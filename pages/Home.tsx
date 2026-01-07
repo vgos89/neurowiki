@@ -123,9 +123,28 @@ const Home: React.FC = () => {
               Protocols, calculators, and guidelines for Neurologists.
             </p>
             
+            {/* Pathway Tools Links - Discrete */}
+            <div className="pt-4 md:pt-2">
+                 <span className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 md:mb-3 text-center md:text-left">Try Pathways & Calculators</span>
+                 <div className="flex flex-wrap justify-center md:justify-start gap-2 md:gap-3">
+                     <Link to="/calculators/evt-pathway" className="group flex items-center space-x-2 text-xs font-bold text-neuro-700 bg-white border border-neuro-100 px-3 py-1.5 rounded-lg hover:border-neuro-300 hover:shadow-sm transition-all">
+                        <span className="w-1.5 h-1.5 bg-neuro-500 rounded-full group-hover:scale-125 transition-transform"></span>
+                        <span>Thrombectomy</span>
+                     </Link>
+                     <Link to="/calculators/elan-pathway" className="group flex items-center space-x-2 text-xs font-bold text-purple-700 bg-white border border-purple-100 px-3 py-1.5 rounded-lg hover:border-purple-300 hover:shadow-sm transition-all">
+                        <span className="w-1.5 h-1.5 bg-purple-500 rounded-full group-hover:scale-125 transition-transform"></span>
+                        <span>ELAN Protocol</span>
+                     </Link>
+                     <Link to="/calculators/gca-pathway" className="group flex items-center space-x-2 text-xs font-bold text-slate-700 bg-white border border-slate-200 px-3 py-1.5 rounded-lg hover:border-slate-300 hover:shadow-sm transition-all">
+                        <span className="w-1.5 h-1.5 bg-slate-500 rounded-full group-hover:scale-125 transition-transform"></span>
+                        <span>GCA Helper</span>
+                     </Link>
+                </div>
+            </div>
+
             {/* Quick Search Chips - Organized & Compact */}
-            <div className="pt-2">
-              <span className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 md:mb-3">Quick Search</span>
+            <div className="pt-4 border-t border-gray-50/50">
+              <span className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 md:mb-3 text-center md:text-left">Quick Search Wiki</span>
               <div className="flex flex-wrap justify-center md:justify-start gap-2">
                 <Link to="/wiki/Stroke" className="px-4 py-1.5 bg-slate-50 text-slate-600 rounded-full text-xs font-bold hover:bg-neuro-100 hover:text-neuro-700 transition-all border border-gray-100">Stroke</Link>
                 <Link to="/wiki/Sclerosis" className="px-4 py-1.5 bg-slate-50 text-slate-600 rounded-full text-xs font-bold hover:bg-neuro-100 hover:text-neuro-700 transition-all border border-gray-100">MS</Link>
@@ -172,7 +191,7 @@ const Home: React.FC = () => {
       {/* Calculators Quick Access */}
       <section className="pb-10">
         <div className="flex items-center justify-between mb-6 px-2">
-            <h2 className="text-lg md:text-2xl font-black text-slate-900 uppercase tracking-tight">Calculators</h2>
+            <h2 className="text-lg md:text-2xl font-black text-slate-900 uppercase tracking-tight">Calculators and Pathways</h2>
             <Link to="/calculators" className="text-neuro-600 text-[10px] md:text-sm font-bold hover:text-neuro-800 flex items-center bg-white px-3 py-1.5 md:px-4 md:py-2 rounded-xl shadow-sm border border-gray-100 transition-all uppercase tracking-wider">
                 All <ChevronRight size={14} className="ml-1" />
             </Link>
