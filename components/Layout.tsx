@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -9,7 +10,9 @@ import {
   BookOpen, 
   Activity,
   Github,
-  Library
+  Library,
+  FlaskConical,
+  Stethoscope
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -33,7 +36,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const navItems = [
     { label: 'Encyclopedia', icon: <BookOpen size={20} />, path: '/' },
-    { label: 'Resident Guide', icon: <Library size={20} />, path: '/guide' },
+    { label: 'Resident Guide', icon: <Stethoscope size={20} />, path: '/guide' },
+    { label: 'Neuro Trials', icon: <FlaskConical size={20} />, path: '/trials' },
     { label: 'Calculators', icon: <Calculator size={20} />, path: '/calculators' },
   ];
 
@@ -120,7 +124,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
 
           <div className="flex items-center space-x-4">
-            {/* Removed System Operational and Avatar as requested */}
           </div>
         </header>
         

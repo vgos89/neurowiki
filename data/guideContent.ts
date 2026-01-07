@@ -1,3 +1,4 @@
+
 export interface GuideTopic {
   id: string;
   title: string;
@@ -6,7 +7,78 @@ export interface GuideTopic {
 }
 
 export const GUIDE_CONTENT: Record<string, GuideTopic> = {
+  // --- NEURO TRIALS (Vascular Neurology) ---
+  'shine-trial': {
+    id: 'shine-trial',
+    title: 'SHINE Trial: Glycemic Control in Acute Stroke',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Hyperglycemia occurs in up to 40% of patients with acute ischemic stroke and is associated with worse clinical outcomes, increased infarct expansion, and higher risk of hemorrhagic transformation. The SHINE trial (Stroke Hyperglycemia Insulin Network Effort) sought to determine if intensive glucose control improved 90-day functional outcomes.
+
+## Trial Summary
+*   **Design:** Multicenter, randomized, open-label, blinded-endpoint trial.
+*   **Population:** 1,151 patients with acute ischemic stroke and hyperglycemia (glucose >110 mg/dL if diabetic, >150 mg/dL if non-diabetic).
+*   **Intervention:** Intensive insulin (IV infusion, target 80–130 mg/dL) vs. Standard care (SC insulin, target <180 mg/dL).
+*   **Outcome:** No significant difference in favorable functional outcome (mRS) at 90 days.
+
+## Clinical PEARLS
+*   **No Benefit to Intensive Control:** Targeting a tight range of 80–130 mg/dL with IV insulin did not improve 90-day outcomes compared to standard subcutaneous sliding scale targeting <180 mg/dL.
+*   **Hypoglycemia Risk:** Intensive therapy significantly increased the risk of severe hypoglycemia (2.6% vs. 0%), often leading to premature discontinuation of the infusion.
+*   **Practical Threshold:** Current [Acute Stroke Management](/guide/acute-stroke-mgmt) protocols utilize a threshold of 180 mg/dL for treatment initiation based on these results.
+*   **Nursing Burden:** Intensive IV insulin required significantly more frequent monitoring (often hourly), which increased nursing workload without improving patient recovery.
+*   **Standard of Care:** Meticulous glucose monitoring is still required, but "permissive" hyperglycemia up to 180 mg/dL is safer than aggressive lowering.
+
+## Conclusion
+The SHINE trial reinforces that for acute ischemic stroke, "less is more" regarding glycemic intensity. Clinicians should prioritize avoiding hypoglycemia while maintaining blood glucose below 180 mg/dL using standard subcutaneous regimens.
+
+*Source: [SHINE Trial Investigators (JAMA 2019)](https://pmc.ncbi.nlm.nih.gov/articles/PMC6652154/)*
+`
+  },
+
   // --- VASCULAR NEUROLOGY ---
+  'acute-stroke-mgmt': {
+    id: 'acute-stroke-mgmt',
+    title: 'Acute Management of LVO Stroke',
+    category: 'Vascular Neurology',
+    content: `
+## 1. Thrombolysis Protocol
+While thrombectomy is the definitive treatment for LVO, bridging thrombolysis remains a cornerstone.
+*   **Preferred Agent:** **Tenecteplase (TNK)** is increasingly preferred over Alteplase (rtPA) due to single-bolus convenience and non-inferiority.
+    *   **TNK Dosing:** 0.25 mg/kg (Max 25 mg) as a single IV bolus over 5–10 seconds.
+    *   **Alteplase (rtPA) Dosing:** 0.9 mg/kg (Max 90 mg). Give 10% as initial bolus over 1 min, then remaining 90% as infusion over 60 mins.
+*   **Blood Pressure Goals:**
+    *   Pre-thrombolysis: < 185/110 mmHg.
+    *   Post-thrombolysis: < 180/105 mmHg.
+*   **Complication Management:** If bleeding is suspected, **stop rtPA infusion immediately** and initiate the reversal protocol (Cryoprecipitate, PCC, and Platelets).
+
+## 2. Thrombectomy Selection (EVT)
+Candidacy for Endovascular Thrombectomy (EVT) has expanded significantly:
+*   **Late Window (6-24h):** Based on DAWN/DEFUSE-3 trials (Perfusion mismatch).
+*   **Large Core Infarcts:** Now eligible based on SELECT2/ANGEL-ASPECT (ASPECTS 3-5).
+*   **Distal Occlusions:** Considered based on technical feasibility and deficit severity.
+
+## 3. Neurocritical ICU Monitoring
+After admission to the Neuro-ICU, the primary goal is preventing secondary injury.
+*   **Neurologic Exams:** Performed every 15 minutes immediately post-EVT, then spaced to every 1-2 hours by 8 hours post-procedure.
+*   **Hemodynamics:** Avoid excessive BP variability. For non-recanalized patients, permissive hypertension (up to 220 mmHg systolic) may be reasonable to support the penumbra.
+*   **Metabolic Targets:**
+    *   **Glucose:** Maintain between 140 mg/dL and 180 mg/dL (See [SHINE Trial Pearls](/guide/shine-trial)). Meticulously avoid hypoglycemia (< 60 mg/dL).
+    *   **Temperature:** Aggressively treat hyperthermia (> 37.5°C) to prevent exacerbation of the ischemic cascade.
+
+## 4. Post-Thrombectomy Complications
+*   **Access Site:** Monitor for groin hematoma, retroperitoneal bleed, or distal limb ischemia (especially with femoral access).
+*   **Cerebral Edema:** "Malignant cerebral edema" carries 80% mortality if untreated. 
+    *   *Risk Factors:* NIHSS > 20, carotid T occlusion, early CT hypodensity.
+    *   *Management:* HOB > 30°, hyperosmolar therapy (Mannitol/Hypertonic Saline), and early consideration for **Hemicraniectomy** within 24-48h for patients < 60 years.
+*   **Hemorrhagic Transformation:** Classified by the Heidelberg scale (HI1/2, PH1/2). PH2 (mass effect) carries the worst 90-day prognosis.
+
+## 5. Secondary Prevention & Rehabilitation
+*   **Secondary Stroke Prevention:** Perform protocolized evaluation for etiology (Atrial Fibrillation, Carotid Disease, ICAD). 
+*   **Antithrombotics:** Decisions on initiation (Aspirin/Anticoagulation) must balance existing ischemic damage against the risk of hemorrhage.
+*   **Early Mobilization:** While bedrest is often favored for 24h post-EVT, interprofessional rehab (PT/OT/SLP) should be initiated early to optimize independence.
+`
+  },
   'stroke-basics': {
     id: 'stroke-basics',
     title: 'Stroke Code Basics',
@@ -124,32 +196,6 @@ Use the **[Thrombectomy Calculator](/calculators?id=evt&returnTo=/guide/thrombec
 *   **Reperfusion Injury:** Hemorrhagic transformation (monitor BP strict < 140-160 post-procedure depending on recanalization status).
 *   **Groin:** Hematoma, retroperitoneal bleed.
 *   **Vessel:** Dissection, perforation, embolization to new territory.
-`
-  },
-  'stroke-orders': {
-    id: 'stroke-orders',
-    title: 'Stroke Admission Orders',
-    category: 'Vascular Neurology',
-    content: `
-## Ischemic Stroke
-1.  **s/p IV TPA @ WMC:**
-    *   Click "STROKE reperfusion therapy" order set.
-    *   Uncheck monitoring section ONLY if already ordered via "pre-post alteplase subphase".
-2.  **s/p IV TPA @ OSH:**
-    *   Ensure "pre and post alteplase subphase" was ordered.
-    *   Click "STROKE reperfusion therapy" order set.
-    *   Tailor neurochecks based on time patient received tPA at OSH.
-3.  **s/p EVT, no TPA:**
-    *   Click "STROKE reperfusion therapy" order set.
-    *   Uncheck monitoring section (fellow will enter post-EVT checks).
-4.  **No Intervention:**
-    *   Click "STROKE ischemic or TIA" order set.
-
-**Communication:** For all reperfusion patients (TPA, EVT, CAS, CEA), send out tiger text and email.
-
-## Hemorrhagic Stroke
-1.  **SAH/ICH:** Click "STROKE hemorrhagic" order set.
-2.  **Service:** If anticoagulation reversed, patient stays on NES service for first 24 hours.
 `
   },
   'hemorrhagic-stroke': {
