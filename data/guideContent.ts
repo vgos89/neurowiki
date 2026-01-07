@@ -8,6 +8,130 @@ export interface GuideTopic {
 
 export const GUIDE_CONTENT: Record<string, GuideTopic> = {
   // --- NEURO TRIALS (Vascular Neurology) ---
+  'defuse-3-trial': {
+    id: 'defuse-3-trial',
+    title: 'DEFUSE 3 Trial: Thrombectomy 6-16 Hours',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Historically, mechanical thrombectomy was limited to 6 hours from symptom onset. The DEFUSE 3 trial aimed to determine if patients with salvageable tissue on perfusion imaging (penumbra) would benefit from treatment in the extended 6–16 hour window.
+
+## Trial Summary
+*   **Design:** Multicenter, randomized, open-label, blinded-endpoint trial.
+*   **Population:** Acute ischemic stroke with ICA or M1 occlusion 6–16 hours from Last Known Well.
+*   **Selection Criteria (Perfusion):**
+    *   **Infarct Core:** < 70 ml.
+    *   **Mismatch Ratio:** ≥ 1.8.
+    *   **Mismatch Volume:** ≥ 15 ml.
+*   **Intervention:** Thrombectomy + Standard Medical Therapy vs. Standard Medical Therapy alone.
+*   **Primary Outcome:** Functional independence (mRS 0-2) at 90 days.
+*   **Results:**
+    *   **Functional Independence:** 45% in EVT group vs 17% in Control group (P<0.001).
+    *   **Mortality:** 14% in EVT group vs 26% in Control group (P=0.05).
+
+## Clinical PEARLS
+*   **NNT:** The Number Needed to Treat (NNT) for one additional patient to be functionally independent was **3**.
+*   **Safety:** No significant difference in symptomatic intracranial hemorrhage (sICH) or serious adverse events.
+*   **Paradigm Shift:** Along with the DAWN trial, DEFUSE 3 established the "Late Window" protocol, shifting focus from "Time is Brain" to "Tissue is Brain".
+*   **Implementation:** Requires automated perfusion software (e.g., RAPID) for standardized core/penumbra calculation.
+
+## Conclusion
+Thrombectomy for ischemic stroke 6 to 16 hours after onset plus standard medical therapy results in better functional outcomes and lower mortality than standard medical therapy alone in selected patients with salvageable tissue.
+
+*Source: [Albers et al. (NEJM 2018)](https://www.nejm.org/doi/full/10.1056/NEJMoa1706442)*
+`
+  },
+  'dawn-trial': {
+    id: 'dawn-trial',
+    title: 'DAWN Trial: Thrombectomy 6-24 Hours',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+The DAWN trial investigated whether thrombectomy is effective in patients with a "Wake-Up" stroke or late presentation (6 to 24 hours) who demonstrate a clinical-core mismatch (severe deficit but small infarct core).
+
+## Trial Summary
+*   **Design:** Multicenter, prospective, randomized, open-label, adaptive trial.
+*   **Population:** LVO (ICA or M1) at 6–24 hours from last known well.
+*   **Selection Criteria (Clinical-Core Mismatch):**
+    *   **Group A:** Age ≥ 80, [NIHSS](/calculators?id=nihss) ≥ 10, Core < 21 ml.
+    *   **Group B:** Age < 80, [NIHSS](/calculators?id=nihss) ≥ 10, Core < 31 ml.
+    *   **Group C:** Age < 80, [NIHSS](/calculators?id=nihss) ≥ 20, Core 31–50 ml.
+*   **Primary Outcome:** Mean score for utility-weighted modified Rankin scale (mRS) at 90 days.
+*   **Results:**
+    *   **Functional Independence (mRS 0-2):** 49% in EVT group vs 13% in Control group.
+    *   **Probability of Superiority:** >99.9%.
+
+## Clinical PEARLS
+*   **Massive Benefit:** The absolute difference in functional independence was **36%**, yielding a Number Needed to Treat (**NNT**) of **2.8**. This is one of the most potent effect sizes in stroke history.
+*   **Patient Selection:** Relies heavily on **age** and **[NIHSS](/calculators?id=nihss)** relative to core volume, unlike DEFUSE-3 which uses a flat core/penumbra cutoff.
+*   **Wake-Up Strokes:** Provided the first robust evidence for treating patients with unknown onset time (e.g., waking up with symptoms) if physiology was favorable.
+
+## Conclusion
+Among patients with acute stroke and mismatched clinical deficit and infarct volume, thrombectomy within 6 to 24 hours results in significantly better functional outcomes than standard care.
+
+*Source: [Nogueira et al. (NEJM 2018)](https://www.nejm.org/doi/full/10.1056/NEJMoa1713973)*
+`
+  },
+  'select2-trial': {
+    id: 'select2-trial',
+    title: 'SELECT2 Trial: Large Core Thrombectomy',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Patients with large ischemic cores (ASPECTS < 6 or Core Volume > 50ml) were historically excluded from thrombectomy trials due to fears of futile reperfusion and hemorrhagic transformation. SELECT2 challenged this dogma.
+
+## Trial Summary
+*   **Design:** Randomized, open-label, international trial.
+*   **Population:** Acute ischemic stroke with ICA or M1 occlusion.
+*   **Selection Criteria (Large Core):**
+    *   **NCCT:** ASPECTS 3–5.
+    *   **OR CTP:** Core volume ≥ 50 ml.
+*   **Intervention:** Thrombectomy vs Medical Management.
+*   **Outcome:** Distribution of mRS scores at 90 days.
+*   **Results:**
+    *   **Functional Independence (mRS 0-2):** 20% in EVT group vs 7% in Medical group.
+    *   **Generalized Odds Ratio:** 1.51 (favoring EVT).
+
+## Clinical PEARLS
+*   **New Frontier:** Established that "Large Core" is no longer an absolute contraindication for thrombectomy.
+*   **Risk/Benefit:** While outcomes are generally poorer than small-core patients, EVT still provides a significant shift towards lower disability (e.g., being able to walk vs bedbound).
+*   **Safety:** Symptomatic intracranial hemorrhage (sICH) was low and not significantly different between groups, though any ICH was more frequent in the EVT group.
+
+## Conclusion
+Endovascular thrombectomy improves functional outcomes in patients with large ischemic strokes (ASPECTS 3–5 or Core ≥ 50 ml) compared to medical management alone.
+
+*Source: [Sarraj et al. (NEJM 2023)](https://www.nejm.org/doi/full/10.1056/NEJMoa2214403)*
+`
+  },
+  'angel-aspect-trial': {
+    id: 'angel-aspect-trial',
+    title: 'ANGEL-ASPECT Trial: Large Core (China)',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Conducted in China, ANGEL-ASPECT complemented SELECT2 by investigating thrombectomy in patients with large infarct cores, including those with cores up to 100ml.
+
+## Trial Summary
+*   **Design:** Multicenter, randomized, open-label trial in China.
+*   **Population:** Anterior circulation LVO within 24 hours.
+*   **Selection Criteria:**
+    *   **ASPECTS:** 3–5.
+    *   **OR Core Volume:** 70–100 ml (on CTP/DWI).
+*   **Results:**
+    *   **Functional Independence (mRS 0-2):** 30% in EVT group vs 11.6% in Medical group.
+    *   **Generalized Odds Ratio:** 1.37.
+
+## Clinical PEARLS
+*   **Confirmation:** Validated the findings of SELECT2 in an Asian population and with slightly different volume criteria (pushing the upper limit to 100ml).
+*   **Hemorrhage Risk:** Unlike SELECT2, this trial showed a statistically significant increase in symptomatic intracranial hemorrhage (sICH) in the EVT group (6.1% vs 2.7%), emphasizing the need for careful patient selection and BP management.
+*   **Mortality:** Despite higher hemorrhage risk, there was no difference in 90-day mortality, and functional outcomes were superior.
+
+## Conclusion
+In patients with large ischemic core volume, endovascular therapy resulted in better functional outcomes but was associated with more intracranial hemorrhages.
+
+*Source: [Huo et al. (NEJM 2023)](https://www.nejm.org/doi/full/10.1056/NEJMoa2213379)*
+`
+  },
   'shine-trial': {
     id: 'shine-trial',
     title: 'SHINE Trial: Glycemic Control in Acute Stroke',
@@ -35,50 +159,286 @@ The SHINE trial reinforces that for acute ischemic stroke, "less is more" regard
 *Source: [SHINE Trial Investigators (JAMA 2019)](https://pmc.ncbi.nlm.nih.gov/articles/PMC6652154/)*
 `
   },
-
-  // --- VASCULAR NEUROLOGY ---
-  'acute-stroke-mgmt': {
-    id: 'acute-stroke-mgmt',
-    title: 'Acute Management of LVO Stroke',
-    category: 'Vascular Neurology',
+  'nascet-trial': {
+    id: 'nascet-trial',
+    title: 'NASCET Trial: Carotid Endarterectomy',
+    category: 'Neuro Trials',
     content: `
-## 1. Thrombolysis Protocol
-While thrombectomy is the definitive treatment for LVO, bridging thrombolysis remains a cornerstone.
-*   **Preferred Agent:** **Tenecteplase (TNK)** is increasingly preferred over Alteplase (rtPA) due to single-bolus convenience and non-inferiority.
-    *   **TNK Dosing:** 0.25 mg/kg (Max 25 mg) as a single IV bolus over 5–10 seconds.
-    *   **Alteplase (rtPA) Dosing:** 0.9 mg/kg (Max 90 mg). Give 10% as initial bolus over 1 min, then remaining 90% as infusion over 60 mins.
-*   **Blood Pressure Goals:**
-    *   Pre-thrombolysis: < 185/110 mmHg.
-    *   Post-thrombolysis: < 180/105 mmHg.
-*   **Complication Management:** If bleeding is suspected, **stop rtPA infusion immediately** and initiate the reversal protocol (Cryoprecipitate, PCC, and Platelets).
+## Clinical Context
+Before NASCET, the benefit of Carotid Endarterectomy (CEA) for symptomatic carotid stenosis was controversial. This landmark trial stratified benefit by degree of stenosis.
 
-## 2. Thrombectomy Selection (EVT)
-Candidacy for Endovascular Thrombectomy (EVT) has expanded significantly:
-*   **Late Window (6-24h):** Based on DAWN/DEFUSE-3 trials (Perfusion mismatch).
-*   **Large Core Infarcts:** Now eligible based on SELECT2/ANGEL-ASPECT (ASPECTS 3-5).
-*   **Distal Occlusions:** Considered based on technical feasibility and deficit severity.
+## Trial Summary
+*   **Population:** Patients with TIA or non-disabling stroke and ipsilateral carotid stenosis.
+*   **Intervention:** Carotid Endarterectomy (CEA) + Medical Therapy vs. Medical Therapy alone.
+*   **High-Grade Stenosis (70-99%):**
+    *   **Result:** 2-year ipsilateral stroke risk was 9% (CEA) vs 26% (Medical).
+    *   **Absolute Risk Reduction:** 17%. **NNT:** 6.
+*   **Moderate Stenosis (50-69%):**
+    *   **Result:** 5-year stroke risk was 15.7% (CEA) vs 22.2% (Medical).
+    *   **Absolute Risk Reduction:** 6.5%. **NNT:** 15.
+*   **Low Stenosis (<50%):** No benefit found.
 
-## 3. Neurocritical ICU Monitoring
-After admission to the Neuro-ICU, the primary goal is preventing secondary injury.
-*   **Neurologic Exams:** Performed every 15 minutes immediately post-EVT, then spaced to every 1-2 hours by 8 hours post-procedure.
-*   **Hemodynamics:** Avoid excessive BP variability. For non-recanalized patients, permissive hypertension (up to 220 mmHg systolic) may be reasonable to support the penumbra.
-*   **Metabolic Targets:**
-    *   **Glucose:** Maintain between 140 mg/dL and 180 mg/dL (See [SHINE Trial Pearls](/guide/shine-trial)). Meticulously avoid hypoglycemia (< 60 mg/dL).
-    *   **Temperature:** Aggressively treat hyperthermia (> 37.5°C) to prevent exacerbation of the ischemic cascade.
+## Clinical PEARLS
+*   **Degree Matters:** Benefit is highly dependent on the degree of stenosis.
+*   **Symptomatic Only:** This trial applies to *symptomatic* patients. (ACAS/ACST addressed asymptomatic).
+*   **Timing:** Benefit is highest when performed within 2 weeks of the symptomatic event.
+*   **Gender:** In the moderate stenosis group (50-69%), benefit was significant for men but marginal/non-significant for women.
 
-## 4. Post-Thrombectomy Complications
-*   **Access Site:** Monitor for groin hematoma, retroperitoneal bleed, or distal limb ischemia (especially with femoral access).
-*   **Cerebral Edema:** "Malignant cerebral edema" carries 80% mortality if untreated. 
-    *   *Risk Factors:* NIHSS > 20, carotid T occlusion, early CT hypodensity.
-    *   *Management:* HOB > 30°, hyperosmolar therapy (Mannitol/Hypertonic Saline), and early consideration for **Hemicraniectomy** within 24-48h for patients < 60 years.
-*   **Hemorrhagic Transformation:** Classified by the Heidelberg scale (HI1/2, PH1/2). PH2 (mass effect) carries the worst 90-day prognosis.
+## Conclusion
+Carotid endarterectomy is highly beneficial for symptomatic patients with severe (70-99%) stenosis and moderately beneficial for those with moderate (50-69%) stenosis.
 
-## 5. Secondary Prevention & Rehabilitation
-*   **Secondary Stroke Prevention:** Perform protocolized evaluation for etiology (Atrial Fibrillation, Carotid Disease, ICAD). 
-*   **Antithrombotics:** Decisions on initiation (Aspirin/Anticoagulation) must balance existing ischemic damage against the risk of hemorrhage.
-*   **Early Mobilization:** While bedrest is often favored for 24h post-EVT, interprofessional rehab (PT/OT/SLP) should be initiated early to optimize independence.
+*Source: [Barnett et al. (Stroke 1999 / NEJM 1991)](https://www.ahajournals.org/doi/10.1161/01.str.30.9.1751)*
 `
   },
+  'crest-trial': {
+    id: 'crest-trial',
+    title: 'CREST Trial: Stenting vs CEA',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+With the emergence of Carotid Artery Stenting (CAS) as a less invasive alternative to Endarterectomy (CEA), CREST sought to compare their safety and efficacy.
+
+## Trial Summary
+*   **Design:** Randomized, controlled trial.
+*   **Population:** 2,502 patients with symptomatic or asymptomatic carotid stenosis.
+*   **Intervention:** Carotid Artery Stenting (CAS) vs. Carotid Endarterectomy (CEA).
+*   **Primary Outcome:** Composite of Stroke, Myocardial Infarction, or Death during periprocedural period, or ipsilateral stroke within 4 years.
+*   **Results:**
+    *   **Composite Rate:** 7.2% (CAS) vs 6.8% (CEA). No significant difference (P=0.51).
+
+## Clinical PEARLS
+*   **The Trade-off:**
+    *   **Stroke:** Risk was significantly higher with Stenting (4.1% vs 2.3%).
+    *   **Myocardial Infarction:** Risk was significantly higher with CEA (2.3% vs 1.1%).
+*   **Age Effect:**
+    *   **Age > 70:** Better outcomes with **CEA** (Surgery).
+    *   **Age < 70:** Better outcomes with **CAS** (Stenting).
+*   **QOL:** Stroke had a larger impact on quality of life at 1 year than MI.
+
+## Conclusion
+Among patients with carotid stenosis, stenting and endarterectomy were associated with similar rates of the primary composite outcome. However, stenting carried a higher risk of stroke, while surgery carried a higher risk of MI.
+
+*Source: [Brott et al. (NEJM 2010)](https://www.nejm.org/doi/full/10.1056/NEJMoa0912321)*
+`
+  },
+  'chance-trial': {
+    id: 'chance-trial',
+    title: 'CHANCE Trial: Dual Antiplatelet Therapy',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+For years, Aspirin monotherapy was standard for acute ischemic stroke. The CHANCE trial (China) investigated if short-term Dual Antiplatelet Therapy (DAPT) with Clopidogrel and Aspirin could reduce recurrent stroke in high-risk patients.
+
+## Trial Summary
+*   **Design:** Randomized, double-blind, placebo-controlled trial in China.
+*   **Population:** 5,170 patients with minor ischemic stroke ([NIHSS](/calculators?id=nihss) ≤ 3) or high-risk TIA ([ABCD²](/calculators?id=abcd2) ≥ 4) within 24 hours of onset.
+*   **Intervention:**
+    *   **DAPT:** Clopidogrel (300mg load, then 75mg/d) + Aspirin (75mg/d) for 21 days, followed by Clopidogrel monotherapy.
+    *   **Control:** Aspirin (75mg/d) monotherapy.
+*   **Primary Outcome:** Stroke (ischemic or hemorrhagic) recurrence at 90 days.
+*   **Results:**
+    *   **Stroke Recurrence:** 8.2% in DAPT group vs 11.7% in Aspirin group (Hazard Ratio 0.68; P<0.001).
+    *   **Hemorrhage:** No significant difference in moderate/severe hemorrhage (0.3% vs 0.3%).
+
+## Clinical PEARLS
+*   **Standard of Care Change:** CHANCE provided the first major evidence that DAPT is superior to monotherapy for *minor* stroke and high-risk TIA in the acute phase.
+*   **Population Specificity:** Conducted entirely in China (CYP2C19 loss-of-function alleles are more common in Asian populations, yet Clopidogrel still worked).
+*   **21 Days:** The protocol used DAPT for only 21 days, establishing the concept of "short-term" DAPT to minimize bleeding risk while maximizing ischemic protection.
+
+## Conclusion
+Among patients with high-risk TIA or minor ischemic stroke, treatment with Clopidogrel plus Aspirin for 21 days reduced the risk of recurrent stroke compared to Aspirin alone.
+
+*Source: [Wang et al. (NEJM 2013)](https://www.nejm.org/doi/full/10.1056/NEJMoa1215340)*
+`
+  },
+  'point-trial': {
+    id: 'point-trial',
+    title: 'POINT Trial: DAPT in International Population',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Following the CHANCE trial in China, the POINT trial sought to confirm the benefits of DAPT in an international (Western) population with slightly different loading protocols.
+
+## Trial Summary
+*   **Design:** Randomized, double-blind, international trial.
+*   **Population:** 4,881 patients with minor ischemic stroke ([NIHSS](/calculators?id=nihss) ≤ 3) or high-risk TIA ([ABCD²](/calculators?id=abcd2) ≥ 4) within 12 hours.
+*   **Intervention:**
+    *   **DAPT:** Clopidogrel (600mg load, then 75mg/d) + Aspirin (50-325mg/d) for 90 days.
+    *   **Control:** Aspirin alone.
+*   **Primary Outcome:** Composite of ischemic stroke, MI, or ischemic vascular death at 90 days.
+*   **Results:**
+    *   **Major Ischemic Events:** 5.0% in DAPT group vs 6.5% in Aspirin group (P=0.02).
+    *   **Major Hemorrhage:** 0.9% in DAPT group vs 0.4% in Aspirin group (P=0.02).
+
+## Clinical PEARLS
+*   **Confirms CHANCE:** Validated the efficacy of DAPT for minor stroke/TIA in a Western population.
+*   **Bleeding Risk:** Unlike CHANCE, POINT showed a statistically significant increase in major hemorrhage.
+*   **Time Course:** Benefit was driven primarily by reduction in stroke during the first **7 to 21 days**. The bleeding risk persisted throughout the 90 days.
+*   **Guideline Consensus:** Combined with CHANCE, this led to guidelines recommending DAPT for **21 days only**, rather than the 90 days tested in POINT, to balance efficacy vs safety.
+
+## Conclusion
+In patients with minor ischemic stroke or high-risk TIA, DAPT with Clopidogrel and Aspirin reduced the risk of major ischemic events but increased the risk of major hemorrhage compared to Aspirin alone.
+
+*Source: [Johnston et al. (NEJM 2018)](https://www.nejm.org/doi/full/10.1056/NEJMoa1800410)*
+`
+  },
+  'sammpris-trial': {
+    id: 'sammpris-trial',
+    title: 'SAMMPRIS Trial: ICAD Stenting vs Medical',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Intracranial Atherosclerotic Disease (ICAD) carries a high risk of recurrent stroke. SAMMPRIS investigated whether percutaneous transluminal angioplasty and stenting (PTAS) was superior to aggressive medical management alone.
+
+## Trial Summary
+*   **Design:** Randomized, open-label trial.
+*   **Population:** Patients with **70-99% stenosis** of a major intracranial artery and a recent (last 30 days) TIA or stroke.
+*   **Intervention:**
+    *   **Stenting Group:** PTAS (Wingspan stent) + Aggressive Medical Management.
+    *   **Medical Group:** Aggressive Medical Management alone (DAPT for 90 days, Rosuvastatin 20mg, BP < 140/90).
+*   **Results (Stopped Early):**
+    *   **30-Day Stroke/Death:** 14.7% in Stenting group vs 5.8% in Medical group (P=0.002).
+    *   **1-Year Primary Endpoint:** 20.0% in Stenting group vs 12.2% in Medical group.
+
+## Clinical PEARLS
+*   **Stenting is Dangerous:** The trial was halted early because the stenting group had significantly higher rates of periprocedural stroke.
+*   **Aggressive Medical Management (AMM):** The "Control" group did surprisingly well compared to historical controls (WASID trial), proving that AMM (DAPT + High-intensity Statin + BP control) is a highly effective strategy.
+*   **Standard of Care:** AMM is now the first-line treatment for symptomatic ICAD. Stenting is reserved for salvage cases failing AMM.
+
+## Conclusion
+In patients with symptomatic intracranial arterial stenosis, aggressive medical management was superior to PTAS with the Wingspan stent system, primarily due to the high risk of periprocedural stroke in the stenting arm.
+
+*Source: [Chimowitz et al. (NEJM 2011)](https://www.nejm.org/doi/pdf/10.1056/nejmoa1105335)*
+`
+  },
+  'socrates-trial': {
+    id: 'socrates-trial',
+    title: 'SOCRATES Trial: Ticagrelor vs Aspirin',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Ticagrelor is a potent antiplatelet agent used in cardiology. SOCRATES aimed to see if Ticagrelor monotherapy was superior to Aspirin monotherapy for acute stroke/TIA.
+
+## Trial Summary
+*   **Design:** Randomized, double-blind trial.
+*   **Population:** 13,199 patients with acute mild-to-moderate ischemic stroke ([NIHSS](/calculators?id=nihss) ≤ 5) or high-risk TIA.
+*   **Intervention:**
+    *   **Ticagrelor:** 180mg load, then 90mg BID.
+    *   **Aspirin:** 300mg load, then 100mg daily.
+*   **Primary Outcome:** Composite of stroke, MI, or death at 90 days.
+*   **Results:**
+    *   **Primary Endpoint:** 6.7% in Ticagrelor group vs 7.5% in Aspirin group (Hazard Ratio 0.89; P=0.07).
+    *   **Significance:** Not statistically significant.
+
+## Clinical PEARLS
+*   **Negative Trial:** Ticagrelor was not superior to Aspirin in the broad population of minor stroke/TIA.
+*   **Subgroup Analysis:** There was a suggestion of benefit in patients with ipsilateral stenosis, but this was exploratory.
+*   **THALES Trial:** A subsequent trial (THALES) later showed that Ticagrelor + Aspirin (DAPT) was superior to Aspirin alone, but with increased bleeding, similar to the CHANCE/POINT results for Clopidogrel.
+*   **Current Use:** Clopidogrel + Aspirin remains the preferred DAPT regimen unless there is Clopidogrel resistance (CYP2C19 status).
+
+## Conclusion
+In patients with acute ischemic stroke or high-risk TIA, Ticagrelor was not found to be superior to Aspirin in reducing the rate of stroke, myocardial infarction, or death at 90 days.
+
+*Source: [Johnston et al. (NEJM 2016)](https://www.nejm.org/doi/full/10.1056/NEJMoa1603060)*
+`
+  },
+  'sps3-trial': {
+    id: 'sps3-trial',
+    title: 'SPS3 Trial: DAPT in Lacunar Stroke',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Small subcortical strokes (lacunar infarcts) are common. SPS3 investigated two questions: BP targets (Standard vs Intensive) and Antiplatelets (DAPT vs Aspirin) for secondary prevention. This entry focuses on the **Antiplatelet** arm.
+
+## Trial Summary
+*   **Design:** Randomized, double-blind, multicenter trial.
+*   **Population:** 3,020 patients with MRI-confirmed symptomatic lacunar infarctions.
+*   **Intervention (Antiplatelet Arm):**
+    *   **DAPT:** Aspirin (325mg) + Clopidogrel (75mg).
+    *   **Monotherapy:** Aspirin (325mg) + Placebo.
+*   **Results:**
+    *   **Recurrent Stroke:** 2.5% per year (DAPT) vs 2.7% per year (Aspirin) (P=0.48). Non-significant.
+    *   **All-Cause Mortality:** Significant increase in DAPT group (HR 1.52; P=0.004).
+    *   **Major Bleeding:** Nearly doubled in DAPT group (2.1% vs 1.1%).
+
+## Clinical PEARLS
+*   **Do NOT use DAPT for Lacunes:** Unlike large vessel disease or acute minor stroke (CHANCE/POINT), long-term DAPT is harmful in established lacunar stroke patients.
+*   **Mortality Signal:** The trial was stopped early due to lack of benefit and increased mortality/bleeding in the DAPT arm.
+*   **Mechanism:** Lacunar disease is often a small vessel lipohyalinosis pathology, which may be less responsive to aggressive platelet inhibition compared to large artery atherosclerosis, but is prone to hemorrhage.
+
+## Conclusion
+Among patients with recent lacunar strokes, the addition of clopidogrel to aspirin did not significantly reduce the risk of recurrent stroke and was associated with an increased risk of bleeding and death.
+
+*Source: [SPS3 Investigators (NEJM 2012)](https://www.nejm.org/doi/full/10.1056/NEJMoa1204133)*
+`
+  },
+  'sparcl-trial': {
+    id: 'sparcl-trial',
+    title: 'SPARCL Trial: Statins in Stroke',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Statins are known to reduce stroke risk in patients with coronary artery disease. The SPARCL trial investigated whether high-dose atorvastatin reduces the risk of recurrent stroke in patients with recent stroke or TIA *without* known coronary heart disease.
+
+## Trial Summary
+*   **Design:** Randomized, double-blind, placebo-controlled trial.
+*   **Population:** 4,731 patients with stroke or TIA within 1–6 months, LDL 100–190 mg/dL, and no known coronary heart disease.
+*   **Intervention:** Atorvastatin 80 mg daily vs. Placebo.
+*   **Primary Outcome:** Fatal or non-fatal stroke.
+*   **Results:**
+    *   **Stroke Recurrence:** 11.2% in Atorvastatin group vs 13.1% in Placebo group (Hazard Ratio 0.84; P=0.03).
+    *   **Major Coronary Events:** Significant reduction (HR 0.65).
+
+## Clinical PEARLS
+*   **Standard of Care:** Established high-intensity statin (Atorvastatin 80mg) as the standard of care for secondary prevention of non-cardioembolic ischemic stroke.
+*   **Hemorrhage Risk:** There was a small but statistically significant increase in hemorrhagic stroke in the Atorvastatin group (2.3% vs 1.4%), though the overall benefit for ischemic stroke reduction outweighed this risk.
+*   **LDL Reduction:** The treatment group achieved a mean LDL of 73 mg/dL compared to 129 mg/dL in the placebo group.
+
+## Conclusion
+In patients with recent stroke or TIA and without known coronary heart disease, 80 mg of atorvastatin per day reduced the overall incidence of stroke and of cardiovascular events.
+
+*Source: [Amarenco et al. (NEJM 2006)](https://www.nejm.org/doi/full/10.1056/NEJMoa061894)*
+`
+  },
+  'elan-study': {
+    id: 'elan-study',
+    title: 'ELAN Study: Timing of DOACs',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+For patients with ischemic stroke and Atrial Fibrillation, the optimal timing to start Direct Oral Anticoagulants (DOACs) has been debated. Early initiation risks hemorrhagic transformation, while late initiation risks recurrent embolism. The "1-3-6-12 day" rule was common but lacked robust evidence.
+
+## Trial Summary
+*   **Design:** Open-label, randomized controlled trial.
+*   **Population:** 2,013 patients with acute ischemic stroke and Atrial Fibrillation.
+*   **Intervention:**
+    *   **Early Treatment:**
+        *   Minor/TIA: < 48 hours.
+        *   Moderate: Day 2.
+        *   Major: Day 6-7.
+    *   **Later Treatment:**
+        *   Minor/TIA: Day 3-4.
+        *   Moderate: Day 6-7.
+        *   Major: Day 12-14.
+*   **Primary Outcome:** Composite of recurrent ischemic stroke, symptomatic intracranial hemorrhage (sICH), extracranial bleeding, systemic embolism, or vascular death at 30 days.
+*   **Results:**
+    *   **Composite Outcome:** 2.9% (Early) vs 4.1% (Later). Risk Difference -1.18% (Range -2.84 to 0.47).
+    *   **Recurrent Ischemic Stroke:** 1.4% (Early) vs 2.5% (Later).
+    *   **Symptomatic ICH:** 0.2% in both groups (Low risk).
+
+## Clinical PEARLS
+*   **Safety Confirmed:** Early initiation of DOACs did not increase the risk of symptomatic intracranial hemorrhage compared to later initiation.
+*   **Efficacy Signal:** While designed to estimate range (not superiority), the data suggests early initiation prevents more ischemic strokes.
+*   **Practice Change:** Supports starting DOACs earlier than historical guidelines (e.g., day 2 for moderate, day 6-7 for major) provided imaging excludes hemorrhagic transformation.
+
+## Conclusion
+Early initiation of DOAC treatment was non-inferior and appeared safe compared to later initiation in patients with ischemic stroke associated with atrial fibrillation.
+
+*Source: [Fischer et al. (NEJM 2023)](https://www.nejm.org/doi/full/10.1056/NEJMoa2303048)*
+`
+  },
+
+  // --- VASCULAR NEUROLOGY ---
   'stroke-basics': {
     id: 'stroke-basics',
     title: 'Stroke Code Basics',
@@ -88,7 +448,7 @@ After admission to the Neuro-ICU, the primary goal is preventing secondary injur
 *   **Establish Last Known Well (LKW):** Critical for eligibility. If wake-up stroke, LKW is time last seen normal before sleep.
 *   **Vitals:** BP, HR, O2 Sat, Temp.
 *   **POC Glucose:** Rule out hypoglycemia (< 50 mg/dL), which is a common mimic.
-*   **NIHSS:** Perform baseline assessment by certified examiner.
+*   **[NIHSS](/calculators?id=nihss):** Perform baseline assessment by certified examiner.
     *   *Pearls:* Specifically assess for disabling deficits (e.g., isolated aphasia, visual field cut, hand weakness) even if total score is low.
     *   *History:* Screen for trauma, recent surgery (<14 days), active bleeding, anticoagulant use (time of last dose).
 
@@ -198,61 +558,49 @@ Use the **[Thrombectomy Calculator](/calculators?id=evt&returnTo=/guide/thrombec
 *   **Vessel:** Dissection, perforation, embolization to new territory.
 `
   },
+  'acute-stroke-mgmt': {
+    id: 'acute-stroke-mgmt',
+    title: 'Acute Management of LVO Stroke',
+    category: 'Vascular Neurology',
+    content: `
+## 1. Thrombectomy Selection (EVT)
+Candidacy for Endovascular Thrombectomy (EVT) has expanded significantly:
+*   **Late Window (6-24h):** Based on DAWN/DEFUSE-3 trials (Perfusion mismatch).
+*   **Large Core Infarcts:** Now eligible based on SELECT2/ANGEL-ASPECT (ASPECTS 3-5).
+*   **Distal Occlusions:** Considered based on technical feasibility and deficit severity.
+
+## 2. Neurocritical ICU Monitoring
+After admission to the Neuro-ICU, the primary goal is preventing secondary injury.
+*   **Neurologic Exams:** Performed every 15 minutes immediately post-EVT, then spaced to every 1-2 hours by 8 hours post-procedure.
+*   **Hemodynamics:** Avoid excessive BP variability. For non-recanalized patients, permissive hypertension (up to 220 mmHg systolic) may be reasonable to support the penumbra.
+*   **Metabolic Targets:**
+    *   **Glucose:** Maintain between 140 mg/dL and 180 mg/dL (See [SHINE Trial Pearls](/guide/shine-trial)). Meticulously avoid hypoglycemia (< 60 mg/dL).
+    *   **Temperature:** Aggressively treat hyperthermia (> 37.5°C) to prevent exacerbation of the ischemic cascade.
+
+## 3. Post-Thrombectomy Complications
+*   **Access Site:** Monitor for groin hematoma, retroperitoneal bleed, or distal limb ischemia (especially with femoral access).
+*   **Cerebral Edema:** "Malignant cerebral edema" carries 80% mortality if untreated. 
+    *   *Risk Factors:* [NIHSS](/calculators?id=nihss) > 20, carotid T occlusion, early CT hypodensity.
+    *   *Management:* HOB > 30°, hyperosmolar therapy (Mannitol/Hypertonic Saline), and early consideration for **Hemicraniectomy** within 24-48h for patients < 60 years.
+*   **Hemorrhagic Transformation:** Classified by the Heidelberg scale (HI1/2, PH1/2). PH2 (mass effect) carries the worst 90-day prognosis.
+
+## 4. Secondary Prevention & Rehabilitation
+*   **Secondary Stroke Prevention:** Perform protocolized evaluation for etiology (Atrial Fibrillation, Carotid Disease, ICAD). 
+*   **Antithrombotics:** Decisions on initiation (Aspirin/Anticoagulation) must balance existing ischemic damage against the risk of hemorrhage.
+*   **Early Mobilization:** While bedrest is often favored for 24h post-EVT, interprofessional rehab (PT/OT/SLP) should be initiated early to optimize independence.
+`
+  },
   'hemorrhagic-stroke': {
     id: 'hemorrhagic-stroke',
     title: 'Hemorrhagic Stroke & ICH',
     category: 'Vascular Neurology',
-    content: `
-## Causes of Hemorrhage
-*   **Hypertension:** Small lenticulostriate (lipohyalinosis/microaneurysms). 70% deep structures/basal ganglia, 10% cerebellum, 10% pons.
-*   **Amyloid:** Lobar.
-*   **Vascular:** AVM or Cavernoma (lobar).
-*   **Inflammation:** Vasculitis.
-*   **Tumor:** Melanoma, Renal Cell, Lung, Chorio, Thyroid, Breast.
-*   **Infectious:** HSV.
-*   **Dyscrasias:** Abnormal PT/PTT/INR.
-*   **Trauma:** Capillary telangiectasias/venous anomalies (rarely bleed).
-
-## [ICH Score](/calculators?id=ich&returnTo=/guide/hemorrhagic-stroke) (Mortality Prediction)
-| Component | Criteria | Points |
-|---|---|---|
-| **[GCS](/calculators?id=gcs&returnTo=/guide/hemorrhagic-stroke)** | 3-4 | 2 |
-| | 5-12 | 1 |
-| **ICH Volume** | ≥ 30 cc | 1 |
-| **IVH Extension** | Yes | 1 |
-| **Infratentorial** | Yes | 1 |
-| **Age** | ≥ 80 | 1 |
-
-**Mortality Estimate:**
-*   Score 0: 0%
-*   Score 1: 13%
-*   Score 2: 26%
-*   Score 3: 72%
-*   Score 4: 97%
-*   Score 5-6: 100%
-`
+    content: ``
   },
   'anticoagulation-reversal': {
     id: 'anticoagulation-reversal',
     title: 'Anticoagulation Reversal',
     category: 'Vascular Neurology',
-    content: `
-## Immediate Reversal Agents
-*   **Coumadin:** Vitamin K 5-10mg IV (over 10 mins) + PCC (Prothrombin Complex Concentrate).
-*   **Heparin:** Protamine sulfate (1mg per 100u heparin in last 2-3 hrs).
-*   **LMWH:** Andexxa or Protamine sulfate.
-*   **Antiplatelets:** Platelet transfusion (1u if ASA, 2u if Plavix/Dual). DDVAP (0.4mcg/kg IV).
-*   **Anti-Xa (Eliquis/Xarelto):** Andexxa.
-*   **Pradaxa:** Praxbind (5g IV).
-
-## Management of Elevated INR
-| INR | Bleeding | Treatment |
-|---|---|---|
-| < 5 | None/Minimal | Hold warfarin 1-2 days or decrease dose. |
-| 5-9 | None/Minimal | Hold warfarin. Resume when INR therapeutic. Oral Vit K (1-2.5mg) if high risk. |
-| > 9 | None/Minimal | Hold warfarin. High dose oral Vit K (2.5-5mg). |
-| Any | Serious/Life Threatening | Hold warfarin. **IV Vitamin K + PCC**. |
-`
+    content: ``
   },
 
   // --- NEUROCRITICAL CARE ---
@@ -260,66 +608,19 @@ Use the **[Thrombectomy Calculator](/calculators?id=evt&returnTo=/guide/thrombec
     id: 'icp-mgmt',
     title: 'Management of Increased ICP',
     category: 'Neurocritical Care',
-    content: `
-**Formula:** CPP = MAP - ICP.
-**Goal:** ICP < 20-25 mmHg. CPP > 60 mmHg.
-
-## Interventions
-1.  **Airway:** Intubate if [GCS](/calculators?id=gcs&returnTo=/guide/icp-mgmt) < 8.
-2.  **Imaging:** STAT CT Head.
-3.  **Position:** HOB 30 degrees. Avoid lateral neck flexion or constriction.
-4.  **Hyperventilation:** Target PCO2 30-35 mmHg.
-    *   *Note: Only temporary (bridge). Do not drop < 25 mmHg.*
-5.  **Hyperosmolar Agents:**
-    *   **Mannitol:** 1g/kg bolus -> 0.25g/kg q6h. Monitor Serum Osm (Keep < 320). Euvolmia maintenance.
-    *   **Hypertonic Saline (3%):** 100ml bolus -> Infusion to Na goal 150-155. Check Na q2-4h. Can use 23.4% (30ml) via central line for crisis.
-6.  **Sedation/Analgesia:** Control pain/cough.
-7.  **Seizure/Fever:** Control aggressively.
-8.  **Refractory:** Hypothermia (32-34C). Barbiturate coma (Pentobarbital) as last resort.
-`
+    content: ``
   },
   'sah-mgmt': {
     id: 'sah-mgmt',
     title: 'Aneurysmal SAH Management',
     category: 'Neurocritical Care',
-    content: `
-## Initial Management
-*   Intubate if [GCS](/calculators?id=gcs&returnTo=/guide/sah-mgmt) < 8.
-*   Reverse anticoagulation.
-*   **BP Goal:** SBP < 160 (Labetalol, Nicardipine). *Avoid Nitroprusside/Nitroglycerin (increases cerebral blood volume/ICP).*
-*   **Nimodipine:** 60mg q4h for 21 days (improves outcomes, prevents delayed ischemia).
-
-## Modified Fisher Scale (Vasospasm Risk)
-| Grade | Criteria | Vasospasm Risk |
-|---|---|---|
-| 0 | No SAH/IVH | 0% |
-| 1 | Thin SAH (<1mm), No IVH | 24% |
-| 2 | Thin SAH, IVH present | 33% |
-| 3 | Thick SAH (≥1mm), No IVH | 33% |
-| 4 | Thick SAH, IVH present | 40% |
-`
+    content: ``
   },
   'hypoxic-brain': {
     id: 'hypoxic-brain',
     title: 'Hypoxic Brain Injury & Brain Death',
     category: 'Neurocritical Care',
-    content: `
-## Hypoxic Brain Injury Workup
-*   Long term video EEG.
-*   CT Head non-contrast and MRI Brain.
-*   SSEP (Median Nerve).
-*   NSE (Neuron Specific Enolase).
-
-## Brain Death Protocol
-*   2 Exams of cerebral and brain stem function 6 hours apart.
-*   **Apnea Test** (Performed at end of 2nd exam):
-    1.  Pre-oxygenate 100% for 10 min.
-    2.  Reduce RR to 10 and PEEP to 5.
-    3.  Draw baseline ABG.
-    4.  Discontinue Vent, place O2 NC at carina 6L.
-    5.  ABG immediately and after 5 min.
-    *   **Positive Result:** No spontaneous breathing AND (PCO2 > 55 OR PCO2 increase by >20) OR pH <= 7.25.
-`
+    content: ``
   },
 
   // --- EPILEPSY ---
@@ -328,31 +629,82 @@ Use the **[Thrombectomy Calculator](/calculators?id=evt&returnTo=/guide/thrombec
     title: 'Management of Status Epilepticus',
     category: 'Epilepsy',
     content: `
-1.  **Initial:** ABCs, O2, IV Access. Labs (Chem-7, Mg, Ca, CBC, LFTs, AED levels, Tox screen).
-2.  **Thiamine:** 100mg IV + D50 50mL (unless glucose known).
-3.  **Benzodiazepine:**
-    *   Lorazepam 2mg IV (Max 8mg).
-    *   Alt: Diazepam 20mg PR or Midazolam 10mg IM.
-4.  **Anti-Epileptic:** Fosphenytoin 20mg/kg IV @ 150mg/min (Monitor BP/EKG).
-5.  **Refractory (Intubation Required):**
-    *   **Midazolam Drip:** Load 0.2mg/kg. Rate 0.1-2.9 mg/kg/hr.
-    *   **Propofol Drip:** Load 1-2mg/kg. Rate 1-15 mg/kg/hr. *(Watch for Propofol Infusion Syndrome)*.
-    *   **Pentobarbital:** Load 5mg/kg. Rate 1-10 mg/kg/hr.
-`
-  },
-  'emu-orders': {
-    id: 'emu-orders',
-    title: 'EMU Orders',
-    category: 'Epilepsy',
-    content: `
-*   Long term video EEG.
-*   **Labs:** CK, Urine drug screen.
-*   **Nursing Orders:**
-    *   Sleep deprivation until 2am.
-    *   Photic stimulation.
-    *   Hyperventilation.
-*   **Medications:** AEDs per attending. Ativan PRN.
-*   **Precautions:** Seizure, Fall, Aspiration.
+## Definition (ILAE 2015)
+Status Epilepticus (SE) is defined by two operational time points:
+*   **T1 (Time to Treatment):** 5 minutes for convulsive SE. Seizures are unlikely to stop spontaneously; start treatment.
+*   **T2 (Time to Damage):** 30 minutes for convulsive SE. Risk of long-term neuronal injury; seizure must be controlled.
+
+**Classification:**
+*   **Convulsive SE:** Prominent motor symptoms.
+*   **Non-convulsive SE (NCSE):** EEG evidence of seizures without prominent motor signs (coma, confusion).
+*   **Refractory SE:** Persists despite 2 appropriate medications (Benzo + AED).
+*   **Super-Refractory SE:** Persists > 24h despite anesthesia.
+
+## Phase I: Initial Therapy (0-10 min)
+**Goal:** Stop the seizure immediately. Benzodiazepines are the cornerstone. Underdosing is the most common cause of failure.
+
+### Preferred Agents (Choose One)
+*   **Lorazepam (Ativan)**
+    *   **Dose:** 4 mg IV (0.1 mg/kg)
+    *   *Note:* May repeat once. Preferred IV agent.
+*   **Midazolam (Versed)**
+    *   **Dose:** 10 mg IM (>40kg) or 5 mg IM (<40kg)
+    *   *Note:* First line for pre-hospital or no IV access.
+*   **Diazepam (Valium)**
+    *   **Dose:** 10 mg IV (0.15 mg/kg)
+
+**Pearls:**
+*   Do not delay for EEG.
+*   Support ABCs.
+*   Check glucose (Give Thiamine 100mg + D50 if < 60 mg/dL).
+
+## Phase II: Urgent Control (10-30 min)
+**Goal:** Prevent recurrence. Start immediately if seizure persists after Phase I.
+**Evidence:** The ESETT Trial (2019) showed Levetiracetam, Fosphenytoin, and Valproate are equally effective (~50% cessation).
+
+### Preferred Agents (Choose One)
+*   **Levetiracetam (Keppra)**
+    *   **Dose:** 60 mg/kg IV (Max 4500 mg)
+    *   **Infusion:** Over 15 min.
+*   **Fosphenytoin (Cerebyx)**
+    *   **Dose:** 20 mg PE/kg IV (Max 1500 mg PE)
+    *   **Infusion:** Up to 150 mg/min. Cardiac monitoring required.
+*   **Valproic Acid (Depacon)**
+    *   **Dose:** 40 mg/kg IV (Max 3000 mg)
+    *   **Infusion:** Over 10 min. (Avoid in liver disease/pregnancy).
+
+**Alternative:**
+*   **Phenobarbital:** 15 mg/kg IV. (Risk of hypotension/respiratory depression).
+
+## Phase III: Refractory Management (30-60 min)
+**Goal:** Suppress seizure activity with anesthetic infusions. Intubation usually required.
+**Monitoring:** Continuous EEG is mandatory to titrate to seizure suppression or burst suppression.
+
+### Continuous Infusions
+*   **Midazolam**
+    *   **Load:** 0.2 mg/kg
+    *   **Maintenance:** 0.1 - 2 mg/kg/hr
+*   **Propofol**
+    *   **Load:** 1-2 mg/kg
+    *   **Maintenance:** 20 - 200 mcg/kg/min (Watch for PRIS)
+*   **Ketamine**
+    *   **Load:** 1.5 - 4.5 mg/kg
+    *   **Maintenance:** 1 - 10 mg/kg/hr (Hemodynamically stable; NMDA antagonist)
+*   **Pentobarbital**
+    *   **Load:** 5-15 mg/kg
+    *   **Maintenance:** 0.5 - 5 mg/kg/hr (Hypotension common)
+
+## Phase IV: Super-Refractory (> 24 hrs)
+If seizures persist despite 24 hours of anesthesia:
+*   **Ketamine:** Add if not already used.
+*   **Immunotherapy:** Consider empiric High-Dose Steroids (Methylprednisolone 1g x 3-5d) or IVIG if suspicion of **NORSE** (New-Onset Refractory Status Epilepticus).
+*   **Other:** Ketogenic diet, Vagus Nerve Stimulation (VNS), Hypothermia (mixed evidence).
+
+## Diagnostic Workup
+*   **Stat:** Fingerstick Glucose, Electrolytes (Ca, Mg, Phos), AED levels, Toxicology.
+*   **Imaging:** CT Head (Acute), MRI Brain (Etiology).
+*   **LP:** If febrile or immunocompromised.
+*   **Etiologies to Rule Out:** Stroke, Trauma, Infection, Metabolic (Na, Glucose, Uremia), drug withdrawal/toxicity, Autoimmune Encephalitis.
 `
   },
 
@@ -361,54 +713,19 @@ Use the **[Thrombectomy Calculator](/calculators?id=evt&returnTo=/guide/thrombec
     id: 'meningitis',
     title: 'Meningitis',
     category: 'Infectious Disease',
-    content: `
-## CSF Profiles
-| Type | Glucose (40-70) | Protein (15-45) | Cells |
-|---|---|---|---|
-| **Acute Bacterial** | Low | High | PMNs > 300 |
-| **Acute Viral** | Normal | Normal/High | Mono < 300 |
-| **Tuberculous** | Low | High | Mono/PMN < 300 |
-| **Fungal** | Low | High | < 300 |
-| **Malignant** | Low | High | Mononuclear |
-
-## Management
-*   **Tests:** Cell count, protein, glucose, culture, encephalitis panel.
-*   **Empiric Tx:** Vancomycin + Ceftriaxone + Acyclovir (10mg/kg q8h).
-`
+    content: ``
   },
   'workups': {
     id: 'workups',
     title: 'General Neurology Workups',
     category: 'General Neurology',
-    content: `
-## Hypercoagulable Workup
-Protein S, Protein C, Antithrombin III, Anticardiolipin Ab, Lupus anticoagulant, Beta 2 glycan, Homocysteine, Factor VIII, Factor V Leiden, Prothrombin Mutation.
-
-## Vasculitis Workup
-ANA, RF, RPR/VDRL, Hep B/C Panel, ESR, Cryoglobulins, HSV, HIV, CRP, ACE, C1Q, SSA/SSB, ANCA (p/c), C3/C4, SPEP, Anti-Ds DNA, Lyme.
-
-## Neuropathy Workup
-CBC, BMP, HbA1c, TFTs, B12, Folate, Methylmalonic Acid, SPEP, HIV, Hepatitis, Lyme, RPR.
-*   **Toxic:** Heavy metals, alcohol.
-*   **Genetic:** If indicated (CMT).
-*   **Paraneoplastic:** If indicated.
-
-## Myopathy Workup
-CPK, ESR, CRP, TFT, ANA/Autoimmune, EMG/NCS, Muscle Biopsy.
-`
+    content: ``
   },
   'dementia-workup': {
     id: 'dementia-workup',
     title: 'Dementia Workup',
     category: 'Cognitive Neurology',
-    content: `
-*   **History:** Drug review (anticholinergics, sedatives).
-*   **Cognitive:** MMSE or MoCA.
-*   **Labs:** CBC, BMP, TSH, B12, MMA, Homocysteine, Thiamine, RPR.
-*   **Advanced:** Heavy metal, Paraneoplastic, APOE (AD), 14-3-3 (CJD).
-*   **Imaging:** MRI Brain or CT Head.
-*   **Procedures:** EEG, LP, Neuropsych testing.
-`
+    content: ``
   },
   
   // --- NEUROMUSCULAR & IMMUNOLOGY ---
@@ -416,53 +733,18 @@ CPK, ESR, CRP, TFT, ANA/Autoimmune, EMG/NCS, Muscle Biopsy.
     id: 'myasthenia-gravis',
     title: 'Myasthenia Gravis',
     category: 'Neuromuscular',
-    content: `
-## Workup
-*   TFTs
-*   AChR antibodies (Binding, Blocking, Modulating).
-*   MuSK antibodies.
-*   CT Chest (Thymoma).
-*   EMG/NCS (Repetitive stim, Single fiber).
-
-## Treatment (Crisis)
-*   **Respiratory:** Monitor NIF and FVC q4h. Intubate if NIF < 20 or FVC < 1L.
-*   **Acute:** Plasmapheresis (PLEX) or IVIG (0.4g/kg/day x 5 days).
-*   **Contraindicated Meds:** Aminoglycosides, Fluoroquinolones, Macrolides, Beta-blockers, Magnesium.
-`
+    content: ``
   },
   'gbs': {
     id: 'gbs',
     title: 'Guillain-Barre Syndrome',
     category: 'Neuromuscular',
-    content: `
-## Workup
-*   **LP:** Albuminocytologic dissociation (High protein, Normal WBC).
-*   **EMG/NCS:** Demyelinating features (slow conduction, prolonged latency, blocks) or Axonal features.
-*   **MRI Spine:** Enhancement of nerve roots/cauda equina.
-*   **Antibodies:** Anti-GQ1b (Miller Fisher).
-
-## Treatment
-*   **IVIG:** 0.4g/kg for 5 days (Check IgA level first).
-*   **PLEX:** 40-50ml/kg for 5 doses.
-*   **Monitoring:** NIF/FVC q4h (Intubate if NIF < 20 / FVC < 1L). Cardiac monitoring (autonomic instability). DVT ppx.
-`
+    content: ``
   },
   'multiple-sclerosis': {
     id: 'multiple-sclerosis',
     title: 'Multiple Sclerosis',
     category: 'Neuroimmunology',
-    content: `
-## Initial Workup
-*   MRI Brain and Neuro-axis (C/T spine) with/without contrast.
-*   **LP (CSF):** Oligoclonal bands (paired with serum), IgG Index, Myelin Basic Protein, Cell count.
-*   **Labs:** NMO/AQP-4, Anti-MOG, ACE, Lyme, B12, ANA.
-*   Visual Evoked Potentials (VEP).
-
-## Acute Treatment
-*   **Methylprednisolone:** 1000mg IV daily x 3-5 days.
-*   GI prophylaxis (PPI).
-*   Sliding scale insulin.
-*   Oral prednisone taper often follows.
-`
+    content: ``
   }
 };

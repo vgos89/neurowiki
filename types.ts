@@ -31,7 +31,7 @@ export interface CalculatorDefinition {
   name: string;
   description: string;
   inputs: CalculatorInput[];
-  calculate: (values: Record<string, any>) => { score: number | string; interpretation: string };
+  calculate: (values: Record<string, any>) => { score: number | string; interpretation: any };
 }
 
 export enum LoadingState {
