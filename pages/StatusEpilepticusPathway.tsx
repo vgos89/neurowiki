@@ -294,7 +294,7 @@ const StatusEpilepticusPathway: React.FC = () => {
                  <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
                     <div className="relative z-10">
                         <h2 className="text-2xl font-black mb-1">Refractory SE</h2>
-                        <p className="opacity-90">Stage 3 (>30 min). Intubation & Continuous EEG required.</p>
+                        <p className="opacity-90">Stage 3 (&gt;30 min). Intubation & Continuous EEG required.</p>
                     </div>
                     <Activity className="absolute right-4 top-4 text-white opacity-20" size={64} />
                  </div>
