@@ -220,7 +220,7 @@ const MigrainePathway: React.FC = () => {
       if (cocktail.ketorolac) lines.push(`- Ketorolac ${cocktail.ketorolac} mg IM/IV x1 (Repeat x1 at 8h PRN, Max 2 doses)`);
       if (cocktail.dexamethasone) lines.push(`- Dexamethasone ${cocktail.dexamethasone} mg IV x1`);
 
-      if (firstLineAddOns.sumatriptan) lines.push("- Sumatriptan 6 mg SC x1 (Repeat x1 at 2h PRN, Max 12mg/24h)");
+      if (firstLineAddOns.sumatriptan) lines.push("- Sumatriptan 6 mg SC x1 (Repeat x1 after 1h PRN, Max 12mg/24h)");
       if (firstLineAddOns.magnesium) lines.push(`- Magnesium Sulfate ${firstLineAddOns.magnesium} g IV x1`);
       if (firstLineAddOns.valproate) lines.push(`- Valproate ${firstLineAddOns.valproate} mg IV over 15m x1 (Repeat 500mg q8h PRN, Max 3 doses)`);
 
@@ -438,6 +438,7 @@ const MigrainePathway: React.FC = () => {
                             <div>
                                 <div className="font-bold text-slate-900">Diphenhydramine</div>
                                 <div className="text-xs text-slate-500">25/50 mg PO/IV x1</div>
+                                <div className="text-[10px] text-indigo-600 font-bold mt-0.5">Prevents akathisia from antiemetics.</div>
                             </div>
                             <input type="checkbox" checked={cocktail.benadryl} onChange={(e) => setCocktail({...cocktail, benadryl: e.target.checked})} className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500" />
                          </div>
@@ -448,7 +449,15 @@ const MigrainePathway: React.FC = () => {
                             <div className="space-y-2">
                                 {['metoclopramide', 'prochlorperazine', 'ondansetron'].map((opt) => (
                                     <label key={opt} className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer ${cocktail.antiemetic === opt ? 'bg-indigo-50 border-indigo-200' : 'bg-slate-50 border-transparent hover:bg-slate-100'}`}>
-                                        <div className="text-sm font-medium capitalize">{opt} <span className="text-xs opacity-60 ml-1">{opt === 'ondansetron' ? '4-8 mg' : '10 mg'}</span></div>
+                                        <div className="flex-1">
+                                            <div className="text-sm font-medium capitalize flex items-center">
+                                                {opt} 
+                                                <span className="text-xs opacity-60 ml-1 font-normal">{opt === 'ondansetron' ? '4-8 mg' : '10 mg'}</span>
+                                            </div>
+                                            {opt === 'metoclopramide' && <div className="text-[10px] text-slate-500 mt-0.5">First-line dopamine antagonist. May repeat q8h.</div>}
+                                            {opt === 'prochlorperazine' && <div className="text-[10px] text-slate-500 mt-0.5">Alternative dopamine antagonist. May repeat q8h.</div>}
+                                            {opt === 'ondansetron' && <div className="text-[10px] text-amber-600 mt-0.5 font-bold">Use for allergy/QT risk. Less effective for pain. May repeat q8h.</div>}
+                                        </div>
                                         <input type="radio" name="antiemetic" checked={cocktail.antiemetic === opt} onChange={() => setCocktail({...cocktail, antiemetic: opt as AntiemeticChoice})} className="text-indigo-600 focus:ring-indigo-500" />
                                     </label>
                                 ))}
@@ -458,7 +467,10 @@ const MigrainePathway: React.FC = () => {
                          {/* C: Ketorolac */}
                          <div className={`bg-white p-4 rounded-xl border border-gray-200 ${checkEligibility('ketorolac').disabled ? 'opacity-50' : ''}`}>
                              <div className="flex justify-between items-start mb-2">
-                                <div className="font-bold text-slate-900">Ketorolac (Toradol)</div>
+                                <div>
+                                    <div className="font-bold text-slate-900">Ketorolac (Toradol)</div>
+                                    <div className="text-[10px] text-indigo-600 font-bold mt-0.5">NSAID. Targets prostaglandin-mediated pain. May repeat q8h (Max 2 doses).</div>
+                                </div>
                                 {checkEligibility('ketorolac').disabled && <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">{checkEligibility('ketorolac').reason}</span>}
                              </div>
                              {!checkEligibility('ketorolac').disabled && (
@@ -484,7 +496,10 @@ const MigrainePathway: React.FC = () => {
                          {/* D: Dexamethasone */}
                          <div className={`bg-white p-4 rounded-xl border border-gray-200 ${checkEligibility('dexamethasone').disabled ? 'opacity-50' : ''}`}>
                              <div className="flex justify-between items-start mb-2">
-                                <div className="font-bold text-slate-900">Dexamethasone</div>
+                                <div>
+                                    <div className="font-bold text-slate-900">Dexamethasone</div>
+                                    <div className="text-[10px] text-indigo-600 font-bold mt-0.5">Prevents recurrence (rebound) within 72h. Single dose only.</div>
+                                </div>
                                 {checkEligibility('dexamethasone').disabled && <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">{checkEligibility('dexamethasone').reason}</span>}
                              </div>
                              {!checkEligibility('dexamethasone').disabled && (
@@ -521,7 +536,10 @@ const MigrainePathway: React.FC = () => {
                             }`}
                          >
                              <div className="flex justify-between items-start">
-                                 <div className="font-bold text-slate-900">Sumatriptan 6 mg SC</div>
+                                 <div>
+                                     <div className="font-bold text-slate-900">Sumatriptan 6 mg SC</div>
+                                     <div className="text-[10px] text-indigo-600 font-bold mt-0.5">5-HT agonist. Specific migraine abortive. May repeat x1 after 1hr (Max 12mg/24h).</div>
+                                 </div>
                                  {checkEligibility('sumatriptan').disabled ? <span className="text-xs text-red-600 font-bold">{checkEligibility('sumatriptan').reason}</span> : (firstLineAddOns.sumatriptan && <Check size={16} className="text-indigo-600"/>)}
                              </div>
                          </button>
@@ -538,6 +556,7 @@ const MigrainePathway: React.FC = () => {
                              <div className="flex justify-between items-start">
                                  <div>
                                      <div className="font-bold text-slate-900">Magnesium Sulfate 1-2 g IV</div>
+                                     <div className="text-[10px] text-indigo-600 font-bold mt-0.5">NMDA antagonist. Helpful for aura/photophobia. Single dose.</div>
                                      {checkEligibility('magnesium').warning && <div className="text-xs text-amber-600 font-bold mt-1">{checkEligibility('magnesium').warning}</div>}
                                  </div>
                                  {checkEligibility('magnesium').disabled ? <span className="text-xs text-red-600 font-bold">{checkEligibility('magnesium').reason}</span> : (firstLineAddOns.magnesium && <Check size={16} className="text-indigo-600"/>)}
@@ -560,7 +579,10 @@ const MigrainePathway: React.FC = () => {
                             }`}
                          >
                              <div className="flex justify-between items-start">
-                                 <div className="font-bold text-slate-900">Valproate Sodium IV</div>
+                                 <div>
+                                     <div className="font-bold text-slate-900">Valproate Sodium IV</div>
+                                     <div className="text-[10px] text-indigo-600 font-bold mt-0.5">Effective for refractory Status Migrainosus. May repeat 500mg q8h (Max 3 doses).</div>
+                                 </div>
                                  {checkEligibility('valproate').disabled ? <span className="text-xs text-red-600 font-bold">{checkEligibility('valproate').reason}</span> : (firstLineAddOns.valproate && <Check size={16} className="text-indigo-600"/>)}
                              </div>
                              {firstLineAddOns.valproate && (

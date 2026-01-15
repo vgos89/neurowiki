@@ -1,10 +1,10 @@
 
 export const EVT_CONTENT = {
   earlyEligible: "Class I evidence for benefit (ASPECTS ≥ 6).",
-  largeCore: "SELECT2 and ANGEL-ASPECT trials demonstrate benefit for large core infarcts (ASPECTS 3-5 or Core ≥ 50ml). CAUTION: Higher hemorrhage risk.",
+  largeCore: "SELECT2 and ANGEL-ASPECT trials demonstrate benefit for large core infarcts (ASPECTS 3-5 or Core ≥ 50ml). CAUTION: Higher hemorrhage risk. Recommend interdisciplinary discussion.",
   dawnEligible: "Meets DAWN trial inclusion for thrombectomy 6-24h (Clinical-Core Mismatch).",
   defuseEligible: "Meets DEFUSE-3 trial inclusion (Core < 70ml, Ratio ≥ 1.8).",
-  largeCoreLate: "Benefit shown in ANGEL-ASPECT and SELECT2 for large core volumes. Very large cores may be futile.",
+  largeCoreLate: "Benefit shown in ANGEL-ASPECT and SELECT2 for large core volumes. Very large cores may be futile. CAUTION: Higher hemorrhage risk. Recommend interdisciplinary discussion.",
   notEligibleLate: "Does not meet DAWN, DEFUSE-3, or SELECT2/ANGEL-ASPECT criteria."
 };
 

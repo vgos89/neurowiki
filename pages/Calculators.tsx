@@ -352,9 +352,9 @@ const ROPE_CALC: CalculatorDefinition = {
   name: 'RoPE Score',
   description: 'Estimates probability that a PFO is the cause of cryptogenic stroke (PFO Attributable Fraction).',
   inputs: [
-    { id: 'hypertension', label: 'No History of Hypertension', type: 'boolean' },
-    { id: 'diabetes', label: 'No History of Diabetes', type: 'boolean' },
-    { id: 'stroke', label: 'No Prior Stroke/TIA', type: 'boolean' },
+    { id: 'hypertension', label: 'History of Hypertension', type: 'boolean' },
+    { id: 'diabetes', label: 'History of Diabetes', type: 'boolean' },
+    { id: 'stroke', label: 'Prior Stroke/TIA', type: 'boolean' },
     { id: 'smoker', label: 'Non-Smoker', type: 'boolean' },
     { id: 'cortical', label: 'Cortical Infarct on Imaging', type: 'boolean' },
     {
@@ -373,12 +373,19 @@ const ROPE_CALC: CalculatorDefinition = {
   ],
   calculate: (values) => {
     let score = 0;
-    if (values.hypertension) score++;
-    if (values.diabetes) score++;
-    if (values.stroke) score++;
-    if (values.smoker) score++;
-    if (values.cortical) score++;
+    // RoPE score awards points for the ABSENCE of vascular risk factors.
+    // If user selects "No" (false) to History of Hypertension, score +1.
+    if (values.hypertension === false) score++;
+    if (values.diabetes === false) score++;
+    if (values.stroke === false) score++;
+    
+    // RoPE score awards points for PRESENCE of favorable features.
+    // If user selects "Yes" (true) to Non-Smoker, score +1.
+    if (values.smoker === true) score++;
+    if (values.cortical === true) score++;
+    
     score += Number(values.age || 0);
+    
     let interp = "0% PFO Attributable Fraction (Incidental PFO)";
     if (score === 4) interp = "38% PFO Attributable Fraction";
     else if (score === 5) interp = "34% PFO Attributable Fraction";
