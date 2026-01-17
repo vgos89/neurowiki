@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, AlertTriangle, Check, RotateCcw, Copy, Info, AlertCircle, ChevronRight, Activity } from 'lucide-react';
+import { ArrowLeft, AlertTriangle, Check, RotateCcw, Copy, Info, AlertCircle, ChevronRight, Activity, Star } from 'lucide-react';
+import { useFavorites } from '../hooks/useFavorites';
 
 // --- Types ---
 type Tri = "no" | "yes" | "unknown";
@@ -161,15 +162,15 @@ interface TriButtonProps {
 const TriButton = React.memo(({ field, label, value, onChange, registerRef }: TriButtonProps) => (
     <div 
         ref={registerRef}
-        className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm transition-all hover:border-neuro-100 scroll-mt-24"
+        className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm transition-all hover:border-neuro-100 scroll-mt-32"
     >
-      <label className="block text-sm font-bold text-slate-800 mb-3">{label}</label>
-      <div className="flex bg-slate-100 rounded-lg p-1">
+      <label className="block text-base font-bold text-slate-800 mb-4">{label}</label>
+      <div className="flex bg-slate-100 rounded-lg p-1.5 h-16">
         {(['yes', 'no', 'unknown'] as Tri[]).map(val => (
           <button
             key={val}
             onClick={() => onChange(field, val)}
-            className={`flex-1 py-3 rounded-md text-sm font-bold capitalize transition-all duration-200 ${
+            className={`flex-1 rounded-md text-sm font-bold capitalize transition-all duration-200 touch-manipulation ${
               value === val
                 ? val === 'yes' 
                     ? 'bg-neuro-600 text-white shadow-md' 
@@ -203,6 +204,17 @@ const GCAPathway: React.FC = () => {
 
   const [result, setResult] = useState<Result | null>(null);
   const fieldRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  // Favorites
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const [showFavToast, setShowFavToast] = useState(false);
+  const isFav = isFavorite('gca-pathway');
+
+  const handleFavToggle = () => {
+      const newVal = toggleFavorite('gca-pathway');
+      setShowFavToast(true);
+      setTimeout(() => setShowFavToast(false), 2000);
+  };
 
   useEffect(() => {
     setResult(calculateGcaDecision(inputs));
@@ -238,7 +250,7 @@ const GCAPathway: React.FC = () => {
                 if (nextEl) {
                     nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
-            }, 150);
+            }, 300);
         } 
         // If it's the last field, scroll to the action bar
         else if (idx === currentFields.length - 1) {
@@ -247,7 +259,7 @@ const GCAPathway: React.FC = () => {
                 if (actionBar) {
                     actionBar.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }
-            }, 150);
+            }, 300);
         }
     }
   }, [step]);
@@ -304,20 +316,28 @@ ${result.notes.join('\n')}
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32 md:pb-20">
       {/* Header */}
-      <div className="mb-6">
-        <Link to="/calculators" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
-            <div className="bg-white p-1.5 rounded-md border border-gray-200 mr-2 shadow-sm group-hover:shadow-md transition-all">
-                <ArrowLeft size={16} />
+      <div className="mb-6 flex items-start justify-between">
+        <div>
+            <Link to="/calculators" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
+                <div className="bg-white p-1.5 rounded-md border border-gray-200 mr-2 shadow-sm group-hover:shadow-md transition-all">
+                    <ArrowLeft size={16} />
+                </div>
+                Back to Calculators
+            </Link>
+            <div className="flex items-center space-x-3 mb-2">
+                <div className="p-2 bg-neuro-100 text-neuro-700 rounded-lg">
+                    <Activity size={24} />
+                </div>
+                <h1 className="text-2xl font-black text-slate-900 tracking-tight">GCA / PMR Clinical Pathway</h1>
             </div>
-            Back to Calculators
-        </Link>
-        <div className="flex items-center space-x-3 mb-2">
-            <div className="p-2 bg-neuro-100 text-neuro-700 rounded-lg">
-                <Activity size={24} />
-            </div>
-            <h1 className="text-2xl font-black text-slate-900 tracking-tight">GCA / PMR Clinical Pathway</h1>
+            <p className="text-slate-500 font-medium">Guided decision aid for suspected GCA/PMR; not a substitute for clinical judgment.</p>
         </div>
-        <p className="text-slate-500 font-medium">Guided decision aid for suspected GCA/PMR; not a substitute for clinical judgment.</p>
+        <button 
+            onClick={handleFavToggle}
+            className="p-3 rounded-full hover:bg-slate-100 transition-colors"
+        >
+            <Star size={24} className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'} />
+        </button>
       </div>
 
       {/* Progress */}
@@ -338,7 +358,7 @@ ${result.notes.join('\n')}
 
       {/* Step 1: Red Flags */}
       {step === 1 && (
-        <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+        <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
             <TriButton field="age50" label="Age ≥ 50 years?" value={inputs.age50} onChange={handleFieldChange} registerRef={el => fieldRefs.current['age50'] = el} />
             <TriButton field="visual" label="Visual symptoms or transient vision loss?" value={inputs.visual} onChange={handleFieldChange} registerRef={el => fieldRefs.current['visual'] = el} />
             <TriButton field="jawClaudication" label="Jaw claudication?" value={inputs.jawClaudication} onChange={handleFieldChange} registerRef={el => fieldRefs.current['jawClaudication'] = el} />
@@ -347,7 +367,7 @@ ${result.notes.join('\n')}
 
       {/* Step 2: Phenotype */}
       {step === 2 && (
-        <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+        <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
              <TriButton field="headacheOrScalpTenderness" label="New headache or scalp tenderness?" value={inputs.headacheOrScalpTenderness} onChange={handleFieldChange} registerRef={el => fieldRefs.current['headacheOrScalpTenderness'] = el} />
              <TriButton field="pmrSymptoms" label="PMR features (proximal pain/stiffness, morning stiffness)?" value={inputs.pmrSymptoms} onChange={handleFieldChange} registerRef={el => fieldRefs.current['pmrSymptoms'] = el} />
              <TriButton field="constitutional" label="Constitutional symptoms (fever/weight loss/night sweats)?" value={inputs.constitutional} onChange={handleFieldChange} registerRef={el => fieldRefs.current['constitutional'] = el} />
@@ -356,31 +376,31 @@ ${result.notes.join('\n')}
 
       {/* Step 3: Objective */}
       {step === 3 && (
-        <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+        <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
             <div 
                 ref={el => { fieldRefs.current['crpEsr'] = el; }}
-                className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:border-neuro-100 transition-all scroll-mt-24"
+                className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:border-neuro-100 transition-all scroll-mt-32"
             >
-                <label className="block text-sm font-bold text-slate-800 mb-3">CRP/ESR Level</label>
-                <div className="flex flex-col space-y-2">
+                <label className="block text-base font-bold text-slate-800 mb-4">CRP/ESR Level</label>
+                <div className="flex flex-col space-y-3">
                     {markerOptions.map((opt) => (
                         <button
                             key={opt.value}
                             onClick={() => handleFieldChange('crpEsr', opt.value)}
-                            className={`flex items-center justify-between p-3 rounded-lg text-sm transition-all duration-200 border ${
+                            className={`flex items-center justify-between p-4 rounded-xl text-sm transition-all duration-200 border touch-manipulation active:scale-[0.98] ${
                                 inputs.crpEsr === opt.value
-                                    ? 'bg-neuro-600 text-white border-neuro-600 shadow-md'
+                                    ? 'bg-neuro-600 text-white border-neuro-600 shadow-md ring-2 ring-neuro-100'
                                     : 'bg-slate-50 text-slate-600 border-transparent hover:bg-white hover:border-gray-200'
                             }`}
                         >
-                            <span className="font-bold">{opt.label}</span>
+                            <span className="font-bold text-base">{opt.label}</span>
                             <span className={`text-xs ${inputs.crpEsr === opt.value ? 'text-neuro-100' : 'text-slate-400'}`}>{opt.desc}</span>
                         </button>
                     ))}
                 </div>
             </div>
 
-            <h3 className="text-sm font-black uppercase text-slate-400 tracking-widest mt-6 mb-2">Imaging Findings</h3>
+            <h3 className="text-sm font-black uppercase text-slate-400 tracking-widest mt-8 mb-2 px-2">Imaging Findings</h3>
             <TriButton field="imagingTemporal" label="Temporal Artery (Halo sign/Biopsy)?" value={inputs.imagingTemporal} onChange={handleFieldChange} registerRef={el => fieldRefs.current['imagingTemporal'] = el} />
             <TriButton field="imagingAortic" label="Aortic/Branch Involvement (Large Vessel)?" value={inputs.imagingAortic} onChange={handleFieldChange} registerRef={el => fieldRefs.current['imagingAortic'] = el} />
             <TriButton field="imagingShoulderHip" label="Shoulder/Hip Inflammation (PMR)?" value={inputs.imagingShoulderHip} onChange={handleFieldChange} registerRef={el => fieldRefs.current['imagingShoulderHip'] = el} />
@@ -391,7 +411,7 @@ ${result.notes.join('\n')}
       {step === 4 && result && (
           <div className="space-y-6 animate-in zoom-in-95 duration-300">
              {/* Tier Card */}
-             <div className={`p-8 rounded-3xl text-white relative overflow-hidden shadow-lg ${
+             <div className={`p-8 rounded-3xl text-white relative overflow-hidden shadow-xl ${
                  result.tier === 'High' ? 'bg-red-600 shadow-red-200' :
                  result.tier === 'Intermediate' ? 'bg-amber-500 shadow-amber-200' : 'bg-emerald-500 shadow-emerald-200'
              }`}>
@@ -450,9 +470,9 @@ ${result.notes.join('\n')}
           </div>
       )}
 
-      {/* Actions Bar */}
-      <div id="gca-action-bar" className="mt-8 pt-4 border-t border-gray-100 scroll-mt-4">
-         <div className="flex items-center justify-between gap-4">
+      {/* Sticky Actions Bar */}
+      <div id="gca-action-bar" className="mt-8 pt-4 md:border-t border-gray-100 scroll-mt-4 fixed bottom-[4.5rem] md:static left-0 right-0 bg-white/95 backdrop-blur md:bg-transparent p-4 md:p-0 border-t md:border-0 z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none">
+         <div className="max-w-3xl mx-auto flex items-center justify-between gap-4">
              {/* Back Button */}
              <button 
                 onClick={handleBack} 
@@ -475,24 +495,25 @@ ${result.notes.join('\n')}
 
              {/* Next / Copy Button */}
              {step < 4 ? (
-                 <button onClick={handleNext} className="px-8 py-3 bg-neuro-600 text-white rounded-xl font-bold hover:bg-neuro-700 shadow-lg shadow-neuro-200 transition-all flex items-center transform active:scale-95">
+                 <button onClick={handleNext} className="flex-1 md:flex-none px-8 py-3 bg-neuro-600 text-white rounded-xl font-bold hover:bg-neuro-700 shadow-lg shadow-neuro-200 transition-all flex items-center justify-center transform active:scale-95">
                      Next <ChevronRight size={16} className="ml-2" />
                  </button>
              ) : (
-                 <button onClick={copySummary} className="px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-all flex items-center transform active:scale-95">
+                 <button onClick={copySummary} className="flex-1 md:flex-none px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-all flex items-center justify-center transform active:scale-95">
                      <Copy size={16} className="mr-2" /> Copy
                  </button>
              )}
          </div>
-         {/* Mobile Start Over for Step 4 */}
-         {step === 4 && (
-            <div className="md:hidden mt-4 text-center">
-                <button onClick={handleReset} className="text-sm text-slate-400 font-bold flex items-center justify-center w-full p-2 hover:bg-slate-50 rounded-lg transition-colors">
-                    <RotateCcw size={14} className="mr-2" /> Start Over
-                </button>
-            </div>
-         )}
       </div>
+      
+      {/* Mobile Start Over Spacer & Button */}
+      {step === 4 && (
+        <div className="md:hidden mt-20 text-center pb-8">
+            <button onClick={handleReset} className="text-sm text-slate-400 font-bold flex items-center justify-center w-full p-4 hover:bg-slate-50 rounded-lg transition-colors">
+                <RotateCcw size={14} className="mr-2" /> Start Over
+            </button>
+        </div>
+      )}
 
       {/* References */}
       {step === 4 && (
@@ -517,6 +538,11 @@ ${result.notes.join('\n')}
                   </li>
               </ul>
           </div>
+      )}
+      {showFavToast && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
+          {isFav ? 'Saved to Favorites' : 'Removed from Favorites'}
+        </div>
       )}
     </div>
   );

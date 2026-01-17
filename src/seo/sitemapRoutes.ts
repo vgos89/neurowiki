@@ -1,0 +1,25 @@
+
+export const SITEMAP_ROUTES = [
+  '/',
+  '/calculators',
+  '/calculators/nihss',
+  '/calculators/abcd2',
+  '/calculators/ich',
+  '/calculators/gcs',
+  '/calculators/rope',
+  '/calculators/aspects',
+  '/calculators/evt-pathway',
+  '/calculators/elan-pathway',
+  '/calculators/se-pathway',
+  '/calculators/migraine-pathway',
+  '/calculators/gca-pathway',
+  '/guide',
+  '/guide/stroke-basics',
+  '/guide/iv-tpa',
+  '/guide/thrombectomy',
+  '/guide/status-epilepticus',
+  '/trials',
+  '/trials/dawn-trial',
+  '/trials/defuse-3-trial',
+  '/trials/select2-trial'
+];

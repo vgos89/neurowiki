@@ -1,35 +1,54 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Check, RotateCcw, Copy, Info, AlertCircle, ChevronRight, Activity, Zap, XCircle } from 'lucide-react';
+import { ArrowLeft, Check, RotateCcw, Copy, Info, AlertCircle, ChevronRight, Activity, Zap, XCircle, AlertTriangle, ShieldAlert, Brain, Star } from 'lucide-react';
 import { EVT_CONTENT } from '../data/toolContent';
 import { autoLinkReactNodes } from '../internalLinks/autoLink';
+import LearningPearl from '../components/LearningPearl';
+import { useFavorites } from '../hooks/useFavorites';
 
-// ... (KEEP ALL TYPES AND INTERFACES SAME) ...
 type Tri = "yes" | "no" | "unknown";
 type AgeGroup = "under_18" | "18_79" | "80_plus" | "unknown";
 type TimeWindow = "0_6" | "6_24" | "unknown";
 type NIHSSGroup = "0_5" | "6_9" | "10_19" | "20_plus" | "unknown";
+type OcclusionType = "lvo" | "mevo" | "unknown";
+type LvoLocation = "anterior" | "basilar" | "unknown";
+type MevoLocation = "dominant_m2" | "nondominant_m2" | "distal" | "aca" | "pca" | "unknown";
 
 type Inputs = {
+  // Path Selector
+  occlusionType: OcclusionType;
+
+  // LVO Inputs
+  lvoLocation: LvoLocation;
   lvo: Tri;
   mrs: Tri;
   age: AgeGroup;
   time: TimeWindow;
   nihss: NIHSSGroup;
   aspects: string;
+  pcAspects: string; // For Basilar
   core: string;
   mismatchVol: string;
   mismatchRatio: string;
+
+  // MeVO Inputs
+  mevoLocation: MevoLocation;
+  mevoDependent: Tri; // "Requires daily nursing care"
+  nihssNumeric: string;
+  mevoDisabling: Tri;
+  mevoSalvageable: Tri; // Used for "Favorable Imaging" (0-6h) OR "Salvageable Tissue" (6-24h)
+  mevoTechnical: Tri;
 };
 
 type Result = {
-  eligible: boolean;
-  status: "Eligible" | "Not Eligible" | "Consult" | "Clinical Judgment";
+  eligible: boolean; // loosely used for "Green/Yellow" status vs "Red"
+  status: "Eligible" | "Not Eligible" | "Consult" | "Clinical Judgment" | "EVT Reasonable" | "BMT Preferred" | "High Uncertainty" | "Avoid EVT";
   criteriaName?: string;
   reason: string;
   details: string;
   exclusionReason?: string;
+  variant?: 'success' | 'warning' | 'danger' | 'neutral'; // specific color override
 };
 
 const STEPS = [
@@ -40,27 +59,59 @@ const STEPS = [
 ];
 
 const STEP_FIELDS: Record<number, string[]> = {
-  1: ['lvo', 'mrs', 'age'],
-  2: ['time', 'nihss'],
-  3: ['aspects', 'core', 'mismatchVol', 'mismatchRatio']
+  1: ['occlusionType', 'lvoLocation', 'lvo', 'mrs', 'age', 'mevoLocation', 'mevoDependent'],
+  2: ['time', 'nihss', 'nihssNumeric', 'mevoDisabling'],
+  3: ['aspects', 'pcAspects', 'core', 'mismatchVol', 'mismatchRatio', 'mevoSalvageable', 'mevoTechnical']
 };
 
-const calculateEvtProtocol = (inputs: Inputs): Result => {
-  if (inputs.lvo === 'no') return { eligible: false, status: "Not Eligible", reason: "No Large Vessel Occlusion (LVO)", details: "Thrombectomy is indicated for occlusions of the ICA or MCA (M1).", exclusionReason: "Absence of LVO target." };
-  if (inputs.mrs === 'no') return { eligible: false, status: "Not Eligible", reason: "Pre-stroke Disability (mRS > 1)", details: "Standard criteria require pre-stroke functional independence.", exclusionReason: "Poor baseline functional status." };
-  if (inputs.age === 'under_18') return { eligible: false, status: "Consult", reason: "Pediatric Patient", details: "Standard guidelines apply to age ≥ 18. Pediatric thrombectomy requires specialized consultation.", exclusionReason: "Age < 18." };
+const calculateLvoProtocol = (inputs: Inputs): Result => {
+  if (inputs.lvo === 'no') return { eligible: false, status: "Not Eligible", reason: "No Large Vessel Occlusion (LVO)", details: "Thrombectomy is indicated for occlusions of the ICA, MCA (M1), or Basilar Artery.", exclusionReason: "Absence of LVO target.", variant: 'danger' };
+  if (inputs.mrs === 'no') return { eligible: false, status: "Not Eligible", reason: "Pre-stroke Disability (mRS > 1)", details: "Standard criteria require pre-stroke functional independence.", exclusionReason: "Poor baseline functional status.", variant: 'danger' };
+  if (inputs.age === 'under_18') return { eligible: false, status: "Consult", reason: "Pediatric Patient", details: "Standard guidelines apply to age ≥ 18. Pediatric thrombectomy requires specialized consultation.", exclusionReason: "Age < 18.", variant: 'warning' };
 
+  // --- BASILAR ARTERY PROTOCOL (ATTENTION / BAOCHE) ---
+  if (inputs.lvoLocation === 'basilar') {
+      const pcScore = parseInt(inputs.pcAspects);
+      if (isNaN(pcScore)) return { eligible: false, status: "Not Eligible", reason: "Pending Imaging", details: "", variant: 'neutral' };
+
+      // Both trials used pc-ASPECTS >= 6 as cutoff
+      if (pcScore >= 6) {
+          // Check NIHSS if available (though clinical judgment overrides in basilar due to high mortality)
+          if (inputs.nihss === '0_5') {
+               return { eligible: true, status: "Clinical Judgment", reason: "Basilar LVO + Low NIHSS", details: "Trials typically enrolled NIHSS ≥ 6 or 10. However, Basilar occlusion carries extremely high risk of deterioration. Careful observation or treatment is reasonable.", variant: 'warning' };
+          }
+          return { 
+              eligible: true, 
+              status: "Eligible", 
+              criteriaName: inputs.time === '0_6' ? "ATTENTION / BAOCHE Criteria" : "BAOCHE Criteria",
+              reason: `Favorable Imaging (pc-ASPECTS ${pcScore})`, 
+              details: "Strong evidence for EVT in Basilar Artery Occlusion up to 24h with pc-ASPECTS ≥ 6. (ATTENTION trial 0-12h, BAOCHE trial 6-24h).", 
+              variant: 'success' 
+          };
+      } else {
+          return { 
+              eligible: false, 
+              status: "Avoid EVT", 
+              reason: `Extensive Infarct (pc-ASPECTS ${pcScore})`, 
+              details: "pc-ASPECTS < 6 indicates large established brainstem/cerebellar infarction. EVT is associated with high futile recanalization rates and mortality in this group.", 
+              exclusionReason: "pc-ASPECTS < 6",
+              variant: 'danger' 
+          };
+      }
+  }
+
+  // --- ANTERIOR CIRCULATION (ICA / M1) ---
   if (inputs.time === '0_6') {
      const aspects = parseInt(inputs.aspects);
-     if (isNaN(aspects)) return { eligible: false, status: "Not Eligible", reason: "Pending Imaging", details: "" };
-     if (inputs.nihss === '0_5') return { eligible: true, status: "Clinical Judgment", reason: "Low NIHSS (< 6)", details: "Guidelines recommend EVT if deficit is disabling despite low score (e.g., aphasia, hemianopsia).", criteriaName: "Early Window (Low NIHSS)" };
+     if (isNaN(aspects)) return { eligible: false, status: "Not Eligible", reason: "Pending Imaging", details: "", variant: 'neutral' };
+     if (inputs.nihss === '0_5') return { eligible: true, status: "Clinical Judgment", reason: "Low NIHSS (< 6)", details: "Guidelines recommend EVT if deficit is disabling despite low score (e.g., aphasia, hemianopsia).", criteriaName: "Early Window (Low NIHSS)", variant: 'warning' };
 
      if (aspects >= 6) {
-         return { eligible: true, status: "Eligible", criteriaName: "Standard Early Window", reason: "ASPECTS ≥ 6", details: EVT_CONTENT.earlyEligible };
+         return { eligible: true, status: "Eligible", criteriaName: "Standard Early Window", reason: "ASPECTS ≥ 6", details: EVT_CONTENT.earlyEligible, variant: 'success' };
      } else if (aspects >= 3) {
-         return { eligible: true, status: "Eligible", criteriaName: "Large Core Protocol", reason: "ASPECTS 3-5", details: EVT_CONTENT.largeCore };
+         return { eligible: true, status: "Eligible", criteriaName: "Large Core Protocol", reason: "ASPECTS 3-5", details: EVT_CONTENT.largeCore, variant: 'warning' };
      } else {
-         return { eligible: false, status: "Consult", reason: "Malignant Profile (ASPECTS 0-2)", details: "Very large core. High risk of futile reperfusion and hemorrhage. Individualized decision.", exclusionReason: "ASPECTS < 3" };
+         return { eligible: false, status: "Consult", reason: "Malignant Profile (ASPECTS 0-2)", details: "Very large core. High risk of futile reperfusion and hemorrhage. Individualized decision.", exclusionReason: "ASPECTS < 3", variant: 'danger' };
      }
   }
 
@@ -68,7 +119,7 @@ const calculateEvtProtocol = (inputs: Inputs): Result => {
       const core = parseInt(inputs.core);
       const mmVol = parseInt(inputs.mismatchVol);
       const ratio = parseFloat(inputs.mismatchRatio);
-      if (isNaN(core)) return { eligible: false, status: "Not Eligible", reason: "Pending Imaging", details: "" };
+      if (isNaN(core)) return { eligible: false, status: "Not Eligible", reason: "Pending Imaging", details: "", variant: 'neutral' };
 
       let dawnEligible = false;
       const isAge80Plus = inputs.age === '80_plus';
@@ -79,23 +130,98 @@ const calculateEvtProtocol = (inputs: Inputs): Result => {
           else { if (core < 31) dawnEligible = true; else if (core < 51 && nihssNum >= 20) dawnEligible = true; }
       }
 
-      if (dawnEligible) return { eligible: true, status: "Eligible", criteriaName: "DAWN Criteria", reason: "Clinical-Core Mismatch", details: EVT_CONTENT.dawnEligible };
+      if (dawnEligible) return { eligible: true, status: "Eligible", criteriaName: "DAWN Criteria", reason: "Clinical-Core Mismatch", details: EVT_CONTENT.dawnEligible, variant: 'success' };
 
       if (!isNaN(mmVol) && !isNaN(ratio)) {
-          if (core < 70 && mmVol >= 15 && ratio >= 1.8) return { eligible: true, status: "Eligible", criteriaName: "DEFUSE-3 Criteria", reason: "Perfusion Mismatch", details: EVT_CONTENT.defuseEligible };
+          if (core < 70 && mmVol >= 15 && ratio >= 1.8) return { eligible: true, status: "Eligible", criteriaName: "DEFUSE-3 Criteria", reason: "Perfusion Mismatch", details: EVT_CONTENT.defuseEligible, variant: 'success' };
       }
 
       if (core >= 50) {
-           return { eligible: true, status: "Eligible", criteriaName: "Large Core Protocol", reason: `Large Core Volume (${core} ml)`, details: EVT_CONTENT.largeCoreLate };
+           return { eligible: true, status: "Eligible", criteriaName: "Large Core Protocol", reason: `Large Core Volume (${core} ml)`, details: EVT_CONTENT.largeCoreLate, variant: 'warning' };
       }
       
-      return { eligible: false, status: "Not Eligible", reason: "No Target Profile", details: EVT_CONTENT.notEligibleLate, exclusionReason: "Imaging criteria not met." };
+      return { eligible: false, status: "Not Eligible", reason: "No Target Profile", details: EVT_CONTENT.notEligibleLate, exclusionReason: "Imaging criteria not met.", variant: 'danger' };
   }
 
-  return { eligible: false, status: "Not Eligible", reason: "Incomplete Data", details: "" };
+  return { eligible: false, status: "Not Eligible", reason: "Incomplete Data", details: "", variant: 'neutral' };
 };
 
-// ... (KEEP SELECTION CARD COMPONENT SAME) ...
+const calculateMevoProtocol = (inputs: Inputs): Result => {
+    const score = parseInt(inputs.nihssNumeric);
+    
+    // Status D: Avoid EVT - Clinical Hard Stops
+    if (inputs.mevoDependent === 'yes') {
+        return { eligible: false, status: "Avoid EVT", reason: "Baseline Dependency", details: "Avoid EVT based on baseline dependency (requires daily nursing care).", variant: 'danger' };
+    }
+    // Low NIHSS / Non-disabling
+    if (!isNaN(score) && score < 5 && inputs.mevoDisabling === 'no') {
+        return { eligible: false, status: "Avoid EVT", reason: "Non-disabling Deficit", details: "Avoid EVT for low NIHSS (<5) without disabling features.", variant: 'danger' };
+    }
+    
+    // IMAGING CHECK - Now applies to BOTH windows
+    // 0-6h: Requires "Favorable Profile" (Small core, collaterals, OR mismatch)
+    // 6-24h: Requires "Salvageable Tissue" (Mismatch)
+    if (inputs.mevoSalvageable === 'no') {
+        return { 
+            eligible: false, 
+            status: "Avoid EVT", 
+            reason: "Unfavorable Imaging", 
+            details: inputs.time === '0_6' 
+                ? "Avoid EVT. Imaging suggests large established infarct or poor collaterals." 
+                : "Avoid EVT. No evidence of salvageable tissue (penumbra) in late window.", 
+            variant: 'danger' 
+        };
+    }
+
+    // Status A: EVT Reasonable
+    // Dominant M2 + Disabling/High Score + Technical Feasibility
+    const hasDeficit = (!isNaN(score) && score >= 5) || inputs.mevoDisabling === 'yes';
+    
+    if (inputs.mevoLocation === 'dominant_m2' && hasDeficit && inputs.mevoTechnical === 'yes') {
+        return { 
+            eligible: true, 
+            status: "EVT Reasonable", 
+            criteriaName: "Selected MeVO",
+            reason: "Dominant M2 + Disabling", 
+            details: "EVT reasonable for selected MeVO (disabling deficit + favorable imaging + feasible anatomy). Discuss urgently with neurointerventional.", 
+            variant: 'success' 
+        };
+    }
+
+    // Status C: High Uncertainty
+    // Nondominant/Distal/ACA/PCA + Disabling + Technical
+    const isOtherLocation = inputs.mevoLocation !== 'dominant_m2' && inputs.mevoLocation !== 'unknown';
+    if (isOtherLocation && inputs.mevoDisabling === 'yes' && inputs.mevoTechnical === 'yes') {
+        return {
+            eligible: true,
+            status: "High Uncertainty",
+            criteriaName: "Specialist Decision",
+            reason: "Disabling Distal/Nondominant",
+            details: "High uncertainty: consider EVT only after specialist discussion; weigh disability vs. hemorrhage/procedural risk.",
+            variant: 'warning'
+        };
+    }
+
+    // Status B: BMT Preferred (Default) - e.g. High Technical Risk
+    if (inputs.mevoTechnical === 'no') {
+        return {
+            eligible: false, 
+            status: "BMT Preferred", 
+            reason: "High Technical Risk", 
+            details: "Procedural risks (access, tortuosity, distal location) likely outweigh benefits.", 
+            variant: 'neutral'
+        };
+    }
+
+    return { 
+        eligible: false, 
+        status: "BMT Preferred", 
+        reason: "Standard MeVO Criteria", 
+        details: "Best medical therapy preferred for this MeVO pattern; evidence for routine EVT is not established.", 
+        variant: 'neutral' 
+    };
+};
+
 interface SelectionCardProps {
     title: string;
     description?: string;
@@ -104,34 +230,59 @@ interface SelectionCardProps {
     variant?: 'default' | 'danger';
 }
 const SelectionCard = React.memo(({ title, description, selected, onClick, variant = 'default' }: SelectionCardProps) => (
-    <button onClick={onClick} className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 relative overflow-hidden ${selected ? variant === 'danger' ? 'bg-red-50 border-red-500 text-red-900' : 'bg-neuro-50 border-neuro-500 text-neuro-900' : 'bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50 text-slate-700'}`}>
+    <button onClick={onClick} className={`w-full text-left p-5 rounded-2xl border-2 transition-all duration-200 relative overflow-hidden active:scale-[0.99] touch-manipulation ${selected ? variant === 'danger' ? 'bg-red-50 border-red-500 text-red-900' : 'bg-neuro-50 border-neuro-500 text-neuro-900' : 'bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50 text-slate-700'}`}>
         <div className="flex items-start justify-between relative z-10">
-            <div><span className={`block font-bold ${selected ? 'text-current' : 'text-slate-900'}`}>{title}</span>{description && <span className={`text-sm mt-1 block ${selected ? 'opacity-90' : 'text-slate-500'}`}>{description}</span>}</div>
-            {selected && <div className={`p-1 rounded-full ${variant === 'danger' ? 'bg-red-500 text-white' : 'bg-neuro-500 text-white'}`}><Check size={14} /></div>}
+            <div className="pr-4">
+                <span className={`block text-lg font-bold ${selected ? 'text-current' : 'text-slate-900'}`}>{title}</span>
+                {description && <span className={`text-sm mt-1.5 block leading-relaxed ${selected ? 'opacity-90' : 'text-slate-500'}`}>{description}</span>}
+            </div>
+            {selected && <div className={`p-1.5 rounded-full ${variant === 'danger' ? 'bg-red-500 text-white' : 'bg-neuro-500 text-white'}`}><Check size={16} /></div>}
         </div>
     </button>
 ));
 
 const EvtPathway: React.FC = () => {
   const [step, setStep] = useState(1);
-  const [inputs, setInputs] = useState<Inputs>({ lvo: 'unknown', mrs: 'unknown', age: 'unknown', time: 'unknown', nihss: 'unknown', aspects: '', core: '', mismatchVol: '', mismatchRatio: '' });
+  const [inputs, setInputs] = useState<Inputs>({ 
+      occlusionType: 'unknown',
+      lvoLocation: 'unknown',
+      lvo: 'unknown', mrs: 'unknown', age: 'unknown', 
+      time: 'unknown', nihss: 'unknown', aspects: '', pcAspects: '', core: '', mismatchVol: '', mismatchRatio: '',
+      mevoLocation: 'unknown', mevoDependent: 'unknown', nihssNumeric: '', mevoDisabling: 'unknown', mevoSalvageable: 'unknown', mevoTechnical: 'unknown'
+  });
   const [result, setResult] = useState<Result | null>(null);
   const stepContainerRef = useRef<HTMLDivElement>(null);
   const fieldRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  useEffect(() => { setResult(calculateEvtProtocol(inputs)); }, [inputs]);
+  // Favorites
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const [showFavToast, setShowFavToast] = useState(false);
+  const isFav = isFavorite('evt-pathway');
+
+  const handleFavToggle = () => {
+      const newVal = toggleFavorite('evt-pathway');
+      setShowFavToast(true);
+      setTimeout(() => setShowFavToast(false), 2000);
+  };
+
+  useEffect(() => { 
+      if (inputs.occlusionType === 'lvo') {
+          setResult(calculateLvoProtocol(inputs)); 
+      } else if (inputs.occlusionType === 'mevo') {
+          setResult(calculateMevoProtocol(inputs));
+      } else {
+          setResult(null);
+      }
+  }, [inputs]);
+
   useEffect(() => { const mainElement = document.querySelector('main'); if (mainElement) mainElement.scrollTo({ top: 0, behavior: 'instant' }); else window.scrollTo(0,0); }, [step]);
 
   const updateInput = useCallback((field: keyof Inputs, value: any) => {
     setInputs(prev => {
         const next = { ...prev, [field]: value };
-        
-        // Auto-calculate Mismatch Ratio if Core and MismatchVol are present
-        // Ratio = (Core + MismatchVol) / Core, assuming MismatchVol input is the difference (Penumbra)
         if (field === 'core' || field === 'mismatchVol') {
             const coreVal = parseFloat(field === 'core' ? value : prev.core);
             const mmVal = parseFloat(field === 'mismatchVol' ? value : prev.mismatchVol);
-            
             if (!isNaN(coreVal) && !isNaN(mmVal) && coreVal > 0) {
                  const ratio = ((mmVal + coreVal) / coreVal).toFixed(1);
                  next.mismatchRatio = ratio;
@@ -150,56 +301,310 @@ const EvtPathway: React.FC = () => {
 
   const handleNext = () => { if (step < 4) setStep(step + 1); };
   const handleBack = () => { if (step > 1) setStep(step - 1); };
-  const handleReset = () => { setInputs({ lvo: 'unknown', mrs: 'unknown', age: 'unknown', time: 'unknown', nihss: 'unknown', aspects: '', core: '', mismatchVol: '', mismatchRatio: '' }); setStep(1); };
-  const copySummary = () => { if (!result) return; const summary = `EVT Eligibility Assessment\nStatus: ${result.status.toUpperCase()}\nProtocol: ${result.criteriaName || 'Standard Screening'}\n\nClinical Data:\n- Time Window: ${inputs.time === '0_6' ? '0-6h' : '6-24h'}\n- NIHSS: ${inputs.nihss.replace('_', '-').replace('plus', '+')}\n- Age: ${inputs.age.replace('_', '-').replace('plus', '+')}\n\nImaging Data:\n${inputs.time === '0_6' ? `- ASPECTS: ${inputs.aspects}` : `- Core: ${inputs.core}ml | Mismatch: ${inputs.mismatchVol}ml | Ratio: ${inputs.mismatchRatio}`}\n\nReason: ${result.reason}\n${result.details}`.trim(); navigator.clipboard.writeText(summary); alert("Assessment copied to EMR."); };
-  const isTriageFail = inputs.lvo === 'no' || inputs.mrs === 'no' || inputs.age === 'under_18';
+  
+  const handleReset = () => { 
+      setInputs({ 
+          occlusionType: 'unknown',
+          lvoLocation: 'unknown',
+          lvo: 'unknown', mrs: 'unknown', age: 'unknown', 
+          time: 'unknown', nihss: 'unknown', aspects: '', pcAspects: '', core: '', mismatchVol: '', mismatchRatio: '',
+          mevoLocation: 'unknown', mevoDependent: 'unknown', nihssNumeric: '', mevoDisabling: 'unknown', mevoSalvageable: 'unknown', mevoTechnical: 'unknown'
+      }); 
+      setStep(1); 
+  };
+
+  const copySummary = () => { 
+      if (!result) return; 
+      let summary = "";
+      if (inputs.occlusionType === 'lvo') {
+          summary = `LVO EVT Assessment\nType: ${inputs.lvoLocation === 'basilar' ? 'Basilar' : 'Anterior'}\nStatus: ${result.status.toUpperCase()}\nProtocol: ${result.criteriaName || 'Standard Screening'}\n\nClinical Data:\n- Time Window: ${inputs.time === '0_6' ? '0-6h' : '6-24h'}\n- NIHSS: ${inputs.nihss.replace('_', '-').replace('plus', '+')}\n- Age: ${inputs.age.replace('_', '-').replace('plus', '+')}\n\nImaging Data:\n${inputs.lvoLocation === 'basilar' ? `- pc-ASPECTS: ${inputs.pcAspects}` : (inputs.time === '0_6' ? `- ASPECTS: ${inputs.aspects}` : `- Core: ${inputs.core}ml | Mismatch: ${inputs.mismatchVol}ml | Ratio: ${inputs.mismatchRatio}`)}\n\nReason: ${result.reason}\n${result.details}`;
+      } else {
+          summary = `MeVO EVT Assessment\nStatus: ${result.status.toUpperCase()}\nReason: ${result.reason}\n\nClinical Data:\n- Location: ${inputs.mevoLocation.replace('_', ' ').toUpperCase()}\n- NIHSS: ${inputs.nihssNumeric}\n- Disabling: ${inputs.mevoDisabling}\n- Dependent: ${inputs.mevoDependent}\n- Time: ${inputs.time === '0_6' ? '0-6h' : '6-24h'}\n- Favorable Imaging: ${inputs.mevoSalvageable.toUpperCase()}\n\nDetails:\n${result.details}`;
+      }
+      navigator.clipboard.writeText(summary.trim()); 
+      alert("Assessment copied to EMR."); 
+  };
+
+  const isLvo = inputs.occlusionType === 'lvo';
+  const isMevo = inputs.occlusionType === 'mevo';
+  const isBasilar = inputs.lvoLocation === 'basilar';
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32 md:pb-20">
-      {/* Header and Progress... */}
-      <div className="mb-6">
-        <Link to="/calculators" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
-            <div className="bg-white p-1.5 rounded-md border border-gray-200 mr-2 shadow-sm group-hover:shadow-md transition-all"><ArrowLeft size={16} /></div> Back to Calculators
-        </Link>
-        <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-neuro-100 text-neuro-700 rounded-lg"><Zap size={24} className="fill-neuro-700" /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">Thrombectomy Pathway</h1></div>
-        <p className="text-slate-500 font-medium">Eligibility screening for Early (0-6h) and Late (6-24h) EVT.</p>
+      <div className="mb-6 flex items-start justify-between">
+        <div>
+            <Link to="/calculators" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
+                <div className="bg-white p-1.5 rounded-md border border-gray-200 mr-2 shadow-sm group-hover:shadow-md transition-all"><ArrowLeft size={16} /></div> Back to Calculators
+            </Link>
+            <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-neuro-100 text-neuro-700 rounded-lg"><Zap size={24} className="fill-neuro-700" /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">Thrombectomy Pathway</h1></div>
+            <p className="text-slate-500 font-medium">Eligibility screening for LVO (ICA/M1/Basilar) and MeVO (M2/M3/Distal).</p>
+        </div>
+        <button 
+            onClick={handleFavToggle}
+            className="p-3 rounded-full hover:bg-slate-100 transition-colors"
+        >
+            <Star size={24} className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'} />
+        </button>
       </div>
       
       <div className="flex items-center space-x-2 mb-8 px-1">{STEPS.map((s, idx) => (<div key={s.id} className="flex-1 flex flex-col items-center relative"><div className={`w-full h-1 absolute top-1/2 -translate-y-1/2 -z-10 ${idx === 0 ? 'hidden' : ''} ${step >= s.id ? 'bg-neuro-500' : 'bg-gray-200'}`}></div><div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-colors z-10 ${step === s.id ? 'bg-white border-neuro-500 text-neuro-600' : step > s.id ? 'bg-neuro-500 border-neuro-500 text-white' : 'bg-gray-100 border-gray-200 text-gray-400'}`}>{step > s.id ? <Check size={14} /> : s.id}</div><span className={`text-[10px] mt-2 font-bold uppercase tracking-wider ${step === s.id ? 'text-neuro-600' : 'text-gray-300'}`}>{s.title}</span></div>))}</div>
 
       <div ref={stepContainerRef} className="space-y-6 min-h-[300px]">
         {/* Step 1: Triage */}
-        {step === 1 && (<div className="space-y-6 animate-in slide-in-from-right-4 duration-300"><div ref={el => { fieldRefs.current['lvo'] = el; }}><h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Vessel Status</h3><div className="grid grid-cols-1 gap-3"><SelectionCard title="LVO Confirmed?" description="Occlusion of ICA or MCA (M1) on CTA/MRA." selected={inputs.lvo === 'yes'} onClick={() => updateInput('lvo', 'yes')} /><SelectionCard title="No LVO / Distal Only" description="Standard criteria require proximal LVO." selected={inputs.lvo === 'no'} onClick={() => updateInput('lvo', 'no')} /></div></div>{inputs.lvo === 'yes' && (<div ref={el => { fieldRefs.current['mrs'] = el; }} className="animate-in fade-in slide-in-from-top-2"><h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide mt-6">Functional Baseline</h3><div className="grid grid-cols-1 gap-3"><SelectionCard title="Independent (mRS 0-1)" description="No symptoms or no significant disability prior to stroke." selected={inputs.mrs === 'yes'} onClick={() => updateInput('mrs', 'yes')} /><SelectionCard title="Dependent (mRS > 1)" description="Requires assistance for ADLs prior to stroke." selected={inputs.mrs === 'no'} onClick={() => updateInput('mrs', 'no')} /></div></div>)}{inputs.mrs === 'yes' && (<div ref={el => { fieldRefs.current['age'] = el; }} className="animate-in fade-in slide-in-from-top-2"><h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide mt-6">Age Group</h3><div className="grid grid-cols-3 gap-3"><button onClick={() => updateInput('age', 'under_18')} className={`p-4 rounded-xl border-2 font-bold transition-all ${inputs.age === 'under_18' ? 'border-neuro-500 bg-neuro-50 text-neuro-900' : 'bg-white border-gray-100'}`}>&lt; 18</button><button onClick={() => updateInput('age', '18_79')} className={`p-4 rounded-xl border-2 font-bold transition-all ${inputs.age === '18_79' ? 'border-neuro-500 bg-neuro-50 text-neuro-900' : 'bg-white border-gray-100'}`}>18 - 79</button><button onClick={() => updateInput('age', '80_plus')} className={`p-4 rounded-xl border-2 font-bold transition-all ${inputs.age === '80_plus' ? 'border-neuro-500 bg-neuro-50 text-neuro-900' : 'bg-white border-gray-100'}`}>≥ 80</button></div></div>)}{isTriageFail && (<div className="bg-red-50 border border-red-100 p-4 rounded-xl flex items-start space-x-3 text-red-800 animate-in zoom-in-95 mt-4"><XCircle className="flex-shrink-0 mt-0.5" size={20} /><div><p className="font-bold">Likely Ineligible</p><p className="text-sm mt-1">{result?.exclusionReason || "Does not meet standard screening criteria."}</p></div></div>)}</div>)}
+        {step === 1 && (
+            <div className="space-y-6">
+                <div ref={el => { fieldRefs.current['occlusionType'] = el; }}>
+                    <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Occlusion Type</h3>
+                    <div className="grid grid-cols-1 gap-3">
+                        <SelectionCard title="Large Vessel Occlusion (LVO)" description="Proximal: ICA, M1, or Basilar Artery." selected={inputs.occlusionType === 'lvo'} onClick={() => updateInput('occlusionType', 'lvo')} />
+                        <SelectionCard title="Medium/Distal Vessel (MeVO/DMVO)" description="Distal: M2, M3, A2, A3, P2, P3." selected={inputs.occlusionType === 'mevo'} onClick={() => updateInput('occlusionType', 'mevo')} />
+                    </div>
+                    <LearningPearl 
+                        title="Evidence Landscape" 
+                        content="LVO has Class I evidence for EVT. MeVO/DMVO is an evolving area; benefit depends on deficit severity, eloquence, and risk." 
+                    />
+                </div>
+
+                {isLvo && (
+                    <div className="space-y-6 animate-in slide-in-from-top-2">
+                        <div ref={el => { fieldRefs.current['lvoLocation'] = el; }} className="pt-4 border-t border-gray-100">
+                            <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">LVO Location</h3>
+                            <div className="grid grid-cols-2 gap-3">
+                                <SelectionCard title="Anterior Circulation" description="ICA or MCA (M1)" selected={inputs.lvoLocation === 'anterior'} onClick={() => updateInput('lvoLocation', 'anterior')} />
+                                <SelectionCard title="Posterior Circulation" description="Basilar Artery" selected={inputs.lvoLocation === 'basilar'} onClick={() => updateInput('lvoLocation', 'basilar')} />
+                            </div>
+                        </div>
+
+                        {inputs.lvoLocation !== 'unknown' && (
+                            <div ref={el => { fieldRefs.current['lvo'] = el; }}>
+                                <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Confirm LVO</h3>
+                                <div className="grid grid-cols-1 gap-3">
+                                    <SelectionCard title="LVO Confirmed on CTA/MRA" selected={inputs.lvo === 'yes'} onClick={() => updateInput('lvo', 'yes')} />
+                                    <SelectionCard title="No LVO" selected={inputs.lvo === 'no'} onClick={() => updateInput('lvo', 'no')} />
+                                </div>
+                            </div>
+                        )}
+                        {inputs.lvo === 'yes' && (
+                            <div ref={el => { fieldRefs.current['mrs'] = el; }}>
+                                <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Functional Baseline</h3>
+                                <div className="grid grid-cols-1 gap-3">
+                                    <SelectionCard title="Independent (mRS 0-1)" description="No significant disability prior to stroke." selected={inputs.mrs === 'yes'} onClick={() => updateInput('mrs', 'yes')} />
+                                    <SelectionCard title="Dependent (mRS > 1)" description="Requires assistance for ADLs." selected={inputs.mrs === 'no'} onClick={() => updateInput('mrs', 'no')} />
+                                </div>
+                            </div>
+                        )}
+                        {inputs.mrs === 'yes' && (
+                            <div ref={el => { fieldRefs.current['age'] = el; }}>
+                                <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Age Group</h3>
+                                <div className="grid grid-cols-3 gap-3">
+                                    <button onClick={() => updateInput('age', 'under_18')} className={`p-4 rounded-xl border-2 font-bold transition-all touch-manipulation ${inputs.age === 'under_18' ? 'border-neuro-500 bg-neuro-50 text-neuro-900' : 'bg-white border-gray-100'}`}>&lt; 18</button>
+                                    <button onClick={() => updateInput('age', '18_79')} className={`p-4 rounded-xl border-2 font-bold transition-all touch-manipulation ${inputs.age === '18_79' ? 'border-neuro-500 bg-neuro-50 text-neuro-900' : 'bg-white border-gray-100'}`}>18 - 79</button>
+                                    <button onClick={() => updateInput('age', '80_plus')} className={`p-4 rounded-xl border-2 font-bold transition-all touch-manipulation ${inputs.age === '80_plus' ? 'border-neuro-500 bg-neuro-50 text-neuro-900' : 'bg-white border-gray-100'}`}>≥ 80</button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {isMevo && (
+                    <div className="space-y-6 animate-in slide-in-from-top-2">
+                        <div ref={el => { fieldRefs.current['mevoLocation'] = el; }} className="pt-4 border-t border-gray-100">
+                            <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Vessel Location</h3>
+                            <div className="space-y-3">
+                                <select className="w-full p-4 bg-white border border-gray-200 rounded-xl font-bold text-slate-800 outline-none focus:ring-2 focus:ring-neuro-500 min-h-[56px] text-base" value={inputs.mevoLocation} onChange={(e) => updateInput('mevoLocation', e.target.value)}>
+                                    <option value="unknown">Select Location...</option>
+                                    <option value="dominant_m2">Dominant / Proximal M2</option>
+                                    <option value="nondominant_m2">Nondominant / Codominant M2</option>
+                                    <option value="distal">Distal M2 / M3</option>
+                                    <option value="aca">ACA (A2 / A3)</option>
+                                    <option value="pca">PCA (P2 / P3)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div ref={el => { fieldRefs.current['mevoDependent'] = el; }}>
+                            <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Baseline Function</h3>
+                            <SelectionCard title="Requires daily nursing care / ADL assistance?" description="If YES, EVT is generally avoided for MeVO." selected={inputs.mevoDependent === 'yes'} onClick={() => updateInput('mevoDependent', 'yes')} variant="danger" />
+                            <div className="mt-2"><SelectionCard title="Independent / Minimal Assistance" selected={inputs.mevoDependent === 'no'} onClick={() => updateInput('mevoDependent', 'no')} /></div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        )}
         
-        {/* Step 2: Clinical - UPDATED LATE WINDOW DESCRIPTION */}
+        {/* Step 2: Clinical */}
         {step === 2 && (
-            <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
+            <div className="space-y-6">
                 <div ref={el => { fieldRefs.current['time'] = el; }}>
                     <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Time from Last Known Well</h3>
                     <div className="grid grid-cols-1 gap-3">
-                        <SelectionCard title="Early Window (0 - 6 Hours)" description="Uses NCCT (ASPECTS) or CTP." selected={inputs.time === '0_6'} onClick={() => updateInput('time', '0_6')} />
-                        <SelectionCard title="Late Window (6 - 24 Hours)" description="Perfusion (DAWN/DEFUSE-3) or Large Core (SELECT2/ANGEL-ASPECT)." selected={inputs.time === '6_24'} onClick={() => updateInput('time', '6_24')} />
+                        <SelectionCard title="Early Window (0 - 6 Hours)" description="Standard window." selected={inputs.time === '0_6'} onClick={() => updateInput('time', '0_6')} />
+                        <SelectionCard title="Late Window (6 - 24 Hours)" description="Extended window consideration." selected={inputs.time === '6_24'} onClick={() => updateInput('time', '6_24')} />
                     </div>
+                    <LearningPearl 
+                        title="Time & Physiology" 
+                        content="In early windows, tissue status is often inferred from noncontrast CT and collaterals. In late windows, benefit is more closely tied to imaging mismatch and salvageable tissue." 
+                    />
                 </div>
-                <div ref={el => { fieldRefs.current['nihss'] = el; }} className="pt-4">
-                    <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">NIH Stroke Scale</h3>
-                    <div className="grid grid-cols-2 gap-3">
-                        <SelectionCard title="0 - 5" description="Mild" selected={inputs.nihss === '0_5'} onClick={() => updateInput('nihss', '0_5')} />
-                        <SelectionCard title="6 - 9" description="Moderate" selected={inputs.nihss === '6_9'} onClick={() => updateInput('nihss', '6_9')} />
-                        <SelectionCard title="10 - 19" description="Mod-Severe" selected={inputs.nihss === '10_19'} onClick={() => updateInput('nihss', '10_19')} />
-                        <SelectionCard title="≥ 20" description="Severe" selected={inputs.nihss === '20_plus'} onClick={() => updateInput('nihss', '20_plus')} />
+
+                {isLvo && (
+                    <div ref={el => { fieldRefs.current['nihss'] = el; }} className="pt-4">
+                        <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">NIH Stroke Scale</h3>
+                        <div className="grid grid-cols-2 gap-3">
+                            <SelectionCard title="0 - 5" description="Mild" selected={inputs.nihss === '0_5'} onClick={() => updateInput('nihss', '0_5')} />
+                            <SelectionCard title="6 - 9" description="Moderate" selected={inputs.nihss === '6_9'} onClick={() => updateInput('nihss', '6_9')} />
+                            <SelectionCard title="10 - 19" description="Mod-Severe" selected={inputs.nihss === '10_19'} onClick={() => updateInput('nihss', '10_19')} />
+                            <SelectionCard title="≥ 20" description="Severe" selected={inputs.nihss === '20_plus'} onClick={() => updateInput('nihss', '20_plus')} />
+                        </div>
+                        <LearningPearl 
+                            title="NIHSS Limitations" 
+                            content="NIHSS underestimates disability in eloquent territories (aphasia, hemianopia, dominant hand) and posterior circulation (Basilar). Disabling symptoms may justify intervention even with low numeric scores." 
+                        />
                     </div>
-                </div>
+                )}
+
+                {isMevo && (
+                    <div className="pt-4 space-y-6">
+                        <div ref={el => { fieldRefs.current['nihssNumeric'] = el; }}>
+                            <label className="block text-sm font-bold text-slate-900 mb-2">NIHSS Score (Numeric)</label>
+                            <input type="number" min="0" max="42" className="w-full p-4 text-lg bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 4" value={inputs.nihssNumeric} onChange={(e) => updateInput('nihssNumeric', e.target.value)} />
+                        </div>
+                        <div ref={el => { fieldRefs.current['mevoDisabling'] = el; }}>
+                            <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Disabling Deficit?</h3>
+                            <div className="bg-blue-50 p-3 rounded-lg text-xs text-blue-800 mb-3">
+                                Examples: Aphasia, hemianopsia, dominant hand weakness, or deficits impacting occupation/lifestyle despite low NIHSS.
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                                <SelectionCard title="Yes" description="Disabling symptoms present" selected={inputs.mevoDisabling === 'yes'} onClick={() => updateInput('mevoDisabling', 'yes')} />
+                                <SelectionCard title="No" description="Non-disabling / Minor" selected={inputs.mevoDisabling === 'no'} onClick={() => updateInput('mevoDisabling', 'no')} />
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         )}
 
-        {/* Step 3: Imaging - TRADEMARKS ADDED & AUTO-CALC RATIO */}
-        {step === 3 && (<div className="space-y-6 animate-in slide-in-from-right-4 duration-300">{inputs.time === '0_6' && (<div ref={el => { fieldRefs.current['aspects'] = el; }}><div className="bg-blue-50 p-4 rounded-xl text-blue-900 text-sm mb-6 border border-blue-100"><h4 className="font-bold flex items-center mb-2"><Info size={16} className="mr-2"/> Early Window Imaging</h4><p>Enter ASPECTS score from non-contrast CT.</p></div><label className="block text-sm font-bold text-slate-700 mb-2">ASPECTS Score (0-10)</label><input type="number" min="0" max="10" className="w-full p-4 text-lg bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 8" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} /></div>)}{inputs.time === '6_24' && (<div><div className="bg-purple-50 p-4 rounded-xl text-purple-900 text-sm mb-6 border border-purple-100"><h4 className="font-bold flex items-center mb-2"><Info size={16} className="mr-2"/> Perfusion Imaging Required</h4><p>Enter values from automated software (RAPID™, Viz.ai™, etc).</p></div><div className="space-y-4"><div ref={el => { fieldRefs.current['core'] = el; }}><label className="block text-sm font-bold text-slate-700 mb-2">Ischemic Core Volume (ml)</label><input type="number" className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium" placeholder="CBF < 30%" value={inputs.core} onChange={(e) => updateInput('core', e.target.value)} /></div><div className="grid grid-cols-2 gap-4"><div ref={el => { fieldRefs.current['mismatchVol'] = el; }}><label className="block text-sm font-bold text-slate-700 mb-2">Mismatch Volume (ml)</label><input type="number" className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium" placeholder="Volume (ml)" value={inputs.mismatchVol} onChange={(e) => updateInput('mismatchVol', e.target.value)} /></div><div ref={el => { fieldRefs.current['mismatchRatio'] = el; }}><label className="block text-sm font-bold text-slate-700 mb-2">Mismatch Ratio</label><input type="number" step="0.1" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-slate-600" placeholder="Auto-calc" value={inputs.mismatchRatio} onChange={(e) => updateInput('mismatchRatio', e.target.value)} /></div></div></div></div>)}</div>)}
+        {/* Step 3: Imaging */}
+        {step === 3 && (
+            <div className="space-y-6">
+                {isLvo && (
+                    <div>
+                        {/* Anterior 0-6h: ASPECTS */}
+                        {inputs.time === '0_6' && !isBasilar && (
+                            <div ref={el => { fieldRefs.current['aspects'] = el; }}>
+                                <div className="bg-blue-50 p-4 rounded-xl text-blue-900 text-sm mb-6 border border-blue-100">
+                                    <h4 className="font-bold flex items-center mb-2"><Info size={16} className="mr-2"/> Early Window Imaging</h4>
+                                    <p>Enter ASPECTS score from non-contrast CT.</p>
+                                </div>
+                                <label className="block text-sm font-bold text-slate-700 mb-2">ASPECTS Score (0-10)</label>
+                                <input type="number" min="0" max="10" className="w-full p-4 text-lg bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 8" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
+                                <LearningPearl 
+                                    title="Understanding ASPECTS" 
+                                    content="ASPECTS is a 10-point scoring system for MCA stroke. Start with 10 (normal) and subtract 1 point for early ischemic changes in each of 10 defined regions (Caudate, Lentiform, Internal Capsule, Insula, M1-M6). Scores < 6 typically indicate a large established infarct core." 
+                                />
+                            </div>
+                        )}
+
+                        {/* Basilar (Any Time): pc-ASPECTS */}
+                        {isBasilar && (
+                            <div ref={el => { fieldRefs.current['pcAspects'] = el; }}>
+                                <div className="bg-purple-50 p-4 rounded-xl text-purple-900 text-sm mb-6 border border-purple-100">
+                                    <h4 className="font-bold flex items-center mb-2"><Brain size={16} className="mr-2"/> Posterior Circulation Imaging</h4>
+                                    <p>Enter <strong>pc-ASPECTS</strong> score (from CTA source images or DWI).</p>
+                                </div>
+                                <label className="block text-sm font-bold text-slate-700 mb-2">pc-ASPECTS Score (0-10)</label>
+                                <input type="number" min="0" max="10" className="w-full p-4 text-lg bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 8" value={inputs.pcAspects} onChange={(e) => updateInput('pcAspects', e.target.value)} />
+                                <LearningPearl 
+                                    title="pc-ASPECTS Explained" 
+                                    content="pc-ASPECTS scores the posterior circulation on a 10-point scale. Points are subtracted for changes in: Thalami (1 each), Occipital lobes (1 each), Midbrain (2), Pons (2), Cerebellar hemispheres (1 each). Score ≥ 6 indicates favorable imaging." 
+                                />
+                            </div>
+                        )}
+
+                        {/* Anterior 6-24h: Core/Mismatch */}
+                        {inputs.time === '6_24' && !isBasilar && (
+                            <div>
+                                <div className="bg-purple-50 p-4 rounded-xl text-purple-900 text-sm mb-6 border border-purple-100">
+                                    <h4 className="font-bold flex items-center mb-2"><Info size={16} className="mr-2"/> Perfusion Imaging Required</h4>
+                                    <p>Enter values from automated software (RAPID™, Viz.ai™, etc).</p>
+                                </div>
+                                <div className="space-y-4">
+                                    <div ref={el => { fieldRefs.current['core'] = el; }}>
+                                        <label className="block text-sm font-bold text-slate-700 mb-2">Ischemic Core Volume (ml)</label>
+                                        <input type="number" className="w-full p-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-lg" placeholder="CBF < 30%" value={inputs.core} onChange={(e) => updateInput('core', e.target.value)} />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div ref={el => { fieldRefs.current['mismatchVol'] = el; }}>
+                                            <label className="block text-sm font-bold text-slate-700 mb-2">Mismatch Volume</label>
+                                            <input type="number" className="w-full p-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-lg" placeholder="Volume" value={inputs.mismatchVol} onChange={(e) => updateInput('mismatchVol', e.target.value)} />
+                                        </div>
+                                        <div ref={el => { fieldRefs.current['mismatchRatio'] = el; }}>
+                                            <label className="block text-sm font-bold text-slate-700 mb-2">Mismatch Ratio</label>
+                                            <input type="number" step="0.1" className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-slate-600 text-lg" placeholder="Ratio" value={inputs.mismatchRatio} onChange={(e) => updateInput('mismatchRatio', e.target.value)} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {isMevo && (
+                    <div className="space-y-6">
+                        <div ref={el => { fieldRefs.current['mevoSalvageable'] = el; }}>
+                            <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">
+                                {inputs.time === '0_6' ? "Imaging Profile (0-6h)" : "Salvageable Tissue (6-24h)"}
+                            </h3>
+                            <div className="bg-slate-50 p-3 rounded-lg text-xs text-slate-600 mb-3 border border-gray-200">
+                                {inputs.time === '0_6' ? (
+                                     <span><strong>Favorable Profile defined as ANY of:</strong><br/>• No large established infarct (NCCT/MRI)<br/>• Moderate/Good Collaterals<br/>• Perfusion Mismatch</span>
+                                ) : (
+                                     <span><strong>Salvageable Tissue defined as:</strong><br/>• Clinical-Core Mismatch<br/>• Perfusion Mismatch (Penumbra)</span>
+                                )}
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                                <SelectionCard 
+                                    title="Yes" 
+                                    description={inputs.time === '0_6' ? "Favorable profile present" : "Evidence of penumbra"} 
+                                    selected={inputs.mevoSalvageable === 'yes'} 
+                                    onClick={() => updateInput('mevoSalvageable', 'yes')} 
+                                />
+                                <SelectionCard 
+                                    title="No" 
+                                    description={inputs.time === '0_6' ? "Large infarct / Poor collaterals" : "Large core / No mismatch"} 
+                                    selected={inputs.mevoSalvageable === 'no'} 
+                                    onClick={() => updateInput('mevoSalvageable', 'no')} 
+                                />
+                            </div>
+                            <LearningPearl 
+                                title="MeVO Imaging Selection" 
+                                content="For MeVO, absence of a large established core may be more important than formal perfusion mismatch in early windows. Editorials emphasize individualized selection rather than strict perfusion thresholds." 
+                            />
+                        </div>
+                        <div ref={el => { fieldRefs.current['mevoTechnical'] = el; }}>
+                            <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Technical Feasibility</h3>
+                            <div className="grid grid-cols-1 gap-3">
+                                <SelectionCard title="Low Procedural Risk" description="Accessible anatomy, low tortuosity, operator confidence." selected={inputs.mevoTechnical === 'yes'} onClick={() => updateInput('mevoTechnical', 'yes')} />
+                                <SelectionCard title="High Risk / Difficult Access" description="Tortuous anatomy, distal location risk." selected={inputs.mevoTechnical === 'no'} onClick={() => updateInput('mevoTechnical', 'no')} />
+                            </div>
+                            <LearningPearl 
+                                title="Procedural Risks" 
+                                content="Distal access increases perforation and hemorrhage risk. Operator experience and device choice significantly influence MeVO outcomes." 
+                            />
+                        </div>
+                    </div>
+                )}
+            </div>
+        )}
 
         {/* Step 4: Decision */}
         {step === 4 && result && (
              <div className="space-y-6 animate-in zoom-in-95 duration-300">
-                <div className={`p-8 rounded-3xl relative overflow-hidden shadow-xl text-white ${result.eligible ? 'bg-slate-900' : result.status === 'Consult' ? 'bg-amber-500' : 'bg-red-600'}`}>
+                <div className={`p-8 rounded-3xl relative overflow-hidden shadow-xl text-white ${
+                    result.variant === 'success' ? 'bg-emerald-600' :
+                    result.variant === 'warning' ? 'bg-amber-500' :
+                    result.variant === 'danger' ? 'bg-red-600' :
+                    result.eligible ? 'bg-slate-900' : 'bg-slate-700'
+                }`}>
                     <div className="absolute top-0 right-0 w-40 h-40 bg-white opacity-10 rounded-full blur-3xl -mr-10 -mt-10"></div>
                     <div className="relative z-10">
                         <div className="inline-flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4"><Activity size={12} /><span>Recommendation</span></div>
@@ -207,24 +612,87 @@ const EvtPathway: React.FC = () => {
                         <div className="pt-6 border-t border-white/20">
                              <div className="text-sm font-bold uppercase tracking-widest opacity-70 mb-2">Reasoning</div>
                              <div className="text-lg font-bold">{result.reason}</div>
-                             {/* AUTO-LINKING APPLIED HERE */}
                              <div className="text-sm opacity-90 mt-1 leading-relaxed">{autoLinkReactNodes(result.details)}</div>
                         </div>
                     </div>
                 </div>
-                {/* Keep summary card same... */}
-                <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm"><h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Assessment Summary</h4><ul className="space-y-3 text-sm text-slate-700 font-medium"><li className="flex justify-between border-b border-gray-50 pb-2"><span>Time Window</span><span className="font-bold">{inputs.time === '0_6' ? '0 - 6 Hours' : '6 - 24 Hours'}</span></li><li className="flex justify-between border-b border-gray-50 pb-2"><span>LVO Status</span><span className="font-bold">{inputs.lvo === 'yes' ? 'Confirmed' : 'None'}</span></li><li className="flex justify-between border-b border-gray-50 pb-2"><span>NIHSS</span><span className="font-bold">{inputs.nihss.replace('_', '-').replace('plus', '+')}</span></li>{inputs.time === '0_6' && (<li className="flex justify-between"><span>ASPECTS</span><span className="font-bold">{inputs.aspects || '--'}</span></li>)}{inputs.time === '6_24' && (<><li className="flex justify-between border-b border-gray-50 pb-2"><span>Core Volume</span><span className="font-bold">{inputs.core || '--'} ml</span></li><li className="flex justify-between"><span>Mismatch Ratio</span><span className="font-bold">{inputs.mismatchRatio || '--'}</span></li></>)}</ul></div>
-                {/* AUTO-LINKING IN FOOTER */}
-                <div className="flex items-start space-x-3 bg-slate-50 p-4 rounded-xl border border-gray-100 text-xs text-slate-500 leading-relaxed"><AlertCircle size={16} className="flex-shrink-0 mt-0.5" /><div><strong>Decision Support Only.</strong><p className="mt-1">{autoLinkReactNodes("Based on AHA/ASA Guidelines and major trials (DAWN, DEFUSE-3, SELECT2). Always verify clinical details.")}</p></div></div>
+
+                {/* Risk & Evidence Box for MeVO */}
+                {isMevo && (
+                    <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 shadow-sm">
+                        <div className="flex items-center space-x-2 mb-4 text-amber-800">
+                            <ShieldAlert size={20} />
+                            <h3 className="font-bold text-sm uppercase tracking-wide">MeVO Risk & Evidence</h3>
+                        </div>
+                        <ul className="space-y-3 text-sm text-amber-900">
+                            <li className="flex items-start">
+                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
+                                <span><strong>ESCAPE-MeVO (2025):</strong> No functional benefit at 90d overall. Higher sICH rate and trend toward higher mortality in EVT arm.</span>
+                            </li>
+                            <li className="flex items-start">
+                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
+                                <span><strong>DISTAL (2025):</strong> Neutral primary outcome. Higher sICH in EVT arm (5.9% vs 2.6%). Reperfusion rates were lower than typical LVO trials.</span>
+                            </li>
+                            <li className="flex items-start">
+                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
+                                <span><strong>Synthesis:</strong> Be cautious in older patients, those with mild deficits, or baseline disability. Benefit is most plausible for dominant M2/M3 occlusions with disabling deficits.</span>
+                            </li>
+                        </ul>
+                    </div>
+                )}
+
+                {/* Summary Card */}
+                <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Assessment Summary</h4>
+                    <ul className="space-y-3 text-sm text-slate-700 font-medium">
+                        <li className="flex justify-between border-b border-gray-50 pb-2"><span>Type</span><span className="font-bold">{isLvo ? (isBasilar ? 'LVO (Basilar)' : 'LVO (Anterior)') : 'MeVO'}</span></li>
+                        <li className="flex justify-between border-b border-gray-50 pb-2"><span>Time</span><span className="font-bold">{inputs.time === '0_6' ? '0-6h' : '6-24h'}</span></li>
+                        {isLvo && <li className="flex justify-between border-b border-gray-50 pb-2"><span>NIHSS</span><span className="font-bold">{inputs.nihss.replace('_', '-').replace('plus', '+')}</span></li>}
+                        {isMevo && (
+                            <>
+                                <li className="flex justify-between border-b border-gray-50 pb-2"><span>Location</span><span className="font-bold">{inputs.mevoLocation.replace('_', ' ').toUpperCase()}</span></li>
+                                <li className="flex justify-between border-b border-gray-50 pb-2"><span>NIHSS</span><span className="font-bold">{inputs.nihssNumeric}</span></li>
+                                <li className="flex justify-between border-b border-gray-50 pb-2"><span>Disabling</span><span className="font-bold capitalize">{inputs.mevoDisabling}</span></li>
+                            </>
+                        )}
+                        {inputs.time === '0_6' && isLvo && !isBasilar && (<li className="flex justify-between"><span>ASPECTS</span><span className="font-bold">{inputs.aspects || '--'}</span></li>)}
+                        {inputs.time === '6_24' && isLvo && !isBasilar && (<><li className="flex justify-between border-b border-gray-50 pb-2"><span>Core Vol</span><span className="font-bold">{inputs.core || '--'} ml</span></li><li className="flex justify-between"><span>Ratio</span><span className="font-bold">{inputs.mismatchRatio || '--'}</span></li></>)}
+                        {isBasilar && (<li className="flex justify-between"><span>pc-ASPECTS</span><span className="font-bold">{inputs.pcAspects || '--'}</span></li>)}
+                    </ul>
+                </div>
+
+                <div className="flex items-start space-x-3 bg-slate-50 p-4 rounded-xl border border-gray-100 text-xs text-slate-500 leading-relaxed">
+                    <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
+                    <div>
+                        <strong>Decision Support Only.</strong>
+                        <p className="mt-1">{autoLinkReactNodes("Based on AHA/ASA Guidelines and major trials (DAWN, DEFUSE-3, SELECT2, ESCAPE-MeVO, DISTAL, ATTENTION, BAOCHE). Always verify clinical details.")}</p>
+                        
+                        {/* NEW DISCLAIMERS */}
+                        <p className="mt-3 pt-3 border-t border-gray-200">
+                             <strong>Clinical Context:</strong> Always discuss with Vascular Neurology and the Neurointerventional/Interventional Neurology team; local protocols and anatomy-specific factors apply.
+                        </p>
+                    </div>
+                </div>
+                
+                <LearningPearl
+                    title="Clinical Context Summary"
+                    content={
+                        <ul className="list-disc list-inside space-y-1">
+                            <li><strong>Evidence:</strong> Strong for LVO (Anterior & Basilar), evolving for MeVO.</li>
+                            <li><strong>Selection:</strong> Imaging guides eligibility, but clinical judgment on disability vs risk is paramount.</li>
+                            <li><strong>Team:</strong> Multidisciplinary discussion is critical for complex or borderline cases.</li>
+                        </ul>
+                    }
+                />
              </div>
         )}
       </div>
 
-      <div id="evt-action-bar" className="mt-8 pt-4 border-t border-gray-100 scroll-mt-4">
-         <div className="flex items-center justify-between gap-4">
+      <div id="evt-action-bar" className="mt-8 pt-4 md:border-t border-gray-100 scroll-mt-4 fixed bottom-[4.5rem] md:static left-0 right-0 bg-white/95 backdrop-blur md:bg-transparent p-4 md:p-0 border-t md:border-0 z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none">
+         <div className="max-w-3xl mx-auto flex items-center justify-between gap-4">
              <button onClick={handleBack} disabled={step === 1} className={`px-6 py-3 border border-gray-200 rounded-xl font-bold transition-all ${step === 1 ? 'opacity-0 pointer-events-none' : 'bg-white text-slate-600 hover:bg-slate-50 hover:border-gray-300'}`}>Back</button>
              {step === 4 && (<button onClick={handleReset} className="hidden md:flex items-center text-slate-500 hover:text-neuro-600 font-bold px-4 py-2 rounded-lg transition-colors"><RotateCcw size={16} className="mr-2" /> Start Over</button>)}
-             {step < 4 ? (<button onClick={handleNext} className="px-8 py-3 bg-neuro-600 text-white rounded-xl font-bold hover:bg-neuro-700 shadow-lg shadow-neuro-200 transition-all flex items-center transform active:scale-95">Next <ChevronRight size={16} className="ml-2" /></button>) : (<button onClick={copySummary} className="px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-all flex items-center transform active:scale-95"><Copy size={16} className="mr-2" /> Copy to EMR</button>)}
+             {step < 4 ? (<button onClick={handleNext} className="flex-1 md:flex-none px-8 py-3 bg-neuro-600 text-white rounded-xl font-bold hover:bg-neuro-700 shadow-lg shadow-neuro-200 transition-all flex items-center justify-center transform active:scale-95">Next <ChevronRight size={16} className="ml-2" /></button>) : (<button onClick={copySummary} className="flex-1 md:flex-none px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-all flex items-center justify-center transform active:scale-95"><Copy size={16} className="mr-2" /> Copy to EMR</button>)}
          </div>
          {step === 4 && (<div className="md:hidden mt-4 text-center"><button onClick={handleReset} className="text-sm text-slate-400 font-bold flex items-center justify-center w-full p-2 hover:bg-slate-50 rounded-lg transition-colors"><RotateCcw size={14} className="mr-2" /> Start Over</button></div>)}
       </div>
@@ -235,8 +703,15 @@ const EvtPathway: React.FC = () => {
               <ul className="space-y-3 text-xs text-slate-500">
                   <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">1</span>{autoLinkReactNodes("DAWN & DEFUSE 3 Trials (2018): Extended window thrombectomy.")}</li>
                   <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">2</span>{autoLinkReactNodes("SELECT2 & ANGEL-ASPECT (2023): Large core thrombectomy.")}</li>
+                  <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">3</span>{autoLinkReactNodes("ESCAPE-MeVO & DISTAL Trials (2025): Medium vessel occlusion thrombectomy.")}</li>
+                  <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">4</span>{autoLinkReactNodes("ATTENTION (2022) & BAOCHE (2022): Basilar Artery Occlusion thrombectomy.")}</li>
               </ul>
           </div>
+      )}
+      {showFavToast && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
+          {isFav ? 'Saved to Favorites' : 'Removed from Favorites'}
+        </div>
       )}
     </div>
   );

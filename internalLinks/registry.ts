@@ -75,6 +75,17 @@ const getArticleAliases = (id: string, title: string): string[] => {
   if (id === 'sparcl-trial') aliases.push('SPARCL', 'SPARCL trial');
   if (id === 'elan-study') aliases.push('ELAN trial', 'ELAN study'); // Distinction from ELAN Protocol tool
   if (id === 'status-epilepticus') aliases.push('ESETT', 'ESETT trial'); // The article covers ESETT
+  if (id === 'distal-trial') aliases.push('DISTAL', 'DISTAL trial');
+  if (id === 'escape-mevo-trial') aliases.push('ESCAPE-MeVO', 'ESCAPE MeVO', 'ESCAPE-MeVO trial');
+  
+  // New Trials
+  if (id === 'attention-trial') aliases.push('ATTENTION', 'ATTENTION trial');
+  if (id === 'baoche-trial') aliases.push('BAOCHE', 'BAOCHE trial');
+  if (id === 'extend-trial') aliases.push('EXTEND', 'EXTEND trial');
+  if (id === 'ninds-trial') aliases.push('NINDS', 'NINDS trial');
+  if (id === 'ecass3-trial') aliases.push('ECASS III', 'ECASS 3', 'ECASS-3', 'ECASS III trial');
+  if (id === 'weave-trial') aliases.push('WEAVE', 'WEAVE trial');
+  if (id === 'eagle-trial') aliases.push('EAGLE', 'EAGLE trial');
 
   return aliases;
 };

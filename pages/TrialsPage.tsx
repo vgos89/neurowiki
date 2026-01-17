@@ -1,101 +1,239 @@
 
-import React, { useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { FlaskConical, ChevronRight, BookOpen } from 'lucide-react';
+import { FlaskConical, ChevronRight, ChevronDown, BookOpen, Layers, Activity } from 'lucide-react';
 import { GUIDE_CONTENT } from '../data/guideContent';
 
+type Subcategory = {
+  title: string;
+  description: string;
+  ids: string[];
+};
+
+type Category = {
+  title: string;
+  subcategories: Subcategory[];
+};
+
+const TRIAL_STRUCTURE: Category[] = [
+  {
+    title: "Vascular Neurology",
+    subcategories: [
+      {
+        title: "Thrombolysis",
+        description: "IV Alteplase & Tenecteplase Evidence",
+        ids: ['ninds-trial', 'ecass3-trial', 'extend-trial', 'eagle-trial']
+      },
+      {
+        title: "Thrombectomy",
+        description: "Large & Medium Vessel Occlusion evidence",
+        ids: ['distal-trial', 'escape-mevo-trial', 'defuse-3-trial', 'dawn-trial', 'select2-trial', 'angel-aspect-trial', 'attention-trial', 'baoche-trial']
+      },
+      {
+        title: "Antiplatelets & Prevention",
+        description: "DAPT, Anticoagulation, Lipids",
+        ids: ['chance-trial', 'point-trial', 'sps3-trial', 'socrates-trial', 'elan-study', 'sparcl-trial']
+      },
+      {
+        title: "Carotid & Intracranial Disease",
+        description: "Stenting vs Endarterectomy vs Medical",
+        ids: ['nascet-trial', 'crest-trial', 'sammpris-trial', 'weave-trial']
+      },
+      {
+        title: "Acute Management",
+        description: "Glycemic control & Systemic care",
+        ids: ['shine-trial']
+      }
+    ]
+  }
+];
+
 const TrialsPage: React.FC = () => {
-  const trialTopics = Object.values(GUIDE_CONTENT).filter(
-    (item) => item.category === 'Neuro Trials'
-  );
+  // Changed state to track a single open subcategory (string | null) instead of a record of booleans
+  const [openSubcategory, setOpenSubcategory] = useState<string | null>('Thrombectomy');
 
-  const categories = useMemo(() => {
-    const map: Record<string, typeof trialTopics> = {
-      'Vascular Neurology': [],
-      'Neurocritical Care': [],
-      'Epilepsy': [],
-      'Neuromuscular': [],
-      'General Neurology': []
-    };
+  const toggleSubcategory = (title: string) => {
+    setOpenSubcategory(prev => (prev === title ? null : title));
+  };
 
-    trialTopics.forEach(trial => {
-      const content = trial.content.toLowerCase();
-      if (content.includes('stroke') || content.includes('tia')) map['Vascular Neurology'].push(trial);
-      else if (content.includes('icp') || content.includes('sah') || content.includes('coma')) map['Neurocritical Care'].push(trial);
-      else if (content.includes('seizure') || content.includes('epilepsy')) map['Epilepsy'].push(trial);
-      else if (content.includes('nerve') || content.includes('muscle')) map['Neuromuscular'].push(trial);
-      else map['General Neurology'].push(trial);
-    });
+  const orphans = useMemo(() => {
+    const structuredIds = new Set(TRIAL_STRUCTURE.flatMap(c => c.subcategories.flatMap(s => s.ids)));
+    return Object.values(GUIDE_CONTENT)
+      .filter(t => t.category === 'Neuro Trials' && !structuredIds.has(t.id));
+  }, []);
 
-    return Object.entries(map).filter(([_, items]) => items.length > 0);
-  }, [trialTopics]);
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
     <div className="flex flex-col md:flex-row relative items-start">
+      {/* Sidebar */}
       <div className="w-full md:w-80 bg-white border-r border-gray-200 flex-shrink-0 md:sticky md:top-0 md:h-[calc(100vh-4rem)] overflow-y-auto custom-scrollbar self-start">
         <div className="p-5 border-b border-gray-100 bg-white sticky top-0 z-10 backdrop-blur-sm bg-white/95">
             <h2 className="font-bold text-slate-900 flex items-center text-lg">
               <FlaskConical className="mr-2 text-emerald-600" size={24} /> Neuro Trials
             </h2>
-            <p className="text-xs text-slate-500 mt-1 ml-8">Evidence-based medicine pearls</p>
+            <p className="text-xs text-slate-500 mt-1 ml-8">Evidence pearls</p>
         </div>
-        <div className="p-4 space-y-8">
-          {categories.map(([cat, items]) => (
-            <div key={cat}>
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-3">{cat}</h3>
+        <div className="p-4 space-y-6">
+          {TRIAL_STRUCTURE.map((cat) => (
+            <div key={cat.title}>
+              <h3 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-3 px-2 flex items-center">
+                {cat.title}
+              </h3>
               <div className="space-y-1">
-                {items.map(topic => (
-                  <Link
-                    key={topic.id}
-                    to={`/trials/${topic.id}`}
-                    className="group flex items-center justify-between px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200"
-                  >
-                    <span>{topic.title}</span>
-                    <ChevronRight size={14} className="text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </Link>
+                {cat.subcategories.map(sub => {
+                  const isOpen = openSubcategory === sub.title;
+                  return (
+                    <div key={sub.title} className="mb-2">
+                        <button
+                          onClick={() => toggleSubcategory(sub.title)}
+                          className={`w-full group flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all duration-200 text-left font-bold ${isOpen ? 'bg-emerald-50 text-emerald-800' : 'text-slate-700 hover:bg-slate-50'}`}
+                        >
+                          <span>{sub.title}</span>
+                          <ChevronDown size={16} className={`text-emerald-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                        </button>
+                        
+                        {isOpen && (
+                           <div className="mt-1 ml-2 pl-3 border-l-2 border-emerald-100 space-y-1 animate-in slide-in-from-top-1 fade-in duration-200">
+                              {sub.ids.map(id => {
+                                 const trial = GUIDE_CONTENT[id];
+                                 if(!trial) return null;
+                                 return (
+                                   <Link 
+                                     key={id} 
+                                     to={`/trials/${id}`}
+                                     className="block px-3 py-2 text-xs font-medium text-slate-500 hover:text-emerald-700 hover:bg-emerald-50/50 rounded-md transition-colors truncate"
+                                   >
+                                     {trial.title.replace(/Trial:|Study:/gi, '').trim()}
+                                   </Link>
+                                 );
+                              })}
+                           </div>
+                        )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+          
+          {orphans.length > 0 && (
+             <div>
+               <h3 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-3 px-2">Other Trials</h3>
+               <div className="space-y-1">
+                 {orphans.map(t => (
+                    <Link
+                      key={t.id}
+                      to={`/trials/${t.id}`}
+                      className="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all truncate"
+                    >
+                      {t.title}
+                    </Link>
+                 ))}
+               </div>
+             </div>
+          )}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 min-w-0 p-4 md:p-8">
+        <div className="max-w-5xl mx-auto space-y-12">
+          
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">Landmark Trials</h1>
+            <p className="text-slate-500 mt-2 font-medium text-lg">Curated summaries of pivotal studies shaping modern neurology.</p>
+          </div>
+
+          {TRIAL_STRUCTURE.map((cat) => (
+            <div key={cat.title} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="flex items-center space-x-3 mb-6 pb-2 border-b border-gray-100">
+                 <div className="p-2 bg-slate-100 rounded-lg text-slate-600">
+                    <Layers size={20} />
+                 </div>
+                 <h2 className="text-2xl font-bold text-slate-900">{cat.title}</h2>
+              </div>
+
+              <div className="space-y-10">
+                {cat.subcategories.map(sub => (
+                  <div key={sub.title} id={sub.title.replace(/\s+/g, '-').toLowerCase()} className="scroll-mt-24">
+                    <div className="mb-4 ml-1">
+                        <h3 className="text-lg font-bold text-emerald-800 flex items-center">
+                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-3"></div>
+                            {sub.title}
+                        </h3>
+                        <p className="text-sm text-slate-500 ml-4.5 mt-0.5">{sub.description}</p>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                      {sub.ids.map(id => {
+                        const trial = GUIDE_CONTENT[id];
+                        if (!trial) return null;
+                        
+                        return (
+                          <Link
+                            key={id}
+                            to={`/trials/${id}`}
+                            className="group bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all flex flex-col relative overflow-hidden"
+                          >
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-full blur-2xl opacity-0 group-hover:opacity-50 transition-opacity -mr-8 -mt-8"></div>
+                            
+                            <div className="flex justify-between items-start mb-3 relative z-10">
+                                <h4 className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors text-lg leading-tight pr-4">
+                                    {trial.title.replace('Trial:', '').replace('Study:', '').trim()}
+                                </h4>
+                                <div className="p-2 bg-emerald-50 rounded-xl text-emerald-600 group-hover:bg-emerald-100 transition-colors shrink-0">
+                                    <BookOpen size={18} />
+                                </div>
+                            </div>
+                            
+                            <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed mb-4 flex-1">
+                                {trial.content.split('\n').find(l => l.length > 40 && !l.startsWith('#'))?.replace(/\*+/g, '') || "Clinical summary available."}
+                            </p>
+
+                            <div className="flex items-center text-xs font-bold text-emerald-600 uppercase tracking-wider mt-auto">
+                                View Summary <ChevronRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
           ))}
-        </div>
-      </div>
-
-      <div className="flex-1 min-w-0 p-8">
-        <div className="max-w-5xl mx-auto">
-          <div className="mb-10">
-            <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Landmark Trials</h1>
-            <p className="text-slate-500 mt-2 font-medium">Quick reference summaries for key neurological evidence.</p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-6">
-            {trialTopics.map((trial) => (
-              <Link
-                key={trial.id}
-                to={`/trials/${trial.id}`}
-                className="group bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg hover:border-emerald-200 transition-all flex items-start justify-between"
-              >
-                <div className="flex-1 pr-4">
-                  <div className="flex items-center space-x-2 mb-3">
-                    <span className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.2em] bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100/50">
-                      Neuro Trials
-                    </span>
-                  </div>
-                  <h2 className="text-2xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">
-                    {trial.title}
-                  </h2>
-                  <p className="text-slate-500 mt-3 text-base leading-relaxed italic line-clamp-2">
-                    {trial.content.split('\n').find(l => l.length > 50 && !l.startsWith('#'))?.substring(0, 180)}...
-                  </p>
-                  <div className="mt-6 flex items-center text-emerald-600 font-bold text-sm uppercase tracking-widest">
-                    Read Trial Summary <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                  </div>
+          {/* Orphans */}
+          {orphans.length > 0 && (
+             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="flex items-center space-x-3 mb-6 pb-2 border-b border-gray-100">
+                    <div className="p-2 bg-slate-100 rounded-lg text-slate-600"><Activity size={20} /></div>
+                    <h2 className="text-2xl font-bold text-slate-900">Other Trials</h2>
                 </div>
-                <div className="p-4 bg-emerald-50 rounded-2xl text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-inner">
-                  <BookOpen size={28} />
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {orphans.map(trial => (
+                        <Link
+                            key={trial.id}
+                            to={`/trials/${trial.id}`}
+                            className="group bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all"
+                        >
+                            <h4 className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors text-lg mb-2">
+                                {trial.title}
+                            </h4>
+                            <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed">
+                                {trial.content.split('\n').find(l => l.length > 40 && !l.startsWith('#'))?.replace(/\*+/g, '')}
+                            </p>
+                        </Link>
+                    ))}
                 </div>
-              </Link>
-            ))}
-          </div>
+             </div>
+          )}
         </div>
       </div>
     </div>

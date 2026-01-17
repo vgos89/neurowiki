@@ -1,9 +1,10 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, AlertTriangle, Check, RotateCcw, Copy, Info, AlertCircle, ChevronRight, Brain, Calendar, XCircle, Activity } from 'lucide-react';
+import { ArrowLeft, AlertTriangle, Check, RotateCcw, Copy, Info, AlertCircle, ChevronRight, Brain, Calendar, XCircle, Activity, Star } from 'lucide-react';
 import { ELAN_CONTENT } from '../data/toolContent';
 import { autoLinkReactNodes } from '../internalLinks/autoLink';
+import { useFavorites } from '../hooks/useFavorites';
 
 // ... (KEEP ALL TYPES, INTERFACES, STEPS, LOGIC, COMPONENTS SAME UNTIL RENDER) ...
 type Tri = "yes" | "no" | "unknown";
@@ -87,8 +88,14 @@ interface SelectionCardProps {
     variant?: 'default' | 'danger';
 }
 const SelectionCard = React.memo(({ title, description, selected, onClick, variant = 'default' }: SelectionCardProps) => (
-    <button onClick={onClick} className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 relative overflow-hidden ${selected ? variant === 'danger' ? 'bg-red-50 border-red-500 text-red-900' : 'bg-neuro-50 border-neuro-500 text-neuro-900' : 'bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50 text-slate-700'}`}>
-        <div className="flex items-start justify-between relative z-10"><div><span className={`block font-bold ${selected ? 'text-current' : 'text-slate-900'}`}>{title}</span>{description && <span className={`text-sm mt-1 block ${selected ? 'opacity-90' : 'text-slate-500'}`}>{description}</span>}</div>{selected && <div className={`p-1 rounded-full ${variant === 'danger' ? 'bg-red-500 text-white' : 'bg-neuro-500 text-white'}`}><Check size={14} /></div>}</div>
+    <button onClick={onClick} className={`w-full text-left p-5 rounded-2xl border-2 transition-all duration-200 relative overflow-hidden active:scale-[0.99] touch-manipulation ${selected ? variant === 'danger' ? 'bg-red-50 border-red-500 text-red-900' : 'bg-neuro-50 border-neuro-500 text-neuro-900' : 'bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50 text-slate-700'}`}>
+        <div className="flex items-start justify-between relative z-10">
+            <div className="pr-4">
+                <span className={`block text-lg font-bold ${selected ? 'text-current' : 'text-slate-900'}`}>{title}</span>
+                {description && <span className={`text-sm mt-1.5 block leading-relaxed ${selected ? 'opacity-90' : 'text-slate-500'}`}>{description}</span>}
+            </div>
+            {selected && <div className={`p-1.5 rounded-full ${variant === 'danger' ? 'bg-red-500 text-white' : 'bg-neuro-500 text-white'}`}><Check size={16} /></div>}
+        </div>
     </button>
 ));
 
@@ -100,6 +107,17 @@ const ElanPathway: React.FC = () => {
   const stepContainerRef = useRef<HTMLDivElement>(null);
   const fieldRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
+  // Favorites
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const [showFavToast, setShowFavToast] = useState(false);
+  const isFav = isFavorite('elan-pathway');
+
+  const handleFavToggle = () => {
+      const newVal = toggleFavorite('elan-pathway');
+      setShowFavToast(true);
+      setTimeout(() => setShowFavToast(false), 2000);
+  };
+
   useEffect(() => { setResult(calculateElanProtocol(inputs)); }, [inputs]);
   useEffect(() => { const mainElement = document.querySelector('main'); if (mainElement) mainElement.scrollTo({ top: 0, behavior: 'instant' }); else window.scrollTo(0,0); }, [step]);
 
@@ -108,8 +126,8 @@ const ElanPathway: React.FC = () => {
     const currentFields = STEP_FIELDS[step];
     if (currentFields) {
         const idx = currentFields.indexOf(field);
-        if (idx >= 0 && idx < currentFields.length - 1) setTimeout(() => fieldRefs.current[currentFields[idx + 1]]?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150);
-        else if (idx === currentFields.length - 1) setTimeout(() => document.getElementById('elan-action-bar')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 150);
+        if (idx >= 0 && idx < currentFields.length - 1) setTimeout(() => fieldRefs.current[currentFields[idx + 1]]?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+        else if (idx === currentFields.length - 1) setTimeout(() => document.getElementById('elan-action-bar')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300);
     }
   }, [step]);
 
@@ -122,10 +140,18 @@ const ElanPathway: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32 md:pb-20">
       {/* Header same */}
-      <div className="mb-6">
-        <Link to="/calculators" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group"><div className="bg-white p-1.5 rounded-md border border-gray-200 mr-2 shadow-sm group-hover:shadow-md transition-all"><ArrowLeft size={16} /></div> Back to Calculators</Link>
-        <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-purple-100 text-purple-700 rounded-lg"><Brain size={24} /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">ELAN Protocol Pathway</h1></div>
-        <p className="text-slate-500 font-medium">Timing of DOAC initiation after acute ischemic stroke with AF.</p>
+      <div className="mb-6 flex items-start justify-between">
+        <div>
+            <Link to="/calculators" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group"><div className="bg-white p-1.5 rounded-md border border-gray-200 mr-2 shadow-sm group-hover:shadow-md transition-all"><ArrowLeft size={16} /></div> Back to Calculators</Link>
+            <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-purple-100 text-purple-700 rounded-lg"><Brain size={24} /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">ELAN Protocol Pathway</h1></div>
+            <p className="text-slate-500 font-medium">Timing of DOAC initiation after acute ischemic stroke with AF.</p>
+        </div>
+        <button 
+            onClick={handleFavToggle}
+            className="p-3 rounded-full hover:bg-slate-100 transition-colors"
+        >
+            <Star size={24} className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'} />
+        </button>
       </div>
       
       {/* Progress same... */}
@@ -138,9 +164,9 @@ const ElanPathway: React.FC = () => {
         {step === 3 && (
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
                 <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Stroke Onset</h3>
-                <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm" ref={el => { fieldRefs.current['onset'] = el; }}>
-                    <div className="flex justify-between items-center mb-2">
-                        <label className="block text-sm font-medium text-slate-700">Date of Onset</label>
+                <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm" ref={el => { fieldRefs.current['onset'] = el; }}>
+                    <div className="flex justify-between items-center mb-4">
+                        <label className="block text-base font-bold text-slate-700">Date of Onset</label>
                         {inputs.onset && (
                             <button onClick={() => updateInput('onset', '')} className="text-xs text-slate-400 hover:text-red-500 font-bold flex items-center transition-colors">
                                 <RotateCcw size={12} className="mr-1" /> Clear
@@ -151,7 +177,7 @@ const ElanPathway: React.FC = () => {
                         <input 
                             type="date" 
                             max={new Date().toLocaleDateString('en-CA')}
-                            className="w-full p-3 bg-slate-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all font-medium text-slate-900 placeholder-slate-400 appearance-none min-h-[50px]" 
+                            className="w-full p-4 bg-slate-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all font-medium text-lg text-slate-900 placeholder-slate-400 appearance-none min-h-[60px]" 
                             value={inputs.onset} 
                             onChange={(e) => updateInput('onset', e.target.value)}
                             onClick={(e) => {
@@ -167,12 +193,12 @@ const ElanPathway: React.FC = () => {
                         />
                         {/* Calendar Icon Indicator (Decorative, absolute positioned) */}
                         {!inputs.onset && (
-                             <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover:text-purple-500 transition-colors">
-                                 <Calendar size={20} />
+                             <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover:text-purple-500 transition-colors">
+                                 <Calendar size={24} />
                              </div>
                         )}
                     </div>
-                    <p className="text-xs text-slate-500 mt-2">The timing of anticoagulation is calculated relative to this date (Day 0).</p>
+                    <p className="text-xs text-slate-500 mt-3 font-medium">The timing of anticoagulation is calculated relative to this date (Day 0).</p>
                 </div>
             </div>
         )}
@@ -185,7 +211,7 @@ const ElanPathway: React.FC = () => {
                     <div className="relative z-10">
                         <div className="inline-flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-6"><Activity size={12} /><span>{result.size} Stroke Protocol</span></div>
                         <div className="grid md:grid-cols-2 gap-8">
-                            <div className="space-y-1"><span className="text-emerald-400 font-bold text-xs uppercase tracking-widest flex items-center"><Check size={12} className="mr-1"/> Early Strategy (Recommended)</span><div className="text-2xl font-black">{result.earlyText}</div><div className="text-slate-400 font-medium">{result.earlyDates}</div></div>
+                            <div className="space-y-1"><span className="text-emerald-400 font-bold text-xs uppercase tracking-widest flex items-center"><Check size={12} className="mr-1"/> Early Strategy (Recommended)</span><div className="text-3xl font-black">{result.earlyText}</div><div className="text-slate-400 font-medium">{result.earlyDates}</div></div>
                             <div className="space-y-1 pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-white/10 md:pl-8"><span className="text-slate-400 font-bold text-xs uppercase tracking-widest">Later Strategy</span><div className="text-xl font-bold opacity-80">{result.lateText}</div><div className="text-slate-500 font-medium">{result.lateDates}</div></div>
                         </div>
                     </div>
@@ -207,9 +233,21 @@ const ElanPathway: React.FC = () => {
         )}
       </div>
 
-      <div id="elan-action-bar" className="mt-8 pt-4 border-t border-gray-100 scroll-mt-4">
-         <div className="flex items-center justify-between gap-4"><button onClick={handleBack} disabled={step === 1} className={`px-6 py-3 border border-gray-200 rounded-xl font-bold transition-all ${step === 1 ? 'opacity-0 pointer-events-none' : 'bg-white text-slate-600 hover:bg-slate-50 hover:border-gray-300'}`}>Back</button>{step === 4 && (<button onClick={handleReset} className="hidden md:flex items-center text-slate-500 hover:text-neuro-600 font-bold px-4 py-2 rounded-lg transition-colors"><RotateCcw size={16} className="mr-2" /> Start Over</button>)}{step < 4 ? (<button onClick={handleNext} disabled={step === 1 && isStep1Invalid} className={`px-8 py-3 bg-purple-600 text-white rounded-xl font-bold hover:bg-purple-700 shadow-lg shadow-purple-200 transition-all flex items-center transform active:scale-95 ${(step === 1 && isStep1Invalid) ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}>Next <ChevronRight size={16} className="ml-2" /></button>) : (<button onClick={copySummary} className="px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-all flex items-center transform active:scale-95"><Copy size={16} className="mr-2" /> Copy to EMR</button>)}</div>{step === 4 && (<div className="md:hidden mt-4 text-center"><button onClick={handleReset} className="text-sm text-slate-400 font-bold flex items-center justify-center w-full p-2 hover:bg-slate-50 rounded-lg transition-colors"><RotateCcw size={14} className="mr-2" /> Start Over</button></div>)}
+      <div id="elan-action-bar" className="mt-8 pt-4 md:border-t border-gray-100 scroll-mt-4 fixed bottom-[4.5rem] md:static left-0 right-0 bg-white/95 backdrop-blur md:bg-transparent p-4 md:p-0 border-t md:border-0 z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none">
+         <div className="max-w-3xl mx-auto flex items-center justify-between gap-4">
+             <button onClick={handleBack} disabled={step === 1} className={`px-6 py-3 border border-gray-200 rounded-xl font-bold transition-all ${step === 1 ? 'opacity-0 pointer-events-none' : 'bg-white text-slate-600 hover:bg-slate-50 hover:border-gray-300'}`}>Back</button>
+             {step === 4 && (<button onClick={handleReset} className="hidden md:flex items-center text-slate-500 hover:text-neuro-600 font-bold px-4 py-2 rounded-lg transition-colors"><RotateCcw size={16} className="mr-2" /> Start Over</button>)}
+             {step < 4 ? (<button onClick={handleNext} disabled={step === 1 && isStep1Invalid} className={`flex-1 md:flex-none px-8 py-3 bg-purple-600 text-white rounded-xl font-bold hover:bg-purple-700 shadow-lg shadow-purple-200 transition-all flex items-center justify-center transform active:scale-95 ${(step === 1 && isStep1Invalid) ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}>Next <ChevronRight size={16} className="ml-2" /></button>) : (<button onClick={copySummary} className="flex-1 md:flex-none px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-all flex items-center justify-center transform active:scale-95"><Copy size={16} className="mr-2" /> Copy to EMR</button>)}
+         </div>
       </div>
+      
+      {step === 4 && (
+        <div className="md:hidden mt-20 text-center pb-8">
+            <button onClick={handleReset} className="text-sm text-slate-400 font-bold flex items-center justify-center w-full p-4 hover:bg-slate-50 rounded-lg transition-colors">
+                <RotateCcw size={14} className="mr-2" /> Start Over
+            </button>
+        </div>
+      )}
 
       {step === 4 && (
           <div className="mt-12 border-t border-gray-100 pt-8 pb-8">
@@ -219,6 +257,11 @@ const ElanPathway: React.FC = () => {
                   <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">2</span>Classification: Minor (≤1.5cm), Moderate (Cortical superficial/Deep MCA), Major (Large territory/Brainstem &gt;1.5cm).</li>
               </ul>
           </div>
+      )}
+      {showFavToast && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
+          {isFav ? 'Saved to Favorites' : 'Removed from Favorites'}
+        </div>
       )}
     </div>
   );

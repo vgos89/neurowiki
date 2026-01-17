@@ -15,6 +15,40 @@ const generateSlug = (text: string) => {
     .replace(/\s+/g, '-');
 };
 
+// Define structure for Trials Sidebar
+const TRIAL_STRUCTURE = [
+  {
+    title: "Vascular Neurology",
+    subcategories: [
+      {
+        title: "Thrombolysis",
+        description: "IV Alteplase & Tenecteplase Evidence",
+        ids: ['ninds-trial', 'ecass3-trial', 'extend-trial', 'eagle-trial']
+      },
+      {
+        title: "Thrombectomy",
+        description: "Large & Medium Vessel Occlusion evidence",
+        ids: ['distal-trial', 'escape-mevo-trial', 'defuse-3-trial', 'dawn-trial', 'select2-trial', 'angel-aspect-trial', 'attention-trial', 'baoche-trial']
+      },
+      {
+        title: "Antiplatelets & Prevention",
+        description: "DAPT, Anticoagulation, Lipids",
+        ids: ['chance-trial', 'point-trial', 'sps3-trial', 'socrates-trial', 'elan-study', 'sparcl-trial']
+      },
+      {
+        title: "Carotid & Intracranial Disease",
+        description: "Stenting vs Endarterectomy vs Medical",
+        ids: ['nascet-trial', 'crest-trial', 'sammpris-trial', 'weave-trial']
+      },
+      {
+        title: "Acute Management",
+        description: "Glycemic control & Systemic care",
+        ids: ['shine-trial']
+      }
+    ]
+  }
+];
+
 interface ResidentGuideProps {
   context?: 'guide' | 'trials';
 }
@@ -41,12 +75,12 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
       return links;
   }, [currentTopic]);
 
-  // --- Sidebar Logic ---
+  // --- Sidebar Logic (Guide) ---
   const sidebarContent = useMemo(() => {
-    const topics = Object.values(GUIDE_CONTENT).filter(t => 
-      isTrialMode ? t.category === 'Neuro Trials' : t.category !== 'Neuro Trials'
-    );
+    // Only used for Resident Guide mode
+    if (isTrialMode) return [];
     
+    const topics = Object.values(GUIDE_CONTENT).filter(t => t.category !== 'Neuro Trials');
     const cats = Array.from(new Set(topics.map(t => t.category)));
     
     const CATEGORY_ORDER = [
@@ -61,7 +95,6 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
       'Infectious Disease'
     ];
     
-    // Sort logic
     return cats.sort((a, b) => {
       const indexA = CATEGORY_ORDER.indexOf(a);
       const indexB = CATEGORY_ORDER.indexOf(b);
@@ -75,18 +108,42 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
     }));
   }, [isTrialMode]);
 
-  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({});
+  // --- Sidebar Logic (Trials Orphans) ---
+  const trialOrphans = useMemo(() => {
+    if (!isTrialMode) return [];
+    const structuredIds = new Set(TRIAL_STRUCTURE.flatMap(c => c.subcategories.flatMap(s => s.ids)));
+    return Object.values(GUIDE_CONTENT)
+      .filter(t => t.category === 'Neuro Trials' && !structuredIds.has(t.id));
+  }, [isTrialMode]);
 
-  // Initialize sidebar expansion
+  // Unified State for open section (Category Name for Guide; Subcategory Name for Trials)
+  const [openCategory, setOpenCategory] = useState<string | null>(null);
+
+  // Initialize sidebar expansion based on current topic
   useEffect(() => {
-    if (sidebarContent.length === 0) return;
     if (topicId) {
-      const activeCat = sidebarContent.find(c => c.items.some(i => i.id === topicId));
-      if (activeCat) {
-        setOpenCategories(prev => ({ ...prev, [activeCat.name]: true }));
+      if (isTrialMode) {
+        // For Trials: Find the subcategory that contains this trial ID
+        for (const cat of TRIAL_STRUCTURE) {
+          for (const sub of cat.subcategories) {
+            if (sub.ids.includes(topicId)) {
+              setOpenCategory(sub.title);
+              return;
+            }
+          }
+        }
+        // If not found in structure (orphan), we might leave it null or handle differently
+      } else {
+        // For Guide: Find the category
+        if (sidebarContent.length > 0) {
+            const activeCat = sidebarContent.find(c => c.items.some(i => i.id === topicId));
+            if (activeCat) {
+              setOpenCategory(activeCat.name);
+            }
+        }
       }
     } 
-  }, [topicId, sidebarContent]);
+  }, [topicId, sidebarContent, isTrialMode]);
 
   // Scroll to top when topic changes
   useEffect(() => {
@@ -97,10 +154,7 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
   }, [topicId]);
 
   const toggleCategory = (categoryName: string) => {
-    setOpenCategories(prev => ({
-      ...prev,
-      [categoryName]: !prev[categoryName]
-    }));
+    setOpenCategory(prev => (prev === categoryName ? null : categoryName));
   };
 
   // --- Article Content Parsing (Sections for Accordion) ---
@@ -153,10 +207,18 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
 
   const toggleSection = (id: string) => {
     setExpandedSections(prev => {
-      if (prev[id]) {
-        return {};
+      const isOpening = !prev[id];
+      if (isOpening) {
+          // Auto-scroll when opening to ensure title/content are visible
+          setTimeout(() => {
+              const element = document.getElementById(id);
+              if (element) {
+                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+          }, 150);
+          return { [id]: true };
       }
-      return { [id]: true };
+      return {};
     });
   };
 
@@ -238,41 +300,92 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
             <p className="text-xs text-slate-500 mt-1 ml-8">{isTrialMode ? 'Evidence pearls' : 'Clinical protocols'}</p>
         </div>
         <div className="p-4 space-y-1">
-          {sidebarContent.map(cat => {
-            const isOpen = openCategories[cat.name];
-            return (
-            <div key={cat.name} className="border-b border-gray-50 last:border-0 pb-2 mb-2">
-              <button
-                onClick={() => toggleCategory(cat.name)}
-                className="w-full flex items-center justify-between px-3 py-3 text-left group hover:bg-slate-50 rounded-lg transition-colors"
-              >
-                 <span className="text-sm font-bold text-slate-800 uppercase tracking-wide group-hover:text-neuro-600 transition-colors">
-                    {cat.name}
-                 </span>
-                 <ChevronDown
-                    size={16}
-                    className={`text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-                 />
-              </button>
-              
-              {isOpen && (
-                  <div className="space-y-1 mt-1 pl-2 animate-in slide-in-from-top-1 fade-in duration-200">
-                    {cat.items.map(topic => (
-                      <Link
-                        key={topic.id}
-                        to={isTrialMode ? `/trials/${topic.id}` : `/guide/${topic.id}`}
-                        className={`group flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all duration-200 ${
-                          topicId === topic.id ? activeBg + ' font-semibold shadow-sm ring-1' : 'text-slate-600 hover:bg-gray-50'
-                        }`}
-                      >
-                        <span className="truncate">{topic.title}</span>
-                        {topicId === topic.id && <ChevronRight size={14} className={isTrialMode ? 'text-emerald-500' : 'text-neuro-500'} />}
-                      </Link>
-                    ))}
+          {/* RENDER LOGIC FOR TRIALS (Structured) */}
+          {isTrialMode ? (
+             <>
+               {TRIAL_STRUCTURE.map(cat => (
+                 <div key={cat.title}>
+                    <h3 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-2 px-2 mt-4 first:mt-0 flex items-center">{cat.title}</h3>
+                    <div className="space-y-1">
+                      {cat.subcategories.map(sub => {
+                         const isOpen = openCategory === sub.title;
+                         return (
+                           <div key={sub.title} className="mb-2">
+                              <button
+                                 onClick={() => toggleCategory(sub.title)}
+                                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-bold text-left transition-all ${isOpen ? 'bg-emerald-50 text-emerald-800' : 'text-slate-700 hover:bg-slate-50'}`}
+                              >
+                                 <span>{sub.title}</span>
+                                 <ChevronDown size={16} className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                              </button>
+                              {isOpen && (
+                                 <div className="mt-1 ml-2 pl-3 border-l-2 border-emerald-100 space-y-1 animate-in slide-in-from-top-1 fade-in duration-200">
+                                    {sub.ids.map(id => {
+                                        const trial = GUIDE_CONTENT[id];
+                                        if (!trial) return null;
+                                        return (
+                                            <Link key={id} to={`/trials/${id}`} className={`block px-3 py-2 text-xs font-medium rounded-md transition-colors truncate ${topicId === id ? 'text-emerald-700 bg-emerald-50 font-bold' : 'text-slate-500 hover:text-emerald-700 hover:bg-emerald-50/50'}`}>
+                                                {trial.title.replace(/Trial:|Study:/gi, '').trim()}
+                                            </Link>
+                                        )
+                                    })}
+                                 </div>
+                              )}
+                           </div>
+                         )
+                      })}
+                    </div>
+                 </div>
+               ))}
+               {trialOrphans.length > 0 && (
+                  <div className="mt-4">
+                      <h3 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-2 px-2">Other Trials</h3>
+                       {trialOrphans.map(t => (
+                          <Link key={t.id} to={`/trials/${t.id}`} className={`block px-3 py-2 rounded-lg text-sm transition-all truncate ${topicId === t.id ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:bg-emerald-50 hover:text-emerald-700'}`}>
+                              {t.title}
+                          </Link>
+                       ))}
                   </div>
-              )}
-            </div>
-          )})}
+               )}
+             </>
+          ) : (
+            // RENDER LOGIC FOR GUIDE (Standard)
+            sidebarContent.map(cat => {
+              const isOpen = openCategory === cat.name;
+              return (
+              <div key={cat.name} className="border-b border-gray-50 last:border-0 pb-2 mb-2">
+                <button
+                  onClick={() => toggleCategory(cat.name)}
+                  className="w-full flex items-center justify-between px-3 py-3 text-left group hover:bg-slate-50 rounded-lg transition-colors"
+                >
+                   <span className="text-sm font-bold text-slate-800 uppercase tracking-wide group-hover:text-neuro-600 transition-colors">
+                      {cat.name}
+                   </span>
+                   <ChevronDown
+                      size={16}
+                      className={`text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                   />
+                </button>
+                
+                {isOpen && (
+                    <div className="space-y-1 mt-1 pl-2 animate-in slide-in-from-top-1 fade-in duration-200">
+                      {cat.items.map(topic => (
+                        <Link
+                          key={topic.id}
+                          to={`/guide/${topic.id}`}
+                          className={`group flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all duration-200 ${
+                            topicId === topic.id ? activeBg + ' font-semibold shadow-sm ring-1' : 'text-slate-600 hover:bg-gray-50'
+                          }`}
+                        >
+                          <span className="truncate">{topic.title}</span>
+                          {topicId === topic.id && <ChevronRight size={14} className={isTrialMode ? 'text-emerald-500' : 'text-neuro-500'} />}
+                        </Link>
+                      ))}
+                    </div>
+                )}
+              </div>
+            )})
+          )}
         </div>
       </div>
 

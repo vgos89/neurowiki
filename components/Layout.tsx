@@ -124,20 +124,21 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="absolute inset-0 bg-white z-50 flex items-center px-4 animate-in fade-in slide-in-from-top-2 duration-200">
                <button 
                 onClick={() => setIsMobileSearchOpen(false)}
-                className="p-2 text-slate-400 hover:text-slate-600 mr-2 rounded-full hover:bg-slate-100"
+                className="p-3 text-slate-400 hover:text-slate-600 mr-2 rounded-full hover:bg-slate-100 touch-manipulation"
+                aria-label="Close Search"
                >
-                 <ArrowLeft size={20} />
+                 <ArrowLeft size={24} />
                </button>
                <form onSubmit={handleSearch} className="flex-1 relative">
                   <input
                     ref={mobileSearchInputRef}
                     type="text"
-                    className="w-full py-2.5 pl-11 pr-4 bg-slate-50 border-none ring-1 ring-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-neuro-500 text-base font-medium text-slate-800 placeholder:text-slate-400"
+                    className="w-full py-3 pl-11 pr-4 bg-slate-50 border-none ring-1 ring-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-neuro-500 text-base font-medium text-slate-800 placeholder:text-slate-400"
                     placeholder="Search protocols..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
-                  <Search className="absolute left-3.5 top-3 h-5 w-5 text-slate-400" />
+                  <Search className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400" />
                </form>
             </div>
           )}
@@ -146,9 +147,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             {/* Logo Mobile */}
             <div className="md:hidden flex items-center space-x-2">
               <div className="bg-neuro-500 p-1.5 rounded-lg">
-                 <Brain className="text-white" size={20} />
+                 <Brain className="text-white" size={24} />
               </div>
-              <span className="text-lg font-black text-slate-900 tracking-tight">NeuroWiki</span>
+              <span className="text-xl font-black text-slate-900 tracking-tight">NeuroWiki</span>
             </div>
           </div>
 
@@ -171,10 +172,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="flex items-center space-x-2">
             <button 
               onClick={() => setIsMobileSearchOpen(true)}
-              className="md:hidden p-2.5 text-slate-500 hover:bg-slate-100 rounded-full transition-colors active:scale-95"
+              className="md:hidden p-3 text-slate-500 hover:bg-slate-100 rounded-full transition-colors active:scale-95 touch-manipulation"
               aria-label="Open Search"
             >
-              <Search size={22} />
+              <Search size={24} />
             </button>
             <div className="hidden md:flex items-center space-x-4">
                <Link to="/calculators" className="text-xs font-bold text-slate-400 hover:text-neuro-600 transition-colors uppercase tracking-wider flex items-center">
@@ -184,23 +185,24 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto bg-slate-50/50 p-4 md:p-8 scroll-smooth pb-24 md:pb-8">
+        {/* Main Content with extra padding for mobile bottom nav + sticky actions */}
+        <main className="flex-1 overflow-y-auto bg-slate-50/50 p-4 md:p-8 scroll-smooth pb-32 md:pb-8">
           <div className="max-w-7xl mx-auto">
             {children}
           </div>
         </main>
 
-        {/* Mobile Bottom Navigation Bar */}
-        <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-slate-200 px-6 py-2 pb-safe flex justify-between items-center z-40 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)]">
+        {/* Mobile Bottom Navigation Bar - Height increased for ergonomics */}
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-slate-200 px-4 h-[4.5rem] pb-safe flex justify-around items-center z-40 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)]">
             {mobileNavItems.map((item) => {
                 const active = isActive(item.path);
                 return (
                   <Link 
                     key={item.path} 
                     to={item.path} 
-                    className={`flex flex-col items-center justify-center py-2 px-1 min-w-[64px] rounded-2xl transition-all duration-200 active:scale-90 ${active ? 'text-neuro-600' : 'text-slate-400 hover:text-slate-600'}`}
+                    className={`flex flex-col items-center justify-center w-16 h-full transition-all duration-200 active:scale-95 touch-manipulation ${active ? 'text-neuro-600' : 'text-slate-400 hover:text-slate-600'}`}
                   >
-                     <div className={`p-1.5 mb-1 rounded-xl transition-all duration-300 relative ${active ? 'bg-neuro-100 -translate-y-1 shadow-sm' : ''}`}>
+                     <div className={`p-1 mb-0.5 rounded-xl transition-all duration-300 relative ${active ? 'bg-neuro-50 -translate-y-1' : ''}`}>
                         {item.icon}
                         {active && <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-neuro-600 rounded-full"></span>}
                      </div>

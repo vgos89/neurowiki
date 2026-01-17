@@ -1,9 +1,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Check, RotateCcw, Copy, Activity, AlertTriangle, ShieldCheck, ClipboardCheck, Syringe, BedDouble, ChevronRight, Calculator, Info, Thermometer, Zap, XCircle, Brain } from 'lucide-react';
+import { ArrowLeft, Check, RotateCcw, Copy, Activity, AlertTriangle, ShieldCheck, ClipboardCheck, Syringe, BedDouble, ChevronRight, Calculator, Info, Thermometer, Zap, XCircle, Brain, Star } from 'lucide-react';
 import { SE_CONTENT } from '../data/toolContent';
 import { autoLinkReactNodes } from '../internalLinks/autoLink';
+import { useFavorites } from '../hooks/useFavorites';
 
 // --- Types & Logic ---
 type Agent = "levetiracetam" | "fosphenytoin" | "valproate" | "lacosamide" | "phenobarbital";
@@ -45,7 +46,22 @@ const StatusEpilepticusPathway: React.FC = () => {
   const [stage2ActualAgent, setStage2ActualAgent] = useState<Agent | null>(null);
   const [step3Checklist, setStep3Checklist] = useState<Step3Checklist>({ benzoAdequate: false, stage2Adequate: false, glucoseTreated: false, eegConsidered: false });
   const [stage3Agent, setStage3Agent] = useState<string | null>(null); 
+  
   const topRef = useRef<HTMLDivElement>(null);
+  const stage1DoseRef = useRef<HTMLDivElement>(null);
+  const stage2DoseRef = useRef<HTMLDivElement>(null);
+  const stage3DoseRef = useRef<HTMLDivElement>(null);
+
+  // Favorites
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const [showFavToast, setShowFavToast] = useState(false);
+  const isFav = isFavorite('se-pathway');
+
+  const handleFavToggle = () => {
+      const newVal = toggleFavorite('se-pathway');
+      setShowFavToast(true);
+      setTimeout(() => setShowFavToast(false), 2000);
+  };
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
   useEffect(() => { if (step > 1 && topRef.current) setTimeout(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100); }, [step]);
@@ -117,14 +133,42 @@ const StatusEpilepticusPathway: React.FC = () => {
 
   const STEPS = [{id:1, title:"Basics"}, {id:2, title:"Benzos"}, {id:3, title:"Urgent"}, {id:4, title:"Refractory"}];
 
+  // Auto scroll effects
+  useEffect(() => {
+      if (stage1Agent && stage1DoseRef.current) {
+          setTimeout(() => stage1DoseRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+      }
+  }, [stage1Agent]);
+
+  useEffect(() => {
+      // Auto-scroll to Stage 2 dose recommendation when entering step 3
+      if (step === 3 && stage2DoseRef.current) {
+          setTimeout(() => stage2DoseRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 500);
+      }
+  }, [step]);
+
+  useEffect(() => {
+      if (stage3Agent && stage3DoseRef.current) {
+          setTimeout(() => stage3DoseRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+      }
+  }, [stage3Agent]);
+
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32 md:pb-20">
-      <div className="mb-6">
-        <Link to="/calculators" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
-            <div className="bg-white p-1.5 rounded-md border border-gray-200 mr-2 shadow-sm group-hover:shadow-md transition-all"><ArrowLeft size={16} /></div> Back to Calculators
-        </Link>
-        <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-red-100 text-red-700 rounded-lg"><Activity size={24} /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">Status Epilepticus Pathway</h1></div>
-        <p className="text-slate-500 font-medium">Step-wise management for convulsive status epilepticus (ESETT protocol compliant).</p>
+      <div className="mb-6 flex items-start justify-between">
+        <div>
+            <Link to="/calculators" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
+                <div className="bg-white p-1.5 rounded-md border border-gray-200 mr-2 shadow-sm group-hover:shadow-md transition-all"><ArrowLeft size={16} /></div> Back to Calculators
+            </Link>
+            <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-red-100 text-red-700 rounded-lg"><Activity size={24} /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">Status Epilepticus Pathway</h1></div>
+            <p className="text-slate-500 font-medium">Step-wise management for convulsive status epilepticus (ESETT protocol compliant).</p>
+        </div>
+        <button 
+            onClick={handleFavToggle}
+            className="p-3 rounded-full hover:bg-slate-100 transition-colors"
+        >
+            <Star size={24} className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'} />
+        </button>
       </div>
 
       <div className="flex items-center space-x-2 mb-8 px-1">
@@ -142,34 +186,38 @@ const StatusEpilepticusPathway: React.FC = () => {
         {step === 1 && (
             <div className="space-y-6 animate-in slide-in-from-right-4">
                 <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                    <label className="block text-sm font-bold text-slate-700 mb-3">Patient Weight (kg)</label>
+                    <label className="block text-base font-bold text-slate-700 mb-3">Patient Weight (kg)</label>
                     <div className="flex items-center space-x-4">
-                        <input type="number" className="w-full p-4 text-lg bg-slate-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 outline-none font-bold" value={patient.weight || ''} onChange={e => setPatient({...patient, weight: parseFloat(e.target.value)})} placeholder="kg" />
+                        <input type="number" className="w-full p-4 text-xl bg-slate-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 outline-none font-bold" value={patient.weight || ''} onChange={e => setPatient({...patient, weight: parseFloat(e.target.value)})} placeholder="kg" />
                         <div className="text-sm text-slate-400 font-medium">Used for all calculations</div>
                     </div>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <button onClick={() => setPatient({...patient, convulsive: !patient.convulsive})} className={`p-4 rounded-xl border-2 text-left transition-all ${patient.convulsive ? 'border-red-500 bg-red-50 text-red-900' : 'border-gray-200 bg-white'}`}>
-                        <div className="font-bold flex items-center">{patient.convulsive ? <Activity size={18} className="mr-2"/> : <Brain size={18} className="mr-2"/>} {patient.convulsive ? 'Convulsive SE' : 'Non-Convulsive SE'}</div>
-                        <div className="text-xs mt-1 opacity-70">{patient.convulsive ? 'Prominent motor symptoms' : 'Coma/Confusion/EEG only'}</div>
+                    <button onClick={() => setPatient({...patient, convulsive: !patient.convulsive})} className={`p-5 rounded-2xl border-2 text-left transition-all active:scale-[0.99] touch-manipulation ${patient.convulsive ? 'border-red-500 bg-red-50 text-red-900' : 'border-gray-200 bg-white'}`}>
+                        <div className="font-bold flex items-center text-lg">{patient.convulsive ? <Activity size={20} className="mr-3"/> : <Brain size={20} className="mr-3"/>} {patient.convulsive ? 'Convulsive SE' : 'Non-Convulsive SE'}</div>
+                        <div className="text-sm mt-1 opacity-70 ml-8">{patient.convulsive ? 'Prominent motor symptoms' : 'Coma/Confusion/EEG only'}</div>
                     </button>
-                     <button onClick={() => setPatient({...patient, ivAccess: !patient.ivAccess})} className={`p-4 rounded-xl border-2 text-left transition-all ${patient.ivAccess ? 'border-emerald-500 bg-emerald-50 text-emerald-900' : 'border-amber-500 bg-amber-50 text-amber-900'}`}>
-                        <div className="font-bold flex items-center"><Syringe size={18} className="mr-2"/> {patient.ivAccess ? 'IV Access Established' : 'No IV Access'}</div>
-                        <div className="text-xs mt-1 opacity-70">{patient.ivAccess ? 'Enables IV Meds' : 'Use IM Midazolam'}</div>
+                     <button onClick={() => setPatient({...patient, ivAccess: !patient.ivAccess})} className={`p-5 rounded-2xl border-2 text-left transition-all active:scale-[0.99] touch-manipulation ${patient.ivAccess ? 'border-emerald-500 bg-emerald-50 text-emerald-900' : 'border-amber-500 bg-amber-50 text-amber-900'}`}>
+                        <div className="font-bold flex items-center text-lg"><Syringe size={20} className="mr-3"/> {patient.ivAccess ? 'IV Access Established' : 'No IV Access'}</div>
+                        <div className="text-sm mt-1 opacity-70 ml-8">{patient.ivAccess ? 'Enables IV Meds' : 'Use IM Midazolam'}</div>
                     </button>
                 </div>
 
-                <div className={`p-4 rounded-xl border transition-all ${patient.glucoseChecked ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-red-50 border-red-200 text-red-900'}`}>
-                    <label className="flex items-center cursor-pointer">
-                        <input type="checkbox" checked={patient.glucoseChecked} onChange={e => setPatient({...patient, glucoseChecked: e.target.checked})} className="w-5 h-5 rounded text-red-600 focus:ring-red-500 mr-3" />
-                        <span className="font-bold">Fingerstick Glucose Checked?</span>
-                    </label>
-                    {!patient.glucoseChecked && <div className="mt-2 text-sm ml-8 text-red-700 font-medium">Hypoglycemia is a common mimic. Check immediately.</div>}
-                </div>
+                <button onClick={() => setPatient({...patient, glucoseChecked: !patient.glucoseChecked})} className={`w-full p-5 rounded-2xl border-2 transition-all active:scale-[0.99] touch-manipulation text-left ${patient.glucoseChecked ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-red-50 border-red-200 text-red-900'}`}>
+                    <div className="flex items-center">
+                        <div className={`w-6 h-6 rounded border flex items-center justify-center mr-4 ${patient.glucoseChecked ? 'bg-emerald-500 border-emerald-500' : 'bg-white border-red-300'}`}>
+                            {patient.glucoseChecked && <Check size={16} className="text-white" />}
+                        </div>
+                        <span className="font-bold text-lg">Fingerstick Glucose Checked?</span>
+                    </div>
+                    {!patient.glucoseChecked && <div className="mt-2 text-sm ml-10 text-red-700 font-medium">Hypoglycemia is a common mimic. Check immediately.</div>}
+                </button>
 
-                <div className="flex justify-end pt-4">
-                    <button disabled={!patient.weight} onClick={() => setStep(2)} className="px-8 py-3 bg-red-600 text-white font-bold rounded-xl shadow-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center">Proceed to Stage 1 <ChevronRight size={18} className="ml-2" /></button>
+                <div className="fixed bottom-[4.5rem] md:static left-0 right-0 bg-white/95 backdrop-blur md:bg-transparent p-4 md:p-0 border-t md:border-0 z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none flex justify-end">
+                    <div className="w-full max-w-3xl mx-auto flex justify-end">
+                        <button disabled={!patient.weight} onClick={() => setStep(2)} className="w-full md:w-auto px-8 py-3 bg-red-600 text-white font-bold rounded-xl shadow-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center active:scale-95">Proceed to Stage 1 <ChevronRight size={18} className="ml-2" /></button>
+                    </div>
                 </div>
             </div>
         )}
@@ -184,20 +232,20 @@ const StatusEpilepticusPathway: React.FC = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {['lorazepam', 'midazolam', 'diazepam'].map((agent) => (
-                        <button key={agent} onClick={() => setStage1Agent(agent as any)} className={`p-4 rounded-xl border-2 text-left transition-all ${stage1Agent === agent ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white hover:border-red-200'}`}>
-                            <div className="font-bold capitalize text-slate-900">{agent}</div>
-                            {agent === 'midazolam' && !patient.ivAccess && <div className="text-xs text-emerald-600 font-bold mt-1">Preferred (IM)</div>}
+                        <button key={agent} onClick={() => setStage1Agent(agent as any)} className={`p-5 rounded-2xl border-2 text-left transition-all active:scale-[0.99] touch-manipulation ${stage1Agent === agent ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white hover:border-red-200'}`}>
+                            <div className="font-bold capitalize text-slate-900 text-lg">{agent}</div>
+                            {agent === 'midazolam' && !patient.ivAccess && <div className="text-sm text-emerald-600 font-bold mt-1">Preferred (IM)</div>}
                         </button>
                     ))}
                 </div>
 
                 {stage1Agent && (
-                    <div className="bg-white p-6 rounded-2xl border border-red-100 shadow-sm animate-in zoom-in-95">
+                    <div ref={stage1DoseRef} className="bg-white p-6 rounded-2xl border border-red-100 shadow-sm animate-in zoom-in-95 scroll-mt-24">
                         <div className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Recommended Dose</div>
-                        <div className="text-3xl font-black text-slate-900 mb-2">{calculateDose(stage1Agent, patient.weight)}</div>
+                        <div className="text-4xl font-black text-slate-900 mb-2">{calculateDose(stage1Agent, patient.weight)}</div>
                         
                         {!stage1FirstDoseGiven ? (
-                            <button onClick={() => setStage1FirstDoseGiven(true)} className="w-full mt-4 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-all">Mark First Dose Given</button>
+                            <button onClick={() => setStage1FirstDoseGiven(true)} className="w-full mt-4 py-4 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-all shadow-lg active:scale-95">Mark First Dose Given</button>
                         ) : (
                             <div className="space-y-4 mt-4">
                                 <div className="flex items-center text-emerald-600 font-bold"><Check size={18} className="mr-2" /> First dose administered</div>
@@ -205,8 +253,8 @@ const StatusEpilepticusPathway: React.FC = () => {
                                     <div className="bg-slate-50 p-4 rounded-xl border border-gray-200">
                                         <div className="font-bold text-slate-900 mb-3">Seizure Status?</div>
                                         <div className="grid grid-cols-2 gap-3">
-                                            <button onClick={() => setStage1Success(true)} className="py-3 bg-emerald-500 text-white font-bold rounded-lg hover:bg-emerald-600">Stopped</button>
-                                            <button onClick={() => setStage1SecondDoseGiven(true)} className="py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600">Persists (Repeat)</button>
+                                            <button onClick={() => setStage1Success(true)} className="py-4 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 shadow-md active:scale-95">Stopped</button>
+                                            <button onClick={() => setStage1SecondDoseGiven(true)} className="py-4 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 shadow-md active:scale-95">Persists (Repeat)</button>
                                         </div>
                                     </div>
                                 )}
@@ -215,8 +263,8 @@ const StatusEpilepticusPathway: React.FC = () => {
                                          <div className="flex items-center text-red-600 font-bold mb-3"><Syringe size={18} className="mr-2" /> Second dose administered</div>
                                          <div className="font-bold text-slate-900 mb-3">Seizure Status?</div>
                                          <div className="grid grid-cols-2 gap-3">
-                                            <button onClick={() => setStage1Success(true)} className="py-3 bg-emerald-500 text-white font-bold rounded-lg hover:bg-emerald-600">Stopped</button>
-                                            <button onClick={() => { setStage1Success(false); setStep(3); }} className="py-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700">Persists (Refractory)</button>
+                                            <button onClick={() => setStage1Success(true)} className="py-4 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 shadow-md active:scale-95">Stopped</button>
+                                            <button onClick={() => { setStage1Success(false); setStep(3); }} className="py-4 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 shadow-md active:scale-95">Persists (Refractory)</button>
                                         </div>
                                     </div>
                                 )}
@@ -229,7 +277,7 @@ const StatusEpilepticusPathway: React.FC = () => {
                          <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3"><Check size={24} /></div>
                          <h3 className="text-xl font-bold text-emerald-900">Seizure Controlled</h3>
                          <p className="text-emerald-700 mb-4">Monitor ABCs. Consider maintenance therapy.</p>
-                         <button onClick={copySummary} className="px-6 py-2 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700">Copy Summary</button>
+                         <button onClick={copySummary} className="px-6 py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 shadow-lg active:scale-95">Copy Summary</button>
                      </div>
                  )}
             </div>
@@ -247,30 +295,30 @@ const StatusEpilepticusPathway: React.FC = () => {
                     <h3 className="font-bold text-slate-900 mb-3">Comorbidities (Affects Drug Choice)</h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                         {Object.keys(comorbidities).map(k => (
-                            <button key={k} onClick={() => setComorbidities({...comorbidities, [k]: !comorbidities[k as keyof Comorbidities]})} className={`px-3 py-2 text-xs font-bold rounded-lg border transition-all ${comorbidities[k as keyof Comorbidities] ? 'bg-slate-800 text-white border-slate-800' : 'bg-slate-50 text-slate-500 border-gray-200'}`}>
+                            <button key={k} onClick={() => setComorbidities({...comorbidities, [k]: !comorbidities[k as keyof Comorbidities]})} className={`px-3 py-3 text-sm font-bold rounded-lg border transition-all active:scale-[0.98] touch-manipulation ${comorbidities[k as keyof Comorbidities] ? 'bg-slate-800 text-white border-slate-800' : 'bg-slate-50 text-slate-500 border-gray-200'}`}>
                                 {k.toUpperCase()}
                             </button>
                         ))}
                     </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-2xl border border-indigo-100 shadow-sm">
+                <div ref={stage2DoseRef} className="bg-white p-6 rounded-2xl border border-indigo-100 shadow-sm scroll-mt-24">
                     <div className="flex justify-between items-start mb-4">
                         <div>
                              <div className="text-sm font-bold text-indigo-500 uppercase tracking-widest">Recommended Agent</div>
-                             <div className="text-2xl font-black text-slate-900 capitalize">{stage2Recommendation.agent}</div>
+                             <div className="text-3xl font-black text-slate-900 capitalize">{stage2Recommendation.agent}</div>
                         </div>
                         {stage2Recommendation.warnings.length > 0 && <AlertTriangle className="text-amber-500" />}
                     </div>
                     {stage2Recommendation.warnings.map((w, i) => <div key={i} className="text-xs text-amber-700 bg-amber-50 px-2 py-1 rounded mb-1">{w}</div>)}
                     <div className="mt-4 p-4 bg-slate-50 rounded-xl">
                         <div className="text-xs font-bold text-slate-400 uppercase">Dosing</div>
-                        <div className="text-lg font-bold text-slate-900">{calculateDose(finalStage2, patient.weight)}</div>
+                        <div className="text-xl font-bold text-slate-900">{calculateDose(finalStage2, patient.weight)}</div>
                     </div>
                     
                     <div className="mt-4">
                         <label className="text-xs font-bold text-slate-400 uppercase block mb-2">Override Selection</label>
-                        <select className="w-full p-2 bg-white border border-gray-300 rounded-lg text-sm font-bold" value={stage2Agent} onChange={(e) => setStage2Agent(e.target.value as any)}>
+                        <select className="w-full p-4 bg-white border border-gray-300 rounded-xl text-base font-bold" value={stage2Agent} onChange={(e) => setStage2Agent(e.target.value as any)}>
                             <option value="auto">Auto-Recommend ({stage2Recommendation.agent})</option>
                             <option value="levetiracetam">Levetiracetam</option>
                             <option value="fosphenytoin">Fosphenytoin</option>
@@ -281,9 +329,11 @@ const StatusEpilepticusPathway: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="flex justify-end pt-4 space-x-4">
-                    <button onClick={() => setStage1Success(true)} className="px-6 py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 flex-1">Seizure Stopped</button>
-                    <button onClick={() => { setStage2Success(false); setStage2ActualAgent(finalStage2); setStep(4); }} className="px-6 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 flex-1">Persists (Refractory)</button>
+                <div className="fixed bottom-[4.5rem] md:static left-0 right-0 bg-white/95 backdrop-blur md:bg-transparent p-4 md:p-0 border-t md:border-0 z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none flex justify-between space-x-4">
+                    <div className="w-full max-w-3xl mx-auto flex gap-4">
+                        <button onClick={() => setStage1Success(true)} className="px-6 py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 flex-1 shadow-lg active:scale-95">Seizure Stopped</button>
+                        <button onClick={() => { setStage2Success(false); setStage2ActualAgent(finalStage2); setStep(4); }} className="px-6 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 flex-1 shadow-lg active:scale-95">Persists (Refractory)</button>
+                    </div>
                 </div>
             </div>
         )}
@@ -302,40 +352,53 @@ const StatusEpilepticusPathway: React.FC = () => {
                  <div className="bg-white p-6 rounded-2xl border border-gray-200">
                     <h3 className="font-bold text-slate-900 mb-4">Continuous Infusion Options</h3>
                     <div className="space-y-3">
-                         <button onClick={() => setStage3Agent("midazolam_inf")} className={`w-full text-left p-4 rounded-xl border-2 transition-all ${stage3Agent === 'midazolam_inf' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-red-200'}`}>
-                            <div className="font-bold">Midazolam Infusion</div>
+                         <button onClick={() => setStage3Agent("midazolam_inf")} className={`w-full text-left p-5 rounded-2xl border-2 transition-all active:scale-[0.99] touch-manipulation ${stage3Agent === 'midazolam_inf' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-red-200'}`}>
+                            <div className="font-bold text-lg">Midazolam Infusion</div>
                             <div className="text-sm opacity-70">Load: 0.2 mg/kg. Maint: 0.1-2 mg/kg/hr.</div>
                         </button>
-                        <button onClick={() => setStage3Agent("propofol_inf")} className={`w-full text-left p-4 rounded-xl border-2 transition-all ${stage3Agent === 'propofol_inf' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-red-200'}`}>
-                            <div className="font-bold">Propofol Infusion</div>
+                        <button onClick={() => setStage3Agent("propofol_inf")} className={`w-full text-left p-5 rounded-2xl border-2 transition-all active:scale-[0.99] touch-manipulation ${stage3Agent === 'propofol_inf' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-red-200'}`}>
+                            <div className="font-bold text-lg">Propofol Infusion</div>
                             <div className="text-sm opacity-70">Load: 1-2 mg/kg. Maint: 20-200 mcg/kg/min. Caution PRIS.</div>
                         </button>
-                         <button onClick={() => setStage3Agent("ketamine_inf")} className={`w-full text-left p-4 rounded-xl border-2 transition-all ${stage3Agent === 'ketamine_inf' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-red-200'}`}>
-                            <div className="font-bold">Ketamine Infusion</div>
+                         <button onClick={() => setStage3Agent("ketamine_inf")} className={`w-full text-left p-5 rounded-2xl border-2 transition-all active:scale-[0.99] touch-manipulation ${stage3Agent === 'ketamine_inf' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-red-200'}`}>
+                            <div className="font-bold text-lg">Ketamine Infusion</div>
                             <div className="text-sm opacity-70">Load: 1.5-4.5 mg/kg. Maint: 1-10 mg/kg/hr. Hemodynamically stable.</div>
                         </button>
                     </div>
                  </div>
 
                  {stage3Agent && (
-                     <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 animate-in zoom-in-95">
+                     <div ref={stage3DoseRef} className="bg-slate-50 p-6 rounded-2xl border border-slate-200 animate-in zoom-in-95 pb-24 scroll-mt-24">
                          <h3 className="font-bold text-slate-900 mb-2">Calculated Load</h3>
-                         <div className="text-3xl font-black text-slate-900">{calculateDose(stage3Agent, patient.weight)}</div>
-                         <button onClick={copySummary} className="w-full mt-6 py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 shadow-lg">Copy Full Pathway Note</button>
+                         <div className="text-4xl font-black text-slate-900">{calculateDose(stage3Agent, patient.weight)}</div>
                      </div>
+                 )}
+                 {stage3Agent && (
+                    <div className="fixed bottom-[4.5rem] md:static left-0 right-0 bg-white/95 backdrop-blur md:bg-transparent p-4 md:p-0 border-t md:border-0 z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none">
+                        <div className="max-w-3xl mx-auto">
+                            <button onClick={copySummary} className="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 shadow-lg active:scale-95">Copy Full Pathway Note</button>
+                        </div>
+                    </div>
                  )}
              </div>
         )}
 
-        <div className="mt-12 border-t border-gray-100 pt-8 pb-8">
-             <h3 className="text-sm font-bold text-slate-900 mb-4">References</h3>
-             <ul className="space-y-3 text-xs text-slate-500">
-                 <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">1</span>{autoLinkReactNodes("Glauser T et al. Epilepsy Curr 2016 (AES Guidelines).")}</li>
-                 <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">2</span>{autoLinkReactNodes("Kapur J et al. N Engl J Med 2019 (ESETT Trial).")}</li>
-                 <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">3</span>{autoLinkReactNodes(SE_CONTENT.stage2Note)}</li>
-             </ul>
-        </div>
+        {step === 4 && (
+            <div className="mt-12 border-t border-gray-100 pt-8 pb-8">
+                 <h3 className="text-sm font-bold text-slate-900 mb-4">References</h3>
+                 <ul className="space-y-3 text-xs text-slate-500">
+                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">1</span>{autoLinkReactNodes("Glauser T et al. Epilepsy Curr 2016 (AES Guidelines).")}</li>
+                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">2</span>{autoLinkReactNodes("Kapur J et al. N Engl J Med 2019 (ESETT Trial).")}</li>
+                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">3</span>{autoLinkReactNodes(SE_CONTENT.stage2Note)}</li>
+                 </ul>
+            </div>
+        )}
       </div>
+      {showFavToast && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
+          {isFav ? 'Saved to Favorites' : 'Removed from Favorites'}
+        </div>
+      )}
     </div>
   );
 };

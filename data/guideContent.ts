@@ -8,6 +8,252 @@ export interface GuideTopic {
 
 export const GUIDE_CONTENT: Record<string, GuideTopic> = {
   // --- NEURO TRIALS (Vascular Neurology) ---
+  'ninds-trial': {
+    id: 'ninds-trial',
+    title: 'NINDS Trial: IV tPA (0-3h)',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+The NINDS tPA Stroke Study was the landmark trial that established intravenous alteplase (tPA) as the first FDA-approved treatment for acute ischemic stroke.
+
+## Trial Summary
+*   **Design:** Two-part, randomized, double-blind, placebo-controlled trial.
+*   **Population:** 624 patients with acute ischemic stroke treated within **3 hours** of onset.
+*   **Intervention:** IV Alteplase (0.9 mg/kg, max 90 mg) vs. Placebo.
+*   **Results (Part 2 - Efficacy):**
+    *   **Minimal Disability (mRS 0-1):** 42.6% in tPA group vs 27.2% in Placebo group at 3 months.
+    *   **Odds Ratio:** 1.7 (95% CI 1.2–2.6) for favorable outcome.
+    *   **Safety:** Symptomatic Intracranial Hemorrhage (sICH) occurred in **6.4%** of tPA patients vs 0.6% of placebo patients.
+    *   **Mortality:** No significant difference in mortality at 3 months (17% vs 21%).
+
+## Clinical PEARLS
+*   **Time is Brain:** Established the 3-hour window.
+*   **Safety Trade-off:** Established the classic risk profile of tPA: significantly improved functional outcomes at the cost of a ~6% risk of symptomatic hemorrhage, but with no increase in overall mortality.
+*   **BP Control:** Strict blood pressure control (< 185/110 mmHg) was mandatory and remains a cornerstone of safety.
+
+## Conclusion
+Despite an increased incidence of symptomatic intracerebral hemorrhage, treatment with intravenous tPA within 3 hours of the onset of ischemic stroke improved clinical outcome at 3 months.
+
+*Source: [The National Institute of Neurological Disorders and Stroke rt-PA Stroke Study Group (NEJM 1995)](https://www.nejm.org/doi/full/10.1056/NEJM199512143332401)*
+`
+  },
+  'ecass3-trial': {
+    id: 'ecass3-trial',
+    title: 'ECASS III Trial: IV tPA (3-4.5h)',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+ECASS III investigated whether the window for IV tPA could be safely extended from 3 hours (NINDS) to 4.5 hours.
+
+## Trial Summary
+*   **Design:** Randomized, double-blind, placebo-controlled trial.
+*   **Population:** 821 patients with acute ischemic stroke treated between **3 and 4.5 hours** after onset.
+*   **Key Exclusions (Stricter than 0-3h):** Age > 80 years, baseline NIHSS > 25, patients taking oral anticoagulants (regardless of INR), and patients with both diabetes and prior stroke.
+*   **Intervention:** IV Alteplase (0.9 mg/kg) vs. Placebo.
+*   **Primary Outcome:** Disability at 90 days (mRS 0-1).
+*   **Results:**
+    *   **Favorable Outcome (mRS 0-1):** 52.4% in tPA group vs 45.2% in Placebo group (P=0.04).
+    *   **Symptomatic ICH:** 2.4% in tPA group vs 0.2% in Placebo group (P=0.008).
+    *   **Mortality:** No significant difference.
+
+## Clinical PEARLS
+*   **Extended Window:** Successfully expanded the treatment window to 4.5 hours for eligible patients.
+*   **Efficacy Decay:** The treatment effect (OR 1.34) was smaller than in the 0-3 hour window (OR 1.7 in NINDS), reinforcing that earlier treatment is better.
+*   **Guideline Evolution:** While the trial excluded Age > 80 and those on warfarin, modern guidelines often permit treatment in these groups within 3-4.5h after individual risk assessment (though caution remains for DOACs/Warfarin).
+
+## Conclusion
+Intravenous alteplase administered between 3 and 4.5 hours after the onset of symptoms significantly improved clinical outcomes in patients with acute ischemic stroke.
+
+*Source: [Hacke et al. (NEJM 2008)](https://www.nejm.org/doi/full/10.1056/NEJMoa0804656)*
+`
+  },
+  'extend-trial': {
+    id: 'extend-trial',
+    title: 'EXTEND Trial: tPA 4.5-9 Hours',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Can we thrombolyse patients beyond 4.5 hours if they have salvageable tissue? The EXTEND trial tested desmoteplase (and pooled data with ECASS-4/EPITHET using Alteplase) using perfusion imaging selection.
+
+## Trial Summary
+*   **Design:** Multicenter, randomized, placebo-controlled trial.
+*   **Population:** Patients with ischemic stroke **4.5 to 9.0 hours** after onset OR **Wake-up stroke** (within 9h of midpoint of sleep).
+*   **Selection Criteria (Perfusion):**
+    *   **Core:** < 70 ml (CTP or DWI).
+    *   **Mismatch:** Penumbra > 10 ml and > 1.2x Core volume.
+*   **Intervention:** IV Alteplase vs. Placebo.
+*   **Primary Outcome:** mRS 0-1 at 90 days.
+*   **Results:**
+    *   **Excellent Outcome (mRS 0-1):** 35.4% in Alteplase group vs 29.5% in Placebo group (Adj Risk Ratio 1.44; P=0.04).
+    *   **Symptomatic ICH:** 6.2% in Alteplase group vs 0.9% in Placebo group.
+
+## Clinical PEARLS
+*   **Tissue Window:** Proved that the "tissue window" (perfusion mismatch) is more relevant than the rigid "time window" for thrombolysis, similar to mechanical thrombectomy.
+*   **Wake-Up Stroke:** Provided evidence for treating wake-up strokes guided by CTP (alternative to the MRI DWI-FLAIR mismatch strategy from WAKE-UP trial).
+*   **Clinical Implementation:** Many centers now utilize this protocol for patients < 9 hours who are not thrombectomy candidates (e.g., distal occlusions) but have favorable perfusion profiles.
+
+## Conclusion
+Among patients with ischemic stroke 4.5 to 9.0 hours after onset or wake-up stroke who had salvageable brain tissue on perfusion imaging, alteplase resulted in a higher percentage of patients with no or minor neurologic deficits.
+
+*Source: [Ma et al. (NEJM 2019)](https://www.nejm.org/doi/full/10.1056/NEJMoa1910355)*
+`
+  },
+  'eagle-trial': {
+    id: 'eagle-trial',
+    title: 'EAGLE Trial: IA tPA for CRAO',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Central Retinal Artery Occlusion (CRAO) is an ophthalmologic emergency with poor prognosis. Intra-arterial (IA) fibrinolysis was hypothesized to improve visual outcomes by recanalizing the ophthalmic artery. The EAGLE trial was the first randomized controlled trial to test this.
+
+## Trial Summary
+*   **Design:** Prospective, randomized, multicenter trial.
+*   **Population:** 84 patients with acute non-arteritic CRAO.
+*   **Time Window:** Within **20 hours** of symptom onset.
+*   **Intervention:**
+    *   **LIF Group:** Local Intra-arterial Fibrinolysis (max 50mg tPA) via microcatheter in ophthalmic artery.
+    *   **CST Group:** Conservative Standard Treatment (hemodilution, ocular massage, timolol, acetazolamide).
+*   **Primary Outcome:** Change in Best Corrected Visual Acuity (BCVA) at 1 month.
+*   **Results:**
+    *   **Visual Improvement:** Clinically significant improvement in 60.0% of CST group vs 57.1% of LIF group (P=0.69). No difference.
+    *   **Adverse Events:** 4.3% in CST group vs **37.1%** in LIF group (including headaches, but also 2 hemorrhages in LIF).
+
+## Clinical PEARLS
+*   **Negative Trial:** IA tPA showed no efficacy benefit over conservative therapy.
+*   **Safety Hazard:** The intervention carried significantly higher risks (hemorrhage, etc.) without benefit.
+*   **Study Stopped:** The trial was terminated early by the Data Safety Monitoring Board due to futility and safety concerns.
+*   **Guideline Impact:** Based on EAGLE, IA tPA is generally **not recommended** for CRAO in standard practice, though IV tPA within 4.5h is still considered by some centers (based on other non-randomized data, e.g., recent AHA statements).
+
+## Conclusion
+In light of similar visual outcomes and a higher rate of adverse reactions associated with Local Intra-arterial Fibrinolysis (LIF), it cannot be recommended for the management of acute CRAO.
+
+*Source: [Schumacher et al. (Ophthalmology 2010)](https://www.aaojournal.org/article/S0161-6420(10)00258-2/fulltext)*
+`
+  },
+  'attention-trial': {
+    id: 'attention-trial',
+    title: 'ATTENTION Trial: Basilar Artery EVT',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Basilar Artery Occlusion (BAO) carries high mortality (>80% without treatment). Early trials (BEST, BASICS) were inconclusive due to crossover and slow recruitment. ATTENTION (and BAOCHE) provided definitive evidence.
+
+## Trial Summary
+*   **Design:** Multicenter, randomized, open-label trial in China.
+*   **Population:** 340 patients with Basilar Artery Occlusion.
+*   **Time Window:** Within **12 hours** of estimated onset.
+*   **Intervention:** Endovascular Thrombectomy (EVT) (+/- tPA) vs. Best Medical Therapy (BMT).
+*   **Primary Outcome:** Good functional status (mRS 0-3) at 90 days.
+*   **Results:**
+    *   **Good Outcome (mRS 0-3):** 46% in EVT group vs 23% in BMT group (Adj Rate Ratio 2.06; P<0.001).
+    *   **Mortality:** 37% in EVT group vs 55% in BMT group.
+    *   **Symptomatic ICH:** 5% in EVT vs 0% in BMT.
+
+## Clinical PEARLS
+*   **Definitive Benefit:** Unlike anterior circulation where mRS 0-2 is the goal, BAO trials often use mRS 0-3 because the natural history is so devastating. EVT doubled the rate of good outcomes.
+*   **Mortality Reduction:** One of the few stroke interventions shown to significantly reduce mortality (NNT ~ 5.5 to prevent death).
+*   **Bridging:** ~30% of patients received IV thrombolysis.
+
+## Conclusion
+In patients with basilar-artery occlusion presenting within 12 hours, endovascular thrombectomy led to better functional outcomes and lower mortality than best medical care.
+
+*Source: [Tao et al. (NEJM 2022)](https://www.nejm.org/doi/full/10.1056/NEJMoa2207576)*
+`
+  },
+  'baoche-trial': {
+    id: 'baoche-trial',
+    title: 'BAOCHE Trial: Basilar EVT 6-24h',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Following the success of extended window thrombectomy in the anterior circulation (DAWN/DEFUSE-3), BAOCHE examined the 6-24 hour window for Basilar Artery Occlusion.
+
+## Trial Summary
+*   **Design:** Multicenter, randomized, open-label trial in China.
+*   **Population:** 217 patients with Basilar Artery Occlusion.
+*   **Time Window:** **6 to 24 hours** from onset.
+*   **Selection:** Used clinical exclusion (severe disability) but did not strictly require perfusion imaging mismatch, though pc-ASPECTS was assessed.
+*   **Intervention:** Thrombectomy vs. Best Medical Therapy.
+*   **Primary Outcome:** Good functional status (mRS 0-3) at 90 days.
+*   **Results:**
+    *   **Good Outcome (mRS 0-3):** 46% in EVT group vs 24% in Control group (Adj Rate Ratio 1.81; P<0.001).
+    *   **Mortality:** 31% in EVT group vs 42% in Control group.
+
+## Clinical PEARLS
+*   **Late Window Basilar:** Confirms that the basilar artery also has a "late window" benefit, likely due to collateral flow from the posterior communicating arteries.
+*   **High Efficacy:** The effect size was remarkably similar to the early window ATTENTION trial (46% good outcome in both).
+*   **Recommendation:** EVT is now recommended for BAO up to 24 hours in eligible patients.
+
+## Conclusion
+Among patients with basilar-artery occlusion who presented between 6 and 24 hours after symptom onset, thrombectomy led to a higher rate of good functional status at 90 days than medical therapy.
+
+*Source: [Jovin et al. (NEJM 2022)](https://www.nejm.org/doi/full/10.1056/NEJMoa2206317)*
+`
+  },
+  'distal-trial': {
+    id: 'distal-trial',
+    title: 'DISTAL Trial: EVT for Medium/Distal Vessels',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+While Endovascular Thrombectomy (EVT) is the standard of care for Large Vessel Occlusions (LVO), its efficacy for medium (e.g., M2, M3) and distal vessel occlusions has been uncertain. The DISTAL trial aimed to determine if EVT offers benefit over Best Medical Treatment (BMT) for these lesions.
+
+## Trial Summary
+*   **Design:** International, multicenter, randomized, assessor-blinded trial.
+*   **Population:** 543 patients with isolated occlusion of medium or distal vessels (M2 non-dominant/co-dominant, M3, M4, A1-A3, P1-P3).
+    *   *Note:* Dominant M2 occlusions were excluded (as benefit is probable).
+*   **Time Window:** Within 24 hours of Last Known Well.
+*   **Intervention:** EVT + Best Medical Treatment (BMT) vs. BMT alone.
+*   **Primary Outcome:** Functional disability (mRS shift) at 90 days.
+*   **Results:**
+    *   **Functional Outcome:** No significant difference in mRS distribution (Common Odds Ratio 0.90; 95% CI 0.67–1.22; P=0.50).
+    *   **Mortality:** 15.5% in EVT group vs 14.0% in BMT group.
+    *   **Symptomatic ICH:** 5.9% in EVT group vs 2.6% in BMT group (OR 2.38).
+
+## Clinical PEARLS
+*   **Neutral Result:** The trial failed to show a benefit for EVT in this broad population of medium/distal occlusions.
+*   **Technical Challenges:** Successful reperfusion (TICI 2b-3) was achieved in only **71.7%** of EVT patients, significantly lower than typical LVO trials, highlighting the difficulty of accessing distal vessels.
+*   **Safety Signal:** Symptomatic intracranial hemorrhage (sICH) was more than double in the EVT group (5.9% vs 2.6%).
+*   **Workflow:** Median time from imaging to arterial puncture was 70 minutes, exceeding the 60-minute target.
+
+## Conclusion
+In patients with stroke due to medium or distal vessel occlusion, EVT did not result in less disability or death compared to best medical treatment alone.
+
+*Source: [Psychogios et al. (NEJM 2025)](https://www.nejm.org/doi/full/10.1056/NEJMoa2408954)*
+`
+  },
+  'escape-mevo-trial': {
+    id: 'escape-mevo-trial',
+    title: 'ESCAPE-MeVO Trial: EVT for MeVO',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Conducted in parallel with DISTAL, the ESCAPE-MeVO trial investigated the efficacy and safety of endovascular thrombectomy for Medium Vessel Occlusions (MeVO), specifically targeting the M2/M3 MCA, A2/A3 ACA, and P2/P3 PCA segments.
+
+## Trial Summary
+*   **Design:** Multicenter, prospective, randomized, open-label trial (PROBE).
+*   **Population:** 530 patients with acute ischemic stroke due to MeVO.
+*   **Time Window:** Within 12 hours of Last Known Well.
+*   **Selection:** High baseline NIHSS (>5 or disabling 3-5) and favorable baseline imaging.
+*   **Intervention:** EVT + Usual Care vs. Usual Care alone.
+*   **Primary Outcome:** Excellent functional outcome (mRS 0-1) at 90 days.
+*   **Results:**
+    *   **Excellent Outcome (mRS 0-1):** 41.6% in EVT group vs 43.1% in Usual Care (Adjusted Rate Ratio 0.95; P=0.61).
+    *   **Mortality:** 13.3% in EVT group vs 8.4% in Usual Care (Adjusted HR 1.82; 95% CI 1.06–3.12).
+    *   **Symptomatic ICH:** 5.4% in EVT group vs 2.2% in Usual Care.
+
+## Clinical PEARLS
+*   **No Benefit:** Like DISTAL, this trial showed no functional benefit for routine EVT in MeVO patients.
+*   **Evidence of Harm:** There was a statistically significant increase in **90-day mortality** (aHR 1.82) in the EVT group.
+*   **Procedural Risk:** Symptomatic intracranial hemorrhage was significantly more frequent in the EVT arm.
+*   **Implication:** Routine EVT for medium vessel occlusions is not supported by current evidence; the risks of the procedure in these smaller vessels may outweigh benefits in unselected populations.
+
+## Conclusion
+Endovascular treatment for medium-vessel occlusion stroke within 12 hours did not lead to better functional outcomes and was associated with higher mortality compared to usual care.
+
+*Source: [Goyal et al. (NEJM 2025)](https://www.nejm.org/doi/full/10.1056/NEJMoa2411668)*
+`
+  },
   'defuse-3-trial': {
     id: 'defuse-3-trial',
     title: 'DEFUSE 3 Trial: Thrombectomy 6-16 Hours',
@@ -309,6 +555,38 @@ Intracranial Atherosclerotic Disease (ICAD) carries a high risk of recurrent str
 In patients with symptomatic intracranial arterial stenosis, aggressive medical management was superior to PTAS with the Wingspan stent system, primarily due to the high risk of periprocedural stroke in the stenting arm.
 
 *Source: [Chimowitz et al. (NEJM 2011)](https://www.nejm.org/doi/pdf/10.1056/nejmoa1105335)*
+`
+  },
+  'weave-trial': {
+    id: 'weave-trial',
+    title: 'WEAVE Trial: Wingspan Stent On-Label',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Following the poor outcomes of intracranial stenting in SAMMPRIS (14.7% event rate), the FDA mandated a post-market surveillance study to assess the safety of the Wingspan stent when used strictly "on-label" by experienced interventionalists.
+
+## Trial Summary
+*   **Design:** Prospective, single-arm, post-market surveillance.
+*   **Population:** 152 consecutive patients meeting strict **On-Label** criteria:
+    *   Symptomatic ICAD 70-99%.
+    *   Recurrent stroke despite medical therapy (at least 2 strokes in territory).
+    *   Age 22-80, mRS <= 3.
+    *   **>8 days** from most recent stroke (to avoid reperfusion hemorrhage).
+*   **Intervention:** Angioplasty and Stenting with Wingspan Stent System.
+*   **Primary Outcome:** Stroke or death within 72 hours.
+*   **Results:**
+    *   **Periprocedural Stroke/Death:** **2.6%** (4/152 patients).
+    *   **Benchmark:** Significantly lower than the 4% safety benchmark set by the FDA.
+
+## Clinical PEARLS
+*   **Patient Selection:** This trial demonstrated that intracranial stenting *can* be performed safely (2.6% risk vs 14.7% in SAMMPRIS) if strict selection criteria are followed, particularly waiting >8 days after stroke and requiring demonstrated failure of medical therapy (2 recurrent strokes).
+*   **Experience Matters:** The trial utilized experienced interventionalists, which likely contributed to the lower complication rate.
+*   **Role of Stenting:** While WEAVE assessed safety (not efficacy vs medical therapy), it reopened the door for stenting as a viable salvage option for highly selected refractory patients.
+
+## Conclusion
+With experienced interventionalists and proper patient selection following on-label usage guidelines (specifically >7 days post-stroke), the use of the Wingspan stent for intracranial atherosclerotic disease demonstrated a low periprocedural complication rate.
+
+*Source: [Alexander et al. (Stroke 2019)](https://www.ahajournals.org/doi/10.1161/STROKEAHA.118.023996)*
 `
   },
   'socrates-trial': {
@@ -649,7 +927,7 @@ Status Epilepticus (SE) is defined by two operational time points:
     *   *Note:* May repeat once. Preferred IV agent.
 *   **Midazolam (Versed)**
     *   **Dose:** 10 mg IM (>40kg) or 5 mg IM (<40kg)
-    *   *Note:* First line for pre-hospital or no IV access.
+    *   **Note:* First line for pre-hospital or no IV access.
 *   **Diazepam (Valium)**
     *   **Dose:** 10 mg IV (0.15 mg/kg)
 

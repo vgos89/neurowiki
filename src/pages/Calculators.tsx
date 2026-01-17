@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link, useParams } from 'react-router-dom';
 import { CalculatorDefinition } from '../types';
 import { Calculator, ChevronRight, RefreshCw, ArrowLeft, AlertCircle, Scan, Skull, Timer, Zap, Brain, Activity, Star, ChevronLeft, Settings2, UserCog, AlertTriangle, Copy, Check, ChevronDown } from 'lucide-react';
 import { useFavorites } from '../hooks/useFavorites';
@@ -222,7 +222,10 @@ const CALCULATORS = [
 
 const Calculators: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const activeId = searchParams.get('id');
+  const { id: paramId } = useParams<{ id: string }>();
+  
+  // Prioritize path param (clean url), fallback to query param (legacy/compatibility)
+  const activeId = paramId || searchParams.get('id');
   
   // Dedicated state for NIHSS
   const [nihssValues, setNihssValues] = useState<Record<string, number>>({});
@@ -385,7 +388,7 @@ const Calculators: React.FC = () => {
   const renderStandardCalc = (calc: CalculatorDefinition) => {
       const isFav = isFavorite(calc.id);
       return (
-        <Link key={calc.id} to={`/calculators?id=${calc.id}`} className="relative group flex items-center justify-between bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-neuro-100 transition-all active:scale-[0.98]">
+        <Link key={calc.id} to={`/calculators/${calc.id}`} className="relative group flex items-center justify-between bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-neuro-100 transition-all active:scale-[0.98]">
             <div className="flex items-center space-x-5 flex-1 pr-8">
                 <div className="p-3 bg-neuro-50 rounded-xl text-neuro-600 group-hover:bg-neuro-600 group-hover:text-white transition-all shadow-inner flex-shrink-0"><Calculator size={24} /></div>
                 <div><h3 className="text-lg font-bold text-slate-900 group-hover:text-neuro-700 transition-colors">{calc.name}</h3><p className="text-slate-500 text-sm font-medium leading-snug">{calc.description}</p></div>
@@ -541,7 +544,7 @@ const Calculators: React.FC = () => {
   }
 
   // --- List View ---
-  const favoritesList = [...SPECIAL_TOOLS, ...CALCULATORS.map(c => ({...c, path: `/calculators?id=${c.id}`, icon: Calculator}))].filter(c => isFavorite(c.id));
+  const favoritesList = [...SPECIAL_TOOLS, ...CALCULATORS.map(c => ({...c, path: `/calculators/${c.id}`, icon: Calculator}))].filter(c => isFavorite(c.id));
   const hasFavorites = favoritesList.length > 0;
 
   return (

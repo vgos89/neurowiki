@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Check, RotateCcw, Copy, AlertTriangle, ChevronRight, Activity, Pill, Syringe, Skull, AlertCircle, XCircle, ShieldAlert } from 'lucide-react';
+import { ArrowLeft, Check, RotateCcw, Copy, AlertTriangle, ChevronRight, Skull, ShieldAlert, AlertCircle, ClipboardCheck, Star } from 'lucide-react';
+import { useFavorites } from '../hooks/useFavorites';
 
 // --- Types ---
 interface RedFlags {
@@ -60,6 +61,24 @@ const STEPS = [
 const MigrainePathway: React.FC = () => {
   const [step, setStep] = useState(1);
   const topRef = useRef<HTMLDivElement>(null);
+  
+  // Section refs for auto-scroll
+  const cocktailRef = useRef<HTMLDivElement>(null);
+  const antiemeticRef = useRef<HTMLDivElement>(null);
+  const ketorolacRef = useRef<HTMLDivElement>(null);
+  const dexRef = useRef<HTMLDivElement>(null);
+  const addonsRef = useRef<HTMLDivElement>(null);
+
+  // Favorites
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const [showFavToast, setShowFavToast] = useState(false);
+  const isFav = isFavorite('migraine-pathway');
+
+  const handleFavToggle = () => {
+      const newVal = toggleFavorite('migraine-pathway');
+      setShowFavToast(true);
+      setTimeout(() => setShowFavToast(false), 2000);
+  };
 
   // Clinical State
   const [redFlags, setRedFlags] = useState<RedFlags>({
@@ -127,7 +146,7 @@ const MigrainePathway: React.FC = () => {
       switch(drug) {
           case 'ketorolac':
               if (safety.pregnant) { disabled = true; reasons.push("Pregnancy"); }
-              if (isRenalImpaired) { disabled = true; reasons.push("GFR < 50"); } // Prompt: avoid if GFR < 50
+              if (isRenalImpaired) { disabled = true; reasons.push("GFR < 50"); }
               break;
           case 'dexamethasone':
               if (safety.dm) { disabled = true; reasons.push("Uncontrolled DM"); }
@@ -145,8 +164,6 @@ const MigrainePathway: React.FC = () => {
               break;
           case 'magnesium':
               if (isRenalImpaired) { warning = "Caution in Renal Impairment"; }
-              // Prompt says "allow if GFR > 50 (show warning if <=50)". 
-              // We'll treat < 50 as Warning/Caution for Mg, but disable for severe if needed.
               if (isRenalSevere) { disabled = true; reasons.push("Severe Renal Failure"); }
               break;
       }
@@ -246,7 +263,7 @@ const MigrainePathway: React.FC = () => {
   const SafetyToggle = ({ label, active, onClick }: { label: string, active: boolean, onClick: () => void }) => (
       <button 
         onClick={onClick}
-        className={`px-3 py-2 rounded-lg text-xs font-bold border transition-all ${
+        className={`px-3 py-3 rounded-lg text-sm font-bold border transition-all touch-manipulation ${
             active 
             ? 'bg-red-100 text-red-800 border-red-200 shadow-inner' 
             : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300'
@@ -257,23 +274,31 @@ const MigrainePathway: React.FC = () => {
   );
 
   return (
-    <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-24" ref={topRef}>
+    <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32" ref={topRef}>
       
       {/* Header */}
-      <div className="mb-8">
-        <Link to="/calculators" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
-            <div className="bg-white p-1.5 rounded-md border border-gray-200 mr-2 shadow-sm group-hover:shadow-md transition-all">
-                <ArrowLeft size={16} />
+      <div className="mb-8 flex items-start justify-between">
+        <div>
+            <Link to="/calculators" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
+                <div className="bg-white p-1.5 rounded-md border border-gray-200 mr-2 shadow-sm group-hover:shadow-md transition-all">
+                    <ArrowLeft size={16} />
+                </div>
+                Back to Calculators
+            </Link>
+            <div className="flex items-center space-x-3 mb-2">
+                <div className="p-2 bg-indigo-100 text-indigo-700 rounded-lg">
+                    <Skull size={24} />
+                </div>
+                <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Acute Migraine Pathway</h1>
             </div>
-            Back to Calculators
-        </Link>
-        <div className="flex items-center space-x-3 mb-2">
-            <div className="p-2 bg-indigo-100 text-indigo-700 rounded-lg">
-                <Skull size={24} />
-            </div>
-            <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Acute Migraine Pathway</h1>
+            <p className="text-slate-500 font-medium">Evidence-based "Headache Cocktail" algorithm for ED & Inpatient management.</p>
         </div>
-        <p className="text-slate-500 font-medium">Evidence-based "Headache Cocktail" algorithm for ED & Inpatient management.</p>
+        <button 
+            onClick={handleFavToggle}
+            className="p-3 rounded-full hover:bg-slate-100 transition-colors"
+        >
+            <Star size={24} className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'} />
+        </button>
       </div>
 
       {/* Progress */}
@@ -317,7 +342,7 @@ const MigrainePathway: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-4">
                     {Object.keys(redFlags).map((key) => {
                          const labels: Record<string, string> = {
                             thunderclap: "Thunderclap onset (worst of life, max <1 min)",
@@ -329,15 +354,16 @@ const MigrainePathway: React.FC = () => {
                             immunocompromised: "Immunocompromised or Cancer history"
                          };
                          return (
-                            <label key={key} className={`flex items-center justify-between p-4 rounded-xl border cursor-pointer transition-all ${redFlags[key as keyof RedFlags] ? 'bg-red-100 border-red-300 text-red-900' : 'bg-slate-50 border-gray-200 hover:bg-white'}`}>
-                                <span className="font-bold">{labels[key]}</span>
-                                <input 
-                                    type="checkbox" 
-                                    checked={redFlags[key as keyof RedFlags]} 
-                                    onChange={(e) => setRedFlags({...redFlags, [key]: e.target.checked})}
-                                    className="w-5 h-5 text-red-600 rounded focus:ring-red-500" 
-                                />
-                            </label>
+                            <button 
+                                key={key}
+                                onClick={() => setRedFlags({...redFlags, [key]: !redFlags[key as keyof RedFlags]})}
+                                className={`w-full flex items-center justify-between p-5 rounded-xl border cursor-pointer transition-all active:scale-[0.99] touch-manipulation text-left ${redFlags[key as keyof RedFlags] ? 'bg-red-100 border-red-300 text-red-900' : 'bg-slate-50 border-gray-200 hover:bg-white'}`}
+                            >
+                                <span className="font-bold text-base">{labels[key]}</span>
+                                <div className={`w-6 h-6 rounded border flex items-center justify-center ${redFlags[key as keyof RedFlags] ? 'bg-red-600 border-red-600' : 'bg-white border-gray-300'}`}>
+                                    {redFlags[key as keyof RedFlags] && <Check size={16} className="text-white" />}
+                                </div>
+                            </button>
                          );
                     })}
                 </div>
@@ -350,8 +376,8 @@ const MigrainePathway: React.FC = () => {
                         <p className="text-sm opacity-90">Do not proceed with migraine pathway until secondary causes (SAH, Meningitis, Mass, Stroke) are excluded.</p>
                     </div>
                 ) : (
-                    <div className="mt-8 pt-4 border-t border-gray-100 flex justify-end">
-                        <button onClick={() => setStep(2)} className="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition-all flex items-center">
+                    <div className="mt-8 flex justify-end">
+                        <button onClick={() => setStep(2)} className="w-full md:w-auto px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center">
                             No Red Flags — Continue <ChevronRight size={18} className="ml-2" />
                         </button>
                     </div>
@@ -364,29 +390,31 @@ const MigrainePathway: React.FC = () => {
              <div className="p-6 md:p-8 animate-in slide-in-from-right-4">
                 <h2 className="text-2xl font-bold text-slate-900 mb-6">Triage & Care Setting</h2>
                 <div className="grid gap-4">
-                    <button onClick={() => setCareSetting('adequate')} className={`text-left p-5 rounded-xl border-2 transition-all ${careSetting === 'adequate' ? 'border-emerald-500 bg-emerald-50 text-emerald-900' : 'border-gray-200 hover:border-indigo-200'}`}>
+                    <button onClick={() => setCareSetting('adequate')} className={`text-left p-6 rounded-xl border-2 transition-all active:scale-[0.99] touch-manipulation ${careSetting === 'adequate' ? 'border-emerald-500 bg-emerald-50 text-emerald-900' : 'border-gray-200 hover:border-indigo-200'}`}>
                         <div className="font-bold text-lg">Adequate response to home therapy</div>
-                        <p className="text-sm opacity-70">Pain manageable, able to tolerate oral fluids.</p>
+                        <p className="text-sm opacity-70 mt-1">Pain manageable, able to tolerate oral fluids.</p>
                     </button>
-                    <button onClick={() => setCareSetting('incomplete')} className={`text-left p-5 rounded-xl border-2 transition-all ${careSetting === 'incomplete' ? 'border-indigo-500 bg-indigo-50 text-indigo-900' : 'border-gray-200 hover:border-indigo-200'}`}>
+                    <button onClick={() => setCareSetting('incomplete')} className={`text-left p-6 rounded-xl border-2 transition-all active:scale-[0.99] touch-manipulation ${careSetting === 'incomplete' ? 'border-indigo-500 bg-indigo-50 text-indigo-900' : 'border-gray-200 hover:border-indigo-200'}`}>
                         <div className="font-bold text-lg">Incomplete / Inconsistent response</div>
-                        <p className="text-sm opacity-70">Home meds failed, significant pain persists.</p>
+                        <p className="text-sm opacity-70 mt-1">Home meds failed, significant pain persists.</p>
                     </button>
-                    <button onClick={() => setCareSetting('vomiting')} className={`text-left p-5 rounded-xl border-2 transition-all ${careSetting === 'vomiting' ? 'border-indigo-500 bg-indigo-50 text-indigo-900' : 'border-gray-200 hover:border-indigo-200'}`}>
+                    <button onClick={() => setCareSetting('vomiting')} className={`text-left p-6 rounded-xl border-2 transition-all active:scale-[0.99] touch-manipulation ${careSetting === 'vomiting' ? 'border-indigo-500 bg-indigo-50 text-indigo-900' : 'border-gray-200 hover:border-indigo-200'}`}>
                         <div className="font-bold text-lg">Severe Nausea / Vomiting</div>
-                        <p className="text-sm opacity-70">Cannot tolerate oral medications or fluids.</p>
+                        <p className="text-sm opacity-70 mt-1">Cannot tolerate oral medications or fluids.</p>
                     </button>
                 </div>
 
-                <div className="mt-8 flex justify-between items-center">
-                    <button onClick={() => setStep(1)} className="text-slate-400 hover:text-slate-600 font-bold px-4">Back</button>
-                    {careSetting === 'adequate' ? (
-                        <div className="text-emerald-600 font-bold text-right">Discharge / Outpatient Management Indicated.</div>
-                    ) : (
-                        <button disabled={!careSetting} onClick={() => setStep(3)} className="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center">
-                            Proceed to Cocktail <ChevronRight size={18} className="ml-2" />
-                        </button>
-                    )}
+                <div className="fixed bottom-[4.5rem] md:static left-0 right-0 bg-white/95 backdrop-blur md:bg-transparent p-4 md:p-0 border-t md:border-0 z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none mt-8 flex justify-between items-center">
+                    <div className="w-full max-w-3xl mx-auto flex justify-between items-center">
+                        <button onClick={() => setStep(1)} className="text-slate-400 hover:text-slate-600 font-bold px-4">Back</button>
+                        {careSetting === 'adequate' ? (
+                            <div className="text-emerald-600 font-bold text-right text-sm md:text-base">Discharge / Outpatient Management.</div>
+                        ) : (
+                            <button disabled={!careSetting} onClick={() => setStep(3)} className="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center">
+                                Proceed to Cocktail <ChevronRight size={18} className="ml-2" />
+                            </button>
+                        )}
+                    </div>
                 </div>
              </div>
         )}
@@ -401,17 +429,17 @@ const MigrainePathway: React.FC = () => {
                          <ShieldAlert size={18} className="text-slate-500" />
                          <h3 className="font-bold text-slate-700 text-sm uppercase tracking-wider">Patient Safety Profile</h3>
                      </div>
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <div className="grid grid-cols-1 gap-4">
                          <div>
                              <label className="block text-xs font-bold text-slate-500 mb-1.5">Renal Function</label>
-                             <select value={safety.renal} onChange={(e) => setSafety({...safety, renal: e.target.value as RenalStatus})} className="w-full p-2 bg-white border border-slate-300 rounded-lg text-sm font-bold text-slate-800">
+                             <select value={safety.renal} onChange={(e) => setSafety({...safety, renal: e.target.value as RenalStatus})} className="w-full p-4 bg-white border border-slate-300 rounded-xl text-base font-bold text-slate-800">
                                  <option value="normal">Normal (&gt;50)</option>
                                  <option value="30-50">eGFR 30–50</option>
                                  <option value="below30">eGFR &lt; 30</option>
                                  <option value="dialysis">Dialysis</option>
                              </select>
                          </div>
-                         <div className="flex flex-wrap gap-2">
+                         <div className="flex flex-wrap gap-3">
                              <SafetyToggle label="Pregnant" active={safety.pregnant} onClick={() => setSafety({...safety, pregnant: !safety.pregnant})} />
                              <SafetyToggle label="Age > 65" active={safety.age65} onClick={() => setSafety({...safety, age65: !safety.age65})} />
                              <SafetyToggle label="Weight < 50kg" active={safety.weightLow} onClick={() => setSafety({...safety, weightLow: !safety.weightLow})} />
@@ -426,7 +454,7 @@ const MigrainePathway: React.FC = () => {
                  </div>
 
                  {/* HEADACHE COCKTAIL */}
-                 <div className="mb-8">
+                 <div ref={cocktailRef} className="mb-8">
                      <div className="flex items-center space-x-2 mb-4 border-b border-gray-100 pb-2">
                          <span className="bg-indigo-600 text-white px-2 py-1 rounded text-xs font-black uppercase tracking-wider">Step 1</span>
                          <h3 className="font-bold text-slate-900 text-lg">First-Line Cocktail</h3>
@@ -434,56 +462,76 @@ const MigrainePathway: React.FC = () => {
                      
                      <div className="space-y-4">
                          {/* A: Diphenhydramine */}
-                         <div className="bg-white p-4 rounded-xl border border-gray-200 flex items-center justify-between">
+                         <button 
+                            onClick={() => {
+                                setCocktail({...cocktail, benadryl: !cocktail.benadryl});
+                                // Auto scroll to antiemetic after toggling benadryl
+                                setTimeout(() => antiemeticRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+                            }} 
+                            className="w-full bg-white p-5 rounded-xl border border-gray-200 flex items-center justify-between transition-all active:scale-[0.99] touch-manipulation text-left"
+                         >
                             <div>
-                                <div className="font-bold text-slate-900">Diphenhydramine</div>
-                                <div className="text-xs text-slate-500">25/50 mg PO/IV x1</div>
+                                <div className="font-bold text-slate-900 text-base">Diphenhydramine</div>
+                                <div className="text-sm text-slate-500">25/50 mg PO/IV x1</div>
                                 <div className="text-[10px] text-indigo-600 font-bold mt-0.5">Prevents akathisia from antiemetics.</div>
                             </div>
-                            <input type="checkbox" checked={cocktail.benadryl} onChange={(e) => setCocktail({...cocktail, benadryl: e.target.checked})} className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500" />
-                         </div>
+                            <div className={`w-6 h-6 rounded border flex items-center justify-center ${cocktail.benadryl ? 'bg-indigo-600 border-indigo-600' : 'bg-white border-gray-300'}`}>
+                                {cocktail.benadryl && <Check size={16} className="text-white" />}
+                            </div>
+                         </button>
 
                          {/* B: Antiemetic */}
-                         <div className="bg-white p-4 rounded-xl border border-gray-200">
-                            <div className="font-bold text-slate-900 mb-2">Antiemetic (Choose One)</div>
-                            <div className="space-y-2">
+                         <div ref={antiemeticRef} className="bg-white p-5 rounded-xl border border-gray-200 scroll-mt-24">
+                            <div className="font-bold text-slate-900 mb-3 text-base">Antiemetic (Choose One)</div>
+                            <div className="space-y-3">
                                 {['metoclopramide', 'prochlorperazine', 'ondansetron'].map((opt) => (
-                                    <label key={opt} className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer ${cocktail.antiemetic === opt ? 'bg-indigo-50 border-indigo-200' : 'bg-slate-50 border-transparent hover:bg-slate-100'}`}>
+                                    <button 
+                                        key={opt} 
+                                        onClick={() => {
+                                            setCocktail({...cocktail, antiemetic: opt as AntiemeticChoice});
+                                            setTimeout(() => ketorolacRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+                                        }}
+                                        className={`w-full flex items-center justify-between p-4 rounded-xl border text-left transition-all touch-manipulation active:scale-[0.99] ${cocktail.antiemetic === opt ? 'bg-indigo-50 border-indigo-200' : 'bg-slate-50 border-transparent hover:bg-slate-100'}`}
+                                    >
                                         <div className="flex-1">
-                                            <div className="text-sm font-medium capitalize flex items-center">
+                                            <div className="text-base font-bold capitalize flex items-center">
                                                 {opt} 
-                                                <span className="text-xs opacity-60 ml-1 font-normal">{opt === 'ondansetron' ? '4-8 mg' : '10 mg'}</span>
+                                                <span className="text-sm opacity-60 ml-1 font-normal">{opt === 'ondansetron' ? '4-8 mg' : '10 mg'}</span>
                                             </div>
-                                            {opt === 'metoclopramide' && <div className="text-[10px] text-slate-500 mt-0.5">First-line dopamine antagonist. May repeat q8h.</div>}
-                                            {opt === 'prochlorperazine' && <div className="text-[10px] text-slate-500 mt-0.5">Alternative dopamine antagonist. May repeat q8h.</div>}
-                                            {opt === 'ondansetron' && <div className="text-[10px] text-amber-600 mt-0.5 font-bold">Use for allergy/QT risk. Less effective for pain. May repeat q8h.</div>}
+                                            {opt === 'metoclopramide' && <div className="text-xs text-slate-500 mt-1">First-line dopamine antagonist. May repeat q8h.</div>}
+                                            {opt === 'prochlorperazine' && <div className="text-xs text-slate-500 mt-1">Alternative dopamine antagonist. May repeat q8h.</div>}
+                                            {opt === 'ondansetron' && <div className="text-xs text-amber-600 mt-1 font-bold">Use for allergy/QT risk. Less effective for pain. May repeat q8h.</div>}
                                         </div>
-                                        <input type="radio" name="antiemetic" checked={cocktail.antiemetic === opt} onChange={() => setCocktail({...cocktail, antiemetic: opt as AntiemeticChoice})} className="text-indigo-600 focus:ring-indigo-500" />
-                                    </label>
+                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center ml-3 ${cocktail.antiemetic === opt ? 'border-indigo-600' : 'border-slate-300'}`}>
+                                            {cocktail.antiemetic === opt && <div className="w-3 h-3 bg-indigo-600 rounded-full"></div>}
+                                        </div>
+                                    </button>
                                 ))}
                             </div>
                          </div>
 
                          {/* C: Ketorolac */}
-                         <div className={`bg-white p-4 rounded-xl border border-gray-200 ${checkEligibility('ketorolac').disabled ? 'opacity-50' : ''}`}>
-                             <div className="flex justify-between items-start mb-2">
+                         <div ref={ketorolacRef} className={`bg-white p-5 rounded-xl border border-gray-200 scroll-mt-24 ${checkEligibility('ketorolac').disabled ? 'opacity-50' : ''}`}>
+                             <div className="flex justify-between items-start mb-3">
                                 <div>
-                                    <div className="font-bold text-slate-900">Ketorolac (Toradol)</div>
-                                    <div className="text-[10px] text-indigo-600 font-bold mt-0.5">NSAID. Targets prostaglandin-mediated pain. May repeat q8h (Max 2 doses).</div>
+                                    <div className="font-bold text-slate-900 text-base">Ketorolac (Toradol)</div>
+                                    <div className="text-xs text-indigo-600 font-bold mt-0.5">NSAID. Targets prostaglandin-mediated pain. May repeat q8h (Max 2 doses).</div>
                                 </div>
                                 {checkEligibility('ketorolac').disabled && <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">{checkEligibility('ketorolac').reason}</span>}
                              </div>
                              {!checkEligibility('ketorolac').disabled && (
-                                 <div className="flex gap-2">
+                                 <div className="flex gap-3">
                                      {(['15', '30', '45'] as KetorolacDose[]).map(dose => {
                                          if (!dose) return null;
-                                         // Logic: Hide 45 if Age>65 or Weight<50kg
                                          if (dose === '45' && (safety.age65 || safety.weightLow)) return null;
                                          return (
                                              <button 
                                                 key={dose} 
-                                                onClick={() => setCocktail({...cocktail, ketorolac: dose})}
-                                                className={`flex-1 py-2 text-sm font-bold rounded border ${cocktail.ketorolac === dose ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-600 border-gray-200 hover:bg-white'}`}
+                                                onClick={() => {
+                                                    setCocktail({...cocktail, ketorolac: dose});
+                                                    setTimeout(() => dexRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+                                                }}
+                                                className={`flex-1 py-3 text-sm font-bold rounded-lg border transition-all touch-manipulation ${cocktail.ketorolac === dose ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-600 border-gray-200 hover:bg-white'}`}
                                              >
                                                  {dose} mg
                                              </button>
@@ -494,21 +542,24 @@ const MigrainePathway: React.FC = () => {
                          </div>
 
                          {/* D: Dexamethasone */}
-                         <div className={`bg-white p-4 rounded-xl border border-gray-200 ${checkEligibility('dexamethasone').disabled ? 'opacity-50' : ''}`}>
-                             <div className="flex justify-between items-start mb-2">
+                         <div ref={dexRef} className={`bg-white p-5 rounded-xl border border-gray-200 scroll-mt-24 ${checkEligibility('dexamethasone').disabled ? 'opacity-50' : ''}`}>
+                             <div className="flex justify-between items-start mb-3">
                                 <div>
-                                    <div className="font-bold text-slate-900">Dexamethasone</div>
-                                    <div className="text-[10px] text-indigo-600 font-bold mt-0.5">Prevents recurrence (rebound) within 72h. Single dose only.</div>
+                                    <div className="font-bold text-slate-900 text-base">Dexamethasone</div>
+                                    <div className="text-xs text-indigo-600 font-bold mt-0.5">Prevents recurrence (rebound) within 72h. Single dose only.</div>
                                 </div>
                                 {checkEligibility('dexamethasone').disabled && <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">{checkEligibility('dexamethasone').reason}</span>}
                              </div>
                              {!checkEligibility('dexamethasone').disabled && (
-                                 <div className="flex gap-2">
+                                 <div className="flex gap-3">
                                      {(['4', '10'] as DexDose[]).map(dose => (
                                          <button 
                                             key={dose} 
-                                            onClick={() => setCocktail({...cocktail, dexamethasone: dose})}
-                                            className={`flex-1 py-2 text-sm font-bold rounded border ${cocktail.dexamethasone === dose ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-600 border-gray-200 hover:bg-white'}`}
+                                            onClick={() => {
+                                                setCocktail({...cocktail, dexamethasone: dose});
+                                                setTimeout(() => addonsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+                                            }}
+                                            className={`flex-1 py-3 text-sm font-bold rounded-lg border transition-all touch-manipulation ${cocktail.dexamethasone === dose ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-600 border-gray-200 hover:bg-white'}`}
                                          >
                                              {dose} mg
                                          </button>
@@ -520,170 +571,151 @@ const MigrainePathway: React.FC = () => {
                  </div>
 
                  {/* ADD ONS */}
-                 <div className="mb-8">
+                 <div ref={addonsRef} className="mb-8 scroll-mt-24">
                      <div className="flex items-center space-x-2 mb-4 border-b border-gray-100 pb-2">
                          <span className="bg-slate-600 text-white px-2 py-1 rounded text-xs font-black uppercase tracking-wider">Step 2</span>
-                         <h3 className="font-bold text-slate-900 text-lg">Optional Add-ons</h3>
+                         <h3 className="font-bold text-slate-900 text-lg">First-Line Add-Ons</h3>
                      </div>
-                     <div className="space-y-3">
+                     <div className="space-y-4">
+                         
                          {/* Sumatriptan */}
-                         <button 
-                            disabled={checkEligibility('sumatriptan').disabled}
-                            onClick={() => setFirstLineAddOns({...firstLineAddOns, sumatriptan: !firstLineAddOns.sumatriptan})}
-                            className={`w-full text-left p-4 rounded-xl border transition-all ${
-                                checkEligibility('sumatriptan').disabled ? 'bg-gray-50 border-gray-100 opacity-60' :
-                                firstLineAddOns.sumatriptan ? 'bg-indigo-50 border-indigo-500' : 'bg-white border-gray-200 hover:border-indigo-200'
-                            }`}
-                         >
-                             <div className="flex justify-between items-start">
+                         <div className={`bg-white p-5 rounded-xl border border-gray-200 ${checkEligibility('sumatriptan').disabled ? 'opacity-50' : ''}`}>
+                             <div className="flex justify-between items-start mb-2">
                                  <div>
-                                     <div className="font-bold text-slate-900">Sumatriptan 6 mg SC</div>
-                                     <div className="text-[10px] text-indigo-600 font-bold mt-0.5">5-HT agonist. Specific migraine abortive. May repeat x1 after 1hr (Max 12mg/24h).</div>
+                                    <div className="font-bold text-slate-900">Sumatriptan 6mg Subcutaneous</div>
+                                    <div className="text-xs text-slate-500">Fastest onset triptan. Avoid in CAD/Stroke/Pregnancy.</div>
                                  </div>
-                                 {checkEligibility('sumatriptan').disabled ? <span className="text-xs text-red-600 font-bold">{checkEligibility('sumatriptan').reason}</span> : (firstLineAddOns.sumatriptan && <Check size={16} className="text-indigo-600"/>)}
+                                 {checkEligibility('sumatriptan').disabled ? (
+                                    <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">{checkEligibility('sumatriptan').reason}</span>
+                                 ) : (
+                                    <div className={`w-6 h-6 rounded border flex items-center justify-center cursor-pointer ${firstLineAddOns.sumatriptan ? 'bg-indigo-600 border-indigo-600' : 'bg-white border-gray-300'}`} onClick={() => setFirstLineAddOns({...firstLineAddOns, sumatriptan: !firstLineAddOns.sumatriptan})}>
+                                        {firstLineAddOns.sumatriptan && <Check size={16} className="text-white" />}
+                                    </div>
+                                 )}
                              </div>
-                         </button>
+                         </div>
 
                          {/* Magnesium */}
-                         <button 
-                            disabled={checkEligibility('magnesium').disabled}
-                            onClick={() => setFirstLineAddOns({...firstLineAddOns, magnesium: firstLineAddOns.magnesium ? null : '1'})} // Default to 1g toggle
-                            className={`w-full text-left p-4 rounded-xl border transition-all ${
-                                checkEligibility('magnesium').disabled ? 'bg-gray-50 border-gray-100 opacity-60' :
-                                firstLineAddOns.magnesium ? 'bg-indigo-50 border-indigo-500' : 'bg-white border-gray-200 hover:border-indigo-200'
-                            }`}
-                         >
-                             <div className="flex justify-between items-start">
+                         <div className={`bg-white p-5 rounded-xl border border-gray-200 ${checkEligibility('magnesium').disabled ? 'opacity-50' : ''}`}>
+                             <div className="flex justify-between items-start mb-3">
                                  <div>
-                                     <div className="font-bold text-slate-900">Magnesium Sulfate 1-2 g IV</div>
-                                     <div className="text-[10px] text-indigo-600 font-bold mt-0.5">NMDA antagonist. Helpful for aura/photophobia. Single dose.</div>
+                                     <div className="font-bold text-slate-900">Magnesium Sulfate IV</div>
+                                     <div className="text-xs text-slate-500">Beneficial for aura/photophobia.</div>
                                      {checkEligibility('magnesium').warning && <div className="text-xs text-amber-600 font-bold mt-1">{checkEligibility('magnesium').warning}</div>}
                                  </div>
-                                 {checkEligibility('magnesium').disabled ? <span className="text-xs text-red-600 font-bold">{checkEligibility('magnesium').reason}</span> : (firstLineAddOns.magnesium && <Check size={16} className="text-indigo-600"/>)}
+                                 {checkEligibility('magnesium').disabled && <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">{checkEligibility('magnesium').reason}</span>}
                              </div>
-                             {firstLineAddOns.magnesium && (
-                                 <div className="flex gap-2 mt-3" onClick={(e) => e.stopPropagation()}>
-                                     <button onClick={() => setFirstLineAddOns({...firstLineAddOns, magnesium: '1'})} className={`flex-1 py-1 text-xs font-bold rounded border ${firstLineAddOns.magnesium === '1' ? 'bg-indigo-600 text-white' : 'bg-white'}`}>1 g</button>
-                                     <button onClick={() => setFirstLineAddOns({...firstLineAddOns, magnesium: '2'})} className={`flex-1 py-1 text-xs font-bold rounded border ${firstLineAddOns.magnesium === '2' ? 'bg-indigo-600 text-white' : 'bg-white'}`}>2 g</button>
+                             {!checkEligibility('magnesium').disabled && (
+                                 <div className="flex gap-3">
+                                     {(['1', '2'] as MagDose[]).map(dose => (
+                                         <button key={dose} onClick={() => setFirstLineAddOns({...firstLineAddOns, magnesium: dose})} className={`flex-1 py-2 text-sm font-bold rounded-lg border transition-all ${firstLineAddOns.magnesium === dose ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-600 border-gray-200 hover:bg-white'}`}>{dose} g</button>
+                                     ))}
+                                     <button onClick={() => setFirstLineAddOns({...firstLineAddOns, magnesium: null})} className={`px-4 py-2 text-sm font-bold rounded-lg border ${!firstLineAddOns.magnesium ? 'bg-slate-200 text-slate-800' : 'bg-white text-slate-400'}`}>None</button>
                                  </div>
                              )}
-                         </button>
+                         </div>
 
                          {/* Valproate */}
-                         <button 
-                            disabled={checkEligibility('valproate').disabled}
-                            onClick={() => setFirstLineAddOns({...firstLineAddOns, valproate: firstLineAddOns.valproate ? null : '500'})}
-                            className={`w-full text-left p-4 rounded-xl border transition-all ${
-                                checkEligibility('valproate').disabled ? 'bg-gray-50 border-gray-100 opacity-60' :
-                                firstLineAddOns.valproate ? 'bg-indigo-50 border-indigo-500' : 'bg-white border-gray-200 hover:border-indigo-200'
-                            }`}
-                         >
-                             <div className="flex justify-between items-start">
+                         <div className={`bg-white p-5 rounded-xl border border-gray-200 ${checkEligibility('valproate').disabled ? 'opacity-50' : ''}`}>
+                             <div className="flex justify-between items-start mb-3">
                                  <div>
-                                     <div className="font-bold text-slate-900">Valproate Sodium IV</div>
-                                     <div className="text-[10px] text-indigo-600 font-bold mt-0.5">Effective for refractory Status Migrainosus. May repeat 500mg q8h (Max 3 doses).</div>
+                                     <div className="font-bold text-slate-900">Valproate (Depacon) IV</div>
+                                     <div className="text-xs text-slate-500">Highly effective. Contraindicated in pregnancy.</div>
                                  </div>
-                                 {checkEligibility('valproate').disabled ? <span className="text-xs text-red-600 font-bold">{checkEligibility('valproate').reason}</span> : (firstLineAddOns.valproate && <Check size={16} className="text-indigo-600"/>)}
+                                 {checkEligibility('valproate').disabled && <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">{checkEligibility('valproate').reason}</span>}
                              </div>
-                             {firstLineAddOns.valproate && (
-                                 <div className="flex gap-2 mt-3" onClick={(e) => e.stopPropagation()}>
-                                     <button onClick={() => setFirstLineAddOns({...firstLineAddOns, valproate: '500'})} className={`flex-1 py-1 text-xs font-bold rounded border ${firstLineAddOns.valproate === '500' ? 'bg-indigo-600 text-white' : 'bg-white'}`}>500 mg</button>
-                                     <button onClick={() => setFirstLineAddOns({...firstLineAddOns, valproate: '1000'})} className={`flex-1 py-1 text-xs font-bold rounded border ${firstLineAddOns.valproate === '1000' ? 'bg-indigo-600 text-white' : 'bg-white'}`}>1000 mg</button>
+                             {!checkEligibility('valproate').disabled && (
+                                 <div className="flex gap-3">
+                                     {(['500', '1000'] as ValproateDose[]).map(dose => (
+                                         <button key={dose} onClick={() => setFirstLineAddOns({...firstLineAddOns, valproate: dose})} className={`flex-1 py-2 text-sm font-bold rounded-lg border transition-all ${firstLineAddOns.valproate === dose ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-600 border-gray-200 hover:bg-white'}`}>{dose} mg</button>
+                                     ))}
+                                     <button onClick={() => setFirstLineAddOns({...firstLineAddOns, valproate: null})} className={`px-4 py-2 text-sm font-bold rounded-lg border ${!firstLineAddOns.valproate ? 'bg-slate-200 text-slate-800' : 'bg-white text-slate-400'}`}>None</button>
                                  </div>
                              )}
-                         </button>
+                         </div>
+
                      </div>
                  </div>
 
-                <div className="mt-8 pt-4 border-t border-gray-100 flex justify-between items-center">
-                    <button onClick={() => setStep(2)} className="text-slate-400 hover:text-slate-600 font-bold px-4">Back</button>
-                    <button onClick={() => setStep(4)} className="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition-all flex items-center">
-                        Administer & Reassess <ChevronRight size={18} className="ml-2" />
-                    </button>
+                 <div className="fixed bottom-[4.5rem] md:static left-0 right-0 bg-white/95 backdrop-blur md:bg-transparent p-4 md:p-0 border-t md:border-0 z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none flex justify-between items-center">
+                    <div className="w-full max-w-3xl mx-auto flex justify-between items-center">
+                        <button onClick={() => setStep(2)} className="text-slate-400 hover:text-slate-600 font-bold px-4">Back</button>
+                        <button onClick={() => setStep(4)} className="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition-all flex items-center">
+                            Administer & Check Response <ChevronRight size={18} className="ml-2" />
+                        </button>
+                    </div>
                 </div>
             </div>
         )}
 
-        {/* STEP 4: REASSESSMENT */}
+        {/* STEP 4: RESPONSE */}
         {step === 4 && (
             <div className="p-6 md:p-8 animate-in slide-in-from-right-4">
-                <h2 className="text-2xl font-bold text-slate-900 mb-4">Reassessment</h2>
-                <div className="bg-slate-50 p-6 rounded-2xl border border-gray-200 text-center mb-6">
-                    <h3 className="font-bold text-lg mb-4">Is headache significantly improved &ge; 2 hours post-treatment?</h3>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <div className="bg-white p-8 rounded-2xl border border-gray-200 text-center mb-8">
+                    <h2 className="text-xl font-bold text-slate-900 mb-6">Patient Status (1 hour post-cocktail)</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <button 
                             onClick={() => { setResponseImproved(true); setStep(5); }}
-                            className="px-6 py-4 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 shadow-md transition-all"
+                            className="p-6 bg-emerald-50 border-2 border-emerald-100 rounded-2xl hover:border-emerald-500 hover:shadow-lg transition-all group"
                         >
-                            Yes, Improved
+                            <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                <Check size={24} />
+                            </div>
+                            <div className="font-black text-emerald-900 text-lg">Improved</div>
+                            <div className="text-emerald-700 text-sm">Pain manageable, nausea resolved.</div>
                         </button>
                         <button 
                             onClick={() => { setResponseImproved(false); }}
-                            className={`px-6 py-4 font-bold rounded-xl shadow-md transition-all ${responseImproved === false ? 'bg-indigo-600 text-white' : 'bg-white text-indigo-600 border border-indigo-200'}`}
+                            className={`p-6 border-2 rounded-2xl hover:shadow-lg transition-all group ${responseImproved === false ? 'bg-indigo-50 border-indigo-500 ring-2 ring-indigo-200' : 'bg-slate-50 border-gray-200 hover:border-indigo-500'}`}
                         >
-                            No, Pain Persists
+                            <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                <AlertTriangle size={24} />
+                            </div>
+                            <div className="font-black text-slate-900 text-lg">Refractory</div>
+                            <div className="text-slate-500 text-sm">Significant pain or vomiting persists.</div>
                         </button>
                     </div>
                 </div>
 
-                {/* Second Line Options if Failed */}
                 {responseImproved === false && (
-                    <div className="animate-in fade-in slide-in-from-bottom-2">
-                        <div className="flex items-center space-x-2 mb-4 border-b border-gray-100 pb-2">
-                            <span className="bg-amber-500 text-white px-2 py-1 rounded text-xs font-black uppercase tracking-wider">Refractory</span>
-                            <h3 className="font-bold text-slate-900 text-lg">Second-Line Options</h3>
+                    <div className="animate-in slide-in-from-bottom-4">
+                        <div className="flex items-center space-x-2 mb-4">
+                             <span className="bg-red-600 text-white px-2 py-1 rounded text-xs font-black uppercase tracking-wider">Step 3</span>
+                             <h3 className="font-bold text-slate-900 text-lg">Second-Line Rescue</h3>
                         </div>
-                        
                         <div className="space-y-4 mb-8">
-                             {/* Mg Second Line */}
+                            <div className="bg-slate-50 p-4 rounded-xl text-sm text-slate-600 mb-4">
+                                If not used in Step 1, consider adding these agents now. If already used, consider admission or Neurology Consult.
+                            </div>
+                            
+                             {/* Magnesium Rescue */}
                              {!firstLineAddOns.magnesium && !checkEligibility('magnesium').disabled && (
-                                 <div className="bg-white p-4 rounded-xl border border-gray-200">
-                                     <div className="flex justify-between items-start mb-3">
-                                         <div>
-                                            <div className="font-bold text-slate-900">Magnesium Sulfate</div>
-                                            <div className="text-xs text-slate-500">Not used in first line.</div>
-                                         </div>
-                                         <input type="checkbox" checked={!!secondLine.magnesium} onChange={(e) => setSecondLine({...secondLine, magnesium: e.target.checked ? '1' : null})} className="w-5 h-5 text-indigo-600 rounded" />
+                                 <div className="bg-white p-5 rounded-xl border border-gray-200">
+                                     <div className="flex justify-between items-center">
+                                         <div className="font-bold text-slate-900">Magnesium Sulfate 2g IV</div>
+                                         <button onClick={() => setSecondLine({...secondLine, magnesium: secondLine.magnesium ? null : '2'})} className={`px-4 py-2 rounded-lg font-bold text-sm ${secondLine.magnesium ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'}`}>
+                                             {secondLine.magnesium ? 'Selected' : 'Select'}
+                                         </button>
                                      </div>
-                                     {secondLine.magnesium && (
-                                         <div className="flex gap-2">
-                                             <button onClick={() => setSecondLine({...secondLine, magnesium: '1'})} className={`flex-1 py-1 text-xs font-bold rounded border ${secondLine.magnesium === '1' ? 'bg-indigo-600 text-white' : 'bg-white'}`}>1 g</button>
-                                             <button onClick={() => setSecondLine({...secondLine, magnesium: '2'})} className={`flex-1 py-1 text-xs font-bold rounded border ${secondLine.magnesium === '2' ? 'bg-indigo-600 text-white' : 'bg-white'}`}>2 g</button>
-                                         </div>
-                                     )}
                                  </div>
                              )}
 
-                             {/* Valproate Second Line */}
+                             {/* Valproate Rescue */}
                              {!firstLineAddOns.valproate && !checkEligibility('valproate').disabled && (
-                                 <div className="bg-white p-4 rounded-xl border border-gray-200">
-                                     <div className="flex justify-between items-start mb-3">
-                                         <div>
-                                            <div className="font-bold text-slate-900">Valproate Sodium</div>
-                                            <div className="text-xs text-slate-500">Not used in first line.</div>
-                                         </div>
-                                         <input type="checkbox" checked={!!secondLine.valproate} onChange={(e) => setSecondLine({...secondLine, valproate: e.target.checked ? '500' : null})} className="w-5 h-5 text-indigo-600 rounded" />
+                                 <div className="bg-white p-5 rounded-xl border border-gray-200">
+                                     <div className="flex justify-between items-center">
+                                         <div className="font-bold text-slate-900">Valproate 1000mg IV</div>
+                                         <button onClick={() => setSecondLine({...secondLine, valproate: secondLine.valproate ? null : '1000'})} className={`px-4 py-2 rounded-lg font-bold text-sm ${secondLine.valproate ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'}`}>
+                                             {secondLine.valproate ? 'Selected' : 'Select'}
+                                         </button>
                                      </div>
-                                     {secondLine.valproate && (
-                                         <div className="flex gap-2">
-                                             <button onClick={() => setSecondLine({...secondLine, valproate: '500'})} className={`flex-1 py-1 text-xs font-bold rounded border ${secondLine.valproate === '500' ? 'bg-indigo-600 text-white' : 'bg-white'}`}>500 mg</button>
-                                             <button onClick={() => setSecondLine({...secondLine, valproate: '1000'})} className={`flex-1 py-1 text-xs font-bold rounded border ${secondLine.valproate === '1000' ? 'bg-indigo-600 text-white' : 'bg-white'}`}>1000 mg</button>
-                                         </div>
-                                     )}
-                                 </div>
-                             )}
-
-                             {/* If nothing left */}
-                             {(firstLineAddOns.magnesium || checkEligibility('magnesium').disabled) && (firstLineAddOns.valproate || checkEligibility('valproate').disabled) && (
-                                 <div className="p-4 bg-slate-50 text-slate-500 text-sm font-medium italic text-center rounded-xl">
-                                     No standard second-line options remaining. Consider Neurology consult.
                                  </div>
                              )}
                         </div>
-                        
+
                         <div className="flex justify-end">
                             <button onClick={() => setStep(5)} className="px-8 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition-all">
-                                Finalize Plan
+                                Finalize Plan <ChevronRight size={18} className="ml-2" />
                             </button>
                         </div>
                     </div>
@@ -691,68 +723,48 @@ const MigrainePathway: React.FC = () => {
             </div>
         )}
 
-        {/* STEP 5: SUMMARY */}
+        {/* STEP 5: PLAN */}
         {step === 5 && (
             <div className="p-6 md:p-8 animate-in zoom-in-95">
-                 <div className="bg-indigo-600 text-white p-6 rounded-2xl shadow-lg mb-6 relative overflow-hidden">
+                <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-xl mb-6 relative overflow-hidden">
                     <div className="relative z-10">
-                        <h2 className="text-2xl font-black mb-1">Treatment Plan</h2>
-                        <p className="opacity-90">Acute Migraine Pathway</p>
-                    </div>
-                    <Activity className="absolute right-4 top-4 text-white opacity-20" size={64} />
-                 </div>
-
-                 <div className="space-y-6">
-                    {/* First Line Summary */}
-                    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-                        <h3 className="text-xs font-black uppercase text-indigo-600 tracking-widest mb-4 flex items-center">
-                            <Pill size={14} className="mr-2" /> First-Line Orders
-                        </h3>
-                        <ul className="space-y-3 text-sm text-slate-700">
-                             {cocktail.benadryl && <li className="flex justify-between"><span>Diphenhydramine</span><span className="font-bold">25/50 mg PO/IV x1</span></li>}
-                             {cocktail.antiemetic && <li className="flex justify-between"><span className="capitalize">{cocktail.antiemetic}</span><span className="font-bold">10 mg PO/IV x1 (q8h PRN)</span></li>}
-                             {cocktail.ketorolac && <li className="flex justify-between"><span>Ketorolac</span><span className="font-bold">{cocktail.ketorolac} mg IM/IV x1 (Repeat x1 q8h PRN)</span></li>}
-                             {cocktail.dexamethasone && <li className="flex justify-between"><span>Dexamethasone</span><span className="font-bold">{cocktail.dexamethasone} mg IV x1</span></li>}
-                             {firstLineAddOns.sumatriptan && <li className="flex justify-between"><span>Sumatriptan</span><span className="font-bold">6 mg SC x1 (q2h PRN)</span></li>}
-                             {firstLineAddOns.magnesium && <li className="flex justify-between"><span>Magnesium Sulfate</span><span className="font-bold">{firstLineAddOns.magnesium} g IV x1</span></li>}
-                             {firstLineAddOns.valproate && <li className="flex justify-between"><span>Valproate</span><span className="font-bold">{firstLineAddOns.valproate} mg IV x1 (Repeat 500mg q8h)</span></li>}
-                        </ul>
-                    </div>
-
-                    {/* Second Line Summary */}
-                    {responseImproved === false && (secondLine.magnesium || secondLine.valproate) && (
-                        <div className="bg-amber-50 border border-amber-100 rounded-xl p-5 shadow-sm">
-                            <h3 className="text-xs font-black uppercase text-amber-700 tracking-widest mb-4 flex items-center">
-                                <Syringe size={14} className="mr-2" /> Second-Line Orders
-                            </h3>
-                            <ul className="space-y-3 text-sm text-slate-700">
-                                {secondLine.magnesium && <li className="flex justify-between"><span>Magnesium Sulfate</span><span className="font-bold">{secondLine.magnesium} g IV x1</span></li>}
-                                {secondLine.valproate && <li className="flex justify-between"><span>Valproate</span><span className="font-bold">{secondLine.valproate} mg IV x1</span></li>}
-                            </ul>
+                        <div className="flex items-center space-x-3 mb-4">
+                            <div className="p-2 bg-white/10 rounded-lg"><ClipboardCheck size={24} /></div>
+                            <h2 className="text-2xl font-black">Treatment Plan</h2>
                         </div>
-                    )}
-
-                    {/* Disclaimer */}
-                    <div className="bg-slate-50 p-4 rounded-xl text-xs text-slate-500">
-                        <div className="flex items-start">
-                            <AlertCircle size={14} className="mr-2 shrink-0 mt-0.5" />
-                            <span>Decision support only. Not medical advice. Verify all doses and contraindications.</span>
+                        <div className="space-y-4 opacity-90 text-sm md:text-base font-mono">
+                            {generateSummary().split('\n').map((line, i) => (
+                                <div key={i} className={line.startsWith('-') ? 'ml-4' : 'font-bold mt-4 first:mt-0'}>{line}</div>
+                            ))}
                         </div>
                     </div>
-                 </div>
+                    {/* Decor */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500 rounded-full blur-3xl opacity-20 -mr-16 -mt-16"></div>
+                </div>
 
-                 <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                     <button onClick={copySummary} className="flex-1 py-4 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 transition-all flex items-center justify-center">
-                        <Copy size={18} className="mr-2" /> Copy to EMR
-                     </button>
-                     <button onClick={handleReset} className="px-6 py-4 text-slate-500 font-bold rounded-xl hover:bg-slate-100 transition-all flex items-center justify-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button onClick={copySummary} className="py-4 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition-all flex items-center justify-center active:scale-95">
+                        <Copy size={18} className="mr-2" /> Copy to Clipboard
+                    </button>
+                    <button onClick={handleReset} className="py-4 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition-all flex items-center justify-center">
                         <RotateCcw size={18} className="mr-2" /> Start Over
-                     </button>
-                 </div>
+                    </button>
+                </div>
             </div>
         )}
 
       </div>
+      
+      {/* Disclaimer Footer */}
+      <div className="mt-8 text-center text-xs text-slate-400 max-w-lg mx-auto leading-relaxed">
+          <p className="font-bold mb-1">DECISION SUPPORT ONLY</p>
+          <p>This tool is based on standard emergency neurology guidelines (AHS/AAN). Individual patient factors (allergies, interactions) must be verified by the treating clinician.</p>
+      </div>
+      {showFavToast && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
+          {isFav ? 'Saved to Favorites' : 'Removed from Favorites'}
+        </div>
+      )}
     </div>
   );
 };
