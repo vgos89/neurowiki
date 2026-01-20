@@ -111,6 +111,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <p>© 2026 NeuroWiki AI</p>
           <p className="mt-1 opacity-60">Reference and Decision Support</p>
           <p className="opacity-60">Not Medical Advice</p>
+          <p className="mt-1 opacity-40 text-[10px]">Build: V1.1</p>
         </div>
       </aside>
 
