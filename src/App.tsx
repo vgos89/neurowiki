@@ -1,19 +1,19 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Layout from './components/Layout';
-import Home from './pages/Home';
-import Wiki from './pages/Wiki';
-import Calculators from './pages/Calculators';
-import ResidentGuide from './pages/ResidentGuide';
-import TrialsPage from './pages/TrialsPage';
-import GCAPathway from './pages/GCAPathway';
-import ElanPathway from './pages/ElanPathway';
-import EvtPathway from './pages/EvtPathway';
-import StatusEpilepticusPathway from './pages/StatusEpilepticusPathway';
-import MigrainePathway from './pages/MigrainePathway';
-import AspectsCalculator from './pages/AspectsCalculator';
-import DisclaimerModal from './components/DisclaimerModal';
+import Layout from '../components/Layout';
+import Home from '../pages/Home';
+import Wiki from '../pages/Wiki';
+import Calculators from '../pages/Calculators';
+import ResidentGuide from '../pages/ResidentGuide';
+import TrialsPage from '../pages/TrialsPage';
+import GCAPathway from '../pages/GCAPathway';
+import ElanPathway from '../pages/ElanPathway';
+import EvtPathway from '../pages/EvtPathway';
+import StatusEpilepticusPathway from '../pages/StatusEpilepticusPathway';
+import MigrainePathway from '../pages/MigrainePathway';
+import AspectsCalculator from '../pages/AspectsCalculator';
+import DisclaimerModal from '../components/DisclaimerModal';
 
 const App: React.FC = () => {
   return (
