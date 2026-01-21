@@ -1,6 +1,6 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigationSource } from '../src/hooks/useNavigationSource';
 import { ArrowLeft, RefreshCw, Copy, Star, Zap, UserCog } from 'lucide-react';
 import { useFavorites } from '../hooks/useFavorites';
 import { NIHSS_ITEMS, calculateTotal, getItemWarning } from '../utils/nihssShortcuts';
@@ -14,6 +14,7 @@ const NihssCalculator: React.FC = () => {
   const [isHeaderCompact, setIsHeaderCompact] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { getBackPath } = useNavigationSource();
 
   useEffect(() => {
     const main = document.querySelector('main');
@@ -67,7 +68,7 @@ const NihssCalculator: React.FC = () => {
       >
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <Link to="/calculators" onClick={(e) => e.stopPropagation()} className="p-2 -ml-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors">
+            <Link to={getBackPath()} onClick={(e) => e.stopPropagation()} className="p-2 -ml-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors">
               <ArrowLeft size={20} />
             </Link>
             <h1 className={`font-black text-slate-900 ml-2 transition-colors duration-150 ${isHeaderCompact ? 'text-lg' : 'text-xl'}`}>NIHSS</h1>

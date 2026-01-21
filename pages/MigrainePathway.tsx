@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Check, RotateCcw, Copy, AlertTriangle, ChevronRight, Skull, ShieldAlert, AlertCircle, ClipboardCheck, Star } from 'lucide-react';
 import { useFavorites } from '../hooks/useFavorites';
+import { useNavigationSource } from '../src/hooks/useNavigationSource';
 
 // --- Types ---
 interface RedFlags {
@@ -60,6 +61,7 @@ const STEPS = [
 
 const MigrainePathway: React.FC = () => {
   const [step, setStep] = useState(1);
+  const { getBackPath, getBackLabel } = useNavigationSource();
   const topRef = useRef<HTMLDivElement>(null);
   
   // Section refs for auto-scroll
@@ -279,11 +281,11 @@ const MigrainePathway: React.FC = () => {
       {/* Header */}
       <div className="mb-8 flex items-start justify-between">
         <div>
-            <Link to="/calculators" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
+            <Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
                 <div className="bg-white p-1.5 rounded-md border border-gray-200 mr-2 shadow-sm group-hover:shadow-md transition-all">
                     <ArrowLeft size={16} />
                 </div>
-                Back to Calculators
+                {getBackLabel()}
             </Link>
             <div className="flex items-center space-x-3 mb-2">
                 <div className="p-2 bg-indigo-100 text-indigo-700 rounded-lg">

@@ -1,6 +1,6 @@
 
-import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { FlaskConical, ChevronRight, ChevronDown, BookOpen, Layers, Activity } from 'lucide-react';
 import { GUIDE_CONTENT } from '../data/guideContent';
 
@@ -49,8 +49,14 @@ const TRIAL_STRUCTURE: Category[] = [
 ];
 
 const TrialsPage: React.FC = () => {
-  // Changed state to track a single open subcategory (string | null) instead of a record of booleans
+  const [searchParams] = useSearchParams();
   const [openSubcategory, setOpenSubcategory] = useState<string | null>('Thrombectomy');
+
+  // When returning with ?open=, expand that subcategory
+  useEffect(() => {
+    const o = searchParams.get('open');
+    if (o) setOpenSubcategory(o);
+  }, [searchParams]);
 
   const toggleSubcategory = (title: string) => {
     setOpenSubcategory(prev => (prev === title ? null : title));
@@ -106,7 +112,7 @@ const TrialsPage: React.FC = () => {
                                  return (
                                    <Link 
                                      key={id} 
-                                     to={`/trials/${id}`}
+                                     to={`/trials/${id}?from=trials&category=${encodeURIComponent(sub.title)}`}
                                      className="block px-3 py-2 text-xs font-medium text-slate-500 hover:text-emerald-700 hover:bg-emerald-50/50 rounded-md transition-colors truncate"
                                    >
                                      {trial.title.replace(/Trial:|Study:/gi, '').trim()}
@@ -129,7 +135,7 @@ const TrialsPage: React.FC = () => {
                  {orphans.map(t => (
                     <Link
                       key={t.id}
-                      to={`/trials/${t.id}`}
+                      to={`/trials/${t.id}?from=trials`}
                       className="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 transition-colors duration-150 truncate"
                     >
                       {t.title}
@@ -179,7 +185,7 @@ const TrialsPage: React.FC = () => {
                         return (
                           <Link
                             key={id}
-                            to={`/trials/${id}`}
+                            to={`/trials/${id}?from=trials&category=${encodeURIComponent(sub.title)}`}
                             className="group bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-colors duration-150 flex flex-col relative overflow-hidden"
                           >
                             <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-full blur-2xl opacity-0 group-hover:opacity-50 transition-opacity -mr-8 -mt-8"></div>
@@ -220,7 +226,7 @@ const TrialsPage: React.FC = () => {
                     {orphans.map(trial => (
                         <Link
                             key={trial.id}
-                            to={`/trials/${trial.id}`}
+                            to={`/trials/${trial.id}?from=trials`}
                             className="group bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-colors duration-150"
                         >
                             <h4 className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors text-lg mb-2">

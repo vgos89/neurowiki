@@ -13,3 +13,12 @@
   backface-visibility: hidden;
   perspective: 1000px;
 }
+
+/* Hide scrollbar for category pills */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

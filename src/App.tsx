@@ -6,6 +6,7 @@ import { PublishGate } from './components/PublishGate';
 import Home from '../pages/Home';
 import Wiki from '../pages/Wiki';
 import Calculators from '../pages/Calculators';
+import NihssCalculator from '../pages/NihssCalculator';
 import ResidentGuide from '../pages/ResidentGuide';
 import StrokeBasics from './pages/guide/StrokeBasics';
 import IvTpa from './pages/guide/IvTpa';
@@ -28,7 +29,7 @@ import ElanPathway from '../pages/ElanPathway';
 import EvtPathway from '../pages/EvtPathway';
 import StatusEpilepticusPathway from '../pages/StatusEpilepticusPathway';
 import MigrainePathway from '../pages/MigrainePathway';
-import DisclaimerModal from '../components/DisclaimerModal';
+import DisclaimerModal from './components/DisclaimerModal';
 
 const App: React.FC = () => {
   return (
@@ -39,6 +40,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/wiki/:topic" element={<Wiki />} />
           <Route path="/calculators" element={<Calculators />} />
+          <Route path="/calculators/nihss" element={<PublishGate><NihssCalculator /></PublishGate>} />
           <Route path="/calculators/gca-pathway" element={<PublishGate><GCAPathway /></PublishGate>} />
           <Route path="/calculators/elan-pathway" element={<PublishGate><ElanPathway /></PublishGate>} />
           <Route path="/calculators/evt-pathway" element={<PublishGate><EvtPathway /></PublishGate>} />

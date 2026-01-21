@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Check, RotateCcw, Copy, Info, AlertCircle, ChevronRight, Activity, Zap, XCircle, AlertTriangle, ShieldAlert, Brain, Star } from 'lucide-react';
+import { useNavigationSource } from '../src/hooks/useNavigationSource';
 import { EVT_CONTENT } from '../data/toolContent';
 import { autoLinkReactNodes } from '../internalLinks/autoLink';
 import LearningPearl from '../components/LearningPearl';
@@ -246,6 +247,7 @@ const SelectionCard = React.memo(({ title, description, selected, onClick, varia
 const EvtPathway: React.FC = () => {
   const [activeSection, setActiveSection] = useState<number>(0);
   const step = activeSection + 1;
+  const { getBackPath, getBackLabel } = useNavigationSource();
   const [inputs, setInputs] = useState<Inputs>({ 
       occlusionType: 'unknown',
       lvoLocation: 'unknown',
@@ -411,8 +413,8 @@ const EvtPathway: React.FC = () => {
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32 md:pb-20">
       <div className="mb-6 flex items-start justify-between">
         <div>
-            <Link to="/calculators" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
-                <div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-colors duration-150"><ArrowLeft size={16} /></div> Back to Calculators
+            <Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
+                <div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-colors duration-150"><ArrowLeft size={16} /></div> {getBackLabel()}
             </Link>
             <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-neuro-100 text-neuro-700 rounded-lg"><Zap size={24} className="fill-neuro-700" /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">Thrombectomy Pathway</h1></div>
             <p className="text-slate-500 font-medium">Eligibility screening for LVO (ICA/M1/Basilar) and MeVO (M2/M3/Distal).</p>

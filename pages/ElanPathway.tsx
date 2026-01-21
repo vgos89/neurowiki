@@ -6,6 +6,7 @@ import { ELAN_CONTENT } from '../data/toolContent';
 import { autoLinkReactNodes } from '../internalLinks/autoLink';
 import { useFavorites } from '../hooks/useFavorites';
 import { useCalculatorAnalytics } from '../src/hooks/useCalculatorAnalytics';
+import { useNavigationSource } from '../src/hooks/useNavigationSource';
 
 // ... (KEEP ALL TYPES, INTERFACES, STEPS, LOGIC, COMPONENTS SAME UNTIL RENDER) ...
 type Tri = "yes" | "no" | "unknown";
@@ -103,6 +104,7 @@ const SelectionCard = React.memo(({ title, description, selected, onClick, varia
 const ElanPathway: React.FC = () => {
   // ... (HOOKS AND HANDLERS SAME) ...
   const [step, setStep] = useState(1);
+  const { getBackPath, getBackLabel } = useNavigationSource();
   const [inputs, setInputs] = useState<Inputs>({ isIschemicAfib: 'unknown', hasBleed: 'unknown', size: 'unknown', onset: '' });
   const [result, setResult] = useState<Result | null>(null);
   const stepContainerRef = useRef<HTMLDivElement>(null);
@@ -152,7 +154,7 @@ const ElanPathway: React.FC = () => {
       {/* Header same */}
       <div className="mb-6 flex items-start justify-between">
         <div>
-            <Link to="/calculators" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group"><div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-colors duration-150"><ArrowLeft size={16} /></div> Back to Calculators</Link>
+            <Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group"><div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-colors duration-150"><ArrowLeft size={16} /></div> {getBackLabel()}</Link>
             <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-purple-100 text-purple-700 rounded-lg"><Brain size={24} /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">ELAN Protocol Pathway</h1></div>
             <p className="text-slate-500 font-medium">Timing of DOAC initiation after acute ischemic stroke with AF.</p>
         </div>

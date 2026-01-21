@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigationSource } from '../src/hooks/useNavigationSource';
 import ReactMarkdown from 'react-markdown';
 import { ChevronRight, ArrowLeft, ArrowUp, List, ChevronDown, ExternalLink, Stethoscope, FlaskConical, AlertCircle, Zap, Activity, Link as LinkIcon, Calculator } from 'lucide-react';
 import { GUIDE_CONTENT } from '../data/guideContent';
@@ -117,7 +118,15 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
   }, [isTrialMode]);
 
   // Unified State for open section (Category Name for Guide; Subcategory Name for Trials)
+  const [searchParams] = useSearchParams();
   const [openCategory, setOpenCategory] = useState<string | null>(null);
+  const { getBackPath, getBackLabel, source } = useNavigationSource();
+
+  // When returning with ?open=, expand that accordion (no topic selected)
+  useEffect(() => {
+    const o = searchParams.get('open');
+    if (!topicId && o) setOpenCategory(o);
+  }, [topicId, searchParams]);
 
   // Initialize sidebar expansion based on current topic
   useEffect(() => {
@@ -324,7 +333,7 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                                         const trial = GUIDE_CONTENT[id];
                                         if (!trial) return null;
                                         return (
-                                            <Link key={id} to={`/trials/${id}`} className={`block px-3 py-2 text-xs font-medium rounded-md transition-colors truncate ${topicId === id ? 'text-emerald-700 bg-emerald-50 font-bold' : 'text-slate-500 hover:text-emerald-700 hover:bg-emerald-50/50'}`}>
+                                            <Link key={id} to={`/trials/${id}?from=trials&category=${encodeURIComponent(sub.title)}`} className={`block px-3 py-2 text-xs font-medium rounded-md transition-colors truncate ${topicId === id ? 'text-emerald-700 bg-emerald-50 font-bold' : 'text-slate-500 hover:text-emerald-700 hover:bg-emerald-50/50'}`}>
                                                 {trial.title.replace(/Trial:|Study:/gi, '').trim()}
                                             </Link>
                                         )
@@ -341,7 +350,7 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                   <div className="mt-4">
                       <h3 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-2 px-2">Other Trials</h3>
                        {trialOrphans.map(t => (
-                          <Link key={t.id} to={`/trials/${t.id}`} className={`block px-3 py-2 rounded-lg text-sm transition-colors duration-150 truncate ${topicId === t.id ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:bg-emerald-50 hover:text-emerald-700'}`}>
+                          <Link key={t.id} to={`/trials/${t.id}?from=trials`} className={`block px-3 py-2 rounded-lg text-sm transition-colors duration-150 truncate ${topicId === t.id ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-600 hover:bg-emerald-50 hover:text-emerald-700'}`}>
                               {t.title}
                           </Link>
                        ))}
@@ -372,7 +381,7 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                       {cat.items.map(topic => (
                         <Link
                           key={topic.id}
-                          to={`/guide/${topic.id}`}
+                          to={`/guide/${topic.id}?from=guide&category=${encodeURIComponent(cat.name)}`}
                           className={`group flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors duration-200 ${
                             topicId === topic.id ? activeBg + ' font-semibold shadow-sm ring-1' : 'text-slate-600 hover:bg-slate-50'
                           }`}
@@ -393,9 +402,9 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
       <div className={`flex-1 min-w-0 ${!topicId ? 'hidden md:block' : ''}`}>
         {currentTopic ? (
           <div className="max-w-6xl mx-auto p-4 md:p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-             <Link to={isTrialMode ? "/trials" : "/guide"} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
+             <Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
                 <div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-colors duration-150"><ArrowLeft size={16} /></div>
-                Back to {isTrialMode ? 'Trials' : 'Guide'} Index
+                {source.category || getBackLabel()}
              </Link>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
@@ -411,7 +420,7 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                          <div className="flex flex-wrap gap-3 mt-6">
                             {/* Hardcoded Primary Tools */}
                             {currentTopic.id === 'thrombectomy' && (
-                                <Link to="/calculators/evt-pathway" className="inline-flex items-center px-6 py-3 bg-neuro-600 text-white font-bold rounded-xl shadow-lg shadow-neuro-200 hover:bg-neuro-700 transition-colors duration-150 active:scale-95 transform-gpu group">
+                                <Link to={`/calculators/evt-pathway?from=guide&category=${encodeURIComponent(currentTopic.category)}`} className="inline-flex items-center px-6 py-3 bg-neuro-600 text-white font-bold rounded-xl shadow-lg shadow-neuro-200 hover:bg-neuro-700 transition-colors duration-150 active:scale-95 transform-gpu group">
                                     <Zap size={18} className="mr-2 fill-white" />
                                     Launch Thrombectomy Pathway
                                     <ChevronRight size={16} className="ml-2 opacity-60 group-hover:translate-x-1 transition-transform" />
@@ -419,7 +428,7 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                             )}
 
                             {currentTopic.id === 'status-epilepticus' && (
-                                <Link to="/calculators/se-pathway" className="inline-flex items-center px-6 py-3 bg-red-600 text-white font-bold rounded-xl shadow-lg shadow-red-200 hover:bg-red-700 transition-colors duration-150 active:scale-95 transform-gpu group">
+                                <Link to={`/calculators/se-pathway?from=guide&category=${encodeURIComponent(currentTopic.category)}`} className="inline-flex items-center px-6 py-3 bg-red-600 text-white font-bold rounded-xl shadow-lg shadow-red-200 hover:bg-red-700 transition-colors duration-150 active:scale-95 transform-gpu group">
                                     <Activity size={18} className="mr-2" />
                                     Launch Status Epilepticus Pathway
                                     <ChevronRight size={16} className="ml-2 opacity-60 group-hover:translate-x-1 transition-transform" />
@@ -430,7 +439,7 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                             {backlinks.map(link => (
                                 <Link 
                                     key={link.id} 
-                                    to={link.url}
+                                    to={`${link.url}${link.url.includes('?') ? '&' : '?'}from=guide&category=${encodeURIComponent(currentTopic.category)}`}
                                     className={`inline-flex items-center px-6 py-3 font-bold rounded-xl shadow-lg transition-colors duration-150 active:scale-95 transform-gpu group ${
                                         isTrialMode 
                                         ? 'bg-emerald-600 text-white shadow-emerald-200 hover:bg-emerald-700' 

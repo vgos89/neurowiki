@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useNavigationSource } from '../hooks/useNavigationSource';
 import { getComingSoonMessage } from '../config/contentStatus';
 
 export const ComingSoon: React.FC = () => {
   const location = useLocation();
+  const { getBackLabel, getBackPath } = useNavigationSource();
   const message = getComingSoonMessage(location.pathname);
 
   return (
@@ -36,15 +38,15 @@ export const ComingSoon: React.FC = () => {
           {message}
         </p>
 
-        {/* Back button */}
+        {/* Dynamic Back button */}
         <Link
-          to="/"
+          to={getBackPath()}
           className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 transition-colors"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          Back to Home
+          {getBackLabel()}
         </Link>
 
         {/* Decorative line */}

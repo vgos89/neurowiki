@@ -10,6 +10,7 @@ import {
   ArrowLeft,
   Home
 } from 'lucide-react';
+import { FeedbackButton } from '../src/components/FeedbackButton';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -104,19 +105,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
               Quick Tools
             </div>
-            <Link to="/calculators/evt-pathway" className="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-600 hover:text-neuro-600 hover:bg-slate-50 rounded-md transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
+            <Link to="/calculators/evt-pathway?from=calculators&category=vascular" className="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-600 hover:text-neuro-600 hover:bg-slate-50 rounded-md transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
               <span className="w-1 h-1 rounded-full bg-slate-300"></span>
               <span>Thrombectomy</span>
             </Link>
-            <Link to="/calculators/migraine-pathway" className="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-600 hover:text-neuro-600 hover:bg-slate-50 rounded-md transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
+            <Link to="/calculators/migraine-pathway?from=calculators&category=headache" className="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-600 hover:text-neuro-600 hover:bg-slate-50 rounded-md transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
               <span className="w-1 h-1 rounded-full bg-slate-300"></span>
               <span>Migraine Pathway</span>
             </Link>
-            <Link to="/calculators?id=nihss" className="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-600 hover:text-neuro-600 hover:bg-slate-50 rounded-md transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
+            <Link to="/calculators/nihss?from=calculators&category=vascular" className="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-600 hover:text-neuro-600 hover:bg-slate-50 rounded-md transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
               <span className="w-1 h-1 rounded-full bg-slate-300"></span>
               <span>NIH Stroke Scale</span>
             </Link>
-            <Link to="/calculators/elan-pathway" className="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-600 hover:text-neuro-600 hover:bg-slate-50 rounded-md transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
+            <Link to="/calculators/elan-pathway?from=calculators&category=vascular" className="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-600 hover:text-neuro-600 hover:bg-slate-50 rounded-md transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
               <span className="w-1 h-1 rounded-full bg-slate-300"></span>
               <span>ELAN Protocol</span>
             </Link>
@@ -208,6 +209,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             {children}
           </div>
         </main>
+
+        <FeedbackButton />
 
         {/* Mobile Bottom Navigation Bar - Clinical Premium */}
         <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-slate-200/80 px-2 py-2 pb-safe z-50">
