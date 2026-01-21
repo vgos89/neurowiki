@@ -21,6 +21,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const mobileSearchInputRef = useRef<HTMLInputElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,6 +45,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       mobileSearchInputRef.current.focus();
     }
   }, [isMobileSearchOpen]);
+
+  // Scroll main content to top on route change (e.g. Related links, nav)
+  useEffect(() => {
+    if (mainRef.current) mainRef.current.scrollTop = 0;
+  }, [location.pathname, location.search]);
 
   // Desktop Navigation
   const desktopNavItems = [
@@ -197,7 +203,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </header>
 
         {/* Main Content with extra padding for mobile bottom nav + sticky actions */}
-        <main className="flex-1 overflow-y-auto bg-surface-50 p-4 md:p-8 scroll-smooth pb-20 md:pb-8">
+        <main ref={mainRef} className="flex-1 overflow-y-auto bg-surface-50 p-4 md:p-8 scroll-smooth pb-20 md:pb-8">
           <div className="max-w-7xl mx-auto">
             {children}
           </div>

@@ -1,0 +1,254 @@
+# Neurowiki Writing & Code Standards
+
+> These rules apply to ALL article content, component development, and documentation.
+
+---
+
+## WRITING VOICE: Clinical, Direct, Human
+
+### ❌ NEVER USE — AI Marker Words & Phrases
+
+**Banned vocabulary:**
+- "delve into" / "delve deeper"
+- "underscore" / "underscores"
+- "pivotal" / "pivotal role"
+- "at its core"
+- "it's important to note"
+- "it's worth noting"
+- "in today's world"
+- "in the realm of"
+- "navigate" (when not literal)
+- "landscape" (when not literal)
+- "leverage" (use "use")
+- "utilize" (use "use")
+- "facilitate"
+- "endeavor"
+- "multifaceted"
+- "holistic"
+- "synergy" / "synergistic"
+- "paradigm"
+- "robust"
+- "streamline"
+- "optimize" (unless discussing actual optimization)
+- "empower"
+- "foster"
+- "cutting-edge"
+- "game-changer"
+- "deep dive"
+- "unpack" (when not literal)
+- "bucket" (as a verb)
+- "circle back"
+- "move the needle"
+- "at the end of the day"
+- "the fact that"
+- "in order to" (just use "to")
+- "due to the fact that" (use "because")
+- "a myriad of" (use "many")
+- "plethora"
+- "cornucopia"
+- "revolutionize"
+- "transformative"
+
+**Banned sentence starters:**
+- "It's important to..."
+- "It's worth mentioning..."
+- "It should be noted..."
+- "Interestingly,"
+- "Notably,"
+- "Importantly,"
+- "Significantly,"
+- "In essence,"
+- "Essentially,"
+- "Basically,"
+- "Fundamentally,"
+- "As such,"
+- "That being said,"
+- "With that said,"
+- "All in all,"
+- "In conclusion,"
+- "To summarize,"
+- "In summary,"
+
+**Banned transitions:**
+- "Furthermore,"
+- "Moreover,"
+- "Additionally," (at sentence start)
+- "However," (overused — vary your transitions)
+- "Thus,"
+- "Hence,"
+- "Therefore," (overused)
+- "Consequently,"
+- "Subsequently,"
+
+---
+
+### ✅ DO USE — Direct Clinical Language
+
+**Good patterns:**
+- Start with the action or fact
+- Use "because" not "due to the fact that"
+- Use "use" not "utilize"
+- Use "about" not "approximately" (unless precision matters)
+- Use "but" and "and" to start sentences when natural
+- Use short sentences for critical info
+- Use specific numbers, not "numerous" or "several"
+
+**Examples:**
+
+```
+❌ BAD: "It's important to note that establishing the Last Known Well time is pivotal for treatment eligibility."
+
+✅ GOOD: "Establish Last Known Well immediately — it determines treatment eligibility."
+```
+
+```
+❌ BAD: "The glucose level should be checked in order to rule out hypoglycemia, which can present with a myriad of stroke-like symptoms."
+
+✅ GOOD: "Check glucose first. Hypoglycemia mimics stroke perfectly."
+```
+
+```
+❌ BAD: "Furthermore, it's worth noting that up to 30% of code strokes are ultimately mimics, underscoring the importance of a thorough evaluation."
+
+✅ GOOD: "Up to 30% of code strokes are mimics. Always check glucose — it takes 10 seconds."
+```
+
+---
+
+## STRUCTURAL PATTERNS TO AVOID
+
+### ❌ Robotic Transitions
+Don't connect every paragraph with formal transitions. Let ideas flow naturally.
+
+### ❌ Formulaic Structure
+Don't follow: "Introduction → Point 1 → Point 2 → Point 3 → Summary"
+Medical articles should follow clinical logic, not essay structure.
+
+### ❌ Repetitive Phrasing
+Don't repeat the same sentence structure. Vary length and rhythm.
+
+```
+❌ BAD:
+"The NIHSS should be performed. The vitals should be obtained. The glucose should be checked."
+
+✅ GOOD:
+"Perform NIHSS. Get vitals. Check glucose first — it rules out a common mimic."
+```
+
+### ❌ Over-hedging
+Don't soften everything with qualifiers.
+
+```
+❌ BAD: "It may potentially be helpful to consider checking..."
+✅ GOOD: "Check..."
+```
+
+### ❌ Excessive Em Dashes
+Use em dashes sparingly — one per paragraph maximum. Don't use them in every sentence — it becomes a crutch — and looks robotic.
+
+### ❌ Overly Neutral Tone
+Medical writing can have voice. A senior resident explaining to a junior has personality.
+
+---
+
+## ARTICLE CONTENT STANDARDS
+
+### Paragraph Expansion (`detail` prop)
+
+The expanded detail should:
+- Add practical "how to" information
+- Include clinical pearls from experience
+- Explain the "why" behind recommendations
+- Mention common pitfalls
+- Feel like advice from a senior resident
+
+The expanded detail should NOT:
+- Repeat what's in the summary
+- Add filler content
+- Use AI-style language
+- Be longer than 2-3 sentences typically
+
+```
+❌ BAD detail: "It's important to be precise when establishing the Last Known Well time, as this information is pivotal for determining treatment eligibility and can significantly impact patient outcomes."
+
+✅ GOOD detail: "'Yesterday' is not acceptable. Get exact times. If found down, work backwards: when did they go to bed? When were they last seen awake?"
+```
+
+### Term Definitions
+
+Keep definitions:
+- Under 15 words ideally
+- Practical, not textbook
+- Focused on what the reader needs to know NOW
+
+```
+❌ BAD: "NIH Stroke Scale — a comprehensive, validated neurological assessment tool that quantifies stroke severity across multiple domains"
+
+✅ GOOD: "NIH Stroke Scale — standardized neuro assessment, scored 0-42"
+```
+
+### Critical Warnings
+
+Use `<Critical>` for:
+- Actions that must happen
+- Contraindications
+- Time-sensitive items
+
+Don't overuse. If everything is critical, nothing is.
+
+---
+
+## CODE STANDARDS
+
+### Component Props
+- Use TypeScript interfaces
+- Make `viewMode` required where needed
+- Provide sensible defaults
+
+### Tailwind Classes
+- Use design system colors (slate, blue, red, indigo)
+- Avoid arbitrary values unless necessary
+- Mobile-first: base styles for mobile, `md:` for desktop
+
+### File Naming
+- Components: PascalCase (`Term.tsx`)
+- Utilities: camelCase (`formatDate.ts`)
+- Articles: kebab-case (`stroke-basics.tsx`)
+
+---
+
+## REVIEW CHECKLIST
+
+Before committing any article:
+
+- [ ] No banned AI vocabulary
+- [ ] No formulaic transitions
+- [ ] Varied sentence structure
+- [ ] Em dashes used sparingly (max 1-2 per section)
+- [ ] Expanded details add real value
+- [ ] Term definitions are concise
+- [ ] Critical warnings used sparingly
+- [ ] Reads like a human wrote it
+- [ ] A senior resident would find this useful
+
+---
+
+## EXAMPLES OF GOOD VOICE
+
+**Direct and practical:**
+> "Check glucose first. Takes 10 seconds, can save 30 minutes of workup."
+
+**Specific and actionable:**
+> "For anticoagulants, get the exact last dose time. 'This morning' isn't good enough — was it 6am or 11am?"
+
+**Acknowledges reality:**
+> "Up to 30% of code strokes are mimics. You will call strokes that aren't. That's fine — missing a real one is worse."
+
+**Has personality:**
+> "DWI is your friend in the posterior fossa. CT lies. Trust the MRI."
+
+---
+
+## FINAL RULE
+
+Read it out loud. If it sounds like a robot wrote it, rewrite it.
