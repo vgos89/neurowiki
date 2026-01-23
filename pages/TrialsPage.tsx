@@ -78,34 +78,42 @@ const TrialsPage: React.FC = () => {
   return (
     <div className="flex flex-col md:flex-row relative items-start">
       {/* Sidebar */}
-      <div className="w-full md:w-80 bg-white border-r border-slate-200 flex-shrink-0 md:sticky md:top-0 md:h-[calc(100vh-4rem)] overflow-y-auto custom-scrollbar self-start">
-        <div className="p-5 border-b border-slate-100 bg-white sticky top-0 z-10 backdrop-blur-sm bg-white/95">
-            <h2 className="font-bold text-slate-900 flex items-center text-lg">
-              <FlaskConical className="mr-2 text-emerald-600" size={24} /> Neuro Trials
-            </h2>
-            <p className="text-xs text-slate-500 mt-1 ml-8">Evidence pearls</p>
+      <div className="w-full md:w-64 bg-white flex-shrink-0 md:sticky md:top-0 md:h-screen overflow-y-auto self-start">
+        {/* Header */}
+        <div className="px-4 py-4 border-b border-slate-100">
+          <div className="flex items-center gap-3">
+            <FlaskConical className="text-neuro-500" size={20} />
+            <div>
+              <h2 className="text-base font-semibold text-slate-900">Neuro Trials</h2>
+              <p className="text-xs text-slate-500 mt-0.5">Evidence pearls</p>
+            </div>
+          </div>
         </div>
-        <div className="p-4 space-y-6">
+        
+        {/* Navigation */}
+        <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
           {TRIAL_STRUCTURE.map((cat) => (
-            <div key={cat.title}>
-              <h3 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-3 px-2 flex items-center">
+            <div key={cat.title} className="mt-4 first:mt-0">
+              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 px-3">
                 {cat.title}
               </h3>
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 {cat.subcategories.map(sub => {
                   const isOpen = openSubcategory === sub.title;
                   return (
-                    <div key={sub.title} className="mb-2">
+                    <div key={sub.title}>
                         <button
                           onClick={() => toggleSubcategory(sub.title)}
-                          className={`w-full group flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors duration-200 text-left font-bold ${isOpen ? 'bg-emerald-50 text-emerald-800' : 'text-slate-700 hover:bg-slate-50'}`}
+                          className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors duration-150 group min-h-[40px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
+                            isOpen ? 'bg-slate-100 text-slate-900 font-medium' : 'text-slate-700 hover:bg-slate-50 font-normal'
+                          }`}
                         >
-                          <span>{sub.title}</span>
-                          <ChevronDown size={16} className={`text-emerald-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                          <span className="text-left">{sub.title}</span>
+                          <ChevronDown size={16} className={`text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
                         </button>
                         
                         {isOpen && (
-                           <div className="mt-1 ml-2 pl-3 border-l-2 border-emerald-100 space-y-1 animate-in slide-in-from-top-1 fade-in duration-200">
+                           <div className="mt-0.5 space-y-0.5 pl-3 animate-in slide-in-from-top-1 fade-in duration-200">
                               {sub.ids.map(id => {
                                  const trial = GUIDE_CONTENT[id];
                                  if(!trial) return null;
@@ -113,7 +121,7 @@ const TrialsPage: React.FC = () => {
                                    <Link 
                                      key={id} 
                                      to={`/trials/${id}?from=trials&category=${encodeURIComponent(sub.title)}`}
-                                     className="block px-3 py-2 text-xs font-medium text-slate-500 hover:text-emerald-700 hover:bg-emerald-50/50 rounded-md transition-colors truncate"
+                                     className="block px-3 py-2 text-sm rounded-lg transition-colors duration-150 truncate text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                                    >
                                      {trial.title.replace(/Trial:|Study:/gi, '').trim()}
                                    </Link>
@@ -129,14 +137,14 @@ const TrialsPage: React.FC = () => {
           ))}
           
           {orphans.length > 0 && (
-             <div>
-               <h3 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-3 px-2">Other Trials</h3>
-               <div className="space-y-1">
+             <div className="mt-4">
+               <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 px-3">Other Trials</h3>
+               <div className="space-y-0.5">
                  {orphans.map(t => (
                     <Link
                       key={t.id}
                       to={`/trials/${t.id}?from=trials`}
-                      className="block px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 transition-colors duration-150 truncate"
+                      className="block px-3 py-2.5 rounded-lg text-sm transition-colors duration-150 truncate text-slate-700 hover:bg-slate-50 font-normal"
                     >
                       {t.title}
                     </Link>
@@ -144,7 +152,7 @@ const TrialsPage: React.FC = () => {
                </div>
              </div>
           )}
-        </div>
+        </nav>
       </div>
 
       {/* Main Content */}

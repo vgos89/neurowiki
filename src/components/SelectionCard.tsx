@@ -34,7 +34,7 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1">
-          <span className={['text-sm font-medium', isSelected ? 'text-neuro-700' : 'text-slate-700'].join(' ')}>
+          <span className={['text-sm font-medium', isSelected ? 'text-teal-500' : 'text-slate-700'].join(' ')}>
             {label}
           </span>
           {description && <p className="text-xs text-slate-500 mt-0.5">{description}</p>}
@@ -45,7 +45,7 @@ export const SelectionCard: React.FC<SelectionCardProps> = ({
             <span
               className={[
                 'text-xs font-bold px-2 py-0.5 rounded',
-                isSelected ? 'bg-neuro-100 text-neuro-700' : 'bg-slate-100 text-slate-500',
+                isSelected ? 'bg-neuro-100 text-teal-500' : 'bg-slate-100 text-slate-500',
               ].join(' ')}
             >
               {score}

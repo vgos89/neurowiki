@@ -281,7 +281,7 @@ const MigrainePathway: React.FC = () => {
       {/* Header */}
       <div className="mb-8 flex items-start justify-between">
         <div>
-            <Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
+            <Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-500 mb-6 group">
                 <div className="bg-white p-1.5 rounded-md border border-gray-200 mr-2 shadow-sm group-hover:shadow-md transition-all">
                     <ArrowLeft size={16} />
                 </div>

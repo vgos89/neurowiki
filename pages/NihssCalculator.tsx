@@ -89,7 +89,7 @@ const NihssCalculator: React.FC = () => {
             <div className="relative flex bg-slate-100 rounded-lg p-1 h-9 cursor-pointer w-full" onClick={() => setUserMode((m) => (m === 'resident' ? 'attending' : 'resident'))}>
               <div className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-md bg-white shadow-sm transition-colors duration-300 ease-out border border-black/5 ${userMode === 'resident' ? 'left-1' : 'left-[calc(50%+0px)]'}`} />
               <button onClick={(e) => { e.stopPropagation(); setUserMode('resident'); }} className={`relative z-10 flex-1 flex items-center justify-center px-2 text-xs font-bold transition-colors min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${userMode === 'resident' ? 'text-slate-900' : 'text-slate-500'}`}>
-                <UserCog size={12} className={`mr-1.5 ${userMode === 'resident' ? 'text-neuro-600' : ''}`} /> Resident
+                <UserCog size={12} className={`mr-1.5 ${userMode === 'resident' ? 'text-neuro-500' : ''}`} /> Resident
               </button>
               <button onClick={(e) => { e.stopPropagation(); setUserMode('attending'); }} className={`relative z-10 flex-1 flex items-center justify-center px-2 text-xs font-bold transition-colors min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${userMode === 'attending' ? 'text-slate-900' : 'text-slate-500'}`}>
                 <Zap size={12} className={`mr-1.5 ${userMode === 'attending' ? 'text-amber-500' : ''}`} /> Attending
@@ -110,7 +110,7 @@ const NihssCalculator: React.FC = () => {
                 <React.Fragment key="motor-header">
                   <div className="flex justify-between items-end border-b border-slate-100 pb-2 mt-8 mb-4">
                     <h3 className="font-black text-sm text-slate-400 uppercase tracking-widest">Motor</h3>
-                    <button onClick={() => setAllMotor(0)} className="text-xs font-bold text-neuro-600 bg-neuro-50 px-2 py-1 rounded hover:bg-neuro-100">Normal Exam</button>
+                    <button onClick={() => setAllMotor(0)} className="text-xs font-bold text-neuro-500 bg-neuro-50 px-2 py-1 rounded hover:bg-neuro-100">Normal Exam</button>
                   </div>
                   <NihssItemRow key={item.id} item={item} value={nihssValues[item.id] ?? 0} onChange={(v) => handleNihssChange(item.id, v)} mode={nihssMode} userMode={userMode} showPearl={showPearl} onShowPearl={() => setActivePearl((p) => (p === item.id ? null : item.id))} warning={warning} />
                 </React.Fragment>
@@ -129,7 +129,7 @@ const NihssCalculator: React.FC = () => {
           </div>
           <div className="flex space-x-3">
             <button onClick={() => setNihssValues({})} className="p-3 bg-slate-100 rounded-xl text-slate-600 hover:bg-slate-200 transition-colors"><RefreshCw size={20} /></button>
-            <button onClick={copyNihss} className="px-6 py-3 bg-neuro-600 text-white font-bold rounded-xl shadow-lg hover:bg-neuro-700 active:scale-95 transform-gpu flex items-center transition-colors duration-150"><Copy size={18} className="mr-2" /> Copy</button>
+            <button onClick={copyNihss} className="px-6 py-3 bg-neuro-500 text-white font-bold rounded-xl shadow-lg hover:bg-teal-500 active:scale-95 transform-gpu flex items-center transition-colors duration-150"><Copy size={18} className="mr-2" /> Copy</button>
           </div>
         </div>
       </div>

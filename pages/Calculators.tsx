@@ -125,6 +125,14 @@ export default function Calculators() {
     if (o && CATEGORY_IDS.includes(o)) setActiveCategory(o);
   }, [searchParams]);
 
+  // When returning with ?favorites=true, show favorites only
+  useEffect(() => {
+    const favoritesParam = searchParams.get('favorites');
+    if (favoritesParam === 'true') {
+      setShowFavoritesOnly(true);
+    }
+  }, [searchParams]);
+
   const toggleFavorite = (id: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();

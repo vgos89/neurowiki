@@ -12,25 +12,51 @@ export default {
         sans: ['Inter', 'sans-serif'],
       },
       colors: {
-        // Refined Neuro Blue (deeper, more sophisticated)
+        // Ocean Mist - Accent color for buttons, highlighted text
         neuro: {
-          50: '#EFF6FF',
-          100: '#DBEAFE',
-          200: '#BFDBFE',
-          300: '#93C5FD',
-          400: '#60A5FA',
-          500: '#3B82F6',
-          600: '#0F5EA3',  // PRIMARY - deeper blue
-          700: '#0C4A82',
-          800: '#0A3D6B',
-          900: '#072F54',
-          950: '#041E36',
+          50: '#E0F7F4',
+          100: '#B3EBE3',
+          200: '#80DFD1',
+          300: '#4DD3BF',
+          400: '#26C7B0',
+          500: '#1FC7B2',  // PRIMARY - Ocean Mist
+          600: '#1AB39E',
+          700: '#149D8A',
+          800: '#0E8776',
+          900: '#076152',
+          950: '#00555A',  // Dark Teal for hover states
         },
-        // Warm backgrounds instead of pure white/gray
+        // Dark Teal - Secondary elements, hover states
+        teal: {
+          50: '#E0F2F3',
+          100: '#B3DEE0',
+          200: '#80C9CD',
+          300: '#4DB4BA',
+          400: '#269FA7',
+          500: '#00555A',  // Dark Teal
+          600: '#004A4F',
+          700: '#003F44',
+          800: '#003439',
+          900: '#00292E',
+        },
+        // Jet Black - Main background
+        jet: {
+          50: '#E5EAEB',
+          100: '#B8C5C7',
+          200: '#8AA0A3',
+          300: '#5C7B7F',
+          400: '#2E565B',
+          500: '#0C2F34',  // Jet Black
+          600: '#0A272B',
+          700: '#081F22',
+          800: '#061719',
+          900: '#040F10',
+        },
+        // Surface colors with Jet Black base
         surface: {
-          50: '#FAFBFC',   // Page background
-          100: '#F5F7F9',  // Card hover
-          200: '#EEF1F4',  // Borders
+          50: '#F5F7F8',   // Light page background
+          100: '#E8ECED',  // Card hover
+          200: '#D1D9DB',  // Borders
         },
       }
     },

@@ -176,7 +176,7 @@ const TriButton = React.memo(({ field, label, value, onChange, registerRef }: Tr
             className={`flex-1 rounded-md text-sm font-bold capitalize transition-colors duration-200 touch-manipulation ${
               value === val
                 ? val === 'yes' 
-                    ? 'bg-neuro-600 text-white shadow-md' 
+                    ? 'bg-neuro-500 text-white shadow-md' 
                     : val === 'no' 
                         ? 'bg-white text-slate-700 shadow-md ring-1 ring-black/5'
                         : 'bg-white text-slate-400 shadow-md ring-1 ring-black/5'
@@ -345,14 +345,14 @@ ${result.notes.join('\n')}
       {/* Header */}
       <div className="mb-6 flex items-start justify-between">
         <div>
-<Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
+<Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-500 mb-6 group">
             <div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-colors duration-150">
                     <ArrowLeft size={16} />
                 </div>
                 {getBackLabel()}
             </Link>
             <div className="flex items-center space-x-3 mb-2">
-                <div className="p-2 bg-neuro-100 text-neuro-700 rounded-lg">
+                <div className="p-2 bg-neuro-100 text-teal-500 rounded-lg">
                     <Activity size={24} />
                 </div>
                 <h1 className="text-2xl font-black text-slate-900 tracking-tight">GCA / PMR Clinical Pathway</h1>
@@ -435,7 +435,7 @@ ${result.notes.join('\n')}
                     onClick={() => handleFieldChange('crpEsr', opt.value)}
                     className={`flex items-center justify-between p-4 rounded-xl text-sm transition-colors duration-200 border touch-manipulation active:scale-[0.98] ${
                       inputs.crpEsr === opt.value
-                        ? 'bg-neuro-600 text-white border-neuro-600 shadow-md ring-2 ring-neuro-100'
+                        ? 'bg-neuro-500 text-white border-neuro-500 shadow-md ring-2 ring-neuro-100'
                         : 'bg-slate-50 text-slate-600 border-transparent hover:bg-white hover:border-slate-200'
                     }`}
                   >
@@ -489,7 +489,7 @@ ${result.notes.join('\n')}
                     {result.reasons.length > 0 ? result.reasons.map((r, i) => (
                       <li key={i} className="text-sm font-medium text-slate-700 flex justify-between items-center border-b border-slate-50 pb-1 last:border-0 last:pb-0">
                         <span>{r.label}</span>
-                        <span className="font-bold text-neuro-600 bg-neuro-50 px-2 py-0.5 rounded ml-2">+{r.points}</span>
+                        <span className="font-bold text-neuro-500 bg-neuro-50 px-2 py-0.5 rounded ml-2">+{r.points}</span>
                       </li>
                     )) : <span className="text-sm text-slate-400 italic">No specific positive drivers selected.</span>}
                   </ul>
@@ -497,7 +497,7 @@ ${result.notes.join('\n')}
               </div>
 
               {result.notes.length > 0 && (
-                <div className="bg-neuro-50 p-5 rounded-2xl border border-neuro-100 text-neuro-900 text-sm shadow-sm">
+                <div className="bg-neuro-50 p-5 rounded-2xl border border-neuro-100 text-teal-500 text-sm shadow-sm">
                   <div className="flex items-center font-bold mb-2">
                     <Info size={16} className="mr-2" /> Clinical Notes
                   </div>
@@ -539,14 +539,14 @@ ${result.notes.join('\n')}
 
              {/* Desktop Start Over for Step 4 */}
              {activeSection === 3 && (
-                <button onClick={handleReset} className="hidden md:flex items-center text-slate-500 hover:text-neuro-600 font-bold px-4 py-2 rounded-lg transition-colors min-h-[44px] touch-manipulation active:scale-95 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
+                <button onClick={handleReset} className="hidden md:flex items-center text-slate-500 hover:text-neuro-500 font-bold px-4 py-2 rounded-lg transition-colors min-h-[44px] touch-manipulation active:scale-95 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
                     <RotateCcw size={16} className="mr-2" /> Start Over
                 </button>
              )}
 
              {/* Next / Copy Button */}
              {activeSection < 3 ? (
-                 <button onClick={handleNext} className="flex-1 md:flex-none px-8 py-3 bg-neuro-600 text-white rounded-xl font-bold hover:bg-neuro-700 shadow-lg shadow-neuro-200 transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
+                 <button onClick={handleNext} className="flex-1 md:flex-none px-8 py-3 bg-neuro-500 text-white rounded-xl font-bold hover:bg-neuro-700 shadow-lg shadow-neuro-200 transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
                      Next <ChevronRight size={16} className="ml-2" />
                  </button>
              ) : (

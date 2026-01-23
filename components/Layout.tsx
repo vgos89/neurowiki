@@ -8,21 +8,70 @@ import {
   FlaskConical,
   Stethoscope,
   ArrowLeft,
-  Home
+  Home,
+  X,
+  Trash2,
+  Star
 } from 'lucide-react';
 import { FeedbackButton } from '../src/components/FeedbackButton';
+import ToolManagerModal from './ToolManagerModal';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
+interface Tool {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  type: 'calculator' | 'pathway';
+  path: string;
+}
+
+// All available tools
+const ALL_TOOLS: Tool[] = [
+  { id: 'nihss', name: 'NIHSS', description: 'NIH Stroke Scale assessment', category: 'vascular', type: 'calculator', path: '/calculators/nihss' },
+  { id: 'evt-pathway', name: 'Thrombectomy Pathway', description: 'EVT eligibility for early and late windows', category: 'vascular', type: 'pathway', path: '/calculators/evt-pathway' },
+  { id: 'elan-pathway', name: 'ELAN Protocol', description: 'DOAC timing after ischemic stroke with AF', category: 'vascular', type: 'pathway', path: '/calculators/elan-pathway' },
+  { id: 'se-pathway', name: 'Status Epilepticus', description: 'Stage 1–3 SE management pathway', category: 'epilepsy', type: 'pathway', path: '/calculators/se-pathway' },
+  { id: 'migraine-pathway', name: 'Migraine & Headache', description: 'ED and inpatient management', category: 'headache', type: 'pathway', path: '/calculators/migraine-pathway' },
+  { id: 'gca-pathway', name: 'GCA / PMR Pathway', description: 'Suspected giant cell arteritis workup', category: 'headache', type: 'pathway', path: '/calculators/gca-pathway' },
+];
+
+// Category color mapping
+const categoryColors: Record<string, string> = {
+  vascular: 'bg-red-500',
+  epilepsy: 'bg-amber-500',
+  headache: 'bg-blue-500',
+  neuromuscular: 'bg-emerald-500',
+  general: 'bg-slate-400',
+};
+
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [isToolModalOpen, setIsToolModalOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const mobileSearchInputRef = useRef<HTMLInputElement>(null);
   const mainRef = useRef<HTMLElement>(null);
+  
+  // Load selected tools from localStorage
+  const [selectedTools, setSelectedTools] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('neurowiki-sidebar-tools');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Validate that all saved tools still exist
+        return parsed.filter((id: string) => ALL_TOOLS.some(tool => tool.id === id));
+      }
+      // Default tools if nothing saved
+      return ['evt-pathway', 'elan-pathway', 'nihss', 'migraine-pathway'];
+    } catch {
+      return ['evt-pathway', 'elan-pathway', 'nihss', 'migraine-pathway'];
+    }
+  });
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,11 +103,32 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   // Desktop Navigation
   const desktopNavItems = [
-    { label: 'Home', icon: <Home size={20} />, path: '/' },
-    { label: 'Resident Guide', icon: <Stethoscope size={20} />, path: '/guide' },
-    { label: 'Neuro Trials', icon: <FlaskConical size={20} />, path: '/trials' },
-    { label: 'Calculators', icon: <Calculator size={20} />, path: '/calculators' },
+    { label: 'Home', icon: <Home size={18} />, path: '/' },
+    { label: 'Resident Guide', icon: <Stethoscope size={18} />, path: '/guide' },
+    { label: 'Neuro Trials', icon: <FlaskConical size={18} />, path: '/trials' },
+    { label: 'Calculators', icon: <Calculator size={18} />, path: '/calculators' },
   ];
+
+  // Get selected tools data
+  const selectedToolsData = ALL_TOOLS.filter(tool => selectedTools.includes(tool.id));
+
+  // Save selected tools to localStorage
+  const handleToolsChange = (toolIds: string[]) => {
+    setSelectedTools(toolIds);
+    try {
+      localStorage.setItem('neurowiki-sidebar-tools', JSON.stringify(toolIds));
+    } catch (error) {
+      console.error('Failed to save tools to localStorage:', error);
+    }
+  };
+
+  // Delete a tool from sidebar
+  const handleDeleteTool = (toolId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const updated = selectedTools.filter(id => id !== toolId);
+    handleToolsChange(updated);
+  };
 
   // Mobile Bottom Navigation
   const mobileNavItems = [
@@ -66,69 +136,111 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { label: 'Guide', icon: <Stethoscope size={20} />, path: '/guide' },
     { label: 'Trials', icon: <FlaskConical size={20} />, path: '/trials' },
     { label: 'Calcs', icon: <Calculator size={20} />, path: '/calculators' },
+    { label: 'Favourites', icon: <Star size={20} />, path: '/calculators?favorites=true' },
   ];
 
   const isActive = (path: string) => {
     if (path === '/' && location.pathname === '/') return true;
-    if (path !== '/' && location.pathname.startsWith(path)) return true;
+    // Handle favorites query param
+    if (path.includes('?favorites=true')) {
+      return location.pathname === '/calculators' && location.search.includes('favorites=true');
+    }
+    if (path !== '/' && location.pathname.startsWith(path.split('?')[0])) {
+      // If the path has query params, check them too
+      if (path.includes('?')) {
+        const queryParams = new URLSearchParams(path.split('?')[1]);
+        const currentParams = new URLSearchParams(location.search);
+        return Array.from(queryParams.entries()).every(([key, value]) => 
+          currentParams.get(key) === value
+        );
+      }
+      return true;
+    }
     return false;
   };
 
+
   return (
     <div className="flex h-screen bg-surface-50 overflow-hidden">
-      {/* Sidebar for Desktop - Clinical Premium */}
-      <aside className="hidden md:flex flex-col w-64 bg-white border-r border-slate-200">
-        <div className="p-6 flex items-center space-x-3 border-b border-slate-100">
-          <div className="bg-neuro-600 p-2.5 rounded-lg min-h-[40px] min-w-[40px] flex items-center justify-center">
-            <Brain className="text-white" size={20} />
-          </div>
-          <span className="text-lg font-bold tracking-tight text-slate-900">NeuroWiki</span>
+      {/* Sidebar for Desktop - Inspired Design */}
+      <aside className="hidden md:flex flex-col w-64 bg-white">
+        {/* Header with close button */}
+        <div className="px-4 py-4 flex items-center justify-between border-b border-slate-100">
+          <span className="text-base font-semibold text-slate-900">NeuroWiki</span>
+          <button
+            onClick={() => {/* Optional: Add sidebar collapse functionality */}}
+            className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+            aria-label="Close sidebar"
+          >
+            <X size={16} />
+          </button>
         </div>
 
-        <nav className="flex-1 px-3 py-4 space-y-1">
-          {desktopNavItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors duration-150 group min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
-                isActive(item.path)
-                  ? 'bg-neuro-50 text-neuro-700 font-semibold border border-neuro-100'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium'
-              }`}
-            >
-              <span className={isActive(item.path) ? 'text-neuro-600' : 'text-slate-500 group-hover:text-slate-700'}>{item.icon}</span>
-              <span>{item.label}</span>
-            </Link>
-          ))}
+        {/* Navigation */}
+        <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
+          {desktopNavItems.map((item) => {
+            const active = isActive(item.path);
+            const baseClassName = `w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors duration-150 group min-h-[40px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
+              active
+                ? 'bg-slate-100 text-slate-900 font-medium'
+                : 'text-slate-700 hover:bg-slate-50 font-normal'
+            }`;
+            
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={baseClassName}
+              >
+                <span className={`${active ? 'text-slate-700' : 'text-slate-400 group-hover:text-slate-600'}`}>
+                  {item.icon}
+                </span>
+                <span className="text-left">{item.label}</span>
+              </Link>
+            );
+          })}
           
-          <div className="mt-6 pt-4 border-t border-slate-100">
-            <div className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-              Quick Tools
+          {/* Tools Section */}
+          {selectedToolsData.length > 0 && (
+            <div className="mt-6 pt-4 border-t border-slate-100">
+              <div className="space-y-0.5">
+                {selectedToolsData.map((tool) => (
+                  <Link
+                    key={tool.id}
+                    to={`${tool.path}?from=calculators&category=${encodeURIComponent(tool.category)}`}
+                    className="group flex items-center justify-between px-3 py-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+                  >
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <div className={`w-2 h-2 ${categoryColors[tool.category] || 'bg-slate-400'} rounded-sm flex-shrink-0`}></div>
+                      <span className="truncate">{tool.name}</span>
+                    </div>
+                    <button
+                      onClick={(e) => handleDeleteTool(tool.id, e)}
+                      className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-all duration-150 flex-shrink-0 ml-2"
+                      aria-label={`Remove ${tool.name}`}
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </Link>
+                ))}
+              </div>
             </div>
-            <Link to="/calculators/evt-pathway?from=calculators&category=vascular" className="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-600 hover:text-neuro-600 hover:bg-slate-50 rounded-md transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
-              <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-              <span>Thrombectomy</span>
-            </Link>
-            <Link to="/calculators/migraine-pathway?from=calculators&category=headache" className="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-600 hover:text-neuro-600 hover:bg-slate-50 rounded-md transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
-              <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-              <span>Migraine Pathway</span>
-            </Link>
-            <Link to="/calculators/nihss?from=calculators&category=vascular" className="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-600 hover:text-neuro-600 hover:bg-slate-50 rounded-md transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
-              <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-              <span>NIH Stroke Scale</span>
-            </Link>
-            <Link to="/calculators/elan-pathway?from=calculators&category=vascular" className="flex items-center gap-2 px-3 py-1.5 text-sm text-slate-600 hover:text-neuro-600 hover:bg-slate-50 rounded-md transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
-              <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-              <span>ELAN Protocol</span>
-            </Link>
+          )}
+          
+          {/* Add Tool Button */}
+          <div className="mt-6 pt-4 border-t border-slate-100">
+            <button
+              onClick={() => setIsToolModalOpen(true)}
+              className="w-full flex items-center justify-center px-3 py-2 text-sm text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+            >
+              <span>Add Tool</span>
+            </button>
           </div>
         </nav>
 
-        <div className="p-6 border-t border-slate-100 text-slate-500 text-xs font-medium">
-          <p>© 2026 NeuroWiki AI</p>
-          <p className="mt-1 opacity-60">Reference and Decision Support</p>
-          <p className="opacity-60">Not Medical Advice</p>
-          <p className="mt-1 opacity-40 text-xs">Build: V1.1</p>
+        {/* Footer - Simplified */}
+        <div className="px-4 py-4 border-t border-slate-100 text-slate-500 text-xs">
+          <p className="opacity-60">© 2026 NeuroWiki AI</p>
         </div>
       </aside>
 
@@ -196,7 +308,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <Search size={24} />
             </button>
             <div className="hidden md:flex items-center space-x-4">
-               <Link to="/calculators" className="text-xs font-bold text-slate-400 hover:text-neuro-600 transition-colors uppercase tracking-wider flex items-center">
+               <Link to="/calculators" className="text-xs font-bold text-slate-400 hover:text-neuro-500 transition-colors uppercase tracking-wider flex items-center">
                   Quick Calc <Calculator size={14} className="ml-1.5" />
                </Link>
             </div>
@@ -204,13 +316,21 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </header>
 
         {/* Main Content with extra padding for mobile bottom nav + sticky actions */}
-        <main ref={mainRef} className="flex-1 overflow-y-auto bg-surface-50 p-4 md:p-8 scroll-smooth pb-20 md:pb-8">
+        <main ref={mainRef} className="flex-1 overflow-y-auto bg-jet-500 p-4 md:p-8 scroll-smooth pb-20 md:pb-8">
           <div className="max-w-7xl mx-auto">
             {children}
           </div>
         </main>
 
         <FeedbackButton />
+
+        {/* Tool Manager Modal */}
+        <ToolManagerModal
+          isOpen={isToolModalOpen}
+          onClose={() => setIsToolModalOpen(false)}
+          selectedTools={selectedTools}
+          onToolsChange={handleToolsChange}
+        />
 
         {/* Mobile Bottom Navigation Bar - Clinical Premium */}
         <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-slate-200/80 px-2 py-2 pb-safe z-50">
@@ -221,7 +341,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <Link 
                   key={item.path} 
                   to={item.path} 
-                  className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl min-w-[64px] transition-colors duration-150 touch-manipulation ${active ? 'text-neuro-600' : 'text-slate-400 hover:text-slate-600'}`}
+                  className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl min-w-[64px] transition-colors duration-150 touch-manipulation ${active ? 'text-neuro-500' : 'text-slate-400 hover:text-neuro-500'}`}
                 >
                   <div className="w-5 h-5 flex items-center justify-center">
                     {item.icon}

@@ -233,7 +233,7 @@ interface SelectionCardProps {
     variant?: 'default' | 'danger';
 }
 const SelectionCard = React.memo(({ title, description, selected, onClick, variant = 'default' }: SelectionCardProps) => (
-    <button onClick={onClick} className={`w-full text-left p-5 rounded-2xl border-2 transition-colors duration-150 relative overflow-hidden active:scale-[0.99] transform-gpu touch-manipulation min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${selected ? variant === 'danger' ? 'bg-red-50 border-red-500 text-red-900' : 'bg-neuro-50 border-neuro-500 text-neuro-900' : 'bg-white border-slate-100 hover:border-slate-200 hover:bg-slate-50 text-slate-700'}`}>
+    <button onClick={onClick} className={`w-full text-left p-5 rounded-2xl border-2 transition-colors duration-150 relative overflow-hidden active:scale-[0.99] transform-gpu touch-manipulation min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${selected ? variant === 'danger' ? 'bg-red-50 border-red-500 text-red-900' : 'bg-neuro-50 border-neuro-500 text-teal-500' : 'bg-white border-slate-100 hover:border-slate-200 hover:bg-slate-50 text-slate-700'}`}>
         <div className="flex items-start justify-between relative z-10">
             <div className="pr-4">
                 <span className={`block text-lg font-bold ${selected ? 'text-current' : 'text-slate-900'}`}>{title}</span>
@@ -413,10 +413,10 @@ const EvtPathway: React.FC = () => {
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32 md:pb-20">
       <div className="mb-6 flex items-start justify-between">
         <div>
-            <Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
+            <Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-500 mb-6 group">
                 <div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-colors duration-150"><ArrowLeft size={16} /></div> {getBackLabel()}
             </Link>
-            <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-neuro-100 text-neuro-700 rounded-lg"><Zap size={24} className="fill-neuro-700" /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">Thrombectomy Pathway</h1></div>
+            <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-neuro-100 text-teal-500 rounded-lg"><Zap size={24} className="fill-neuro-700" /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">Thrombectomy Pathway</h1></div>
             <p className="text-slate-500 font-medium">Eligibility screening for LVO (ICA/M1/Basilar) and MeVO (M2/M3/Distal).</p>
         </div>
         <button 
@@ -493,9 +493,9 @@ const EvtPathway: React.FC = () => {
                             <div ref={el => { fieldRefs.current['age'] = el; }}>
                                 <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Age Group</h3>
                                 <div className="grid grid-cols-3 gap-3">
-                                    <button onClick={() => updateInput('age', 'under_18')} className={`p-4 rounded-xl border-2 font-bold transition-colors duration-150 touch-manipulation min-h-[44px] active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${inputs.age === 'under_18' ? 'border-neuro-500 bg-neuro-50 text-neuro-900' : 'bg-white border-slate-100'}`}>&lt; 18</button>
-                                    <button onClick={() => updateInput('age', '18_79')} className={`p-4 rounded-xl border-2 font-bold transition-colors duration-150 touch-manipulation min-h-[44px] active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${inputs.age === '18_79' ? 'border-neuro-500 bg-neuro-50 text-neuro-900' : 'bg-white border-slate-100'}`}>18 - 79</button>
-                                    <button onClick={() => updateInput('age', '80_plus')} className={`p-4 rounded-xl border-2 font-bold transition-colors duration-150 touch-manipulation min-h-[44px] active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${inputs.age === '80_plus' ? 'border-neuro-500 bg-neuro-50 text-neuro-900' : 'bg-white border-slate-100'}`}>≥ 80</button>
+                                    <button onClick={() => updateInput('age', 'under_18')} className={`p-4 rounded-xl border-2 font-bold transition-colors duration-150 touch-manipulation min-h-[44px] active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${inputs.age === 'under_18' ? 'border-neuro-500 bg-neuro-50 text-teal-500' : 'bg-white border-slate-100'}`}>&lt; 18</button>
+                                    <button onClick={() => updateInput('age', '18_79')} className={`p-4 rounded-xl border-2 font-bold transition-colors duration-150 touch-manipulation min-h-[44px] active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${inputs.age === '18_79' ? 'border-neuro-500 bg-neuro-50 text-teal-500' : 'bg-white border-slate-100'}`}>18 - 79</button>
+                                    <button onClick={() => updateInput('age', '80_plus')} className={`p-4 rounded-xl border-2 font-bold transition-colors duration-150 touch-manipulation min-h-[44px] active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${inputs.age === '80_plus' ? 'border-neuro-500 bg-neuro-50 text-teal-500' : 'bg-white border-slate-100'}`}>≥ 80</button>
                                 </div>
                             </div>
                         )}
@@ -573,7 +573,7 @@ const EvtPathway: React.FC = () => {
                         </div>
                         <div ref={el => { fieldRefs.current['mevoDisabling'] = el; }}>
                             <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Disabling Deficit?</h3>
-                            <div className="bg-neuro-50 p-3 rounded-lg text-xs text-neuro-800 mb-3">
+                            <div className="bg-neuro-50 p-3 rounded-lg text-xs text-teal-500 mb-3">
                                 Examples: Aphasia, hemianopsia, dominant hand weakness, or deficits impacting occupation/lifestyle despite low NIHSS.
                             </div>
                             <div className="grid grid-cols-2 gap-3">
@@ -601,7 +601,7 @@ const EvtPathway: React.FC = () => {
                         {/* Anterior 0-6h: ASPECTS */}
                         {inputs.time === '0_6' && !isBasilar && (
                             <div ref={el => { fieldRefs.current['aspects'] = el; }}>
-                                <div className="bg-neuro-50 p-4 rounded-xl text-neuro-900 text-sm mb-6 border border-neuro-100">
+                                <div className="bg-neuro-50 p-4 rounded-xl text-teal-500 text-sm mb-6 border border-neuro-100">
                                     <h4 className="font-bold flex items-center mb-2"><Info size={16} className="mr-2"/> Early Window Imaging</h4>
                                     <p>Enter ASPECTS score from non-contrast CT.</p>
                                 </div>
@@ -808,8 +808,8 @@ const EvtPathway: React.FC = () => {
       <div id="evt-action-bar" className="mt-8 pt-4 md:border-t border-slate-100 scroll-mt-4 fixed bottom-[4.5rem] md:static left-0 right-0 bg-white/95 backdrop-blur md:bg-transparent p-4 md:p-0 border-t md:border-0 z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none">
          <div className="max-w-3xl mx-auto flex items-center justify-between gap-4">
              <button onClick={handleBack} disabled={activeSection === 0} className={`px-6 py-3 border border-slate-200 rounded-xl font-bold transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${activeSection === 0 ? 'opacity-0 pointer-events-none cursor-not-allowed' : 'bg-white text-slate-600 hover:bg-slate-50 hover:border-slate-300'}`}>Back</button>
-             {activeSection === 3 && (<button onClick={handleReset} className="hidden md:flex items-center text-slate-500 hover:text-neuro-600 font-bold px-4 py-2 rounded-lg transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><RotateCcw size={16} className="mr-2" /> Start Over</button>)}
-             {activeSection < 3 ? (<button onClick={handleNext} className="flex-1 md:flex-none px-8 py-3 bg-neuro-600 text-white rounded-xl font-bold hover:bg-neuro-700 shadow-lg shadow-neuro-200 transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">Next <ChevronRight size={16} className="ml-2" /></button>) : (<button onClick={copySummary} className="flex-1 md:flex-none px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><Copy size={16} className="mr-2" /> Copy to EMR</button>)}
+             {activeSection === 3 && (<button onClick={handleReset} className="hidden md:flex items-center text-slate-500 hover:text-neuro-500 font-bold px-4 py-2 rounded-lg transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><RotateCcw size={16} className="mr-2" /> Start Over</button>)}
+             {activeSection < 3 ? (<button onClick={handleNext} className="flex-1 md:flex-none px-8 py-3 bg-neuro-500 text-white rounded-xl font-bold hover:bg-teal-500 shadow-lg shadow-neuro-200 transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">Next <ChevronRight size={16} className="ml-2" /></button>) : (<button onClick={copySummary} className="flex-1 md:flex-none px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><Copy size={16} className="mr-2" /> Copy to EMR</button>)}
          </div>
          {activeSection === 3 && (<div className="md:hidden mt-4 text-center"><button onClick={handleReset} className="text-sm text-slate-400 font-bold flex items-center justify-center w-full p-3 hover:bg-slate-50 rounded-lg transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><RotateCcw size={14} className="mr-2" /> Start Over</button></div>)}
       </div>

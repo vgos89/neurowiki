@@ -117,7 +117,7 @@ const Home: React.FC = () => {
         <div className="max-w-2xl">
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
             The Digital{' '}
-            <span className="text-neuro-600">Neurology</span>
+            <span className="text-neuro-500">Neurology</span>
             {' '}Companion
           </h1>
           <p className="mt-3 text-base md:text-lg text-slate-600 leading-relaxed">
@@ -132,35 +132,35 @@ const Home: React.FC = () => {
             <Link 
               to="/calculators/evt-pathway" 
               onClick={() => trackQuickToolClick('thrombectomy')} 
-              className="text-sm font-medium text-neuro-600 hover:text-neuro-700 hover:underline transition-colors duration-150"
+              className="text-sm font-medium text-neuro-500 hover:text-teal-500 hover:underline transition-colors duration-150"
             >
               Thrombectomy →
             </Link>
             <Link 
               to="/calculators/elan-pathway" 
               onClick={() => trackQuickToolClick('elan_protocol')} 
-              className="text-sm font-medium text-neuro-600 hover:text-neuro-700 hover:underline transition-colors duration-150"
+              className="text-sm font-medium text-neuro-500 hover:text-teal-500 hover:underline transition-colors duration-150"
             >
               ELAN Protocol →
             </Link>
             <Link 
               to="/calculators/se-pathway" 
               onClick={() => trackQuickToolClick('status_epilepticus')} 
-              className="text-sm font-medium text-neuro-600 hover:text-neuro-700 hover:underline transition-colors duration-150"
+              className="text-sm font-medium text-neuro-500 hover:text-teal-500 hover:underline transition-colors duration-150"
             >
               Status Epilepticus →
             </Link>
             <Link 
               to="/calculators/migraine-pathway" 
               onClick={() => trackQuickToolClick('migraine_pathway')} 
-              className="text-sm font-medium text-neuro-600 hover:text-neuro-700 hover:underline transition-colors duration-150"
+              className="text-sm font-medium text-neuro-500 hover:text-teal-500 hover:underline transition-colors duration-150"
             >
               Migraine →
             </Link>
             <Link 
               to="/calculators/gca-pathway" 
               onClick={() => trackQuickToolClick('gca_pathway')} 
-              className="text-sm font-medium text-neuro-600 hover:text-neuro-700 hover:underline transition-colors duration-150"
+              className="text-sm font-medium text-neuro-500 hover:text-teal-500 hover:underline transition-colors duration-150"
             >
               GCA Helper →
             </Link>
@@ -227,7 +227,7 @@ const Home: React.FC = () => {
       <section className="pb-10">
         <div className="flex items-center justify-between mb-6 px-2">
             <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">Calculators</h2>
-            <Link to="/calculators" className="text-sm font-semibold text-neuro-600 hover:text-neuro-700 flex items-center transition-colors duration-150">
+            <Link to="/calculators" className="text-sm font-semibold text-neuro-500 hover:text-teal-500 flex items-center transition-colors duration-150">
                 View All <ChevronRight size={16} className="ml-1" />
             </Link>
         </div>
@@ -240,7 +240,7 @@ const Home: React.FC = () => {
                   className="group flex items-center gap-3 p-4 bg-white hover:bg-slate-50 rounded-lg border border-slate-200 hover:border-slate-300 transition-colors duration-150"
                 >
                   <div className="p-2 bg-slate-100 group-hover:bg-neuro-50 rounded-lg transition-colors duration-150">
-                    <Calculator size={20} className="text-slate-500 group-hover:text-neuro-600 transition-colors" />
+                    <Calculator size={20} className="text-slate-500 group-hover:text-neuro-500 transition-colors" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-900 text-sm">{calc.name}</h3>

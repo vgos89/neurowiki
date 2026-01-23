@@ -53,7 +53,7 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
               isCompleted
                 ? 'bg-emerald-100 text-emerald-600'
                 : isActive
-                  ? 'bg-neuro-100 text-neuro-600'
+                  ? 'bg-neuro-100 text-neuro-500'
                   : 'bg-slate-200 text-slate-500',
             ].join(' ')}
             aria-label={`Step ${stepNumber} of ${totalSteps}`}

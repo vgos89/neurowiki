@@ -172,7 +172,7 @@ const StatusEpilepticusPathway: React.FC = () => {
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32 md:pb-20">
       <div className="mb-6 flex items-start justify-between">
         <div>
-            <Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-600 mb-6 group">
+            <Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-500 mb-6 group">
                 <div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-colors duration-150"><ArrowLeft size={16} /></div> {getBackLabel()}
             </Link>
             <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-red-100 text-red-700 rounded-lg"><Activity size={24} /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">Status Epilepticus Pathway</h1></div>
