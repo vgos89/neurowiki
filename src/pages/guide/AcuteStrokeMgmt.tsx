@@ -33,7 +33,7 @@ export default function AcuteStrokeMgmt() {
           <Section number={1} title="Thrombectomy Selection" />
 
           <Paragraph viewMode={viewMode}>
-            Late window (6–24 h): <Trial name="DAWN" /> / <Trial name="DEFUSE-3" />. Large core: <Trial name="SELECT2" /> / <Trial name="ANGEL-ASPECT" /> (ASPECTS 3–5). Distal occlusions: by feasibility and deficit.
+            Late window (6–24 h): <Trial name="DAWN" path="/trials/dawn-trial" /> / <Trial name="DEFUSE-3" path="/trials/defuse-3-trial" />. Large core: <Trial name="SELECT2" path="/trials/select2-trial" /> / <Trial name="ANGEL-ASPECT" path="/trials/angel-aspect-trial" /> (ASPECTS 3–5). Distal occlusions: by feasibility and deficit.
           </Paragraph>
 
           <Section number={2} title="Neuro-ICU Monitoring" />
@@ -60,7 +60,7 @@ export default function AcuteStrokeMgmt() {
             viewMode={viewMode}
             detail="SHINE: intensive glucose control (80–130) did not improve outcomes and increased hypoglycemia. Target 140–180. Below 60 is dangerous."
           >
-            <strong>Glucose:</strong> <Value>140–180 mg/dL</Value> (<Trial name="SHINE" />). Avoid hypoglycemia <Value>&lt;60 mg/dL</Value>.
+            <strong>Glucose:</strong> <Value>140–180 mg/dL</Value> (<Trial name="SHINE" path="/trials/shine-trial" />). Avoid hypoglycemia <Value>&lt;60 mg/dL</Value>.
           </Paragraph>
 
           <Paragraph viewMode={viewMode} detail="Fever worsens infarct. Acetaminophen, cooling. Work up infection if persistent.">

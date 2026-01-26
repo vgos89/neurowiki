@@ -46,7 +46,7 @@ export default function Thrombectomy() {
             viewMode={viewMode}
             detail="ASPECTS 6–10 = small core. ASPECTS 3–5 = large core; SELECT2 and ANGEL-ASPECT showed benefit. Don't dismiss based on core alone."
           >
-            NCCT <Term detail="Alberta Stroke Program Early CT Score, 0–10">ASPECTS</Term> <Value>≥6</Value> (small core). <Trial name="SELECT2" /> and <Trial name="ANGEL-ASPECT" />: large core (ASPECTS 3–5 or core <Value>&gt;50 ml</Value>) also benefits.
+            NCCT <Term detail="Alberta Stroke Program Early CT Score, 0–10">ASPECTS</Term> <Value>≥6</Value> (small core). <Trial name="SELECT2" path="/trials/select2-trial" /> and <Trial name="ANGEL-ASPECT" path="/trials/angel-aspect-trial" />: large core (ASPECTS 3–5 or core <Value>&gt;50 ml</Value>) also benefits.
           </Paragraph>
 
           <SubSection title="Late Window (6–24 h)" />
@@ -55,7 +55,7 @@ export default function Thrombectomy() {
             viewMode={viewMode}
             detail="DAWN uses clinical–core mismatch (age, NIHSS, core volume). DEFUSE-3 uses core &lt;70 ml, mismatch ratio ≥1.8, volume ≥15 ml. Need CTP or MRI."
           >
-            <Trial name="DAWN" /> or <Trial name="DEFUSE-3" /> criteria. CTP or MRI to show <Term detail="small core, large deficit or penumbra">clinical–core mismatch</Term>.
+            <Trial name="DAWN" path="/trials/dawn-trial" /> or <Trial name="DEFUSE-3" path="/trials/defuse-3-trial" /> criteria. CTP or MRI to show <Term detail="small core, large deficit or penumbra">clinical–core mismatch</Term>.
           </Paragraph>
 
           <Section number={3} title="Posterior Circulation and Distal Occlusions" />
@@ -64,7 +64,7 @@ export default function Thrombectomy() {
             viewMode={viewMode}
             detail="Basilar: ATTENTION and BAOCHE. M2/M3, ACA, PCA: consider by technical feasibility and deficit; DISTAL/ESCAPE-MeVO did not show benefit for routine MeVO."
           >
-            <strong>Basilar:</strong> EVT up to 24 h (<Trial name="ATTENTION" />, <Trial name="BAOCHE" />). <strong>Distal/MeVO:</strong> M2/M3, ACA, PCA — by feasibility and deficit; evidence for routine EVT is limited.
+            <strong>Basilar:</strong> EVT up to 24 h (<Trial name="ATTENTION" path="/trials/attention-trial" />, <Trial name="BAOCHE" path="/trials/baoche-trial" />). <strong>Distal/MeVO:</strong> M2/M3, ACA, PCA — by feasibility and deficit; evidence for routine EVT is limited.
           </Paragraph>
 
           <Section number={4} title="Procedural Management" />

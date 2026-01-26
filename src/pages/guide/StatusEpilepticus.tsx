@@ -59,7 +59,7 @@ export default function StatusEpilepticus() {
           <Section number={3} title="Phase II: Urgent Control (10–30 min)" />
 
           <Paragraph viewMode={viewMode} detail="ESETT: LEV, fosphenytoin, valproate ~50% each. Pick one. Start as soon as Phase I fails — don't wait.">
-            <Trial name="ESETT" />: <Term detail="levetiracetam">Levetiracetam</Term>, <Term detail="phenytoin prodrug">Fosphenytoin</Term>, and <Term detail="valproic acid">Valproate</Term> equally effective (~50% cessation). Start if seizure continues after Phase I.
+            <Trial name="ESETT" path="/trials/esett" />: <Term detail="levetiracetam">Levetiracetam</Term>, <Term detail="phenytoin prodrug">Fosphenytoin</Term>, and <Term detail="valproic acid">Valproate</Term> equally effective (~50% cessation). Start if seizure continues after Phase I.
           </Paragraph>
 
           <SubSection title="Agents (Choose One)" />

@@ -101,7 +101,7 @@ export default function StrokeBasics() {
             viewMode={viewMode}
             detail="Small core + large penumbra (mismatch) = good outcomes with thrombectomy even at 24 hours."
           >
-            <strong>CT Perfusion</strong> required for 6–24h window per <Trial name="DAWN" /> and <Trial name="DEFUSE-3" /> criteria.
+            <strong>CT Perfusion</strong> required for 6–24h window per <Trial name="DAWN" path="/trials/dawn-trial" /> and <Trial name="DEFUSE-3" path="/trials/defuse-3-trial" /> criteria.
           </Paragraph>
 
           <Paragraph
@@ -146,7 +146,7 @@ export default function StrokeBasics() {
             viewMode={viewMode}
             detail="Many cryptogenic strokes show paroxysmal AF later. Consider loop recorder for unexplained strokes."
           >
-            <strong>Telemetry</strong> minimum 24 hours for paroxysmal AF (<Trial name="STROKE-AF" />).
+            <strong>Telemetry</strong> minimum 24 hours for paroxysmal AF (<Trial name="STROKE-AF" path="/trials/stroke-af" />).
           </Paragraph>
 
           <SubSection title="Echocardiography" />

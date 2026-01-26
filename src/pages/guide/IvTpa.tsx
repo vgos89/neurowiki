@@ -118,7 +118,7 @@ export default function IvTpa() {
             viewMode={viewMode}
             detail="DWI bright, FLAIR dark = likely &lt;4.5h. WAKE-UP used this. Perfusion mismatch (core &lt;70 ml, penumbra &gt;10 ml, ratio &gt;1.2) qualifies for extended-window trials like EXTEND."
           >
-            Eligible if: <strong>MRI</strong> DWI+ and FLAIR− suggests onset <Value>&lt;4.5 h</Value>; or <strong>CTP</strong> favorable penumbral profile per <Trial name="WAKE-UP" /> / <Trial name="EXTEND" />.
+            Eligible if: <strong>MRI</strong> DWI+ and FLAIR− suggests onset <Value>&lt;4.5 h</Value>; or <strong>CTP</strong> favorable penumbral profile per <Trial name="WAKE-UP" path="/trials/wake-up" /> / <Trial name="EXTEND" path="/trials/extend-trial" />.
           </Paragraph>
         </>
       )}
