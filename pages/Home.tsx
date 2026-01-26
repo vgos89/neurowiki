@@ -115,19 +115,19 @@ const Home: React.FC = () => {
       {/* Hero Section - Clinical Premium */}
       <section className="px-4 md:px-8 py-8 md:py-12">
         <div className="max-w-2xl">
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">
             The Digital{' '}
             <span className="text-neuro-500">Neurology</span>
             {' '}Companion
           </h1>
-          <p className="mt-3 text-base md:text-lg text-slate-600 leading-relaxed">
+          <p className="mt-3 text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
             Protocols, calculators, and guidelines for Neurologists.
           </p>
         </div>
         
         {/* Pathway Tools - Minimal Text Links */}
         <div className="mt-6">
-          <span className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Pathways & Calculators</span>
+          <span className="block text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">Pathways & Calculators</span>
           <div className="flex flex-wrap gap-4">
             <Link 
               to="/calculators/evt-pathway" 
@@ -168,30 +168,30 @@ const Home: React.FC = () => {
         </div>
 
         {/* Quick Search - Minimal Chips */}
-        <div className="mt-6 pt-6 border-t border-slate-100">
-          <span className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Quick Search</span>
+        <div className="mt-6 pt-6 border-t border-slate-100 dark:border-slate-700">
+          <span className="block text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">Quick Search</span>
           <div className="flex flex-wrap gap-2">
             <Link 
               to="/wiki/Stroke" 
-              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-md border border-slate-200 transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 rounded-md border border-slate-200 dark:border-slate-600 transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
             >
               Stroke
             </Link>
             <Link 
               to="/wiki/Sclerosis" 
-              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-md border border-slate-200 transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 rounded-md border border-slate-200 dark:border-slate-600 transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
             >
               MS
             </Link>
             <Link 
               to="/wiki/Epilepsy" 
-              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-md border border-slate-200 transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 rounded-md border border-slate-200 dark:border-slate-600 transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
             >
               Epilepsy
             </Link>
             <Link 
               to="/wiki/Meningitis" 
-              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-md border border-slate-200 transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 rounded-md border border-slate-200 dark:border-slate-600 transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
             >
               Meningitis
             </Link>
@@ -202,21 +202,21 @@ const Home: React.FC = () => {
       {/* Categories Grid */}
       <section>
         <div className="flex items-center justify-between mb-6 px-2">
-            <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">Subspecialties</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Subspecialties</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {categories.map((cat) => (
             <Link 
               key={cat.name} 
               to={`/wiki/${cat.name}`} 
-              className="group flex items-center gap-3 p-4 bg-white hover:bg-slate-50 rounded-lg border border-slate-200 hover:border-slate-300 transition-colors duration-150"
+              className="group flex items-center gap-3 p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-colors duration-150"
             >
-              <div className="p-2 bg-slate-100 group-hover:bg-neuro-50 rounded-lg transition-colors duration-150">
+              <div className="p-2 bg-slate-100 dark:bg-slate-700 group-hover:bg-neuro-50 dark:group-hover:bg-neuro-900/30 rounded-lg transition-colors duration-150">
                 {cat.icon}
               </div>
               <div>
-                <h3 className="font-semibold text-slate-900 text-sm">{cat.name}</h3>
-                <p className="text-xs text-slate-500 mt-0.5">{cat.desc}</p>
+                <h3 className="font-semibold text-slate-900 dark:text-white text-sm">{cat.name}</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{cat.desc}</p>
               </div>
             </Link>
           ))}
@@ -226,8 +226,8 @@ const Home: React.FC = () => {
       {/* Calculators Quick Access */}
       <section className="pb-10">
         <div className="flex items-center justify-between mb-6 px-2">
-            <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">Calculators</h2>
-            <Link to="/calculators" className="text-sm font-semibold text-neuro-500 hover:text-teal-500 flex items-center transition-colors duration-150">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Calculators</h2>
+            <Link to="/calculators" className="text-sm font-semibold text-neuro-500 dark:text-neuro-400 hover:text-teal-500 dark:hover:text-neuro-300 flex items-center transition-colors duration-150">
                 View All <ChevronRight size={16} className="ml-1" />
             </Link>
         </div>
@@ -237,14 +237,14 @@ const Home: React.FC = () => {
                   key={calc.id} 
                   to={`/calculators?id=${calc.id}`} 
                   onClick={() => trackQuickToolClick(calc.id)} 
-                  className="group flex items-center gap-3 p-4 bg-white hover:bg-slate-50 rounded-lg border border-slate-200 hover:border-slate-300 transition-colors duration-150"
+                  className="group flex items-center gap-3 p-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-colors duration-150"
                 >
-                  <div className="p-2 bg-slate-100 group-hover:bg-neuro-50 rounded-lg transition-colors duration-150">
-                    <Calculator size={20} className="text-slate-500 group-hover:text-neuro-500 transition-colors" />
+                  <div className="p-2 bg-slate-100 dark:bg-slate-700 group-hover:bg-neuro-50 dark:group-hover:bg-neuro-900/30 rounded-lg transition-colors duration-150">
+                    <Calculator size={20} className="text-slate-500 dark:text-slate-400 group-hover:text-neuro-500 dark:group-hover:text-neuro-400 transition-colors" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-slate-900 text-sm">{calc.name}</h3>
-                    <p className="text-xs text-slate-500 mt-0.5">{calc.desc}</p>
+                    <h3 className="font-semibold text-slate-900 dark:text-white text-sm">{calc.name}</h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{calc.desc}</p>
                   </div>
                 </Link>
             ))}

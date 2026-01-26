@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Brain, 
@@ -11,10 +11,18 @@ import {
   Home,
   X,
   Trash2,
-  Star
+  Star,
+  Moon,
+  Sun,
+  ChevronDown,
+  ChevronRight,
+  Menu,
+  PanelLeftClose
 } from 'lucide-react';
+import { useDarkMode } from '../src/contexts/DarkModeContext';
 import { FeedbackButton } from '../src/components/FeedbackButton';
 import ToolManagerModal from './ToolManagerModal';
+import { GUIDE_CONTENT } from '../data/guideContent';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -49,6 +57,9 @@ const categoryColors: Record<string, string> = {
 };
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const { isDark, toggleDarkMode } = useDarkMode();
+  // Debug logging
+  console.log('Layout rendered. isDark:', isDark, 'toggleDarkMode:', typeof toggleDarkMode);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [isToolModalOpen, setIsToolModalOpen] = useState(false);
   const location = useLocation();
@@ -72,6 +83,115 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       return ['evt-pathway', 'elan-pathway', 'nihss', 'migraine-pathway'];
     }
   });
+
+  // Check current section
+  const isOnGuidePage = location.pathname.startsWith('/guide');
+  const isOnTrialsPage = location.pathname.startsWith('/trials');
+  const isOnCalculatorsPage = location.pathname.startsWith('/calculators');
+
+  // Determines if we show the content panel (Guide, Trials only)
+  const showContentPanel = isOnGuidePage || isOnTrialsPage;
+
+  // Navigation expanded state - defaults to true (open) on first load
+  const [isNavExpanded, setIsNavExpanded] = useState(true);
+
+  // Expanded guide categories
+  const [expandedCategories, setExpandedCategories] = useState<string[]>(['Vascular Neurology']);
+
+  const toggleCategory = (category: string) => {
+    setExpandedCategories(prev =>
+      prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]
+    );
+  };
+
+  // Expanded trials subcategories
+  const [expandedTrialsSubcategories, setExpandedTrialsSubcategories] = useState<string[]>(['Thrombectomy']);
+
+  const toggleTrialsSubcategory = (subcategory: string) => {
+    setExpandedTrialsSubcategories(prev =>
+      prev.includes(subcategory) ? prev.filter(c => c !== subcategory) : [...prev, subcategory]
+    );
+  };
+
+  // Trials navigation structure
+  const TRIAL_STRUCTURE = [
+    {
+      title: "Vascular Neurology",
+      subcategories: [
+        {
+          title: "Thrombolysis",
+          description: "IV Alteplase & Tenecteplase Evidence",
+          ids: ['ninds-trial', 'ecass3-trial', 'extend-trial', 'eagle-trial']
+        },
+        {
+          title: "Thrombectomy",
+          description: "Large & Medium Vessel Occlusion evidence",
+          ids: ['distal-trial', 'escape-mevo-trial', 'defuse-3-trial', 'dawn-trial', 'select2-trial', 'angel-aspect-trial', 'attention-trial', 'baoche-trial']
+        },
+        {
+          title: "Antiplatelets & Prevention",
+          description: "DAPT, Anticoagulation, Lipids",
+          ids: ['chance-trial', 'point-trial', 'sps3-trial', 'socrates-trial', 'elan-study', 'sparcl-trial']
+        },
+        {
+          title: "Carotid & Intracranial Disease",
+          description: "Stenting vs Endarterectomy vs Medical",
+          ids: ['nascet-trial', 'crest-trial', 'sammpris-trial', 'weave-trial']
+        },
+        {
+          title: "Acute Management",
+          description: "Glycemic control & Systemic care",
+          ids: ['shine-trial']
+        }
+      ]
+    }
+  ];
+
+  // Get orphan trials (not in structure)
+  const trialOrphans = useMemo(() => {
+    if (!isOnTrialsPage) return [];
+    const structuredIds = new Set(TRIAL_STRUCTURE.flatMap(c => c.subcategories.flatMap(s => s.ids)));
+    return Object.values(GUIDE_CONTENT)
+      .filter(t => t.category === 'Neuro Trials' && !structuredIds.has(t.id));
+  }, [isOnTrialsPage]);
+
+  // Guide navigation structure - UPDATE PATHS TO MATCH YOUR ACTUAL ROUTES
+  const GUIDE_NAVIGATION = [
+    {
+      name: 'Vascular Neurology',
+      items: [
+        { name: 'Stroke Code Basics', path: '/guide/stroke-basics' },
+        { name: 'IV Thrombolytic Protocol', path: '/guide/iv-tpa' },
+        { name: 'Mechanical Thrombectomy', path: '/guide/thrombectomy' },
+        { name: 'ICH Management', path: '/guide/ich-management' },
+      ],
+    },
+    {
+      name: 'Epilepsy',
+      items: [
+        { name: 'Status Epilepticus', path: '/guide/status-epilepticus' },
+        { name: 'Seizure Workup', path: '/guide/seizure-workup' },
+      ],
+    },
+    {
+      name: 'Neurocritical Care',
+      items: [
+        { name: 'Altered Mental Status', path: '/guide/altered-mental-status' },
+        { name: 'Meningitis', path: '/guide/meningitis' },
+      ],
+    },
+    {
+      name: 'General Neurology',
+      items: [
+        { name: 'Headache Workup', path: '/guide/headache-workup' },
+        { name: 'Vertigo', path: '/guide/vertigo' },
+        { name: 'Weakness Workup', path: '/guide/weakness-workup' },
+        { name: 'GBS', path: '/guide/gbs' },
+        { name: 'Myasthenia Gravis', path: '/guide/myasthenia-gravis' },
+        { name: 'Multiple Sclerosis', path: '/guide/multiple-sclerosis' },
+      ],
+    },
+  ];
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,6 +220,44 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   useEffect(() => {
     if (mainRef.current) mainRef.current.scrollTop = 0;
   }, [location.pathname, location.search]);
+
+  // Auto-collapse navigation when content panel opens (Guide/Trials pages)
+  useEffect(() => {
+    if (showContentPanel) {
+      setIsNavExpanded(false);
+    }
+  }, [showContentPanel]);
+
+  // Auto-expand category when navigating to a guide page
+  useEffect(() => {
+    if (isOnGuidePage) {
+      // Find which category contains the current path
+      const currentCategory = GUIDE_NAVIGATION.find(cat =>
+        cat.items.some(item => location.pathname === item.path)
+      );
+      if (currentCategory && !expandedCategories.includes(currentCategory.name)) {
+        setExpandedCategories(prev => [...prev, currentCategory.name]);
+      }
+    }
+  }, [location.pathname, isOnGuidePage, expandedCategories]);
+
+  // Auto-expand trials subcategory when navigating to a trial page
+  useEffect(() => {
+    if (isOnTrialsPage && location.pathname.includes('/trials/')) {
+      const trialId = location.pathname.split('/trials/')[1]?.split('?')[0];
+      if (trialId) {
+        // Find which subcategory contains this trial
+        for (const cat of TRIAL_STRUCTURE) {
+          for (const sub of cat.subcategories) {
+            if (sub.ids.includes(trialId) && !expandedTrialsSubcategories.includes(sub.title)) {
+              setExpandedTrialsSubcategories(prev => [...prev, sub.title]);
+              return;
+            }
+          }
+        }
+      }
+    }
+  }, [location.pathname, isOnTrialsPage, expandedTrialsSubcategories]);
 
   // Desktop Navigation
   const desktopNavItems = [
@@ -161,100 +319,333 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
 
   return (
-    <div className="flex h-screen bg-surface-50 overflow-hidden">
-      {/* Sidebar for Desktop - Inspired Design */}
-      <aside className="hidden md:flex flex-col w-64 bg-white">
-        {/* Header with close button */}
-        <div className="px-4 py-4 flex items-center justify-between border-b border-slate-100">
-          <span className="text-base font-semibold text-slate-900">NeuroWiki</span>
-          <button
-            onClick={() => {/* Optional: Add sidebar collapse functionality */}}
-            className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
-            aria-label="Close sidebar"
-          >
-            <X size={16} />
-          </button>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
-          {desktopNavItems.map((item) => {
-            const active = isActive(item.path);
-            const baseClassName = `w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors duration-150 group min-h-[40px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
-              active
-                ? 'bg-slate-100 text-slate-900 font-medium'
-                : 'text-slate-700 hover:bg-slate-50 font-normal'
-            }`;
-            
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={baseClassName}
-              >
-                <span className={`${active ? 'text-slate-700' : 'text-slate-400 group-hover:text-slate-600'}`}>
-                  {item.icon}
-                </span>
-                <span className="text-left">{item.label}</span>
-              </Link>
-            );
-          })}
-          
-          {/* Tools Section */}
-          {selectedToolsData.length > 0 && (
-            <div className="mt-6 pt-4 border-t border-slate-100">
-              <div className="space-y-0.5">
-                {selectedToolsData.map((tool) => (
-                  <Link
-                    key={tool.id}
-                    to={`${tool.path}?from=calculators&category=${encodeURIComponent(tool.category)}`}
-                    className="group flex items-center justify-between px-3 py-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
-                  >
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <div className={`w-2 h-2 ${categoryColors[tool.category] || 'bg-slate-400'} rounded-sm flex-shrink-0`}></div>
-                      <span className="truncate">{tool.name}</span>
-                    </div>
-                    <button
-                      onClick={(e) => handleDeleteTool(tool.id, e)}
-                      className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-all duration-150 flex-shrink-0 ml-2"
-                      aria-label={`Remove ${tool.name}`}
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </Link>
-                ))}
+    <div className="flex h-screen bg-surface-50 dark:bg-slate-900 overflow-hidden transition-colors">
+      {/* Sidebar for Desktop */}
+      <aside className="hidden md:flex h-screen">
+        {/* ============================================ */}
+        {/* Universal Collapsible Navigation Strip      */}
+        {/* ============================================ */}
+        <div className={`${isNavExpanded ? 'w-48' : 'w-16'} bg-white dark:bg-slate-800 border-r border-slate-100 dark:border-slate-700 flex flex-col transition-all duration-200 ${isNavExpanded ? 'items-stretch' : 'items-center'} py-4`}>
+              {/* Logo */}
+              <div className={`${isNavExpanded ? 'px-2 mb-4' : 'mb-4'} flex items-center ${isNavExpanded ? 'gap-2' : 'justify-center'}`}>
+                <div className="bg-neuro-500 p-2 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Brain className="text-white" size={isNavExpanded ? 20 : 24} />
+                </div>
+                {isNavExpanded && (
+                  <span className="text-base font-black text-slate-900 dark:text-white tracking-tight">NeuroWiki</span>
+                )}
               </div>
-            </div>
-          )}
-          
-          {/* Add Tool Button */}
-          <div className="mt-6 pt-4 border-t border-slate-100">
-            <button
-              onClick={() => setIsToolModalOpen(true)}
-              className="w-full flex items-center justify-center px-3 py-2 text-sm text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors duration-150 min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
-            >
-              <span>Add Tool</span>
-            </button>
-          </div>
-        </nav>
 
-        {/* Footer - Simplified */}
-        <div className="px-4 py-4 border-t border-slate-100 text-slate-500 text-xs">
-          <p className="opacity-60">© 2026 NeuroWiki AI</p>
-        </div>
+              {/* Nav Icons */}
+              <nav className={`flex-1 flex flex-col gap-2 ${isNavExpanded ? 'px-2' : ''}`}>
+                <Link
+                  to="/"
+                  className={`${isNavExpanded ? 'flex items-center gap-3 px-3 py-2.5' : 'p-3 flex items-center justify-center'} rounded-xl transition-colors ${
+                    location.pathname === '/'
+                      ? 'bg-slate-100 dark:bg-slate-700 text-neuro-500'
+                      : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                  }`}
+                  title="Home"
+                >
+                  <Home size={20} className="flex-shrink-0" />
+                  {isNavExpanded && (
+                    <span className={`text-sm font-medium whitespace-nowrap ${
+                      location.pathname === '/'
+                        ? 'text-neuro-500'
+                        : 'text-slate-700 dark:text-slate-300'
+                    }`}>Home</span>
+                  )}
+                </Link>
+                <Link
+                  to="/guide"
+                  className={`${isNavExpanded ? 'flex items-center gap-3 px-3 py-2.5' : 'p-3 flex items-center justify-center'} rounded-xl transition-colors ${
+                    isOnGuidePage
+                      ? 'bg-slate-100 dark:bg-slate-700 text-neuro-500'
+                      : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                  }`}
+                  title="Resident Guide"
+                >
+                  <Stethoscope size={20} className="flex-shrink-0" />
+                  {isNavExpanded && (
+                    <span className={`text-sm font-medium whitespace-nowrap ${
+                      isOnGuidePage
+                        ? 'text-neuro-500'
+                        : 'text-slate-700 dark:text-slate-300'
+                    }`}>Resident Guide</span>
+                  )}
+                </Link>
+                <Link
+                  to="/trials"
+                  className={`${isNavExpanded ? 'flex items-center gap-3 px-3 py-2.5' : 'p-3 flex items-center justify-center'} rounded-xl transition-colors ${
+                    isOnTrialsPage
+                      ? 'bg-slate-100 dark:bg-slate-700 text-neuro-500'
+                      : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                  }`}
+                  title="Neuro Trials"
+                >
+                  <FlaskConical size={20} className="flex-shrink-0" />
+                  {isNavExpanded && (
+                    <span className={`text-sm font-medium whitespace-nowrap ${
+                      isOnTrialsPage
+                        ? 'text-neuro-500'
+                        : 'text-slate-700 dark:text-slate-300'
+                    }`}>Neuro Trials</span>
+                  )}
+                </Link>
+                {/* Calculators with Tools submenu */}
+                <div className="flex flex-col">
+                  <Link
+                    to="/calculators"
+                    className={`${isNavExpanded ? 'flex items-center gap-3 px-3 py-2.5' : 'p-3 flex items-center justify-center'} rounded-xl transition-colors ${
+                      isOnCalculatorsPage
+                        ? 'bg-slate-100 dark:bg-slate-700 text-neuro-500'
+                        : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                    }`}
+                    title="Calculators"
+                  >
+                    <Calculator size={20} className="flex-shrink-0" />
+                    {isNavExpanded && (
+                      <span className={`text-sm font-medium whitespace-nowrap ${
+                        isOnCalculatorsPage
+                          ? 'text-neuro-500'
+                          : 'text-slate-700 dark:text-slate-300'
+                      }`}>Calculators</span>
+                    )}
+                  </Link>
+                  
+                  {/* Tools under Calculators (shown when expanded) */}
+                  {isNavExpanded && selectedToolsData.length > 0 && (
+                    <div className="mt-1 ml-8 space-y-0.5">
+                      {selectedToolsData.map((tool) => (
+                        <Link
+                          key={tool.id}
+                          to={`${tool.path}?from=calculators&category=${encodeURIComponent(tool.category)}`}
+                          className="group flex items-center justify-between px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors duration-150 min-h-[32px]"
+                        >
+                          <div className="flex items-center gap-2 flex-1 min-w-0">
+                            <div className={`w-1.5 h-1.5 ${categoryColors[tool.category] || 'bg-slate-400'} rounded-sm flex-shrink-0`}></div>
+                            <span className="truncate">{tool.name}</span>
+                          </div>
+                          <button
+                            onClick={(e) => handleDeleteTool(tool.id, e)}
+                            className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-all duration-150 flex-shrink-0 ml-2"
+                            aria-label={`Remove ${tool.name}`}
+                          >
+                            <Trash2 size={12} />
+                          </button>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {/* Add Tool button under Calculators */}
+                  {isNavExpanded && (
+                    <button
+                      onClick={() => setIsToolModalOpen(true)}
+                      className="mt-1 ml-8 flex items-center justify-start gap-2 px-3 py-1.5 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors border border-slate-200 dark:border-slate-600"
+                    >
+                      <span>+ Add Tool</span>
+                    </button>
+                  )}
+                </div>
+              </nav>
+
+              {/* Footer (shown when expanded) */}
+              {isNavExpanded && (
+                <div className="px-4 py-4 border-t border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs mx-2">
+                  <p className="opacity-60">© 2026 NeuroWiki AI</p>
+                </div>
+              )}
+
+              {/* Collapse Button at Bottom */}
+              <button
+                onClick={() => setIsNavExpanded(!isNavExpanded)}
+                className={`p-3 mt-auto rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors ${isNavExpanded ? 'mx-2' : ''}`}
+                title={isNavExpanded ? 'Collapse navigation' : 'Expand navigation'}
+              >
+                {isNavExpanded ? <PanelLeftClose size={20} /> : <Menu size={20} />}
+              </button>
+            </div>
+
+            {/* Content Panel (Guide or Trials only) */}
+            {showContentPanel && (
+              <div className="w-64 bg-white dark:bg-slate-800 border-r border-slate-100 dark:border-slate-700 flex flex-col overflow-hidden">
+              {/* Panel Header */}
+              <div className="px-4 py-4 border-b border-slate-100 dark:border-slate-700">
+                <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                  {isOnGuidePage ? 'Resident Guide' : 'Neuro Trials'}
+                </h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  {isOnGuidePage ? 'Clinical Protocols' : 'Clinical Evidence'}
+                </p>
+              </div>
+
+              {/* Search */}
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input
+                    type="text"
+                    placeholder={isOnGuidePage ? 'Search guidelines...' : 'Search trials...'}
+                    className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-700 border-0 rounded-lg text-sm placeholder-slate-400 dark:placeholder-slate-500 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-neuro-500"
+                  />
+                </div>
+              </div>
+
+              {/* Panel Content */}
+              <div className="flex-1 overflow-y-auto px-3 py-3">
+                {/* Guide Categories */}
+                {isOnGuidePage && (
+                  <div>
+                    {GUIDE_NAVIGATION.map((category) => (
+                      <div key={category.name} className="mb-1">
+                        <button
+                          onClick={() => toggleCategory(category.name)}
+                          className="w-full flex items-center justify-between px-3 py-2.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider hover:text-slate-700 dark:hover:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                        >
+                          <span>{category.name}</span>
+                          <ChevronDown
+                            size={14}
+                            className={`transition-transform duration-200 ${
+                              expandedCategories.includes(category.name) ? 'rotate-180' : ''
+                            }`}
+                          />
+                        </button>
+
+                        {expandedCategories.includes(category.name) && (
+                          <div className="mt-1 space-y-0.5">
+                            {category.items.map((item) => {
+                              const itemActive = location.pathname === item.path;
+                              return (
+                                <Link
+                                  key={item.path}
+                                  to={item.path}
+                                  className={`block px-3 py-2 ml-2 rounded-lg text-sm transition-colors border-l-2 ${
+                                    itemActive
+                                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium border-blue-500'
+                                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 border-transparent hover:border-slate-300'
+                                  }`}
+                                >
+                                  {item.name}
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Trials Navigation */}
+                {isOnTrialsPage && (
+                  <div>
+                    {TRIAL_STRUCTURE.map((cat) => (
+                      <div key={cat.title} className="mb-1">
+                        <h3 className="px-3 py-2 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider text-left">
+                          {cat.title}
+                        </h3>
+                        <div className="space-y-0.5">
+                          {cat.subcategories.map(sub => {
+                            const isOpen = expandedTrialsSubcategories.includes(sub.title);
+                            return (
+                              <div key={sub.title}>
+                                <button
+                                  onClick={() => toggleTrialsSubcategory(sub.title)}
+                                  className="w-full flex items-center justify-between px-3 py-2.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider hover:text-slate-700 dark:hover:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-left"
+                                >
+                                  <span className="text-left">{sub.title}</span>
+                                  <ChevronDown
+                                    size={14}
+                                    className={`transition-transform duration-200 flex-shrink-0 ${
+                                      isOpen ? 'rotate-180' : ''
+                                    }`}
+                                  />
+                                </button>
+
+                                {isOpen && (
+                                  <div className="mt-1 space-y-0.5">
+                                    {sub.ids.map(id => {
+                                      const trial = GUIDE_CONTENT[id];
+                                      if (!trial) return null;
+                                      const itemActive = location.pathname === `/trials/${id}`;
+                                      return (
+                                        <Link
+                                          key={id}
+                                          to={`/trials/${id}?from=trials&category=${encodeURIComponent(sub.title)}`}
+                                          className={`block px-3 py-2 ml-2 rounded-lg text-sm transition-colors border-l-2 ${
+                                            itemActive
+                                              ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium border-blue-500'
+                                              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 border-transparent hover:border-slate-300'
+                                          }`}
+                                        >
+                                          {trial.title.replace(/Trial:|Study:/gi, '').trim()}
+                                        </Link>
+                                      );
+                                    })}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* Orphan Trials */}
+                    {trialOrphans.length > 0 && (
+                      <div className="mt-4">
+                        <h3 className="px-3 py-2 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider text-left">
+                          Other Trials
+                        </h3>
+                        <div className="space-y-0.5">
+                          {trialOrphans.map(trial => {
+                            const itemActive = location.pathname === `/trials/${trial.id}`;
+                            return (
+                              <Link
+                                key={trial.id}
+                                to={`/trials/${trial.id}?from=trials`}
+                                className={`block px-3 py-2 ml-2 rounded-lg text-sm transition-colors border-l-2 ${
+                                  itemActive
+                                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium border-blue-500'
+                                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 border-transparent hover:border-slate-300'
+                                }`}
+                              >
+                                {trial.title}
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+                {/* Panel Footer */}
+                <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-700">
+                  <button
+                    onClick={() => setIsToolModalOpen(true)}
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors border border-slate-200 dark:border-slate-600"
+                  >
+                    <span>+ Custom Tool</span>
+                  </button>
+                </div>
+              </div>
+            )}
       </aside>
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden relative">
         {/* Header */}
-        <header className="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-4 md:px-8 z-20 shadow-sm relative">
+        <header className="h-16 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-4 md:px-8 z-20 shadow-sm relative">
           
           {/* Mobile Search Overlay */}
           {isMobileSearchOpen && (
-            <div className="absolute inset-0 bg-white z-50 flex items-center px-4 animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="absolute inset-0 bg-white dark:bg-slate-800 z-50 flex items-center px-4 animate-in fade-in slide-in-from-top-2 duration-200">
                <button 
                 onClick={() => setIsMobileSearchOpen(false)}
-                className="p-3 text-slate-400 hover:text-slate-600 mr-2 rounded-full hover:bg-slate-100 touch-manipulation active:scale-95 transform-gpu transition-colors duration-150 min-h-[44px] min-w-[44px] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+                className="p-3 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 mr-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 touch-manipulation active:scale-95 transform-gpu transition-colors duration-150 min-h-[44px] min-w-[44px] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
                 aria-label="Close Search"
                >
                  <ArrowLeft size={24} />
@@ -263,12 +654,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   <input
                     ref={mobileSearchInputRef}
                     type="text"
-                    className="w-full py-3 pl-11 pr-4 bg-slate-50 border-none ring-1 ring-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-neuro-500 text-base font-medium text-slate-800 placeholder:text-slate-400"
+                    className="w-full py-3 pl-11 pr-4 bg-slate-50 dark:bg-slate-700 border-none ring-1 ring-slate-200 dark:ring-slate-600 rounded-2xl focus:outline-none focus:ring-2 focus:ring-neuro-500 text-base font-medium text-slate-800 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     placeholder="Search protocols..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
-                  <Search className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400" />
+                  <Search className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400 dark:text-slate-500" />
                </form>
             </div>
           )}
@@ -279,7 +670,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <div className="bg-neuro-500 p-3 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center">
                  <Brain className="text-white" size={24} />
               </div>
-              <span className="text-xl font-black text-slate-900 tracking-tight">NeuroWiki</span>
+              <span className="text-xl font-black text-slate-900 dark:text-white tracking-tight">NeuroWiki</span>
             </div>
           </div>
 
@@ -291,7 +682,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </div>
                 <input
                   type="text"
-                  className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-xl leading-5 bg-slate-50/50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-neuro-500/20 focus:border-neuro-500 sm:text-sm transition-colors duration-150 shadow-sm"
+                  className="block w-full pl-10 pr-3 py-2 border border-slate-200 dark:border-slate-600 rounded-xl leading-5 bg-slate-50/50 dark:bg-slate-700/50 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-neuro-500/20 focus:border-neuro-500 sm:text-sm transition-colors duration-150 shadow-sm text-slate-900 dark:text-white"
                   placeholder="Search clinical guidelines, trials, calculators..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -302,21 +693,32 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="flex items-center space-x-2">
             <button 
               onClick={() => setIsMobileSearchOpen(true)}
-              className="md:hidden p-3 text-slate-500 hover:bg-slate-100 rounded-full transition-colors duration-150 active:scale-95 transform-gpu touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+              className="md:hidden p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors duration-150 active:scale-95 transform-gpu touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
               aria-label="Open Search"
             >
               <Search size={24} />
             </button>
             <div className="hidden md:flex items-center space-x-4">
-               <Link to="/calculators" className="text-xs font-bold text-slate-400 hover:text-neuro-500 transition-colors uppercase tracking-wider flex items-center">
+               <Link to="/calculators" className="text-xs font-bold text-slate-400 dark:text-slate-500 hover:text-neuro-500 dark:hover:text-neuro-400 transition-colors uppercase tracking-wider flex items-center">
                   Quick Calc <Calculator size={14} className="ml-1.5" />
                </Link>
+               <button
+                 onClick={() => {
+                   console.log('Dark mode toggle clicked. Current isDark:', isDark);
+                   toggleDarkMode();
+                   console.log('Toggle function called. New value should be:', !isDark);
+                 }}
+                 className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                 aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+               >
+                 {isDark ? <Sun size={18} /> : <Moon size={18} />}
+               </button>
             </div>
           </div>
         </header>
 
         {/* Main Content with extra padding for mobile bottom nav + sticky actions */}
-        <main ref={mainRef} className="flex-1 overflow-y-auto bg-jet-500 p-4 md:p-8 scroll-smooth pb-20 md:pb-8">
+        <main ref={mainRef} className="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-900 p-4 md:p-8 scroll-smooth pb-20 md:pb-8">
           <div className="max-w-7xl mx-auto">
             {children}
           </div>
@@ -333,7 +735,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         />
 
         {/* Mobile Bottom Navigation Bar - Clinical Premium */}
-        <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-slate-200/80 px-2 py-2 pb-safe z-50">
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-800/95 backdrop-blur-lg border-t border-slate-200/80 dark:border-slate-700/80 px-2 py-2 pb-safe z-50">
           <div className="flex items-center justify-around max-w-md mx-auto">
             {mobileNavItems.map((item) => {
               const active = isActive(item.path);
@@ -341,7 +743,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <Link 
                   key={item.path} 
                   to={item.path} 
-                  className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl min-w-[64px] transition-colors duration-150 touch-manipulation ${active ? 'text-neuro-500' : 'text-slate-400 hover:text-neuro-500'}`}
+                  className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl min-w-[64px] transition-colors duration-150 touch-manipulation ${active ? 'text-neuro-500 dark:text-neuro-400' : 'text-slate-400 dark:text-slate-500 hover:text-neuro-500 dark:hover:text-neuro-400'}`}
                 >
                   <div className="w-5 h-5 flex items-center justify-center">
                     {item.icon}

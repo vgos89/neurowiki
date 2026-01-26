@@ -165,17 +165,17 @@ export default function Calculators() {
   const pathwayCount = tools.filter((t) => t.type === 'pathway').length;
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
       {/* Compact Header with Integrated Filters */}
-      <div className="bg-white border-b border-slate-200">
+      <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
         <div className="max-w-2xl mx-auto px-5 md:px-8">
           {/* Title Row */}
           <div className="flex items-center justify-between py-3">
-            <h1 className="text-lg font-bold text-slate-900">Clinical Tools</h1>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white">Clinical Tools</h1>
             <button
               onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
               className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                showFavoritesOnly ? 'bg-amber-100 text-amber-700' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-100'
+                showFavoritesOnly ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
               }`}
             >
               <svg className="w-4 h-4" fill={showFavoritesOnly ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
@@ -186,22 +186,22 @@ export default function Calculators() {
           </div>
 
           {/* Type Filter - Segmented Control */}
-          <div className="flex gap-1 p-1 bg-slate-100 rounded-lg mb-3">
+          <div className="flex gap-1 p-1 bg-slate-100 dark:bg-slate-700 rounded-lg mb-3">
             <button
               onClick={() => setTypeFilter('all')}
-              className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${typeFilter === 'all' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+              className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${typeFilter === 'all' ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'}`}
             >
               All ({tools.length})
             </button>
             <button
               onClick={() => setTypeFilter('calculator')}
-              className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${typeFilter === 'calculator' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+              className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${typeFilter === 'calculator' ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'}`}
             >
               Calculators ({calcCount})
             </button>
             <button
               onClick={() => setTypeFilter('pathway')}
-              className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${typeFilter === 'pathway' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+              className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${typeFilter === 'pathway' ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'}`}
             >
               Pathways ({pathwayCount})
             </button>
@@ -229,7 +229,7 @@ export default function Calculators() {
             {activeCategory && (
               <button
                 onClick={() => setActiveCategory(null)}
-                className="flex-shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 transition-all"
+                className="flex-shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-600 transition-all"
               >
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -244,14 +244,14 @@ export default function Calculators() {
       {/* Main Content */}
       <main className="max-w-2xl mx-auto px-5 md:px-8 py-6">
         {showFavoritesOnly && (
-          <div className="mb-4 px-4 py-3 bg-amber-50 border border-amber-100 rounded-xl flex items-center justify-between">
+          <div className="mb-4 px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/50 rounded-xl flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 text-amber-600" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-amber-600 dark:text-amber-400" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
               </svg>
-              <span className="text-sm text-amber-800 font-medium">Showing favorites only</span>
+              <span className="text-sm text-amber-800 dark:text-amber-300 font-medium">Showing favorites only</span>
             </div>
-            <button onClick={() => setShowFavoritesOnly(false)} className="text-sm text-amber-600 hover:text-amber-800 font-medium">
+            <button onClick={() => setShowFavoritesOnly(false)} className="text-sm text-amber-600 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 font-medium">
               Show all
             </button>
           </div>
@@ -262,8 +262,8 @@ export default function Calculators() {
             {!activeCategory && (
               <div className="flex items-center gap-2 mb-3 pl-1">
                 <span className={`w-2.5 h-2.5 rounded-full ${categoryStyles[category].dot}`} />
-                <h2 className={`text-sm font-semibold tracking-wide ${categoryStyles[category].text}`}>{categoryNames[category]}</h2>
-                <span className="text-xs text-slate-400">{categoryTools.length}</span>
+                <h2 className={`text-sm font-semibold tracking-wide ${categoryStyles[category].text} dark:text-slate-300`}>{categoryNames[category]}</h2>
+                <span className="text-xs text-slate-400 dark:text-slate-500">{categoryTools.length}</span>
               </div>
             )}
             <div className="space-y-2">
@@ -271,25 +271,25 @@ export default function Calculators() {
                 <Link
                   key={tool.id}
                   to={`${tool.path}${tool.path.includes('?') ? '&' : '?'}from=calculators&category=${encodeURIComponent(tool.category)}`}
-                  className={`group flex items-center justify-between p-4 bg-white rounded-xl border-l-4 ${categoryStyles[category].border} border border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all`}
+                  className={`group flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl border-l-4 ${categoryStyles[category].border} border border-slate-100 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600 hover:shadow-sm dark:hover:shadow-slate-900/50 transition-all`}
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">{tool.name}</h3>
+                      <h3 className="font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{tool.name}</h3>
                       <span
                         className={`px-2 py-0.5 text-xs font-medium rounded ${
-                          tool.type === 'pathway' ? 'bg-indigo-50 text-indigo-600' : 'bg-slate-100 text-slate-500'
+                          tool.type === 'pathway' ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
                         }`}
                       >
                         {tool.type === 'pathway' ? 'Pathway' : 'Calc'}
                       </span>
                     </div>
-                    <p className="text-sm text-slate-500 mt-0.5">{tool.description}</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{tool.description}</p>
                   </div>
                   <div className="flex items-center gap-1 ml-3">
                     <button
                       onClick={(e) => toggleFavorite(tool.id, e)}
-                      className={`p-2 rounded-lg transition-colors ${favorites.includes(tool.id) ? 'text-amber-500' : 'text-slate-300 hover:text-slate-400'}`}
+                      className={`p-2 rounded-lg transition-colors ${favorites.includes(tool.id) ? 'text-amber-500 dark:text-amber-400' : 'text-slate-300 dark:text-slate-500 hover:text-slate-400 dark:hover:text-slate-400'}`}
                       aria-label={favorites.includes(tool.id) ? 'Remove from favorites' : 'Add to favorites'}
                     >
                       <svg className="w-5 h-5" fill={favorites.includes(tool.id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">

@@ -63,35 +63,35 @@ const NihssCalculator: React.FC = () => {
   return (
     <div className="max-w-xl mx-auto pb-32">
       <div
-        className={`sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-colors duration-300 ease-in-out px-4 overflow-hidden ${isHeaderCompact ? 'py-2 cursor-pointer' : 'py-3'}`}
+        className={`sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm transition-colors duration-300 ease-in-out px-4 overflow-hidden ${isHeaderCompact ? 'py-2 cursor-pointer' : 'py-3'}`}
         onClick={() => isHeaderCompact && setIsHeaderCompact(false)}
       >
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <Link to={getBackPath()} onClick={(e) => e.stopPropagation()} className="p-2 -ml-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors">
+            <Link to={getBackPath()} onClick={(e) => e.stopPropagation()} className="p-2 -ml-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
               <ArrowLeft size={20} />
             </Link>
-            <h1 className={`font-black text-slate-900 ml-2 transition-colors duration-150 ${isHeaderCompact ? 'text-lg' : 'text-xl'}`}>NIHSS</h1>
+            <h1 className={`font-black text-slate-900 dark:text-white ml-2 transition-colors duration-150 ${isHeaderCompact ? 'text-lg' : 'text-xl'}`}>NIHSS</h1>
           </div>
-          {isHeaderCompact && <div className="text-sm font-black text-slate-900 animate-in fade-in">Score: {calculateTotal(nihssValues)}</div>}
+          {isHeaderCompact && <div className="text-sm font-black text-slate-900 dark:text-white animate-in fade-in">Score: {calculateTotal(nihssValues)}</div>}
           {!isHeaderCompact && (
-            <button onClick={handleFavToggle} className="p-3 rounded-full hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
-              <Star size={20} className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'} />
+            <button onClick={handleFavToggle} className="p-3 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
+              <Star size={20} className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300 dark:text-slate-600'} />
             </button>
           )}
         </div>
         <div className={`transition-colors duration-300 ease-in-out overflow-hidden ${isHeaderCompact ? 'max-h-0 opacity-0' : 'max-h-40 opacity-100 mt-4'}`}>
           <div className="flex flex-col gap-3 pb-1" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center bg-slate-100 rounded-lg p-1 w-full">
-              <button onClick={() => setNihssMode('rapid')} className={`flex-1 px-3 py-1.5 rounded-md text-xs font-bold transition-colors duration-150 ${nihssMode === 'rapid' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500'}`}>Rapid</button>
-              <button onClick={() => setNihssMode('detailed')} className={`flex-1 px-3 py-1.5 rounded-md text-xs font-bold transition-colors duration-150 ${nihssMode === 'detailed' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500'}`}>Detailed</button>
+            <div className="flex items-center bg-slate-100 dark:bg-slate-700 rounded-lg p-1 w-full">
+              <button onClick={() => setNihssMode('rapid')} className={`flex-1 px-3 py-1.5 rounded-md text-xs font-bold transition-colors duration-150 ${nihssMode === 'rapid' ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400'}`}>Rapid</button>
+              <button onClick={() => setNihssMode('detailed')} className={`flex-1 px-3 py-1.5 rounded-md text-xs font-bold transition-colors duration-150 ${nihssMode === 'detailed' ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400'}`}>Detailed</button>
             </div>
-            <div className="relative flex bg-slate-100 rounded-lg p-1 h-9 cursor-pointer w-full" onClick={() => setUserMode((m) => (m === 'resident' ? 'attending' : 'resident'))}>
-              <div className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-md bg-white shadow-sm transition-colors duration-300 ease-out border border-black/5 ${userMode === 'resident' ? 'left-1' : 'left-[calc(50%+0px)]'}`} />
-              <button onClick={(e) => { e.stopPropagation(); setUserMode('resident'); }} className={`relative z-10 flex-1 flex items-center justify-center px-2 text-xs font-bold transition-colors min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${userMode === 'resident' ? 'text-slate-900' : 'text-slate-500'}`}>
+            <div className="relative flex bg-slate-100 dark:bg-slate-700 rounded-lg p-1 h-9 cursor-pointer w-full" onClick={() => setUserMode((m) => (m === 'resident' ? 'attending' : 'resident'))}>
+              <div className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-md bg-white dark:bg-slate-600 shadow-sm transition-colors duration-300 ease-out border border-black/5 dark:border-slate-500 ${userMode === 'resident' ? 'left-1' : 'left-[calc(50%+0px)]'}`} />
+              <button onClick={(e) => { e.stopPropagation(); setUserMode('resident'); }} className={`relative z-10 flex-1 flex items-center justify-center px-2 text-xs font-bold transition-colors min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${userMode === 'resident' ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400'}`}>
                 <UserCog size={12} className={`mr-1.5 ${userMode === 'resident' ? 'text-neuro-500' : ''}`} /> Resident
               </button>
-              <button onClick={(e) => { e.stopPropagation(); setUserMode('attending'); }} className={`relative z-10 flex-1 flex items-center justify-center px-2 text-xs font-bold transition-colors min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${userMode === 'attending' ? 'text-slate-900' : 'text-slate-500'}`}>
+              <button onClick={(e) => { e.stopPropagation(); setUserMode('attending'); }} className={`relative z-10 flex-1 flex items-center justify-center px-2 text-xs font-bold transition-colors min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${userMode === 'attending' ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400'}`}>
                 <Zap size={12} className={`mr-1.5 ${userMode === 'attending' ? 'text-amber-500' : ''}`} /> Attending
               </button>
             </div>
@@ -109,7 +109,7 @@ const NihssCalculator: React.FC = () => {
               return (
                 <React.Fragment key="motor-header">
                   <div className="flex justify-between items-end border-b border-slate-100 pb-2 mt-8 mb-4">
-                    <h3 className="font-black text-sm text-slate-400 uppercase tracking-widest">Motor</h3>
+                    <h3 className="font-black text-sm text-slate-400 dark:text-slate-500 uppercase tracking-widest">Motor</h3>
                     <button onClick={() => setAllMotor(0)} className="text-xs font-bold text-neuro-500 bg-neuro-50 px-2 py-1 rounded hover:bg-neuro-100">Normal Exam</button>
                   </div>
                   <NihssItemRow key={item.id} item={item} value={nihssValues[item.id] ?? 0} onChange={(v) => handleNihssChange(item.id, v)} mode={nihssMode} userMode={userMode} showPearl={showPearl} onShowPearl={() => setActivePearl((p) => (p === item.id ? null : item.id))} warning={warning} />

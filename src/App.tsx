@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { DarkModeProvider } from './contexts/DarkModeContext';
 import Layout from '../components/Layout';
 import { PublishGate } from './components/PublishGate';
 import Home from '../pages/Home';
@@ -33,9 +34,10 @@ import DisclaimerModal from './components/DisclaimerModal';
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <DisclaimerModal />
-      <Layout>
+    <DarkModeProvider>
+      <Router>
+        <DisclaimerModal />
+        <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/wiki/:topic" element={<Wiki />} />
@@ -68,8 +70,9 @@ const App: React.FC = () => {
           <Route path="/trials/:topicId" element={<PublishGate><ResidentGuide context="trials" /></PublishGate>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </Layout>
-    </Router>
+        </Layout>
+      </Router>
+    </DarkModeProvider>
   );
 };
 
