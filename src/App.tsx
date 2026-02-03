@@ -1,11 +1,13 @@
-
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import { PublishGate } from './components/PublishGate';
-import DisclaimerModal from './components/DisclaimerModal';
 import { TrialModalProvider, useTrialModal } from './contexts/TrialModalContext';
-import { GlobalTrialModal } from './components/GlobalTrialModal';
+
+const DisclaimerModal = lazy(() => import('./components/DisclaimerModal'));
+const GlobalTrialModal = lazy(() =>
+  import('./components/GlobalTrialModal').then((m) => ({ default: m.GlobalTrialModal }))
+);
 
 // Lazy load all page components for code splitting
 const Home = lazy(() => import('./pages/Home'));
@@ -49,15 +51,17 @@ const WeaknessWorkup = lazy(() => import('./pages/guide/WeaknessWorkup'));
 
 const TrialModalWrapper: React.FC = () => {
   const { isOpen, trialSlug, closeTrial } = useTrialModal();
-  
+
   if (!trialSlug) return null;
-  
+
   return (
-    <GlobalTrialModal 
-      trialSlug={trialSlug} 
-      isOpen={isOpen} 
-      onClose={closeTrial} 
-    />
+    <Suspense fallback={null}>
+      <GlobalTrialModal
+        trialSlug={trialSlug}
+        isOpen={isOpen}
+        onClose={closeTrial}
+      />
+    </Suspense>
   );
 };
 
@@ -65,7 +69,9 @@ const App: React.FC = () => {
   return (
     <Router>
       <TrialModalProvider>
-        <DisclaimerModal />
+        <Suspense fallback={null}>
+          <DisclaimerModal />
+        </Suspense>
         <Layout>
           <Suspense fallback={
             <div className="min-h-screen flex items-center justify-center bg-slate-50">

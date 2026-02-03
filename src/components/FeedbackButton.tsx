@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { useLocation } from 'react-router-dom';
-import FeedbackModal from './FeedbackModal';
+
+const FeedbackModal = lazy(() => import('./FeedbackModal'));
 
 export type PageType = 'article' | 'calculator' | 'pathway' | 'trial';
 
@@ -59,13 +60,17 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = (props) => {
         </span>
       </button>
 
-      <FeedbackModal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        pageTitle={pageTitle}
-        pageType={pageType}
-        pagePath={pagePath}
-      />
+      {isOpen && (
+        <Suspense fallback={null}>
+          <FeedbackModal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            pageTitle={pageTitle}
+            pageType={pageType}
+            pagePath={pagePath}
+          />
+        </Suspense>
+      )}
     </>
   );
 };

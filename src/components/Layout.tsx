@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useMemo, lazy, Suspense } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Brain, 
@@ -18,8 +18,9 @@ import {
   PanelLeftClose
 } from 'lucide-react';
 import { FeedbackButton } from './FeedbackButton';
-import ToolManagerModal from './ToolManagerModal';
-import { GUIDE_CONTENT } from '../data/guideContent';
+import type { GuideTopic } from '../data/guideContent';
+
+const ToolManagerModal = lazy(() => import('./ToolManagerModal'));
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -57,12 +58,20 @@ const categoryColors: Record<string, string> = {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [isToolModalOpen, setIsToolModalOpen] = useState(false);
+  const [guideContent, setGuideContent] = useState<Record<string, GuideTopic> | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const mobileSearchInputRef = useRef<HTMLInputElement>(null);
   const mainRef = useRef<HTMLElement>(null);
-  
+
+  // Lazy load guide/trials data only when user visits guide or trials section (reduces initial bundle)
+  useEffect(() => {
+    if (location.pathname.startsWith('/guide') || location.pathname.startsWith('/trials')) {
+      import('../data/guideContent').then((m) => setGuideContent(m.GUIDE_CONTENT));
+    }
+  }, [location.pathname]);
+
   // Search state for sidebar filtering (separate from main search)
   const [sidebarSearchQuery, setSidebarSearchQuery] = useState('');
   
@@ -153,13 +162,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   ];
 
+  const guideContentMap = guideContent ?? {};
+
   // Get orphan trials (not in structure)
   const trialOrphans = useMemo(() => {
     if (!isOnTrialsPage) return [];
     const structuredIds = new Set(TRIAL_STRUCTURE.flatMap(c => c.subcategories.flatMap(s => s.ids)));
-    return Object.values(GUIDE_CONTENT)
+    return Object.values(guideContentMap)
       .filter(t => t.category === 'Neuro Trials' && !structuredIds.has(t.id));
-  }, [isOnTrialsPage]);
+  }, [isOnTrialsPage, guideContent]);
 
   // Guide navigation structure - UPDATE PATHS TO MATCH YOUR ACTUAL ROUTES
   const GUIDE_NAVIGATION = [
@@ -583,7 +594,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                             // Filter trials based on search query
                             const filteredTrialIds = sidebarSearchQuery.trim()
                               ? sub.ids.filter(id => {
-                                  const trial = GUIDE_CONTENT[id];
+                                  const trial = guideContentMap[id];
                                   if (!trial) return false;
                                   const trialTitle = trial.title.replace(/Trial:|Study:/gi, '').trim();
                                   return trialTitle.toLowerCase().includes(sidebarSearchQuery.toLowerCase());
@@ -622,7 +633,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                 {isOpen && (
                                   <div className="mt-1 space-y-0.5">
                                     {filteredTrialIds.map(id => {
-                                      const trial = GUIDE_CONTENT[id];
+                                      const trial = guideContentMap[id];
                                       if (!trial) return null;
                                       const itemActive = location.pathname === `/trials/${id}`;
                                       return (
@@ -778,13 +789,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         <FeedbackButton />
 
-        {/* Tool Manager Modal */}
-        <ToolManagerModal
-          isOpen={isToolModalOpen}
-          onClose={() => setIsToolModalOpen(false)}
-          selectedTools={selectedTools}
-          onToolsChange={handleToolsChange}
-        />
+        {/* Tool Manager Modal - lazy loaded when opened */}
+        {isToolModalOpen && (
+          <Suspense fallback={null}>
+            <ToolManagerModal
+              isOpen={isToolModalOpen}
+              onClose={() => setIsToolModalOpen(false)}
+              selectedTools={selectedTools}
+              onToolsChange={handleToolsChange}
+            />
+          </Suspense>
+        )}
 
         {/* Mobile Bottom Navigation Bar - Clinical Premium */}
         <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-800/95 backdrop-blur-lg border-t border-slate-200/80 dark:border-slate-700/80 px-2 py-2 pb-safe z-50">

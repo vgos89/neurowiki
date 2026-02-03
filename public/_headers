@@ -1,0 +1,16 @@
+# Cache static assets long-term (Cloudflare Pages)
+# https://developers.cloudflare.com/pages/platform/headers/
+
+# Hashed JS/CSS from Vite: immutable, 1 year
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fonts and images in public
+/favicon.png
+  Cache-Control: public, max-age=86400
+/og-image.png
+  Cache-Control: public, max-age=86400
+
+# HTML: short cache, revalidate (SPA)
+/*
+  Cache-Control: public, max-age=0, must-revalidate

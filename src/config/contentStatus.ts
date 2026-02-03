@@ -21,7 +21,7 @@ export const contentStatus: ContentStatus = {
     comingSoonMessage: 'IV tPA eligibility and protocol coming soon',
   },
   '/guide/tpa-eligibility': {
-    published: false,
+    published: true,
     comingSoonMessage: 'tPA eligibility criteria coming soon',
   },
   '/guide/thrombectomy': {
@@ -29,7 +29,7 @@ export const contentStatus: ContentStatus = {
     comingSoonMessage: 'Thrombectomy guide coming soon',
   },
   '/guide/acute-stroke-mgmt': {
-    published: false,
+    published: true,
     comingSoonMessage: 'Acute stroke management guide coming soon',
   },
   '/guide/status-epilepticus': {
@@ -37,51 +37,51 @@ export const contentStatus: ContentStatus = {
     comingSoonMessage: 'Status epilepticus guide coming soon',
   },
   '/guide/ich-management': {
-    published: false,
+    published: true,
     comingSoonMessage: 'ICH management guide coming soon',
   },
   '/guide/meningitis': {
-    published: false,
+    published: true,
     comingSoonMessage: 'Meningitis guide coming soon',
   },
   '/guide/gbs': {
-    published: false,
+    published: true,
     comingSoonMessage: 'GBS guide coming soon',
   },
   '/guide/myasthenia-gravis': {
-    published: false,
+    published: true,
     comingSoonMessage: 'Myasthenia gravis guide coming soon',
   },
   '/guide/myasthenia-crisis': {
-    published: false,
+    published: true,
     comingSoonMessage: 'Myasthenia crisis guide coming soon',
   },
   '/guide/multiple-sclerosis': {
-    published: false,
+    published: true,
     comingSoonMessage: 'Multiple sclerosis guide coming soon',
   },
   '/guide/ms-relapse': {
-    published: false,
+    published: true,
     comingSoonMessage: 'MS relapse guide coming soon',
   },
   '/guide/seizure-workup': {
-    published: false,
+    published: true,
     comingSoonMessage: 'Seizure workup guide coming soon',
   },
   '/guide/altered-mental-status': {
-    published: false,
+    published: true,
     comingSoonMessage: 'Altered mental status guide coming soon',
   },
   '/guide/headache-workup': {
-    published: false,
+    published: true,
     comingSoonMessage: 'Headache workup guide coming soon',
   },
   '/guide/vertigo': {
-    published: false,
+    published: true,
     comingSoonMessage: 'Vertigo guide coming soon',
   },
   '/guide/weakness-workup': {
-    published: false,
+    published: true,
     comingSoonMessage: 'Weakness workup guide coming soon',
   },
 
@@ -139,23 +139,23 @@ export const contentStatus: ContentStatus = {
     comingSoonMessage: 'Boston Criteria 2.0 for CAA',
   },
   '/calculators/aspects': {
-    published: false,
+    published: true,
     comingSoonMessage: 'ASPECTS calculator coming soon',
   },
   '/calculators/tpa-dosing': {
-    published: false,
+    published: true,
     comingSoonMessage: 'tPA dosing calculator coming soon',
   },
   '/calculators/gcs': {
-    published: false,
+    published: true,
     comingSoonMessage: 'GCS calculator coming soon',
   },
   '/pathways/thrombectomy': {
-    published: false,
+    published: true,
     comingSoonMessage: 'Thrombectomy pathway coming soon',
   },
   '/pathways/status-epilepticus': {
-    published: false,
+    published: true,
     comingSoonMessage: 'Status epilepticus pathway coming soon',
   },
 
@@ -169,7 +169,7 @@ export const contentStatus: ContentStatus = {
     comingSoonMessage: 'DEFUSE-3 trial summary coming soon',
   },
   '/trials/ninds-trial': {
-    published: false,
+    published: true,
     comingSoonMessage: 'NINDS trial summary coming soon',
   },
   '/trials/ecass3-trial': {
@@ -177,7 +177,7 @@ export const contentStatus: ContentStatus = {
     comingSoonMessage: 'ECASS-III trial summary coming soon',
   },
   '/trials/extend-trial': {
-    published: false,
+    published: true,
     comingSoonMessage: 'EXTEND trial summary coming soon',
   },
   '/trials/attention-trial': {

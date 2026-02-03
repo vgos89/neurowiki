@@ -6,8 +6,10 @@ import { ProtocolSection } from '../../components/article/stroke/ProtocolSection
 import { SidebarTimer } from '../../components/article/stroke/SidebarTimer';
 import { ProtocolStepsNav, Step as ProtocolStep } from '../../components/article/stroke/ProtocolStepsNav';
 import { QuickToolsGrid } from '../../components/article/stroke/QuickToolsGrid';
-import { STROKE_CLINICAL_PEARLS } from '../../data/strokeClinicalPearls';
-import { CodeModeStep1, Step1Data } from '../../components/article/stroke/CodeModeStep1';
+import type { ClinicalPearlsData } from '../../data/strokeClinicalPearls';
+import { CodeModeStep1 } from '../../components/article/stroke/CodeModeStep1';
+import type { Step1Data } from '../../components/article/stroke/CodeModeStep1';
+import type { Step2Data } from '../../components/article/stroke/CodeModeStep2';
 
 /** Lazy-load modals for smaller initial bundle (mobile performance) */
 const DeepLearningModal = lazy(() => import('../../components/article/stroke/DeepLearningModal').then(m => ({ default: m.DeepLearningModal })));
@@ -18,11 +20,13 @@ const AnalogClockPicker = lazy(() => import('../../components/article/stroke/Ana
 const TpaReversalProtocolModal = lazy(() => import('../../components/article/stroke/TpaReversalProtocolModal').then(m => ({ default: m.TpaReversalProtocolModal })));
 const OrolingualEdemaProtocolModal = lazy(() => import('../../components/article/stroke/OrolingualEdemaProtocolModal').then(m => ({ default: m.OrolingualEdemaProtocolModal })));
 const HemorrhageProtocolModal = lazy(() => import('../../components/article/stroke/HemorrhageProtocolModal').then(m => ({ default: m.HemorrhageProtocolModal })));
-import { CodeModeStep2, Step2Data } from '../../components/article/stroke/CodeModeStep2';
-import { CodeModeStep3 } from '../../components/article/stroke/CodeModeStep3';
-import { CodeModeStep4 } from '../../components/article/stroke/CodeModeStep4';
-import { StrokeIchProtocolStep } from '../../components/article/stroke/StrokeIchProtocolStep';
-import { NihssCalculatorEmbed } from '../../components/article/stroke/NihssCalculatorEmbed';
+
+/** Lazy-load heavy step components and NIHSS embed to shorten critical path and improve LCP */
+const CodeModeStep2 = lazy(() => import('../../components/article/stroke/CodeModeStep2'));
+const CodeModeStep3 = lazy(() => import('../../components/article/stroke/CodeModeStep3'));
+const CodeModeStep4 = lazy(() => import('../../components/article/stroke/CodeModeStep4'));
+const StrokeIchProtocolStep = lazy(() => import('../../components/article/stroke/StrokeIchProtocolStep'));
+const NihssCalculatorEmbed = lazy(() => import('../../components/article/stroke/NihssCalculatorEmbed'));
 
 /** Fallback Step 1 data for Study Mode when user hasn't completed Step 1 (all steps visible) */
 const DEFAULT_STEP1_DATA: Step1Data = {
@@ -155,7 +159,10 @@ const MainContent: React.FC<{
   setOrolingualEdemaModalOpen: (value: boolean) => void;
   hemorrhageProtocolModalOpen: boolean;
   setHemorrhageProtocolModalOpen: (value: boolean) => void;
-}> = ({ workflowMode, setWorkflowMode, steps, toggleStep, completeStep, activeStepNumber, getProtocolStatus, handleStepClick, step1ModalOpen, setStep1ModalOpen, step2ModalOpen, setStep2ModalOpen, step3ModalOpen, setStep3ModalOpen, step4ModalOpen, setStep4ModalOpen, thrombectomyModalOpen, setThrombectomyModalOpen, onThrombectomyRecommendation, thrombectomyRecommendation, timerStartTime, setTimerStartTime, timerRunning, setTimerRunning, milestones, setMilestones, setStep1Data, step1Data, setStep2Data, step2Data, step4Orders, setStep4Orders, setSteps, scrollToStep, nihssModalOpen, setNihssModalOpen, eligibilityModalOpen, setEligibilityModalOpen, doorTimePickerOpen, setDoorTimePickerOpen, nihssFromModal, setNihssFromModal, eligibilityResult, setEligibilityResult, toastMessage, setToastMessage, tpaReversalModalOpen, setTpaReversalModalOpen, orolingualEdemaModalOpen, setOrolingualEdemaModalOpen, hemorrhageProtocolModalOpen, setHemorrhageProtocolModalOpen }) => {
+  /** Loaded async to reduce initial bundle (strokeClinicalPearls ~110KB) */
+  pearlsData: ClinicalPearlsData | null;
+}> = ({ workflowMode, setWorkflowMode, steps, toggleStep, completeStep, activeStepNumber, getProtocolStatus, handleStepClick, step1ModalOpen, setStep1ModalOpen, step2ModalOpen, setStep2ModalOpen, step3ModalOpen, setStep3ModalOpen, step4ModalOpen, setStep4ModalOpen, thrombectomyModalOpen, setThrombectomyModalOpen, onThrombectomyRecommendation, thrombectomyRecommendation, timerStartTime, setTimerStartTime, timerRunning, setTimerRunning, milestones, setMilestones, setStep1Data, step1Data, setStep2Data, step2Data, step4Orders, setStep4Orders, setSteps, scrollToStep, nihssModalOpen, setNihssModalOpen, eligibilityModalOpen, setEligibilityModalOpen, doorTimePickerOpen, setDoorTimePickerOpen, nihssFromModal, setNihssFromModal, eligibilityResult, setEligibilityResult, toastMessage, setToastMessage, tpaReversalModalOpen, setTpaReversalModalOpen, orolingualEdemaModalOpen, setOrolingualEdemaModalOpen, hemorrhageProtocolModalOpen, setHemorrhageProtocolModalOpen, pearlsData }) => {
+  const pearls = pearlsData ?? {};
   const doorTimeForPicker = milestones.doorTime ?? timerStartTime;
   const doorTimeTo12h = (d: Date) => {
     let h = d.getHours();
@@ -321,7 +328,7 @@ const MainContent: React.FC<{
             isActive={activeStepNumber === 1}
             showCompleteButton={false}
             showDeepLearningBadge={workflowMode === 'study'}
-            pearlCount={STROKE_CLINICAL_PEARLS['step-1']?.deep?.length || 0}
+            pearlCount={pearls['step-1']?.deep?.length || 0}
             onDeepLearningClick={() => setStep1ModalOpen(true)}
           >
             {workflowMode === 'study' && (
@@ -377,7 +384,7 @@ const MainContent: React.FC<{
               isOpen={step1ModalOpen}
               onClose={() => setStep1ModalOpen(false)}
               sectionTitle="1. Last Known Well & Eligibility"
-              pearls={STROKE_CLINICAL_PEARLS['step-1']?.deep || []}
+              pearls={pearls['step-1']?.deep || []}
             />
           )}
         </section>
@@ -391,7 +398,7 @@ const MainContent: React.FC<{
             isActive={activeStepNumber === 2}
             showCompleteButton={false}
             showDeepLearningBadge={workflowMode === 'study'}
-            pearlCount={STROKE_CLINICAL_PEARLS['step-2']?.deep?.length || 0}
+            pearlCount={pearls['step-2']?.deep?.length || 0}
             onDeepLearningClick={() => setStep2ModalOpen(true)}
           >
             {workflowMode === 'study' && (
@@ -430,25 +437,27 @@ const MainContent: React.FC<{
                 <p>Complete Step 1 first (LKW, vitals, NIHSS, weight)</p>
               </div>
             ) : (
-              <CodeModeStep2
-                step1Data={step1Data || DEFAULT_STEP1_DATA}
-                doorTime={milestones.doorTime ?? timerStartTime}
-                eligibilityResult={eligibilityResult}
-                onIchSelected={() => setHemorrhageProtocolModalOpen(true)}
-                onComplete={(data) => {
-                  setStep2Data(data);
-                  const summary = [
-                    data.ctResult === 'bleed' ? 'CT: Bleed' : 'CT: No bleed',
-                    data.treatmentGiven !== 'none' ? `${data.treatmentGiven.toUpperCase()} given` : null,
-                    data.ctaOrdered ? 'CTA ordered' : null
-                  ].filter(Boolean).join(' • ');
-                  completeStep(2, summary);
-                  scrollToStep(3, 400);
-                }}
-                onOpenEVTPathway={() => setThrombectomyModalOpen(true)}
-                onRecordMilestone={(milestone, time) => setMilestones(prev => ({ ...prev, [milestone]: time }))}
-                milestones={milestones}
-              />
+              <Suspense fallback={<div className="p-6 text-slate-500 animate-pulse">Loading step…</div>}>
+                <CodeModeStep2
+                  step1Data={step1Data || DEFAULT_STEP1_DATA}
+                  doorTime={milestones.doorTime ?? timerStartTime}
+                  eligibilityResult={eligibilityResult}
+                  onIchSelected={() => setHemorrhageProtocolModalOpen(true)}
+                  onComplete={(data) => {
+                    setStep2Data(data);
+                    const summary = [
+                      data.ctResult === 'bleed' ? 'CT: Bleed' : 'CT: No bleed',
+                      data.treatmentGiven !== 'none' ? `${data.treatmentGiven.toUpperCase()} given` : null,
+                      data.ctaOrdered ? 'CTA ordered' : null
+                    ].filter(Boolean).join(' • ');
+                    completeStep(2, summary);
+                    scrollToStep(3, 400);
+                  }}
+                  onOpenEVTPathway={() => setThrombectomyModalOpen(true)}
+                  onRecordMilestone={(milestone, time) => setMilestones(prev => ({ ...prev, [milestone]: time }))}
+                  milestones={milestones}
+                />
+              </Suspense>
             )}
           </ProtocolSection>
 
@@ -457,7 +466,7 @@ const MainContent: React.FC<{
               isOpen={step2ModalOpen}
               onClose={() => setStep2ModalOpen(false)}
               sectionTitle="2. LVO Screening"
-              pearls={STROKE_CLINICAL_PEARLS['step-2']?.deep || []}
+              pearls={pearls['step-2']?.deep || []}
             />
           )}
 
@@ -543,7 +552,7 @@ const MainContent: React.FC<{
             isActive={activeStepNumber === 3}
             showCompleteButton={false}
             showDeepLearningBadge={workflowMode === 'study'}
-            pearlCount={(STROKE_CLINICAL_PEARLS['step-3']?.deep?.length || 0) + (STROKE_CLINICAL_PEARLS['step-4']?.deep?.length || 0)}
+            pearlCount={(pearls['step-3']?.deep?.length || 0) + (pearls['step-4']?.deep?.length || 0)}
             onDeepLearningClick={() => setStep3ModalOpen(true)}
           >
             {workflowMode === 'study' && (
@@ -565,13 +574,15 @@ const MainContent: React.FC<{
                 <p>Complete Step 2 first (CT result and treatment decision)</p>
               </div>
             ) : step2Data?.ctResult === 'bleed' ? (
-              <StrokeIchProtocolStep
-                onComplete={() => {
-                  completeStep(3, 'ICH protocol completed');
-                  scrollToStep(4, 400);
-                }}
-                isLearningMode={workflowMode === 'study'}
-              />
+              <Suspense fallback={<div className="p-6 text-slate-500 animate-pulse">Loading ICH protocol…</div>}>
+                <StrokeIchProtocolStep
+                  onComplete={() => {
+                    completeStep(3, 'ICH protocol completed');
+                    scrollToStep(4, 400);
+                  }}
+                  isLearningMode={workflowMode === 'study'}
+                />
+              </Suspense>
             ) : (
               <div className="space-y-6">
                 <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -579,6 +590,7 @@ const MainContent: React.FC<{
                   <p className="text-sm text-slate-700 mb-4">
                     <strong>Evidence &amp; rationale (AHA/ASA 2026):</strong> Point-of-care <strong>glucose is the only mandatory lab</strong> before thrombolysis; do not delay tPA for other labs if within 4.5h (NINDS, ECASS III). Post-thrombolysis: neuro checks, BP &lt;180/105, NPO until swallow passed, no antithrombotics × 24h. SITS-ISTR, Fonarow GWTG, ARTIS.
                   </p>
+                  <Suspense fallback={<div className="p-4 text-slate-500 animate-pulse">Loading orders…</div>}>
                   <CodeModeStep4
                     step2Data={step2Data || { ctResult: 'no-bleed', treatmentGiven: 'none' }}
                     onComplete={(orders) => {
@@ -591,6 +603,7 @@ const MainContent: React.FC<{
                       setTimeout(() => setToastMessage(null), 2500);
                     }}
                   />
+                  </Suspense>
                 </section>
               </div>
             )}
@@ -601,7 +614,7 @@ const MainContent: React.FC<{
               isOpen={step3ModalOpen}
               onClose={() => setStep3ModalOpen(false)}
               sectionTitle="3. Labs & Treatment Orders"
-              pearls={[...(STROKE_CLINICAL_PEARLS['step-3']?.deep || []), ...(STROKE_CLINICAL_PEARLS['step-4']?.deep || [])]}
+              pearls={[...(pearls['step-3']?.deep || []), ...(pearls['step-4']?.deep || [])]}
             />
           )}
         </section>
@@ -615,7 +628,7 @@ const MainContent: React.FC<{
             isActive={activeStepNumber === 4}
             showCompleteButton={false}
             showDeepLearningBadge={workflowMode === 'study'}
-            pearlCount={STROKE_CLINICAL_PEARLS['step-5']?.deep?.length || 0}
+            pearlCount={pearls['step-5']?.deep?.length || 0}
             onDeepLearningClick={() => setStep4ModalOpen(true)}
           >
             {workflowMode === 'study' && (
@@ -654,18 +667,20 @@ const MainContent: React.FC<{
                 <p>Complete Step 3 first (Labs & Treatment Orders or ICH protocol)</p>
               </div>
             ) : (
-              <CodeModeStep3
-                step1Data={step1Data || DEFAULT_STEP1_DATA}
-                step2Data={step2Data || DEFAULT_STEP2_DATA}
-                step4Orders={step4Orders || []}
-                milestones={milestones}
-                timerStartTime={timerStartTime}
-                thrombectomyRecommendation={thrombectomyRecommendation ?? undefined}
-                onCopySuccess={() => {
-                  setToastMessage('Code summary copied to clipboard');
-                  setTimeout(() => setToastMessage(null), 2500);
-                }}
-              />
+              <Suspense fallback={<div className="p-6 text-slate-500 animate-pulse">Loading summary…</div>}>
+                <CodeModeStep3
+                  step1Data={step1Data || DEFAULT_STEP1_DATA}
+                  step2Data={step2Data || DEFAULT_STEP2_DATA}
+                  step4Orders={step4Orders || []}
+                  milestones={milestones}
+                  timerStartTime={timerStartTime}
+                  thrombectomyRecommendation={thrombectomyRecommendation ?? undefined}
+                  onCopySuccess={() => {
+                    setToastMessage('Code summary copied to clipboard');
+                    setTimeout(() => setToastMessage(null), 2500);
+                  }}
+                />
+              </Suspense>
             )}
           </ProtocolSection>
 
@@ -674,7 +689,7 @@ const MainContent: React.FC<{
               isOpen={step4ModalOpen}
               onClose={() => setStep4ModalOpen(false)}
               sectionTitle="4. Code Summary & Documentation"
-              pearls={STROKE_CLINICAL_PEARLS['step-5']?.deep || []}
+              pearls={pearls['step-5']?.deep || []}
             />
           )}
         </section>
@@ -729,14 +744,16 @@ const MainContent: React.FC<{
               </button>
             </div>
             <div className="p-6 overflow-y-auto flex-1">
-              <NihssCalculatorEmbed
-                initialScore={step1Data?.nihssScore ?? 0}
-                onApply={(score) => {
-                  setNihssFromModal(score);
-                  setNihssModalOpen(false);
-                }}
-                onBack={() => setNihssModalOpen(false)}
-              />
+              <Suspense fallback={<div className="p-6 text-slate-500 animate-pulse">Loading NIHSS calculator…</div>}>
+                <NihssCalculatorEmbed
+                  initialScore={step1Data?.nihssScore ?? 0}
+                  onApply={(score) => {
+                    setNihssFromModal(score);
+                    setNihssModalOpen(false);
+                  }}
+                  onBack={() => setNihssModalOpen(false)}
+                />
+              </Suspense>
             </div>
           </div>
         </div>
@@ -834,6 +851,7 @@ const MainContent: React.FC<{
 
 export default function StrokeBasicsWorkflowV2() {
   const [workflowMode, setWorkflowMode] = useState<'code' | 'study'>('code'); // Default to CODE MODE
+  const [pearlsData, setPearlsData] = useState<ClinicalPearlsData | null>(null);
   const [step1ModalOpen, setStep1ModalOpen] = useState(false);
   const [step2ModalOpen, setStep2ModalOpen] = useState(false);
   const [step3ModalOpen, setStep3ModalOpen] = useState(false);
@@ -879,6 +897,11 @@ export default function StrokeBasicsWorkflowV2() {
     const now = new Date();
     setTimerStartTime(now);
     setTimerRunning(true);
+  }, []);
+
+  // Load clinical pearls async to reduce initial bundle (~110KB) and improve LCP
+  useEffect(() => {
+    import('../../data/strokeClinicalPearls').then((m) => setPearlsData(m.STROKE_CLINICAL_PEARLS));
   }, []);
 
   // When ICH is detected in Step 2, update Step 3 title to ICH Protocol
@@ -1084,6 +1107,7 @@ export default function StrokeBasicsWorkflowV2() {
           setOrolingualEdemaModalOpen={setOrolingualEdemaModalOpen}
           hemorrhageProtocolModalOpen={hemorrhageProtocolModalOpen}
           setHemorrhageProtocolModalOpen={setHemorrhageProtocolModalOpen}
+          pearlsData={pearlsData}
         />
       }
     />
