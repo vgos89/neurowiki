@@ -16,14 +16,7 @@ const TrialPageNew: React.FC = () => {
   // Extract trial ID from URL pathname (handles both /trials/wake-up and /trials/wake-up-trial)
   const pathname = location.pathname;
   const pathTrialId = pathname.replace('/trials/', '');
-  
-  // Debug logging
-  console.log('TrialPageNew - pathname:', pathname);
-  console.log('TrialPageNew - topicId from params:', topicId);
-  console.log('TrialPageNew - pathTrialId:', pathTrialId);
-  console.log('TrialPageNew - GUIDE_CONTENT keys (first 10):', Object.keys(GUIDE_CONTENT).slice(0, 10));
-  console.log('TrialPageNew - TRIAL_DATA keys:', Object.keys(TRIAL_DATA));
-  
+
   // Determine trial ID: prefer topicId param, fallback to pathname extraction
   // Handle both 'wake-up' and 'wake-up-trial' IDs
   let trialId = '';
@@ -34,68 +27,12 @@ const TrialPageNew: React.FC = () => {
     // If no topicId param (from specific route like /trials/wake-up-trial)
     trialId = pathTrialId === 'wake-up' ? 'wake-up-trial' : pathTrialId;
   }
-  
-  console.log('TrialPageNew - resolved trialId:', trialId);
-  
+
   const trial = GUIDE_CONTENT[trialId];
   const trialMetadata = TRIAL_DATA[trialId];
-  
-  console.log('TrialPageNew - trial found:', !!trial);
-  console.log('TrialPageNew - trialMetadata found:', !!trialMetadata);
-  
-  // Verification logging
-  useEffect(() => {
-    if (trialMetadata) {
-      console.group(`🔍 Trial Verification: ${trialMetadata.title}`);
-      console.log('Trial ID:', trialId);
-      console.log('Sample Size:', trialMetadata.stats.sampleSize.value);
-      console.log('Primary Endpoint:', trialMetadata.stats.primaryEndpoint.value);
-      console.log('p-Value:', trialMetadata.stats.pValue.value, `(${trialMetadata.stats.pValue.label})`);
-      console.log('Effect Size:', trialMetadata.stats.effectSize.value);
-      console.log('Treatment %:', trialMetadata.efficacyResults.treatment.percentage);
-      console.log('Control %:', trialMetadata.efficacyResults.control.percentage);
-      
-      // Calculate expected NNT
-      const arr = Math.abs(
-        trialMetadata.efficacyResults.treatment.percentage - 
-        trialMetadata.efficacyResults.control.percentage
-      );
-      const expectedNNT = arr > 0 ? Math.round((100 / arr) * 10) / 10 : null;
-      console.log('Calculated NNT:', expectedNNT);
-      console.log('Displayed NNT:', trialMetadata.calculations?.nnt || 'NOT SET');
-      
-      if (expectedNNT && trialMetadata.calculations?.nnt) {
-        const difference = Math.abs(expectedNNT - trialMetadata.calculations.nnt);
-        if (difference > 0.5) {
-          console.error('⚠️  NNT MISMATCH!', {
-            calculated: expectedNNT,
-            displayed: trialMetadata.calculations.nnt,
-            difference
-          });
-        } else {
-          console.log('✅ NNT matches calculation');
-        }
-      }
-      
-      console.log('Timeline:', trialMetadata.trialDesign.timeline);
-      console.log('Number of pearls:', trialMetadata.pearls.length);
-      console.log('Clinical Context length:', trialMetadata.clinicalContext.length);
-      console.log('Source:', trialMetadata.source);
-      console.groupEnd();
-    }
-  }, [trialId, trialMetadata]);
-  
-  // Debug: Log available trial IDs if trial not found
-  if (!trial) {
-    console.error('TrialPageNew - TRIAL NOT FOUND:', {
-      pathname,
-      topicId,
-      pathTrialId,
-      trialId,
-      availableTrials: Object.keys(GUIDE_CONTENT).filter(k => k.includes('wake')),
-      allTrialKeys: Object.keys(GUIDE_CONTENT).filter(k => GUIDE_CONTENT[k]?.category === 'Neuro Trials'),
-      guideContentHasWakeUp: 'wake-up-trial' in GUIDE_CONTENT
-    });
+
+  if (!trial && import.meta.env.DEV) {
+    console.error('TrialPageNew - TRIAL NOT FOUND:', { pathname, topicId, pathTrialId, trialId });
   }
 
   if (!trial) {

@@ -54,7 +54,6 @@ export const trackCalculatorUsed = (
       calculator_name: calculatorName,
       result_value: resultValue,
     });
-    console.log(`[Analytics] Calculator used: ${calculatorName}`, resultValue);
   }
 };
 

@@ -467,7 +467,7 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
       onCopySuccess?.();
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy:', err);
+      if (import.meta.env.DEV) console.error('Failed to copy:', err);
     }
   };
 

@@ -295,7 +295,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     try {
       localStorage.setItem('neurowiki-sidebar-tools', JSON.stringify(toolIds));
     } catch (error) {
-      console.error('Failed to save tools to localStorage:', error);
+      if (import.meta.env.DEV) console.error('Failed to save tools to localStorage:', error);
     }
   };
 

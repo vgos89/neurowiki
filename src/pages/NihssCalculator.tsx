@@ -19,17 +19,7 @@ const NihssCalculator: React.FC = () => {
   const { getBackPath } = useNavigationSource();
 
   // Memoize LVO calculation to ensure it updates properly when nihssValues change
-  const lvoData = useMemo(() => {
-    const result = calculateLvoProbability(nihssValues);
-    console.log('🔍 LVO Calculation Updated:', {
-      nihssValues,
-      raceScore: result.raceScore,
-      probability: result.probability,
-      label: result.label,
-      breakdown: result.breakdown
-    });
-    return result;
-  }, [nihssValues]);
+  const lvoData = useMemo(() => calculateLvoProbability(nihssValues), [nihssValues]);
 
   // Close tooltip when clicking outside
   useEffect(() => {

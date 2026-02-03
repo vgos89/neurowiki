@@ -184,7 +184,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
       onCopySuccess?.();
       setTimeout(() => setCopied(false), 2500);
     } catch (err) {
-      console.error('Failed to copy:', err);
+      if (import.meta.env.DEV) console.error('Failed to copy:', err);
     }
   };
 

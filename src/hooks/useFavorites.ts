@@ -15,7 +15,7 @@ export const useFavorites = () => {
         setFavorites(JSON.parse(stored));
       }
     } catch (e) {
-      console.warn('Failed to load favorites', e);
+      if (import.meta.env.DEV) console.warn('Failed to load favorites', e);
     } finally {
       setIsLoaded(true);
     }
@@ -27,7 +27,7 @@ export const useFavorites = () => {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
       } catch (e) {
-        console.warn('Failed to save favorites', e);
+        if (import.meta.env.DEV) console.warn('Failed to save favorites', e);
       }
     }
   }, [favorites, isLoaded]);

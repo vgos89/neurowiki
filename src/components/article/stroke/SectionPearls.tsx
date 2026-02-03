@@ -24,17 +24,11 @@ export const SectionPearls: React.FC<SectionPearlsProps> = ({
   if (!isLearningMode) return null;
 
   // Safety check: Return null if pearls data is missing
-  if (!quickPearls || !deepPearls) {
-    console.warn(`[SectionPearls] Missing pearls data for section: ${sectionId}`);
-    return null;
-  }
+  if (!quickPearls || !deepPearls) return null;
 
   // Safety check: Handle empty arrays
   const pearls = isDeepLearning ? deepPearls : quickPearls;
-  if (!pearls || pearls.length === 0) {
-    console.warn(`[SectionPearls] No pearls available for section: ${sectionId} (mode: ${isDeepLearning ? 'deep' : 'quick'})`);
-    return null;
-  }
+  if (!pearls || pearls.length === 0) return null;
 
   const getPearlIcon = (type: ClinicalPearl['type']) => {
     switch (type) {
@@ -115,10 +109,7 @@ export const SectionPearls: React.FC<SectionPearlsProps> = ({
       <div className="space-y-3">
         {pearls.map((pearl) => {
           // Safety check for pearl data
-          if (!pearl || !pearl.id || !pearl.title || !pearl.content) {
-            console.warn(`[SectionPearls] Invalid pearl data in section ${sectionId}:`, pearl);
-            return null;
-          }
+          if (!pearl || !pearl.id || !pearl.title || !pearl.content) return null;
           return (
             <div
               key={pearl.id}
