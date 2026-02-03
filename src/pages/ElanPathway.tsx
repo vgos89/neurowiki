@@ -152,7 +152,7 @@ const ElanPathway: React.FC = () => {
   const handleNext = () => { if (step === 1 && (inputs.isIschemicAfib === 'no' || inputs.hasBleed === 'yes' || inputs.hasMechanicalValve === 'yes')) return; if (step < 4) setStep(step + 1); };
   const handleBack = () => { if (step > 1) setStep(step - 1); };
   const handleReset = () => { setInputs({ isIschemicAfib: 'unknown', hasBleed: 'unknown', hasMechanicalValve: 'unknown', size: 'unknown', onset: '' }); setStep(1); };
-  const copySummary = () => { if (!result) return; let definition = ""; if (result.size === 'minor') definition = "infarct ≤ 1.5 cm"; else if (result.size === 'moderate') definition = "cortical superficial branch of MCA/ACA/PCA, deep branch MCA, or internal border-zone"; else if (result.size === 'major') definition = "large territory, ≥2 MCA cortical branches, or brainstem/cerebellum > 1.5 cm"; const summary = `Post-Stroke Anticoagulation Protocol Applied:\nImaging-based stroke size classified as ${result.size.charAt(0).toUpperCase() + result.size.slice(1)} per stroke size definitions (${definition}).\n\nAnticoagulation timing determined using evidence-based protocol:\nEarly DOAC initiation window = ${result.earlyText} (${result.earlyDates}).\n\nDecision based on imaging-defined infarct size and absence of contraindicating hemorrhage.\n\nReference:\nBased on ELAN trial (Paciaroni et al., NEJM 2023) and 2024 AHA/ASA Guidelines for stroke anticoagulation timing.`.trim(); navigator.clipboard.writeText(summary); alert("Summary copied to clipboard."); };
+  const copySummary = () => { if (!result) return; let definition = ""; if (result.size === 'minor') definition = "infarct ≤ 1.5 cm"; else if (result.size === 'moderate') definition = "cortical superficial branch of MCA/ACA/PCA, deep branch MCA, or internal border-zone"; else if (result.size === 'major') definition = "large territory, ≥2 MCA cortical branches, or brainstem/cerebellum > 1.5 cm"; const summary = `Post-Stroke Anticoagulation Protocol Applied:\nImaging-based stroke size classified as ${result.size.charAt(0).toUpperCase() + result.size.slice(1)} per stroke size definitions (${definition}).\n\nAnticoagulation timing determined using evidence-based protocol:\nEarly DOAC initiation window = ${result.earlyText} (${result.earlyDates}).\n\nDecision based on imaging-defined infarct size and absence of contraindicating hemorrhage.\n\nReference:\nBased on ELAN trial (Paciaroni et al., NEJM 2023) and AHA/ASA 2026 Guidelines for stroke anticoagulation timing.`.trim(); navigator.clipboard.writeText(summary); alert("Summary copied to clipboard."); };
   const isStep1Invalid = inputs.isIschemicAfib === 'no' || inputs.hasBleed === 'yes' || inputs.hasMechanicalValve === 'yes';
 
   return (
@@ -246,7 +246,7 @@ const ElanPathway: React.FC = () => {
                 <div className="bg-blue-50 border border-blue-200 p-6 rounded-2xl shadow-sm">
                     <h4 className="text-xs font-bold text-blue-900 uppercase tracking-wider mb-4 flex items-center">
                         <Info size={16} className="mr-2" /> 
-                        DOAC Selection (2024 AHA/ASA Guidelines)
+                        DOAC Selection (AHA/ASA 2026 Guidelines)
                     </h4>
                     <div className="space-y-3">
                         <div className="flex items-start">
@@ -276,7 +276,7 @@ const ElanPathway: React.FC = () => {
                             ⚠️ MANDATORY: Repeat brain imaging (CT or MRI) immediately before initiating anticoagulation to exclude hemorrhagic transformation.
                         </p>
                         <p className="mt-2">
-                            {autoLinkReactNodes("Based on ELAN Trial (Paciaroni et al., NEJM 2023), OPTIMAS Trial (2024), TIMING Trial (2024), and 2024 AHA/ASA Guidelines for Secondary Stroke Prevention. Early DOAC initiation is safe when hemorrhage is excluded by imaging. This tool does not replace clinical judgment or institutional protocols.", openTrial)}
+                            {autoLinkReactNodes("Based on ELAN Trial (Paciaroni et al., NEJM 2023), OPTIMAS Trial (2024), TIMING Trial (2024), and AHA/ASA 2026 Guidelines for Secondary Stroke Prevention. Early DOAC initiation is safe when hemorrhage is excluded by imaging. This tool does not replace clinical judgment or institutional protocols.", openTrial)}
                         </p>
                     </div>
                 </div>
@@ -318,7 +318,7 @@ const ElanPathway: React.FC = () => {
                   </li>
                   <li className="flex items-start">
                       <span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">4</span>
-                      {autoLinkReactNodes("2024 AHA/ASA Guidelines for Secondary Stroke Prevention: Class I recommendation for DOACs over warfarin; early initiation supported with appropriate imaging exclusion of hemorrhage.", openTrial)}
+                      {autoLinkReactNodes("AHA/ASA 2026 Guidelines for Secondary Stroke Prevention: Class I recommendation for DOACs over warfarin; early initiation supported with appropriate imaging exclusion of hemorrhage.", openTrial)}
                   </li>
                   <li className="flex items-start">
                       <span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">5</span>

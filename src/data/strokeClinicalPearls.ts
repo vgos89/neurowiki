@@ -6,8 +6,12 @@ export interface ClinicalPearl {
   section?: string;
   link?: string;
   evidence?: string;
-  
-  // NEW FIELDS (all optional - won't break existing code):
+
+  // 2026 AHA/ASA alignment:
+  evidenceClass?: 'I' | 'IIa' | 'IIb' | 'III';  // AHA recommendation class
+  evidenceLevel?: 'A' | 'B' | 'C';                // AHA evidence level
+  plainEnglish?: string;                          // Resident-friendly one-liner
+
   detailedContent?: {
     overview: string;
     clinicalTips?: string[];
@@ -60,6 +64,9 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         content: 'If patient woke with symptoms, LKW is time last seen normal before sleep. Work backwards: when did they go to bed? Be precise - "yesterday" is not sufficient. Always verify with family, witnesses, or medical records. If exact time is unknown, use the most conservative estimate (earliest possible time).',
         type: 'pearl',
         section: 'step-1',
+        evidenceClass: 'I',
+        evidenceLevel: 'C',
+        plainEnglish: 'LKW = last time patient was definitely normal. For wake-up stroke, LKW is bedtime.',
         detailedContent: {
           overview: "The \"last known well\" (LKW) time is the precise moment when the patient was last confirmed to be at their baseline neurological function. This is the single most critical timestamp in acute stroke management as it determines eligibility for time-sensitive treatments including IV thrombolysis (4.5-hour window) and mechanical thrombectomy (6-24 hour window depending on imaging).",
           clinicalTips: [
@@ -69,8 +76,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
             "If uncertain, use the earliest possible time (most conservative estimate)",
             "Document your reasoning and all sources consulted in the medical record"
           ],
-          evidence: "Standard of care per AHA/ASA Guidelines for Early Management of Acute Ischemic Stroke (2019)",
-          reference: "Powers WJ, et al. 2019 AHA/ASA Focused Update. Stroke. 2019;50:e344-e418."
+          evidence: "Standard of care per AHA/ASA 2026 Guidelines for Early Management of Acute Ischemic Stroke",
+          reference: "Powers WJ, et al. 2026 Guideline for the Early Management of Patients With Acute Ischemic Stroke. Stroke. 2026. https://www.ahajournals.org/doi/10.1161/STR.0000000000000513"
         }
       },
       {
@@ -79,6 +86,9 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         content: '1.9 million neurons die per minute during untreated stroke. Every 15-minute delay reduces probability of good outcome by 4%. NINDS trial: Treatment <90min had 50% vs 38% good outcome at 3 months. Pooled analysis (Emberson 2014): Treatment benefit decreases linearly with time. Target door-to-needle <60 minutes (excellence: <30 minutes).',
         type: 'pearl',
         section: 'step-1',
+        evidenceClass: 'I',
+        evidenceLevel: 'A',
+        plainEnglish: 'Every minute counts. Target door-to-needle <60 min (ideal <30).',
         evidence: 'Emberson et al, Lancet 2014; NINDS 1995',
       },
       {
@@ -89,6 +99,9 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         section: 'step-1',
         link: '/trials/ninds',
         evidence: 'NEJM 1995',
+        evidenceClass: 'I',
+        evidenceLevel: 'A',
+        plainEnglish: 'NINDS proved tPA works in 0-3h. Still the foundation of acute stroke care.',
         trialSlug: '/trials/ninds-trial',
         detailedContent: {
           overview: "The NINDS trial (1995) was the landmark study that established intravenous tissue plasminogen activator (tPA) as the standard of care for acute ischemic stroke within 3 hours of symptom onset.",
@@ -104,6 +117,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         section: 'step-1',
         link: '/trials/ecass-3',
         evidence: 'NEJM 2008',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
         trialSlug: '/trials/ecass3-trial',
       },
       {
@@ -114,6 +129,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         section: 'step-1',
         link: '/trials/wake-up',
         evidence: 'NEJM 2018',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
       {
         id: 'extend-trial',
@@ -123,6 +140,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         section: 'step-1',
         link: '/trials/extend',
         evidence: 'NEJM 2019',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
         trialSlug: '/trials/extend-trial',
       },
       {
@@ -131,6 +150,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         content: 'Acute ICH on imaging. Active internal bleeding. BP >185/110 uncontrolled. Platelet <100K. INR >1.7. Therapeutic LMWH <24h. Direct thrombin/Factor Xa inhibitors. Recent neurosurgery/severe head trauma <3mo. Blood glucose <50 mg/dL (hypoglycemia mimic).',
         type: 'pearl',
         section: 'step-1',
+        evidenceClass: 'III',
+        evidenceLevel: 'B',
       },
       {
         id: 'contraindications-relative',
@@ -139,6 +160,52 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-1',
         evidence: 'Fugate & Rabinstein, Neurohospitalist 2015',
+        evidenceClass: 'IIa',
+        evidenceLevel: 'B',
+      },
+      {
+        id: 'doac-management-2026',
+        title: 'DOAC Management (2026 Update)',
+        content: 'For patients on DOACs: If last dose >48h with normal renal function, may consider tPA. Check drug-specific assays: anti-Xa level for apixaban/rivaroxaban/edoxaban (must be normal), ECT or dilute thrombin time for dabigatran (must be normal). If levels elevated OR last dose <48h, do NOT give tPA.',
+        type: 'pearl',
+        section: 'step-1',
+        evidenceClass: 'III',
+        evidenceLevel: 'C',
+        plainEnglish: 'DOACs taken <48h ago = no tPA. If >48h, check drug-specific labs (anti-Xa or ECT). Elevated levels = no tPA.',
+        evidence: 'AHA/ASA 2026 Guidelines',
+      },
+      {
+        id: 'extended-window-exclusions',
+        title: '3-4.5h Window ADDITIONAL Exclusions',
+        content: 'ECASS III added exclusions for 3-4.5h window ONLY (not 0-3h): Age >80, NIHSS >25, any oral anticoagulant use (regardless of INR), prior stroke + diabetes, imaging shows >1/3 MCA territory infarct. These patients ARE eligible in 0-3h window.',
+        type: 'pearl',
+        section: 'step-1',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
+        plainEnglish: 'Age >80 is OK in 0-3h window but excluded in 3-4.5h window. ECASS III exclusions only apply to extended window.',
+        evidence: 'ECASS III 2008, AHA/ASA 2026 Guidelines',
+      },
+      {
+        id: 'stroke-mimics-safety',
+        title: 'Stroke Mimics & tPA Safety',
+        content: 'Stroke mimics (seizure, migraine, conversion disorder, hypoglycemia) receive tPA in 1-2% of cases. Zinkstok meta-analysis (5,581 patients): sICH rate 1.0-2.0% in mimics vs 5.5-7.9% in true strokes. No fatal ICH in mimics. Bottom line: Don\'t delay tPA for extensive workup if stroke is likely.',
+        type: 'pearl',
+        section: 'step-1',
+        evidenceClass: 'IIa',
+        evidenceLevel: 'B',
+        plainEnglish: 'Giving tPA to a stroke mimic is safer than withholding tPA from a real stroke. When in doubt, treat.',
+        evidence: 'Zinkstok et al, Stroke 2021',
+      },
+      {
+        id: 'pregnancy-tpa',
+        title: 'Pregnancy & tPA (2026 Update)',
+        content: 'Pregnancy is a RELATIVE contraindication, not absolute. tPA does not cross placenta. Risk: maternal bleeding (uterine, postpartum). For severe disabling stroke, benefits often outweigh risks. Immediate OB consult required. Case series: ~15 pregnant women treated, 2 sICH (13%), 8 healthy births (67%).',
+        type: 'pearl',
+        section: 'step-1',
+        evidenceClass: 'IIb',
+        evidenceLevel: 'C',
+        plainEnglish: 'Pregnant with severe stroke? tPA may be appropriate. Get OB involved immediately.',
+        evidence: 'AHA/ASA 2026 Guidelines',
       },
       {
         id: 'ist3-trial',
@@ -148,6 +215,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         section: 'step-1',
         link: '/trials/ist-3',
         evidence: 'Lancet 2012',
+        evidenceClass: 'IIa',
+        evidenceLevel: 'B',
       },
     ],
   },
@@ -184,6 +253,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-2',
         evidence: 'Duvekot et al, Stroke 2021',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
       {
         id: 'race-scale-deep',
@@ -192,6 +263,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-2',
         evidence: 'Pérez de la Ossa et al, Stroke 2014',
+        evidenceClass: 'IIa',
+        evidenceLevel: 'B',
       },
       {
         id: 'fast-ed-scale',
@@ -200,6 +273,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-2',
         evidence: 'Lima et al, Stroke 2016',
+        evidenceClass: 'IIa',
+        evidenceLevel: 'B',
       },
       {
         id: 'hermes-meta-analysis',
@@ -209,6 +284,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         section: 'step-2',
         link: '/trials/hermes',
         evidence: 'Lancet 2016',
+        evidenceClass: 'I',
+        evidenceLevel: 'A',
       },
       {
         id: 'dawn-trial',
@@ -218,6 +295,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         section: 'step-2',
         link: '/trials/dawn',
         evidence: 'NEJM 2018',
+        evidenceClass: 'I',
+        evidenceLevel: 'A',
         trialSlug: '/trials/dawn-trial',
       },
       {
@@ -228,6 +307,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         section: 'step-2',
         link: '/trials/defuse-3',
         evidence: 'NEJM 2018',
+        evidenceClass: 'I',
+        evidenceLevel: 'A',
         trialSlug: '/trials/defuse-3-trial',
       },
       {
@@ -236,6 +317,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         content: 'If cortical signs present: (1) Give tPA if <4.5h (don\'t delay), (2) STAT CTA/CTP, (3) Alert IR team immediately, (4) Consider direct transfer to angio suite. LVO + tPA + thrombectomy = best outcomes. Sequential therapy is superior to either alone.',
         type: 'pearl',
         section: 'step-2',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
     ],
   },
@@ -271,6 +354,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         content: 'Point-of-care glucose is the ONLY mandatory lab because: (1) Hypoglycemia (<50) can perfectly mimic stroke with focal deficits - 10-second test prevents inappropriate tPA. (2) Hyperglycemia (>200) worsens ischemia - treat but don\'t delay. (3) All other labs can run during tPA infusion. Exception: Known anticoagulation requires INR/aPTT.',
         type: 'pearl',
         section: 'step-3',
+        evidenceClass: 'I',
+        evidenceLevel: 'A',
       },
       {
         id: 'door-to-needle-deep',
@@ -279,6 +364,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-3',
         evidence: 'Fonarow et al, Stroke 2014',
+        evidenceClass: 'I',
+        evidenceLevel: 'A',
       },
       {
         id: 'anticoag-warfarin',
@@ -287,6 +374,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-3',
         evidence: 'Xian et al, JAMA 2012',
+        evidenceClass: 'III',
+        evidenceLevel: 'B',
       },
       {
         id: 'anticoag-doacs',
@@ -295,6 +384,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-3',
         evidence: 'Fugate & Rabinstein, Neurohospitalist 2015',
+        evidenceClass: 'III',
+        evidenceLevel: 'C',
       },
       {
         id: 'anticoag-lmwh',
@@ -303,6 +394,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-3',
         evidence: 'Matute et al, Cerebrovasc Dis 2012',
+        evidenceClass: 'III',
+        evidenceLevel: 'B',
       },
       {
         id: 'cardiac-workup',
@@ -311,6 +404,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-3',
         evidence: 'CRYSTAL-AF, Circulation 2014',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
       {
         id: 'platelet-count',
@@ -319,6 +414,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-3',
         evidence: 'Fugate & Rabinstein, Neurohospitalist 2015',
+        evidenceClass: 'III',
+        evidenceLevel: 'B',
       },
     ],
   },
@@ -348,6 +445,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-4',
         evidence: 'ENCHANTED 2016, ENOS 2015',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
       {
         id: 'bp-pretpa-deep',
@@ -356,6 +455,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-4',
         evidence: 'NINDS 1995',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
       {
         id: 'bp-posttpa-deep',
@@ -364,6 +465,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-4',
         evidence: 'SITS-ISTR 2009; ENCHANTED 2016',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
       {
         id: 'bp-management-protocol',
@@ -371,6 +474,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         content: 'Labetalol (first-line): 10-20mg IV over 1-2 min, repeat q10min (max 300mg). Combined α/β blocker - smooth reduction. Nicardipine (preferred if asthma/COPD): Start 5mg/h, titrate by 2.5mg/h q5-15min (max 15mg/h). Continuous infusion allows precise control. Clevidipine: Ultra-short acting, expensive but ultra-precise. Hydralazine: NOT recommended - unpredictable, can cause precipitous drops.',
         type: 'pearl',
         section: 'step-4',
+        evidenceClass: 'I',
+        evidenceLevel: 'C',
       },
       {
         id: 'enchanted-trial',
@@ -380,6 +485,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         section: 'step-4',
         link: '/trials/enchanted',
         evidence: 'Lancet 2016',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
       {
         id: 'glucose-deep',
@@ -388,6 +495,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-4',
         evidence: 'Ribo et al, Stroke 2005',
+        evidenceClass: 'I',
+        evidenceLevel: 'C',
       },
       {
         id: 'shine-trial',
@@ -397,6 +506,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         section: 'step-4',
         link: '/trials/shine',
         evidence: 'JAMA 2019',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
         trialSlug: '/trials/shine-trial',
         detailedContent: {
           overview: "The SHINE trial investigated whether intensive insulin therapy targeting 80-130 mg/dL improved outcomes compared to standard care targeting <180 mg/dL in acute ischemic stroke patients with hyperglycemia.",
@@ -412,6 +523,21 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         section: 'step-4',
         link: '/trials/gist-uk',
         evidence: 'Lancet Neurol 2015',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
+      },
+      {
+        id: 'sparcl-trial',
+        title: 'SPARCL Trial (Statin for Secondary Prevention)',
+        content: '4,731 patients with recent stroke/TIA randomized to atorvastatin 80mg vs placebo. Primary outcome (stroke recurrence): 11.2% vs 13.1% (16% relative risk reduction, NNT=46). Benefit across all stroke subtypes. Start high-intensity statin immediately unless ICH.',
+        type: 'trial',
+        section: 'step-4',
+        link: '/trials/sparcl',
+        evidenceClass: 'I',
+        evidenceLevel: 'A',
+        plainEnglish: 'Atorvastatin 80mg prevents 1 stroke for every 46 patients treated. Start on day 1.',
+        evidence: 'NEJM 2006',
+        trialSlug: '/trials/sparcl-trial',
       },
     ],
   },
@@ -448,6 +574,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-5',
         evidence: 'SITS-MOST 2007',
+        evidenceClass: 'I',
+        evidenceLevel: 'C',
       },
       {
         id: 'sits-most-trial',
@@ -457,6 +585,44 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         section: 'step-5',
         link: '/trials/sits-most',
         evidence: 'Lancet 2007',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
+      },
+      {
+        id: 'artis-trial',
+        title: 'ARTIS Trial (Aspirin Timing)',
+        content: '642 patients randomized to aspirin 300mg IV vs placebo within 90min of tPA. Trial stopped early: sICH 4.3% vs 1.6% in aspirin group (p=0.04). No benefit in outcomes. Established standard: NO antiplatelet agents × 24h post-tPA.',
+        type: 'trial',
+        section: 'step-5',
+        link: '/trials/artis',
+        evidenceClass: 'III',
+        evidenceLevel: 'B',
+        plainEnglish: 'Aspirin within 24h of tPA triples bleeding risk without benefit. Wait 24 hours.',
+        evidence: 'Stroke 2017',
+      },
+      {
+        id: 'crystal-af-trial',
+        title: 'CRYSTAL-AF (Extended Cardiac Monitoring)',
+        content: '441 cryptogenic stroke patients randomized to implantable cardiac monitor vs standard monitoring. AF detection: 8.9% at 6mo, 12.4% at 12mo, 16.1% at 36mo vs 1.4% at 6mo, 2.0% at 12mo with standard care. Changed practice: extended monitoring (30 days minimum) for cryptogenic stroke.',
+        type: 'trial',
+        section: 'step-5',
+        link: '/trials/crystal-af',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
+        plainEnglish: '30-day monitoring detects 3x more AF than 24h Holter. Essential for cryptogenic stroke workup.',
+        evidence: 'NEJM 2014',
+      },
+      {
+        id: 'clots3-trial',
+        title: 'CLOTS-3 Trial (DVT Prophylaxis)',
+        content: '2,876 immobile stroke patients randomized to intermittent pneumatic compression (IPC) vs none. DVT: 12.1% vs 8.5% with IPC (ARR 3.6%, NNT=28). Safe to use immediately post-tPA. Pharmacologic prophylaxis (heparin SQ) starts after 24h once CT confirms no hemorrhage.',
+        type: 'trial',
+        section: 'step-5',
+        link: '/trials/clots-3',
+        evidenceClass: 'I',
+        evidenceLevel: 'A',
+        plainEnglish: 'SCDs prevent 1 DVT for every 28 patients. Start immediately, even post-tPA.',
+        evidence: 'Lancet 2013',
       },
       {
         id: 'ct-protocol-deep',
@@ -465,6 +631,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-5',
         evidence: 'ECASS-3 2008',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
       {
         id: 'anticoagulation-timing',
@@ -473,6 +641,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-5',
         evidence: 'ELAN trial 2023',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
       {
         id: 'telemetry-monitoring',
@@ -481,6 +651,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-5',
         evidence: 'CRYSTAL-AF, Circulation 2014',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
       {
         id: 'no-lines-24h',
@@ -488,6 +660,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         content: 'Avoid central lines, arterial sticks, Foley catheter × 24h post-tPA. Reason: Bleeding risk at ALL puncture sites during systemic fibrinolysis. If absolutely required: Use compressible sites only (femoral vein OK, subclavian NOT OK). Apply firm pressure × 10 minutes minimum.',
         type: 'pearl',
         section: 'step-5',
+        evidenceClass: 'I',
+        evidenceLevel: 'C',
       },
       {
         id: 'bp-maintenance-deep',
@@ -495,6 +669,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         content: 'Maintain <180/105 for 24h post-tPA. First 24h are critical for sICH prevention. SITS-ISTR: BP >180 associated with 6% → 17% sICH rate. After 24h: Gradual liberalization based on perfusion needs and vascular status.',
         type: 'pearl',
         section: 'step-5',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
     ],
   },
@@ -511,7 +687,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'hemorrhage-management-quick',
         title: 'Hemorrhage Protocol',
-        content: 'Stop tPA immediately. STAT CT. Cryoprecipitate 10 units IV (raises fibrinogen ~50 mg/dL, target >150). Consider TXA 1g IV. BP target 100-140. Neurosurgery consult STAT.',
+        content: 'Stop tPA immediately. STAT CT. Cryoprecipitate 10 units IV (raises fibrinogen ~50 mg/dL, target >150). BP target <140 mmHg within 1 h; avoid SBP <110. Reverse anticoagulation if applicable (4-factor PCC + vitamin K for warfarin; idarucizumab for dabigatran; andexanet or PCC for Xa inhibitors). Platelet transfusion not routinely recommended (2022). Neurosurgery consult STAT.',
         type: 'pearl',
         section: 'step-6',
       },
@@ -524,6 +700,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-6',
         evidence: 'ECASS-3 2008',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
       {
         id: 'sich-incidence-deep',
@@ -532,6 +710,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         type: 'pearl',
         section: 'step-6',
         evidence: 'NINDS 1995; Pooled analysis',
+        evidenceClass: 'I',
+        evidenceLevel: 'A',
       },
       {
         id: 'hemorrhage-recognition',
@@ -539,48 +719,60 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         content: 'Timing: Typically presents 6-12h post-tPA (can be up to 36h). Symptoms: Sudden neurological deterioration (NIHSS ↑≥4), severe headache, nausea/vomiting, decreased level of consciousness, seizure, acute BP spike. Action: IMMEDIATE CT + stop all antithrombotics + neurosurgery page.',
         type: 'pearl',
         section: 'step-6',
+        evidenceClass: 'I',
+        evidenceLevel: 'C',
       },
       {
         id: 'hemorrhage-reversal-protocol',
         title: 'Coagulopathy Reversal Protocol',
-        content: 'STEP 1: Stop tPA infusion immediately. STEP 2: Cryoprecipitate 10 units IV push (replaces fibrinogen depleted by tPA). Each unit raises fibrinogen ~5 mg/dL. Target fibrinogen >150 mg/dL. Check q30min until target reached. STEP 3: Tranexamic acid (TXA) 1000mg IV over 10 min (inhibits fibrinolysis). Evidence: TICH-2 showed safe in spontaneous ICH but no clear benefit. STEP 4: Platelet transfusion if <100,000 (target >100K). STEP 5: Reverse any anticoagulation: PCC 50 units/kg for Factor Xa inhibitors/Warfarin, Idarucizumab 5g IV for Dabigatran.',
+        content: 'STEP 1: Stop tPA infusion immediately. STEP 2: Cryoprecipitate 10 units IV push (replaces fibrinogen depleted by tPA). Target fibrinogen >150 mg/dL; check q30min until target. STEP 3: TXA is NOT routinely recommended per 2022 AHA/ASA ICH guidelines (Class III, Level A; TICH-2 showed no benefit, possible thromboembolic harm). STEP 4: Platelet transfusion NOT routinely recommended (2022 guidelines; may worsen outcomes). Reserve for severe thrombocytopenia or emergency surgery. STEP 5: Warfarin: 4-factor PCC 25-50 units/kg IV + Vitamin K 10 mg IV (goal INR <1.4). FFP if PCC unavailable. Dabigatran: idarucizumab 5 g IV. Xa inhibitors: andexanet alfa or 4-factor PCC.',
         type: 'pearl',
         section: 'step-6',
-        evidence: 'Consensus guidelines; TICH-2 2018',
+        evidence: 'AHA/ASA 2022 ICH Guidelines, Sections 5.1, 6.2; TICH-2 2018',
+        evidenceClass: 'I',
+        evidenceLevel: 'C',
       },
       {
         id: 'tich2-trial',
         title: 'TICH-2 Trial (TXA)',
-        content: 'Tranexamic acid in spontaneous ICH. 2,325 patients. TXA safe but no clear benefit in functional outcomes. Mechanism: TXA inhibits fibrinolysis. Used off-label for tPA-related ICH but evidence limited.',
+        content: 'Tranexamic acid in spontaneous ICH. 2,325 patients. TXA did not improve functional outcomes; possible increase in thromboembolic events. 2022 AHA/ASA ICH: TXA NOT recommended for routine use (Class III, Level A). Not recommended for tPA-related ICH as routine therapy.',
         type: 'trial',
         section: 'step-6',
         link: '/trials/tich-2',
-        evidence: 'Lancet 2018',
+        evidence: 'Lancet 2018; AHA/ASA 2022 ICH',
+        evidenceClass: 'IIb',
+        evidenceLevel: 'B',
       },
       {
         id: 'bp-in-hemorrhage',
         title: 'BP Management in ICH',
-        content: 'Target SBP 100-140 mmHg (prevent hematoma expansion). ATACH-2 trial: Intensive lowering (110-139) was safe. Contrast with ischemic stroke: Lower is better in ICH (prevents expansion), but in ischemic stroke too low worsens penumbral perfusion. Use nicardipine or labetalol drip for precise control.',
+        content: 'Target SBP <140 mmHg within 1 hour when feasible (Class I, Level A). Avoid SBP <110 mmHg (ATACH-2: intensive target 110-139 showed no benefit, possible harm). Use nicardipine or labetalol. Contrast with ischemic stroke: in ICH lower BP reduces expansion; in ischemic stroke too low worsens penumbral perfusion.',
         type: 'pearl',
         section: 'step-6',
-        evidence: 'ATACH-2, NEJM 2016',
+        evidence: 'AHA/ASA 2022 ICH Guidelines, Section 5.1, Class I, Level A; INTERACT-2, ATACH-2',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
       {
         id: 'atach2-trial',
         title: 'ATACH-2 Trial',
-        content: 'Intensive BP lowering (110-139) vs standard (140-179) in spontaneous ICH. Intensive lowering was safe. No difference in death or disability but trend toward benefit. Current practice: Target 100-140 to prevent hematoma expansion.',
+        content: 'Intensive BP lowering (110-139) vs standard (140-179) in spontaneous ICH. No difference in death or disability; intensive arm had possible harm (e.g. renal). 2022 guidelines: SBP <140 within 1 hour when feasible; avoid SBP <110.',
         type: 'trial',
         section: 'step-6',
         link: '/trials/atach-2',
-        evidence: 'NEJM 2016',
+        evidence: 'NEJM 2016; AHA/ASA 2022 ICH',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
       {
         id: 'neurosurgery-indications',
         title: 'Surgical Intervention for ICH',
-        content: 'STAT neurosurgery consult for: Cerebellar hemorrhage >3cm (risk of hydrocephalus/brainstem compression), Superficial lobar ICH >30ml with mass effect + declining GCS, Intraventricular hemorrhage with hydrocephalus (EVD placement), Any ICH with herniation signs. STICH trials: Benefit for superficial (<1cm from cortex) lobar hemorrhages with mass effect. Deep hemorrhages (basal ganglia, thalamus) generally managed medically.',
+        content: 'STAT neurosurgery consult for: Cerebellar hemorrhage >3 cm with neurological decline or brainstem compression or hydrocephalus (evacuate; Class I, Level B). EVD for hydrocephalus from IVH. Superficial lobar ICH with mass effect + declining GCS (STICH II-type). Any ICH with herniation signs. STICH trials: Benefit for superficial (<1cm from cortex) lobar hemorrhages with mass effect. Deep hemorrhages (basal ganglia, thalamus) generally managed medically.',
         type: 'pearl',
         section: 'step-6',
-        evidence: 'STICH, STICH II',
+        evidence: 'AHA/ASA 2022 ICH Guidelines; STICH, STICH II',
+        evidenceClass: 'I',
+        evidenceLevel: 'B',
       },
       {
         id: 'stich-trial',
@@ -590,6 +782,8 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         section: 'step-6',
         link: '/trials/stich',
         evidence: 'Lancet 2005, 2013',
+        evidenceClass: 'IIa',
+        evidenceLevel: 'B',
       },
     ],
   },

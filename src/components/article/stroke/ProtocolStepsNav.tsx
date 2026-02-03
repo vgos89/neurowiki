@@ -29,7 +29,7 @@ export const ProtocolStepsNav: React.FC<ProtocolStepsNavProps> = ({ steps, onSte
         );
       case 'locked':
         return (
-          <div className="w-6 h-6 rounded-full bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 flex items-center justify-center flex-shrink-0 font-bold text-xs">
+          <div className="w-6 h-6 rounded-full bg-gray-300 text-gray-500 flex items-center justify-center flex-shrink-0 font-bold text-xs">
             {stepId}
           </div>
         );
@@ -39,34 +39,34 @@ export const ProtocolStepsNav: React.FC<ProtocolStepsNavProps> = ({ steps, onSte
   const getStepTextColor = (status: Step['status']) => {
     switch (status) {
       case 'completed':
-        return 'text-gray-600 dark:text-gray-400';
+        return 'text-gray-600';
       case 'active':
-        return 'text-blue-600 dark:text-blue-400 font-semibold';
+        return 'text-blue-600 font-semibold';
       case 'locked':
-        return 'text-gray-400 dark:text-gray-600';
+        return 'text-gray-400';
     }
   };
 
   return (
-    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4 space-y-2">
+    <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-2">
       {/* Header */}
-      <h3 className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3">
+      <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-3">
         Protocol Steps
       </h3>
 
-      {/* Steps List */}
+      {/* Steps List - 44px touch targets */}
       <div className="space-y-1">
         {steps.map((step) => (
           <button
             key={step.id}
             onClick={() => onStepClick?.(step.id)}
             disabled={step.status === 'locked'}
-            className={`w-full flex items-center gap-3 px-2 py-2 rounded-lg transition-colors text-left ${
+            className={`w-full min-h-[44px] flex items-center gap-3 px-3 py-3 rounded-lg transition-colors text-left ${
               step.status === 'locked'
                 ? 'cursor-not-allowed opacity-60'
                 : step.status === 'active'
-                ? 'bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 cursor-pointer'
-                : 'hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer'
+                ? 'bg-blue-50 hover:bg-blue-100 cursor-pointer'
+                : 'hover:bg-gray-50 cursor-pointer'
             }`}
           >
             {getStepIcon(step.status, step.id)}
@@ -74,7 +74,7 @@ export const ProtocolStepsNav: React.FC<ProtocolStepsNavProps> = ({ steps, onSte
               {step.id}. {step.title}
             </span>
             {step.status === 'active' && (
-              <ChevronRight className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+              <ChevronRight className="w-4 h-4 text-blue-600 flex-shrink-0" />
             )}
           </button>
         ))}

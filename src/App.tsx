@@ -12,6 +12,13 @@ const Home = lazy(() => import('./pages/Home'));
 const Wiki = lazy(() => import('./pages/Wiki'));
 const Calculators = lazy(() => import('./pages/Calculators'));
 const NihssCalculator = lazy(() => import('./pages/NihssCalculator'));
+const IchScoreCalculator = lazy(() => import('./pages/IchScoreCalculator'));
+const Abcd2ScoreCalculator = lazy(() => import('./pages/Abcd2ScoreCalculator'));
+const HasBledScoreCalculator = lazy(() => import('./pages/HasBledScoreCalculator'));
+const RopeScoreCalculator = lazy(() => import('./pages/RopeScoreCalculator'));
+const GlasgowComaScaleCalculator = lazy(() => import('./pages/GlasgowComaScaleCalculator'));
+const HeidelbergBleedingCalculator = lazy(() => import('./pages/HeidelbergBleedingCalculator'));
+const BostonCriteriaCaaCalculator = lazy(() => import('./pages/BostonCriteriaCaaCalculator'));
 const ResidentGuide = lazy(() => import('./pages/ResidentGuide'));
 const TrialsPage = lazy(() => import('./pages/TrialsPage'));
 const TrialPageNew = lazy(() => import('./pages/trials/TrialPageNew'));
@@ -73,6 +80,13 @@ const App: React.FC = () => {
           <Route path="/wiki/:topic" element={<Wiki />} />
           <Route path="/calculators" element={<Calculators />} />
           <Route path="/calculators/nihss" element={<PublishGate><NihssCalculator /></PublishGate>} />
+          <Route path="/calculators/ich-score" element={<PublishGate><IchScoreCalculator /></PublishGate>} />
+          <Route path="/calculators/abcd2-score" element={<PublishGate><Abcd2ScoreCalculator /></PublishGate>} />
+          <Route path="/calculators/has-bled-score" element={<PublishGate><HasBledScoreCalculator /></PublishGate>} />
+          <Route path="/calculators/rope-score" element={<PublishGate><RopeScoreCalculator /></PublishGate>} />
+          <Route path="/calculators/glasgow-coma-scale" element={<PublishGate><GlasgowComaScaleCalculator /></PublishGate>} />
+          <Route path="/calculators/heidelberg-bleeding-classification" element={<PublishGate><HeidelbergBleedingCalculator /></PublishGate>} />
+          <Route path="/calculators/boston-criteria-caa" element={<PublishGate><BostonCriteriaCaaCalculator /></PublishGate>} />
           <Route path="/calculators/gca-pathway" element={<PublishGate><GCAPathway /></PublishGate>} />
           <Route path="/calculators/elan-pathway" element={<PublishGate><ElanPathway /></PublishGate>} />
           <Route path="/calculators/evt-pathway" element={<PublishGate><EvtPathway /></PublishGate>} />

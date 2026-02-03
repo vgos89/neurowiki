@@ -42,6 +42,7 @@ const ALL_TOOLS: Tool[] = [
   { id: 'se-pathway', name: 'Status Epilepticus', description: 'Stage 1–3 SE management pathway', category: 'epilepsy', type: 'pathway', path: '/calculators/se-pathway' },
   { id: 'migraine-pathway', name: 'Migraine & Headache', description: 'ED and inpatient management', category: 'headache', type: 'pathway', path: '/calculators/migraine-pathway' },
   { id: 'gca-pathway', name: 'GCA / PMR Pathway', description: 'Suspected giant cell arteritis workup', category: 'headache', type: 'pathway', path: '/calculators/gca-pathway' },
+  { id: 'ich', name: 'ICH Score', description: '30-day mortality for ICH', category: 'vascular', type: 'calculator', path: '/calculators/ich-score' },
 ];
 
 // Category color mapping
@@ -94,8 +95,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     (isOnTrialsPage && location.pathname !== '/trials')
   );
   
-  // Determines if we show the content panel (Guide, Trials only, but NOT when viewing an article)
-  const showContentPanel = (isOnGuidePage || isOnTrialsPage) && !isViewingArticle;
+  // Content panel (sidebar) only for Resident Guide landing. Neuro Trials uses in-page filters — no sidebar.
+  const showContentPanel = isOnGuidePage && !isViewingArticle;
 
   // Navigation expanded state - defaults to true (open) on first load
   const [isNavExpanded, setIsNavExpanded] = useState(true);

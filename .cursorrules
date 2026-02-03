@@ -1,656 +1,130 @@
-# 🎯 SEO & SEMANTIC STANDARDS FOR NEUROWIKI.AI
-
-**Version:** 1.0  
-**Last Updated:** 2026-01-19  
-**Scope:** All page components, layouts, and content generation
-
----
-
-## 📋 TABLE OF CONTENTS
-1. [Semantic HTML Structure](#1-semantic-html-structure)
-2. [Next.js Metadata API](#2-nextjs-metadata-api)
-3. [Structured Data (JSON-LD)](#3-structured-data-json-ld)
-4. [Performance & Core Web Vitals](#4-performance--core-web-vitals)
-5. [SEO Self-Audit Checklist](#5-seo-self-audit-checklist)
-6. [Examples & Templates](#6-examples--templates)
-
----
-
-## 1. SEMANTIC HTML STRUCTURE
-
-### 🚫 STRICTLY FORBIDDEN (The "Anti-Div Soup" Rule)
-
-**Never use `<div>` when a semantic element exists:**
-```tsx
-// ❌ WRONG - Generic div soup
-<div className="article-wrapper">
-  <div className="article-header">
-    <div className="title">Parkinson's Disease</div>
-  </div>
-  <div className="content">
-    <div className="section">
-      <div className="section-title">Symptoms</div>
-      <div className="text">...</div>
-    </div>
-  </div>
-</div>
-
-// ✅ CORRECT - Semantic HTML5
-<article className="article-wrapper">
-  <header className="article-header">
-    <h1>Parkinson's Disease</h1>
-  </header>
-  <section className="content">
-    <h2>Symptoms</h2>
-    <p>...</p>
-  </section>
-</article>
-```
-
-### ✅ MANDATED SEMANTIC TAGS
-
-Use these tags based on content purpose:
-
-| Tag | Purpose | Example Use Case |
-|-----|---------|------------------|
-| `<article>` | Self-contained content | Wiki article pages, blog posts |
-| `<section>` | Thematic grouping | Symptoms section, Treatment section |
-| `<aside>` | Tangentially related | Clinical pearls, related articles sidebar |
-| `<nav>` | Navigation links | Main menu, breadcrumbs, pagination |
-| `<header>` | Introductory content | Page title, article metadata |
-| `<footer>` | Closing content | References, last updated date |
-| `<main>` | Primary content | Wraps the main article content (one per page) |
-| `<figure>` + `<figcaption>` | Images with captions | Anatomy diagrams, MRI scans |
-
-### 📐 HEADING HIERARCHY RULES
-
-**Strict enforcement:**
-
-1. **One `<h1>` per page** (the article title or page title)
-2. **Logical nesting:** Never skip levels (h1 → h3 is forbidden)
-3. **Hierarchy reflects structure:** Subtopics under main topics
-```tsx
-// ❌ WRONG - Broken hierarchy
-<h1>Stroke Management</h1>
-<h3>Acute Phase</h3>  {/* Skipped h2! */}
-<h2>Recovery</h2>     {/* Out of order! */}
-
-// ✅ CORRECT - Logical hierarchy
-<h1>Stroke Management</h1>
-<h2>Acute Phase</h2>
-  <h3>Thrombolysis</h3>
-  <h3>Thrombectomy</h3>
-<h2>Recovery Phase</h2>
-  <h3>Physical Therapy</h3>
-```
-
-### 🔍 SEMANTIC VALIDATION CHECKLIST
-
-Before committing, verify:
-- [ ] No `<div>` used where `<section>`, `<article>`, or `<aside>` would be appropriate
-- [ ] All navigation wrapped in `<nav>`
-- [ ] Images in context use `<figure>` + `<figcaption>`
-- [ ] Only one `<h1>` exists on the page
-- [ ] Headings follow logical order (no skipped levels)
-
----
-
-## 2. NEXT.JS METADATA API
-
-### ✅ REQUIRED FOR EVERY PAGE
-
-**Every `page.tsx` or `layout.tsx` MUST export metadata.**
-
-### 🎯 Dynamic Metadata (For Content Pages)
-
-**Use `generateMetadata` for pages with dynamic content:**
-```tsx
-// app/conditions/[slug]/page.tsx
-
-import { Metadata } from 'next';
-
-export async function generateMetadata({ 
-  params 
-}: { 
-  params: { slug: string } 
-}): Promise<Metadata> {
-  // Fetch article data
-  const article = await getArticleBySlug(params.slug);
-  
-  return {
-    // Primary Metadata
-    title: `${article.title} | Neurowiki`,
-    description: article.description, // 150-160 chars, unique per page
-    
-    // Open Graph (Facebook, LinkedIn)
-    openGraph: {
-      title: article.title,
-      description: article.description,
-      url: `https://neurowiki.ai/conditions/${params.slug}`,
-      siteName: 'Neurowiki',
-      images: [
-        {
-          url: article.ogImage || 'https://neurowiki.ai/og-default.png',
-          width: 1200,
-          height: 630,
-          alt: article.title,
-        },
-      ],
-      locale: 'en_US',
-      type: 'article',
-      publishedTime: article.publishedAt,
-      modifiedTime: article.updatedAt,
-      authors: [article.author],
-      section: article.category, // e.g., "Neurodegenerative Diseases"
-      tags: article.tags, // e.g., ["Parkinson's", "Movement Disorders"]
-    },
-    
-    // Twitter Card
-    twitter: {
-      card: 'summary_large_image',
-      title: article.title,
-      description: article.description,
-      images: [article.ogImage || 'https://neurowiki.ai/og-default.png'],
-      creator: '@neurowiki', // Replace with actual Twitter handle
-    },
-    
-    // Additional SEO
-    keywords: article.keywords, // Array of relevant medical terms
-    authors: [{ name: article.author }],
-    alternates: {
-      canonical: `https://neurowiki.ai/conditions/${params.slug}`,
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
-      },
-    },
-  };
-}
-```
-
-### 🎨 Static Metadata (For Static Pages)
-
-**For pages like "About", "Contact", "Guides":**
-```tsx
-// app/about/page.tsx
-
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'About Neurowiki | AI-Powered Neurology Education',
-  description: 'Neurowiki is a comprehensive, AI-enhanced knowledge base designed to function as a bedside teacher for neurology residents and physicians.',
-  openGraph: {
-    title: 'About Neurowiki',
-    description: 'Learn how Neurowiki transforms neurology education with interactive, evidence-based content.',
-    url: 'https://neurowiki.ai/about',
-    siteName: 'Neurowiki',
-    images: [{ url: 'https://neurowiki.ai/og-about.png', width: 1200, height: 630 }],
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'About Neurowiki',
-    description: 'AI-powered neurology education for residents and physicians.',
-  },
-};
-```
-
-### 🚫 FORBIDDEN PRACTICES
-
-**Never use generic descriptions:**
-```tsx
-// ❌ WRONG - AI slop / generic
-description: "Learn about this topic on Neurowiki"
-description: "Read our comprehensive guide"
-description: "Everything you need to know"
-
-// ✅ CORRECT - Specific and informative
-description: "Evidence-based overview of Parkinson's disease pathophysiology, clinical presentation, diagnostic criteria, and treatment options for neurologists."
-```
-
-### 📋 METADATA VALIDATION CHECKLIST
-
-Before committing:
-- [ ] `title` is unique and under 60 characters
-- [ ] `description` is unique and 150-160 characters
-- [ ] `openGraph` includes all required fields
-- [ ] `twitter` card configured with image
-- [ ] `canonical` URL is set correctly
-- [ ] `keywords` are medically relevant (no keyword stuffing)
-- [ ] Images are 1200x630 for optimal display
-
----
-
-## 3. STRUCTURED DATA (JSON-LD)
-
-### ✅ REQUIRED FOR CONTENT PAGES
-
-**All article pages MUST include JSON-LD structured data.**
-
-### 🧬 Medical Article Schema
-
-**Implement using Next.js Script component:**
-```tsx
-// app/conditions/[slug]/page.tsx
-
-import Script from 'next/script';
-
-export default async function ConditionPage({ params }: { params: { slug: string } }) {
-  const article = await getArticleBySlug(params.slug);
-  
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'MedicalScholarlyArticle', // or 'Article' for non-medical
-    headline: article.title,
-    description: article.description,
-    image: article.ogImage,
-    datePublished: article.publishedAt,
-    dateModified: article.updatedAt,
-    author: {
-      '@type': 'Organization',
-      name: 'Neurowiki Editorial Team',
-      url: 'https://neurowiki.ai/about',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Neurowiki',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://neurowiki.ai/logo.png',
-      },
-    },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `https://neurowiki.ai/conditions/${params.slug}`,
-    },
-    articleSection: article.category, // e.g., "Movement Disorders"
-    keywords: article.keywords.join(', '),
-    
-    // Medical-specific fields
-    about: {
-      '@type': 'MedicalCondition',
-      name: article.conditionName, // e.g., "Parkinson's Disease"
-      alternateName: article.alternateNames, // e.g., ["PD", "Paralysis agitans"]
-      code: {
-        '@type': 'MedicalCode',
-        code: article.icd10Code, // e.g., "G20"
-        codingSystem: 'ICD-10',
-      },
-    },
-  };
-  
-  return (
-    <>
-      <Script
-        id="structured-data"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      
-      <article>
-        {/* Your content */}
-      </article>
-    </>
-  );
-}
-```
-
-### 📚 BreadcrumbList Schema
-
-**Add breadcrumbs for navigation context:**
-```tsx
-const breadcrumbData = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: [
-    {
-      '@type': 'ListItem',
-      position: 1,
-      name: 'Home',
-      item: 'https://neurowiki.ai',
-    },
-    {
-      '@type': 'ListItem',
-      position: 2,
-      name: 'Conditions',
-      item: 'https://neurowiki.ai/conditions',
-    },
-    {
-      '@type': 'ListItem',
-      position: 3,
-      name: article.title,
-      item: `https://neurowiki.ai/conditions/${params.slug}`,
-    },
-  ],
-};
-```
-
-### 🔍 VALIDATION
-
-**Test structured data:**
-- Use [Google Rich Results Test](https://search.google.com/test/rich-results)
-- Use [Schema.org Validator](https://validator.schema.org/)
-
----
-
-## 4. PERFORMANCE & CORE WEB VITALS
-
-### 🖼️ IMAGE OPTIMIZATION (LCP)
-
-**MANDATORY: Use `next/image` with proper attributes:**
-```tsx
-import Image from 'next/image';
-
-// ❌ WRONG - Regular img tag
-<img src="/brain-scan.jpg" alt="MRI scan" />
-
-// ✅ CORRECT - Next.js Image with optimization
-<Image
-  src="/brain-scan.jpg"
-  alt="Axial T2-weighted MRI showing hyperintense lesion in basal ganglia"
-  width={800}
-  height={600}
-  priority={true}  // For above-the-fold images (LCP)
-  quality={85}     // Balance quality vs. file size
-  placeholder="blur" // Prevents layout shift
-  blurDataURL="data:image/jpeg;base64,..." // Optional: custom blur
-/>
-```
-
-**Image Attribute Rules:**
-- `priority={true}` → For hero images, article headers (first visible image)
-- `priority={false}` → For below-the-fold content
-- Always include descriptive `alt` text (not just "image" or "photo")
-- Use `sizes` prop for responsive images
-
-### ✍️ FONT OPTIMIZATION (CLS)
-
-**MANDATORY: Use `next/font` to prevent layout shift:**
-```tsx
-// app/layout.tsx
-
-import { Inter, Space_Grotesk } from 'next/font/google';
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap', // Prevent FOIT (Flash of Invisible Text)
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-heading',
-  display: 'swap',
-  weight: ['700'],
-});
-
-export default function RootLayout({ children }) {
-  return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <body>{children}</body>
-    </html>
-  );
-}
-```
-
-**In CSS:**
-```css
-body {
-  font-family: var(--font-inter), sans-serif;
-}
-
-h1, h2, h3 {
-  font-family: var(--font-heading), sans-serif;
-}
-```
-
-### ⚡ LAZY LOADING
-
-**For non-critical content:**
-```tsx
-import dynamic from 'next/dynamic';
-
-// Lazy load heavy components
-const InteractiveQuiz = dynamic(() => import('@/components/InteractiveQuiz'), {
-  loading: () => <div>Loading quiz...</div>,
-  ssr: false, // Client-side only if needed
-});
-
-// Lazy load images below the fold
-<Image
-  src="/diagram.png"
-  alt="Neural pathway diagram"
-  width={600}
-  height={400}
-  loading="lazy" // Defers loading until near viewport
-/>
-```
-
-### 📊 CORE WEB VITALS TARGETS
-
-**Aim for these scores:**
-
-- **LCP (Largest Contentful Paint):** < 2.5s
-- **FID (First Input Delay):** < 100ms
-- **CLS (Cumulative Layout Shift):** < 0.1
-
-**Monitor with:**
-```bash
-npm run build
-npm run start
-# Open Lighthouse in Chrome DevTools
-```
-
----
-
-## 5. SEO SELF-AUDIT CHECKLIST
-
-### 🔎 BEFORE MARKING TASK AS "COMPLETE"
-
-**Every coding agent MUST verify:**
-
-#### ✅ Metadata Checklist
-- [ ] `generateMetadata` or `metadata` export exists
-- [ ] `title` is unique and descriptive (not generic)
-- [ ] `description` is 150-160 chars and informative
-- [ ] `openGraph` image is 1200x630 and exists
-- [ ] `canonical` URL is correct
-- [ ] `twitter` card configured
-
-#### ✅ Semantic HTML Checklist
-- [ ] No unnecessary `<div>` wrappers
-- [ ] Content wrapped in `<article>`, `<section>`, or `<aside>`
-- [ ] Navigation in `<nav>` tags
-- [ ] Only ONE `<h1>` per page
-- [ ] Headings follow logical hierarchy (h1 → h2 → h3)
-- [ ] Images use `<figure>` + `<figcaption>` when appropriate
-
-#### ✅ Structured Data Checklist
-- [ ] JSON-LD schema included for article pages
-- [ ] Schema validated (no errors in Rich Results Test)
-- [ ] BreadcrumbList added for deep pages
-- [ ] Medical schema includes ICD-10 codes (if applicable)
-
-#### ✅ Performance Checklist
-- [ ] All images use `next/image`
-- [ ] Hero images have `priority={true}`
-- [ ] Fonts loaded via `next/font`
-- [ ] Heavy components lazy-loaded with `dynamic()`
-- [ ] No layout shift during load (CLS < 0.1)
-
-#### ✅ Accessibility Checklist
-- [ ] All images have descriptive `alt` text
-- [ ] Color contrast meets WCAG AA (4.5:1 for text)
-- [ ] Focus states visible for keyboard navigation
-- [ ] ARIA labels on interactive elements
-
----
-
-## 6. EXAMPLES & TEMPLATES
-
-### 📄 COMPLETE PAGE TEMPLATE
-
-**Use this as a starting point for new pages:**
-```tsx
-// app/conditions/[slug]/page.tsx
-
-import { Metadata } from 'next';
-import Image from 'next/image';
-import Script from 'next/script';
-import { getArticleBySlug } from '@/lib/articles';
-
-// ========================================
-// METADATA GENERATION
-// ========================================
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const article = await getArticleBySlug(params.slug);
-  
-  return {
-    title: `${article.title} | Neurowiki`,
-    description: article.description,
-    openGraph: {
-      title: article.title,
-      description: article.description,
-      url: `https://neurowiki.ai/conditions/${params.slug}`,
-      siteName: 'Neurowiki',
-      images: [{ url: article.ogImage, width: 1200, height: 630 }],
-      type: 'article',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: article.title,
-      description: article.description,
-    },
-    alternates: {
-      canonical: `https://neurowiki.ai/conditions/${params.slug}`,
-    },
-  };
-}
-
-// ========================================
-// PAGE COMPONENT
-// ========================================
-export default async function ConditionPage({ params }: { params: { slug: string } }) {
-  const article = await getArticleBySlug(params.slug);
-  
-  // Structured Data
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'MedicalScholarlyArticle',
-    headline: article.title,
-    description: article.description,
-    image: article.ogImage,
-    datePublished: article.publishedAt,
-    dateModified: article.updatedAt,
-    author: { '@type': 'Organization', name: 'Neurowiki' },
-    publisher: { '@type': 'Organization', name: 'Neurowiki' },
-  };
-  
-  return (
-    <>
-      {/* Structured Data */}
-      <Script
-        id="article-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      
-      {/* Semantic HTML Structure */}
-      <article className="article-container">
-        <header className="article-header">
-          <h1>{article.title}</h1>
-          <p className="article-meta">
-            Last updated: {new Date(article.updatedAt).toLocaleDateString()}
-          </p>
-        </header>
-        
-        {/* Hero Image */}
-        <figure>
-          <Image
-            src={article.heroImage}
-            alt={article.heroImageAlt}
-            width={1200}
-            height={630}
-            priority={true}
-            quality={85}
-          />
-          <figcaption>{article.heroImageCaption}</figcaption>
-        </figure>
-        
-        {/* Main Content */}
-        <section>
-          <h2>Overview</h2>
-          <p>{article.overview}</p>
-        </section>
-        
-        <section>
-          <h2>Clinical Presentation</h2>
-          <p>{article.clinicalPresentation}</p>
-        </section>
-        
-        {/* Related Content */}
-        <aside className="related-articles">
-          <h3>Related Articles</h3>
-          <nav>
-            <ul>
-              {article.relatedArticles.map((related) => (
-                <li key={related.slug}>
-                  <a href={`/conditions/${related.slug}`}>{related.title}</a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </aside>
-        
-        {/* References */}
-        <footer className="article-footer">
-          <h2>References</h2>
-          <ol>
-            {article.references.map((ref, idx) => (
-              <li key={idx}>{ref}</li>
-            ))}
-          </ol>
-        </footer>
-      </article>
-    </>
-  );
-}
-```
-
----
-
-## 🚨 ENFORCEMENT POLICY
-
-**These rules are NOT optional.**
-
-- If you generate code that violates these standards, **I will reject your PR.**
-- Before submitting any code for review, **run the self-audit checklist.**
-- If unsure about semantic structure, **ask before implementing.**
-
-**Success criteria:** Every page on Neurowiki.ai should score 95+ on Google Lighthouse SEO audit.
-
----
-
-## 📚 RESOURCES
-
-- [Next.js Metadata Docs](https://nextjs.org/docs/app/building-your-application/optimizing/metadata)
-- [Schema.org Medical Types](https://schema.org/MedicalEntity)
-- [Google Search Central](https://developers.google.com/search)
-- [Web Vitals Guide](https://web.dev/vitals/)
-
----
-## Calculator Analytics
-
-When creating any new calculator component:
-1. Import: `import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';`
-2. Initialize: `const { trackResult } = useCalculatorAnalytics('calculator_name');`
-3. Track result: Call `trackResult(resultValue)` when calculation completes
-
-**END OF RULE FILE**
+# NEUROWIKI - AI MEDICAL EDUCATION PLATFORM
+# Multi-Agent Development System
+
+You are the **Lead AI Architect** for Neurowiki, coordinating specialized agents to build a world-class neurology education platform.
+
+## PLATFORM OVERVIEW
+
+**Mission:** Provide neurology residents with evidence-based clinical decision support and interactive learning tools.
+
+**Core Products:**
+1. Clinical Workflows - Step-by-step stroke/seizure/headache protocols
+2. Medical Calculators - NIHSS, ASPECTS, CSF interpretation
+3. Knowledge Base - Searchable neurology concepts with trial references
+4. Interactive Learning - Study Mode with Deep Learning pearls
+
+## TECHNOLOGY STACK
+
+**Frontend:**
+- React 18 with TypeScript
+- Next.js 14
+- Tailwind CSS
+- Material Icons
+
+**Key Directories:**
+- src/pages/guide/ - Clinical workflows
+- src/components/article/stroke/ - Stroke components
+- src/data/ - Clinical content and trials
+
+## MULTI-AGENT ARCHITECTURE
+
+When a task comes in, analyze it and delegate to specialized agents:
+
+### **Agent 1: UI Architect** (agents/ui-architect.md)
+**Trigger words:** "design", "layout", "styling", "UI", "looks", "appearance"
+
+### **Agent 2: Medical Scientist** (agents/medical-scientist.md)
+**Trigger words:** "accurate", "evidence", "guidelines", "trial", "clinical", "AHA"
+
+### **Agent 3: Calculator Engineer** (agents/calculator-engineer.md)
+**Trigger words:** "calculator", "score", "NIHSS", "ASPECTS", "compute"
+
+### **Agent 4: Data Architect** (agents/data-architect.md)
+**Trigger words:** "database", "schema", "structure", "API", "data model"
+
+### **Agent 5: Quality Assurance** (agents/quality-assurance.md)
+**Trigger words:** "test", "bug", "error", "validate", "performance"
+
+### **Agent 6: SEO Specialist** (agents/seo-specialist.md)
+**Trigger words:** "SEO", "search", "ranking", "traffic", "keywords", "meta tags", "title", "description"
+
+### **Agent 7: Error & Feedback Handler** (agents/error-feedback-handler.md)
+**Trigger words:** "bug", "error", "crash", "feedback", "issue", "report", "user complaint"
+
+### **Agent 8: Compliance & Legal** (agents/compliance-legal.md)
+**Trigger words:** "HIPAA", "privacy", "legal", "disclaimer", "terms", "compliance", "copyright", "liability"
+
+### **Agent 9: Internationalization** (agents/internationalization.md)
+**Trigger words:** "translate", "language", "i18n", "localization", "Spanish", "international", "RTL"
+
+### **Agent 10: Content Writer** (agents/content-writer.md)
+**Trigger words:** "content", "copy", "writing", "blurb", "pearl", "FAQ", "educational"
+
+### **Agent 11: API Integration** (agents/api-integration.md)
+**Trigger words:** "API", "PubMed", "ClinicalTrials", "MCP", "integration", "sync", "external data"
+
+### **Agent 12: Accessibility Specialist** (agents/accessibility-specialist.md)
+**Trigger words:** "accessibility", "a11y", "WCAG", "screen reader", "keyboard", "ARIA"
+
+### **Agent 13: Performance Optimizer** (agents/performance-optimizer.md)
+**Trigger words:** "performance", "speed", "Core Web Vitals", "bundle", "lazy load"
+
+### **Agent 14: Analytics & Insights** (agents/analytics-insights.md)
+**Trigger words:** "analytics", "metrics", "tracking", "usage", "conversion", "funnel"
+
+### **Agent 15: Onboarding & Documentation** (agents/onboarding-documentation.md)
+**Trigger words:** "onboarding", "documentation", "README", "help", "guide", "runbook"
+
+### **Agent 16: Mobile-First Developer** (agents/mobile-first-developer.md)
+**Trigger words:** "mobile", "phone", "tablet", "responsive", "touch", "offline", "PWA", "slow network", "3G"
+
+## DELEGATION PROTOCOL
+
+When user makes a request:
+1. Analyze the request - What type of work?
+2. Identify primary agent - Which specialist should lead?
+3. Invoke agent(s) - Use their expertise
+4. Coordinate - If multiple agents needed, orchestrate them
+5. Report back - Summarize what was done
+
+## RESPONSE PROTOCOL
+
+Always:
+1. Identify which agent(s) you're using
+2. Explain your reasoning
+3. Make changes incrementally
+4. Test thoroughly
+5. Report what you did
+
+## GUIDELINES YOU FOLLOW
+
+**Acute Ischemic Stroke:**
+- AHA/ASA 2026 Early Management Guidelines (PRIMARY SOURCE)
+  - https://www.ahajournals.org/doi/10.1161/STR.0000000000000513
+
+**Intracerebral Hemorrhage (ICH):**
+- AHA/ASA 2022 Spontaneous ICH Management Guidelines (PRIMARY SOURCE)
+  - https://www.ahajournals.org/doi/10.1161/STR.0000000000000407
+  - Key topics: BP management (SBP <140), anticoagulation reversal, surgical indications
+
+- AHA/ASA 2024, 2019, 2018 guidelines (historical reference for ischemic stroke)
+
+## CRITICAL RULES
+
+❌ NEVER change medical calculations without verification
+❌ NEVER remove clinical citations
+❌ NEVER break existing functionality
+❌ NEVER ignore TypeScript errors
+❌ NEVER invent medical information
+❌ NEVER give thrombolytics in hemorrhagic stroke
+
+✅ ALWAYS preserve functionality
+✅ ALWAYS cite sources
+✅ ALWAYS test changes
+✅ ALWAYS explain what you did
+✅ ALWAYS use AHA/ASA 2026 guidelines for ischemic stroke content
+✅ ALWAYS use AHA/ASA 2022 guidelines for hemorrhage (ICH) content
+✅ ALWAYS cite specific guideline sections (e.g., "AHA/ASA 2026, Section 3.1" or "AHA/ASA 2022 ICH, Section 5.1")
+✅ ALWAYS distinguish ischemic vs hemorrhagic stroke clearly
+✅ ALWAYS verify recommendations against 2026 guidelines (ischemic) or 2022 ICH guidelines (hemorrhage) before publishing
+✅ ALWAYS note when content differs from previous guidelines

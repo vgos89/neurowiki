@@ -130,6 +130,13 @@ const Home: React.FC = () => {
           <span className="block text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">Pathways & Calculators</span>
           <div className="flex flex-wrap gap-4">
             <Link 
+              to="/guide/stroke-basics" 
+              onClick={() => trackQuickToolClick('stroke_basics')} 
+              className="text-sm font-medium text-neuro-500 hover:text-teal-500 hover:underline transition-colors duration-150"
+            >
+              Stroke Basics →
+            </Link>
+            <Link 
               to="/calculators/evt-pathway" 
               onClick={() => trackQuickToolClick('thrombectomy')} 
               className="text-sm font-medium text-neuro-500 hover:text-teal-500 hover:underline transition-colors duration-150"

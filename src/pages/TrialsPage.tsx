@@ -1,322 +1,202 @@
+import React, { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { useFavorites } from '../hooks/useFavorites';
+import {
+  trials,
+  categoryStyles,
+  categoryNames,
+  groupTrialsByCategory,
+  TRIAL_CATEGORY_IDS,
+  type TrialItem,
+  type TrialCategoryKey,
+} from '../data/trialListData';
 
-import React, { useMemo, useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { ChevronRight, BookOpen, Layers, Activity, List, Search, ChevronDown } from 'lucide-react';
-import { GUIDE_CONTENT } from '../data/guideContent';
+export default function TrialsPage() {
+  const [searchParams] = useSearchParams();
+  const [activeCategory, setActiveCategory] = useState<TrialCategoryKey | null>(null);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const { toggleFavorite, isFavorite } = useFavorites();
 
-type Subcategory = {
-  title: string;
-  description: string;
-  ids: string[];
-};
-
-type Category = {
-  title: string;
-  subcategories: Subcategory[];
-};
-
-const TRIAL_STRUCTURE: Category[] = [
-  {
-    title: "Vascular Neurology",
-    subcategories: [
-      {
-        title: "Thrombolysis",
-        description: "IV Alteplase & Tenecteplase Evidence",
-        ids: ['ninds-trial', 'ecass3-trial', 'extend-trial', 'eagle-trial']
-      },
-      {
-        title: "Thrombectomy",
-        description: "Large & Medium Vessel Occlusion evidence",
-        ids: ['distal-trial', 'escape-mevo-trial', 'defuse-3-trial', 'dawn-trial', 'select2-trial', 'angel-aspect-trial', 'attention-trial', 'baoche-trial']
-      },
-      {
-        title: "Antiplatelets & Prevention",
-        description: "DAPT, Anticoagulation, Lipids",
-        ids: ['chance-trial', 'point-trial', 'sps3-trial', 'socrates-trial', 'elan-study', 'sparcl-trial']
-      },
-      {
-        title: "Carotid & Intracranial Disease",
-        description: "Stenting vs Endarterectomy vs Medical",
-        ids: ['nascet-trial', 'crest-trial', 'sammpris-trial', 'weave-trial']
-      },
-      {
-        title: "Acute Management",
-        description: "Glycemic control & Systemic care",
-        ids: ['shine-trial']
-      }
-    ]
-  }
-];
-
-const TrialsPage: React.FC = () => {
-  const location = useLocation();
-  const [expandedTrialsSubcategories, setExpandedTrialsSubcategories] = useState<string[]>([]);
-  
-  // Search state for mobile legend
-  const [sidebarSearchQuery, setSidebarSearchQuery] = useState('');
-  
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
-  const toggleTrialsSubcategory = (subcategory: string) => {
-    setExpandedTrialsSubcategories(prev =>
-      prev.includes(subcategory)
-        ? prev.filter(s => s !== subcategory)
-        : [...prev, subcategory]
-    );
-  };
-  
-  // Clear search when navigating
   useEffect(() => {
-    setSidebarSearchQuery('');
-  }, [location.pathname]);
+    const fav = searchParams.get('favorites');
+    if (fav === 'true') setShowFavoritesOnly(true);
+    else setShowFavoritesOnly(false);
+  }, [searchParams]);
 
-  const orphans = useMemo(() => {
-    const structuredIds = new Set(TRIAL_STRUCTURE.flatMap(c => c.subcategories.flatMap(s => s.ids)));
-    return Object.values(GUIDE_CONTENT)
-      .filter(t => t.category === 'Neuro Trials' && !structuredIds.has(t.id));
-  }, []);
+  let filteredTrials = trials;
+  if (showFavoritesOnly) filteredTrials = filteredTrials.filter((t) => isFavorite(t.id));
+  if (activeCategory) filteredTrials = filteredTrials.filter((t) => t.category === activeCategory);
+
+  const groupedTrials = groupTrialsByCategory(filteredTrials);
+
+  const filterByCategory = (category: TrialCategoryKey) => {
+    setActiveCategory((prev) => (prev === category ? null : category));
+  };
+
+  const handleFavoriteClick = (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(id);
+  };
 
   return (
-    <div className="flex flex-col relative items-start">
-      {/* Main Content */}
-      <div className="flex-1 min-w-0 w-full">
-        {/* Mobile Sidebar Legend (matching desktop) */}
-        <div className="lg:hidden">
-            <div className="bg-white dark:bg-slate-800 overflow-hidden">
-                {/* Panel Header */}
-                <div className="px-4 pt-4 pb-4 border-b border-slate-100 dark:border-slate-700">
-                  <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                    Neuro Trials
-                  </h2>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
-                    Clinical Evidence
-                  </p>
-                </div>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+      {/* Header with integrated filters — same layout as Clinical Tools */}
+      <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+        <div className="max-w-2xl mx-auto px-5 md:px-8">
+          <div className="flex items-center justify-between py-3">
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white">Landmark Trials</h1>
+            <button
+              onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors min-h-[44px] touch-manipulation ${
+                showFavoritesOnly
+                  ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+              }`}
+              aria-label={showFavoritesOnly ? 'Show all trials' : 'Show favorites only'}
+            >
+              <svg className="w-4 h-4 shrink-0" fill={showFavoritesOnly ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              </svg>
+              <span className="hidden sm:inline">Favorites</span>
+            </button>
+          </div>
 
-                {/* Search */}
-                <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                    <input
-                      type="text"
-                      placeholder="Search trials..."
-                      value={sidebarSearchQuery}
-                      onChange={(e) => setSidebarSearchQuery(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-700 border-0 rounded-lg text-sm placeholder-slate-400 dark:placeholder-slate-500 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-neuro-500"
-                    />
-                  </div>
-                </div>
+          {/* Single tab: All (count) — matches Calculators pattern */}
+          <div className="flex gap-1 p-1 bg-slate-100 dark:bg-slate-700 rounded-lg mb-3">
+            <button
+              onClick={() => setShowFavoritesOnly(false)}
+              className="flex-1 py-2 text-sm font-medium rounded-md transition-all bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm"
+            >
+              All ({trials.length})
+            </button>
+          </div>
 
-                {/* Panel Content */}
-                <div className="flex-1 overflow-y-auto px-3 py-3 max-h-[50vh]">
-                  {TRIAL_STRUCTURE.map((cat) => (
-                    cat.subcategories.map(sub => {
-                      // Filter trials based on search query
-                      const filteredTrialIds = sidebarSearchQuery.trim()
-                        ? sub.ids.filter(id => {
-                            const trial = GUIDE_CONTENT[id];
-                            if (!trial) return false;
-                            const trialTitle = trial.title.replace(/Trial:|Study:/gi, '').trim();
-                            return trialTitle.toLowerCase().includes(sidebarSearchQuery.toLowerCase());
-                          })
-                        : sub.ids;
-                      
-                      // Only show subcategory if it has matching trials or search is empty
-                      if (sidebarSearchQuery.trim() && filteredTrialIds.length === 0) {
-                        return null;
-                      }
-                      
-                      // Auto-expand subcategory if search query matches
-                      const isOpen = sidebarSearchQuery.trim()
-                        ? filteredTrialIds.length > 0
-                        : expandedTrialsSubcategories.includes(sub.title);
-                      
-                      return (
-                        <div key={sub.title} className="mb-1">
-                          <button
-                            onClick={() => toggleTrialsSubcategory(sub.title)}
-                            className="w-full flex items-center justify-between px-3 py-2.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider hover:text-slate-700 dark:hover:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-                          >
-                            <span>{sub.title}</span>
-                            <ChevronDown
-                              size={14}
-                              className={`transition-transform duration-200 ${
-                                isOpen ? 'rotate-180' : ''
-                              }`}
-                            />
-                          </button>
-
-                          {isOpen && (
-                            <div className="mt-1 space-y-0.5">
-                              {filteredTrialIds.map(id => {
-                                const trial = GUIDE_CONTENT[id];
-                                if (!trial) return null;
-                                const itemActive = location.pathname === `/trials/${id}`;
-                                return (
-                                  <Link
-                                    key={id}
-                                    to={`/trials/${id}?from=trials&category=${encodeURIComponent(sub.title)}`}
-                                    className={`block px-3 py-2 ml-2 rounded-lg text-sm transition-colors border-l-2 ${
-                                      itemActive
-                                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium border-blue-500'
-                                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 border-transparent hover:border-slate-300'
-                                    }`}
-                                  >
-                                    {trial.title.replace(/Trial:|Study:/gi, '').trim()}
-                                  </Link>
-                                );
-                              })}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })
-                  ))}
-                
-                {/* Orphan Trials */}
-                {orphans.length > 0 && (() => {
-                  // Filter orphan trials based on search query
-                  const filteredOrphans = sidebarSearchQuery.trim()
-                    ? orphans.filter(trial =>
-                        trial.title.toLowerCase().includes(sidebarSearchQuery.toLowerCase())
-                      )
-                    : orphans;
-                  
-                  if (sidebarSearchQuery.trim() && filteredOrphans.length === 0) {
-                    return null;
-                  }
-                  
-                  return (
-                    <div className="mt-4">
-                      <h3 className="px-3 py-2 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider text-left">
-                        Other Trials
-                      </h3>
-                      <div className="space-y-0.5">
-                        {filteredOrphans.map(trial => {
-                          const itemActive = location.pathname === `/trials/${trial.id}`;
-                          return (
-                            <Link
-                              key={trial.id}
-                              to={`/trials/${trial.id}?from=trials`}
-                              className={`block px-3 py-2 ml-2 rounded-lg text-sm transition-colors border-l-2 ${
-                                itemActive
-                                  ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium border-blue-500'
-                                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 border-transparent hover:border-slate-300'
-                              }`}
-                            >
-                              {trial.title}
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  );
-                })()}
-              </div>
-            </div>
-        </div>
-
-        {/* Main Trial Cards - Hidden on mobile, shown on desktop */}
-        <div className="hidden lg:block px-4 md:p-8">
-          <div className="max-w-5xl mx-auto space-y-12">
-            {/* Header */}
-            <div className="mb-8">
-              <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">Landmark Trials</h1>
-              <p className="text-slate-500 dark:text-slate-400 mt-2 font-medium text-lg">Curated summaries of pivotal studies shaping modern neurology.</p>
-            </div>
-            {TRIAL_STRUCTURE.map((cat) => (
-              <div key={cat.title} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div className="flex items-center space-x-3 mb-6 pb-2 border-b border-slate-100 dark:border-slate-700">
-                   <div className="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-400">
-                      <Layers size={20} />
-                   </div>
-                   <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{cat.title}</h2>
-                </div>
-
-                <div className="space-y-10">
-                  {cat.subcategories.map(sub => (
-                    <div key={sub.title} id={sub.title.replace(/\s+/g, '-').toLowerCase()} className="scroll-mt-24">
-                      <div className="mb-4 ml-1">
-                          <h3 className="text-lg font-bold text-emerald-800 dark:text-emerald-400 flex items-center">
-                              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-3"></div>
-                              {sub.title}
-                          </h3>
-                          <p className="text-sm text-slate-500 dark:text-slate-400 ml-4.5 mt-0.5">{sub.description}</p>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        {sub.ids.map(id => {
-                          const trial = GUIDE_CONTENT[id];
-                          if (!trial) return null;
-                          
-                          return (
-                            <Link
-                              key={id}
-                              to={`/trials/${id}?from=trials&category=${encodeURIComponent(sub.title)}`}
-                              className="group bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm dark:shadow-slate-900/50 hover:shadow-md dark:hover:shadow-slate-900/70 hover:border-emerald-200 dark:hover:border-emerald-700 transition-colors duration-150 flex flex-col relative overflow-hidden"
-                            >
-                              <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 dark:bg-emerald-900/30 rounded-full blur-2xl opacity-0 group-hover:opacity-50 transition-opacity -mr-8 -mt-8"></div>
-                              
-                              <div className="flex justify-between items-start mb-3 relative z-10">
-                                  <h4 className="font-bold text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors text-lg leading-tight pr-4">
-                                      {trial.title.replace('Trial:', '').replace('Study:', '').trim()}
-                                  </h4>
-                                  <div className="p-2 bg-emerald-50 dark:bg-emerald-900/30 rounded-xl text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/50 transition-colors shrink-0">
-                                      <BookOpen size={18} />
-                                  </div>
-                              </div>
-                              
-                              <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed mb-4 flex-1">
-                                  {trial.content.split('\n').find(l => l.length > 40 && !l.startsWith('#'))?.replace(/\*+/g, '') || "Clinical summary available."}
-                              </p>
-
-                              <div className="flex items-center text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mt-auto">
-                                  View Summary <ChevronRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                              </div>
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-            {/* Orphans */}
-            {orphans.length > 0 && (
-               <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                  <div className="flex items-center space-x-3 mb-6 pb-2 border-b border-slate-100 dark:border-slate-700">
-                      <div className="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg text-slate-600 dark:text-slate-400"><Activity size={20} /></div>
-                      <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Other Trials</h2>
-                  </div>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                      {orphans.map(trial => (
-                          <Link
-                              key={trial.id}
-                              to={`/trials/${trial.id}?from=trials`}
-                              className="group bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm dark:shadow-slate-900/50 hover:shadow-md dark:hover:shadow-slate-900/70 hover:border-emerald-200 dark:hover:border-emerald-700 transition-colors duration-150"
-                          >
-                              <h4 className="font-bold text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors text-lg mb-2">
-                                  {trial.title}
-                              </h4>
-                              <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
-                                  {trial.content.split('\n').find(l => l.length > 40 && !l.startsWith('#'))?.replace(/\*+/g, '')}
-                              </p>
-                          </Link>
-                      ))}
-                  </div>
-               </div>
+          {/* Category pills — horizontal scroll, touch-friendly */}
+          <div className="flex gap-2 overflow-x-auto pb-3 -mx-1 px-1 scrollbar-hide">
+            {TRIAL_CATEGORY_IDS.map((category) => {
+              const count = trials.filter((t) => t.category === category).length;
+              if (count === 0) return null;
+              const styles = categoryStyles[category];
+              return (
+                <button
+                  key={category}
+                  onClick={() => filterByCategory(category)}
+                  className={`flex-shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium border transition-all min-h-[44px] touch-manipulation ${
+                    activeCategory === category ? styles.pillActive : `${styles.pillBg} ${styles.pillText} hover:opacity-80`
+                  }`}
+                >
+                  <span className={`w-2 h-2 rounded-full shrink-0 ${activeCategory === category ? 'bg-white' : styles.dot}`} />
+                  <span>{categoryNames[category]}</span>
+                  <span className={`text-xs shrink-0 ${activeCategory === category ? 'text-white/70' : 'opacity-60'}`}>{count}</span>
+                </button>
+              );
+            })}
+            {activeCategory && (
+              <button
+                onClick={() => setActiveCategory(null)}
+                className="flex-shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-600 transition-all min-h-[44px] touch-manipulation"
+              >
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Clear
+              </button>
             )}
           </div>
         </div>
       </div>
+
+      {/* Main content — card list with left border, title, Trial tag, blurb, star, arrow */}
+      <main className="max-w-2xl mx-auto px-5 md:px-8 py-6">
+        {showFavoritesOnly && (
+          <div className="mb-4 px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/50 rounded-xl flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              </svg>
+              <span className="text-sm text-amber-800 dark:text-amber-300 font-medium">Showing favorites only</span>
+            </div>
+            <button onClick={() => setShowFavoritesOnly(false)} className="text-sm text-amber-600 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 font-medium">
+              Show all
+            </button>
+          </div>
+        )}
+
+        {Object.entries(groupedTrials).map(([category, categoryTrials]) => (
+          <div key={category} className="mb-8">
+            {!activeCategory && (
+              <div className="flex items-center gap-2 mb-3 pl-1">
+                <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${categoryStyles[category].dot}`} />
+                <h2 className={`text-sm font-semibold tracking-wide ${categoryStyles[category].text} dark:text-slate-300`}>
+                  {categoryNames[category as TrialCategoryKey]}
+                </h2>
+                <span className="text-xs text-slate-400 dark:text-slate-500">{categoryTrials.length}</span>
+              </div>
+            )}
+            <div className="space-y-2">
+              {categoryTrials.map((trial: TrialItem) => (
+                <Link
+                  key={trial.id}
+                  to={`${trial.path}${trial.path.includes('?') ? '&' : '?'}from=trials&category=${encodeURIComponent(categoryNames[trial.category])}`}
+                  className={`group flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl border-l-4 ${categoryStyles[trial.category].border} border border-slate-100 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600 hover:shadow-sm dark:hover:shadow-slate-900/50 transition-all min-h-[44px] touch-manipulation`}
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        {trial.name}
+                      </h3>
+                      <span className="px-2 py-0.5 text-xs font-medium rounded bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400">
+                        Trial
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{trial.description}</p>
+                  </div>
+                  <div className="flex items-center gap-1 ml-3 shrink-0">
+                    <button
+                      onClick={(e) => handleFavoriteClick(trial.id, e)}
+                      className={`p-2 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
+                        isFavorite(trial.id) ? 'text-amber-500 dark:text-amber-400' : 'text-slate-300 dark:text-slate-500 hover:text-slate-400 dark:hover:text-slate-400'
+                      }`}
+                      aria-label={isFavorite(trial.id) ? 'Remove from favorites' : 'Add to favorites'}
+                    >
+                      <svg className="w-5 h-5" fill={isFavorite(trial.id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                      </svg>
+                    </button>
+                    <svg className="w-5 h-5 text-slate-300 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        {Object.keys(groupedTrials).length === 0 && (
+          <div className="text-center py-16">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+              <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <p className="text-slate-600 dark:text-slate-300 font-medium mb-1">No trials found</p>
+            <p className="text-sm text-slate-400">{showFavoritesOnly ? 'No favorites match' : 'Try a different filter'}</p>
+            <button
+              onClick={() => {
+                setShowFavoritesOnly(false);
+                setActiveCategory(null);
+              }}
+              className="mt-4 px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 font-medium"
+            >
+              Clear filters
+            </button>
+          </div>
+        )}
+      </main>
+
+      <div className="h-24 md:h-0" />
     </div>
   );
-};
-
-export default TrialsPage;
+}

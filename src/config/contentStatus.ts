@@ -110,6 +110,34 @@ export const contentStatus: ContentStatus = {
     published: true,
     comingSoonMessage: 'NIHSS calculator',
   },
+  '/calculators/ich-score': {
+    published: true,
+    comingSoonMessage: 'ICH Score calculator',
+  },
+  '/calculators/abcd2-score': {
+    published: true,
+    comingSoonMessage: 'ABCD² Score calculator',
+  },
+  '/calculators/has-bled-score': {
+    published: true,
+    comingSoonMessage: 'HAS-BLED calculator',
+  },
+  '/calculators/rope-score': {
+    published: true,
+    comingSoonMessage: 'RoPE Score calculator',
+  },
+  '/calculators/glasgow-coma-scale': {
+    published: true,
+    comingSoonMessage: 'GCS calculator',
+  },
+  '/calculators/heidelberg-bleeding-classification': {
+    published: true,
+    comingSoonMessage: 'Heidelberg bleeding classification',
+  },
+  '/calculators/boston-criteria-caa': {
+    published: true,
+    comingSoonMessage: 'Boston Criteria 2.0 for CAA',
+  },
   '/calculators/aspects': {
     published: false,
     comingSoonMessage: 'ASPECTS calculator coming soon',

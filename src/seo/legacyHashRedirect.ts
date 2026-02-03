@@ -18,10 +18,20 @@ const LegacyHashRedirect: React.FC = () => {
       
       let newPath = pathname;
 
-      // Handle specific legacy migration patterns
+      // Handle specific legacy migration patterns: ?id= → canonical calculator routes
       if (pathname === '/calculators' && params.has('id')) {
         const id = params.get('id');
-        if (id) {
+        const legacyToCanonical: Record<string, string> = {
+          nihss: 'nihss',
+          ich: 'ich-score',
+          abcd2: 'abcd2-score',
+          'has-bled': 'has-bled-score',
+          rope: 'rope-score',
+          gcs: 'glasgow-coma-scale',
+        };
+        if (id && legacyToCanonical[id]) {
+          newPath = `/calculators/${legacyToCanonical[id]}`;
+        } else if (id) {
           newPath = `/calculators/${id}`;
         }
       }

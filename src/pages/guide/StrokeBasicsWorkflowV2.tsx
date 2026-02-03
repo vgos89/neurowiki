@@ -1,20 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, Copy } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Copy, Brain, Info, AlertTriangle, AlertCircle } from 'lucide-react';
 import { StrokeBasicsLayout } from './StrokeBasicsLayout';
 import { ProtocolSection } from '../../components/article/stroke/ProtocolSection';
-import { LKWSection } from '../../components/article/stroke/LKWSection';
-import { LVOSection } from '../../components/article/stroke/LVOSection';
-import { LabsAndVitalsSection } from '../../components/article/stroke/LabsAndVitalsSection';
-import { TreatmentSection } from '../../components/article/stroke/TreatmentSection';
-import { HemorrhageProtocol } from '../../components/article/stroke/HemorrhageProtocol';
 import { SidebarTimer } from '../../components/article/stroke/SidebarTimer';
 import { ProtocolStepsNav, Step as ProtocolStep } from '../../components/article/stroke/ProtocolStepsNav';
 import { QuickToolsGrid } from '../../components/article/stroke/QuickToolsGrid';
 import { STROKE_CLINICAL_PEARLS } from '../../data/strokeClinicalPearls';
-import { StickyArticleHeader } from '../../components/article/stroke/StickyArticleHeader';
-import { DeepLearningModal } from '../../components/article/stroke/DeepLearningModal';
-import { ThrombectomyPathwayModal } from '../../components/article/stroke/ThrombectomyPathwayModal';
+import { CodeModeStep1, Step1Data } from '../../components/article/stroke/CodeModeStep1';
+
+/** Lazy-load modals for smaller initial bundle (mobile performance) */
+const DeepLearningModal = lazy(() => import('../../components/article/stroke/DeepLearningModal').then(m => ({ default: m.DeepLearningModal })));
+const ThrombectomyPathwayModal = lazy(() => import('../../components/article/stroke/ThrombectomyPathwayModal').then(m => ({ default: m.ThrombectomyPathwayModal })));
+const ThrombolysisEligibilityModal = lazy(() => import('../../components/article/stroke/ThrombolysisEligibilityModal').then(m => ({ default: m.ThrombolysisEligibilityModal })));
+import type { ThrombolysisEligibilityData } from '../../components/article/stroke/ThrombolysisEligibilityModal';
+const AnalogClockPicker = lazy(() => import('../../components/article/stroke/AnalogClockPicker').then(m => ({ default: m.AnalogClockPicker })));
+const TpaReversalProtocolModal = lazy(() => import('../../components/article/stroke/TpaReversalProtocolModal').then(m => ({ default: m.TpaReversalProtocolModal })));
+const OrolingualEdemaProtocolModal = lazy(() => import('../../components/article/stroke/OrolingualEdemaProtocolModal').then(m => ({ default: m.OrolingualEdemaProtocolModal })));
+const HemorrhageProtocolModal = lazy(() => import('../../components/article/stroke/HemorrhageProtocolModal').then(m => ({ default: m.HemorrhageProtocolModal })));
+import { CodeModeStep2, Step2Data } from '../../components/article/stroke/CodeModeStep2';
+import { CodeModeStep3 } from '../../components/article/stroke/CodeModeStep3';
+import { CodeModeStep4 } from '../../components/article/stroke/CodeModeStep4';
+import { StrokeIchProtocolStep } from '../../components/article/stroke/StrokeIchProtocolStep';
+import { NihssCalculatorEmbed } from '../../components/article/stroke/NihssCalculatorEmbed';
+
+/** Fallback Step 1 data for Study Mode when user hasn't completed Step 1 (all steps visible) */
+const DEFAULT_STEP1_DATA: Step1Data = {
+  lkwHours: 2,
+  lkwUnknown: false,
+  nihssScore: 5,
+  systolicBP: 140,
+  diastolicBP: 90,
+  glucose: 100,
+  weightValue: 70,
+  weightUnit: 'kg',
+  bpControlled: true,
+  eligibilityChecked: false
+};
+
+/** Fallback Step 2 data for Study Mode when user hasn't completed Step 2 */
+const DEFAULT_STEP2_DATA: Step2Data = {
+  ctResult: 'no-bleed',
+  treatmentGiven: 'none',
+  ctaOrdered: false,
+  lvoPresent: null
+};
+
+/** Get With The Guidelines (GWTG) stroke metrics – single source of truth for timestamps */
+export interface GWTGMilestones {
+  doorTime?: Date | null;
+  doorToData?: Date;
+  doorToCT?: Date;
+  doorToNeedle?: Date;
+  lkwTime?: Date | null;
+  symptomDiscoveryTime?: Date | null;
+  neurologistEvaluationTime?: Date | null;
+  ctOrderedTime?: Date | null;
+  ctFirstImageTime?: Date | null;
+  ctInterpretedTime?: Date | null;
+  tpaBolusTime?: Date | null;
+  groinPunctureTime?: Date | null;
+  firstDeviceTime?: Date | null;
+  firstReperfusionTime?: Date | null;
+}
 
 type StepStatus = 'completed' | 'active' | 'locked';
 
@@ -25,12 +73,37 @@ interface Step {
   status: StepStatus;
   isExpanded: boolean;
   completionSummary?: string;
+  startedAt?: Date;
+  completedAt?: Date;
 }
+
+const TimerDisplay: React.FC<{ startTime: Date; running: boolean }> = ({ startTime, running }) => {
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    if (!running) return;
+
+    const interval = setInterval(() => {
+      setElapsed(Math.floor((new Date().getTime() - startTime.getTime()) / 1000));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [startTime, running]);
+
+  const minutes = Math.floor(elapsed / 60);
+  const seconds = elapsed % 60;
+
+  return (
+    <span className="text-xl font-mono font-semibold tabular-nums leading-tight text-slate-900">
+      {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+    </span>
+  );
+};
 
 // Main content component that uses the layout hook (must be inside StrokeBasicsLayout)
 const MainContent: React.FC<{
-  isLearningMode: boolean;
-  setIsLearningMode: (value: boolean) => void;
+  workflowMode: 'code' | 'study';
+  setWorkflowMode: (value: 'code' | 'study') => void;
   steps: Step[];
   toggleStep: (id: number) => void;
   completeStep: (id: number, summary?: string) => void;
@@ -45,101 +118,261 @@ const MainContent: React.FC<{
   setStep3ModalOpen: (value: boolean) => void;
   step4ModalOpen: boolean;
   setStep4ModalOpen: (value: boolean) => void;
-  step5ModalOpen: boolean;
-  setStep5ModalOpen: (value: boolean) => void;
   thrombectomyModalOpen: boolean;
   setThrombectomyModalOpen: (value: boolean) => void;
   onThrombectomyRecommendation?: (recommendation: string) => void;
   thrombectomyRecommendation: string | null;
-}> = ({ isLearningMode, setIsLearningMode, steps, toggleStep, completeStep, activeStepNumber, getProtocolStatus, handleStepClick, step1ModalOpen, setStep1ModalOpen, step2ModalOpen, setStep2ModalOpen, step3ModalOpen, setStep3ModalOpen, step4ModalOpen, setStep4ModalOpen, step5ModalOpen, setStep5ModalOpen, thrombectomyModalOpen, setThrombectomyModalOpen, onThrombectomyRecommendation, thrombectomyRecommendation }) => {
+  timerStartTime: Date;
+  setTimerStartTime: (d: Date) => void;
+  timerRunning: boolean;
+  setTimerRunning: (v: boolean) => void;
+  /** GWTG-aligned milestones: door time, LKW, imaging, treatment, thrombectomy */
+  milestones: GWTGMilestones;
+  setMilestones: React.Dispatch<React.SetStateAction<GWTGMilestones>>;
+  setStep1Data: (d: Step1Data | null) => void;
+  step1Data: Step1Data | null;
+  setStep2Data: (d: Step2Data | null) => void;
+  step2Data: Step2Data | null;
+  step4Orders: string[];
+  setStep4Orders: (orders: string[]) => void;
+  setSteps: React.Dispatch<React.SetStateAction<Step[]>>;
+  scrollToStep: (stepId: number, delay?: number) => void;
+  nihssModalOpen: boolean;
+  setNihssModalOpen: (value: boolean) => void;
+  eligibilityModalOpen: boolean;
+  setEligibilityModalOpen: (value: boolean) => void;
+  doorTimePickerOpen: boolean;
+  setDoorTimePickerOpen: (value: boolean) => void;
+  nihssFromModal: number | null;
+  setNihssFromModal: (v: number | null) => void;
+  eligibilityResult: ThrombolysisEligibilityData | null;
+  setEligibilityResult: React.Dispatch<React.SetStateAction<ThrombolysisEligibilityData | null>>;
+  toastMessage: string | null;
+  setToastMessage: (msg: string | null) => void;
+  tpaReversalModalOpen: boolean;
+  setTpaReversalModalOpen: (value: boolean) => void;
+  orolingualEdemaModalOpen: boolean;
+  setOrolingualEdemaModalOpen: (value: boolean) => void;
+  hemorrhageProtocolModalOpen: boolean;
+  setHemorrhageProtocolModalOpen: (value: boolean) => void;
+}> = ({ workflowMode, setWorkflowMode, steps, toggleStep, completeStep, activeStepNumber, getProtocolStatus, handleStepClick, step1ModalOpen, setStep1ModalOpen, step2ModalOpen, setStep2ModalOpen, step3ModalOpen, setStep3ModalOpen, step4ModalOpen, setStep4ModalOpen, thrombectomyModalOpen, setThrombectomyModalOpen, onThrombectomyRecommendation, thrombectomyRecommendation, timerStartTime, setTimerStartTime, timerRunning, setTimerRunning, milestones, setMilestones, setStep1Data, step1Data, setStep2Data, step2Data, step4Orders, setStep4Orders, setSteps, scrollToStep, nihssModalOpen, setNihssModalOpen, eligibilityModalOpen, setEligibilityModalOpen, doorTimePickerOpen, setDoorTimePickerOpen, nihssFromModal, setNihssFromModal, eligibilityResult, setEligibilityResult, toastMessage, setToastMessage, tpaReversalModalOpen, setTpaReversalModalOpen, orolingualEdemaModalOpen, setOrolingualEdemaModalOpen, hemorrhageProtocolModalOpen, setHemorrhageProtocolModalOpen }) => {
+  const doorTimeForPicker = milestones.doorTime ?? timerStartTime;
+  const doorTimeTo12h = (d: Date) => {
+    let h = d.getHours();
+    const period: 'AM' | 'PM' = h >= 12 ? 'PM' : 'AM';
+    h = h % 12;
+    if (h === 0) h = 12;
+    return { hour: h, minute: d.getMinutes(), period };
+  };
+  const doorTimeFrom12h = (hour: number, minute: number, period: 'AM' | 'PM'): Date => {
+    let hour24 = hour;
+    if (period === 'PM' && hour !== 12) hour24 += 12;
+    if (period === 'AM' && hour === 12) hour24 = 0;
+    const d = new Date();
+    d.setHours(hour24, minute, 0, 0);
+    if (d > new Date()) d.setDate(d.getDate() - 1);
+    return d;
+  };
 
       return (
+        <Suspense fallback={null}>
         <>
-          {/* Sticky Header with Timer, Steps, Tools */}
-          <StickyArticleHeader
-            steps={steps.map(step => ({
-              id: step.id,
-              title: step.title,
-              status: step.status === 'completed' ? 'completed' : step.status === 'active' ? 'active' : 'locked'
-            }))}
-            activeStepNumber={activeStepNumber}
-            onStepClick={handleStepClick}
-          />
-
-          {/* Back Button */}
-          <div className="mb-6 px-6 pt-6">
-            <Link
-              to="/guide"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors border border-slate-200 dark:border-slate-700 mb-4"
-            >
-              <ArrowLeft size={18} />
-              <span>Back to Resident Guide</span>
-            </Link>
-          </div>
-
-          {/* Header */}
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-2">
-              <h1 className="text-3xl font-black text-gray-900 dark:text-white">
-                Stroke Code Basics
-              </h1>
-          <div className="flex items-center gap-2">
-            {/* Learning Mode Toggle */}
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Learning
-              </span>
-              <button
-                onClick={() => setIsLearningMode(!isLearningMode)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${
-                  isLearningMode ? 'bg-purple-600' : 'bg-gray-300 dark:bg-gray-600'
-                }`}
-                role="switch"
-                aria-checked={isLearningMode}
-                aria-label="Toggle learning mode"
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    isLearningMode ? 'translate-x-6' : 'translate-x-1'
-                  }`}
-                />
-              </button>
+          {/* Timer Display - CODE MODE only */}
+          {workflowMode === 'code' && (
+            <div className="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-slate-200 pt-[env(safe-area-inset-top)]">
+              <div className="max-w-4xl mx-auto px-3 sm:px-6 py-2 sm:py-4 flex items-center justify-between gap-2 flex-wrap">
+                <div className="flex items-center gap-2 sm:space-x-3 min-w-0 flex-wrap">
+                  <span className="material-icons-outlined text-red-600 text-lg sm:scale-110 flex-shrink-0" aria-hidden>timer</span>
+                  <div className="flex flex-col min-w-0">
+                    <span className="hidden sm:block text-xs uppercase tracking-widest font-bold text-slate-500">
+                      Elapsed Time
+                    </span>
+                    <TimerDisplay startTime={timerStartTime} running={timerRunning} />
+                  </div>
+                  {(() => {
+                    const doorTime = milestones.doorTime ?? timerStartTime;
+                    return (
+                      <div className="flex items-center gap-1.5 text-xs text-slate-600 flex-shrink-0">
+                        <span className="hidden sm:inline">Door:</span>
+                        <span className="font-mono font-medium text-slate-800">
+                          {doorTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setDoorTimePickerOpen(true)}
+                          className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center p-1.5 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-700"
+                          title="Set door time (analogue clock)"
+                          aria-label="Set door time with analogue clock"
+                        >
+                          <span className="material-icons-outlined text-lg">schedule</span>
+                        </button>
+                      </div>
+                    );
+                  })()}
+                  {milestones.neurologistEvaluationTime == null && (
+                    <button
+                      type="button"
+                      onClick={() => setMilestones(prev => ({ ...prev, neurologistEvaluationTime: new Date() }))}
+                      className="min-h-[44px] px-2 sm:px-3 py-1.5 text-xs font-medium rounded-lg bg-sky-100 text-sky-700 hover:bg-sky-200 border border-sky-200"
+                      title="Record neurologist evaluation time (GWTG)"
+                    >
+                      Record Neuro Eval
+                    </button>
+                  )}
+                  {milestones.neurologistEvaluationTime != null && (
+                    <span className="text-xs text-slate-500 flex-shrink-0">
+                      Neuro: {milestones.neurologistEvaluationTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  )}
+                  {milestones.doorToNeedle && (
+                    <div className="text-xs sm:text-sm font-bold bg-red-50 text-red-700 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-red-200 flex-shrink-0">
+                      🎯 D2N: {Math.round((milestones.doorToNeedle.getTime() - (milestones.doorTime ?? timerStartTime).getTime()) / 60000)}m
+                    </div>
+                  )}
+                </div>
+                <button
+                  onClick={() => {
+                    if (confirm('Reset will clear all step data and restart the timer. Continue?')) {
+                      const now = new Date();
+                      setTimerStartTime(now);
+                      setTimerRunning(true);
+                      setMilestones({ doorTime: now });
+                      setStep1Data(null);
+                      setStep2Data(null);
+                      setSteps(prev => prev.slice(0, 4).map((s, idx) => ({
+                        ...s,
+                        status: idx === 0 ? 'active' : 'locked',
+                        isExpanded: idx === 0,
+                        completionSummary: undefined,
+                        startedAt: idx === 0 ? new Date() : undefined,
+                        completedAt: undefined
+                      })));
+                      setToastMessage('Workflow reset');
+                      setTimeout(() => setToastMessage(null), 2500);
+                    }
+                  }}
+                  className="flex-shrink-0 min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-medium border border-slate-200 rounded-full hover:bg-slate-50 transition-colors"
+                >
+                  <span className="sm:inline">Reset</span>
+                  <span className="hidden sm:inline sm:ml-0.5">Timer</span>
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Real-time emergency decision support • Complete each step sequentially
-        </p>
-      </div>
+          )}
 
-      {/* Wikipedia-Style Protocol Sections */}
-      <div className="space-y-12">
-        {/* Step 1: Last Known Well */}
-        <div id="step-1">
+          {/* Back + Header: compact on mobile */}
+          <div className="mb-3 sm:mb-6 px-3 sm:px-6 pt-2 sm:pt-6">
+            <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
+              <Link
+                to="/guide"
+                className="inline-flex items-center gap-1.5 min-h-[44px] px-3 py-2 sm:px-4 sm:py-3 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors border border-slate-200 flex-shrink-0"
+                aria-label="Back to Resident Guide"
+              >
+                <ArrowLeft size={18} aria-hidden />
+                <span className="hidden sm:inline">Back to Resident Guide</span>
+                <span className="sm:hidden">Back</span>
+              </Link>
+              <div className="inline-flex rounded-2xl bg-slate-100/80 p-1 flex-shrink-0">
+                <button
+                  onClick={() => setWorkflowMode('code')}
+                  className={`min-h-[40px] sm:min-h-[44px] px-3 sm:px-8 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all ${
+                    workflowMode === 'code'
+                      ? 'bg-white shadow-sm text-slate-900'
+                      : 'text-slate-500 hover:text-slate-900'
+                  }`}
+                >
+                  <span className="hidden sm:inline">CODE MODE</span>
+                  <span className="sm:hidden">Code</span>
+                </button>
+                <button
+                  onClick={() => setWorkflowMode('study')}
+                  className={`min-h-[40px] sm:min-h-[44px] px-3 sm:px-8 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all ${
+                    workflowMode === 'study'
+                      ? 'bg-white shadow-sm text-slate-900'
+                      : 'text-slate-500 hover:text-slate-900'
+                  }`}
+                >
+                  <span className="hidden sm:inline">STUDY MODE</span>
+                  <span className="sm:hidden">Study</span>
+                </button>
+              </div>
+            </div>
+            <h1 className="text-xl sm:text-3xl font-black text-gray-900 mb-0 sm:mb-1">
+              Stroke Code Basics
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-500 mt-0 sm:mt-0">
+              <span className="sm:hidden">{workflowMode === 'code' ? '5 steps' : '5 steps'}</span>
+              <span className="hidden sm:inline">
+                {workflowMode === 'code'
+                  ? '⚡ Fast-track clinical decisions during active stroke code • 5 essential steps'
+                  : '📚 Evidence-based learning with trials and clinical pearls • 5 comprehensive steps'}
+              </span>
+            </p>
+          </div>
+
+      {/* Protocol Sections - tighter spacing on mobile */}
+      <article className="space-y-8 sm:space-y-12" aria-label="Stroke code protocol">
+        {/* Step 1: Clinical Assessment & Data Collection (same component for both modes) */}
+        <section id="step-1" aria-labelledby="step-1-title">
           <ProtocolSection
             number={1}
-            title={steps[0].title}
+            title="Clinical Assessment & Data Collection"
             status={getProtocolStatus(steps[0])}
             isActive={activeStepNumber === 1}
-            showCompleteButton={steps[0].status === 'active'}
-            onComplete={() => completeStep(1, 'LKW established • Eligibility assessed')}
-            showDeepLearningBadge={isLearningMode}
+            showCompleteButton={false}
+            showDeepLearningBadge={workflowMode === 'study'}
             pearlCount={STROKE_CLINICAL_PEARLS['step-1']?.deep?.length || 0}
             onDeepLearningClick={() => setStep1ModalOpen(true)}
           >
-            <LKWSection 
-              isLearningMode={isLearningMode}
-              onOutsideWindow={(hoursElapsed) => {
-                // Auto-advance to LVO Screen if outside 4.5 hour window
-                completeStep(1, `LKW established • Outside 4.5h window (${hoursElapsed.toFixed(1)}h) • Proceed to LVO screening`);
-                // completeStep already handles scrolling, but add extra scroll as backup
+            {workflowMode === 'study' && (
+              <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="flex gap-3">
+                  <span className="material-icons-outlined text-blue-600 text-xl">info</span>
+                  <div className="flex-1 space-y-3">
+                    <div>
+                      <h4 className="font-semibold text-blue-900 mb-2">Last Known Well & Treatment Windows</h4>
+                      <p className="text-sm text-blue-800 leading-relaxed">
+                        The &quot;last known well&quot; (LKW) time is the most critical piece of information in acute stroke management, determining eligibility for time-sensitive reperfusion therapies. For IV thrombolysis (tPA/TNK), the standard window is <strong>0-4.5 hours</strong>, with extended windows possible up to 9 hours using perfusion imaging (EXTEND trial). For mechanical thrombectomy, treatment is possible <strong>up to 24 hours</strong> with appropriate imaging showing salvageable tissue (DAWN/DEFUSE-3 trials).
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-blue-800 leading-relaxed">
+                        <strong>Time is Brain:</strong> During untreated stroke, 1.9 million neurons die per minute. Every 15-minute delay in treatment reduces the probability of good outcome by 4% (Emberson et al, Lancet 2014). The NINDS trial demonstrated that patients treated within 90 minutes had 50% vs 38% excellent outcomes compared to those treated later in the 3-hour window.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-blue-800 leading-relaxed">
+                        <strong>Wake-Up Strokes:</strong> If the patient woke with symptoms, LKW is when they were last seen normal before sleep (bedtime), NOT when they woke up. This represents 25% of all ischemic strokes. The WAKE-UP trial (2018) showed that MRI-guided treatment using DWI-FLAIR mismatch in unknown-onset strokes resulted in 53.3% vs 41.8% favorable outcomes.
+                      </p>
+                    </div>
+                    <div className="pt-2 border-t border-blue-200">
+                      <p className="text-xs text-blue-700">
+                        <strong>References:</strong> <a href="https://www.ahajournals.org/doi/10.1161/STR.0000000000000513" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-900">AHA/ASA 2026 Guidelines</a> • <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1804355" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-900">WAKE-UP Trial</a> • <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(14)60584-5/fulltext" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-900">Emberson Meta-Analysis</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            <CodeModeStep1
+              onComplete={(data) => {
+                setStep1Data(data);
+                setMilestones(prev => ({
+                  ...prev,
+                  doorToData: new Date(),
+                  lkwTime: data.lkwTimestamp ?? null,
+                  symptomDiscoveryTime: data.symptomDiscoveryTime ?? null
+                }));
+                completeStep(1, data.lkwUnknown ? `LKW: Unknown • NIHSS: ${data.nihssScore} • BP: ${data.systolicBP}/${data.diastolicBP} • Weight: ${data.weightValue}${data.weightUnit}` : `LKW: ${data.lkwHours}h • NIHSS: ${data.nihssScore} • BP: ${data.systolicBP}/${data.diastolicBP} • Weight: ${data.weightValue}${data.weightUnit}`);
                 scrollToStep(2, 400);
               }}
+              onOpenNIHSS={() => setNihssModalOpen(true)}
+              onOpenEligibility={() => setEligibilityModalOpen(true)}
+              nihssScoreFromModal={nihssFromModal}
             />
           </ProtocolSection>
 
-          {/* Modal */}
-          {isLearningMode && (
+          {workflowMode === 'study' && (
             <DeepLearningModal
               isOpen={step1ModalOpen}
               onClose={() => setStep1ModalOpen(false)}
@@ -147,28 +380,79 @@ const MainContent: React.FC<{
               pearls={STROKE_CLINICAL_PEARLS['step-1']?.deep || []}
             />
           )}
-        </div>
+        </section>
 
-        {/* Step 2: LVO Screening */}
-        <div id="step-2">
+        {/* Step 2: Imaging & Treatment Decision (same component for both modes) */}
+        <section id="step-2" aria-labelledby="step-2-title">
           <ProtocolSection
             number={2}
-            title={steps[1].title}
+            title="Imaging & Treatment Decision"
             status={getProtocolStatus(steps[1])}
             isActive={activeStepNumber === 2}
-            showCompleteButton={steps[1].status === 'active'}
-            onComplete={() => completeStep(2, 'LVO screening completed')}
-            showDeepLearningBadge={isLearningMode}
+            showCompleteButton={false}
+            showDeepLearningBadge={workflowMode === 'study'}
             pearlCount={STROKE_CLINICAL_PEARLS['step-2']?.deep?.length || 0}
             onDeepLearningClick={() => setStep2ModalOpen(true)}
           >
-            <LVOSection 
-              isLearningMode={isLearningMode} 
-              onCorticalSignsYes={() => setThrombectomyModalOpen(true)}
-            />
+            {workflowMode === 'study' && (
+              <div className="mb-4 p-4 bg-purple-50 rounded-lg border border-purple-200">
+                <div className="flex gap-3">
+                  <span className="material-icons-outlined text-purple-600 text-xl">visibility</span>
+                  <div className="flex-1 space-y-3">
+                    <div>
+                      <h4 className="font-semibold text-purple-900 mb-2">Large Vessel Occlusion Detection</h4>
+                      <p className="text-sm text-purple-800 leading-relaxed">
+                        Large vessel occlusion (LVO) occurs in approximately 30% of acute ischemic strokes and represents the most time-sensitive neurological emergency. Without treatment, LVO strokes result in severe disability or death in &gt;80% of cases. The HERMES meta-analysis (2016) demonstrated that mechanical thrombectomy achieves functional independence in 46% vs 29% with medical therapy alone (NNT = 2.6, one of the best in medicine).
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-purple-800 leading-relaxed">
+                        <strong>Cortical Signs:</strong> Aphasia, neglect, gaze deviation, hemianopia, and apraxia strongly suggest LVO. Multiple cortical signs (≥2) have 89% specificity for M1/M2 occlusion (Duvekot et al, Stroke 2021). Even with mild NIHSS, presence of cortical signs warrants urgent CTA and interventional radiology activation.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-purple-800 leading-relaxed">
+                        <strong>Extended Time Windows:</strong> The DAWN trial (2018) showed benefit up to 24 hours using clinical-core mismatch criteria (48.6% vs 13.1% good outcome, NNT=3). DEFUSE-3 demonstrated efficacy in 6-16 hour window with perfusion imaging. Sequential therapy (tPA + thrombectomy) is superior to either alone—never delay tPA to wait for thrombectomy.
+                      </p>
+                    </div>
+                    <div className="pt-2 border-t border-purple-200">
+                      <p className="text-xs text-purple-700">
+                        <strong>References:</strong> <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(15)01833-5/fulltext" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-900">HERMES Meta-Analysis</a> • <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1706442" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-900">DAWN Trial</a> • <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1713973" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-900">DEFUSE-3 Trial</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {(workflowMode === 'code' && !step1Data) ? (
+              <div className="p-6 text-center text-slate-600">
+                <span className="material-icons-outlined text-4xl mb-2 block">arrow_upward</span>
+                <p>Complete Step 1 first (LKW, vitals, NIHSS, weight)</p>
+              </div>
+            ) : (
+              <CodeModeStep2
+                step1Data={step1Data || DEFAULT_STEP1_DATA}
+                doorTime={milestones.doorTime ?? timerStartTime}
+                eligibilityResult={eligibilityResult}
+                onIchSelected={() => setHemorrhageProtocolModalOpen(true)}
+                onComplete={(data) => {
+                  setStep2Data(data);
+                  const summary = [
+                    data.ctResult === 'bleed' ? 'CT: Bleed' : 'CT: No bleed',
+                    data.treatmentGiven !== 'none' ? `${data.treatmentGiven.toUpperCase()} given` : null,
+                    data.ctaOrdered ? 'CTA ordered' : null
+                  ].filter(Boolean).join(' • ');
+                  completeStep(2, summary);
+                  scrollToStep(3, 400);
+                }}
+                onOpenEVTPathway={() => setThrombectomyModalOpen(true)}
+                onRecordMilestone={(milestone, time) => setMilestones(prev => ({ ...prev, [milestone]: time }))}
+                milestones={milestones}
+              />
+            )}
           </ProtocolSection>
 
-          {isLearningMode && (
+          {workflowMode === 'study' && (
             <DeepLearningModal
               isOpen={step2ModalOpen}
               onClose={() => setStep2ModalOpen(false)}
@@ -177,204 +461,434 @@ const MainContent: React.FC<{
             />
           )}
 
-          {/* Thrombectomy Pathway Modal */}
-          <ThrombectomyPathwayModal
-            isOpen={thrombectomyModalOpen}
-            onClose={() => setThrombectomyModalOpen(false)}
-            onRecommendation={onThrombectomyRecommendation}
-          />
-        </div>
+          {/* Thrombectomy Pathway Modal - lazy when opened */}
+          {thrombectomyModalOpen && (
+            <Suspense fallback={null}>
+              <ThrombectomyPathwayModal
+                isOpen={thrombectomyModalOpen}
+                onClose={() => setThrombectomyModalOpen(false)}
+                onRecommendation={onThrombectomyRecommendation}
+              />
+            </Suspense>
+          )}
+        </section>
 
-        {/* Step 3: Labs */}
-        <div id="step-3">
+        {/* Thrombectomy Recommendation Card - Shows after Step 2 completion */}
+        {thrombectomyRecommendation && steps[1]?.status === 'completed' && (
+          <div className="mt-6 mx-6 p-5 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-2xl shadow-lg animate-in slide-in-from-bottom-4 duration-500">
+            <div className="flex items-start gap-4">
+              {/* Icon */}
+              <div className="flex-shrink-0 p-3 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl shadow-md">
+                <Brain size={24} className="text-white" />
+              </div>
+              
+              {/* Content */}
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <h4 className="text-lg font-bold text-purple-900">
+                    Thrombectomy Assessment Complete
+                  </h4>
+                  <span className="px-2 py-0.5 bg-purple-600 text-white text-xs font-bold rounded-full uppercase tracking-wide">
+                    EVT
+                  </span>
+                </div>
+                
+                <p className="text-base text-purple-800 font-medium mb-3 leading-relaxed">
+                  {thrombectomyRecommendation}
+                </p>
+                
+                {/* Action Buttons */}
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={() => setThrombectomyModalOpen(true)}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors shadow-sm"
+                  >
+                    <ExternalLink size={16} />
+                    View Full Assessment
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      const text = `THROMBECTOMY ASSESSMENT:\n${thrombectomyRecommendation}\n\nAssessed at: ${new Date().toLocaleString()}`;
+                      navigator.clipboard.writeText(text).then(() => {
+                        setToastMessage('Thrombectomy recommendation copied to clipboard');
+                        setTimeout(() => setToastMessage(null), 2500);
+                      });
+                    }}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-purple-50 text-purple-700 text-sm font-medium rounded-lg transition-colors border-2 border-purple-200 shadow-sm"
+                  >
+                    <Copy size={16} />
+                    Copy to Clipboard
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            {/* Footer note */}
+            <div className="mt-4 pt-4 border-t border-purple-200">
+              <p className="text-xs text-purple-600 flex items-center gap-2">
+                <Info size={14} />
+                Based on EVT Pathway criteria (DAWN, DEFUSE-3, SELECT2, ATTENTION/BAOCHE protocols)
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Labs & Treatment Orders (or ICH protocol when ICH detected) */}
+        <section id="step-3" aria-labelledby="step-3-title">
           <ProtocolSection
             number={3}
             title={steps[2].title}
             status={getProtocolStatus(steps[2])}
             isActive={activeStepNumber === 3}
-            showCompleteButton={steps[2].status === 'active'}
-            onComplete={() => completeStep(3, 'Labs ordered • Vitals checked')}
-            showDeepLearningBadge={isLearningMode}
-            pearlCount={STROKE_CLINICAL_PEARLS['step-3']?.deep?.length || 0}
+            showCompleteButton={false}
+            showDeepLearningBadge={workflowMode === 'study'}
+            pearlCount={(STROKE_CLINICAL_PEARLS['step-3']?.deep?.length || 0) + (STROKE_CLINICAL_PEARLS['step-4']?.deep?.length || 0)}
             onDeepLearningClick={() => setStep3ModalOpen(true)}
           >
-            <LabsAndVitalsSection isLearningMode={isLearningMode} />
+            {workflowMode === 'study' && (
+              <div className="mb-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
+                <div className="flex gap-3">
+                  <span className="material-icons-outlined text-amber-600 text-xl">science</span>
+                  <div className="flex-1 space-y-3">
+                    <h4 className="font-semibold text-amber-900 mb-2">Laboratory Workup & Treatment Orders</h4>
+                    <p className="text-sm text-amber-800 leading-relaxed">
+                      Point-of-care <strong>glucose is the ONLY mandatory lab</strong> before thrombolysis (AHA/ASA 2026). Do not delay tPA for other labs if within 4.5h. Post-thrombolysis: neuro checks, BP &lt;180/105, NPO until swallow, no antithrombotics × 24h. Evidence: Fonarow, ARTIS, SITS-ISTR.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+            {(workflowMode === 'code' && !step2Data) ? (
+              <div className="p-6 text-center text-slate-600">
+                <span className="material-icons-outlined text-4xl mb-2 block">arrow_upward</span>
+                <p>Complete Step 2 first (CT result and treatment decision)</p>
+              </div>
+            ) : step2Data?.ctResult === 'bleed' ? (
+              <StrokeIchProtocolStep
+                onComplete={() => {
+                  completeStep(3, 'ICH protocol completed');
+                  scrollToStep(4, 400);
+                }}
+                isLearningMode={workflowMode === 'study'}
+              />
+            ) : (
+              <div className="space-y-6">
+                <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                  <h3 className="text-base font-bold text-slate-900 mb-2">Laboratory workup & treatment orders</h3>
+                  <p className="text-sm text-slate-700 mb-4">
+                    <strong>Evidence &amp; rationale (AHA/ASA 2026):</strong> Point-of-care <strong>glucose is the only mandatory lab</strong> before thrombolysis; do not delay tPA for other labs if within 4.5h (NINDS, ECASS III). Post-thrombolysis: neuro checks, BP &lt;180/105, NPO until swallow passed, no antithrombotics × 24h. SITS-ISTR, Fonarow GWTG, ARTIS.
+                  </p>
+                  <CodeModeStep4
+                    step2Data={step2Data || { ctResult: 'no-bleed', treatmentGiven: 'none' }}
+                    onComplete={(orders) => {
+                      setStep4Orders(orders);
+                      completeStep(3, `Labs ordered • ${orders.length} orders selected`);
+                      scrollToStep(4, 400);
+                    }}
+                    onCopySuccess={() => {
+                      setToastMessage('Orders copied to clipboard');
+                      setTimeout(() => setToastMessage(null), 2500);
+                    }}
+                  />
+                </section>
+              </div>
+            )}
           </ProtocolSection>
 
-          {isLearningMode && (
+          {workflowMode === 'study' && (
             <DeepLearningModal
               isOpen={step3ModalOpen}
               onClose={() => setStep3ModalOpen(false)}
-              sectionTitle="3. Labs & Vitals"
-              pearls={STROKE_CLINICAL_PEARLS['step-3']?.deep || []}
+              sectionTitle="3. Labs & Treatment Orders"
+              pearls={[...(STROKE_CLINICAL_PEARLS['step-3']?.deep || []), ...(STROKE_CLINICAL_PEARLS['step-4']?.deep || [])]}
             />
           )}
-        </div>
+        </section>
 
-        {/* Step 4: Treatment Orders */}
-        <div id="step-4">
+        {/* Step 4: Code Summary & Documentation */}
+        <section id="step-4" aria-labelledby="step-4-title">
           <ProtocolSection
             number={4}
-            title={steps[3].title}
+            title="Code Summary & Documentation"
             status={getProtocolStatus(steps[3])}
             isActive={activeStepNumber === 4}
-            showCompleteButton={steps[3].status === 'active'}
-            onComplete={() => completeStep(4, 'Orders placed • Post-tPA monitoring active')}
-            showDeepLearningBadge={isLearningMode}
-            pearlCount={STROKE_CLINICAL_PEARLS['step-4']?.deep?.length || 0}
+            showCompleteButton={false}
+            showDeepLearningBadge={workflowMode === 'study'}
+            pearlCount={STROKE_CLINICAL_PEARLS['step-5']?.deep?.length || 0}
             onDeepLearningClick={() => setStep4ModalOpen(true)}
           >
-            <TreatmentSection isLearningMode={isLearningMode} />
+            {workflowMode === 'study' && (
+              <div className="mb-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                <div className="flex gap-3">
+                  <span className="material-icons-outlined text-green-600 text-xl">description</span>
+                  <div className="flex-1 space-y-3">
+                    <div>
+                      <h4 className="font-semibold text-green-900 mb-2">Documentation & Quality Improvement</h4>
+                      <p className="text-sm text-green-800 leading-relaxed">
+                        Comprehensive stroke code documentation serves multiple critical functions: medical-legal protection, quality improvement tracking, accurate billing (E/M level 5 + critical care time if applicable), and seamless care transitions. Include precise LKW time with source (family, EMS, records), NIHSS score with subscores, contraindication assessment, door-to-needle time, and detailed treatment rationale.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-green-800 leading-relaxed">
+                        <strong>Key Performance Metrics:</strong> National benchmarks track door-to-needle time (&lt;60 min goal, &lt;30 min excellence), imaging-to-needle time (&lt;20 min), and thrombolysis rates (8-12% of all stroke admissions). Dedicated stroke units reduce mortality by 18% and improve functional outcomes through protocol adherence, early complication detection, and coordinated multidisciplinary care (Stroke Unit Trialists Collaboration).
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-green-800 leading-relaxed">
+                        <strong>Outcome Prediction:</strong> Modified Rankin Scale (mRS) at 90 days is the primary outcome measure. mRS 0-2 represents functional independence (living at home, performing all usual activities). Predictors of good outcome: lower NIHSS, shorter time to treatment, younger age, absence of diabetes, and successful recanalization. The &quot;golden hour&quot; (treatment &lt;60 minutes from onset) yields the best outcomes—50% achieve mRS 0-1 vs 38% when treated later (NINDS subgroup analysis).
+                      </p>
+                    </div>
+                    <div className="pt-2 border-t border-green-200">
+                      <p className="text-xs text-green-700">
+                        <strong>References:</strong> <a href="https://www.bmj.com/content/346/bmj.f2422" target="_blank" rel="noopener noreferrer" className="underline hover:text-green-900">Stroke Unit Trialists Meta-Analysis</a> • <a href="https://www.ahajournals.org/doi/10.1161/STROKEAHA.118.020203" target="_blank" rel="noopener noreferrer" className="underline hover:text-green-900">Get With The Guidelines Quality Metrics</a> • <a href="https://www.nejm.org/doi/full/10.1056/NEJM199512143332401" target="_blank" rel="noopener noreferrer" className="underline hover:text-green-900">NINDS tPA Trial</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {(workflowMode === 'code' && (!step1Data || !step2Data || steps[2]?.status !== 'completed')) ? (
+              <div className="p-6 text-center text-slate-600">
+                <span className="material-icons-outlined text-4xl mb-2 block">arrow_upward</span>
+                <p>Complete Step 3 first (Labs & Treatment Orders or ICH protocol)</p>
+              </div>
+            ) : (
+              <CodeModeStep3
+                step1Data={step1Data || DEFAULT_STEP1_DATA}
+                step2Data={step2Data || DEFAULT_STEP2_DATA}
+                step4Orders={step4Orders || []}
+                milestones={milestones}
+                timerStartTime={timerStartTime}
+                thrombectomyRecommendation={thrombectomyRecommendation ?? undefined}
+                onCopySuccess={() => {
+                  setToastMessage('Code summary copied to clipboard');
+                  setTimeout(() => setToastMessage(null), 2500);
+                }}
+              />
+            )}
           </ProtocolSection>
 
-          {isLearningMode && (
+          {workflowMode === 'study' && (
             <DeepLearningModal
               isOpen={step4ModalOpen}
               onClose={() => setStep4ModalOpen(false)}
-              sectionTitle="4. Treatment Orders"
-              pearls={STROKE_CLINICAL_PEARLS['step-4']?.deep || []}
-            />
-          )}
-        </div>
-
-        {/* Step 5: Complications */}
-        <div id="step-5">
-          <ProtocolSection
-            number={5}
-            title={steps[4].title}
-            status={getProtocolStatus(steps[4])}
-            isActive={activeStepNumber === 5}
-            showCompleteButton={false}
-            showDeepLearningBadge={isLearningMode}
-            pearlCount={STROKE_CLINICAL_PEARLS['step-5']?.deep?.length || 0}
-            onDeepLearningClick={() => setStep5ModalOpen(true)}
-          >
-            {isLearningMode && (
-              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500 mb-4">
-                <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                  Hemorrhage management protocol for symptomatic intracranial hemorrhage post-thrombolysis.
-                </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">
-                  <strong>Clinical Context:</strong> Symptomatic ICH (sICH) is the most feared complication of thrombolysis, 
-                  occurring in 1-7% of patients. Immediate recognition and management are critical. The ECASS-3 definition 
-                  requires neurological deterioration (NIHSS increase ≥4) plus evidence of hemorrhage on imaging. Immediate 
-                  reversal of coagulopathy and neurosurgical consultation are mandatory.
-                </p>
-              </div>
-            )}
-            <HemorrhageProtocol isLearningMode={isLearningMode || false} />
-            <div className="mt-6">
-              <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border-2 border-green-300 dark:border-green-700 text-center mb-4">
-                <div className="text-lg font-bold text-green-700 dark:text-green-300 mb-2">
-                  ✓ Stroke Code Workflow Complete
-                </div>
-                <div className="text-sm text-green-600 dark:text-green-400">
-                  Continue monitoring patient per protocol. Review complications management as needed.
-                </div>
-              </div>
-              
-              {/* Copy to EMR Button */}
-              <div className="flex justify-center">
-                <button
-                  onClick={() => {
-                    // Generate comprehensive EMR summary
-                    let emrText = `--- STROKE CODE WORKFLOW SUMMARY ---\n`;
-                    emrText += `Assessment Date: ${new Date().toLocaleString()}\n\n`;
-                    
-                    // Step 1: Last Known Well & Eligibility
-                    const step1 = steps.find(s => s.id === 1);
-                    if (step1?.completionSummary) {
-                      emrText += `--- Step 1: Last Known Well & Eligibility ---\n`;
-                      emrText += `${step1.completionSummary}\n\n`;
-                    }
-                    
-                    // Step 2: LVO Screening
-                    const step2 = steps.find(s => s.id === 2);
-                    if (step2?.completionSummary) {
-                      emrText += `--- Step 2: LVO Screening ---\n`;
-                      emrText += `${step2.completionSummary}\n\n`;
-                    }
-                    
-                    // Step 3: Labs & Vitals
-                    const step3 = steps.find(s => s.id === 3);
-                    if (step3?.completionSummary) {
-                      emrText += `--- Step 3: Labs & Vitals ---\n`;
-                      emrText += `${step3.completionSummary}\n\n`;
-                    }
-                    
-                    // Step 4: Treatment Orders
-                    const step4 = steps.find(s => s.id === 4);
-                    if (step4?.completionSummary) {
-                      emrText += `--- Step 4: Treatment Orders ---\n`;
-                      emrText += `${step4.completionSummary}\n\n`;
-                    }
-                    
-                    // Step 5: Complications
-                    const step5 = steps.find(s => s.id === 5);
-                    if (step5?.completionSummary) {
-                      emrText += `--- Step 5: Complications ---\n`;
-                      emrText += `${step5.completionSummary}\n\n`;
-                    }
-                    
-                    // Thrombectomy Recommendation (if available)
-                    if (thrombectomyRecommendation) {
-                      emrText += `--- Thrombectomy Pathway Assessment ---\n`;
-                      emrText += `Recommendation: ${thrombectomyRecommendation}\n\n`;
-                    }
-                    
-                    emrText += `-------------------------------------\n`;
-                    emrText += `Generated by NeuroWiki Stroke Code Workflow\n`;
-                    
-                    navigator.clipboard.writeText(emrText).then(() => {
-                      alert('Workflow summary copied to clipboard!');
-                    }).catch(err => {
-                      console.error('Failed to copy to EMR:', err);
-                      alert('Failed to copy to clipboard');
-                    });
-                  }}
-                  className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold transition-colors shadow-lg flex items-center justify-center gap-2"
-                >
-                  <Copy size={18} />
-                  Copy to EMR
-                </button>
-              </div>
-            </div>
-          </ProtocolSection>
-
-          {isLearningMode && (
-            <DeepLearningModal
-              isOpen={step5ModalOpen}
-              onClose={() => setStep5ModalOpen(false)}
-              sectionTitle="5. Complications"
+              sectionTitle="4. Code Summary & Documentation"
               pearls={STROKE_CLINICAL_PEARLS['step-5']?.deep || []}
             />
           )}
-        </div>
-      </div>
+        </section>
 
-      {/* Bottom Spacing for Mobile */}
-      <div className="h-24" />
+        {/* Emergency Protocols - after code ends, near Copy to EMR */}
+        <section className="mt-8 mx-4 sm:mx-6 pt-8 border-t border-slate-200" aria-labelledby="emergency-protocols-heading">
+          <h2 id="emergency-protocols-heading" className="text-lg font-bold text-slate-900 mb-2">
+            Emergency Protocols
+          </h2>
+          <p className="text-sm text-slate-600 mb-4">
+            Complication protocols for use during or after thrombolysis (AHA/ASA 2026).
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button
+              type="button"
+              onClick={() => setTpaReversalModalOpen(true)}
+              className="min-h-[44px] flex items-center gap-3 px-5 py-3 rounded-xl border-2 border-red-200 bg-red-50 hover:bg-red-100 text-red-900 font-semibold text-left transition-colors"
+              aria-label="Open tPA/TNK Reversal Protocol for symptomatic intracranial bleeding"
+            >
+              <span className="flex-shrink-0 w-10 h-10 rounded-lg bg-red-200 flex items-center justify-center">
+                <AlertTriangle className="w-5 h-5 text-red-700" aria-hidden />
+              </span>
+              <span>tPA/TNK Reversal Protocol</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setOrolingualEdemaModalOpen(true)}
+              className="min-h-[44px] flex items-center gap-3 px-5 py-3 rounded-xl border-2 border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-900 font-semibold text-left transition-colors"
+              aria-label="Open Orolingual Angioedema Protocol"
+            >
+              <span className="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-200 flex items-center justify-center">
+                <AlertCircle className="w-5 h-5 text-amber-700" aria-hidden />
+              </span>
+              <span>Orolingual Edema Protocol</span>
+            </button>
+          </div>
+        </section>
+      </article>
+
+      {/* NIHSS Calculator Modal - embedded calculator; Apply syncs score to workflow, Back closes */}
+      {nihssModalOpen && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[80] flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between flex-shrink-0">
+              <h2 className="text-xl font-bold text-slate-900">NIHSS Calculator</h2>
+              <button
+                onClick={() => setNihssModalOpen(false)}
+                className="min-h-[44px] min-w-[44px] p-2 rounded-lg hover:bg-slate-100 transition-colors"
+                aria-label="Close NIHSS calculator"
+              >
+                <span className="material-icons-outlined text-xl">close</span>
+              </button>
+            </div>
+            <div className="p-6 overflow-y-auto flex-1">
+              <NihssCalculatorEmbed
+                initialScore={step1Data?.nihssScore ?? 0}
+                onApply={(score) => {
+                  setNihssFromModal(score);
+                  setNihssModalOpen(false);
+                }}
+                onBack={() => setNihssModalOpen(false)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Inclusion/Exclusion Criteria Modal - lazy when opened */}
+      {eligibilityModalOpen && (
+        <Suspense fallback={null}>
+          <ThrombolysisEligibilityModal
+            isOpen={eligibilityModalOpen}
+            onClose={() => setEligibilityModalOpen(false)}
+            onComplete={(data) => {
+              setEligibilityResult(data);
+              setEligibilityModalOpen(false);
+            }}
+          />
+        </Suspense>
+      )}
+
+      {/* Emergency protocol modals - tPA/TNK Reversal & Orolingual Edema */}
+      {tpaReversalModalOpen && (
+        <Suspense fallback={null}>
+          <TpaReversalProtocolModal
+            isOpen={tpaReversalModalOpen}
+            onClose={() => setTpaReversalModalOpen(false)}
+            onCopySuccess={() => {
+              setToastMessage('Copied to EMR');
+              setTimeout(() => setToastMessage(null), 2500);
+            }}
+          />
+        </Suspense>
+      )}
+      {orolingualEdemaModalOpen && (
+        <Suspense fallback={null}>
+          <OrolingualEdemaProtocolModal
+            isOpen={orolingualEdemaModalOpen}
+            onClose={() => setOrolingualEdemaModalOpen(false)}
+            onCopySuccess={() => {
+              setToastMessage('Copied to EMR');
+              setTimeout(() => setToastMessage(null), 2500);
+            }}
+          />
+        </Suspense>
+      )}
+
+      {/* Hemorrhage protocol modal - opens when ICH detected is selected */}
+      {hemorrhageProtocolModalOpen && (
+        <Suspense fallback={null}>
+          <HemorrhageProtocolModal
+            isOpen={hemorrhageProtocolModalOpen}
+            onClose={() => setHemorrhageProtocolModalOpen(false)}
+            onCopySuccess={() => {
+              setToastMessage('Copied to EMR');
+              setTimeout(() => setToastMessage(null), 2500);
+            }}
+          />
+        </Suspense>
+      )}
+
+      {/* Door time analogue clock picker (same as LKW) */}
+      {doorTimePickerOpen && (
+        <Suspense fallback={<div className="fixed inset-0 z-[90] bg-black/10 flex items-center justify-center" aria-label="Loading clock" />}>
+          <AnalogClockPicker
+            isOpen={doorTimePickerOpen}
+            onClose={() => setDoorTimePickerOpen(false)}
+            onTimeSelect={(h, m, p) => {
+              const doorTime = doorTimeFrom12h(h, m, p);
+              setMilestones(prev => ({ ...prev, doorTime }));
+              setDoorTimePickerOpen(false);
+            }}
+            initialHours={doorTimeTo12h(doorTimeForPicker).hour}
+            initialMinutes={doorTimeTo12h(doorTimeForPicker).minute}
+            initialPeriod={doorTimeTo12h(doorTimeForPicker).period}
+          />
+        </Suspense>
+      )}
+
+      {/* Bottom spacing + safe area for mobile (sticky CTA, notch) */}
+      <div className="h-24 safe-area-inset-bottom" />
+
+      {/* Toast for copy / reset */}
+      {toastMessage && (
+        <div
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] px-4 py-3 rounded-lg bg-slate-800 text-white text-sm font-medium shadow-lg animate-in fade-in duration-200"
+          role="status"
+          aria-live="polite"
+        >
+          {toastMessage}
+        </div>
+      )}
     </>
+    </Suspense>
   );
 };
 
 export default function StrokeBasicsWorkflowV2() {
-  const [isLearningMode, setIsLearningMode] = useState(false);
+  const [workflowMode, setWorkflowMode] = useState<'code' | 'study'>('code'); // Default to CODE MODE
   const [step1ModalOpen, setStep1ModalOpen] = useState(false);
   const [step2ModalOpen, setStep2ModalOpen] = useState(false);
   const [step3ModalOpen, setStep3ModalOpen] = useState(false);
   const [step4ModalOpen, setStep4ModalOpen] = useState(false);
-  const [step5ModalOpen, setStep5ModalOpen] = useState(false);
+  const [nihssModalOpen, setNihssModalOpen] = useState(false);
+  const [nihssFromModal, setNihssFromModal] = useState<number | null>(null);
+  const [eligibilityModalOpen, setEligibilityModalOpen] = useState(false);
+  const [eligibilityResult, setEligibilityResult] = useState<ThrombolysisEligibilityData | null>(null);
   const [thrombectomyModalOpen, setThrombectomyModalOpen] = useState(false);
   const [thrombectomyRecommendation, setThrombectomyRecommendation] = useState<string | null>(null);
-  
+  const [doorTimePickerOpen, setDoorTimePickerOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [tpaReversalModalOpen, setTpaReversalModalOpen] = useState(false);
+  const [orolingualEdemaModalOpen, setOrolingualEdemaModalOpen] = useState(false);
+  const [hemorrhageProtocolModalOpen, setHemorrhageProtocolModalOpen] = useState(false);
+
+  // Timer system (door time = hospital arrival; default same as timer start)
+  const [timerStartTime, setTimerStartTime] = useState<Date>(new Date());
+  const [timerRunning, setTimerRunning] = useState(true);
+  const [milestones, setMilestones] = useState<GWTGMilestones>({ doorTime: new Date() });
+
+  // Step 1, Step 2, Step 4 collected data (CODE MODE)
+  const [step1Data, setStep1Data] = useState<Step1Data | null>(null);
+  const [step2Data, setStep2Data] = useState<Step2Data | null>(null);
+  const [step4Orders, setStep4Orders] = useState<string[]>([]);
+
   const [steps, setSteps] = useState<Step[]>([
-    { id: 1, title: 'Last Known Well & Eligibility', subtitle: 'Treatment window & eligibility assessment', status: 'active', isExpanded: true },
+    { 
+      id: 1, 
+      title: 'Last Known Well & Eligibility', 
+      subtitle: 'Treatment window & eligibility assessment', 
+      status: 'active', 
+      isExpanded: true,
+      startedAt: new Date() // Workflow start time
+    },
     { id: 2, title: 'LVO Screening', subtitle: 'Large vessel occlusion detection', status: 'locked', isExpanded: false },
-    { id: 3, title: 'Labs', subtitle: 'Essential laboratory workup', status: 'locked', isExpanded: false },
-    { id: 4, title: 'Treatment Orders', subtitle: 'Post-tPA management', status: 'locked', isExpanded: false },
-    { id: 5, title: 'Complications', subtitle: 'Hemorrhage protocol', status: 'locked', isExpanded: false },
+    { id: 3, title: 'Labs & Treatment Orders', subtitle: 'Laboratory workup and orders (evidence-based)', status: 'locked', isExpanded: false },
+    { id: 4, title: 'Code Summary & Documentation', subtitle: 'GWTG note & hemorrhage protocol', status: 'locked', isExpanded: false },
   ]);
+
+  useEffect(() => {
+    // Initialize timer on mount (door time already set in initial milestones state)
+    const now = new Date();
+    setTimerStartTime(now);
+    setTimerRunning(true);
+  }, []);
+
+  // When ICH is detected in Step 2, update Step 3 title to ICH Protocol
+  useEffect(() => {
+    if (step2Data?.ctResult === 'bleed') {
+      setSteps(prev => prev.map(s => s.id === 3 ? { ...s, title: 'ICH Protocol', subtitle: 'Acute ICH management (AHA/ASA)' } : s));
+    } else {
+      setSteps(prev => prev.map(s => s.id === 3 ? { ...s, title: 'Labs & Treatment Orders', subtitle: 'Laboratory workup and orders (evidence-based)' } : s));
+    }
+  }, [step2Data?.ctResult]);
 
   // Find the active step (the one that's "active" or in-progress)
   const activeStep = steps.find(s => s.status === 'active') || steps[0];
@@ -404,6 +918,8 @@ export default function StrokeBasicsWorkflowV2() {
   };
 
   const completeStep = (id: number, summary?: string) => {
+    const completionTime = new Date(); // Capture completion timestamp
+    
     setSteps(prev => {
       const newSteps = prev.map(step => {
         if (step.id === id) {
@@ -415,12 +931,18 @@ export default function StrokeBasicsWorkflowV2() {
             ...step, 
             status: 'completed' as StepStatus, 
             isExpanded: false,
-            completionSummary: finalSummary 
+            completionSummary: finalSummary,
+            completedAt: completionTime // Record completion time
           };
         }
-        // Unlock next step
+        // Unlock next step and record start time
         if (step.id === id + 1) {
-          return { ...step, status: 'active' as StepStatus, isExpanded: true };
+          return { 
+            ...step, 
+            status: 'active' as StepStatus, 
+            isExpanded: true,
+            startedAt: completionTime // Record when next step starts
+          };
         }
         return step;
       });
@@ -428,7 +950,7 @@ export default function StrokeBasicsWorkflowV2() {
     });
     
     // Auto-scroll to next step if it exists - use longer delay to ensure DOM updates
-    if (id < 5) {
+    if (id < 4) {
       scrollToStep(id + 1, 300);
     }
   };
@@ -510,8 +1032,8 @@ export default function StrokeBasicsWorkflowV2() {
       leftSidebar={null}
       mainContent={
         <MainContent
-          isLearningMode={isLearningMode}
-          setIsLearningMode={setIsLearningMode}
+          workflowMode={workflowMode}
+          setWorkflowMode={setWorkflowMode}
           steps={steps}
           toggleStep={toggleStep}
           completeStep={completeStep}
@@ -526,12 +1048,42 @@ export default function StrokeBasicsWorkflowV2() {
           setStep3ModalOpen={setStep3ModalOpen}
           step4ModalOpen={step4ModalOpen}
           setStep4ModalOpen={setStep4ModalOpen}
-          step5ModalOpen={step5ModalOpen}
-          setStep5ModalOpen={setStep5ModalOpen}
           thrombectomyModalOpen={thrombectomyModalOpen}
           setThrombectomyModalOpen={setThrombectomyModalOpen}
           onThrombectomyRecommendation={handleThrombectomyRecommendation}
           thrombectomyRecommendation={thrombectomyRecommendation}
+          timerStartTime={timerStartTime}
+          setTimerStartTime={setTimerStartTime}
+          timerRunning={timerRunning}
+          setTimerRunning={setTimerRunning}
+          milestones={milestones}
+          setMilestones={setMilestones}
+          setStep1Data={setStep1Data}
+          step1Data={step1Data}
+          setStep2Data={setStep2Data}
+          step2Data={step2Data}
+          step4Orders={step4Orders}
+          setStep4Orders={setStep4Orders}
+          setSteps={setSteps}
+          scrollToStep={scrollToStep}
+          nihssModalOpen={nihssModalOpen}
+          setNihssModalOpen={setNihssModalOpen}
+          eligibilityModalOpen={eligibilityModalOpen}
+          setEligibilityModalOpen={setEligibilityModalOpen}
+          doorTimePickerOpen={doorTimePickerOpen}
+          setDoorTimePickerOpen={setDoorTimePickerOpen}
+          nihssFromModal={nihssFromModal}
+          setNihssFromModal={setNihssFromModal}
+          eligibilityResult={eligibilityResult}
+          setEligibilityResult={setEligibilityResult}
+          toastMessage={toastMessage}
+          setToastMessage={setToastMessage}
+          tpaReversalModalOpen={tpaReversalModalOpen}
+          setTpaReversalModalOpen={setTpaReversalModalOpen}
+          orolingualEdemaModalOpen={orolingualEdemaModalOpen}
+          setOrolingualEdemaModalOpen={setOrolingualEdemaModalOpen}
+          hemorrhageProtocolModalOpen={hemorrhageProtocolModalOpen}
+          setHemorrhageProtocolModalOpen={setHemorrhageProtocolModalOpen}
         />
       }
     />

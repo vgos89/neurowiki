@@ -33,19 +33,19 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({
     switch (status) {
       case 'in-progress':
         return (
-          <span className="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-bold rounded uppercase tracking-wide">
+          <span className="px-2.5 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded uppercase tracking-wide">
             IN PROGRESS
           </span>
         );
       case 'pending':
         return (
-          <span className="px-2.5 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 text-xs font-bold rounded uppercase tracking-wide">
+          <span className="px-2.5 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded uppercase tracking-wide">
             PENDING
           </span>
         );
       case 'completed':
         return (
-          <span className="px-2.5 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-bold rounded uppercase tracking-wide">
+          <span className="px-2.5 py-1 bg-green-100 text-green-700 text-xs font-bold rounded uppercase tracking-wide">
             COMPLETED
           </span>
         );
@@ -53,39 +53,39 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({
   };
 
   return (
-    <div className={`relative ${isActive ? 'pl-4 border-l-4 border-blue-600 dark:border-blue-500' : 'pl-4 border-l-4 border-transparent'}`}>
-      {/* Header - Responsive Layout */}
-      <div className="mb-4">
+    <div className={`relative ${isActive ? 'pl-4 border-l-4 border-red-600' : 'pl-4 border-l-4 border-transparent'}`}>
+      {/* Header - tight Stitch spacing */}
+      <div className="mb-3">
         {/* Desktop: Single row with everything */}
         {/* Mobile: Two rows - title on top, badges below */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
-          {/* Left Side: Step Number + Title */}
-          <div className="flex items-center gap-3">
-            {/* Step number badge */}
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm flex-shrink-0 ${
-              status === 'completed' ? 'bg-green-500 text-white' :
-              status === 'in-progress' ? 'bg-blue-500 text-white' :
-              'bg-gray-300 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
-            }`}>
+          {/* Left Side: Step Number + Title - badge 44px tap target on mobile */}
+          <div className="flex items-center gap-3 pl-6 sm:pl-6">
+            {/* Step number badge - min 44px for touch */}
+            <div className={`absolute -left-[22px] sm:-left-[17px] top-0 w-11 h-11 sm:w-8 sm:h-8 rounded-full text-white flex items-center justify-center font-bold flex-shrink-0 text-sm sm:text-base ${
+              status === 'completed' ? 'bg-green-600 shadow-lg shadow-green-600/20' :
+              status === 'in-progress' ? 'bg-red-600 shadow-lg shadow-red-600/20' :
+'bg-slate-300 text-slate-600'
+}`}>
               {number}
             </div>
             
-            {/* Title */}
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            {/* Title - tight Stitch sizing */}
+            <h2 className="text-lg font-bold text-slate-900">
               {title}
             </h2>
           </div>
 
           {/* Right Side: Status Badge + Deep Learning Badge */}
-          <div className="flex items-center gap-2 ml-11 lg:ml-0">
+          <div className="flex items-center gap-2 ml-14 sm:ml-11 lg:ml-0 flex-wrap">
             {/* Status Badge */}
             {getStatusBadge()}
 
-            {/* Deep Learning Badge */}
+            {/* Deep Learning Badge - 44px touch target */}
             {showDeepLearningBadge && onDeepLearningClick && (
               <button
                 onClick={onDeepLearningClick}
-                className="inline-flex items-center gap-2 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-full shadow-md hover:shadow-lg transition-all duration-200 flex-shrink-0"
+                className="inline-flex items-center justify-center gap-2 min-h-[44px] min-w-[44px] px-3 py-2.5 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-full shadow-md hover:shadow-lg transition-all duration-200 flex-shrink-0"
                 aria-label={`View ${pearlCount} clinical pearls`}
               >
                 <span>Deep Learning</span>
@@ -99,22 +99,22 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({
           </div>
         </div>
 
-        {/* Description */}
+        {/* Description - tight Stitch sizing */}
         {description && (
-          <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed mt-2">
+          <p className="text-sm text-slate-600 leading-relaxed mt-2">
             {description}
           </p>
         )}
       </div>
 
-      {/* Section Content */}
-      <div className="space-y-4">
+      {/* Section Content - tight spacing */}
+      <div className="space-y-3">
         {children}
       </div>
 
-      {/* Complete Button */}
+      {/* Complete Button - 44px touch, full width on mobile, safe area */}
       {showCompleteButton && onComplete && status !== 'completed' && (
-        <div className="mt-6 flex justify-end">
+        <div className="mt-6 flex justify-end safe-area-pb md:pb-0">
           <button
             onClick={() => {
               // Call the existing onComplete first
@@ -165,10 +165,10 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({
                 }
               }, 250);
             }}
-            className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-bold transition-colors flex items-center gap-2"
+            className="w-full md:w-auto min-h-[44px] px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-bold transition-colors flex items-center justify-center gap-2"
           >
             <span>Next</span>
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-4 h-4" aria-hidden />
           </button>
         </div>
       )}

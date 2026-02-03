@@ -47,17 +47,17 @@ export default function IchManagement() {
 
           <Section number={3} title="Anticoagulation Reversal" />
 
-          <Paragraph viewMode={viewMode} detail="Warfarin: 4-factor PCC + IV vitamin K. Dabigatran: idarucizumab. Xa inhibitors: andexanet. DOAC within 48h without assay: consider andexanet for apixaban/rivaroxaban; idarucizumab for dabigatran.">
-            <strong>Warfarin:</strong> 4-factor <Term detail="prothrombin complex concentrate">PCC</Term> + IV vitamin K. <strong>Dabigatran:</strong> <Term detail="idarucizumab">idarucizumab</Term>. <strong>Xa inhibitors:</strong> <Term detail="andexanet alfa">andexanet</Term>. Do not wait for labs when the history is clear.
+          <Paragraph viewMode={viewMode} detail="Warfarin: 4-factor PCC 25-50 units/kg IV + Vitamin K 10 mg IV (goal INR <1.4). If PCC unavailable, FFP. Dabigatran: idarucizumab 5 g IV. Xa inhibitors: andexanet or PCC. 2022 AHA/ASA ICH, Class I, Level B.">
+            <strong>Warfarin:</strong> 4-factor <Term detail="prothrombin complex concentrate">PCC</Term> 25-50 units/kg IV + Vitamin K 10 mg IV (goal INR &lt;1.4). If PCC unavailable, FFP 10-15 mL/kg. <strong>Dabigatran:</strong> <Term detail="idarucizumab">idarucizumab</Term> 5 g IV. <strong>Xa inhibitors:</strong> <Term detail="andexanet alfa">andexanet</Term> alfa or 4-factor PCC. Do not wait for labs when the history is clear. (2022 AHA/ASA ICH, Class I, Level B.)
           </Paragraph>
 
           <Section number={4} title="Blood Pressure" />
 
           <Paragraph
             viewMode={viewMode}
-            detail="INTERACT2/ATACH-2: SBP &lt;140 may reduce expansion and improve function. Start early. Nicardipine or labetalol. Avoid drops &gt;90 mmHg in 1 h."
+            detail="INTERACT-2, ATACH-2: SBP <140 within 1 h when feasible (Class I, Level A). Avoid SBP <110. Nicardipine or labetalol. Avoid rapid drop >90 mmHg in 1 h."
           >
-            SBP <Value>&lt;140 mmHg</Value> when feasible. Nicardipine or labetalol. Avoid rapid drop (e.g. &gt;<Value>90</Value> mmHg in 1 h).
+            SBP <Value>&lt;140 mmHg</Value> within 1 hour when feasible (Class I, Level A). Nicardipine or labetalol. Avoid SBP &lt;110 mmHg; avoid rapid drop (e.g. &gt;<Value>90</Value> mmHg in 1 h). Evidence: INTERACT-2, ATACH-2; 2022 AHA/ASA ICH Guidelines.
           </Paragraph>
 
           <Section number={5} title="ICP and Herniation" />
@@ -70,9 +70,9 @@ export default function IchManagement() {
 
           <Paragraph
             viewMode={viewMode}
-            detail="STICH: no benefit for most. STICH II: lobar ICH 10–100 ml, GCS 5–14, superficial, no IVH — surgery within 12 h had small benefit. Cerebellar &gt;3 cm or brainstem compression: evacuate. Consider decompression for dominant hemispheric with shift."
+            detail="STICH: no benefit for most. STICH II: lobar ICH 10–100 ml, GCS 5–14, superficial, no IVH — surgery within 12 h had small benefit. Cerebellar >3 cm with neurological decline or brainstem compression or hydrocephalus: evacuate (Class I, Level B). EVD for hydrocephalus from IVH."
           >
-            Most supratentorial ICH: medical. <Term detail="superficial lobar, 10–100 ml">STICH II</Term>-type — consider evacuation. Cerebellar <Value>&gt;3 cm</Value> or brainstem compression: <Critical>evacuate</Critical>.
+            Most supratentorial ICH: medical. <Term detail="superficial lobar, 10–100 ml">STICH II</Term>-type — consider evacuation. Cerebellar hemorrhage <Value>&gt;3 cm</Value> with neurological decline or brainstem compression or hydrocephalus: <Critical>evacuate</Critical> (Class I, Level B). EVD for hydrocephalus from IVH.
           </Paragraph>
 
           <Section number={6} title="ICU and Complications" />
@@ -84,6 +84,11 @@ export default function IchManagement() {
           <Warning>
             Do not give tPA or antiplatelets in acute ICH. Reverse anticoagulation before any elective procedure.
           </Warning>
+
+          <Paragraph viewMode={viewMode} detail="2022 AHA/ASA ICH Guideline reference.">
+            References: 2022 AHA/ASA Guideline for the Management of Patients With Spontaneous Intracerebral Hemorrhage.{' '}
+            <a href="https://www.ahajournals.org/doi/10.1161/STR.0000000000000407" target="_blank" rel="noopener noreferrer">Stroke. 2022</a>.
+          </Paragraph>
         </>
       )}
     </ArticleLayout>

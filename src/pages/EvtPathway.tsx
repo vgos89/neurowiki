@@ -12,6 +12,7 @@ import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { CollapsibleSection } from '../components/CollapsibleSection';
 
 type Tri = "yes" | "no" | "unknown";
+type MrsGroup = "yes" | "mrs2" | "mrs34" | "no" | "unknown"; // yes = mRS 0-1, mrs2 = mRS 2, mrs34 = mRS 3-4, no = mRS >4
 type AgeGroup = "under_18" | "18_79" | "80_plus" | "unknown";
 type TimeWindow = "0_6" | "6_24" | "unknown";
 type NIHSSGroup = "0_5" | "6_9" | "10_19" | "20_plus" | "unknown";
@@ -26,12 +27,13 @@ type Inputs = {
   // LVO Inputs
   lvoLocation: LvoLocation;
   lvo: Tri;
-  mrs: Tri;
+  mrs: MrsGroup;
   age: AgeGroup;
   time: TimeWindow;
   nihss: NIHSSGroup;
   aspects: string;
   pcAspects: string; // For Basilar
+  massEffect: Tri; // Significant mass effect (AHA 2026: affects ASPECTS 0-2 / 6-24h selection)
   core: string;
   mismatchVol: string;
   mismatchRatio: string;
@@ -65,7 +67,7 @@ const STEPS = [
 const STEP_FIELDS: Record<number, string[]> = {
   1: ['occlusionType', 'lvoLocation', 'lvo', 'mrs', 'age', 'mevoLocation', 'mevoDependent'],
   2: ['time', 'nihss', 'nihssNumeric', 'mevoDisabling'],
-  3: ['aspects', 'pcAspects', 'core', 'mismatchVol', 'mismatchRatio', 'mevoSalvageable', 'mevoTechnical']
+  3: ['aspects', 'pcAspects', 'massEffect', 'core', 'mismatchVol', 'mismatchRatio', 'mevoSalvageable', 'mevoTechnical']
 };
 
 const getNihssNumeric = (nihss: NIHSSGroup): number => {
@@ -80,10 +82,10 @@ const getNihssNumeric = (nihss: NIHSSGroup): number => {
 
 const calculateLvoProtocol = (inputs: Inputs): Result => {
   if (inputs.lvo === 'no') return { eligible: false, status: "Not Eligible", reason: "No Large Vessel Occlusion (LVO)", details: "Thrombectomy is indicated for occlusions of the ICA, MCA (M1), or Basilar Artery.", exclusionReason: "Absence of LVO target.", variant: 'danger' };
-  if (inputs.mrs === 'no') return { eligible: false, status: "Not Eligible", reason: "Pre-stroke Disability (mRS > 1)", details: "Standard criteria require pre-stroke functional independence.", exclusionReason: "Poor baseline functional status.", variant: 'danger' };
+  if (inputs.mrs === 'no') return { eligible: false, status: "Not Eligible", reason: "Pre-stroke Disability (mRS > 4)", details: "EVT is not recommended for prestroke mRS > 4. Standard criteria require mRS 0–1, selected mRS 2, or mRS 3–4 (Class IIb in 0–6h with ASPECTS ≥6).", exclusionReason: "Poor baseline functional status.", variant: 'danger' };
   if (inputs.age === 'under_18') return { eligible: false, status: "Consult", reason: "Pediatric Patient", details: "Standard guidelines apply to age ≥ 18. Pediatric thrombectomy requires specialized consultation.", exclusionReason: "Age < 18.", variant: 'warning' };
 
-  // --- BASILAR ARTERY PROTOCOL (2026 AHA/ASA Guidelines) ---
+  // --- BASILAR ARTERY PROTOCOL (2026 AHA/ASA Guidelines — pc-ASPECTS ≥6) ---
   if (inputs.lvoLocation === 'basilar') {
       const pcScore = parseInt(inputs.pcAspects);
       const nihssNum = getNihssNumeric(inputs.nihss);
@@ -96,31 +98,31 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
           variant: 'neutral' 
       };
 
-      // Class I: Strong recommendation (pc-ASPECTS ≥8 + NIHSS ≥10)
-      if (pcScore >= 8 && nihssNum >= 10) {
+      // Class I: pc-ASPECTS ≥6 + NIHSS ≥10 (AHA/ASA 2026 infographic / Section 4.7.2)
+      if (pcScore >= 6 && nihssNum >= 10) {
           return { 
               eligible: true, 
               status: "Eligible", 
               criteriaName: "Basilar EVT - Class I",
               reason: `Favorable Imaging (pc-ASPECTS ${pcScore}, NIHSS ${nihssNum})`, 
-              details: "Class I recommendation: EVT strongly recommended for Basilar Artery Occlusion within 24h with pc-ASPECTS ≥8 and NIHSS ≥10. Strong evidence from ATTENTION and BAOCHE trials. (2026 AHA/ASA Guidelines)", 
+              details: "Class I recommendation: EVT strongly recommended for Basilar Artery Occlusion within 24h with pc-ASPECTS ≥6 and NIHSS ≥10. Strong evidence from ATTENTION and BAOCHE trials. (2026 AHA/ASA Guidelines)", 
               variant: 'success' 
           };
       }
       
-      // Class IIa: Reasonable to offer (pc-ASPECTS 6-7 or lower NIHSS)
-      if (pcScore >= 6) {
+      // Class IIb: pc-ASPECTS ≥6 + NIHSS 6–9 — EVT may be considered (AHA 2026 infographic)
+      if (pcScore >= 6 && nihssNum >= 6) {
           return { 
               eligible: true, 
-              status: "EVT Reasonable", 
-              criteriaName: "Basilar EVT - Class IIa",
-              reason: `Moderate Imaging (pc-ASPECTS ${pcScore})${nihssNum < 10 ? ' or Lower NIHSS' : ''}`, 
-              details: "Class IIa recommendation: EVT is reasonable for Basilar occlusion with pc-ASPECTS 6-7, or with lower NIHSS scores. Individualized decision based on clinical context. (2026 AHA/ASA Guidelines)", 
+              status: "Clinical Judgment", 
+              criteriaName: "Basilar EVT - Class IIb",
+              reason: `Moderate Severity (pc-ASPECTS ${pcScore}, NIHSS 6–9)`, 
+              details: "Class IIb recommendation: EVT may be considered for Basilar occlusion with pc-ASPECTS ≥6 and NIHSS 6–9. Individualized decision based on clinical context. (2026 AHA/ASA Guidelines)", 
               variant: 'warning' 
           };
       }
       
-      // Avoid EVT
+      // Avoid EVT — pc-ASPECTS < 6
       return { 
           eligible: false, 
           status: "Avoid EVT", 
@@ -131,39 +133,94 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
       };
   }
 
-  // --- ANTERIOR CIRCULATION (ICA / M1) ---
+  // --- ANTERIOR CIRCULATION (ICA / M1) — AHA/ASA 2026 Section 4.7.2 ---
   if (inputs.time === '0_6') {
      const aspects = parseInt(inputs.aspects);
      if (isNaN(aspects)) return { eligible: false, status: "Not Eligible", reason: "Pending Imaging", details: "", variant: 'neutral' };
      if (inputs.nihss === '0_5') return { eligible: true, status: "Clinical Judgment", reason: "Low NIHSS (< 6)", details: "Guidelines recommend EVT if deficit is disabling despite low score (e.g., aphasia, hemianopsia).", criteriaName: "Early Window (Low NIHSS)", variant: 'warning' };
 
-     if (aspects >= 6) {
-         return { 
-             eligible: true, 
-             status: "Eligible", 
-             criteriaName: "Standard Early Window - Class I", 
-             reason: "ASPECTS ≥ 6", 
-             details: "Class I recommendation: EVT strongly recommended for anterior circulation LVO with ASPECTS ≥6 in 0-6h window. Strong evidence from multiple RCTs (MR CLEAN, ESCAPE, EXTEND-IA, SWIFT PRIME, REVASCAT). (2026 AHA/ASA Guidelines)", 
-             variant: 'success' 
-         };
-     } else if (aspects >= 3) {
-         return { 
-             eligible: true, 
-             status: "Clinical Judgment", 
-             criteriaName: "Large Core (ASPECTS 3-5) - Class IIb", 
-             reason: "ASPECTS 3-5", 
-             details: "Class IIb: EVT MAY be considered for large cores (ASPECTS 3-5) based on SELECT2/ANGEL-ASPECT trials. Higher risk of symptomatic ICH and poor functional outcomes. Requires careful patient selection and informed consent discussion. (2026 AHA/ASA Guidelines)", 
-             variant: 'warning' 
-         };
-     } else {
-         return { eligible: false, status: "Consult", reason: "Malignant Profile (ASPECTS 0-2)", details: "Very large core. High risk of futile reperfusion and hemorrhage. Individualized decision.", exclusionReason: "ASPECTS < 3", variant: 'danger' };
+     // COR 2a: Prestroke mRS 2 + ASPECTS ≥6 — EVT reasonable (2026 AHA/ASA 4.7.2)
+     if (inputs.mrs === 'mrs2') {
+         if (aspects >= 6) {
+             return {
+                 eligible: true,
+                 status: "EVT Reasonable",
+                 criteriaName: "Early Window mRS 2 - Class IIa",
+                 reason: "Prestroke mRS 2, ASPECTS ≥ 6",
+                 details: "Class IIa: In patients with NIHSS ≥6 and ASPECTS ≥6 who have prestroke mRS 2, EVT is reasonable to improve functional outcomes and reduce accumulated disability. (AHA/ASA 2026, Section 4.7.2)",
+                 variant: 'warning'
+             };
+         }
+         return { eligible: false, status: "Consult", reason: "Prestroke mRS 2, ASPECTS < 6", details: "Evidence for EVT in mRS 2 is limited to ASPECTS ≥6. Individualized decision with Vascular Neurology/Neurointerventional.", exclusionReason: "mRS 2 with large core", variant: 'danger' };
      }
+
+     // COR 2b: Prestroke mRS 3–4 + ASPECTS ≥6 (0–6 h) — EVT may be considered (AHA 2026 infographic)
+     if (inputs.mrs === 'mrs34') {
+         if (aspects >= 6) {
+             return {
+                 eligible: true,
+                 status: "Clinical Judgment",
+                 criteriaName: "Early Window mRS 3-4 - Class IIb",
+                 reason: "Prestroke mRS 3–4, ASPECTS ≥ 6",
+                 details: "Class IIb: In patients with anterior LVO within 6h, NIHSS ≥6, and ASPECTS ≥6 who have prestroke mRS 3–4, EVT may be considered. Benefits may outweigh risks in selected patients; individualized decision with Vascular Neurology/Neurointerventional. (AHA/ASA 2026 infographic)",
+                 variant: 'warning'
+             };
+         }
+         return { eligible: false, status: "Consult", reason: "Prestroke mRS 3–4", details: "Evidence for EVT in mRS 3–4 is limited to 0–6h with ASPECTS ≥6 and NIHSS ≥6. Individualized decision with Vascular Neurology/Neurointerventional.", exclusionReason: "mRS 3–4 criteria not met", variant: 'danger' };
+     }
+
+     // COR 1: mRS 0–1, NIHSS ≥6, ASPECTS 3–10 — EVT recommended (2026 AHA/ASA 4.7.2)
+     if (aspects >= 3 && aspects <= 10) {
+         return {
+             eligible: true,
+             status: "Eligible",
+             criteriaName: "Standard Early Window - Class I",
+             reason: "ASPECTS 3–10",
+             details: "Class I: EVT is recommended for anterior circulation LVO (ICA/M1) within 6h with NIHSS ≥6, prestroke mRS 0–1, and ASPECTS 3–10 to improve functional outcomes and reduce mortality. (AHA/ASA 2026, Section 4.7.2)",
+             variant: 'success'
+         };
+     }
+
+     // COR 2a: ASPECTS 0–2, age <80, without significant mass effect — EVT reasonable (2026 AHA/ASA 4.7.2)
+     const isAgeUnder80 = inputs.age === '18_79';
+     if (aspects >= 0 && aspects <= 2 && isAgeUnder80 && inputs.massEffect === 'no') {
+         return {
+             eligible: true,
+             status: "EVT Reasonable",
+             criteriaName: "Very Large Core (ASPECTS 0–2) - Class IIa",
+             reason: "ASPECTS 0–2, age <80, no significant mass effect",
+             details: "Class IIa: In selected patients with anterior LVO within 6h, age <80 years, NIHSS ≥6, mRS 0–1, ASPECTS 0–2, and without significant mass effect, EVT is reasonable. (AHA/ASA 2026, Section 4.7.2)",
+             variant: 'warning'
+         };
+     }
+
+     // ASPECTS 0–2 with mass effect or age ≥80 or mass effect unknown → Consult
+     if (aspects >= 0 && aspects <= 2) {
+         return { eligible: false, status: "Consult", reason: "Very Large Core (ASPECTS 0–2)", details: "High risk of futile reperfusion. Class IIa applies only to selected patients age <80 without significant mass effect. Individualized decision.", exclusionReason: "ASPECTS 0–2", variant: 'danger' };
+     }
+
+     return { eligible: false, status: "Not Eligible", reason: "Incomplete Imaging", details: "", variant: 'neutral' };
   }
 
   if (inputs.time === '6_24') {
       const core = parseInt(inputs.core);
       const mmVol = parseInt(inputs.mismatchVol);
       const ratio = parseFloat(inputs.mismatchRatio);
+      const aspectsLate = parseInt(inputs.aspects);
+
+      // COR 1 (2026): Selected patients, mRS 0–1, age <80, NIHSS ≥6, ASPECTS 3-5, no significant mass effect — EVT recommended in 6-24h (infographic: mRS ≥2 → IDD)
+      const nihssNumLate = getNihssNumeric(inputs.nihss);
+      if (inputs.mrs === 'yes' && inputs.age === '18_79' && nihssNumLate >= 6 && !isNaN(aspectsLate) && aspectsLate >= 3 && aspectsLate <= 5 && inputs.massEffect === 'no') {
+          return {
+              eligible: true,
+              status: "Eligible",
+              criteriaName: "Late Window ASPECTS 3-5 - Class I",
+              reason: "ASPECTS 3-5, age <80, NIHSS ≥6, no significant mass effect",
+              details: "Class I: In selected patients with anterior LVO 6-24h from onset, age <80 years, NIHSS ≥6, mRS 0-1, ASPECTS 3-5, and without significant mass effect, EVT is recommended. (AHA/ASA 2026, Section 4.7.2)",
+              variant: 'success'
+          };
+      }
+
       if (isNaN(core)) return { eligible: false, status: "Not Eligible", reason: "Pending Imaging", details: "", variant: 'neutral' };
 
       let dawnEligible = false;
@@ -238,8 +295,8 @@ const calculateMevoProtocol = (inputs: Inputs): Result => {
         };
     }
 
-    // Status A: EVT Reasonable
-    // Dominant M2 + Disabling/High Score + Technical Feasibility
+    // Status A: EVT Reasonable (COR 2a per AHA 2026 infographic)
+    // Dominant M2: We use favorable imaging + disabling deficit (no explicit ASPECTS 6–10 requirement); outcome = EVT reasonable.
     const hasDeficit = (!isNaN(score) && score >= 5) || inputs.mevoDisabling === 'yes';
     
     if (inputs.mevoLocation === 'dominant_m2' && hasDeficit && inputs.mevoTechnical === 'yes') {
@@ -325,12 +382,13 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
       occlusionType: 'unknown',
       lvoLocation: 'unknown',
       lvo: 'unknown', mrs: 'unknown', age: 'unknown', 
-      time: 'unknown', nihss: 'unknown', aspects: '', pcAspects: '', core: '', mismatchVol: '', mismatchRatio: '',
+      time: 'unknown', nihss: 'unknown', aspects: '', pcAspects: '', massEffect: 'unknown', core: '', mismatchVol: '', mismatchRatio: '',
       mevoLocation: 'unknown', mevoDependent: 'unknown', nihssNumeric: '', mevoDisabling: 'unknown', mevoSalvageable: 'unknown', mevoTechnical: 'unknown'
   });
   const [result, setResult] = useState<Result | null>(null);
   const stepContainerRef = useRef<HTMLDivElement>(null);
   const fieldRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const prevCompleteRef = useRef({ s0: false, s1: false, s2: false });
 
   // Analytics
   const { trackResult } = useCalculatorAnalytics('evt_pathway');
@@ -356,18 +414,14 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           if (onResultChange) {
             onResultChange(newResult);
           }
-          if (newResult && inputs.occlusionType !== 'unknown') {
-            trackResult(newResult.status);
-          }
+          if (newResult) trackResult(newResult.status);
       } else if (inputs.occlusionType === 'mevo') {
           const newResult = calculateMevoProtocol(inputs);
           setResult(newResult);
           if (onResultChange) {
             onResultChange(newResult);
           }
-          if (newResult && inputs.occlusionType !== 'unknown') {
-            trackResult(newResult.status);
-          }
+          if (newResult) trackResult(newResult.status);
       } else {
           setResult(null);
           if (onResultChange) {
@@ -376,7 +430,13 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
       }
   }, [inputs, trackResult, onResultChange]);
 
-  useEffect(() => { const mainElement = document.querySelector('main'); if (mainElement) mainElement.scrollTo({ top: 0, behavior: 'instant' }); else window.scrollTo(0,0); }, [activeSection]);
+  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  useEffect(() => {
+    if (activeSection >= 0 && activeSection <= 3) {
+      const el = sectionRefs.current[activeSection];
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+    }
+  }, [activeSection]);
 
   const updateInput = useCallback((field: keyof Inputs, value: any) => {
     setInputs(prev => {
@@ -400,15 +460,38 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
     }
   }, [activeSection]);
 
-  const handleNext = () => { setActiveSection((prev) => Math.min(3, prev + 1)); };
+  const handleNext = () => {
+    setActiveSection((prev) => {
+      if (prev === -1) {
+        // Fallback if ever collapsed: open first incomplete section or Decision
+        if (isSection0Complete && isSection1Complete && isSection2Complete) return 3;
+        if (isSection0Complete && isSection1Complete) return 2;
+        if (isSection0Complete) return 1;
+        return 0;
+      }
+      return Math.min(3, prev + 1);
+    });
+  };
   const handleBack = () => { setActiveSection((prev) => Math.max(0, prev - 1)); };
+
+  // Collapse = go to adjacent section (never leave activeSection at -1)
+  const handleSectionToggle = (sectionIndex: number) => {
+    setActiveSection((prev) => {
+      if (prev === sectionIndex) {
+        if (sectionIndex === 0) return 1;
+        if (sectionIndex === 3) return 2;
+        return sectionIndex - 1;
+      }
+      return sectionIndex;
+    });
+  };
   
   const handleReset = () => { 
       setInputs({ 
           occlusionType: 'unknown',
           lvoLocation: 'unknown',
           lvo: 'unknown', mrs: 'unknown', age: 'unknown', 
-          time: 'unknown', nihss: 'unknown', aspects: '', pcAspects: '', core: '', mismatchVol: '', mismatchRatio: '',
+          time: 'unknown', nihss: 'unknown', aspects: '', pcAspects: '', massEffect: 'unknown', core: '', mismatchVol: '', mismatchRatio: '',
           mevoLocation: 'unknown', mevoDependent: 'unknown', nihssNumeric: '', mevoDisabling: 'unknown', mevoSalvageable: 'unknown', mevoTechnical: 'unknown'
       }); 
       setActiveSection(0); 
@@ -455,7 +538,10 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
       if (inputs.time === 'unknown') return false;
       if (inputs.lvoLocation === 'basilar') return inputs.pcAspects !== '';
       if (inputs.time === '0_6') return inputs.aspects !== '';
-      return inputs.core !== '';
+      // 6-24h: complete if core entered OR ASPECTS 3-5 + mass effect set (Class I path)
+      const aspectsNum = parseInt(inputs.aspects, 10);
+      const hasAspectsClassI = !isNaN(aspectsNum) && aspectsNum >= 3 && aspectsNum <= 5 && inputs.massEffect !== 'unknown';
+      return inputs.core !== '' || hasAspectsClassI;
     }
     return inputs.mevoSalvageable !== 'unknown' && inputs.mevoTechnical !== 'unknown';
   }, [inputs]);
@@ -478,7 +564,11 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
       if (inputs.occlusionType === 'lvo') {
         if (inputs.lvoLocation === 'basilar') return inputs.pcAspects ? `pc-ASPECTS ${inputs.pcAspects}` : undefined;
         if (inputs.time === '0_6') return inputs.aspects ? `ASPECTS ${inputs.aspects}` : undefined;
-        return inputs.core ? `Core ${inputs.core} mL` : undefined;
+        if (inputs.time === '6_24') {
+          const a = parseInt(inputs.aspects, 10);
+          if (!isNaN(a) && a >= 3 && a <= 5 && inputs.massEffect !== 'unknown') return inputs.aspects ? `ASPECTS ${inputs.aspects}` : undefined;
+          return inputs.core ? `Core ${inputs.core} mL` : undefined;
+        }
       }
       const a = inputs.mevoSalvageable === 'unknown' ? '?' : inputs.mevoSalvageable.toUpperCase();
       const t = inputs.mevoTechnical === 'unknown' ? '?' : inputs.mevoTechnical.toUpperCase();
@@ -489,11 +579,21 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
   };
 
   useEffect(() => {
-    // Auto-progression disabled to allow Back button to work properly
-    // Users must manually click "Next" to advance through sections
-    // if (activeSection === 0 && isSection0Complete) setTimeout(() => setActiveSection(1), 250);
-    // if (activeSection === 1 && isSection1Complete) setTimeout(() => setActiveSection(2), 250);
-    // if (activeSection === 2 && isSection2Complete) setTimeout(() => setActiveSection(3), 250);
+    // Auto-open next step only when current section *just* became complete (not when user clicked Back).
+    // Imaging (section 2) does NOT auto-advance to Decision — user must click "Next".
+    if (activeSection === 0 && isSection0Complete && !prevCompleteRef.current.s0) {
+      prevCompleteRef.current.s0 = true;
+      setTimeout(() => setActiveSection(1), 280);
+    }
+    if (!isSection0Complete) prevCompleteRef.current.s0 = false;
+
+    if (activeSection === 1 && isSection1Complete && !prevCompleteRef.current.s1) {
+      prevCompleteRef.current.s1 = true;
+      setTimeout(() => setActiveSection(2), 280);
+    }
+    if (!isSection1Complete) prevCompleteRef.current.s1 = false;
+
+    // Section 2 (Imaging): no auto-advance to Decision; user clicks "Next" to proceed.
   }, [activeSection, isSection0Complete, isSection1Complete, isSection2Complete]);
 
   return (
@@ -505,7 +605,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                   <div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-colors duration-150"><ArrowLeft size={16} /></div> {getBackLabel()}
               </Link>
               <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-neuro-100 text-teal-500 rounded-lg"><Zap size={24} className="fill-neuro-700" /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">Thrombectomy Pathway</h1></div>
-              <p className="text-slate-500 font-medium">Eligibility screening for LVO (ICA/M1/Basilar) and MeVO (M2/M3/Distal).</p>
+              <p className="text-slate-500 font-medium">Eligibility screening for LVO (ICA, M1, Basilar) and MeVO (M2, M3, ACA, PCA).</p>
           </div>
           <button 
               onClick={handleFavToggle}
@@ -528,13 +628,14 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
       </div>
 
       <div ref={stepContainerRef} className="space-y-6 min-h-[300px]">
+        <div ref={el => { sectionRefs.current[0] = el; }} className="scroll-mt-4">
         <CollapsibleSection
           title="Triage"
           stepNumber={1}
           totalSteps={4}
           isCompleted={isSection0Complete}
           isActive={activeSection === 0}
-          onToggle={() => setActiveSection((prev) => (prev === 0 ? -1 : 0))}
+          onToggle={() => handleSectionToggle(0)}
           summary={getSummary(0)}
         >
             <div className="space-y-6">
@@ -547,6 +648,10 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                     <LearningPearl 
                         title="Evidence Landscape" 
                         content="LVO has Class I evidence for EVT. MeVO/DMVO is an evolving area; benefit depends on deficit severity, eloquence, and risk." 
+                    />
+                    <LearningPearl 
+                        title="Exclusions" 
+                        content="Exclusions include: no LVO, pre-stroke dependence (mRS >1), age <18, terminal illness or limited goals of care. When in doubt, discuss with Vascular Neurology and Neurointerventional." 
                     />
                 </div>
 
@@ -571,14 +676,16 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         )}
                         {inputs.lvo === 'yes' && (
                             <div ref={el => { fieldRefs.current['mrs'] = el; }}>
-                                <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Functional Baseline</h3>
+                                <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Prestroke Functional Status (mRS)</h3>
                                 <div className="grid grid-cols-1 gap-3">
                                     <SelectionCard title="Independent (mRS 0-1)" description="No significant disability prior to stroke." selected={inputs.mrs === 'yes'} onClick={() => updateInput('mrs', 'yes')} />
-                                    <SelectionCard title="Dependent (mRS > 1)" description="Requires assistance for ADLs." selected={inputs.mrs === 'no'} onClick={() => updateInput('mrs', 'no')} />
+                                    <SelectionCard title="Dependent, selected (mRS 2)" description="Requires assistance for ADLs; EVT reasonable if ASPECTS ≥6 (2026 Class IIa)." selected={inputs.mrs === 'mrs2'} onClick={() => updateInput('mrs', 'mrs2')} />
+                                    <SelectionCard title="Dependent (mRS 3-4)" description="EVT may be considered if ASPECTS ≥6 in 0-6h (2026 Class IIb)." selected={inputs.mrs === 'mrs34'} onClick={() => updateInput('mrs', 'mrs34')} />
+                                    <SelectionCard title="Dependent (mRS > 4)" description="EVT not recommended (mRS 5-6)." selected={inputs.mrs === 'no'} onClick={() => updateInput('mrs', 'no')} variant="danger" />
                                 </div>
                             </div>
                         )}
-                        {inputs.mrs === 'yes' && (
+                        {(inputs.mrs === 'yes' || inputs.mrs === 'mrs2' || inputs.mrs === 'mrs34') && (
                             <div ref={el => { fieldRefs.current['age'] = el; }}>
                                 <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Age Group</h3>
                                 <div className="grid grid-cols-3 gap-3">
@@ -615,14 +722,16 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                 )}
             </div>
         </CollapsibleSection>
-        
+        </div>
+
+        <div ref={el => { sectionRefs.current[1] = el; }} className="scroll-mt-4">
         <CollapsibleSection
           title="Clinical"
           stepNumber={2}
           totalSteps={4}
           isCompleted={isSection1Complete}
           isActive={activeSection === 1}
-          onToggle={() => setActiveSection((prev) => (prev === 1 ? -1 : 1))}
+          onToggle={() => handleSectionToggle(1)}
           summary={getSummary(1)}
         >
             <div className="space-y-6">
@@ -634,7 +743,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                     </div>
                     <LearningPearl 
                         title="2026 Guideline Update" 
-                        content="The 2026 AHA/ASA Guidelines reaffirm Class I recommendations for EVT in 0-24h windows with appropriate imaging selection. New emphasis on distinguishing Class I (strong evidence, ≥6 ASPECTS or ≥8 pc-ASPECTS) vs Class IIb (uncertain benefit, may be considered) for large cores and extended scenarios." 
+                        content="The 2026 AHA/ASA Guidelines reaffirm Class I for EVT in 0-24h with appropriate imaging. Early window (0-6h): Class I for ASPECTS 3–10 with NIHSS ≥6 and mRS 0–1; Class IIa for selected patients with ASPECTS 0–2 (age <80, no mass effect) and for mRS 2 with ASPECTS ≥6. Late window (6-24h): Class I for selected patients with ASPECTS 3–5, age <80, no mass effect (NIHSS ≥6). DEFUSE-3 evidence strongest in 6-16h; DAWN extended to 6-24h." 
                     />
                 </div>
 
@@ -674,14 +783,16 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                 )}
             </div>
         </CollapsibleSection>
+        </div>
 
+        <div ref={el => { sectionRefs.current[2] = el; }} className="scroll-mt-4">
         <CollapsibleSection
           title="Imaging"
           stepNumber={3}
           totalSteps={4}
           isCompleted={isSection2Complete}
           isActive={activeSection === 2}
-          onToggle={() => setActiveSection((prev) => (prev === 2 ? -1 : 2))}
+          onToggle={() => handleSectionToggle(2)}
           summary={getSummary(2)}
         >
             <div className="space-y-6">
@@ -696,13 +807,22 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                 </div>
                                 <label className="block text-sm font-bold text-slate-700 mb-2">ASPECTS Score (0-10)</label>
                                 <input type="number" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 8" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
+                                <div ref={el => { fieldRefs.current['massEffect'] = el; }} className="mt-6">
+                                    <h4 className="text-sm font-bold text-slate-900 mb-2">Significant mass effect on imaging?</h4>
+                                    <p className="text-xs text-slate-500 mb-3">Relevant for ASPECTS 0–2 (Class IIa requires no significant mass effect per 2026 guidelines).</p>
+                                    <div className="grid grid-cols-3 gap-3">
+                                        <SelectionCard title="No" description="No significant mass effect" selected={inputs.massEffect === 'no'} onClick={() => updateInput('massEffect', 'no')} />
+                                        <SelectionCard title="Yes" description="Significant mass effect" selected={inputs.massEffect === 'yes'} onClick={() => updateInput('massEffect', 'yes')} />
+                                        <SelectionCard title="Unknown" description="Not assessed" selected={inputs.massEffect === 'unknown'} onClick={() => updateInput('massEffect', 'unknown')} />
+                                    </div>
+                                </div>
                                 <LearningPearl 
                                     title="Understanding ASPECTS" 
                                     content="ASPECTS is a 10-point scoring system for MCA stroke. Start with 10 (normal) and subtract 1 point for early ischemic changes in each of 10 defined regions (Caudate, Lentiform, Internal Capsule, Insula, M1-M6). Scores < 6 typically indicate a large established infarct core." 
                                 />
                                 <LearningPearl 
-                                    title="Large Core Evidence (2023-2024)" 
-                                    content="SELECT2 and ANGEL-ASPECT trials (2023) showed EVT benefit for ASPECTS 3-5 (0-6h) and cores 50-100 mL (6-24h), but with 15-20% hemorrhage risk. The 2026 Guidelines classify these as Class IIb (may be considered with careful selection) rather than routine recommendations." 
+                                    title="AHA/ASA 2026 Early Window (Section 4.7.2)" 
+                                    content="Class I: EVT recommended for ASPECTS 3–10 with NIHSS ≥6 and mRS 0–1. Class IIa: EVT reasonable for prestroke mRS 2 with ASPECTS ≥6; and for selected patients with ASPECTS 0–2, age <80 years, without significant mass effect. SELECT2/ANGEL-ASPECT support large-core selection." 
                                 />
                             </div>
                         )}
@@ -718,17 +838,31 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                 <input type="number" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 8" value={inputs.pcAspects} onChange={(e) => updateInput('pcAspects', e.target.value)} />
                                 <LearningPearl 
                                     title="pc-ASPECTS & 2026 Guidelines" 
-                                    content="pc-ASPECTS scores the posterior circulation on a 10-point scale: Thalami (1 each), Occipital lobes (1 each), Midbrain (2), Pons (2), Cerebellar hemispheres (1 each). The 2026 Guidelines specify pc-ASPECTS ≥8 with NIHSS ≥10 for Class I (strong) recommendation. Scores 6-7 receive Class IIa (reasonable) designation. ATTENTION and BAOCHE trials support intervention up to 24h." 
+                                    content="pc-ASPECTS scores the posterior circulation on a 10-point scale: Thalami (1 each), Occipital lobes (1 each), Midbrain (2), Pons (2), Cerebellar hemispheres (1 each). Per AHA/ASA 2026: pc-ASPECTS ≥6 with NIHSS ≥10 → Class I; pc-ASPECTS ≥6 with NIHSS 6–9 → Class IIb (EVT may be considered). pc-ASPECTS <6 → Avoid EVT. ATTENTION and BAOCHE trials support intervention up to 24h." 
                                 />
                             </div>
                         )}
 
-                        {/* Anterior 6-24h: Core/Mismatch */}
+                        {/* Anterior 6-24h: Optional ASPECTS + Perfusion */}
                         {inputs.time === '6_24' && !isBasilar && (
                             <div>
                                 <div className="bg-purple-50 p-4 rounded-xl text-purple-900 text-sm mb-6 border border-purple-100">
                                     <h4 className="font-bold flex items-center mb-2"><Info size={16} className="mr-2"/> Perfusion Imaging Required</h4>
-                                    <p>Enter values from automated software (RAPID™, Viz.ai™, etc).</p>
+                                    <p>Enter values from automated software (RAPID™, Viz.ai™, etc). DEFUSE-3 evidence is strongest in 6-16h; DAWN extended eligibility to 6-24h. Per AHA/ASA 2026 Section 4.7.2: In selected patients with age &lt;80 years, NIHSS ≥6, mRS 0–1, ASPECTS 3–5, and without significant mass effect, EVT is Class I in the 6–24h window.</p>
+                                </div>
+                                {/* Optional ASPECTS for 6-24h Class I (ASPECTS 3-5, no mass effect) */}
+                                <div ref={el => { fieldRefs.current['aspects'] = el; }} className="mb-6">
+                                    <h4 className="text-sm font-bold text-slate-900 mb-2">ASPECTS from NCCT (optional)</h4>
+                                    <p className="text-xs text-slate-500 mb-2">If available. ASPECTS 3-5 with age &lt;80 and no significant mass effect supports Class I in selected patients (2026 Section 4.7.2).</p>
+                                    <input type="number" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 5 (optional)" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
+                                    <div ref={el => { fieldRefs.current['massEffect'] = el; }} className="mt-4">
+                                        <h4 className="text-sm font-bold text-slate-900 mb-2">Significant mass effect on imaging?</h4>
+                                        <div className="grid grid-cols-3 gap-3">
+                                            <SelectionCard title="No" description="No significant mass effect" selected={inputs.massEffect === 'no'} onClick={() => updateInput('massEffect', 'no')} />
+                                            <SelectionCard title="Yes" description="Significant mass effect" selected={inputs.massEffect === 'yes'} onClick={() => updateInput('massEffect', 'yes')} />
+                                            <SelectionCard title="Unknown" description="Not assessed" selected={inputs.massEffect === 'unknown'} onClick={() => updateInput('massEffect', 'unknown')} />
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="space-y-4">
                                     <div ref={el => { fieldRefs.current['core'] = el; }}>
@@ -798,14 +932,16 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                 )}
             </div>
         </CollapsibleSection>
+        </div>
 
+        <div ref={el => { sectionRefs.current[3] = el; }} className="scroll-mt-4">
         <CollapsibleSection
           title="Decision"
           stepNumber={4}
           totalSteps={4}
           isCompleted={isSection3Complete}
           isActive={activeSection === 3}
-          onToggle={() => setActiveSection((prev) => (prev === 3 ? -1 : 3))}
+          onToggle={() => handleSectionToggle(3)}
           summary={getSummary(3)}
         >
              {result && (<div className="space-y-6 animate-in zoom-in-95 duration-300">
@@ -896,6 +1032,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                 />
              </div>)}
         </CollapsibleSection>
+        </div>
       </div>
 
       <div id="evt-action-bar" className={`mt-8 pt-4 md:border-t border-slate-100 scroll-mt-4 ${isInModal ? 'static' : 'fixed bottom-[4.5rem] md:static'} left-0 right-0 ${isInModal ? 'bg-transparent' : 'bg-white/95 backdrop-blur md:bg-transparent'} p-4 md:p-0 border-t md:border-0 ${isInModal ? '' : 'z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none'}`}>
