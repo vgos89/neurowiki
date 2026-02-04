@@ -22,11 +22,11 @@ const OrolingualEdemaProtocolModal = lazy(() => import('../../components/article
 const HemorrhageProtocolModal = lazy(() => import('../../components/article/stroke/HemorrhageProtocolModal').then(m => ({ default: m.HemorrhageProtocolModal })));
 
 /** Lazy-load heavy step components and NIHSS embed to shorten critical path and improve LCP */
-const CodeModeStep2 = lazy(() => import('../../components/article/stroke/CodeModeStep2'));
-const CodeModeStep3 = lazy(() => import('../../components/article/stroke/CodeModeStep3'));
-const CodeModeStep4 = lazy(() => import('../../components/article/stroke/CodeModeStep4'));
-const StrokeIchProtocolStep = lazy(() => import('../../components/article/stroke/StrokeIchProtocolStep'));
-const NihssCalculatorEmbed = lazy(() => import('../../components/article/stroke/NihssCalculatorEmbed'));
+const CodeModeStep2 = lazy(() => import('../../components/article/stroke/CodeModeStep2').then(m => ({ default: m.CodeModeStep2 })));
+const CodeModeStep3 = lazy(() => import('../../components/article/stroke/CodeModeStep3').then(m => ({ default: m.CodeModeStep3 })));
+const CodeModeStep4 = lazy(() => import('../../components/article/stroke/CodeModeStep4').then(m => ({ default: m.CodeModeStep4 })));
+const StrokeIchProtocolStep = lazy(() => import('../../components/article/stroke/StrokeIchProtocolStep').then(m => ({ default: m.StrokeIchProtocolStep })));
+const NihssCalculatorEmbed = lazy(() => import('../../components/article/stroke/NihssCalculatorEmbed').then(m => ({ default: m.NihssCalculatorEmbed })));
 
 /** Fallback Step 1 data for Study Mode when user hasn't completed Step 1 (all steps visible) */
 const DEFAULT_STEP1_DATA: Step1Data = {
