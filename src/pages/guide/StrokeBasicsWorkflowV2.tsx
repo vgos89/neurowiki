@@ -365,7 +365,6 @@ const MainContent: React.FC<{
               <Suspense fallback={<div className="p-6 text-slate-500 animate-pulse">Loading step…</div>}>
                 <CodeModeStep2
                   step1Data={step1Data || DEFAULT_STEP1_DATA}
-                  doorTime={milestones.doorTime ?? timerStartTime}
                   eligibilityResult={eligibilityResult}
                   onIchSelected={() => setHemorrhageProtocolModalOpen(true)}
                   onComplete={(data) => {
@@ -379,8 +378,6 @@ const MainContent: React.FC<{
                     scrollToStep(3, 400);
                   }}
                   onOpenEVTPathway={() => setThrombectomyModalOpen(true)}
-                  onRecordMilestone={(milestone, time) => setMilestones(prev => ({ ...prev, [milestone]: time }))}
-                  milestones={milestones}
                 />
               </Suspense>
             )}

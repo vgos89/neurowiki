@@ -1,4 +1,5 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
+import { AlertTriangle, ExternalLink, FlaskConical, Brain } from 'lucide-react';
 import type { Step1Data } from './CodeModeStep1';
 import type { ThrombolysisEligibilityData } from './ThrombolysisEligibilityModal';
 
@@ -10,57 +11,30 @@ export interface Step2Data {
   ctaOrdered?: boolean;
   thrombectomyPlan?: string; // 'yes' | 'no' | 'pending'
   lvoPresent?: boolean | null;
-  doorToCTMinutes?: number;
-  doorToNeedleMinutes?: number;
 }
 
 interface CodeModeStep2Props {
   step1Data: Step1Data;
-  /** GWTG: door time for "minutes from door" on Record now buttons */
-  doorTime?: Date | null;
   onComplete: (data: Step2Data) => void;
   onOpenEVTPathway?: () => void;
-  /** Record GWTG milestone: 'doorToCT' | 'doorToNeedle' | 'ctOrderedTime' | 'ctFirstImageTime' | 'ctInterpretedTime' | 'tpaBolusTime' | 'groinPunctureTime' | 'firstDeviceTime' | 'firstReperfusionTime' */
-  onRecordMilestone?: (milestone: string, time: Date) => void;
-  /** Current GWTG milestones (to show already-recorded times and minutes from door) */
-  milestones?: {
-    ctOrderedTime?: Date | null;
-    ctFirstImageTime?: Date | null;
-    ctInterpretedTime?: Date | null;
-    tpaBolusTime?: Date | null;
-    groinPunctureTime?: Date | null;
-    firstDeviceTime?: Date | null;
-    firstReperfusionTime?: Date | null;
-  };
   /** When set, show mandatory prompts: absolute → do not give TNK; relative → discuss risk vs benefits */
   eligibilityResult?: ThrombolysisEligibilityData | null;
   /** Called when user selects "ICH detected"; e.g. open hemorrhage protocol modal */
   onIchSelected?: () => void;
 }
 
-function minutesFromDoor(door: Date | undefined | null, eventTime: Date | undefined | null): number | null {
-  if (!door || !eventTime) return null;
-  return Math.round((eventTime.getTime() - door.getTime()) / 60000);
-}
-
 export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
   step1Data,
-  doorTime,
   onComplete,
   onOpenEVTPathway,
-  onRecordMilestone,
-  milestones = {},
   eligibilityResult = null,
-  onIchSelected
+  onIchSelected,
 }) => {
   const [ctResult, setCtResult] = useState<string>('');
   const [treatmentGiven, setTreatmentGiven] = useState<string>('');
   const [ctaOrdered, setCtaOrdered] = useState(false);
   const [lvoPresent, setLvoPresent] = useState<string>(''); // 'yes' | 'no' | 'pending'
-  const [doorToCTMinutes, setDoorToCTMinutes] = useState<number | ''>('');
-  const [doorToNeedleMinutes, setDoorToNeedleMinutes] = useState<number | ''>('');
-  const [ctMilestoneRecorded, setCtMilestoneRecorded] = useState(false);
-  const [needleMilestoneRecorded, setNeedleMilestoneRecorded] = useState(false);
+  const [ctReadStamped, setCtReadStamped] = useState(false);
 
   // Pre-fill doses from Step 1 weight
   const weightKg = useMemo(() => {
@@ -89,31 +63,8 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
   // Map to 'bleed' for workflow compatibility when ICH selected
   const ctResultForComplete = ctResult === 'ich' ? 'bleed' : ctResult;
 
-  useEffect(() => {
-    if (doorToCTMinutes !== '' && typeof doorToCTMinutes === 'number' && onRecordMilestone && !ctMilestoneRecorded) {
-      const time = new Date(Date.now() - doorToCTMinutes * 60 * 1000);
-      onRecordMilestone('doorToCT', time);
-      setCtMilestoneRecorded(true);
-    }
-  }, [doorToCTMinutes, ctMilestoneRecorded, onRecordMilestone]);
-
-  useEffect(() => {
-    if (
-      doorToNeedleMinutes !== '' &&
-      typeof doorToNeedleMinutes === 'number' &&
-      onRecordMilestone &&
-      !needleMilestoneRecorded &&
-      (treatmentGiven === 'tpa' || treatmentGiven === 'tnk')
-    ) {
-      const time = new Date(Date.now() - doorToNeedleMinutes * 60 * 1000);
-      onRecordMilestone('doorToNeedle', time);
-      setNeedleMilestoneRecorded(true);
-    }
-  }, [doorToNeedleMinutes, needleMilestoneRecorded, treatmentGiven, onRecordMilestone]);
-
   const canComplete =
     ctResult !== '' &&
-    (doorToCTMinutes !== '' && typeof doorToCTMinutes === 'number') &&
     (isICH || (isNoBleed && treatmentGiven !== '') || ctResult === 'other');
 
   const handleComplete = () => {
@@ -123,19 +74,21 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
       ctResult: ctResultForComplete,
       treatmentGiven: treatmentForComplete,
       ctaOrdered,
-      doorToCTMinutes: typeof doorToCTMinutes === 'number' ? doorToCTMinutes : undefined,
       lvoPresent: lvoPresent === 'yes' ? true : lvoPresent === 'no' ? false : undefined,
       thrombectomyPlan: lvoPresent || undefined
     };
     if (treatmentForComplete === 'tpa' || treatmentForComplete === 'tnk') {
       payload.tpaDose = treatmentForComplete === 'tpa' ? tpaDose : undefined;
       payload.tnkDose = treatmentForComplete === 'tnk' ? tnkDose : undefined;
-      payload.doorToNeedleMinutes = typeof doorToNeedleMinutes === 'number' ? doorToNeedleMinutes : undefined;
     }
     onComplete(payload);
   };
 
-  const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
+  const handleStampCtRead = () => {
+    if (ctReadStamped) return;
+    window.dispatchEvent(new CustomEvent('stroke:stamp-ct-read'));
+    setCtReadStamped(true);
+  };
 
   return (
     <div className="space-y-4">
@@ -155,7 +108,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
       {step1Data && (step1Data.systolicBP > 185 || step1Data.diastolicBP > 110) && (
         <div className="rounded-lg p-4 border-2 border-red-200 bg-red-50">
           <div className="flex items-start gap-3">
-            <span className="material-icons-outlined text-red-600 text-xl">warning</span>
+            <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-red-900 space-y-2">
               {(treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (step1Data.systolicBP > 185 || step1Data.diastolicBP > 110) && (
                 <>
@@ -176,9 +129,35 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
 
       {/* CT Result Selection */}
       <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
-        <div className="flex items-center gap-3 mb-4">
-          <span className="material-icons-outlined text-slate-400">psychology</span>
-          <h3 className="text-base font-semibold tracking-tight text-slate-900">CT Head Result</h3>
+        <div className="flex items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-3">
+            <Brain className="w-5 h-5 text-slate-400" />
+            <h3 className="text-base font-semibold tracking-tight text-slate-900">CT Head Result</h3>
+          </div>
+          {/* CT Read Time stamp — syncs with TimestampBubble */}
+          <button
+            type="button"
+            onClick={handleStampCtRead}
+            disabled={ctReadStamped}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+              ctReadStamped
+                ? 'bg-green-100 text-green-700 border border-green-200 cursor-default'
+                : 'bg-neuro-50 text-neuro-700 border border-neuro-200 hover:bg-neuro-100'
+            }`}
+            title="Record CT Read Time in timestamp tracker"
+          >
+            {ctReadStamped ? (
+              <>
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                CT Read Stamped
+              </>
+            ) : (
+              <>
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10"/><path strokeLinecap="round" d="M12 6v6l4 2"/></svg>
+                Stamp CT Read Time
+              </>
+            )}
+          </button>
         </div>
         <div className="space-y-3">
           <label className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
@@ -220,7 +199,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
       {/* ICH callout + button to open hemorrhage protocol modal */}
       {isICH && (
         <div className="rounded-lg p-4 flex flex-col sm:flex-row sm:items-start gap-3 bg-amber-50 border border-amber-200">
-          <span className="material-icons-outlined text-amber-600 text-xl flex-shrink-0">warning</span>
+          <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
           <div className="flex-1">
             <p className="font-bold text-amber-900">Thrombolysis contraindicated</p>
             <p className="text-sm text-amber-800 mt-1">Proceed to hemorrhage protocol (2022 AHA/ASA ICH). Consider EVT pathway if LVO suspected with appropriate imaging.</p>
@@ -239,7 +218,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
       {isNoBleed && eligibilityResult && (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
         <div className={`rounded-lg p-4 border-2 ${eligibilityResult.eligibilityStatus === 'absolute-contraindication' ? 'border-red-300 bg-red-50' : 'border-amber-300 bg-amber-50'}`}>
           <div className="flex items-start gap-3">
-            <span className={`material-icons-outlined text-xl ${eligibilityResult.eligibilityStatus === 'absolute-contraindication' ? 'text-red-600' : 'text-amber-600'}`}>warning</span>
+            <AlertTriangle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${eligibilityResult.eligibilityStatus === 'absolute-contraindication' ? 'text-red-600' : 'text-amber-600'}`} />
             <div className="text-sm">
               {eligibilityResult.eligibilityStatus === 'absolute-contraindication' && (
                 <p className="font-bold text-red-900">Do not give tPA/TNK — major exclusion(s) identified. Check eligibility in Step 1.</p>
@@ -256,7 +235,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
       {isNoBleed && (
         <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
           <div className="flex items-center gap-3 mb-4">
-            <span className="material-icons-outlined text-slate-400">medication</span>
+            <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /><rect x="3" y="3" width="18" height="18" rx="3" /></svg>
             <h3 className="text-base font-semibold tracking-tight text-slate-900">Treatment Decision</h3>
           </div>
           <div className="space-y-3">
@@ -299,7 +278,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
       {/* CTA & LVO Screening */}
       <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
         <div className="flex items-center gap-3 mb-4">
-          <span className="material-icons-outlined text-slate-400">science</span>
+          <FlaskConical className="w-5 h-5 text-slate-400" />
           <h3 className="text-base font-semibold tracking-tight text-slate-900">CTA & LVO Screening</h3>
         </div>
         <label className="flex items-center gap-3 cursor-pointer mb-4">
@@ -352,136 +331,13 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
                 onClick={onOpenEVTPathway}
                 className="mt-3 w-full py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
               >
-                <span className="material-icons-outlined text-lg">open_in_new</span>
+                <ExternalLink className="w-4 h-4" />
                 EVT Pathway
               </button>
             )}
           </div>
         )}
       </div>
-
-      {/* GWTG Brain Imaging Times – Record now */}
-      <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
-        <div className="flex items-center gap-3 mb-3">
-          <span className="material-icons-outlined text-slate-400">schedule</span>
-          <h3 className="text-base font-semibold tracking-tight text-slate-900">Brain Imaging Times (GWTG)</h3>
-        </div>
-        <p className="text-xs text-slate-500 mb-3">Target: Door-to-CT (first image) &lt;25 min; CT interpreted ≤45 min (rural).</p>
-        <div className="flex flex-wrap gap-2">
-          {onRecordMilestone && (
-            <>
-              <button
-                type="button"
-                onClick={() => onRecordMilestone('ctOrderedTime', new Date())}
-                className="min-h-[44px] min-w-[44px] inline-flex flex-col items-center justify-center px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-medium"
-              >
-                <span className="material-icons-outlined text-lg">add_circle</span>
-                CT ordered
-                {milestones.ctOrderedTime && doorTime && (
-                  <span className="font-mono text-[10px] text-slate-500">{minutesFromDoor(doorTime, milestones.ctOrderedTime)}m</span>
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  onRecordMilestone('ctFirstImageTime', new Date());
-                  const min = doorTime ? Math.round((new Date().getTime() - doorTime.getTime()) / 60000) : null;
-                  if (min != null && doorToCTMinutes === '') setDoorToCTMinutes(min);
-                }}
-                className="min-h-[44px] min-w-[44px] inline-flex flex-col items-center justify-center px-3 py-2 rounded-lg border border-sky-200 bg-sky-50/50 hover:bg-sky-100 text-sky-800 text-xs font-medium"
-              >
-                <span className="material-icons-outlined text-lg">image</span>
-                First image (Door-to-CT)
-                {milestones.ctFirstImageTime && doorTime && (
-                  <span className="font-mono text-[10px]">{minutesFromDoor(doorTime, milestones.ctFirstImageTime)}m</span>
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={() => onRecordMilestone('ctInterpretedTime', new Date())}
-                className="min-h-[44px] min-w-[44px] inline-flex flex-col items-center justify-center px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-medium"
-              >
-                <span className="material-icons-outlined text-lg">visibility</span>
-                Interpreted
-                {milestones.ctInterpretedTime && doorTime && (
-                  <span className="font-mono text-[10px] text-slate-500">{minutesFromDoor(doorTime, milestones.ctInterpretedTime)}m</span>
-                )}
-              </button>
-            </>
-          )}
-        </div>
-        {isNoBleed && (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
-          <div className="mt-4 pt-4 border-t border-slate-200">
-            <label className="block text-sm font-medium text-slate-700 mb-1">Door-to-Needle time (minutes)</label>
-            <p className="text-xs text-rose-600 font-medium mb-2">Target: Door-to-Needle &lt;60 min</p>
-            <div className="flex flex-wrap gap-2 items-center">
-              {onRecordMilestone && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    const now = new Date();
-                    onRecordMilestone('tpaBolusTime', now);
-                    onRecordMilestone('doorToNeedle', now);
-                    if (doorTime) setDoorToNeedleMinutes(Math.round((now.getTime() - doorTime.getTime()) / 60000));
-                  }}
-                  className="min-h-[44px] px-3 py-2 rounded-lg bg-rose-100 text-rose-800 text-sm font-medium border border-rose-200"
-                >
-                  Record tPA bolus now
-                </button>
-              )}
-              <input
-                type="number"
-                min={0}
-                max={999}
-                value={doorToNeedleMinutes === '' ? '' : doorToNeedleMinutes}
-                onChange={(e) => setDoorToNeedleMinutes(e.target.value === '' ? '' : clamp(parseInt(e.target.value, 10) || 0, 0, 999))}
-                onFocus={(e) => e.target.select()}
-                className="w-24 min-h-[44px] px-3 py-2 rounded-lg border border-slate-300 text-slate-900 font-mono"
-              />
-            </div>
-            <div className="p-2 rounded-lg bg-rose-50 border border-rose-200 mt-2">
-              <p className="text-xs text-rose-800">Time-critical: &lt;60 min national benchmark</p>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Thrombectomy times (optional) – show when CTA + LVO */}
-      {ctaOrdered && lvoPresent === 'yes' && onRecordMilestone && (
-        <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
-          <div className="flex items-center gap-3 mb-3">
-            <span className="material-icons-outlined text-orange-500">local_hospital</span>
-            <h3 className="text-base font-semibold tracking-tight text-slate-900">Thrombectomy Times (GWTG)</h3>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => onRecordMilestone('groinPunctureTime', new Date())}
-              className="min-h-[44px] inline-flex flex-col items-center justify-center px-3 py-2 rounded-lg border border-orange-200 bg-orange-50/50 hover:bg-orange-100 text-orange-800 text-xs font-medium"
-            >
-              <span className="material-icons-outlined text-lg">radio_button_checked</span>
-              Groin puncture
-              {milestones.groinPunctureTime && doorTime && (
-                <span className="font-mono text-[10px]">{minutesFromDoor(doorTime, milestones.groinPunctureTime)}m</span>
-              )}
-            </button>
-            <button
-              type="button"
-              onClick={() => onRecordMilestone('firstDeviceTime', new Date())}
-              className="min-h-[44px] inline-flex flex-col items-center justify-center px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-medium"
-            >
-              First device
-            </button>
-            <button
-              type="button"
-              onClick={() => onRecordMilestone('firstReperfusionTime', new Date())}
-              className="min-h-[44px] inline-flex flex-col items-center justify-center px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-medium"
-            >
-              First reperfusion
-            </button>
-          </div>
-        </div>
-      )}
 
       <button
         type="button"

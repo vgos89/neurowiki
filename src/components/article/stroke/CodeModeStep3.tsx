@@ -60,10 +60,10 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
     ? minutesFromStart(doorTime, milestones.ctFirstImageTime)
     : doorTime && milestones?.doorToCT
       ? minutesFromStart(doorTime, milestones.doorToCT)
-      : step2Data?.doorToCTMinutes ?? null;
+      : null;
   const doorToNeedleMin = doorTime && milestones?.doorToNeedle
     ? minutesFromStart(doorTime, milestones.doorToNeedle)
-    : step2Data?.doorToNeedleMinutes ?? null;
+    : null;
   const doorToCTOrderedMin = doorTime && milestones?.ctOrderedTime ? minutesFromStart(doorTime, milestones.ctOrderedTime) : null;
   const doorToCTInterpretedMin = doorTime && milestones?.ctInterpretedTime ? minutesFromStart(doorTime, milestones.ctInterpretedTime) : null;
   const lkwToNeedleMin = step1Data?.lkwTimestamp && milestones?.doorToNeedle

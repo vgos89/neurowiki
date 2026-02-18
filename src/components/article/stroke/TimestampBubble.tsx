@@ -39,6 +39,19 @@ export const TimestampBubble: React.FC = () => {
     return () => clearTimeout(t);
   }, []);
 
+  // Listen for CT Read Time stamp event fired from CodeModeStep2
+  useEffect(() => {
+    const handler = () => {
+      setShowPulse(false);
+      setTimestamps(prev => {
+        if (prev['CT Read Time']) return prev; // already stamped — no-op
+        return { ...prev, 'CT Read Time': new Date() };
+      });
+    };
+    window.addEventListener('stroke:stamp-ct-read', handler);
+    return () => window.removeEventListener('stroke:stamp-ct-read', handler);
+  }, []);
+
   const handleOpen = () => {
     setShowThought(false);
     setShowPulse(false);
