@@ -1003,6 +1003,14 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         </div>
                     </div>
                 )}
+
+                {/* Section 2 complete nudge — prompt user to tap Next */}
+                {isSection2Complete && (
+                    <div className="mt-5 flex items-center gap-2 px-4 py-3 bg-neuro-50 dark:bg-neuro-900/30 border border-neuro-200 dark:border-neuro-700 rounded-xl text-sm font-semibold text-neuro-700 dark:text-neuro-300 animate-in fade-in duration-300">
+                        <ChevronRight size={16} className="flex-shrink-0" />
+                        <span>Imaging complete — tap <strong>Next</strong> to see your eligibility result</span>
+                    </div>
+                )}
             </div>
         </CollapsibleSection>
         </div>
