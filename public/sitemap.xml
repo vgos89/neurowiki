@@ -4,397 +4,389 @@
   <!-- Homepage -->
   <url>
     <loc>https://neurowiki.ai/</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-  
+
   <!-- Main Navigation Pages -->
   <url>
     <loc>https://neurowiki.ai/guide</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/trials</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/calculators</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-  
-  <!-- Calculator Pathways -->
-  <url>
-    <loc>https://neurowiki.ai/calculators/gca-pathway</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/calculators/elan-pathway</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
+
+  <!-- Clinical Pathways -->
   <url>
     <loc>https://neurowiki.ai/calculators/evt-pathway</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
-  
+
+  <url>
+    <loc>https://neurowiki.ai/calculators/elan-pathway</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
   <url>
     <loc>https://neurowiki.ai/calculators/se-pathway</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/calculators/migraine-pathway</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  
-  <!-- Standard Calculators (path-based URLs for SEO) -->
+
+  <url>
+    <loc>https://neurowiki.ai/calculators/gca-pathway</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Standard Calculators -->
   <url>
     <loc>https://neurowiki.ai/calculators/nihss</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/calculators/abcd2-score</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/calculators/ich-score</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/calculators/abcd2-score</loc>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/calculators/glasgow-coma-scale</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/calculators/rope-score</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/calculators/has-bled-score</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
+  <url>
+    <loc>https://neurowiki.ai/calculators/rope-score</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <url>
     <loc>https://neurowiki.ai/calculators/heidelberg-bleeding-classification</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/calculators/boston-criteria-caa</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
-  <!-- Guide Topics (Vascular Neurology, Neurocritical Care, Epilepsy, etc.) -->
+
   <url>
-    <loc>https://neurowiki.ai/guide/stroke-basics</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/guide/iv-tpa</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/guide/thrombectomy</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/guide/acute-stroke-mgmt</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/guide/hemorrhagic-stroke</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/guide/anticoagulation-reversal</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/guide/icp-mgmt</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/guide/sah-mgmt</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/guide/hypoxic-brain</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/guide/status-epilepticus</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/guide/meningitis</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/guide/workups</loc>
-    <lastmod>2026-02-02</lastmod>
+    <loc>https://neurowiki.ai/calculators/em-billing</loc>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-  
+
+  <!-- Guide Articles — Vascular Neurology -->
   <url>
-    <loc>https://neurowiki.ai/guide/dementia-workup</loc>
-    <lastmod>2026-02-02</lastmod>
+    <loc>https://neurowiki.ai/guide/stroke-basics</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/guide/iv-tpa</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/guide/thrombectomy</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/guide/acute-stroke-mgmt</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/guide/ich-management</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Guide Articles — Epilepsy & Neurocritical Care -->
+  <url>
+    <loc>https://neurowiki.ai/guide/status-epilepticus</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/guide/meningitis</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/guide/altered-mental-status</loc>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
+  <!-- Guide Articles — General Neurology Workups -->
   <url>
-    <loc>https://neurowiki.ai/guide/myasthenia-gravis</loc>
-    <lastmod>2026-02-02</lastmod>
+    <loc>https://neurowiki.ai/guide/seizure-workup</loc>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
+  <url>
+    <loc>https://neurowiki.ai/guide/headache-workup</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/guide/vertigo</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/guide/weakness-workup</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Guide Articles — Neuromuscular & Neuroimmunology -->
   <url>
     <loc>https://neurowiki.ai/guide/gbs</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
+  <url>
+    <loc>https://neurowiki.ai/guide/myasthenia-gravis</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <url>
     <loc>https://neurowiki.ai/guide/multiple-sclerosis</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
-  <!-- Neuro Trials -->
+
+  <!-- Landmark Trials — Thrombolysis -->
   <url>
     <loc>https://neurowiki.ai/trials/ninds-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/trials/ecass3-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/trials/extend-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/trials/eagle-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
   <url>
-    <loc>https://neurowiki.ai/trials/attention-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <loc>https://neurowiki.ai/trials/wake-up-trial</loc>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/trials/baoche-trial</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/trials/distal-trial</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/trials/escape-mevo-trial</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://neurowiki.ai/trials/defuse-3-trial</loc>
-    <lastmod>2026-02-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
+
+  <!-- Landmark Trials — Thrombectomy -->
   <url>
     <loc>https://neurowiki.ai/trials/dawn-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
-  
+
+  <url>
+    <loc>https://neurowiki.ai/trials/defuse-3-trial</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
   <url>
     <loc>https://neurowiki.ai/trials/select2-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/trials/angel-aspect-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  
+
   <url>
-    <loc>https://neurowiki.ai/trials/shine-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <loc>https://neurowiki.ai/trials/distal-trial</loc>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
   <url>
-    <loc>https://neurowiki.ai/trials/nascet-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <loc>https://neurowiki.ai/trials/escape-mevo-trial</loc>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
+  <!-- Landmark Trials — Basilar Artery -->
   <url>
-    <loc>https://neurowiki.ai/trials/crest-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <loc>https://neurowiki.ai/trials/attention-trial</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/trials/baoche-trial</loc>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
+  <!-- Landmark Trials — Antiplatelet & Secondary Prevention -->
   <url>
     <loc>https://neurowiki.ai/trials/chance-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/trials/point-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/trials/sammpris-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/trials/weave-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/trials/socrates-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/trials/sps3-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/trials/sparcl-trial</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
+
   <url>
     <loc>https://neurowiki.ai/trials/elan-study</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

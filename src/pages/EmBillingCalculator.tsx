@@ -594,20 +594,25 @@ function isNpiNumber(query: string): boolean { return /^\d{5,10}$/.test(query.tr
 async function fetchNpiProviders(query: string): Promise<NpiProvider[]> {
   const trimmed = query.trim();
   if (!trimmed) return [];
-  const params = new URLSearchParams({ version: '2.1' });
+  const params = new URLSearchParams({ version: '2.1', limit: '10', enumeration_type: 'NPI-1' });
   if (isNpiNumber(trimmed)) {
-    params.set('search_type', 'NPI');
     params.set('number', trimmed);
+    params.delete('limit');
+    params.delete('enumeration_type');
   } else {
     const parts = trimmed.split(/\s+/);
-    params.set('first_name', parts.length >= 2 ? parts[0] : '');
-    params.set('last_name', parts.length >= 2 ? parts[1] : parts[0]);
-    params.set('limit', '10');
-    params.set('enumeration_type', 'NPI-1');
+    if (parts.length >= 2) {
+      params.set('first_name', parts[0]);
+      params.set('last_name', parts[1]);
+    } else {
+      // Single word — search last_name only (no first_name param avoids NPI API errors)
+      params.set('last_name', parts[0]);
+    }
   }
   const resp = await fetch(`/api/npi?${params.toString()}`);
   if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
   const data = await resp.json();
+  if (data.Errors) throw new Error(data.Errors[0]?.description ?? 'NPI API error');
   if (!data.results || data.results.length === 0) return [];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return data.results.map((r: any): NpiProvider => {
@@ -979,8 +984,9 @@ const EmBillingCalculator: React.FC = () => {
       try {
         const results = await fetchNpiProviders(value);
         set({ npiResults: results, showNpiDropdown: true, npiLoading: false });
-      } catch (_) {
-        set({ npiError: 'NPI lookup failed. Check your connection.', npiLoading: false, showNpiDropdown: false });
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : 'NPI lookup failed';
+        set({ npiError: `NPI lookup failed: ${msg}`, npiLoading: false, showNpiDropdown: false });
       }
     }, 300);
   };
