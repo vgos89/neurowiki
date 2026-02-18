@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Layout from './components/Layout';
 import { PublishGate } from './components/PublishGate';
 import { TrialModalProvider, useTrialModal } from './contexts/TrialModalContext';
+import Seo from './components/Seo';
 
 const DisclaimerModal = lazy(() => import('./components/DisclaimerModal'));
 const GlobalTrialModal = lazy(() =>
@@ -70,6 +71,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <TrialModalProvider>
+        <Seo />
         <Suspense fallback={null}>
           <DisclaimerModal />
         </Suspense>
