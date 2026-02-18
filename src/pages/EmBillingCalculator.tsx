@@ -95,6 +95,10 @@ interface EmBillingState {
   // Time-based
   timeMinutes: string;
 
+  // Billing context
+  dateOfService: string; // ISO date string YYYY-MM-DD
+  selectedModifiers: string[]; // e.g. ['-25', '-AI']
+
   // UI
   toast: string | null;
 }
@@ -111,6 +115,71 @@ const VISIT_TYPE_LABELS: Record<VisitType, string> = {
   consult_outpatient: 'Consultation (Outpatient)',
   consult_inpatient: 'Consultation (Inpatient)',
   emergency_dept: 'Emergency Department',
+};
+
+// CMS Place of Service (POS) codes
+const VISIT_TYPE_POS: Record<VisitType, string> = {
+  new_patient_office: '11 — Office',
+  established_patient_office: '11 — Office',
+  initial_inpatient: '21 — Inpatient Hospital',
+  subsequent_inpatient: '21 — Inpatient Hospital',
+  consult_outpatient: '11 — Office',
+  consult_inpatient: '21 — Inpatient Hospital',
+  emergency_dept: '23 — Emergency Room – Hospital',
+};
+
+// Common billing modifiers per visit type (for reference, not auto-appended to CPT)
+const VISIT_TYPE_MODIFIERS: Record<VisitType, { code: string; label: string }[]> = {
+  new_patient_office: [
+    { code: '-25', label: 'Significant, separately identifiable E&M same day as procedure' },
+    { code: '-57', label: 'Decision for surgery (major procedure, same or next day)' },
+  ],
+  established_patient_office: [
+    { code: '-25', label: 'Significant, separately identifiable E&M same day as procedure' },
+    { code: '-57', label: 'Decision for surgery (major procedure, same or next day)' },
+  ],
+  initial_inpatient: [
+    { code: '-AI', label: 'Principal physician of record (attending)' },
+    { code: '-GC', label: 'Service performed in part by resident under teaching physician' },
+  ],
+  subsequent_inpatient: [
+    { code: '-AI', label: 'Principal physician of record (attending)' },
+    { code: '-GC', label: 'Service performed in part by resident under teaching physician' },
+  ],
+  consult_outpatient: [
+    { code: '-32', label: 'Mandated service (insurance/legal/employer-required)' },
+    { code: '-25', label: 'Significant, separately identifiable E&M same day as procedure' },
+  ],
+  consult_inpatient: [
+    { code: '-AI', label: 'Principal physician of record (attending)' },
+    { code: '-32', label: 'Mandated service' },
+    { code: '-GC', label: 'Service performed in part by resident under teaching physician' },
+  ],
+  emergency_dept: [
+    { code: '-25', label: 'Significant, separately identifiable E&M same day as procedure' },
+  ],
+};
+
+// MDM problem justification text for audit doc
+const PROBLEM_JUSTIFICATION: Record<MdmLevel, string> = {
+  minimal: 'One self-limited or minor problem (e.g., cold, insect bite)',
+  low: 'One stable chronic illness, or one acute uncomplicated illness/injury, or two or more self-limited problems',
+  moderate: 'One or more chronic illnesses with exacerbation/progression/side effects; or one undiagnosed new problem with uncertain prognosis; or one acute illness with systemic symptoms',
+  high: 'One or more chronic illnesses with severe exacerbation/progression/side effects; or one acute or chronic illness/injury posing a threat to life or bodily function',
+};
+
+const DATA_JUSTIFICATION: Record<MdmLevel, string> = {
+  minimal: 'Minimal or no data reviewed',
+  low: 'Limited data — review of prior external notes or ordering of tests only',
+  moderate: 'Moderate data — independent interpretation of results and/or discussion with treating provider',
+  high: 'Extensive data — independent interpretation of results from tests ordered by another provider and discussion of management',
+};
+
+const RISK_JUSTIFICATION: Record<MdmLevel, string> = {
+  minimal: 'Minimal risk — self-limited problem, no prescription drug management',
+  low: 'Low risk — OTC drugs, minor surgery with no identified risk factors, PT/OT, IV fluids without additives',
+  moderate: 'Moderate risk — prescription drug management, minor surgery with identified risk factors, new presenting illness requiring hospitalization decision, diagnosis or treatment significantly limited by social determinants',
+  high: 'High risk — drug therapy requiring intensive monitoring for toxicity, elective major surgery with identified risk factors, diagnosis or treatment significantly limited by social determinants of health',
 };
 
 const SPECIALTIES = [
@@ -325,6 +394,31 @@ function getTimeCpt(visitType: VisitType, minutes: number): CptEntry | null {
   return { code: match.cpt, description: `${VISIT_TYPE_LABELS[visitType]} — ${match.label}` };
 }
 
+// ─── Taxonomy → Specialty Matcher ────────────────────────────────────────────
+
+// Maps NPPES taxonomy description fragments to our SPECIALTIES list entries.
+// The taxonomy string from NPPES is free-text (e.g. "Neurology", "Family Medicine",
+// "Emergency Medicine (Physician)", "Internal Medicine"). We do a case-insensitive
+// substring match, walking the priority list so the most specific match wins.
+const TAXONOMY_MAP: { fragment: string; specialty: string }[] = [
+  { fragment: 'Neurosurg', specialty: 'Neurosurgery' },
+  { fragment: 'Neurol', specialty: 'Neurology' },
+  { fragment: 'Emergency', specialty: 'Emergency Medicine' },
+  { fragment: 'Family', specialty: 'Family Medicine' },
+  { fragment: 'Internal', specialty: 'Internal Medicine' },
+  { fragment: 'Cardiol', specialty: 'Cardiology' },
+  { fragment: 'Psychiatr', specialty: 'Psychiatry' },
+  { fragment: 'Hospital', specialty: 'Hospitalist' },
+];
+
+function matchTaxonomyToSpecialty(taxonomy: string): string | null {
+  const lower = taxonomy.toLowerCase();
+  for (const { fragment, specialty } of TAXONOMY_MAP) {
+    if (lower.includes(fragment.toLowerCase())) return specialty;
+  }
+  return null;
+}
+
 // ─── API Functions ────────────────────────────────────────────────────────────
 
 function isNpiNumber(query: string): boolean {
@@ -393,58 +487,144 @@ function generateDocText(
   overallMdm: MdmLevel,
   cptEntry: CptEntry | null
 ): string {
-  const { selectedProvider, selectedDiagnoses, visitType, billingMode, timeMinutes, dataReviewed, managementRisk } = state;
+  const {
+    selectedProvider, selectedDiagnoses, visitType, specialty,
+    billingMode, timeMinutes, dataReviewed, managementRisk,
+    dateOfService, selectedModifiers,
+  } = state;
+
+  const sep = '─'.repeat(50);
   const lines: string[] = [];
 
-  lines.push(`MDM PATHWAY:`);
+  // ── Header block ──
+  lines.push('EVALUATION & MANAGEMENT BILLING DOCUMENTATION');
+  lines.push('Generated by NeuroWiki E/M Calculator (2021 AMA MDM)');
+  lines.push(sep);
+
+  // ── Administrative / claim fields ──
+  lines.push('CLAIM INFORMATION');
+  lines.push(`Date of Service (DOS):  ${dateOfService || '[Enter date of service]'}`);
+  lines.push(`Visit Type:             ${VISIT_TYPE_LABELS[visitType]}`);
+  lines.push(`Place of Service (POS): ${VISIT_TYPE_POS[visitType]}`);
+  lines.push(`Specialty:              ${specialty}`);
+  if (selectedProvider) {
+    const name = `${selectedProvider.firstName} ${selectedProvider.lastName}${selectedProvider.credential ? ', ' + selectedProvider.credential : ''}`;
+    lines.push(`Rendering Provider:     ${name}`);
+    lines.push(`NPI (Type 1):           ${selectedProvider.npi}`);
+    lines.push(`Taxonomy:               ${selectedProvider.taxonomy}`);
+    lines.push(`Practice Location:      ${selectedProvider.address || '[Not specified]'}`);
+  } else {
+    lines.push(`Rendering Provider:     [Not entered — search NPI above]`);
+    lines.push(`NPI (Type 1):           [Required for claim submission]`);
+  }
   lines.push('');
 
-  const cptLine = cptEntry ? `CPT ${cptEntry.code} — ${cptEntry.description}` : 'CPT: Not determined';
+  // ── CPT / billing code ──
+  lines.push('PROCEDURE CODE');
+  if (cptEntry) {
+    lines.push(`CPT Code:               ${cptEntry.code}`);
+    lines.push(`Description:            ${cptEntry.description}`);
+    lines.push(`Basis:                  ${billingMode === 'mdm' ? 'Medical Decision Making (MDM)' : 'Total Time on Date of Service'}`);
+  } else {
+    lines.push(`CPT Code:               [Not determined — complete inputs above]`);
+  }
+  if (selectedModifiers.length > 0) {
+    const modLabels = selectedModifiers
+      .map((m) => {
+        const found = VISIT_TYPE_MODIFIERS[visitType].find((x) => x.code === m);
+        return found ? `${m} (${found.label})` : m;
+      })
+      .join('; ');
+    lines.push(`Modifier(s):            ${modLabels}`);
+  }
+  lines.push('');
 
+  // ── Diagnoses ──
+  lines.push('DIAGNOSIS CODES (ICD-10-CM)');
+  if (selectedDiagnoses.length > 0) {
+    selectedDiagnoses.forEach((dx, i) => {
+      lines.push(`  ${i === 0 ? 'Principal (DX1):' : `Secondary (DX${i + 1}):`.padEnd(17)}  ${dx.code}  ${dx.name}`);
+    });
+  } else {
+    lines.push('  [No diagnoses entered]');
+  }
+  lines.push('');
+
+  // ── MDM or Time documentation ──
   if (billingMode === 'mdm') {
-    lines.push(`${MDM_LEVEL_FULL[overallMdm]} Complexity Decision Making (Meets 2 of 3 criteria).`);
+    lines.push('MEDICAL DECISION MAKING (2021 AMA Table of Risk)');
+    lines.push(`Overall MDM Level:      ${MDM_LEVEL_FULL[overallMdm]} Complexity`);
+    lines.push(`Qualification:          2-of-3 rule met`);
+    lines.push('');
+
+    // Column 1 — Problems
+    const probMet = levelToNum(problemLevel) >= levelToNum(overallMdm);
+    lines.push(`  [${probMet ? '✓' : ' '}] 1. NUMBER & COMPLEXITY OF PROBLEMS — ${MDM_LEVEL_FULL[problemLevel].toUpperCase()}`);
+    lines.push(`      ${PROBLEM_JUSTIFICATION[problemLevel]}`);
     if (selectedDiagnoses.length > 0) {
-      const dxNames = selectedDiagnoses.map((d) => `${d.name} (${d.code})`).join(', ');
-      lines.push(`Patient presents with ${dxNames}.`);
+      selectedDiagnoses.forEach((dx) => lines.push(`      • ${dx.name} (${dx.code})`));
     }
     lines.push('');
-    lines.push('Medical Decision Making:');
-    lines.push(`• Problem Complexity: ${MDM_LEVEL_FULL[problemLevel]} — ${selectedDiagnoses.length} diagnosis/diagnoses addressed`);
 
+    // Column 2 — Data
+    const dataMet = levelToNum(dataLevel) >= levelToNum(overallMdm);
     const dataItems: string[] = [];
-    if (dataReviewed.reviewedLabsImaging) dataItems.push('reviewed labs/imaging');
-    if (dataReviewed.independentInterpretation) dataItems.push('independent interpretation');
-    if (dataReviewed.externalNotesReview) dataItems.push('external notes reviewed');
-    if (dataReviewed.discussedWithProvider) dataItems.push('discussed with provider');
-    lines.push(`• Data Reviewed: ${MDM_LEVEL_FULL[dataLevel]}${dataItems.length > 0 ? ' — ' + dataItems.join(', ') : ''}`);
-    lines.push(`• Management Risk: ${MDM_LEVEL_FULL[riskLevel]}${managementRisk ? ' — ' + MANAGEMENT_RISK_LABELS[managementRisk] : ''}`);
+    if (dataReviewed.reviewedLabsImaging) dataItems.push('Reviewed labs/imaging');
+    if (dataReviewed.independentInterpretation) dataItems.push('Independent interpretation of results');
+    if (dataReviewed.externalNotesReview) dataItems.push('External notes/records reviewed');
+    if (dataReviewed.discussedWithProvider) dataItems.push('Discussion with treating provider');
+    lines.push(`  [${dataMet ? '✓' : ' '}] 2. AMOUNT & COMPLEXITY OF DATA — ${MDM_LEVEL_FULL[dataLevel].toUpperCase()}`);
+    lines.push(`      ${DATA_JUSTIFICATION[dataLevel]}`);
+    dataItems.forEach((item) => lines.push(`      • ${item}`));
+    if (dataItems.length === 0) lines.push('      • None documented');
     lines.push('');
 
-    const meetingColumns: string[] = [];
-    const levels = [
-      { name: 'Problem', level: problemLevel },
+    // Column 3 — Risk
+    const riskMet = levelToNum(riskLevel) >= levelToNum(overallMdm);
+    lines.push(`  [${riskMet ? '✓' : ' '}] 3. RISK OF COMPLICATIONS — ${MDM_LEVEL_FULL[riskLevel].toUpperCase()}`);
+    lines.push(`      ${RISK_JUSTIFICATION[riskLevel]}`);
+    if (managementRisk) lines.push(`      • ${MANAGEMENT_RISK_LABELS[managementRisk]}`);
+    lines.push('');
+
+    const qualifyingCols = [
+      { name: 'Problems', level: problemLevel },
       { name: 'Data', level: dataLevel },
       { name: 'Risk', level: riskLevel },
-    ].filter((c) => levelToNum(c.level) >= levelToNum(overallMdm));
-    meetingColumns.push(...levels.map((c) => c.name));
-
-    lines.push(`Overall MDM: ${MDM_LEVEL_FULL[overallMdm]} (2-of-3 rule satisfied by ${meetingColumns.join(' + ')})`);
+    ]
+      .filter((c) => levelToNum(c.level) >= levelToNum(overallMdm))
+      .map((c) => c.name);
+    lines.push(`  Qualifying columns (≥2 required): ${qualifyingCols.join(' + ')}`);
   } else {
+    // Time-based
     const mins = parseInt(timeMinutes, 10);
-    lines.push(`Time-Based Billing — ${isNaN(mins) ? '—' : mins} minutes total encounter time.`);
+    lines.push('TIME-BASED BILLING DOCUMENTATION');
+    lines.push(`Total time on date of service: ${isNaN(mins) ? '[Enter minutes]' : `${mins} minutes`}`);
+    lines.push('(Per CMS: includes all time personally spent by provider on DOS —');
+    lines.push(' history, exam, MDM, ordering tests, care coordination, documentation)');
     if (selectedDiagnoses.length > 0) {
-      const dxNames = selectedDiagnoses.map((d) => `${d.name} (${d.code})`).join(', ');
-      lines.push(`Diagnoses: ${dxNames}`);
+      lines.push('');
+      lines.push('Conditions managed during encounter:');
+      selectedDiagnoses.forEach((dx) => lines.push(`  • ${dx.name} (${dx.code})`));
     }
   }
 
   lines.push('');
-  lines.push(cptLine);
-  lines.push(`Visit Type: ${VISIT_TYPE_LABELS[visitType]}`);
+  lines.push(sep);
+  lines.push('ATTESTATION');
+  lines.push('I personally performed/supervised the services described above.');
+  lines.push('The medical necessity and level of service are supported by the');
+  lines.push('clinical documentation in the medical record.');
+  lines.push('');
+  lines.push(`Signature: _______________________________  Date: ___________`);
   if (selectedProvider) {
-    const name = `Dr. ${selectedProvider.firstName} ${selectedProvider.lastName}${selectedProvider.credential ? ', ' + selectedProvider.credential : ''}`;
-    lines.push(`Provider: ${name} | NPI ${selectedProvider.npi}`);
+    lines.push(`           ${selectedProvider.firstName} ${selectedProvider.lastName}${selectedProvider.credential ? ', ' + selectedProvider.credential : ''}`);
+    lines.push(`           NPI ${selectedProvider.npi}`);
   }
+  lines.push('');
+  lines.push(sep);
+  lines.push('NOTE: This output is a documentation aid. It does not constitute');
+  lines.push('legal or compliance advice. Verify CPT codes and modifiers with');
+  lines.push('your institutional billing compliance team before submission.');
 
   return lines.join('\n');
 }
@@ -482,6 +662,9 @@ const INITIAL_STATE: EmBillingState = {
   managementRisk: '',
 
   timeMinutes: '',
+
+  dateOfService: new Date().toISOString().split('T')[0],
+  selectedModifiers: [],
 
   toast: null,
 };
@@ -566,7 +749,16 @@ const EmBillingCalculator: React.FC = () => {
   };
 
   const selectProvider = (provider: NpiProvider) => {
-    set({ selectedProvider: provider, showNpiDropdown: false, npiQuery: '', npiResults: [], showNpiPanel: false });
+    // Auto-match provider's NPPES taxonomy to the Specialty dropdown
+    const matchedSpecialty = matchTaxonomyToSpecialty(provider.taxonomy);
+    set({
+      selectedProvider: provider,
+      showNpiDropdown: false,
+      npiQuery: '',
+      npiResults: [],
+      showNpiPanel: false,
+      ...(matchedSpecialty ? { specialty: matchedSpecialty } : {}),
+    });
     try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(provider)); } catch (_) {}
   };
 
@@ -629,6 +821,8 @@ const EmBillingCalculator: React.FC = () => {
     setState((s) => ({
       ...INITIAL_STATE,
       selectedProvider: s.selectedProvider, // keep provider
+      specialty: s.specialty,               // keep specialty (may have been auto-set from NPI)
+      dateOfService: new Date().toISOString().split('T')[0], // reset to today
     }));
   };
 
@@ -834,8 +1028,8 @@ const EmBillingCalculator: React.FC = () => {
               </div>
             </div>
 
-            {/* Visit Type + Specialty */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            {/* Visit Type + Specialty + Date of Service */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
                   Visit Type
@@ -843,7 +1037,7 @@ const EmBillingCalculator: React.FC = () => {
                 <div className="relative">
                   <select
                     value={state.visitType}
-                    onChange={(e) => set({ visitType: e.target.value as VisitType, problemLevelOverride: null })}
+                    onChange={(e) => set({ visitType: e.target.value as VisitType, problemLevelOverride: null, selectedModifiers: [] })}
                     className="block w-full pl-3 pr-9 py-2.5 text-sm bg-gray-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neuro-500 appearance-none text-slate-800"
                   >
                     {(Object.entries(VISIT_TYPE_LABELS) as [VisitType, string][]).map(([v, label]) => (
@@ -852,6 +1046,7 @@ const EmBillingCalculator: React.FC = () => {
                   </select>
                   <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                 </div>
+                <p className="mt-1 text-xs text-slate-400">POS: {VISIT_TYPE_POS[state.visitType]}</p>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
@@ -869,6 +1064,68 @@ const EmBillingCalculator: React.FC = () => {
                   </select>
                   <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                 </div>
+                {state.selectedProvider && matchTaxonomyToSpecialty(state.selectedProvider.taxonomy) === state.specialty && (
+                  <p className="mt-1 text-xs text-green-600 flex items-center gap-1">
+                    <CheckCircle2 size={11} /> Auto-matched from NPI taxonomy
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Date of Service + Modifiers row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div>
+                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+                  Date of Service (DOS)
+                </label>
+                <input
+                  type="date"
+                  value={state.dateOfService}
+                  onChange={(e) => set({ dateOfService: e.target.value })}
+                  className="block w-full pl-3 pr-3 py-2.5 text-sm bg-gray-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neuro-500 text-slate-800"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+                  Modifiers
+                  <span className="ml-1 font-normal text-slate-400 normal-case">(optional)</span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {VISIT_TYPE_MODIFIERS[state.visitType].map(({ code, label }) => {
+                    const active = state.selectedModifiers.includes(code);
+                    return (
+                      <button
+                        key={code}
+                        title={label}
+                        onClick={() =>
+                          set({
+                            selectedModifiers: active
+                              ? state.selectedModifiers.filter((m) => m !== code)
+                              : [...state.selectedModifiers, code],
+                          })
+                        }
+                        className={`px-2.5 py-1.5 text-xs font-bold rounded border transition-all ${
+                          active
+                            ? 'bg-neuro-600 text-white border-neuro-600'
+                            : 'bg-white text-slate-600 border-slate-200 hover:border-neuro-400'
+                        }`}
+                      >
+                        {code}
+                      </button>
+                    );
+                  })}
+                  {VISIT_TYPE_MODIFIERS[state.visitType].length === 0 && (
+                    <span className="text-xs text-slate-400 py-2">None common for this visit type</span>
+                  )}
+                </div>
+                {state.selectedModifiers.length > 0 && (
+                  <p className="mt-1 text-xs text-slate-500">
+                    {state.selectedModifiers.map((m) => {
+                      const found = VISIT_TYPE_MODIFIERS[state.visitType].find((x) => x.code === m);
+                      return found ? `${m}: ${found.label}` : m;
+                    }).join(' · ')}
+                  </p>
+                )}
               </div>
             </div>
 

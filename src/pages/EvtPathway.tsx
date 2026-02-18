@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Check, RotateCcw, Copy, Info, AlertCircle, ChevronRight, Activity, Zap, XCircle, AlertTriangle, ShieldAlert, Brain, Star } from 'lucide-react';
+import { ArrowLeft, Check, RotateCcw, Copy, Info, AlertCircle, ChevronRight, Activity, Zap, XCircle, AlertTriangle, ShieldAlert, Brain, Star, UserCheck, Clock, ScanLine } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { EVT_CONTENT } from '../data/toolContent';
 import { autoLinkReactNodes } from '../internalLinks/autoLink';
@@ -473,6 +473,45 @@ const SelectionCard = React.memo(({ title, description, selected, onClick, varia
     </button>
 ));
 
+// Compact version — ~56px tall vs ~120px for SelectionCard; used for all inputs in redesigned UI
+interface CompactSelectionCardProps {
+    title: string;
+    description?: string;
+    selected: boolean;
+    onClick: () => void;
+    variant?: 'default' | 'danger';
+}
+const CompactSelectionCard = React.memo(({ title, description, selected, onClick, variant = 'default' }: CompactSelectionCardProps) => (
+    <button
+        onClick={onClick}
+        className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-colors duration-150 active:scale-[0.99] transform-gpu touch-manipulation min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none
+        ${selected
+            ? variant === 'danger'
+                ? 'bg-red-50 border-red-500'
+                : 'bg-neuro-50 border-neuro-500'
+            : 'bg-white border-slate-100 hover:border-slate-200 hover:bg-slate-50'
+        }`}
+    >
+        <div className="flex items-center justify-between gap-3">
+            <div className="flex-1 min-w-0">
+                <span className={`block text-sm font-bold leading-tight ${selected ? (variant === 'danger' ? 'text-red-900' : 'text-neuro-700') : 'text-slate-900'}`}>
+                    {title}
+                </span>
+                {description && (
+                    <span className={`text-xs leading-tight block mt-0.5 ${selected ? (variant === 'danger' ? 'text-red-700' : 'text-neuro-600') : 'text-slate-500'}`}>
+                        {description}
+                    </span>
+                )}
+            </div>
+            {selected && (
+                <div className={`p-1 rounded-full shrink-0 ${variant === 'danger' ? 'bg-red-500 text-white' : 'bg-neuro-500 text-white'}`}>
+                    <Check size={12} />
+                </div>
+            )}
+        </div>
+    </button>
+));
+
 interface EvtPathwayProps {
   onResultChange?: (result: Result | null) => void;
   hideHeader?: boolean;
@@ -719,35 +758,56 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
   }, [activeSection, isSection0Complete, isSection1Complete, isSection2Complete]);
 
   return (
-    <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32 md:pb-20">
+    <div className={`max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 ${isInModal ? 'pb-8' : 'pb-32'} md:pb-20`}>
+      {/* Sticky compact header */}
       {!hideHeader && (
-        <div className="mb-6 flex items-start justify-between">
-          <div>
-              <Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-500 mb-6 group">
-                  <div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-colors duration-150"><ArrowLeft size={16} /></div> {getBackLabel()}
+        <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-100 shadow-sm -mx-4 px-4 md:-mx-6 md:px-6">
+          <div className="max-w-3xl mx-auto flex items-center justify-between h-14 gap-3">
+            {/* Left: Back + Title */}
+            <div className="flex items-center gap-2 min-w-0">
+              <Link to={getBackPath()} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors shrink-0 text-slate-500">
+                <ArrowLeft size={16} />
               </Link>
-              <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-neuro-100 text-teal-500 rounded-lg"><Zap size={24} className="fill-neuro-700" /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">Thrombectomy Pathway</h1></div>
-              <p className="text-slate-500 font-medium">Eligibility screening for LVO (ICA, M1, Basilar) and MeVO (M2, M3, ACA, PCA).</p>
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="p-1.5 bg-neuro-100 text-neuro-700 rounded-md shrink-0">
+                  <Zap size={16} />
+                </div>
+                <span className="text-sm font-black text-slate-900 truncate">EVT Pathway</span>
+              </div>
+            </div>
+            {/* Center: Step dots */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              {([0, 1, 2, 3] as const).map((i) => {
+                const completedFlags = [isSection0Complete, isSection1Complete, isSection2Complete, isSection3Complete];
+                const isComp = completedFlags[i];
+                const isCurr = activeSection === i;
+                const isClickable = isComp || isCurr || (i > 0 && completedFlags[i - 1]);
+                return (
+                  <button
+                    key={i}
+                    onClick={() => { if (isClickable) setActiveSection(i); }}
+                    disabled={!isClickable}
+                    aria-label={`Step ${i + 1}: ${STEPS[i].title}`}
+                    className={`transition-all duration-200 rounded-full flex items-center justify-center touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none
+                      ${isComp ? 'w-7 h-7 bg-emerald-500 text-white' : isCurr ? 'w-7 h-7 bg-neuro-500 text-white ring-2 ring-neuro-200' : 'w-2 h-2 bg-slate-200'}`}
+                  >
+                    {isComp ? <Check size={12} /> : isCurr ? <span className="text-xs font-bold">{i + 1}</span> : null}
+                  </button>
+                );
+              })}
+            </div>
+            {/* Right: Favorite + Reset */}
+            <div className="flex items-center gap-1 shrink-0">
+              <button onClick={handleFavToggle} className="p-2 rounded-lg hover:bg-slate-100 transition-colors" aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}>
+                <Star size={16} className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'} />
+              </button>
+              <button onClick={handleReset} className="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400" aria-label="Reset">
+                <RotateCcw size={16} />
+              </button>
+            </div>
           </div>
-          <button 
-              onClick={handleFavToggle}
-              className="p-3 rounded-full hover:bg-slate-100 transition-colors"
-          >
-              <Star size={24} className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'} />
-          </button>
         </div>
       )}
-      
-      {/* Progress bar */}
-      <div className="mb-6">
-        <div className="h-1 bg-slate-100 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-neuro-500 transition-colors duration-150"
-            style={{ width: `${(completedCount / 4) * 100}%` }}
-          />
-        </div>
-        <div className="mt-2 text-xs text-slate-500">{completedCount}/4 sections completed</div>
-      </div>
 
       <div ref={stepContainerRef} className="space-y-6 min-h-[300px]">
         <div ref={el => { sectionRefs.current[0] = el; }} className="scroll-mt-4">
@@ -759,57 +819,51 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           isActive={activeSection === 0}
           onToggle={() => handleSectionToggle(0)}
           summary={getSummary(0)}
+          icon={<UserCheck size={14} />}
+          accentClass="bg-neuro-100 text-neuro-600"
         >
             <div className="space-y-6">
                 <div ref={el => { fieldRefs.current['occlusionType'] = el; }}>
-                    <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Occlusion Type</h3>
-                    <div className="grid grid-cols-1 gap-3">
-                        <SelectionCard title="Large Vessel Occlusion (LVO)" description="Proximal: ICA, M1, or Basilar Artery." selected={inputs.occlusionType === 'lvo'} onClick={() => updateInput('occlusionType', 'lvo')} />
-                        <SelectionCard title="Medium/Distal Vessel (MeVO/DMVO)" description="Distal: M2, M3, A2, A3, P2, P3." selected={inputs.occlusionType === 'mevo'} onClick={() => updateInput('occlusionType', 'mevo')} />
+                    <h3 className="text-sm font-semibold text-slate-700 mb-2">Occlusion Type</h3>
+                    <div className="grid grid-cols-1 gap-2">
+                        <CompactSelectionCard title="Large Vessel Occlusion (LVO)" description="Proximal: ICA, M1, or Basilar Artery." selected={inputs.occlusionType === 'lvo'} onClick={() => updateInput('occlusionType', 'lvo')} />
+                        <CompactSelectionCard title="Medium/Distal Vessel (MeVO/DMVO)" description="Distal: M2, M3, A2, A3, P2, P3." selected={inputs.occlusionType === 'mevo'} onClick={() => updateInput('occlusionType', 'mevo')} />
                     </div>
-                    <LearningPearl 
-                        title="Evidence Landscape" 
-                        content="LVO has Class I evidence for EVT. MeVO/DMVO is an evolving area; benefit depends on deficit severity, eloquence, and risk." 
-                    />
-                    <LearningPearl
-                        title="Exclusions"
-                        content="Hard exclusions: no LVO, pre-stroke dependence (mRS >4), age <18, terminal illness or limited goals of care. Note: mRS 2 is Class IIa and mRS 3–4 is Class IIb per 2026 guidelines — prior disability alone is not an exclusion. When in doubt, discuss with Vascular Neurology and Neurointerventional."
-                    />
                 </div>
 
                 {isLvo && (
                     <div className="space-y-6 animate-in slide-in-from-top-2">
                         <div ref={el => { fieldRefs.current['lvoLocation'] = el; }} className="pt-4 border-t border-slate-100">
-                            <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">LVO Location</h3>
-                            <div className="grid grid-cols-2 gap-3">
-                                <SelectionCard title="Anterior Circulation" description="ICA or MCA (M1)" selected={inputs.lvoLocation === 'anterior'} onClick={() => updateInput('lvoLocation', 'anterior')} />
-                                <SelectionCard title="Posterior Circulation" description="Basilar Artery" selected={inputs.lvoLocation === 'basilar'} onClick={() => updateInput('lvoLocation', 'basilar')} />
+                            <h3 className="text-sm font-semibold text-slate-700 mb-2">LVO Location</h3>
+                            <div className="grid grid-cols-2 gap-2">
+                                <CompactSelectionCard title="Anterior Circulation" description="ICA or MCA (M1)" selected={inputs.lvoLocation === 'anterior'} onClick={() => updateInput('lvoLocation', 'anterior')} />
+                                <CompactSelectionCard title="Posterior Circulation" description="Basilar Artery" selected={inputs.lvoLocation === 'basilar'} onClick={() => updateInput('lvoLocation', 'basilar')} />
                             </div>
                         </div>
 
                         {inputs.lvoLocation !== 'unknown' && (
                             <div ref={el => { fieldRefs.current['lvo'] = el; }}>
-                                <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Confirm LVO</h3>
-                                <div className="grid grid-cols-1 gap-3">
-                                    <SelectionCard title="LVO Confirmed on CTA/MRA" selected={inputs.lvo === 'yes'} onClick={() => updateInput('lvo', 'yes')} />
-                                    <SelectionCard title="No LVO" selected={inputs.lvo === 'no'} onClick={() => updateInput('lvo', 'no')} />
+                                <h3 className="text-sm font-semibold text-slate-700 mb-2">Confirm LVO</h3>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <CompactSelectionCard title="LVO Confirmed on CTA/MRA" selected={inputs.lvo === 'yes'} onClick={() => updateInput('lvo', 'yes')} />
+                                    <CompactSelectionCard title="No LVO" selected={inputs.lvo === 'no'} onClick={() => updateInput('lvo', 'no')} />
                                 </div>
                             </div>
                         )}
                         {inputs.lvo === 'yes' && (
                             <div ref={el => { fieldRefs.current['mrs'] = el; }}>
-                                <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Prestroke Functional Status (mRS)</h3>
-                                <div className="grid grid-cols-1 gap-3">
-                                    <SelectionCard title="Independent (mRS 0-1)" description="No significant disability prior to stroke." selected={inputs.mrs === 'yes'} onClick={() => updateInput('mrs', 'yes')} />
-                                    <SelectionCard title="Dependent, selected (mRS 2)" description="Requires assistance for ADLs; EVT reasonable if ASPECTS ≥6 (2026 Class IIa)." selected={inputs.mrs === 'mrs2'} onClick={() => updateInput('mrs', 'mrs2')} />
-                                    <SelectionCard title="Dependent (mRS 3-4)" description="EVT may be considered if ASPECTS ≥6 in 0-6h (2026 Class IIb)." selected={inputs.mrs === 'mrs34'} onClick={() => updateInput('mrs', 'mrs34')} />
-                                    <SelectionCard title="Dependent (mRS > 4)" description="EVT not recommended (mRS 5-6)." selected={inputs.mrs === 'no'} onClick={() => updateInput('mrs', 'no')} variant="danger" />
+                                <h3 className="text-sm font-semibold text-slate-700 mb-2">Prestroke Functional Status (mRS)</h3>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <CompactSelectionCard title="Independent (mRS 0-1)" description="No significant disability prior to stroke." selected={inputs.mrs === 'yes'} onClick={() => updateInput('mrs', 'yes')} />
+                                    <CompactSelectionCard title="Dependent, selected (mRS 2)" description="Requires assistance for ADLs; EVT reasonable if ASPECTS ≥6 (2026 Class IIa)." selected={inputs.mrs === 'mrs2'} onClick={() => updateInput('mrs', 'mrs2')} />
+                                    <CompactSelectionCard title="Dependent (mRS 3-4)" description="EVT may be considered if ASPECTS ≥6 in 0-6h (2026 Class IIb)." selected={inputs.mrs === 'mrs34'} onClick={() => updateInput('mrs', 'mrs34')} />
+                                    <CompactSelectionCard title="Dependent (mRS > 4)" description="EVT not recommended (mRS 5-6)." selected={inputs.mrs === 'no'} onClick={() => updateInput('mrs', 'no')} variant="danger" />
                                 </div>
                             </div>
                         )}
                         {(inputs.mrs === 'yes' || inputs.mrs === 'mrs2' || inputs.mrs === 'mrs34') && (
                             <div ref={el => { fieldRefs.current['age'] = el; }}>
-                                <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Age Group</h3>
+                                <h3 className="text-sm font-semibold text-slate-700 mb-2">Age Group</h3>
                                 <div className="grid grid-cols-3 gap-3">
                                     <button onClick={() => updateInput('age', 'under_18')} className={`p-4 rounded-xl border-2 font-bold transition-colors duration-150 touch-manipulation min-h-[44px] active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${inputs.age === 'under_18' ? 'border-neuro-500 bg-neuro-50 text-teal-500' : 'bg-white border-slate-100'}`}>&lt; 18</button>
                                     <button onClick={() => updateInput('age', '18_79')} className={`p-4 rounded-xl border-2 font-bold transition-colors duration-150 touch-manipulation min-h-[44px] active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${inputs.age === '18_79' ? 'border-neuro-500 bg-neuro-50 text-teal-500' : 'bg-white border-slate-100'}`}>18 - 79</button>
@@ -822,24 +876,34 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
 
                 {isMevo && (
                     <div className="space-y-6 animate-in slide-in-from-top-2">
-                        <div ref={el => { fieldRefs.current['mevoLocation'] = el; }} className="pt-4 border-t border-slate-100">
-                            <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Vessel Location</h3>
-                            <div className="space-y-3">
-                                <select className="w-full p-4 bg-white border border-slate-200 rounded-xl font-bold text-slate-800 outline-none focus:ring-2 focus:ring-neuro-500 min-h-[56px] text-base" value={inputs.mevoLocation} onChange={(e) => updateInput('mevoLocation', e.target.value)}>
-                                    <option value="unknown">Select Location...</option>
-                                    <option value="dominant_m2">Dominant / Proximal M2</option>
-                                    <option value="nondominant_m2">Nondominant / Codominant M2</option>
-                                    <option value="distal">Distal M2 / M3</option>
-                                    <option value="aca">ACA (A2 / A3)</option>
-                                    <option value="pca">PCA (P2 / P3)</option>
-                                </select>
-                            </div>
+                        <div ref={el => { fieldRefs.current['mevoLocation'] = el; }} className="pt-4 border-t border-slate-100 grid grid-cols-1 gap-2 scroll-mb-24">
+                            <h3 className="text-sm font-semibold text-slate-700 mb-2">Vessel Location</h3>
+                            <CompactSelectionCard title="Dominant / Proximal M2" description="Eligible for EVT consideration" selected={inputs.mevoLocation === 'dominant_m2'} onClick={() => updateInput('mevoLocation', 'dominant_m2')} />
+                            <CompactSelectionCard title="Nondominant / Codominant M2" description="AHA 2026: Class III No Benefit" selected={inputs.mevoLocation === 'nondominant_m2'} onClick={() => updateInput('mevoLocation', 'nondominant_m2')} />
+                            <CompactSelectionCard title="Distal M2 / M3" description="AHA 2026: Class III No Benefit" selected={inputs.mevoLocation === 'distal'} onClick={() => updateInput('mevoLocation', 'distal')} />
+                            <CompactSelectionCard title="ACA (A2 / A3)" description="AHA 2026: Class III No Benefit" selected={inputs.mevoLocation === 'aca'} onClick={() => updateInput('mevoLocation', 'aca')} />
+                            <CompactSelectionCard title="PCA (P2 / P3)" description="AHA 2026: Class III No Benefit" selected={inputs.mevoLocation === 'pca'} onClick={() => updateInput('mevoLocation', 'pca')} />
                         </div>
                         <div ref={el => { fieldRefs.current['mevoDependent'] = el; }}>
-                            <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Baseline Function</h3>
-                            <SelectionCard title="Requires daily nursing care / ADL assistance?" description="If YES, EVT is generally avoided for MeVO." selected={inputs.mevoDependent === 'yes'} onClick={() => updateInput('mevoDependent', 'yes')} variant="danger" />
-                            <div className="mt-2"><SelectionCard title="Independent / Minimal Assistance" selected={inputs.mevoDependent === 'no'} onClick={() => updateInput('mevoDependent', 'no')} /></div>
+                            <h3 className="text-sm font-semibold text-slate-700 mb-2">Baseline Function</h3>
+                            <div className="grid grid-cols-2 gap-2">
+                                <CompactSelectionCard title="Requires daily nursing care / ADL assistance?" description="If YES, EVT is generally avoided for MeVO." selected={inputs.mevoDependent === 'yes'} onClick={() => updateInput('mevoDependent', 'yes')} variant="danger" />
+                                <CompactSelectionCard title="Independent / Minimal Assistance" selected={inputs.mevoDependent === 'no'} onClick={() => updateInput('mevoDependent', 'no')} />
+                            </div>
                         </div>
+                    </div>
+                )}
+
+                {inputs.occlusionType !== 'unknown' && (
+                    <div className="pt-2 border-t border-slate-100 space-y-1 mt-4">
+                        <LearningPearl
+                            title="Evidence Landscape"
+                            content="LVO has Class I evidence for EVT. MeVO/DMVO is an evolving area; benefit depends on deficit severity, eloquence, and risk."
+                        />
+                        <LearningPearl
+                            title="Exclusions"
+                            content="Hard exclusions: no LVO, pre-stroke dependence (mRS >4), age <18, terminal illness or limited goals of care. Note: mRS 2 is Class IIa and mRS 3–4 is Class IIb per 2026 guidelines — prior disability alone is not an exclusion. When in doubt, discuss with Vascular Neurology and Neurointerventional."
+                        />
                     </div>
                 )}
             </div>
@@ -855,52 +919,61 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           isActive={activeSection === 1}
           onToggle={() => handleSectionToggle(1)}
           summary={getSummary(1)}
+          icon={<Clock size={14} />}
+          accentClass="bg-teal-100 text-teal-600"
         >
             <div className="space-y-6">
-                <div ref={el => { fieldRefs.current['time'] = el; }}>
-                    <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Time from Last Known Well</h3>
-                    <div className="grid grid-cols-1 gap-3">
-                        <SelectionCard title="Early Window (0 - 6 Hours)" description="Standard window." selected={inputs.time === '0_6'} onClick={() => updateInput('time', '0_6')} />
-                        <SelectionCard title="Late Window (6 - 24 Hours)" description="Extended window consideration." selected={inputs.time === '6_24'} onClick={() => updateInput('time', '6_24')} />
+                <div ref={el => { fieldRefs.current['time'] = el; }} className="scroll-mb-24">
+                    <h3 className="text-sm font-semibold text-slate-700 mb-2">Time from Last Known Well</h3>
+                    <div className="grid grid-cols-2 gap-2">
+                        <CompactSelectionCard title="Early Window (0 - 6 Hours)" description="Standard window." selected={inputs.time === '0_6'} onClick={() => updateInput('time', '0_6')} />
+                        <CompactSelectionCard title="Late Window (6 - 24 Hours)" description="Extended window consideration." selected={inputs.time === '6_24'} onClick={() => updateInput('time', '6_24')} />
                     </div>
-                    <LearningPearl
-                        title="2026 Guideline Update"
-                        content="The 2026 AHA/ASA Guidelines (Section 4.7.2) — Early window (0–6h): Class I for ASPECTS 3–10, NIHSS ≥6, mRS 0–1; Class IIa for ASPECTS 0–2 (age <80, no mass effect) and for mRS 2 with ASPECTS ≥6; Class IIb for mRS 3–4 with ASPECTS ≥6. Late window (6–24h): Class I for ASPECTS ≥6 with NIHSS ≥6 and mRS 0–1 (NEW — Rec #2, LOE A); Class I for ASPECTS 3–5 with age <80, no mass effect (Rec #3); DAWN/DEFUSE-3 criteria apply for perfusion-selected patients."
-                    />
                 </div>
 
                 {isLvo && (
-                    <div ref={el => { fieldRefs.current['nihss'] = el; }} className="pt-4">
-                        <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">NIH Stroke Scale</h3>
-                        <div className="grid grid-cols-2 gap-3">
-                            <SelectionCard title="0 - 5" description="Mild" selected={inputs.nihss === '0_5'} onClick={() => updateInput('nihss', '0_5')} />
-                            <SelectionCard title="6 - 9" description="Moderate" selected={inputs.nihss === '6_9'} onClick={() => updateInput('nihss', '6_9')} />
-                            <SelectionCard title="10 - 19" description="Mod-Severe" selected={inputs.nihss === '10_19'} onClick={() => updateInput('nihss', '10_19')} />
-                            <SelectionCard title="≥ 20" description="Severe" selected={inputs.nihss === '20_plus'} onClick={() => updateInput('nihss', '20_plus')} />
+                    <div ref={el => { fieldRefs.current['nihss'] = el; }} className="pt-4 scroll-mb-24">
+                        <h3 className="text-sm font-semibold text-slate-700 mb-2">NIH Stroke Scale</h3>
+                        <div className="grid grid-cols-2 gap-2">
+                            <CompactSelectionCard title="0 - 5" description="Mild" selected={inputs.nihss === '0_5'} onClick={() => updateInput('nihss', '0_5')} />
+                            <CompactSelectionCard title="6 - 9" description="Moderate" selected={inputs.nihss === '6_9'} onClick={() => updateInput('nihss', '6_9')} />
+                            <CompactSelectionCard title="10 - 19" description="Mod-Severe" selected={inputs.nihss === '10_19'} onClick={() => updateInput('nihss', '10_19')} />
+                            <CompactSelectionCard title="≥ 20" description="Severe" selected={inputs.nihss === '20_plus'} onClick={() => updateInput('nihss', '20_plus')} />
                         </div>
-                        <LearningPearl 
-                            title="NIHSS Limitations" 
-                            content="NIHSS underestimates disability in eloquent territories (aphasia, hemianopia, dominant hand) and posterior circulation (Basilar). Disabling symptoms may justify intervention even with low numeric scores." 
-                        />
                     </div>
                 )}
 
                 {isMevo && (
                     <div className="pt-4 space-y-6">
                         <div ref={el => { fieldRefs.current['nihssNumeric'] = el; }}>
-                            <label className="block text-sm font-bold text-slate-900 mb-2">NIHSS Score (Numeric)</label>
+                            <label className="block text-sm font-semibold text-slate-700 mb-2">NIHSS Score (Numeric)</label>
                             <input type="number" min="0" max="42" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 4" value={inputs.nihssNumeric} onChange={(e) => updateInput('nihssNumeric', e.target.value)} />
                         </div>
                         <div ref={el => { fieldRefs.current['mevoDisabling'] = el; }}>
-                            <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Disabling Deficit?</h3>
+                            <h3 className="text-sm font-semibold text-slate-700 mb-2">Disabling Deficit?</h3>
                             <div className="bg-neuro-50 p-3 rounded-lg text-xs text-teal-500 mb-3">
                                 Examples: Aphasia, hemianopsia, dominant hand weakness, or deficits impacting occupation/lifestyle despite low NIHSS.
                             </div>
-                            <div className="grid grid-cols-2 gap-3">
-                                <SelectionCard title="Yes" description="Disabling symptoms present" selected={inputs.mevoDisabling === 'yes'} onClick={() => updateInput('mevoDisabling', 'yes')} />
-                                <SelectionCard title="No" description="Non-disabling / Minor" selected={inputs.mevoDisabling === 'no'} onClick={() => updateInput('mevoDisabling', 'no')} />
+                            <div className="grid grid-cols-2 gap-2">
+                                <CompactSelectionCard title="Yes" description="Disabling symptoms present" selected={inputs.mevoDisabling === 'yes'} onClick={() => updateInput('mevoDisabling', 'yes')} />
+                                <CompactSelectionCard title="No" description="Non-disabling / Minor" selected={inputs.mevoDisabling === 'no'} onClick={() => updateInput('mevoDisabling', 'no')} />
                             </div>
                         </div>
+                    </div>
+                )}
+
+                {inputs.time !== 'unknown' && (
+                    <div className="pt-2 border-t border-slate-100 space-y-1 mt-4">
+                        <LearningPearl
+                            title="2026 Guideline Update"
+                            content="The 2026 AHA/ASA Guidelines (Section 4.7.2) — Early window (0–6h): Class I for ASPECTS 3–10, NIHSS ≥6, mRS 0–1; Class IIa for ASPECTS 0–2 (age <80, no mass effect) and for mRS 2 with ASPECTS ≥6; Class IIb for mRS 3–4 with ASPECTS ≥6. Late window (6–24h): Class I for ASPECTS ≥6 with NIHSS ≥6 and mRS 0–1 (NEW — Rec #2, LOE A); Class I for ASPECTS 3–5 with age <80, no mass effect (Rec #3); DAWN/DEFUSE-3 criteria apply for perfusion-selected patients."
+                        />
+                        {isLvo && (
+                            <LearningPearl
+                                title="NIHSS Limitations"
+                                content="NIHSS underestimates disability in eloquent territories (aphasia, hemianopia, dominant hand) and posterior circulation (Basilar). Disabling symptoms may justify intervention even with low numeric scores."
+                            />
+                        )}
                     </div>
                 )}
             </div>
@@ -916,52 +989,70 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           isActive={activeSection === 2}
           onToggle={() => handleSectionToggle(2)}
           summary={getSummary(2)}
+          icon={<ScanLine size={14} />}
+          accentClass="bg-purple-100 text-purple-600"
         >
             <div className="space-y-6">
+                {/* Provisional result banner */}
+                {isSection0Complete && isSection1Complete && result && result.status !== 'Incomplete' && result.reason !== 'Pending Imaging' && (
+                    <div className={`mb-4 flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 text-sm font-semibold animate-in fade-in duration-300
+                        ${result.variant === 'success' ? 'bg-emerald-50 border-emerald-500 text-emerald-800' :
+                          result.variant === 'warning' ? 'bg-amber-50 border-amber-400 text-amber-800' :
+                          result.variant === 'danger' ? 'bg-red-50 border-red-500 text-red-800' :
+                          'bg-slate-50 border-slate-400 text-slate-700'}`}>
+                        <Activity size={14} className="shrink-0" />
+                        <span>Provisional: <strong>{result.status}</strong> — complete imaging to confirm</span>
+                    </div>
+                )}
+
                 {isLvo && (
                     <div>
                         {/* Anterior 0-6h: ASPECTS */}
                         {inputs.time === '0_6' && !isBasilar && (
-                            <div ref={el => { fieldRefs.current['aspects'] = el; }}>
+                            <div ref={el => { fieldRefs.current['aspects'] = el; }} className="scroll-mb-24">
                                 <div className="bg-neuro-50 p-4 rounded-xl text-teal-500 text-sm mb-6 border border-neuro-100">
                                     <h4 className="font-bold flex items-center mb-2"><Info size={16} className="mr-2"/> Early Window Imaging</h4>
                                     <p>Enter ASPECTS score from non-contrast CT.</p>
                                 </div>
-                                <label className="block text-sm font-bold text-slate-700 mb-2">ASPECTS Score (0-10)</label>
-                                <input type="number" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 8" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
-                                <div ref={el => { fieldRefs.current['massEffect'] = el; }} className="mt-6">
-                                    <h4 className="text-sm font-bold text-slate-900 mb-2">Significant mass effect on imaging?</h4>
+                                <label className="block text-sm font-semibold text-slate-700 mb-2">ASPECTS Score (0-10)</label>
+                                <input type="number" inputMode="numeric" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 8" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
+                                <div ref={el => { fieldRefs.current['massEffect'] = el; }} className="mt-6 scroll-mb-24">
+                                    <h4 className="text-sm font-semibold text-slate-700 mb-2">Significant mass effect on imaging?</h4>
                                     <p className="text-xs text-slate-500 mb-3">Relevant for ASPECTS 0–2 (Class IIa requires no significant mass effect per 2026 guidelines).</p>
-                                    <div className="grid grid-cols-3 gap-3">
-                                        <SelectionCard title="No" description="No significant mass effect" selected={inputs.massEffect === 'no'} onClick={() => updateInput('massEffect', 'no')} />
-                                        <SelectionCard title="Yes" description="Significant mass effect" selected={inputs.massEffect === 'yes'} onClick={() => updateInput('massEffect', 'yes')} />
-                                        <SelectionCard title="Unknown" description="Not assessed" selected={inputs.massEffect === 'unknown'} onClick={() => updateInput('massEffect', 'unknown')} />
+                                    <div className="grid grid-cols-3 gap-2">
+                                        <CompactSelectionCard title="No" description="No significant mass effect" selected={inputs.massEffect === 'no'} onClick={() => updateInput('massEffect', 'no')} />
+                                        <CompactSelectionCard title="Yes" description="Significant mass effect" selected={inputs.massEffect === 'yes'} onClick={() => updateInput('massEffect', 'yes')} />
+                                        <CompactSelectionCard title="Unknown" description="Not assessed" selected={inputs.massEffect === 'unknown'} onClick={() => updateInput('massEffect', 'unknown')} />
                                     </div>
                                 </div>
-                                <LearningPearl 
-                                    title="Understanding ASPECTS" 
-                                    content="ASPECTS is a 10-point scoring system for MCA stroke. Start with 10 (normal) and subtract 1 point for early ischemic changes in each of 10 defined regions (Caudate, Lentiform, Internal Capsule, Insula, M1-M6). Scores < 6 typically indicate a large established infarct core." 
-                                />
-                                <LearningPearl 
-                                    title="AHA/ASA 2026 Early Window (Section 4.7.2)" 
-                                    content="Class I: EVT recommended for ASPECTS 3–10 with NIHSS ≥6 and mRS 0–1. Class IIa: EVT reasonable for prestroke mRS 2 with ASPECTS ≥6; and for selected patients with ASPECTS 0–2, age <80 years, without significant mass effect. SELECT2/ANGEL-ASPECT support large-core selection." 
-                                />
+                                <div className="pt-2 border-t border-slate-100 space-y-1 mt-4">
+                                    <LearningPearl
+                                        title="Understanding ASPECTS"
+                                        content="ASPECTS is a 10-point scoring system for MCA stroke. Start with 10 (normal) and subtract 1 point for early ischemic changes in each of 10 defined regions (Caudate, Lentiform, Internal Capsule, Insula, M1-M6). Scores < 6 typically indicate a large established infarct core."
+                                    />
+                                    <LearningPearl
+                                        title="AHA/ASA 2026 Early Window (Section 4.7.2)"
+                                        content="Class I: EVT recommended for ASPECTS 3–10 with NIHSS ≥6 and mRS 0–1. Class IIa: EVT reasonable for prestroke mRS 2 with ASPECTS ≥6; and for selected patients with ASPECTS 0–2, age <80 years, without significant mass effect. SELECT2/ANGEL-ASPECT support large-core selection."
+                                    />
+                                </div>
                             </div>
                         )}
 
                         {/* Basilar (Any Time): pc-ASPECTS */}
                         {isBasilar && (
-                            <div ref={el => { fieldRefs.current['pcAspects'] = el; }}>
+                            <div ref={el => { fieldRefs.current['pcAspects'] = el; }} className="scroll-mb-24">
                                 <div className="bg-purple-50 p-4 rounded-xl text-purple-900 text-sm mb-6 border border-purple-100">
                                     <h4 className="font-bold flex items-center mb-2"><Brain size={16} className="mr-2"/> Posterior Circulation Imaging</h4>
                                     <p>Enter <strong>pc-ASPECTS</strong> score (from CTA source images or DWI).</p>
                                 </div>
-                                <label className="block text-sm font-bold text-slate-700 mb-2">pc-ASPECTS Score (0-10)</label>
-                                <input type="number" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 8" value={inputs.pcAspects} onChange={(e) => updateInput('pcAspects', e.target.value)} />
-                                <LearningPearl 
-                                    title="pc-ASPECTS & 2026 Guidelines" 
-                                    content="pc-ASPECTS scores the posterior circulation on a 10-point scale: Thalami (1 each), Occipital lobes (1 each), Midbrain (2), Pons (2), Cerebellar hemispheres (1 each). Per AHA/ASA 2026: pc-ASPECTS ≥6 with NIHSS ≥10 → Class I; pc-ASPECTS ≥6 with NIHSS 6–9 → Class IIb (EVT may be considered). pc-ASPECTS <6 → Avoid EVT. ATTENTION and BAOCHE trials support intervention up to 24h." 
-                                />
+                                <label className="block text-sm font-semibold text-slate-700 mb-2">pc-ASPECTS Score (0-10)</label>
+                                <input type="number" inputMode="numeric" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 8" value={inputs.pcAspects} onChange={(e) => updateInput('pcAspects', e.target.value)} />
+                                <div className="pt-2 border-t border-slate-100 space-y-1 mt-4">
+                                    <LearningPearl
+                                        title="pc-ASPECTS & 2026 Guidelines"
+                                        content="pc-ASPECTS scores the posterior circulation on a 10-point scale: Thalami (1 each), Occipital lobes (1 each), Midbrain (2), Pons (2), Cerebellar hemispheres (1 each). Per AHA/ASA 2026: pc-ASPECTS ≥6 with NIHSS ≥10 → Class I; pc-ASPECTS ≥6 with NIHSS 6–9 → Class IIb (EVT may be considered). pc-ASPECTS <6 → Avoid EVT. ATTENTION and BAOCHE trials support intervention up to 24h."
+                                    />
+                                </div>
                             </div>
                         )}
 
@@ -983,20 +1074,20 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                     )}
                                 </div>
                                 {/* ASPECTS — primary criterion for Class I in 6-24h (Recs #2 and #3) */}
-                                <div ref={el => { fieldRefs.current['aspects'] = el; }} className="mb-6">
-                                    <h4 className="text-sm font-bold text-slate-900 mb-2">ASPECTS from NCCT</h4>
+                                <div ref={el => { fieldRefs.current['aspects'] = el; }} className="mb-6 scroll-mb-24">
+                                    <h4 className="text-sm font-semibold text-slate-700 mb-2">ASPECTS from NCCT</h4>
                                     <p className="text-xs text-slate-500 mb-2">ASPECTS ≥6 → Class I (no other criteria needed). ASPECTS 3–5 → Class I if age &lt;80 + no mass effect. Enter 0–10 or leave blank to use perfusion criteria instead.</p>
-                                    <input type="number" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 7" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
+                                    <input type="number" inputMode="numeric" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 7" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
 
                                     {/* Mass effect — only relevant for ASPECTS 3–5 (Rec #3) and ASPECTS 0–2 */}
                                     {showMassEffect && (
-                                        <div ref={el => { fieldRefs.current['massEffect'] = el; }} className="mt-4">
-                                            <h4 className="text-sm font-bold text-slate-900 mb-2">Significant mass effect on imaging?</h4>
+                                        <div ref={el => { fieldRefs.current['massEffect'] = el; }} className="mt-4 scroll-mb-24">
+                                            <h4 className="text-sm font-semibold text-slate-700 mb-2">Significant mass effect on imaging?</h4>
                                             <p className="text-xs text-slate-500 mb-2">Required for ASPECTS 3–5 Class I pathway (Rec #3).</p>
-                                            <div className="grid grid-cols-3 gap-3">
-                                                <SelectionCard title="No" description="No significant mass effect" selected={inputs.massEffect === 'no'} onClick={() => updateInput('massEffect', 'no')} />
-                                                <SelectionCard title="Yes" description="Significant mass effect" selected={inputs.massEffect === 'yes'} onClick={() => updateInput('massEffect', 'yes')} />
-                                                <SelectionCard title="Unknown" description="Not assessed" selected={inputs.massEffect === 'unknown'} onClick={() => updateInput('massEffect', 'unknown')} />
+                                            <div className="grid grid-cols-3 gap-2">
+                                                <CompactSelectionCard title="No" description="No significant mass effect" selected={inputs.massEffect === 'no'} onClick={() => updateInput('massEffect', 'no')} />
+                                                <CompactSelectionCard title="Yes" description="Significant mass effect" selected={inputs.massEffect === 'yes'} onClick={() => updateInput('massEffect', 'yes')} />
+                                                <CompactSelectionCard title="Unknown" description="Not assessed" selected={inputs.massEffect === 'unknown'} onClick={() => updateInput('massEffect', 'unknown')} />
                                             </div>
                                         </div>
                                     )}
@@ -1005,19 +1096,19 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                 {/* CTP perfusion fields — only needed when ASPECTS <6 or not entered (DAWN/DEFUSE-3 path) */}
                                 {showCtp && (
                                     <div className="space-y-4">
-                                        <div ref={el => { fieldRefs.current['core'] = el; }}>
-                                            <label className="block text-sm font-bold text-slate-700 mb-2">Ischemic Core Volume (ml)</label>
+                                        <div ref={el => { fieldRefs.current['core'] = el; }} className="scroll-mb-24">
+                                            <label className="block text-sm font-semibold text-slate-700 mb-2">Ischemic Core Volume (ml)</label>
                                             <p className="text-xs text-slate-500 mb-2">For DAWN/DEFUSE-3 eligibility. Leave blank if using ASPECTS-based pathway.</p>
-                                            <input type="number" className="w-full p-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-lg" placeholder="CBF < 30%" value={inputs.core} onChange={(e) => updateInput('core', e.target.value)} />
+                                            <input type="number" inputMode="numeric" className="w-full p-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-lg" placeholder="CBF < 30%" value={inputs.core} onChange={(e) => updateInput('core', e.target.value)} />
                                         </div>
                                         <div className="grid grid-cols-2 gap-4">
-                                            <div ref={el => { fieldRefs.current['mismatchVol'] = el; }}>
-                                                <label className="block text-sm font-bold text-slate-700 mb-2">Mismatch Volume</label>
-                                                <input type="number" className="w-full p-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-lg" placeholder="Volume" value={inputs.mismatchVol} onChange={(e) => updateInput('mismatchVol', e.target.value)} />
+                                            <div ref={el => { fieldRefs.current['mismatchVol'] = el; }} className="scroll-mb-24">
+                                                <label className="block text-sm font-semibold text-slate-700 mb-2">Mismatch Volume</label>
+                                                <input type="number" inputMode="numeric" className="w-full p-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-lg" placeholder="Volume" value={inputs.mismatchVol} onChange={(e) => updateInput('mismatchVol', e.target.value)} />
                                             </div>
-                                            <div ref={el => { fieldRefs.current['mismatchRatio'] = el; }}>
-                                                <label className="block text-sm font-bold text-slate-700 mb-2">Mismatch Ratio</label>
-                                                <input type="number" step="0.1" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-slate-600 text-lg" placeholder="Ratio" value={inputs.mismatchRatio} onChange={(e) => updateInput('mismatchRatio', e.target.value)} />
+                                            <div ref={el => { fieldRefs.current['mismatchRatio'] = el; }} className="scroll-mb-24">
+                                                <label className="block text-sm font-semibold text-slate-700 mb-2">Mismatch Ratio</label>
+                                                <input type="number" inputMode="decimal" step="0.1" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-slate-600 text-lg" placeholder="Ratio" value={inputs.mismatchRatio} onChange={(e) => updateInput('mismatchRatio', e.target.value)} />
                                             </div>
                                         </div>
                                     </div>
@@ -1030,8 +1121,8 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
 
                 {isMevo && (
                     <div className="space-y-6">
-                        <div ref={el => { fieldRefs.current['mevoSalvageable'] = el; }}>
-                            <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">
+                        <div ref={el => { fieldRefs.current['mevoSalvageable'] = el; }} className="scroll-mb-24">
+                            <h3 className="text-sm font-semibold text-slate-700 mb-2">
                                 {inputs.time === '0_6' ? "Imaging Profile (0-6h)" : "Salvageable Tissue (6-24h)"}
                             </h3>
                             <div className="bg-slate-50 p-3 rounded-lg text-xs text-slate-600 mb-3 border border-slate-200">
@@ -1041,44 +1132,52 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                      <span><strong>Salvageable Tissue defined as:</strong><br/>• Clinical-Core Mismatch<br/>• Perfusion Mismatch (Penumbra)</span>
                                 )}
                             </div>
-                            <div className="grid grid-cols-2 gap-3">
-                                <SelectionCard 
-                                    title="Yes" 
-                                    description={inputs.time === '0_6' ? "Favorable profile present" : "Evidence of penumbra"} 
-                                    selected={inputs.mevoSalvageable === 'yes'} 
-                                    onClick={() => updateInput('mevoSalvageable', 'yes')} 
+                            <div className="grid grid-cols-2 gap-2">
+                                <CompactSelectionCard
+                                    title="Yes"
+                                    description={inputs.time === '0_6' ? "Favorable profile present" : "Evidence of penumbra"}
+                                    selected={inputs.mevoSalvageable === 'yes'}
+                                    onClick={() => updateInput('mevoSalvageable', 'yes')}
                                 />
-                                <SelectionCard 
-                                    title="No" 
-                                    description={inputs.time === '0_6' ? "Large infarct / Poor collaterals" : "Large core / No mismatch"} 
-                                    selected={inputs.mevoSalvageable === 'no'} 
-                                    onClick={() => updateInput('mevoSalvageable', 'no')} 
+                                <CompactSelectionCard
+                                    title="No"
+                                    description={inputs.time === '0_6' ? "Large infarct / Poor collaterals" : "Large core / No mismatch"}
+                                    selected={inputs.mevoSalvageable === 'no'}
+                                    onClick={() => updateInput('mevoSalvageable', 'no')}
                                 />
                             </div>
-                            <LearningPearl 
-                                title="MeVO Imaging Selection" 
-                                content="For MeVO, absence of a large established core may be more important than formal perfusion mismatch in early windows. Editorials emphasize individualized selection rather than strict perfusion thresholds." 
-                            />
                         </div>
-                        <div ref={el => { fieldRefs.current['mevoTechnical'] = el; }}>
-                            <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Technical Feasibility</h3>
-                            <div className="grid grid-cols-1 gap-3">
-                                <SelectionCard title="Low Procedural Risk" description="Accessible anatomy, low tortuosity, operator confidence." selected={inputs.mevoTechnical === 'yes'} onClick={() => updateInput('mevoTechnical', 'yes')} />
-                                <SelectionCard title="High Risk / Difficult Access" description="Tortuous anatomy, distal location risk." selected={inputs.mevoTechnical === 'no'} onClick={() => updateInput('mevoTechnical', 'no')} />
+                        <div ref={el => { fieldRefs.current['mevoTechnical'] = el; }} className="scroll-mb-24">
+                            <h3 className="text-sm font-semibold text-slate-700 mb-2">Technical Feasibility</h3>
+                            <div className="grid grid-cols-2 gap-2">
+                                <CompactSelectionCard title="Low Procedural Risk" description="Accessible anatomy, low tortuosity, operator confidence." selected={inputs.mevoTechnical === 'yes'} onClick={() => updateInput('mevoTechnical', 'yes')} />
+                                <CompactSelectionCard title="High Risk / Difficult Access" description="Tortuous anatomy, distal location risk." selected={inputs.mevoTechnical === 'no'} onClick={() => updateInput('mevoTechnical', 'no')} />
                             </div>
-                            <LearningPearl 
-                                title="Procedural Risks" 
-                                content="Distal access increases perforation and hemorrhage risk. Operator experience and device choice significantly influence MeVO outcomes." 
+                        </div>
+                        <div className="pt-2 border-t border-slate-100 space-y-1 mt-4">
+                            <LearningPearl
+                                title="MeVO Imaging Selection"
+                                content="For MeVO, absence of a large established core may be more important than formal perfusion mismatch in early windows. Editorials emphasize individualized selection rather than strict perfusion thresholds."
+                            />
+                            <LearningPearl
+                                title="Procedural Risks"
+                                content="Distal access increases perforation and hemorrhage risk. Operator experience and device choice significantly influence MeVO outcomes."
                             />
                         </div>
                     </div>
                 )}
 
-                {/* Section 2 complete nudge — prompt user to tap Next */}
+                {/* Section 2 complete nudge — prominent full-width card */}
                 {isSection2Complete && (
-                    <div className="mt-5 flex items-center gap-2 px-4 py-3 bg-neuro-50 dark:bg-neuro-900/30 border border-neuro-200 dark:border-neuro-700 rounded-xl text-sm font-semibold text-neuro-700 dark:text-neuro-300 animate-in fade-in duration-300">
-                        <ChevronRight size={16} className="flex-shrink-0" />
-                        <span>Imaging complete — tap <strong>Next</strong> to see your eligibility result</span>
+                    <div className="mt-4 px-4 py-4 bg-neuro-500 text-white rounded-2xl shadow-lg flex items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                        <div className="flex items-center gap-2">
+                            <Check size={18} className="shrink-0" />
+                            <div>
+                                <div className="font-black text-sm">Imaging complete</div>
+                                <div className="text-xs opacity-80">Tap Next to see your eligibility result</div>
+                            </div>
+                        </div>
+                        <ChevronRight size={20} className="shrink-0 opacity-80" />
                     </div>
                 )}
             </div>
@@ -1094,51 +1193,11 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           isActive={activeSection === 3}
           onToggle={() => handleSectionToggle(3)}
           summary={getSummary(3)}
+          icon={<Activity size={14} />}
+          accentClass={result?.variant === 'success' ? 'bg-emerald-100 text-emerald-600' : result?.variant === 'danger' ? 'bg-red-100 text-red-600' : result?.variant === 'warning' ? 'bg-amber-100 text-amber-600' : 'bg-slate-200 text-slate-500'}
         >
              {result && (<div className="space-y-6 animate-in zoom-in-95 duration-300">
-                <div className={`p-8 rounded-3xl relative overflow-hidden shadow-xl text-white ${
-                    result.variant === 'success' ? 'bg-emerald-600' :
-                    result.variant === 'warning' ? 'bg-amber-500' :
-                    result.variant === 'danger' ? 'bg-red-600' :
-                    result.eligible ? 'bg-slate-900' : 'bg-slate-700'
-                }`}>
-                    <div className="absolute top-0 right-0 w-40 h-40 bg-white opacity-10 rounded-full blur-3xl -mr-10 -mt-10"></div>
-                    <div className="relative z-10">
-                        <div className="inline-flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4"><Activity size={12} /><span>Recommendation</span></div>
-                        <div className="mb-6"><div className="text-4xl font-black tracking-tight">{result.status}</div>{result.criteriaName && <div className="text-lg font-medium opacity-90 mt-1">{result.criteriaName}</div>}</div>
-                        <div className="pt-6 border-t border-white/20">
-                             <div className="text-sm font-bold uppercase tracking-widest opacity-70 mb-2">Reasoning</div>
-                             <div className="text-lg font-bold">{result.reason}</div>
-                             <div className="text-sm opacity-90 mt-1 leading-relaxed">{autoLinkReactNodes(result.details, openTrial)}</div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Risk & Evidence Box for MeVO */}
-                {isMevo && (
-                    <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 shadow-sm">
-                        <div className="flex items-center space-x-2 mb-4 text-amber-800">
-                            <ShieldAlert size={20} />
-                            <h3 className="font-bold text-sm uppercase tracking-wide">MeVO Risk & Evidence</h3>
-                        </div>
-                        <ul className="space-y-3 text-sm text-amber-900">
-                            <li className="flex items-start">
-                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
-                                <span><strong>ESCAPE-MeVO (2025):</strong> No functional benefit at 90d overall. Higher sICH rate and trend toward higher mortality in EVT arm.</span>
-                            </li>
-                            <li className="flex items-start">
-                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
-                                <span><strong>DISTAL (2025):</strong> Neutral primary outcome. Higher sICH in EVT arm (5.9% vs 2.6%). Reperfusion rates were lower than typical LVO trials.</span>
-                            </li>
-                            <li className="flex items-start">
-                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
-                                <span><strong>Synthesis:</strong> Be cautious in older patients, those with mild deficits, or baseline disability. Benefit is most plausible for dominant M2/M3 occlusions with disabling deficits.</span>
-                            </li>
-                        </ul>
-                    </div>
-                )}
-
-                {/* Summary Card */}
+                {/* 1. Assessment Summary card — MOVED UP */}
                 <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
                     <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Assessment Summary</h4>
                     <ul className="space-y-3 text-sm text-slate-700 font-medium">
@@ -1162,19 +1221,93 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                     </ul>
                 </div>
 
+                {/* 2. Copy to EMR button — ELEVATED */}
+                {result.status !== 'Incomplete' && (
+                    <button
+                        onClick={copySummary}
+                        className="w-full py-3.5 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 shadow-lg transition-colors duration-150 flex items-center justify-center gap-2 active:scale-[0.99] transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+                    >
+                        <Copy size={16} />
+                        Copy to EMR
+                    </button>
+                )}
+
+                {/* 3. Result card — redesigned with left-border-stripe */}
+                <div className={`rounded-2xl border-l-[8px] shadow-md overflow-hidden p-5 md:p-8
+                    ${result.variant === 'success' ? 'border-l-emerald-500 bg-emerald-50' :
+                      result.variant === 'warning' ? 'border-l-amber-400 bg-amber-50' :
+                      result.variant === 'danger' ? 'border-l-red-500 bg-red-50' :
+                      'border-l-slate-400 bg-slate-50'
+                    }`}>
+                    <div>
+                        <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4
+                            ${result.variant === 'success' ? 'bg-emerald-100 text-emerald-700' :
+                              result.variant === 'warning' ? 'bg-amber-100 text-amber-700' :
+                              result.variant === 'danger' ? 'bg-red-100 text-red-700' :
+                              'bg-slate-100 text-slate-600'}`}>
+                            <Activity size={12} /><span>Recommendation</span>
+                        </div>
+                        <div className="mb-6">
+                            <div className={`text-5xl font-black tracking-tight
+                                ${result.variant === 'success' ? 'text-emerald-900' :
+                                  result.variant === 'warning' ? 'text-amber-900' :
+                                  result.variant === 'danger' ? 'text-red-900' :
+                                  'text-slate-900'}`}>
+                                {result.status}
+                            </div>
+                            {result.criteriaName && <div className="text-lg font-medium text-slate-600 mt-1">{result.criteriaName}</div>}
+                        </div>
+                        <div className="pt-6 border-t border-slate-200">
+                             <div className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-2">Reasoning</div>
+                             <div className={`text-lg font-bold
+                                 ${result.variant === 'success' ? 'text-emerald-900' :
+                                   result.variant === 'warning' ? 'text-amber-900' :
+                                   result.variant === 'danger' ? 'text-red-900' :
+                                   'text-slate-900'}`}>
+                                 {result.reason}
+                             </div>
+                             <div className="text-sm text-slate-700 mt-1 leading-relaxed">{autoLinkReactNodes(result.details, openTrial)}</div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 4. Risk & Evidence Box for MeVO (unchanged) */}
+                {isMevo && (
+                    <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 shadow-sm">
+                        <div className="flex items-center space-x-2 mb-4 text-amber-800">
+                            <ShieldAlert size={20} />
+                            <h3 className="font-bold text-sm uppercase tracking-wide">MeVO Risk & Evidence</h3>
+                        </div>
+                        <ul className="space-y-3 text-sm text-amber-900">
+                            <li className="flex items-start">
+                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
+                                <span><strong>ESCAPE-MeVO (2025):</strong> No functional benefit at 90d overall. Higher sICH rate and trend toward higher mortality in EVT arm.</span>
+                            </li>
+                            <li className="flex items-start">
+                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
+                                <span><strong>DISTAL (2025):</strong> Neutral primary outcome. Higher sICH in EVT arm (5.9% vs 2.6%). Reperfusion rates were lower than typical LVO trials.</span>
+                            </li>
+                            <li className="flex items-start">
+                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
+                                <span><strong>Synthesis:</strong> Be cautious in older patients, those with mild deficits, or baseline disability. Benefit is most plausible for dominant M2/M3 occlusions with disabling deficits.</span>
+                            </li>
+                        </ul>
+                    </div>
+                )}
+
+                {/* 5. Disclaimer */}
                 <div className="flex items-start space-x-3 bg-slate-50 p-4 rounded-xl border border-slate-100 text-xs text-slate-500 leading-relaxed">
                     <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
                     <div>
                         <strong>Decision Support Only.</strong>
                         <p className="mt-1">{autoLinkReactNodes("Based on AHA/ASA Guidelines and major trials (DAWN, DEFUSE-3, SELECT2, ESCAPE-MeVO, DISTAL, ATTENTION, BAOCHE). Always verify clinical details.", openTrial)}</p>
-                        
-                        {/* NEW DISCLAIMERS */}
                         <p className="mt-3 pt-3 border-t border-slate-200">
                              <strong>Clinical Context:</strong> Always discuss with Vascular Neurology and the Neurointerventional/Interventional Neurology team; local protocols and anatomy-specific factors apply.
                         </p>
                     </div>
                 </div>
-                
+
+                {/* 6. LearningPearl */}
                 <LearningPearl
                     title="Clinical Context Summary"
                     content={
@@ -1190,8 +1323,20 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
         </div>
       </div>
 
-      <div id="evt-action-bar" className={`mt-8 pt-4 md:border-t border-slate-100 scroll-mt-4 ${isInModal ? 'static' : 'fixed bottom-[4.5rem] md:static'} left-0 right-0 ${isInModal ? 'bg-transparent' : 'bg-white/95 backdrop-blur md:bg-transparent'} p-4 md:p-0 border-t md:border-0 ${isInModal ? '' : 'z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none'}`}>
-         <div className="max-w-3xl mx-auto flex items-center justify-between gap-4">
+      <div id="evt-action-bar" className={`mt-8 pt-4 md:border-t border-slate-100 scroll-mt-4 ${isInModal ? 'static' : 'fixed bottom-[4.5rem] md:static'} left-0 right-0 ${isInModal ? 'bg-transparent' : 'bg-white/95 backdrop-blur md:bg-transparent'} border-t md:border-0 ${isInModal ? '' : 'z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none'}`}>
+         {/* Mobile progress strip */}
+         {!isInModal && (
+           <div className="md:hidden flex gap-1 px-4 pt-3 pb-1">
+             {([0, 1, 2, 3] as const).map((i) => {
+               const flags = [isSection0Complete, isSection1Complete, isSection2Complete, isSection3Complete];
+               return (
+                 <div key={i} className={`flex-1 h-1 rounded-full transition-all duration-300
+                   ${flags[i] ? 'bg-emerald-500' : activeSection === i ? 'bg-neuro-500' : 'bg-slate-200'}`} />
+               );
+             })}
+           </div>
+         )}
+         <div className="max-w-3xl mx-auto flex items-center justify-between gap-4 p-4 pb-[max(1rem,env(safe-area-inset-bottom,1rem))] md:p-0 md:pb-0">
              <button onClick={handleBack} disabled={activeSection === 0} aria-hidden={activeSection === 0} className={`px-6 py-3 border border-slate-200 rounded-xl font-bold transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${activeSection === 0 ? 'opacity-0 pointer-events-none cursor-not-allowed' : 'bg-white text-slate-600 hover:bg-slate-50 hover:border-slate-300'}`}>Back</button>
              {activeSection === 3 && (<button onClick={handleReset} className="hidden md:flex items-center text-slate-500 hover:text-neuro-500 font-bold px-4 py-2 rounded-lg transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><RotateCcw size={16} className="mr-2" /> Start Over</button>)}
              {activeSection < 3 ? (<button onClick={handleNext} className="flex-1 md:flex-none px-8 py-3 bg-neuro-500 text-white rounded-xl font-bold hover:bg-teal-500 shadow-lg shadow-neuro-200 transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">Next <ChevronRight size={16} className="ml-2" /></button>) : (customActionButton ? (

@@ -10,6 +10,8 @@ interface CollapsibleSectionProps {
   onToggle: () => void;
   children: React.ReactNode;
   summary?: string; // Shows selected value when collapsed
+  icon?: React.ReactNode; // Optional icon shown in step badge when active
+  accentClass?: string; // Optional color override for active step badge e.g. "bg-teal-100 text-teal-600"
 }
 
 export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
@@ -21,6 +23,8 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
   onToggle,
   children,
   summary,
+  icon,
+  accentClass,
 }) => {
   return (
     <div
@@ -53,12 +57,12 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
               isCompleted
                 ? 'bg-emerald-100 text-emerald-600'
                 : isActive
-                  ? 'bg-neuro-100 text-neuro-500'
+                  ? (accentClass ?? 'bg-neuro-100 text-neuro-500')
                   : 'bg-slate-200 text-slate-500',
             ].join(' ')}
             aria-label={`Step ${stepNumber} of ${totalSteps}`}
           >
-            {isCompleted ? <Check className="w-4 h-4" /> : stepNumber}
+            {isCompleted ? <Check className="w-4 h-4" /> : (isActive && icon) ? icon : stepNumber}
           </div>
 
           {/* Title and summary */}
