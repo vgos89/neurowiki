@@ -222,75 +222,71 @@ const ElanPathway: React.FC = () => {
             </div>
         )}
 
-        {/* STEP 4: RESULTS - UPDATED WITH AUTO-LINKING */}
+        {/* STEP 4: RESULTS */}
         {step === 4 && result && result.eligible && (
-             <div className="space-y-6 animate-in zoom-in-95 duration-300">
-                {/* Safety Warning — prominent amber card */}
-                <div className="bg-amber-50 border border-amber-300 p-4 rounded-2xl flex items-start space-x-3">
-                    <AlertTriangle size={20} className="flex-shrink-0 text-amber-600 mt-0.5" />
-                    <div>
-                        <p className="text-sm font-bold text-amber-900">Mandatory before initiating anticoagulation</p>
-                        <p className="text-sm text-amber-800 mt-1">Repeat brain imaging (CT or MRI) is required immediately before starting anticoagulation to exclude hemorrhagic transformation.</p>
-                    </div>
-                </div>
-                {/* Main results card */}
-                <div className="bg-slate-900 text-white rounded-3xl relative overflow-hidden shadow-xl">
-                    <div className="absolute top-0 right-0 w-40 h-40 bg-purple-500 rounded-full blur-3xl opacity-20 -mr-10 -mt-10"></div>
-                    <div className="relative z-10 p-6 md:p-8">
-                        {/* Header row */}
-                        <div className="flex items-center justify-between mb-6">
-                            <div className="inline-flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"><Activity size={12} /><span>{result.size} Stroke</span></div>
-                            <div className="text-xs font-bold text-white/50 uppercase tracking-wider">COR 2a · LOE A · AHA/ASA 2026</div>
-                        </div>
+             <div className="space-y-4 animate-in zoom-in-95 duration-300">
 
-                        {/* Strategy timing */}
-                        <div className="grid grid-cols-2 gap-4 mb-6">
-                            <div className="bg-emerald-500/15 border border-emerald-500/30 rounded-2xl p-4">
-                                <span className="text-emerald-400 font-bold text-xs uppercase tracking-widest flex items-center mb-2"><Check size={12} className="mr-1"/> Recommended</span>
-                                <div className="text-2xl font-black leading-tight">{result.earlyText}</div>
-                                <div className="text-slate-400 text-sm font-medium mt-1">{result.earlyDates}</div>
+                {/* Single consolidated card */}
+                <div className="bg-slate-900 text-white rounded-3xl overflow-hidden shadow-xl">
+                    <div className="relative">
+                        <div className="absolute top-0 right-0 w-48 h-48 bg-purple-500 rounded-full blur-3xl opacity-20 -mr-12 -mt-12 pointer-events-none"></div>
+
+                        {/* Top: guideline badge + stroke type */}
+                        <div className="relative z-10 flex items-center justify-between px-6 pt-6 pb-4 border-b border-white/10">
+                            <div className="flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                                <Activity size={11} />
+                                <span>{result.size} stroke</span>
                             </div>
-                            <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
-                                <span className="text-slate-400 font-bold text-xs uppercase tracking-widest block mb-2">Alternative</span>
-                                <div className="text-xl font-bold opacity-80 leading-tight">{result.lateText}</div>
-                                <div className="text-slate-500 text-sm font-medium mt-1">{result.lateDates}</div>
+                            <div className="text-right">
+                                <div className="text-xs font-black text-purple-300 uppercase tracking-wider">COR 2a · LOE A</div>
+                                <div className="text-[10px] text-white/40 font-medium mt-0.5">AHA/ASA 2026</div>
                             </div>
                         </div>
 
-                        {/* Divider */}
-                        <div className="border-t border-white/10 mb-5"></div>
+                        {/* Timing: two columns */}
+                        <div className="relative z-10 grid grid-cols-2 divide-x divide-white/10">
+                            {/* Recommended */}
+                            <div className="px-6 py-5">
+                                <div className="flex items-center space-x-1 mb-3">
+                                    <Check size={11} className="text-emerald-400" />
+                                    <span className="text-emerald-400 text-[10px] font-black uppercase tracking-widest">Recommended</span>
+                                </div>
+                                <div className="text-2xl font-black leading-snug">{result.earlyText}</div>
+                                <div className="text-slate-400 text-xs font-medium mt-1">{result.earlyDates}</div>
+                            </div>
+                            {/* Alternative */}
+                            <div className="px-6 py-5">
+                                <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-3">Alternative</div>
+                                <div className="text-lg font-bold text-white/70 leading-snug">{result.lateText}</div>
+                                <div className="text-slate-600 text-xs font-medium mt-1">{result.lateDates}</div>
+                            </div>
+                        </div>
 
-                        {/* Evidence line */}
-                        <p className="text-xs text-slate-400 leading-relaxed mb-5">
-                            {autoLinkReactNodes("ELAN, OPTIMAS & TIMING trials: early DOAC initiation is low-risk and noninferior to delayed initiation. Superiority for early recurrent stroke prevention not yet established.", openTrial)}
-                        </p>
+                        {/* Imaging warning — inline, inside card */}
+                        <div className="relative z-10 mx-5 mb-4 bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-start space-x-2.5">
+                            <AlertTriangle size={14} className="flex-shrink-0 text-amber-400 mt-0.5" />
+                            <p className="text-xs text-amber-200 leading-relaxed"><span className="font-bold">Repeat imaging required</span> — CT or MRI immediately before starting anticoagulation to exclude hemorrhagic transformation.</p>
+                        </div>
 
-                        {/* DOAC options */}
-                        <div className="border-t border-white/10 pt-5">
-                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Anticoagulant</p>
-                            <div className="grid grid-cols-2 gap-2">
-                                {[
-                                    { name: 'Apixaban', note: '64% of ELAN cohort' },
-                                    { name: 'Rivaroxaban', note: '15% of ELAN cohort' },
-                                    { name: 'Dabigatran', note: '7% of ELAN cohort' },
-                                    { name: 'Edoxaban', note: '5% of ELAN cohort' },
-                                ].map(d => (
-                                    <div key={d.name} className="bg-white/5 rounded-xl px-3 py-2.5">
-                                        <div className="text-sm font-bold">{d.name}</div>
-                                        <div className="text-xs text-slate-500 mt-0.5">{d.note}</div>
+                        {/* DOAC row */}
+                        <div className="relative z-10 border-t border-white/10 px-6 py-4">
+                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3">Use a DOAC</p>
+                            <div className="grid grid-cols-4 gap-2">
+                                {['Apixaban', 'Rivaroxaban', 'Dabigatran', 'Edoxaban'].map(d => (
+                                    <div key={d} className="bg-white/5 rounded-lg px-2 py-2 text-center">
+                                        <div className="text-xs font-bold leading-tight">{d}</div>
                                     </div>
                                 ))}
                             </div>
-                            <p className="text-xs text-slate-500 mt-3">Choose based on renal function, drug interactions, and patient preference. Mechanical valves require warfarin.</p>
+                            <p className="text-[10px] text-slate-600 mt-2.5 leading-relaxed">Based on renal function, interactions &amp; preference. Warfarin required for mechanical valves.</p>
                         </div>
                     </div>
                 </div>
 
-                {/* Disclaimer */}
-                <div className="flex items-start space-x-3 bg-slate-50 p-4 rounded-xl border border-slate-100 text-xs text-slate-500 leading-relaxed">
-                    <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
-                    <p>{autoLinkReactNodes("Decision support only. Based on ELAN Trial (NEJM 2023), OPTIMAS (2024), TIMING (2024), and 2026 AHA/ASA Guideline for the Early Management of Patients with Acute Ischemic Stroke. Does not replace clinical judgment.", openTrial)}</p>
-                </div>
+                {/* Single-line disclaimer */}
+                <p className="text-xs text-slate-400 text-center px-2 leading-relaxed">
+                    {autoLinkReactNodes("Decision support only · ELAN (NEJM 2023) · OPTIMAS (2024) · TIMING (2024) · AHA/ASA 2026", openTrial)}
+                </p>
              </div>
         )}
       </div>
@@ -311,33 +307,6 @@ const ElanPathway: React.FC = () => {
         </div>
       )}
 
-      {step === 4 && (
-          <div className="mt-12 border-t border-slate-100 pt-8 pb-8">
-              <h3 className="text-sm font-bold text-slate-900 mb-4">References</h3>
-              <ul className="space-y-3 text-xs text-slate-500">
-                  <li className="flex items-start">
-                      <span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">1</span>
-                      {autoLinkReactNodes("Paciaroni M et al. Early Recurrence and Cerebral Bleeding in Patients With Acute Ischemic Stroke and Atrial Fibrillation (ELAN Trial). NEJM 2023. Primary evidence for imaging-based timing strategy.", openTrial)}
-                  </li>
-                  <li className="flex items-start">
-                      <span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">2</span>
-                      {autoLinkReactNodes("OPTIMAS Trial (2024): Optimal timing of anticoagulation comparing imaging-based vs fixed time-based approaches. Supports individualized decision-making.", openTrial)}
-                  </li>
-                  <li className="flex items-start">
-                      <span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">3</span>
-                      {autoLinkReactNodes("TIMING Trial (2024): Early vs standard anticoagulation timing stratified by stroke severity. Confirmed safety of early approach in appropriately selected patients.", openTrial)}
-                  </li>
-                  <li className="flex items-start">
-                      <span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">4</span>
-                      {autoLinkReactNodes("2026 AHA/ASA Guideline for the Early Management of Patients with Acute Ischemic Stroke: COR 2a, LOE A for early oral anticoagulation in carefully selected AF patients; efficacy for early recurrent stroke prevention not yet established.", openTrial)}
-                  </li>
-                  <li className="flex items-start">
-                      <span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">5</span>
-                      Classification: Minor (≤1.5cm), Moderate (Cortical superficial/Deep MCA/Border-zone), Major (Large territory/≥2 MCA cortical branches/Brainstem &gt;1.5cm).
-                  </li>
-              </ul>
-          </div>
-      )}
       {showFavToast && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
           {isFav ? 'Saved to Favorites' : 'Removed from Favorites'}
