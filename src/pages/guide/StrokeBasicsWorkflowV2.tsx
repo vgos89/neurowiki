@@ -665,17 +665,19 @@ const MainContent: React.FC<{
       {nihssModalOpen && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[80] flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-            <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between flex-shrink-0">
-              <h2 className="text-xl font-bold text-slate-900">NIHSS Calculator</h2>
+            {/* Slim modal header — just title + close; embed shows score/LVO/controls below */}
+            <div className="flex items-center justify-between h-12 px-4 border-b border-slate-100 flex-shrink-0">
+              <span className="text-sm font-bold text-slate-700">NIHSS Calculator</span>
               <button
                 onClick={() => setNihssModalOpen(false)}
-                className="min-h-[44px] min-w-[44px] p-2 rounded-lg hover:bg-slate-100 transition-colors"
+                className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
                 aria-label="Close NIHSS calculator"
               >
-                <svg className="w-5 h-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
-            <div className="p-6 overflow-y-auto flex-1">
+            {/* Embed fills remaining space; manages its own scroll + footer */}
+            <div className="flex-1 overflow-hidden flex flex-col">
               <Suspense fallback={<div className="p-6 text-slate-500 animate-pulse">Loading NIHSS calculator…</div>}>
                 <NihssCalculatorEmbed
                   initialScore={step1Data?.nihssScore ?? 0}

@@ -116,6 +116,7 @@ const ElanPathway: React.FC = () => {
   // Favorites
   const { isFavorite, toggleFavorite } = useFavorites();
   const [showFavToast, setShowFavToast] = useState(false);
+  const [showCopyToast, setShowCopyToast] = useState(false);
   const isFav = isFavorite('elan-pathway');
 
   const handleFavToggle = () => {
@@ -152,7 +153,7 @@ const ElanPathway: React.FC = () => {
   const handleNext = () => { if (step === 1 && (inputs.isIschemicAfib === 'no' || inputs.hasBleed === 'yes' || inputs.hasMechanicalValve === 'yes')) return; if (step < 4) setStep(step + 1); };
   const handleBack = () => { if (step > 1) setStep(step - 1); };
   const handleReset = () => { setInputs({ isIschemicAfib: 'unknown', hasBleed: 'unknown', hasMechanicalValve: 'unknown', size: 'unknown', onset: '' }); setStep(1); };
-  const copySummary = () => { if (!result) return; let definition = ""; if (result.size === 'minor') definition = "infarct ≤ 1.5 cm"; else if (result.size === 'moderate') definition = "cortical superficial branch of MCA/ACA/PCA, deep branch MCA, or internal border-zone"; else if (result.size === 'major') definition = "large territory, ≥2 MCA cortical branches, or brainstem/cerebellum > 1.5 cm"; const summary = `Post-Stroke Anticoagulation Protocol Applied:\nImaging-based stroke size classified as ${result.size.charAt(0).toUpperCase() + result.size.slice(1)} per stroke size definitions (${definition}).\n\nAnticoagulation timing determined using evidence-based protocol:\nEarly DOAC initiation window = ${result.earlyText} (${result.earlyDates}).\n\nDecision based on imaging-defined infarct size and absence of contraindicating hemorrhage.\n\nReference:\nBased on ELAN trial (Paciaroni et al., NEJM 2023) and AHA/ASA 2026 Guidelines for stroke anticoagulation timing.`.trim(); navigator.clipboard.writeText(summary); alert("Summary copied to clipboard."); };
+  const copySummary = () => { if (!result) return; let definition = ""; if (result.size === 'minor') definition = "infarct ≤ 1.5 cm"; else if (result.size === 'moderate') definition = "cortical superficial branch of MCA/ACA/PCA, deep branch MCA, or internal border-zone"; else if (result.size === 'major') definition = "large territory, ≥2 MCA cortical branches, or brainstem/cerebellum > 1.5 cm"; const summary = `Post-Stroke Anticoagulation Protocol Applied:\nImaging-based stroke size classified as ${result.size.charAt(0).toUpperCase() + result.size.slice(1)} per stroke size definitions (${definition}).\n\nAnticoagulation timing determined using evidence-based protocol:\nEarly DOAC initiation window = ${result.earlyText} (${result.earlyDates}).\n\nDecision based on imaging-defined infarct size and absence of contraindicating hemorrhage.\n\nReference:\nBased on ELAN trial (Paciaroni et al., NEJM 2023), OPTIMAS trial (2024), TIMING trial (2024), and 2026 AHA/ASA Guideline for the Early Management of Patients with Acute Ischemic Stroke (COR 2a, LOE A).`.trim(); navigator.clipboard.writeText(summary); setShowCopyToast(true); setTimeout(() => setShowCopyToast(false), 2500); };
   const isStep1Invalid = inputs.isIschemicAfib === 'no' || inputs.hasBleed === 'yes' || inputs.hasMechanicalValve === 'yes';
 
   return (
@@ -173,12 +174,12 @@ const ElanPathway: React.FC = () => {
       </div>
       
       {/* Progress same... */}
-      <div className="flex items-center space-x-2 mb-8 px-1">{STEPS.map((s, idx) => (<div key={s.id} className="flex-1 flex flex-col items-center relative"><div className={`w-full h-1 absolute top-1/2 -translate-y-1/2 -z-10 ${idx === 0 ? 'hidden' : ''} ${step >= s.id ? 'bg-purple-500' : 'bg-slate-200'}`}></div><div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-colors z-10 ${step === s.id ? 'bg-white border-purple-500 text-purple-600' : step > s.id ? 'bg-purple-500 border-purple-500 text-white' : 'bg-slate-100 border-slate-200 text-slate-400'}`}>{step > s.id ? <Check size={14} /> : s.id}</div><span className={`text-xs mt-2 font-bold uppercase tracking-wider ${step === s.id ? 'text-purple-600' : 'text-slate-300'}`}>{s.title}</span></div>))}</div>
+      <div className="flex items-center space-x-2 mb-8 px-1">{STEPS.map((s, idx) => (<div key={s.id} className="flex-1 flex flex-col items-center relative"><div className={`w-full h-1 absolute top-1/2 -translate-y-1/2 -z-10 ${idx === 0 ? 'hidden' : ''} ${step >= s.id ? 'bg-purple-500' : 'bg-slate-200'}`}></div><div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-colors z-10 ${step === s.id ? 'bg-white border-purple-500 text-purple-600' : step > s.id ? 'bg-purple-500 border-purple-500 text-white' : 'bg-slate-100 border-slate-200 text-slate-400'}`}>{step > s.id ? <Check size={14} /> : s.id}</div><span className={`text-xs mt-2 font-bold uppercase tracking-wider ${step === s.id ? 'text-purple-600' : 'text-slate-400'}`}>{s.title}</span></div>))}</div>
 
       <div ref={stepContainerRef} className="space-y-6 min-h-[300px]">
         {/* Step 1-3 logic identical... */}
         {step === 1 && (<div className="space-y-6 animate-in slide-in-from-right-4 duration-300"><div ref={el => { fieldRefs.current['isIschemicAfib'] = el; }}><h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Inclusion</h3><div className="grid grid-cols-1 gap-3"><SelectionCard title="Ischemic Stroke with Atrial Fibrillation?" description="Confirm imaging-proven ischemic stroke and history or new diagnosis of AF." selected={inputs.isIschemicAfib === 'yes'} onClick={() => updateInput('isIschemicAfib', 'yes')} /><SelectionCard title="No" selected={inputs.isIschemicAfib === 'no'} onClick={() => updateInput('isIschemicAfib', 'no')} /></div></div>{inputs.isIschemicAfib === 'yes' && (<div ref={el => { fieldRefs.current['hasBleed'] = el; }} className="animate-in fade-in slide-in-from-top-2"><h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide mt-6">Exclusion</h3><div className="grid grid-cols-1 gap-3"><SelectionCard title="Any significant hemorrhage?" description="Confluent parenchymal hematoma (PH type) or significant bleeding risk." selected={inputs.hasBleed === 'yes'} onClick={() => updateInput('hasBleed', 'yes')} variant="danger" /><SelectionCard title="No significant hemorrhage" description="Trace or petechial hemorrhagic transformation (HI1/HI2) is permitted." selected={inputs.hasBleed === 'no'} onClick={() => updateInput('hasBleed', 'no')} /></div></div>)}{inputs.hasBleed === 'no' && (<div ref={el => { fieldRefs.current['hasMechanicalValve'] = el; }} className="animate-in fade-in slide-in-from-top-2"><h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide mt-6">Additional Exclusion</h3><div className="grid grid-cols-1 gap-3"><SelectionCard title="Mechanical Heart Valve?" description="Mechanical valves require warfarin (not DOAC) with specific INR targets." selected={inputs.hasMechanicalValve === 'yes'} onClick={() => updateInput('hasMechanicalValve', 'yes')} variant="danger" /><SelectionCard title="No Mechanical Valve" description="Bioprosthetic valve or no valve replacement." selected={inputs.hasMechanicalValve === 'no'} onClick={() => updateInput('hasMechanicalValve', 'no')} /></div></div>)}{isStep1Invalid && (<div className="bg-red-50 border border-red-100 p-4 rounded-xl flex items-start space-x-3 text-red-800 animate-in zoom-in-95"><XCircle className="flex-shrink-0 mt-0.5" size={20} /><div><p className="font-bold">Not eligible for Post-Stroke Anticoagulation Protocol</p><p className="text-sm mt-1">{result?.ineligibleReason}</p></div></div>)}</div>)}
-        {step === 2 && (<div className="space-y-6 animate-in slide-in-from-right-4 duration-300"><div className="bg-neuro-50 p-4 rounded-xl text-teal-500 text-sm mb-6 border border-neuro-100"><h4 className="font-bold flex items-center mb-2"><Info size={16} className="mr-2"/> Imaging-Based Definitions</h4><ul className="space-y-2 list-disc list-inside opacity-90"><li><strong>Minor:</strong> Infarct size ≤ 1.5 cm.</li><li><strong>Moderate:</strong> Cortical superficial branch of MCA/ACA/PCA, deep branch MCA, or internal border-zone.</li><li><strong>Major:</strong> Large territory (entire MCA/ACA/PCA), ≥2 MCA cortical branches, or Brainstem/Cerebellum &gt; 1.5 cm.</li></ul></div><h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Select Stroke Classification</h3><div className="grid gap-3" ref={el => { fieldRefs.current['size'] = el; }}><SelectionCard title="Minor" description="≤ 1.5 cm anterior or posterior circulation" selected={inputs.size === 'minor'} onClick={() => updateInput('size', 'minor')} /><SelectionCard title="Moderate" description="Cortical superficial branch, MCA deep, or internal border-zone" selected={inputs.size === 'moderate'} onClick={() => updateInput('size', 'moderate')} /><SelectionCard title="Major" description="Whole territory, large cortical, or brainstem/cerebellum > 1.5 cm" selected={inputs.size === 'major'} onClick={() => updateInput('size', 'major')} /></div></div>)}
+        {step === 2 && (<div className="space-y-6 animate-in slide-in-from-right-4 duration-300"><div className="bg-neuro-50 p-4 rounded-xl text-teal-500 text-sm mb-6 border border-neuro-100"><h4 className="font-bold flex items-center mb-2"><Info size={16} className="mr-2"/> Imaging-Based Definitions</h4><ul className="space-y-2 list-disc list-inside opacity-90"><li><strong>Minor:</strong> Infarct size ≤ 1.5 cm.</li><li><strong>Moderate:</strong> Cortical superficial branch of MCA, ACA, or PCA; deep branch of MCA; or internal border-zone.</li><li><strong>Major:</strong> Large territory (entire MCA/ACA/PCA), ≥2 MCA cortical branches, or Brainstem/Cerebellum &gt; 1.5 cm.</li></ul></div><h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Select Stroke Classification</h3><div className="grid gap-3" ref={el => { fieldRefs.current['size'] = el; }}><SelectionCard title="Minor" description="≤ 1.5 cm anterior or posterior circulation" selected={inputs.size === 'minor'} onClick={() => updateInput('size', 'minor')} /><SelectionCard title="Moderate" description="Cortical superficial branch, MCA deep, or internal border-zone" selected={inputs.size === 'moderate'} onClick={() => updateInput('size', 'moderate')} /><SelectionCard title="Major" description="Whole territory, large cortical, or brainstem/cerebellum > 1.5 cm" selected={inputs.size === 'major'} onClick={() => updateInput('size', 'major')} /></div></div>)}
         {step === 3 && (
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
                 <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Stroke Onset</h3>
@@ -224,6 +225,14 @@ const ElanPathway: React.FC = () => {
         {/* STEP 4: RESULTS - UPDATED WITH AUTO-LINKING */}
         {step === 4 && result && result.eligible && (
              <div className="space-y-6 animate-in zoom-in-95 duration-300">
+                {/* Safety Warning — prominent amber card */}
+                <div className="bg-amber-50 border border-amber-300 p-4 rounded-2xl flex items-start space-x-3">
+                    <AlertTriangle size={20} className="flex-shrink-0 text-amber-600 mt-0.5" />
+                    <div>
+                        <p className="text-sm font-bold text-amber-900">Mandatory before initiating anticoagulation</p>
+                        <p className="text-sm text-amber-800 mt-1">Repeat brain imaging (CT or MRI) is required immediately before starting anticoagulation to exclude hemorrhagic transformation.</p>
+                    </div>
+                </div>
                 <div className="bg-slate-900 text-white p-8 rounded-3xl relative overflow-hidden shadow-xl">
                     <div className="absolute top-0 right-0 w-40 h-40 bg-purple-500 rounded-full blur-3xl opacity-20 -mr-10 -mt-10"></div>
                     <div className="relative z-10">
@@ -239,31 +248,31 @@ const ElanPathway: React.FC = () => {
                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Logic applied</h4>
                      <ul className="space-y-2">
                         {result.reasons.map((r, i) => ( <li key={i} className="flex items-center text-sm font-medium text-slate-700"><div className="w-1.5 h-1.5 bg-purple-500 rounded-full mr-3"></div>{r}</li>))}
-                        <li className="flex items-center text-sm font-medium text-slate-700"><div className="w-1.5 h-1.5 bg-purple-500 rounded-full mr-3"></div>{autoLinkReactNodes("Evidence from ELAN trial (NEJM 2023) shows early initiation is non-inferior and safe.", openTrial)}</li>
+                        <li className="flex items-center text-sm font-medium text-slate-700"><div className="w-1.5 h-1.5 bg-purple-500 rounded-full mr-3"></div>{autoLinkReactNodes("ELAN, OPTIMAS, and TIMING trials show early DOAC initiation is low-risk and noninferior to delayed initiation; superiority in preventing early recurrent stroke is not yet established (COR 2a, LOE A — AHA/ASA 2026).", openTrial)}</li>
                      </ul>
                 </div>
 
                 <div className="bg-blue-50 border border-blue-200 p-6 rounded-2xl shadow-sm">
                     <h4 className="text-xs font-bold text-blue-900 uppercase tracking-wider mb-4 flex items-center">
-                        <Info size={16} className="mr-2" /> 
-                        DOAC Selection (AHA/ASA 2026 Guidelines)
+                        <Info size={16} className="mr-2" />
+                        DOAC Considerations (Evidence-Based)
                     </h4>
                     <div className="space-y-3">
                         <div className="flex items-start">
                             <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 mt-2"></div>
-                            <p className="text-sm text-blue-900"><strong>Preferred:</strong> Direct Oral Anticoagulants (DOACs) over warfarin for stroke prevention in AF (Class I recommendation).</p>
+                            <p className="text-sm text-blue-900"><strong>Preferred agent class:</strong> DOACs are generally preferred over warfarin for anticoagulation in AF-related stroke, based on AF management guidelines and trial evidence. Mechanical valves require warfarin.</p>
                         </div>
                         <div className="flex items-start">
                             <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 mt-2"></div>
-                            <p className="text-sm text-blue-900"><strong>Options:</strong> Apixaban, rivaroxaban, dabigatran, or edoxaban (choose based on renal function, drug interactions, patient preference).</p>
+                            <p className="text-sm text-blue-900"><strong>Options:</strong> Apixaban, rivaroxaban, dabigatran, or edoxaban — choose based on renal function, drug interactions, and patient preference.</p>
                         </div>
                         <div className="flex items-start">
                             <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 mt-2"></div>
-                            <p className="text-sm text-blue-900"><strong>Rationale:</strong> Faster onset, no INR monitoring, no heparin bridging required, lower intracranial hemorrhage risk vs warfarin.</p>
+                            <p className="text-sm text-blue-900"><strong>Rationale:</strong> Faster onset, no INR monitoring, no bridging required, lower intracranial hemorrhage risk compared to warfarin.</p>
                         </div>
                         <div className="flex items-start">
                             <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 mt-2"></div>
-                            <p className="text-sm text-blue-900"><strong>ELAN cohort:</strong> 91% received DOACs (apixaban 64%, rivaroxaban 15%, dabigatran 7%, edoxaban 5%).</p>
+                            <p className="text-sm text-blue-900"><strong>ELAN trial cohort:</strong> 91% received DOACs (apixaban 64%, rivaroxaban 15%, dabigatran 7%, edoxaban 5%).</p>
                         </div>
                     </div>
                 </div>
@@ -271,12 +280,9 @@ const ElanPathway: React.FC = () => {
                 <div className="flex items-start space-x-3 bg-slate-50 p-4 rounded-xl border border-slate-100 text-xs text-slate-500 leading-relaxed">
                     <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
                     <div>
-                        <strong>Decision Support Only - Critical Safety Note.</strong>
-                        <p className="mt-2 font-bold text-slate-700">
-                            ⚠️ MANDATORY: Repeat brain imaging (CT or MRI) immediately before initiating anticoagulation to exclude hemorrhagic transformation.
-                        </p>
+                        <strong>Decision Support Only.</strong>
                         <p className="mt-2">
-                            {autoLinkReactNodes("Based on ELAN Trial (Paciaroni et al., NEJM 2023), OPTIMAS Trial (2024), TIMING Trial (2024), and AHA/ASA 2026 Guidelines for Secondary Stroke Prevention. Early DOAC initiation is safe when hemorrhage is excluded by imaging. This tool does not replace clinical judgment or institutional protocols.", openTrial)}
+                            {autoLinkReactNodes("Based on ELAN Trial (Paciaroni et al., NEJM 2023), OPTIMAS Trial (2024), TIMING Trial (2024), and 2026 AHA/ASA Guideline for the Early Management of Patients with Acute Ischemic Stroke (COR 2a, LOE A). This tool does not replace clinical judgment or institutional protocols.", openTrial)}
                         </p>
                     </div>
                 </div>
@@ -318,7 +324,7 @@ const ElanPathway: React.FC = () => {
                   </li>
                   <li className="flex items-start">
                       <span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">4</span>
-                      {autoLinkReactNodes("AHA/ASA 2026 Guidelines for Secondary Stroke Prevention: Class I recommendation for DOACs over warfarin; early initiation supported with appropriate imaging exclusion of hemorrhage.", openTrial)}
+                      {autoLinkReactNodes("2026 AHA/ASA Guideline for the Early Management of Patients with Acute Ischemic Stroke: COR 2a, LOE A for early oral anticoagulation in carefully selected AF patients; efficacy for early recurrent stroke prevention not yet established.", openTrial)}
                   </li>
                   <li className="flex items-start">
                       <span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">5</span>
@@ -330,6 +336,12 @@ const ElanPathway: React.FC = () => {
       {showFavToast && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
           {isFav ? 'Saved to Favorites' : 'Removed from Favorites'}
+        </div>
+      )}
+      {showCopyToast && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60] flex items-center space-x-2">
+          <Check size={12} />
+          <span>Summary copied to clipboard</span>
         </div>
       )}
     </div>
