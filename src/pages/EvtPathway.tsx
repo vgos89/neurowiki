@@ -323,17 +323,18 @@ const calculateMevoProtocol = (inputs: Inputs): Result => {
         };
     }
 
-    // Status C: High Uncertainty
-    // Nondominant/Distal/ACA/PCA + Disabling + Technical
+    // Status C: Class III No Benefit — Nondominant M2 / Distal / ACA / PCA
+    // 2026 AHA/ASA 4.7.2 Rec #8 (COR 3: No Benefit, LOE A): EVT not recommended for nondominant M2, codominant M2, distal MCA, ACA, PCA
     const isOtherLocation = inputs.mevoLocation !== 'dominant_m2' && inputs.mevoLocation !== 'unknown';
-    if (isOtherLocation && inputs.mevoDisabling === 'yes' && inputs.mevoTechnical === 'yes') {
+    if (isOtherLocation) {
         return {
-            eligible: true,
-            status: "High Uncertainty",
-            criteriaName: "Specialist Decision",
-            reason: "Disabling Distal/Nondominant",
-            details: "High uncertainty: consider EVT only after specialist discussion; weigh disability vs. hemorrhage/procedural risk.",
-            variant: 'warning'
+            eligible: false,
+            status: "Avoid EVT",
+            criteriaName: "Class III: No Benefit",
+            reason: "Nondominant / Distal Vessel — Not Recommended",
+            details: "COR 3: No Benefit (LOE A) — The 2026 AHA/ASA Guidelines do not recommend EVT for nondominant or codominant proximal M2, distal MCA, ACA, or PCA occlusions. Based on ESCAPE-MeVO (2025) and DISTAL (2025), which showed no functional benefit and higher sICH rates. Specialist consultation required for exceptional cases. (AHA/ASA 2026, Section 4.7.2, Rec #8)",
+            exclusionReason: "COR 3: No Benefit — nondominant/distal vessel location.",
+            variant: 'danger'
         };
     }
 
@@ -412,6 +413,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
   // Favorites
   const { isFavorite, toggleFavorite } = useFavorites();
   const [showFavToast, setShowFavToast] = useState(false);
+  const [showCopyToast, setShowCopyToast] = useState(false);
   const isFav = isFavorite('evt-pathway');
 
   const handleFavToggle = () => {
@@ -514,12 +516,22 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
       if (!result) return; 
       let summary = "";
       if (inputs.occlusionType === 'lvo') {
-          summary = `LVO EVT Assessment\nType: ${inputs.lvoLocation === 'basilar' ? 'Basilar' : 'Anterior'}\nStatus: ${result.status.toUpperCase()}\nProtocol: ${result.criteriaName || 'Standard Screening'}\n\nClinical Data:\n- Time Window: ${inputs.time === '0_6' ? '0-6h' : '6-24h'}\n- NIHSS: ${inputs.nihss.replace('_', '-').replace('plus', '+')}\n- Age: ${inputs.age.replace('_', '-').replace('plus', '+')}\n\nImaging Data:\n${inputs.lvoLocation === 'basilar' ? `- pc-ASPECTS: ${inputs.pcAspects}` : (inputs.time === '0_6' ? `- ASPECTS: ${inputs.aspects}` : `- Core: ${inputs.core}ml | Mismatch: ${inputs.mismatchVol}ml | Ratio: ${inputs.mismatchRatio}`)}\n\nReason: ${result.reason}\n${result.details}`;
+          const imagingLine = inputs.lvoLocation === 'basilar'
+              ? `- pc-ASPECTS: ${inputs.pcAspects}`
+              : inputs.time === '0_6'
+                  ? `- ASPECTS: ${inputs.aspects}`
+                  : [
+                      inputs.aspects ? `- ASPECTS: ${inputs.aspects}` : '',
+                      inputs.core ? `- Core: ${inputs.core}ml` : '',
+                      inputs.mismatchVol ? `- Mismatch: ${inputs.mismatchVol}ml | Ratio: ${inputs.mismatchRatio}` : '',
+                    ].filter(Boolean).join('\n');
+          summary = `LVO EVT Assessment\nType: ${inputs.lvoLocation === 'basilar' ? 'Basilar' : 'Anterior'}\nStatus: ${result.status.toUpperCase()}\nProtocol: ${result.criteriaName || 'Standard Screening'}\n\nClinical Data:\n- Time Window: ${inputs.time === '0_6' ? '0-6h' : '6-24h'}\n- NIHSS: ${inputs.nihss.replace('_', '-').replace('plus', '+')}\n- Age: ${inputs.age.replace('_', '-').replace('plus', '+')}\n\nImaging Data:\n${imagingLine}\n\nReason: ${result.reason}\n${result.details}`;
       } else {
           summary = `MeVO EVT Assessment\nStatus: ${result.status.toUpperCase()}\nReason: ${result.reason}\n\nClinical Data:\n- Location: ${inputs.mevoLocation.replace('_', ' ').toUpperCase()}\n- NIHSS: ${inputs.nihssNumeric}\n- Disabling: ${inputs.mevoDisabling}\n- Dependent: ${inputs.mevoDependent}\n- Time: ${inputs.time === '0_6' ? '0-6h' : '6-24h'}\n- Favorable Imaging: ${inputs.mevoSalvageable.toUpperCase()}\n\nDetails:\n${result.details}`;
       }
-      navigator.clipboard.writeText(summary.trim()); 
-      alert("Assessment copied to EMR."); 
+      navigator.clipboard.writeText(summary.trim());
+      setShowCopyToast(true);
+      setTimeout(() => setShowCopyToast(false), 2000);
   };
 
   const isLvo = inputs.occlusionType === 'lvo';
@@ -664,9 +676,9 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         title="Evidence Landscape" 
                         content="LVO has Class I evidence for EVT. MeVO/DMVO is an evolving area; benefit depends on deficit severity, eloquence, and risk." 
                     />
-                    <LearningPearl 
-                        title="Exclusions" 
-                        content="Exclusions include: no LVO, pre-stroke dependence (mRS >1), age <18, terminal illness or limited goals of care. When in doubt, discuss with Vascular Neurology and Neurointerventional." 
+                    <LearningPearl
+                        title="Exclusions"
+                        content="Hard exclusions: no LVO, pre-stroke dependence (mRS >4), age <18, terminal illness or limited goals of care. Note: mRS 2 is Class IIa and mRS 3–4 is Class IIb per 2026 guidelines — prior disability alone is not an exclusion. When in doubt, discuss with Vascular Neurology and Neurointerventional."
                     />
                 </div>
 
@@ -756,9 +768,9 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         <SelectionCard title="Early Window (0 - 6 Hours)" description="Standard window." selected={inputs.time === '0_6'} onClick={() => updateInput('time', '0_6')} />
                         <SelectionCard title="Late Window (6 - 24 Hours)" description="Extended window consideration." selected={inputs.time === '6_24'} onClick={() => updateInput('time', '6_24')} />
                     </div>
-                    <LearningPearl 
-                        title="2026 Guideline Update" 
-                        content="The 2026 AHA/ASA Guidelines reaffirm Class I for EVT in 0-24h with appropriate imaging. Early window (0-6h): Class I for ASPECTS 3–10 with NIHSS ≥6 and mRS 0–1; Class IIa for selected patients with ASPECTS 0–2 (age <80, no mass effect) and for mRS 2 with ASPECTS ≥6. Late window (6-24h): Class I for selected patients with ASPECTS 3–5, age <80, no mass effect (NIHSS ≥6). DEFUSE-3 evidence strongest in 6-16h; DAWN extended to 6-24h." 
+                    <LearningPearl
+                        title="2026 Guideline Update"
+                        content="The 2026 AHA/ASA Guidelines (Section 4.7.2) — Early window (0–6h): Class I for ASPECTS 3–10, NIHSS ≥6, mRS 0–1; Class IIa for ASPECTS 0–2 (age <80, no mass effect) and for mRS 2 with ASPECTS ≥6; Class IIb for mRS 3–4 with ASPECTS ≥6. Late window (6–24h): Class I for ASPECTS ≥6 with NIHSS ≥6 and mRS 0–1 (NEW — Rec #2, LOE A); Class I for ASPECTS 3–5 with age <80, no mass effect (Rec #3); DAWN/DEFUSE-3 criteria apply for perfusion-selected patients."
                     />
                 </div>
 
@@ -862,14 +874,14 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         {inputs.time === '6_24' && !isBasilar && (
                             <div>
                                 <div className="bg-purple-50 p-4 rounded-xl text-purple-900 text-sm mb-6 border border-purple-100">
-                                    <h4 className="font-bold flex items-center mb-2"><Info size={16} className="mr-2"/> Perfusion Imaging Required</h4>
-                                    <p>Enter values from automated software (RAPID™, Viz.ai™, etc). DEFUSE-3 evidence is strongest in 6-16h; DAWN extended eligibility to 6-24h. Per AHA/ASA 2026 Section 4.7.2: In selected patients with age &lt;80 years, NIHSS ≥6, mRS 0–1, ASPECTS 3–5, and without significant mass effect, EVT is Class I in the 6–24h window.</p>
+                                    <h4 className="font-bold flex items-center mb-2"><Info size={16} className="mr-2"/> Late Window Imaging (6–24h)</h4>
+                                    <p><strong>ASPECTS ≥6 → Class I</strong> (Rec #2, LOE A) — no perfusion required. <strong>ASPECTS 3–5, age &lt;80, no mass effect → Class I</strong> (Rec #3, LOE A). For borderline cases, enter perfusion values (DAWN/DEFUSE-3 criteria below).</p>
                                 </div>
-                                {/* Optional ASPECTS for 6-24h Class I (ASPECTS 3-5, no mass effect) */}
+                                {/* ASPECTS — primary criterion for Class I in 6-24h (Recs #2 and #3) */}
                                 <div ref={el => { fieldRefs.current['aspects'] = el; }} className="mb-6">
-                                    <h4 className="text-sm font-bold text-slate-900 mb-2">ASPECTS from NCCT (optional)</h4>
-                                    <p className="text-xs text-slate-500 mb-2">If available. ASPECTS 3-5 with age &lt;80 and no significant mass effect supports Class I in selected patients (2026 Section 4.7.2).</p>
-                                    <input type="number" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 5 (optional)" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
+                                    <h4 className="text-sm font-bold text-slate-900 mb-2">ASPECTS from NCCT</h4>
+                                    <p className="text-xs text-slate-500 mb-2">ASPECTS ≥6 → Class I (no other criteria needed). ASPECTS 3–5 → Class I if age &lt;80 + no mass effect. Enter 0–10 or leave blank to use perfusion criteria instead.</p>
+                                    <input type="number" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 7" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
                                     <div ref={el => { fieldRefs.current['massEffect'] = el; }} className="mt-4">
                                         <h4 className="text-sm font-bold text-slate-900 mb-2">Significant mass effect on imaging?</h4>
                                         <div className="grid grid-cols-3 gap-3">
@@ -1017,7 +1029,11 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                             </>
                         )}
                         {inputs.time === '0_6' && isLvo && !isBasilar && (<li className="flex justify-between"><span>ASPECTS</span><span className="font-bold">{inputs.aspects || '--'}</span></li>)}
-                        {inputs.time === '6_24' && isLvo && !isBasilar && (<><li className="flex justify-between border-b border-slate-50 pb-2"><span>Core Vol</span><span className="font-bold">{inputs.core || '--'} ml</span></li><li className="flex justify-between"><span>Ratio</span><span className="font-bold">{inputs.mismatchRatio || '--'}</span></li></>)}
+                        {inputs.time === '6_24' && isLvo && !isBasilar && (<>
+                          {inputs.aspects && <li className="flex justify-between border-b border-slate-50 pb-2"><span>ASPECTS</span><span className="font-bold">{inputs.aspects}</span></li>}
+                          {inputs.core && <li className="flex justify-between border-b border-slate-50 pb-2"><span>Core Vol</span><span className="font-bold">{inputs.core} ml</span></li>}
+                          {inputs.mismatchRatio && <li className="flex justify-between"><span>Mismatch Ratio</span><span className="font-bold">{inputs.mismatchRatio}</span></li>}
+                        </>)}
                         {isBasilar && (<li className="flex justify-between"><span>pc-ASPECTS</span><span className="font-bold">{inputs.pcAspects || '--'}</span></li>)}
                     </ul>
                 </div>
@@ -1052,7 +1068,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
 
       <div id="evt-action-bar" className={`mt-8 pt-4 md:border-t border-slate-100 scroll-mt-4 ${isInModal ? 'static' : 'fixed bottom-[4.5rem] md:static'} left-0 right-0 ${isInModal ? 'bg-transparent' : 'bg-white/95 backdrop-blur md:bg-transparent'} p-4 md:p-0 border-t md:border-0 ${isInModal ? '' : 'z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none'}`}>
          <div className="max-w-3xl mx-auto flex items-center justify-between gap-4">
-             <button onClick={handleBack} disabled={activeSection === 0} className={`px-6 py-3 border border-slate-200 rounded-xl font-bold transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${activeSection === 0 ? 'opacity-0 pointer-events-none cursor-not-allowed' : 'bg-white text-slate-600 hover:bg-slate-50 hover:border-slate-300'}`}>Back</button>
+             <button onClick={handleBack} disabled={activeSection === 0} aria-hidden={activeSection === 0} className={`px-6 py-3 border border-slate-200 rounded-xl font-bold transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${activeSection === 0 ? 'opacity-0 pointer-events-none cursor-not-allowed' : 'bg-white text-slate-600 hover:bg-slate-50 hover:border-slate-300'}`}>Back</button>
              {activeSection === 3 && (<button onClick={handleReset} className="hidden md:flex items-center text-slate-500 hover:text-neuro-500 font-bold px-4 py-2 rounded-lg transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><RotateCcw size={16} className="mr-2" /> Start Over</button>)}
              {activeSection < 3 ? (<button onClick={handleNext} className="flex-1 md:flex-none px-8 py-3 bg-neuro-500 text-white rounded-xl font-bold hover:bg-teal-500 shadow-lg shadow-neuro-200 transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">Next <ChevronRight size={16} className="ml-2" /></button>) : (customActionButton ? (
                <button onClick={customActionButton.onClick} className="flex-1 md:flex-none px-8 py-3 bg-neuro-500 text-white rounded-xl font-bold hover:bg-teal-500 shadow-lg shadow-neuro-200 transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
@@ -1080,6 +1096,11 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
       {showFavToast && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
           {isFav ? 'Saved to Favorites' : 'Removed from Favorites'}
+        </div>
+      )}
+      {showCopyToast && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
+          ✓ Assessment copied to clipboard
         </div>
       )}
     </div>
