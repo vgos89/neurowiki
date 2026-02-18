@@ -233,58 +233,63 @@ const ElanPathway: React.FC = () => {
                         <p className="text-sm text-amber-800 mt-1">Repeat brain imaging (CT or MRI) is required immediately before starting anticoagulation to exclude hemorrhagic transformation.</p>
                     </div>
                 </div>
-                <div className="bg-slate-900 text-white p-8 rounded-3xl relative overflow-hidden shadow-xl">
+                {/* Main results card */}
+                <div className="bg-slate-900 text-white rounded-3xl relative overflow-hidden shadow-xl">
                     <div className="absolute top-0 right-0 w-40 h-40 bg-purple-500 rounded-full blur-3xl opacity-20 -mr-10 -mt-10"></div>
-                    <div className="relative z-10">
-                        <div className="inline-flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-6"><Activity size={12} /><span>{result.size} Stroke Protocol</span></div>
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <div className="space-y-1"><span className="text-emerald-400 font-bold text-xs uppercase tracking-widest flex items-center"><Check size={12} className="mr-1"/> Early Strategy (Recommended)</span><div className="text-3xl font-black">{result.earlyText}</div><div className="text-slate-400 font-medium">{result.earlyDates}</div></div>
-                            <div className="space-y-1 pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-white/10 md:pl-8"><span className="text-slate-400 font-bold text-xs uppercase tracking-widest">Later Strategy</span><div className="text-xl font-bold opacity-80">{result.lateText}</div><div className="text-slate-500 font-medium">{result.lateDates}</div></div>
+                    <div className="relative z-10 p-6 md:p-8">
+                        {/* Header row */}
+                        <div className="flex items-center justify-between mb-6">
+                            <div className="inline-flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"><Activity size={12} /><span>{result.size} Stroke</span></div>
+                            <div className="text-xs font-bold text-white/50 uppercase tracking-wider">COR 2a · LOE A · AHA/ASA 2026</div>
+                        </div>
+
+                        {/* Strategy timing */}
+                        <div className="grid grid-cols-2 gap-4 mb-6">
+                            <div className="bg-emerald-500/15 border border-emerald-500/30 rounded-2xl p-4">
+                                <span className="text-emerald-400 font-bold text-xs uppercase tracking-widest flex items-center mb-2"><Check size={12} className="mr-1"/> Recommended</span>
+                                <div className="text-2xl font-black leading-tight">{result.earlyText}</div>
+                                <div className="text-slate-400 text-sm font-medium mt-1">{result.earlyDates}</div>
+                            </div>
+                            <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
+                                <span className="text-slate-400 font-bold text-xs uppercase tracking-widest block mb-2">Alternative</span>
+                                <div className="text-xl font-bold opacity-80 leading-tight">{result.lateText}</div>
+                                <div className="text-slate-500 text-sm font-medium mt-1">{result.lateDates}</div>
+                            </div>
+                        </div>
+
+                        {/* Divider */}
+                        <div className="border-t border-white/10 mb-5"></div>
+
+                        {/* Evidence line */}
+                        <p className="text-xs text-slate-400 leading-relaxed mb-5">
+                            {autoLinkReactNodes("ELAN, OPTIMAS & TIMING trials: early DOAC initiation is low-risk and noninferior to delayed initiation. Superiority for early recurrent stroke prevention not yet established.", openTrial)}
+                        </p>
+
+                        {/* DOAC options */}
+                        <div className="border-t border-white/10 pt-5">
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Anticoagulant</p>
+                            <div className="grid grid-cols-2 gap-2">
+                                {[
+                                    { name: 'Apixaban', note: '64% of ELAN cohort' },
+                                    { name: 'Rivaroxaban', note: '15% of ELAN cohort' },
+                                    { name: 'Dabigatran', note: '7% of ELAN cohort' },
+                                    { name: 'Edoxaban', note: '5% of ELAN cohort' },
+                                ].map(d => (
+                                    <div key={d.name} className="bg-white/5 rounded-xl px-3 py-2.5">
+                                        <div className="text-sm font-bold">{d.name}</div>
+                                        <div className="text-xs text-slate-500 mt-0.5">{d.note}</div>
+                                    </div>
+                                ))}
+                            </div>
+                            <p className="text-xs text-slate-500 mt-3">Choose based on renal function, drug interactions, and patient preference. Mechanical valves require warfarin.</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-                     <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Logic applied</h4>
-                     <ul className="space-y-2">
-                        {result.reasons.map((r, i) => ( <li key={i} className="flex items-center text-sm font-medium text-slate-700"><div className="w-1.5 h-1.5 bg-purple-500 rounded-full mr-3"></div>{r}</li>))}
-                        <li className="flex items-center text-sm font-medium text-slate-700"><div className="w-1.5 h-1.5 bg-purple-500 rounded-full mr-3"></div>{autoLinkReactNodes("ELAN, OPTIMAS, and TIMING trials show early DOAC initiation is low-risk and noninferior to delayed initiation; superiority in preventing early recurrent stroke is not yet established (COR 2a, LOE A — AHA/ASA 2026).", openTrial)}</li>
-                     </ul>
-                </div>
-
-                <div className="bg-blue-50 border border-blue-200 p-6 rounded-2xl shadow-sm">
-                    <h4 className="text-xs font-bold text-blue-900 uppercase tracking-wider mb-4 flex items-center">
-                        <Info size={16} className="mr-2" />
-                        DOAC Considerations (Evidence-Based)
-                    </h4>
-                    <div className="space-y-3">
-                        <div className="flex items-start">
-                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 mt-2"></div>
-                            <p className="text-sm text-blue-900"><strong>Preferred agent class:</strong> DOACs are generally preferred over warfarin for anticoagulation in AF-related stroke, based on AF management guidelines and trial evidence. Mechanical valves require warfarin.</p>
-                        </div>
-                        <div className="flex items-start">
-                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 mt-2"></div>
-                            <p className="text-sm text-blue-900"><strong>Options:</strong> Apixaban, rivaroxaban, dabigatran, or edoxaban — choose based on renal function, drug interactions, and patient preference.</p>
-                        </div>
-                        <div className="flex items-start">
-                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 mt-2"></div>
-                            <p className="text-sm text-blue-900"><strong>Rationale:</strong> Faster onset, no INR monitoring, no bridging required, lower intracranial hemorrhage risk compared to warfarin.</p>
-                        </div>
-                        <div className="flex items-start">
-                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 mt-2"></div>
-                            <p className="text-sm text-blue-900"><strong>ELAN trial cohort:</strong> 91% received DOACs (apixaban 64%, rivaroxaban 15%, dabigatran 7%, edoxaban 5%).</p>
-                        </div>
-                    </div>
-                </div>
-
+                {/* Disclaimer */}
                 <div className="flex items-start space-x-3 bg-slate-50 p-4 rounded-xl border border-slate-100 text-xs text-slate-500 leading-relaxed">
                     <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
-                    <div>
-                        <strong>Decision Support Only.</strong>
-                        <p className="mt-2">
-                            {autoLinkReactNodes("Based on ELAN Trial (Paciaroni et al., NEJM 2023), OPTIMAS Trial (2024), TIMING Trial (2024), and 2026 AHA/ASA Guideline for the Early Management of Patients with Acute Ischemic Stroke (COR 2a, LOE A). This tool does not replace clinical judgment or institutional protocols.", openTrial)}
-                        </p>
-                    </div>
+                    <p>{autoLinkReactNodes("Decision support only. Based on ELAN Trial (NEJM 2023), OPTIMAS (2024), TIMING (2024), and 2026 AHA/ASA Guideline for the Early Management of Patients with Acute Ischemic Stroke. Does not replace clinical judgment.", openTrial)}</p>
                 </div>
              </div>
         )}
