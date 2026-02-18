@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Clock, X, CheckCircle } from 'lucide-react';
 
 const EVENTS = ['Code Activation', 'Neurology Evaluation', 'CT Read Time'] as const;
@@ -20,6 +20,7 @@ function getElapsed(from: Date, to: Date): string {
 export const TimestampBubble: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showThought, setShowThought] = useState(true);
+  const [showPulse, setShowPulse] = useState(false);
   const [timestamps, setTimestamps] = useState<Record<EventName, Date | null>>({
     'Code Activation': null,
     'Neurology Evaluation': null,
@@ -32,13 +33,21 @@ export const TimestampBubble: React.FC = () => {
     return () => clearTimeout(t);
   }, []);
 
+  // Show pulse ring after 10s if no stamps yet
+  useEffect(() => {
+    const t = setTimeout(() => setShowPulse(true), 10000);
+    return () => clearTimeout(t);
+  }, []);
+
   const handleOpen = () => {
     setShowThought(false);
+    setShowPulse(false);
     setIsExpanded(prev => !prev);
   };
 
   const handleStamp = (event: EventName) => {
     if (timestamps[event]) return;
+    setShowPulse(false);
     setTimestamps(prev => ({ ...prev, [event]: new Date() }));
   };
 
@@ -49,6 +58,7 @@ export const TimestampBubble: React.FC = () => {
 
   const anchorTime = timestamps['Code Activation'];
   const stampedCount = Object.values(timestamps).filter(Boolean).length;
+  const needsAttention = showPulse && stampedCount === 0 && !isExpanded;
 
   return (
     <>
@@ -78,7 +88,7 @@ export const TimestampBubble: React.FC = () => {
         className={`fixed bottom-20 right-4 z-50 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${
           isExpanded
             ? 'bg-slate-700 dark:bg-slate-600 scale-90'
-            : `bg-neuro-600 hover:bg-neuro-700 dark:bg-neuro-500 dark:hover:bg-neuro-600 ${showThought ? 'bubble-wobble' : ''}`
+            : `bg-neuro-600 hover:bg-neuro-700 dark:bg-neuro-500 dark:hover:bg-neuro-600 ${showThought ? 'bubble-wobble' : ''} ${needsAttention ? 'ring-4 ring-neuro-400 ring-offset-2 animate-pulse' : ''}`
         }`}
       >
         {isExpanded ? (

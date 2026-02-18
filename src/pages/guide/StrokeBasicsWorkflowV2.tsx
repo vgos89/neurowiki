@@ -352,10 +352,15 @@ const MainContent: React.FC<{
               </div>
             )}
             {(workflowMode === 'code' && !step1Data) ? (
-              <div className="p-6 text-center text-slate-600">
-                <span className="material-icons-outlined text-4xl mb-2 block">arrow_upward</span>
-                <p>Complete Step 1 first (LKW, vitals, NIHSS, weight)</p>
-              </div>
+              <button
+                type="button"
+                onClick={() => scrollToStep(1)}
+                className="w-full p-6 text-center text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg border-2 border-dashed border-slate-200 hover:border-blue-300 transition-colors group"
+              >
+                <ArrowLeft className="w-5 h-5 mx-auto mb-2 rotate-90 group-hover:text-blue-600" />
+                <p className="text-sm font-medium">Step 1 is in progress — tap to jump up</p>
+                <p className="text-xs mt-1 text-slate-400">Complete LKW, vitals, NIHSS & weight</p>
+              </button>
             ) : (
               <Suspense fallback={<div className="p-6 text-slate-500 animate-pulse">Loading step…</div>}>
                 <CodeModeStep2
@@ -478,7 +483,7 @@ const MainContent: React.FC<{
             {workflowMode === 'study' && (
               <div className="mb-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
                 <div className="flex gap-3">
-                  <span className="material-icons-outlined text-amber-600 text-xl">science</span>
+                  <FlaskConical className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
                   <div className="flex-1 space-y-3">
                     <h4 className="font-semibold text-amber-900 mb-2">Laboratory Workup & Treatment Orders</h4>
                     <p className="text-sm text-amber-800 leading-relaxed">
@@ -489,10 +494,15 @@ const MainContent: React.FC<{
               </div>
             )}
             {(workflowMode === 'code' && !step2Data) ? (
-              <div className="p-6 text-center text-slate-600">
-                <span className="material-icons-outlined text-4xl mb-2 block">arrow_upward</span>
-                <p>Complete Step 2 first (CT result and treatment decision)</p>
-              </div>
+              <button
+                type="button"
+                onClick={() => scrollToStep(2)}
+                className="w-full p-6 text-center text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg border-2 border-dashed border-slate-200 hover:border-blue-300 transition-colors group"
+              >
+                <ArrowLeft className="w-5 h-5 mx-auto mb-2 rotate-90 group-hover:text-blue-600" />
+                <p className="text-sm font-medium">Step 2 is in progress — tap to jump up</p>
+                <p className="text-xs mt-1 text-slate-400">Complete CT result and treatment decision</p>
+              </button>
             ) : step2Data?.ctResult === 'bleed' ? (
               <Suspense fallback={<div className="p-6 text-slate-500 animate-pulse">Loading ICH protocol…</div>}>
                 <StrokeIchProtocolStep
@@ -554,7 +564,7 @@ const MainContent: React.FC<{
             {workflowMode === 'study' && (
               <div className="mb-4 p-4 bg-green-50 rounded-lg border border-green-200">
                 <div className="flex gap-3">
-                  <span className="material-icons-outlined text-green-600 text-xl">description</span>
+                  <FileTextIcon className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                   <div className="flex-1 space-y-3">
                     <div>
                       <h4 className="font-semibold text-green-900 mb-2">Documentation & Quality Improvement</h4>
@@ -582,10 +592,15 @@ const MainContent: React.FC<{
               </div>
             )}
             {(workflowMode === 'code' && (!step1Data || !step2Data || steps[2]?.status !== 'completed')) ? (
-              <div className="p-6 text-center text-slate-600">
-                <span className="material-icons-outlined text-4xl mb-2 block">arrow_upward</span>
-                <p>Complete Step 3 first (Labs & Treatment Orders or ICH protocol)</p>
-              </div>
+              <button
+                type="button"
+                onClick={() => scrollToStep(!step1Data ? 1 : !step2Data ? 2 : 3)}
+                className="w-full p-6 text-center text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg border-2 border-dashed border-slate-200 hover:border-blue-300 transition-colors group"
+              >
+                <ArrowLeft className="w-5 h-5 mx-auto mb-2 rotate-90 group-hover:text-blue-600" />
+                <p className="text-sm font-medium">Step {!step1Data ? 1 : !step2Data ? 2 : 3} is in progress — tap to jump up</p>
+                <p className="text-xs mt-1 text-slate-400">Complete {!step1Data ? 'LKW, vitals, NIHSS & weight' : !step2Data ? 'CT result and treatment decision' : 'Labs & Treatment Orders or ICH protocol'}</p>
+              </button>
             ) : (
               <Suspense fallback={<div className="p-6 text-slate-500 animate-pulse">Loading summary…</div>}>
                 <CodeModeStep3
@@ -660,7 +675,7 @@ const MainContent: React.FC<{
                 className="min-h-[44px] min-w-[44px] p-2 rounded-lg hover:bg-slate-100 transition-colors"
                 aria-label="Close NIHSS calculator"
               >
-                <span className="material-icons-outlined text-xl">close</span>
+                <svg className="w-5 h-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
             <div className="p-6 overflow-y-auto flex-1">
