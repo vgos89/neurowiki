@@ -340,19 +340,19 @@ Assessment Date: ${new Date().toLocaleString()}`;
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} aria-hidden />
       <div className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col" role="dialog" aria-labelledby="modal-title">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-white">
+        <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-white">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
               <Calendar className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <h2 id="modal-title" className="text-xl font-bold text-gray-900">IV tPA Eligibility Assessment</h2>
-              <p className="text-sm text-gray-500">Inclusion & exclusion checklist</p>
+              <h2 id="modal-title" className="text-xl font-bold text-slate-900">IV tPA Eligibility Assessment</h2>
+              <p className="text-sm text-slate-500">Inclusion & exclusion checklist</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+            className="p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
@@ -362,8 +362,8 @@ Assessment Date: ${new Date().toLocaleString()}`;
         {/* Scrollable Content - Checklist only */}
         <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
           {/* Inclusion Criteria - 2024 */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="bg-white rounded-lg border border-slate-200 p-6">
+            <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5 text-green-600" />
               Inclusion Criteria
             </h3>
@@ -441,7 +441,7 @@ Assessment Date: ${new Date().toLocaleString()}`;
               </div>
 
           {/* Absolute Contraindications - 2024 */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="bg-white rounded-lg border border-slate-200 p-6">
             <h3 className="text-sm font-bold text-red-600 uppercase tracking-wider mb-4">Absolute Contraindications</h3>
             <p className="text-xs text-slate-600 mb-4">Check each that applies to this patient.</p>
             <div className="space-y-4">
@@ -556,23 +556,23 @@ Assessment Date: ${new Date().toLocaleString()}`;
           </div>
 
           {/* Notes */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Clinical Notes (Optional)</label>
+          <div className="bg-white rounded-lg border border-slate-200 p-6">
+            <label className="block text-sm font-medium text-slate-700 mb-2">Clinical Notes (Optional)</label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Document any additional considerations..."
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               rows={3}
             />
           </div>
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex items-center justify-between">
+        <div className="px-6 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
           <button
             onClick={copyToEMR}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-semibold transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-semibold transition-colors"
           >
             {copiedToClipboard ? (
               <>
@@ -589,7 +589,7 @@ Assessment Date: ${new Date().toLocaleString()}`;
           <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-semibold transition-colors"
+              className="px-6 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-semibold transition-colors"
             >
               {onComplete ? 'Cancel' : 'Close'}
             </button>

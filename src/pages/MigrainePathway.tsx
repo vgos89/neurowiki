@@ -282,7 +282,7 @@ const MigrainePathway: React.FC = () => {
       <div className="mb-8 flex items-start justify-between">
         <div>
             <Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-500 mb-6 group">
-                <div className="bg-white p-1.5 rounded-md border border-gray-200 mr-2 shadow-sm group-hover:shadow-md transition-all">
+                <div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-all">
                     <ArrowLeft size={16} />
                 </div>
                 {getBackLabel()}
@@ -307,14 +307,14 @@ const MigrainePathway: React.FC = () => {
       <div className="flex items-center space-x-1 mb-8 px-1">
          {STEPS.map((s) => (
              <div key={s.id} className="flex-1 flex flex-col items-center relative">
-                 <div className={`w-full h-1 absolute top-1/2 -translate-y-1/2 -z-10 ${s.id === 1 ? 'hidden' : ''} ${step >= s.id ? 'bg-indigo-500' : 'bg-gray-200'}`}></div>
+                 <div className={`w-full h-1 absolute top-1/2 -translate-y-1/2 -z-10 ${s.id === 1 ? 'hidden' : ''} ${step >= s.id ? 'bg-indigo-500' : 'bg-slate-200'}`}></div>
                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-colors z-10 ${
                      step === s.id ? 'bg-white border-indigo-500 text-indigo-600' : 
-                     step > s.id ? 'bg-indigo-500 border-indigo-500 text-white' : 'bg-gray-100 border-gray-200 text-gray-400'
+                     step > s.id ? 'bg-indigo-500 border-indigo-500 text-white' : 'bg-slate-100 border-slate-200 text-slate-400'
                  }`}>
                      {step > s.id ? <Check size={14} /> : s.id}
                  </div>
-                 <span className={`hidden sm:block text-[10px] mt-2 font-bold uppercase tracking-wider ${step === s.id ? 'text-indigo-600' : 'text-gray-300'}`}>{s.title}</span>
+                 <span className={`hidden sm:block text-[10px] mt-2 font-bold uppercase tracking-wider ${step === s.id ? 'text-indigo-600' : 'text-slate-300'}`}>{s.title}</span>
              </div>
          ))}
       </div>
@@ -331,7 +331,7 @@ const MigrainePathway: React.FC = () => {
           </div>
       )}
 
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         
         {/* STEP 1: SAFETY SCREEN */}
         {step === 1 && (
@@ -359,10 +359,10 @@ const MigrainePathway: React.FC = () => {
                             <button 
                                 key={key}
                                 onClick={() => setRedFlags({...redFlags, [key]: !redFlags[key as keyof RedFlags]})}
-                                className={`w-full flex items-center justify-between p-5 rounded-xl border cursor-pointer transition-all active:scale-[0.99] touch-manipulation text-left ${redFlags[key as keyof RedFlags] ? 'bg-red-100 border-red-300 text-red-900' : 'bg-slate-50 border-gray-200 hover:bg-white'}`}
+                                className={`w-full flex items-center justify-between p-5 rounded-xl border cursor-pointer transition-all active:scale-[0.99] touch-manipulation text-left ${redFlags[key as keyof RedFlags] ? 'bg-red-100 border-red-300 text-red-900' : 'bg-slate-50 border-slate-200 hover:bg-white'}`}
                             >
                                 <span className="font-bold text-base">{labels[key]}</span>
-                                <div className={`w-6 h-6 rounded border flex items-center justify-center ${redFlags[key as keyof RedFlags] ? 'bg-red-600 border-red-600' : 'bg-white border-gray-300'}`}>
+                                <div className={`w-6 h-6 rounded border flex items-center justify-center ${redFlags[key as keyof RedFlags] ? 'bg-red-600 border-red-600' : 'bg-white border-slate-300'}`}>
                                     {redFlags[key as keyof RedFlags] && <Check size={16} className="text-white" />}
                                 </div>
                             </button>
@@ -392,15 +392,15 @@ const MigrainePathway: React.FC = () => {
              <div className="p-6 md:p-8 animate-in slide-in-from-right-4">
                 <h2 className="text-2xl font-bold text-slate-900 mb-6">Triage & Care Setting</h2>
                 <div className="grid gap-4">
-                    <button onClick={() => setCareSetting('adequate')} className={`text-left p-6 rounded-xl border-2 transition-all active:scale-[0.99] touch-manipulation ${careSetting === 'adequate' ? 'border-emerald-500 bg-emerald-50 text-emerald-900' : 'border-gray-200 hover:border-indigo-200'}`}>
+                    <button onClick={() => setCareSetting('adequate')} className={`text-left p-6 rounded-xl border-2 transition-all active:scale-[0.99] touch-manipulation ${careSetting === 'adequate' ? 'border-emerald-500 bg-emerald-50 text-emerald-900' : 'border-slate-200 hover:border-indigo-200'}`}>
                         <div className="font-bold text-lg">Adequate response to home therapy</div>
                         <p className="text-sm opacity-70 mt-1">Pain manageable, able to tolerate oral fluids.</p>
                     </button>
-                    <button onClick={() => setCareSetting('incomplete')} className={`text-left p-6 rounded-xl border-2 transition-all active:scale-[0.99] touch-manipulation ${careSetting === 'incomplete' ? 'border-indigo-500 bg-indigo-50 text-indigo-900' : 'border-gray-200 hover:border-indigo-200'}`}>
+                    <button onClick={() => setCareSetting('incomplete')} className={`text-left p-6 rounded-xl border-2 transition-all active:scale-[0.99] touch-manipulation ${careSetting === 'incomplete' ? 'border-indigo-500 bg-indigo-50 text-indigo-900' : 'border-slate-200 hover:border-indigo-200'}`}>
                         <div className="font-bold text-lg">Incomplete / Inconsistent response</div>
                         <p className="text-sm opacity-70 mt-1">Home meds failed, significant pain persists.</p>
                     </button>
-                    <button onClick={() => setCareSetting('vomiting')} className={`text-left p-6 rounded-xl border-2 transition-all active:scale-[0.99] touch-manipulation ${careSetting === 'vomiting' ? 'border-indigo-500 bg-indigo-50 text-indigo-900' : 'border-gray-200 hover:border-indigo-200'}`}>
+                    <button onClick={() => setCareSetting('vomiting')} className={`text-left p-6 rounded-xl border-2 transition-all active:scale-[0.99] touch-manipulation ${careSetting === 'vomiting' ? 'border-indigo-500 bg-indigo-50 text-indigo-900' : 'border-slate-200 hover:border-indigo-200'}`}>
                         <div className="font-bold text-lg">Severe Nausea / Vomiting</div>
                         <p className="text-sm opacity-70 mt-1">Cannot tolerate oral medications or fluids.</p>
                     </button>
@@ -457,7 +457,7 @@ const MigrainePathway: React.FC = () => {
 
                  {/* HEADACHE COCKTAIL */}
                  <div ref={cocktailRef} className="mb-8">
-                     <div className="flex items-center space-x-2 mb-4 border-b border-gray-100 pb-2">
+                     <div className="flex items-center space-x-2 mb-4 border-b border-slate-100 pb-2">
                          <span className="bg-indigo-600 text-white px-2 py-1 rounded text-xs font-black uppercase tracking-wider">Step 1</span>
                          <h3 className="font-bold text-slate-900 text-lg">First-Line Cocktail</h3>
                      </div>
@@ -470,20 +470,20 @@ const MigrainePathway: React.FC = () => {
                                 // Auto scroll to antiemetic after toggling benadryl
                                 setTimeout(() => antiemeticRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
                             }} 
-                            className="w-full bg-white p-5 rounded-xl border border-gray-200 flex items-center justify-between transition-all active:scale-[0.99] touch-manipulation text-left"
+                            className="w-full bg-white p-5 rounded-xl border border-slate-200 flex items-center justify-between transition-all active:scale-[0.99] touch-manipulation text-left"
                          >
                             <div>
                                 <div className="font-bold text-slate-900 text-base">Diphenhydramine</div>
                                 <div className="text-sm text-slate-500">25/50 mg PO/IV x1</div>
                                 <div className="text-[10px] text-indigo-600 font-bold mt-0.5">Prevents akathisia from antiemetics.</div>
                             </div>
-                            <div className={`w-6 h-6 rounded border flex items-center justify-center ${cocktail.benadryl ? 'bg-indigo-600 border-indigo-600' : 'bg-white border-gray-300'}`}>
+                            <div className={`w-6 h-6 rounded border flex items-center justify-center ${cocktail.benadryl ? 'bg-indigo-600 border-indigo-600' : 'bg-white border-slate-300'}`}>
                                 {cocktail.benadryl && <Check size={16} className="text-white" />}
                             </div>
                          </button>
 
                          {/* B: Antiemetic */}
-                         <div ref={antiemeticRef} className="bg-white p-5 rounded-xl border border-gray-200 scroll-mt-24">
+                         <div ref={antiemeticRef} className="bg-white p-5 rounded-xl border border-slate-200 scroll-mt-24">
                             <div className="font-bold text-slate-900 mb-3 text-base">Antiemetic (Choose One)</div>
                             <div className="space-y-3">
                                 {['metoclopramide', 'prochlorperazine', 'ondansetron'].map((opt) => (
@@ -513,7 +513,7 @@ const MigrainePathway: React.FC = () => {
                          </div>
 
                          {/* C: Ketorolac */}
-                         <div ref={ketorolacRef} className={`bg-white p-5 rounded-xl border border-gray-200 scroll-mt-24 ${checkEligibility('ketorolac').disabled ? 'opacity-50' : ''}`}>
+                         <div ref={ketorolacRef} className={`bg-white p-5 rounded-xl border border-slate-200 scroll-mt-24 ${checkEligibility('ketorolac').disabled ? 'opacity-50' : ''}`}>
                              <div className="flex justify-between items-start mb-3">
                                 <div>
                                     <div className="font-bold text-slate-900 text-base">Ketorolac (Toradol)</div>
@@ -533,7 +533,7 @@ const MigrainePathway: React.FC = () => {
                                                     setCocktail({...cocktail, ketorolac: dose});
                                                     setTimeout(() => dexRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
                                                 }}
-                                                className={`flex-1 py-3 text-sm font-bold rounded-lg border transition-all touch-manipulation ${cocktail.ketorolac === dose ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-600 border-gray-200 hover:bg-white'}`}
+                                                className={`flex-1 py-3 text-sm font-bold rounded-lg border transition-all touch-manipulation ${cocktail.ketorolac === dose ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-white'}`}
                                              >
                                                  {dose} mg
                                              </button>
@@ -544,7 +544,7 @@ const MigrainePathway: React.FC = () => {
                          </div>
 
                          {/* D: Dexamethasone */}
-                         <div ref={dexRef} className={`bg-white p-5 rounded-xl border border-gray-200 scroll-mt-24 ${checkEligibility('dexamethasone').disabled ? 'opacity-50' : ''}`}>
+                         <div ref={dexRef} className={`bg-white p-5 rounded-xl border border-slate-200 scroll-mt-24 ${checkEligibility('dexamethasone').disabled ? 'opacity-50' : ''}`}>
                              <div className="flex justify-between items-start mb-3">
                                 <div>
                                     <div className="font-bold text-slate-900 text-base">Dexamethasone</div>
@@ -561,7 +561,7 @@ const MigrainePathway: React.FC = () => {
                                                 setCocktail({...cocktail, dexamethasone: dose});
                                                 setTimeout(() => addonsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
                                             }}
-                                            className={`flex-1 py-3 text-sm font-bold rounded-lg border transition-all touch-manipulation ${cocktail.dexamethasone === dose ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-600 border-gray-200 hover:bg-white'}`}
+                                            className={`flex-1 py-3 text-sm font-bold rounded-lg border transition-all touch-manipulation ${cocktail.dexamethasone === dose ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-white'}`}
                                          >
                                              {dose} mg
                                          </button>
@@ -574,14 +574,14 @@ const MigrainePathway: React.FC = () => {
 
                  {/* ADD ONS */}
                  <div ref={addonsRef} className="mb-8 scroll-mt-24">
-                     <div className="flex items-center space-x-2 mb-4 border-b border-gray-100 pb-2">
+                     <div className="flex items-center space-x-2 mb-4 border-b border-slate-100 pb-2">
                          <span className="bg-slate-600 text-white px-2 py-1 rounded text-xs font-black uppercase tracking-wider">Step 2</span>
                          <h3 className="font-bold text-slate-900 text-lg">First-Line Add-Ons</h3>
                      </div>
                      <div className="space-y-4">
                          
                          {/* Sumatriptan */}
-                         <div className={`bg-white p-5 rounded-xl border border-gray-200 ${checkEligibility('sumatriptan').disabled ? 'opacity-50' : ''}`}>
+                         <div className={`bg-white p-5 rounded-xl border border-slate-200 ${checkEligibility('sumatriptan').disabled ? 'opacity-50' : ''}`}>
                              <div className="flex justify-between items-start mb-2">
                                  <div>
                                     <div className="font-bold text-slate-900">Sumatriptan 6mg Subcutaneous</div>
@@ -590,7 +590,7 @@ const MigrainePathway: React.FC = () => {
                                  {checkEligibility('sumatriptan').disabled ? (
                                     <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">{checkEligibility('sumatriptan').reason}</span>
                                  ) : (
-                                    <div className={`w-6 h-6 rounded border flex items-center justify-center cursor-pointer ${firstLineAddOns.sumatriptan ? 'bg-indigo-600 border-indigo-600' : 'bg-white border-gray-300'}`} onClick={() => setFirstLineAddOns({...firstLineAddOns, sumatriptan: !firstLineAddOns.sumatriptan})}>
+                                    <div className={`w-6 h-6 rounded border flex items-center justify-center cursor-pointer ${firstLineAddOns.sumatriptan ? 'bg-indigo-600 border-indigo-600' : 'bg-white border-slate-300'}`} onClick={() => setFirstLineAddOns({...firstLineAddOns, sumatriptan: !firstLineAddOns.sumatriptan})}>
                                         {firstLineAddOns.sumatriptan && <Check size={16} className="text-white" />}
                                     </div>
                                  )}
@@ -598,7 +598,7 @@ const MigrainePathway: React.FC = () => {
                          </div>
 
                          {/* Magnesium */}
-                         <div className={`bg-white p-5 rounded-xl border border-gray-200 ${checkEligibility('magnesium').disabled ? 'opacity-50' : ''}`}>
+                         <div className={`bg-white p-5 rounded-xl border border-slate-200 ${checkEligibility('magnesium').disabled ? 'opacity-50' : ''}`}>
                              <div className="flex justify-between items-start mb-3">
                                  <div>
                                      <div className="font-bold text-slate-900">Magnesium Sulfate IV</div>
@@ -610,7 +610,7 @@ const MigrainePathway: React.FC = () => {
                              {!checkEligibility('magnesium').disabled && (
                                  <div className="flex gap-3">
                                      {(['1', '2'] as MagDose[]).map(dose => (
-                                         <button key={dose} onClick={() => setFirstLineAddOns({...firstLineAddOns, magnesium: dose})} className={`flex-1 py-2 text-sm font-bold rounded-lg border transition-all ${firstLineAddOns.magnesium === dose ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-600 border-gray-200 hover:bg-white'}`}>{dose} g</button>
+                                         <button key={dose} onClick={() => setFirstLineAddOns({...firstLineAddOns, magnesium: dose})} className={`flex-1 py-2 text-sm font-bold rounded-lg border transition-all ${firstLineAddOns.magnesium === dose ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-white'}`}>{dose} g</button>
                                      ))}
                                      <button onClick={() => setFirstLineAddOns({...firstLineAddOns, magnesium: null})} className={`px-4 py-2 text-sm font-bold rounded-lg border ${!firstLineAddOns.magnesium ? 'bg-slate-200 text-slate-800' : 'bg-white text-slate-400'}`}>None</button>
                                  </div>
@@ -618,7 +618,7 @@ const MigrainePathway: React.FC = () => {
                          </div>
 
                          {/* Valproate */}
-                         <div className={`bg-white p-5 rounded-xl border border-gray-200 ${checkEligibility('valproate').disabled ? 'opacity-50' : ''}`}>
+                         <div className={`bg-white p-5 rounded-xl border border-slate-200 ${checkEligibility('valproate').disabled ? 'opacity-50' : ''}`}>
                              <div className="flex justify-between items-start mb-3">
                                  <div>
                                      <div className="font-bold text-slate-900">Valproate (Depacon) IV</div>
@@ -629,7 +629,7 @@ const MigrainePathway: React.FC = () => {
                              {!checkEligibility('valproate').disabled && (
                                  <div className="flex gap-3">
                                      {(['500', '1000'] as ValproateDose[]).map(dose => (
-                                         <button key={dose} onClick={() => setFirstLineAddOns({...firstLineAddOns, valproate: dose})} className={`flex-1 py-2 text-sm font-bold rounded-lg border transition-all ${firstLineAddOns.valproate === dose ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-600 border-gray-200 hover:bg-white'}`}>{dose} mg</button>
+                                         <button key={dose} onClick={() => setFirstLineAddOns({...firstLineAddOns, valproate: dose})} className={`flex-1 py-2 text-sm font-bold rounded-lg border transition-all ${firstLineAddOns.valproate === dose ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-white'}`}>{dose} mg</button>
                                      ))}
                                      <button onClick={() => setFirstLineAddOns({...firstLineAddOns, valproate: null})} className={`px-4 py-2 text-sm font-bold rounded-lg border ${!firstLineAddOns.valproate ? 'bg-slate-200 text-slate-800' : 'bg-white text-slate-400'}`}>None</button>
                                  </div>
@@ -653,7 +653,7 @@ const MigrainePathway: React.FC = () => {
         {/* STEP 4: RESPONSE */}
         {step === 4 && (
             <div className="p-6 md:p-8 animate-in slide-in-from-right-4">
-                <div className="bg-white p-8 rounded-2xl border border-gray-200 text-center mb-8">
+                <div className="bg-white p-8 rounded-2xl border border-slate-200 text-center mb-8">
                     <h2 className="text-xl font-bold text-slate-900 mb-6">Patient Status (1 hour post-cocktail)</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <button 
@@ -668,7 +668,7 @@ const MigrainePathway: React.FC = () => {
                         </button>
                         <button 
                             onClick={() => { setResponseImproved(false); }}
-                            className={`p-6 border-2 rounded-2xl hover:shadow-lg transition-all group ${responseImproved === false ? 'bg-indigo-50 border-indigo-500 ring-2 ring-indigo-200' : 'bg-slate-50 border-gray-200 hover:border-indigo-500'}`}
+                            className={`p-6 border-2 rounded-2xl hover:shadow-lg transition-all group ${responseImproved === false ? 'bg-indigo-50 border-indigo-500 ring-2 ring-indigo-200' : 'bg-slate-50 border-slate-200 hover:border-indigo-500'}`}
                         >
                             <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                                 <AlertTriangle size={24} />
@@ -692,7 +692,7 @@ const MigrainePathway: React.FC = () => {
                             
                              {/* Magnesium Rescue */}
                              {!firstLineAddOns.magnesium && !checkEligibility('magnesium').disabled && (
-                                 <div className="bg-white p-5 rounded-xl border border-gray-200">
+                                 <div className="bg-white p-5 rounded-xl border border-slate-200">
                                      <div className="flex justify-between items-center">
                                          <div className="font-bold text-slate-900">Magnesium Sulfate 2g IV</div>
                                          <button onClick={() => setSecondLine({...secondLine, magnesium: secondLine.magnesium ? null : '2'})} className={`px-4 py-2 rounded-lg font-bold text-sm ${secondLine.magnesium ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'}`}>
@@ -704,7 +704,7 @@ const MigrainePathway: React.FC = () => {
 
                              {/* Valproate Rescue */}
                              {!firstLineAddOns.valproate && !checkEligibility('valproate').disabled && (
-                                 <div className="bg-white p-5 rounded-xl border border-gray-200">
+                                 <div className="bg-white p-5 rounded-xl border border-slate-200">
                                      <div className="flex justify-between items-center">
                                          <div className="font-bold text-slate-900">Valproate 1000mg IV</div>
                                          <button onClick={() => setSecondLine({...secondLine, valproate: secondLine.valproate ? null : '1000'})} className={`px-4 py-2 rounded-lg font-bold text-sm ${secondLine.valproate ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'}`}>

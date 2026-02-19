@@ -1094,7 +1094,7 @@ const EmBillingCalculator: React.FC = () => {
   const specialtyEx = getSpecialtyExamples(state.specialty);
 
   return (
-    <div className="min-h-screen bg-gray-100 font-sans">
+    <div className="min-h-screen bg-slate-100 font-sans">
       {/* ── Sticky Header ── */}
       <div className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200">
         <div className="flex items-center gap-3 px-4 py-3">
@@ -1136,7 +1136,7 @@ const EmBillingCalculator: React.FC = () => {
           </div>
           <button
             onClick={() => set({ showNpiPanel: !state.showNpiPanel })}
-            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-gray-50 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-gray-100 transition-colors"
+            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors"
           >
             <span className={`w-2 h-2 rounded-full flex-shrink-0 ${state.selectedProvider ? 'bg-green-500' : 'bg-slate-300'}`} />
             {providerDisplayName ? `NPI: ${providerDisplayName}` : 'Search Provider NPI'}
@@ -1162,7 +1162,7 @@ const EmBillingCalculator: React.FC = () => {
                   value={state.npiQuery}
                   onChange={(e) => handleNpiQuery(e.target.value)}
                   placeholder="e.g. 1234567890 or Jane Smith"
-                  className="w-full pl-9 pr-9 py-2.5 text-sm bg-gray-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neuro-500"
+                  className="w-full pl-9 pr-9 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neuro-500"
                 />
               </div>
               {state.npiError && (
@@ -1172,7 +1172,7 @@ const EmBillingCalculator: React.FC = () => {
                 <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 overflow-hidden">
                   {state.npiResults.map((r) => (
                     <button key={r.npi} onClick={() => selectProvider(r)}
-                      className="w-full flex items-start gap-3 p-3 hover:bg-gray-50 transition-colors text-left border-b border-slate-100 last:border-0">
+                      className="w-full flex items-start gap-3 p-3 hover:bg-slate-50 transition-colors text-left border-b border-slate-100 last:border-0">
                       <div className="w-8 h-8 bg-neuro-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                         <span className="text-neuro-700 text-xs font-bold">{r.firstName?.[0]}{r.lastName?.[0]}</span>
                       </div>
@@ -1214,7 +1214,7 @@ const EmBillingCalculator: React.FC = () => {
                 <select
                   value={state.specialty}
                   onChange={(e) => set({ specialty: e.target.value })}
-                  className="pl-3 pr-8 py-1.5 text-xs font-semibold bg-gray-100 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neuro-500 appearance-none text-slate-700"
+                  className="pl-3 pr-8 py-1.5 text-xs font-semibold bg-slate-100 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neuro-500 appearance-none text-slate-700"
                 >
                   {SPECIALTIES.map((s) => <option key={s} value={s}>{s}</option>)}
                 </select>
@@ -1396,7 +1396,7 @@ const EmBillingCalculator: React.FC = () => {
                   type="date"
                   value={state.dateOfService}
                   onChange={(e) => set({ dateOfService: e.target.value })}
-                  className="block w-full pl-3 pr-3 py-2.5 text-sm bg-gray-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neuro-500 text-slate-800"
+                  className="block w-full pl-3 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neuro-500 text-slate-800"
                 />
               </div>
               <div>
@@ -1455,7 +1455,7 @@ const EmBillingCalculator: React.FC = () => {
                 Problems Addressed (ICD-10)
               </label>
               <div className="icd10-search-area relative">
-                <div className="flex flex-wrap items-center gap-2 p-2 bg-gray-50 border border-slate-200 rounded-lg focus-within:ring-2 focus-within:ring-neuro-500 focus-within:border-transparent transition-all">
+                <div className="flex flex-wrap items-center gap-2 p-2 bg-slate-50 border border-slate-200 rounded-lg focus-within:ring-2 focus-within:ring-neuro-500 focus-within:border-transparent transition-all">
                   {state.selectedDiagnoses.map((dx) => (
                     <div key={dx.code} className="flex items-center gap-1 bg-white border border-slate-200 px-2 py-1 rounded text-sm text-slate-800 shadow-sm">
                       <span>{dx.name}</span>
@@ -1484,7 +1484,7 @@ const EmBillingCalculator: React.FC = () => {
                   <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 overflow-hidden">
                     {state.icd10Results.map((code) => (
                       <button key={code.code} onMouseDown={(e) => { e.preventDefault(); addDiagnosis(code); }}
-                        className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors text-left border-b border-slate-100 last:border-0">
+                        className="w-full flex items-center gap-3 p-3 hover:bg-slate-50 transition-colors text-left border-b border-slate-100 last:border-0">
                         <span className="bg-neuro-100 text-neuro-700 text-xs font-bold px-2 py-0.5 rounded flex-shrink-0">{code.code}</span>
                         <span className="text-sm text-slate-700">{code.name}</span>
                         {state.selectedDiagnoses.some((d) => d.code === code.code) && <CheckCircle2 size={14} className="text-green-500 ml-auto flex-shrink-0" />}
@@ -1498,7 +1498,7 @@ const EmBillingCalculator: React.FC = () => {
             {/* ── Billing Mode Toggle ── */}
             {!isTimeOnly && !isIncidentTo && (
               <div className="mb-5">
-                <div className="flex bg-gray-100 rounded-lg p-1 w-full">
+                <div className="flex bg-slate-100 rounded-lg p-1 w-full">
                   <button
                     onClick={() => set({ billingMode: 'mdm' })}
                     disabled={isTimeOnly}
@@ -1543,7 +1543,7 @@ const EmBillingCalculator: React.FC = () => {
             {/* ── MDM Section ── */}
             {effectiveBillingMode === 'mdm' && !isTimeOnly && !isIncidentTo && (
               <>
-                <div className="bg-gray-50 rounded-xl p-5 border border-slate-200 mb-5">
+                <div className="bg-slate-50 rounded-xl p-5 border border-slate-200 mb-5">
                   <div className="flex justify-between items-center mb-3">
                     <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide">Medical Decision Making</h3>
                     <span className={`text-xs font-bold px-2 py-0.5 rounded ${
@@ -1575,7 +1575,7 @@ const EmBillingCalculator: React.FC = () => {
                 </div>
 
                 {/* Problem Complexity Override */}
-                <div className="mb-5 p-3 bg-gray-50 rounded-lg border border-slate-200">
+                <div className="mb-5 p-3 bg-slate-50 rounded-lg border border-slate-200">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Problem Complexity</span>
@@ -1622,10 +1622,10 @@ const EmBillingCalculator: React.FC = () => {
                       <span className={`text-xs font-bold px-1.5 py-0.5 rounded ml-auto ${
                         dataLevel === 'high' ? 'bg-red-100 text-red-700' :
                         dataLevel === 'moderate' ? 'bg-orange-100 text-orange-700' :
-                        dataLevel === 'low' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-500'
+                        dataLevel === 'low' ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'
                       }`}>{MDM_LEVEL_LABELS[dataLevel]}</span>
                     </div>
-                    <div className="bg-gray-50 p-4 rounded-xl border border-slate-200 space-y-4">
+                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
                       {[
                         {
                           key: 'reviewedLabsImaging' as keyof DataReviewed,
@@ -1672,10 +1672,10 @@ const EmBillingCalculator: React.FC = () => {
                       <span className={`text-xs font-bold px-1.5 py-0.5 rounded ml-auto ${
                         riskLevel === 'high' ? 'bg-red-100 text-red-700' :
                         riskLevel === 'moderate' ? 'bg-orange-100 text-orange-700' :
-                        riskLevel === 'low' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-500'
+                        riskLevel === 'low' ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'
                       }`}>{MDM_LEVEL_LABELS[riskLevel]}</span>
                     </div>
-                    <div className="bg-gray-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
                       {MANAGEMENT_RISK_OPTIONS.map(({ value, label, plain, level }) => (
                         <label key={value} className="flex items-start gap-3 cursor-pointer">
                           <input
@@ -1721,7 +1721,7 @@ const EmBillingCalculator: React.FC = () => {
                     value={state.timeMinutes}
                     onChange={(e) => set({ timeMinutes: e.target.value })}
                     placeholder={state.visitType === 'critical_care' ? 'min 30' : 'e.g., 45'}
-                    className="w-full pl-4 pr-4 py-3 text-lg font-bold text-slate-900 bg-gray-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neuro-500"
+                    className="w-full pl-4 pr-4 py-3 text-lg font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neuro-500"
                   />
                   <p className="text-xs text-slate-400 mt-1">
                     Include your face-to-face time + time spent on this patient's care on the same day (review, documentation, care coordination). Do not include clinical staff time.
@@ -1735,7 +1735,7 @@ const EmBillingCalculator: React.FC = () => {
 
                 {/* Time thresholds */}
                 {TIME_THRESHOLDS[state.visitType] && (
-                  <div className="bg-gray-50 rounded-xl border border-slate-200 overflow-hidden mb-4">
+                  <div className="bg-slate-50 rounded-xl border border-slate-200 overflow-hidden mb-4">
                     <div className="px-4 py-2 border-b border-slate-200 bg-white">
                       <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Time Thresholds — {VISIT_TYPE_LABELS[state.visitType]}</span>
                     </div>
@@ -1754,7 +1754,7 @@ const EmBillingCalculator: React.FC = () => {
                 )}
 
                 {/* Time activities checkboxes */}
-                <div className="bg-gray-50 rounded-xl border border-slate-200 p-4">
+                <div className="bg-slate-50 rounded-xl border border-slate-200 p-4">
                   <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-3">
                     Activities performed on date of service
                     <span className="font-normal text-slate-400 normal-case ml-1">(check all that apply — required for time billing documentation)</span>
