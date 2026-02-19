@@ -76,6 +76,7 @@ export const categoryNames: Record<TrialCategoryKey, string> = {
 /** Flat list of trials with blurbs for the filter/list page. */
 export const trials: TrialItem[] = [
   { id: 'ninds-trial', name: 'NINDS IV tPA (0-3h)', description: 'Landmark trial establishing IV tPA within 3 hours; 42.6% vs 27.2% favorable outcome.', category: 'thrombolysis', path: '/trials/ninds-trial' },
+  { id: 'original-trial', name: 'ORIGINAL Tenecteplase vs Alteplase', description: 'Tenecteplase noninferior to alteplase for AIS within 4.5h; 72.7% vs 70.3% mRS 0–1 (JAMA 2024).', category: 'thrombolysis', path: '/trials/original-trial' },
   { id: 'ecass3-trial', name: 'ECASS III IV tPA (3-4.5h)', description: 'Extended IV tPA window to 4.5 hours; 52.4% vs 45.2% mRS 0-1.', category: 'thrombolysis', path: '/trials/ecass3-trial' },
   { id: 'extend-trial', name: 'EXTEND tPA 4.5-9 Hours', description: 'tPA 4.5–9h and wake-up stroke with perfusion mismatch selection.', category: 'thrombolysis', path: '/trials/extend-trial' },
   { id: 'eagle-trial', name: 'EAGLE IA tPA for CRAO', description: 'IV tPA for central retinal artery occlusion.', category: 'thrombolysis', path: '/trials/eagle-trial' },

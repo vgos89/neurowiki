@@ -137,7 +137,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {
           title: "Thrombolysis",
           description: "IV Alteplase & Tenecteplase Evidence",
-          ids: ['ninds-trial', 'ecass3-trial', 'extend-trial', 'wake-up-trial', 'eagle-trial']
+          ids: ['ninds-trial', 'original-trial', 'ecass3-trial', 'extend-trial', 'wake-up-trial', 'eagle-trial']
         },
         {
           title: "Thrombectomy",

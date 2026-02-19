@@ -129,6 +129,7 @@ const App: React.FC = () => {
           {/* Specific routes for trials using TrialPageNew - must come BEFORE catch-all */}
           {/* Thrombolysis Trials */}
           <Route path="/trials/ninds-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
+          <Route path="/trials/original-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="/trials/ecass3-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="/trials/extend-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="/trials/eagle-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />

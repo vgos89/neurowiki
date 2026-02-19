@@ -255,7 +255,8 @@ In light of similar visual outcomes and a higher rate of adverse reactions assoc
   },
   'original-trial': {
     id: 'original-trial',
-    title: 'ORIGINAL Trial: Tenecteplase vs Alteplase for Acute Ischemic Stroke',
+    title: 'ORIGINAL Trial',
+    subtitle: 'Tenecteplase vs Alteplase for Acute Ischemic Stroke (0–4.5 Hours)',
     category: 'Neuro Trials',
     content: `
 ## Clinical Context
