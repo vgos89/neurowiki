@@ -17,10 +17,10 @@ export const SmartTimer: React.FC = () => {
   const handleStart = () => {
     if (!isRunning && elapsedSeconds === 0) {
       const now = new Date();
-      setStartTime(now.toLocaleTimeString('en-US', { 
-        hour: '2-digit', 
+      setStartTime(now.toLocaleTimeString('en-US', {
+        hour: '2-digit',
         minute: '2-digit',
-        hour12: true 
+        hour12: true
       }));
     }
     setIsRunning(!isRunning);
@@ -40,14 +40,14 @@ export const SmartTimer: React.FC = () => {
 
   // Determine background color based on time
   const getBackgroundColor = () => {
-    if (!isRunning) return 'bg-gray-100 dark:bg-gray-800';
+    if (!isRunning) return 'bg-slate-100 dark:bg-slate-800';
     if (elapsedMinutes >= 60) return 'bg-red-100 dark:bg-red-900/30';
     if (elapsedMinutes >= 25) return 'bg-yellow-100 dark:bg-yellow-900/30';
     return 'bg-green-100 dark:bg-green-900/30';
   };
 
   const getTextColor = () => {
-    if (!isRunning) return 'text-gray-600 dark:text-gray-400';
+    if (!isRunning) return 'text-slate-600 dark:text-slate-400';
     if (elapsedMinutes >= 60) return 'text-red-700 dark:text-red-300';
     if (elapsedMinutes >= 25) return 'text-yellow-700 dark:text-yellow-300';
     return 'text-green-700 dark:text-green-300';
@@ -62,7 +62,7 @@ export const SmartTimer: React.FC = () => {
   const alert = getMilestoneAlert();
 
   return (
-    <div className={`${getBackgroundColor()} transition-colors duration-500 sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800`}>
+    <div className={`${getBackgroundColor()} transition-colors duration-500 sticky top-0 z-50 border-b border-slate-200 dark:border-slate-800`}>
       <div className="px-4 py-3 flex items-center justify-between gap-4">
         {/* Timer Display */}
         <div className="flex items-center gap-3">
@@ -71,12 +71,12 @@ export const SmartTimer: React.FC = () => {
             <span className={`text-2xl font-black tabular-nums ${getTextColor()}`}>
               {minutes}:{seconds.toString().padStart(2, '0')}
             </span>
-            <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
               {isRunning ? 'elapsed' : 'ready'}
             </span>
           </div>
           {startTime && (
-            <span className="text-xs text-gray-500 dark:text-gray-400 hidden sm:inline">
+            <span className="text-xs text-slate-500 dark:text-slate-400 hidden sm:inline">
               | Started {startTime}
             </span>
           )}
@@ -109,14 +109,14 @@ export const SmartTimer: React.FC = () => {
               </>
             )}
           </button>
-          
+
           {elapsedSeconds > 0 && (
             <button
               onClick={handleReset}
-              className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+              className="p-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
               title="Reset timer"
             >
-              <RotateCcw className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+              <RotateCcw className="w-4 h-4 text-slate-600 dark:text-slate-400" />
             </button>
           )}
         </div>

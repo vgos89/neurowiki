@@ -4,6 +4,7 @@ import { ArrowLeft, RefreshCw, Copy, Star } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
+import { copyToClipboard } from '../utils/clipboard';
 import {
   ICH_GCS_OPTIONS,
   ICH_VOLUME_OPTIONS,
@@ -52,7 +53,7 @@ const IchScoreCalculator: React.FC = () => {
     setInputs((prev) => ({ ...prev, age80OrOlder: value }));
   }, []);
 
-  const copyToClipboard = () => {
+  const handleCopy = () => {
     const parts = [
       `ICH Score: ${score}/6`,
       `30-day mortality: ${mortality}%`,
@@ -62,10 +63,11 @@ const IchScoreCalculator: React.FC = () => {
       `Origin: ${inputs.infratentorial ? 'Infratentorial' : 'Supratentorial'}`,
       `Age: ${inputs.age80OrOlder ? '≥80 years' : '<80 years'}`,
     ];
-    navigator.clipboard.writeText(parts.join('\n'));
-    setToastMessage('Copied to clipboard');
-    setTimeout(() => setToastMessage(null), 2000);
     trackResult(score);
+    copyToClipboard(parts.join('\n'), () => {
+      setToastMessage('Copied to clipboard');
+      setTimeout(() => setToastMessage(null), 2000);
+    });
   };
 
   const handleReset = () => {
@@ -142,7 +144,7 @@ const IchScoreCalculator: React.FC = () => {
                 <RefreshCw size={18} className="text-slate-500 dark:text-slate-400" aria-hidden="true" />
               </button>
               <button
-                onClick={copyToClipboard}
+                onClick={handleCopy}
                 className="bg-slate-900 dark:bg-slate-700 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors"
               >
                 <span className="hidden sm:inline">Copy</span>

@@ -11,17 +11,17 @@ interface TrialEmbedProps {
 export const TrialEmbed: React.FC<TrialEmbedProps> = ({ trialSlug }) => {
   // Extract trial ID from slug (e.g., "/trials/ninds-trial" → "ninds-trial")
   const trialId = trialSlug.replace('/trials/', '');
-  
+
   // Get trial content from GUIDE_CONTENT
   const trial = GUIDE_CONTENT[trialId];
-  
+
   if (!trial) {
     return (
       <div className="p-6 bg-red-50 dark:bg-red-900/20 rounded-lg border-2 border-red-200 dark:border-red-800">
         <h4 className="text-lg font-bold text-red-900 dark:text-red-100 mb-2">
           Trial Not Found
         </h4>
-        <p className="text-sm text-gray-700 dark:text-gray-300">
+        <p className="text-sm text-slate-700 dark:text-slate-300">
           Could not find trial with ID: {trialId}
         </p>
       </div>
@@ -57,7 +57,7 @@ export const TrialEmbed: React.FC<TrialEmbedProps> = ({ trialSlug }) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <p className="text-xs text-gray-700 dark:text-gray-300">
+        <p className="text-xs text-slate-700 dark:text-slate-300">
           <span className="font-semibold">Quick Preview:</span> Summary embedded below. For full details including study design, endpoints, and statistical analysis, view the complete trial page.
         </p>
       </div>
@@ -66,20 +66,20 @@ export const TrialEmbed: React.FC<TrialEmbedProps> = ({ trialSlug }) => {
       <div className="prose prose-sm dark:prose-invert max-w-none">
         <ReactMarkdown
           components={{
-            h1: ({node, ...props}) => <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4" {...props} />,
-            h2: ({node, ...props}) => <h3 className="text-xl font-bold text-gray-900 dark:text-white mt-6 mb-3" {...props} />,
-            h3: ({node, ...props}) => <h4 className="text-lg font-semibold text-gray-900 dark:text-white mt-4 mb-2" {...props} />,
-            p: ({node, ...props}) => <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4" {...props} />,
-            ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-2 mb-4 text-sm text-gray-700 dark:text-gray-300" {...props} />,
-            ol: ({node, ...props}) => <ol className="list-decimal list-inside space-y-2 mb-4 text-sm text-gray-700 dark:text-gray-300" {...props} />,
-            strong: ({node, ...props}) => <strong className="font-bold text-gray-900 dark:text-white" {...props} />,
+            h1: ({node, ...props}) => <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4" {...props} />,
+            h2: ({node, ...props}) => <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-6 mb-3" {...props} />,
+            h3: ({node, ...props}) => <h4 className="text-lg font-semibold text-slate-900 dark:text-white mt-4 mb-2" {...props} />,
+            p: ({node, ...props}) => <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed mb-4" {...props} />,
+            ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-2 mb-4 text-sm text-slate-700 dark:text-slate-300" {...props} />,
+            ol: ({node, ...props}) => <ol className="list-decimal list-inside space-y-2 mb-4 text-sm text-slate-700 dark:text-slate-300" {...props} />,
+            strong: ({node, ...props}) => <strong className="font-bold text-slate-900 dark:text-white" {...props} />,
             em: ({node, ...props}) => <em className="italic" {...props} />,
-            blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic my-4 text-gray-600 dark:text-gray-400" {...props} />,
-            code: ({node, inline, ...props}: any) => 
+            blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic my-4 text-slate-600 dark:text-slate-400" {...props} />,
+            code: ({node, inline, ...props}: any) =>
               inline ? (
-                <code className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs font-mono" {...props} />
+                <code className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-xs font-mono" {...props} />
               ) : (
-                <code className="block p-3 bg-gray-100 dark:bg-gray-800 rounded text-xs font-mono overflow-x-auto" {...props} />
+                <code className="block p-3 bg-slate-100 dark:bg-slate-800 rounded text-xs font-mono overflow-x-auto" {...props} />
               ),
           }}
         >
@@ -88,12 +88,12 @@ export const TrialEmbed: React.FC<TrialEmbedProps> = ({ trialSlug }) => {
       </div>
 
       {/* Footer CTA to Full Page */}
-      <div className="pt-4 border-t-2 border-gray-200 dark:border-gray-800">
+      <div className="pt-4 border-t-2 border-slate-200 dark:border-slate-800">
         <Link
           to={trialSlug}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border-2 border-gray-200 dark:border-gray-700 rounded-xl transition-all text-sm font-semibold text-gray-700 dark:text-gray-300"
+          className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border-2 border-slate-200 dark:border-slate-700 rounded-xl transition-all text-sm font-semibold text-slate-700 dark:text-slate-300"
         >
           <span>View Complete Trial Details</span>
           <ArrowUpRight className="w-4 h-4" />

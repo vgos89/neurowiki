@@ -10,12 +10,12 @@ interface MedicalTooltipProps {
 
 /**
  * MedicalTooltip Component
- * 
+ *
  * Displays an inline info icon with a tooltip containing medical term definitions.
- * 
+ *
  * Usage:
  * <MedicalTooltip term="p-Value" definition="Probability the result occurred by chance..." />
- * 
+ *
  * Features:
  * - Hover on desktop, tap on mobile
  * - Dark mode support
@@ -23,8 +23,8 @@ interface MedicalTooltipProps {
  * - Smart positioning (prevents off-screen overflow)
  * - Portal rendering (escapes overflow-hidden containers)
  */
-export const MedicalTooltip: React.FC<MedicalTooltipProps> = ({ 
-  term, 
+export const MedicalTooltip: React.FC<MedicalTooltipProps> = ({
+  term,
   definition,
   className = ''
 }) => {
@@ -172,7 +172,7 @@ export const MedicalTooltip: React.FC<MedicalTooltipProps> = ({
   const tooltipContent = isOpen ? (
     <div
       ref={tooltipRef}
-      className={`fixed z-[9999] px-3 py-2 max-w-[calc(100vw-32px)] sm:max-w-xs bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl text-sm ${
+      className={`fixed z-[9999] px-3 py-2 max-w-[calc(100vw-32px)] sm:max-w-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl text-sm ${
         isPositioned ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
       style={{
@@ -182,17 +182,17 @@ export const MedicalTooltip: React.FC<MedicalTooltipProps> = ({
       role="tooltip"
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="font-semibold text-gray-900 dark:text-white mb-1 break-words">
+      <div className="font-semibold text-slate-900 dark:text-white mb-1 break-words">
         {term}
       </div>
-      <div className="text-gray-700 dark:text-gray-300 leading-relaxed break-words">
+      <div className="text-slate-700 dark:text-slate-300 leading-relaxed break-words">
         {definition}
       </div>
       {/* Arrow - positioned based on placement */}
-      <div 
-        className={`absolute w-2 h-2 bg-white dark:bg-gray-800 border-l border-t border-gray-200 dark:border-gray-700 transform rotate-45 ${
-          position.placement === 'top' 
-            ? '-bottom-1 left-4' 
+      <div
+        className={`absolute w-2 h-2 bg-white dark:bg-slate-800 border-l border-t border-slate-200 dark:border-slate-700 transform rotate-45 ${
+          position.placement === 'top'
+            ? '-bottom-1 left-4'
             : '-top-1 left-4'
         }`}
       />

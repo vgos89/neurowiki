@@ -19,9 +19,9 @@ import {
   Loader2,
   AlertCircle,
   AlertTriangle,
-  User,
   GraduationCap,
-  Stethoscope,
+  Users,
+  UserCheck,
 } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
@@ -62,6 +62,15 @@ type VisitType =
   | 'critical_care';
 
 type BillingMode = 'mdm' | 'time';
+
+// Provider role — determines attestation text and auto-applied modifiers
+type ProviderRole =
+  | 'attending_solo'    // Standard solo visit — no attestation text needed
+  | 'teaching_resident' // Teaching physician + resident — -GC auto-applied
+  | 'shared_split'      // Attending + NP/PA — -FS modifier auto-applied
+  | 'incident_to';      // NP/PA billing under MD NPI — office only
+
+type SubstantivePortion = 'physician' | 'npppa';
 
 type ManagementRisk =
   | ''
@@ -119,10 +128,12 @@ interface EmBillingState {
   dateOfService: string;
   selectedModifiers: string[];
 
-  // Clinical narrative
-  chiefComplaint: string;
-  hpiNarrative: string;
-  examFindings: string;
+  // Provider role (replaces manual -GC selection for teaching)
+  providerRole: ProviderRole;
+  npPaName: string;                  // for shared_split and incident_to
+  substantivePortion: SubstantivePortion; // for shared_split: who did the substantive portion
+
+  // Clinical narrative (only rxDrugName kept — CC/HPI/Exam removed as redundant with EMR)
   rxDrugName: string;
   residentName: string;
   teachingPhysicianName: string;
@@ -212,31 +223,24 @@ const VISIT_TYPE_MODIFIERS: Record<VisitType, { code: string; label: string; pla
   ],
   initial_inpatient: [
     { code: '-AI', label: 'Principal physician of record (attending)', plain: "You are the admitting/attending physician responsible for this patient's overall hospital care" },
-    { code: '-GC', label: 'Service performed in part by resident under teaching physician supervision', plain: 'A resident was involved — you supervised and are attesting to the services per CMS teaching physician rules' },
   ],
   subsequent_inpatient: [
     { code: '-AI', label: 'Principal physician of record (attending)', plain: "You are the attending physician of record responsible for this patient's overall hospital care" },
-    { code: '-GC', label: 'Service performed in part by resident under teaching physician supervision', plain: 'A resident participated — you supervised and are attesting per CMS teaching physician rules' },
   ],
   observation: [
     { code: '-AI', label: 'Principal physician of record (attending)', plain: "You are the attending physician responsible for this observation patient's care" },
-    { code: '-GC', label: 'Resident involved — teaching physician supervision', plain: 'A resident was involved in this observation encounter under your supervision' },
   ],
   discharge_day: [
     { code: '-AI', label: 'Principal physician of record', plain: "You are the discharging attending physician of record" },
-    { code: '-GC', label: 'Resident involved — teaching physician supervision', plain: 'Resident assisted with discharge — you supervised per CMS rules' },
   ],
   consult_inpatient: [
     { code: '-AI', label: 'Principal physician of record', plain: 'You are taking over as the principal physician for this patient' },
     { code: '-32', label: 'Mandated consultation', plain: 'This inpatient consult was required by a third party or regulatory requirement' },
-    { code: '-GC', label: 'Resident involved — teaching physician supervision', plain: 'Resident participated in this consult under your teaching physician supervision' },
   ],
   emergency_dept: [
     { code: '-25', label: 'Significant, separately identifiable E&M same day as procedure', plain: 'You performed a procedure in the ED and this was a separate, complete emergency evaluation' },
-    { code: '-GC', label: 'Resident involved — teaching physician supervision', plain: 'Resident evaluated this patient — you supervised per CMS ED teaching rules' },
   ],
   critical_care: [
-    { code: '-GC', label: 'Resident involved — teaching physician supervision', plain: 'Resident was involved in critical care — you supervised and performed key portions per CMS rules' },
     { code: '-AI', label: 'Principal physician of record', plain: 'You are the primary attending responsible for this critically ill patient' },
   ],
 };
@@ -747,246 +751,119 @@ async function fetchIcd10Codes(query: string): Promise<Icd10Code[]> {
   return results;
 }
 
-// ─── Documentation Generator ──────────────────────────────────────────────────
+// ─── MDM Justification Helpers ────────────────────────────────────────────────
 
-function generateDocText(
+function getProblemSummary(diagnoses: Icd10Code[], override: MdmLevel | null): string {
+  if (override !== null) return `Overridden to ${MDM_LEVEL_FULL[override]}`;
+  const n = diagnoses.length;
+  if (n === 0) return 'No diagnoses entered';
+  if (n === 1) return `1 diagnosis — ${diagnoses[0].name}`;
+  return `${n} diagnoses entered`;
+}
+
+function getDataSummary(data: DataReviewed): string {
+  const items: string[] = [];
+  if (data.reviewedLabsImaging) items.push('labs/imaging');
+  if (data.independentInterpretation) items.push('independent review');
+  if (data.externalNotesReview) items.push('outside records');
+  if (data.discussedWithProvider) items.push('provider discussion');
+  if (items.length === 0) return 'No data review checked';
+  return items.join(', ');
+}
+
+function getRiskSummary(risk: ManagementRisk): string {
+  if (!risk) return 'No management risk selected';
+  const opt = MANAGEMENT_RISK_OPTIONS.find((o) => o.value === risk);
+  return opt ? opt.label : risk;
+}
+
+function getMdmNarrative(prob: MdmLevel, data: MdmLevel, risk: MdmLevel, overall: MdmLevel): string {
+  const cols = [
+    { name: 'Problems', level: prob },
+    { name: 'Data', level: data },
+    { name: 'Risk', level: risk },
+  ].filter((c) => levelToNum(c.level) >= levelToNum(overall)).map((c) => c.name);
+
+  if (cols.length >= 2) {
+    return `${cols.join(' + ')} qualify at ${MDM_LEVEL_FULL[overall].toUpperCase()} — 2-of-3 rule satisfied`;
+  }
+  return 'Need ≥2 columns at same level — review inputs above';
+}
+
+// ─── New Focused Generator Functions ─────────────────────────────────────────
+
+function generateBillingLine(
   state: EmBillingState,
-  problemLevel: MdmLevel,
-  dataLevel: MdmLevel,
-  riskLevel: MdmLevel,
-  overallMdm: MdmLevel,
-  cptEntry: CptEntry | null
+  cptEntry: CptEntry | null,
+  roleModifiers: string[],
+  timeMins: number
 ): string {
-  const {
-    selectedProvider, selectedDiagnoses, visitType, specialty,
-    billingMode, timeMinutes, dataReviewed, managementRisk,
-    dateOfService, selectedModifiers,
-    chiefComplaint, hpiNarrative, examFindings, rxDrugName,
-    residentName, teachingPhysicianName, timeActivities,
-  } = state;
+  const { selectedDiagnoses, dateOfService, visitType, selectedModifiers } = state;
 
-  const isTeaching = selectedModifiers.includes('-GC');
-  const isTimeBased = billingMode === 'time' || TIME_ONLY_TYPES.includes(visitType);
-  const sep1 = '═'.repeat(52);
-  const sep2 = '─'.repeat(52);
-  const lines: string[] = [];
+  const allMods = [...roleModifiers, ...selectedModifiers];
+  const modsStr = allMods.length > 0 ? ` ${allMods.join(' ')}` : '';
 
-  // ── Header ──
   const dosDisplay = dateOfService
     ? new Date(dateOfService + 'T12:00:00').toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
     : '[Date Not Entered]';
 
-  lines.push(sep1);
-  lines.push('  E/M BILLING ATTESTATION');
-  lines.push(`  Date of Service: ${dosDisplay}`);
-  lines.push('  NeuroWiki · 2021/2023 AMA E/M MDM Guidelines');
-  lines.push(sep1);
-  lines.push('');
+  const lines: string[] = [];
 
-  // ── Claim Details ──
-  lines.push('CLAIM DETAILS');
-  lines.push(`  Visit Type:        ${VISIT_TYPE_LABELS[visitType]}`);
-  lines.push(`  Place of Service:  ${VISIT_TYPE_POS[visitType]}`);
-  lines.push(`  Specialty:         ${specialty}`);
   if (cptEntry) {
-    const mods = selectedModifiers.length > 0 ? ` ${selectedModifiers.join(' ')}` : '';
-    lines.push(`  CPT Code:          ${cptEntry.code}${mods}`);
-    lines.push(`  Description:       ${cptEntry.description}`);
-    lines.push(`  Billing Basis:     ${isTimeBased ? 'Total Time on Date of Service' : 'Medical Decision Making (MDM)'}`);
+    lines.push(`CPT: ${cptEntry.code}${modsStr}`);
+    // Critical care add-on
+    if (visitType === 'critical_care' && !isNaN(timeMins) && timeMins >= 75) {
+      const addOnCount = Math.floor((timeMins - 74) / 30);
+      if (addOnCount > 0) lines.push(`Add-on: 99292 ×${addOnCount} (each add'l 30 min)`);
+    }
   } else {
-    lines.push(`  CPT Code:          [Not determined — complete inputs above]`);
+    lines.push(`CPT: [Complete inputs to determine code]`);
   }
-  if (selectedModifiers.length > 0) {
-    lines.push('  Modifier Detail:');
-    selectedModifiers.forEach((m) => {
-      const found = VISIT_TYPE_MODIFIERS[visitType]?.find((x) => x.code === m);
-      if (found) lines.push(`    ${m} — ${found.plain}`);
-    });
-  }
-  if (selectedProvider) {
-    const provName = `${selectedProvider.firstName} ${selectedProvider.lastName}${selectedProvider.credential ? ', ' + selectedProvider.credential : ''}`;
-    lines.push(`  Provider:          ${provName}`);
-    lines.push(`  NPI (Type 1):      ${selectedProvider.npi}`);
-    lines.push(`  Taxonomy:          ${selectedProvider.taxonomy}`);
-    if (selectedProvider.address) lines.push(`  Practice Location: ${selectedProvider.address}`);
-  } else {
-    lines.push(`  Provider:          [Search NPI above to populate]`);
-    lines.push(`  NPI (Type 1):      [Required for claim submission]`);
-  }
-  lines.push('');
 
-  // ── Diagnoses ──
-  lines.push('DIAGNOSIS CODES (ICD-10-CM)');
   if (selectedDiagnoses.length > 0) {
-    selectedDiagnoses.forEach((dx, i) => {
-      const label = i === 0 ? 'Principal:  ' : `Secondary ${i + 1}:`;
-      lines.push(`  ${label}  ${dx.code}  —  ${dx.name}`);
-    });
+    lines.push(`ICD-10: ${selectedDiagnoses.map((d) => d.code).join(', ')}`);
   } else {
-    lines.push('  [No diagnoses entered — search and add ICD-10 codes above]');
+    lines.push(`ICD-10: [No diagnoses entered]`);
   }
-  lines.push('');
 
-  // ── Chief Complaint ──
-  lines.push('CHIEF COMPLAINT');
-  lines.push(`  ${chiefComplaint || '[Not documented — required for audit. Enter above.]'}`);
-  lines.push('');
+  lines.push(`DOS: ${dosDisplay}`);
+  lines.push(`POS: ${VISIT_TYPE_POS[visitType]}`);
 
-  // ── HPI ──
-  lines.push('HISTORY OF PRESENT ILLNESS');
-  if (hpiNarrative) {
-    hpiNarrative.split('\n').forEach((l) => lines.push(`  ${l}`));
-  } else {
-    lines.push('  [Not documented — required for medical necessity. Enter a brief HPI above.]');
-  }
-  lines.push('');
+  return lines.join('\n');
+}
 
-  // ── Exam ──
-  lines.push('PHYSICAL EXAMINATION');
-  lines.push(`  ${examFindings || 'Medically appropriate examination performed. See EHR for full documented findings.'}`);
-  lines.push('');
+function generateAttestationText(
+  state: EmBillingState,
+  providerDisplayName: string | null
+): string | null {
+  const { providerRole, residentName, teachingPhysicianName, npPaName, substantivePortion } = state;
 
-  // ── MDM or Time ──
-  if (!isTimeBased) {
-    lines.push(`MEDICAL DECISION MAKING (2021/2023 AMA — 2 of 3 Elements Required)`);
-    lines.push(`  Overall MDM Level:  ${MDM_LEVEL_FULL[overallMdm].toUpperCase()} COMPLEXITY`);
-    if (cptEntry) lines.push(`  Supported CPT:     ${cptEntry.code}`);
-    lines.push('');
+  const teachingName = teachingPhysicianName || providerDisplayName || '______________________________';
 
-    // Column 1 — Problems
-    const probMet = levelToNum(problemLevel) >= levelToNum(overallMdm);
-    lines.push(`  [${probMet ? '✓' : ' '}] 1. PROBLEMS ADDRESSED — ${MDM_LEVEL_FULL[problemLevel].toUpperCase()}`);
-    lines.push(`      ${PROBLEM_JUSTIFICATION[problemLevel]}`);
-    if (selectedDiagnoses.length > 0) {
-      selectedDiagnoses.forEach((dx) => lines.push(`      • ${dx.name} (${dx.code})`));
-    } else {
-      lines.push('      • [No diagnoses documented]');
-    }
-    lines.push('');
+  switch (providerRole) {
+    case 'attending_solo':
+    case 'incident_to':
+      return null;
 
-    // Column 2 — Data
-    const dataMet = levelToNum(dataLevel) >= levelToNum(overallMdm);
-    lines.push(`  [${dataMet ? '✓' : ' '}] 2. DATA REVIEWED & ANALYZED — ${MDM_LEVEL_FULL[dataLevel].toUpperCase()}`);
-    lines.push(`      ${DATA_JUSTIFICATION[dataLevel]}`);
-    if (dataReviewed.reviewedLabsImaging)
-      lines.push('      • Reviewed laboratory results and/or imaging studies');
-    if (dataReviewed.independentInterpretation)
-      lines.push('      • Independently reviewed actual images/tracings/waveforms (not relying solely on formal report)');
-    if (dataReviewed.externalNotesReview)
-      lines.push('      • Reviewed outside/external records, notes, or documents from another facility or provider');
-    if (dataReviewed.discussedWithProvider)
-      lines.push('      • Directly discussed management or test interpretation with an external physician/provider (not via intermediary)');
-    if (!Object.values(dataReviewed).some(Boolean))
-      lines.push('      • No data review documented for this encounter');
-    lines.push('');
-
-    // Column 3 — Risk
-    const riskMet = levelToNum(riskLevel) >= levelToNum(overallMdm);
-    lines.push(`  [${riskMet ? '✓' : ' '}] 3. RISK OF PATIENT MANAGEMENT — ${MDM_LEVEL_FULL[riskLevel].toUpperCase()}`);
-    lines.push(`      ${RISK_JUSTIFICATION[riskLevel]}`);
-    if (managementRisk) {
-      const option = MANAGEMENT_RISK_OPTIONS.find((o) => o.value === managementRisk);
-      if (option) {
-        lines.push(`      • ${option.label}`);
-        if (managementRisk === 'rx_medication' && rxDrugName) {
-          lines.push(`        Drug/Medication: ${rxDrugName}`);
-          lines.push('        Indication, dose, risks, and patient-specific benefit-risk assessment documented in EHR.');
-        }
-      }
-    }
-    lines.push('');
-
-    const qualifyingCols = [
-      { name: 'Problems', level: problemLevel },
-      { name: 'Data', level: dataLevel },
-      { name: 'Risk', level: riskLevel },
-    ].filter((c) => levelToNum(c.level) >= levelToNum(overallMdm)).map((c) => c.name);
-    lines.push(`  Qualifying elements (≥2 required): ${qualifyingCols.length >= 2 ? qualifyingCols.join(' + ') : '[Insufficient — review inputs]'}`);
-    lines.push(`  Overall MDM: ${MDM_LEVEL_FULL[overallMdm].toUpperCase()} COMPLEXITY${cptEntry ? ` → CPT ${cptEntry.code}` : ''}`);
-
-  } else {
-    // Time-based documentation
-    const mins = parseInt(timeMinutes, 10);
-    lines.push('TIME-BASED BILLING DOCUMENTATION');
-    if (visitType === 'critical_care') {
-      lines.push(`  Critical Care Services: 99291 (first 30–74 minutes)`);
-      if (!isNaN(mins) && mins >= 75) {
-        const addOns = getCriticalCareAddOns(mins);
-        if (addOns) lines.push(`  Add-on code(s): ${addOns}`);
-      }
-      lines.push(`  Total time personally spent on date of service: ${isNaN(mins) ? '[Enter minutes above]' : `${mins} minutes`}`);
-    } else if (visitType === 'discharge_day') {
-      lines.push(`  Discharge Day Management: ${!isNaN(mins) ? (mins <= 30 ? '99238 (≤30 min)' : '99239 (>30 min)') : '[Enter minutes]'}`);
-      lines.push(`  Total time on date of discharge: ${isNaN(mins) ? '[Enter minutes above]' : `${mins} minutes`}`);
-    } else {
-      lines.push(`  Total time personally spent by provider on date of service: ${isNaN(mins) ? '[Enter minutes above]' : `${mins} minutes`}`);
-      lines.push('  (Per CMS: includes face-to-face + non-face-to-face time on the same calendar date — not clinical staff time)');
-    }
-
-    if (timeActivities.length > 0) {
-      lines.push('');
-      lines.push('  Activities performed on date of service:');
-      TIME_ACTIVITIES.filter((a) => timeActivities.includes(a.key)).forEach((a) =>
-        lines.push(`    [✓] ${a.label} ${a.plain}`)
+    case 'teaching_resident': {
+      const residentPart = residentName ? `, ${residentName},` : '';
+      return (
+        `[Teaching Physician]: I was present with the resident${residentPart} during the history, physical examination, and medical decision making. I agree with the findings and plan as documented.\n\n` +
+        `[${residentName || 'Resident'}]: The teaching physician was present and participated in this encounter.`
       );
     }
 
-    if (selectedDiagnoses.length > 0) {
-      lines.push('');
-      lines.push('  Conditions managed during this encounter:');
-      selectedDiagnoses.forEach((dx) => lines.push(`    • ${dx.name} (${dx.code})`));
+    case 'shared_split': {
+      const whoLabel = substantivePortion === 'physician' ? 'the physician (MD/DO)' : `the NP/PA${npPaName ? ` (${npPaName})` : ''}`;
+      const providerRef = substantivePortion === 'physician'
+        ? (providerDisplayName || teachingName)
+        : (npPaName || 'NP/PA');
+      return `[Shared/Split Visit -FS]: The substantive portion of this encounter was performed by ${whoLabel}${substantivePortion === 'physician' ? ` (${providerRef})` : ''}. Both providers participated in the care of this patient on the date of service.`;
     }
+
+    default:
+      return null;
   }
-
-  lines.push('');
-  lines.push(sep2);
-
-  // ── Attestation ──
-  lines.push('ATTESTATION');
-  lines.push('');
-  if (isTeaching) {
-    // Teaching physician attestation (CMS-compliant language)
-    lines.push('  TEACHING PHYSICIAN ATTESTATION (Modifier -GC)');
-    lines.push('');
-    lines.push(`  I was present with the resident${residentName ? `, ${residentName},` : ''} during the key portions of`);
-    lines.push('  this encounter, including the history, examination, and medical decision making.');
-    lines.push('  I have reviewed the documentation, agree with the assessment and plan, and');
-    lines.push('  personally performed/verified the services documented herein.');
-    lines.push('');
-    lines.push(`  Teaching Physician: ${teachingPhysicianName || (selectedProvider ? `${selectedProvider.firstName} ${selectedProvider.lastName}${selectedProvider.credential ? ', ' + selectedProvider.credential : ''}` : '______________________________')}`);
-    if (selectedProvider) lines.push(`  NPI: ${selectedProvider.npi}`);
-    lines.push(`  Resident: ${residentName || '______________________________'}`);
-    lines.push('');
-    lines.push('  Signature: _______________________________   Date: _______________');
-    lines.push('');
-    lines.push('  RESIDENT DOCUMENTATION ATTESTATION');
-    lines.push('  The teaching physician was present during the key portions of this encounter.');
-    lines.push('  I discussed the assessment and plan with the attending as documented above.');
-    lines.push('');
-    lines.push(`  Resident Signature: _______________________   Date: _______________`);
-  } else {
-    lines.push('  I personally evaluated this patient and performed the services documented herein.');
-    lines.push('  The level of service billed is supported by my medical decision making (or total time)');
-    lines.push('  as documented above, in accordance with 2021/2023 AMA E/M guidelines.');
-    lines.push('');
-    if (selectedProvider) {
-      const provName = `${selectedProvider.firstName} ${selectedProvider.lastName}${selectedProvider.credential ? ', ' + selectedProvider.credential : ''}`;
-      lines.push(`  Provider:    ${provName}`);
-      lines.push(`  NPI:         ${selectedProvider.npi}`);
-    } else {
-      lines.push('  Provider:    ______________________________');
-      lines.push('  NPI:         ______________________________');
-    }
-    lines.push('');
-    lines.push('  Signature: _______________________________   Date: _______________');
-  }
-
-  lines.push('');
-  lines.push(sep2);
-  lines.push('  This tool assists with billing documentation. Verify all CPT codes, modifiers,');
-  lines.push('  and diagnoses with your institutional billing compliance team before submission.');
-
-  return lines.join('\n');
 }
 
 // ─── Initial State ────────────────────────────────────────────────────────────
@@ -1007,9 +884,9 @@ const INITIAL_STATE: EmBillingState = {
   timeActivities: [],
   dateOfService: new Date().toISOString().split('T')[0],
   selectedModifiers: [],
-  chiefComplaint: '',
-  hpiNarrative: '',
-  examFindings: '',
+  providerRole: 'attending_solo',
+  npPaName: '',
+  substantivePortion: 'physician',
   rxDrugName: '',
   residentName: '',
   teachingPhysicianName: '',
@@ -1052,9 +929,16 @@ const EmBillingCalculator: React.FC = () => {
   const isTimeOnly = TIME_ONLY_TYPES.includes(state.visitType);
   const isNoTime = NO_TIME_TYPES.includes(state.visitType);
   const isConsult = CONSULT_TYPES.includes(state.visitType);
-  const isTeaching = state.selectedModifiers.includes('-GC');
 
-  // Effective billing mode (time-only types override)
+  // Provider role derived flags
+  const isTeachingRole = state.providerRole === 'teaching_resident';
+  const isSharedSplit = state.providerRole === 'shared_split';
+  const isIncidentTo = state.providerRole === 'incident_to';
+
+  // Auto-applied role modifiers (no longer manually toggled)
+  const roleModifiers: string[] = isTeachingRole ? ['-GC'] : isSharedSplit ? ['-FS'] : [];
+
+  // Effective billing mode (time-only types override; incident-to hides MDM)
   const effectiveBillingMode: BillingMode = isTimeOnly ? 'time' : state.billingMode;
 
   const mdmCpt = getMdmCpt(state.visitType, overallMdm);
@@ -1154,12 +1038,30 @@ const EmBillingCalculator: React.FC = () => {
     set({ visitType: vt, billingMode: newBillingMode, selectedModifiers: [], problemLevelOverride: null });
   };
 
-  // ── Copy / Reset ──
-  const docText = generateDocText(state, problemLevel, dataLevel, riskLevel, overallMdm, activeCpt);
+  // ── Provider role change handler ──
+  const handleProviderRoleChange = (role: ProviderRole) => {
+    const patch: Partial<EmBillingState> = { providerRole: role };
+    if (role === 'incident_to') {
+      patch.visitSetting = 'office';
+      patch.visitType = 'established_patient_office';
+    }
+    set(patch);
+  };
 
-  const copyNote = () => {
-    navigator.clipboard.writeText(docText);
-    set({ toast: 'Copied to clipboard' });
+  // ── Copy helpers ──
+  const billingLine = generateBillingLine(state, activeCpt, roleModifiers, timeMins);
+  const attestationText = generateAttestationText(state, providerDisplayName);
+
+  const copyBillingLine = () => {
+    navigator.clipboard.writeText(billingLine);
+    set({ toast: 'CPT codes copied' });
+    setTimeout(() => set({ toast: null }), 2000);
+  };
+
+  const copyAttestation = () => {
+    if (!attestationText) return;
+    navigator.clipboard.writeText(attestationText);
+    set({ toast: 'Attestation copied' });
     setTimeout(() => set({ toast: null }), 2000);
   };
 
@@ -1326,6 +1228,112 @@ const EmBillingCalculator: React.FC = () => {
               </p>
             )}
 
+            {/* ── Provider Role ── */}
+            <div className="mb-5">
+              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Provider Role</label>
+              <div className="grid grid-cols-2 gap-2">
+                {([
+                  { role: 'attending_solo' as ProviderRole, label: 'Attending Only', icon: <UserCheck size={14} />, desc: 'Solo visit — no attestation' },
+                  { role: 'teaching_resident' as ProviderRole, label: 'Teaching + Resident', icon: <GraduationCap size={14} />, desc: '-GC auto-applied' },
+                  { role: 'shared_split' as ProviderRole, label: 'Shared / Split', icon: <Users size={14} />, desc: '-FS auto-applied' },
+                  { role: 'incident_to' as ProviderRole, label: 'Incident-To (NP/PA)', icon: <AlertTriangle size={14} />, desc: 'Office only · 100% fee' },
+                ] as { role: ProviderRole; label: string; icon: React.ReactNode; desc: string }[]).map(({ role, label, icon, desc }) => (
+                  <button
+                    key={role}
+                    onClick={() => handleProviderRoleChange(role)}
+                    className={`flex items-start gap-2 p-3 rounded-xl border text-left transition-all ${
+                      state.providerRole === role
+                        ? 'bg-neuro-50 border-neuro-400 text-neuro-700'
+                        : 'bg-white border-slate-200 text-slate-600 hover:border-neuro-300'
+                    }`}
+                  >
+                    <span className={`flex-shrink-0 mt-0.5 ${state.providerRole === role ? 'text-neuro-600' : 'text-slate-400'}`}>{icon}</span>
+                    <div>
+                      <div className="text-xs font-bold leading-tight">{label}</div>
+                      <div className="text-[10px] text-slate-400 mt-0.5 leading-tight">{desc}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {/* Role sub-panels */}
+              {isTeachingRole && (
+                <div className="mt-3 bg-blue-50 border border-blue-200 rounded-xl p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <GraduationCap size={15} className="text-blue-600" />
+                    <span className="text-xs font-bold text-blue-800">Teaching Physician Details (-GC auto-applied)</span>
+                  </div>
+                  <p className="text-xs text-blue-700 mb-3">Per CMS: document presence during history, exam, and MDM. -GC is automatically applied to the billing code.</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-600 mb-1">Resident Name <span className="font-normal">(optional)</span></label>
+                      <input type="text" value={state.residentName} onChange={(e) => set({ residentName: e.target.value })}
+                        placeholder="e.g., Dr. Jane Resident"
+                        className="w-full px-3 py-2 text-sm bg-white border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-600 mb-1">Teaching Physician Name</label>
+                      <input type="text" value={state.teachingPhysicianName} onChange={(e) => set({ teachingPhysicianName: e.target.value })}
+                        placeholder={providerDisplayName || 'e.g., Dr. Jane Attending, MD'}
+                        className="w-full px-3 py-2 text-sm bg-white border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {isSharedSplit && (
+                <div className="mt-3 bg-slate-50 border border-slate-300 rounded-xl p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Users size={15} className="text-slate-600" />
+                    <span className="text-xs font-bold text-slate-700">Shared / Split Visit (-FS auto-applied)</span>
+                  </div>
+                  <p className="text-xs text-slate-600 mb-3">Who performed the <strong>substantive portion</strong> of this encounter?</p>
+                  <div className="flex gap-2 mb-3">
+                    {(['physician', 'npppa'] as SubstantivePortion[]).map((sp) => (
+                      <button key={sp} onClick={() => set({ substantivePortion: sp })}
+                        className={`flex-1 py-2 text-xs font-semibold rounded-lg border transition-all ${
+                          state.substantivePortion === sp ? 'bg-slate-700 text-white border-slate-700' : 'bg-white text-slate-600 border-slate-300 hover:border-slate-500'
+                        }`}>
+                        {sp === 'physician' ? '■ Physician (MD/DO)' : '□ NP/PA'}
+                      </button>
+                    ))}
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">NP/PA Name <span className="font-normal">(optional)</span></label>
+                    <input type="text" value={state.npPaName} onChange={(e) => set({ npPaName: e.target.value })}
+                      placeholder="e.g., Jane Smith, NP"
+                      className="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neuro-500" />
+                  </div>
+                </div>
+              )}
+
+              {isIncidentTo && (
+                <div className="mt-3 bg-amber-50 border border-amber-300 rounded-xl p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <AlertTriangle size={15} className="text-amber-600" />
+                    <span className="text-xs font-bold text-amber-800">Incident-To Requirements</span>
+                  </div>
+                  <div className="space-y-1.5 text-xs text-amber-800 mb-3">
+                    {['Office visit only (not hospital/facility)', 'Established patient with existing treatment plan', 'MD/DO must be physically present in the suite', 'No new problems — continuation of established plan only', 'NP/PA cannot independently initiate new treatment'].map((item) => (
+                      <div key={item} className="flex items-start gap-2">
+                        <CheckCircle2 size={12} className="text-amber-600 flex-shrink-0 mt-0.5" />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="bg-amber-100 border border-amber-200 rounded-lg px-3 py-2 text-xs text-amber-900 font-semibold mb-3">
+                    REIMBURSEMENT: 100% of fee schedule (vs 85% under NP/PA's own NPI)
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">NP/PA Name <span className="font-normal">(for reference)</span></label>
+                    <input type="text" value={state.npPaName} onChange={(e) => set({ npPaName: e.target.value })}
+                      placeholder="e.g., Jane Smith, NP"
+                      className="w-full px-3 py-2 text-sm bg-white border border-amber-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400" />
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* ── Step 1: Setting Pills ── */}
             <div className="mb-3">
               <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Setting</label>
@@ -1424,94 +1432,20 @@ const EmBillingCalculator: React.FC = () => {
               </div>
             </div>
 
-            {/* ── Teaching Physician Panel (when -GC selected) ── */}
-            {isTeaching && (
-              <div className="mb-4 bg-blue-50 border border-blue-200 rounded-xl p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <GraduationCap size={16} className="text-blue-600" />
-                  <h3 className="text-sm font-bold text-blue-800">Teaching Physician Details (Modifier -GC)</h3>
-                </div>
-                <p className="text-xs text-blue-700 mb-3">
-                  Per CMS rules: You must document that you were present during key portions of the encounter (history, exam, MDM) and agree with the plan.
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Resident Name <span className="font-normal">(optional)</span></label>
-                    <input
-                      type="text"
-                      value={state.residentName}
-                      onChange={(e) => set({ residentName: e.target.value })}
-                      placeholder="e.g., Dr. Jane Resident"
-                      className="w-full px-3 py-2 text-sm bg-white border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Teaching Physician Name</label>
-                    <input
-                      type="text"
-                      value={state.teachingPhysicianName}
-                      onChange={(e) => set({ teachingPhysicianName: e.target.value })}
-                      placeholder={providerDisplayName || 'e.g., Dr. Jane Attending, MD'}
-                      className="w-full px-3 py-2 text-sm bg-white border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    />
-                  </div>
-                </div>
+            {/* ── Rx Drug Name (only when rx_medication risk selected) ── */}
+            {state.managementRisk === 'rx_medication' && (
+              <div className="mb-4">
+                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Drug / Medication Name & Dose</label>
+                <input
+                  type="text"
+                  value={state.rxDrugName}
+                  onChange={(e) => set({ rxDrugName: e.target.value })}
+                  placeholder="e.g., Levetiracetam 500mg BID, Eliquis 5mg BID, Metformin 1000mg daily"
+                  className="w-full px-3 py-2 text-sm bg-white border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <p className="text-xs text-slate-400 mt-1">Included in billing output — auditors require the specific drug name for Moderate risk</p>
               </div>
             )}
-
-            {/* ── Clinical Narrative ── */}
-            <div className="mb-5 bg-slate-50 rounded-xl border border-slate-200 p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <Stethoscope size={15} className="text-slate-500" />
-                <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wide">Clinical Documentation</h3>
-                <span className="text-xs text-slate-400 font-normal normal-case ml-1">— included in attestation copy</span>
-              </div>
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-500 mb-1">Chief Complaint</label>
-                  <input
-                    type="text"
-                    value={state.chiefComplaint}
-                    onChange={(e) => set({ chiefComplaint: e.target.value })}
-                    placeholder="e.g., Right arm weakness for 2 hours, acute onset"
-                    className="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neuro-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-500 mb-1">Brief HPI / Reason for Visit</label>
-                  <textarea
-                    value={state.hpiNarrative}
-                    onChange={(e) => set({ hpiNarrative: e.target.value })}
-                    rows={3}
-                    placeholder="e.g., 67-year-old male with history of hypertension and atrial fibrillation who presents with sudden onset right hemiplegia and aphasia beginning at 09:15. Last known well 09:00. No prior neurological deficits. Currently on apixaban but ran out 3 days ago."
-                    className="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neuro-500 resize-y"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-500 mb-1">Examination Performed</label>
-                  <input
-                    type="text"
-                    value={state.examFindings}
-                    onChange={(e) => set({ examFindings: e.target.value })}
-                    placeholder="Medically appropriate examination performed. See EHR for full findings."
-                    className="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-neuro-500"
-                  />
-                </div>
-                {state.managementRisk === 'rx_medication' && (
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-500 mb-1">Drug / Medication Name & Dose</label>
-                    <input
-                      type="text"
-                      value={state.rxDrugName}
-                      onChange={(e) => set({ rxDrugName: e.target.value })}
-                      placeholder="e.g., Levetiracetam 500mg BID, Eliquis 5mg BID, Metformin 1000mg daily"
-                      className="w-full px-3 py-2 text-sm bg-white border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    />
-                    <p className="text-xs text-slate-400 mt-1">Required by auditors when billing prescription drug management (Moderate risk)</p>
-                  </div>
-                )}
-              </div>
-            </div>
 
             {/* ── ICD-10 Diagnoses ── */}
             <div className="mb-5">

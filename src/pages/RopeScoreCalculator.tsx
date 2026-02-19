@@ -4,6 +4,7 @@ import { ArrowLeft, RefreshCw, Copy, Star } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
+import { copyToClipboard } from '../utils/clipboard';
 import {
   ROPE_CITATION,
   ROPE_AGE_OPTIONS,
@@ -30,7 +31,7 @@ export default function RopeScoreCalculator() {
 
   const result = calculateROPEScore(inputs);
 
-  const copyToClipboard = () => {
+  const handleCopy = () => {
     const lines = [
       `RoPE Score: ${result.score}/10`,
       `PFO-attributable fraction: ${result.pfoAttributablePercent}%`,
@@ -41,10 +42,11 @@ export default function RopeScoreCalculator() {
       `Nonsmoker: ${inputs.nonsmoker ? 'Yes' : 'No'}`,
       `Cortical infarct on imaging: ${inputs.corticalInfarct ? 'Yes' : 'No'}`,
     ];
-    navigator.clipboard.writeText(lines.join('\n'));
-    setToast('Copied to clipboard');
-    setTimeout(() => setToast(null), 2000);
     trackResult(result.score);
+    copyToClipboard(lines.join('\n'), () => {
+      setToast('Copied to clipboard');
+      setTimeout(() => setToast(null), 2000);
+    });
   };
 
   const handleReset = () => {
@@ -96,7 +98,7 @@ export default function RopeScoreCalculator() {
               <button onClick={handleReset} className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label="Reset calculator">
                 <RefreshCw size={18} className="text-slate-500 dark:text-slate-400" aria-hidden="true" />
               </button>
-              <button onClick={copyToClipboard} className="bg-slate-900 dark:bg-slate-700 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors">
+              <button onClick={handleCopy} className="bg-slate-900 dark:bg-slate-700 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors">
                 <span className="hidden sm:inline">Copy</span>
                 <Copy size={18} className="sm:hidden inline" aria-hidden="true" />
               </button>

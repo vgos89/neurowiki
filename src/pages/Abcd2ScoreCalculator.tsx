@@ -4,6 +4,7 @@ import { ArrowLeft, RefreshCw, Copy, Star } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
+import { copyToClipboard } from '../utils/clipboard';
 import {
   ABCD2_CITATION,
   ABCD2_AGE_OPTIONS,
@@ -47,7 +48,8 @@ export default function Abcd2ScoreCalculator() {
   const result = complete ? calculateABCD2Score(inputs) : null;
   const riskColor = result ? riskColors[result.risk] : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300 border-slate-300';
 
-  const copyToClipboard = () => {
+  const handleCopy = () => {
+    let text: string;
     if (complete && result) {
       const lines = [
         `ABCD² Score: ${result.score}/7`,
@@ -59,13 +61,15 @@ export default function Abcd2ScoreCalculator() {
         `Duration: ${inputs.duration === '60plus' ? '≥60 min' : inputs.duration === '10to59' ? '10-59 min' : '<10 min'}`,
         `Diabetes: ${inputs.diabetes ? 'Yes' : 'No'}`,
       ];
-      navigator.clipboard.writeText(lines.join('\n'));
+      text = lines.join('\n');
       trackResult(result.score);
     } else {
-      navigator.clipboard.writeText('ABCD² Score: Incomplete — select all fields.');
+      text = 'ABCD² Score: Incomplete — select all fields.';
     }
-    setToast('Copied to clipboard');
-    setTimeout(() => setToast(null), 2000);
+    copyToClipboard(text, () => {
+      setToast('Copied to clipboard');
+      setTimeout(() => setToast(null), 2000);
+    });
   };
 
   const handleReset = () => {
@@ -120,7 +124,7 @@ export default function Abcd2ScoreCalculator() {
               <button onClick={handleReset} className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label="Reset calculator">
                 <RefreshCw size={18} className="text-slate-500 dark:text-slate-400" aria-hidden="true" />
               </button>
-              <button onClick={copyToClipboard} className="bg-slate-900 dark:bg-slate-700 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors">
+              <button onClick={handleCopy} className="bg-slate-900 dark:bg-slate-700 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors">
                 <span className="hidden sm:inline">Copy</span>
                 <Copy size={18} className="sm:hidden inline" aria-hidden="true" />
               </button>

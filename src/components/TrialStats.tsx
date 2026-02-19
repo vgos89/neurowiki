@@ -19,9 +19,9 @@ interface TrialStatsProps {
 
 /**
  * TrialStats Component
- * 
+ *
  * Displays trial statistics cards with built-in tooltips for medical terms.
- * 
+ *
  * Usage:
  * <TrialStats
  *   sampleSize="503"
@@ -52,7 +52,7 @@ export const TrialStats: React.FC<TrialStatsProps> = ({
   const getPValueTooltip = () => {
     // Use trial-specific info if available
     if (pValueInfo) return pValueInfo;
-    
+
     if (pValueLabel?.toLowerCase().includes('estimation')) {
       return 'Estimation trial design establishes a safe range for clinical practice rather than testing for superiority. No p-value is calculated because the goal is to estimate the range of plausible effects, not to prove one treatment is better.';
     }
@@ -62,7 +62,7 @@ export const TrialStats: React.FC<TrialStatsProps> = ({
   const getEffectSizeTooltip = () => {
     // Use trial-specific info if available
     if (effectSizeInfo) return effectSizeInfo;
-    
+
     if (effectSizeLabel?.toLowerCase().includes('risk difference')) {
       return 'Risk Difference: The absolute difference in event rates between treatment and control groups. Negative values favor treatment. The confidence interval shows the range of plausible values. For estimation trials, this establishes the safe range for practice.';
     }
@@ -72,72 +72,65 @@ export const TrialStats: React.FC<TrialStatsProps> = ({
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       {/* Sample Size */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 overflow-hidden max-w-full">
-        <div className="text-xs text-gray-500 dark:text-gray-400 mb-1 flex items-start gap-1 min-h-[2.5rem]">
-          <span className="flex-1 break-words break-all leading-tight" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{sampleSizeLabel}</span>
+      <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 overflow-hidden max-w-full">
+        <div className="text-xs text-slate-500 dark:text-slate-400 mb-1 flex items-start gap-1 min-h-[2.5rem]">
+          <span className="flex-1 break-words break-all leading-tight">{sampleSizeLabel}</span>
           <MedicalTooltip
             term="Sample Size"
             definition={sampleSizeInfo || MEDICAL_GLOSSARY['sample-size'] || 'Total number of patients enrolled and randomized in the study.'}
           />
         </div>
-        <div className="text-2xl font-bold text-gray-900 dark:text-white break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{sampleSize}</div>
+        <div className="text-2xl font-bold text-slate-900 dark:text-white break-words">{sampleSize}</div>
       </div>
 
       {/* Primary Endpoint */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 overflow-hidden max-w-full">
-        <div className="text-xs text-gray-500 dark:text-gray-400 mb-1 flex items-start gap-1 min-h-[2.5rem]">
-          <span className="flex-1 break-words break-all leading-tight" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{primaryEndpointLabel}</span>
+      <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 overflow-hidden max-w-full">
+        <div className="text-xs text-slate-500 dark:text-slate-400 mb-1 flex items-start gap-1 min-h-[2.5rem]">
+          <span className="flex-1 break-words break-all leading-tight">{primaryEndpointLabel}</span>
           <MedicalTooltip
             term="Primary Endpoint"
             definition={primaryEndpointInfo || MEDICAL_GLOSSARY['primary-endpoint'] || 'The main outcome measure used to determine if the treatment works.'}
           />
         </div>
-        <div className="text-base sm:text-lg font-bold text-gray-900 dark:text-white break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{primaryEndpoint}</div>
+        <div className="text-base sm:text-lg font-bold text-slate-900 dark:text-white break-words">{primaryEndpoint}</div>
       </div>
 
       {/* P-Value */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 overflow-hidden max-w-full">
-        <div className="text-xs text-gray-500 dark:text-gray-400 mb-1 flex items-start gap-1 min-h-[2.5rem]">
-          <span className="flex-1 break-words break-all leading-tight" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{pValueLabel}</span>
+      <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 overflow-hidden max-w-full">
+        <div className="text-xs text-slate-500 dark:text-slate-400 mb-1 flex items-start gap-1 min-h-[2.5rem]">
+          <span className="flex-1 break-words break-all leading-tight">{pValueLabel}</span>
           <MedicalTooltip
             term={pValueLabel?.toLowerCase().includes('estimation') ? 'Estimation Design' : 'p-Value'}
             definition={getPValueTooltip()}
           />
         </div>
-        <div className={`text-xl sm:text-2xl font-bold break-words`} style={{ wordBreak: 'break-word', overflowWrap: 'break-word', 
-          color: pValueLabel?.toLowerCase().includes('not significant') || 
-          (pValue !== 'N/A' && !isNaN(parseFloat(pValue)) && parseFloat(pValue) >= 0.05)
-            ? undefined 
-            : pValue === 'N/A'
-            ? undefined
-            : undefined
-        }}>
+        <div className={`text-xl sm:text-2xl font-bold break-words`}>
           <span className={
-            pValueLabel?.toLowerCase().includes('not significant') || 
+            pValueLabel?.toLowerCase().includes('not significant') ||
             (pValue !== 'N/A' && !isNaN(parseFloat(pValue)) && parseFloat(pValue) >= 0.05)
-              ? 'text-red-600 dark:text-red-400' 
+              ? 'text-red-600 dark:text-red-400'
               : pValue === 'N/A'
-              ? 'text-gray-600 dark:text-gray-400'
+              ? 'text-slate-600 dark:text-slate-400'
               : 'text-green-600 dark:text-green-400'
           }>{pValue}</span>
         </div>
       </div>
 
       {/* Effect Size */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 overflow-hidden max-w-full">
-        <div className="text-xs text-gray-500 dark:text-gray-400 mb-1 flex items-start gap-1 min-h-[2.5rem]">
-          <span className="flex-1 break-words break-all leading-tight" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{effectSizeLabel}</span>
+      <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 overflow-hidden max-w-full">
+        <div className="text-xs text-slate-500 dark:text-slate-400 mb-1 flex items-start gap-1 min-h-[2.5rem]">
+          <span className="flex-1 break-words break-all leading-tight">{effectSizeLabel}</span>
           <MedicalTooltip
             term={effectSizeLabel?.toLowerCase().includes('risk difference') ? 'Risk Difference' : 'Effect Size'}
             definition={getEffectSizeTooltip()}
           />
         </div>
-        <div className={`text-xl sm:text-2xl font-bold break-words`} style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+        <div className={`text-xl sm:text-2xl font-bold break-words`}>
           <span className={
-            effectSize.toLowerCase().includes('no benefit') || 
+            effectSize.toLowerCase().includes('no benefit') ||
             effectSize.toLowerCase().includes('harm') ||
             effectSize.toLowerCase().includes('possible harm')
-              ? 'text-red-600 dark:text-red-400' 
+              ? 'text-red-600 dark:text-red-400'
               : 'text-blue-600 dark:text-blue-400'
           }>{effectSize}</span>
         </div>

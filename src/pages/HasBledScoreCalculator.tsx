@@ -4,6 +4,7 @@ import { ArrowLeft, RefreshCw, Copy, Star } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
+import { copyToClipboard } from '../utils/clipboard';
 import {
   HASBLED_CITATION,
   HASBLED_RISK_LABELS,
@@ -54,7 +55,7 @@ export default function HasBledScoreCalculator() {
   const result = calculateHASBLEDScore(inputs);
   const riskColor = riskColors[result.risk];
 
-  const copyToClipboard = () => {
+  const handleCopy = () => {
     const lines = [
       `HAS-BLED Score: ${result.score}/9`,
       `Risk: ${HASBLED_RISK_LABELS[result.risk]}`,
@@ -69,10 +70,11 @@ export default function HasBledScoreCalculator() {
       `Drugs (antiplatelet/NSAIDs): ${inputs.drugs ? 'Yes' : 'No'}`,
       `Alcohol ≥8/wk: ${inputs.alcohol ? 'Yes' : 'No'}`,
     ];
-    navigator.clipboard.writeText(lines.join('\n'));
-    setToast('Copied to clipboard');
-    setTimeout(() => setToast(null), 2000);
     trackResult(result.score);
+    copyToClipboard(lines.join('\n'), () => {
+      setToast('Copied to clipboard');
+      setTimeout(() => setToast(null), 2000);
+    });
   };
 
   const handleReset = () => {
@@ -121,7 +123,7 @@ export default function HasBledScoreCalculator() {
               <button onClick={handleReset} className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label="Reset calculator">
                 <RefreshCw size={18} className="text-slate-500 dark:text-slate-400" aria-hidden="true" />
               </button>
-              <button onClick={copyToClipboard} className="bg-slate-900 dark:bg-slate-700 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors">
+              <button onClick={handleCopy} className="bg-slate-900 dark:bg-slate-700 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors">
                 <span className="hidden sm:inline">Copy</span>
                 <Copy size={18} className="sm:hidden inline" aria-hidden="true" />
               </button>

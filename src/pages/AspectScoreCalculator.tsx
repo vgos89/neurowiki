@@ -4,6 +4,7 @@ import { ArrowLeft, RefreshCw, Copy, Star, ChevronRight } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
+import { copyToClipboard } from '../utils/clipboard';
 
 // ── Region definitions ──────────────────────────────────────────────────────
 
@@ -106,7 +107,7 @@ const AspectScoreCalculator: React.FC = () => {
     });
   }, []);
 
-  const copyToClipboard = () => {
+  const handleCopy = () => {
     const involvedList = [...involved].join(', ') || 'None';
     const text = [
       `ASPECTS Score: ${score}/10`,
@@ -114,10 +115,11 @@ const AspectScoreCalculator: React.FC = () => {
       `Involved regions (${involved.size}): ${involvedList}`,
       `EVT implication: ${scoreInfo.evtText}`,
     ].join('\n');
-    navigator.clipboard.writeText(text);
-    setToastMessage('Copied to clipboard');
-    setTimeout(() => setToastMessage(null), 2000);
     trackResult(score);
+    copyToClipboard(text, () => {
+      setToastMessage('Copied to clipboard');
+      setTimeout(() => setToastMessage(null), 2000);
+    });
   };
 
   const handleReset = () => {
@@ -194,7 +196,7 @@ const AspectScoreCalculator: React.FC = () => {
                 <RefreshCw size={18} className="text-slate-500 dark:text-slate-400" aria-hidden="true" />
               </button>
               <button
-                onClick={copyToClipboard}
+                onClick={handleCopy}
                 className="bg-slate-900 dark:bg-slate-700 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors"
               >
                 <span className="hidden sm:inline">Copy</span>
