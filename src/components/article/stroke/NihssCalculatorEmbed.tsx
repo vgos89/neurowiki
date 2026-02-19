@@ -78,7 +78,7 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
       : 'text-green-600';
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full min-h-0">
       {/* ── Sticky control bar ─────────────────────────────────────────── */}
       <div className="sticky top-0 z-10 bg-white border-b border-slate-100 shadow-sm px-1 py-2 flex items-center justify-between gap-2 flex-wrap">
 

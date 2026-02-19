@@ -664,7 +664,7 @@ const MainContent: React.FC<{
       {/* NIHSS Calculator Modal - embedded calculator; Apply syncs score to workflow, Back closes */}
       {nihssModalOpen && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[80] flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col min-h-0">
             {/* Slim modal header — just title + close; embed shows score/LVO/controls below */}
             <div className="flex items-center justify-between h-12 px-4 border-b border-slate-100 flex-shrink-0">
               <span className="text-sm font-bold text-slate-700">NIHSS Calculator</span>
@@ -677,7 +677,7 @@ const MainContent: React.FC<{
               </button>
             </div>
             {/* Embed fills remaining space; manages its own scroll + footer */}
-            <div className="flex-1 overflow-hidden flex flex-col">
+            <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
               <Suspense fallback={<div className="p-6 text-slate-500 animate-pulse">Loading NIHSS calculator…</div>}>
                 <NihssCalculatorEmbed
                   initialScore={step1Data?.nihssScore ?? 0}

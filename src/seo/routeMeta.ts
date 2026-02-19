@@ -18,9 +18,9 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
   '/': DEFAULT_META,
 
   '/guide': {
-    title: 'Neurology Resident Guide — Protocols & Clinical Reference | NeuroWiki',
-    description: 'Evidence-based neurology protocols and clinical guides for residents, attendings, and medical students. Stroke, epilepsy, neuromuscular, and more.',
-    keywords: 'neurology protocols for residents, neurology resident guide, clinical neurology reference, stroke guide, epilepsy protocol',
+    title: 'Neurology Toolkit — Clinical Guides, Protocols & Calculators | NeuroWiki',
+    description: 'Evidence-based neurology protocols and clinical guides for residents, attendings, and medical students. Stroke code, EVT, status epilepticus, ASPECTS, NIHSS, and more. AHA/ASA 2026 aligned.',
+    keywords: 'neurology toolkit, neurology protocols for residents, neurology resident guide, clinical neurology reference, stroke guide, epilepsy protocol, neurology calculators',
     image: 'https://neurowiki.ai/og-image.png',
   },
 
