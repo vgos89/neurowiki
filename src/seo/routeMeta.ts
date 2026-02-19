@@ -367,6 +367,30 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
     description: 'ELAN trial (NEJM 2023): early (<48h for TIA/minor stroke, <6d for moderate stroke) vs. late (≥7d) DOAC initiation in AF-related ischemic stroke. No significant difference in recurrence or bleeding.',
     keywords: 'ELAN trial anticoagulation, ELAN trial DOAC stroke, early anticoagulation after stroke, DOAC timing atrial fibrillation stroke, ELAN trial results NEJM, post-stroke anticoagulation timing AF',
   },
+
+  '/trials/thales-trial': {
+    title: 'THALES Trial — Ticagrelor vs Aspirin After Minor Stroke or TIA | NeuroWiki',
+    description: 'THALES trial (NEJM 2020): ticagrelor + aspirin vs aspirin alone after minor stroke or TIA. AHA/ASA 2026 COR 3: No Benefit — NNT=91, severe bleeding 5× higher. Use clopidogrel DAPT instead.',
+    keywords: 'THALES trial stroke, THALES trial ticagrelor aspirin, ticagrelor aspirin TIA, THALES trial results NEJM, ticagrelor minor stroke NNT, DAPT minor stroke guidelines, THALES antiplatelet stroke',
+  },
+
+  '/trials/inspires-trial': {
+    title: 'INSPIRES Trial — DAPT for Atherosclerotic Minor Stroke Within 72 Hours | NeuroWiki',
+    description: 'INSPIRES trial (NEJM 2024): clopidogrel + aspirin vs aspirin for atherosclerotic minor stroke/TIA within 72 hours. NNT=53, HR 0.79. AHA/ASA 2026 COR 2a. Extends DAPT window beyond 24 hours.',
+    keywords: 'INSPIRES trial stroke, INSPIRES trial NEJM 2024, DAPT 72 hours stroke, clopidogrel aspirin atherosclerotic stroke, INSPIRES trial dual antiplatelet, atherosclerotic TIA treatment, DAPT extended window',
+  },
+
+  '/trials/chance-2-trial': {
+    title: 'CHANCE-2 Trial — Ticagrelor vs Clopidogrel DAPT in CYP2C19 LOF Carriers | NeuroWiki',
+    description: 'CHANCE-2 trial (NEJM 2021): ticagrelor + aspirin vs clopidogrel + aspirin in CYP2C19 loss-of-function carriers after minor stroke or TIA. NNT=63, HR 0.77. AHA/ASA 2026 COR 2b.',
+    keywords: 'CHANCE-2 trial stroke, CHANCE-2 CYP2C19, ticagrelor clopidogrel CYP2C19 stroke, CYP2C19 antiplatelet stroke, CHANCE-2 NEJM 2021, pharmacogenomic DAPT stroke, CYP2C19 loss of function ticagrelor',
+  },
+
+  '/trials/enrich-trial': {
+    title: 'ENRICH Trial — Minimally Invasive Surgery for Intracerebral Hemorrhage | NeuroWiki',
+    description: 'ENRICH trial (NEJM 2024): minimally invasive parafascicular surgery (MIPS) vs medical management for lobar/anterior basal ganglia ICH (30–80 mL). First positive surgical ICH trial. 30-day mortality halved (9.3% vs 18.0%).',
+    keywords: 'ENRICH trial ICH, ENRICH trial NEJM 2024, minimally invasive ICH surgery, MIPS ICH surgery, BrainPath ICH, intracerebral hemorrhage surgery trial, ENRICH trial results, lobar ICH surgery',
+  },
 };
 
 export const getRouteMeta = (pathname: string): MetaData => {

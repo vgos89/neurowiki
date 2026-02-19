@@ -71,4 +71,12 @@ export const SITEMAP_ROUTES = [
   '/trials/sps3-trial',
   '/trials/sparcl-trial',
   '/trials/elan-study',
+
+  // Trials — DAPT (AHA 2026 Section 4.8)
+  '/trials/thales-trial',
+  '/trials/inspires-trial',
+  '/trials/chance-2-trial',
+
+  // Trials — ICH Surgery
+  '/trials/enrich-trial',
 ];

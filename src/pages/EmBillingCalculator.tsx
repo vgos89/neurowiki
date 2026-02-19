@@ -136,7 +136,6 @@ interface EmBillingState {
   // Clinical narrative (only rxDrugName kept — CC/HPI/Exam removed as redundant with EMR)
   rxDrugName: string;
   residentName: string;
-  teachingPhysicianName: string;
 
   // UI
   toast: string | null;
@@ -836,9 +835,7 @@ function generateAttestationText(
   state: EmBillingState,
   providerDisplayName: string | null
 ): string | null {
-  const { providerRole, residentName, teachingPhysicianName, npPaName, substantivePortion } = state;
-
-  const teachingName = teachingPhysicianName || providerDisplayName || '______________________________';
+  const { providerRole, residentName, npPaName, substantivePortion } = state;
 
   switch (providerRole) {
     case 'attending_solo':
@@ -846,17 +843,16 @@ function generateAttestationText(
       return null;
 
     case 'teaching_resident': {
+      // Post-2021 MDM-era language: personal evaluation + MDM participation
+      // No [Resident] line — this tool is used by attending physicians only
       const residentPart = residentName ? `, ${residentName},` : '';
-      return (
-        `[Teaching Physician]: I was present with the resident${residentPart} during the history, physical examination, and medical decision making. I agree with the findings and plan as documented.\n\n` +
-        `[${residentName || 'Resident'}]: The teaching physician was present and participated in this encounter.`
-      );
+      return `[Teaching Physician -GC]: I personally saw and evaluated this patient and was present with the resident${residentPart} during key portions of this encounter. I participated in the medical decision making and agree with the findings and plan as documented.`;
     }
 
     case 'shared_split': {
       const whoLabel = substantivePortion === 'physician' ? 'the physician (MD/DO)' : `the NP/PA${npPaName ? ` (${npPaName})` : ''}`;
       const providerRef = substantivePortion === 'physician'
-        ? (providerDisplayName || teachingName)
+        ? (providerDisplayName || '______________________________')
         : (npPaName || 'NP/PA');
       return `[Shared/Split Visit -FS]: The substantive portion of this encounter was performed by ${whoLabel}${substantivePortion === 'physician' ? ` (${providerRef})` : ''}. Both providers participated in the care of this patient on the date of service.`;
     }
@@ -864,6 +860,24 @@ function generateAttestationText(
     default:
       return null;
   }
+}
+
+// Merge billing line + attestation + name-only signature into a single copyable block
+function generateCombinedOutput(
+  state: EmBillingState,
+  cptEntry: CptEntry | null,
+  roleModifiers: string[],
+  timeMins: number,
+  providerDisplayName: string | null
+): string {
+  const billingSection = generateBillingLine(state, cptEntry, roleModifiers, timeMins);
+  const attestation = generateAttestationText(state, providerDisplayName);
+  if (!attestation) return billingSection;
+  // Name only — no NPI in the copy text
+  const signatureLine = state.selectedProvider
+    ? `\n— ${providerDisplayName}`
+    : '\n— [Attending Physician — search NPI above to populate]';
+  return `${billingSection}\n\n${attestation}${signatureLine}`;
 }
 
 // ─── Initial State ────────────────────────────────────────────────────────────
@@ -889,7 +903,6 @@ const INITIAL_STATE: EmBillingState = {
   substantivePortion: 'physician',
   rxDrugName: '',
   residentName: '',
-  teachingPhysicianName: '',
   toast: null,
 };
 

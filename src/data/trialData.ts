@@ -1689,5 +1689,501 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT03148457',
     specialDesign: 'estimation-trial',
     keyMessage: 'Early DOAC initiation is SAFE - can be used in practice if clinically indicated'
+  },
+
+  // ─── THALES TRIAL ─────────────────────────────────────────────────────────
+  'thales-trial': {
+    id: 'thales-trial',
+    title: 'THALES Trial',
+    subtitle: 'Ticagrelor + Aspirin vs Aspirin Alone After Minor Stroke or TIA',
+    category: 'Neuro Trials',
+    trialResult: 'NEGATIVE',
+    specialDesign: 'negative-trial',
+    stats: {
+      sampleSize: {
+        value: '11,016',
+        label: 'Randomized Patients',
+        info: 'Patients with acute noncardioembolic minor ischemic stroke (NIHSS ≤5) or high-risk TIA (ABCD2 ≥6) enrolled within 24 hours. 414 sites, 28 countries. Mean age 65 years, 37% female.'
+      },
+      primaryEndpoint: {
+        value: 'Stroke/death',
+        label: 'at 30 Days',
+        info: 'Composite of stroke (ischemic or hemorrhagic) or death within 30 days of randomization.'
+      },
+      pValue: {
+        value: '0.02',
+        label: 'Stat. Significant',
+        info: 'p=0.02 — statistically significant but AHA/ASA 2026 rates ticagrelor as COR 3: No Benefit over aspirin alone: NNT=91 and severe bleeding 5× higher outweigh benefit vs clopidogrel DAPT (CHANCE NNT=28).',
+        highlight: false
+      },
+      effectSize: {
+        value: '1.1%',
+        label: 'Absolute Reduction',
+        info: 'Absolute risk reduction: 6.6% (aspirin) − 5.5% (ticagrelor+aspirin) = 1.1%. NNT=91. Far less efficient than clopidogrel DAPT (CHANCE NNT=28). Severe bleeding 5× higher with ticagrelor.',
+        highlight: false
+      }
+    },
+    trialDesign: {
+      type: [
+        'Randomized double-blind placebo-controlled trial',
+        'International — 414 sites, 28 countries',
+        '1:1 allocation (ticagrelor + aspirin vs aspirin + placebo)',
+        '30-day treatment duration'
+      ],
+      timeline: 'Enrolled 2018–2019; published NEJM 2020',
+      sampleSize: {
+        value: '11,016 patients',
+        info: 'Largest DAPT trial for minor stroke/TIA. Global enrollment across 28 countries.'
+      },
+      primaryEndpoint: {
+        value: 'Stroke or death at 30 days',
+        info: 'Composite of any stroke or death within 30 days. Centrally adjudicated.'
+      },
+      pValue: {
+        value: 'HR 0.83 (95% CI 0.71–0.96), p=0.02',
+        info: '17% relative risk reduction — statistically significant but absolute benefit (1.1%) modest with disproportionate bleeding.'
+      },
+      nnt: {
+        value: '91',
+        info: 'NNT=91 at 30 days. Compare: CHANCE NNT=28 at 90 days. 91 patients need ticagrelor+aspirin to prevent one event, while each patient faces 5× higher severe bleeding risk.'
+      }
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 5.5,
+        label: 'Stroke or death at 30 days',
+        name: 'Ticagrelor + Aspirin'
+      },
+      control: {
+        percentage: 6.6,
+        label: 'Stroke or death at 30 days',
+        name: 'Aspirin Alone'
+      }
+    },
+    intervention: {
+      treatment: {
+        name: 'Ticagrelor 180mg load → 90mg BID + Aspirin 300–325mg load → 75–100mg/d × 30 days',
+        description: 'Ticagrelor plus aspirin for 30 days, initiated within 24 hours of symptom onset.',
+        details: [
+          'Ticagrelor 180mg loading dose on Day 1, then 90mg twice daily',
+          'Aspirin 300–325mg loading dose Day 1, then 75–100mg daily',
+          'Continued for 30 days total',
+          'Mean time to treatment ~11 hours from symptom onset'
+        ]
+      },
+      control: {
+        name: 'Aspirin 300–325mg load → 75–100mg/d × 30 days + placebo ticagrelor',
+        description: 'Aspirin monotherapy for 30 days. Double-dummy design.',
+        details: [
+          'Aspirin 300–325mg loading dose Day 1, then 75–100mg daily',
+          'Placebo ticagrelor twice daily (double-dummy)'
+        ]
+      }
+    },
+    clinicalContext: 'THALES tested ticagrelor (a more potent P2Y12 inhibitor than clopidogrel) vs aspirin alone for minor stroke/TIA. It enrolled a broader population (NIHSS ≤5 vs ≤3 in CHANCE) using a 30-day protocol. While statistically significant, the 2026 AHA/ASA guidelines rate ticagrelor as COR 3: No Benefit for this indication — the NNT of 91 is far worse than clopidogrel DAPT (NNT 28–67) and severe bleeding was 5× higher. Ticagrelor-based DAPT is only appropriate for confirmed CYP2C19 loss-of-function carriers (see CHANCE-2, COR 2b).',
+    calculations: {
+      nnt: 91,
+      nntExplanation: 'NNT=91 at 30 days — 91 patients must be treated to prevent one stroke/death, while each patient faces severe bleeding risk 5× higher than aspirin alone.'
+    },
+    pearls: [
+      'AHA/ASA 2026: COR 3: No Benefit — ticagrelor NOT recommended over aspirin alone for minor stroke/TIA',
+      'Statistically significant (p=0.02) but clinically inadequate: NNT=91, severe bleeding 5× higher',
+      'Severe hemorrhage: 0.5% (ticagrelor+ASA) vs 0.1% (ASA alone), p<0.001',
+      'Net clinical benefit unfavorable vs clopidogrel DAPT: CHANCE NNT=28 with comparable safety',
+      'Broader eligibility (NIHSS ≤5, ABCD2 ≥6) vs CHANCE (NIHSS ≤3, ABCD2 ≥4)',
+      'Ticagrelor dyspnea in ~12% — pharmacologic, not cardiac, but common discontinuation reason',
+      'NOT equivalent to clopidogrel DAPT — do not substitute ticagrelor for clopidogrel routinely',
+      'Exception: CYP2C19 poor metabolizers may benefit from ticagrelor DAPT (CHANCE-2, COR 2b)',
+      'Benefit consistent across atherosclerotic and non-atherosclerotic causes',
+      'Published: Johnston SC et al. N Engl J Med. 2020;383(3):207–217. DOI: 10.1056/NEJMoa1916870'
+    ],
+    conclusion: 'Ticagrelor + aspirin reduced stroke/death at 30 days vs aspirin alone (5.5% vs 6.6%, HR 0.83, p=0.02), but caused 5× more severe bleeding (0.5% vs 0.1%). AHA/ASA 2026 rates ticagrelor COR 3: No Benefit for minor stroke/TIA — NNT=91 is far inferior to clopidogrel DAPT (CHANCE NNT=28) with worse bleeding. Use clopidogrel+aspirin instead.',
+    source: 'Johnston SC, et al. (NEJM 2020)',
+    doi: '10.1056/NEJMoa1916870',
+    pmid: '32668111',
+    clinicalTrialsId: 'NCT03354429',
+    keyMessage: 'AHA/ASA 2026 COR 3: No Benefit — ticagrelor NOT recommended over aspirin for minor stroke/TIA. Use clopidogrel-based DAPT (CHANCE protocol) instead.',
+    limitations: [
+      'Broader eligibility (NIHSS ≤5, ABCD2 ≥6) makes direct comparison with CHANCE/POINT difficult',
+      '30-day endpoint vs 90-day in CHANCE — different time horizons complicate NNT comparison',
+      'No head-to-head comparison with clopidogrel-based DAPT in the same trial',
+      'Ticagrelor dyspnea (~12%) may have introduced differential dropout bias',
+      '57% Asian patients — higher CYP2C19 LOF prevalence may have partially confounded results'
+    ]
+  },
+
+  // ─── INSPIRES TRIAL ───────────────────────────────────────────────────────
+  'inspires-trial': {
+    id: 'inspires-trial',
+    title: 'INSPIRES Trial',
+    subtitle: 'DAPT for Atherosclerotic Minor Stroke or TIA Within 72 Hours',
+    category: 'Neuro Trials',
+    trialResult: 'POSITIVE',
+    stats: {
+      sampleSize: {
+        value: '6,100',
+        label: 'Randomized Patients',
+        info: 'Patients with mild ischemic stroke (NIHSS ≤5) or high-risk TIA (ABCD2 ≥4) of presumed atherosclerotic cause (≥50% intracranial or extracranial stenosis) enrolled within 72 hours. 222 centers in China.'
+      },
+      primaryEndpoint: {
+        value: 'New stroke',
+        label: 'at 90 Days',
+        info: 'Primary outcome: new stroke (ischemic or hemorrhagic) within 90 days. INSPIRES extends DAPT eligibility to 72 hours and targets atherosclerotic etiology specifically.'
+      },
+      pValue: {
+        value: '0.008',
+        label: 'Statistically Sig.',
+        info: 'p=0.008 — highly significant. AHA/ASA 2026: COR 2a, LOE B-R for atherosclerotic etiology within 24–72 hours.',
+        highlight: true
+      },
+      effectSize: {
+        value: '1.9%',
+        label: 'Absolute Reduction',
+        info: 'Absolute risk reduction: 9.2% − 7.3% = 1.9%. NNT≈53. Benefit maintained even with 24–72h initiation in atherosclerotic stroke.',
+        highlight: true
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter randomized double-blind 2×2 factorial trial',
+        '222 centers in China',
+        '1:1 allocation (DAPT vs aspirin) in antiplatelet arm',
+        'Second factor: intensive vs standard statin (independent)',
+        'Treatment window: within 72 hours of symptom onset'
+      ],
+      timeline: 'Enrolled 2019–2023; published NEJM 2024',
+      sampleSize: {
+        value: '6,100 patients',
+        info: '2×2 factorial simultaneously testing antiplatelet and statin intensification in atherosclerotic stroke. Powered for 20% relative risk reduction.'
+      },
+      primaryEndpoint: {
+        value: 'New stroke at 90 days',
+        info: 'Any stroke (ischemic or hemorrhagic) within 90 days. Centrally adjudicated.'
+      },
+      pValue: {
+        value: 'HR 0.79 (95% CI 0.66–0.94), p=0.008',
+        info: '21% relative risk reduction. Benefit consistent across 0–24h and 24–72h initiation subgroups.'
+      },
+      nnt: {
+        value: '53',
+        info: 'NNT≈53 (AHA/ASA 2026 cited). For every 53 atherosclerotic minor stroke/TIA patients treated with DAPT × 21 days, one stroke is prevented over 90 days.'
+      }
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 7.3,
+        label: 'New stroke at 90 days',
+        name: 'Clopidogrel + Aspirin (DAPT)'
+      },
+      control: {
+        percentage: 9.2,
+        label: 'New stroke at 90 days',
+        name: 'Aspirin Alone'
+      }
+    },
+    intervention: {
+      treatment: {
+        name: 'Clopidogrel 300mg load → 75mg/d + Aspirin 100–300mg load → 100mg/d × 21 days, then clopidogrel',
+        description: 'Clopidogrel + aspirin for 21 days, then clopidogrel monotherapy to 90 days. Initiated within 72 hours.',
+        details: [
+          'Clopidogrel 300mg loading dose at enrollment',
+          'Aspirin 100–300mg loading dose at enrollment',
+          'Days 2–21: Clopidogrel 75mg + Aspirin 100mg daily',
+          'Days 22–90: Clopidogrel 75mg daily alone',
+          'Can initiate up to 72 hours after onset (extends CHANCE 24h window)'
+        ]
+      },
+      control: {
+        name: 'Aspirin 100–300mg load → 100mg/d × 90 days + placebo clopidogrel',
+        description: 'Aspirin monotherapy for 90 days with placebo clopidogrel.',
+        details: [
+          'Aspirin 100–300mg loading dose at enrollment',
+          'Days 2–90: Aspirin 100mg daily',
+          'Placebo clopidogrel throughout'
+        ]
+      }
+    },
+    clinicalContext: 'CHANCE/POINT established DAPT within 24 hours for minor stroke/TIA. INSPIRES addresses two clinically important extensions: (1) the 24–72 hour window for delayed presenters, and (2) atherosclerotic etiology (≥50% stenosis) — a subtype particularly prone to early recurrence from in-situ thrombosis. AHA/ASA 2026 incorporated INSPIRES to support COR 2a: DAPT is reasonable for atherosclerotic minor stroke/TIA within 24–72 hours.',
+    calculations: {
+      nnt: 53,
+      nntExplanation: 'NNT≈53 at 90 days. Benefit maintained even when DAPT started 24–72h post-onset in atherosclerotic etiology patients.'
+    },
+    pearls: [
+      'AHA/ASA 2026: COR 2a — DAPT reasonable for atherosclerotic minor stroke/TIA within 24–72 hours',
+      'Key eligibility: ≥50% intracranial OR extracranial stenosis on vascular imaging (must confirm etiology)',
+      'Extends CHANCE/POINT paradigm: DAPT benefit persists even with 24–72h initiation',
+      'NNT≈53 at 90 days — clinically meaningful even with delayed initiation',
+      'Bleeding: moderate-to-severe 0.9% (DAPT) vs 0.4% (aspirin) — small but statistically significant',
+      'Same 21-day DAPT → monotherapy protocol as CHANCE — consistent guideline regimen',
+      'NOT applicable to cardioembolic, lacunar (without stenosis), or non-atherosclerotic etiology',
+      '2×2 factorial: statin intensification arm showed neutral effect (separate analysis)',
+      'Critical use case: patient arriving 30–72h after onset with confirmed stenosis on CTA/MRA',
+      'Published: Zhao J, et al. N Engl J Med. 2024;390(3):203–213. DOI: 10.1056/NEJMoa2309137'
+    ],
+    conclusion: 'Among patients with mild ischemic stroke or high-risk TIA of atherosclerotic cause treated within 72 hours, clopidogrel+aspirin × 21 days reduced new stroke at 90 days (7.3% vs 9.2%, HR 0.79, p=0.008) vs aspirin alone. Moderate-to-severe bleeding slightly increased (0.9% vs 0.4%). AHA/ASA 2026: COR 2a for atherosclerotic etiology within 24–72 hours.',
+    source: 'Zhao J, et al. (NEJM 2024)',
+    doi: '10.1056/NEJMoa2309137',
+    pmid: '38157499',
+    clinicalTrialsId: 'NCT03635749',
+    keyMessage: 'Atherosclerotic minor stroke/TIA within 24–72h: clopidogrel+aspirin × 21 days is reasonable (COR 2a). Requires ≥50% stenosis confirmed on vascular imaging.',
+    limitations: [
+      'Conducted entirely in China — higher intracranial atherosclerosis prevalence may limit generalizability',
+      'Requires vascular imaging to confirm ≥50% stenosis — not always available within 72h in all settings',
+      '2×2 factorial design: antiplatelet and statin arms may interact',
+      'Excludes non-atherosclerotic etiology — results do not generalize to all minor stroke/TIA patients'
+    ]
+  },
+
+  // ─── CHANCE-2 TRIAL ───────────────────────────────────────────────────────
+  'chance-2-trial': {
+    id: 'chance-2-trial',
+    title: 'CHANCE-2 Trial',
+    subtitle: 'Ticagrelor vs Clopidogrel DAPT in CYP2C19 Loss-of-Function Carriers',
+    category: 'Neuro Trials',
+    trialResult: 'POSITIVE',
+    stats: {
+      sampleSize: {
+        value: '6,412',
+        label: 'Randomized Patients',
+        info: 'Patients with minor stroke (NIHSS ≤3) or high-risk TIA (ABCD2 ≥4) positive for CYP2C19 loss-of-function alleles (*2 or *3). Enrolled within 24 hours. 202 centers in China. Rapid point-of-care genotyping required at enrollment.'
+      },
+      primaryEndpoint: {
+        value: 'Stroke recurrence',
+        label: 'at 90 Days',
+        info: 'Primary outcome: new stroke (ischemic or hemorrhagic) within 90 days. CYP2C19 LOF carriers have reduced clopidogrel activation — CHANCE-2 tests whether ticagrelor overcomes this resistance.'
+      },
+      pValue: {
+        value: '0.009',
+        label: 'Statistically Sig.',
+        info: 'p=0.009 for 90-day primary. AHA/ASA 2026: COR 2b — ticagrelor DAPT may be reasonable over clopidogrel DAPT for confirmed CYP2C19 LOF carriers within 24 hours.',
+        highlight: true
+      },
+      effectSize: {
+        value: '1.6%',
+        label: 'Absolute Reduction',
+        info: 'Stroke recurrence: 6.0% (ticagrelor) vs 7.6% (clopidogrel). NNT=63 (AHA/ASA 2026). 1-year benefit confirmed: HR 0.80, p=0.007.',
+        highlight: true
+      }
+    },
+    trialDesign: {
+      type: [
+        'Randomized double-blind placebo-controlled trial',
+        '202 centers in China',
+        '1:1 allocation (ticagrelor+aspirin vs clopidogrel+aspirin)',
+        'CYP2C19 *2 or *3 LOF allele required for enrollment',
+        'Rapid point-of-care bedside genotyping (30–60 min)'
+      ],
+      timeline: 'Enrolled 2019–2021; published NEJM 2021',
+      sampleSize: {
+        value: '6,412 CYP2C19 LOF carriers',
+        info: 'First large stroke trial requiring mandatory pharmacogenomic eligibility. Only LOF carriers enrolled after rapid bedside CYP2C19 genotyping. Normal metabolizers excluded.'
+      },
+      primaryEndpoint: {
+        value: 'Stroke recurrence at 90 days',
+        info: 'Any stroke within 90 days. 1-year secondary endpoint also assessed.'
+      },
+      pValue: {
+        value: 'HR 0.77 (95% CI 0.64–0.94), p=0.009; 1-year HR 0.80, p=0.007',
+        info: '23% relative risk reduction at 90 days. Durable benefit confirmed at 1 year.'
+      },
+      nnt: {
+        value: '63',
+        info: 'NNT=63 (AHA/ASA 2026). For every 63 CYP2C19 LOF carriers treated with ticagrelor+aspirin instead of clopidogrel+aspirin, one additional stroke is prevented at 90 days.'
+      }
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 6.0,
+        label: 'Stroke recurrence at 90 days',
+        name: 'Ticagrelor + Aspirin'
+      },
+      control: {
+        percentage: 7.6,
+        label: 'Stroke recurrence at 90 days',
+        name: 'Clopidogrel + Aspirin'
+      }
+    },
+    intervention: {
+      treatment: {
+        name: 'Ticagrelor 180mg load → 90mg BID + Aspirin × 21 days, then ticagrelor 90mg BID alone',
+        description: 'Ticagrelor-based DAPT for 21 days, then ticagrelor monotherapy to 90 days. Direct-acting — no CYP2C19 conversion needed.',
+        details: [
+          'Ticagrelor 180mg loading dose on Day 1',
+          'Aspirin 75–300mg loading dose on Day 1',
+          'Days 2–21: Ticagrelor 90mg BID + Aspirin 75mg daily',
+          'Days 22–90: Ticagrelor 90mg BID alone',
+          'Direct-acting P2Y12 inhibitor — bypasses CYP2C19 pathway entirely'
+        ]
+      },
+      control: {
+        name: 'Clopidogrel 300mg load → 75mg/d + Aspirin × 21 days, then clopidogrel 75mg/d alone',
+        description: 'Standard clopidogrel DAPT. CYP2C19 LOF reduces active metabolite by ~25–30%, causing suboptimal platelet inhibition.',
+        details: [
+          'Clopidogrel 300mg loading dose on Day 1',
+          'Aspirin 75–300mg loading dose on Day 1',
+          'Days 2–21: Clopidogrel 75mg + Aspirin 75mg daily',
+          'Days 22–90: Clopidogrel 75mg daily alone',
+          'LOF carriers: ~25–30% reduced clopidogrel active metabolite'
+        ]
+      }
+    },
+    clinicalContext: 'Clopidogrel requires CYP2C19 enzymatic conversion to its active metabolite. CYP2C19 *2 (loss-of-function) allele is present in 15–30% of Europeans and 50–60% of East Asians. LOF carriers have significantly reduced clopidogrel efficacy and may have higher recurrence risk on clopidogrel DAPT. Ticagrelor is a direct-acting, reversible P2Y12 inhibitor that does not require CYP2C19 conversion, making it genotype-independent. CHANCE-2 is the first large trial of pharmacogenomically-guided antiplatelet therapy in stroke.',
+    calculations: {
+      nnt: 63,
+      nntExplanation: 'NNT=63 at 90 days. For every 63 CYP2C19 LOF carriers treated with ticagrelor instead of clopidogrel DAPT, one additional stroke recurrence is prevented.'
+    },
+    pearls: [
+      'AHA/ASA 2026: COR 2b — ticagrelor DAPT may be reasonable over clopidogrel DAPT in CYP2C19 LOF carriers',
+      'CYP2C19 *2/*3 LOF alleles present in ~15–30% Europeans, ~50–60% East Asians',
+      'Rapid point-of-care genotyping (30–60 min) available at many comprehensive stroke centers',
+      'Ticagrelor direct-acting P2Y12 inhibitor — genotype-independent, no CYP2C19 conversion needed',
+      'Severe/moderate bleeding: 0.28% (ticagrelor) vs 0.39% (clopidogrel) — no significant difference',
+      'Dyspnea: ~15% with ticagrelor vs ~5% clopidogrel — pharmacologic not cardiac, manageable',
+      '1-year benefit confirmed: HR 0.80 (95% CI 0.68–0.95), p=0.007 — durable effect',
+      'Only CYP2C19 LOF carriers benefit — normal metabolizers should use standard clopidogrel DAPT',
+      'If testing unavailable within 24h: use clopidogrel DAPT NOW — do NOT delay treatment for genotyping',
+      'Published: Wang Y, et al. N Engl J Med. 2021;385(27):2497–2505. DOI: 10.1056/NEJMoa2111749'
+    ],
+    conclusion: 'In CYP2C19 LOF carriers with minor stroke or high-risk TIA, ticagrelor+aspirin × 21 days significantly reduced stroke recurrence vs clopidogrel+aspirin (6.0% vs 7.6%, HR 0.77, p=0.009) without increasing severe bleeding. AHA/ASA 2026: COR 2b — reasonable when CYP2C19 LOF confirmed within 24 hours. If testing unavailable, use clopidogrel DAPT immediately.',
+    source: 'Wang Y, et al. (NEJM 2021)',
+    doi: '10.1056/NEJMoa2111749',
+    pmid: '34708996',
+    clinicalTrialsId: 'NCT04078984',
+    keyMessage: 'CYP2C19 LOF confirmed: use ticagrelor+aspirin × 21 days (COR 2b). Testing unavailable: use clopidogrel DAPT now — do NOT delay.',
+    limitations: [
+      'Conducted entirely in China — CYP2C19 *2 more prevalent in Asian populations',
+      'Rapid genotyping not universally available at all stroke centers',
+      'COR 2b (weak) — regulatory and cost barriers with ticagrelor in many systems',
+      'No direct comparison with aspirin alone — only vs clopidogrel DAPT',
+      'Ticagrelor dyspnea (~15%) may reduce adherence in patients with pulmonary disease'
+    ]
+  },
+
+  // ─── ENRICH TRIAL ─────────────────────────────────────────────────────────
+  'enrich-trial': {
+    id: 'enrich-trial',
+    title: 'ENRICH Trial',
+    subtitle: 'Minimally Invasive Surgical Evacuation of Intracerebral Hemorrhage',
+    category: 'Neuro Trials',
+    trialResult: 'POSITIVE',
+    stats: {
+      sampleSize: {
+        value: '300',
+        label: 'Randomized Patients',
+        info: 'Patients with lobar or anterior basal ganglia ICH (30–80 mL) within 24 hours. 37 US hospitals. Bayesian response-adaptive randomized design. Median age 61, 45% female.'
+      },
+      primaryEndpoint: {
+        value: 'UW-mRS',
+        label: 'at 180 Days',
+        info: 'Utility-weighted mRS (UW-mRS) at 180 days. Weights mRS by quality-of-life utility: mRS 0=1.0, 1=0.91, 2=0.76, 3=0.65, 4=0.33, 5–6=0.0. Captures functional outcome AND mortality in one continuous score.'
+      },
+      pValue: {
+        value: '0.04',
+        label: 'Statistically Sig.',
+        info: 'p=0.04 (Bayesian posterior probability >0.97). FIRST positive randomized surgical ICH trial — overturns decades of negative evidence: STICH I (2005), STICH II (2013), MISTIE III (2019).',
+        highlight: true
+      },
+      effectSize: {
+        value: '0.458 vs 0.374',
+        label: 'UW-mRS (surgery vs medical)',
+        info: 'UW-mRS difference 0.084. Most striking finding: 30-day mortality 9.3% (surgery) vs 18.0% (medical) — near-halving. NNT≈12 for 30-day mortality benefit.',
+        highlight: true
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter Bayesian response-adaptive randomized trial',
+        '37 US hospitals (2017–2023)',
+        'MIPS — trans-sulcal parafascicular approach',
+        'BrainPath® + Myriad® (NICO Corporation)',
+        'Surgery within 24 hours of last known well'
+      ],
+      timeline: 'Enrolled 2017–2023; published NEJM April 2024',
+      sampleSize: {
+        value: '300 patients (adaptive design)',
+        info: 'Bayesian adaptive design: allocation ratio adjusted by interim results. Final: 152 surgery, 148 medical. Adaptive design maintains validity with smaller n than traditional RCTs.'
+      },
+      primaryEndpoint: {
+        value: 'UW-mRS at 180 days',
+        info: 'Quality-adjusted functional survival at 180 days using utility weights from the general population.'
+      },
+      pValue: {
+        value: 'UW-mRS difference 0.084 (95% CI 0.005–0.163), p=0.04',
+        info: 'Bayesian posterior >0.97; frequentist p=0.04. Confirms statistical significance despite small n.'
+      },
+      nnt: {
+        value: '~12',
+        info: 'NNT≈12 for 30-day mortality: 18.0% vs 9.3% = 8.7% absolute reduction. Every 12 patients treated with MIPS prevents one death at 30 days.'
+      }
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 45.8,
+        label: 'Mean UW-mRS ×100 at 180 days',
+        name: 'Minimally Invasive Surgery (MIPS)'
+      },
+      control: {
+        percentage: 37.4,
+        label: 'Mean UW-mRS ×100 at 180 days',
+        name: 'Medical Management Alone'
+      }
+    },
+    intervention: {
+      treatment: {
+        name: 'MIPS: BrainPath® + Myriad® within 24 hours of last known well',
+        description: 'Trans-sulcal parafascicular approach: tubular retractor placed through sulcal corridor to reach hematoma without traversing cortex. Myriad aspirator removes clot.',
+        details: [
+          'BrainPath® tubular retractor (28 or 33 mm) via sulcal corridor',
+          'Myriad® rotary morcellator-aspirator for hematoma evacuation',
+          'Goal: ≥80% hematoma evacuation',
+          'Surgery within 24 hours of last known well',
+          'Plus standard medical management (same as control)'
+        ]
+      },
+      control: {
+        name: 'Guideline-based medical management alone (no surgery)',
+        description: 'Standard ICH management: BP control, coagulopathy reversal, supportive care.',
+        details: [
+          'Target SBP 130–150 mmHg per AHA/ASA ICH guidelines',
+          'Reversal of anticoagulation if applicable',
+          'Seizure management as indicated',
+          'DVT prophylaxis',
+          'No hematoma evacuation'
+        ]
+      }
+    },
+    clinicalContext: 'ICH carries ~30–40% 30-day mortality and only ~20% functional independence at 1 year. Prior surgical trials consistently failed — STICH I (2005), STICH II (2013), and MISTIE III (2019) all showed no benefit, largely due to open craniotomy trauma and non-selective patient selection. ENRICH tested MIPS, which avoids crossing brain parenchyma via natural sulcal corridors, in a tightly selected population: lobar or anterior basal ganglia ICH (30–80 mL) only — avoiding the deep and posterior fossa regions where surgical risk is highest.',
+    calculations: {
+      nnt: 12,
+      nntExplanation: 'NNT≈12 for 30-day mortality: 18.0% vs 9.3% = 8.7% absolute reduction. For every 12 MIPS-eligible patients treated surgically, one death is prevented at 30 days.'
+    },
+    pearls: [
+      'FIRST positive randomized surgical ICH trial — overturns STICH I (2005), STICH II (2013), MISTIE III (2019)',
+      '30-day mortality: 9.3% (surgery) vs 18.0% (medical) — NNT≈12, near-halving of early mortality',
+      'Primary benefit driven by LOBAR ICH — anterior basal ganglia subgroup showed less robust benefit',
+      'UW-mRS at 180d: 0.458 (surgery) vs 0.374 (medical) — meaningful quality-adjusted improvement',
+      'MIPS trans-sulcal approach avoids cortical transgression — key advantage vs open craniotomy',
+      'Requires BrainPath + Myriad devices (NICO Corporation) — not universally available; needs training',
+      'Eligibility: LOBAR or ANTERIOR BASAL GANGLIA ICH only, volume 30–80 mL, within 24 hours',
+      'NOT applicable to: deep (thalamic/putaminal) ICH, posterior fossa ICH, brainstem ICH',
+      'NOT applicable to: volume <30 mL (less severe) or >80 mL (typically non-survivable)',
+      'Bayesian adaptive design — statistically valid but smaller n than traditional RCTs',
+      'Published: Hanley DF, et al. N Engl J Med. 2024;390(14):1277–1289. DOI: 10.1056/NEJMoa2308440'
+    ],
+    conclusion: 'Among patients with lobar or anterior basal ganglia ICH (30–80 mL) treated within 24 hours, MIPS improved functional outcomes at 180 days (UW-mRS 0.458 vs 0.374, p=0.04) and dramatically reduced 30-day mortality (9.3% vs 18.0%) vs medical management alone. ENRICH is the first positive randomized surgical ICH trial — a paradigm shift for selected ICH patients at centers with appropriate equipment and expertise.',
+    source: 'Hanley DF, et al. (NEJM 2024)',
+    doi: '10.1056/NEJMoa2308440',
+    pmid: '38598795',
+    clinicalTrialsId: 'NCT02880878',
+    keyMessage: 'Lobar/anterior basal ganglia ICH 30–80 mL within 24h: MIPS surgery halves 30-day mortality (NNT≈12) and improves 180-day outcomes. Requires BrainPath+Myriad and trained neurosurgical team.',
+    limitations: [
+      'Small n=300 (adaptive) — subgroup analyses underpowered; lobar vs anterior BG results uncertain',
+      'BrainPath + Myriad system required — specialty equipment not universally available',
+      'US-only trial — generalizability to other healthcare systems uncertain',
+      'Open-label — impossible to blind surgical intervention',
+      'Adaptive randomization ratio changed over time — potential allocation bias',
+      'Does not address deep ICH (thalamus/putamen), posterior fossa, or volumes outside 30–80 mL',
+      'Longer-term outcomes (>180 days) not reported'
+    ]
   }
 };
