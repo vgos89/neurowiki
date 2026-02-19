@@ -152,6 +152,32 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
       answer: 'Hemorrhagic infarction (HI1, HI2) on the Heidelberg classification is generally not a contraindication to anticoagulation initiation but may prompt a short delay. Parenchymal hemorrhage (PH1, PH2) warrants postponing anticoagulation until imaging stability is confirmed, typically at 7+ days.',
     },
   ],
+  '/calculators/em-billing': [
+    {
+      question: 'How do I choose between CPT 99205 and 99215?',
+      answer: '99205 is for new patients with high-complexity MDM or 60+ minutes of total time. 99215 is for established patients with high-complexity MDM or 54+ minutes. Both require high-complexity medical decision-making: typically a problem with threat to life or bodily function, extensive data review, and high-risk management (e.g., starting/adjusting a high-risk medication, IV drug therapy, or a major surgery decision). For established patients, 99213 (low), 99214 (moderate), and 99215 (high) map to the same MDM levels as 99203, 99204, and 99205 for new patients.',
+    },
+    {
+      question: 'What is the 2021 AMA E/M MDM framework?',
+      answer: 'Since January 2021, outpatient E/M codes (99202–99215) are selected based on Medical Decision-Making (MDM) or total time — not documentation of history and physical exam. MDM has three elements: (1) Number and complexity of problems addressed, (2) Amount and/or complexity of data reviewed and analyzed, and (3) Risk of complications and/or morbidity or mortality of patient management. The overall MDM level is determined by meeting at least 2 of 3 elements at a given level (minimal, low, moderate, or high).',
+    },
+    {
+      question: 'What CPT codes do hospitalists use for inpatient billing?',
+      answer: 'Hospitalists use 99221–99223 for initial hospital care (low/moderate/high MDM or 40–75+ minutes) and 99231–99233 for subsequent hospital care (low/moderate/high MDM or 25–50+ minutes). Discharge day management uses 99238 (≤30 minutes) or 99239 (>30 minutes). For critical care, 99291 covers the first 30–74 minutes and 99292 each additional 30 minutes.',
+    },
+    {
+      question: 'Can I bill E/M codes by time in 2023?',
+      answer: 'Yes. Since 2021, total physician time on the date of service is a valid sole basis for E/M level selection for office and outpatient visits (99202–99215). For inpatient and subsequent visits (99221–99233), time-based billing is also permitted. Emergency department visits (99281–99285) are the exception — per 2023 AMA guidelines, time is not a valid basis for ED E/M code selection; MDM must be used.',
+    },
+    {
+      question: 'What is the difference between MDM-based and time-based E/M billing?',
+      answer: 'MDM-based billing selects the CPT code based on problem complexity, data reviewed, and management risk — regardless of how long the visit takes. Time-based billing selects the CPT code based on total physician time on the date of the encounter (including pre-charting, exam, counseling, and documentation). You may choose whichever method supports the highest code for any given encounter. Neither method requires documenting that you chose it — simply meet the criteria for the level you are billing.',
+    },
+    {
+      question: 'What is a -GC modifier and when is it used for E/M billing?',
+      answer: 'The -GC modifier (Teaching Physician performed or supervised service) is added to an E/M code when a resident is present and the attending physician personally performs the key or critical portion of the service and is present during the resident\'s key portions. The attestation must document the attending\'s personal participation and evaluation, not merely supervisory presence. In the primary care exception (PCTE), supervision rules are relaxed for certain low-complexity office visits.',
+    },
+  ],
   '/calculators/se-pathway': [
     {
       question: 'What is the first-line treatment for status epilepticus?',

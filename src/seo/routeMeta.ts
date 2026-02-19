@@ -128,9 +128,9 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
   },
 
   '/calculators/em-billing': {
-    title: 'E/M Billing Calculator — 2021 CPT Code Selection | NeuroWiki',
-    description: 'Select the correct outpatient E/M CPT code (99202–99215) based on 2021 AMA guidelines. Medical decision-making and time-based billing for neurologists and residents.',
-    keywords: 'E/M billing calculator, CPT code selection, evaluation and management billing, outpatient E/M codes, 2021 AMA billing, MDM billing, neurology billing calculator',
+    title: 'E/M Billing Calculator — CPT Code 99202–99215 | MDM & Time-Based | NeuroWiki',
+    description: 'Free E/M billing calculator for physicians. Select the correct CPT code (99202–99215, 99221–99233) using 2021 AMA MDM or time-based criteria. Neurology, hospitalist, IM, and emergency medicine. NPI lookup included.',
+    keywords: 'EM billing calculator, E/M billing calculator neurology, CPT 99202 99205 99212 99215 calculator, MDM calculator 2021, medical decision making calculator, evaluation and management billing physician, hospitalist EM billing calculator, inpatient EM coding 99221 99222 99223 99231 99232 99233, time vs MDM calculator, 2021 AMA EM coding, neurology CPT code calculator, evaluation and management calculator free',
   },
 
   // ── Guide Articles ─────────────────────────────────────────────────────────
