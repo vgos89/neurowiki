@@ -120,6 +120,41 @@ export default function IvTpa() {
           >
             Eligible if: <strong>MRI</strong> DWI+ and FLAIR− suggests onset <Value>&lt;4.5 h</Value>; or <strong>CTP</strong> favorable penumbral profile per <Trial name="WAKE-UP" path="/trials/wake-up" /> / <Trial name="EXTEND" path="/trials/extend-trial" />.
           </Paragraph>
+
+          <Section number={7} title="Tenecteplase vs Alteplase — When to Choose" />
+
+          <Paragraph
+            viewMode={viewMode}
+            detail="AHA/ASA 2026 COR 1 / LOE A for both. No need to choose based on efficacy — they are equivalent for outcomes. Choose based on logistics."
+          >
+            Per <strong>2026 AHA/ASA guidelines</strong>, <Term detail="single IV bolus; 0.25 mg/kg, max 25 mg">tenecteplase</Term> and <Term detail="10% bolus + 60-min infusion; 0.9 mg/kg, max 90 mg">alteplase</Term> are <Critical>equivalent first-line choices</Critical> (COR 1, LOE A). Select based on clinical context.
+          </Paragraph>
+
+          <SubSection title="Choose Tenecteplase (TNK) when:" />
+
+          <Paragraph
+            viewMode={viewMode}
+            detail="For drip-and-ship: give TNK at the referring hospital, patient transfers with no infusion pump needed. The bolus is already done before they get in the ambulance."
+          >
+            <strong>Transferring for thrombectomy</strong> (drip-and-ship): single bolus means no IV pump during transport. Also preferred when <strong>rapid administration</strong> is critical or nursing resources are limited.
+          </Paragraph>
+
+          <Paragraph viewMode={viewMode} detail="EAGLE trial (2024) directly compared TNK 0.25 mg/kg to alteplase 0.9 mg/kg and confirmed non-inferiority for clinical outcomes and similar sICH rates.">
+            Supported by <Trial name="EAGLE" path="/trials/eagle-trial" /> confirming non-inferiority. Simpler administration reduces <Term detail="symptomatic intracranial hemorrhage">sICH</Term>-risk time window from 60 min (alteplase) to seconds.
+          </Paragraph>
+
+          <SubSection title="Choose Alteplase when:" />
+
+          <Paragraph
+            viewMode={viewMode}
+            detail="Extended window data (4.5–9h) comes from EXTEND and WAKE-UP — both used alteplase. TNK has less evidence beyond 4.5h. Stick with alteplase until TNK extended-window RCT data matures."
+          >
+            <strong>Extended window (&gt;4.5 h)</strong> perfusion-selected patients: alteplase has more trial data (EXTEND, WAKE-UP). Also use alteplase when institutional protocol or formulary requires it.
+          </Paragraph>
+
+          <Warning>
+            <strong>Do not use TNK</strong> at doses &gt;0.25 mg/kg — higher doses (0.4 mg/kg) showed increased hemorrhage in early trials. The approved stroke dose is <Value>0.25 mg/kg</Value> IV bolus only.
+          </Warning>
         </>
       )}
     </ArticleLayout>

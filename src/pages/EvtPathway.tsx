@@ -10,6 +10,7 @@ import LearningPearl from '../components/LearningPearl';
 import { useFavorites } from '../hooks/useFavorites';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { CollapsibleSection } from '../components/CollapsibleSection';
+import { AspectsModal } from '../components/AspectsModal';
 
 type Tri = "yes" | "no" | "unknown";
 type MrsGroup = "yes" | "mrs2" | "mrs34" | "no" | "unknown"; // yes = mRS 0-1, mrs2 = mRS 2, mrs34 = mRS 3-4, no = mRS >4
@@ -545,6 +546,9 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
   // Trial Modal
   const { openTrial } = useTrialModal();
 
+  // ASPECTS Modal
+  const [showAspectsModal, setShowAspectsModal] = useState(false);
+
   // Favorites
   const { isFavorite, toggleFavorite } = useFavorites();
   const [showFavToast, setShowFavToast] = useState(false);
@@ -1016,6 +1020,14 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                 </div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">ASPECTS Score (0-10)</label>
                                 <input type="number" inputMode="numeric" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 8" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowAspectsModal(true)}
+                                    className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-neuro-200 bg-neuro-50 text-neuro-700 hover:bg-neuro-100 transition-colors text-sm font-medium dark:bg-neuro-900/20 dark:border-neuro-800 dark:text-neuro-300 dark:hover:bg-neuro-900/30"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">calculate</span>
+                                    Calculate ASPECTS →
+                                </button>
                                 <div ref={el => { fieldRefs.current['massEffect'] = el; }} className="mt-6 scroll-mb-24">
                                     <h4 className="text-sm font-semibold text-slate-700 mb-2">Significant mass effect on imaging?</h4>
                                     <p className="text-xs text-slate-500 mb-3">Relevant for ASPECTS 0–2 (Class IIa requires no significant mass effect per 2026 guidelines).</p>
@@ -1078,6 +1090,14 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                     <h4 className="text-sm font-semibold text-slate-700 mb-2">ASPECTS from NCCT</h4>
                                     <p className="text-xs text-slate-500 mb-2">ASPECTS ≥6 → Class I (no other criteria needed). ASPECTS 3–5 → Class I if age &lt;80 + no mass effect. Enter 0–10 or leave blank to use perfusion criteria instead.</p>
                                     <input type="number" inputMode="numeric" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 7" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowAspectsModal(true)}
+                                        className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-neuro-200 bg-neuro-50 text-neuro-700 hover:bg-neuro-100 transition-colors text-sm font-medium dark:bg-neuro-900/20 dark:border-neuro-800 dark:text-neuro-300 dark:hover:bg-neuro-900/30"
+                                    >
+                                        <span className="material-symbols-outlined text-[18px]">calculate</span>
+                                        Calculate ASPECTS →
+                                    </button>
 
                                     {/* Mass effect — only relevant for ASPECTS 3–5 (Rec #3) and ASPECTS 0–2 */}
                                     {showMassEffect && (
@@ -1372,6 +1392,16 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           ✓ Assessment copied to clipboard
         </div>
       )}
+
+      {/* ASPECTS Calculator Modal */}
+      <AspectsModal
+        isOpen={showAspectsModal}
+        onClose={() => setShowAspectsModal(false)}
+        onScoreConfirmed={(score) => {
+          updateInput('aspects', String(score));
+          setShowAspectsModal(false);
+        }}
+      />
     </div>
   );
 };
