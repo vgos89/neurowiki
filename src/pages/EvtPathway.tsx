@@ -596,8 +596,8 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
     setInputs(prev => {
         const next = { ...prev, [field]: value };
         if (field === 'core' || field === 'mismatchVol') {
-            const coreVal = parseFloat(field === 'core' ? value : prev.core);
-            const mmVal = parseFloat(field === 'mismatchVol' ? value : prev.mismatchVol);
+            const coreVal = parseFloat(field === 'core' ? String(value) : prev.core);
+            const mmVal = parseFloat(field === 'mismatchVol' ? String(value) : prev.mismatchVol);
             if (!isNaN(coreVal) && !isNaN(mmVal) && coreVal > 0) {
                  const ratio = ((mmVal + coreVal) / coreVal).toFixed(1);
                  next.mismatchRatio = ratio;
