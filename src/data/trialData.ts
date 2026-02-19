@@ -152,6 +152,10 @@ export interface TrialMetadata {
   clinicalApplication?: string; // How to apply in practice (can be detailed text)
   safetyData?: string; // Detailed safety information
   educationalContext?: string; // Extended educational content (why it worked, etc.)
+  /** Category shown on the /trials listing page. Set this on every new trial to auto-register it. */
+  listCategory?: 'thrombolysis' | 'thrombectomy' | 'antiplatelets' | 'carotid' | 'acute';
+  /** One-line resident-focused blurb shown on the /trials listing page. Falls back to truncated clinicalContext if omitted. */
+  listDescription?: string;
 }
 
 export const TRIAL_DATA: Record<string, TrialMetadata> = {
@@ -216,7 +220,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'Despite an increased incidence of symptomatic intracerebral hemorrhage, treatment with intravenous tPA within 3 hours of the onset of ischemic stroke improved clinical outcome at 3 months.',
     source: 'The National Institute of Neurological Disorders and Stroke rt-PA Stroke Study Group (NEJM 1995)',
-    clinicalTrialsId: 'NCT00000292'
+    clinicalTrialsId: 'NCT00000292',
+    listCategory: 'thrombolysis',
+    listDescription: 'Landmark trial establishing IV tPA within 3 hours; 42.6% vs 27.2% favorable outcome.',
   },
   'original-trial': {
     id: 'original-trial',
@@ -283,7 +289,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'In patients with acute ischemic stroke eligible for intravenous thrombolysis within 4.5 hours, tenecteplase 0.25 mg/kg was noninferior to alteplase 0.9 mg/kg for excellent functional outcome (mRS 0–1) at 90 days with a similar safety profile. Findings support tenecteplase as a suitable alternative to alteplase.',
     source: 'Meng X et al. (JAMA 2024)',
-    clinicalTrialsId: 'NCT04915729'
+    clinicalTrialsId: 'NCT04915729',
+    listCategory: 'thrombolysis',
+    listDescription: 'Tenecteplase noninferior to alteplase for AIS within 4.5h; 72.7% vs 70.3% mRS 0–1 (JAMA 2024).',
   },
 
   'ecass3-trial': {
@@ -347,7 +355,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'Intravenous alteplase administered between 3 and 4.5 hours after the onset of symptoms significantly improved clinical outcomes in patients with acute ischemic stroke.',
     source: 'Hacke et al. (NEJM 2008)',
-    clinicalTrialsId: 'NCT00153036'
+    clinicalTrialsId: 'NCT00153036',
+    listCategory: 'thrombolysis',
+    listDescription: 'Extended IV tPA window to 4.5 hours; 52.4% vs 45.2% mRS 0-1.',
   },
   'extend-trial': {
     id: 'extend-trial',
@@ -412,7 +422,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'Among patients with ischemic stroke 4.5 to 9.0 hours after onset or wake-up stroke who had salvageable brain tissue on perfusion imaging, alteplase resulted in a higher percentage of patients with no or minor neurologic deficits.',
     source: 'Ma et al. (NEJM 2019)',
-    clinicalTrialsId: 'NCT00887328'
+    clinicalTrialsId: 'NCT00887328',
+    listCategory: 'thrombolysis',
+    listDescription: 'tPA 4.5–9h and wake-up stroke with perfusion mismatch selection.',
   },
   'eagle-trial': {
     id: 'eagle-trial',
@@ -475,7 +487,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'In light of similar visual outcomes and a higher rate of adverse reactions associated with Local Intra-arterial Fibrinolysis (LIF), it cannot be recommended for the management of acute CRAO.',
     source: 'Schumacher et al. (Ophthalmology 2010)',
-    clinicalTrialsId: 'NCT00622778'
+    clinicalTrialsId: 'NCT00622778',
+    listCategory: 'thrombolysis',
+    listDescription: 'IA tPA for central retinal artery occlusion — negative trial; stopped early for futility.',
   },
   'distal-trial': {
     id: 'distal-trial',

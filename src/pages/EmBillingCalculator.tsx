@@ -1101,70 +1101,8 @@ const EmBillingCalculator: React.FC = () => {
   const isFav = isFavorite('em-billing');
   const specialtyEx = getSpecialtyExamples(state.specialty);
 
-  // ── Teaching Physician Rationale (collapsible, teaching_resident only) ──
-  const TeachingPhysicianRationale: React.FC = () => {
-    const [open, setOpen] = useState(false);
-    return (
-      <div className="mt-3 bg-blue-50 border border-blue-200 rounded-lg overflow-hidden">
-        <button
-          onClick={() => setOpen(!open)}
-          className="w-full flex items-center justify-between px-3 py-2.5 text-xs text-blue-700 hover:bg-blue-100 transition-colors"
-        >
-          <span className="flex items-center gap-1.5 font-semibold">
-            <Info size={13} />
-            Why is this 2-sentence attestation sufficient?
-          </span>
-          {open ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
-        </button>
-        {open && (
-          <div className="px-4 pb-4 pt-1 text-xs text-blue-900 space-y-4 border-t border-blue-200">
-
-            {/* Section 1 */}
-            <div>
-              <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1">■ CMS 2019 policy (still in effect)</p>
-              <p className="text-blue-800 italic mb-1.5">"The teaching physician may review and verify — not re-document — information recorded by the resident or student."</p>
-              <p className="text-blue-700 leading-relaxed">This means you do <strong>NOT</strong> need to re-type the H&amp;P narrative, physical exam findings, or imaging results (MRI, CT, labs). These live in the resident's note. You verify by co-signing.</p>
-            </div>
-
-            {/* Section 2 */}
-            <div>
-              <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1">■ Post-2021 AMA E/M framework</p>
-              <p className="text-blue-700 leading-relaxed">Since 2021, E/M codes are selected by <strong>MDM or time only</strong> — not by the completeness of history or physical exam documentation. Your attestation needs to establish MDM participation and personal patient evaluation, not document exam components.</p>
-            </div>
-
-            {/* Section 3 */}
-            <div>
-              <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1.5">■ What the resident's note must contain</p>
-              <p className="text-blue-700 mb-1.5">The composite of resident + attending documentation must together support medical necessity. The resident's note should include:</p>
-              <ul className="space-y-0.5 text-blue-700 ml-2">
-                <li>• Chief complaint and HPI</li>
-                <li>• Physical exam findings</li>
-                <li>• Labs, imaging, and relevant data reviewed</li>
-                <li>• Assessment and plan (which the attending co-signs)</li>
-              </ul>
-            </div>
-
-            {/* Section 4 */}
-            <div>
-              <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1.5">■ What your attestation must establish</p>
-              <ul className="space-y-0.5 text-blue-700 ml-2">
-                <li>✓ You personally saw and evaluated the patient</li>
-                <li>✓ You were present during key portions of the encounter</li>
-                <li>✓ You participated in medical decision making</li>
-                <li>✓ You agree with (or modify) the assessment and plan</li>
-                <li className="mt-1.5 text-red-700">✗ "Rounded, reviewed, agree" = <strong>AUDIT RISK</strong> (no physical presence established)</li>
-                <li className="text-red-700">✗ Resident writing that attending was present = <strong>INSUFFICIENT</strong> (must be attending's own statement)</li>
-              </ul>
-            </div>
-
-            <p className="text-[10px] text-blue-500 border-t border-blue-200 pt-2 leading-relaxed">
-              Source: CMS Medicare Claims Processing Manual Ch. 12 · CMS June 2022 Teaching Physician Guidelines Update · AMA 2021 E/M Revisions
-            </p>
-          </div>
-        )}
-      </div>
-    );
-  };
+  // ── Rationale accordion state (must be at parent level — not inside a sub-component — to persist across renders) ──
+  const [rationaleOpen, setRationaleOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-slate-100 font-sans">
@@ -1179,9 +1117,9 @@ const EmBillingCalculator: React.FC = () => {
             <p className="text-xs text-slate-500 mt-0.5">2021/2023 AMA MDM Guidelines</p>
           </div>
           {providerDisplayName && (
-            <div className="hidden sm:flex items-center gap-1.5 bg-green-50 border border-green-200 text-green-700 text-xs font-semibold px-3 py-1.5 rounded-full flex-shrink-0">
+            <div className="flex items-center gap-1.5 bg-green-50 border border-green-200 text-green-700 text-xs font-semibold px-2.5 py-1.5 rounded-full flex-shrink-0 max-w-[140px] sm:max-w-none truncate">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
-              {providerDisplayName}
+              <span className="truncate">{providerDisplayName}</span>
             </div>
           )}
           {activeCpt && (
@@ -1275,8 +1213,8 @@ const EmBillingCalculator: React.FC = () => {
         {/* ── Main Grid ── */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-          {/* ═══ LEFT COLUMN ═══ */}
-          <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+          {/* ═══ LEFT COLUMN ═══ — order-2 on mobile so right column (results) shows first */}
+          <div className="order-2 lg:order-1 lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2 text-slate-900">
                 <Zap size={20} className="text-neuro-600" />
@@ -1847,8 +1785,8 @@ const EmBillingCalculator: React.FC = () => {
             )}
           </div>
 
-          {/* ═══ RIGHT COLUMN ═══ */}
-          <div className="lg:col-span-5 flex flex-col gap-6">
+          {/* ═══ RIGHT COLUMN ═══ — order-1 on mobile so it shows above the inputs */}
+          <div className="order-1 lg:order-2 lg:col-span-5 flex flex-col gap-6">
             {/* ── Recommended Code Card ── */}
             <div className="bg-neuro-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
               <div className="absolute -right-10 -top-10 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl pointer-events-none" />
@@ -1859,7 +1797,7 @@ const EmBillingCalculator: React.FC = () => {
 
               {activeCpt ? (
                 <div className="text-center py-4">
-                  <div className="text-7xl font-bold tracking-tight mb-2" aria-live="polite">{activeCpt.code}</div>
+                  <div className="text-5xl sm:text-7xl font-bold tracking-tight mb-2" aria-live="polite">{activeCpt.code}</div>
                   {state.visitType === 'critical_care' && !isNaN(timeMins) && timeMins >= 75 && (
                     <p className="text-blue-200 text-sm mb-1">+ 99292 ×{Math.floor((timeMins - 74) / 30)}</p>
                   )}
@@ -1912,7 +1850,7 @@ const EmBillingCalculator: React.FC = () => {
 
               {/* Unified billing + attestation block */}
               <div className="p-4">
-                <pre className="whitespace-pre text-sm font-mono text-slate-800 leading-relaxed bg-slate-50 rounded-lg px-4 py-3 border border-slate-200">
+                <pre className="whitespace-pre-wrap break-words text-sm font-mono text-slate-800 leading-relaxed bg-slate-50 rounded-lg px-4 py-3 border border-slate-200 overflow-x-auto max-h-64 overflow-y-auto">
                   {combinedOutput}
                 </pre>
                 {state.rxDrugName && state.managementRisk === 'rx_medication' && (
@@ -1937,7 +1875,59 @@ const EmBillingCalculator: React.FC = () => {
                   <Copy size={14} />
                   {attestationText ? 'Copy Billing + Attestation' : 'Copy Billing Codes'}
                 </button>
-                {isTeachingRole && <TeachingPhysicianRationale />}
+
+                {/* Teaching Physician Rationale — inline to preserve state across renders */}
+                {isTeachingRole && (
+                  <div className="mt-3 bg-blue-50 border border-blue-200 rounded-lg overflow-hidden">
+                    <button
+                      onClick={() => setRationaleOpen(!rationaleOpen)}
+                      className="w-full flex items-center justify-between px-3 py-2.5 text-xs text-blue-700 hover:bg-blue-100 transition-colors"
+                    >
+                      <span className="flex items-center gap-1.5 font-semibold">
+                        <Info size={13} />
+                        Why is this 2-sentence attestation sufficient?
+                      </span>
+                      {rationaleOpen ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+                    </button>
+                    {rationaleOpen && (
+                      <div className="px-4 pb-4 pt-1 text-xs text-blue-900 space-y-4 border-t border-blue-200">
+                        <div>
+                          <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1">■ CMS 2019 policy (still in effect)</p>
+                          <p className="text-blue-800 italic mb-1.5">"The teaching physician may review and verify — not re-document — information recorded by the resident or student."</p>
+                          <p className="text-blue-700 leading-relaxed">This means you do <strong>NOT</strong> need to re-type the H&amp;P narrative, physical exam findings, or imaging results (MRI, CT, labs). These live in the resident's note. You verify by co-signing.</p>
+                        </div>
+                        <div>
+                          <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1">■ Post-2021 AMA E/M framework</p>
+                          <p className="text-blue-700 leading-relaxed">Since 2021, E/M codes are selected by <strong>MDM or time only</strong> — not by the completeness of history or physical exam documentation. Your attestation needs to establish MDM participation and personal patient evaluation, not document exam components.</p>
+                        </div>
+                        <div>
+                          <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1.5">■ What the resident's note must contain</p>
+                          <p className="text-blue-700 mb-1.5">The composite of resident + attending documentation must together support medical necessity. The resident's note should include:</p>
+                          <ul className="space-y-0.5 text-blue-700 ml-2">
+                            <li>• Chief complaint and HPI</li>
+                            <li>• Physical exam findings</li>
+                            <li>• Labs, imaging, and relevant data reviewed</li>
+                            <li>• Assessment and plan (which the attending co-signs)</li>
+                          </ul>
+                        </div>
+                        <div>
+                          <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1.5">■ What your attestation must establish</p>
+                          <ul className="space-y-0.5 text-blue-700 ml-2">
+                            <li>✓ You personally saw and evaluated the patient</li>
+                            <li>✓ You were present during key portions of the encounter</li>
+                            <li>✓ You participated in medical decision making</li>
+                            <li>✓ You agree with (or modify) the assessment and plan</li>
+                            <li className="mt-1.5 text-red-700">✗ "Rounded, reviewed, agree" = <strong>AUDIT RISK</strong> (no physical presence established)</li>
+                            <li className="text-red-700">✗ Resident writing that attending was present = <strong>INSUFFICIENT</strong> (must be attending's own statement)</li>
+                          </ul>
+                        </div>
+                        <p className="text-[10px] text-blue-500 border-t border-blue-200 pt-2 leading-relaxed">
+                          Source: CMS Medicare Claims Processing Manual Ch. 12 · CMS June 2022 Teaching Physician Guidelines Update · AMA 2021 E/M Revisions
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
