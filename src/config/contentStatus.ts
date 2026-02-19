@@ -214,6 +214,9 @@ export const contentStatus: ContentStatus = {
     comingSoonMessage: 'STROKE-AF trial summary coming soon',
   },
   '/trials/eagle-trial': { published: true, comingSoonMessage: 'EAGLE trial summary coming soon' },
+  '/trials/original-trial': { published: true, comingSoonMessage: 'ORIGINAL trial summary coming soon' },
+  '/trials/wake-up-trial': { published: true, comingSoonMessage: 'WAKE-UP trial summary coming soon' },
+  '/calculators/aspects-score': { published: true, comingSoonMessage: 'ASPECTS Score calculator' },
   '/trials/distal-trial': { published: true, comingSoonMessage: 'DISTAL trial summary coming soon' },
   '/trials/escape-mevo-trial': { published: true, comingSoonMessage: 'ESCAPE-MeVO trial summary coming soon' },
   '/trials/nascet-trial': { published: true, comingSoonMessage: 'NASCET trial summary coming soon' },
@@ -234,8 +237,8 @@ export const isPublished = (path: string): boolean => {
     return true;
   }
 
-  // Check the status; default to false if not in list
-  return contentStatus[path]?.published ?? false;
+  // Default to true — all pages are published unless explicitly marked false
+  return contentStatus[path]?.published ?? true;
 };
 
 // Get the coming soon message for a path
