@@ -591,7 +591,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Psychogios M, Brehm A, et al. N Engl J Med. 2025;392(14):1374-1384',
     clinicalTrialsId: 'NCT05029414',
     specialDesign: 'negative-trial',
-    keyMessage: 'EVT does NOT work for medium/distal vessel occlusions - stick to medical treatment'
+    keyMessage: 'EVT does NOT work for medium/distal vessel occlusions - stick to medical treatment',
+    listCategory: 'thrombectomy',
+    listDescription: 'EVT for medium and distal vessel occlusions — negative trial (NEJM 2025).',
   },
   'escape-mevo-trial': {
     id: 'escape-mevo-trial',
@@ -654,7 +656,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'Endovascular treatment for medium-vessel occlusion stroke within 12 hours did not lead to better functional outcomes and was associated with higher mortality compared to usual care.',
     source: 'Goyal et al. (NEJM 2025)',
-    clinicalTrialsId: 'NCT05151172'
+    clinicalTrialsId: 'NCT05151172',
+    listCategory: 'thrombectomy',
+    listDescription: 'EVT for medium vessel occlusion (MeVO) — no benefit over medical care (NEJM 2025).',
   },
   'defuse-3-trial': {
     id: 'defuse-3-trial',
@@ -719,7 +723,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'Thrombectomy for ischemic stroke 6 to 16 hours after onset plus standard medical therapy results in better functional outcomes and lower mortality than standard medical therapy alone in selected patients with salvageable tissue.',
     source: 'Albers et al. (NEJM 2018)',
-    clinicalTrialsId: 'NCT02586415'
+    clinicalTrialsId: 'NCT02586415',
+    listCategory: 'thrombectomy',
+    listDescription: 'Thrombectomy 6–16 hours with perfusion imaging selection.',
   },
   'dawn-trial': {
     id: 'dawn-trial',
@@ -783,7 +789,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'Among patients with acute stroke and mismatched clinical deficit and infarct volume, thrombectomy within 6 to 24 hours results in significantly better functional outcomes than standard care.',
     source: 'Nogueira et al. (NEJM 2018)',
-    clinicalTrialsId: 'NCT02142283'
+    clinicalTrialsId: 'NCT02142283',
+    listCategory: 'thrombectomy',
+    listDescription: 'Thrombectomy 6–24 hours with clinical–imaging mismatch.',
   },
   'select2-trial': {
     id: 'select2-trial',
@@ -846,7 +854,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'Endovascular thrombectomy improves functional outcomes in patients with large ischemic strokes (ASPECTS 3-5 or Core ≥ 50 ml) compared to medical management alone.',
     source: 'Sarraj et al. (NEJM 2023)',
-    clinicalTrialsId: 'NCT03876457'
+    clinicalTrialsId: 'NCT03876457',
+    listCategory: 'thrombectomy',
+    listDescription: 'Large core thrombectomy (ASPECTS 3–5, 0–6h and extended window).',
   },
   'angel-aspect-trial': {
     id: 'angel-aspect-trial',
@@ -911,7 +921,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'In patients with large ischemic core volume, endovascular therapy resulted in better functional outcomes but was associated with more intracranial hemorrhages.',
     source: 'Huo et al. (NEJM 2023)',
-    clinicalTrialsId: 'NCT04551664'
+    clinicalTrialsId: 'NCT04551664',
+    listCategory: 'thrombectomy',
+    listDescription: 'Large core thrombectomy; China cohort (ASPECTS 3–5 or core ≥70 mL).',
   },
   'wake-up-trial': {
     id: 'wake-up-trial',
@@ -977,7 +989,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'Among patients with acute ischemic stroke and unknown time of symptom onset who had MRI findings of DWI-FLAIR mismatch, treatment with IV alteplase resulted in significantly better functional outcomes at 90 days compared to placebo (mRS 0-1: 53.3% vs 41.8%, OR 1.61). This represents an absolute benefit of 11.5 percentage points with an NNT of 8.7.',
     source: 'Thomalla G, et al. N Engl J Med. 2018;379(7):611-622',
-    clinicalTrialsId: 'NCT01525290'
+    clinicalTrialsId: 'NCT01525290',
+    listCategory: 'thrombolysis',
+    listDescription: 'MRI DWI–FLAIR mismatch for thrombolysis in unknown-onset stroke.',
   },
   // ========== BASILAR ARTERY TRIALS ==========
   'attention-trial': {
