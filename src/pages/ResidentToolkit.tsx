@@ -234,10 +234,10 @@ const ResidentToolkit: React.FC = () => {
             </div>
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white leading-tight">
-                Resident Toolkit
+                Neurology Toolkit
               </h1>
               <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm md:text-base">
-                Evidence-based protocols, calculators, and clinical guides — AHA/ASA 2026 aligned
+                Evidence-based protocols, calculators, and clinical guides
               </p>
             </div>
           </div>
