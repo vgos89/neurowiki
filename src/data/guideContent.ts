@@ -253,6 +253,40 @@ In light of similar visual outcomes and a higher rate of adverse reactions assoc
 *Source: [Schumacher et al. (Ophthalmology 2010)](https://www.aaojournal.org/article/S0161-6420(10)00258-2/fulltext)*
 `
   },
+  'original-trial': {
+    id: 'original-trial',
+    title: 'ORIGINAL Trial: Tenecteplase vs Alteplase for Acute Ischemic Stroke',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Tenecteplase (TNK) is a bioengineered variant of alteplase with greater fibrin specificity, longer half-life, and resistance to plasminogen activator inhibitor-1 — enabling single-bolus IV administration over 5–10 seconds rather than a 60-minute infusion. Prior trials (NOR-TEST, AcT) suggested noninferiority but had mixed results or regional limitations. The ORIGINAL trial was designed as a large multicenter noninferiority trial specifically in Chinese patients to directly compare the two agents head-to-head within the standard 4.5-hour thrombolysis window.
+
+## Trial Summary
+*   **Design:** Multicenter, active-controlled, open-label, blinded-endpoint (PROBE) noninferiority trial. 55 stroke centers in China.
+*   **Population:** 1,489 randomized (1,465 in full analysis set); acute ischemic stroke, NIHSS 1–25, symptoms ≥30 minutes without significant improvement, treated within **4.5 hours** of onset.
+*   **Intervention:** IV Tenecteplase **0.25 mg/kg** (max 25 mg) single bolus vs IV Alteplase **0.9 mg/kg** (max 90 mg; 10% bolus + 60-min infusion).
+*   **Primary Outcome:** Excellent functional outcome (mRS 0–1) at 90 days. Noninferiority margin: risk ratio ≥ 0.937.
+*   **Results:**
+    *   **mRS 0–1 at 90 days:** **72.7%** (TNK, 532/732) vs **70.3%** (alteplase, 515/733) — RR 1.03 (95% CI 0.97–1.09). **Noninferiority threshold met.**
+    *   **Symptomatic ICH (ECASS III definition):** **1.2%** in both groups — RR 1.01 (95% CI 0.37–2.70). Identical safety profiles.
+    *   **90-day mortality:** 4.6% (TNK) vs 5.8% (alteplase) — RR 0.80 (95% CI 0.51–1.23); numerically lower with TNK, not statistically significant.
+*   **Enrollment:** July 2021 – July 2023.
+
+## Clinical PEARLS
+*   **Noninferiority confirmed:** RR 1.03 (95% CI 0.97–1.09) — the noninferiority margin of 0.937 was met. Tenecteplase is a safe and effective substitute for alteplase within 4.5 hours.
+*   **Single-bolus advantage:** Eliminates the 60-minute infusion pump — critical for drip-and-ship transfers. Patient can be loaded into the ambulance immediately after the bolus.
+*   **Identical sICH rates:** 1.2% in both groups. Tenecteplase's higher fibrin specificity does not translate to increased hemorrhagic risk at the 0.25 mg/kg dose.
+*   **2026 AHA/ASA Guidelines (COR 1, LOE A):** ORIGINAL, alongside AcT (Canada, 2022) and NOR-TEST 2, forms the evidence base for the 2026 AHA/ASA guideline endorsing tenecteplase and alteplase as equivalent first-line choices.
+*   **Dose clarity:** Only 0.25 mg/kg (max 25 mg) is supported. Higher doses (0.4 mg/kg) increased hemorrhagic risk in earlier trials and are not approved.
+*   **Do not confuse with EAGLE:** The EAGLE trial (Ophthalmology 2010) tested intra-arterial tPA for central retinal artery occlusion — a completely different indication and negative trial.
+
+## Conclusion
+In patients with acute ischemic stroke eligible for intravenous thrombolysis within 4.5 hours, tenecteplase 0.25 mg/kg was **noninferior to alteplase 0.9 mg/kg** for excellent functional outcome (mRS 0–1) at 90 days, with an identical safety profile. These findings support tenecteplase as a suitable alternative to alteplase and underpin the 2026 AHA/ASA COR 1 recommendation for both agents.
+
+*Source: [Meng X et al. JAMA 2024;332(17):1437–1445. DOI: 10.1001/jama.2024.14721](https://doi.org/10.1001/jama.2024.14721) — ClinicalTrials.gov: NCT04915729*
+`
+  },
+
   'attention-trial': {
     id: 'attention-trial',
     title: 'ATTENTION Trial: Basilar Artery EVT',
