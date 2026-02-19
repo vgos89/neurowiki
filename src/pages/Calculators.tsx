@@ -67,6 +67,7 @@ interface Tool {
 }
 
 const tools: Tool[] = [
+  { id: 'aspects', name: 'ASPECTS Score', description: 'Alberta Stroke Program Early CT Score — EVT core assessment', category: 'vascular', type: 'calculator', path: '/calculators/aspects-score' },
   { id: 'nihss', name: 'NIHSS', description: 'NIH Stroke Scale assessment', category: 'vascular', type: 'calculator', path: '/calculators/nihss' },
   { id: 'evt-pathway', name: 'Thrombectomy Pathway', description: 'EVT eligibility for early and late windows', category: 'vascular', type: 'pathway', path: '/calculators/evt-pathway' },
   { id: 'elan-pathway', name: 'Post-Stroke Anticoagulation Timing', description: 'Anticoagulation timing after ischemic stroke with AF', category: 'vascular', type: 'pathway', path: '/calculators/elan-pathway' },

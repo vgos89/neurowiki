@@ -69,6 +69,13 @@
 
   <!-- Standard Calculators -->
   <url>
+    <loc>https://neurowiki.ai/calculators/aspects-score</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
     <loc>https://neurowiki.ai/calculators/nihss</loc>
     <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>

@@ -7,6 +7,7 @@ export const SITEMAP_ROUTES = [
   '/trials',
 
   // Calculators
+  '/calculators/aspects-score',
   '/calculators/nihss',
   '/calculators/ich-score',
   '/calculators/abcd2-score',

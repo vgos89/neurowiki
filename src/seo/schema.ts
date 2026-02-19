@@ -329,6 +329,7 @@ function trialSchema(pathname: string, title: string, description: string, trial
 
 /** Calculator display names for schema mainEntity + breadcrumb */
 const CALC_NAMES: Record<string, { app: string; breadcrumb: string }> = {
+  '/calculators/aspects-score':                   { app: 'ASPECTS Score Calculator', breadcrumb: 'ASPECTS Score' },
   '/calculators/nihss':                           { app: 'NIHSS Calculator', breadcrumb: 'NIHSS Calculator' },
   '/calculators/ich-score':                       { app: 'ICH Score Calculator', breadcrumb: 'ICH Score' },
   '/calculators/abcd2-score':                     { app: 'ABCD² Score Calculator', breadcrumb: 'ABCD² Score' },

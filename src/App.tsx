@@ -22,7 +22,9 @@ const RopeScoreCalculator = lazy(() => import('./pages/RopeScoreCalculator'));
 const GlasgowComaScaleCalculator = lazy(() => import('./pages/GlasgowComaScaleCalculator'));
 const HeidelbergBleedingCalculator = lazy(() => import('./pages/HeidelbergBleedingCalculator'));
 const BostonCriteriaCaaCalculator = lazy(() => import('./pages/BostonCriteriaCaaCalculator'));
+const AspectScoreCalculator = lazy(() => import('./pages/AspectScoreCalculator'));
 const ResidentGuide = lazy(() => import('./pages/ResidentGuide'));
+const ResidentToolkit = lazy(() => import('./pages/ResidentToolkit'));
 const TrialsPage = lazy(() => import('./pages/TrialsPage'));
 const TrialPageNew = lazy(() => import('./pages/trials/TrialPageNew'));
 const GCAPathway = lazy(() => import('./pages/GCAPathway'));
@@ -88,6 +90,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/wiki/:topic" element={<Wiki />} />
           <Route path="/calculators" element={<Calculators />} />
+          <Route path="/calculators/aspects-score" element={<PublishGate><AspectScoreCalculator /></PublishGate>} />
           <Route path="/calculators/nihss" element={<PublishGate><NihssCalculator /></PublishGate>} />
           <Route path="/calculators/ich-score" element={<PublishGate><IchScoreCalculator /></PublishGate>} />
           <Route path="/calculators/abcd2-score" element={<PublishGate><Abcd2ScoreCalculator /></PublishGate>} />
@@ -102,7 +105,7 @@ const App: React.FC = () => {
           <Route path="/calculators/se-pathway" element={<PublishGate><StatusEpilepticusPathway /></PublishGate>} />
           <Route path="/calculators/migraine-pathway" element={<PublishGate><MigrainePathway /></PublishGate>} />
           <Route path="/calculators/em-billing" element={<PublishGate><EmBillingCalculator /></PublishGate>} />
-          <Route path="/guide" element={<ResidentGuide context="guide" />} />
+          <Route path="/guide" element={<ResidentToolkit />} />
           <Route path="/guide/stroke-basics" element={<PublishGate><StrokeBasics /></PublishGate>} />
           <Route path="/guide/stroke-basics-desktop" element={<StrokeBasicsDesktop />} />
           <Route path="/guide/stroke-basics-mobile" element={<StrokeBasicsMobile />} />

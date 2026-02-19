@@ -39,6 +39,12 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
   },
 
   // ── Calculators ─────────────────────────────────────────────────────────────
+  '/calculators/aspects-score': {
+    title: 'ASPECTS Score Calculator — Alberta Stroke Program Early CT Score | NeuroWiki',
+    description: 'Free ASPECTS calculator for MCA stroke. Score 10 regions (M1–M6, Caudate, Lentiform, Internal Capsule, Insular Ribbon) on non-contrast CT. Color-coded EVT eligibility per AHA/ASA 2026 guidelines.',
+    keywords: 'ASPECTS score calculator, Alberta Stroke Program Early CT Score, ASPECTS thrombectomy eligibility, ASPECTS score stroke, MCA territory infarct, large core stroke EVT',
+  },
+
   '/calculators/nihss': {
     title: 'NIHSS Calculator — NIH Stroke Scale Online | NeuroWiki',
     description: 'Free NIHSS calculator for stroke severity assessment. Calculate NIH Stroke Scale score with step-by-step guidance, LVO probability estimate, and clinical interpretation. Used by neurology residents and attendings.',
