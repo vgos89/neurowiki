@@ -1048,6 +1048,11 @@ const EmBillingCalculator: React.FC = () => {
     set(patch);
   };
 
+  // ── Provider display name (needed by copy helpers) ──
+  const providerDisplayName = state.selectedProvider
+    ? `${state.selectedProvider.firstName} ${state.selectedProvider.lastName}${state.selectedProvider.credential ? ', ' + state.selectedProvider.credential : ''}`
+    : null;
+
   // ── Copy helpers ──
   const billingLine = generateBillingLine(state, activeCpt, roleModifiers, timeMins);
   const attestationText = generateAttestationText(state, providerDisplayName);
@@ -1084,10 +1089,6 @@ const EmBillingCalculator: React.FC = () => {
     moderate: { active: 'bg-orange-400 text-white', muted: 'bg-orange-100 text-orange-600' },
     high: { active: 'bg-red-400 text-white', muted: 'bg-red-100 text-red-600' },
   };
-
-  const providerDisplayName = state.selectedProvider
-    ? `${state.selectedProvider.firstName} ${state.selectedProvider.lastName}${state.selectedProvider.credential ? ', ' + state.selectedProvider.credential : ''}`
-    : null;
 
   const isFav = isFavorite('em-billing');
   const specialtyEx = getSpecialtyExamples(state.specialty);
@@ -1495,7 +1496,7 @@ const EmBillingCalculator: React.FC = () => {
             </div>
 
             {/* ── Billing Mode Toggle ── */}
-            {!isTimeOnly && (
+            {!isTimeOnly && !isIncidentTo && (
               <div className="mb-5">
                 <div className="flex bg-gray-100 rounded-lg p-1 w-full">
                   <button
@@ -1540,7 +1541,7 @@ const EmBillingCalculator: React.FC = () => {
             )}
 
             {/* ── MDM Section ── */}
-            {effectiveBillingMode === 'mdm' && !isTimeOnly && (
+            {effectiveBillingMode === 'mdm' && !isTimeOnly && !isIncidentTo && (
               <>
                 <div className="bg-gray-50 rounded-xl p-5 border border-slate-200 mb-5">
                   <div className="flex justify-between items-center mb-3">
@@ -1709,7 +1710,7 @@ const EmBillingCalculator: React.FC = () => {
             )}
 
             {/* ── Time-Based Section ── */}
-            {(effectiveBillingMode === 'time' || isTimeOnly) && (
+            {(effectiveBillingMode === 'time' || isTimeOnly) && !isIncidentTo && (
               <div>
                 <div className="mb-4">
                   <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">
@@ -1832,57 +1833,105 @@ const EmBillingCalculator: React.FC = () => {
               </div>
             </div>
 
-            {/* ── Documentation Card ── */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+            {/* ── Billing Output Card ── */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
               <div className="p-4 border-b border-slate-200 flex justify-between items-center">
                 <div className="flex items-center gap-2 text-slate-700 font-bold text-sm uppercase tracking-wide">
                   <FileText size={16} />
-                  Attestation Preview
+                  Billing Output
                 </div>
-                <button onClick={resetAll} className="text-xs font-bold text-neuro-600 hover:text-neuro-700 transition-colors">RESET</button>
+                <button onClick={resetAll} className="text-xs font-bold text-slate-400 hover:text-red-500 transition-colors">RESET</button>
               </div>
-              <div className="p-4 flex-1">
-                <pre className="whitespace-pre-wrap text-xs font-mono leading-relaxed text-slate-700 max-h-[480px] overflow-y-auto">
-                  {docText}
+
+              {/* Section 1 — Billing Codes (always shown) */}
+              <div className="p-4 border-b border-slate-100">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Billing Codes</p>
+                <pre className="whitespace-pre text-sm font-mono text-slate-800 leading-relaxed bg-slate-50 rounded-lg px-4 py-3 border border-slate-200">
+                  {billingLine}
                 </pre>
-              </div>
-              <div className="p-4 border-t border-slate-200 bg-gray-50 rounded-b-2xl">
+                {state.rxDrugName && state.managementRisk === 'rx_medication' && (
+                  <p className="mt-2 text-xs text-slate-500">
+                    <span className="font-semibold">Rx:</span> {state.rxDrugName}
+                  </p>
+                )}
                 <button
-                  onClick={copyNote}
-                  className="w-full bg-neuro-600 hover:bg-neuro-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                  onClick={copyBillingLine}
+                  className="mt-3 w-full bg-neuro-600 hover:bg-neuro-700 text-white font-bold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
                 >
-                  <Copy size={16} />
-                  COPY TO NOTE
+                  <Copy size={14} />
+                  Copy CPT + Codes
                 </button>
-                <p className="text-center text-xs text-slate-400 mt-2">Paste directly into your EHR billing attestation field</p>
               </div>
+
+              {/* Section 2 — Attestation Text (shown only when role requires it) */}
+              {attestationText ? (
+                <div className="p-4">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Attestation Text</p>
+                  <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3">
+                    <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">{attestationText}</p>
+                  </div>
+                  <button
+                    onClick={copyAttestation}
+                    className="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
+                  >
+                    <Copy size={14} />
+                    Copy Attestation Text
+                  </button>
+                </div>
+              ) : (
+                <div className="p-4">
+                  {state.providerRole === 'attending_solo' && (
+                    <p className="text-xs text-slate-400 text-center py-2">
+                      No separate attestation needed — sign your progress note as usual.
+                    </p>
+                  )}
+                  {isIncidentTo && (
+                    <p className="text-xs text-amber-700 text-center py-2">
+                      Incident-to: MD supervising physician signs the note. No separate attestation block needed.
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
 
-            {/* ── Quick Reference Card ── */}
-            <div className="bg-slate-50 rounded-xl border border-slate-200 p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <User size={14} className="text-slate-500" />
-                <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wide">2-of-3 MDM Rule Quick Reference</h3>
+            {/* ── MDM Justification Card (live) ── */}
+            {!isIncidentTo && (
+              <div className="bg-slate-50 rounded-xl border border-slate-200 p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <Info size={14} className="text-slate-500" />
+                  <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wide">MDM Justification</h3>
+                  <span className="ml-auto text-[10px] text-slate-400">Live · Reference only</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 mb-3">
+                  {([
+                    { label: 'PROBLEMS', level: problemLevel, summary: getProblemSummary(state.selectedDiagnoses, state.problemLevelOverride) },
+                    { label: 'DATA', level: dataLevel, summary: getDataSummary(state.dataReviewed) },
+                    { label: 'RISK', level: riskLevel, summary: getRiskSummary(state.managementRisk) },
+                  ] as { label: string; level: MdmLevel; summary: string }[]).map(({ label, level, summary }) => {
+                    const meetsOverall = levelToNum(level) >= levelToNum(overallMdm);
+                    return (
+                      <div key={label} className={`rounded-lg p-2.5 border text-center ${meetsOverall ? 'bg-neuro-50 border-neuro-200' : 'bg-white border-slate-200'}`}>
+                        <div className="flex items-center justify-center gap-1 mb-1">
+                          {meetsOverall && <CheckCircle2 size={10} className="text-neuro-600" />}
+                          <span className="text-[9px] font-bold text-slate-500 uppercase">{label}</span>
+                        </div>
+                        <div className={`text-xs font-bold mb-1 ${
+                          level === 'high' ? 'text-red-600' :
+                          level === 'moderate' ? 'text-orange-600' :
+                          level === 'low' ? 'text-blue-600' : 'text-green-600'
+                        }`}>
+                          {MDM_LEVEL_LABELS[level]}
+                        </div>
+                        <p className="text-[9px] text-slate-400 leading-tight">{summary}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="bg-white rounded-lg border border-slate-200 px-3 py-2">
+                  <p className="text-xs text-slate-600">{getMdmNarrative(problemLevel, dataLevel, riskLevel, overallMdm)}</p>
+                </div>
               </div>
-              <div className="space-y-2 text-xs text-slate-600">
-                <div className="flex items-start gap-2">
-                  <span className="font-bold text-green-600 flex-shrink-0 w-12">MIN:</span>
-                  <span>1 self-limited problem · No Rx · Minimal data</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="font-bold text-blue-600 flex-shrink-0 w-12">LOW:</span>
-                  <span>Stable chronic illness · OTC meds · ≥2 data elements</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="font-bold text-orange-600 flex-shrink-0 w-12">MOD:</span>
-                  <span>Chronic illness exacerbation · Rx drug management · Independent test interpretation or external MD discussion</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="font-bold text-red-600 flex-shrink-0 w-12">HIGH:</span>
-                  <span>Threat to life or function · IV/monitored drugs · Surgery decision · ICU escalation · DNR discussion</span>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
