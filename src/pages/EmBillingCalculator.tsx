@@ -10,6 +10,7 @@ import {
   Info,
   BadgeCheck,
   ChevronDown,
+  ChevronUp,
   Settings,
   Star,
   BarChart2,
@@ -1069,17 +1070,11 @@ const EmBillingCalculator: React.FC = () => {
   // ── Copy helpers ──
   const billingLine = generateBillingLine(state, activeCpt, roleModifiers, timeMins);
   const attestationText = generateAttestationText(state, providerDisplayName);
+  const combinedOutput = generateCombinedOutput(state, activeCpt, roleModifiers, timeMins, providerDisplayName);
 
-  const copyBillingLine = () => {
-    navigator.clipboard.writeText(billingLine);
-    set({ toast: 'CPT codes copied' });
-    setTimeout(() => set({ toast: null }), 2000);
-  };
-
-  const copyAttestation = () => {
-    if (!attestationText) return;
-    navigator.clipboard.writeText(attestationText);
-    set({ toast: 'Attestation copied' });
+  const copyCombined = () => {
+    navigator.clipboard.writeText(combinedOutput);
+    set({ toast: attestationText ? 'Billing + attestation copied' : 'Billing codes copied' });
     setTimeout(() => set({ toast: null }), 2000);
   };
 
@@ -1105,6 +1100,71 @@ const EmBillingCalculator: React.FC = () => {
 
   const isFav = isFavorite('em-billing');
   const specialtyEx = getSpecialtyExamples(state.specialty);
+
+  // ── Teaching Physician Rationale (collapsible, teaching_resident only) ──
+  const TeachingPhysicianRationale: React.FC = () => {
+    const [open, setOpen] = useState(false);
+    return (
+      <div className="mt-3 bg-blue-50 border border-blue-200 rounded-lg overflow-hidden">
+        <button
+          onClick={() => setOpen(!open)}
+          className="w-full flex items-center justify-between px-3 py-2.5 text-xs text-blue-700 hover:bg-blue-100 transition-colors"
+        >
+          <span className="flex items-center gap-1.5 font-semibold">
+            <Info size={13} />
+            Why is this 2-sentence attestation sufficient?
+          </span>
+          {open ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+        </button>
+        {open && (
+          <div className="px-4 pb-4 pt-1 text-xs text-blue-900 space-y-4 border-t border-blue-200">
+
+            {/* Section 1 */}
+            <div>
+              <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1">■ CMS 2019 policy (still in effect)</p>
+              <p className="text-blue-800 italic mb-1.5">"The teaching physician may review and verify — not re-document — information recorded by the resident or student."</p>
+              <p className="text-blue-700 leading-relaxed">This means you do <strong>NOT</strong> need to re-type the H&amp;P narrative, physical exam findings, or imaging results (MRI, CT, labs). These live in the resident's note. You verify by co-signing.</p>
+            </div>
+
+            {/* Section 2 */}
+            <div>
+              <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1">■ Post-2021 AMA E/M framework</p>
+              <p className="text-blue-700 leading-relaxed">Since 2021, E/M codes are selected by <strong>MDM or time only</strong> — not by the completeness of history or physical exam documentation. Your attestation needs to establish MDM participation and personal patient evaluation, not document exam components.</p>
+            </div>
+
+            {/* Section 3 */}
+            <div>
+              <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1.5">■ What the resident's note must contain</p>
+              <p className="text-blue-700 mb-1.5">The composite of resident + attending documentation must together support medical necessity. The resident's note should include:</p>
+              <ul className="space-y-0.5 text-blue-700 ml-2">
+                <li>• Chief complaint and HPI</li>
+                <li>• Physical exam findings</li>
+                <li>• Labs, imaging, and relevant data reviewed</li>
+                <li>• Assessment and plan (which the attending co-signs)</li>
+              </ul>
+            </div>
+
+            {/* Section 4 */}
+            <div>
+              <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1.5">■ What your attestation must establish</p>
+              <ul className="space-y-0.5 text-blue-700 ml-2">
+                <li>✓ You personally saw and evaluated the patient</li>
+                <li>✓ You were present during key portions of the encounter</li>
+                <li>✓ You participated in medical decision making</li>
+                <li>✓ You agree with (or modify) the assessment and plan</li>
+                <li className="mt-1.5 text-red-700">✗ "Rounded, reviewed, agree" = <strong>AUDIT RISK</strong> (no physical presence established)</li>
+                <li className="text-red-700">✗ Resident writing that attending was present = <strong>INSUFFICIENT</strong> (must be attending's own statement)</li>
+              </ul>
+            </div>
+
+            <p className="text-[10px] text-blue-500 border-t border-blue-200 pt-2 leading-relaxed">
+              Source: CMS Medicare Claims Processing Manual Ch. 12 · CMS June 2022 Teaching Physician Guidelines Update · AMA 2021 E/M Revisions
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-slate-100 font-sans">
@@ -1277,20 +1337,14 @@ const EmBillingCalculator: React.FC = () => {
                     <GraduationCap size={15} className="text-blue-600" />
                     <span className="text-xs font-bold text-blue-800">Teaching Physician Details (-GC auto-applied)</span>
                   </div>
-                  <p className="text-xs text-blue-700 mb-3">Per CMS: document presence during history, exam, and MDM. -GC is automatically applied to the billing code.</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-600 mb-1">Resident Name <span className="font-normal">(optional)</span></label>
-                      <input type="text" value={state.residentName} onChange={(e) => set({ residentName: e.target.value })}
-                        placeholder="e.g., Dr. Jane Resident"
-                        className="w-full px-3 py-2 text-sm bg-white border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-600 mb-1">Teaching Physician Name</label>
-                      <input type="text" value={state.teachingPhysicianName} onChange={(e) => set({ teachingPhysicianName: e.target.value })}
-                        placeholder={providerDisplayName || 'e.g., Dr. Jane Attending, MD'}
-                        className="w-full px-3 py-2 text-sm bg-white border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
-                    </div>
+                  <p className="text-xs text-blue-700 mb-3">
+                    Your name auto-populates from the NPI lookup above. -GC is automatically applied to the billing code.
+                  </p>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Resident Name <span className="font-normal">(optional — auto-fills into attestation)</span></label>
+                    <input type="text" value={state.residentName} onChange={(e) => set({ residentName: e.target.value })}
+                      placeholder="e.g., Dr. Jane Resident"
+                      className="w-full px-3 py-2 text-sm bg-white border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
                   </div>
                 </div>
               )}
@@ -1856,55 +1910,35 @@ const EmBillingCalculator: React.FC = () => {
                 <button onClick={resetAll} className="text-xs font-bold text-slate-400 hover:text-red-500 transition-colors">RESET</button>
               </div>
 
-              {/* Section 1 — Billing Codes (always shown) */}
-              <div className="p-4 border-b border-slate-100">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Billing Codes</p>
+              {/* Unified billing + attestation block */}
+              <div className="p-4">
                 <pre className="whitespace-pre text-sm font-mono text-slate-800 leading-relaxed bg-slate-50 rounded-lg px-4 py-3 border border-slate-200">
-                  {billingLine}
+                  {combinedOutput}
                 </pre>
                 {state.rxDrugName && state.managementRisk === 'rx_medication' && (
                   <p className="mt-2 text-xs text-slate-500">
                     <span className="font-semibold">Rx:</span> {state.rxDrugName}
                   </p>
                 )}
+                {!attestationText && state.providerRole === 'attending_solo' && (
+                  <p className="mt-2 text-xs text-slate-400 text-center">
+                    No separate attestation needed — sign your progress note as usual.
+                  </p>
+                )}
+                {!attestationText && isIncidentTo && (
+                  <p className="mt-2 text-xs text-amber-700 text-center">
+                    Incident-to: MD supervising physician signs the note. No separate attestation block needed.
+                  </p>
+                )}
                 <button
-                  onClick={copyBillingLine}
+                  onClick={copyCombined}
                   className="mt-3 w-full bg-neuro-600 hover:bg-neuro-700 text-white font-bold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
                 >
                   <Copy size={14} />
-                  Copy CPT + Codes
+                  {attestationText ? 'Copy Billing + Attestation' : 'Copy Billing Codes'}
                 </button>
+                {isTeachingRole && <TeachingPhysicianRationale />}
               </div>
-
-              {/* Section 2 — Attestation Text (shown only when role requires it) */}
-              {attestationText ? (
-                <div className="p-4">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Attestation Text</p>
-                  <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3">
-                    <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">{attestationText}</p>
-                  </div>
-                  <button
-                    onClick={copyAttestation}
-                    className="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
-                  >
-                    <Copy size={14} />
-                    Copy Attestation Text
-                  </button>
-                </div>
-              ) : (
-                <div className="p-4">
-                  {state.providerRole === 'attending_solo' && (
-                    <p className="text-xs text-slate-400 text-center py-2">
-                      No separate attestation needed — sign your progress note as usual.
-                    </p>
-                  )}
-                  {isIncidentTo && (
-                    <p className="text-xs text-amber-700 text-center py-2">
-                      Incident-to: MD supervising physician signs the note. No separate attestation block needed.
-                    </p>
-                  )}
-                </div>
-              )}
             </div>
 
             {/* ── MDM Justification Card (live) ── */}
