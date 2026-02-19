@@ -632,12 +632,119 @@ async function fetchNpiProviders(query: string): Promise<NpiProvider[]> {
   });
 }
 
+// ─── ICD-10 Clinical Synonym Map ─────────────────────────────────────────────
+// The NLM API only does prefix word matching — common clinical shorthand
+// terms need to be mapped to the correct ICD-10-CM description vocabulary.
+const ICD10_SYNONYMS: Record<string, string> = {
+  // Stroke / cerebrovascular
+  'stroke': 'cerebral infarction',
+  'ischemic stroke': 'cerebral infarction',
+  'hemorrhagic stroke': 'intracerebral hemorrhage',
+  'cva': 'cerebral infarction',
+  'tia': 'transient cerebral ischemic',
+  'mini stroke': 'transient cerebral ischemic',
+  'brain attack': 'cerebral infarction',
+  'subarachnoid': 'subarachnoid hemorrhage',
+  'sah': 'subarachnoid hemorrhage',
+  'ich': 'intracerebral hemorrhage',
+  'brain bleed': 'intracerebral hemorrhage',
+  // Cardiac
+  'heart attack': 'myocardial infarction',
+  'mi': 'myocardial infarction',
+  'stemi': 'ST elevation myocardial infarction',
+  'nstemi': 'non-ST elevation myocardial infarction',
+  'afib': 'atrial fibrillation',
+  'a-fib': 'atrial fibrillation',
+  'af': 'atrial fibrillation',
+  'chf': 'heart failure',
+  'hf': 'heart failure',
+  'vt': 'ventricular tachycardia',
+  'vfib': 'ventricular fibrillation',
+  'svt': 'supraventricular tachycardia',
+  'pe': 'pulmonary embolism',
+  'dvt': 'deep vein thrombosis',
+  'pad': 'peripheral arterial disease',
+  'cad': 'coronary artery disease',
+  // Neuro
+  'sz': 'seizure',
+  'szr': 'seizure',
+  'ms': 'multiple sclerosis',
+  'als': 'amyotrophic lateral sclerosis',
+  'pd': 'parkinson',
+  'ad': 'alzheimer',
+  'icp': 'intracranial pressure',
+  'meningitis': 'meningitis',
+  'encephalitis': 'encephalitis',
+  // Pulmonary
+  'copd': 'chronic obstructive pulmonary',
+  'pneumo': 'pneumonia',
+  'pna': 'pneumonia',
+  'ards': 'acute respiratory distress',
+  'respiratory failure': 'respiratory failure',
+  'asthma': 'asthma',
+  // Metabolic / endocrine
+  'dm': 'diabetes mellitus',
+  'dm1': 'type 1 diabetes',
+  'dm2': 'type 2 diabetes',
+  't2dm': 'type 2 diabetes',
+  't1dm': 'type 1 diabetes',
+  'dka': 'diabetic ketoacidosis',
+  'hhs': 'hyperosmolarity',
+  'htn': 'hypertension',
+  'bp': 'hypertension',
+  'ckd': 'chronic kidney disease',
+  'aki': 'acute kidney injury',
+  'esrd': 'end stage renal',
+  'uti': 'urinary tract infection',
+  'gerd': 'gastroesophageal reflux',
+  'gi bleed': 'gastrointestinal hemorrhage',
+  'ugib': 'gastrointestinal hemorrhage',
+  // Psych
+  'mdd': 'major depressive disorder',
+  'gad': 'generalized anxiety',
+  'ptsd': 'post-traumatic stress',
+  'bpd': 'borderline personality',
+  'ocd': 'obsessive-compulsive',
+  // Oncology
+  'ca': 'malignant neoplasm',
+  'mets': 'secondary malignant',
+};
+
 async function fetchIcd10Codes(query: string): Promise<Icd10Code[]> {
-  if (!query.trim()) return [];
-  const resp = await fetch(`https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search?sf=code,name&terms=${encodeURIComponent(query)}&maxList=10`);
-  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-  const data: [number, string[], null, [string, string][]] = await resp.json();
-  return (data[3] ?? []).map(([code, name]) => ({ code, name }));
+  const raw = query.trim();
+  if (!raw) return [];
+
+  // Resolve synonym: lowercase exact match first, then check if query starts with a synonym key
+  const lower = raw.toLowerCase();
+  const resolvedTerm = ICD10_SYNONYMS[lower] ?? (() => {
+    // partial match: if query starts with a known synonym key
+    const match = Object.keys(ICD10_SYNONYMS).find(k => lower.startsWith(k + ' ') || lower === k);
+    return match ? ICD10_SYNONYMS[match] + raw.slice(match.length) : raw;
+  })();
+
+  const nlmSearch = async (term: string): Promise<Icd10Code[]> => {
+    const resp = await fetch(
+      `https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search?sf=code,name&terms=${encodeURIComponent(term)}&maxList=10`
+    );
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data: [number, string[], null, [string, string][]] = await resp.json();
+    return (data[3] ?? []).map(([code, name]) => ({ code, name }));
+  };
+
+  // Primary search with resolved term
+  const results = await nlmSearch(resolvedTerm);
+  if (results.length > 0) return results;
+
+  // Fallback: if multi-word and no results, try the last significant word
+  const words = resolvedTerm.split(/\s+/).filter(w => w.length > 3);
+  if (words.length > 1) {
+    const fallback = await nlmSearch(words[words.length - 1]);
+    if (fallback.length > 0) return fallback;
+    // Also try the first word
+    return nlmSearch(words[0]);
+  }
+
+  return results;
 }
 
 // ─── Documentation Generator ──────────────────────────────────────────────────
