@@ -148,12 +148,16 @@ const App: React.FC = () => {
           {/* Antiplatelet & Secondary Prevention Trials */}
           <Route path="/trials/chance-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="/trials/point-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
+          <Route path="/trials/thales-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
+          <Route path="/trials/inspires-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
+          <Route path="/trials/chance-2-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="/trials/sammpris-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="/trials/weave-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="/trials/socrates-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="/trials/sps3-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="/trials/sparcl-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="/trials/elan-study" element={<PublishGate><TrialPageNew /></PublishGate>} />
+          <Route path="/trials/enrich-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
           {/* Catch-all route for other trials - must come AFTER specific routes */}
           <Route path="/trials/:topicId" element={<PublishGate><ResidentGuide context="trials" /></PublishGate>} />
           <Route path="*" element={<Navigate to="/" replace />} />
