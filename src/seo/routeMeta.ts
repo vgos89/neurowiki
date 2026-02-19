@@ -144,7 +144,7 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
   '/guide/iv-tpa': {
     title: 'IV tPA Protocol — Alteplase & Tenecteplase Eligibility | NeuroWiki',
     description: 'Complete IV thrombolysis protocol for acute ischemic stroke. Alteplase 0.9 mg/kg and tenecteplase 0.25 mg/kg eligibility, dosing, inclusions/exclusions, and monitoring. AHA/ASA 2026 COR 1 for both agents.',
-    keywords: 'IV tPA protocol stroke, alteplase stroke dosing, tenecteplase stroke eligibility, tPA eligibility criteria, thrombolysis stroke protocol, IV thrombolysis inclusion exclusion, tPA 0.9 mg kg, tenecteplase 0.25 mg kg',
+    keywords: 'IV tPA protocol stroke, alteplase stroke dosing, tenecteplase stroke eligibility, tenecteplase vs alteplase stroke, tPA eligibility criteria, thrombolysis stroke protocol, IV thrombolysis inclusion exclusion, tPA 0.9 mg kg, tenecteplase 0.25 mg kg, tenecteplase alteplase equivalent',
     image: 'https://neurowiki.ai/og-image.png',
   },
 
@@ -253,9 +253,15 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
   },
 
   '/trials/eagle-trial': {
-    title: 'EAGLE Trial — Tenecteplase vs Alteplase in Stroke | NeuroWiki',
-    description: 'EAGLE trial: head-to-head comparison of tenecteplase (TNK) versus alteplase for acute ischemic stroke thrombolysis. Key evidence supporting tenecteplase adoption.',
-    keywords: 'EAGLE trial stroke, tenecteplase vs alteplase, TNK vs tPA stroke, EAGLE stroke trial results, tenecteplase stroke thrombolysis',
+    title: 'EAGLE Trial — Intra-Arterial tPA for Central Retinal Artery Occlusion | NeuroWiki',
+    description: 'EAGLE trial (Ophthalmology 2010): randomized trial of local intra-arterial fibrinolysis (IA tPA) vs conservative treatment for central retinal artery occlusion (CRAO). Negative trial — no visual benefit, higher adverse events.',
+    keywords: 'EAGLE trial retinal artery occlusion, CRAO intra-arterial tPA, central retinal artery occlusion treatment, EAGLE ophthalmology trial',
+  },
+
+  '/trials/original-trial': {
+    title: 'ORIGINAL Trial — Tenecteplase vs Alteplase for Ischemic Stroke | NeuroWiki',
+    description: 'ORIGINAL trial (JAMA 2024, n=1,465): tenecteplase 0.25 mg/kg noninferior to alteplase 0.9 mg/kg for mRS 0–1 at 90 days (72.7% vs 70.3%). Identical sICH rates (1.2%). Key evidence for AHA/ASA 2026 COR 1 equivalence.',
+    keywords: 'ORIGINAL trial stroke, tenecteplase vs alteplase stroke, ORIGINAL trial JAMA 2024, tenecteplase noninferiority stroke, TNK alteplase equivalent stroke, tenecteplase 0.25 mg/kg stroke trial',
   },
 
   '/trials/wake-up-trial': {

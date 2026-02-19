@@ -139,8 +139,8 @@ export default function IvTpa() {
             <strong>Transferring for thrombectomy</strong> (drip-and-ship): single bolus means no IV pump during transport. Also preferred when <strong>rapid administration</strong> is critical or nursing resources are limited.
           </Paragraph>
 
-          <Paragraph viewMode={viewMode} detail="EAGLE trial (2024) directly compared TNK 0.25 mg/kg to alteplase 0.9 mg/kg and confirmed non-inferiority for clinical outcomes and similar sICH rates.">
-            Supported by <Trial name="EAGLE" path="/trials/eagle-trial" /> confirming non-inferiority. Simpler administration reduces <Term detail="symptomatic intracranial hemorrhage">sICH</Term>-risk time window from 60 min (alteplase) to seconds.
+          <Paragraph viewMode={viewMode} detail="ORIGINAL trial (JAMA 2024, n=1,465): TNK 0.25 mg/kg vs alteplase 0.9 mg/kg within 4.5h. Primary outcome mRS 0–1 at 90 days: 72.7% vs 70.3% (RR 1.03, 95% CI 0.97–1.09). Symptomatic ICH 1.2% in both groups. Noninferiority margin (RR ≥0.937) met. 55 centers in China.">
+            Supported by the <Trial name="ORIGINAL" path="/trials/original-trial" /> trial (JAMA 2024), which confirmed noninferiority across 1,465 patients — <strong>mRS 0–1 at 90 days 72.7% vs 70.3%</strong>, identical sICH rates (1.2% each). Simpler single-bolus administration eliminates the 60-minute infusion pump.
           </Paragraph>
 
           <SubSection title="Choose Alteplase when:" />

@@ -47,6 +47,7 @@ export const SITEMAP_ROUTES = [
   '/trials/ecass3-trial',
   '/trials/extend-trial',
   '/trials/eagle-trial',
+  '/trials/original-trial',
   '/trials/wake-up-trial',
 
   // Trials — Thrombectomy

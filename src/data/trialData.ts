@@ -218,6 +218,74 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'The National Institute of Neurological Disorders and Stroke rt-PA Stroke Study Group (NEJM 1995)',
     clinicalTrialsId: 'NCT00000292'
   },
+  'original-trial': {
+    id: 'original-trial',
+    title: 'ORIGINAL Trial',
+    subtitle: 'Tenecteplase vs Alteplase for Acute Ischemic Stroke (0–4.5 Hours)',
+    category: 'Neuro Trials',
+    trialResult: 'POSITIVE',
+    stats: {
+      sampleSize: {
+        value: '1,465',
+        label: 'Patients (Full Analysis Set)'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0–1',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: 'Non-inf',
+        label: 'Margin Met (RR 0.937)'
+      },
+      effectSize: {
+        value: '72.7% vs 70.3%',
+        label: 'TNK vs Alteplase'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter randomized open-label blinded-endpoint (PROBE) trial',
+        'Active-controlled noninferiority design',
+        '1:1 allocation (Tenecteplase 0.25 mg/kg vs Alteplase 0.9 mg/kg)',
+        '55 neurology clinics and stroke centers in China'
+      ],
+      timeline: 'Enrolled July 2021 – July 2023'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 72.7,
+        label: 'Excellent outcome (mRS 0–1) at 90 days',
+        name: 'Tenecteplase Group (n=732)'
+      },
+      control: {
+        percentage: 70.3,
+        label: 'Excellent outcome (mRS 0–1) at 90 days',
+        name: 'Alteplase Group (n=733)'
+      }
+    },
+    intervention: {
+      treatment: 'IV Tenecteplase 0.25 mg/kg (max 25 mg) — single IV bolus over 5–10 seconds',
+      control: 'IV Alteplase 0.9 mg/kg (max 90 mg) — 10% bolus + 60-minute infusion'
+    },
+    clinicalContext: 'Tenecteplase is a bioengineered variant of alteplase with greater fibrin specificity, longer half-life, and resistance to plasminogen activator inhibitor-1, enabling single-bolus administration. Prior evidence (NOR-TEST, AcT trials) had shown mixed results. ORIGINAL was designed to establish noninferiority in a large Chinese population and directly compared the two agents head-to-head within the 4.5-hour thrombolysis window.',
+    calculations: {
+      nnt: null,
+      nntExplanation: 'Noninferiority trial — NNT is not the primary framing. Tenecteplase was noninferior to alteplase (RR 1.03, 95% CI 0.97–1.09; noninferiority threshold of RR ≥0.937 met).'
+    },
+    pearls: [
+      'Noninferiority confirmed: RR 1.03 (95% CI 0.97–1.09) — noninferiority margin of 0.937 met',
+      'Symptomatic ICH (ECASS III definition): 1.2% in both groups (RR 1.01, 95% CI 0.37–2.70) — identical safety profiles',
+      '90-day mortality: 4.6% (TNK) vs 5.8% (alteplase) — numerically lower with TNK but not statistically significant (RR 0.80, 95% CI 0.51–1.23)',
+      'Single-bolus advantage: Tenecteplase eliminates the need for a 60-minute IV infusion pump — critical for drip-and-ship and inter-hospital transfer',
+      'Population: Chinese patients with AIS, NIHSS 1–25, treated within 4.5h; 30.4% female; mean age ~65',
+      'Alongside AcT (Canada 2022) and NOR-TEST 2 (Norway), this trial provides the multi-ethnic evidence base for AHA/ASA 2026 COR 1 equivalence',
+      'Published: JAMA 2024; 332(17):1437–1445. DOI: 10.1001/jama.2024.14721'
+    ],
+    conclusion: 'In patients with acute ischemic stroke eligible for intravenous thrombolysis within 4.5 hours, tenecteplase 0.25 mg/kg was noninferior to alteplase 0.9 mg/kg for excellent functional outcome (mRS 0–1) at 90 days with a similar safety profile. Findings support tenecteplase as a suitable alternative to alteplase.',
+    source: 'Meng X et al. (JAMA 2024)',
+    clinicalTrialsId: 'NCT04915729'
+  },
+
   'ecass3-trial': {
     id: 'ecass3-trial',
     title: 'ECASS III Trial',
