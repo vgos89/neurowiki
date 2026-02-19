@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { X, ArrowLeft, Zap } from 'lucide-react';
 import EvtPathway from '../../../pages/EvtPathway';
 
+interface EvtResult {
+  status: string;
+  criteriaName?: string;
+  reason: string;
+}
+
 interface ThrombectomyPathwayModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -24,7 +30,7 @@ export const ThrombectomyPathwayModal: React.FC<ThrombectomyPathwayModalProps> =
     };
   }, [isOpen]);
 
-  const handleResultChange = (result: any) => {
+  const handleResultChange = (result: EvtResult | null) => {
     if (result && onRecommendation) {
       // Format the recommendation string
       const recommendation = `${result.status}${result.criteriaName ? ` (${result.criteriaName})` : ''}: ${result.reason}`;

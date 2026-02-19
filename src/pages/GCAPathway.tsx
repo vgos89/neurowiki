@@ -240,11 +240,11 @@ const GCAPathway: React.FC = () => {
      }
   }, [activeSection]);
 
-  const updateInput = (field: keyof Inputs, value: any) => {
+  const updateInput = (field: keyof Inputs, value: string | boolean | number) => {
     setInputs(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleFieldChange = useCallback((field: keyof Inputs, value: any) => {
+  const handleFieldChange = useCallback((field: keyof Inputs, value: string | boolean | number) => {
     setInputs(prev => ({ ...prev, [field]: value }));
 
     // Auto-scroll (snap) logic

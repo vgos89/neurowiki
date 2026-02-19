@@ -141,7 +141,7 @@ const ElanPathway: React.FC = () => {
   }, [inputs, trackResult]);
   useEffect(() => { const mainElement = document.querySelector('main'); if (mainElement) mainElement.scrollTo({ top: 0, behavior: 'instant' }); else window.scrollTo(0,0); }, [step]);
 
-  const updateInput = useCallback((field: keyof Inputs, value: any) => {
+  const updateInput = useCallback((field: keyof Inputs, value: string | boolean | number) => {
     setInputs(prev => ({ ...prev, [field]: value }));
     const currentFields = STEP_FIELDS[step];
     if (currentFields) {

@@ -107,8 +107,8 @@ const App: React.FC = () => {
           <Route path="/calculators/em-billing" element={<PublishGate><EmBillingCalculator /></PublishGate>} />
           <Route path="/guide" element={<ResidentToolkit />} />
           <Route path="/guide/stroke-basics" element={<PublishGate><StrokeBasics /></PublishGate>} />
-          <Route path="/guide/stroke-basics-desktop" element={<StrokeBasicsDesktop />} />
-          <Route path="/guide/stroke-basics-mobile" element={<StrokeBasicsMobile />} />
+          <Route path="/guide/stroke-basics-desktop" element={<PublishGate><StrokeBasicsDesktop /></PublishGate>} />
+          <Route path="/guide/stroke-basics-mobile" element={<PublishGate><StrokeBasicsMobile /></PublishGate>} />
           <Route path="/guide/iv-tpa" element={<PublishGate><IvTpa /></PublishGate>} />
           <Route path="/guide/tpa-eligibility" element={<PublishGate><IvTpa /></PublishGate>} />
           <Route path="/guide/thrombectomy" element={<PublishGate><Thrombectomy /></PublishGate>} />

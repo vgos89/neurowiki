@@ -592,7 +592,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
     }
   }, [activeSection]);
 
-  const updateInput = useCallback((field: keyof Inputs, value: any) => {
+  const updateInput = useCallback((field: keyof Inputs, value: string | boolean | number) => {
     setInputs(prev => {
         const next = { ...prev, [field]: value };
         if (field === 'core' || field === 'mismatchVol') {

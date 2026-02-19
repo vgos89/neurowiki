@@ -17,6 +17,14 @@ export const contentStatus: ContentStatus = {
     published: true,
     comingSoonMessage: 'Stroke basics guide',
   },
+  '/guide/stroke-basics-desktop': {
+    published: true,
+    comingSoonMessage: 'Stroke basics guide',
+  },
+  '/guide/stroke-basics-mobile': {
+    published: true,
+    comingSoonMessage: 'Stroke basics guide',
+  },
   '/guide/iv-tpa': {
     published: true,
     comingSoonMessage: 'IV tPA eligibility and protocol coming soon',

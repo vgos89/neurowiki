@@ -84,13 +84,35 @@ export type ICHScoreInputs = {
   age80OrOlder: boolean; // true = ≥80 years = 1 pt
 };
 
-export function calculateICHScore(inputs: ICHScoreInputs): number {
+export interface ICHScoreResult {
+  score: number;
+  thirtyDayMortality: string;
+  interpretation: string;
+}
+
+const ICH_MORTALITY_TABLE: Record<number, { mortality: string; interpretation: string }> = {
+  0: { mortality: '0%', interpretation: 'Very low 30-day mortality' },
+  1: { mortality: '13%', interpretation: 'Low 30-day mortality' },
+  2: { mortality: '26%', interpretation: 'Moderate 30-day mortality' },
+  3: { mortality: '72%', interpretation: 'High 30-day mortality' },
+  4: { mortality: '97%', interpretation: 'Very high 30-day mortality' },
+  5: { mortality: '100%', interpretation: 'Extremely high 30-day mortality' },
+  6: { mortality: '100%', interpretation: 'Extremely high 30-day mortality' },
+};
+
+export function calculateICHScore(inputs: ICHScoreInputs): ICHScoreResult {
   let score = 0;
   score += inputs.gcsPoints;
   score += inputs.volume30OrMore ? 1 : 0;
   score += inputs.ivh ? 1 : 0;
   score += inputs.infratentorial ? 1 : 0;
   score += inputs.age80OrOlder ? 1 : 0;
-  return Math.min(6, Math.max(0, score));
+  const clampedScore = Math.min(6, Math.max(0, score));
+  const { mortality, interpretation } = ICH_MORTALITY_TABLE[clampedScore];
+  return {
+    score: clampedScore,
+    thirtyDayMortality: mortality,
+    interpretation,
+  };
 }
 

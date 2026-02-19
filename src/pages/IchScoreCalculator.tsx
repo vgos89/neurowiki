@@ -33,7 +33,7 @@ const IchScoreCalculator: React.FC = () => {
   const { toggleFavorite, isFavorite } = useFavorites();
   const { trackResult, resetTracking } = useCalculatorAnalytics('ich_score');
 
-  const score = calculateICHScore(inputs);
+  const { score } = calculateICHScore(inputs);
   const mortality = ICH_MORTALITY_BY_SCORE[score] ?? 0;
   const severityLabel = ICH_SEVERITY_LABELS[score] ?? '—';
 
