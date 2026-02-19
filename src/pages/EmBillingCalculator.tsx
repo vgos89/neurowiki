@@ -863,6 +863,32 @@ function generateAttestationText(
   }
 }
 
+// Append MDM data + management selections as a trailing audit-support block
+function generateMdmSupportLine(state: EmBillingState): string | null {
+  const dataLabels: string[] = [];
+  if (state.dataReviewed.reviewedLabsImaging)       dataLabels.push('Reviewed labs/imaging');
+  if (state.dataReviewed.independentInterpretation)  dataLabels.push('Reviewed images/tracings directly');
+  if (state.dataReviewed.externalNotesReview)        dataLabels.push('Reviewed outside records');
+  if (state.dataReviewed.discussedWithProvider)      dataLabels.push('Discussed with another physician');
+
+  const mgmtOption = MANAGEMENT_RISK_OPTIONS.find(o => o.value === state.managementRisk);
+  const hasData = dataLabels.length > 0;
+  const hasMgmt = !!mgmtOption;
+
+  if (!hasData && !hasMgmt) return null;
+
+  const lines: string[] = ['MDM SUPPORT (2-of-3):'];
+  if (hasData) lines.push(`• Data: ${dataLabels.join(' · ')}`);
+  if (hasMgmt) {
+    const levelLabel = mgmtOption!.level === 'high' ? 'HIGH' : mgmtOption!.level === 'moderate' ? 'MODERATE' : 'LOW';
+    lines.push(`• Management: ${mgmtOption!.label} (${levelLabel})`);
+    if (state.managementRisk === 'rx_medication' && state.rxDrugName) {
+      lines.push(`  Drug: ${state.rxDrugName}`);
+    }
+  }
+  return lines.join('\n');
+}
+
 // Merge billing line + attestation + name-only signature into a single copyable block
 function generateCombinedOutput(
   state: EmBillingState,
@@ -873,12 +899,20 @@ function generateCombinedOutput(
 ): string {
   const billingSection = generateBillingLine(state, cptEntry, roleModifiers, timeMins);
   const attestation = generateAttestationText(state, providerDisplayName);
-  if (!attestation) return billingSection;
-  // Name only — no NPI in the copy text
-  const signatureLine = state.selectedProvider
-    ? `\n— ${providerDisplayName}`
-    : '\n— [Attending Physician — search NPI above to populate]';
-  return `${billingSection}\n\n${attestation}${signatureLine}`;
+  const mdmSupport = generateMdmSupportLine(state);
+
+  let output = billingSection;
+  if (attestation) {
+    // Name only — no NPI in the copy text
+    const signatureLine = state.selectedProvider
+      ? `\n— ${providerDisplayName}`
+      : '\n— [Attending Physician — search NPI above to populate]';
+    output += `\n\n${attestation}${signatureLine}`;
+  }
+  if (mdmSupport) {
+    output += `\n\n${mdmSupport}`;
+  }
+  return output;
 }
 
 // ─── Initial State ────────────────────────────────────────────────────────────
@@ -1438,21 +1472,6 @@ const EmBillingCalculator: React.FC = () => {
               </div>
             </div>
 
-            {/* ── Rx Drug Name (only when rx_medication risk selected) ── */}
-            {state.managementRisk === 'rx_medication' && (
-              <div className="mb-4">
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Drug / Medication Name & Dose</label>
-                <input
-                  type="text"
-                  value={state.rxDrugName}
-                  onChange={(e) => set({ rxDrugName: e.target.value })}
-                  placeholder="e.g., Levetiracetam 500mg BID, Eliquis 5mg BID, Metformin 1000mg daily"
-                  className="w-full px-3 py-2 text-sm bg-white border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
-                <p className="text-xs text-slate-400 mt-1">Included in billing output — auditors require the specific drug name for Moderate risk</p>
-              </div>
-            )}
-
             {/* ── ICD-10 Diagnoses ── */}
             <div className="mb-5">
               <label className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">
@@ -1691,7 +1710,7 @@ const EmBillingCalculator: React.FC = () => {
                             onChange={() => set({ managementRisk: value })}
                             className="mt-0.5 w-4 h-4 text-neuro-600 border-slate-300 focus:ring-neuro-500 flex-shrink-0"
                           />
-                          <div>
+                          <div className="flex-1">
                             <div className="flex items-center gap-2">
                               <span className="text-sm text-slate-700">{label}</span>
                               <span className={`text-[10px] font-bold px-1 py-0.5 rounded ${
@@ -1700,6 +1719,19 @@ const EmBillingCalculator: React.FC = () => {
                               }`}>{MDM_LEVEL_LABELS[level]}</span>
                             </div>
                             <p className="text-xs text-slate-400 mt-0.5">{plain}</p>
+                            {/* Inline drug name input — appears directly under its radio when selected */}
+                            {value === 'rx_medication' && state.managementRisk === 'rx_medication' && (
+                              <div className="mt-2" onClick={(e) => e.preventDefault()}>
+                                <input
+                                  type="text"
+                                  value={state.rxDrugName}
+                                  onChange={(e) => set({ rxDrugName: e.target.value })}
+                                  placeholder="e.g., Levetiracetam 500mg BID, Eliquis 5mg BID"
+                                  className="w-full px-3 py-2 text-sm bg-white border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                />
+                                <p className="text-xs text-blue-600 mt-1">Auditors require the specific drug name for Moderate risk</p>
+                              </div>
+                            )}
                           </div>
                         </label>
                       ))}
@@ -1708,6 +1740,7 @@ const EmBillingCalculator: React.FC = () => {
                           Clear selection
                         </button>
                       )}
+                      <p className="text-xs text-slate-400 mt-2 italic">Select the single most complex action — MDM uses the highest risk level only.</p>
                     </div>
                   </div>
                 </div>
@@ -1853,11 +1886,6 @@ const EmBillingCalculator: React.FC = () => {
                 <pre className="whitespace-pre-wrap break-words text-sm font-mono text-slate-800 leading-relaxed bg-slate-50 rounded-lg px-4 py-3 border border-slate-200 overflow-x-auto max-h-64 overflow-y-auto">
                   {combinedOutput}
                 </pre>
-                {state.rxDrugName && state.managementRisk === 'rx_medication' && (
-                  <p className="mt-2 text-xs text-slate-500">
-                    <span className="font-semibold">Rx:</span> {state.rxDrugName}
-                  </p>
-                )}
                 {!attestationText && state.providerRole === 'attending_solo' && (
                   <p className="mt-2 text-xs text-slate-400 text-center">
                     No separate attestation needed — sign your progress note as usual.

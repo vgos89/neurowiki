@@ -1055,7 +1055,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'In patients with basilar-artery occlusion presenting within 12 hours, endovascular thrombectomy led to better functional outcomes and lower mortality than best medical care.',
     source: 'Tao et al. (NEJM 2022)',
-    clinicalTrialsId: 'NCT04751708'
+    clinicalTrialsId: 'NCT04751708',
+    listCategory: 'thrombectomy',
+    listDescription: 'Basilar artery thrombectomy within 12 hours; China trial.',
   },
   'baoche-trial': {
     id: 'baoche-trial',
@@ -1119,7 +1121,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'Among patients with basilar-artery occlusion who presented between 6 and 24 hours after symptom onset, thrombectomy led to a higher rate of good functional status at 90 days than medical therapy.',
     source: 'Jovin et al. (NEJM 2022)',
-    clinicalTrialsId: 'NCT02737189'
+    clinicalTrialsId: 'NCT02737189',
+    listCategory: 'thrombectomy',
+    listDescription: 'Basilar EVT 6–24 hours with imaging selection.',
   },
   // ========== ANTIPLATELET & SECONDARY PREVENTION TRIALS ==========
   'chance-trial': {
@@ -1263,7 +1267,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Excluded patients with clear indication for anticoagulation (e.g., atrial fibrillation)',
       'Short follow-up (90 days) - long-term outcomes unknown',
       'TIA diagnosis can be challenging - potential for enrollment of "TIA mimics" despite exclusion criteria'
-    ]
+    ],
+    listCategory: 'antiplatelets',
+    listDescription: 'DAPT (clopidogrel + aspirin) after TIA/minor stroke; NNT=29. AHA 2026 COR 1.',
   },
   'point-trial': {
     id: 'point-trial',
@@ -1325,7 +1331,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'In patients with minor ischemic stroke or high-risk TIA, DAPT with Clopidogrel and Aspirin reduced the risk of major ischemic events but increased the risk of major hemorrhage compared to Aspirin alone.',
     source: 'Johnston et al. (NEJM 2018)',
-    clinicalTrialsId: 'NCT00991029'
+    clinicalTrialsId: 'NCT00991029',
+    listCategory: 'antiplatelets',
+    listDescription: 'Dual antiplatelet in TIA and minor stroke (Western population); NNT=67.',
   },
   'sammpris-trial': {
     id: 'sammpris-trial',
@@ -1387,7 +1395,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'In patients with symptomatic intracranial arterial stenosis, aggressive medical management was superior to PTAS with the Wingspan stent system, primarily due to the high risk of periprocedural stroke in the stenting arm.',
     source: 'Chimowitz et al. (NEJM 2011)',
-    clinicalTrialsId: 'NCT00576693'
+    clinicalTrialsId: 'NCT00576693',
+    listCategory: 'carotid',
+    listDescription: 'Intracranial stenting vs medical therapy for stenosis — medical management wins.',
   },
   'weave-trial': {
     id: 'weave-trial',
@@ -1449,7 +1459,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'With experienced interventionalists and proper patient selection following on-label usage guidelines (specifically >7 days post-stroke), the use of the Wingspan stent for intracranial atherosclerotic disease demonstrated a low periprocedural complication rate.',
     source: 'Alexander et al. (Stroke 2019)',
-    clinicalTrialsId: 'NCT02034058'
+    clinicalTrialsId: 'NCT02034058',
+    listCategory: 'carotid',
+    listDescription: 'Perioperative outcomes of Wingspan carotid stenting with strict on-label criteria.',
   },
   'socrates-trial': {
     id: 'socrates-trial',
@@ -1510,7 +1522,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'In patients with acute ischemic stroke or high-risk TIA, Ticagrelor was not found to be superior to Aspirin in reducing the rate of stroke, myocardial infarction, or death at 90 days.',
     source: 'Johnston et al. (NEJM 2016)',
-    clinicalTrialsId: 'NCT01994720'
+    clinicalTrialsId: 'NCT01994720',
+    listCategory: 'antiplatelets',
+    listDescription: 'Ticagrelor vs aspirin monotherapy in acute ischemic stroke — not superior.',
   },
   'sps3-trial': {
     id: 'sps3-trial',
@@ -1572,7 +1586,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'Among patients with recent lacunar strokes, the addition of clopidogrel to aspirin did not significantly reduce the risk of recurrent stroke and was associated with an increased risk of bleeding and death.',
     source: 'SPS3 Investigators (NEJM 2012)',
-    clinicalTrialsId: 'NCT00059306'
+    clinicalTrialsId: 'NCT00059306',
+    listCategory: 'antiplatelets',
+    listDescription: 'DAPT not beneficial in lacunar stroke — increased bleeding without stroke reduction.',
   },
   'sparcl-trial': {
     id: 'sparcl-trial',
@@ -1634,7 +1650,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'In patients with recent stroke or TIA and without known coronary heart disease, 80 mg of atorvastatin per day reduced the overall incidence of stroke and of cardiovascular events.',
     source: 'Amarenco et al. (NEJM 2006)',
-    clinicalTrialsId: 'NCT00147602'
+    clinicalTrialsId: 'NCT00147602',
+    listCategory: 'antiplatelets',
+    listDescription: 'High-intensity statin (atorvastatin 80mg) for secondary stroke prevention; NNT=53.',
   },
   'elan-study': {
     id: 'elan-study',
@@ -1716,7 +1734,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Fischer U, et al. N Engl J Med. 2023;388(26):2411-2421',
     clinicalTrialsId: 'NCT03148457',
     specialDesign: 'estimation-trial',
-    keyMessage: 'Early DOAC initiation is SAFE - can be used in practice if clinically indicated'
+    keyMessage: 'Early DOAC initiation is SAFE - can be used in practice if clinically indicated',
+    listCategory: 'antiplatelets',
+    listDescription: 'Early vs delayed DOAC initiation after stroke with atrial fibrillation — early is safe.',
   },
 
   // ─── THALES TRIAL ─────────────────────────────────────────────────────────
@@ -1837,7 +1857,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'No head-to-head comparison with clopidogrel-based DAPT in the same trial',
       'Ticagrelor dyspnea (~12%) may have introduced differential dropout bias',
       '57% Asian patients — higher CYP2C19 LOF prevalence may have partially confounded results'
-    ]
+    ],
+    listCategory: 'antiplatelets',
+    listDescription: 'Ticagrelor + aspirin vs aspirin alone — AHA 2026 COR 3: No Benefit. NNT=91, bleeding 5× higher.',
   },
 
   // ─── INSPIRES TRIAL ───────────────────────────────────────────────────────
@@ -1959,7 +1981,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Requires vascular imaging to confirm ≥50% stenosis — not always available within 72h in all settings',
       '2×2 factorial design: antiplatelet and statin arms may interact',
       'Excludes non-atherosclerotic etiology — results do not generalize to all minor stroke/TIA patients'
-    ]
+    ],
+    listCategory: 'antiplatelets',
+    listDescription: 'DAPT for atherosclerotic minor stroke/TIA within 72 hours. NNT=53. AHA 2026 COR 2a.',
   },
 
   // ─── CHANCE-2 TRIAL ───────────────────────────────────────────────────────
@@ -2084,7 +2108,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'COR 2b (weak) — regulatory and cost barriers with ticagrelor in many systems',
       'No direct comparison with aspirin alone — only vs clopidogrel DAPT',
       'Ticagrelor dyspnea (~15%) may reduce adherence in patients with pulmonary disease'
-    ]
+    ],
+    listCategory: 'antiplatelets',
+    listDescription: 'Ticagrelor vs clopidogrel DAPT in CYP2C19 loss-of-function carriers. NNT=63. AHA 2026 COR 2b.',
   },
 
   // ─── ENRICH TRIAL ─────────────────────────────────────────────────────────
@@ -2212,6 +2238,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Adaptive randomization ratio changed over time — potential allocation bias',
       'Does not address deep ICH (thalamus/putamen), posterior fossa, or volumes outside 30–80 mL',
       'Longer-term outcomes (>180 days) not reported'
-    ]
+    ],
+    listCategory: 'acute',
+    listDescription: 'First positive surgical ICH trial — MIPS halves 30-day mortality (9.3% vs 18.0%). NEJM 2024.',
   }
 };

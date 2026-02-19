@@ -158,8 +158,9 @@ const App: React.FC = () => {
           <Route path="/trials/sparcl-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="/trials/elan-study" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="/trials/enrich-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          {/* Catch-all route for other trials - must come AFTER specific routes */}
-          <Route path="/trials/:topicId" element={<PublishGate><ResidentGuide context="trials" /></PublishGate>} />
+          {/* Catch-all for trials — TrialPageNew handles unknown IDs gracefully */}
+          {/* New trials added to TRIAL_DATA with listCategory will work without touching App.tsx */}
+          <Route path="/trials/:topicId" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
           </Suspense>
