@@ -578,11 +578,18 @@ function calculateMdmLevel(problem: MdmLevel, data: MdmLevel, risk: MdmLevel): M
 function getMdmCpt(visitType: VisitType, mdmLevel: MdmLevel): CptEntry | null {
   const map = MDM_CPT[visitType];
   if (!map) return null;
+  // Walk DOWN from requested level (handles exact match + downgrade for time-based codes)
   let idx = levelToNum(mdmLevel);
   while (idx >= 0) {
     const level = numToLevel(idx);
     if (map[level]) return map[level]!;
     idx--;
+  }
+  // No entry at or below the requested level — return the lowest available entry.
+  // Per AMA 2023 footnote: visit types with no 'minimal' code (inpatient, consults)
+  // still bill at their floor code when MDM calculates as minimal.
+  for (const level of MDM_LEVEL_ORDER) {
+    if (map[level]) return map[level]!;
   }
   return null;
 }
@@ -1930,6 +1937,12 @@ const EmBillingCalculator: React.FC = () => {
                     <p className="text-blue-200 text-sm mb-1">+ 99292 ×{Math.floor((timeMins - 74) / 30)}</p>
                   )}
                   <p className="text-blue-100 font-medium text-base leading-snug">{activeCpt.description}</p>
+                  {/* Floor note: when MDM is minimal but visit type has no minimal code */}
+                  {effectiveBillingMode === 'mdm' && overallMdm === 'minimal' && !MDM_CPT[state.visitType]?.minimal && (
+                    <p className="text-blue-200 text-xs mt-1.5 italic opacity-80">
+                      This visit type has no minimal-complexity code — floor code shown per AMA guidelines.
+                    </p>
+                  )}
                   {activeCpt.epicLabel && (
                     <div className="mt-2 inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm rounded-full px-3 py-1">
                       <span className="text-[10px] font-bold uppercase tracking-wider text-blue-200">Epic</span>
