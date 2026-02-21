@@ -2134,6 +2134,126 @@ const EmBillingCalculator: React.FC = () => {
         </div>
       </div>
 
+      {/* ── Mobile Billing Output Drawer — fixed above the bottom nav, hidden on md+ ── */}
+      <div className="md:hidden fixed left-0 right-0 z-[55]" style={{ bottom: 'max(3.5rem, calc(env(safe-area-inset-bottom) + 3.5rem))' }}>
+        {/* Handle bar — always visible, shows live CPT code */}
+        <button
+          onClick={() => setBillingDrawerOpen(!billingDrawerOpen)}
+          className="w-full flex items-center justify-between px-4 py-3 bg-neuro-600 text-white shadow-lg"
+          style={{ borderRadius: '12px 12px 0 0' }}
+          aria-expanded={billingDrawerOpen}
+          aria-label="Toggle billing output"
+        >
+          <div className="flex items-center gap-2">
+            <FileText size={15} />
+            <span className="text-sm font-bold">
+              {activeCpt ? activeCpt.code : 'Billing Output'}
+            </span>
+            {activeCpt && (
+              <span className="text-[10px] bg-white/20 px-1.5 py-0.5 rounded font-semibold uppercase tracking-wide">
+                {MDM_LEVEL_LABELS[overallMdm]}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            {!billingDrawerOpen && (
+              <span className="text-[10px] text-blue-200 font-medium">tap to expand</span>
+            )}
+            {billingDrawerOpen ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
+          </div>
+        </button>
+
+        {/* Expanded drawer body */}
+        {billingDrawerOpen && (
+          <div className="bg-white border-x border-slate-200 shadow-2xl max-h-[58vh] overflow-y-auto">
+            <div className="p-4 space-y-3">
+              {/* Combined output pre block */}
+              <pre className="whitespace-pre-wrap break-words text-sm font-mono text-slate-800 leading-relaxed bg-slate-50 rounded-lg px-4 py-3 border border-slate-200 max-h-44 overflow-y-auto">
+                {combinedOutput}
+              </pre>
+
+              {/* Role-specific helper text */}
+              {!attestationText && state.providerRole === 'attending_solo' && (
+                <p className="text-xs text-slate-400 text-center">No separate attestation needed — sign your progress note as usual.</p>
+              )}
+              {!attestationText && isIncidentTo && (
+                <p className="text-xs text-amber-700 text-center">Incident-to: MD supervising physician signs the note. No separate attestation block needed.</p>
+              )}
+
+              {/* Copy button — closes drawer on success */}
+              <button
+                onClick={() => { copyCombined(); setBillingDrawerOpen(false); }}
+                className="w-full bg-neuro-600 hover:bg-neuro-700 text-white font-bold py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm"
+              >
+                <Copy size={14} />
+                {attestationText ? 'Copy Billing + Attestation' : 'Copy Billing Codes'}
+              </button>
+
+              {/* Reset */}
+              <button
+                onClick={() => { resetAll(); setBillingDrawerOpen(false); }}
+                className="w-full text-xs text-slate-400 hover:text-red-500 transition-colors py-1"
+              >
+                Reset all
+              </button>
+
+              {/* Teaching Physician Rationale accordion — reuses parent-level rationaleOpen state */}
+              {isTeachingRole && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg overflow-hidden">
+                  <button
+                    onClick={() => setRationaleOpen(!rationaleOpen)}
+                    className="w-full flex items-center justify-between px-3 py-2.5 text-xs text-blue-700 hover:bg-blue-100 transition-colors"
+                  >
+                    <span className="flex items-center gap-1.5 font-semibold">
+                      <Info size={13} />
+                      Why is this 2-sentence attestation sufficient?
+                    </span>
+                    {rationaleOpen ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+                  </button>
+                  {rationaleOpen && (
+                    <div className="px-4 pb-4 pt-1 text-xs text-blue-900 space-y-4 border-t border-blue-200">
+                      <div>
+                        <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1">■ CMS 2019 policy (still in effect)</p>
+                        <p className="text-blue-800 italic mb-1.5">"The teaching physician may review and verify — not re-document — information recorded by the resident or student."</p>
+                        <p className="text-blue-700 leading-relaxed">This means you do <strong>NOT</strong> need to re-type the H&amp;P narrative, physical exam findings, or imaging results (MRI, CT, labs). These live in the resident's note. You verify by co-signing.</p>
+                      </div>
+                      <div>
+                        <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1">■ Post-2021 AMA E/M framework</p>
+                        <p className="text-blue-700 leading-relaxed">Since 2021, E/M codes are selected by <strong>MDM or time only</strong> — not by the completeness of history or physical exam documentation. Your attestation needs to establish MDM participation and personal patient evaluation, not document exam components.</p>
+                      </div>
+                      <div>
+                        <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1.5">■ What the resident's note must contain</p>
+                        <p className="text-blue-700 mb-1.5">The composite of resident + attending documentation must together support medical necessity. The resident's note should include:</p>
+                        <ul className="space-y-0.5 text-blue-700 ml-2">
+                          <li>• Chief complaint and HPI</li>
+                          <li>• Physical exam findings</li>
+                          <li>• Labs, imaging, and relevant data reviewed</li>
+                          <li>• Assessment and plan (which the attending co-signs)</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="font-bold text-blue-800 uppercase tracking-wide text-[10px] mb-1.5">■ What your attestation must establish</p>
+                        <ul className="space-y-0.5 text-blue-700 ml-2">
+                          <li>✓ You personally saw and evaluated the patient</li>
+                          <li>✓ You were present during key portions of the encounter</li>
+                          <li>✓ You participated in medical decision making</li>
+                          <li>✓ You agree with (or modify) the assessment and plan</li>
+                          <li className="mt-1.5 text-red-700">✗ "Rounded, reviewed, agree" = <strong>AUDIT RISK</strong> (no physical presence established)</li>
+                          <li className="text-red-700">✗ Resident writing that attending was present = <strong>INSUFFICIENT</strong> (must be attending's own statement)</li>
+                        </ul>
+                      </div>
+                      <p className="text-[10px] text-blue-500 border-t border-blue-200 pt-2 leading-relaxed">
+                        Source: CMS Medicare Claims Processing Manual Ch. 12 · CMS June 2022 Teaching Physician Guidelines Update · AMA 2021 E/M Revisions
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* ── Toast ── */}
       {state.toast && (
         <div className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-xl text-sm font-bold z-[60] whitespace-nowrap">
