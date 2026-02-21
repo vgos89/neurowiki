@@ -782,7 +782,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </header>
 
         {/* Main Content with extra padding for mobile bottom nav + sticky actions */}
-        <main ref={mainRef} className="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-900 px-4 pb-20 pt-16 md:px-8 md:pb-8 scroll-smooth">
+        <main ref={mainRef} className="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-900 px-4 pb-24 pt-16 md:px-8 md:pb-8 scroll-smooth">
           <div className="max-w-7xl mx-auto">
             {children}
           </div>
@@ -803,7 +803,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         )}
 
         {/* Mobile Bottom Navigation Bar - Clinical Premium */}
-        <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-800/95 backdrop-blur-lg border-t border-slate-200/80 dark:border-slate-700/80 px-2 py-2 pb-safe z-50">
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-800/95 backdrop-blur-lg border-t border-slate-200/80 dark:border-slate-700/80 px-2 pt-2 z-50" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
           <div className="flex items-center justify-around max-w-md mx-auto">
             {mobileNavItems.map((item) => {
               const active = isActive(item.path);
