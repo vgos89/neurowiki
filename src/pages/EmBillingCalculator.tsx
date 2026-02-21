@@ -1152,6 +1152,10 @@ const EmBillingCalculator: React.FC = () => {
   const [rationaleOpen, setRationaleOpen] = useState(false);
   // ── Mobile billing drawer state ──
   const [billingDrawerOpen, setBillingDrawerOpen] = useState(false);
+  // ── About / FAQ accordion state ──
+  const [aboutOpen, setAboutOpen] = useState(false);
+  const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set());
+  const toggleFaq = (i: number) => setOpenFaqs(prev => { const s = new Set(prev); s.has(i) ? s.delete(i) : s.add(i); return s; });
 
   return (
     <div className="min-h-screen bg-slate-100 font-sans pb-28 md:pb-0">
@@ -2019,85 +2023,109 @@ const EmBillingCalculator: React.FC = () => {
       {/* ── SEO Content ── */}
       {/* Visible on-page content for search engine crawlers and AIO/LLM indexing */}
       <div className="px-4 lg:px-8 pb-16 max-w-screen-xl mx-auto">
-        <div className="mt-4 border-t border-slate-200 pt-10">
-          <h2 className="text-lg font-bold text-slate-800 mb-1">About This E/M Billing Calculator</h2>
-          <p className="text-sm text-slate-500 mb-6">Free physician-facing tool · 2021/2023 AMA guidelines · MDM and time-based billing</p>
+        <div className="mt-4 border-t border-slate-200 pt-6">
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-            <div>
-              <h3 className="text-sm font-bold text-slate-700 mb-2">How to Use: MDM vs Time-Based Billing</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Since January 2021, the AMA revised E/M coding so outpatient codes (99202–99215) are selected by <strong>Medical Decision-Making (MDM)</strong> or <strong>total physician time</strong> — not by the completeness of history or physical exam documentation.
-                This calculator supports both methods. For MDM, select your problem complexity, data reviewed, and management risk to calculate the overall MDM level (minimal/low/moderate/high) and the corresponding CPT code.
-                For time-based billing, enter the total time spent on the date of the encounter — including pre-visit preparation, history, exam, counseling, care coordination, and documentation.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-sm font-bold text-slate-700 mb-2">Supported Visit Types and CPT Codes</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                The calculator covers all major clinical settings: <strong>office visits</strong> (new patient 99202–99205, established 99211–99215),
-                <strong> outpatient consultations</strong> (99243–99245), <strong>initial inpatient</strong> (99221–99223),
-                <strong> subsequent inpatient</strong> (99231–99233), <strong>hospital discharge</strong> (99238–99239),
-                <strong> emergency department</strong> (99281–99285, MDM only per 2023 AMA),
-                <strong> critical care</strong> (99291 + 99292 add-ons), and inpatient consultation codes.
-                Specialty-specific MDM examples are available for neurology, hospitalist, internal medicine, emergency medicine, cardiology, psychiatry, and surgery.
-              </p>
-            </div>
+          {/* ── About accordion ── */}
+          <div className="mb-2 rounded-xl border border-slate-200 bg-white overflow-hidden">
+            <button
+              onClick={() => setAboutOpen(!aboutOpen)}
+              className="w-full flex items-center justify-between px-4 py-3.5 text-left hover:bg-slate-50 transition-colors"
+              aria-expanded={aboutOpen}
+            >
+              <div>
+                <span className="text-sm font-bold text-slate-800">About This E/M Billing Calculator</span>
+                <span className="ml-2 text-xs text-slate-400 hidden sm:inline">MDM · time-based · 2021/2023 AMA</span>
+              </div>
+              {aboutOpen ? <ChevronUp size={15} className="text-slate-400 flex-shrink-0" /> : <ChevronDown size={15} className="text-slate-400 flex-shrink-0" />}
+            </button>
+            {aboutOpen && (
+              <div className="px-4 pb-5 pt-1 border-t border-slate-100">
+                <p className="text-xs text-slate-400 mb-4">Free physician-facing tool · 2021/2023 AMA guidelines · MDM and time-based billing</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-700 mb-1.5">How to Use: MDM vs Time-Based Billing</h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      Since January 2021, the AMA revised E/M coding so outpatient codes (99202–99215) are selected by <strong>Medical Decision-Making (MDM)</strong> or <strong>total physician time</strong> — not by the completeness of history or physical exam documentation.
+                      This calculator supports both methods. For MDM, select your problem complexity, data reviewed, and management risk to calculate the overall MDM level (minimal/low/moderate/high) and the corresponding CPT code.
+                      For time-based billing, enter the total time spent on the date of the encounter — including pre-visit preparation, history, exam, counseling, care coordination, and documentation.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-700 mb-1.5">Supported Visit Types and CPT Codes</h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      The calculator covers all major clinical settings: <strong>office visits</strong> (new patient 99202–99205, established 99211–99215),
+                      <strong> outpatient consultations</strong> (99243–99245), <strong>initial inpatient</strong> (99221–99223),
+                      <strong> subsequent inpatient</strong> (99231–99233), <strong>hospital discharge</strong> (99238–99239),
+                      <strong> emergency department</strong> (99281–99285, MDM only per 2023 AMA),
+                      <strong> critical care</strong> (99291 + 99292 add-ons), and inpatient consultation codes.
+                      Specialty-specific MDM examples are available for neurology, hospitalist, internal medicine, emergency medicine, cardiology, psychiatry, and surgery.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="mb-10">
-            <h3 className="text-sm font-bold text-slate-700 mb-3">Frequently Asked Questions</h3>
-            <div className="space-y-4">
-
-              <div>
-                <h4 className="text-sm font-semibold text-slate-700">How do I choose between CPT 99205 and 99215?</h4>
-                <p className="text-sm text-slate-600 mt-1 leading-relaxed">
-                  <strong>99205</strong> (new patient, high complexity) and <strong>99215</strong> (established patient, high complexity) both require high-complexity MDM: a problem posing a threat to life or bodily function, extensive data review, and high-risk management — such as prescribing IV medications, deciding on major surgery, or managing a drug with intensive monitoring requirements. The only difference is new vs. established patient status. Time thresholds: 99205 requires 60+ minutes; 99215 requires 54+ minutes.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="text-sm font-semibold text-slate-700">What CPT codes do hospitalists use for inpatient billing?</h4>
-                <p className="text-sm text-slate-600 mt-1 leading-relaxed">
-                  Hospitalists bill <strong>initial hospital care</strong> with 99221 (low MDM, 40 min), 99222 (moderate MDM, 55 min), or 99223 (high MDM, 75+ min).
-                  <strong> Subsequent hospital care</strong> uses 99231 (low, 25 min), 99232 (moderate, 35 min), or 99233 (high, 50+ min).
-                  Discharge day management is 99238 (≤30 min) or 99239 (&gt;30 min). For critical illness, 99291 covers the first 30–74 minutes and 99292 each additional 30-minute block.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="text-sm font-semibold text-slate-700">Can I bill by time for E/M visits in 2024?</h4>
-                <p className="text-sm text-slate-600 mt-1 leading-relaxed">
-                  Yes. Total physician time on the date of service is a valid sole basis for E/M level selection for office (99202–99215) and inpatient visits (99221–99233).
-                  The <strong>exception</strong> is the emergency department — per 2023 AMA guidelines, time is not a valid coding basis for ED E/M codes (99281–99285); only MDM applies.
-                  You may choose MDM or time on a visit-by-visit basis; use whichever supports the more accurate level for the encounter.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="text-sm font-semibold text-slate-700">What is the 2021 AMA MDM framework?</h4>
-                <p className="text-sm text-slate-600 mt-1 leading-relaxed">
-                  MDM is determined by meeting at least 2 of 3 elements at a given level:
-                  (1) <strong>Number and complexity of problems</strong> — from self-limited (minimal) to acute illness with systemic symptoms (moderate) to threat to life or bodily function (high);
-                  (2) <strong>Amount and complexity of data</strong> — from minimal/none (minimal) to review/order of tests plus independent interpretation or discussion with another provider (high);
-                  (3) <strong>Risk of management</strong> — from minor surgery or OTC medication (low) to prescription drug management (moderate) to IV drug therapy, major surgery, or hospitalization decision (high).
-                </p>
-              </div>
-
-              <div>
-                <h4 className="text-sm font-semibold text-slate-700">When should I use modifier -GC for teaching physician billing?</h4>
-                <p className="text-sm text-slate-600 mt-1 leading-relaxed">
-                  Add <strong>modifier -GC</strong> when an attending teaching physician personally performs or supervises a resident. The attending must be present during the key portion of the service and personally examine the patient. The attestation should confirm the attending's participation and physical presence — not merely supervisory oversight. For critical care with a resident, the attending must be immediately available and personally document their own participation in the critical care services.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="text-sm font-semibold text-slate-700">How does shared/split billing work with the -FS modifier?</h4>
-                <p className="text-sm text-slate-600 mt-1 leading-relaxed">
-                  In shared/split E/M billing, a physician and a non-physician practitioner (NP/PA) both provide substantive portions of the same encounter. Since 2022, billing under the physician's NPI requires that the physician performs the <strong>substantive portion</strong> of the visit (more than half the total time, or the key portion of MDM). Add <strong>modifier -FS</strong> to indicate a shared/split visit. If the NPP performs the substantive portion, bill under the NPP's NPI instead.
-                </p>
-              </div>
-
+          {/* ── FAQ accordion ── */}
+          <div className="mb-8 rounded-xl border border-slate-200 bg-white overflow-hidden">
+            {/* FAQ section header — not itself a toggle, just a label row */}
+            <div className="px-4 py-3 border-b border-slate-100 flex items-center gap-2">
+              <span className="text-sm font-bold text-slate-800">Frequently Asked Questions</span>
+              <span className="text-xs text-slate-400">· {[
+                'How do I choose between CPT 99205 and 99215?',
+                'What CPT codes do hospitalists use for inpatient billing?',
+                'Can I bill by time for E/M visits in 2024?',
+                'What is the 2021 AMA MDM framework?',
+                'When should I use modifier -GC for teaching physician billing?',
+                'How does shared/split billing work with the -FS modifier?',
+              ].length} questions</span>
+            </div>
+            <div className="divide-y divide-slate-100">
+              {([
+                {
+                  q: 'How do I choose between CPT 99205 and 99215?',
+                  a: <><strong>99205</strong> (new patient, high complexity) and <strong>99215</strong> (established patient, high complexity) both require high-complexity MDM: a problem posing a threat to life or bodily function, extensive data review, and high-risk management — such as prescribing IV medications, deciding on major surgery, or managing a drug with intensive monitoring requirements. The only difference is new vs. established patient status. Time thresholds: 99205 requires 60+ minutes; 99215 requires 54+ minutes.</>,
+                },
+                {
+                  q: 'What CPT codes do hospitalists use for inpatient billing?',
+                  a: <>Hospitalists bill <strong>initial hospital care</strong> with 99221 (low MDM, 40 min), 99222 (moderate MDM, 55 min), or 99223 (high MDM, 75+ min). <strong>Subsequent hospital care</strong> uses 99231 (low, 25 min), 99232 (moderate, 35 min), or 99233 (high, 50+ min). Discharge day management is 99238 (≤30 min) or 99239 (&gt;30 min). For critical illness, 99291 covers the first 30–74 minutes and 99292 each additional 30-minute block.</>,
+                },
+                {
+                  q: 'Can I bill by time for E/M visits in 2024?',
+                  a: <>Yes. Total physician time on the date of service is a valid sole basis for E/M level selection for office (99202–99215) and inpatient visits (99221–99233). The <strong>exception</strong> is the emergency department — per 2023 AMA guidelines, time is not a valid coding basis for ED E/M codes (99281–99285); only MDM applies. You may choose MDM or time on a visit-by-visit basis; use whichever supports the more accurate level for the encounter.</>,
+                },
+                {
+                  q: 'What is the 2021 AMA MDM framework?',
+                  a: <>MDM is determined by meeting at least 2 of 3 elements at a given level: (1) <strong>Number and complexity of problems</strong> — from self-limited (minimal) to acute illness with systemic symptoms (moderate) to threat to life or bodily function (high); (2) <strong>Amount and complexity of data</strong> — from minimal/none (minimal) to review/order of tests plus independent interpretation or discussion with another provider (high); (3) <strong>Risk of management</strong> — from minor surgery or OTC medication (low) to prescription drug management (moderate) to IV drug therapy, major surgery, or hospitalization decision (high).</>,
+                },
+                {
+                  q: 'When should I use modifier -GC for teaching physician billing?',
+                  a: <>Add <strong>modifier -GC</strong> when an attending teaching physician personally performs or supervises a resident. The attending must be present during the key portion of the service and personally examine the patient. The attestation should confirm the attending's participation and physical presence — not merely supervisory oversight. For critical care with a resident, the attending must be immediately available and personally document their own participation in the critical care services.</>,
+                },
+                {
+                  q: 'How does shared/split billing work with the -FS modifier?',
+                  a: <>In shared/split E/M billing, a physician and a non-physician practitioner (NP/PA) both provide substantive portions of the same encounter. Since 2022, billing under the physician's NPI requires that the physician performs the <strong>substantive portion</strong> of the visit (more than half the total time, or the key portion of MDM). Add <strong>modifier -FS</strong> to indicate a shared/split visit. If the NPP performs the substantive portion, bill under the NPP's NPI instead.</>,
+                },
+              ] as { q: string; a: React.ReactNode }[]).map(({ q, a }, i) => {
+                const open = openFaqs.has(i);
+                return (
+                  <div key={i}>
+                    <button
+                      onClick={() => toggleFaq(i)}
+                      className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-slate-50 transition-colors"
+                      aria-expanded={open}
+                    >
+                      <span className="text-sm font-semibold text-slate-700 pr-4">{q}</span>
+                      {open ? <ChevronUp size={14} className="text-slate-400 flex-shrink-0" /> : <ChevronDown size={14} className="text-slate-400 flex-shrink-0" />}
+                    </button>
+                    {open && (
+                      <div className="px-4 pb-4 pt-0.5">
+                        <p className="text-sm text-slate-600 leading-relaxed">{a}</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
