@@ -1150,9 +1150,11 @@ const EmBillingCalculator: React.FC = () => {
 
   // ── Rationale accordion state (must be at parent level — not inside a sub-component — to persist across renders) ──
   const [rationaleOpen, setRationaleOpen] = useState(false);
+  // ── Mobile billing drawer state ──
+  const [billingDrawerOpen, setBillingDrawerOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-100 font-sans">
+    <div className="min-h-screen bg-slate-100 font-sans pb-28 md:pb-0">
       {/* ── Sticky Header ── */}
       <div className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200">
         <div className="flex items-center gap-3 px-4 py-3">
@@ -1884,8 +1886,8 @@ const EmBillingCalculator: React.FC = () => {
               </div>
             </div>
 
-            {/* ── Billing Output Card ── */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            {/* ── Billing Output Card — desktop only; mobile uses sticky bottom drawer ── */}
+            <div className="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
               <div className="p-4 border-b border-slate-200 flex justify-between items-center">
                 <div className="flex items-center gap-2 text-slate-700 font-bold text-sm uppercase tracking-wide">
                   <FileText size={16} />
