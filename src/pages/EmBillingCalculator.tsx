@@ -84,9 +84,19 @@ type ManagementRisk =
   | 'dnr_discussion';
 
 interface DataReviewed {
-  reviewedLabsImaging: boolean;
+  // ── Category 1 — Tests, Documents, or Independent Historian(s) ──────────────
+  // Each item counts separately; need ≥2 for Low, ≥3 for Moderate/High (AMA 2023)
+  priorTestResults: boolean;      // Reviewed prior test result(s) per unique test (NOT self-ordered)
+  orderedTests: boolean;          // Ordered imaging, lab, psychometric, physiologic data testing
+  externalRecords: boolean;       // Evaluated external records from an external provider
+  additionalHistorian: boolean;   // Encounter including an additional historian (caregiver, family, witness)
+
+  // ── Category 2 — Independent Interpretation of Tests ─────────────────────────
+  // Alone = Moderate. Formally read/billed by another provider; NOT separately reported by you
   independentInterpretation: boolean;
-  externalNotesReview: boolean;
+
+  // ── Category 3 — Discussion of Management or Test Interpretation ──────────────
+  // Alone = Moderate. Direct dialogue with external provider; not separately reportable
   discussedWithProvider: boolean;
 }
 
@@ -359,19 +369,20 @@ const MANAGEMENT_RISK_TO_MDM: Record<ManagementRisk, MdmLevel> = {
   dnr_discussion: 'high',
 };
 
-// MDM problem justification text
+// MDM problem justification text — per AMA 2023 MDM Chart
 const PROBLEM_JUSTIFICATION: Record<MdmLevel, string> = {
-  minimal: 'One self-limited or minor problem (e.g., cold, insect bite, minor injury)',
-  low: 'Stable chronic illness; or one acute uncomplicated illness/injury; or two or more self-limited problems; or one acute problem requiring hospital-level care',
-  moderate: 'One or more chronic illnesses with exacerbation/progression/side effects; or one undiagnosed new problem with uncertain prognosis; or one acute illness with systemic symptoms; or one acute complicated injury',
-  high: 'One or more chronic illnesses with severe exacerbation/progression; or one acute/chronic illness posing a threat to life or bodily function',
+  minimal: '1 negligible or meager problem addressed',
+  low: 'Stable chronic problem; OR 1 acute, direct or well-defined problem/injury; OR stable, acute illness',
+  moderate: 'Chronic complaint that is not stable (progressing, worsening, or side effects); OR 2+ stable chronic problems; OR 1 new undiagnosed problem with potentially high risk; OR acute complaint with unanticipated symptoms; OR acute complex injury',
+  high: '1 (or more) chronic problem(s) severely triggered, progressive, or with side effects of treatment; OR acute/chronic illness placing danger/risk to life or bodily function',
 };
 
+// MDM data justification text — per AMA 2023 MDM Chart (3-category model)
 const DATA_JUSTIFICATION: Record<MdmLevel, string> = {
-  minimal: 'Minimal or no data reviewed',
-  low: 'Limited — reviewed notes or ordered/reviewed tests (at least 2 data elements)',
-  moderate: 'Moderate — at least 3 data elements, OR independent test interpretation, OR discussion with external physician',
-  high: 'Extensive — at least 2 of the 3 data categories met (tests/documents, independent interpretation, and/or external physician discussion)',
+  minimal: 'No additional order, review, or data beyond the work of the encounter',
+  low: 'Category 1 met: ≥2 items from (prior test results reviewed, tests ordered, external records reviewed, additional historian)',
+  moderate: '1 of 3 categories met — Category 1 (≥3 items); OR Category 2 (independent test interpretation, not separately billed); OR Category 3 (direct discussion with external provider)',
+  high: 'At least 2 of 3 categories met at the Moderate threshold',
 };
 
 const RISK_JUSTIFICATION: Record<MdmLevel, string> = {
@@ -524,25 +535,39 @@ function matchTaxonomyToSpecialty(taxonomy: string): string | null {
 function levelToNum(l: MdmLevel): number { return MDM_LEVEL_ORDER.indexOf(l); }
 function numToLevel(n: number): MdmLevel { return MDM_LEVEL_ORDER[Math.max(0, Math.min(3, n))]; }
 
-function deriveProblemLevel(diagnoses: Icd10Code[], override: MdmLevel | null): MdmLevel {
-  if (override !== null) return override;
-  const count = diagnoses.length;
-  if (count === 0) return 'minimal';
-  if (count === 1) return 'low';
-  if (count === 2) return 'moderate';
-  return 'high';
+// Problem level is always an explicit physician selection — no count heuristic (AMA 2023)
+function deriveProblemLevel(override: MdmLevel | null): MdmLevel {
+  return override ?? 'minimal';
 }
 
+// AMA 2023 3-category data scoring:
+//   Cat1 (tests/docs/historian): ≥2 items = Low; ≥3 items = Moderate threshold met
+//   Cat2 (independent interpretation): alone = Moderate threshold met
+//   Cat3 (provider discussion): alone = Moderate threshold met
+//   High (Extensive): ≥2 of 3 categories met at Moderate threshold
 function deriveDataLevel(data: DataReviewed): MdmLevel {
-  const score =
-    (data.reviewedLabsImaging ? 1 : 0) +
-    (data.independentInterpretation ? 1 : 0) +
-    (data.externalNotesReview ? 1 : 0) +
-    (data.discussedWithProvider ? 1 : 0);
-  if (score === 0) return 'minimal';
-  if (score === 1) return 'low';
-  if (score === 2) return 'moderate';
-  return 'high';
+  const cat1Count =
+    (data.priorTestResults ? 1 : 0) +
+    (data.orderedTests ? 1 : 0) +
+    (data.externalRecords ? 1 : 0) +
+    (data.additionalHistorian ? 1 : 0);
+
+  const cat1MetLow      = cat1Count >= 2; // Cat1 at Low threshold (≥2 items)
+  const cat1MetModerate = cat1Count >= 3; // Cat1 at Moderate threshold (≥3 items)
+  const cat2Met = data.independentInterpretation;
+  const cat3Met = data.discussedWithProvider;
+
+  // High (Extensive): ≥2 of 3 categories met at Moderate threshold
+  const moderateCategoriesMet = (cat1MetModerate ? 1 : 0) + (cat2Met ? 1 : 0) + (cat3Met ? 1 : 0);
+  if (moderateCategoriesMet >= 2) return 'high';
+
+  // Moderate: exactly 1 category met at Moderate threshold (Cat1 ≥3, OR Cat2, OR Cat3)
+  if (moderateCategoriesMet >= 1) return 'moderate';
+
+  // Low: Cat1 ≥2 items (historian is a Cat1 item)
+  if (cat1MetLow) return 'low';
+
+  return 'minimal';
 }
 
 function calculateMdmLevel(problem: MdmLevel, data: MdmLevel, risk: MdmLevel): MdmLevel {
@@ -767,21 +792,20 @@ async function fetchIcd10Codes(query: string, signal?: AbortSignal): Promise<Icd
 
 // ─── MDM Justification Helpers ────────────────────────────────────────────────
 
-function getProblemSummary(diagnoses: Icd10Code[], override: MdmLevel | null): string {
-  if (override !== null) return `Overridden to ${MDM_LEVEL_FULL[override]}`;
-  const n = diagnoses.length;
-  if (n === 0) return 'No diagnoses entered';
-  if (n === 1) return `1 diagnosis — ${diagnoses[0].name}`;
-  return `${n} diagnoses entered`;
+function getProblemSummary(override: MdmLevel | null): string {
+  if (override === null) return 'Select problem complexity above';
+  return MDM_LEVEL_FULL[override];
 }
 
 function getDataSummary(data: DataReviewed): string {
   const items: string[] = [];
-  if (data.reviewedLabsImaging) items.push('labs/imaging');
-  if (data.independentInterpretation) items.push('independent review');
-  if (data.externalNotesReview) items.push('outside records');
+  if (data.priorTestResults) items.push('prior test results');
+  if (data.orderedTests) items.push('tests ordered');
+  if (data.externalRecords) items.push('external records');
+  if (data.additionalHistorian) items.push('additional historian');
+  if (data.independentInterpretation) items.push('independent interpretation');
   if (data.discussedWithProvider) items.push('provider discussion');
-  if (items.length === 0) return 'No data review checked';
+  if (items.length === 0) return 'No data elements checked';
   return items.join(', ');
 }
 
@@ -881,10 +905,12 @@ function generateAttestationText(
 // Append MDM data + management selections as a trailing audit-support block
 function generateMdmSupportLine(state: EmBillingState): string | null {
   const dataLabels: string[] = [];
-  if (state.dataReviewed.reviewedLabsImaging)       dataLabels.push('Reviewed labs/imaging');
-  if (state.dataReviewed.independentInterpretation)  dataLabels.push('Reviewed images/tracings directly');
-  if (state.dataReviewed.externalNotesReview)        dataLabels.push('Reviewed outside records');
-  if (state.dataReviewed.discussedWithProvider)      dataLabels.push('Discussed with another physician');
+  if (state.dataReviewed.priorTestResults)          dataLabels.push('Reviewed prior test results');
+  if (state.dataReviewed.orderedTests)              dataLabels.push('Ordered tests');
+  if (state.dataReviewed.externalRecords)           dataLabels.push('Reviewed external records');
+  if (state.dataReviewed.additionalHistorian)       dataLabels.push('Obtained history from additional historian');
+  if (state.dataReviewed.independentInterpretation) dataLabels.push('Independently interpreted a test');
+  if (state.dataReviewed.discussedWithProvider)     dataLabels.push('Discussed management with external provider');
 
   const mgmtOption = MANAGEMENT_RISK_OPTIONS.find(o => o.value === state.managementRisk);
   const hasData = dataLabels.length > 0;
@@ -942,7 +968,7 @@ const INITIAL_STATE: EmBillingState = {
   specialty: 'Neurology',
   billingMode: 'mdm',
   problemLevelOverride: null,
-  dataReviewed: { reviewedLabsImaging: false, independentInterpretation: false, externalNotesReview: false, discussedWithProvider: false },
+  dataReviewed: { priorTestResults: false, orderedTests: false, externalRecords: false, additionalHistorian: false, independentInterpretation: false, discussedWithProvider: false },
   managementRisk: '',
   timeMinutes: '',
   timeActivities: [],
@@ -985,7 +1011,7 @@ const EmBillingCalculator: React.FC = () => {
   }, []);
 
   // ── Derived MDM values ──
-  const problemLevel = deriveProblemLevel(state.selectedDiagnoses, state.problemLevelOverride);
+  const problemLevel = deriveProblemLevel(state.problemLevelOverride);
   const dataLevel = deriveDataLevel(state.dataReviewed);
   const riskLevel = MANAGEMENT_RISK_TO_MDM[state.managementRisk];
   const overallMdm = calculateMdmLevel(problemLevel, dataLevel, riskLevel);
@@ -1624,41 +1650,51 @@ const EmBillingCalculator: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Problem Complexity Override */}
+                {/* Problem Complexity — explicit physician selection (AMA 2023: complexity/stability, not count) */}
                 <div className="mb-5 p-3 bg-slate-50 rounded-lg border border-slate-200">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Problem Complexity</span>
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded ${
-                        problemLevel === 'high' ? 'bg-red-100 text-red-700' :
-                        problemLevel === 'moderate' ? 'bg-orange-100 text-orange-700' :
-                        problemLevel === 'low' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
-                      }`}>
-                        {MDM_LEVEL_FULL[problemLevel]}{state.problemLevelOverride === null && <span className="ml-1 font-normal opacity-70">auto</span>}
-                      </span>
-                    </div>
-                    <button onClick={() => set({ problemLevelOverride: state.problemLevelOverride !== null ? null : problemLevel })}
-                      className="text-xs text-neuro-600 hover:text-neuro-700 font-medium transition-colors">
-                      {state.problemLevelOverride !== null ? 'Auto-derive' : 'Override'}
-                    </button>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">Number &amp; Complexity of Problems</span>
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded ml-auto ${
+                      problemLevel === 'high' ? 'bg-red-100 text-red-700' :
+                      problemLevel === 'moderate' ? 'bg-orange-100 text-orange-700' :
+                      problemLevel === 'low' ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'
+                    }`}>
+                      {state.problemLevelOverride === null ? 'Not selected' : MDM_LEVEL_FULL[problemLevel]}
+                    </span>
                   </div>
-                  {/* Specialty examples */}
-                  <p className="text-xs text-slate-400 mt-1.5">
-                    {overallMdm === 'high' || overallMdm === 'moderate'
-                      ? `${state.specialty}: ${specialtyEx.problems[overallMdm === 'high' ? 'high' : 'moderate']}`
-                      : `Auto-derived from ${state.selectedDiagnoses.length} diagnosis${state.selectedDiagnoses.length !== 1 ? 'es' : ''} entered above`}
-                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {([
+                      { level: 'minimal' as MdmLevel, short: 'MIN', desc: 'Negligible or meager problem' },
+                      { level: 'low'     as MdmLevel, short: 'LOW', desc: 'Stable chronic or acute uncomplicated' },
+                      { level: 'moderate'as MdmLevel, short: 'MOD', desc: 'Unstable chronic, new undiagnosed, or acute complex' },
+                      { level: 'high'    as MdmLevel, short: 'HIGH', desc: 'Severe exacerbation or threat to life/function' },
+                    ]).map(({ level, short, desc }) => (
+                      <button
+                        key={level}
+                        onClick={() => set({ problemLevelOverride: level })}
+                        className={`flex flex-col items-start p-2.5 rounded-lg border text-left transition-all ${
+                          state.problemLevelOverride === level
+                            ? level === 'high'     ? 'bg-red-50 border-red-400 ring-1 ring-red-300'
+                            : level === 'moderate' ? 'bg-orange-50 border-orange-400 ring-1 ring-orange-300'
+                            : level === 'low'      ? 'bg-blue-50 border-blue-400 ring-1 ring-blue-300'
+                            :                       'bg-emerald-50 border-emerald-400 ring-1 ring-emerald-300'
+                            : 'bg-white border-slate-200 hover:border-slate-300'
+                        }`}
+                      >
+                        <span className={`text-xs font-bold mb-1 ${
+                          state.problemLevelOverride === level
+                            ? level === 'high' ? 'text-red-700' : level === 'moderate' ? 'text-orange-700' : level === 'low' ? 'text-blue-700' : 'text-emerald-700'
+                            : 'text-slate-500'
+                        }`}>{short}</span>
+                        <span className="text-[11px] text-slate-600 leading-tight">{desc}</span>
+                      </button>
+                    ))}
+                  </div>
                   {state.problemLevelOverride !== null && (
-                    <div className="mt-3 flex gap-2">
-                      {MDM_LEVEL_ORDER.map((level) => (
-                        <button key={level} onClick={() => set({ problemLevelOverride: level })}
-                          className={`flex-1 py-1.5 text-xs font-semibold rounded border transition-all ${
-                            state.problemLevelOverride === level ? 'bg-neuro-600 text-white border-neuro-600' : 'bg-white text-slate-600 border-slate-200 hover:border-neuro-400'
-                          }`}>
-                          {MDM_LEVEL_LABELS[level]}
-                        </button>
-                      ))}
-                    </div>
+                    <p className="text-xs text-slate-400 mt-2 leading-snug">{PROBLEM_JUSTIFICATION[state.problemLevelOverride]}</p>
+                  )}
+                  {state.problemLevelOverride === null && (
+                    <p className="text-xs text-amber-600 mt-2">Select the complexity that best matches the problems addressed at this visit.</p>
                   )}
                 </div>
 
@@ -1675,42 +1711,75 @@ const EmBillingCalculator: React.FC = () => {
                         dataLevel === 'low' ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'
                       }`}>{MDM_LEVEL_LABELS[dataLevel]}</span>
                     </div>
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
-                      {[
-                        {
-                          key: 'reviewedLabsImaging' as keyof DataReviewed,
-                          label: 'Reviewed labs or imaging',
-                          sub: `e.g., ${specialtyEx.labs}`,
-                        },
-                        {
-                          key: 'independentInterpretation' as keyof DataReviewed,
-                          label: 'Personally reviewed images/tracings — not just a report',
-                          sub: `e.g., ${specialtyEx.imaging}`,
-                        },
-                        {
-                          key: 'externalNotesReview' as keyof DataReviewed,
-                          label: 'Reviewed outside records or notes',
-                          sub: 'e.g., OSH records, transfer notes, prior specialist notes',
-                        },
-                        {
-                          key: 'discussedWithProvider' as keyof DataReviewed,
-                          label: 'Directly spoke with another physician',
-                          sub: 'e.g., called radiology, spoke with neurosurgery, discussed with PCP',
-                        },
-                      ].map(({ key, label, sub }) => (
-                        <label key={key} className="flex items-start gap-3 cursor-pointer">
+                    <div className="bg-slate-50 rounded-xl border border-slate-200 overflow-hidden">
+                      {/* Category 1 */}
+                      <div className="px-4 pt-3 pb-1">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                          Cat 1 — Tests, Documents &amp; Historian
+                          <span className="ml-1 font-normal normal-case">
+                            (≥2 = Low · ≥3 = Moderate)
+                          </span>
+                        </p>
+                        <div className="space-y-3">
+                          {([
+                            { key: 'priorTestResults' as keyof DataReviewed, label: 'Reviewed prior test results', sub: `e.g., ${specialtyEx.labs} — NOT tests you ordered yourself` },
+                            { key: 'orderedTests'      as keyof DataReviewed, label: 'Ordered tests',              sub: `e.g., ordered MRI, CT, LP, EMG, labs — each unique test per CPT` },
+                            { key: 'externalRecords'   as keyof DataReviewed, label: 'Reviewed external records',  sub: 'e.g., OSH records, transfer notes, prior specialist notes from outside' },
+                            { key: 'additionalHistorian' as keyof DataReviewed, label: 'Additional historian', sub: 'e.g., obtained history from caregiver, family member, or witness' },
+                          ] as { key: keyof DataReviewed; label: string; sub: string }[]).map(({ key, label, sub }) => (
+                            <label key={key} className="flex items-start gap-3 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={state.dataReviewed[key]}
+                                onChange={(e) => set({ dataReviewed: { ...state.dataReviewed, [key]: e.target.checked } })}
+                                className="mt-0.5 w-4 h-4 text-neuro-600 rounded border-slate-300 focus:ring-neuro-500 flex-shrink-0"
+                              />
+                              <div>
+                                <span className="text-sm text-slate-700">{label}</span>
+                                <p className="text-xs text-slate-400 mt-0.5">{sub}</p>
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                      {/* Category 2 */}
+                      <div className="px-4 pt-3 pb-1 border-t border-slate-200 mt-2">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                          Cat 2 — Independent Interpretation
+                          <span className="ml-1 font-normal normal-case">(alone = Moderate)</span>
+                        </p>
+                        <label className="flex items-start gap-3 cursor-pointer mb-3">
                           <input
                             type="checkbox"
-                            checked={state.dataReviewed[key]}
-                            onChange={(e) => set({ dataReviewed: { ...state.dataReviewed, [key]: e.target.checked } })}
+                            checked={state.dataReviewed.independentInterpretation}
+                            onChange={(e) => set({ dataReviewed: { ...state.dataReviewed, independentInterpretation: e.target.checked } })}
                             className="mt-0.5 w-4 h-4 text-neuro-600 rounded border-slate-300 focus:ring-neuro-500 flex-shrink-0"
                           />
                           <div>
-                            <span className="text-sm text-slate-700">{label}</span>
-                            <p className="text-xs text-slate-400 mt-0.5">{sub}</p>
+                            <span className="text-sm text-slate-700">Personally interpreted a test</span>
+                            <p className="text-xs text-slate-400 mt-0.5">e.g., {specialtyEx.imaging} — viewed raw images/tracings yourself, NOT just a report; NOT separately billed</p>
                           </div>
                         </label>
-                      ))}
+                      </div>
+                      {/* Category 3 */}
+                      <div className="px-4 pt-3 pb-3 border-t border-slate-200">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                          Cat 3 — Provider Discussion
+                          <span className="ml-1 font-normal normal-case">(alone = Moderate)</span>
+                        </p>
+                        <label className="flex items-start gap-3 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={state.dataReviewed.discussedWithProvider}
+                            onChange={(e) => set({ dataReviewed: { ...state.dataReviewed, discussedWithProvider: e.target.checked } })}
+                            className="mt-0.5 w-4 h-4 text-neuro-600 rounded border-slate-300 focus:ring-neuro-500 flex-shrink-0"
+                          />
+                          <div>
+                            <span className="text-sm text-slate-700">Spoke directly with external provider</span>
+                            <p className="text-xs text-slate-400 mt-0.5">e.g., called radiology, discussed with neurosurgery, spoke with PCP — re: management or test interpretation; asynchronous OK</p>
+                          </div>
+                        </label>
+                      </div>
                     </div>
                   </div>
 
@@ -2001,7 +2070,7 @@ const EmBillingCalculator: React.FC = () => {
                 </div>
                 <div className="grid grid-cols-3 gap-2 mb-3">
                   {([
-                    { label: 'PROBLEMS', level: problemLevel, summary: getProblemSummary(state.selectedDiagnoses, state.problemLevelOverride) },
+                    { label: 'PROBLEMS', level: problemLevel, summary: getProblemSummary(state.problemLevelOverride) },
                     { label: 'DATA', level: dataLevel, summary: getDataSummary(state.dataReviewed) },
                     { label: 'RISK', level: riskLevel, summary: getRiskSummary(state.managementRisk) },
                   ] as { label: string; level: MdmLevel; summary: string }[]).map(({ label, level, summary }) => {
