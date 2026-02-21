@@ -714,7 +714,10 @@ const ICD10_SYNONYMS: Record<string, string> = {
   'mets': 'secondary malignant',
 };
 
-async function fetchIcd10Codes(query: string): Promise<Icd10Code[]> {
+// Module-level cache — survives re-renders, cleared on page reload (~5KB for 100 queries)
+const icd10Cache = new Map<string, Icd10Code[]>();
+
+async function fetchIcd10Codes(query: string, signal?: AbortSignal): Promise<Icd10Code[]> {
   const raw = query.trim();
   if (!raw) return [];
 
@@ -727,12 +730,17 @@ async function fetchIcd10Codes(query: string): Promise<Icd10Code[]> {
   })();
 
   const nlmSearch = async (term: string): Promise<Icd10Code[]> => {
+    const cacheKey = term.toLowerCase().trim();
+    if (icd10Cache.has(cacheKey)) return icd10Cache.get(cacheKey)!;
     const resp = await fetch(
-      `https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search?sf=code,name&terms=${encodeURIComponent(term)}&maxList=10`
+      `https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search?sf=code,name&terms=${encodeURIComponent(term)}&maxList=20`,
+      { signal }
     );
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data: [number, string[], null, [string, string][]] = await resp.json();
-    return (data[3] ?? []).map(([code, name]) => ({ code, name }));
+    const results = (data[3] ?? []).map(([code, name]) => ({ code, name }));
+    if (results.length > 0) icd10Cache.set(cacheKey, results);
+    return results;
   };
 
   // Primary search with resolved term
@@ -961,6 +969,7 @@ const EmBillingCalculator: React.FC = () => {
 
   const npiDebounce = useRef<ReturnType<typeof setTimeout> | null>(null);
   const icd10Debounce = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const icd10AbortRef = useRef<AbortController | null>(null);
   const icd10InputRef = useRef<HTMLInputElement>(null);
   const npiInputRef = useRef<HTMLInputElement>(null);
 
@@ -1027,7 +1036,7 @@ const EmBillingCalculator: React.FC = () => {
         const msg = err instanceof Error ? err.message : 'NPI lookup failed';
         set({ npiError: `NPI lookup failed: ${msg}`, npiLoading: false, showNpiDropdown: false });
       }
-    }, 300);
+    }, 500);
   };
 
   const selectProvider = (provider: NpiProvider) => {
@@ -1051,14 +1060,18 @@ const EmBillingCalculator: React.FC = () => {
     if (icd10Debounce.current) clearTimeout(icd10Debounce.current);
     if (value.trim().length < 2) { set({ icd10Results: [], showIcd10Dropdown: false }); return; }
     icd10Debounce.current = setTimeout(async () => {
+      // Cancel any in-flight request before starting a new one
+      icd10AbortRef.current?.abort();
+      icd10AbortRef.current = new AbortController();
       set({ icd10Loading: true });
       try {
-        const results = await fetchIcd10Codes(value);
+        const results = await fetchIcd10Codes(value, icd10AbortRef.current.signal);
         set({ icd10Results: results, showIcd10Dropdown: true, icd10Loading: false });
-      } catch (_) {
+      } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') return;
         set({ icd10Error: 'ICD-10 lookup failed. Try again.', icd10Loading: false, showIcd10Dropdown: false });
       }
-    }, 300);
+    }, 500);
   };
 
   const addDiagnosis = (code: Icd10Code) => {
@@ -1214,7 +1227,7 @@ const EmBillingCalculator: React.FC = () => {
                 <div className="mt-2 flex items-center gap-2 text-red-500 text-xs"><AlertCircle size={12} />{state.npiError}</div>
               )}
               {state.showNpiDropdown && state.npiResults.length > 0 && (
-                <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 overflow-hidden">
+                <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 overflow-y-auto max-h-64">
                   {state.npiResults.map((r) => (
                     <button key={r.npi} onClick={() => selectProvider(r)}
                       className="w-full flex items-start gap-3 p-3 hover:bg-slate-50 transition-colors text-left border-b border-slate-100 last:border-0">
@@ -1505,7 +1518,7 @@ const EmBillingCalculator: React.FC = () => {
                   <div className="mt-1 flex items-center gap-1 text-red-500 text-xs"><AlertCircle size={12} /> {state.icd10Error}</div>
                 )}
                 {state.showIcd10Dropdown && state.icd10Results.length > 0 && (
-                  <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 overflow-hidden">
+                  <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 overflow-y-auto max-h-64">
                     {state.icd10Results.map((code) => (
                       <button key={code.code} onMouseDown={(e) => { e.preventDefault(); addDiagnosis(code); }}
                         className="w-full flex items-center gap-3 p-3 hover:bg-slate-50 transition-colors text-left border-b border-slate-100 last:border-0">
