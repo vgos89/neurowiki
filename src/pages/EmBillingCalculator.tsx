@@ -383,51 +383,52 @@ const RISK_JUSTIFICATION: Record<MdmLevel, string> = {
 
 // ─── CPT Code Tables ──────────────────────────────────────────────────────────
 
-interface CptEntry { code: string; description: string }
+// epicLabel = the plain-English name used in Epic charge capture search
+interface CptEntry { code: string; description: string; epicLabel?: string }
 
 const MDM_CPT: Record<VisitType, Partial<Record<MdmLevel, CptEntry>>> = {
   new_patient_office: {
-    low: { code: '99202', description: 'New Patient Office — Straightforward MDM' },
-    moderate: { code: '99204', description: 'New Patient Office — Moderate Complexity MDM' },
-    high: { code: '99205', description: 'New Patient Office — High Complexity MDM' },
+    low:      { code: '99202', description: 'New Patient Office — Straightforward MDM',    epicLabel: 'Office Visit New Patient Level 2' },
+    moderate: { code: '99204', description: 'New Patient Office — Moderate Complexity MDM', epicLabel: 'Office Visit New Patient Level 4' },
+    high:     { code: '99205', description: 'New Patient Office — High Complexity MDM',     epicLabel: 'Office Visit New Patient Level 5' },
   },
   established_patient_office: {
-    minimal: { code: '99211', description: 'Established Patient Office — Minimal (Staff Visit)' },
-    low: { code: '99213', description: 'Established Patient Office — Low Complexity MDM' },
-    moderate: { code: '99214', description: 'Established Patient Office — Moderate Complexity MDM' },
-    high: { code: '99215', description: 'Established Patient Office — High Complexity MDM' },
+    minimal:  { code: '99211', description: 'Established Patient Office — Minimal (Staff Visit)', epicLabel: 'Office Visit Established Level 1' },
+    low:      { code: '99213', description: 'Established Patient Office — Low Complexity MDM',    epicLabel: 'Office Visit Established Level 3' },
+    moderate: { code: '99214', description: 'Established Patient Office — Moderate Complexity MDM', epicLabel: 'Office Visit Established Level 4' },
+    high:     { code: '99215', description: 'Established Patient Office — High Complexity MDM',     epicLabel: 'Office Visit Established Level 5' },
   },
   consult_outpatient: {
-    low: { code: '99243', description: 'Outpatient Consultation — Low Complexity MDM' },
-    moderate: { code: '99244', description: 'Outpatient Consultation — Moderate Complexity MDM' },
-    high: { code: '99245', description: 'Outpatient Consultation — High Complexity MDM' },
+    low:      { code: '99243', description: 'Outpatient Consultation — Low Complexity MDM',      epicLabel: 'Outpatient Consult Level 3' },
+    moderate: { code: '99244', description: 'Outpatient Consultation — Moderate Complexity MDM', epicLabel: 'Outpatient Consult Level 4' },
+    high:     { code: '99245', description: 'Outpatient Consultation — High Complexity MDM',     epicLabel: 'Outpatient Consult Level 5' },
   },
   initial_inpatient: {
-    low: { code: '99221', description: 'Initial Hospital Inpatient/Observation — Low Complexity MDM' },
-    moderate: { code: '99222', description: 'Initial Hospital Inpatient/Observation — Moderate Complexity MDM' },
-    high: { code: '99223', description: 'Initial Hospital Inpatient/Observation — High Complexity MDM' },
+    low:      { code: '99221', description: 'Initial Hospital Inpatient/Observation — Low Complexity MDM',      epicLabel: 'Initial Hospital Care Level 1' },
+    moderate: { code: '99222', description: 'Initial Hospital Inpatient/Observation — Moderate Complexity MDM', epicLabel: 'Initial Hospital Care Level 2' },
+    high:     { code: '99223', description: 'Initial Hospital Inpatient/Observation — High Complexity MDM',     epicLabel: 'Initial Hospital Care Level 3' },
   },
   subsequent_inpatient: {
-    low: { code: '99231', description: 'Subsequent Hospital Inpatient/Observation — Low Complexity MDM' },
-    moderate: { code: '99232', description: 'Subsequent Hospital Inpatient/Observation — Moderate Complexity MDM' },
-    high: { code: '99233', description: 'Subsequent Hospital Inpatient/Observation — High Complexity MDM' },
+    low:      { code: '99231', description: 'Subsequent Hospital Inpatient/Observation — Low Complexity MDM',      epicLabel: 'Subsequent Hospital Care Level 1' },
+    moderate: { code: '99232', description: 'Subsequent Hospital Inpatient/Observation — Moderate Complexity MDM', epicLabel: 'Subsequent Hospital Care Level 2' },
+    high:     { code: '99233', description: 'Subsequent Hospital Inpatient/Observation — High Complexity MDM',     epicLabel: 'Subsequent Hospital Care Level 3' },
   },
   observation: {
-    low: { code: '99221', description: 'Hospital Observation — Low Complexity MDM' },
-    moderate: { code: '99222', description: 'Hospital Observation — Moderate Complexity MDM' },
-    high: { code: '99223', description: 'Hospital Observation — High Complexity MDM' },
+    low:      { code: '99221', description: 'Hospital Observation — Low Complexity MDM',      epicLabel: 'Initial Hospital Care Level 1' },
+    moderate: { code: '99222', description: 'Hospital Observation — Moderate Complexity MDM', epicLabel: 'Initial Hospital Care Level 2' },
+    high:     { code: '99223', description: 'Hospital Observation — High Complexity MDM',     epicLabel: 'Initial Hospital Care Level 3' },
   },
   discharge_day: {}, // Time-only
   consult_inpatient: {
-    low: { code: '99252', description: 'Inpatient Consultation — Low Complexity MDM' },
-    moderate: { code: '99254', description: 'Inpatient Consultation — Moderate Complexity MDM' },
-    high: { code: '99255', description: 'Inpatient Consultation — High Complexity MDM' },
+    low:      { code: '99252', description: 'Inpatient Consultation — Low Complexity MDM',      epicLabel: 'Inpatient Consult Level 2' },
+    moderate: { code: '99254', description: 'Inpatient Consultation — Moderate Complexity MDM', epicLabel: 'Inpatient Consult Level 4' },
+    high:     { code: '99255', description: 'Inpatient Consultation — High Complexity MDM',     epicLabel: 'Inpatient Consult Level 5' },
   },
   emergency_dept: {
-    minimal: { code: '99281', description: 'Emergency Department — Minimal MDM (may not require physician presence)' },
-    low: { code: '99282', description: 'Emergency Department — Straightforward MDM' },
-    moderate: { code: '99284', description: 'Emergency Department — Moderate Complexity MDM' },
-    high: { code: '99285', description: 'Emergency Department — High Complexity MDM' },
+    minimal:  { code: '99281', description: 'Emergency Department — Minimal MDM (may not require physician presence)', epicLabel: 'Emergency Department Level 1' },
+    low:      { code: '99282', description: 'Emergency Department — Straightforward MDM',        epicLabel: 'Emergency Department Level 2' },
+    moderate: { code: '99284', description: 'Emergency Department — Moderate Complexity MDM',    epicLabel: 'Emergency Department Level 4' },
+    high:     { code: '99285', description: 'Emergency Department — High Complexity MDM',        epicLabel: 'Emergency Department Level 5' },
   },
   critical_care: {}, // Time-only
 };
@@ -564,16 +565,21 @@ function getMdmCpt(visitType: VisitType, mdmLevel: MdmLevel): CptEntry | null {
 function getTimeCpt(visitType: VisitType, minutes: number): CptEntry | null {
   if (visitType === 'critical_care') {
     if (minutes < 30) return null;
-    return { code: '99291', description: 'Critical Care Services — First 30–74 minutes' };
+    return { code: '99291', description: 'Critical Care Services — First 30–74 minutes', epicLabel: 'MD HB Critical Care 30-74 Min' };
+  }
+  // Discharge day: time-only codes not in MDM_CPT — map epicLabels inline
+  if (visitType === 'discharge_day') {
+    if (minutes <= 30) return { code: '99238', description: 'Hospital Discharge Day Management — 30 minutes or less', epicLabel: 'Hospital Discharge 30 Min or Less' };
+    return { code: '99239', description: 'Hospital Discharge Day Management — more than 30 minutes', epicLabel: 'Hospital Discharge More Than 30 Min' };
   }
   const thresholds = TIME_THRESHOLDS[visitType];
   if (!thresholds) return null;
   const match = thresholds.find((t) => minutes >= t.min && (t.max === null || minutes <= t.max));
   if (!match) return null;
-  // Find description from MDM table
+  // Find description + epicLabel from MDM table (time-based billing uses same codes)
   for (const map of Object.values(MDM_CPT)) {
     for (const entry of Object.values(map)) {
-      if (entry && entry.code === match.cpt) return { code: match.cpt, description: entry.description };
+      if (entry && entry.code === match.cpt) return { code: match.cpt, description: entry.description, epicLabel: entry.epicLabel };
     }
   }
   return { code: match.cpt, description: `${VISIT_TYPE_LABELS[visitType]} — ${match.label}` };
@@ -819,6 +825,7 @@ function generateBillingLine(
 
   if (cptEntry) {
     lines.push(`CPT: ${cptEntry.code}${modsStr}`);
+    if (cptEntry.epicLabel) lines.push(`Epic Charge: ${cptEntry.epicLabel}`);
     // Critical care add-on
     if (visitType === 'critical_care' && !isNaN(timeMins) && timeMins >= 75) {
       const addOnCount = Math.floor((timeMins - 74) / 30);
@@ -1854,6 +1861,12 @@ const EmBillingCalculator: React.FC = () => {
                     <p className="text-blue-200 text-sm mb-1">+ 99292 ×{Math.floor((timeMins - 74) / 30)}</p>
                   )}
                   <p className="text-blue-100 font-medium text-base leading-snug">{activeCpt.description}</p>
+                  {activeCpt.epicLabel && (
+                    <div className="mt-2 inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm rounded-full px-3 py-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-blue-200">Epic</span>
+                      <span className="text-xs text-white font-semibold">{activeCpt.epicLabel}</span>
+                    </div>
+                  )}
                   {state.selectedModifiers.length > 0 && (
                     <p className="text-blue-200 text-xs mt-2">Modifier: {state.selectedModifiers.join(' ')}</p>
                   )}
