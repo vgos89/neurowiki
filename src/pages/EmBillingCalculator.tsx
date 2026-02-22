@@ -752,6 +752,88 @@ const ICD10_SYNONYMS: Record<string, string> = {
   'mets': 'secondary malignant',
 };
 
+// Word-level abbreviation expansions — applied token-by-token anywhere in the query
+const ICD10_WORD_SYNONYMS: Record<string, string> = {
+  // Cerebrovascular — vessel abbreviations
+  'mca': 'middle cerebral artery',
+  'pca': 'posterior cerebral artery',
+  'aca': 'anterior cerebral artery',
+  'ica': 'internal carotid artery',
+  'ba':  'basilar artery',
+  'va':  'vertebral artery',
+  // Cerebrovascular — condition abbreviations (full-phrase synonyms already handle these exact, but word-level handles them mid-query)
+  'cva': 'cerebral infarction',
+  'tia': 'transient cerebral ischemic',
+  'ich': 'intracerebral hemorrhage',
+  'sah': 'subarachnoid hemorrhage',
+  'sdh': 'subdural hemorrhage',
+  'edh': 'epidural hemorrhage',
+  // Neuro
+  'als': 'amyotrophic lateral sclerosis',
+  'ms':  'multiple sclerosis',
+  'pd':  'parkinson disease',
+  'ad':  'alzheimer disease',
+  'gbs': 'Guillain-Barre syndrome',
+  'cidp': 'chronic inflammatory demyelinating polyneuropathy',
+  'mg':  'myasthenia gravis',
+  'nph': 'normal pressure hydrocephalus',
+  'sz':  'epilepsy',
+  // Cardiac
+  'afib': 'atrial fibrillation',
+  'chf': 'heart failure',
+  'mi':  'myocardial infarction',
+  'pe':  'pulmonary embolism',
+  'dvt': 'deep vein thrombosis',
+  // Metabolic
+  'dm':  'diabetes mellitus',
+  'htn': 'hypertension',
+  'ckd': 'chronic kidney disease',
+  'aki': 'acute kidney injury',
+};
+
+// Words that are clinical colloquialisms NOT present in ICD-10-CM names — dropping them improves results
+const ICD10_DROP_WORDS = new Set([
+  'stroke',        // ICD-10 uses "cerebral infarction" / "intracerebral hemorrhage"
+  'attack',        // e.g., "heart attack" → MI already handled by synonym; "attack" alone is noise
+  'infarct',       // ICD-10 uses "infarction" (with -ion); bare "infarct" returns 0 results
+  'hemorrhagic',   // ICD-10 uses "intracerebral hemorrhage"; bare "hemorrhagic" returns fever codes
+  'ischemic',      // ICD-10 uses "cerebral infarction"; bare "ischemic" returns 0 results
+  'cardioembolic', // not an ICD-10 term
+  'cryptogenic',   // not an ICD-10 term
+  'watershed',     // not an ICD-10 term
+]);
+
+// Expand clinical shorthand into ICD-10-compatible terminology, token by token
+function expandIcd10Query(raw: string): string {
+  const lower = raw.toLowerCase().trim();
+  // Exact full-phrase match takes priority (existing ICD10_SYNONYMS)
+  if (ICD10_SYNONYMS[lower]) return ICD10_SYNONYMS[lower];
+
+  const words = lower.split(/\s+/);
+  const expanded: string[] = [];
+  let i = 0;
+  while (i < words.length) {
+    // Try bigram first (e.g., "gi bleed" is in ICD10_SYNONYMS as a phrase)
+    if (i + 1 < words.length) {
+      const bigram = words[i] + ' ' + words[i + 1];
+      if (ICD10_SYNONYMS[bigram]) {
+        expanded.push(ICD10_SYNONYMS[bigram]);
+        i += 2;
+        continue;
+      }
+    }
+    // Single-word abbreviation expansion
+    if (ICD10_WORD_SYNONYMS[words[i]]) {
+      expanded.push(ICD10_WORD_SYNONYMS[words[i]]);
+    } else if (!ICD10_DROP_WORDS.has(words[i])) {
+      // Keep the word unless it's known noise for ICD-10 search
+      expanded.push(words[i]);
+    }
+    i++;
+  }
+  return expanded.join(' ').trim() || raw;
+}
+
 // Module-level cache — survives re-renders, cleared on page reload (~5KB for 100 queries)
 const icd10Cache = new Map<string, Icd10Code[]>();
 
@@ -759,13 +841,9 @@ async function fetchIcd10Codes(query: string, signal?: AbortSignal): Promise<Icd
   const raw = query.trim();
   if (!raw) return [];
 
-  // Resolve synonym: lowercase exact match first, then check if query starts with a synonym key
+  // Expand clinical shorthand into ICD-10-compatible terminology
   const lower = raw.toLowerCase();
-  const resolvedTerm = ICD10_SYNONYMS[lower] ?? (() => {
-    // partial match: if query starts with a known synonym key
-    const match = Object.keys(ICD10_SYNONYMS).find(k => lower.startsWith(k + ' ') || lower === k);
-    return match ? ICD10_SYNONYMS[match] + raw.slice(match.length) : raw;
-  })();
+  const resolvedTerm = expandIcd10Query(lower);
 
   const nlmSearch = async (term: string): Promise<Icd10Code[]> => {
     const cacheKey = term.toLowerCase().trim();
