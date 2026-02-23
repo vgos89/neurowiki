@@ -578,8 +578,7 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
           onClick={handleComplete}
           className="px-8 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg shadow-lg transition-all active:scale-[0.98] flex items-center gap-2"
         >
-          <span>Complete Orders</span>
-          <span className="material-icons-outlined text-lg">arrow_forward</span>
+          <span>Save Orders</span>
         </button>
       </div>
     </div>

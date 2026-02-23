@@ -459,7 +459,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
           disabled={!isComplete}
           className="w-full min-h-[44px] py-4 md:py-4 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-all"
         >
-          Mark Complete & Continue →
+          Save
         </button>
       </div>
 

@@ -345,7 +345,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
         disabled={!canComplete}
         className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-all"
       >
-        Mark Complete & Continue →
+        Save
       </button>
     </div>
   );
