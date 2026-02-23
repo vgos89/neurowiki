@@ -189,8 +189,8 @@ const MainContent: React.FC<{
           {/* Timestamp Bubble */}
           <TimestampBubble />
 
-          {/* Emergency Protocols FAB — fixed bottom-left, always reachable */}
-          <div className="fixed bottom-6 left-4 sm:left-6 z-[60] flex flex-col items-start gap-2">
+          {/* Emergency Protocols FAB — stacked above TimestampBubble (bottom-right) */}
+          <div className="fixed bottom-[8.5rem] right-4 z-[60] flex flex-col items-end gap-2">
             {emergencyFabOpen && (
               <>
                 <button
