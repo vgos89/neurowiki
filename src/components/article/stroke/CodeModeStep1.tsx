@@ -45,9 +45,11 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   const [weightValue, setWeightValue] = useState<number>(0);
   const [weightUnit, setWeightUnit] = useState<'kg' | 'lbs'>('kg');
   const [bpControlled, setBpControlled] = useState(false);
-  const [lkwHour, setLkwHour] = useState<number>(12);
-  const [lkwMinute, setLkwMinute] = useState<number>(0);
-  const [lkwPeriod, setLkwPeriod] = useState<'AM' | 'PM'>('AM');
+  const _now = new Date();
+  const _h = _now.getHours();
+  const [lkwHour, setLkwHour] = useState<number>(_h % 12 || 12);
+  const [lkwMinute, setLkwMinute] = useState<number>(_now.getMinutes());
+  const [lkwPeriod, setLkwPeriod] = useState<'AM' | 'PM'>(_h >= 12 ? 'PM' : 'AM');
   const [clockPickerOpen, setClockPickerOpen] = useState(false);
   const [clockPickerMode, setClockPickerMode] = useState<'lkw' | 'symptomDiscovery'>('lkw');
   /** GWTG: symptom discovery same as LKW (default) or custom time */
@@ -133,6 +135,13 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
     weightValue > 0 &&
     (!bpTooHigh || bpControlled || lkwUnknown);
 
+  const missingFields: string[] = [];
+  if (!lkwUnknown && lkwHours <= 0) missingFields.push('LKW time');
+  if (nihssScore <= 0) missingFields.push('NIHSS');
+  if (systolicBP <= 0 || diastolicBP <= 0) missingFields.push('BP');
+  if (glucose <= 0) missingFields.push('Glucose');
+  if (weightValue <= 0) missingFields.push('Weight');
+
   /** Build Date for today from 12h clock (hour, minute, AM/PM); if result &gt; now, use yesterday */
   const dateFromClock = (h: number, m: number, p: 'AM' | 'PM'): Date => {
     let hour24 = h;
@@ -168,7 +177,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
 
   const lkwTimeDisplay = `${lkwHour || 12}:${String(lkwMinute).padStart(2, '0')} ${lkwPeriod}`;
-  const lkwTimeSet = !lkwUnknown && (lkwHour !== 12 || lkwMinute !== 0 || lkwPeriod !== 'AM');
+  const lkwTimeSet = !lkwUnknown;
 
   return (
     <div className="space-y-4">
@@ -461,6 +470,11 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
         >
           Save
         </button>
+        {!isComplete && missingFields.length > 0 && (
+          <p className="text-center text-xs text-slate-400 mt-1.5">
+            Still needed: {missingFields.join(' · ')}
+          </p>
+        )}
       </div>
 
       {clockPickerOpen && (
