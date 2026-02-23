@@ -208,14 +208,6 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
                     <span className="text-slate-500 text-sm">Set time</span>
                   )}
                 </button>
-                <button
-                  type="button"
-                  onClick={() => { setClockPickerMode('lkw'); setClockPickerOpen(true); }}
-                  className="w-full flex items-center justify-between gap-2 px-4 py-3 rounded-lg border border-slate-200 bg-slate-50/50 text-slate-600 hover:bg-slate-100 transition-colors"
-                >
-                  <span>Witnessed Onset</span>
-                  <span className="material-icons-outlined text-slate-400 text-lg">chevron_right</span>
-                </button>
                 {lkwHours > 0 && (
                   <p className="text-sm text-slate-600">
                     ~{lkwHours.toFixed(1)}h ago

@@ -58,12 +58,12 @@ export const StrokeBasicsLayout: React.FC<StrokeBasicsLayoutProps> = ({
 
   return (
     <LayoutContext.Provider value={layoutContextValue}>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Desktop Layout: 3-column flex structure with floating toggles */}
       <div className="hidden lg:flex min-h-screen">
         {/* Left Sidebar - Optional, show/hide */}
         {leftSidebar && (
-          <aside className={`bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 transition-all duration-300 flex-shrink-0 overflow-hidden ${
+          <aside className={`bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transition-all duration-300 flex-shrink-0 overflow-hidden ${
             isLeftSidebarCollapsed ? 'w-0' : 'w-[280px]'
           }`}>
             <div className={`w-[280px] h-full overflow-y-auto ${isLeftSidebarCollapsed ? 'hidden' : ''}`}>
@@ -75,22 +75,22 @@ export const StrokeBasicsLayout: React.FC<StrokeBasicsLayoutProps> = ({
         )}
 
         {/* Main Content - With floating toggle buttons */}
-        <main className="flex-1 min-w-0 relative bg-gray-50 dark:bg-gray-900">
+        <main className="flex-1 min-w-0 relative bg-slate-50 dark:bg-slate-900">
           {/* LEFT TOGGLE BUTTON - Only show if leftSidebar exists */}
           {leftSidebar && (
             <button
               onClick={toggleLeftSidebar}
-              className="fixed top-1/2 -translate-y-1/2 w-10 h-20 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-r-xl shadow-xl flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-all z-50 group hover:scale-105"
-              style={{ 
+              className="fixed top-1/2 -translate-y-1/2 w-10 h-20 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-r-xl shadow-xl flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-700 transition-all z-50 group hover:scale-105"
+              style={{
                 left: isLeftSidebarCollapsed ? '64px' : '344px', // 64px = main nav width, 344px = 64px (main nav) + 280px (sidebar)
                 transition: 'left 0.3s ease-in-out'
               }}
               aria-label={isLeftSidebarCollapsed ? "Show left sidebar" : "Collapse sidebar"}
             >
               {isLeftSidebarCollapsed ? (
-                <ChevronRight className="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
+                <ChevronRight className="w-5 h-5 text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors" />
               ) : (
-                <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
+                <ChevronLeft className="w-5 h-5 text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors" />
               )}
             </button>
           )}
@@ -124,10 +124,10 @@ export const StrokeBasicsLayout: React.FC<StrokeBasicsLayoutProps> = ({
               onClick={closeMobileLeft}
             />
             {/* Sidebar */}
-            <aside className="fixed left-0 top-0 h-full w-[280px] bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 z-50 transform transition-transform duration-300">
+            <aside className="fixed left-0 top-0 h-full w-[280px] bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 z-50 transform transition-transform duration-300">
               <div className="h-full overflow-y-auto p-4">
                 {/* Close Button */}
-                <div className="flex justify-end mb-4 border-b border-gray-200 dark:border-gray-800 pb-2">
+                <div className="flex justify-end mb-4 border-b border-slate-200 dark:border-slate-800 pb-2">
                   <button
                     onClick={closeMobileLeft}
                     className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"

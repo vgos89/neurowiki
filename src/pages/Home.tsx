@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Brain,
@@ -9,7 +9,6 @@ import {
   Calculator,
   FlaskConical,
   ChevronRight,
-  Search,
   Shield,
   Heart,
   Stethoscope,
@@ -190,30 +189,10 @@ const FEATURED_TRIALS = [
   { name: 'ELAN', subtitle: 'Early vs late anticoagulation after AF stroke', path: '/trials/elan-study', tag: 'Prevention' },
 ];
 
-// ── Search data ─────────────────────────────────────────────────────────────
-
-const ALL_SEARCH_ITEMS = [
-  ...FEATURED_TOOLS.map((t) => ({ name: t.name, subtitle: t.subtitle, path: t.path, type: 'tool' })),
-  ...GUIDE_CATEGORIES.flatMap((cat) =>
-    cat.guides.map((g) => ({ name: g.name, subtitle: cat.name, path: g.path, type: 'guide' }))
-  ),
-  ...FEATURED_TRIALS.map((t) => ({ name: t.name, subtitle: t.subtitle, path: t.path, type: 'trial' })),
-];
-
 // ── Component ────────────────────────────────────────────────────────────────
 
 const Home: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-
-  const searchResults = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) return [];
-    return ALL_SEARCH_ITEMS.filter(
-      (item) =>
-        item.name.toLowerCase().includes(q) || item.subtitle.toLowerCase().includes(q)
-    ).slice(0, 8);
-  }, [searchQuery]);
 
   const toggleCategory = (id: string) => {
     setExpandedCategory((prev) => (prev === id ? null : id));
@@ -241,43 +220,6 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          {/* Search */}
-          <div className="relative">
-            <Search
-              size={18}
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
-              aria-hidden="true"
-            />
-            <input
-              type="search"
-              placeholder="Search guides, protocols, calculators…"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-neuro-400 dark:focus:ring-neuro-500 transition-shadow"
-              aria-label="Search neurology toolkit"
-            />
-            {/* Search results dropdown */}
-            {searchResults.length > 0 && (
-              <div className="absolute top-full mt-2 left-0 right-0 z-30 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl overflow-hidden">
-                {searchResults.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setSearchQuery('')}
-                    className="flex items-center justify-between px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700 last:border-0 transition-colors"
-                  >
-                    <div>
-                      <div className="text-sm font-medium text-slate-900 dark:text-white">{item.name}</div>
-                      <div className="text-xs text-slate-500 dark:text-slate-400">{item.subtitle}</div>
-                    </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 flex-shrink-0 ml-4">
-                      {item.type}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
       </div>
 

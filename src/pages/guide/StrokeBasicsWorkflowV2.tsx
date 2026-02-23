@@ -1,6 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, Copy, Brain, Info, AlertTriangle, AlertCircle, InfoIcon, FlaskConical, Eye, FileText as FileTextIcon, Zap, BookOpen } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Copy, Brain, Info, AlertTriangle, AlertCircle, InfoIcon, FlaskConical, Eye, FileText as FileTextIcon, Zap, BookOpen, ChevronDown } from 'lucide-react';
 import { StrokeBasicsLayout } from './StrokeBasicsLayout';
 import { ProtocolSection } from '../../components/article/stroke/ProtocolSection';
 import { TimestampBubble } from '../../components/article/stroke/TimestampBubble';
@@ -8,6 +8,7 @@ import { ProtocolStepsNav, Step as ProtocolStep } from '../../components/article
 import { QuickToolsGrid } from '../../components/article/stroke/QuickToolsGrid';
 import type { ClinicalPearlsData } from '../../data/strokeClinicalPearls';
 import { CodeModeStep1 } from '../../components/article/stroke/CodeModeStep1';
+import { QuickReferenceCard } from '../../components/article/stroke/QuickReferenceCard';
 import type { Step1Data } from '../../components/article/stroke/CodeModeStep1';
 import type { Step2Data } from '../../components/article/stroke/CodeModeStep2';
 
@@ -162,6 +163,7 @@ const MainContent: React.FC<{
   /** Loaded async to reduce initial bundle (strokeClinicalPearls ~110KB) */
   pearlsData: ClinicalPearlsData | null;
 }> = ({ workflowMode, setWorkflowMode, steps, toggleStep, completeStep, activeStepNumber, getProtocolStatus, handleStepClick, step1ModalOpen, setStep1ModalOpen, step2ModalOpen, setStep2ModalOpen, step3ModalOpen, setStep3ModalOpen, step4ModalOpen, setStep4ModalOpen, thrombectomyModalOpen, setThrombectomyModalOpen, onThrombectomyRecommendation, thrombectomyRecommendation, timerStartTime, setTimerStartTime, timerRunning, setTimerRunning, milestones, setMilestones, setStep1Data, step1Data, setStep2Data, step2Data, step4Orders, setStep4Orders, setSteps, scrollToStep, nihssModalOpen, setNihssModalOpen, eligibilityModalOpen, setEligibilityModalOpen, doorTimePickerOpen, setDoorTimePickerOpen, nihssFromModal, setNihssFromModal, eligibilityResult, setEligibilityResult, toastMessage, setToastMessage, tpaReversalModalOpen, setTpaReversalModalOpen, orolingualEdemaModalOpen, setOrolingualEdemaModalOpen, hemorrhageProtocolModalOpen, setHemorrhageProtocolModalOpen, pearlsData }) => {
+  const [emergencyFabOpen, setEmergencyFabOpen] = useState(false);
   const pearls = pearlsData ?? {};
   const doorTimeForPicker = milestones.doorTime ?? timerStartTime;
   const doorTimeTo12h = (d: Date) => {
@@ -187,6 +189,44 @@ const MainContent: React.FC<{
           {/* Timestamp Bubble */}
           <TimestampBubble />
 
+          {/* Emergency Protocols FAB — fixed bottom-left, always reachable */}
+          <div className="fixed bottom-6 left-4 sm:left-6 z-[60] flex flex-col items-start gap-2">
+            {emergencyFabOpen && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => { setTpaReversalModalOpen(true); setEmergencyFabOpen(false); }}
+                  className="flex items-center gap-2.5 pl-3 pr-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl shadow-lg transition-colors animate-in slide-in-from-bottom-2 duration-200"
+                >
+                  <AlertTriangle className="w-4 h-4 flex-shrink-0" aria-hidden />
+                  tPA/TNK Reversal
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setOrolingualEdemaModalOpen(true); setEmergencyFabOpen(false); }}
+                  className="flex items-center gap-2.5 pl-3 pr-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold rounded-xl shadow-lg transition-colors animate-in slide-in-from-bottom-2 duration-150"
+                >
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" aria-hidden />
+                  Orolingual Edema
+                </button>
+              </>
+            )}
+            <button
+              type="button"
+              onClick={() => setEmergencyFabOpen(prev => !prev)}
+              className={`flex items-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all border-2 ${
+                emergencyFabOpen
+                  ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700'
+                  : 'bg-red-600 text-white border-red-700 hover:bg-red-700'
+              }`}
+              aria-label={emergencyFabOpen ? 'Close emergency protocols menu' : 'Open emergency protocols'}
+              aria-expanded={emergencyFabOpen}
+            >
+              <AlertTriangle className="w-4 h-4" aria-hidden />
+              <span className="hidden sm:inline">{emergencyFabOpen ? 'Close' : 'Emergency'}</span>
+            </button>
+          </div>
+
           {/* Back + Header: compact on mobile */}
           <div className="mb-3 sm:mb-6 px-3 sm:px-6 pt-2 sm:pt-6">
             <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
@@ -199,35 +239,40 @@ const MainContent: React.FC<{
                 <span className="hidden sm:inline">Back to Resident Guide</span>
                 <span className="sm:hidden">Back</span>
               </Link>
-              <div className="inline-flex rounded-2xl bg-slate-100/80 p-1 flex-shrink-0">
-                <button
-                  onClick={() => setWorkflowMode('code')}
-                  className={`min-h-[40px] sm:min-h-[44px] px-3 sm:px-8 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all ${
-                    workflowMode === 'code'
-                      ? 'bg-white shadow-sm text-slate-900'
-                      : 'text-slate-500 hover:text-slate-900'
-                  }`}
-                >
-                  <span className="hidden sm:inline">CODE MODE</span>
-                  <span className="sm:hidden">Code</span>
-                </button>
-                <button
-                  onClick={() => setWorkflowMode('study')}
-                  className={`min-h-[40px] sm:min-h-[44px] px-3 sm:px-8 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all ${
-                    workflowMode === 'study'
-                      ? 'bg-white shadow-sm text-slate-900'
-                      : 'text-slate-500 hover:text-slate-900'
-                  }`}
-                >
-                  <span className="hidden sm:inline">STUDY MODE</span>
-                  <span className="sm:hidden">Study</span>
-                </button>
+              <div className="flex flex-col items-center gap-0.5 flex-shrink-0">
+                <div className="inline-flex rounded-2xl bg-slate-100/80 p-1">
+                  <button
+                    onClick={() => setWorkflowMode('code')}
+                    className={`min-h-[40px] sm:min-h-[44px] px-3 sm:px-8 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all ${
+                      workflowMode === 'code'
+                        ? 'bg-white shadow-sm text-slate-900'
+                        : 'text-slate-500 hover:text-slate-900'
+                    }`}
+                  >
+                    <span className="hidden sm:inline">CODE MODE</span>
+                    <span className="sm:hidden">Code</span>
+                  </button>
+                  <button
+                    onClick={() => setWorkflowMode('study')}
+                    className={`min-h-[40px] sm:min-h-[44px] px-3 sm:px-8 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all ${
+                      workflowMode === 'study'
+                        ? 'bg-white shadow-sm text-slate-900'
+                        : 'text-slate-500 hover:text-slate-900'
+                    }`}
+                  >
+                    <span className="hidden sm:inline">STUDY MODE</span>
+                    <span className="sm:hidden">Study</span>
+                  </button>
+                </div>
+                <p className="text-[10px] text-slate-400 font-medium">
+                  {workflowMode === 'code' ? 'Fast-track decisions' : 'Evidence + clinical pearls'}
+                </p>
               </div>
             </div>
-            <h1 className="text-xl sm:text-3xl font-black text-gray-900 mb-0 sm:mb-1">
+            <h1 className="text-xl sm:text-3xl font-black text-slate-900 mb-0 sm:mb-1">
               Stroke Code Basics
             </h1>
-            <p className="text-xs sm:text-sm text-gray-500 mt-0 sm:mt-0 flex items-center gap-1.5">
+            <p className="text-xs sm:text-sm text-slate-500 mt-0 sm:mt-0 flex items-center gap-1.5">
               <span className="sm:hidden">{steps.length} steps</span>
               <span className="hidden sm:inline items-center gap-1.5 flex">
                 {workflowMode === 'code'
@@ -236,6 +281,52 @@ const MainContent: React.FC<{
               </span>
             </p>
           </div>
+
+      {/* Quick Reference Card — always visible, collapsible */}
+      <QuickReferenceCard />
+
+      {/* Clinical Context Bar — appears after Step 1 completes */}
+      {step1Data && (
+        <div className="mx-3 sm:mx-6 mb-4 px-4 py-2.5 rounded-xl bg-slate-800 dark:bg-slate-900 border border-slate-700 flex flex-wrap items-center gap-x-4 gap-y-1.5" role="status" aria-label="Clinical context summary">
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-slate-400">NIHSS</span>
+            <span className="text-base font-mono font-bold text-white">{step1Data.nihssScore}</span>
+          </div>
+          <div className="w-px h-4 bg-slate-600 hidden sm:block" aria-hidden />
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-slate-400">BP</span>
+            <span className="text-base font-mono font-bold text-white">{step1Data.systolicBP}/{step1Data.diastolicBP}</span>
+          </div>
+          <div className="w-px h-4 bg-slate-600 hidden sm:block" aria-hidden />
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-slate-400">Glucose</span>
+            <span className="text-base font-mono font-bold text-white">{step1Data.glucose}</span>
+          </div>
+          <div className="w-px h-4 bg-slate-600 hidden sm:block" aria-hidden />
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-bold uppercase tracking-wide text-slate-400">LKW</span>
+            {step1Data.lkwUnknown ? (
+              <span className="text-sm font-semibold text-amber-400">Unknown</span>
+            ) : (
+              <span className="text-base font-mono font-bold text-white">{step1Data.lkwHours.toFixed(1)}h ago</span>
+            )}
+          </div>
+          {!step1Data.lkwUnknown && step1Data.lkwHours > 0 && (
+            <>
+              <div className="w-px h-4 bg-slate-600 hidden sm:block" aria-hidden />
+              <span className={`text-xs font-bold px-2 py-1 rounded uppercase tracking-wide ${
+                step1Data.lkwHours <= 4.5
+                  ? 'bg-emerald-600 text-white'
+                  : step1Data.lkwHours <= 9
+                  ? 'bg-amber-500 text-white'
+                  : 'bg-red-600 text-white'
+              }`}>
+                {step1Data.lkwHours <= 4.5 ? 'IVT Window' : step1Data.lkwHours <= 9 ? 'Extended Window' : 'Outside IVT'}
+              </span>
+            </>
+          )}
+        </div>
+      )}
 
       {/* Protocol Sections - tighter spacing on mobile */}
       <article className="space-y-8 sm:space-y-12" aria-label="Stroke code protocol">
@@ -251,36 +342,6 @@ const MainContent: React.FC<{
             pearlCount={pearls['step-1']?.deep?.length || 0}
             onDeepLearningClick={() => setStep1ModalOpen(true)}
           >
-            {workflowMode === 'study' && (
-              <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <div className="flex gap-3">
-                  <InfoIcon className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1 space-y-3">
-                    <div>
-                      <h4 className="font-semibold text-blue-900 mb-2">Last Known Well & Treatment Windows</h4>
-                      <p className="text-sm text-blue-800 leading-relaxed">
-                        The &quot;last known well&quot; (LKW) time is the most critical piece of information in acute stroke management, determining eligibility for time-sensitive reperfusion therapies. For IV thrombolysis (tPA/TNK), the standard window is <strong>0-4.5 hours</strong>, with extended windows possible up to 9 hours using perfusion imaging (EXTEND trial). For mechanical thrombectomy, treatment is possible <strong>up to 24 hours</strong> with appropriate imaging showing salvageable tissue (DAWN/DEFUSE-3 trials).
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-blue-800 leading-relaxed">
-                        <strong>Time is Brain:</strong> During untreated stroke, 1.9 million neurons die per minute. Every 15-minute delay in treatment reduces the probability of good outcome by 4% (Emberson et al, Lancet 2014). The NINDS trial demonstrated that patients treated within 90 minutes had 50% vs 38% excellent outcomes compared to those treated later in the 3-hour window.
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-blue-800 leading-relaxed">
-                        <strong>Wake-Up Strokes:</strong> If the patient woke with symptoms, LKW is when they were last seen normal before sleep (bedtime), NOT when they woke up. This represents 25% of all ischemic strokes. The WAKE-UP trial (2018) showed that MRI-guided treatment using DWI-FLAIR mismatch in unknown-onset strokes resulted in 53.3% vs 41.8% favorable outcomes.
-                      </p>
-                    </div>
-                    <div className="pt-2 border-t border-blue-200">
-                      <p className="text-xs text-blue-700">
-                        <strong>References:</strong> <a href="https://www.ahajournals.org/doi/10.1161/STR.0000000000000513" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-900">AHA/ASA 2026 Guidelines</a> • <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1804355" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-900">WAKE-UP Trial</a> • <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(14)60584-5/fulltext" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-900">Emberson Meta-Analysis</a>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
             <CodeModeStep1
               onComplete={(data) => {
                 setStep1Data(data);
@@ -297,6 +358,31 @@ const MainContent: React.FC<{
               onOpenEligibility={() => setEligibilityModalOpen(true)}
               nihssScoreFromModal={nihssFromModal}
             />
+            {workflowMode === 'study' && (
+              <details className="mt-4 group rounded-lg border border-blue-200 bg-blue-50 overflow-hidden">
+                <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-semibold text-blue-800 hover:bg-blue-100/60 transition-colors list-none">
+                  <InfoIcon className="w-4 h-4 text-blue-600 flex-shrink-0" aria-hidden />
+                  <span>Evidence: Last Known Well &amp; Treatment Windows</span>
+                  <ChevronDown className="w-4 h-4 text-blue-500 ml-auto group-open:rotate-180 transition-transform" aria-hidden />
+                </summary>
+                <div className="px-4 pb-4 pt-1 space-y-3">
+                  <p className="text-sm text-blue-800 leading-relaxed">
+                    The &quot;last known well&quot; (LKW) time is the most critical piece of information in acute stroke management, determining eligibility for time-sensitive reperfusion therapies. For IV thrombolysis (tPA/TNK), the standard window is <strong>0-4.5 hours</strong>, with extended windows possible up to 9 hours using perfusion imaging (EXTEND trial). For mechanical thrombectomy, treatment is possible <strong>up to 24 hours</strong> with appropriate imaging showing salvageable tissue (DAWN/DEFUSE-3 trials).
+                  </p>
+                  <p className="text-sm text-blue-800 leading-relaxed">
+                    <strong>Time is Brain:</strong> During untreated stroke, 1.9 million neurons die per minute. Every 15-minute delay in treatment reduces the probability of good outcome by 4% (Emberson et al, Lancet 2014). The NINDS trial demonstrated that patients treated within 90 minutes had 50% vs 38% excellent outcomes compared to those treated later in the 3-hour window.
+                  </p>
+                  <p className="text-sm text-blue-800 leading-relaxed">
+                    <strong>Wake-Up Strokes:</strong> If the patient woke with symptoms, LKW is when they were last seen normal before sleep (bedtime), NOT when they woke up. This represents 25% of all ischemic strokes. The WAKE-UP trial (2018) showed that MRI-guided treatment using DWI-FLAIR mismatch in unknown-onset strokes resulted in 53.3% vs 41.8% favorable outcomes.
+                  </p>
+                  <div className="pt-2 border-t border-blue-200">
+                    <p className="text-xs text-blue-700">
+                      <strong>References:</strong> <a href="https://www.ahajournals.org/doi/10.1161/STR.0000000000000513" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-900">AHA/ASA 2026 Guidelines</a> • <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1804355" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-900">WAKE-UP Trial</a> • <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(14)60584-5/fulltext" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-900">Emberson Meta-Analysis</a>
+                    </p>
+                  </div>
+                </div>
+              </details>
+            )}
           </ProtocolSection>
 
           {workflowMode === 'study' && (
@@ -321,36 +407,6 @@ const MainContent: React.FC<{
             pearlCount={pearls['step-2']?.deep?.length || 0}
             onDeepLearningClick={() => setStep2ModalOpen(true)}
           >
-            {workflowMode === 'study' && (
-              <div className="mb-4 p-4 bg-purple-50 rounded-lg border border-purple-200">
-                <div className="flex gap-3">
-                  <Eye className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1 space-y-3">
-                    <div>
-                      <h4 className="font-semibold text-purple-900 mb-2">Large Vessel Occlusion Detection</h4>
-                      <p className="text-sm text-purple-800 leading-relaxed">
-                        Large vessel occlusion (LVO) occurs in approximately 30% of acute ischemic strokes and represents the most time-sensitive neurological emergency. Without treatment, LVO strokes result in severe disability or death in &gt;80% of cases. The HERMES meta-analysis (2016) demonstrated that mechanical thrombectomy achieves functional independence in 46% vs 29% with medical therapy alone (NNT = 2.6, one of the best in medicine).
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-purple-800 leading-relaxed">
-                        <strong>Cortical Signs:</strong> Aphasia, neglect, gaze deviation, hemianopia, and apraxia strongly suggest LVO. Multiple cortical signs (≥2) have 89% specificity for M1/M2 occlusion (Duvekot et al, Stroke 2021). Even with mild NIHSS, presence of cortical signs warrants urgent CTA and interventional radiology activation.
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-purple-800 leading-relaxed">
-                        <strong>Extended Time Windows:</strong> The DAWN trial (2018) showed benefit up to 24 hours using clinical-core mismatch criteria (48.6% vs 13.1% good outcome, NNT=3). DEFUSE-3 demonstrated efficacy in 6-16 hour window with perfusion imaging. Sequential therapy (tPA + thrombectomy) is superior to either alone—never delay tPA to wait for thrombectomy.
-                      </p>
-                    </div>
-                    <div className="pt-2 border-t border-purple-200">
-                      <p className="text-xs text-purple-700">
-                        <strong>References:</strong> <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(15)01833-5/fulltext" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-900">HERMES Meta-Analysis</a> • <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1706442" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-900">DAWN Trial</a> • <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1713973" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-900">DEFUSE-3 Trial</a>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
             {(workflowMode === 'code' && !step1Data) ? (
               <button
                 type="button"
@@ -380,6 +436,31 @@ const MainContent: React.FC<{
                   onOpenEVTPathway={() => setThrombectomyModalOpen(true)}
                 />
               </Suspense>
+            )}
+            {workflowMode === 'study' && (
+              <details className="mt-4 group rounded-lg border border-purple-200 bg-purple-50 overflow-hidden">
+                <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-semibold text-purple-800 hover:bg-purple-100/60 transition-colors list-none">
+                  <Eye className="w-4 h-4 text-purple-600 flex-shrink-0" aria-hidden />
+                  <span>Evidence: Large Vessel Occlusion &amp; EVT Windows</span>
+                  <ChevronDown className="w-4 h-4 text-purple-500 ml-auto group-open:rotate-180 transition-transform" aria-hidden />
+                </summary>
+                <div className="px-4 pb-4 pt-1 space-y-3">
+                  <p className="text-sm text-purple-800 leading-relaxed">
+                    Large vessel occlusion (LVO) occurs in approximately 30% of acute ischemic strokes and represents the most time-sensitive neurological emergency. Without treatment, LVO strokes result in severe disability or death in &gt;80% of cases. The HERMES meta-analysis (2016) demonstrated that mechanical thrombectomy achieves functional independence in 46% vs 29% with medical therapy alone (NNT = 2.6, one of the best in medicine).
+                  </p>
+                  <p className="text-sm text-purple-800 leading-relaxed">
+                    <strong>Cortical Signs:</strong> Aphasia, neglect, gaze deviation, hemianopia, and apraxia strongly suggest LVO. Multiple cortical signs (≥2) have 89% specificity for M1/M2 occlusion (Duvekot et al, Stroke 2021). Even with mild NIHSS, presence of cortical signs warrants urgent CTA and interventional radiology activation.
+                  </p>
+                  <p className="text-sm text-purple-800 leading-relaxed">
+                    <strong>Extended Time Windows:</strong> The DAWN trial (2018) showed benefit up to 24 hours using clinical-core mismatch criteria (48.6% vs 13.1% good outcome, NNT=3). DEFUSE-3 demonstrated efficacy in 6-16 hour window with perfusion imaging. Sequential therapy (tPA + thrombectomy) is superior to either alone—never delay tPA to wait for thrombectomy.
+                  </p>
+                  <div className="pt-2 border-t border-purple-200">
+                    <p className="text-xs text-purple-700">
+                      <strong>References:</strong> <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(15)01833-5/fulltext" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-900">HERMES Meta-Analysis</a> • <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1706442" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-900">DAWN Trial</a> • <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1713973" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-900">DEFUSE-3 Trial</a>
+                    </p>
+                  </div>
+                </div>
+              </details>
             )}
           </ProtocolSection>
 
@@ -477,19 +558,6 @@ const MainContent: React.FC<{
             pearlCount={(pearls['step-3']?.deep?.length || 0) + (pearls['step-4']?.deep?.length || 0)}
             onDeepLearningClick={() => setStep3ModalOpen(true)}
           >
-            {workflowMode === 'study' && (
-              <div className="mb-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
-                <div className="flex gap-3">
-                  <FlaskConical className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1 space-y-3">
-                    <h4 className="font-semibold text-amber-900 mb-2">Laboratory Workup & Treatment Orders</h4>
-                    <p className="text-sm text-amber-800 leading-relaxed">
-                      Point-of-care <strong>glucose is the ONLY mandatory lab</strong> before thrombolysis (AHA/ASA 2026). Do not delay tPA for other labs if within 4.5h. Post-thrombolysis: neuro checks, BP &lt;180/105, NPO until swallow, no antithrombotics × 24h. Evidence: Fonarow, ARTIS, SITS-ISTR.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
             {(workflowMode === 'code' && !step2Data) ? (
               <button
                 type="button"
@@ -534,6 +602,20 @@ const MainContent: React.FC<{
                 </section>
               </div>
             )}
+            {workflowMode === 'study' && (
+              <details className="mt-4 group rounded-lg border border-amber-200 bg-amber-50 overflow-hidden">
+                <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-semibold text-amber-800 hover:bg-amber-100/60 transition-colors list-none">
+                  <FlaskConical className="w-4 h-4 text-amber-600 flex-shrink-0" aria-hidden />
+                  <span>Evidence: Laboratory Workup &amp; Treatment Orders</span>
+                  <ChevronDown className="w-4 h-4 text-amber-500 ml-auto group-open:rotate-180 transition-transform" aria-hidden />
+                </summary>
+                <div className="px-4 pb-4 pt-1">
+                  <p className="text-sm text-amber-800 leading-relaxed">
+                    Point-of-care <strong>glucose is the ONLY mandatory lab</strong> before thrombolysis (AHA/ASA 2026). Do not delay tPA for other labs if within 4.5h. Post-thrombolysis: neuro checks, BP &lt;180/105, NPO until swallow passed, no antithrombotics × 24h. Evidence: Fonarow GWTG, ARTIS, SITS-ISTR.
+                  </p>
+                </div>
+              </details>
+            )}
           </ProtocolSection>
 
           {workflowMode === 'study' && (
@@ -558,36 +640,6 @@ const MainContent: React.FC<{
             pearlCount={pearls['step-5']?.deep?.length || 0}
             onDeepLearningClick={() => setStep4ModalOpen(true)}
           >
-            {workflowMode === 'study' && (
-              <div className="mb-4 p-4 bg-green-50 rounded-lg border border-green-200">
-                <div className="flex gap-3">
-                  <FileTextIcon className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                  <div className="flex-1 space-y-3">
-                    <div>
-                      <h4 className="font-semibold text-green-900 mb-2">Documentation & Quality Improvement</h4>
-                      <p className="text-sm text-green-800 leading-relaxed">
-                        Comprehensive stroke code documentation serves multiple critical functions: medical-legal protection, quality improvement tracking, accurate billing (E/M level 5 + critical care time if applicable), and seamless care transitions. Include precise LKW time with source (family, EMS, records), NIHSS score with subscores, contraindication assessment, door-to-needle time, and detailed treatment rationale.
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-green-800 leading-relaxed">
-                        <strong>Key Performance Metrics:</strong> National benchmarks track door-to-needle time (&lt;60 min goal, &lt;30 min excellence), imaging-to-needle time (&lt;20 min), and thrombolysis rates (8-12% of all stroke admissions). Dedicated stroke units reduce mortality by 18% and improve functional outcomes through protocol adherence, early complication detection, and coordinated multidisciplinary care (Stroke Unit Trialists Collaboration).
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-green-800 leading-relaxed">
-                        <strong>Outcome Prediction:</strong> Modified Rankin Scale (mRS) at 90 days is the primary outcome measure. mRS 0-2 represents functional independence (living at home, performing all usual activities). Predictors of good outcome: lower NIHSS, shorter time to treatment, younger age, absence of diabetes, and successful recanalization. The &quot;golden hour&quot; (treatment &lt;60 minutes from onset) yields the best outcomes—50% achieve mRS 0-1 vs 38% when treated later (NINDS subgroup analysis).
-                      </p>
-                    </div>
-                    <div className="pt-2 border-t border-green-200">
-                      <p className="text-xs text-green-700">
-                        <strong>References:</strong> <a href="https://www.bmj.com/content/346/bmj.f2422" target="_blank" rel="noopener noreferrer" className="underline hover:text-green-900">Stroke Unit Trialists Meta-Analysis</a> • <a href="https://www.ahajournals.org/doi/10.1161/STROKEAHA.118.020203" target="_blank" rel="noopener noreferrer" className="underline hover:text-green-900">Get With The Guidelines Quality Metrics</a> • <a href="https://www.nejm.org/doi/full/10.1056/NEJM199512143332401" target="_blank" rel="noopener noreferrer" className="underline hover:text-green-900">NINDS tPA Trial</a>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
             {(workflowMode === 'code' && (!step1Data || !step2Data || steps[2]?.status !== 'completed')) ? (
               <button
                 type="button"
@@ -613,6 +665,28 @@ const MainContent: React.FC<{
                   }}
                 />
               </Suspense>
+            )}
+            {workflowMode === 'study' && (
+              <details className="mt-4 group rounded-lg border border-green-200 bg-green-50 overflow-hidden">
+                <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-semibold text-green-800 hover:bg-green-100/60 transition-colors list-none">
+                  <FileTextIcon className="w-4 h-4 text-green-600 flex-shrink-0" aria-hidden />
+                  <span>Evidence: Documentation &amp; Quality Improvement</span>
+                  <ChevronDown className="w-4 h-4 text-green-500 ml-auto group-open:rotate-180 transition-transform" aria-hidden />
+                </summary>
+                <div className="px-4 pb-4 pt-1 space-y-3">
+                  <p className="text-sm text-green-800 leading-relaxed">
+                    Comprehensive stroke code documentation serves multiple critical functions: medical-legal protection, quality improvement tracking, accurate billing (E/M level 5 + critical care time if applicable), and seamless care transitions. Include precise LKW time with source, NIHSS score with subscores, contraindication assessment, door-to-needle time, and detailed treatment rationale.
+                  </p>
+                  <p className="text-sm text-green-800 leading-relaxed">
+                    <strong>Key Performance Metrics:</strong> National benchmarks track door-to-needle time (&lt;60 min goal, &lt;30 min excellence), imaging-to-needle time (&lt;20 min), and thrombolysis rates (8–12% of all stroke admissions). Dedicated stroke units reduce mortality by 18% through protocol adherence and coordinated multidisciplinary care (Stroke Unit Trialists Collaboration).
+                  </p>
+                  <div className="pt-2 border-t border-green-200">
+                    <p className="text-xs text-green-700">
+                      <strong>References:</strong> <a href="https://www.bmj.com/content/346/bmj.f2422" target="_blank" rel="noopener noreferrer" className="underline hover:text-green-900">Stroke Unit Trialists</a> • <a href="https://www.ahajournals.org/doi/10.1161/STROKEAHA.118.020203" target="_blank" rel="noopener noreferrer" className="underline hover:text-green-900">GWTG Quality Metrics</a> • <a href="https://www.nejm.org/doi/full/10.1056/NEJM199512143332401" target="_blank" rel="noopener noreferrer" className="underline hover:text-green-900">NINDS tPA Trial</a>
+                    </p>
+                  </div>
+                </div>
+              </details>
             )}
           </ProtocolSection>
 
@@ -657,6 +731,43 @@ const MainContent: React.FC<{
               </span>
               <span>Orolingual Edema Protocol</span>
             </button>
+          </div>
+        </section>
+
+        {/* Related Resources — navigation tail after code completion */}
+        <section className="mt-8 mx-4 sm:mx-6 pt-8 border-t border-slate-200" aria-labelledby="related-resources-heading">
+          <h2 id="related-resources-heading" className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-3">
+            Related Resources
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <Link
+              to="/guide/iv-tpa"
+              className="flex flex-col gap-1 p-3 rounded-xl border border-slate-200 bg-white hover:bg-neuro-50 hover:border-neuro-300 transition-colors group"
+            >
+              <span className="text-xs font-bold text-neuro-600 group-hover:text-neuro-700 uppercase tracking-wide">Protocol</span>
+              <span className="text-sm font-semibold text-slate-900">IV tPA Guide</span>
+            </Link>
+            <Link
+              to="/guide/thrombectomy"
+              className="flex flex-col gap-1 p-3 rounded-xl border border-slate-200 bg-white hover:bg-purple-50 hover:border-purple-300 transition-colors group"
+            >
+              <span className="text-xs font-bold text-purple-600 group-hover:text-purple-700 uppercase tracking-wide">Protocol</span>
+              <span className="text-sm font-semibold text-slate-900">EVT / Thrombectomy</span>
+            </Link>
+            <Link
+              to="/guide/ich-management"
+              className="flex flex-col gap-1 p-3 rounded-xl border border-slate-200 bg-white hover:bg-red-50 hover:border-red-300 transition-colors group"
+            >
+              <span className="text-xs font-bold text-red-600 group-hover:text-red-700 uppercase tracking-wide">Protocol</span>
+              <span className="text-sm font-semibold text-slate-900">ICH Management</span>
+            </Link>
+            <Link
+              to="/calculators"
+              className="flex flex-col gap-1 p-3 rounded-xl border border-slate-200 bg-white hover:bg-emerald-50 hover:border-emerald-300 transition-colors group"
+            >
+              <span className="text-xs font-bold text-emerald-600 group-hover:text-emerald-700 uppercase tracking-wide">Tools</span>
+              <span className="text-sm font-semibold text-slate-900">All Calculators</span>
+            </Link>
           </div>
         </section>
       </article>
