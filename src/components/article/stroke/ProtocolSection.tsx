@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { CheckCircle, ChevronDown, ChevronRight } from 'lucide-react';
+import { CheckCircle, ChevronDown, ChevronRight, LockOpen } from 'lucide-react';
 
 interface ProtocolSectionProps {
   number: number;
@@ -16,6 +16,8 @@ interface ProtocolSectionProps {
   showDeepLearningBadge?: boolean;
   pearlCount?: number;
   onDeepLearningClick?: () => void;
+  // Parallel team workflow unlock
+  onUnlock?: () => void;
 }
 
 export const ProtocolSection: React.FC<ProtocolSectionProps> = ({
