@@ -162,7 +162,8 @@ const MainContent: React.FC<{
   setHemorrhageProtocolModalOpen: (value: boolean) => void;
   /** Loaded async to reduce initial bundle (strokeClinicalPearls ~110KB) */
   pearlsData: ClinicalPearlsData | null;
-}> = ({ workflowMode, setWorkflowMode, steps, toggleStep, completeStep, activeStepNumber, getProtocolStatus, handleStepClick, step1ModalOpen, setStep1ModalOpen, step2ModalOpen, setStep2ModalOpen, step3ModalOpen, setStep3ModalOpen, step4ModalOpen, setStep4ModalOpen, thrombectomyModalOpen, setThrombectomyModalOpen, onThrombectomyRecommendation, thrombectomyRecommendation, timerStartTime, setTimerStartTime, timerRunning, setTimerRunning, milestones, setMilestones, setStep1Data, step1Data, setStep2Data, step2Data, step4Orders, setStep4Orders, setSteps, scrollToStep, nihssModalOpen, setNihssModalOpen, eligibilityModalOpen, setEligibilityModalOpen, doorTimePickerOpen, setDoorTimePickerOpen, nihssFromModal, setNihssFromModal, eligibilityResult, setEligibilityResult, toastMessage, setToastMessage, tpaReversalModalOpen, setTpaReversalModalOpen, orolingualEdemaModalOpen, setOrolingualEdemaModalOpen, hemorrhageProtocolModalOpen, setHemorrhageProtocolModalOpen, pearlsData }) => {
+  unlockStep: (id: number) => void;
+}> = ({ workflowMode, setWorkflowMode, steps, toggleStep, completeStep, activeStepNumber, getProtocolStatus, handleStepClick, step1ModalOpen, setStep1ModalOpen, step2ModalOpen, setStep2ModalOpen, step3ModalOpen, setStep3ModalOpen, step4ModalOpen, setStep4ModalOpen, thrombectomyModalOpen, setThrombectomyModalOpen, onThrombectomyRecommendation, thrombectomyRecommendation, timerStartTime, setTimerStartTime, timerRunning, setTimerRunning, milestones, setMilestones, setStep1Data, step1Data, setStep2Data, step2Data, step4Orders, setStep4Orders, setSteps, scrollToStep, nihssModalOpen, setNihssModalOpen, eligibilityModalOpen, setEligibilityModalOpen, doorTimePickerOpen, setDoorTimePickerOpen, nihssFromModal, setNihssFromModal, eligibilityResult, setEligibilityResult, toastMessage, setToastMessage, tpaReversalModalOpen, setTpaReversalModalOpen, orolingualEdemaModalOpen, setOrolingualEdemaModalOpen, hemorrhageProtocolModalOpen, setHemorrhageProtocolModalOpen, pearlsData, unlockStep }) => {
   const [emergencyFabOpen, setEmergencyFabOpen] = useState(false);
   const pearls = pearlsData ?? {};
   const doorTimeForPicker = milestones.doorTime ?? timerStartTime;
@@ -1172,6 +1173,7 @@ export default function StrokeBasicsWorkflowV2() {
           hemorrhageProtocolModalOpen={hemorrhageProtocolModalOpen}
           setHemorrhageProtocolModalOpen={setHemorrhageProtocolModalOpen}
           pearlsData={pearlsData}
+          unlockStep={unlockStep}
         />
       }
     />
