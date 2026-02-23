@@ -408,6 +408,7 @@ const MainContent: React.FC<{
             showDeepLearningBadge={workflowMode === 'study'}
             pearlCount={pearls['step-2']?.deep?.length || 0}
             onDeepLearningClick={() => setStep2ModalOpen(true)}
+            onUnlock={() => unlockStep(2)}
           >
             {(workflowMode === 'code' && !step1Data) ? (
               <button
@@ -560,6 +561,7 @@ const MainContent: React.FC<{
             showDeepLearningBadge={workflowMode === 'study'}
             pearlCount={(pearls['step-3']?.deep?.length || 0) + (pearls['step-4']?.deep?.length || 0)}
             onDeepLearningClick={() => setStep3ModalOpen(true)}
+            onUnlock={() => unlockStep(3)}
           >
             {(workflowMode === 'code' && !step2Data) ? (
               <button
@@ -645,6 +647,7 @@ const MainContent: React.FC<{
             showDeepLearningBadge={workflowMode === 'study'}
             pearlCount={pearls['step-5']?.deep?.length || 0}
             onDeepLearningClick={() => setStep4ModalOpen(true)}
+            onUnlock={() => unlockStep(4)}
           >
             {(workflowMode === 'code' && (!step1Data || !step2Data || steps[2]?.status !== 'completed')) ? (
               <button
@@ -989,6 +992,16 @@ export default function StrokeBasicsWorkflowV2() {
       }
       return step;
     }));
+  };
+
+  // Unlock a single step for parallel team use — does not affect sequential completeStep chain
+  const unlockStep = (id: number) => {
+    setSteps(prev => prev.map(step =>
+      step.id === id && step.status === 'locked'
+        ? { ...step, status: 'active' as StepStatus, isExpanded: true, startedAt: new Date() }
+        : step
+    ));
+    scrollToStep(id, 150);
   };
 
   const completeStep = (id: number, summary?: string) => {

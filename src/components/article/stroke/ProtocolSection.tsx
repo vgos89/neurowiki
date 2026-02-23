@@ -34,6 +34,7 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({
   showDeepLearningBadge = false,
   pearlCount = 0,
   onDeepLearningClick,
+  onUnlock,
 }) => {
   // Auto-collapse when completed; user can re-expand
   const [userExpanded, setUserExpanded] = useState(false);
@@ -123,6 +124,19 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({
           {/* Right Side: Status Badge + Collapse button (when expanded completed) + Deep Learning */}
           <div className="flex items-center gap-2 ml-14 sm:ml-11 lg:ml-0 flex-wrap">
             {getStatusBadge()}
+
+            {/* Parallel team unlock — de-emphasized, only on locked/pending steps */}
+            {status === 'pending' && onUnlock && (
+              <button
+                type="button"
+                onClick={onUnlock}
+                className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                aria-label={`Unlock step ${number} for independent team use`}
+              >
+                <LockOpen className="w-3 h-3" aria-hidden />
+                <span>Unlock</span>
+              </button>
+            )}
 
             {/* Collapse button — only shown when user re-expanded a completed step */}
             {status === 'completed' && userExpanded && (
