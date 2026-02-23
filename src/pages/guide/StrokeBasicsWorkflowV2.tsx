@@ -215,7 +215,7 @@ const MainContent: React.FC<{
             <button
               type="button"
               onClick={() => setEmergencyFabOpen(prev => !prev)}
-              className={`flex items-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all border-2 ${
+              className={`w-14 h-14 rounded-full font-bold shadow-lg transition-all border-2 flex items-center justify-center ${
                 emergencyFabOpen
                   ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700'
                   : 'bg-red-600 text-white border-red-700 hover:bg-red-700'
@@ -223,8 +223,7 @@ const MainContent: React.FC<{
               aria-label={emergencyFabOpen ? 'Close emergency protocols menu' : 'Open emergency protocols'}
               aria-expanded={emergencyFabOpen}
             >
-              <AlertTriangle className="w-4 h-4" aria-hidden />
-              <span className="hidden sm:inline">{emergencyFabOpen ? 'Close' : 'Emergency'}</span>
+              <AlertTriangle className="w-6 h-6" aria-hidden />
             </button>
           </div>
 
