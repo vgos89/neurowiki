@@ -164,7 +164,6 @@ const MainContent: React.FC<{
   pearlsData: ClinicalPearlsData | null;
   unlockStep: (id: number) => void;
 }> = ({ workflowMode, setWorkflowMode, steps, toggleStep, completeStep, activeStepNumber, getProtocolStatus, handleStepClick, step1ModalOpen, setStep1ModalOpen, step2ModalOpen, setStep2ModalOpen, step3ModalOpen, setStep3ModalOpen, step4ModalOpen, setStep4ModalOpen, thrombectomyModalOpen, setThrombectomyModalOpen, onThrombectomyRecommendation, thrombectomyRecommendation, timerStartTime, setTimerStartTime, timerRunning, setTimerRunning, milestones, setMilestones, setStep1Data, step1Data, setStep2Data, step2Data, step4Orders, setStep4Orders, setSteps, scrollToStep, nihssModalOpen, setNihssModalOpen, eligibilityModalOpen, setEligibilityModalOpen, doorTimePickerOpen, setDoorTimePickerOpen, nihssFromModal, setNihssFromModal, eligibilityResult, setEligibilityResult, toastMessage, setToastMessage, tpaReversalModalOpen, setTpaReversalModalOpen, orolingualEdemaModalOpen, setOrolingualEdemaModalOpen, hemorrhageProtocolModalOpen, setHemorrhageProtocolModalOpen, pearlsData, unlockStep }) => {
-  const [emergencyFabOpen, setEmergencyFabOpen] = useState(false);
   const pearls = pearlsData ?? {};
   const doorTimeForPicker = milestones.doorTime ?? timerStartTime;
   const doorTimeTo12h = (d: Date) => {
@@ -187,45 +186,11 @@ const MainContent: React.FC<{
       return (
         <Suspense fallback={null}>
         <>
-          {/* Timestamp Bubble */}
-          <TimestampBubble />
-
-          {/* Emergency Protocols FAB — stacked above TimestampBubble (bottom-right) */}
-          <div className="fixed bottom-[8.5rem] right-4 z-[60] flex flex-col items-end gap-2">
-            {emergencyFabOpen && (
-              <>
-                <button
-                  type="button"
-                  onClick={() => { setTpaReversalModalOpen(true); setEmergencyFabOpen(false); }}
-                  className="flex items-center gap-2.5 pl-3 pr-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl shadow-lg transition-colors animate-in slide-in-from-bottom-2 duration-200"
-                >
-                  <AlertTriangle className="w-4 h-4 flex-shrink-0" aria-hidden />
-                  tPA/TNK Reversal
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setOrolingualEdemaModalOpen(true); setEmergencyFabOpen(false); }}
-                  className="flex items-center gap-2.5 pl-3 pr-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold rounded-xl shadow-lg transition-colors animate-in slide-in-from-bottom-2 duration-150"
-                >
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" aria-hidden />
-                  Orolingual Edema
-                </button>
-              </>
-            )}
-            <button
-              type="button"
-              onClick={() => setEmergencyFabOpen(prev => !prev)}
-              className={`w-14 h-14 rounded-full font-bold shadow-lg transition-all border-2 flex items-center justify-center ${
-                emergencyFabOpen
-                  ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700'
-                  : 'bg-red-600 text-white border-red-700 hover:bg-red-700'
-              }`}
-              aria-label={emergencyFabOpen ? 'Close emergency protocols menu' : 'Open emergency protocols'}
-              aria-expanded={emergencyFabOpen}
-            >
-              <AlertTriangle className="w-6 h-6" aria-hidden />
-            </button>
-          </div>
+          {/* Unified FAB stack — Emergency (top) + Timestamp (bottom), same layer */}
+          <TimestampBubble
+            onTpaReversal={() => setTpaReversalModalOpen(true)}
+            onOrolingualEdema={() => setOrolingualEdemaModalOpen(true)}
+          />
 
           {/* Back + Header: compact on mobile */}
           <div className="mb-3 sm:mb-6 px-3 sm:px-6 pt-2 sm:pt-6">
