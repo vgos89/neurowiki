@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { ChevronRight } from 'lucide-react';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { CheckCircle, ChevronDown, ChevronRight } from 'lucide-react';
 
 interface ProtocolSectionProps {
   number: number;
@@ -10,6 +10,8 @@ interface ProtocolSectionProps {
   children: ReactNode;
   onComplete?: () => void;
   showCompleteButton?: boolean;
+  completionButtonLabel?: string;
+  completionSummary?: string;
   // Deep Learning badge props
   showDeepLearningBadge?: boolean;
   pearlCount?: number;
@@ -25,10 +27,54 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({
   children,
   onComplete,
   showCompleteButton = false,
+  completionButtonLabel = 'Next',
+  completionSummary,
   showDeepLearningBadge = false,
   pearlCount = 0,
   onDeepLearningClick,
 }) => {
+  // Auto-collapse when completed; user can re-expand
+  const [userExpanded, setUserExpanded] = useState(false);
+
+  useEffect(() => {
+    if (status === 'completed') setUserExpanded(false);
+  }, [status]);
+
+  const isCollapsed = status === 'completed' && !userExpanded;
+
+  // Compact summary row — shown when step is completed and collapsed
+  if (isCollapsed) {
+    return (
+      <div className="relative pl-4 border-l-4 border-green-500">
+        <button
+          type="button"
+          onClick={() => setUserExpanded(true)}
+          className="w-full flex items-start gap-3 py-2 pr-2 text-left hover:bg-slate-50 dark:hover:bg-slate-800/40 rounded-lg transition-colors group"
+          aria-label={`Step ${number} completed — click to expand`}
+        >
+          {/* Green step number badge */}
+          <div className="absolute -left-[17px] top-1 w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center font-bold text-sm shadow-lg shadow-green-600/20 flex-shrink-0">
+            {number}
+          </div>
+
+          <div className="flex-1 min-w-0 pl-6">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm font-bold text-slate-800 dark:text-slate-200">{title}</span>
+              <span className="px-2 py-0.5 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 text-xs font-bold rounded uppercase tracking-wide">
+                Completed
+              </span>
+            </div>
+            {completionSummary && (
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">{completionSummary}</p>
+            )}
+          </div>
+
+          <ChevronDown className="w-4 h-4 text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 flex-shrink-0 mt-1.5" aria-hidden />
+        </button>
+      </div>
+    );
+  }
+
   const getStatusBadge = () => {
     switch (status) {
       case 'in-progress':
@@ -54,14 +100,11 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({
 
   return (
     <div className={`relative ${isActive ? 'pl-4 border-l-4 border-red-600' : 'pl-4 border-l-4 border-transparent'}`}>
-      {/* Header - tight Stitch spacing */}
+      {/* Header */}
       <div className="mb-3">
-        {/* Desktop: Single row with everything */}
-        {/* Mobile: Two rows - title on top, badges below */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
-          {/* Left Side: Step Number + Title - badge 44px tap target on mobile */}
+          {/* Left Side: Step Number + Title */}
           <div className="flex items-center gap-3 pl-6 sm:pl-6">
-            {/* Step number badge - min 44px for touch */}
             <div className={`absolute -left-[22px] sm:-left-[17px] top-0 w-11 h-11 sm:w-8 sm:h-8 rounded-full text-white flex items-center justify-center font-bold flex-shrink-0 text-sm sm:text-base ${
               status === 'completed' ? 'bg-green-600 shadow-lg shadow-green-600/20' :
               status === 'in-progress' ? 'bg-red-600 shadow-lg shadow-red-600/20' :
@@ -69,19 +112,29 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({
 }`}>
               {number}
             </div>
-            
-            {/* Title - tight Stitch sizing */}
+
             <h2 className="text-lg font-bold text-slate-900">
               {title}
             </h2>
           </div>
 
-          {/* Right Side: Status Badge + Deep Learning Badge */}
+          {/* Right Side: Status Badge + Collapse button (when expanded completed) + Deep Learning */}
           <div className="flex items-center gap-2 ml-14 sm:ml-11 lg:ml-0 flex-wrap">
-            {/* Status Badge */}
             {getStatusBadge()}
 
-            {/* Deep Learning Badge - 44px touch target */}
+            {/* Collapse button — only shown when user re-expanded a completed step */}
+            {status === 'completed' && userExpanded && (
+              <button
+                type="button"
+                onClick={() => setUserExpanded(false)}
+                className="flex items-center gap-1 px-2 py-1 text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+              >
+                <ChevronDown className="w-3 h-3" aria-hidden />
+                Collapse
+              </button>
+            )}
+
+            {/* Deep Learning Badge */}
             {showDeepLearningBadge && onDeepLearningClick && (
               <button
                 onClick={onDeepLearningClick}
@@ -99,7 +152,6 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({
           </div>
         </div>
 
-        {/* Description - tight Stitch sizing */}
         {description && (
           <p className="text-sm text-slate-600 leading-relaxed mt-2">
             {description}
@@ -107,68 +159,66 @@ export const ProtocolSection: React.FC<ProtocolSectionProps> = ({
         )}
       </div>
 
-      {/* Section Content - tight spacing */}
+      {/* Section Content */}
       <div className="space-y-3">
         {children}
       </div>
 
-      {/* Complete Button - 44px touch, full width on mobile, safe area */}
+      {/* Complete / Next Button */}
       {showCompleteButton && onComplete && status !== 'completed' && (
         <div className="mt-6 flex justify-end safe-area-pb md:pb-0">
           <button
             onClick={() => {
-              // Call the existing onComplete first
-              if (onComplete) {
-                onComplete();
-              }
+              if (onComplete) onComplete();
 
-              // Scroll to next section after a brief delay to allow state updates
-              setTimeout(() => {
-                const nextSectionId = `step-${number + 1}`;
-                const nextSection = document.getElementById(nextSectionId);
-                
-                if (nextSection) {
-                  // Dynamically measure the sticky header height (bottom of clock)
-                  const stickyHeader = document.querySelector('[data-header-height]') as HTMLElement || 
-                                      document.querySelector('.sticky.top-0') as HTMLElement;
-                  let headerOffset = 120; // Default fallback
-                  
-                  if (stickyHeader) {
-                    const dataHeight = stickyHeader.getAttribute('data-header-height');
-                    headerOffset = dataHeight ? parseInt(dataHeight, 10) : stickyHeader.offsetHeight;
-                  }
-                  
-                  const elementRect = nextSection.getBoundingClientRect();
-                  const absoluteElementTop = elementRect.top + window.pageYOffset;
-                  const offsetPosition = absoluteElementTop - headerOffset;
+              // For non-final steps, scroll to the next section
+              if (completionButtonLabel === 'Next') {
+                setTimeout(() => {
+                  const nextSectionId = `step-${number + 1}`;
+                  const nextSection = document.getElementById(nextSectionId);
 
-                  // Primary scroll method
-                  requestAnimationFrame(() => {
-                    window.scrollTo({
-                      top: Math.max(0, offsetPosition),
-                      behavior: 'smooth'
+                  if (nextSection) {
+                    const stickyHeader = document.querySelector('[data-header-height]') as HTMLElement ||
+                                        document.querySelector('.sticky.top-0') as HTMLElement;
+                    let headerOffset = 120;
+
+                    if (stickyHeader) {
+                      const dataHeight = stickyHeader.getAttribute('data-header-height');
+                      headerOffset = dataHeight ? parseInt(dataHeight, 10) : stickyHeader.offsetHeight;
+                    }
+
+                    const elementRect = nextSection.getBoundingClientRect();
+                    const absoluteElementTop = elementRect.top + window.pageYOffset;
+                    const offsetPosition = absoluteElementTop - headerOffset;
+
+                    requestAnimationFrame(() => {
+                      window.scrollTo({ top: Math.max(0, offsetPosition), behavior: 'smooth' });
+
+                      setTimeout(() => {
+                        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+                        if (Math.abs(currentScroll - Math.max(0, offsetPosition)) > 100) {
+                          nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          setTimeout(() => window.scrollBy({ top: -headerOffset, behavior: 'smooth' }), 100);
+                        }
+                      }, 300);
                     });
-                    
-                    // Fallback for mobile browsers
-                    setTimeout(() => {
-                      const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-                      const expectedScroll = Math.max(0, offsetPosition);
-                      
-                      if (Math.abs(currentScroll - expectedScroll) > 100) {
-                        nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        setTimeout(() => {
-                          window.scrollBy({ top: -headerOffset, behavior: 'smooth' });
-                        }, 100);
-                      }
-                    }, 300);
-                  });
-                }
-              }, 250);
+                  }
+                }, 250);
+              }
             }}
             className="w-full md:w-auto min-h-[44px] px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-bold transition-colors flex items-center justify-center gap-2"
           >
-            <span>Next</span>
-            <ChevronRight className="w-4 h-4" aria-hidden />
+            {completionButtonLabel !== 'Next' ? (
+              <>
+                <CheckCircle className="w-4 h-4" aria-hidden />
+                <span>{completionButtonLabel}</span>
+              </>
+            ) : (
+              <>
+                <span>Next</span>
+                <ChevronRight className="w-4 h-4" aria-hidden />
+              </>
+            )}
           </button>
         </div>
       )}

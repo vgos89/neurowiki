@@ -338,6 +338,7 @@ const MainContent: React.FC<{
             status={getProtocolStatus(steps[0])}
             isActive={activeStepNumber === 1}
             showCompleteButton={false}
+            completionSummary={steps[0].completionSummary}
             showDeepLearningBadge={workflowMode === 'study'}
             pearlCount={pearls['step-1']?.deep?.length || 0}
             onDeepLearningClick={() => setStep1ModalOpen(true)}
@@ -403,6 +404,7 @@ const MainContent: React.FC<{
             status={getProtocolStatus(steps[1])}
             isActive={activeStepNumber === 2}
             showCompleteButton={false}
+            completionSummary={steps[1].completionSummary}
             showDeepLearningBadge={workflowMode === 'study'}
             pearlCount={pearls['step-2']?.deep?.length || 0}
             onDeepLearningClick={() => setStep2ModalOpen(true)}
@@ -554,6 +556,7 @@ const MainContent: React.FC<{
             status={getProtocolStatus(steps[2])}
             isActive={activeStepNumber === 3}
             showCompleteButton={false}
+            completionSummary={steps[2].completionSummary}
             showDeepLearningBadge={workflowMode === 'study'}
             pearlCount={(pearls['step-3']?.deep?.length || 0) + (pearls['step-4']?.deep?.length || 0)}
             onDeepLearningClick={() => setStep3ModalOpen(true)}
@@ -635,7 +638,10 @@ const MainContent: React.FC<{
             title="Code Summary & Documentation"
             status={getProtocolStatus(steps[3])}
             isActive={activeStepNumber === 4}
-            showCompleteButton={false}
+            showCompleteButton={steps[3].status !== 'completed' && steps[2].status === 'completed'}
+            completionButtonLabel="Workflow Complete"
+            onComplete={() => completeStep(4, 'Code summary documented')}
+            completionSummary={steps[3].completionSummary}
             showDeepLearningBadge={workflowMode === 'study'}
             pearlCount={pearls['step-5']?.deep?.length || 0}
             onDeepLearningClick={() => setStep4ModalOpen(true)}
