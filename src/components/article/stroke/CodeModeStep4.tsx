@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { Droplets, Pill, FlaskConical, HeartPulse, ChevronDown, ChevronUp, Copy, Check } from 'lucide-react';
 // Treatment Orders - AHA-based categories with evidence/rationale (v2)
+// BUG-01 fixed: renamed duplicate 'hba1c' id in stroke-workup to 'hba1c_workup'
+// BUG-03 fixed: Material Icons replaced with lucide-react throughout
 
 interface CodeModeStep4Props {
   step2Data: {
@@ -231,8 +234,9 @@ const ORDERS: Order[] = [
     evidenceClass: 'I',
     evidenceLevel: 'A'
   },
+  // BUG-01 fix: renamed from 'hba1c' (duplicate) to 'hba1c_workup'
   {
-    id: 'hba1c',
+    id: 'hba1c_workup',
     label: 'HbA1c and fasting glucose',
     category: 'stroke-workup',
     evidence: 'Class I, Level B',
@@ -346,18 +350,21 @@ const getCategoryClasses = (category: string) => {
   };
 };
 
+/** Lucide icon component for each category (BUG-03: replaces Material Icons) */
+const CategoryIcon: React.FC<{ category: string; className?: string }> = ({ category, className = 'w-5 h-5' }) => {
+  if (category === 'labs') return <Droplets className={className} />;
+  if (category === 'post-tpa') return <Pill className={className} />;
+  if (category === 'stroke-workup') return <FlaskConical className={className} />;
+  return <HeartPulse className={className} />;
+};
+
 const getEvidenceBadgeStyle = (evidenceClass?: string) => {
   switch (evidenceClass) {
-    case 'I':
-      return 'bg-green-50 text-green-700 border-green-300';
-    case 'IIa':
-      return 'bg-blue-50 text-blue-700 border-blue-300';
-    case 'IIb':
-      return 'bg-yellow-50 text-yellow-700 border-yellow-300';
-    case 'III':
-      return 'bg-red-50 text-red-700 border-red-300';
-    default:
-      return 'bg-slate-50 text-slate-700 border-slate-300';
+    case 'I':   return 'bg-green-50 text-green-700 border-green-300';
+    case 'IIa': return 'bg-blue-50 text-blue-700 border-blue-300';
+    case 'IIb': return 'bg-yellow-50 text-yellow-700 border-yellow-300';
+    case 'III': return 'bg-red-50 text-red-700 border-red-300';
+    default:    return 'bg-slate-50 text-slate-700 border-slate-300';
   }
 };
 
@@ -394,13 +401,6 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
     return 'General Stroke Care';
   };
 
-  const getCategoryIcon = (category: string) => {
-    if (category === 'labs') return 'water_drop';
-    if (category === 'post-tpa') return 'medication';
-    if (category === 'stroke-workup') return 'science';
-    return 'local_hospital';
-  };
-
   const handleComplete = () => {
     const selectedOrderLabels = displayOrders
       .filter(o => selectedOrders.includes(o.id))
@@ -421,41 +421,29 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
 
     let emrNote = '# ACUTE ISCHEMIC STROKE - TREATMENT PLAN\n\n';
 
-    if (groupedSelected['labs'] && groupedSelected['labs'].length > 0) {
+    if (groupedSelected['labs']?.length) {
       emrNote += '## LAB WORK\n';
-      groupedSelected['labs'].forEach(label => {
-        emrNote += `- ${label}\n`;
-      });
+      groupedSelected['labs'].forEach(label => { emrNote += `- ${label}\n`; });
       emrNote += '\n';
     }
-
-    if (groupedSelected['post-tpa'] && groupedSelected['post-tpa'].length > 0) {
+    if (groupedSelected['post-tpa']?.length) {
       emrNote += '## POST-THROMBOLYSIS MONITORING\n';
-      groupedSelected['post-tpa'].forEach(label => {
-        emrNote += `- ${label}\n`;
-      });
+      groupedSelected['post-tpa'].forEach(label => { emrNote += `- ${label}\n`; });
       emrNote += '\n';
     }
-
-    if (groupedSelected['stroke-workup'] && groupedSelected['stroke-workup'].length > 0) {
+    if (groupedSelected['stroke-workup']?.length) {
       emrNote += '## STROKE ETIOLOGY WORKUP\n';
-      groupedSelected['stroke-workup'].forEach(label => {
-        emrNote += `- ${label}\n`;
-      });
+      groupedSelected['stroke-workup'].forEach(label => { emrNote += `- ${label}\n`; });
       emrNote += '\n';
     }
-
-    if (groupedSelected['general'] && groupedSelected['general'].length > 0) {
+    if (groupedSelected['general']?.length) {
       emrNote += '## GENERAL STROKE CARE\n';
-      groupedSelected['general'].forEach(label => {
-        emrNote += `- ${label}\n`;
-      });
+      groupedSelected['general'].forEach(label => { emrNote += `- ${label}\n`; });
       emrNote += '\n';
     }
 
     const selectedCount = displayOrders.filter(o => selectedOrders.includes(o.id)).length;
     emrNote += `\nTotal orders: ${selectedCount}`;
-
     return emrNote;
   };
 
@@ -471,6 +459,10 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
     }
   };
 
+  // Expose note generator so parent can build a unified copy (MED-05)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-unknown
+  (CodeModeStep4 as unknown as { _generateNote?: () => string })._generateNote = generateEMRNote;
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-2">
@@ -482,7 +474,6 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
       <div className="space-y-4">
         {Object.entries(groupedOrders).map(([category, orders]) => {
           const classes = getCategoryClasses(category);
-          const icon = getCategoryIcon(category);
           const label = getCategoryLabel(category);
           const selectedCount = orders.filter(o => selectedOrders.includes(o.id)).length;
 
@@ -491,7 +482,7 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
               <div className={`px-4 py-3 ${classes.bg} ${classes.border} border-b`}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className={`material-icons-outlined text-lg ${classes.icon}`}>{icon}</span>
+                    <CategoryIcon category={category} className={`w-5 h-5 ${classes.icon}`} />
                     <div>
                       <h4 className={`font-bold text-sm ${classes.text}`}>{label}</h4>
                       <p className={`text-xs ${classes.textLight} mt-0.5`}>
@@ -521,7 +512,7 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
                             <span className="text-sm font-medium text-slate-900">
                               {order.label}
                             </span>
-
+                            {/* MED-04-style: separate toggle button for rationale (not bundled with checkbox) */}
                             <button
                               onClick={(e) => {
                                 e.preventDefault();
@@ -529,9 +520,10 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
                               }}
                               className={`mt-1 text-xs font-medium ${classes.icon} hover:underline flex items-center gap-0.5`}
                             >
-                              <span className="material-icons-outlined text-sm">
-                                {isExpanded ? 'expand_less' : 'expand_more'}
-                              </span>
+                              {isExpanded
+                                ? <ChevronUp className="w-3.5 h-3.5" />
+                                : <ChevronDown className="w-3.5 h-3.5" />
+                              }
                               {isExpanded ? 'Hide' : 'Why?'} Evidence & Rationale
                             </button>
                           </div>
@@ -540,6 +532,11 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
 
                       {isExpanded && (
                         <div className={`px-4 py-3 ${classes.bg} border-t ${classes.border}`}>
+                          <div className="flex items-center gap-1.5 mb-1.5">
+                            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${getEvidenceBadgeStyle(order.evidenceClass)}`}>
+                              {order.evidence}
+                            </span>
+                          </div>
                           <div className="text-sm text-slate-700 leading-relaxed">
                             {order.rationale}
                           </div>
@@ -567,9 +564,7 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
                 : 'bg-slate-700 text-white hover:bg-slate-800'
           }`}
         >
-          <span className="material-icons-outlined text-lg">
-            {copied ? 'check_circle' : 'content_copy'}
-          </span>
+          {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
           <span>{copied ? 'Copied!' : 'Copy to EMR'}</span>
         </button>
 

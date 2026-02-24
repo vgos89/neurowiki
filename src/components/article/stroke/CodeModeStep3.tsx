@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Info, CheckCircle, Copy, Check, Printer } from 'lucide-react';
 import type { Step1Data } from './CodeModeStep1';
 import type { Step2Data } from './CodeModeStep2';
 
@@ -204,7 +205,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
       {/* Incomplete data warning */}
       {(!hasStep1 || !hasStep2) && (
         <div className="rounded-lg p-4 bg-amber-50 border border-amber-200 flex items-start gap-3">
-          <span className="material-icons-outlined text-amber-600">info</span>
+          <Info className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
           <div>
             <p className="font-semibold text-amber-900">Incomplete data</p>
             <p className="text-sm text-amber-800 mt-1">
@@ -379,7 +380,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
           {generateEMRNote()}
         </pre>
         <div className="mt-4 p-4 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center gap-3">
-          <span className="material-icons-outlined text-emerald-600 text-2xl">check_circle</span>
+          <CheckCircle className="w-6 h-6 text-emerald-600 flex-shrink-0" />
           <div>
             <p className="font-semibold text-emerald-900">Code complete</p>
             <p className="text-sm text-emerald-800">Copy to EMR for handoff.</p>
@@ -393,12 +394,12 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
           >
             {copied ? (
               <>
-                <span className="material-icons-outlined text-lg">check</span>
+                <Check className="w-4 h-4" />
                 Copied
               </>
             ) : (
               <>
-                <span className="material-icons-outlined text-lg">content_copy</span>
+                <Copy className="w-4 h-4" />
                 Copy to EMR
               </>
             )}
@@ -408,7 +409,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
             onClick={handlePrint}
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold rounded-lg transition-colors"
           >
-            <span className="material-icons-outlined text-lg">print</span>
+            <Printer className="w-4 h-4" />
             Print Summary
           </button>
         </div>

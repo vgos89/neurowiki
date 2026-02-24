@@ -86,7 +86,7 @@ export const StrokeCardGrid: React.FC<StrokeCardGridProps> = ({
               'flex flex-col gap-1 p-3 rounded-xl text-left transition-all min-h-[72px]',
               card.id === 3 ? 'col-span-2' : '',
               isActive
-                ? 'border-2 border-red-500 bg-red-50 shadow-sm'
+                ? 'border-2 border-neuro-500 bg-neuro-50 shadow-sm'
                 : filled
                   ? 'border-2 border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'
                   : 'border-2 border-dashed border-slate-200 bg-slate-50/60 hover:border-slate-300',
@@ -98,7 +98,7 @@ export const StrokeCardGrid: React.FC<StrokeCardGridProps> = ({
                 className={[
                   'w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black flex-shrink-0',
                   isActive
-                    ? 'bg-red-500 text-white'
+                    ? 'bg-neuro-500 text-white'
                     : filled
                       ? 'bg-slate-700 text-white'
                       : 'bg-slate-300 text-slate-600',
@@ -109,14 +109,14 @@ export const StrokeCardGrid: React.FC<StrokeCardGridProps> = ({
               </span>
               <span className={[
                 'text-xs font-bold leading-tight flex-1 min-w-0',
-                isActive ? 'text-red-700' : 'text-slate-800',
+                isActive ? 'text-neuro-700' : 'text-slate-800',
               ].join(' ')}>
                 {card.title}
               </span>
               <ChevronRight
                 className={[
                   'w-3.5 h-3.5 flex-shrink-0 transition-transform',
-                  isActive ? 'text-red-400 rotate-90' : 'text-slate-300',
+                  isActive ? 'text-neuro-400 rotate-90' : 'text-slate-300',
                 ].join(' ')}
                 aria-hidden
               />
@@ -126,7 +126,7 @@ export const StrokeCardGrid: React.FC<StrokeCardGridProps> = ({
             <p className={[
               'text-[11px] leading-snug pl-7',
               isActive
-                ? 'text-red-600'
+                ? 'text-neuro-600'
                 : filled
                   ? 'text-slate-600'
                   : 'text-slate-400 italic',
