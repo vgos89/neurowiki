@@ -397,11 +397,8 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
         </div>
       )}
 
-      {/* Mobile spacer */}
-      <div className="md:hidden h-20" aria-hidden />
-
-      {/* ── Sticky CTA ── */}
-      <div className="fixed md:relative bottom-0 left-0 right-0 md:bottom-auto md:left-auto md:right-auto z-40 bg-white md:bg-transparent border-t md:border-t-0 border-slate-200 md:border-0 p-4 md:p-0">
+      {/* ── CTA ── */}
+      <div>
         {withinTPAWindow && isComplete && onOpenEligibility ? (
           <button
             type="button"

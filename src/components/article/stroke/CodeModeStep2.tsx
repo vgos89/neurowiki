@@ -21,6 +21,8 @@ interface CodeModeStep2Props {
   eligibilityResult?: ThrombolysisEligibilityData | null;
   /** Called when user selects "ICH detected"; e.g. open hemorrhage protocol modal */
   onIchSelected?: () => void;
+  /** Opens the tPA eligibility modal without navigating away */
+  onOpenEligibility?: () => void;
 }
 
 export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
@@ -29,6 +31,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
   onOpenEVTPathway,
   eligibilityResult = null,
   onIchSelected,
+  onOpenEligibility,
 }) => {
   const [ctResult, setCtResult] = useState<string>('');
   const [treatmentGiven, setTreatmentGiven] = useState<string>('');
@@ -216,9 +219,22 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
 
       {/* Eligibility not checked warning */}
       {isNoBleed && !eligibilityResult && (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
-        <div className="rounded-lg p-4 border-2 border-amber-300 bg-amber-50 flex items-start gap-3">
-          <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-          <p className="text-sm font-semibold text-amber-900">Eligibility not checked — return to Step 1 (LKW &amp; Vitals) to screen for contraindications before giving tPA/TNK.</p>
+        <div className="rounded-lg p-4 border-2 border-amber-300 bg-amber-50">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-amber-900">Eligibility not checked — screen for tPA/TNK contraindications before giving.</p>
+              {onOpenEligibility && (
+                <button
+                  type="button"
+                  onClick={onOpenEligibility}
+                  className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white rounded-lg transition-colors"
+                >
+                  Open tPA Eligibility Checklist →
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       )}
 

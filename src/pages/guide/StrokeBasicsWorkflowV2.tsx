@@ -256,11 +256,11 @@ const MainContent: React.FC<{
             Stroke Code Basics
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-0 sm:mt-0 flex items-center gap-1.5">
-            <span className="sm:hidden">4 sections · tap any to open</span>
+            <span className="sm:hidden">3 sections · tap any to open</span>
             <span className="hidden sm:flex items-center gap-1.5">
               {workflowMode === 'code'
-                ? <><Zap className="w-3.5 h-3.5 inline-block" /> Fast-track clinical decisions during active stroke code &bull; all 4 sections open immediately</>
-                : <><BookOpen className="w-3.5 h-3.5 inline-block" /> Evidence-based learning with trials and clinical pearls &bull; 4 sections</>}
+                ? <><Zap className="w-3.5 h-3.5 inline-block" /> Fast-track clinical decisions during active stroke code &bull; all 3 sections open immediately</>
+                : <><BookOpen className="w-3.5 h-3.5 inline-block" /> Evidence-based learning with trials and clinical pearls &bull; 3 sections</>}
             </span>
           </p>
         </div>
@@ -409,6 +409,7 @@ const MainContent: React.FC<{
                     setStep2Data(data);
                   }}
                   onOpenEVTPathway={() => setThrombectomyModalOpen(true)}
+                  onOpenEligibility={() => setEligibilityModalOpen(true)}
                 />
               </Suspense>
               {workflowMode === 'study' && (
@@ -463,92 +464,28 @@ const MainContent: React.FC<{
             </div>
           )}
 
-          {/* Card 3: Code Summary */}
+          {/* Card 3: Summary & Orders (merged) */}
           {activeCard === 3 && (
             <div>
               {workflowMode === 'study' && (
                 <StudyPearlsButton
-                  count={pearls['step-5']?.deep?.length || 0}
-                  onClick={() => setStep4ModalOpen(true)}
-                />
-              )}
-              <Suspense fallback={<div className="p-6 text-slate-500 animate-pulse">Loading summary…</div>}>
-                <CodeModeStep3
-                  step1Data={step1Data || DEFAULT_STEP1_DATA}
-                  step2Data={step2Data || DEFAULT_STEP2_DATA}
-                  step4Orders={step4Orders || []}
-                  milestones={milestones}
-                  timerStartTime={timerStartTime}
-                  thrombectomyRecommendation={thrombectomyRecommendation ?? undefined}
-                  onCopySuccess={() => {
-                    setToastMessage('Code summary copied to clipboard');
-                    setTimeout(() => setToastMessage(null), 2500);
-                  }}
-                />
-              </Suspense>
-              {workflowMode === 'study' && (
-                <details className="mt-4 group rounded-lg border border-green-200 bg-green-50 overflow-hidden">
-                  <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-semibold text-green-800 hover:bg-green-100/60 transition-colors list-none">
-                    <FileTextIcon className="w-4 h-4 text-green-600 flex-shrink-0" aria-hidden />
-                    <span>Evidence: Documentation &amp; Quality Improvement</span>
-                    <ChevronDown className="w-4 h-4 text-green-500 ml-auto group-open:rotate-180 transition-transform" aria-hidden />
-                  </summary>
-                  <div className="px-4 pb-4 pt-1 space-y-3">
-                    <p className="text-sm text-green-800 leading-relaxed">
-                      Comprehensive stroke code documentation serves multiple critical functions: medical-legal protection, quality improvement tracking, accurate billing, and seamless care transitions. Include precise LKW time with source, NIHSS score with subscores, contraindication assessment, door-to-needle time, and detailed treatment rationale.
-                    </p>
-                    <p className="text-sm text-green-800 leading-relaxed">
-                      <strong>Key Performance Metrics:</strong> National benchmarks track door-to-needle time (&lt;60 min goal, &lt;30 min excellence), imaging-to-needle time (&lt;20 min), and thrombolysis rates (8–12% of all stroke admissions). Dedicated stroke units reduce mortality by 18% through protocol adherence and coordinated multidisciplinary care (Stroke Unit Trialists Collaboration).
-                    </p>
-                    <div className="pt-2 border-t border-green-200">
-                      <p className="text-xs text-green-700">
-                        <strong>References:</strong>{' '}
-                        <a href="https://www.bmj.com/content/346/bmj.f2422" target="_blank" rel="noopener noreferrer" className="underline hover:text-green-900">Stroke Unit Trialists</a>
-                        {' '}•{' '}
-                        <a href="https://www.ahajournals.org/doi/10.1161/STROKEAHA.118.020203" target="_blank" rel="noopener noreferrer" className="underline hover:text-green-900">GWTG Quality Metrics</a>
-                        {' '}•{' '}
-                        <a href="https://www.nejm.org/doi/full/10.1056/NEJM199512143332401" target="_blank" rel="noopener noreferrer" className="underline hover:text-green-900">NINDS tPA Trial</a>
-                      </p>
-                    </div>
-                  </div>
-                </details>
-              )}
-              {workflowMode === 'study' && (
-                <Suspense fallback={null}>
-                  <DeepLearningModal
-                    isOpen={step4ModalOpen}
-                    onClose={() => setStep4ModalOpen(false)}
-                    sectionTitle="3. Code Summary & Documentation"
-                    pearls={pearls['step-5']?.deep || []}
-                  />
-                </Suspense>
-              )}
-            </div>
-          )}
-
-          {/* Card 4: Labs & Orders (or ICH Protocol if bleed detected in Card 2) */}
-          {activeCard === 4 && (
-            <div>
-              {workflowMode === 'study' && (
-                <StudyPearlsButton
-                  count={(pearls['step-3']?.deep?.length || 0) + (pearls['step-4']?.deep?.length || 0)}
+                  count={(pearls['step-3']?.deep?.length || 0) + (pearls['step-4']?.deep?.length || 0) + (pearls['step-5']?.deep?.length || 0)}
                   onClick={() => setStep3ModalOpen(true)}
                 />
               )}
               {step2Data?.ctResult === 'bleed' ? (
                 <Suspense fallback={<div className="p-6 text-slate-500 animate-pulse">Loading ICH protocol…</div>}>
                   <StrokeIchProtocolStep
-                    onComplete={() => { /* no-op: dashboard cards don't track completion state */ }}
+                    onComplete={() => { /* no-op */ }}
                     isLearningMode={workflowMode === 'study'}
                   />
                 </Suspense>
               ) : (
                 <div className="space-y-6">
+                  {/* Orders first — most actionable during active code */}
                   <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <h3 className="text-base font-bold text-slate-900 mb-2">Laboratory workup &amp; treatment orders</h3>
-                    <p className="text-sm text-slate-700 mb-4">
-                      <strong>Evidence &amp; rationale (AHA/ASA 2026):</strong> Point-of-care <strong>glucose is the only mandatory lab</strong> before thrombolysis; do not delay tPA for other labs if within 4.5h (NINDS, ECASS III). Post-thrombolysis: neuro checks, BP &lt;180/105, NPO until swallow passed, no antithrombotics × 24h.
-                    </p>
+                    <h3 className="text-base font-bold text-slate-900 mb-1">Labs &amp; Treatment Orders</h3>
+                    <p className="text-xs text-slate-500 mb-4">Point-of-care glucose is the only mandatory lab before tPA. Select remaining orders for post-code handoff. (AHA/ASA 2026)</p>
                     <Suspense fallback={<div className="p-4 text-slate-500 animate-pulse">Loading orders…</div>}>
                       <CodeModeStep4
                         step2Data={step2Data || { ctResult: 'no-bleed', treatmentGiven: 'none' }}
@@ -562,29 +499,62 @@ const MainContent: React.FC<{
                       />
                     </Suspense>
                   </section>
+
+                  {/* Code summary below orders */}
+                  <Suspense fallback={<div className="p-6 text-slate-500 animate-pulse">Loading summary…</div>}>
+                    <CodeModeStep3
+                      step1Data={step1Data || DEFAULT_STEP1_DATA}
+                      step2Data={step2Data || DEFAULT_STEP2_DATA}
+                      step4Orders={step4Orders || []}
+                      milestones={milestones}
+                      timerStartTime={timerStartTime}
+                      thrombectomyRecommendation={thrombectomyRecommendation ?? undefined}
+                      onCopySuccess={() => {
+                        setToastMessage('Code summary copied to clipboard');
+                        setTimeout(() => setToastMessage(null), 2500);
+                      }}
+                    />
+                  </Suspense>
                 </div>
               )}
               {workflowMode === 'study' && (
-                <details className="mt-4 group rounded-lg border border-amber-200 bg-amber-50 overflow-hidden">
-                  <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-semibold text-amber-800 hover:bg-amber-100/60 transition-colors list-none">
-                    <FlaskConical className="w-4 h-4 text-amber-600 flex-shrink-0" aria-hidden />
-                    <span>Evidence: Laboratory Workup &amp; Treatment Orders</span>
-                    <ChevronDown className="w-4 h-4 text-amber-500 ml-auto group-open:rotate-180 transition-transform" aria-hidden />
-                  </summary>
-                  <div className="px-4 pb-4 pt-1">
-                    <p className="text-sm text-amber-800 leading-relaxed">
-                      Point-of-care <strong>glucose is the ONLY mandatory lab</strong> before thrombolysis (AHA/ASA 2026). Do not delay tPA for other labs if within 4.5h. Post-thrombolysis: neuro checks, BP &lt;180/105, NPO until swallow passed, no antithrombotics × 24h. Evidence: Fonarow GWTG, ARTIS, SITS-ISTR.
-                    </p>
-                  </div>
-                </details>
+                <div className="mt-4 space-y-3">
+                  <details className="group rounded-lg border border-amber-200 bg-amber-50 overflow-hidden">
+                    <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-semibold text-amber-800 hover:bg-amber-100/60 transition-colors list-none">
+                      <FlaskConical className="w-4 h-4 text-amber-600 flex-shrink-0" aria-hidden />
+                      <span>Evidence: Laboratory Workup &amp; Treatment Orders</span>
+                      <ChevronDown className="w-4 h-4 text-amber-500 ml-auto group-open:rotate-180 transition-transform" aria-hidden />
+                    </summary>
+                    <div className="px-4 pb-4 pt-1">
+                      <p className="text-sm text-amber-800 leading-relaxed">
+                        Point-of-care <strong>glucose is the ONLY mandatory lab</strong> before thrombolysis (AHA/ASA 2026). Do not delay tPA for other labs if within 4.5h. Post-thrombolysis: neuro checks, BP &lt;180/105, NPO until swallow passed, no antithrombotics × 24h. Evidence: Fonarow GWTG, ARTIS, SITS-ISTR.
+                      </p>
+                    </div>
+                  </details>
+                  <details className="group rounded-lg border border-green-200 bg-green-50 overflow-hidden">
+                    <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-semibold text-green-800 hover:bg-green-100/60 transition-colors list-none">
+                      <FileTextIcon className="w-4 h-4 text-green-600 flex-shrink-0" aria-hidden />
+                      <span>Evidence: Documentation &amp; Quality Improvement</span>
+                      <ChevronDown className="w-4 h-4 text-green-500 ml-auto group-open:rotate-180 transition-transform" aria-hidden />
+                    </summary>
+                    <div className="px-4 pb-4 pt-1 space-y-3">
+                      <p className="text-sm text-green-800 leading-relaxed">
+                        Comprehensive stroke code documentation serves multiple critical functions: medical-legal protection, quality improvement tracking, accurate billing, and seamless care transitions. Include precise LKW time with source, NIHSS score with subscores, contraindication assessment, door-to-needle time, and detailed treatment rationale.
+                      </p>
+                      <p className="text-sm text-green-800 leading-relaxed">
+                        <strong>Key Performance Metrics:</strong> National benchmarks track door-to-needle time (&lt;60 min goal, &lt;30 min excellence), imaging-to-needle time (&lt;20 min), and thrombolysis rates (8–12% of all stroke admissions). Dedicated stroke units reduce mortality by 18% through protocol adherence and coordinated multidisciplinary care (Stroke Unit Trialists Collaboration).
+                      </p>
+                    </div>
+                  </details>
+                </div>
               )}
               {workflowMode === 'study' && (
                 <Suspense fallback={null}>
                   <DeepLearningModal
                     isOpen={step3ModalOpen}
                     onClose={() => setStep3ModalOpen(false)}
-                    sectionTitle="4. Labs & Treatment Orders"
-                    pearls={[...(pearls['step-3']?.deep || []), ...(pearls['step-4']?.deep || [])]}
+                    sectionTitle="3. Summary, Orders & Documentation"
+                    pearls={[...(pearls['step-3']?.deep || []), ...(pearls['step-4']?.deep || []), ...(pearls['step-5']?.deep || [])]}
                   />
                 </Suspense>
               )}
@@ -852,8 +822,8 @@ export default function StrokeBasicsWorkflowV2() {
   const [orolingualEdemaModalOpen, setOrolingualEdemaModalOpen] = useState(false);
   const [hemorrhageProtocolModalOpen, setHemorrhageProtocolModalOpen] = useState(false);
 
-  // Active dashboard card — all 4 immediately accessible, no completion locks
-  const [activeCard, setActiveCard] = useState<1 | 2 | 3 | 4>(1);
+  // Active dashboard card — all 3 immediately accessible, no completion locks
+  const [activeCard, setActiveCard] = useState<1 | 2 | 3>(1);
 
   // Timer system (door time = hospital arrival)
   const [timerStartTime, setTimerStartTime] = useState<Date>(new Date());
@@ -888,7 +858,7 @@ export default function StrokeBasicsWorkflowV2() {
           workflowMode={workflowMode}
           setWorkflowMode={setWorkflowMode}
           activeCard={activeCard}
-          setActiveCard={(id) => setActiveCard(id as 1 | 2 | 3 | 4)}
+          setActiveCard={(id) => setActiveCard(id as 1 | 2 | 3)}
           step1ModalOpen={step1ModalOpen}
           setStep1ModalOpen={setStep1ModalOpen}
           step2ModalOpen={step2ModalOpen}

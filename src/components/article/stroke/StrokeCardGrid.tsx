@@ -33,24 +33,18 @@ function card2Summary(d: Step2Data | null): string {
   return `CT: ${ct} · ${tx}`;
 }
 
-function card3Summary(doorTime: Date, tpaBolusTime?: Date | null): string {
-  const door = formatHHMM(doorTime);
-  if (!tpaBolusTime) return `Door: ${door} · Milestones tracking`;
+function card3Summary(doorTime: Date, orders: string[], tpaBolusTime?: Date | null): string {
+  const orderText = orders.length > 0 ? `${orders.length} order${orders.length !== 1 ? 's' : ''}` : 'No orders yet';
+  if (!tpaBolusTime) return `Door: ${formatHHMM(doorTime)} · ${orderText}`;
   const dtnMin = Math.round((tpaBolusTime.getTime() - doorTime.getTime()) / 60000);
   const flag = dtnMin <= 60 ? ' ✓' : '';
-  return `Door: ${door} · DTN: ${dtnMin} min${flag}`;
-}
-
-function card4Summary(orders: string[]): string {
-  if (orders.length === 0) return 'No orders selected';
-  return `${orders.length} orders selected`;
+  return `DTN: ${dtnMin} min${flag} · ${orderText}`;
 }
 
 const CARDS = [
   { id: 1, title: 'LKW & Vitals', sub: 'Assessment' },
   { id: 2, title: 'CT & Treatment', sub: 'Imaging' },
-  { id: 3, title: 'Code Summary', sub: 'Milestones' },
-  { id: 4, title: 'Labs & Orders', sub: 'Orders' },
+  { id: 3, title: 'Summary & Orders', sub: 'Documentation' },
 ] as const;
 
 export const StrokeCardGrid: React.FC<StrokeCardGridProps> = ({
@@ -65,15 +59,13 @@ export const StrokeCardGrid: React.FC<StrokeCardGridProps> = ({
   const summaries: Record<number, string> = {
     1: card1Summary(step1Data),
     2: card2Summary(step2Data),
-    3: card3Summary(doorTime, tpaBolusTime),
-    4: card4Summary(step4Orders),
+    3: card3Summary(doorTime, step4Orders, tpaBolusTime),
   };
 
   const hasData: Record<number, boolean> = {
     1: step1Data !== null,
     2: step2Data !== null,
     3: true, // door time always set
-    4: step4Orders.length > 0,
   };
 
   return (
@@ -92,6 +84,7 @@ export const StrokeCardGrid: React.FC<StrokeCardGridProps> = ({
             onClick={() => onSelectCard(card.id)}
             className={[
               'flex flex-col gap-1 p-3 rounded-xl text-left transition-all min-h-[72px]',
+              card.id === 3 ? 'col-span-2' : '',
               isActive
                 ? 'border-2 border-red-500 bg-red-50 shadow-sm'
                 : filled
