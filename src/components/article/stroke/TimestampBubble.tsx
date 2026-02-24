@@ -176,7 +176,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
       )}
 
       {/* ── Clock FAB — bottom RIGHT ── */}
-      <div className="fixed bottom-36 md:bottom-4 right-4 z-[60]">
+      <div className="fixed bottom-36 md:bottom-20 right-4 z-[60]">
         <div className="relative">
         {/* Clock thought bubble */}
         {showClockThought && !isExpanded && (
