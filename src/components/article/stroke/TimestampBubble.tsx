@@ -111,72 +111,73 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
   const hasEmergency = onTpaReversal || onOrolingualEdema;
 
   return (
-    // Single unified container — both FABs share the same layer
-    <div className="fixed bottom-4 right-4 z-[60] flex flex-col items-end gap-3">
-
-      {/* ── Emergency FAB (top of stack) ── */}
+    <>
+      {/* ── Emergency FAB — bottom LEFT ── */}
       {hasEmergency && (
-        <div className="relative flex flex-col items-end gap-2">
-          {/* Emergency thought bubble */}
-          {showEmergencyThought && !emergencyOpen && (
-            <ThoughtBubble>
-              <p className="text-xs font-semibold text-red-600 dark:text-red-400 leading-snug">
-                Emergency protocols
-              </p>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                tPA reversal · orolingual edema
-              </p>
-            </ThoughtBubble>
-          )}
+        <div className="fixed bottom-24 md:bottom-4 left-4 z-[60]">
+          <div className="relative flex flex-col items-start gap-2">
+            {/* Emergency thought bubble */}
+            {showEmergencyThought && !emergencyOpen && (
+              <ThoughtBubble>
+                <p className="text-xs font-semibold text-red-600 dark:text-red-400 leading-snug">
+                  Emergency protocols
+                </p>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
+                  tPA reversal · orolingual edema
+                </p>
+              </ThoughtBubble>
+            )}
 
-          {/* Submenus — expand upward inside the same relative wrapper */}
-          {emergencyOpen && (
-            <div className="flex flex-col items-end gap-2">
-              {onTpaReversal && (
-                <button
-                  type="button"
-                  onClick={() => { onTpaReversal(); setEmergencyOpen(false); }}
-                  className="flex items-center gap-2.5 pl-3 pr-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl shadow-lg transition-colors animate-in slide-in-from-bottom-2 duration-200"
-                >
-                  <AlertTriangle className="w-4 h-4 flex-shrink-0" aria-hidden />
-                  tPA/TNK Reversal
-                </button>
-              )}
-              {onOrolingualEdema && (
-                <button
-                  type="button"
-                  onClick={() => { onOrolingualEdema(); setEmergencyOpen(false); }}
-                  className="flex items-center gap-2.5 pl-3 pr-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold rounded-xl shadow-lg transition-colors animate-in slide-in-from-bottom-2 duration-150"
-                >
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" aria-hidden />
-                  Orolingual Edema
-                </button>
-              )}
-            </div>
-          )}
+            {/* Submenus — expand upward */}
+            {emergencyOpen && (
+              <div className="flex flex-col items-start gap-2">
+                {onTpaReversal && (
+                  <button
+                    type="button"
+                    onClick={() => { onTpaReversal(); setEmergencyOpen(false); }}
+                    className="flex items-center gap-2.5 pl-3 pr-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl shadow-lg transition-colors animate-in slide-in-from-bottom-2 duration-200"
+                  >
+                    <AlertTriangle className="w-4 h-4 flex-shrink-0" aria-hidden />
+                    tPA/TNK Reversal
+                  </button>
+                )}
+                {onOrolingualEdema && (
+                  <button
+                    type="button"
+                    onClick={() => { onOrolingualEdema(); setEmergencyOpen(false); }}
+                    className="flex items-center gap-2.5 pl-3 pr-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold rounded-xl shadow-lg transition-colors animate-in slide-in-from-bottom-2 duration-150"
+                  >
+                    <AlertCircle className="w-4 h-4 flex-shrink-0" aria-hidden />
+                    Orolingual Edema
+                  </button>
+                )}
+              </div>
+            )}
 
-          {/* Emergency button */}
-          <button
-            type="button"
-            onClick={() => { setEmergencyOpen(prev => !prev); setShowEmergencyThought(false); }}
-            className={`w-14 h-14 rounded-full shadow-lg transition-all border-2 flex items-center justify-center ${
-              emergencyOpen
-                ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700'
-                : 'bg-red-600 text-white border-red-700 hover:bg-red-700'
-            }`}
-            aria-label={emergencyOpen ? 'Close emergency protocols menu' : 'Open emergency protocols'}
-            aria-expanded={emergencyOpen}
-          >
-            {emergencyOpen
-              ? <X className="w-6 h-6" aria-hidden />
-              : <AlertTriangle className="w-6 h-6" aria-hidden />
-            }
-          </button>
+            {/* Emergency button */}
+            <button
+              type="button"
+              onClick={() => { setEmergencyOpen(prev => !prev); setShowEmergencyThought(false); }}
+              className={`w-10 h-10 rounded-full shadow-lg transition-all border-2 flex items-center justify-center ${
+                emergencyOpen
+                  ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700'
+                  : 'bg-red-600 text-white border-red-700 hover:bg-red-700'
+              }`}
+              aria-label={emergencyOpen ? 'Close emergency protocols menu' : 'Open emergency protocols'}
+              aria-expanded={emergencyOpen}
+            >
+              {emergencyOpen
+                ? <X className="w-5 h-5" aria-hidden />
+                : <AlertTriangle className="w-5 h-5" aria-hidden />
+              }
+            </button>
+          </div>
         </div>
       )}
 
-      {/* ── Clock FAB (bottom of stack) ── */}
-      <div className="relative">
+      {/* ── Clock FAB — bottom RIGHT ── */}
+      <div className="fixed bottom-24 md:bottom-4 right-4 z-[60]">
+        <div className="relative">
         {/* Clock thought bubble */}
         {showClockThought && !isExpanded && (
           <ThoughtBubble>
@@ -269,17 +270,17 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
         <button
           onClick={handleOpen}
           aria-label="Open timestamp tracker"
-          className={`w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${
+          className={`w-10 h-10 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${
             isExpanded
               ? 'bg-slate-700 dark:bg-slate-600 scale-90'
               : `bg-neuro-600 hover:bg-neuro-700 dark:bg-neuro-500 dark:hover:bg-neuro-600 ${showClockThought ? 'bubble-wobble' : ''} ${needsAttention ? 'ring-4 ring-neuro-400 ring-offset-2 animate-pulse' : ''}`
           }`}
         >
           {isExpanded ? (
-            <X className="w-6 h-6 text-white" />
+            <X className="w-5 h-5 text-white" />
           ) : (
             <div className="relative">
-              <Clock className="w-6 h-6 text-white" />
+              <Clock className="w-5 h-5 text-white" />
               {stampedCount > 0 && (
                 <span className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full text-white text-[10px] font-bold flex items-center justify-center leading-none">
                   {stampedCount}
@@ -288,8 +289,8 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
             </div>
           )}
         </button>
+        </div>
       </div>
-
-    </div>
+    </>
   );
 };
