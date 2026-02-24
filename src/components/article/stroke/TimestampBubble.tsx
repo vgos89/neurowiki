@@ -20,24 +20,27 @@ function getElapsed(from: Date, to: Date): string {
 interface TimestampBubbleProps {
   onTpaReversal?: () => void;
   onOrolingualEdema?: () => void;
+  /** Called whenever a timestamp is recorded — parent wires this to GWTGMilestones (BUG-02 fix) */
+  onStamp?: (event: EventName, date: Date) => void;
+  /** When set, stamps CT Read Time externally (e.g. from CodeModeStep2 "Stamp CT Read" button) */
+  ctReadExternalTime?: Date | null;
 }
 
-// Shared left-pointing thought bubble (arrow points right toward its FAB)
+// Shared left-pointing thought bubble — arrow uses SVG, no inline styles (MED-03 fix)
 const ThoughtBubble: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="absolute right-[calc(100%+0.625rem)] top-1/2 -translate-y-1/2 pointer-events-none z-10">
     <div className="relative bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2 shadow-lg whitespace-nowrap">
       {children}
-      {/* Right-pointing arrow toward FAB */}
-      <div
+      {/* SVG right-pointing arrow toward FAB — replaces inline CSS border triangle */}
+      <svg
         className="absolute top-1/2 -translate-y-1/2 -right-[7px]"
-        style={{
-          width: 0, height: 0,
-          borderTop: '6px solid transparent',
-          borderBottom: '6px solid transparent',
-          borderLeft: '7px solid white',
-        }}
+        width="7" height="12"
+        viewBox="0 0 7 12"
         aria-hidden
-      />
+      >
+        <polygon points="0,0 7,6 0,12" className="fill-slate-200 dark:fill-slate-600" />
+        <polygon points="0,1 6,6 0,11" className="fill-white dark:fill-slate-800" />
+      </svg>
     </div>
   </div>
 );
@@ -45,6 +48,8 @@ const ThoughtBubble: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
   onTpaReversal,
   onOrolingualEdema,
+  onStamp,
+  ctReadExternalTime,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showClockThought, setShowClockThought] = useState(true);
@@ -74,18 +79,17 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
     return () => clearTimeout(t);
   }, []);
 
-  // Listen for CT Read Time stamp event fired from CodeModeStep2
+  // BUG-02 fix: react to external CT Read stamp from CodeModeStep2 via prop (no DOM events)
   useEffect(() => {
-    const handler = () => {
-      setShowPulse(false);
-      setTimestamps(prev => {
-        if (prev['CT Read Time']) return prev;
-        return { ...prev, 'CT Read Time': new Date() };
-      });
-    };
-    window.addEventListener('stroke:stamp-ct-read', handler);
-    return () => window.removeEventListener('stroke:stamp-ct-read', handler);
-  }, []);
+    if (!ctReadExternalTime) return;
+    setShowPulse(false);
+    setTimestamps(prev => {
+      if (prev['CT Read Time']) return prev;
+      const updated = { ...prev, 'CT Read Time': ctReadExternalTime };
+      onStamp?.('CT Read Time', ctReadExternalTime);
+      return updated;
+    });
+  }, [ctReadExternalTime]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleOpen = () => {
     setShowClockThought(false);
@@ -96,7 +100,9 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
   const handleStamp = (event: EventName) => {
     if (timestamps[event]) return;
     setShowPulse(false);
-    setTimestamps(prev => ({ ...prev, [event]: new Date() }));
+    const now = new Date();
+    setTimestamps(prev => ({ ...prev, [event]: now }));
+    onStamp?.(event, now);
   };
 
   const handleClear = (event: EventName, e: React.MouseEvent) => {
@@ -114,7 +120,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
     <>
       {/* ── Emergency FAB — bottom LEFT ── */}
       {hasEmergency && (
-        <div className="fixed bottom-24 md:bottom-4 left-4 z-[60]">
+        <div className="fixed bottom-24 md:bottom-20 left-4 z-[60]">
           <div className="relative flex flex-col items-start gap-2">
             {/* Emergency thought bubble */}
             {showEmergencyThought && !emergencyOpen && (

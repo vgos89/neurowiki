@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { AlertTriangle, ExternalLink, FlaskConical, Brain } from 'lucide-react';
 import type { Step1Data } from './CodeModeStep1';
 import type { ThrombolysisEligibilityData } from './ThrombolysisEligibilityModal';
+import { getTNKDose, getTpaDoses, toKg } from '../../../utils/strokeDosing';
 
 export interface Step2Data {
   ctResult: string; // 'no-bleed' | 'bleed' (ICH) | 'other'
@@ -23,6 +24,8 @@ interface CodeModeStep2Props {
   onIchSelected?: () => void;
   /** Opens the tPA eligibility modal without navigating away */
   onOpenEligibility?: () => void;
+  /** Called when user clicks "Stamp CT Read Time" — parent wires to TimestampBubble */
+  onCtReadStamped?: () => void;
 }
 
 export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
@@ -32,6 +35,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
   eligibilityResult = null,
   onIchSelected,
   onOpenEligibility,
+  onCtReadStamped,
 }) => {
   const [ctResult, setCtResult] = useState<string>('');
   const [treatmentGiven, setTreatmentGiven] = useState<string>('');
@@ -39,25 +43,17 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
   const [lvoPresent, setLvoPresent] = useState<string>(''); // 'yes' | 'no' | 'pending'
   const [ctReadStamped, setCtReadStamped] = useState(false);
 
-  // Pre-fill doses from Step 1 weight
-  const weightKg = useMemo(() => {
-    if (!step1Data?.weightValue) return 0;
-    return step1Data.weightUnit === 'kg'
-      ? Math.round(step1Data.weightValue * 10) / 10
-      : Math.round((step1Data.weightValue / 2.205) * 10) / 10;
-  }, [step1Data?.weightValue, step1Data?.weightUnit]);
+  // Pre-fill doses from Step 1 weight (shared dosing util — MED-02)
+  const weightKg = useMemo(
+    () => (step1Data?.weightValue ? toKg(step1Data.weightValue, step1Data.weightUnit) : 0),
+    [step1Data?.weightValue, step1Data?.weightUnit]
+  );
 
-  const tpaDose = useMemo(() => (weightKg > 0 ? Math.min(Math.round(weightKg * 0.9 * 10) / 10, 90) : 0), [weightKg]);
-  const tpaBolus = useMemo(() => (tpaDose > 0 ? Math.round(tpaDose * 0.1 * 10) / 10 : 0), [tpaDose]);
-  const tpaInfusion = useMemo(() => (tpaDose > 0 ? Math.round(tpaDose * 0.9 * 10) / 10 : 0), [tpaDose]);
+  const { total: tpaDose, bolus: tpaBolus, infusion: tpaInfusion } = useMemo(
+    () => (weightKg > 0 ? getTpaDoses(weightKg) : { total: 0, bolus: 0, infusion: 0 }),
+    [weightKg]
+  );
 
-  const getTNKDose = (kg: number): number => {
-    if (kg < 60) return 15;
-    if (kg < 70) return 17.5;
-    if (kg < 80) return 20;
-    if (kg < 90) return 22.5;
-    return 25;
-  };
   const tnkDose = useMemo(() => (weightKg > 0 ? getTNKDose(weightKg) : 0), [weightKg]);
 
   const isICH = ctResult === 'ich';
@@ -89,7 +85,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
 
   const handleStampCtRead = () => {
     if (ctReadStamped) return;
-    window.dispatchEvent(new CustomEvent('stroke:stamp-ct-read'));
+    onCtReadStamped?.();
     setCtReadStamped(true);
   };
 

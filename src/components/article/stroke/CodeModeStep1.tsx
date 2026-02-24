@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { LKWTimePicker } from './LKWTimePicker';
+import { getTNKDose, getTpaDoses, toKg } from '../../../utils/strokeDosing';
 
 export interface CodeModeStep1Props {
   onComplete: (data: Step1Data) => void;
@@ -62,24 +63,17 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
     setLkwHours(Math.max(0, (now.getTime() - lkwDate.getTime()) / (1000 * 60 * 60)));
   }, [lkwDate, lkwUnknown]);
 
-  const weightKg = useMemo(() => {
-    if (weightValue === 0) return 0;
-    return weightUnit === 'kg'
-      ? Math.round(weightValue * 10) / 10
-      : Math.round((weightValue / 2.205) * 10) / 10;
-  }, [weightValue, weightUnit]);
+  // Shared dosing util — MED-02 (DRY)
+  const weightKg = useMemo(
+    () => (weightValue === 0 ? 0 : toKg(weightValue, weightUnit)),
+    [weightValue, weightUnit]
+  );
 
-  const tpaDose = useMemo(() => Math.min(Math.round(weightKg * 0.9 * 10) / 10, 90), [weightKg]);
-  const tpaBolus = useMemo(() => Math.round(tpaDose * 0.1 * 10) / 10, [tpaDose]);
-  const tpaInfusion = useMemo(() => Math.round(tpaDose * 0.9 * 10) / 10, [tpaDose]);
+  const { total: tpaDose, bolus: tpaBolus, infusion: tpaInfusion } = useMemo(
+    () => getTpaDoses(weightKg),
+    [weightKg]
+  );
 
-  const getTNKDose = (kg: number): number => {
-    if (kg < 60) return 15;
-    if (kg < 70) return 17.5;
-    if (kg < 80) return 20;
-    if (kg < 90) return 22.5;
-    return 25;
-  };
   const tnkDose = useMemo(() => getTNKDose(weightKg), [weightKg]);
 
   const withinTPAWindow = lkwHours > 0 && lkwHours <= 4.5;
@@ -123,7 +117,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
       weightValue,
       weightUnit,
       bpControlled,
-      eligibilityChecked: !!onOpenEligibility,
+      eligibilityChecked: false, // BUG-04 fix: parent sets this true only after modal is actually completed
       lowGlucoseGuidanceViewed: glucoseLow ? lowGlucoseGuidanceViewed : undefined,
     });
   };

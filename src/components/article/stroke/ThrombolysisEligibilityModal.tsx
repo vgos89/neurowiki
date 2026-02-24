@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { X, Copy, Check, ChevronDown, Zap } from 'lucide-react';
+import { X, Copy, Check, ChevronDown, Zap, Info } from 'lucide-react';
 import { copyToClipboard } from '../../../utils/clipboard';
 
 export interface ThrombolysisEligibilityData {
@@ -17,6 +17,8 @@ interface ThrombolysisEligibilityModalProps {
   onClose: () => void;
   onComplete?: (data: ThrombolysisEligibilityData) => void;
   initialData?: ThrombolysisEligibilityData | null;
+  /** BUG-05 fix: LKW timestamp from Step 1 — used to compute elapsed hours and show 3–4.5h chips */
+  lkwDate?: Date | null;
 }
 
 // ── Chip data ──────────────────────────────────────────────────────────────
@@ -53,12 +55,13 @@ const RELATIVE_CHIPS: Chip[] = [
   { id: 'arterial_puncture', label: 'Arterial access <7d',     detail: 'Arterial puncture at non-compressible site within 7 days.' },
 ];
 
-const EXTENDED_WINDOW_ITEMS = [
-  { label: 'Age >80',                   detail: 'Excluded from 3–4.5h window only (fine in 0–3h window).' },
-  { label: 'Any oral anticoagulant',    detail: 'Even if INR is normal — excluded from 3–4.5h window.' },
-  { label: 'NIHSS >25',                 detail: 'Severe stroke has uncertain benefit in 3–4.5h window.' },
-  { label: 'Diabetes + prior stroke',  detail: 'This combination excluded in 3–4.5h window.' },
-  { label: '>⅓ MCA on imaging',         detail: 'Large ischemic injury on imaging — excluded from 3–4.5h window.' },
+/** HIGH-04 fix: make 3–4.5h window items interactive chips that affect eligibility */
+const EXTENDED_WINDOW_CHIPS: Chip[] = [
+  { id: 'ext_age_over80',       label: 'Age >80',               detail: 'Excluded from 3–4.5h window only (fine in 0–3h window).' },
+  { id: 'ext_oral_anticoag',    label: 'Any oral anticoagulant', detail: 'Even if INR is normal — excluded from 3–4.5h window.' },
+  { id: 'ext_nihss_over25',     label: 'NIHSS >25',             detail: 'Severe stroke has uncertain benefit in 3–4.5h window.' },
+  { id: 'ext_dm_prior_stroke',  label: 'Diabetes + prior stroke', detail: 'This combination excluded in 3–4.5h window.' },
+  { id: 'ext_large_mca',        label: '>⅓ MCA on imaging',      detail: 'Large ischemic injury on imaging — excluded from 3–4.5h window.' },
 ];
 
 // Full label map for EMR copy text
@@ -84,6 +87,12 @@ const CONTRA_LABELS: Record<string, string> = {
   gi_gu_bleed: 'GI/GU hemorrhage within 21 days',
   recent_mi: 'Acute MI within 3 months',
   arterial_puncture: 'Arterial puncture at non-compressible site within 7 days',
+  // 3–4.5h extended window exclusions
+  ext_age_over80:      'Age >80 (3–4.5h window exclusion)',
+  ext_oral_anticoag:   'Oral anticoagulant use — any (3–4.5h window exclusion)',
+  ext_nihss_over25:    'NIHSS >25 (3–4.5h window exclusion)',
+  ext_dm_prior_stroke: 'Diabetes mellitus with prior stroke (3–4.5h window exclusion)',
+  ext_large_mca:       '>1/3 MCA territory on imaging (3–4.5h window exclusion)',
 };
 
 // ── Component ─────────────────────────────────────────────────────────────
@@ -93,6 +102,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
   onClose,
   onComplete,
   initialData,
+  lkwDate,
 }) => {
   const [absoluteContraindications, setAbsoluteContraindications] = useState<Record<string, boolean>>(
     initialData?.absoluteContraindications.reduce((acc, id) => ({ ...acc, [id]: true }), {}) ?? {}
@@ -100,9 +110,19 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
   const [relativeContraindications, setRelativeContraindications] = useState<Record<string, boolean>>(
     initialData?.relativeContraindications.reduce((acc, id) => ({ ...acc, [id]: true }), {}) ?? {}
   );
+  /** HIGH-04: extended window chips — stored as absolute contraindications when active */
+  const [extendedContraindications, setExtendedContraindications] = useState<Record<string, boolean>>({});
   const [notes, setNotes] = useState(initialData?.notes ?? '');
   const [copiedToClipboard, setCopiedToClipboard] = useState(false);
   const [expandedChip, setExpandedChip] = useState<string | null>(null);
+
+  /** BUG-05 / HIGH-04: hours since LKW — drives visibility of 3–4.5h chip section */
+  const lkwHoursElapsed = useMemo(() => {
+    if (!lkwDate) return null;
+    return (Date.now() - lkwDate.getTime()) / 3_600_000;
+  }, [lkwDate]);
+
+  const showExtendedSection = lkwHoursElapsed !== null && lkwHoursElapsed > 3.0 && lkwHoursElapsed <= 4.5;
 
   useEffect(() => {
     if (initialData) setNotes(initialData.notes ?? '');
@@ -130,8 +150,11 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
     setRelativeContraindications(prev => ({ ...prev, [id]: !prev[id] }));
 
   const activeAbsolute = useMemo(
-    () => Object.entries(absoluteContraindications).filter(([, v]) => v).map(([id]) => id),
-    [absoluteContraindications]
+    () => [
+      ...Object.entries(absoluteContraindications).filter(([, v]) => v).map(([id]) => id),
+      ...Object.entries(extendedContraindications).filter(([, v]) => v).map(([id]) => id),
+    ],
+    [absoluteContraindications, extendedContraindications]
   );
   const activeRelative = useMemo(
     () => Object.entries(relativeContraindications).filter(([, v]) => v).map(([id]) => id),
@@ -146,11 +169,13 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
     return { status: 'eligible' as const, label: 'NO CONTRAINDICATIONS FLAGGED', color: 'emerald' };
   }, [activeAbsolute, activeRelative]);
 
+  /** BUG-05 fix: populate lkwTime and timeDifferenceHours from the lkwDate prop */
   const handleComplete = () => {
+    const now = new Date();
     onComplete?.({
-      lkwTime: null,
-      timeDifferenceHours: null,
-      inclusionCriteriaMet: true,
+      lkwTime: lkwDate ?? null,
+      timeDifferenceHours: lkwDate ? (now.getTime() - lkwDate.getTime()) / 3_600_000 : null,
+      inclusionCriteriaMet: activeAbsolute.length === 0,
       absoluteContraindications: activeAbsolute,
       relativeContraindications: activeRelative,
       eligibilityStatus: eligibilityStatus.status,
@@ -243,20 +268,27 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
                 const expanded = expandedChip === chip.id;
                 return (
                   <div key={chip.id}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        toggleAbsolute(chip.id);
-                        setExpandedChip(expanded ? null : chip.id);
-                      }}
-                      className={`w-full min-h-[52px] px-3 py-2.5 rounded-xl border-2 text-sm font-semibold text-left transition-colors leading-snug ${
-                        active
-                          ? 'bg-red-500 border-red-500 text-white'
-                          : 'bg-white border-slate-200 text-slate-700 hover:border-red-200 hover:bg-red-50'
-                      }`}
-                    >
-                      {chip.label}
-                    </button>
+                    {/* MED-04 fix: chip body toggles contraindication; info icon controls expand only */}
+                    <div className={`relative flex min-h-[52px] rounded-xl border-2 overflow-hidden transition-colors ${
+                      active ? 'bg-red-500 border-red-500' : 'bg-white border-slate-200 hover:border-red-200 hover:bg-red-50'
+                    }`}>
+                      <button
+                        type="button"
+                        onClick={() => toggleAbsolute(chip.id)}
+                        className="flex-1 px-3 py-2.5 text-sm font-semibold text-left leading-snug focus-visible:outline-none"
+                        style={{ color: 'inherit' }}
+                      >
+                        <span className={active ? 'text-white' : 'text-slate-700'}>{chip.label}</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setExpandedChip(expanded ? null : chip.id)}
+                        className={`px-2 flex items-center shrink-0 focus-visible:outline-none ${active ? 'text-red-100 hover:text-white' : 'text-slate-300 hover:text-slate-500'}`}
+                        aria-label={`${expanded ? 'Hide' : 'Show'} details for ${chip.label}`}
+                      >
+                        <Info className="w-3.5 h-3.5" aria-hidden />
+                      </button>
+                    </div>
                     {expanded && (
                       <p className="mt-1 text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-2 leading-relaxed">
                         {chip.detail}
@@ -277,20 +309,25 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
                 const expanded = expandedChip === chip.id;
                 return (
                   <div key={chip.id}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        toggleAbsolute(chip.id);
-                        setExpandedChip(expanded ? null : chip.id);
-                      }}
-                      className={`w-full min-h-[52px] px-3 py-2.5 rounded-xl border-2 text-sm font-semibold text-left transition-colors leading-snug ${
-                        active
-                          ? 'bg-red-500 border-red-500 text-white'
-                          : 'bg-white border-slate-200 text-slate-700 hover:border-red-200 hover:bg-red-50'
-                      }`}
-                    >
-                      {chip.label}
-                    </button>
+                    <div className={`relative flex min-h-[52px] rounded-xl border-2 overflow-hidden transition-colors ${
+                      active ? 'bg-red-500 border-red-500' : 'bg-white border-slate-200 hover:border-red-200 hover:bg-red-50'
+                    }`}>
+                      <button
+                        type="button"
+                        onClick={() => toggleAbsolute(chip.id)}
+                        className="flex-1 px-3 py-2.5 text-sm font-semibold text-left leading-snug focus-visible:outline-none"
+                      >
+                        <span className={active ? 'text-white' : 'text-slate-700'}>{chip.label}</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setExpandedChip(expanded ? null : chip.id)}
+                        className={`px-2 flex items-center shrink-0 focus-visible:outline-none ${active ? 'text-red-100 hover:text-white' : 'text-slate-300 hover:text-slate-500'}`}
+                        aria-label={`${expanded ? 'Hide' : 'Show'} details for ${chip.label}`}
+                      >
+                        <Info className="w-3.5 h-3.5" aria-hidden />
+                      </button>
+                    </div>
                     {expanded && (
                       <p className="mt-1 text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-2 leading-relaxed">
                         {chip.detail}
@@ -311,20 +348,25 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
                 const expanded = expandedChip === chip.id;
                 return (
                   <div key={chip.id}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        toggleRelative(chip.id);
-                        setExpandedChip(expanded ? null : chip.id);
-                      }}
-                      className={`w-full min-h-[52px] px-3 py-2.5 rounded-xl border-2 text-sm font-semibold text-left transition-colors leading-snug ${
-                        active
-                          ? 'bg-amber-500 border-amber-500 text-white'
-                          : 'bg-white border-slate-200 text-slate-700 hover:border-amber-200 hover:bg-amber-50'
-                      }`}
-                    >
-                      {chip.label}
-                    </button>
+                    <div className={`relative flex min-h-[52px] rounded-xl border-2 overflow-hidden transition-colors ${
+                      active ? 'bg-amber-500 border-amber-500' : 'bg-white border-slate-200 hover:border-amber-200 hover:bg-amber-50'
+                    }`}>
+                      <button
+                        type="button"
+                        onClick={() => toggleRelative(chip.id)}
+                        className="flex-1 px-3 py-2.5 text-sm font-semibold text-left leading-snug focus-visible:outline-none"
+                      >
+                        <span className={active ? 'text-white' : 'text-slate-700'}>{chip.label}</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setExpandedChip(expanded ? null : chip.id)}
+                        className={`px-2 flex items-center shrink-0 focus-visible:outline-none ${active ? 'text-amber-100 hover:text-white' : 'text-slate-300 hover:text-slate-500'}`}
+                        aria-label={`${expanded ? 'Hide' : 'Show'} details for ${chip.label}`}
+                      >
+                        <Info className="w-3.5 h-3.5" aria-hidden />
+                      </button>
+                    </div>
                     {expanded && (
                       <p className="mt-1 text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-2 leading-relaxed">
                         {chip.detail}
@@ -336,22 +378,68 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
             </div>
           </section>
 
-          {/* ── 3–4.5h window extras (collapsed) ── */}
-          <details className="group rounded-xl border border-amber-200 bg-amber-50 overflow-hidden">
-            <summary className="flex items-center gap-2 px-4 py-3 text-xs font-bold uppercase tracking-wider text-amber-700 cursor-pointer hover:bg-amber-100/60 transition-colors list-none">
-              <ChevronDown className="w-3.5 h-3.5 text-amber-500 group-open:rotate-180 transition-transform shrink-0" aria-hidden />
-              3–4.5h Window — Additional Exclusions
-            </summary>
-            <div className="px-4 pb-4 pt-1 space-y-2.5">
-              <p className="text-xs text-amber-700">If treating in the 3–4.5h window, these ALSO exclude the patient:</p>
-              {EXTENDED_WINDOW_ITEMS.map((item) => (
-                <div key={item.label} className="text-sm">
-                  <span className="font-semibold text-amber-900">• {item.label}</span>
-                  <span className="text-amber-700 ml-1 text-xs">— {item.detail}</span>
+          {/* ── 3–4.5h window extras — interactive chips (HIGH-04 fix) ── */}
+          {showExtendedSection ? (
+            <section className="rounded-xl border-2 border-amber-300 bg-amber-50 overflow-hidden">
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-amber-200">
+                <span className="text-xs font-bold uppercase tracking-wider text-amber-700">3–4.5h Window — Additional Exclusions</span>
+                <span className="ml-auto text-[10px] font-semibold text-amber-600 bg-amber-100 border border-amber-200 rounded-full px-2 py-0.5">Active window</span>
+              </div>
+              <div className="px-4 pb-4 pt-3">
+                <p className="text-xs text-amber-700 mb-3">LKW is in the 3–4.5h window. These ALSO exclude the patient — tap if present:</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {EXTENDED_WINDOW_CHIPS.map((chip) => {
+                    const active = !!extendedContraindications[chip.id];
+                    const expanded = expandedChip === chip.id;
+                    return (
+                      <div key={chip.id}>
+                        <div className={`relative flex min-h-[52px] rounded-xl border-2 overflow-hidden transition-colors ${
+                          active ? 'bg-amber-600 border-amber-600' : 'bg-white border-amber-200 hover:border-amber-400 hover:bg-amber-50'
+                        }`}>
+                          <button
+                            type="button"
+                            onClick={() => setExtendedContraindications(prev => ({ ...prev, [chip.id]: !prev[chip.id] }))}
+                            className="flex-1 px-3 py-2.5 text-sm font-semibold text-left leading-snug focus-visible:outline-none"
+                          >
+                            <span className={active ? 'text-white' : 'text-slate-700'}>{chip.label}</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setExpandedChip(expanded ? null : chip.id)}
+                            className={`px-2 flex items-center shrink-0 focus-visible:outline-none ${active ? 'text-amber-100 hover:text-white' : 'text-slate-300 hover:text-slate-500'}`}
+                            aria-label={`${expanded ? 'Hide' : 'Show'} details for ${chip.label}`}
+                          >
+                            <Info className="w-3.5 h-3.5" aria-hidden />
+                          </button>
+                        </div>
+                        {expanded && (
+                          <p className="mt-1 text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-2 leading-relaxed">
+                            {chip.detail}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
-              ))}
-            </div>
-          </details>
+              </div>
+            </section>
+          ) : (
+            <details className="group rounded-xl border border-amber-200 bg-amber-50 overflow-hidden">
+              <summary className="flex items-center gap-2 px-4 py-3 text-xs font-bold uppercase tracking-wider text-amber-700 cursor-pointer hover:bg-amber-100/60 transition-colors list-none">
+                <ChevronDown className="w-3.5 h-3.5 text-amber-500 group-open:rotate-180 transition-transform shrink-0" aria-hidden />
+                3–4.5h Window — Additional Exclusions
+              </summary>
+              <div className="px-4 pb-4 pt-1 space-y-2.5">
+                <p className="text-xs text-amber-700">If treating in the 3–4.5h window, these ALSO exclude the patient:</p>
+                {EXTENDED_WINDOW_CHIPS.map((chip) => (
+                  <div key={chip.id} className="text-sm">
+                    <span className="font-semibold text-amber-900">• {chip.label}</span>
+                    <span className="text-amber-700 ml-1 text-xs">— {chip.detail}</span>
+                  </div>
+                ))}
+              </div>
+            </details>
+          )}
 
           {/* ── Notes (collapsed) ── */}
           <details className="group rounded-xl border border-slate-200 overflow-hidden">
@@ -396,7 +484,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
                 onClick={handleComplete}
                 className="px-4 py-2 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors"
               >
-                Complete →
+                Save &amp; Return →
               </button>
             )}
           </div>
