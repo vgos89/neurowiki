@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { X, CheckCircle2, AlertTriangle, Calendar, Copy, Check, ChevronDown } from 'lucide-react';
+import { X, Copy, Check, ChevronDown, Zap } from 'lucide-react';
+import { copyToClipboard } from '../../../utils/clipboard';
 
 export interface ThrombolysisEligibilityData {
   lkwTime: Date | null;
@@ -18,169 +19,74 @@ interface ThrombolysisEligibilityModalProps {
   initialData?: ThrombolysisEligibilityData | null;
 }
 
-interface CriteriaItem {
-  id: string;
-  label: string;
-  plainEnglish: string;
-}
+// ── Chip data ──────────────────────────────────────────────────────────────
 
-interface AbsoluteItemWithSub {
-  id: string;
-  label: string;
-  plainEnglish: string;
-  subCriteria?: Array<{ id: string; label: string; plainEnglish: string }>;
-}
+interface Chip { id: string; label: string; detail: string; }
 
-const PRE_TPA_BP_MANAGEMENT = {
-  target: { systolic: 185, diastolic: 110 },
-  medications: [
-    { name: 'Labetalol', dose: '10-20mg IV push over 1-2 minutes', frequency: 'May repeat every 10-20 minutes', maxDose: '300mg total' },
-    { name: 'Nicardipine', dose: '5mg/hr IV infusion', titration: 'Increase by 2.5mg/hr every 5-15 minutes', maxDose: '15mg/hr' },
-  ],
-  guideline: 'AHA/ASA 2026 Guidelines: BP must be <185/110 before tPA administration',
+const HARD_STOP_CHIPS: Chip[] = [
+  { id: 'ich_on_ct',            label: 'ICH on CT',               detail: 'Any intracranial blood on CT. tPA is absolutely contraindicated.' },
+  { id: 'significant_head_trauma', label: 'Head trauma <3mo',     detail: 'Significant head or facial trauma in the past 3 months.' },
+  { id: 'prior_stroke_3mo',     label: 'Stroke <3mo',             detail: 'Prior ischemic stroke within 3 months.' },
+  { id: 'prior_ich',            label: 'Prior brain bleed',       detail: 'Any prior history of intracranial hemorrhage.' },
+  { id: 'sah_symptoms',         label: 'Possible SAH',            detail: 'Thunderclap headache or subarachnoid hemorrhage suspected.' },
+  { id: 'ic_surgery',           label: 'Brain/spine surgery',     detail: 'Intracranial or intraspinal surgery within the past 3 months.' },
+  { id: 'active_bleeding',      label: 'Active bleeding',         detail: 'Active internal bleeding at any site (excludes menses).' },
+  { id: 'hypoglycemia',         label: 'Glucose <50',             detail: 'Treat hypoglycemia first; reassess for tPA if symptoms persist after normoglycemia.' },
+  { id: 'ct_large_infarct',     label: '>⅓ MCA infarct',          detail: 'Hypodensity >1/3 of the MCA territory on CT.' },
+  { id: 'severe_htn',           label: 'BP >185/110',             detail: 'Elevated BP must be controlled to <185/110 before tPA. Treat with labetalol or nicardipine.' },
+];
+
+const BLEEDING_LAB_CHIPS: Chip[] = [
+  { id: 'platelets',    label: 'PLT <100k',         detail: 'Platelet count below 100,000/mm³.' },
+  { id: 'heparin_aptt', label: 'Heparin + ↑aPTT',  detail: 'Heparin administered within 48h with elevated aPTT.' },
+  { id: 'warfarin_inr', label: 'INR >1.7',          detail: 'On anticoagulant with INR >1.7 or PT >15 seconds.' },
+  { id: 'doac',         label: 'DOAC <48h',         detail: 'Direct thrombin or factor Xa inhibitor taken within 48h, or elevated drug-specific assay.' },
+];
+
+const RELATIVE_CHIPS: Chip[] = [
+  { id: 'minor_rapid',       label: 'Minor/rapid improvement', detail: 'Mild or rapidly clearing symptoms. Consider if symptoms are still disabling.' },
+  { id: 'pregnancy',         label: 'Pregnancy',               detail: 'Get OB consult. Benefit may outweigh risk in severe stroke.' },
+  { id: 'seizure_onset',     label: 'Seizure at onset',        detail: "Seizure at stroke onset with residual deficits. May be Todd's paralysis — imaging helps." },
+  { id: 'major_surgery',     label: 'Surgery <14d',            detail: 'Major surgery or serious non-head trauma within 14 days.' },
+  { id: 'gi_gu_bleed',       label: 'GI/GU bleed <21d',        detail: 'Recent gastrointestinal or urinary tract hemorrhage within 21 days.' },
+  { id: 'recent_mi',         label: 'MI <3mo',                 detail: 'Acute myocardial infarction within 3 months. Discuss with cardiology.' },
+  { id: 'arterial_puncture', label: 'Arterial access <7d',     detail: 'Arterial puncture at non-compressible site within 7 days.' },
+];
+
+const EXTENDED_WINDOW_ITEMS = [
+  { label: 'Age >80',                   detail: 'Excluded from 3–4.5h window only (fine in 0–3h window).' },
+  { label: 'Any oral anticoagulant',    detail: 'Even if INR is normal — excluded from 3–4.5h window.' },
+  { label: 'NIHSS >25',                 detail: 'Severe stroke has uncertain benefit in 3–4.5h window.' },
+  { label: 'Diabetes + prior stroke',  detail: 'This combination excluded in 3–4.5h window.' },
+  { label: '>⅓ MCA on imaging',         detail: 'Large ischemic injury on imaging — excluded from 3–4.5h window.' },
+];
+
+// Full label map for EMR copy text
+const CONTRA_LABELS: Record<string, string> = {
+  ich_on_ct: 'ICH on CT',
+  significant_head_trauma: 'Significant head trauma within 3 months',
+  prior_stroke_3mo: 'Prior ischemic stroke within 3 months',
+  prior_ich: 'History of intracranial hemorrhage',
+  sah_symptoms: 'Symptoms suggest subarachnoid hemorrhage',
+  ic_surgery: 'Recent intracranial or intraspinal surgery',
+  active_bleeding: 'Active internal bleeding',
+  hypoglycemia: 'Blood glucose <50 mg/dL',
+  ct_large_infarct: 'CT: multilobar infarction >1/3 MCA territory',
+  severe_htn: 'BP >185/110 mmHg',
+  platelets: 'Platelet count <100,000/mm³',
+  heparin_aptt: 'Heparin within 48h with elevated aPTT',
+  warfarin_inr: 'Anticoagulant use with INR >1.7 or PT >15s',
+  doac: 'DOAC with elevated drug-specific assay',
+  minor_rapid: 'Minor or rapidly improving stroke symptoms',
+  pregnancy: 'Pregnancy',
+  seizure_onset: 'Seizure at onset with postictal neurological deficits',
+  major_surgery: 'Major surgery or serious trauma within 14 days',
+  gi_gu_bleed: 'GI/GU hemorrhage within 21 days',
+  recent_mi: 'Acute MI within 3 months',
+  arterial_puncture: 'Arterial puncture at non-compressible site within 7 days',
 };
 
-const INCLUSION_CRITERIA: CriteriaItem[] = [
-  {
-    id: 'diagnosis',
-    label: 'Diagnosis of ischemic stroke causing measurable neurological deficit',
-    plainEnglish: 'Patient must have clear stroke symptoms that can be measured and documented (not just vague complaints).',
-  },
-  {
-    id: 'time_window',
-    label: 'Symptom onset <3 hours (or <4.5 hours for select patients)',
-    plainEnglish: 'Must know when patient was last normal. If <3h, standard criteria apply. If 3-4.5h, additional restrictions apply (no age >80, no diabetes+prior stroke, no anticoagulants, NIHSS ≤25).',
-  },
-  {
-    id: 'age',
-    label: 'Age ≥18 years',
-    plainEnglish: 'Adult patients only. Pediatric stroke has different management protocols.',
-  },
-];
-
-const ABSOLUTE_CONTRAINDICATIONS: AbsoluteItemWithSub[] = [
-  {
-    id: 'ich_on_ct',
-    label: 'Intracranial hemorrhage on CT',
-    plainEnglish: 'Any bleeding visible in the brain on CT scan. tPA could make bleeding catastrophically worse.',
-  },
-  {
-    id: 'significant_head_trauma',
-    label: 'Significant head trauma in previous 3 months',
-    plainEnglish: 'Recent head injury creates fragile brain tissue at high risk for bleeding with tPA.',
-  },
-  {
-    id: 'prior_stroke_3mo',
-    label: 'Prior ischemic stroke in previous 3 months',
-    plainEnglish: 'Recent stroke tissue is fragile and at very high risk of bleeding. Wait 3 months before considering tPA for new stroke.',
-  },
-  {
-    id: 'prior_ich',
-    label: 'History of intracranial hemorrhage',
-    plainEnglish: 'Ever had brain bleeding in the past. High risk it could happen again with tPA.',
-  },
-  {
-    id: 'sah_symptoms',
-    label: 'Symptoms suggest subarachnoid hemorrhage',
-    plainEnglish: 'Thunderclap headache or signs of bleeding around brain. Get vascular imaging before tPA.',
-  },
-  {
-    id: 'ic_surgery',
-    label: 'Recent intracranial or intraspinal surgery',
-    plainEnglish: 'Surgery in brain or spine within past 3 months. Surgical site could bleed catastrophically.',
-  },
-  {
-    id: 'severe_htn',
-    label: 'Elevated blood pressure (SBP >185 or DBP >110 mm Hg)',
-    plainEnglish: 'High BP must be lowered first. Above 185/110 greatly increases brain bleeding risk. Give BP meds, wait for it to stabilize, then reassess.',
-  },
-  {
-    id: 'active_bleeding',
-    label: 'Active internal bleeding',
-    plainEnglish: "Currently bleeding anywhere in body. tPA prevents clotting so bleeding won't stop.",
-  },
-  {
-    id: 'bleeding_diathesis',
-    label: 'Acute bleeding diathesis, including but not limited to:',
-    plainEnglish: 'Any condition that makes blood unable to clot properly. See specific items below.',
-    subCriteria: [
-      { id: 'platelets', label: 'Platelet count <100,000/mm³', plainEnglish: "Too few platelets means blood cannot clot. tPA would cause dangerous bleeding." },
-      { id: 'heparin_aptt', label: 'Heparin within 48h resulting in elevated aPTT', plainEnglish: "Recent heparin makes blood too thin. Check aPTT - if elevated, blood won't clot properly with tPA." },
-      { id: 'warfarin_inr', label: 'Current anticoagulant use with INR >1.7 or PT >15 seconds', plainEnglish: 'On warfarin/Coumadin with blood too thin (INR >1.7). Adding tPA causes severe bleeding. If INR ≤1.7, tPA is okay.' },
-      { id: 'doac', label: 'Direct thrombin or factor Xa inhibitors with elevated labs (aPTT, INR, platelet count, ECT, TT, or factor Xa assays)', plainEnglish: 'On newer blood thinners (Eliquis, Xarelto, Pradaxa, Savaysa). If taken within 48h OR if drug-specific lab tests are elevated, do NOT give tPA. Check: anti-Xa level for Eliquis/Xarelto/Savaysa, ECT or dilute thrombin time for Pradaxa.' },
-    ],
-  },
-  {
-    id: 'hypoglycemia',
-    label: 'Blood glucose <50 mg/dL',
-    plainEnglish: 'Low blood sugar can cause stroke-like symptoms. Give dextrose, recheck glucose, then reassess if symptoms persist.',
-  },
-  {
-    id: 'ct_large_infarct',
-    label: 'CT shows multilobar infarction (hypodensity >1/3 cerebral hemisphere)',
-    plainEnglish: 'Too much brain already dead (large dark area on CT). Extremely high risk of massive brain swelling and fatal bleeding.',
-  },
-];
-
-const RELATIVE_CONTRAINDICATIONS: CriteriaItem[] = [
-  {
-    id: 'minor_rapid',
-    label: 'Minor or rapidly improving stroke symptoms (clearing spontaneously)',
-    plainEnglish: "Mild symptoms that are getting better on their own. But if symptoms are still disabling even if mild, tPA is recommended. Don't delay treatment to watch for improvement - time is brain.",
-  },
-  {
-    id: 'pregnancy',
-    label: 'Pregnancy',
-    plainEnglish: "tPA doesn't cross placenta but could cause maternal bleeding. For severe disabling stroke, benefit may outweigh risk. Get OB consult immediately.",
-  },
-  {
-    id: 'seizure_onset',
-    label: 'Seizure at stroke onset with postictal residual neurological impairments',
-    plainEnglish: "Seizure at start makes diagnosis tricky - could be Todd's paralysis (temporary weakness after seizure) rather than stroke. If imaging shows real stroke, tPA is reasonable.",
-  },
-  {
-    id: 'major_surgery',
-    label: 'Major surgery or serious trauma within previous 14 days',
-    plainEnglish: 'Recent surgery site could bleed with tPA. Weigh stroke severity against surgical bleeding risk. Get surgery team involved.',
-  },
-  {
-    id: 'gi_gu_bleed',
-    label: 'Recent GI or GU hemorrhage (within previous 21 days)',
-    plainEnglish: 'Recent bleeding from stomach/intestines/urinary tract. Could start bleeding again with tPA, but if stroke is severe, may be worth risk.',
-  },
-  {
-    id: 'recent_mi',
-    label: 'Recent acute myocardial infarction (within previous 3 months)',
-    plainEnglish: 'Recent heart attack. Damaged heart could rupture with tPA. For severe stroke, benefit may outweigh risk - discuss with cardiology.',
-  },
-  {
-    id: 'arterial_puncture',
-    label: 'Arterial puncture at non-compressible site in previous 7 days',
-    plainEnglish: "Recent artery access (like subclavian line) at site that can't be compressed to stop bleeding if it starts.",
-  },
-];
-
-const EXTENDED_WINDOW_EXCLUSIONS: CriteriaItem[] = [
-  { id: 'age_80', label: 'Age >80 years', plainEnglish: 'In the 3-4.5h window specifically, age >80 is excluded (but >80 is fine in 0-3h window!).' },
-  { id: 'anticoagulant_any', label: 'Taking oral anticoagulants regardless of INR', plainEnglish: 'In 3-4.5h window, any oral blood thinner use excludes patient even if INR is normal.' },
-  { id: 'nihss_25', label: 'NIHSS >25', plainEnglish: 'Very severe stroke in extended window has uncertain benefit. These patients are fine in 0-3h window.' },
-  { id: 'stroke_diabetes', label: 'History of both diabetes and prior stroke', plainEnglish: 'This combination in 3-4.5h window is excluded, but okay in 0-3h window.' },
-  { id: 'large_infarct_imaging', label: 'Imaging evidence of ischemic injury involving >1/3 MCA territory', plainEnglish: 'Large area of damage visible on imaging. Too much brain at risk in extended window.' },
-];
-
-function getAbsoluteLabel(id: string): string {
-  for (const item of ABSOLUTE_CONTRAINDICATIONS) {
-    if (item.id === id) return item.label;
-    for (const sub of item.subCriteria || []) {
-      if (sub.id === id) return sub.label;
-    }
-  }
-  return id;
-}
-
-function getRelativeLabel(id: string): string {
-  return RELATIVE_CONTRAINDICATIONS.find(c => c.id === id)?.label ?? id;
-}
+// ── Component ─────────────────────────────────────────────────────────────
 
 export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModalProps> = ({
   isOpen,
@@ -188,424 +94,309 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
   onComplete,
   initialData,
 }) => {
-  const [copiedToClipboard, setCopiedToClipboard] = useState(false);
-
-  // Eligibility State (2024 criteria)
-  const [inclusionCriteria, setInclusionCriteria] = useState<Record<string, boolean>>({
-    diagnosis: false,
-    time_window: false,
-    age: false,
-  });
   const [absoluteContraindications, setAbsoluteContraindications] = useState<Record<string, boolean>>(
-    initialData?.absoluteContraindications.reduce((acc, id) => ({ ...acc, [id]: true }), {}) || {}
+    initialData?.absoluteContraindications.reduce((acc, id) => ({ ...acc, [id]: true }), {}) ?? {}
   );
   const [relativeContraindications, setRelativeContraindications] = useState<Record<string, boolean>>(
-    initialData?.relativeContraindications.reduce((acc, id) => ({ ...acc, [id]: true }), {}) || {}
+    initialData?.relativeContraindications.reduce((acc, id) => ({ ...acc, [id]: true }), {}) ?? {}
   );
-  const [notes, setNotes] = useState(initialData?.notes || '');
+  const [notes, setNotes] = useState(initialData?.notes ?? '');
+  const [copiedToClipboard, setCopiedToClipboard] = useState(false);
+  const [expandedChip, setExpandedChip] = useState<string | null>(null);
 
   useEffect(() => {
-    if (initialData) {
-      setNotes(initialData.notes || '');
-    }
+    if (initialData) setNotes(initialData.notes ?? '');
   }, [initialData]);
 
-  const eligibilityStatus = useMemo(() => {
-    const inclusionMet = inclusionCriteria.diagnosis && inclusionCriteria.time_window && inclusionCriteria.age;
-    const absoluteContras = Object.entries(absoluteContraindications)
-      .filter(([_, checked]) => checked)
-      .map(([id]) => id);
-    const relativeContras = Object.entries(relativeContraindications)
-      .filter(([_, checked]) => checked)
-      .map(([id]) => id);
-
-    if (!inclusionMet) {
-      return {
-        status: 'not-eligible' as const,
-        title: 'DOES NOT MEET CRITERIA',
-        message: 'Not all inclusion criteria are satisfied.',
-        color: 'red',
-        icon: '✗',
-      };
-    }
-
-    if (absoluteContras.length > 0) {
-      return {
-        status: 'absolute-contraindication' as const,
-        title: 'IV tPA CONTRAINDICATED',
-        message: `Absolute contraindication present. Do not administer IV tPA. Consider mechanical thrombectomy.`,
-        color: 'red',
-        icon: '✗',
-      };
-    }
-
-    if (relativeContras.length > 0) {
-      return {
-        status: 'relative-contraindication' as const,
-        title: 'RELATIVE CONTRAINDICATION',
-        message: 'Consider risks vs benefits. May proceed with caution or consider endovascular therapy.',
-        color: 'yellow',
-        icon: '⚠',
-      };
-    }
-
-    return {
-      status: 'eligible' as const,
-      title: 'ELIGIBLE FOR IV tPA',
-      message: 'Patient meets criteria for thrombolysis. Proceed if no other concerns.',
-      color: 'green',
-      icon: '✓',
-    };
-  }, [inclusionCriteria, absoluteContraindications, relativeContraindications]);
-
-  const handleComplete = () => {
-    const absoluteContras = Object.entries(absoluteContraindications)
-      .filter(([_, checked]) => checked)
-      .map(([id]) => id);
-    const relativeContras = Object.entries(relativeContraindications)
-      .filter(([_, checked]) => checked)
-      .map(([id]) => id);
-    const inclusionMet = inclusionCriteria.diagnosis && inclusionCriteria.time_window && inclusionCriteria.age;
-
-    onComplete?.({
-      lkwTime: null,
-      timeDifferenceHours: null,
-      inclusionCriteriaMet: inclusionMet,
-      absoluteContraindications: absoluteContras,
-      relativeContraindications: relativeContras,
-      eligibilityStatus: eligibilityStatus.status,
-      notes,
-    });
-    onClose();
-  };
-
-  const copyToEMR = () => {
-    const absoluteContras = Object.entries(absoluteContraindications)
-      .filter(([_, checked]) => checked)
-      .map(([id]) => getAbsoluteLabel(id));
-    const relativeContras = Object.entries(relativeContraindications)
-      .filter(([_, checked]) => checked)
-      .map(([id]) => getRelativeLabel(id));
-
-    const emrText = `IV tPA ELIGIBILITY ASSESSMENT (AHA/ASA 2026)
-${'='.repeat(50)}
-
-INCLUSION CRITERIA:
-${inclusionCriteria.diagnosis ? '✓' : '✗'} Diagnosis of ischemic stroke causing measurable neurological deficit
-${inclusionCriteria.time_window ? '✓' : '✗'} Symptom onset <3h (or <4.5h for select patients)
-${inclusionCriteria.age ? '✓' : '✗'} Age ≥18 years
-
-ELIGIBILITY STATUS: ${eligibilityStatus.title}
-${eligibilityStatus.message}
-
-${absoluteContras.length > 0 ? `ABSOLUTE CONTRAINDICATIONS:\n${absoluteContras.map(c => `- ${c}`).join('\n')}\n` : ''}
-${relativeContras.length > 0 ? `RELATIVE CONTRAINDICATIONS:\n${relativeContras.map(c => `- ${c}`).join('\n')}\n` : ''}
-${notes ? `NOTES:\n${notes}\n` : ''}
-
-Assessment Date: ${new Date().toLocaleString()}`;
-
-    navigator.clipboard.writeText(emrText).then(() => {
-      setCopiedToClipboard(true);
-      setTimeout(() => setCopiedToClipboard(false), 2000);
-    });
-  };
-
-  // Handle body scroll lock
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
-    return () => {
-      document.body.style.overflow = '';
-    };
+    return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
-  // Handle escape key
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
+    const handleEscape = (e: KeyboardEvent) => { if (e.key === 'Escape' && isOpen) onClose(); };
     window.addEventListener('keydown', handleEscape);
     return () => window.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
 
+  const toggleAbsolute = (id: string) =>
+    setAbsoluteContraindications(prev => ({ ...prev, [id]: !prev[id] }));
+
+  const toggleRelative = (id: string) =>
+    setRelativeContraindications(prev => ({ ...prev, [id]: !prev[id] }));
+
+  const activeAbsolute = useMemo(
+    () => Object.entries(absoluteContraindications).filter(([, v]) => v).map(([id]) => id),
+    [absoluteContraindications]
+  );
+  const activeRelative = useMemo(
+    () => Object.entries(relativeContraindications).filter(([, v]) => v).map(([id]) => id),
+    [relativeContraindications]
+  );
+
+  const eligibilityStatus = useMemo(() => {
+    if (activeAbsolute.length > 0)
+      return { status: 'absolute-contraindication' as const, label: 'IV tPA CONTRAINDICATED', color: 'red' };
+    if (activeRelative.length > 0)
+      return { status: 'relative-contraindication' as const, label: 'RELATIVE — DISCUSS RISK/BENEFIT', color: 'amber' };
+    return { status: 'eligible' as const, label: 'NO CONTRAINDICATIONS FLAGGED', color: 'emerald' };
+  }, [activeAbsolute, activeRelative]);
+
+  const handleComplete = () => {
+    onComplete?.({
+      lkwTime: null,
+      timeDifferenceHours: null,
+      inclusionCriteriaMet: true,
+      absoluteContraindications: activeAbsolute,
+      relativeContraindications: activeRelative,
+      eligibilityStatus: eligibilityStatus.status,
+      notes,
+    });
+    onClose();
+  };
+
+  const handleCopyToEMR = () => {
+    const text = [
+      'IV tPA ELIGIBILITY ASSESSMENT (AHA/ASA 2026)',
+      '='.repeat(48),
+      '',
+      `STATUS: ${eligibilityStatus.label}`,
+      '',
+      activeAbsolute.length > 0
+        ? `ABSOLUTE CONTRAINDICATIONS:\n${activeAbsolute.map(id => `  • ${CONTRA_LABELS[id] ?? id}`).join('\n')}`
+        : null,
+      activeRelative.length > 0
+        ? `RELATIVE CONTRAINDICATIONS:\n${activeRelative.map(id => `  • ${CONTRA_LABELS[id] ?? id}`).join('\n')}`
+        : null,
+      notes ? `NOTES:\n${notes}` : null,
+      '',
+      `Assessed: ${new Date().toLocaleString()}`,
+    ].filter(Boolean).join('\n');
+
+    copyToClipboard(text, () => {
+      setCopiedToClipboard(true);
+      setTimeout(() => setCopiedToClipboard(false), 2000);
+    });
+  };
+
   if (!isOpen) return null;
 
+  const statusBg = eligibilityStatus.color === 'emerald'
+    ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+    : eligibilityStatus.color === 'red'
+    ? 'bg-red-50 border-red-200 text-red-800'
+    : 'bg-amber-50 border-amber-200 text-amber-800';
+
+  const statusIcon = eligibilityStatus.color === 'emerald' ? '✓' : eligibilityStatus.color === 'red' ? '✕' : '⚠';
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} aria-hidden />
-      <div className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col" role="dialog" aria-labelledby="modal-title">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-white">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-blue-600" />
+      <div
+        className="relative w-full sm:max-w-lg max-h-[92dvh] sm:max-h-[88vh] bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl overflow-hidden flex flex-col"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="eligibility-modal-title"
+      >
+        {/* Header — CLAUDE.md standard pattern */}
+        <div className="flex items-center justify-between h-14 px-4 border-b border-slate-100 flex-shrink-0 bg-white">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-7 h-7 rounded-lg bg-neuro-500 flex items-center justify-center shrink-0">
+              <Zap className="w-4 h-4 text-white" aria-hidden />
             </div>
-            <div>
-              <h2 id="modal-title" className="text-xl font-bold text-slate-900">IV tPA Eligibility Assessment</h2>
-              <p className="text-sm text-slate-500">Inclusion & exclusion checklist</p>
-            </div>
+            <span id="eligibility-modal-title" className="text-sm font-bold text-slate-900 truncate">IV tPA Eligibility</span>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors"
+            className="p-2 rounded-lg hover:bg-slate-100 transition-colors shrink-0 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
             aria-label="Close"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 text-slate-500" />
           </button>
         </div>
 
-        {/* Live eligibility status banner */}
-        <div className={`px-5 py-2.5 flex items-center gap-2 border-b text-sm font-semibold flex-shrink-0 ${
-          eligibilityStatus.status === 'eligible'
-            ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
-            : eligibilityStatus.status === 'absolute-contraindication'
-            ? 'bg-red-50 border-red-200 text-red-800'
-            : eligibilityStatus.status === 'relative-contraindication'
-            ? 'bg-amber-50 border-amber-200 text-amber-800'
-            : 'bg-slate-50 border-slate-200 text-slate-500'
-        }`}>
-          <span className="font-mono text-xs uppercase tracking-wider">
-            {eligibilityStatus.status === 'eligible'
-              ? '✓ ELIGIBLE FOR IV tPA'
-              : eligibilityStatus.status === 'absolute-contraindication'
-              ? '✗ IV tPA CONTRAINDICATED'
-              : eligibilityStatus.status === 'relative-contraindication'
-              ? '⚠ RELATIVE CONTRAINDICATION'
-              : 'Checking criteria…'}
-          </span>
+        {/* Live status banner */}
+        <div className={`flex items-center gap-2 px-4 py-2.5 border-b flex-shrink-0 text-sm font-bold ${statusBg}`}>
+          <span className="font-mono">{statusIcon}</span>
+          <span>{eligibilityStatus.label}</span>
         </div>
 
-        {/* Scrollable Content - Checklist only */}
-        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
-          {/* Inclusion Criteria - 2024 */}
-          <div className="bg-white rounded-lg border border-slate-200 p-6">
-            <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-600" />
-              Inclusion Criteria
-            </h3>
-            <div className="space-y-4">
-              {INCLUSION_CRITERIA.map((item) => (
-                <div key={item.id} className="border-l-4 border-emerald-500 pl-4">
-                  <label className="flex items-start gap-3 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={inclusionCriteria[item.id] || false}
-                      onChange={(e) => setInclusionCriteria(prev => ({ ...prev, [item.id]: e.target.checked }))}
-                      className="mt-1 w-5 h-5 rounded border-slate-300 text-green-600 focus:ring-green-500"
-                    />
-                    <div className="flex-1">
-                      <div className="font-semibold text-emerald-900 mb-1">
-                        {item.label}
-                      </div>
-                      <details className="mt-2">
-                        <summary className="text-sm text-blue-600 cursor-pointer hover:underline font-medium">
-                          → What does this mean?
-                        </summary>
-                        <div className="mt-2 text-sm text-slate-700 bg-blue-50 p-4 rounded-lg leading-relaxed">
-                          {item.plainEnglish}
-                        </div>
-                      </details>
-                    </div>
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto px-4 py-5 space-y-5">
 
-          {/* Absolute Contraindications - 2024 */}
-          <div className="bg-white rounded-lg border border-slate-200 p-6">
-            <h3 className="text-sm font-bold text-red-600 uppercase tracking-wider mb-4">Absolute Contraindications</h3>
-            <p className="text-xs text-slate-600 mb-4">Check each that applies to this patient.</p>
-            <div className="space-y-4">
-              {ABSOLUTE_CONTRAINDICATIONS.map((item) => (
-                <div key={item.id} className="mb-4 border-l-4 border-rose-500 pl-4">
-                  {item.subCriteria ? (
-                    <>
-                      <div className="font-semibold text-rose-900 mb-1">{item.label}</div>
-                      <details className="mt-2">
-                        <summary className="text-sm text-blue-600 cursor-pointer hover:underline font-medium">
-                          → What does this mean?
-                        </summary>
-                        <div className="mt-2 text-sm text-slate-700 bg-blue-50 p-4 rounded-lg leading-relaxed">
-                          {item.plainEnglish}
-                        </div>
-                      </details>
-                      <div className="ml-4 mt-3 space-y-3">
-                        {item.subCriteria.map((sub) => (
-                          <div key={sub.id}>
-                            <label className="flex items-start gap-2 cursor-pointer">
-                              <input
-                                type="checkbox"
-                                checked={absoluteContraindications[sub.id] || false}
-                                onChange={(e) => setAbsoluteContraindications(prev => ({ ...prev, [sub.id]: e.target.checked }))}
-                                className="mt-1 w-4 h-4 rounded border-slate-300 text-red-600 focus:ring-red-500"
-                              />
-                              <div className="text-sm font-medium text-slate-800">• {sub.label}</div>
-                            </label>
-                            <details className="ml-6 mt-1">
-                              <summary className="text-xs text-blue-600 cursor-pointer hover:underline">→ Explain</summary>
-                              <div className="mt-2 text-xs text-slate-600 bg-blue-50 p-3 rounded leading-relaxed">
-                                {sub.plainEnglish}
-                              </div>
-                            </details>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <label className="flex items-start gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={absoluteContraindications[item.id] || false}
-                          onChange={(e) => setAbsoluteContraindications(prev => ({ ...prev, [item.id]: e.target.checked }))}
-                          className="mt-1 w-5 h-5 rounded border-slate-300 text-red-600 focus:ring-red-500"
-                        />
-                        <div className="flex-1">
-                          <div className="font-semibold text-rose-900 mb-1">{item.label}</div>
-                          <details className="mt-2">
-                            <summary className="text-sm text-blue-600 cursor-pointer hover:underline font-medium">
-                              → What does this mean?
-                            </summary>
-                            <div className="mt-2 text-sm text-slate-700 bg-blue-50 p-4 rounded-lg leading-relaxed">
-                              {item.plainEnglish}
-                            </div>
-                          </details>
-                        </div>
-                      </label>
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
+          {/* Instruction */}
+          <p className="text-xs text-slate-500 leading-relaxed">
+            Tap any contraindication that applies to this patient. Tap again to deselect.
+            Based on AHA/ASA 2026 criteria for acute ischemic stroke.
+          </p>
 
-            <h3 className="text-sm font-bold text-yellow-600 uppercase tracking-wider pt-6 pb-3">Relative Contraindications</h3>
-            <p className="text-xs text-slate-600 mb-4">Consider risks vs benefits. Check each that applies.</p>
-            <div className="space-y-4">
-              {RELATIVE_CONTRAINDICATIONS.map((item) => (
-                <div key={item.id} className="mb-4 border-l-4 border-amber-500 pl-4">
-                  <label className="flex items-start gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={relativeContraindications[item.id] || false}
-                      onChange={(e) => setRelativeContraindications(prev => ({ ...prev, [item.id]: e.target.checked }))}
-                      className="mt-1 w-5 h-5 rounded border-slate-300 text-yellow-600 focus:ring-yellow-500"
-                    />
-                    <div className="flex-1">
-                      <div className="font-semibold text-amber-900 mb-1">{item.label}</div>
-                      <details className="mt-2">
-                        <summary className="text-sm text-blue-600 cursor-pointer hover:underline font-medium">
-                          → What does this mean?
-                        </summary>
-                        <div className="mt-2 text-sm text-slate-700 bg-blue-50 p-4 rounded-lg leading-relaxed">
-                          {item.plainEnglish}
-                        </div>
-                      </details>
-                    </div>
-                  </label>
-                </div>
-              ))}
+          {/* ── Hard stops ── */}
+          <section>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-red-500 mb-2">Hard Stops — Absolute</p>
+            <div className="grid grid-cols-2 gap-2">
+              {HARD_STOP_CHIPS.map((chip) => {
+                const active = !!absoluteContraindications[chip.id];
+                const expanded = expandedChip === chip.id;
+                return (
+                  <div key={chip.id}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        toggleAbsolute(chip.id);
+                        setExpandedChip(expanded ? null : chip.id);
+                      }}
+                      className={`w-full min-h-[52px] px-3 py-2.5 rounded-xl border-2 text-sm font-semibold text-left transition-colors leading-snug ${
+                        active
+                          ? 'bg-red-500 border-red-500 text-white'
+                          : 'bg-white border-slate-200 text-slate-700 hover:border-red-200 hover:bg-red-50'
+                      }`}
+                    >
+                      {chip.label}
+                    </button>
+                    {expanded && (
+                      <p className="mt-1 text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-2 leading-relaxed">
+                        {chip.detail}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-          </div>
+          </section>
 
-          {/* Extended Window (3-4.5h) Additional Exclusions */}
-          <div className="mt-8 p-6 bg-amber-50 border-2 border-amber-300 rounded-2xl">
-            <h3 className="text-lg font-bold text-amber-900 mb-3 flex items-center gap-2">
-              <span className="material-icons-outlined">schedule</span>
-              Additional Exclusions for 3-4.5 Hour Window
-            </h3>
-            <p className="text-sm text-amber-800 mb-4">
-              If treating in the 3-4.5h window, these ADDITIONAL criteria exclude the patient (on top of all the above):
-            </p>
-            <div className="space-y-3">
-              {EXTENDED_WINDOW_EXCLUSIONS.map((item) => (
-                <div key={item.id} className="mb-3">
-                  <div className="font-medium text-amber-900">• {item.label}</div>
-                  <div className="ml-4 text-sm text-amber-700 mt-1">{item.plainEnglish}</div>
-                </div>
-              ))}
+          {/* ── Bleeding / Labs ── */}
+          <section>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-red-400 mb-2">Bleeding / Labs</p>
+            <div className="grid grid-cols-2 gap-2">
+              {BLEEDING_LAB_CHIPS.map((chip) => {
+                const active = !!absoluteContraindications[chip.id];
+                const expanded = expandedChip === chip.id;
+                return (
+                  <div key={chip.id}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        toggleAbsolute(chip.id);
+                        setExpandedChip(expanded ? null : chip.id);
+                      }}
+                      className={`w-full min-h-[52px] px-3 py-2.5 rounded-xl border-2 text-sm font-semibold text-left transition-colors leading-snug ${
+                        active
+                          ? 'bg-red-500 border-red-500 text-white'
+                          : 'bg-white border-slate-200 text-slate-700 hover:border-red-200 hover:bg-red-50'
+                      }`}
+                    >
+                      {chip.label}
+                    </button>
+                    {expanded && (
+                      <p className="mt-1 text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-2 leading-relaxed">
+                        {chip.detail}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-          </div>
+          </section>
 
-          {/* Pre-tPA BP Reference — collapsible at bottom */}
+          {/* ── Relative / Consider ── */}
+          <section>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-amber-600 mb-2">Consider — Relative</p>
+            <div className="grid grid-cols-2 gap-2">
+              {RELATIVE_CHIPS.map((chip) => {
+                const active = !!relativeContraindications[chip.id];
+                const expanded = expandedChip === chip.id;
+                return (
+                  <div key={chip.id}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        toggleRelative(chip.id);
+                        setExpandedChip(expanded ? null : chip.id);
+                      }}
+                      className={`w-full min-h-[52px] px-3 py-2.5 rounded-xl border-2 text-sm font-semibold text-left transition-colors leading-snug ${
+                        active
+                          ? 'bg-amber-500 border-amber-500 text-white'
+                          : 'bg-white border-slate-200 text-slate-700 hover:border-amber-200 hover:bg-amber-50'
+                      }`}
+                    >
+                      {chip.label}
+                    </button>
+                    {expanded && (
+                      <p className="mt-1 text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-2 leading-relaxed">
+                        {chip.detail}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* ── 3–4.5h window extras (collapsed) ── */}
           <details className="group rounded-xl border border-amber-200 bg-amber-50 overflow-hidden">
-            <summary className="flex cursor-pointer items-center gap-2 px-5 py-3 text-sm font-semibold text-amber-800 hover:bg-amber-100/60 transition-colors list-none">
-              <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" aria-hidden />
-              <span>Pre-tPA BP Reference: target &lt;185/110 mmHg</span>
-              <ChevronDown className="w-4 h-4 text-amber-500 ml-auto group-open:rotate-180 transition-transform" />
+            <summary className="flex items-center gap-2 px-4 py-3 text-xs font-bold uppercase tracking-wider text-amber-700 cursor-pointer hover:bg-amber-100/60 transition-colors list-none">
+              <ChevronDown className="w-3.5 h-3.5 text-amber-500 group-open:rotate-180 transition-transform shrink-0" aria-hidden />
+              3–4.5h Window — Additional Exclusions
             </summary>
-            <div className="px-5 pb-5 pt-1 space-y-3">
-              <div className="bg-white p-4 rounded-lg border border-amber-200">
-                <h4 className="text-sm font-bold text-amber-900 mb-3 uppercase tracking-wide">Treatment Options:</h4>
-                <div className="space-y-3">
-                  {PRE_TPA_BP_MANAGEMENT.medications.map((med, idx) => (
-                    <div key={idx} className="pl-4 border-l-2 border-amber-300">
-                      <div className="font-bold text-amber-900">{med.name}</div>
-                      <div className="text-xs text-amber-800 mt-1 space-y-0.5">
-                        <div>• Dose: {med.dose}</div>
-                        {'frequency' in med && <div>• {med.frequency}</div>}
-                        {'titration' in med && <div>• {med.titration}</div>}
-                        <div>• Max: {med.maxDose}</div>
-                      </div>
-                    </div>
-                  ))}
+            <div className="px-4 pb-4 pt-1 space-y-2.5">
+              <p className="text-xs text-amber-700">If treating in the 3–4.5h window, these ALSO exclude the patient:</p>
+              {EXTENDED_WINDOW_ITEMS.map((item) => (
+                <div key={item.label} className="text-sm">
+                  <span className="font-semibold text-amber-900">• {item.label}</span>
+                  <span className="text-amber-700 ml-1 text-xs">— {item.detail}</span>
                 </div>
-              </div>
-              <p className="text-xs text-amber-800 bg-amber-100/60 rounded px-3 py-2">
-                <strong>Guideline:</strong> {PRE_TPA_BP_MANAGEMENT.guideline}
-              </p>
+              ))}
             </div>
           </details>
 
-          {/* Notes */}
-          <div className="bg-white rounded-lg border border-slate-200 p-6">
-            <label className="block text-sm font-medium text-slate-700 mb-2">Clinical Notes (Optional)</label>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Document any additional considerations..."
-              className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              rows={3}
-            />
-          </div>
+          {/* ── Notes (collapsed) ── */}
+          <details className="group rounded-xl border border-slate-200 overflow-hidden">
+            <summary className="flex items-center gap-2 px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 cursor-pointer hover:bg-slate-50 transition-colors list-none">
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-open:rotate-180 transition-transform shrink-0" aria-hidden />
+              Clinical Notes (optional)
+            </summary>
+            <div className="px-4 pb-4 pt-1">
+              <textarea
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Document additional considerations..."
+                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-neuro-500 resize-none"
+                rows={3}
+              />
+            </div>
+          </details>
+
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+        <div className="px-4 py-3 border-t border-slate-100 bg-white flex items-center justify-between gap-3 flex-shrink-0">
           <button
-            onClick={copyToEMR}
-            className="flex items-center gap-2 px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-semibold transition-colors"
+            type="button"
+            onClick={handleCopyToEMR}
+            className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
           >
-            {copiedToClipboard ? (
-              <>
-                <Check className="w-4 h-4" />
-                <span>Copied!</span>
-              </>
-            ) : (
-              <>
-                <Copy className="w-4 h-4" />
-                <span>Copy to EMR</span>
-              </>
-            )}
+            {copiedToClipboard ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+            {copiedToClipboard ? 'Copied!' : 'Copy to EMR'}
           </button>
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             <button
+              type="button"
               onClick={onClose}
-              className="px-6 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-semibold transition-colors"
+              className="px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
             >
               {onComplete ? 'Cancel' : 'Close'}
             </button>
             {onComplete && (
               <button
+                type="button"
                 onClick={handleComplete}
-                className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-bold transition-colors"
+                className="px-4 py-2 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors"
               >
-                Complete Assessment
+                Complete →
               </button>
             )}
           </div>
