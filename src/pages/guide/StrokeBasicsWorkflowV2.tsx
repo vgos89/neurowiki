@@ -397,6 +397,7 @@ const MainContent: React.FC = () => {
                     lkwTime: data.lkwTimestamp ?? null,
                     symptomDiscoveryTime: data.symptomDiscoveryTime ?? null,
                   }));
+                  setActiveCard(2); // Auto-advance → clear visual feedback that save succeeded
                 }}
                 onOpenNIHSS={() => setNihssModalOpen(true)}
                 onOpenEligibility={() => setEligibilityModalOpen(true)}
