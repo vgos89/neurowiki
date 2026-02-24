@@ -347,7 +347,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
         {/* ══════════════════════════════════════
             MOBILE LAYOUT  (hidden sm+)
         ══════════════════════════════════════ */}
-        <div className="flex sm:hidden flex-col flex-1 overflow-hidden min-h-0">
+        <div className="flex sm:hidden flex-col flex-1 overflow-y-auto min-h-0">
 
           {/* Presets — horizontal scroll row */}
           <div
