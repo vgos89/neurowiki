@@ -214,6 +214,14 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
         </div>
       )}
 
+      {/* Eligibility not checked warning */}
+      {isNoBleed && !eligibilityResult && (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
+        <div className="rounded-lg p-4 border-2 border-amber-300 bg-amber-50 flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <p className="text-sm font-semibold text-amber-900">Eligibility not checked — return to Step 1 (LKW &amp; Vitals) to screen for contraindications before giving tPA/TNK.</p>
+        </div>
+      )}
+
       {/* Eligibility mandatory prompts: absolute → do not give TNK; relative → discuss risk vs benefits */}
       {isNoBleed && eligibilityResult && (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
         <div className={`rounded-lg p-4 border-2 ${eligibilityResult.eligibilityStatus === 'absolute-contraindication' ? 'border-red-300 bg-red-50' : 'border-amber-300 bg-amber-50'}`}>
