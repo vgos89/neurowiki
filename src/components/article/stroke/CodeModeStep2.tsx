@@ -239,7 +239,9 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
       )}
 
       {/* Eligibility mandatory prompts: absolute → do not give TNK; relative → discuss risk vs benefits */}
-      {isNoBleed && eligibilityResult && (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
+      {isNoBleed && eligibilityResult &&
+        (eligibilityResult.eligibilityStatus === 'absolute-contraindication' || eligibilityResult.eligibilityStatus === 'relative-contraindication') &&
+        (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
         <div className={`rounded-lg p-4 border-2 ${eligibilityResult.eligibilityStatus === 'absolute-contraindication' ? 'border-red-300 bg-red-50' : 'border-amber-300 bg-amber-50'}`}>
           <div className="flex items-start gap-3">
             <AlertTriangle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${eligibilityResult.eligibilityStatus === 'absolute-contraindication' ? 'text-red-600' : 'text-amber-600'}`} />

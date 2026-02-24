@@ -1,6 +1,5 @@
-import React, { useState, useMemo, useEffect, lazy, Suspense } from 'react';
-
-const AnalogClockPicker = lazy(() => import('./AnalogClockPicker').then(m => ({ default: m.AnalogClockPicker })));
+import React, { useState, useMemo, useEffect } from 'react';
+import { LKWTimePicker } from './LKWTimePicker';
 
 export interface CodeModeStep1Props {
   onComplete: (data: Step1Data) => void;
@@ -42,11 +41,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   const [bpControlled, setBpControlled] = useState(false);
   const [lowGlucoseGuidanceViewed, setLowGlucoseGuidanceViewed] = useState(false);
 
-  const _now = new Date();
-  const _h = _now.getHours();
-  const [lkwHour, setLkwHour] = useState<number>(_h % 12 || 12);
-  const [lkwMinute, setLkwMinute] = useState<number>(_now.getMinutes());
-  const [lkwPeriod, setLkwPeriod] = useState<'AM' | 'PM'>(_h >= 12 ? 'PM' : 'AM');
+  const [lkwDate, setLkwDate] = useState<Date>(() => new Date());
   const [clockPickerOpen, setClockPickerOpen] = useState(false);
 
   const [disablingSymptoms, setDisablingSymptoms] = useState<Record<string, boolean>>({
@@ -64,14 +59,8 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   useEffect(() => {
     if (lkwUnknown) { setLkwHours(0); return; }
     const now = new Date();
-    const lkwDate = new Date();
-    let hour24 = lkwHour;
-    if (lkwPeriod === 'PM' && lkwHour !== 12) hour24 += 12;
-    if (lkwPeriod === 'AM' && lkwHour === 12) hour24 = 0;
-    lkwDate.setHours(hour24, lkwMinute, 0, 0);
-    if (lkwDate > now) lkwDate.setDate(lkwDate.getDate() - 1);
     setLkwHours(Math.max(0, (now.getTime() - lkwDate.getTime()) / (1000 * 60 * 60)));
-  }, [lkwHour, lkwMinute, lkwPeriod, lkwUnknown]);
+  }, [lkwDate, lkwUnknown]);
 
   const weightKg = useMemo(() => {
     if (weightValue === 0) return 0;
@@ -119,19 +108,9 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   if (glucose <= 0) missingFields.push('Glucose');
   if (weightValue <= 0) missingFields.push('Weight');
 
-  const dateFromClock = (h: number, m: number, p: 'AM' | 'PM'): Date => {
-    let hour24 = h;
-    if (p === 'PM' && h !== 12) hour24 += 12;
-    if (p === 'AM' && h === 12) hour24 = 0;
-    const d = new Date();
-    d.setHours(hour24, m, 0, 0);
-    if (d > new Date()) d.setDate(d.getDate() - 1);
-    return d;
-  };
-
   const handleComplete = () => {
     if (!isComplete) return;
-    const lkwTimestamp = lkwUnknown ? null : dateFromClock(lkwHour, lkwMinute, lkwPeriod);
+    const lkwTimestamp = lkwUnknown ? null : lkwDate;
     onComplete({
       lkwHours,
       lkwUnknown,
@@ -150,7 +129,10 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   };
 
   const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
-  const lkwTimeDisplay = `${lkwHour}:${String(lkwMinute).padStart(2, '0')} ${lkwPeriod}`;
+  const _h24 = lkwDate.getHours();
+  const _h12 = _h24 % 12 || 12;
+  const _period = _h24 >= 12 ? 'PM' : 'AM';
+  const lkwTimeDisplay = `${_h12}:${String(lkwDate.getMinutes()).padStart(2, '0')} ${_period}`;
 
   const WindowBadge: React.FC = () => {
     if (lkwUnknown || lkwHours <= 0) return null;
@@ -419,19 +401,14 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
         )}
       </div>
 
-      {/* Clock picker */}
-      {clockPickerOpen && (
-        <Suspense fallback={<div className="fixed inset-0 z-[90] bg-black/10" aria-label="Loading clock" />}>
-          <AnalogClockPicker
-            isOpen={clockPickerOpen}
-            onClose={() => setClockPickerOpen(false)}
-            onTimeSelect={(h, m, p) => { setLkwHour(h); setLkwMinute(m); setLkwPeriod(p); }}
-            initialHours={lkwHour}
-            initialMinutes={lkwMinute}
-            initialPeriod={lkwPeriod}
-          />
-        </Suspense>
-      )}
+      {/* LKW date + time picker */}
+      <LKWTimePicker
+        isOpen={clockPickerOpen}
+        onClose={() => setClockPickerOpen(false)}
+        onConfirm={(date) => setLkwDate(date)}
+        onUnknown={() => { setLkwUnknown(true); setClockPickerOpen(false); }}
+        initialDate={lkwDate}
+      />
     </div>
   );
 };
