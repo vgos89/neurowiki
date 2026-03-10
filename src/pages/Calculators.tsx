@@ -70,6 +70,7 @@ const tools: Tool[] = [
   { id: 'aspects', name: 'ASPECTS Score', description: 'Alberta Stroke Program Early CT Score — EVT core assessment', category: 'vascular', type: 'calculator', path: '/calculators/aspects-score' },
   { id: 'nihss', name: 'NIHSS', description: 'NIH Stroke Scale assessment', category: 'vascular', type: 'calculator', path: '/calculators/nihss' },
   { id: 'evt-pathway', name: 'Thrombectomy Pathway', description: 'EVT eligibility for early and late windows', category: 'vascular', type: 'pathway', path: '/calculators/evt-pathway' },
+  { id: 'ivt-extended-pathway', name: 'Extended Window IVT', description: 'Thrombolysis eligibility beyond 4.5h (wake-up, EXTEND, TIMELESS)', category: 'vascular', type: 'pathway', path: '/calculators/ivt-extended-pathway' },
   { id: 'elan-pathway', name: 'Post-Stroke Anticoagulation Timing', description: 'Anticoagulation timing after ischemic stroke with AF', category: 'vascular', type: 'pathway', path: '/calculators/elan-pathway' },
   { id: 'abcd2', name: 'ABCD² Score', description: 'TIA stroke risk within 2 days', category: 'vascular', type: 'calculator', path: '/calculators/abcd2-score' },
   { id: 'ich', name: 'ICH Score', description: '30-day mortality prediction for intracerebral hemorrhage', category: 'vascular', type: 'calculator', path: '/calculators/ich-score' },
