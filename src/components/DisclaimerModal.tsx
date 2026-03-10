@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 const DISCLAIMER_STORAGE_KEY = 'neurowiki-disclaimer-accepted';
-const MIN_WAIT_TIME_MS = 5000; // 5 seconds
 const DISCLAIMER_VERSION = '1.0'; // Increment to force re-acceptance
 
 interface StoredDisclaimer {
@@ -14,10 +13,8 @@ export const DisclaimerModal: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
   const [checkboxChecked, setCheckboxChecked] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(5);
   const [canAccept, setCanAccept] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const modalOpenedAt = useRef<number>(0);
 
   // Check if already accepted
   useEffect(() => {
@@ -34,32 +31,12 @@ export const DisclaimerModal: React.FC = () => {
       }
     }
     setIsOpen(true);
-    modalOpenedAt.current = Date.now();
   }, []);
-
-  // Countdown timer
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const timer = setInterval(() => {
-      const elapsed = Date.now() - modalOpenedAt.current;
-      const remaining = Math.max(0, Math.ceil((MIN_WAIT_TIME_MS - elapsed) / 1000));
-      setTimeRemaining(remaining);
-
-      if (remaining === 0) {
-        clearInterval(timer);
-      }
-    }, 100);
-
-    return () => clearInterval(timer);
-  }, [isOpen]);
 
   // Check if can accept
   useEffect(() => {
-    const timeOk = timeRemaining === 0;
-    const allConditionsMet = hasScrolledToBottom && checkboxChecked && timeOk;
-    setCanAccept(allConditionsMet);
-  }, [hasScrolledToBottom, checkboxChecked, timeRemaining]);
+    setCanAccept(hasScrolledToBottom && checkboxChecked);
+  }, [hasScrolledToBottom, checkboxChecked]);
 
   // Handle scroll
   const handleScroll = useCallback(() => {
@@ -170,7 +147,7 @@ export const DisclaimerModal: React.FC = () => {
               checked={checkboxChecked}
               onChange={(e) => setCheckboxChecked(e.target.checked)}
               disabled={!hasScrolledToBottom}
-              className="mt-0.5 w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+              className="mt-0.5 w-5 h-5 rounded border-slate-300 text-neuro-500 focus:ring-neuro-500 cursor-pointer"
             />
             <span className="text-sm text-slate-700">
               I am a healthcare professional and I have read and agree to the above disclaimer
@@ -191,8 +168,6 @@ export const DisclaimerModal: React.FC = () => {
               'Please scroll to read the disclaimer'
             ) : !checkboxChecked ? (
               'Please check the box above'
-            ) : timeRemaining > 0 ? (
-              `Please wait... (${timeRemaining}s)`
             ) : (
               'I Accept and Agree'
             )}
@@ -219,16 +194,6 @@ export const DisclaimerModal: React.FC = () => {
                 )}
               </svg>
               <span>Agreed</span>
-            </div>
-            <div className={`flex items-center gap-1.5 text-xs ${timeRemaining === 0 ? 'text-green-600' : 'text-slate-400'}`}>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {timeRemaining === 0 ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                )}
-              </svg>
-              <span>{timeRemaining === 0 ? 'Ready' : `${timeRemaining}s`}</span>
             </div>
           </div>
         </div>

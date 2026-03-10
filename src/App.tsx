@@ -32,6 +32,7 @@ const ElanPathway = lazy(() => import('./pages/ElanPathway'));
 const EvtPathway = lazy(() => import('./pages/EvtPathway'));
 const StatusEpilepticusPathway = lazy(() => import('./pages/StatusEpilepticusPathway'));
 const MigrainePathway = lazy(() => import('./pages/MigrainePathway'));
+const ExtendedIVTPathway = lazy(() => import('./pages/ExtendedIVTPathway'));
 const EmBillingCalculator = lazy(() => import('./pages/EmBillingCalculator'));
 
 // Lazy load guide articles
@@ -104,6 +105,7 @@ const App: React.FC = () => {
           <Route path="/calculators/evt-pathway" element={<PublishGate><EvtPathway /></PublishGate>} />
           <Route path="/calculators/se-pathway" element={<PublishGate><StatusEpilepticusPathway /></PublishGate>} />
           <Route path="/calculators/migraine-pathway" element={<PublishGate><MigrainePathway /></PublishGate>} />
+          <Route path="/calculators/ivt-extended-pathway" element={<PublishGate routeId="/calculators/ivt-extended-pathway"><ExtendedIVTPathway /></PublishGate>} />
           <Route path="/calculators/em-billing" element={<PublishGate><EmBillingCalculator /></PublishGate>} />
           <Route path="/guide" element={<ResidentToolkit />} />
           <Route path="/guide/stroke-basics" element={<PublishGate><StrokeBasics /></PublishGate>} />

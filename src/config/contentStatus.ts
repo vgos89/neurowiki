@@ -107,6 +107,10 @@ export const contentStatus: ContentStatus = {
     published: true,
     comingSoonMessage: 'EVT pathway',
   },
+  '/calculators/ivt-extended-pathway': {
+    published: true,
+    comingSoonMessage: 'Extended Window IVT Pathway',
+  },
   '/calculators/se-pathway': {
     published: true,
     comingSoonMessage: 'Status epilepticus pathway',
