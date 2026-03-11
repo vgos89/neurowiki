@@ -108,6 +108,13 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
     keywords: 'ELAN anticoagulation pathway, post-stroke anticoagulation timing, DOAC after stroke, atrial fibrillation stroke anticoagulation, ELAN trial, post-stroke DOAC timing calculator',
   },
 
+  '/calculators/late-window-ivt': {
+    title: 'Late Window IVT — Wake-Up Stroke & Thrombolysis Eligibility | NeuroWiki',
+    description: 'Interactive late window IVT eligibility pathway for wake-up stroke and extended thrombolysis (4.5–24h). Based on WAKE-UP, EXTEND, TIMELESS, TRACE-3, and 2026 AHA/ASA guidelines.',
+    keywords: 'late window IVT, wake-up stroke thrombolysis, extended window tPA, DWI FLAIR mismatch eligibility, WAKE-UP trial criteria, TIMELESS trial tenecteplase, late window thrombolysis calculator, unknown onset stroke tPA',
+    image: 'https://neurowiki.ai/og-image.png',
+  },
+
   '/calculators/se-pathway': {
     title: 'Status Epilepticus Protocol — Interactive Management Pathway | NeuroWiki',
     description: 'Step-by-step interactive status epilepticus management pathway. Covers early SE, established SE, refractory SE, and super-refractory SE. Based on ESETT trial and neurocritical care guidelines.',

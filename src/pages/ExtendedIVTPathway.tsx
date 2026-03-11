@@ -472,6 +472,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   return (
     <div className={`max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 ${isInModal ? 'pb-8' : 'pb-32'} md:pb-20`}>
 
+      <h1 className="sr-only">Late Window IVT — Wake-Up Stroke &amp; Thrombolysis Eligibility</h1>
+
       {/* ── Sticky header ── */}
       {!hideHeader && (
         <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-100 shadow-sm -mx-4 px-4 md:-mx-6 md:px-6">

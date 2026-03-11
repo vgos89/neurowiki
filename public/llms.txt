@@ -1,0 +1,46 @@
+# NeuroWiki — The Digital Neurology Companion
+> Evidence-based neurology calculators, clinical pathways, and landmark trial summaries for neurologists, residents, and medical students. AHA/ASA 2026 guideline-aligned.
+
+## High-Value Clinical Pathways
+- [EVT Eligibility Pathway](https://neurowiki.ai/calculators/evt-pathway): Interactive mechanical thrombectomy eligibility tool — LVO, ASPECTS, DAWN/DEFUSE-3 criteria, AHA/ASA 2026
+- [Late Window IVT Pathway](https://neurowiki.ai/calculators/late-window-ivt): Wake-up stroke and extended thrombolysis eligibility (4.5–24h) — WAKE-UP, EXTEND, TIMELESS trials
+- [ELAN Anticoagulation Pathway](https://neurowiki.ai/calculators/elan-pathway): Post-stroke DOAC timing after AF-related stroke, ELAN trial (NEJM 2023)
+- [Status Epilepticus Protocol](https://neurowiki.ai/calculators/se-pathway): Step-by-step SE management — benzodiazepines, ESETT second-line agents, refractory SE
+
+## Neurology Calculators
+- [NIHSS Calculator](https://neurowiki.ai/calculators/nihss): NIH Stroke Scale with LVO probability estimate
+- [ASPECTS Score](https://neurowiki.ai/calculators/aspects-score): Alberta Stroke Program Early CT Score for EVT eligibility
+- [ICH Score](https://neurowiki.ai/calculators/ich-score): 30-day mortality prediction in intracerebral hemorrhage
+- [HAS-BLED Score](https://neurowiki.ai/calculators/has-bled-score): Bleeding risk on anticoagulation
+- [ABCD2 Score](https://neurowiki.ai/calculators/abcd2-score): 2-day stroke risk after TIA
+- [Glasgow Coma Scale](https://neurowiki.ai/calculators/glasgow-coma-scale): GCS with intubated patient support
+- [Boston Criteria 2.0](https://neurowiki.ai/calculators/boston-criteria-caa): Cerebral amyloid angiopathy diagnosis
+- [RoPE Score](https://neurowiki.ai/calculators/rope-score): PFO-attributable stroke risk in cryptogenic stroke
+
+## Clinical Guides (AHA/ASA 2026 Aligned)
+- [IV tPA Protocol](https://neurowiki.ai/guide/iv-tpa): Alteplase and tenecteplase eligibility, dosing, monitoring
+- [Stroke Code Protocol](https://neurowiki.ai/guide/stroke-basics): Complete acute stroke workflow for residents
+- [Thrombectomy Guide](https://neurowiki.ai/guide/thrombectomy): EVT criteria, imaging selection, post-procedure management
+- [Acute Stroke Management](https://neurowiki.ai/guide/acute-stroke-mgmt): BP targets, glucose, antiplatelet, DVT prophylaxis
+- [ICH Management](https://neurowiki.ai/guide/ich-management): Intracerebral hemorrhage protocol, BP targets, reversal agents
+- [Status Epilepticus](https://neurowiki.ai/guide/status-epilepticus): First-line to refractory SE management
+- [GBS Guide](https://neurowiki.ai/guide/gbs): Guillain-Barré diagnosis, IVIG, respiratory monitoring
+- [Myasthenia Gravis](https://neurowiki.ai/guide/myasthenia-gravis): Crisis management, IVIG, pyridostigmine dosing
+
+## Landmark Trial Summaries
+- [WAKE-UP Trial](https://neurowiki.ai/trials/wake-up-trial): MRI-guided tPA for unknown onset stroke (DWI-FLAIR mismatch)
+- [EXTEND Trial](https://neurowiki.ai/trials/extend-trial): Perfusion-guided tPA at 4.5–9 hours
+- [DAWN Trial](https://neurowiki.ai/trials/dawn-trial): Late-window thrombectomy 6–24 hours
+- [DEFUSE-3 Trial](https://neurowiki.ai/trials/defuse-3-trial): Perfusion-selected thrombectomy 6–16 hours
+- [ELAN Trial](https://neurowiki.ai/trials/elan-study): Early vs late DOAC after cardioembolic stroke
+- [ORIGINAL Trial](https://neurowiki.ai/trials/original-trial): Tenecteplase vs alteplase equivalence (JAMA 2024)
+- [SELECT-2 Trial](https://neurowiki.ai/trials/select2-trial): EVT for large infarct core (ASPECTS 3–5)
+- [All trials](https://neurowiki.ai/trials): 25+ landmark neurology trials
+
+## About
+- Specialty: Neurology (Vascular, Neurocritical Care, Epilepsy, Neuromuscular)
+- Guideline source: AHA/ASA 2026 Guidelines for Early Management of AIS (Prabhakaran et al., DOI: 10.1161/STR.0000000000000513)
+- Audience: Neurologists, residents, emergency medicine physicians, medical students
+- Content type: Interactive clinical decision support tools (React SPA — JavaScript required)
+- Last updated: 2026-03-10
+- Site: https://neurowiki.ai
