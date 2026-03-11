@@ -180,10 +180,15 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
 
   /* ── LKW / setup state ── */
   const [lkwPickerOpen, setLkwPickerOpen] = useState(false);
+  const [lkwPickerMode, setLkwPickerMode] = useState<'specific' | 'sleep'>('specific');
   const [lkwTimestamp, setLkwTimestamp] = useState<Date | null>(null);
   const [lkwUnknown, setLkwUnknown] = useState(false);
   const [elapsedHours, setElapsedHours] = useState<number | null>(null);
   const [imagingModality, setImagingModality] = useState<ImagingModality>(null);
+
+  /* ── Sleep onset state (wake-up stroke) ── */
+  const [wakeTimestamp, setWakeTimestamp] = useState<Date | null>(null);
+  const [minutesSinceWaking, setMinutesSinceWaking] = useState<number | null>(null);
 
   /* ── Path A state ── */
   const [aRecognition, setARecognition] = useState<YesNo>(null);
@@ -204,7 +209,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   const [cLvoBarrier, setCLvoBarrier] = useState<EVTBarrierId | null>(null);
   const [cNonLvoExpertise, setCNonLvoExpertise] = useState<YesNo>(null);
 
-  /* ── Live elapsed timer ── */
+  /* ── Live elapsed timer (LKW → now) ── */
   useEffect(() => {
     if (!lkwTimestamp || lkwUnknown) { setElapsedHours(null); return; }
     const calc = () => Math.max(0, (Date.now() - lkwTimestamp.getTime()) / 3_600_000);
@@ -212,6 +217,21 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     const id = setInterval(() => setElapsedHours(calc()), 30_000);
     return () => clearInterval(id);
   }, [lkwTimestamp, lkwUnknown]);
+
+  /* ── Live timer: minutes since waking (sleep onset mode) ── */
+  useEffect(() => {
+    if (!wakeTimestamp) { setMinutesSinceWaking(null); return; }
+    const calc = () => Math.max(0, (Date.now() - wakeTimestamp.getTime()) / 60_000);
+    setMinutesSinceWaking(calc());
+    const id = setInterval(() => setMinutesSinceWaking(calc()), 30_000);
+    return () => clearInterval(id);
+  }, [wakeTimestamp]);
+
+  /* ── Auto-set aRecognition from wake-up time ── */
+  useEffect(() => {
+    if (minutesSinceWaking === null) return;
+    setARecognition(minutesSinceWaking <= 270); // 4.5h = 270 min
+  }, [minutesSinceWaking]);
 
   /* ── Derived ── */
   const setupComplete = lkwUnknown || lkwTimestamp !== null;
@@ -408,6 +428,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   /* ── Handlers ── */
   const handleReset = () => {
     setLkwTimestamp(null); setLkwUnknown(false); setElapsedHours(null); setImagingModality(null);
+    setWakeTimestamp(null); setMinutesSinceWaking(null);
     setARecognition(null); setADwiSmall(null); setAFlair(null);
     setBCtpCore(null); setBCtpMismatch(null); setBMriPwi(null); setBMriMismatch(null); setBEvt(null);
     setCPenumbra(null); setCLvo(null); setCLvoEvt(null); setCLvoBarrier(null); setCNonLvoExpertise(null);
@@ -435,7 +456,12 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
       `Reason: ${result.reason}`,
       '',
       'Setup:',
-      `  LKW: ${lkwUnknown ? 'Unknown onset / Wake-up' : elapsedHours !== null ? `${formatElapsed(elapsedHours)} elapsed` : ''}`,
+      `  LKW: ${
+        wakeTimestamp && lkwTimestamp
+          ? `Bedtime ${lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} · Woke ${wakeTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} (${Math.round(minutesSinceWaking ?? 0)} min since waking)`
+          : lkwUnknown ? 'Unknown onset / Wake-up'
+          : elapsedHours !== null ? `${formatElapsed(elapsedHours)} elapsed` : ''
+      }`,
       `  Imaging: ${imagingModality === 'mri' ? 'MRI (DWI + FLAIR / PWI)' : 'CT Perfusion (RAPID/equivalent)'}`,
       '',
       `Details: ${result.details}`,
@@ -460,6 +486,15 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
 
   /* ── Elapsed time display ── */
   const elapsedBadge = (() => {
+    if (lkwUnknown && wakeTimestamp && lkwTimestamp) {
+      const bedStr  = lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      const wakeStr = wakeTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      const mins = minutesSinceWaking !== null ? Math.round(minutesSinceWaking) : '—';
+      return {
+        label: `Bedtime ${bedStr} · Woke ${wakeStr} · ${mins} min since waking`,
+        cls: 'bg-amber-100 text-amber-800 border-amber-200',
+      };
+    }
     if (lkwUnknown) return { label: 'Unknown / Wake-up stroke', cls: 'bg-amber-100 text-amber-800 border-amber-200' };
     if (elapsedHours === null) return null;
     if (elapsedHours < 4.5) return { label: `${formatElapsed(elapsedHours)} elapsed · Standard window`, cls: 'bg-emerald-100 text-emerald-800 border-emerald-200' };
