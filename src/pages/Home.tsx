@@ -193,7 +193,7 @@ const Home: React.FC = () => {
                 <span className="text-xs font-bold text-neuro-700 dark:text-neuro-300 uppercase tracking-wider">About NeuroWiki</span>
               </div>
               <p className="text-xs text-neuro-700 dark:text-neuro-300 leading-relaxed">
-                Free, evidence-based neurology tools for physicians. All calculators are aligned with <strong>AHA/ASA 2026 stroke guidelines</strong>. For clinical decision support — not a substitute for professional judgment.
+                Free, evidence-based neurology tools for physicians. Stroke tools follow <strong>AHA/ASA 2026 guidelines</strong>; billing tools follow AMA 2021/2023 CPT guidelines. For clinical decision support — not a substitute for professional judgment.
               </p>
             </div>
           </div>
