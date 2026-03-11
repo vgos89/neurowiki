@@ -12,9 +12,19 @@ if (!rootElement) {
   throw new Error("Could not find root element to mount to");
 }
 
-const root = ReactDOM.createRoot(rootElement);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// Use hydrateRoot for react-snap prerendered pages to preserve the static HTML
+// (avoids a flash of blank content). Fall back to createRoot for dev / uncovered routes.
+if (rootElement.hasChildNodes()) {
+  ReactDOM.hydrateRoot(
+    rootElement,
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+} else {
+  ReactDOM.createRoot(rootElement).render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+}

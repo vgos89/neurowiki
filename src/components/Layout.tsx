@@ -2,11 +2,10 @@
 import React, { useState, useRef, useEffect, useMemo, lazy, Suspense } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
-  Brain, 
-  Search, 
-  Calculator, 
+  Brain,
+  Search,
+  Calculator,
   FlaskConical,
-  Stethoscope,
   ArrowLeft,
   Home,
   X,
@@ -37,8 +36,10 @@ interface Tool {
 
 // All available tools
 const ALL_TOOLS: Tool[] = [
+  { id: 'stroke-code', name: 'Stroke Code', description: 'Door-to-needle protocol', category: 'vascular', type: 'pathway', path: '/calculators/stroke-code' },
   { id: 'nihss', name: 'NIHSS', description: 'NIH Stroke Scale assessment', category: 'vascular', type: 'calculator', path: '/calculators/nihss' },
   { id: 'evt-pathway', name: 'Thrombectomy Pathway', description: 'EVT eligibility for early and late windows', category: 'vascular', type: 'pathway', path: '/calculators/evt-pathway' },
+  { id: 'late-window-ivt', name: 'Long Window IVT', description: 'Extended IVT eligibility pathway', category: 'vascular', type: 'pathway', path: '/calculators/late-window-ivt' },
   { id: 'elan-pathway', name: 'Post-Stroke Anticoagulation Timing', description: 'Anticoagulation timing after ischemic stroke with AF', category: 'vascular', type: 'pathway', path: '/calculators/elan-pathway' },
   { id: 'se-pathway', name: 'Status Epilepticus', description: 'Stage 1–3 SE management pathway', category: 'epilepsy', type: 'pathway', path: '/calculators/se-pathway' },
   { id: 'migraine-pathway', name: 'Migraine & Headache', description: 'ED and inpatient management', category: 'headache', type: 'pathway', path: '/calculators/migraine-pathway' },
@@ -279,14 +280,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   }, [location.pathname, isOnTrialsPage, expandedTrialsSubcategories]);
 
-  // Desktop Navigation
-  const desktopNavItems = [
-    { label: 'Home', icon: <Home size={18} />, path: '/' },
-    { label: 'Resident Guide', icon: <Stethoscope size={18} />, path: '/guide' },
-    { label: 'Neuro Trials', icon: <FlaskConical size={18} />, path: '/trials' },
-    { label: 'Calculators', icon: <Calculator size={18} />, path: '/calculators' },
-  ];
-
   // Get selected tools data
   const selectedToolsData = ALL_TOOLS.filter(tool => selectedTools.includes(tool.id));
 
@@ -311,7 +304,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   // Mobile Bottom Navigation
   const mobileNavItems = [
     { label: 'Home', icon: <Home size={20} />, path: '/' },
-    { label: 'Guide', icon: <Stethoscope size={20} />, path: '/guide' },
     { label: 'Trials', icon: <FlaskConical size={20} />, path: '/trials' },
     { label: 'Calcs', icon: <Calculator size={20} />, path: '/calculators' },
     { label: 'Favourites', icon: <Star size={20} />, path: '/calculators?favorites=true' },
@@ -374,24 +366,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         ? 'text-neuro-500'
                         : 'text-slate-700 dark:text-slate-300'
                     }`}>Home</span>
-                  )}
-                </Link>
-                <Link
-                  to="/guide"
-                  className={`${isNavExpanded ? 'flex items-center gap-3 px-3 py-2.5' : 'p-3 flex items-center justify-center'} rounded-xl transition-colors ${
-                    isOnGuidePage
-                      ? 'bg-slate-100 dark:bg-slate-700 text-neuro-500'
-                      : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
-                  }`}
-                  title="Resident Guide"
-                >
-                  <Stethoscope size={20} className="flex-shrink-0" />
-                  {isNavExpanded && (
-                    <span className={`text-sm font-medium whitespace-nowrap ${
-                      isOnGuidePage
-                        ? 'text-neuro-500'
-                        : 'text-slate-700 dark:text-slate-300'
-                    }`}>Resident Guide</span>
                   )}
                 </Link>
                 <Link

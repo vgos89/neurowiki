@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   Brain,
@@ -9,8 +9,6 @@ import {
   Calculator,
   FlaskConical,
   ChevronRight,
-  Shield,
-  Heart,
   Stethoscope,
   AlertCircle,
   TrendingUp,
@@ -21,10 +19,10 @@ import {
 
 const FEATURED_TOOLS = [
   {
-    id: 'stroke-basics',
+    id: 'stroke-code',
     name: 'Stroke Code',
     subtitle: 'Door-to-needle protocol',
-    path: '/guide/stroke-basics',
+    path: '/calculators/stroke-code',
     icon: Zap,
     accentColor: 'bg-red-500',
     ringColor: 'ring-red-200 dark:ring-red-900',
@@ -34,16 +32,29 @@ const FEATURED_TOOLS = [
     tagColor: 'bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300',
   },
   {
+    id: 'late-window-ivt',
+    name: 'Long Window IVT',
+    subtitle: 'Extended IVT eligibility',
+    path: '/calculators/late-window-ivt',
+    icon: Activity,
+    accentColor: 'bg-emerald-500',
+    ringColor: 'ring-emerald-200 dark:ring-emerald-900',
+    bgColor: 'bg-emerald-50 dark:bg-emerald-950/40',
+    textColor: 'text-emerald-700 dark:text-emerald-300',
+    tag: 'Pathway',
+    tagColor: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300',
+  },
+  {
     id: 'evt-pathway',
     name: 'EVT Pathway',
     subtitle: 'Thrombectomy eligibility',
     path: '/calculators/evt-pathway',
-    icon: Activity,
+    icon: Brain,
     accentColor: 'bg-neuro-500',
     ringColor: 'ring-neuro-200 dark:ring-neuro-900',
     bgColor: 'bg-neuro-50 dark:bg-neuro-950/40',
     textColor: 'text-neuro-700 dark:text-neuro-300',
-    tag: 'Calculator',
+    tag: 'Pathway',
     tagColor: 'bg-neuro-100 text-neuro-700 dark:bg-neuro-900/50 dark:text-neuro-300',
   },
   {
@@ -58,19 +69,6 @@ const FEATURED_TOOLS = [
     textColor: 'text-violet-700 dark:text-violet-300',
     tag: 'Calculator',
     tagColor: 'bg-violet-100 text-violet-700 dark:bg-violet-900/50 dark:text-violet-300',
-  },
-  {
-    id: 'aspects',
-    name: 'ASPECTS',
-    subtitle: 'Alberta CT Score',
-    path: '/calculators/aspects-score',
-    icon: Brain,
-    accentColor: 'bg-orange-500',
-    ringColor: 'ring-orange-200 dark:ring-orange-900',
-    bgColor: 'bg-orange-50 dark:bg-orange-950/40',
-    textColor: 'text-orange-700 dark:text-orange-300',
-    tag: 'New',
-    tagColor: 'bg-orange-100 text-orange-700 dark:bg-orange-900/50 dark:text-orange-300',
   },
   {
     id: 'se-pathway',
@@ -100,85 +98,6 @@ const FEATURED_TOOLS = [
   },
 ];
 
-// ── Guide categories ────────────────────────────────────────────────────────
-
-const GUIDE_CATEGORIES = [
-  {
-    id: 'vascular',
-    name: 'Vascular Neurology',
-    description: 'Stroke, TIA, hemorrhage, thrombectomy',
-    icon: Heart,
-    color: 'text-red-600 dark:text-red-400',
-    bgColor: 'bg-red-50 dark:bg-red-950/30',
-    borderColor: 'border-red-200 dark:border-red-900',
-    accentDot: 'bg-red-500',
-    guides: [
-      { name: 'Stroke Code Basics', path: '/guide/stroke-basics', badge: 'Protocol' },
-      { name: 'IV Thrombolytic Protocol', path: '/guide/iv-tpa', badge: 'Updated' },
-      { name: 'Mechanical Thrombectomy', path: '/guide/thrombectomy', badge: 'Guide' },
-      { name: 'ICH Management', path: '/guide/ich-management', badge: 'Protocol' },
-      { name: 'Acute Stroke Management', path: '/guide/acute-stroke-mgmt', badge: 'Guide' },
-    ],
-  },
-  {
-    id: 'epilepsy',
-    name: 'Epilepsy & Seizures',
-    description: 'Status epilepticus, seizure workup',
-    icon: Zap,
-    color: 'text-amber-600 dark:text-amber-400',
-    bgColor: 'bg-amber-50 dark:bg-amber-950/30',
-    borderColor: 'border-amber-200 dark:border-amber-900',
-    accentDot: 'bg-amber-500',
-    guides: [
-      { name: 'Status Epilepticus', path: '/guide/status-epilepticus', badge: 'Protocol' },
-      { name: 'Seizure Workup', path: '/guide/seizure-workup', badge: 'Guide' },
-    ],
-  },
-  {
-    id: 'neurocritical',
-    name: 'Neurocritical Care',
-    description: 'AMS, meningitis, ICP, emergencies',
-    icon: Shield,
-    color: 'text-violet-600 dark:text-violet-400',
-    bgColor: 'bg-violet-50 dark:bg-violet-950/30',
-    borderColor: 'border-violet-200 dark:border-violet-900',
-    accentDot: 'bg-violet-500',
-    guides: [
-      { name: 'Altered Mental Status', path: '/guide/altered-mental-status', badge: 'Guide' },
-      { name: 'Bacterial Meningitis', path: '/guide/meningitis', badge: 'Protocol' },
-    ],
-  },
-  {
-    id: 'general',
-    name: 'General Neurology',
-    description: 'Headache, vertigo, weakness, common workups',
-    icon: Stethoscope,
-    color: 'text-neuro-600 dark:text-neuro-400',
-    bgColor: 'bg-neuro-50 dark:bg-neuro-950/30',
-    borderColor: 'border-neuro-200 dark:border-neuro-900',
-    accentDot: 'bg-neuro-500',
-    guides: [
-      { name: 'Headache Workup', path: '/guide/headache-workup', badge: 'Guide' },
-      { name: 'Vertigo', path: '/guide/vertigo', badge: 'Guide' },
-      { name: 'Weakness Workup', path: '/guide/weakness-workup', badge: 'Guide' },
-    ],
-  },
-  {
-    id: 'neuromuscular',
-    name: 'Neuromuscular & Neuroimmunology',
-    description: 'GBS, MG, MS — diagnosis and management',
-    icon: FlaskConical,
-    color: 'text-emerald-600 dark:text-emerald-400',
-    bgColor: 'bg-emerald-50 dark:bg-emerald-950/30',
-    borderColor: 'border-emerald-200 dark:border-emerald-900',
-    accentDot: 'bg-emerald-500',
-    guides: [
-      { name: 'Guillain-Barré Syndrome', path: '/guide/gbs', badge: 'Guide' },
-      { name: 'Myasthenia Gravis', path: '/guide/myasthenia-gravis', badge: 'Guide' },
-      { name: 'Multiple Sclerosis', path: '/guide/multiple-sclerosis', badge: 'Guide' },
-    ],
-  },
-];
 
 // ── Featured Trials ─────────────────────────────────────────────────────────
 
@@ -192,20 +111,12 @@ const FEATURED_TRIALS = [
 // ── Component ────────────────────────────────────────────────────────────────
 
 const Home: React.FC = () => {
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-
-  const toggleCategory = (id: string) => {
-    setExpandedCategory((prev) => (prev === id ? null : id));
-  };
-
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-16">
 
       {/* ── Hero / Header ─────────────────────────────────────────────────── */}
       <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
         <div className="max-w-4xl mx-auto px-4 md:px-6 pt-8 pb-6">
-
-          {/* Title */}
           <div className="flex items-start gap-4 mb-5">
             <div className="hidden sm:flex w-12 h-12 rounded-2xl bg-neuro-500 items-center justify-center flex-shrink-0 shadow-lg shadow-neuro-200 dark:shadow-neuro-900">
               <Brain size={24} className="text-white" aria-hidden="true" />
@@ -219,7 +130,6 @@ const Home: React.FC = () => {
               </p>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -255,103 +165,41 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        {/* ── Desktop: two-column layout ─────────────────────────────────── */}
+        {/* ── Two-column: Calculators CTA + Landmark Trials ──────────────── */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-          {/* Left: Guide Categories (2/3 width) */}
-          <div className="lg:col-span-2">
-            <section aria-labelledby="guide-categories-heading">
-              <h2 id="guide-categories-heading" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">
-                Clinical Guides
-              </h2>
-              <div className="space-y-2">
-                {GUIDE_CATEGORIES.map((cat) => {
-                  const Icon = cat.icon;
-                  const isExpanded = expandedCategory === cat.id;
-                  return (
-                    <div
-                      key={cat.id}
-                      className={`rounded-2xl border ${cat.borderColor} overflow-hidden transition-all`}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => toggleCategory(cat.id)}
-                        className={`w-full flex items-center gap-3 px-4 py-3.5 text-left ${cat.bgColor} hover:opacity-90 transition-opacity`}
-                        aria-expanded={isExpanded}
-                      >
-                        <div className={`w-8 h-8 rounded-xl bg-white dark:bg-slate-900 flex items-center justify-center flex-shrink-0 border ${cat.borderColor}`}>
-                          <Icon size={16} className={cat.color} aria-hidden="true" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className={`text-sm font-bold ${cat.color}`}>{cat.name}</div>
-                          <div className="text-xs text-slate-500 dark:text-slate-400">{cat.description}</div>
-                        </div>
-                        <div className="flex items-center gap-2 flex-shrink-0">
-                          <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500">
-                            {cat.guides.length} guides
-                          </span>
-                          <ChevronRight
-                            size={16}
-                            className={`text-slate-400 transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
-                            aria-hidden="true"
-                          />
-                        </div>
-                      </button>
-
-                      {isExpanded && (
-                        <div className="bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
-                          {cat.guides.map((guide) => (
-                            <Link
-                              key={guide.path}
-                              to={guide.path}
-                              className="flex items-center justify-between px-5 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group"
-                            >
-                              <div className="flex items-center gap-3">
-                                <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${cat.accentDot}`} aria-hidden="true" />
-                                <span className="text-sm text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white font-medium">
-                                  {guide.name}
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${cat.bgColor} ${cat.color}`}>
-                                  {guide.badge}
-                                </span>
-                                <ChevronRight size={14} className="text-slate-300 dark:text-slate-600 group-hover:text-slate-500 dark:group-hover:text-slate-400 transition-colors" aria-hidden="true" />
-                              </div>
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+          {/* Left: Browse all calculators (2/3 width) */}
+          <div className="lg:col-span-2 space-y-4">
+            <Link
+              to="/calculators"
+              className="flex items-center justify-between w-full p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-neuro-300 dark:hover:border-neuro-700 transition-colors group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-neuro-50 dark:bg-neuro-950/50 flex items-center justify-center">
+                  <Calculator size={16} className="text-neuro-500" aria-hidden="true" />
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-slate-800 dark:text-slate-200">All Calculators & Pathways</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400">NIHSS, ICH Score, EVT, SE, ELAN…</div>
+                </div>
               </div>
+              <ChevronRight size={16} className="text-slate-300 dark:text-slate-600 group-hover:text-neuro-500 transition-colors flex-shrink-0" aria-hidden="true" />
+            </Link>
 
-              {/* Browse all calculators link */}
-              <div className="mt-4">
-                <Link
-                  to="/calculators"
-                  className="flex items-center justify-between w-full p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-neuro-300 dark:hover:border-neuro-700 transition-colors group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-xl bg-neuro-50 dark:bg-neuro-950/50 flex items-center justify-center">
-                      <Calculator size={16} className="text-neuro-500" aria-hidden="true" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-bold text-slate-800 dark:text-slate-200">All Calculators & Pathways</div>
-                      <div className="text-xs text-slate-500 dark:text-slate-400">NIHSS, ASPECTS, ICH Score, EVT, SE, ELAN…</div>
-                    </div>
-                  </div>
-                  <ChevronRight size={16} className="text-slate-300 dark:text-slate-600 group-hover:text-neuro-500 transition-colors flex-shrink-0" aria-hidden="true" />
-                </Link>
+            {/* About Neurowiki */}
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-neuro-50 to-neuro-100 dark:from-neuro-950/50 dark:to-neuro-900/30 border border-neuro-200 dark:border-neuro-800">
+              <div className="flex items-center gap-2 mb-2">
+                <Star size={14} className="text-neuro-500" aria-hidden="true" />
+                <span className="text-xs font-bold text-neuro-700 dark:text-neuro-300 uppercase tracking-wider">About NeuroWiki</span>
               </div>
-            </section>
+              <p className="text-xs text-neuro-700 dark:text-neuro-300 leading-relaxed">
+                Free, evidence-based neurology tools for physicians. All calculators are aligned with <strong>AHA/ASA 2026 stroke guidelines</strong>. For clinical decision support — not a substitute for professional judgment.
+              </p>
+            </div>
           </div>
 
-          {/* Right Sidebar: Trials + Stats (1/3 width) */}
-          <div className="space-y-6">
-
-            {/* Landmark Trials */}
+          {/* Right: Landmark Trials (1/3 width) */}
+          <div>
             <section aria-labelledby="trials-heading">
               <div className="flex items-center justify-between mb-3">
                 <h2 id="trials-heading" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
@@ -394,27 +242,15 @@ const Home: React.FC = () => {
                 </Link>
               </div>
             </section>
-
-            {/* About Neurowiki — compact info card */}
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-neuro-50 to-neuro-100 dark:from-neuro-950/50 dark:to-neuro-900/30 border border-neuro-200 dark:border-neuro-800">
-              <div className="flex items-center gap-2 mb-2">
-                <Star size={14} className="text-neuro-500" aria-hidden="true" />
-                <span className="text-xs font-bold text-neuro-700 dark:text-neuro-300 uppercase tracking-wider">About NeuroWiki</span>
-              </div>
-              <p className="text-xs text-neuro-700 dark:text-neuro-300 leading-relaxed">
-                Free, evidence-based neurology tools for physicians. All calculators are aligned with <strong>AHA/ASA 2026 stroke guidelines</strong>. For clinical decision support — not a substitute for professional judgment.
-              </p>
-            </div>
-
           </div>
         </div>
 
         {/* ── Stats strip ────────────────────────────────────────────────── */}
         <section className="grid grid-cols-3 gap-3" aria-label="Site statistics">
           {[
-            { value: '15+', label: 'Clinical Guides', icon: BookOpen },
             { value: '14+', label: 'Calculators', icon: Calculator },
             { value: '20+', label: 'Landmark Trials', icon: TrendingUp },
+            { value: 'Free', label: 'Always', icon: FlaskConical },
           ].map((stat) => {
             const Icon = stat.icon;
             return (
