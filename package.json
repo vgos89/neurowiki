@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "build:analyze": "ANALYZE=true vite build",
-    "preview": "vite preview",
-    "postbuild": "react-snap"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@google/genai": "^1.34.0",
