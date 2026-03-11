@@ -216,7 +216,7 @@ Approximately 14-27% of acute ischemic strokes occur with an unknown time of ons
 
 ## Conclusion
 
-Among patients with acute ischemic stroke and unknown time of symptom onset who had MRI findings of DWI-FLAIR mismatch, treatment with IV alteplase resulted in significantly better functional outcomes at 90 days compared to placebo (mRS 0-1: 53.3% vs 41.8%, OR 1.61). This represents an absolute benefit of 11.5 percentage points with an NNT of 9. The benefit came with numerically higher rates of symptomatic intracranial hemorrhage and mortality, though these differences were not statistically significant. WAKE-UP established MRI-guided thrombolysis as a viable option for carefully selected wake-up stroke patients, expanding treatment opportunities for a population previously excluded from acute reperfusion therapy.
+Among patients with acute ischemic stroke and unknown time of symptom onset who had MRI findings of DWI-FLAIR mismatch, treatment with IV alteplase resulted in significantly better functional outcomes at 90 days compared to placebo (mRS 0-1: 53.3% vs 41.8%, OR 1.61). This represents an absolute benefit of 11.5 percentage points with an NNT of 9. The benefit came with numerically higher rates of symptomatic intracranial hemorrhage and mortality, though these differences were not statistically significant. WAKE-UP established MRI-guided thrombolysis for wake-up strokes — patients previously ineligible because onset time was unknown.
 
 *Source: [Thomalla G, et al. N Engl J Med. 2018;379(7):611-622](https://www.nejm.org/doi/full/10.1056/NEJMoa1804355)*
 `
@@ -282,7 +282,7 @@ Tenecteplase (TNK) is a bioengineered variant of alteplase with greater fibrin s
 *   **Do not confuse with EAGLE:** The EAGLE trial (Ophthalmology 2010) tested intra-arterial tPA for central retinal artery occlusion — a completely different indication and negative trial.
 
 ## Conclusion
-In patients with acute ischemic stroke eligible for intravenous thrombolysis within 4.5 hours, tenecteplase 0.25 mg/kg was **noninferior to alteplase 0.9 mg/kg** for excellent functional outcome (mRS 0–1) at 90 days, with an identical safety profile. These findings support tenecteplase as a suitable alternative to alteplase and underpin the 2026 AHA/ASA COR 1 recommendation for both agents.
+In patients with acute ischemic stroke eligible for intravenous thrombolysis within 4.5 hours, tenecteplase 0.25 mg/kg was **noninferior to alteplase 0.9 mg/kg** for excellent functional outcome (mRS 0–1) at 90 days, with an identical safety profile. These findings support tenecteplase as an equivalent alternative to alteplase, forming the evidence base for the 2026 AHA/ASA COR 1 recommendation for both agents.
 
 *Source: [Meng X et al. JAMA 2024;332(17):1437–1445. DOI: 10.1001/jama.2024.14721](https://doi.org/10.1001/jama.2024.14721) — ClinicalTrials.gov: NCT04915729*
 `
@@ -436,7 +436,7 @@ Historically, mechanical thrombectomy was limited to 6 hours from symptom onset.
 ## Clinical PEARLS
 *   **NNT:** The Number Needed to Treat (NNT) for one additional patient to be functionally independent was **3**.
 *   **Safety:** No significant difference in symptomatic intracranial hemorrhage (sICH) or serious adverse events.
-*   **Paradigm Shift:** Along with the DAWN trial, DEFUSE 3 established the "Late Window" protocol, shifting focus from "Time is Brain" to "Tissue is Brain".
+*   **Late window:** Along with DAWN, DEFUSE-3 shifted selection from time-based to tissue-based — perfusion mismatch over clock.
 *   **Implementation:** Requires automated perfusion software (e.g., RAPID) for standardized core/penumbra calculation.
 
 ## Conclusion
@@ -497,7 +497,7 @@ Patients with large ischemic cores (ASPECTS < 6 or Core Volume > 50ml) were hist
     *   **Generalized Odds Ratio:** 1.51 (favoring EVT).
 
 ## Clinical PEARLS
-*   **New Frontier:** Established that "Large Core" is no longer an absolute contraindication for thrombectomy.
+*   **Large core:** No longer an absolute contraindication — SELECT2 showed a clear functional shift even at ASPECTS 3–5.
 *   **Risk/Benefit:** While outcomes are generally poorer than small-core patients, EVT still provides a significant shift towards lower disability (e.g., being able to walk vs bedbound).
 *   **Safety:** Symptomatic intracranial hemorrhage (sICH) was low and not significantly different between groups, though any ICH was more frequent in the EVT group.
 
@@ -739,7 +739,7 @@ Following the poor outcomes of intracranial stenting in SAMMPRIS (14.7% event ra
 ## Clinical PEARLS
 *   **Patient Selection:** This trial demonstrated that intracranial stenting *can* be performed safely (2.6% risk vs 14.7% in SAMMPRIS) if strict selection criteria are followed, particularly waiting >8 days after stroke and requiring demonstrated failure of medical therapy (2 recurrent strokes).
 *   **Experience Matters:** The trial utilized experienced interventionalists, which likely contributed to the lower complication rate.
-*   **Role of Stenting:** While WEAVE assessed safety (not efficacy vs medical therapy), it reopened the door for stenting as a viable salvage option for highly selected refractory patients.
+*   **Role of Stenting:** While WEAVE assessed safety (not efficacy vs medical therapy), it supports stenting as a salvage option for highly selected patients who fail medical therapy.
 
 ## Conclusion
 With experienced interventionalists and proper patient selection following on-label usage guidelines (specifically >7 days post-stroke), the use of the Wingspan stent for intracranial atherosclerotic disease demonstrated a low periprocedural complication rate.
@@ -1000,7 +1000,7 @@ Use the **[Thrombectomy Calculator](/calculators/evt-pathway)** to stratify pati
     category: 'Vascular Neurology',
     content: `
 ## 1. Thrombectomy Selection (EVT)
-Candidacy for Endovascular Thrombectomy (EVT) has expanded significantly:
+EVT candidacy now covers late window and large core patients:
 *   **Late Window (6-24h):** Based on DAWN/DEFUSE-3 trials (Perfusion mismatch).
 *   **Large Core Infarcts:** Now eligible based on SELECT2/ANGEL-ASPECT (ASPECTS 3-5).
 *   **Distal Occlusions:** Considered based on technical feasibility and deficit severity.
@@ -1023,7 +1023,7 @@ After admission to the Neuro-ICU, the primary goal is preventing secondary injur
 ## 4. Secondary Prevention & Rehabilitation
 *   **Secondary Stroke Prevention:** Perform protocolized evaluation for etiology (Atrial Fibrillation, Carotid Disease, ICAD). 
 *   **Antithrombotics:** Decisions on initiation (Aspirin/Anticoagulation) must balance existing ischemic damage against the risk of hemorrhage.
-*   **Early Mobilization:** While bedrest is often favored for 24h post-EVT, interprofessional rehab (PT/OT/SLP) should be initiated early to optimize independence.
+*   **Early Mobilization:** While bedrest is often favored for 24h post-EVT, PT/OT/SLP should start early.
 `
   },
   'hemorrhagic-stroke': {
@@ -1392,7 +1392,7 @@ ENRICH used utility-weighted mRS (UW-mRS), which assigns quality-of-life weights
 *   Complements MISTIE III (stereotactic) and STICH (open): different technique, different results
 
 ## Conclusion
-ENRICH is the first positive randomized surgical ICH trial. Among patients with lobar or anterior basal ganglia ICH (30–80 mL) within 24 hours, MIPS improved 180-day functional outcomes (UW-mRS 0.458 vs 0.374, p=0.04) and dramatically reduced 30-day mortality (9.3% vs 18.0%, NNT≈12) vs medical management alone. This represents a paradigm shift for selected ICH patients at centers with BrainPath+Myriad equipment and trained neurosurgical teams.
+ENRICH is the first positive randomized surgical ICH trial. Among patients with lobar or anterior basal ganglia ICH (30–80 mL) within 24 hours, MIPS improved 180-day functional outcomes (UW-mRS 0.458 vs 0.374, p=0.04) and dramatically reduced 30-day mortality (9.3% vs 18.0%, NNT≈12) vs medical management alone. For the first time, a randomized trial confirms surgery improves outcomes in selected ICH patients — at centers with BrainPath+Myriad and trained neurosurgical teams.
 
 *Source: [Hanley DF, et al. N Engl J Med. 2024;390(14):1277–1289](https://www.nejm.org/doi/abs/10.1056/NEJMoa2308440). DOI: 10.1056/NEJMoa2308440*
 `

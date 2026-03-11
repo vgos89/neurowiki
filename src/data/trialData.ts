@@ -715,7 +715,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     pearls: [
       'NNT: Number Needed to Treat (NNT) for one additional patient to be functionally independent was 3.6',
-      'Paradigm Shift: Established the "Late Window" protocol, shifting focus from "Time is Brain" to "Tissue is Brain"',
+      'Late window: Along with DAWN, DEFUSE-3 shifted selection from time-based to tissue-based — perfusion mismatch over clock',
       'Selection Criteria: Infarct Core < 70 ml, Mismatch Ratio ≥ 1.8, Mismatch Volume ≥ 15 ml',
       'Mortality Reduction: 14% in EVT group vs 26% in Control group (P=0.05)',
       'Safety: No significant difference in symptomatic intracranial hemorrhage (sICH) or serious adverse events',
@@ -846,7 +846,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       nntExplanation: 'For every 7.7 patients with large core treated with thrombectomy, one additional patient achieves functional independence (mRS 0-2) compared to medical management alone'
     },
     pearls: [
-      'New Frontier: Established that "Large Core" is no longer an absolute contraindication for thrombectomy',
+      'Large core: No longer an absolute contraindication — SELECT2 showed clear functional benefit even at ASPECTS 3–5',
       'Selection Criteria: ASPECTS 3-5 on NCCT OR Core volume ≥ 50 ml on CTP',
       'Generalized Odds Ratio: 1.51 (favoring EVT)',
       'Risk/Benefit: While outcomes are generally poorer than small-core patients, EVT still provides significant shift towards lower disability (e.g., being able to walk vs bedbound)',
@@ -1248,7 +1248,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Changed international guidelines: AHA/ASA now recommends DAPT for 21 days (Class IIa)',
       'Combined with POINT, established DAPT as standard of care for minor stroke/high-risk TIA'
     ],
-    conclusion: 'Among patients with high-risk TIA or minor ischemic stroke who can be treated within 24 hours of symptom onset, the combination of clopidogrel and aspirin for 21 days, followed by clopidogrel alone to 90 days, is SUPERIOR to aspirin alone for reducing the risk of stroke. The treatment provides a 32% relative risk reduction (3.5% absolute, NNT=29) without increasing the risk of hemorrhage. This represents a major advance in acute stroke prevention, with greatest benefit in the first week when stroke risk is highest. Start clopidogrel + aspirin within 24 hours of minor stroke or high-risk TIA to prevent early recurrent stroke.',
+    conclusion: 'Among patients with high-risk TIA or minor ischemic stroke who can be treated within 24 hours of symptom onset, the combination of clopidogrel and aspirin for 21 days, followed by clopidogrel alone to 90 days, is SUPERIOR to aspirin alone for reducing the risk of stroke. The treatment provides a 32% relative risk reduction (3.5% absolute, NNT=29) without increasing the risk of hemorrhage. Start clopidogrel + aspirin within 24 hours of minor stroke or high-risk TIA to prevent early recurrent stroke.',
     source: 'Wang Y, Wang Y, Zhao X, et al. Clopidogrel with aspirin in acute minor stroke or transient ischemic attack. N Engl J Med. 2013;369(1):11-19.',
     doi: '10.1056/NEJMoa1215340',
     pmid: '23803136',
@@ -2224,7 +2224,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Bayesian adaptive design — statistically valid but smaller n than traditional RCTs',
       'Published: Hanley DF, et al. N Engl J Med. 2024;390(14):1277–1289. DOI: 10.1056/NEJMoa2308440'
     ],
-    conclusion: 'Among patients with lobar or anterior basal ganglia ICH (30–80 mL) treated within 24 hours, MIPS improved functional outcomes at 180 days (UW-mRS 0.458 vs 0.374, p=0.04) and dramatically reduced 30-day mortality (9.3% vs 18.0%) vs medical management alone. ENRICH is the first positive randomized surgical ICH trial — a paradigm shift for selected ICH patients at centers with appropriate equipment and expertise.',
+    conclusion: 'Among patients with lobar or anterior basal ganglia ICH (30–80 mL) treated within 24 hours, MIPS improved functional outcomes at 180 days (UW-mRS 0.458 vs 0.374, p=0.04) and dramatically reduced 30-day mortality (9.3% vs 18.0%) vs medical management alone. ENRICH is the first positive randomized surgical ICH trial — surgery now has a role for selected lobar and anterior basal ganglia ICH at centers with appropriate equipment and trained teams.',
     source: 'Hanley DF, et al. (NEJM 2024)',
     doi: '10.1056/NEJMoa2308440',
     pmid: '38598795',

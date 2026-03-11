@@ -7,9 +7,9 @@ interface MetaData {
 }
 
 const DEFAULT_META: MetaData = {
-  title: 'NeuroWiki | Neurology Calculators & Stroke Protocols',
-  description: 'Free neurology calculators (NIHSS, ASPECTS, ICH Score, ABCD2) and evidence-based stroke protocols. For residents and neurologists. AHA/ASA 2026 aligned.',
-  keywords: 'neurology calculators, NIHSS calculator, stroke protocol, stroke calculator, neurology resources, clinical decision support',
+  title: 'NeuroWiki | Neurology Calculators, Pathways & Trials',
+  description: 'Free stroke calculators, clinical pathways, and landmark trial summaries for neurologists and residents. NIHSS, EVT eligibility, long-window IVT, ICH Score, Status Epilepticus, and more.',
+  keywords: 'neurology calculators, NIHSS calculator, stroke pathway, EVT eligibility, IVT calculator, stroke calculator, neurology trials, neurology resident tools, clinical decision support',
   image: 'https://neurowiki.ai/og-image.png',
 };
 
@@ -19,7 +19,7 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
 
   '/guide': {
     title: 'Neurology Toolkit — Clinical Guides, Protocols & Calculators | NeuroWiki',
-    description: 'Evidence-based neurology protocols and clinical guides for residents, attendings, and medical students. Stroke code, EVT, status epilepticus, ASPECTS, NIHSS, and more. AHA/ASA 2026 aligned.',
+    description: 'Evidence-based neurology protocols and clinical guides for residents, attendings, and medical students. Stroke code, EVT, status epilepticus, ASPECTS, NIHSS, and more.',
     keywords: 'neurology toolkit, neurology protocols for residents, neurology resident guide, clinical neurology reference, stroke guide, epilepsy protocol, neurology calculators',
     image: 'https://neurowiki.ai/og-image.png',
   },
