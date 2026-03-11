@@ -578,18 +578,27 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
               <div>
                 <h3 className="text-sm font-semibold text-slate-700 mb-2">Last Known Well (LKW) Time</h3>
                 {!setupComplete ? (
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-2">
+                    <div className="grid grid-cols-2 gap-2">
+                      <CompactSelectionCard
+                        title="Set LKW Time"
+                        description="Input exact time"
+                        selected={false}
+                        onClick={() => { setLkwPickerMode('specific'); setLkwPickerOpen(true); }}
+                      />
+                      <CompactSelectionCard
+                        title="Unknown / Unwitnessed"
+                        description="Onset time unclear, not sleep-related"
+                        selected={false}
+                        onClick={() => { setLkwUnknown(true); setLkwTimestamp(null); }}
+                        variant="warning"
+                      />
+                    </div>
                     <CompactSelectionCard
-                      title="Set LKW Time"
-                      description="Input exact time"
+                      title="🌙 Sleep Onset (Wake-up Stroke)"
+                      description="Enter bedtime + wake-up time — auto-routes to WAKE-UP / THAWS criteria"
                       selected={false}
-                      onClick={() => setLkwPickerOpen(true)}
-                    />
-                    <CompactSelectionCard
-                      title="Unknown / Wake-up Stroke"
-                      description="Onset during sleep or unwitnessed"
-                      selected={false}
-                      onClick={() => { setLkwUnknown(true); setLkwTimestamp(null); }}
+                      onClick={() => { setLkwPickerMode('sleep'); setLkwPickerOpen(true); }}
                       variant="warning"
                     />
                   </div>
@@ -597,15 +606,18 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                   <div className={`flex items-center justify-between px-4 py-3 rounded-xl border-2 ${
                     lkwUnknown ? 'bg-amber-50 border-amber-400' : 'bg-neuro-50 border-neuro-500'
                   }`}>
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2.5 min-w-0">
                       <Clock size={16} className={lkwUnknown ? 'text-amber-600' : 'text-neuro-600'} />
-                      <span className={`text-sm font-bold ${lkwUnknown ? 'text-amber-800' : 'text-neuro-800'}`}>
+                      <span className={`text-sm font-bold truncate ${lkwUnknown ? 'text-amber-800' : 'text-neuro-800'}`}>
                         {elapsedBadge?.label}
                       </span>
                     </div>
                     <button
-                      onClick={() => { setLkwUnknown(false); setLkwTimestamp(null); setElapsedHours(null); }}
-                      className="text-xs text-slate-500 hover:text-slate-700 underline transition-colors"
+                      onClick={() => {
+                        setLkwUnknown(false); setLkwTimestamp(null); setElapsedHours(null);
+                        setWakeTimestamp(null); setMinutesSinceWaking(null); setARecognition(null);
+                      }}
+                      className="text-xs text-slate-500 hover:text-slate-700 underline transition-colors flex-shrink-0 ml-2"
                     >
                       Change
                     </button>
@@ -708,10 +720,31 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                   <div>
                     <h3 className="text-sm font-semibold text-slate-700 mb-1">Within 4.5h of symptom recognition?</h3>
                     <p className="text-xs text-slate-500 mb-2">Time of awakening with symptoms, or time witness first noticed deficit</p>
-                    <div className="grid grid-cols-2 gap-2">
-                      <CompactSelectionCard title="Yes" description="Within 4.5h of recognition" selected={aRecognition === true} onClick={() => setARecognition(true)} />
-                      <CompactSelectionCard title="No" description="More than 4.5h since recognition" selected={aRecognition === false} onClick={() => setARecognition(false)} variant="danger" />
-                    </div>
+
+                    {/* Auto-computed badge when sleep onset mode was used */}
+                    {wakeTimestamp && minutesSinceWaking !== null ? (
+                      <div className={`flex items-start gap-3 px-4 py-3 rounded-xl border-2 mb-2 ${
+                        minutesSinceWaking <= 270
+                          ? 'bg-emerald-50 border-emerald-400'
+                          : 'bg-red-50 border-red-400'
+                      }`}>
+                        <span className="text-lg mt-0.5">{minutesSinceWaking <= 270 ? '✅' : '❌'}</span>
+                        <div className="min-w-0">
+                          <p className={`text-sm font-bold ${minutesSinceWaking <= 270 ? 'text-emerald-800' : 'text-red-800'}`}>
+                            {minutesSinceWaking <= 270
+                              ? `Within 4.5h — ${Math.round(minutesSinceWaking)} min since waking`
+                              : `Outside window — ${Math.round(minutesSinceWaking)} min since waking`}
+                          </p>
+                          <p className="text-xs text-slate-500 mt-0.5">Auto-calculated from entered wake-up time</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 gap-2">
+                        <CompactSelectionCard title="Yes" description="Within 4.5h of recognition" selected={aRecognition === true} onClick={() => setARecognition(true)} />
+                        <CompactSelectionCard title="No" description="More than 4.5h since recognition" selected={aRecognition === false} onClick={() => setARecognition(false)} variant="danger" />
+                      </div>
+                    )}
+
                     {aRecognition !== null && (
                       <LearningPearl title="WAKE-UP Trial" content="Thomalla et al., NEJM 2018. Alteplase vs placebo for unknown-onset stroke; required DWI-FLAIR mismatch AND treatment within 4.5h of awakening. mRS 0–1 at 90 days: 53.3% vs 41.8%." variant="indigo" />
                     )}
@@ -1062,8 +1095,16 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
       <LKWTimePicker
         isOpen={lkwPickerOpen}
         onClose={() => setLkwPickerOpen(false)}
-        onConfirm={(date) => { setLkwTimestamp(date); setLkwUnknown(false); setLkwPickerOpen(false); }}
-        onUnknown={() => { setLkwUnknown(true); setLkwTimestamp(null); setLkwPickerOpen(false); }}
+        onConfirm={(date) => { setLkwTimestamp(date); setLkwUnknown(false); setWakeTimestamp(null); setMinutesSinceWaking(null); setLkwPickerOpen(false); }}
+        onUnknown={() => { setLkwUnknown(true); setLkwTimestamp(null); setWakeTimestamp(null); setMinutesSinceWaking(null); setLkwPickerOpen(false); }}
+        showSleepOnset={true}
+        defaultMode={lkwPickerMode}
+        onSleepOnset={(bedtime, wakeTime) => {
+          setLkwTimestamp(bedtime);
+          setLkwUnknown(true);
+          setWakeTimestamp(wakeTime);
+          setLkwPickerOpen(false);
+        }}
       />
 
       {/* Toast notifications */}
