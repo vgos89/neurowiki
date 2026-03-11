@@ -430,7 +430,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   const copySummary = () => {
     if (!result) return;
     const lines = [
-      'Extended Window IVT Assessment',
+      'Late Window IVT Assessment',
       `Status: ${result.status.toUpperCase()}`,
       `Reason: ${result.reason}`,
       '',
@@ -484,7 +484,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                 <div className="p-1.5 bg-neuro-100 text-neuro-700 rounded-md shrink-0">
                   <Zap size={16} />
                 </div>
-                <span className="text-sm font-black text-slate-900 truncate">Extended Window IVT</span>
+                <span className="text-sm font-black text-slate-900 truncate">Late Window IVT</span>
               </div>
             </div>
             {/* Step dots */}

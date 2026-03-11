@@ -107,9 +107,9 @@ export const contentStatus: ContentStatus = {
     published: true,
     comingSoonMessage: 'EVT pathway',
   },
-  '/calculators/ivt-extended-pathway': {
+  '/calculators/late-window-ivt': {
     published: true,
-    comingSoonMessage: 'Extended Window IVT Pathway',
+    comingSoonMessage: 'Late Window IVT',
   },
   '/calculators/se-pathway': {
     published: true,

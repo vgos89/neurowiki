@@ -32,7 +32,7 @@ export const ExtendedIVTPathwayModal: React.FC<ExtendedIVTPathwayModalProps> = (
               <Brain className="w-4 h-4 text-white" />
             </div>
             <span className="text-sm font-bold text-slate-900 dark:text-white truncate">
-              Extended Window IVT Pathway
+              Late Window IVT
             </span>
           </div>
           <button
