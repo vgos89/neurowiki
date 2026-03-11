@@ -472,9 +472,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
               {/* Footer (shown when expanded) */}
               {isNavExpanded && (
-                <div className="px-4 py-4 border-t border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs mx-2">
+                <footer className="px-4 py-4 border-t border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs mx-2">
                   <p className="opacity-60">© 2026 NeuroWiki AI</p>
-                </div>
+                </footer>
               )}
 
               {/* Collapse Button at Bottom */}

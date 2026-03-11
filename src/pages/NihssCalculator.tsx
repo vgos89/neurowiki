@@ -91,6 +91,7 @@ const NihssCalculator: React.FC = () => {
 
   return (
     <>
+      <h1 className="sr-only">NIHSS Calculator — NIH Stroke Scale Online</h1>
       {/* Scoring Tally Bar Header - Sticky below navigation */}
       <div 
         ref={nihssHeaderRef} 

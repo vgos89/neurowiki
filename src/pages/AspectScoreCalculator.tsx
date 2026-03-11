@@ -141,6 +141,7 @@ const AspectScoreCalculator: React.FC = () => {
 
   return (
     <>
+      <h1 className="sr-only">ASPECTS Score Calculator — Alberta Stroke Program Early CT Score</h1>
       {/* ── Sticky Header ─────────────────────────────────────────────────── */}
       <header
         className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-700"

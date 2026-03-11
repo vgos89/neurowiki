@@ -89,6 +89,7 @@ const IchScoreCalculator: React.FC = () => {
 
   return (
     <>
+      <h1 className="sr-only">ICH Score Calculator — Intracerebral Hemorrhage Mortality</h1>
       {/* Sticky header - mobile-friendly */}
       <header
         className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-700"

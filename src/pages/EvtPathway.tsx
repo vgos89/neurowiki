@@ -763,6 +763,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
 
   return (
     <div className={`max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 ${isInModal ? 'pb-8' : 'pb-32'} md:pb-20`}>
+      <h1 className="sr-only">EVT Eligibility Pathway — Mechanical Thrombectomy Decision Support</h1>
       {/* Sticky compact header */}
       {!hideHeader && (
         <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-100 shadow-sm -mx-4 px-4 md:-mx-6 md:px-6">

@@ -47,7 +47,7 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
 
   '/calculators/nihss': {
     title: 'NIHSS Calculator — NIH Stroke Scale Online | NeuroWiki',
-    description: 'Free NIHSS calculator for stroke severity assessment. Calculate NIH Stroke Scale score with step-by-step guidance, LVO probability estimate, and clinical interpretation. Used by neurology residents and attendings.',
+    description: 'Free NIHSS calculator for stroke severity assessment. Step-by-step NIH Stroke Scale scoring with LVO probability estimate and clinical interpretation.',
     keywords: 'NIHSS calculator, NIH stroke scale, stroke severity calculator, stroke assessment tool, LVO probability, neurology calculator online',
     image: 'https://neurowiki.ai/og-image.png',
   },
