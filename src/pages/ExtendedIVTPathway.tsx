@@ -80,9 +80,17 @@ function getPathAvail(
   elapsedHours: number | null,
   imagingModality: ImagingModality,
   setupComplete: boolean,
+  hoursSinceMidpoint: number | null,
 ): PathAvail {
   if (!setupComplete || imagingModality === null) return null;
-  if (lkwUnknown) return imagingModality === 'mri' ? 'A' : 'none-mri';
+  if (lkwUnknown) {
+    if (imagingModality === 'mri') return 'A';
+    // Sleep onset + CTP: EXTEND trial uses ≤9h from midpoint of sleep
+    if (imagingModality === 'ctp' && hoursSinceMidpoint !== null) {
+      return hoursSinceMidpoint <= 9 ? 'B' : 'outside';
+    }
+    return 'none-mri'; // general unknown onset + CTP (no times entered)
+  }
   if (elapsedHours === null) return null;
   if (elapsedHours < 4.5) return 'standard';
   if (elapsedHours <= 9)  return 'B';
@@ -189,6 +197,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   /* ── Sleep onset state (wake-up stroke) ── */
   const [wakeTimestamp, setWakeTimestamp] = useState<Date | null>(null);
   const [minutesSinceWaking, setMinutesSinceWaking] = useState<number | null>(null);
+  const [hoursSinceMidpoint, setHoursSinceMidpoint] = useState<number | null>(null);
 
   /* ── Path A state ── */
   const [aRecognition, setARecognition] = useState<YesNo>(null);
@@ -227,6 +236,16 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     return () => clearInterval(id);
   }, [wakeTimestamp]);
 
+  /* ── Live timer: hours since sleep midpoint (EXTEND criterion for CTP path) ── */
+  useEffect(() => {
+    if (!wakeTimestamp || !lkwTimestamp) { setHoursSinceMidpoint(null); return; }
+    const midpoint = new Date((lkwTimestamp.getTime() + wakeTimestamp.getTime()) / 2);
+    const calc = () => (Date.now() - midpoint.getTime()) / 3_600_000;
+    setHoursSinceMidpoint(calc());
+    const id = setInterval(() => setHoursSinceMidpoint(calc()), 30_000);
+    return () => clearInterval(id);
+  }, [wakeTimestamp, lkwTimestamp]);
+
   /* ── Auto-set aRecognition from wake-up time ── */
   useEffect(() => {
     if (minutesSinceWaking === null) return;
@@ -237,8 +256,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   const setupComplete = lkwUnknown || lkwTimestamp !== null;
 
   const pathAvail: PathAvail = useMemo(
-    () => getPathAvail(lkwUnknown, elapsedHours, imagingModality, setupComplete),
-    [lkwUnknown, elapsedHours, imagingModality, setupComplete],
+    () => getPathAvail(lkwUnknown, elapsedHours, imagingModality, setupComplete, hoursSinceMidpoint),
+    [lkwUnknown, elapsedHours, imagingModality, setupComplete, hoursSinceMidpoint],
   );
 
   const isSetupComplete = setupComplete && imagingModality !== null;
@@ -428,7 +447,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   /* ── Handlers ── */
   const handleReset = () => {
     setLkwTimestamp(null); setLkwUnknown(false); setElapsedHours(null); setImagingModality(null);
-    setWakeTimestamp(null); setMinutesSinceWaking(null);
+    setWakeTimestamp(null); setMinutesSinceWaking(null); setHoursSinceMidpoint(null);
     setARecognition(null); setADwiSmall(null); setAFlair(null);
     setBCtpCore(null); setBCtpMismatch(null); setBMriPwi(null); setBMriMismatch(null); setBEvt(null);
     setCPenumbra(null); setCLvo(null); setCLvoEvt(null); setCLvoBarrier(null); setCNonLvoExpertise(null);
@@ -457,7 +476,9 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
       '',
       'Setup:',
       `  LKW: ${
-        wakeTimestamp && lkwTimestamp
+        wakeTimestamp && lkwTimestamp && imagingModality === 'ctp'
+          ? `Bedtime ${lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} · Woke ${wakeTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} (${hoursSinceMidpoint?.toFixed(1)}h since sleep midpoint — EXTEND)`
+          : wakeTimestamp && lkwTimestamp
           ? `Bedtime ${lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} · Woke ${wakeTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} (${Math.round(minutesSinceWaking ?? 0)} min since waking)`
           : lkwUnknown ? 'Unknown onset / Wake-up'
           : elapsedHours !== null ? `${formatElapsed(elapsedHours)} elapsed` : ''
@@ -489,6 +510,17 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     if (lkwUnknown && wakeTimestamp && lkwTimestamp) {
       const bedStr  = lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
       const wakeStr = wakeTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      // CTP path: show hours since sleep midpoint (EXTEND criterion)
+      if (imagingModality === 'ctp' && hoursSinceMidpoint !== null) {
+        const hrs = hoursSinceMidpoint.toFixed(1);
+        const ok  = hoursSinceMidpoint <= 9;
+        return {
+          label: `Bedtime ${bedStr} · Woke ${wakeStr} · ${hrs}h since sleep midpoint`,
+          cls: ok ? 'bg-amber-100 text-amber-800 border-amber-200'
+                  : 'bg-red-100 text-red-800 border-red-200',
+        };
+      }
+      // MRI path (or before imaging selected): show minutes since waking (WAKE-UP criterion)
       const mins = minutesSinceWaking !== null ? Math.round(minutesSinceWaking) : '—';
       return {
         label: `Bedtime ${bedStr} · Woke ${wakeStr} · ${mins} min since waking`,
@@ -615,7 +647,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                     <button
                       onClick={() => {
                         setLkwUnknown(false); setLkwTimestamp(null); setElapsedHours(null);
-                        setWakeTimestamp(null); setMinutesSinceWaking(null); setARecognition(null);
+                        setWakeTimestamp(null); setMinutesSinceWaking(null); setHoursSinceMidpoint(null); setARecognition(null);
                       }}
                       className="text-xs text-slate-500 hover:text-slate-700 underline transition-colors flex-shrink-0 ml-2"
                     >
@@ -786,6 +818,27 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                     </span>
                     <span className="text-xs text-slate-400">COR 2a · LOE B-R</span>
                   </div>
+
+                  {/* Auto-computed time badge — sleep onset + CTP (EXTEND criterion) */}
+                  {lkwUnknown && wakeTimestamp && hoursSinceMidpoint !== null && imagingModality === 'ctp' && (
+                    <div className={`flex items-start gap-3 px-4 py-3 rounded-xl border-2 ${
+                      hoursSinceMidpoint <= 9
+                        ? 'bg-emerald-50 border-emerald-400'
+                        : 'bg-red-50 border-red-400'
+                    }`}>
+                      <span className="text-lg mt-0.5">{hoursSinceMidpoint <= 9 ? '✅' : '❌'}</span>
+                      <div className="min-w-0">
+                        <p className={`text-sm font-bold ${hoursSinceMidpoint <= 9 ? 'text-emerald-800' : 'text-red-800'}`}>
+                          {hoursSinceMidpoint <= 9
+                            ? `Within 9h of sleep midpoint — ${hoursSinceMidpoint.toFixed(1)}h elapsed`
+                            : `Outside EXTEND window — ${hoursSinceMidpoint.toFixed(1)}h since sleep midpoint`}
+                        </p>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          Auto-calculated · EXTEND criterion: ≤9h from midpoint of sleep
+                        </p>
+                      </div>
+                    </div>
+                  )}
 
                   {/* CTP branch */}
                   {imagingModality === 'ctp' && (
