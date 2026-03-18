@@ -182,7 +182,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               status: "Eligible", 
               criteriaName: "Basilar EVT - Class I",
               reason: `Favorable Imaging (pc-ASPECTS ${pcScore}, NIHSS ${nihssNum})`, 
-              details: "Class I recommendation: EVT is recommended for basilar artery occlusion within 24 hours when baseline mRS is 0–1, pc-ASPECTS is ≥6, and NIHSS is ≥10. This posterior-circulation pathway does not require perfusion mismatch imaging; pc-ASPECTS provides the imaging selection anchor. (2026 AHA/ASA Guidelines; ATTENTION/BAOCHE)", 
+              details: "In patients with acute ischemic stroke, basilar artery occlusion, baseline mRS 0–1, NIHSS ≥10, and pc-ASPECTS ≥6 indicating mild ischemic damage, EVT within 24 hours is strongly recommended to improve functional outcomes and reduce mortality. This is a Class I recommendation based on ATTENTION and BAOCHE.", 
               variant: 'success' 
           };
       }
@@ -194,7 +194,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               status: "Clinical Judgment",
               criteriaName: "Basilar EVT - Class IIb",
               reason: `Moderate Severity (pc-ASPECTS ${pcScore}, NIHSS 6–9)`,
-              details: "Class IIb recommendation: EVT may be considered for basilar artery occlusion within 24 hours when baseline mRS is 0–1, pc-ASPECTS is ≥6, and NIHSS is 6–9. Benefit is less certain than in higher-severity basilar stroke, so specialist judgment is required. (2026 AHA/ASA Guidelines)",
+              details: "In patients with acute ischemic stroke, basilar artery occlusion, baseline mRS 0–1, NIHSS 6–9, and pc-ASPECTS ≥6, the effectiveness of EVT within 24 hours is not well established. Treatment should be individualized using clinical judgment. This is a Class IIb recommendation informed by expanded enrollment criteria in BAOCHE.",
               variant: 'warning'
           };
       }
@@ -237,11 +237,11 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
                  status: "EVT Reasonable",
                  criteriaName: "Early Window mRS 2 - Class IIa",
                  reason: "Prestroke mRS 2, ASPECTS ≥ 6",
-                 details: "Class IIa: In patients with NIHSS ≥6 and ASPECTS ≥6 who have prestroke mRS 2, EVT is reasonable to improve functional outcomes and reduce accumulated disability. (AHA/ASA 2026, Section 4.7.2)",
+                 details: "In patients with acute ischemic stroke from anterior circulation proximal LVO presenting within 6 hours, with NIHSS ≥6, ASPECTS ≥6, and mild prestroke disability (mRS 2), EVT is reasonable to improve functional outcomes and reduce accumulated disability. This is a Class IIa recommendation based on pooled patient-level analysis from HERMES.",
                  variant: 'warning'
              };
          }
-         return { eligible: false, status: "Consult", reason: "Prestroke mRS 2, ASPECTS < 6", details: "Evidence for EVT in mRS 2 is limited to ASPECTS ≥6. Individualized decision with Vascular Neurology/Neurointerventional.", exclusionReason: "mRS 2 with large core", variant: 'danger' };
+         return { eligible: false, status: "Consult", reason: "Prestroke mRS 2, ASPECTS < 6", details: "Evidence for EVT in mRS 2 is limited to ASPECTS ≥6 in the 0–6 hour window. The early ASPECTS 0–2 large-core approval pathway is restricted to patients with prestroke mRS 0–1. Individualized decision with Vascular Neurology/Neurointerventional.", exclusionReason: "mRS 2 with large core", variant: 'danger' };
      }
 
      // COR 2b: Prestroke mRS 3–4 + ASPECTS ≥6 (0–6 h) — EVT may be considered (AHA 2026 infographic)
@@ -252,11 +252,11 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
                  status: "Clinical Judgment",
                  criteriaName: "Early Window mRS 3-4 - Class IIb",
                  reason: "Prestroke mRS 3–4, ASPECTS ≥ 6",
-                 details: "Class IIb: In patients with anterior LVO within 6h, NIHSS ≥6, and ASPECTS ≥6 who have prestroke mRS 3–4, EVT may be considered. Benefits may outweigh risks in selected patients; individualized decision with Vascular Neurology/Neurointerventional. (AHA/ASA 2026 infographic)",
+                 details: "In patients with acute ischemic stroke from anterior circulation proximal LVO presenting within 6 hours, with NIHSS ≥6, ASPECTS ≥6, and moderate prestroke disability (mRS 3–4), EVT might be reasonable to improve functional outcomes and reduce accumulated disability. This is a Class IIb recommendation based on retrospective and non-randomized prospective cohorts.",
                  variant: 'warning'
              };
          }
-         return { eligible: false, status: "Consult", reason: "Prestroke mRS 3–4", details: "Evidence for EVT in mRS 3–4 is limited to 0–6h with ASPECTS ≥6 and NIHSS ≥6. Individualized decision with Vascular Neurology/Neurointerventional.", exclusionReason: "mRS 3–4 criteria not met", variant: 'danger' };
+         return { eligible: false, status: "Consult", reason: "Prestroke mRS 3–4", details: "Evidence for EVT in mRS 3–4 is limited to 0–6h with ASPECTS ≥6 and NIHSS ≥6. The early ASPECTS 0–2 large-core approval pathway is restricted to patients with prestroke mRS 0–1. Individualized decision with Vascular Neurology/Neurointerventional.", exclusionReason: "mRS 3–4 criteria not met", variant: 'danger' };
      }
 
      // COR 1: mRS 0–1, NIHSS ≥6, ASPECTS 3–10 — EVT recommended (2026 AHA/ASA 4.7.2)
@@ -285,7 +285,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
              status: "Clinical Judgment",
              criteriaName: "Very Large Core (ASPECTS 0–2) - Severe Hypodensity Warning",
              reason: "Severe CT hypodensity >=26 mL",
-             details: "Exploratory SELECT2 data suggest patients with severe CT hypodensity >=26 mL may derive no functional benefit from EVT and may face higher risks of cerebral edema and decompressive hemicraniectomy. Do not use the automatic ASPECTS 0–2 approval branch; weigh risks and benefits case by case.",
+             details: "Exploratory analyses indicate that patients with severe CT hypodensity volume ≥26 mL derive no functional benefit from EVT and face increased risks of cerebral edema and decompressive hemicraniectomy. Clinicians should carefully weigh these elevated risks before proceeding. This is a safety caveat based on SELECT2 exploratory analysis.",
              variant: 'warning'
          };
      }
@@ -295,7 +295,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
              status: "EVT Reasonable",
              criteriaName: "Very Large Core (ASPECTS 0–2) - Class IIa",
              reason: "ASPECTS 0–2, age <80, no significant mass effect",
-             details: "Class IIa: In selected patients with anterior LVO within 6h, age <80 years, NIHSS ≥6, mRS 0–1, ASPECTS 0–2, and without significant mass effect, EVT is reasonable. (AHA/ASA 2026, Section 4.7.2)",
+             details: "In highly selected patients under 80 years old with anterior circulation proximal LVO, prestroke mRS 0–1, ASPECTS 0–2, and no significant mass effect, EVT is reasonable to improve functional outcomes and reduce mortality. This is a Class IIa recommendation based on SELECT2, ANGEL-ASPECT, and LASTE, with limited applicability in older patients or those with major comorbidity.",
              variant: 'warning'
          };
      }
@@ -348,7 +348,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               status: "Eligible",
               criteriaName: "Late Window ASPECTS ≥6 - Class I",
               reason: `ASPECTS ${aspectsLate}, NIHSS ≥6, mRS 0–1`,
-              details: "Class I (LOE A): In patients with anterior circulation LVO presenting 6–24h from onset with NIHSS ≥6, prestroke mRS 0–1, and ASPECTS ≥6, EVT is recommended to improve functional outcomes and reduce mortality. (AHA/ASA 2026, Section 4.7.2, Rec #2)",
+              details: "In patients with acute ischemic stroke from anterior circulation proximal LVO of the ICA or M1 presenting between 6 and 24 hours, with NIHSS ≥6, prestroke mRS 0–1, and ASPECTS ≥6, EVT is strongly recommended to improve functional outcomes and reduce mortality. This is a Class I recommendation supported by DAWN and DEFUSE-3.",
               variant: 'success'
           };
       }
@@ -366,7 +366,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               status: "Clinical Judgment",
               criteriaName: "Late Window ASPECTS 3–5 - Severe Hypodensity Warning",
               reason: "Severe CT hypodensity >=26 mL",
-              details: "Exploratory SELECT2 data suggest patients with severe CT hypodensity >=26 mL may not gain functional benefit from EVT and may face higher risks of cerebral edema and decompressive hemicraniectomy. Do not use the automatic ASPECTS 3–5 approval branch; weigh risks and benefits case by case.",
+              details: "Exploratory analyses indicate that patients with severe CT hypodensity volume ≥26 mL derive no functional benefit from EVT and face increased risks of cerebral edema and decompressive hemicraniectomy. Clinicians should carefully weigh these elevated risks before proceeding. This is a safety caveat based on SELECT2 exploratory analysis.",
               variant: 'warning'
           };
       }
@@ -376,7 +376,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               status: "Eligible",
               criteriaName: "Late Window ASPECTS 3–5 - Class I",
               reason: "ASPECTS 3–5, age <80, NIHSS ≥6, no significant mass effect",
-              details: "Class I (LOE A): In selected patients with anterior LVO 6–24h from onset, age <80 years, NIHSS ≥6, mRS 0–1, ASPECTS 3–5, and without significant mass effect, EVT is recommended. (AHA/ASA 2026, Section 4.7.2, Rec #3)",
+              details: "In highly selected patients under 80 years old with anterior circulation proximal LVO, prestroke mRS 0–1, ASPECTS 3–5, and no significant mass effect, EVT is recommended to improve functional outcomes and reduce mortality. This is a Class I recommendation based on SELECT2, ANGEL-ASPECT, and LASTE, with limited applicability in older patients or those with major comorbidity.",
               variant: 'success'
           };
       }
@@ -479,7 +479,7 @@ const calculateMevoProtocol = (inputs: Inputs): Result => {
             status: "Avoid EVT",
             criteriaName: "Class III: No Benefit",
             reason: "Stent-retriever EVT is not beneficial for this MeVO pattern",
-            details: "COR 3: No Benefit (LOE A) — In nondominant or codominant proximal M2, distal MCA, ACA, and PCA occlusions, EVT with stent retrievers is not recommended to improve functional outcomes. Other approaches remain investigational, so routine EVT should be avoided outside exceptional specialist-selected cases.",
+            details: "In patients with acute ischemic stroke from proximal nondominant or codominant M2, distal MCA, ACA, or PCA occlusions, endovascular thrombectomy using stent retrievers is of no benefit for improving functional outcomes and is not recommended. This is a Class III (No Benefit) recommendation based on ESCAPE-MeVO and DISTAL, which showed no benefit and possible harm with stent retrievers as a first-pass strategy in these vessels.",
             exclusionReason: "COR 3: No Benefit — stent retriever EVT for nondominant/codominant or distal vessel location.",
             variant: 'danger'
         };
@@ -1125,7 +1125,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                     />
                                     <LearningPearl
                                         title="AHA/ASA 2026 Early Window (Section 4.7.2)"
-                                        content="Class I: EVT recommended for ASPECTS 3–10 with NIHSS ≥6 and mRS 0–1. Class IIa: EVT reasonable for prestroke mRS 2 with ASPECTS ≥6, and for selected patients with ASPECTS 0–2 who are age <80 years and have no significant mass effect. Severe CT hypodensity >=26 mL should trigger caution rather than automatic approval."
+                                        content="Class I: EVT recommended for ASPECTS 3–10 with NIHSS ≥6 and mRS 0–1. Class IIa: EVT reasonable for prestroke mRS 2 only when ASPECTS is ≥6, and for selected patients with ASPECTS 0–2 only when prestroke mRS is 0–1, age is <80 years, and there is no significant mass effect. Severe CT hypodensity >=26 mL should trigger caution rather than automatic approval."
                                     />
                                 </div>
                             </div>

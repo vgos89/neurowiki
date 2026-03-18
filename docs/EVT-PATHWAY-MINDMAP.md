@@ -201,7 +201,10 @@ flowchart TD
   - it uses `pc-ASPECTS >=6` as the imaging gate
   - it then stratifies by NIHSS (`>=10`, `6–9`, `<6`)
   - it does not use perfusion mismatch or late-window penumbra gating
-- Early anterior LVO keeps the mRS-based early-window allowances (`mRS 2` and selected `mRS 3–4`) but now adds a severe-hypodensity warning branch for `ASPECTS 0–2`.
+- Early anterior LVO has two separate early-window concepts:
+  - prestroke `mRS 2` and selected `mRS 3–4` are only allowed on the `ASPECTS >=6` pathway
+  - the `ASPECTS 0–2` large-core branch is restricted to prestroke `mRS 0–1`
+  - severe CT hypodensity `>=26 mL` adds a warning branch within that `ASPECTS 0–2` large-core pathway
 - Late anterior LVO now blocks `mRS 2` and `mRS 3–4` outright:
   - `ASPECTS >=6` with `NIHSS >=6` and `mRS 0–1` remains an immediate Class I approval
   - `ASPECTS 3–5` requires `age <80`, no significant mass effect, and no severe CT hypodensity `>=26 mL`
