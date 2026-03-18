@@ -491,6 +491,1915 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     listCategory: 'thrombolysis',
     listDescription: 'IA tPA for central retinal artery occlusion — negative trial; stopped early for futility.',
   },
+  'mr-clean-trial': {
+    id: 'mr-clean-trial',
+    title: 'MR CLEAN Trial',
+    subtitle: 'Intra-arterial Treatment for Anterior Circulation LVO',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '500',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: 'Significant',
+        label: 'Adjusted OR 1.67'
+      },
+      effectSize: {
+        value: '+13.5%',
+        label: 'mRS 0-2 Benefit'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Pragmatic phase 3 randomized trial',
+        'Open-label with blinded endpoint assessment',
+        'Intra-arterial therapy plus usual care vs usual care alone',
+        'Treatment possible within 6 hours of onset'
+      ],
+      timeline: 'Enrolled at 16 Dutch centers'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 32.6,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Intra-arterial Treatment + Usual Care'
+      },
+      control: {
+        percentage: 19.1,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Usual Care Alone'
+      }
+    },
+    intervention: {
+      treatment: 'Intra-arterial treatment (predominantly stent-retriever thrombectomy) plus usual care, including alteplase when eligible',
+      control: 'Usual care alone, including alteplase when eligible'
+    },
+    clinicalContext: 'MR CLEAN was the first modern positive thrombectomy trial and established that endovascular treatment improves disability outcomes for anterior circulation large-vessel occlusion when patients are selected with vessel imaging and treated rapidly.',
+    pearls: [
+      'Landmark positive EVT trial that reopened the field after earlier neutral endovascular studies',
+      'Most patients also received IV alteplase before randomization (89%)',
+      'Functional independence improved from 19.1% to 32.6%',
+      'Adjusted common odds ratio for better disability outcome was 1.67',
+      'No significant increase in mortality or symptomatic intracerebral hemorrhage was seen'
+    ],
+    conclusion: 'In patients with proximal anterior circulation occlusion treatable within 6 hours, intra-arterial treatment improved 90-day functional outcomes and was safe.',
+    source: 'Berkhemer et al. (NEJM 2015)',
+    specialDesign: 'landmark-evt',
+    keyMessage: 'MR CLEAN established modern EVT as effective therapy for anterior circulation LVO.',
+    listCategory: 'thrombectomy',
+    listDescription: 'First modern positive thrombectomy trial for anterior circulation large-vessel occlusion.',
+  },
+  'escape-trial': {
+    id: 'escape-trial',
+    title: 'ESCAPE Trial',
+    subtitle: 'Rapid EVT for Small-Core LVO With Good Collaterals',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '316',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '<0.001',
+        label: 'Statistically Sig.'
+      },
+      effectSize: {
+        value: 'OR 2.6',
+        label: 'Better Disability Outcome'
+      }
+    },
+    trialDesign: {
+      type: [
+        'International randomized trial',
+        'Standard care vs standard care plus EVT',
+        'CT/CTA selection for small core and moderate-good collaterals',
+        'Treatment allowed up to 12 hours from onset'
+      ],
+      timeline: 'Stopped early for efficacy'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 53.0,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'EVT + Standard Care'
+      },
+      control: {
+        percentage: 29.3,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Standard Care Alone'
+      }
+    },
+    intervention: {
+      treatment: 'Rapid endovascular thrombectomy plus standard care',
+      control: 'Standard care alone, including alteplase when eligible'
+    },
+    clinicalContext: 'ESCAPE emphasized workflow discipline, collateral selection, and rapid reperfusion. It showed that thrombectomy works best when imaging confirms a small core and treatment delays are aggressively minimized.',
+    pearls: [
+      'Marked absolute gain in independence: 53.0% vs 29.3%',
+      'Mortality was reduced: 10.4% vs 19.0%',
+      'Median CT-to-first reperfusion time in the EVT arm was only 84 minutes',
+      'Used collateral imaging to exclude patients with poor tissue reserve',
+      'One of the pivotal 2015 trials that cemented EVT as standard of care'
+    ],
+    conclusion: 'Among patients with proximal anterior circulation occlusion, small infarct core, and favorable collaterals, rapid EVT improved outcomes and reduced mortality.',
+    source: 'Goyal et al. (NEJM 2015)',
+    clinicalTrialsId: 'NCT01778335',
+    listCategory: 'thrombectomy',
+    listDescription: 'Fast thrombectomy trial using collateral-based CT selection and strict workflow targets.',
+  },
+  'revascat-trial': {
+    id: 'revascat-trial',
+    title: 'REVASCAT Trial',
+    subtitle: 'Solitaire Thrombectomy Within 8 Hours',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '206',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: 'Significant',
+        label: 'Adjusted OR 1.7'
+      },
+      effectSize: {
+        value: '+15.5%',
+        label: 'mRS 0-2 Benefit'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Randomized trial embedded in a population-based registry',
+        'Thrombectomy plus medical therapy vs medical therapy alone',
+        'Anterior circulation LVO without large infarct',
+        'Treatment window up to 8 hours'
+      ],
+      timeline: 'Conducted at 4 centers in Catalonia, Spain'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 43.7,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Solitaire Thrombectomy + Medical Therapy'
+      },
+      control: {
+        percentage: 28.2,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Medical Therapy Alone'
+      }
+    },
+    intervention: {
+      treatment: 'Solitaire stent-retriever thrombectomy plus medical therapy',
+      control: 'Medical therapy alone, including alteplase when eligible'
+    },
+    clinicalContext: 'REVASCAT confirmed that stent-retriever thrombectomy improves disability outcomes when used in carefully selected anterior circulation LVO patients, including those in whom alteplase failed or was contraindicated.',
+    pearls: [
+      'Functional independence improved to 43.7% vs 28.2%',
+      'Ordinal disability outcome also favored thrombectomy (adjusted OR 1.7)',
+      'Symptomatic intracranial hemorrhage was identical in both groups at 1.9%',
+      'Trial helped extend confidence in EVT use out to 8 hours in selected patients'
+    ],
+    conclusion: 'Among anterior circulation LVO patients treatable within 8 hours, thrombectomy reduced disability and increased independence without excess hemorrhage.',
+    source: 'Jovin et al. (NEJM 2015)',
+    clinicalTrialsId: 'NCT01692379',
+    listCategory: 'thrombectomy',
+    listDescription: 'Spanish registry-embedded RCT confirming Solitaire thrombectomy benefit within 8 hours.',
+  },
+  'extend-ia-trial': {
+    id: 'extend-ia-trial',
+    title: 'EXTEND-IA Trial',
+    subtitle: 'Perfusion-Selected EVT After Alteplase',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '70',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'Reperfusion',
+        label: '24-Hour Coprimary Endpoint'
+      },
+      pValue: {
+        value: '<0.001',
+        label: 'Reperfusion Benefit'
+      },
+      effectSize: {
+        value: '+31%',
+        label: 'mRS 0-2 Benefit'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Randomized trial after IV alteplase',
+        'Perfusion-imaging selection for salvageable tissue',
+        'Solitaire FR thrombectomy vs alteplase alone',
+        'Occlusion in ICA or MCA with core <70 mL'
+      ],
+      timeline: 'Stopped early for efficacy'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 71,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Thrombectomy + Alteplase'
+      },
+      control: {
+        percentage: 40,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Alteplase Alone'
+      }
+    },
+    intervention: {
+      treatment: 'Solitaire FR thrombectomy after IV alteplase',
+      control: 'IV alteplase alone'
+    },
+    clinicalContext: 'EXTEND-IA showed the power of advanced perfusion imaging to select patients most likely to benefit from thrombectomy, demonstrating dramatic gains in reperfusion and early recovery.',
+    pearls: [
+      'Used CT perfusion to target salvageable tissue and avoid large completed infarcts',
+      'Reperfusion at 24 hours improved from 37% to 100%',
+      'Early neurologic improvement at day 3 was 80% vs 37%',
+      'Functional independence at 90 days rose to 71% vs 40%'
+    ],
+    conclusion: 'In perfusion-selected patients receiving alteplase, early thrombectomy improved reperfusion, early neurologic recovery, and 90-day functional outcome.',
+    source: 'Campbell et al. (NEJM 2015)',
+    clinicalTrialsId: 'NCT01492725',
+    listCategory: 'thrombectomy',
+    listDescription: 'Perfusion-imaging thrombectomy trial showing major reperfusion and functional gains.',
+  },
+  'swift-prime-trial': {
+    id: 'swift-prime-trial',
+    title: 'SWIFT PRIME Trial',
+    subtitle: 'Stent-Retriever EVT Plus IV tPA vs IV tPA Alone',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '196',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '<0.001',
+        label: 'Statistically Sig.'
+      },
+      effectSize: {
+        value: '+25%',
+        label: 'mRS 0-2 Benefit'
+      }
+    },
+    trialDesign: {
+      type: [
+        'International multicenter randomized trial',
+        'IV tPA alone vs IV tPA plus Solitaire thrombectomy',
+        'Imaging-confirmed proximal anterior circulation occlusion',
+        'Large ischemic cores excluded'
+      ],
+      timeline: 'Stopped early for efficacy after 196 patients'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 60,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Stent Retriever + IV tPA'
+      },
+      control: {
+        percentage: 35,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'IV tPA Alone'
+      }
+    },
+    intervention: {
+      treatment: 'Solitaire stent-retriever thrombectomy plus IV tPA',
+      control: 'IV tPA alone'
+    },
+    clinicalContext: 'SWIFT PRIME reinforced that high-quality imaging selection and rapid stent-retriever reperfusion substantially improve disability outcomes in anterior circulation LVO.',
+    pearls: [
+      'Functional independence improved from 35% to 60%',
+      'Substantial reperfusion at end of procedure reached 88%',
+      'Median imaging-to-groin puncture time was 57 minutes',
+      'No significant increase in mortality or symptomatic intracranial hemorrhage'
+    ],
+    conclusion: 'Among patients already receiving IV tPA, rapid stent-retriever thrombectomy within 6 hours improved 90-day functional outcomes.',
+    source: 'Saver et al. (NEJM 2015)',
+    clinicalTrialsId: 'NCT01657461',
+    listCategory: 'thrombectomy',
+    listDescription: 'Pivotal Solitaire thrombectomy trial showing large gains over IV tPA alone.',
+  },
+  'thrace-trial': {
+    id: 'thrace-trial',
+    title: 'THRACE Trial',
+    subtitle: 'Bridging Thrombectomy After Alteplase',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '414',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-2',
+        label: 'at 3 Months'
+      },
+      pValue: {
+        value: '0.028',
+        label: 'Statistically Sig.'
+      },
+      effectSize: {
+        value: 'OR 1.55',
+        label: 'Functional Independence Benefit'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Randomized controlled trial across 26 French centers',
+        'IV alteplase alone vs IV alteplase plus mechanical thrombectomy',
+        'Proximal cerebral artery occlusion',
+        'IVT within 4 hours and thrombectomy within 5 hours'
+      ],
+      timeline: 'Enrolled 2010-2015'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 53,
+        label: 'Functional independence (mRS 0-2) at 3 months',
+        name: 'IV Alteplase + Mechanical Thrombectomy'
+      },
+      control: {
+        percentage: 42,
+        label: 'Functional independence (mRS 0-2) at 3 months',
+        name: 'IV Alteplase Alone'
+      }
+    },
+    intervention: {
+      treatment: 'IV alteplase followed by mechanical thrombectomy',
+      control: 'IV alteplase alone'
+    },
+    clinicalContext: 'THRACE tested whether bridging thrombectomy improves outcomes after standard-dose alteplase in patients with proximal occlusions and helped solidify combined therapy as the dominant early EVT paradigm.',
+    pearls: [
+      'Functional independence increased from 42% to 53%',
+      'Mortality and symptomatic intracranial hemorrhage were similar between groups',
+      'Supports bridging therapy for eligible anterior circulation large-vessel occlusions',
+      'Conducted before the widespread consolidation of modern thrombectomy practice'
+    ],
+    conclusion: 'Mechanical thrombectomy added to standard IV alteplase improved functional independence without excess mortality or symptomatic hemorrhage.',
+    source: 'Bracard et al. (Lancet Neurol 2016)',
+    clinicalTrialsId: 'NCT01062698',
+    listCategory: 'thrombectomy',
+    listDescription: 'French bridging-therapy trial showing benefit from adding thrombectomy to alteplase.',
+  },
+  'direct-mt-trial': {
+    id: 'direct-mt-trial',
+    title: 'DIRECT-MT Trial',
+    subtitle: 'Thrombectomy Alone vs Bridging Alteplase',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '656',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'Noninferiority at 90 Days'
+      },
+      pValue: {
+        value: '0.04',
+        label: 'For Noninferiority'
+      },
+      effectSize: {
+        value: 'OR 1.07',
+        label: 'Met NI Margin'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter Chinese noninferiority trial',
+        'Thrombectomy alone vs alteplase followed by thrombectomy',
+        'Anterior circulation LVO within 4.5 hours',
+        'Primary analysis based on mRS distribution at 90 days'
+      ],
+      timeline: 'Conducted at 41 tertiary centers'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 79.4,
+        label: 'Overall successful reperfusion',
+        name: 'Thrombectomy Alone'
+      },
+      control: {
+        percentage: 84.5,
+        label: 'Overall successful reperfusion',
+        name: 'Alteplase + Thrombectomy'
+      }
+    },
+    intervention: {
+      treatment: 'Direct endovascular thrombectomy alone',
+      control: 'IV alteplase followed by endovascular thrombectomy'
+    },
+    clinicalContext: 'DIRECT-MT was one of the first large randomized trials testing whether IV alteplase can be omitted before thrombectomy in directly presenting eligible patients.',
+    pearls: [
+      'Met its prespecified noninferiority margin for functional outcome',
+      'Pre-thrombectomy reperfusion was lower without alteplase: 2.4% vs 7.0%',
+      'Overall reperfusion was also slightly lower in the direct EVT arm',
+      'Mortality was similar: 17.7% vs 18.8%',
+      'Helped launch the direct-EVT versus bridging-therapy debate'
+    ],
+    conclusion: 'In this Chinese noninferiority trial, thrombectomy alone was noninferior to bridging therapy for 90-day functional outcome, though reperfusion before thrombectomy was less frequent without alteplase.',
+    source: 'Yang et al. (NEJM 2020)',
+    clinicalTrialsId: 'NCT03469206',
+    specialDesign: 'non-inferiority',
+    listCategory: 'thrombectomy',
+    listDescription: 'Early direct-EVT noninferiority trial that intensified the bridge-vs-direct debate.',
+  },
+  'devt-trial': {
+    id: 'devt-trial',
+    title: 'DEVT Trial',
+    subtitle: 'Direct EVT vs Alteplase Plus EVT',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '234',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-2',
+        label: 'Noninferiority at 90 Days'
+      },
+      pValue: {
+        value: '0.003',
+        label: 'For Noninferiority'
+      },
+      effectSize: {
+        value: '+7.7%',
+        label: 'Functional Independence Difference'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter randomized noninferiority trial',
+        'Direct thrombectomy vs alteplase plus thrombectomy',
+        'Proximal anterior circulation occlusion within 4.5 hours',
+        'Conducted at 33 stroke centers in China'
+      ],
+      timeline: 'Enrolled 2018-2020; stopped early for efficacy'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 54.3,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Direct EVT'
+      },
+      control: {
+        percentage: 46.6,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Alteplase + EVT'
+      }
+    },
+    intervention: {
+      treatment: 'Endovascular thrombectomy alone',
+      control: 'IV alteplase followed by endovascular thrombectomy'
+    },
+    clinicalContext: 'DEVT added further evidence from China that direct thrombectomy may achieve similar outcomes to bridging therapy in selected directly presenting alteplase-eligible patients.',
+    pearls: [
+      'Met its noninferiority threshold for 90-day functional independence',
+      'Functional independence was numerically higher with direct EVT: 54.3% vs 46.6%',
+      'Symptomatic intracerebral hemorrhage and mortality were similar between groups',
+      'Interpretation depends on whether clinicians accept the prespecified noninferiority margin'
+    ],
+    conclusion: 'Among patients with proximal anterior circulation occlusion within 4.5 hours, direct EVT met the prespecified noninferiority threshold versus alteplase plus EVT.',
+    source: 'Zi et al. (JAMA 2021)',
+    specialDesign: 'non-inferiority',
+    listCategory: 'thrombectomy',
+    listDescription: 'Chinese direct-EVT trial meeting noninferiority against alteplase plus thrombectomy.',
+  },
+  'skip-trial': {
+    id: 'skip-trial',
+    title: 'SKIP Trial',
+    subtitle: 'Mechanical Thrombectomy Without vs With IV Thrombolysis',
+    category: 'Neuro Trials',
+    trialResult: 'NEUTRAL',
+    stats: {
+      sampleSize: {
+        value: '204',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-2',
+        label: 'Noninferiority at 90 Days'
+      },
+      pValue: {
+        value: '0.18',
+        label: 'Failed NI Test'
+      },
+      effectSize: {
+        value: 'OR 1.09',
+        label: 'Wide CI; NI Not Proven'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Investigator-initiated Japanese noninferiority trial',
+        'Mechanical thrombectomy alone vs low-dose alteplase plus thrombectomy',
+        'LVO stroke without large ischemic core',
+        'Open-label with randomized allocation'
+      ],
+      timeline: 'Enrolled 2017-2019 across 23 networks'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 59.4,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Thrombectomy Alone'
+      },
+      control: {
+        percentage: 57.3,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'IV Alteplase + Thrombectomy'
+      }
+    },
+    intervention: {
+      treatment: 'Mechanical thrombectomy alone',
+      control: 'IV alteplase 0.6 mg/kg plus mechanical thrombectomy'
+    },
+    clinicalContext: 'SKIP tested whether direct thrombectomy could replace bridging therapy in Japan, where alteplase was given at a lower approved dose than in many Western trials.',
+    pearls: [
+      'Did not demonstrate noninferiority despite similar point estimates',
+      'Functional independence was 59.4% vs 57.3%, but the confidence interval was too wide',
+      'Any intracerebral hemorrhage was lower without IV thrombolysis',
+      'Symptomatic hemorrhage and mortality were similar'
+    ],
+    conclusion: 'Mechanical thrombectomy alone failed to prove noninferiority to combined IV thrombolysis plus thrombectomy, though the trial also did not establish inferiority.',
+    source: 'Suzuki et al. (JAMA 2021)',
+    specialDesign: 'non-inferiority',
+    keyMessage: 'SKIP was directionally reassuring for direct EVT but statistically inconclusive.',
+    listCategory: 'thrombectomy',
+    listDescription: 'Japanese direct-EVT study that was inconclusive for noninferiority.',
+  },
+  'mr-clean-no-iv-trial': {
+    id: 'mr-clean-no-iv-trial',
+    title: 'MR CLEAN-NO IV Trial',
+    subtitle: 'Direct EVT in European Alteplase-Eligible Patients',
+    category: 'Neuro Trials',
+    trialResult: 'NEGATIVE',
+    stats: {
+      sampleSize: {
+        value: '539',
+        label: 'Patients in Analysis'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '0.28',
+        label: 'Neither Superiority nor NI'
+      },
+      effectSize: {
+        value: 'OR 0.84',
+        label: 'Direct EVT Not Better'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Open-label multicenter European randomized trial',
+        'Direct EVT vs alteplase followed by EVT',
+        'Direct-to-EVT-center patients eligible for both treatments',
+        'Tested superiority and noninferiority of EVT alone'
+      ],
+      timeline: 'Conducted across Europe'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 20.5,
+        label: 'Mortality at 90 days (lower is better)',
+        name: 'EVT Alone'
+      },
+      control: {
+        percentage: 15.8,
+        label: 'Mortality at 90 days (lower is better)',
+        name: 'Alteplase + EVT'
+      }
+    },
+    intervention: {
+      treatment: 'Endovascular treatment alone',
+      control: 'IV alteplase followed by endovascular treatment'
+    },
+    clinicalContext: 'MR CLEAN-NO IV tested the direct-EVT strategy in a non-Asian population and did not support omitting alteplase before thrombectomy in directly presenting eligible patients.',
+    pearls: [
+      'EVT alone was neither superior nor noninferior to bridging therapy',
+      'Median 90-day mRS favored the bridging arm: 2 vs 3',
+      'Mortality was numerically higher with direct EVT: 20.5% vs 15.8%',
+      'Symptomatic intracerebral hemorrhage was similar between groups'
+    ],
+    conclusion: 'In this European trial, direct EVT was neither superior nor noninferior to alteplase followed by EVT for disability outcome at 90 days.',
+    source: 'LeCouffe et al. (NEJM 2021)',
+    specialDesign: 'negative-trial',
+    keyMessage: 'MR CLEAN-NO IV argues against routinely skipping alteplase before EVT in eligible direct presenters.',
+    listCategory: 'thrombectomy',
+    listDescription: 'European direct-EVT trial showing neither superiority nor noninferiority over bridging therapy.',
+  },
+  'direct-safe-trial': {
+    id: 'direct-safe-trial',
+    title: 'DIRECT-SAFE Trial',
+    subtitle: 'Direct EVT vs Bridging Therapy Within 4.5 Hours',
+    category: 'Neuro Trials',
+    trialResult: 'NEGATIVE',
+    stats: {
+      sampleSize: {
+        value: '295',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-2',
+        label: 'Noninferiority at 90 Days'
+      },
+      pValue: {
+        value: 'Not Met',
+        label: 'NI Margin Missed'
+      },
+      effectSize: {
+        value: '-5.1%',
+        label: 'Risk Difference'
+      }
+    },
+    trialDesign: {
+      type: [
+        'International multicenter randomized noninferiority trial',
+        'Direct EVT vs bridging thrombolysis plus EVT',
+        'Included ICA, M1, M2, and basilar occlusions',
+        'Open-label with blinded endpoint assessment'
+      ],
+      timeline: 'Enrolled 2018-2021 across Australia, New Zealand, China, and Vietnam'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 55,
+        label: 'Functional independence (mRS 0-2 or return to baseline) at 90 days',
+        name: 'Direct EVT'
+      },
+      control: {
+        percentage: 61,
+        label: 'Functional independence (mRS 0-2 or return to baseline) at 90 days',
+        name: 'Bridging Therapy'
+      }
+    },
+    intervention: {
+      treatment: 'Direct endovascular thrombectomy',
+      control: 'IV thrombolysis (alteplase or tenecteplase) followed by EVT'
+    },
+    clinicalContext: 'DIRECT-SAFE broadened the direct-EVT question to a more diverse international population and vascular anatomy, including posterior circulation and M2 occlusions.',
+    pearls: [
+      'Did not show noninferiority of direct EVT',
+      'Functional independence favored bridging therapy: 61% vs 55%',
+      'Safety outcomes were similar, including 1% symptomatic hemorrhage in both arms',
+      'Guideline interpretation generally remains in favor of bridging therapy when alteplase eligible'
+    ],
+    conclusion: 'DIRECT-SAFE failed to show noninferiority of direct thrombectomy compared with bridging therapy, supporting continued use of bridging treatment as standard care.',
+    source: 'Mitchell et al. (Lancet 2022)',
+    clinicalTrialsId: 'NCT03494920',
+    specialDesign: 'negative-trial',
+    listCategory: 'thrombectomy',
+    listDescription: 'International direct-EVT trial that did not support skipping thrombolysis.',
+  },
+  'swift-direct-trial': {
+    id: 'swift-direct-trial',
+    title: 'SWIFT DIRECT Trial',
+    subtitle: 'Thrombectomy Alone vs Alteplase Plus Thrombectomy',
+    category: 'Neuro Trials',
+    trialResult: 'NEGATIVE',
+    stats: {
+      sampleSize: {
+        value: '423',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-2',
+        label: 'Noninferiority at 90 Days'
+      },
+      pValue: {
+        value: 'Not Met',
+        label: 'NI Margin Crossed'
+      },
+      effectSize: {
+        value: '-7.3%',
+        label: 'Adjusted Risk Difference'
+      }
+    },
+    trialDesign: {
+      type: [
+        'European and Canadian randomized noninferiority trial',
+        'Thrombectomy alone vs alteplase plus thrombectomy',
+        'Direct presenters at endovascular centers',
+        'Primary endpoint: mRS 0-2 at 90 days'
+      ],
+      timeline: 'Enrolled 2017-2021'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 57,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Thrombectomy Alone'
+      },
+      control: {
+        percentage: 65,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Alteplase + Thrombectomy'
+      }
+    },
+    intervention: {
+      treatment: 'Stent-retriever thrombectomy alone',
+      control: 'IV alteplase plus stent-retriever thrombectomy'
+    },
+    clinicalContext: 'SWIFT DIRECT was one of the major Western direct-EVT trials and found lower reperfusion rates when alteplase was omitted.',
+    pearls: [
+      'Failed to show noninferiority of thrombectomy alone',
+      'Functional independence favored bridging therapy: 65% vs 57%',
+      'Successful reperfusion was lower without alteplase: 91% vs 96%',
+      'Symptomatic intracranial hemorrhage remained low in both groups'
+    ],
+    conclusion: 'SWIFT DIRECT did not support omitting IV alteplase before thrombectomy in eligible patients because noninferiority was not shown and reperfusion was lower with direct EVT.',
+    source: 'Fischer et al. (Lancet 2022)',
+    clinicalTrialsId: 'NCT03192332',
+    specialDesign: 'negative-trial',
+    listCategory: 'thrombectomy',
+    listDescription: 'Western direct-EVT trial that missed noninferiority and had lower reperfusion without alteplase.',
+  },
+  'laste-trial': {
+    id: 'laste-trial',
+    title: 'LASTE Trial',
+    subtitle: 'Thrombectomy for Large Infarct of Unrestricted Size',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '333',
+        label: 'Assigned Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '<0.001',
+        label: 'Statistically Sig.'
+      },
+      effectSize: {
+        value: 'OR 1.63',
+        label: 'Better Disability Outcome'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Randomized large-core trial',
+        'Thrombectomy plus medical care vs medical care alone',
+        'Anterior circulation proximal occlusion with ASPECTS <=5',
+        'Imaging by CT or MRI within 6.5 hours'
+      ],
+      timeline: 'Stopped early after external positive large-core data'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 36.1,
+        label: 'Death at 90 days (lower is better)',
+        name: 'Thrombectomy + Medical Care'
+      },
+      control: {
+        percentage: 55.5,
+        label: 'Death at 90 days (lower is better)',
+        name: 'Medical Care Alone'
+      }
+    },
+    intervention: {
+      treatment: 'Endovascular thrombectomy plus medical care',
+      control: 'Medical care alone'
+    },
+    clinicalContext: 'LASTE extended EVT evidence into patients with large established infarcts, including infarct volumes not capped by a strict upper limit, showing benefit despite higher hemorrhage risk.',
+    pearls: [
+      'Median 90-day mRS improved from 6 to 4 with thrombectomy',
+      'Mortality fell substantially: 36.1% vs 55.5%',
+      'Symptomatic intracerebral hemorrhage was higher with thrombectomy: 9.6% vs 5.7%',
+      'Supports EVT in selected large-core patients rather than excluding them automatically'
+    ],
+    conclusion: 'For acute stroke with large infarct of unrestricted size, thrombectomy improved disability outcomes and lowered mortality, at the cost of more symptomatic hemorrhage.',
+    source: 'Costalat et al. (NEJM 2024)',
+    clinicalTrialsId: 'NCT03811769',
+    listCategory: 'thrombectomy',
+    listDescription: 'Large-core thrombectomy trial showing better outcomes and lower mortality despite more bleeding.',
+  },
+  'tension-trial': {
+    id: 'tension-trial',
+    title: 'TENSION Trial',
+    subtitle: 'EVT for Large-Core Stroke Selected Mainly by Non-Contrast CT',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '253',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '0.0001',
+        label: 'Statistically Sig.'
+      },
+      effectSize: {
+        value: 'OR 2.58',
+        label: 'Better Disability Outcome'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Prospective multicenter randomized large-core trial',
+        'EVT plus medical treatment vs medical treatment alone',
+        'Anterior circulation LVO with ASPECTS 3-5',
+        'Predominantly non-contrast CT selection up to 12 hours'
+      ],
+      timeline: 'Enrolled 2018-2023; stopped early for efficacy'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 6,
+        label: 'Symptomatic intracranial hemorrhage',
+        name: 'EVT + Medical Treatment'
+      },
+      control: {
+        percentage: 5,
+        label: 'Symptomatic intracranial hemorrhage',
+        name: 'Medical Treatment Alone'
+      }
+    },
+    intervention: {
+      treatment: 'Endovascular thrombectomy plus medical treatment',
+      control: 'Medical treatment alone'
+    },
+    clinicalContext: 'TENSION is important because it demonstrated large-core EVT benefit using mostly non-contrast CT, making large-core thrombectomy evidence more applicable to real-world stroke systems without advanced perfusion imaging.',
+    pearls: [
+      'Functional outcome improved substantially with EVT (adjusted common OR 2.58)',
+      'Mortality was lower with thrombectomy (hazard ratio 0.67)',
+      'Used pragmatic ASPECTS 3-5 selection with non-contrast CT predominant',
+      'Supports offering EVT to selected large-core patients even without advanced imaging'
+    ],
+    conclusion: 'In patients with anterior circulation LVO and established large infarct selected mainly by non-contrast CT, thrombectomy improved outcomes and lowered mortality.',
+    source: 'Bendszus et al. (Lancet 2023)',
+    clinicalTrialsId: 'NCT03094715',
+    listCategory: 'thrombectomy',
+    listDescription: 'Large-core EVT trial using pragmatic non-contrast CT selection rather than perfusion imaging.',
+  },
+  'compass-trial': {
+    id: 'compass-trial',
+    title: 'COMPASS Trial',
+    subtitle: 'Aspiration First Pass vs Stent Retriever First Line',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '270',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-2',
+        label: 'Noninferiority at 90 Days'
+      },
+      pValue: {
+        value: '0.0014',
+        label: 'For Noninferiority'
+      },
+      effectSize: {
+        value: '+2%',
+        label: 'mRS 0-2 Difference'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter randomized open-label noninferiority trial',
+        'Aspiration first pass vs stent retriever first line',
+        'Anterior circulation LVO within 6 hours',
+        'Blinded outcome assessment with core-lab adjudication'
+      ],
+      timeline: 'Conducted at 15 North American sites'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 52,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Aspiration First Pass'
+      },
+      control: {
+        percentage: 50,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Stent Retriever First Line'
+      }
+    },
+    intervention: {
+      treatment: 'Direct aspiration first-pass thrombectomy',
+      control: 'Stent retriever first-line thrombectomy'
+    },
+    clinicalContext: 'COMPASS compared two frontline thrombectomy strategies and helped legitimize aspiration-first approaches as an alternative to stent-retriever-first treatment.',
+    pearls: [
+      'Aspiration first pass was noninferior to stent retriever first line',
+      'Functional independence was similar: 52% vs 50%',
+      'All-cause mortality was identical at 22% in both groups',
+      'Trial supported operator choice and device flexibility in modern EVT'
+    ],
+    conclusion: 'Direct aspiration as first pass provided noninferior 90-day functional outcomes compared with first-line stent retriever thrombectomy.',
+    source: 'Turk et al. (Lancet 2019)',
+    clinicalTrialsId: 'NCT02466893',
+    specialDesign: 'non-inferiority',
+    listCategory: 'thrombectomy',
+    listDescription: 'Device-strategy trial showing aspiration-first thrombectomy was noninferior to stent retrievers.',
+  },
+  'aster-trial': {
+    id: 'aster-trial',
+    title: 'ASTER Trial',
+    subtitle: 'Contact Aspiration vs Stent Retriever Revascularization',
+    category: 'Neuro Trials',
+    trialResult: 'NEGATIVE',
+    stats: {
+      sampleSize: {
+        value: '381',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mTICI 2b-3',
+        label: 'Successful Revascularization'
+      },
+      pValue: {
+        value: '0.53',
+        label: 'Not Significant'
+      },
+      effectSize: {
+        value: '85.4% vs 83.1%',
+        label: 'No Primary Difference'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Randomized open-label, blinded endpoint trial',
+        'First-line contact aspiration vs first-line stent retriever',
+        'Anterior circulation LVO within 6 hours',
+        'Conducted in 8 French comprehensive stroke centers'
+      ],
+      timeline: 'Enrolled 2015-2016'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 85.4,
+        label: 'Successful revascularization (mTICI 2b-3)',
+        name: 'Contact Aspiration First Line'
+      },
+      control: {
+        percentage: 83.1,
+        label: 'Successful revascularization (mTICI 2b-3)',
+        name: 'Stent Retriever First Line'
+      }
+    },
+    intervention: {
+      treatment: 'First-line contact aspiration thrombectomy',
+      control: 'First-line stent retriever thrombectomy'
+    },
+    clinicalContext: 'ASTER directly compared aspiration-first and stent-retriever-first approaches at a time when device strategy was still unsettled in daily EVT practice.',
+    pearls: [
+      'No significant difference in final successful revascularization',
+      'Clinical outcomes at 90 days were also similar',
+      'Trial suggests either strategy is acceptable as a first-line approach',
+      'Important technical trial for device-selection rather than patient-selection questions'
+    ],
+    conclusion: 'First-line contact aspiration did not improve successful revascularization compared with first-line stent retriever thrombectomy.',
+    source: 'Lapergue et al. (JAMA 2017)',
+    clinicalTrialsId: 'NCT02523261',
+    specialDesign: 'negative-trial',
+    listCategory: 'thrombectomy',
+    listDescription: 'Device-comparison trial showing no clear advantage for aspiration over stent retrievers.',
+  },
+  'aster2-trial': {
+    id: 'aster2-trial',
+    title: 'ASTER2 Trial',
+    subtitle: 'Combined Aspiration + Stent Retriever vs Stent Retriever Alone',
+    category: 'Neuro Trials',
+    trialResult: 'NEGATIVE',
+    stats: {
+      sampleSize: {
+        value: '408',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'eTICI 2c-3',
+        label: 'End-of-Procedure Reperfusion'
+      },
+      pValue: {
+        value: '0.17',
+        label: 'Not Significant'
+      },
+      effectSize: {
+        value: '+6.6%',
+        label: 'Primary Endpoint Difference'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter randomized open-label, blinded-endpoint trial',
+        'Combined contact aspiration plus stent retriever vs stent retriever alone',
+        'Anterior circulation LVO within 8 hours',
+        'Conducted in 11 French comprehensive stroke centers'
+      ],
+      timeline: 'Enrolled 2017-2018 with 12-month follow-up'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 64.5,
+        label: 'Near-total or total reperfusion (eTICI 2c-3)',
+        name: 'Combined Aspiration + Stent Retriever'
+      },
+      control: {
+        percentage: 57.9,
+        label: 'Near-total or total reperfusion (eTICI 2c-3)',
+        name: 'Stent Retriever Alone'
+      }
+    },
+    intervention: {
+      treatment: 'Initial thrombectomy with combined contact aspiration and stent retriever',
+      control: 'Initial thrombectomy with stent retriever alone'
+    },
+    clinicalContext: 'ASTER2 asked whether combining the two leading thrombectomy techniques from the outset could improve angiographic results over standard stent-retriever-first treatment.',
+    pearls: [
+      'Primary endpoint was not significantly improved',
+      'Combined therapy improved some secondary angiographic measures after the assigned initial pass',
+      'Final clinical implication: routine combined first-line use was not established',
+      'Useful trial for EVT technique optimization rather than selection of who should receive EVT'
+    ],
+    conclusion: 'An initial combined aspiration and stent retriever strategy did not significantly improve final near-total or total reperfusion compared with stent retriever alone.',
+    source: 'Lapergue et al. (JAMA 2021)',
+    clinicalTrialsId: 'NCT03290885',
+    specialDesign: 'negative-trial',
+    listCategory: 'thrombectomy',
+    listDescription: 'Technical EVT trial showing no clear final reperfusion advantage from upfront combined strategy.',
+  },
+  'choice-trial': {
+    id: 'choice-trial',
+    title: 'CHOICE Trial',
+    subtitle: 'Adjunct Intra-arterial Alteplase After Successful Thrombectomy',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '121',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-1',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '0.047',
+        label: 'Statistically Sig.'
+      },
+      effectSize: {
+        value: '+18.4%',
+        label: 'Adjusted Risk Difference'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Phase 2b randomized double-blind placebo-controlled trial',
+        'Adjunct intra-arterial alteplase after successful thrombectomy',
+        'Large vessel occlusion with eTICI 2b50-3 reperfusion',
+        'Conducted at 7 stroke centers in Catalonia'
+      ],
+      timeline: 'Enrolled 2018-2021; stopped early during the pandemic'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 59.0,
+        label: 'Excellent outcome (mRS 0-1) at 90 days',
+        name: 'Intra-arterial Alteplase'
+      },
+      control: {
+        percentage: 40.4,
+        label: 'Excellent outcome (mRS 0-1) at 90 days',
+        name: 'Placebo'
+      }
+    },
+    intervention: {
+      treatment: 'Adjunct intra-arterial alteplase infused after successful thrombectomy',
+      control: 'Placebo after successful thrombectomy'
+    },
+    clinicalContext: 'CHOICE tested whether incomplete microvascular reperfusion after technically successful thrombectomy could be improved with low-dose intra-arterial alteplase.',
+    pearls: [
+      'Adjunct IA alteplase increased excellent outcome from 40.4% to 59.0%',
+      'Symptomatic intracranial hemorrhage was not increased',
+      'Trial stopped early and was relatively small, so replication is still needed',
+      'Important proof-of-concept study for post-thrombectomy rescue pharmacotherapy'
+    ],
+    conclusion: 'After successful thrombectomy, adjunct intra-arterial alteplase increased the likelihood of excellent 90-day outcome, though the preliminary finding requires replication.',
+    source: 'Renu et al. (JAMA 2022)',
+    clinicalTrialsId: 'NCT03876119',
+    listCategory: 'thrombectomy',
+    listDescription: 'Post-thrombectomy adjunct IA alteplase trial suggesting better excellent outcomes.',
+  },
+  'rescue-bt-trial': {
+    id: 'rescue-bt-trial',
+    title: 'RESCUE BT Trial',
+    subtitle: 'Intravenous Tirofiban Before Endovascular Thrombectomy',
+    category: 'Neuro Trials',
+    trialResult: 'NEGATIVE',
+    stats: {
+      sampleSize: {
+        value: '948',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '0.51',
+        label: 'Not Significant'
+      },
+      effectSize: {
+        value: 'OR 1.08',
+        label: 'No Disability Benefit'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Investigator-initiated randomized double-blind placebo-controlled trial',
+        'IV tirofiban vs placebo before EVT',
+        'Proximal intracranial LVO within 24 hours',
+        'Conducted at 55 hospitals in China'
+      ],
+      timeline: 'Enrolled 2018-2021'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 36.3,
+        label: 'mRS 0-1 or return to premorbid baseline at 90 days',
+        name: 'IV Tirofiban + EVT'
+      },
+      control: {
+        percentage: 32.4,
+        label: 'mRS 0-1 or return to premorbid baseline at 90 days',
+        name: 'Placebo + EVT'
+      }
+    },
+    intervention: {
+      treatment: 'Intravenous tirofiban before endovascular thrombectomy',
+      control: 'Placebo before endovascular thrombectomy'
+    },
+    clinicalContext: 'RESCUE BT tested whether aggressive antiplatelet therapy before thrombectomy could improve microvascular patency and overall outcomes in LVO stroke.',
+    pearls: [
+      'No significant improvement in 90-day disability distribution with tirofiban',
+      'Symptomatic intracranial hemorrhage was numerically higher: 9.7% vs 6.4%',
+      'Mortality was similar between groups',
+      'Does not support routine pre-EVT tirofiban use'
+    ],
+    conclusion: 'Intravenous tirofiban before thrombectomy did not improve 90-day outcomes and does not support routine use in acute ischemic stroke EVT.',
+    source: 'RESCUE BT Investigators (JAMA 2022)',
+    specialDesign: 'negative-trial',
+    listCategory: 'thrombectomy',
+    listDescription: 'Adjunct pre-EVT tirofiban trial showing no functional benefit.',
+  },
+  'enchanted-trial': {
+    id: 'enchanted-trial',
+    title: 'ENCHANTED Trial',
+    subtitle: 'Intensive Blood Pressure Reduction During IV Alteplase Treatment',
+    category: 'Neuro Trials',
+    trialResult: 'NEUTRAL',
+    stats: {
+      sampleSize: {
+        value: '2196',
+        label: 'Alteplase-Eligible Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '0.87',
+        label: 'No Functional Difference'
+      },
+      effectSize: {
+        value: 'OR 0.75',
+        label: 'Less Any ICH'
+      }
+    },
+    trialDesign: {
+      type: [
+        'International randomized open-label trial with blinded endpoint assessment',
+        'Intensive SBP target 130-140 mm Hg vs guideline target <180 mm Hg',
+        'Adults with acute ischemic stroke eligible for IV alteplase',
+        'Blood pressure strategy applied for 72 hours'
+      ],
+      timeline: 'Conducted at 110 sites in 15 countries'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 14.8,
+        label: 'Any intracranial hemorrhage (lower is better)',
+        name: 'Intensive BP Lowering'
+      },
+      control: {
+        percentage: 18.7,
+        label: 'Any intracranial hemorrhage (lower is better)',
+        name: 'Guideline BP Lowering'
+      }
+    },
+    intervention: {
+      treatment: 'Target systolic blood pressure 130-140 mm Hg within 1 hour, maintained for 72 hours during and after alteplase treatment',
+      control: 'Guideline blood pressure treatment with systolic blood pressure kept below 180 mm Hg'
+    },
+    clinicalContext: 'ENCHANTED tested whether more aggressive early blood pressure lowering during IV alteplase therapy could reduce hemorrhagic complications enough to improve longer-term disability outcomes.',
+    pearls: [
+      'Primary functional outcome was neutral despite lower achieved blood pressure in the intensive arm',
+      'Any intracranial hemorrhage was reduced: 14.8% vs 18.7%',
+      'The reduction in bleeding did not translate into better 90-day disability outcomes',
+      'Supports the safety of modestly more aggressive BP control, but not a major change from standard alteplase-era targets'
+    ],
+    conclusion: 'Among alteplase-treated acute ischemic stroke patients, intensive blood pressure lowering reduced intracranial hemorrhage but did not improve 90-day functional outcome compared with guideline treatment.',
+    source: 'Anderson et al. (Lancet 2019)',
+    clinicalTrialsId: 'NCT01422616',
+    specialDesign: 'negative-trial',
+    keyMessage: 'Lower post-alteplase blood pressure reduced bleeding, but not disability.',
+  },
+  'best-ii-trial': {
+    id: 'best-ii-trial',
+    title: 'BEST-II Trial',
+    subtitle: 'Blood Pressure Targets After Successful Endovascular Therapy',
+    category: 'Neuro Trials',
+    trialResult: 'NEUTRAL',
+    stats: {
+      sampleSize: {
+        value: '120',
+        label: 'Randomized EVT Patients'
+      },
+      primaryEndpoint: {
+        value: 'Futility Design',
+        label: 'Infarct Volume and Utility-Weighted mRS'
+      },
+      pValue: {
+        value: '0.93',
+        label: 'Futility Not Met'
+      },
+      effectSize: {
+        value: '14-25%',
+        label: 'Predicted Success of Future Trial'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Phase 2 randomized open-label blinded-endpoint futility trial',
+        'Three post-EVT systolic blood pressure targets: <140, <160, and <=180 mm Hg',
+        'Successful endovascular therapy required before randomization',
+        'Blood pressure strategy initiated within 60 minutes and maintained for 24 hours'
+      ],
+      timeline: 'Three US comprehensive stroke centers, 2020-2022'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 51,
+        label: 'Mean utility-weighted mRS at 90 days (x100)',
+        name: 'Target <140 mm Hg'
+      },
+      control: {
+        percentage: 58,
+        label: 'Mean utility-weighted mRS at 90 days (x100)',
+        name: 'Target <=180 mm Hg'
+      }
+    },
+    intervention: {
+      treatment: 'Lower post-EVT systolic blood pressure target, primarily <140 mm Hg',
+      control: 'Guideline-level post-EVT systolic blood pressure target <=180 mm Hg'
+    },
+    clinicalContext: 'BEST-II was an early dose-finding and futility study designed to see whether pushing systolic blood pressure lower after technically successful EVT was promising enough to justify a large superiority trial.',
+    pearls: [
+      'Neither lower target met prespecified futility boundaries, so definitive harm could not be declared',
+      'Signals still favored the higher target rather than aggressive BP lowering',
+      'Predicted probability of success for a future superiority trial was low: about 25% for <140 mm Hg and 14% for <160 mm Hg',
+      'The highest-target group had the best mean utility-weighted mRS in this small phase 2 study'
+    ],
+    conclusion: 'Lower post-EVT systolic blood pressure targets did not meet formal futility criteria, but the results suggested a low probability that aggressive BP lowering would prove beneficial in a larger trial.',
+    source: 'Mistry et al. (JAMA 2023)',
+    clinicalTrialsId: 'NCT04116112',
+    specialDesign: 'futility-trial',
+    keyMessage: 'BEST-II did not definitively close the question, but it made meaningful benefit from lower post-EVT BP look unlikely.',
+  },
+  'bp-target-trial': {
+    id: 'bp-target-trial',
+    title: 'BP-TARGET Trial',
+    subtitle: 'Intensive vs Standard Blood Pressure Control After Successful EVT',
+    category: 'Neuro Trials',
+    trialResult: 'NEGATIVE',
+    stats: {
+      sampleSize: {
+        value: '324',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'Radiographic ICH',
+        label: 'at 24-36 Hours'
+      },
+      pValue: {
+        value: '0.84',
+        label: 'Not Significant'
+      },
+      effectSize: {
+        value: 'aOR 0.96',
+        label: 'No Reduction in Hemorrhage'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter open-label randomized controlled trial',
+        'Successful large-vessel EVT required before randomization',
+        'SBP target 100-129 mm Hg vs 130-185 mm Hg',
+        'Target achieved within 1 hour and maintained for 24 hours'
+      ],
+      timeline: 'Four academic stroke centers in France'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 42,
+        label: 'Radiographic intraparenchymal hemorrhage at 24-36 hours (lower is better)',
+        name: 'Intensive SBP Target'
+      },
+      control: {
+        percentage: 43,
+        label: 'Radiographic intraparenchymal hemorrhage at 24-36 hours (lower is better)',
+        name: 'Standard SBP Target'
+      }
+    },
+    intervention: {
+      treatment: 'Intensive systolic blood pressure target of 100-129 mm Hg after successful EVT',
+      control: 'Standard systolic blood pressure target of 130-185 mm Hg after successful EVT'
+    },
+    clinicalContext: 'BP-TARGET was the first randomized trial focused specifically on whether lower blood pressure targets after successful reperfusion could prevent post-EVT hemorrhagic injury.',
+    pearls: [
+      'Primary hemorrhage endpoint was almost identical between groups: 42% vs 43%',
+      'Symptomatic intraparenchymal hemorrhage was numerically higher in the intensive arm',
+      'Functional outcomes at 3 months did not differ',
+      'This early randomized signal did not support routine aggressive BP lowering after reperfusion'
+    ],
+    conclusion: 'An intensive systolic blood pressure target of 100-129 mm Hg after successful EVT did not reduce radiographic intraparenchymal hemorrhage compared with standard care.',
+    source: 'Mazighi et al. (Lancet Neurol 2021)',
+    clinicalTrialsId: 'NCT03160677',
+    specialDesign: 'negative-trial',
+    keyMessage: 'Lowering SBP aggressively after successful thrombectomy did not improve post-EVT hemorrhage outcomes.',
+  },
+  'optimal-bp-trial': {
+    id: 'optimal-bp-trial',
+    title: 'OPTIMAL-BP Trial',
+    subtitle: 'Intensive vs Conventional BP Lowering After EVT',
+    category: 'Neuro Trials',
+    trialResult: 'NEGATIVE',
+    stats: {
+      sampleSize: {
+        value: '306',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-2',
+        label: 'at 3 Months'
+      },
+      pValue: {
+        value: '0.03',
+        label: 'Worse With Intensive BP'
+      },
+      effectSize: {
+        value: '-15.1%',
+        label: 'Functional Independence Difference'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter randomized open-label trial with blinded endpoint evaluation',
+        'Patients had successful reperfusion after EVT (mTICI 2b or greater)',
+        'Intensive SBP target <140 mm Hg vs conventional target 140-180 mm Hg',
+        'Blood pressure strategy maintained for 24 hours'
+      ],
+      timeline: '19 South Korean stroke centers, 2020-2022'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 39.4,
+        label: 'Functional independence (mRS 0-2) at 3 months',
+        name: 'Intensive BP Management'
+      },
+      control: {
+        percentage: 54.4,
+        label: 'Functional independence (mRS 0-2) at 3 months',
+        name: 'Conventional BP Management'
+      }
+    },
+    intervention: {
+      treatment: 'Systolic blood pressure target <140 mm Hg for 24 hours after successful EVT',
+      control: 'Systolic blood pressure target 140-180 mm Hg for 24 hours after successful EVT'
+    },
+    clinicalContext: 'OPTIMAL-BP directly tested whether tighter blood pressure control after reperfusion improves outcomes, and unlike earlier smaller studies, it showed a clear signal against intensive lowering.',
+    pearls: [
+      'Functional independence was significantly lower with intensive BP control: 39.4% vs 54.4%',
+      'Trial stopped early because of safety concerns and poorer outcomes in the intensive arm',
+      'Symptomatic intracerebral hemorrhage rates were similar, so harm was not explained by more sICH',
+      'Provides strong evidence to avoid routine aggressive BP lowering below 140 mm Hg after successful EVT'
+    ],
+    conclusion: 'After successful EVT, intensive blood pressure management to a systolic target below 140 mm Hg reduced the likelihood of functional independence compared with conventional management.',
+    source: 'Nam et al. (JAMA 2023)',
+    clinicalTrialsId: 'NCT04205305',
+    specialDesign: 'negative-trial',
+    keyMessage: 'Do not routinely target SBP <140 mm Hg after successful thrombectomy.',
+  },
+  'charm-trial': {
+    id: 'charm-trial',
+    title: 'CHARM Trial',
+    subtitle: 'Intravenous Glibenclamide for Cerebral Edema After Large Hemispheric Stroke',
+    category: 'Neuro Trials',
+    trialResult: 'NEGATIVE',
+    stats: {
+      sampleSize: {
+        value: '535',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '0.42',
+        label: 'Not Significant'
+      },
+      effectSize: {
+        value: 'cOR 1.17',
+        label: 'No Functional Benefit'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Phase 3 double-blind placebo-controlled randomized trial',
+        'Large hemispheric infarction defined by ASPECTS 1-5 or core 80-300 mL',
+        'Study drug started within 10 hours of stroke onset',
+        'Primary efficacy analysis focused on patients aged 18-70 years'
+      ],
+      timeline: '143 stroke centers in 21 countries; stopped early for operational reasons'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 43,
+        label: 'mRS 0-4 at 90 days',
+        name: 'Intravenous Glibenclamide'
+      },
+      control: {
+        percentage: 42,
+        label: 'mRS 0-4 at 90 days',
+        name: 'Placebo'
+      }
+    },
+    intervention: {
+      treatment: 'Intravenous glibenclamide 8.6 mg over 72 hours',
+      control: 'Placebo infusion'
+    },
+    clinicalContext: 'CHARM evaluated whether pharmacologic edema reduction could improve outcome after large hemispheric infarction, a setting with high mortality and limited medical therapies.',
+    pearls: [
+      'No favorable shift in disability at 90 days with glibenclamide',
+      'Mortality was not improved and was numerically higher in the active-treatment arm',
+      'Hypoglycemia was more common with glibenclamide: 6% vs 2%',
+      'Trial was underpowered after early termination, so small subgroup effects remain uncertain'
+    ],
+    conclusion: 'Intravenous glibenclamide did not improve 90-day functional outcome after large hemispheric infarction.',
+    source: 'Sheth et al. (Lancet Neurol 2024)',
+    clinicalTrialsId: 'NCT02864953',
+    specialDesign: 'negative-trial',
+    keyMessage: 'CHARM does not support routine intravenous glibenclamide for malignant edema prevention after large hemispheric stroke.',
+  },
+  'escape-na1-trial': {
+    id: 'escape-na1-trial',
+    title: 'ESCAPE-NA1 Trial',
+    subtitle: 'Nerinetide Neuroprotection During EVT for Acute Ischemic Stroke',
+    category: 'Neuro Trials',
+    trialResult: 'NEGATIVE',
+    stats: {
+      sampleSize: {
+        value: '1105',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-2',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '0.35',
+        label: 'Not Significant Overall'
+      },
+      effectSize: {
+        value: 'RR 1.04',
+        label: 'No Overall Benefit'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter double-blind placebo-controlled randomized trial',
+        'All patients underwent thrombectomy for large-vessel occlusion',
+        'Treatment window up to 12 hours with favorable imaging selection',
+        'Stratified by alteplase use and declared first EVT device'
+      ],
+      timeline: '48 hospitals in 8 countries'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 61.4,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Nerinetide'
+      },
+      control: {
+        percentage: 59.2,
+        label: 'Functional independence (mRS 0-2) at 90 days',
+        name: 'Placebo'
+      }
+    },
+    intervention: {
+      treatment: 'Single-dose intravenous nerinetide before or during EVT',
+      control: 'Placebo infusion'
+    },
+    clinicalContext: 'ESCAPE-NA1 was a major modern neuroprotection trial embedded in the thrombectomy era, testing whether nerinetide could reduce reperfusion injury and improve post-EVT outcomes.',
+    pearls: [
+      'Overall trial was neutral: 61.4% vs 59.2% achieved mRS 0-2',
+      'A prespecified interaction suggested benefit only in patients who did not receive alteplase',
+      'In the no-alteplase subgroup, mRS 0-2 was 59.3% with nerinetide vs 49.8% with placebo',
+      'Findings raised concern for a drug-drug interaction between alteplase and nerinetide'
+    ],
+    conclusion: 'Nerinetide did not improve functional outcomes overall after EVT, although exploratory analyses suggested a possible benefit in patients not treated with alteplase.',
+    source: 'Hill et al. (Lancet 2020)',
+    clinicalTrialsId: 'NCT02930018',
+    specialDesign: 'negative-trial',
+    keyMessage: 'ESCAPE-NA1 was negative overall but reopened interest in neuroprotection for EVT patients not receiving alteplase.',
+  },
+  'decimal-trial': {
+    id: 'decimal-trial',
+    title: 'DECIMAL Trial',
+    subtitle: 'Early Decompressive Craniectomy in Malignant MCA Infarction',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '38',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS <=3',
+        label: 'at 6 Months'
+      },
+      pValue: {
+        value: '0.18',
+        label: 'Underpowered for Primary Endpoint'
+      },
+      effectSize: {
+        value: '-52.8%',
+        label: 'Absolute Mortality Reduction'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter randomized controlled trial',
+        'Early decompressive craniectomy plus medical therapy vs medical therapy alone',
+        'Patients aged 18-55 years with malignant MCA infarction',
+        'Sequential design with blinded primary endpoint assessment'
+      ],
+      timeline: 'France, 2001-2005; stopped early for pooled analysis'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 25.0,
+        label: 'Survival with moderate disability or better (mRS <=3) at 6 months',
+        name: 'Decompressive Craniectomy'
+      },
+      control: {
+        percentage: 5.6,
+        label: 'Survival with moderate disability or better (mRS <=3) at 6 months',
+        name: 'Medical Therapy Alone'
+      }
+    },
+    intervention: {
+      treatment: 'Early decompressive hemicraniectomy plus standard medical therapy',
+      control: 'Standard medical therapy alone'
+    },
+    clinicalContext: 'DECIMAL was one of the foundational European decompressive hemicraniectomy trials for malignant middle cerebral artery infarction, focusing on whether surgery could reduce the otherwise extreme mortality of space-occupying infarction.',
+    pearls: [
+      'Small trial stopped early, so it was underpowered for its primary functional endpoint',
+      'Primary 6-month mRS <=3 outcome favored surgery numerically: 25.0% vs 5.6%',
+      'Mortality was reduced dramatically, with a 52.8% absolute reduction in death',
+      'DECIMAL became most influential through its contribution to pooled European decompressive surgery analyses'
+    ],
+    conclusion: 'Early decompressive craniectomy markedly reduced mortality in malignant MCA infarction, with a numerical but not statistically definitive improvement in moderate disability outcomes in this small trial.',
+    source: 'Vahedi et al. (Stroke 2007)',
+    keyMessage: 'DECIMAL helped establish that early hemicraniectomy saves lives in malignant MCA infarction.',
+  },
+  'destiny-trial': {
+    id: 'destiny-trial',
+    title: 'DESTINY Trial',
+    subtitle: 'Decompressive Surgery for Malignant MCA Infarction',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '32',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-3',
+        label: 'at 6 Months'
+      },
+      pValue: {
+        value: '0.23',
+        label: 'Primary Endpoint NS'
+      },
+      effectSize: {
+        value: '+41%',
+        label: '30-Day Survival Benefit'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Prospective multicenter randomized controlled trial',
+        'Hemicraniectomy vs conservative therapy',
+        'Sequential design with 30-day mortality assessed first',
+        'Primary functional endpoint based on mRS 0-3 at 6 months'
+      ],
+      timeline: 'Germany; stopped after pooled European data emerged'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 47,
+        label: 'mRS 0-3 at 6 months',
+        name: 'Hemicraniectomy'
+      },
+      control: {
+        percentage: 27,
+        label: 'mRS 0-3 at 6 months',
+        name: 'Conservative Therapy'
+      }
+    },
+    intervention: {
+      treatment: 'Early decompressive hemicraniectomy plus intensive medical management',
+      control: 'Conservative medical management'
+    },
+    clinicalContext: 'DESTINY evaluated whether the mortality benefit of hemicraniectomy in malignant MCA infarction could be achieved without merely shifting patients into extremely severe disability.',
+    pearls: [
+      '30-day survival improved substantially: 88% vs 47%',
+      'The prespecified 6-month primary endpoint mRS 0-3 was not statistically significant in this small sample',
+      'Distribution of mRS scores still favored surgery, and severe disability was not disproportionately increased',
+      'DESTINY was central to the pooled European hemicraniectomy evidence base'
+    ],
+    conclusion: 'DESTINY confirmed a major survival benefit from hemicraniectomy in malignant hemispheric stroke, though the trial alone was too small to prove superiority on its primary 6-month functional endpoint.',
+    source: 'Juttler et al. (Stroke 2007)',
+    keyMessage: 'DESTINY reinforced that early hemicraniectomy improves survival in malignant MCA infarction.',
+  },
+  'hamlet-trial': {
+    id: 'hamlet-trial',
+    title: 'HAMLET Trial',
+    subtitle: 'Hemicraniectomy for Space-Occupying Hemispheric Infarction',
+    category: 'Neuro Trials',
+    trialResult: 'NEUTRAL',
+    stats: {
+      sampleSize: {
+        value: '64',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-3',
+        label: 'at 1 Year'
+      },
+      pValue: {
+        value: 'ARR 0%',
+        label: 'No Primary Benefit Overall'
+      },
+      effectSize: {
+        value: 'ARR 38%',
+        label: 'Case Fatality Reduction'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter open randomized trial',
+        'Surgical decompression vs best medical treatment',
+        'Patients randomized within 4 days of stroke onset',
+        'Primary endpoint based on mRS 0-3 at 1 year'
+      ],
+      timeline: 'Netherlands, 2002-2007'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 62,
+        label: 'Survival at 1 year',
+        name: 'Surgical Decompression'
+      },
+      control: {
+        percentage: 24,
+        label: 'Survival at 1 year',
+        name: 'Best Medical Treatment'
+      }
+    },
+    intervention: {
+      treatment: 'Decompressive surgery plus best medical treatment',
+      control: 'Best medical treatment alone'
+    },
+    clinicalContext: 'HAMLET extended the decompressive surgery question beyond the earliest time window and clarified that timing matters: surgery clearly reduces death, but functional benefit appears strongest when performed within 48 hours.',
+    pearls: [
+      'Primary outcome mRS 0-3 at 1 year was neutral overall',
+      'Case fatality was reduced by an absolute 38%',
+      'Meta-analysis of patients treated within 48 hours showed clearer benefit for both survival and poor outcome reduction',
+      'The trial emphasized that delayed surgery up to 96 hours may save lives without clearly improving functional independence'
+    ],
+    conclusion: 'HAMLET showed that decompressive surgery reduces case fatality, but meaningful functional benefit was not demonstrated when surgery was delayed up to 4 days; benefit is strongest within 48 hours.',
+    source: 'Hofmeijer et al. (Lancet Neurol 2009)',
+    keyMessage: 'For malignant hemispheric infarction, timing is critical: hemicraniectomy works best when done early.',
+  },
+  'destiny-ii-trial': {
+    id: 'destiny-ii-trial',
+    title: 'DESTINY II Trial',
+    subtitle: 'Hemicraniectomy in Older Patients With Malignant MCA Stroke',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '112',
+        label: 'Patients Aged 61+ Years'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-4',
+        label: 'at 6 Months'
+      },
+      pValue: {
+        value: '0.04',
+        label: 'Statistically Sig.'
+      },
+      effectSize: {
+        value: '+20%',
+        label: 'Survival Without Severe Disability'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Randomized controlled trial in older adults',
+        'Hemicraniectomy vs conservative intensive care treatment',
+        'Malignant MCA infarction with treatment within 48 hours',
+        'Primary endpoint: survival without severe disability (mRS 0-4) at 6 months'
+      ],
+      timeline: 'Germany; patients aged 61-82 years'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 38,
+        label: 'Survival without severe disability (mRS 0-4) at 6 months',
+        name: 'Hemicraniectomy'
+      },
+      control: {
+        percentage: 18,
+        label: 'Survival without severe disability (mRS 0-4) at 6 months',
+        name: 'Conservative Treatment'
+      }
+    },
+    intervention: {
+      treatment: 'Early decompressive hemicraniectomy',
+      control: 'Conservative intensive care treatment'
+    },
+    clinicalContext: 'DESTINY II addressed the major unresolved question left by the earlier decompressive trials: whether older patients also benefit from surgery for malignant MCA infarction.',
+    pearls: [
+      'Hemicraniectomy improved the primary endpoint in patients older than 60 years',
+      'Mortality was markedly lower with surgery: 33% vs 70%',
+      'Most survivors still had substantial disability, usually mRS 4 or 5',
+      'The trial changed practice by showing age alone should not exclude surgery'
+    ],
+    conclusion: 'Among patients 61 years or older with malignant MCA infarction, hemicraniectomy increased survival without severe disability, though most survivors remained dependent for daily care.',
+    source: 'Juttler et al. (NEJM 2014)',
+    keyMessage: 'Older age does not eliminate benefit from hemicraniectomy, but survival often comes with major residual disability.',
+  },
+  'timing-trial': {
+    id: 'timing-trial',
+    title: 'TIMING Trial',
+    subtitle: 'Early vs Delayed NOAC Initiation After AF-Related Ischemic Stroke',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '888',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'Composite Outcome',
+        label: 'Stroke, sICH, or Death at 90 Days'
+      },
+      pValue: {
+        value: '0.004',
+        label: 'For Noninferiority'
+      },
+      effectSize: {
+        value: '-1.79%',
+        label: 'Absolute Risk Difference'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Registry-based randomized noninferiority trial',
+        'Early NOAC initiation <=4 days vs delayed initiation 5-10 days',
+        'Patients with acute ischemic stroke and atrial fibrillation',
+        'Open-label with blinded endpoint assessment'
+      ],
+      timeline: 'Swedish Stroke Register, 2017-2020'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 6.89,
+        label: 'Primary composite outcome at 90 days',
+        name: 'Early NOAC Start'
+      },
+      control: {
+        percentage: 8.68,
+        label: 'Primary composite outcome at 90 days',
+        name: 'Delayed NOAC Start'
+      }
+    },
+    intervention: {
+      treatment: 'NOAC initiated within 4 days after ischemic stroke onset',
+      control: 'NOAC initiated 5-10 days after ischemic stroke onset'
+    },
+    clinicalContext: 'TIMING addressed a common bedside question in atrial-fibrillation stroke care: how soon can oral anticoagulation be restarted without provoking intracranial hemorrhage.',
+    pearls: [
+      'Early NOAC start was noninferior to delayed initiation',
+      'No symptomatic intracerebral hemorrhages occurred in either group',
+      'Recurrent ischemic stroke and death were numerically lower with early initiation',
+      'Registry-based randomization made the trial highly pragmatic and practice-relevant'
+    ],
+    conclusion: 'Early NOAC initiation within 4 days was noninferior to delayed initiation after AF-related ischemic stroke and appeared safe in appropriately selected patients.',
+    source: 'Oldgren et al. (Circulation 2022)',
+    clinicalTrialsId: 'NCT02961348',
+    specialDesign: 'non-inferiority',
+    keyMessage: 'TIMING supports starting NOACs early after AF-related ischemic stroke when clinically appropriate.',
+  },
+  'optimas-trial': {
+    id: 'optimas-trial',
+    title: 'OPTIMAS Trial',
+    subtitle: 'Optimal Timing of DOACs After AF-Related Ischemic Stroke',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '3621',
+        label: 'Modified Intention-to-Treat Patients'
+      },
+      primaryEndpoint: {
+        value: 'Composite Outcome',
+        label: 'Stroke, sICH, or Systemic Embolism at 90 Days'
+      },
+      pValue: {
+        value: '0.0003',
+        label: 'For Noninferiority'
+      },
+      effectSize: {
+        value: 'RD 0.000',
+        label: 'Event Rates Identical'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter open-label blinded-endpoint phase 4 randomized trial',
+        'Early DOAC initiation <=4 days vs delayed initiation 7-14 days',
+        'Adults with AF-related acute ischemic stroke',
+        'Gatekeeper design testing noninferiority then superiority'
+      ],
+      timeline: '100 UK hospitals, 2019-2024'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 3.3,
+        label: 'Primary composite outcome at 90 days',
+        name: 'Early DOAC Start'
+      },
+      control: {
+        percentage: 3.3,
+        label: 'Primary composite outcome at 90 days',
+        name: 'Delayed DOAC Start'
+      }
+    },
+    intervention: {
+      treatment: 'Direct oral anticoagulant initiated within 4 days of stroke onset',
+      control: 'Direct oral anticoagulant initiated 7-14 days after stroke onset'
+    },
+    clinicalContext: 'OPTIMAS provided a large contemporary randomized test of early versus delayed anticoagulation after atrial-fibrillation-associated ischemic stroke and directly challenged the traditional tendency to wait.',
+    pearls: [
+      'Primary composite event rates were identical: 3.3% vs 3.3%',
+      'Early initiation met noninferiority but not superiority',
+      'Symptomatic intracranial hemorrhage was rare and similar in both groups',
+      'The findings push against routine delayed DOAC initiation after AF-related stroke'
+    ],
+    conclusion: 'Early DOAC initiation within 4 days after AF-related ischemic stroke was noninferior to delayed initiation and does not support routinely waiting 1-2 weeks in otherwise eligible patients.',
+    source: 'Werring et al. (Lancet 2024)',
+    clinicalTrialsId: 'NCT03759938',
+    specialDesign: 'non-inferiority',
+    keyMessage: 'OPTIMAS strengthens the case for earlier anticoagulation after AF-related ischemic stroke.',
+  },
   'distal-trial': {
     id: 'distal-trial',
     title: 'DISTAL Trial',
@@ -2851,5 +4760,795 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT03542188',
     trialResult: 'NEGATIVE',
     keyMessage: 'Underpowered but mechanistically informative: CSC-first speeds EVT, PSC-first speeds IVT, and the net clinical effect remains system dependent.'
+  },
+  'act-trial': {
+    id: 'act-trial',
+    title: 'AcT Trial',
+    subtitle: 'Tenecteplase vs Alteplase in Canada',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '1577',
+        label: 'ITT Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-1',
+        label: 'at 90-120 Days'
+      },
+      pValue: {
+        value: 'NI Met',
+        label: 'Noninferiority'
+      },
+      effectSize: {
+        value: '+2.1%',
+        label: 'Absolute Difference'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Pragmatic, multicenter, open-label, registry-linked randomized noninferiority trial',
+        'Tenecteplase 0.25 mg/kg vs alteplase 0.9 mg/kg',
+        'Canadian routine-practice thrombolysis trial across 22 stroke centres'
+      ],
+      timeline: 'Canada; December 2019 to January 2022'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 36.9,
+        label: 'mRS 0-1 at 90-120 days',
+        name: 'Tenecteplase'
+      },
+      control: {
+        percentage: 34.8,
+        label: 'mRS 0-1 at 90-120 days',
+        name: 'Alteplase'
+      }
+    },
+    intervention: {
+      treatment: 'IV tenecteplase 0.25 mg/kg as a single bolus',
+      control: 'IV alteplase 0.9 mg/kg with bolus plus infusion'
+    },
+    clinicalContext: 'AcT tested whether the practical advantages of tenecteplase in routine stroke care could replace alteplase without sacrificing outcomes. Unlike earlier efficacy-focused trials, it was deliberately pragmatic, embedded in real-world Canadian practice, and enrolled patients with disabling ischemic stroke who met standard thrombolysis criteria within 4.5 hours.',
+    pearls: [
+      'Tenecteplase achieved noninferiority to alteplase for excellent functional outcome',
+      'Symptomatic intracranial hemorrhage was similar: 3.4% vs 3.2%',
+      'Mortality at 90 days was essentially identical: 15.3% vs 15.4%',
+      'AcT is a major modern practice-shaping trial supporting tenecteplase 0.25 mg/kg as a first-line alternative'
+    ],
+    conclusion: 'In the corrected AcT trial data, 1600 patients were randomized and 1577 formed the ITT cohort. Tenecteplase 0.25 mg/kg was noninferior to alteplase for excellent functional outcome, with similar symptomatic intracranial hemorrhage and mortality, supporting tenecteplase as a practical alternative for standard IV thrombolysis.',
+    source: 'Menon BK, et al. (Lancet 2022)',
+    doi: '10.1016/S0140-6736(22)01054-6',
+    clinicalTrialsId: 'NCT03889249',
+    trialResult: 'POSITIVE',
+    safetyProfile: {
+      sICH: {
+        evt: 3.4,
+        control: 3.2,
+        label: 'Symptomatic intracranial hemorrhage at 24 hours'
+      },
+      mortality: {
+        evt: 15.3,
+        control: 15.4,
+        label: 'Death within 90 days'
+      }
+    }
+  },
+  'aramis-trial': {
+    id: 'aramis-trial',
+    title: 'ARAMIS Trial',
+    subtitle: 'Dual Antiplatelet Therapy vs Alteplase for Minor Nondisabling Stroke',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '760',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-1',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '<0.001',
+        label: 'Noninferiority'
+      },
+      effectSize: {
+        value: '+2.3%',
+        label: 'Risk Difference'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter, open-label, blinded-endpoint randomized noninferiority trial',
+        'Minor nondisabling acute ischemic stroke within 4.5 hours',
+        'DAPT vs IV alteplase'
+      ],
+      timeline: 'China; October 2018 to April 2022'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 93.8,
+        label: 'Excellent outcome (mRS 0-1) at 90 days',
+        name: 'DAPT'
+      },
+      control: {
+        percentage: 91.4,
+        label: 'Excellent outcome (mRS 0-1) at 90 days',
+        name: 'Alteplase'
+      }
+    },
+    intervention: {
+      treatment: 'Clopidogrel plus aspirin followed by guideline-based antiplatelet therapy',
+      control: 'IV alteplase 0.9 mg/kg followed by delayed antiplatelet therapy'
+    },
+    clinicalContext: 'For minor nondisabling stroke, the net value of thrombolysis has always been uncertain because the baseline prognosis is good and even low rates of hemorrhage matter. ARAMIS directly challenged the assumption that alteplase is needed in this subgroup.',
+    pearls: [
+      'DAPT was noninferior to alteplase in minor nondisabling stroke',
+      'Excellent 90-day outcome was very high in both groups: 93.8% vs 91.4%',
+      'Symptomatic intracranial hemorrhage remained rare and numerically lower with DAPT: 0.3% vs 0.9%',
+      'ARAMIS complements PRISMS by strengthening the case against routine alteplase for clearly nondisabling deficits'
+    ],
+    conclusion: 'ARAMIS showed that in minor nondisabling acute ischemic stroke, dual antiplatelet therapy is noninferior to alteplase for 90-day excellent outcome and avoids the need for thrombolysis in many low-risk patients.',
+    source: 'Chen HS, et al. (JAMA 2023)',
+    doi: '10.1001/jama.2023.7827',
+    clinicalTrialsId: 'NCT03661411',
+    trialResult: 'POSITIVE'
+  },
+  'attest-2-trial': {
+    id: 'attest-2-trial',
+    title: 'ATTEST-2 Trial',
+    subtitle: 'Tenecteplase vs Alteplase Within 4.5 Hours',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '1777',
+        label: 'Treated Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '<0.0001',
+        label: 'Noninferiority'
+      },
+      effectSize: {
+        value: 'OR 1.07',
+        label: 'Ordinal OR'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Prospective, randomized, parallel-group, open-label trial with masked endpoints',
+        'Tenecteplase 0.25 mg/kg vs alteplase 0.9 mg/kg',
+        '39 UK stroke centres'
+      ],
+      timeline: 'United Kingdom; January 2017 to May 2023'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 44,
+        label: 'Excellent neurological recovery (mRS 0-1) at 90 days',
+        name: 'Tenecteplase'
+      },
+      control: {
+        percentage: 42,
+        label: 'Excellent neurological recovery (mRS 0-1) at 90 days',
+        name: 'Alteplase'
+      }
+    },
+    intervention: {
+      treatment: 'IV tenecteplase 0.25 mg/kg',
+      control: 'IV alteplase 0.9 mg/kg'
+    },
+    clinicalContext: 'ATTEST-2 was designed as a large UK confirmatory trial after earlier tenecteplase studies suggested workflow advantages and at least similar efficacy compared with alteplase.',
+    pearls: [
+      'Tenecteplase was noninferior, but not superior, to alteplase for 90-day ordinal mRS distribution',
+      'Excellent recovery occurred in 44% vs 42%',
+      'Mortality was identical at about 8% in both groups',
+      'This large representative UK cohort strengthens the modern tenecteplase evidence base'
+    ],
+    conclusion: 'ATTEST-2 confirmed that tenecteplase 0.25 mg/kg is noninferior to alteplase for IV thrombolysis within 4.5 hours, supporting its use as a simpler bolus-based alternative.',
+    source: 'Muir KW, et al. (Lancet Neurol 2024)',
+    doi: '10.1016/S1474-4422(24)00377-6',
+    clinicalTrialsId: 'NCT02814409',
+    trialResult: 'POSITIVE'
+  },
+  'nor-test-trial': {
+    id: 'nor-test-trial',
+    title: 'NOR-TEST Trial',
+    subtitle: 'Tenecteplase 0.4 mg/kg vs Alteplase',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '1100',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-1',
+        label: 'at 3 Months'
+      },
+      pValue: {
+        value: '0.52',
+        label: 'Not Superior'
+      },
+      effectSize: {
+        value: 'OR 1.08',
+        label: 'Odds Ratio'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Phase 3, randomized, open-label, blinded-endpoint superiority trial',
+        'Tenecteplase 0.4 mg/kg vs alteplase 0.9 mg/kg',
+        'Included wake-up stroke and bridging patients'
+      ],
+      timeline: 'Norway; September 2012 to September 2016'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 64,
+        label: 'Excellent outcome (mRS 0-1) at 3 months',
+        name: 'Tenecteplase'
+      },
+      control: {
+        percentage: 63,
+        label: 'Excellent outcome (mRS 0-1) at 3 months',
+        name: 'Alteplase'
+      }
+    },
+    intervention: {
+      treatment: 'IV tenecteplase 0.4 mg/kg',
+      control: 'IV alteplase 0.9 mg/kg'
+    },
+    clinicalContext: 'NOR-TEST was an early large tenecteplase phase 3 study, but its interpretation was complicated by a cohort dominated by mild stroke and stroke mimics, which limited its ability to clarify performance in more severe stroke.',
+    pearls: [
+      'Tenecteplase 0.4 mg/kg was not superior to alteplase',
+      'Most patients had mild stroke, with median NIHSS 4',
+      'Serious adverse events and mortality were similar between groups',
+      'The apparently neutral result in mild stroke set the stage for later concern about the 0.4 mg/kg dose in more severe stroke'
+    ],
+    conclusion: 'NOR-TEST found similar efficacy and safety between high-dose tenecteplase and alteplase in a largely mild-stroke population, but it did not establish superiority and left uncertainty about the optimal tenecteplase dose.',
+    source: 'Logallo N, et al. (Lancet Neurol 2017)',
+    doi: '10.1016/S1474-4422(17)30253-3',
+    clinicalTrialsId: 'NCT01949948',
+    trialResult: 'NEUTRAL'
+  },
+  'nor-test-2-part-a-trial': {
+    id: 'nor-test-2-part-a-trial',
+    title: 'NOR-TEST 2 (Part A)',
+    subtitle: 'Tenecteplase 0.4 mg/kg vs Alteplase in Moderate-Severe Stroke',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '204',
+        label: 'Modified ITT Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-1',
+        label: 'at 3 Months'
+      },
+      pValue: {
+        value: '0.0064',
+        label: 'Worse with Tenecteplase'
+      },
+      effectSize: {
+        value: 'OR 0.45',
+        label: 'Odds Ratio'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Phase 3, randomized, open-label, blinded-endpoint noninferiority trial',
+        'Moderate to severe acute ischemic stroke only',
+        'Stopped early for safety at tenecteplase 0.4 mg/kg'
+      ],
+      timeline: 'Norway; October 2019 to September 2021'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 32,
+        label: 'Favorable outcome (mRS 0-1) at 3 months',
+        name: 'Tenecteplase 0.4 mg/kg'
+      },
+      control: {
+        percentage: 51,
+        label: 'Favorable outcome (mRS 0-1) at 3 months',
+        name: 'Alteplase'
+      }
+    },
+    intervention: {
+      treatment: 'IV tenecteplase 0.4 mg/kg',
+      control: 'IV alteplase 0.9 mg/kg'
+    },
+    clinicalContext: 'NOR-TEST 2 was launched to answer the question NOR-TEST could not: how does tenecteplase 0.4 mg/kg perform in patients with genuinely moderate or severe ischemic stroke? The answer was concerning enough that the trial stopped early.',
+    pearls: [
+      'Tenecteplase 0.4 mg/kg performed worse than alteplase in moderate-severe stroke',
+      'Any intracranial hemorrhage was substantially higher with tenecteplase: 21% vs 7%',
+      'Mortality was also higher: 16% vs 5%',
+      'NOR-TEST 2 was the key signal that the 0.4 mg/kg dose is too high for routine acute stroke use'
+    ],
+    conclusion: 'NOR-TEST 2 Part A showed worse safety and functional outcomes with tenecteplase 0.4 mg/kg than with alteplase in moderate to severe stroke. The trial effectively ended enthusiasm for the 0.4 mg/kg tenecteplase dose in acute ischemic stroke.',
+    source: 'Kvistad CE, et al. (Lancet Neurol 2022)',
+    doi: '10.1016/S1474-4422(22)00124-7',
+    clinicalTrialsId: 'NCT03854500',
+    trialResult: 'NEGATIVE'
+  },
+  'prisms-trial': {
+    id: 'prisms-trial',
+    title: 'PRISMS Trial',
+    subtitle: 'Alteplase vs Aspirin in Minor Nondisabling Stroke',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '313',
+        label: 'Enrolled Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-1',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: 'NS',
+        label: 'No Benefit'
+      },
+      effectSize: {
+        value: '-1.1%',
+        label: 'Adjusted Risk Difference'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Phase 3b, double-blind, double-placebo randomized trial',
+        'Minor nondisabling stroke within 3 hours',
+        'IV alteplase vs aspirin'
+      ],
+      timeline: 'United States; May 2014 to December 2016'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 78.2,
+        label: 'Favorable outcome (mRS 0-1) at 90 days',
+        name: 'Alteplase'
+      },
+      control: {
+        percentage: 81.5,
+        label: 'Favorable outcome (mRS 0-1) at 90 days',
+        name: 'Aspirin'
+      }
+    },
+    intervention: {
+      treatment: 'IV alteplase 0.9 mg/kg plus oral placebo',
+      control: 'Aspirin 325 mg plus IV placebo'
+    },
+    clinicalContext: 'PRISMS directly addressed one of the most common thrombolysis gray zones: patients with very mild symptoms that are not clearly disabling. The question is whether tPA meaningfully improves outcome enough to justify hemorrhage risk.',
+    pearls: [
+      'Alteplase did not improve 90-day favorable outcome over aspirin',
+      'Symptomatic intracranial hemorrhage occurred only in the alteplase arm: 3.2% vs 0%',
+      'The trial was stopped early and therefore underpowered, but its direction did not favor alteplase',
+      'PRISMS remains foundational when deciding against thrombolysis for clearly nondisabling deficits'
+    ],
+    conclusion: 'PRISMS did not show benefit of alteplase over aspirin in minor nondisabling stroke and demonstrated nontrivial hemorrhage risk. In practice, it supports withholding thrombolysis when deficits are truly nondisabling.',
+    source: 'Khatri P, et al. (JAMA 2018)',
+    doi: '10.1001/jama.2018.8496',
+    clinicalTrialsId: 'NCT02072226',
+    trialResult: 'NEGATIVE'
+  },
+  'prost-trial': {
+    id: 'prost-trial',
+    title: 'PROST Trial',
+    subtitle: 'Recombinant Human Prourokinase vs Alteplase',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '663',
+        label: 'Modified ITT Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-1',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: 'NI Met',
+        label: 'Noninferiority'
+      },
+      effectSize: {
+        value: '+0.9%',
+        label: 'Risk Difference'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Randomized, alteplase-controlled, open-label phase 3 trial',
+        'rhPro-UK vs alteplase within 4.5 hours',
+        '35 centres in China'
+      ],
+      timeline: 'China; May 2018 to May 2020'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 65.2,
+        label: 'mRS 0-1 at 90 days',
+        name: 'rhPro-UK'
+      },
+      control: {
+        percentage: 64.3,
+        label: 'mRS 0-1 at 90 days',
+        name: 'Alteplase'
+      }
+    },
+    intervention: {
+      treatment: 'Intravenous recombinant human prourokinase',
+      control: 'Intravenous alteplase 0.9 mg/kg'
+    },
+    clinicalContext: 'PROST addressed the need for thrombolytic alternatives to alteplase, especially in regions where supply, cost, or bleeding profile may matter. Recombinant human prourokinase had shown promise in phase 2 testing.',
+    pearls: [
+      'rhPro-UK was noninferior to alteplase for excellent 90-day outcome',
+      'Symptomatic intracranial hemorrhage was similar: 1.5% vs 1.8%',
+      'Systemic bleeding was markedly lower with rhPro-UK: 25.8% vs 42.2%',
+      'PROST opened the door for additional alternative-fibrinolytic development beyond tenecteplase'
+    ],
+    conclusion: 'PROST showed that recombinant human prourokinase is noninferior to alteplase for early-window ischemic stroke and may reduce systemic bleeding, making it a credible alternative thrombolytic strategy.',
+    source: 'PROST Investigators (JAMA Netw Open 2023)',
+    doi: '10.1001/jamanetworkopen.2023.25415',
+    trialResult: 'POSITIVE'
+  },
+  'prost-2-trial': {
+    id: 'prost-2-trial',
+    title: 'PROST-2 Trial',
+    subtitle: 'Large Phase 3 Prourokinase vs Alteplase Trial',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '1552',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-1',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '<0.0001',
+        label: 'Noninferiority'
+      },
+      effectSize: {
+        value: 'RR 1.04',
+        label: 'Risk Ratio'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Phase 3, open-label, noninferiority randomized trial',
+        'Patients ineligible for or refusing EVT',
+        'Prourokinase vs alteplase within 4.5 hours'
+      ],
+      timeline: 'China; January 2023 to March 2024'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 72.0,
+        label: 'mRS 0-1 at 90 days',
+        name: 'Prourokinase'
+      },
+      control: {
+        percentage: 68.7,
+        label: 'mRS 0-1 at 90 days',
+        name: 'Alteplase'
+      }
+    },
+    intervention: {
+      treatment: 'Recombinant human prourokinase 15 mg bolus plus 20 mg infusion over 30 minutes',
+      control: 'IV alteplase 0.9 mg/kg'
+    },
+    clinicalContext: 'PROST-2 expanded the prourokinase evidence base into a much larger phase 3 population, with particular relevance during global thrombolytic shortages and for patients who are not EVT candidates.',
+    pearls: [
+      'Prourokinase was noninferior to alteplase for excellent functional outcome',
+      'Symptomatic intracranial hemorrhage was lower: 0.3% vs 1.3%',
+      'Major bleeding at 7 days was also lower: 0.5% vs 2.1%',
+      'PROST-2 suggests prourokinase may be both a supply alternative and a potentially cleaner bleeding-profile option'
+    ],
+    conclusion: 'PROST-2 confirmed noninferiority of prourokinase to alteplase and suggested lower bleeding rates, strengthening the case for prourokinase as a viable IV thrombolytic alternative.',
+    source: 'PROST-2 Investigators (Lancet Neurol 2024)',
+    doi: '10.1016/S1474-4422(24)00436-8',
+    clinicalTrialsId: 'NCT05700591',
+    trialResult: 'POSITIVE'
+  },
+  'raise-trial': {
+    id: 'raise-trial',
+    title: 'RAISE Trial',
+    subtitle: 'Reteplase vs Alteplase for Acute Ischemic Stroke',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '1412',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-1',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '0.002',
+        label: 'Superior to Alteplase'
+      },
+      effectSize: {
+        value: 'RR 1.13',
+        label: 'Risk Ratio'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Randomized controlled superiority trial',
+        'Reteplase double bolus vs alteplase infusion',
+        'Treatment within 4.5 hours'
+      ],
+      timeline: 'China; NEJM 2024'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 79.5,
+        label: 'Excellent outcome (mRS 0-1) at 90 days',
+        name: 'Reteplase'
+      },
+      control: {
+        percentage: 70.4,
+        label: 'Excellent outcome (mRS 0-1) at 90 days',
+        name: 'Alteplase'
+      }
+    },
+    intervention: {
+      treatment: 'IV reteplase 18 mg bolus followed by a second 18 mg bolus 30 minutes later',
+      control: 'IV alteplase 0.9 mg/kg'
+    },
+    clinicalContext: 'RAISE tested whether reteplase, a fibrinolytic already familiar in cardiology, could outperform alteplase in early ischemic stroke while preserving acceptable safety.',
+    pearls: [
+      'Reteplase improved excellent functional outcome over alteplase: 79.5% vs 70.4%',
+      'Symptomatic intracranial hemorrhage was similar: 2.4% vs 2.0%',
+      'Any intracranial hemorrhage and overall adverse events were higher with reteplase',
+      'RAISE is one of the most provocative recent IVT trials because it suggests a thrombolytic may exceed alteplase rather than simply match it'
+    ],
+    conclusion: 'RAISE showed superior functional outcome with reteplase compared with alteplase in early-window ischemic stroke, although any intracranial hemorrhage and adverse events were somewhat higher. The result is promising but would likely need replication before changing broad practice.',
+    source: 'Li S, et al. (NEJM 2024)',
+    doi: '10.1056/NEJMoa2400314',
+    clinicalTrialsId: 'NCT05295173',
+    trialResult: 'POSITIVE'
+  },
+  'taste-trial': {
+    id: 'taste-trial',
+    title: 'TASTE Trial',
+    subtitle: 'Tenecteplase vs Alteplase with Perfusion-Imaging Selection',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '680',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-1',
+        label: 'at 3 Months'
+      },
+      pValue: {
+        value: 'PP NI Only',
+        label: 'Nuanced Result'
+      },
+      effectSize: {
+        value: '+3%',
+        label: 'Standardized Risk Difference (ITT)'
+      }
+    },
+    trialDesign: {
+      type: [
+        'International, multicenter, open-label noninferiority trial',
+        'Perfusion-imaging selected early-window stroke',
+        'Tenecteplase 0.25 mg/kg vs alteplase 0.9 mg/kg'
+      ],
+      timeline: 'Eight countries; March 2014 to October 2023'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 57,
+        label: 'mRS 0-1 at 3 months (intention-to-treat)',
+        name: 'Tenecteplase'
+      },
+      control: {
+        percentage: 55,
+        label: 'mRS 0-1 at 3 months (intention-to-treat)',
+        name: 'Alteplase'
+      }
+    },
+    intervention: {
+      treatment: 'IV tenecteplase 0.25 mg/kg',
+      control: 'IV alteplase 0.9 mg/kg'
+    },
+    clinicalContext: 'TASTE focused on a more selected early-window population defined by perfusion mismatch and no planned EVT, asking whether tenecteplase remains at least as good as alteplase when imaging confirms salvageable tissue.',
+    pearls: [
+      'In intention-to-treat analysis, tenecteplase numerically favored alteplase but narrowly missed clean noninferiority',
+      'Per-protocol analysis supported noninferiority more clearly',
+      'Symptomatic intracranial hemorrhage was low and similar: 3% vs 2%',
+      'TASTE adds to the tenecteplase body of evidence but is more nuanced than AcT or TRACE-2'
+    ],
+    conclusion: 'TASTE generally supports tenecteplase in perfusion-selected early-window stroke, but its result was more nuanced than other noninferiority trials because the per-protocol analysis was stronger than the intention-to-treat analysis.',
+    source: 'TASTE Investigators (Lancet Neurol 2024)',
+    doi: '10.1016/S1474-4422(24)00206-0',
+    trialResult: 'NEUTRAL'
+  },
+  'timeless-trial': {
+    id: 'timeless-trial',
+    title: 'TIMELESS Trial',
+    subtitle: 'Tenecteplase 4.5-24 Hours with Perfusion-Imaging Selection',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '458',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '0.45',
+        label: 'Not Significant'
+      },
+      effectSize: {
+        value: 'OR 1.13',
+        label: 'Adjusted Common OR'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter, double-blind, placebo-controlled trial',
+        'ICA/MCA occlusion with salvageable tissue 4.5-24 hours',
+        'Most patients subsequently underwent EVT'
+      ],
+      timeline: 'NEJM 2024'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 46.0,
+        label: 'Functional independence at 90 days',
+        name: 'Tenecteplase'
+      },
+      control: {
+        percentage: 42.4,
+        label: 'Functional independence at 90 days',
+        name: 'Placebo'
+      }
+    },
+    intervention: {
+      treatment: 'IV tenecteplase 0.25 mg/kg',
+      control: 'Placebo'
+    },
+    clinicalContext: 'TIMELESS addressed whether tenecteplase adds value in the late window when perfusion imaging shows salvageable tissue, but when modern thrombectomy is already available to most patients.',
+    pearls: [
+      'TIMELESS was neutral for its primary ordinal mRS outcome',
+      'More than three-quarters of enrolled patients underwent thrombectomy, which likely diluted any incremental IV thrombolytic effect',
+      'Recanalization at 24 hours was higher with tenecteplase, but clinical benefit did not emerge',
+      'TIMELESS and TRACE-III together help define an important boundary: late-window IVT may be more useful when EVT is not available'
+    ],
+    conclusion: 'TIMELESS did not show clinical benefit of late-window tenecteplase in a population where most patients underwent thrombectomy. It does not support routine tenecteplase use 4.5-24 hours when EVT is already readily available.',
+    source: 'Albers GW, et al. (NEJM 2024)',
+    doi: '10.1056/NEJMoa2310392',
+    clinicalTrialsId: 'NCT03785678',
+    trialResult: 'NEGATIVE'
+  },
+  'trace-2-trial': {
+    id: 'trace-2-trial',
+    title: 'TRACE-2 Trial',
+    subtitle: 'Tenecteplase vs Alteplase in EVT-Ineligible Stroke',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '1430',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-1',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: 'NI Met',
+        label: 'Noninferiority'
+      },
+      effectSize: {
+        value: 'RR 1.07',
+        label: 'Risk Ratio'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Phase 3, multicenter, open-label, blinded-endpoint noninferiority trial',
+        'Standard-window IVT in EVT-ineligible or EVT-refusing stroke',
+        'Tenecteplase 0.25 mg/kg vs alteplase'
+      ],
+      timeline: 'China; June 2021 to May 2022'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 62,
+        label: 'mRS 0-1 at 90 days',
+        name: 'Tenecteplase'
+      },
+      control: {
+        percentage: 58,
+        label: 'mRS 0-1 at 90 days',
+        name: 'Alteplase'
+      }
+    },
+    intervention: {
+      treatment: 'IV tenecteplase 0.25 mg/kg',
+      control: 'IV alteplase 0.9 mg/kg'
+    },
+    clinicalContext: 'TRACE-2 was a major Chinese phase 3 confirmation study of tenecteplase in patients eligible for standard IVT but not proceeding to thrombectomy, helping determine whether the AcT signal generalizes across systems and populations.',
+    pearls: [
+      'Tenecteplase was noninferior to alteplase for excellent outcome',
+      'Symptomatic intracranial hemorrhage was similar at about 2% in both groups',
+      'TRACE-2 provides important non-Canadian confirmation of tenecteplase 0.25 mg/kg',
+      'Together with AcT and ATTEST-2, it solidifies the 0.25 mg/kg tenecteplase dose'
+    ],
+    conclusion: 'TRACE-2 confirmed that tenecteplase 0.25 mg/kg is noninferior to alteplase for standard-window IV thrombolysis in EVT-ineligible stroke, further supporting tenecteplase as a practical alteplase alternative.',
+    source: 'Wang Y, et al. (Lancet 2023)',
+    doi: '10.1016/S0140-6736(22)02600-9',
+    clinicalTrialsId: 'NCT04797013',
+    trialResult: 'POSITIVE'
+  },
+  'twist-trial': {
+    id: 'twist-trial',
+    title: 'TWIST Trial',
+    subtitle: 'Wake-Up Stroke Treated with Tenecteplase Selected by Non-Contrast CT',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '578',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '0.27',
+        label: 'Not Significant'
+      },
+      effectSize: {
+        value: 'OR 1.18',
+        label: 'Adjusted OR'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Investigator-initiated, multicenter, open-label randomized trial',
+        'Wake-up stroke selected with non-contrast CT only',
+        'Tenecteplase vs no thrombolysis'
+      ],
+      timeline: 'Ten countries; June 2017 to September 2021'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 45,
+        label: 'Excellent outcome (mRS 0-1) at 90 days',
+        name: 'Tenecteplase'
+      },
+      control: {
+        percentage: 38,
+        label: 'Excellent outcome (mRS 0-1) at 90 days',
+        name: 'Control'
+      }
+    },
+    intervention: {
+      treatment: 'IV tenecteplase 0.25 mg/kg within 4.5 hours of awakening',
+      control: 'No thrombolysis'
+    },
+    clinicalContext: 'TWIST asked whether wake-up stroke could be treated without MRI or perfusion imaging, using only non-contrast CT. If positive, it would have dramatically expanded access to reperfusion in imaging-limited settings.',
+    pearls: [
+      'TWIST was neutral for its primary ordinal outcome despite numerically more mRS 0-1 outcomes with tenecteplase',
+      'Symptomatic intracranial hemorrhage remained low: 2% vs 1%',
+      'The trial does not support using non-contrast CT alone to select wake-up stroke patients for tenecteplase',
+      'TWIST helps define the boundary between imaging simplification and overtreatment risk'
+    ],
+    conclusion: 'TWIST did not show clinical benefit of tenecteplase in wake-up stroke selected only by non-contrast CT. Current evidence still favors MRI or perfusion-based selection rather than CT-only selection for unknown-onset reperfusion therapy.',
+    source: 'Roaldsen MB, et al. (Lancet Neurol 2023)',
+    doi: '10.1016/S1474-4422(22)00484-7',
+    clinicalTrialsId: 'NCT03181360',
+    trialResult: 'NEGATIVE'
   }
 };

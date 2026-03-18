@@ -245,6 +245,13 @@ function SVGNode({
 // ─── Detail Panel ─────────────────────────────────────────────────────────────
 
 function CORBadge({ cor }: { cor: string }) {
+  if (cor === '★') {
+    return (
+      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold whitespace-nowrap bg-neuro-100 text-neuro-700 border border-neuro-200">
+        Key Message
+      </span>
+    );
+  }
   return (
     <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold whitespace-nowrap ${corClass(cor)}`}>
       {corLabel(cor)}
@@ -253,6 +260,8 @@ function CORBadge({ cor }: { cor: string }) {
 }
 
 function LOEBadge({ loe }: { loe: string }) {
+  // Key 2026 Updates use numbers as message indices — don't show as "LOE N"
+  if (/^\d+$/.test(loe)) return null;
   return (
     <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200 whitespace-nowrap">
       LOE {loe}
@@ -381,8 +390,7 @@ function MobileAccordionNode({
       <button
         className={[
           'w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors',
-          isSelected ? 'bg-neuro-50' : 'hover:bg-slate-50',
-          isHighlighted ? 'bg-yellow-50' : '',
+          isHighlighted ? 'bg-yellow-100 border-l-2 border-l-yellow-400' : isSelected ? 'bg-neuro-50' : 'hover:bg-slate-50',
         ].join(' ')}
         style={{ minHeight: 44 }}
         onClick={() => {
@@ -463,14 +471,14 @@ function BottomSheet({
 
   return (
     <>
-      {/* Backdrop */}
+      {/* Backdrop — above nav bar (z-50) */}
       <div
-        className="fixed inset-0 bg-black/20 z-40"
+        className="fixed inset-0 bg-black/30 z-[80]"
         onClick={onClose}
       />
-      {/* Sheet */}
+      {/* Sheet — above backdrop and nav bar */}
       <div
-        className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl shadow-2xl flex flex-col"
+        className="fixed bottom-0 left-0 right-0 z-[100] bg-white rounded-t-2xl shadow-2xl flex flex-col"
         style={{
           maxHeight: '80vh',
           transform: `translateY(${translateY}px)`,
@@ -519,9 +527,15 @@ function BottomSheet({
           </div>
         </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
-          {recs.length === 0 && node.children?.length ? (
+        {/* Content — pb-20 ensures last item stays above mobile nav bar */}
+        <div className="flex-1 overflow-y-auto p-4 pb-20 space-y-3">
+          {recs.length === 0 && corFilter && !node.children?.length ? (
+            <div className="flex flex-col items-center justify-center py-10 text-center">
+              <Filter className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+              <p className="text-sm font-medium text-slate-500">No {corFilter === '1' ? 'COR 1' : corFilter === '2a' ? 'COR 2a' : corFilter === '2b' ? 'COR 2b' : 'COR 3'} recommendations</p>
+              <p className="text-xs text-slate-400 mt-1">in this section</p>
+            </div>
+          ) : recs.length === 0 && node.children?.length ? (
             <div>
               <p className="text-xs text-slate-500 mb-3">Sub-topics in this section:</p>
               <div className="space-y-2">
@@ -689,8 +703,8 @@ export default function StrokeGuidelineMindmap() {
 
   return (
     <div className="flex flex-col bg-slate-50" style={{ minHeight: '100vh' }}>
-      {/* ── Page Header ── */}
-      <div className="bg-white border-b border-slate-200 px-4 py-3 flex-shrink-0">
+      {/* ── Page Header — sticky so search/filter stay on screen while scrolling ── */}
+      <div className="bg-white border-b border-slate-200 px-4 py-3 flex-shrink-0 sticky top-0 z-40 -mx-4 md:-mx-8">
         <div className="max-w-screen-xl mx-auto">
           <Link
             to="/guide"
@@ -712,9 +726,10 @@ export default function StrokeGuidelineMindmap() {
               href="https://doi.org/10.1161/STR.0000000000000513"
               target="_blank"
               rel="noopener noreferrer"
-              className="shrink-0 inline-flex items-center gap-1.5 text-xs text-neuro-600 hover:text-neuro-700 font-medium"
+              className="shrink-0 inline-flex items-center gap-1.5 text-xs text-neuro-600 hover:text-neuro-700 font-medium p-2.5 -mr-2.5 rounded-lg hover:bg-neuro-50 transition-colors"
+              aria-label="View source guideline"
             >
-              <BookOpen className="w-3.5 h-3.5" />
+              <BookOpen className="w-4 h-4" />
               <span className="hidden sm:inline">Source</span>
             </a>
           </div>
@@ -746,9 +761,9 @@ export default function StrokeGuidelineMindmap() {
                   key={f.value}
                   onClick={() => setCorFilter((prev) => (prev === f.value ? null : f.value))}
                   className={[
-                    'px-2 py-0.5 rounded text-[10px] font-bold border transition-all',
+                    'px-2.5 py-1.5 rounded-lg text-[11px] font-bold border transition-all min-h-[32px]',
                     f.cls,
-                    corFilter === f.value ? 'ring-2 ring-offset-1 ring-slate-400' : 'opacity-60 hover:opacity-90',
+                    corFilter === f.value ? 'ring-2 ring-offset-1 ring-slate-400' : 'opacity-70 hover:opacity-100',
                   ].join(' ')}
                 >
                   {f.label}

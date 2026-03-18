@@ -29,8 +29,17 @@ const TrialPageNew: React.FC = () => {
     trialId = pathTrialId === 'wake-up' ? 'wake-up-trial' : pathTrialId;
   }
 
-  const trial = GUIDE_CONTENT[trialId];
   const trialMetadata = TRIAL_DATA[trialId];
+  const trial = GUIDE_CONTENT[trialId] ?? (
+    trialMetadata
+      ? {
+          id: trialId,
+          title: trialMetadata.title,
+          category: trialMetadata.category,
+          content: '',
+        }
+      : undefined
+  );
   const catalogTrial = findTrialById(trialId);
   const isPlaceholderTrial = !!catalogTrial?.isPlaceholder && !trial && !trialMetadata;
 
@@ -52,6 +61,7 @@ const TrialPageNew: React.FC = () => {
             </Link>
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-1">
               {catalogTrial.name}
+              {catalogTrial.year > 0 ? <span className="ml-2 text-slate-400 dark:text-slate-500">({catalogTrial.year})</span> : null}
             </h1>
             <p className="text-slate-500 dark:text-slate-400 text-base">
               {categoryNames[catalogTrial.category]}
@@ -210,6 +220,7 @@ const TrialPageNew: React.FC = () => {
           </Link>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-1">
             {trialMetadata?.title || trial.title}
+            {catalogTrial?.year ? <span className="ml-2 text-slate-400 dark:text-slate-500">({catalogTrial.year})</span> : null}
           </h1>
           <p className="text-slate-500 dark:text-slate-400 text-base">
             {trialMetadata?.subtitle || trial.category}
@@ -574,19 +585,21 @@ const TrialPageNew: React.FC = () => {
             )}
 
             {/* Trial Content */}
-            <div className="prose prose-lg dark:prose-invert max-w-none">
-              <ReactMarkdown
-                components={{
-                  h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-slate-900 dark:text-white mt-8 mb-4" {...props} />,
-                  h3: ({node, ...props}) => <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-6 mb-3" {...props} />,
-                  p: ({node, ...props}) => <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4" {...props} />,
-                  ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-2 mb-4 text-slate-700 dark:text-slate-300" {...props} />,
-                  strong: ({node, ...props}) => <strong className="font-bold text-slate-900 dark:text-white" {...props} />,
-                }}
-              >
-                {trial.content}
-              </ReactMarkdown>
-            </div>
+            {trial.content && (
+              <div className="prose prose-lg dark:prose-invert max-w-none">
+                <ReactMarkdown
+                  components={{
+                    h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-slate-900 dark:text-white mt-8 mb-4" {...props} />,
+                    h3: ({node, ...props}) => <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-6 mb-3" {...props} />,
+                    p: ({node, ...props}) => <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4" {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-2 mb-4 text-slate-700 dark:text-slate-300" {...props} />,
+                    strong: ({node, ...props}) => <strong className="font-bold text-slate-900 dark:text-white" {...props} />,
+                  }}
+                >
+                  {trial.content}
+                </ReactMarkdown>
+              </div>
+            )}
 
             {/* Source Citation */}
             {trialMetadata?.source && (
