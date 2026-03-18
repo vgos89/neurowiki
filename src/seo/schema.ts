@@ -457,6 +457,8 @@ function trialSchema(pathname: string, title: string, description: string, trial
       about: { '@type': 'MedicalScholarlyArticle', name: trialLabel, url },
       publisher: PUBLISHER,
       lastReviewed: LAST_REVIEWED,
+      datePublished: DATE_PUBLISHED,
+      dateModified: DATE_MODIFIED,
     },
     {
       '@type': 'BreadcrumbList',
