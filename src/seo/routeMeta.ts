@@ -110,7 +110,7 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
 
   '/calculators/late-window-ivt': {
     title: 'Late Window IVT — Wake-Up Stroke & Thrombolysis Eligibility | NeuroWiki',
-    description: 'Interactive late window IVT eligibility pathway for wake-up stroke and extended thrombolysis (4.5–24h). Based on WAKE-UP, EXTEND, TIMELESS, TRACE-3, and 2026 AHA/ASA guidelines.',
+    description: 'Interactive late window IVT eligibility pathway for wake-up stroke, perfusion-selected 4.5–9h thrombolysis, and selected late-window LVO cases up to 24h from last known well. Based on WAKE-UP, EXTEND, TIMELESS, TRACE-3, and 2026 AHA/ASA guidelines.',
     keywords: 'late window IVT, wake-up stroke thrombolysis, extended window tPA, DWI FLAIR mismatch eligibility, WAKE-UP trial criteria, TIMELESS trial tenecteplase, late window thrombolysis calculator, unknown onset stroke tPA',
     image: 'https://neurowiki.ai/og-image.png',
   },

@@ -22,13 +22,14 @@ export interface ExtendedIVTPathwayProps {
 export interface IVTResult {
   eligible: boolean;
   cor: '2a' | '2b';
-  path: 'A' | 'B' | 'C-LVO' | 'C-NonLVO';
+  path: 'A' | 'B' | 'C-LVO';
   trialsBasis: string[];
 }
 
 type YesNo = boolean | null;
 type ImagingModality = 'mri' | 'ctp' | null;
-type PathAvail = 'A' | 'B' | 'C' | 'standard' | 'outside' | 'none-mri' | null;
+type OnsetMode = 'known' | 'unknown-lkw' | 'unknown-no-lkw' | 'wake-up' | null;
+type PathStage = 'A' | 'B' | 'C' | 'standard' | 'outside' | 'lkw-required' | null;
 
 interface IVTResultFull {
   eligible: boolean;
@@ -37,7 +38,7 @@ interface IVTResultFull {
   details: string;
   variant: 'success' | 'warning' | 'danger' | 'neutral';
   cor?: '2a' | '2b';
-  path?: 'A' | 'B' | 'C-LVO' | 'C-NonLVO';
+  path?: 'A' | 'B' | 'C-LVO';
   trialsBasis?: string[];
   showBothAgents?: boolean;
 }
@@ -52,7 +53,6 @@ const TRIALS: Record<string, TrialInfo> = {
   'ECASS-4':  { journal: 'Stroke', year: 2019, cor: '—'   },
   'TIMELESS': { journal: 'NEJM',   year: 2024, cor: '2b'  },
   'TRACE-3':  { journal: 'NEJM',   year: 2023, cor: '2b'  },
-  'OPTION':   { journal: 'JAMA',   year: 2024, cor: '2b*' },
 };
 
 /* ─── EVT barriers ───────────────────────────────────────────────── */
@@ -75,27 +75,70 @@ function formatElapsed(hours: number): string {
   return `${h}h ${m}m`;
 }
 
-function getPathAvail(
-  lkwUnknown: boolean,
+function getPathStage(
+  onsetMode: OnsetMode,
   elapsedHours: number | null,
   imagingModality: ImagingModality,
   setupComplete: boolean,
   hoursSinceMidpoint: number | null,
-): PathAvail {
+  aRecognition: YesNo,
+  aDwiSmall: YesNo,
+  aFlair: YesNo,
+  bCtpCore: YesNo,
+  bCtpMismatch: YesNo,
+  bMriPwi: YesNo,
+  bMriMismatch: YesNo,
+  bEvt: YesNo,
+): PathStage {
   if (!setupComplete || imagingModality === null) return null;
-  if (lkwUnknown) {
-    if (imagingModality === 'mri') return 'A';
-    // Sleep onset + CTP: EXTEND trial uses ≤9h from midpoint of sleep
-    if (imagingModality === 'ctp' && hoursSinceMidpoint !== null) {
-      return hoursSinceMidpoint <= 9 ? 'B' : 'outside';
-    }
-    return 'none-mri'; // general unknown onset + CTP (no times entered)
+
+  const hasKnownLkw = elapsedHours !== null;
+  const isWakeUp = onsetMode === 'wake-up';
+  const isUnknown = onsetMode === 'unknown-lkw' || onsetMode === 'unknown-no-lkw' || onsetMode === 'wake-up';
+  const pathAAvailable = isUnknown && imagingModality === 'mri';
+  const pathAFailed = aRecognition === false || aDwiSmall === false || aFlair === false;
+  const pathAEligible = aRecognition === true && aDwiSmall === true && aFlair === true;
+
+  const pathBAvailable = (() => {
+    if (imagingModality === 'ctp' && isWakeUp && hoursSinceMidpoint !== null) return hoursSinceMidpoint <= 9;
+    if (!hasKnownLkw) return false;
+    return elapsedHours >= 4.5 && elapsedHours <= 9;
+  })();
+  const pathBFavorable = imagingModality === 'ctp'
+    ? bCtpCore === true && bCtpMismatch === true
+    : bMriPwi === true && bMriMismatch === true;
+  const pathBFailed = imagingModality === 'ctp'
+    ? bCtpCore === false || bCtpMismatch === false
+    : bMriPwi === false || bMriMismatch === false;
+  const pathBResolved = pathBFailed || (pathBFavorable && bEvt !== null);
+
+  const pathCAvailable = hasKnownLkw && elapsedHours <= 24 && (
+    onsetMode === 'known'
+      ? elapsedHours > 9
+      : onsetMode === 'unknown-lkw' || onsetMode === 'wake-up'
+  );
+
+  if (hasKnownLkw && onsetMode !== 'unknown-no-lkw' && elapsedHours < 4.5) return 'standard';
+  if (hasKnownLkw && elapsedHours > 24) return 'outside';
+  if (onsetMode === 'unknown-no-lkw' && imagingModality === 'ctp') return 'lkw-required';
+
+  if (pathAAvailable) {
+    if (!pathAFailed && !pathAEligible) return 'A';
+    if (pathAEligible) return 'A';
   }
-  if (elapsedHours === null) return null;
-  if (elapsedHours < 4.5) return 'standard';
-  if (elapsedHours <= 9)  return 'B';
-  if (elapsedHours <= 24) return 'C';
-  return 'outside';
+
+  if (pathBAvailable) {
+    if (!pathBResolved) return 'B';
+    if (pathBFavorable && bEvt !== null) return 'B';
+  }
+
+  if (pathCAvailable) return 'C';
+
+  if (pathAAvailable && pathAFailed) return 'A';
+  if (pathBAvailable && pathBFailed) return 'B';
+
+  if (onsetMode === 'unknown-no-lkw') return 'lkw-required';
+  return hasKnownLkw && elapsedHours > 24 ? 'outside' : null;
 }
 
 function trialList(names: string[]): string {
@@ -189,8 +232,9 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   /* ── LKW / setup state ── */
   const [lkwPickerOpen, setLkwPickerOpen] = useState(false);
   const [lkwPickerMode, setLkwPickerMode] = useState<'specific' | 'sleep'>('specific');
+  const [pendingOnsetMode, setPendingOnsetMode] = useState<Exclude<OnsetMode, 'unknown-no-lkw' | null>>('known');
   const [lkwTimestamp, setLkwTimestamp] = useState<Date | null>(null);
-  const [lkwUnknown, setLkwUnknown] = useState(false);
+  const [onsetMode, setOnsetMode] = useState<OnsetMode>(null);
   const [elapsedHours, setElapsedHours] = useState<number | null>(null);
   const [imagingModality, setImagingModality] = useState<ImagingModality>(null);
 
@@ -216,16 +260,16 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   const [cLvo, setCLvo] = useState<YesNo>(null);
   const [cLvoEvt, setCLvoEvt] = useState<YesNo>(null);
   const [cLvoBarrier, setCLvoBarrier] = useState<EVTBarrierId | null>(null);
-  const [cNonLvoExpertise, setCNonLvoExpertise] = useState<YesNo>(null);
+  const [cExpertise, setCExpertise] = useState<YesNo>(null);
 
   /* ── Live elapsed timer (LKW → now) ── */
   useEffect(() => {
-    if (!lkwTimestamp || lkwUnknown) { setElapsedHours(null); return; }
+    if (!lkwTimestamp) { setElapsedHours(null); return; }
     const calc = () => Math.max(0, (Date.now() - lkwTimestamp.getTime()) / 3_600_000);
     setElapsedHours(calc());
     const id = setInterval(() => setElapsedHours(calc()), 30_000);
     return () => clearInterval(id);
-  }, [lkwTimestamp, lkwUnknown]);
+  }, [lkwTimestamp]);
 
   /* ── Live timer: minutes since waking (sleep onset mode) ── */
   useEffect(() => {
@@ -248,29 +292,47 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
 
   /* ── Auto-set aRecognition from wake-up time ── */
   useEffect(() => {
-    if (minutesSinceWaking === null) return;
+    if (onsetMode !== 'wake-up' || minutesSinceWaking === null) return;
     setARecognition(minutesSinceWaking <= 270); // 4.5h = 270 min
-  }, [minutesSinceWaking]);
+  }, [onsetMode, minutesSinceWaking]);
 
   /* ── Derived ── */
-  const setupComplete = lkwUnknown || lkwTimestamp !== null;
+  const setupComplete = onsetMode === 'unknown-no-lkw' || lkwTimestamp !== null;
 
-  const pathAvail: PathAvail = useMemo(
-    () => getPathAvail(lkwUnknown, elapsedHours, imagingModality, setupComplete, hoursSinceMidpoint),
-    [lkwUnknown, elapsedHours, imagingModality, setupComplete, hoursSinceMidpoint],
+  const pathStage: PathStage = useMemo(
+    () => getPathStage(
+      onsetMode,
+      elapsedHours,
+      imagingModality,
+      setupComplete,
+      hoursSinceMidpoint,
+      aRecognition,
+      aDwiSmall,
+      aFlair,
+      bCtpCore,
+      bCtpMismatch,
+      bMriPwi,
+      bMriMismatch,
+      bEvt,
+    ),
+    [
+      onsetMode, elapsedHours, imagingModality, setupComplete, hoursSinceMidpoint,
+      aRecognition, aDwiSmall, aFlair,
+      bCtpCore, bCtpMismatch, bMriPwi, bMriMismatch, bEvt,
+    ],
   );
 
   const isSetupComplete = setupComplete && imagingModality !== null;
 
   const isCriteriaComplete = useMemo(() => {
-    if (!pathAvail) return false;
+    if (!pathStage) return false;
     // Redirect cases — no questions, instant complete
-    if (['standard', 'outside', 'none-mri'].includes(pathAvail)) return true;
-    if (pathAvail === 'A') {
+    if (['standard', 'outside', 'lkw-required'].includes(pathStage)) return true;
+    if (pathStage === 'A') {
       if (aRecognition === false || aDwiSmall === false || aFlair === false) return true;
       return aRecognition === true && aDwiSmall === true && aFlair === true;
     }
-    if (pathAvail === 'B') {
+    if (pathStage === 'B') {
       if (imagingModality === 'ctp') {
         if (bCtpCore === false || bCtpMismatch === false) return true;
         return bCtpCore === true && bCtpMismatch === true && bEvt !== null;
@@ -279,45 +341,45 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
         return bMriPwi === true && bMriMismatch === true && bEvt !== null;
       }
     }
-    if (pathAvail === 'C') {
+    if (pathStage === 'C') {
       if (cPenumbra === false) return true;
       if (cPenumbra === null || cLvo === null) return false;
-      if (cLvo === true) {
-        if (cLvoEvt === true) return true; // redirect to EVT
-        return cLvoEvt === false && cLvoBarrier !== null;
-      }
-      return cNonLvoExpertise !== null;
+      if (cLvo === false) return true;
+      if (cLvoEvt === true) return true; // redirect to EVT
+      if (cLvoEvt === null) return false;
+      if (cLvoBarrier === null) return false;
+      return cExpertise !== null;
     }
     return false;
   }, [
-    pathAvail, imagingModality,
+    pathStage, imagingModality,
     aRecognition, aDwiSmall, aFlair,
     bCtpCore, bCtpMismatch, bMriPwi, bMriMismatch, bEvt,
-    cPenumbra, cLvo, cLvoEvt, cLvoBarrier, cNonLvoExpertise,
+    cPenumbra, cLvo, cLvoEvt, cLvoBarrier, cExpertise,
   ]);
 
   /* ── Result computation ── */
   const result: IVTResultFull | null = useMemo(() => {
-    if (!isSetupComplete || !pathAvail) return null;
+    if (!isSetupComplete || !pathStage) return null;
 
-    if (pathAvail === 'standard') return {
+    if (pathStage === 'standard') return {
       eligible: false, status: 'Standard Window', variant: 'neutral',
       reason: 'Within 4.5h of LKW',
       details: 'This patient falls within the standard 4.5-hour thrombolysis window. Use the standard IVT eligibility criteria — extended-window protocols do not apply.',
     };
-    if (pathAvail === 'outside') return {
+    if (pathStage === 'outside') return {
       eligible: false, status: 'Outside Window', variant: 'danger',
       reason: 'Greater than 24h from LKW',
       details: 'The patient is outside all extended thrombolysis windows. No guideline-supported extended IVT indication exists beyond 24 hours from last known well.',
     };
-    if (pathAvail === 'none-mri') return {
-      eligible: false, status: 'MRI Required', variant: 'warning',
-      reason: 'CT Perfusion cannot replace DWI-FLAIR mismatch criteria',
-      details: 'For unknown-onset / wake-up stroke, eligibility is determined by MRI DWI-FLAIR mismatch (WAKE-UP criteria). CTP cannot substitute for this. Obtain MRI if feasible, or consider the standard IVT pathway if onset is subsequently clarified.',
+    if (pathStage === 'lkw-required') return {
+      eligible: false, status: 'LKW Required', variant: 'warning',
+      reason: 'Unknown onset without usable LKW cannot enter late-window pathways',
+      details: 'Without a usable last-known-well time, CT perfusion alone cannot support late-window IVT routing. Obtain a reliable LKW timestamp for 9–24h LVO assessment, or use MRI DWI-FLAIR criteria if available for the unknown-onset pathway.',
     };
 
     // Path A
-    if (pathAvail === 'A') {
+    if (pathStage === 'A') {
       if (aRecognition === false) return { eligible: false, status: 'Not Eligible', variant: 'danger', reason: 'Outside recognition window', details: 'Patient not within 4.5h of symptom recognition. Path A (WAKE-UP/THAWS) requires treatment initiation within 4.5h of the time symptoms were first recognized (e.g., awakening).' };
       if (aDwiSmall === false) return { eligible: false, status: 'Not Eligible', variant: 'danger', reason: 'DWI lesion ≥ 1/3 MCA territory', details: 'DWI lesion size criterion not met. Both WAKE-UP and THAWS required a DWI lesion smaller than 1/3 of the MCA territory.' };
       if (aFlair === false) return { eligible: false, status: 'Not Eligible', variant: 'danger', reason: 'No DWI-FLAIR mismatch', details: 'DWI-FLAIR mismatch not present. A FLAIR-positive lesion in the DWI territory indicates established infarct (>4.5h estimated age) — tissue no longer viable for thrombolysis.' };
@@ -330,7 +392,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     }
 
     // Path B
-    if (pathAvail === 'B') {
+    if (pathStage === 'B') {
       const isCtp = imagingModality === 'ctp';
       const coreInelig = isCtp ? bCtpCore === false : bMriPwi === false;
       const mismatchInelig = isCtp ? bCtpMismatch === false : bMriMismatch === false;
@@ -349,10 +411,9 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
           : 'Diffusion-perfusion mismatch not confirmed on MRI PWI. No salvageable penumbra to treat.',
       };
       if (bEvt === true) return {
-        eligible: true, status: 'EVT Preferred', variant: 'warning', cor: '2a',
-        path: 'B', trialsBasis: ['EXTEND', 'THAWS', 'ECASS-4'], showBothAgents: true,
-        reason: 'EVT Indicated — IVT as Bridge Only',
-        details: 'EVT is preferred for eligible LVO patients. IVT may be given as a bridge if it does not delay EVT transfer. Do not delay thrombectomy for IVT.',
+        eligible: false, status: 'EVT Preferred', variant: 'warning',
+        reason: 'Rapid EVT planned — extended-window IVT not indicated',
+        details: 'Extended-window IVT is intended for patients who cannot receive or will receive delayed EVT. If rapid thrombectomy is already planned and available, proceed to EVT without endorsing late-window IVT.',
       };
       const q1Done = isCtp ? bCtpCore !== null : bMriPwi !== null;
       const q2Done = isCtp ? bCtpMismatch !== null : bMriMismatch !== null;
@@ -365,32 +426,34 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     }
 
     // Path C
-    if (pathAvail === 'C') {
+    if (pathStage === 'C') {
       if (cPenumbra === false) return { eligible: false, status: 'Not Eligible', variant: 'danger', reason: 'No salvageable penumbra', details: 'Extended-window IVT (Path C) requires confirmed target mismatch on perfusion imaging. Without evidence of viable ischemic penumbra, thrombolytic risk outweighs benefit.' };
       if (cLvo === null || cPenumbra === null) return null;
-      if (cLvo === true) {
-        if (cLvoEvt === true) return { eligible: false, status: 'EVT Preferred', variant: 'warning', reason: 'LVO — proceed to thrombectomy', details: 'EVT is the preferred treatment for LVO in the 4.5–24h window. Transfer to EVT-capable center immediately. Extended IVT applies only when EVT is not possible.' };
-        if (cLvoEvt === false && cLvoBarrier !== null) return {
-          eligible: true, status: 'Eligible', variant: 'warning', cor: '2b',
-          path: 'C-LVO', trialsBasis: ['TIMELESS', 'TRACE-3'], showBothAgents: false,
-          reason: 'LVO — Extended Window IVT (COR 2b)',
-          details: 'Patient meets criteria for extended-window IVT with LVO when EVT is not available. COR 2b — weaker evidence; expert discretion required. Document shared decision-making with patient/surrogate.',
-        };
-      }
-      if (cLvo === false && cNonLvoExpertise !== null) return {
+      if (cLvo === false) return {
+        eligible: false, status: 'Not Eligible', variant: 'danger',
+        reason: 'Late-window IVT beyond 9h is limited to LVO',
+        details: 'Current 2026 AHA/ASA late-window IVT guidance in the 9–24h range applies to patients with AIS due to LVO and salvageable penumbra when EVT cannot be performed. Non-LVO patients do not meet this Path C indication.',
+      };
+      if (cLvoEvt === true) return { eligible: false, status: 'EVT Preferred', variant: 'warning', reason: 'LVO — proceed to thrombectomy', details: 'EVT is the preferred treatment for LVO in the late window. Transfer to an EVT-capable center immediately. Path C applies only when EVT cannot be performed promptly.' };
+      if (cLvoEvt === false && cLvoBarrier !== null && cExpertise === false) return {
+        eligible: false, status: 'Not Eligible at Current Site', variant: 'warning',
+        reason: 'Expert thrombolytic stroke care not available',
+        details: 'The 2026 AHA/ASA Class 2b late-window IVT recommendation requires treatment directed by clinicians with expertise in thrombolytic stroke care. Obtain expert stroke guidance or transfer if feasible rather than endorsing IVT at the current site.',
+      };
+      if (cLvoEvt === false && cLvoBarrier !== null && cExpertise === true) return {
         eligible: true, status: 'Eligible', variant: 'warning', cor: '2b',
-        path: 'C-NonLVO', trialsBasis: ['OPTION', 'TRACE-3'], showBothAgents: false,
-        reason: 'Non-LVO — Extended Window IVT (COR 2b)',
-        details: 'Patient meets criteria for extended-window IVT without LVO. COR 2b — emerging evidence (OPTION trial published after 2026 AHA guideline). Expert discretion required. Document shared decision-making.',
+        path: 'C-LVO', trialsBasis: ['TIMELESS', 'TRACE-3'], showBothAgents: false,
+        reason: 'LVO — Extended Window IVT (COR 2b)',
+        details: 'Patient meets criteria for extended-window IVT with LVO, salvageable penumbra, no feasible EVT option, and expert thrombolytic stroke oversight. COR 2b — weaker evidence; document shared decision-making with patient/surrogate.',
       };
     }
 
     return null;
   }, [
-    isSetupComplete, pathAvail, imagingModality,
+    isSetupComplete, pathStage, imagingModality,
     aRecognition, aDwiSmall, aFlair,
     bCtpCore, bCtpMismatch, bMriPwi, bMriMismatch, bEvt,
-    cPenumbra, cLvo, cLvoEvt, cLvoBarrier, cNonLvoExpertise,
+    cPenumbra, cLvo, cLvoEvt, cLvoBarrier, cExpertise,
   ]);
 
   const isDecisionComplete = !!result && result.status !== 'Incomplete';
@@ -417,11 +480,11 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   useEffect(() => {
     if (activeSection === 0 && isSetupComplete && !prevSetupRef.current) {
       prevSetupRef.current = true;
-      const skipCriteria = pathAvail === 'standard' || pathAvail === 'outside' || pathAvail === 'none-mri';
+      const skipCriteria = pathStage === 'standard' || pathStage === 'outside' || pathStage === 'lkw-required';
       setTimeout(() => setActiveSection(skipCriteria ? 2 : 1), 280);
     }
     if (!isSetupComplete) prevSetupRef.current = false;
-  }, [activeSection, isSetupComplete, pathAvail]);
+  }, [activeSection, isSetupComplete, pathStage]);
 
   /* ── Auto-advance: Criteria complete nudge (no auto — user clicks Next) ── */
 
@@ -429,28 +492,40 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   const getSummary = useCallback((idx: number): string | undefined => {
     if (idx === 0) {
       if (!isSetupComplete) return undefined;
-      const lkwStr = lkwUnknown ? 'Unknown onset' : elapsedHours !== null ? `${formatElapsed(elapsedHours)} elapsed` : '';
+      const lkwStr = onsetMode === 'wake-up'
+        ? 'Wake-up stroke'
+        : onsetMode === 'unknown-lkw'
+          ? 'Unknown onset · LKW known'
+          : onsetMode === 'unknown-no-lkw'
+            ? 'Unknown onset · no usable LKW'
+            : elapsedHours !== null
+              ? `${formatElapsed(elapsedHours)} elapsed`
+              : '';
       const imgStr = imagingModality === 'mri' ? 'MRI' : 'CT Perfusion';
       return `${lkwStr} · ${imgStr}`;
     }
     if (idx === 1) {
       if (!isCriteriaComplete) return undefined;
-      if (pathAvail === 'A') return 'Path A · DWI-FLAIR';
-      if (pathAvail === 'B') return `Path B · ${imagingModality === 'ctp' ? 'CTP' : 'MRI PWI'}`;
-      if (pathAvail === 'C') return 'Path C · 4.5–24h';
-      return pathAvail ?? undefined;
+      if (pathStage === 'A') return 'Path A · DWI-FLAIR';
+      if (pathStage === 'B') return `Path B · ${imagingModality === 'ctp' ? 'CTP' : 'MRI PWI'}`;
+      if (pathStage === 'C') return 'Path C · Late LVO';
+      return pathStage ?? undefined;
     }
     if (idx === 2 && result) return `${result.status} · ${result.reason.split('(')[0].trim()}`;
     return undefined;
-  }, [isSetupComplete, lkwUnknown, elapsedHours, imagingModality, isCriteriaComplete, pathAvail, result]);
+  }, [isSetupComplete, onsetMode, elapsedHours, imagingModality, isCriteriaComplete, pathStage, result]);
 
   /* ── Handlers ── */
-  const handleReset = () => {
-    setLkwTimestamp(null); setLkwUnknown(false); setElapsedHours(null); setImagingModality(null);
-    setWakeTimestamp(null); setMinutesSinceWaking(null); setHoursSinceMidpoint(null);
+  const clearCriteriaAnswers = () => {
     setARecognition(null); setADwiSmall(null); setAFlair(null);
     setBCtpCore(null); setBCtpMismatch(null); setBMriPwi(null); setBMriMismatch(null); setBEvt(null);
-    setCPenumbra(null); setCLvo(null); setCLvoEvt(null); setCLvoBarrier(null); setCNonLvoExpertise(null);
+    setCPenumbra(null); setCLvo(null); setCLvoEvt(null); setCLvoBarrier(null); setCExpertise(null);
+  };
+
+  const handleReset = () => {
+    setLkwTimestamp(null); setOnsetMode(null); setElapsedHours(null); setImagingModality(null);
+    setWakeTimestamp(null); setMinutesSinceWaking(null); setHoursSinceMidpoint(null);
+    clearCriteriaAnswers();
     setActiveSection(0);
     prevSetupRef.current = false;
     prevCriteriaRef.current = false;
@@ -476,11 +551,14 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
       '',
       'Setup:',
       `  LKW: ${
-        wakeTimestamp && lkwTimestamp && imagingModality === 'ctp'
+        onsetMode === 'wake-up' && wakeTimestamp && lkwTimestamp && imagingModality === 'ctp'
           ? `Bedtime ${lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} · Woke ${wakeTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} (${hoursSinceMidpoint?.toFixed(1)}h since sleep midpoint — EXTEND)`
-          : wakeTimestamp && lkwTimestamp
+          : onsetMode === 'wake-up' && wakeTimestamp && lkwTimestamp
           ? `Bedtime ${lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} · Woke ${wakeTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} (${Math.round(minutesSinceWaking ?? 0)} min since waking)`
-          : lkwUnknown ? 'Unknown onset / Wake-up'
+          : onsetMode === 'unknown-lkw' && lkwTimestamp
+          ? `${lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} last known well · onset unknown`
+          : onsetMode === 'unknown-no-lkw'
+          ? 'Unknown onset / no usable LKW'
           : elapsedHours !== null ? `${formatElapsed(elapsedHours)} elapsed` : ''
       }`,
       `  Imaging: ${imagingModality === 'mri' ? 'MRI (DWI + FLAIR / PWI)' : 'CT Perfusion (RAPID/equivalent)'}`,
@@ -507,7 +585,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
 
   /* ── Elapsed time display ── */
   const elapsedBadge = (() => {
-    if (lkwUnknown && wakeTimestamp && lkwTimestamp) {
+    if (onsetMode === 'wake-up' && wakeTimestamp && lkwTimestamp) {
       const bedStr  = lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
       const wakeStr = wakeTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
       // CTP path: show hours since sleep midpoint (EXTEND criterion)
@@ -527,11 +605,15 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
         cls: 'bg-amber-100 text-amber-800 border-amber-200',
       };
     }
-    if (lkwUnknown) return { label: 'Unknown / Wake-up stroke', cls: 'bg-amber-100 text-amber-800 border-amber-200' };
+    if (onsetMode === 'unknown-no-lkw') return { label: 'Unknown onset · no usable LKW', cls: 'bg-amber-100 text-amber-800 border-amber-200' };
+    if (onsetMode === 'unknown-lkw' && lkwTimestamp) {
+      const lkwStr = lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      return { label: `LKW ${lkwStr} · onset unknown`, cls: 'bg-amber-100 text-amber-800 border-amber-200' };
+    }
     if (elapsedHours === null) return null;
     if (elapsedHours < 4.5) return { label: `${formatElapsed(elapsedHours)} elapsed · Standard window`, cls: 'bg-emerald-100 text-emerald-800 border-emerald-200' };
     if (elapsedHours <= 9)   return { label: `${formatElapsed(elapsedHours)} elapsed · 4.5–9h window`, cls: 'bg-amber-100 text-amber-800 border-amber-200' };
-    if (elapsedHours <= 24)  return { label: `${formatElapsed(elapsedHours)} elapsed · 4.5–24h window`, cls: 'bg-blue-100 text-blue-800 border-blue-200' };
+    if (elapsedHours <= 24)  return { label: `${formatElapsed(elapsedHours)} elapsed · Late-window LVO range`, cls: 'bg-blue-100 text-blue-800 border-blue-200' };
     return { label: `${formatElapsed(elapsedHours)} elapsed · Outside window`, cls: 'bg-red-100 text-red-800 border-red-200' };
   })();
 
@@ -611,42 +693,74 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                 <h3 className="text-sm font-semibold text-slate-700 mb-2">Last Known Well (LKW) Time</h3>
                 {!setupComplete ? (
                   <div className="space-y-2">
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       <CompactSelectionCard
-                        title="Set LKW Time"
-                        description="Input exact time"
+                        title="Known Onset / LKW"
+                        description="Symptoms began at known time"
                         selected={false}
-                        onClick={() => { setLkwPickerMode('specific'); setLkwPickerOpen(true); }}
+                        onClick={() => {
+                          clearCriteriaAnswers();
+                          setPendingOnsetMode('known');
+                          setLkwPickerMode('specific');
+                          setLkwPickerOpen(true);
+                        }}
                       />
                       <CompactSelectionCard
-                        title="Unknown / Unwitnessed"
-                        description="Onset time unclear, not sleep-related"
+                        title="Unknown Onset + Known LKW"
+                        description="Unwitnessed stroke but last known well is known"
                         selected={false}
-                        onClick={() => { setLkwUnknown(true); setLkwTimestamp(null); }}
+                        onClick={() => {
+                          clearCriteriaAnswers();
+                          setPendingOnsetMode('unknown-lkw');
+                          setLkwPickerMode('specific');
+                          setLkwPickerOpen(true);
+                        }}
                         variant="warning"
                       />
                     </div>
-                    <CompactSelectionCard
-                      title="🌙 Sleep Onset (Wake-up Stroke)"
-                      description="Enter bedtime + wake-up time — auto-routes to WAKE-UP / THAWS criteria"
-                      selected={false}
-                      onClick={() => { setLkwPickerMode('sleep'); setLkwPickerOpen(true); }}
-                      variant="warning"
-                    />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <CompactSelectionCard
+                        title="Unknown Onset / No Usable LKW"
+                        description="Late-window routing will be blocked without LKW"
+                        selected={false}
+                        onClick={() => {
+                          clearCriteriaAnswers();
+                          setOnsetMode('unknown-no-lkw');
+                          setLkwTimestamp(null);
+                          setWakeTimestamp(null);
+                          setMinutesSinceWaking(null);
+                          setHoursSinceMidpoint(null);
+                        }}
+                        variant="warning"
+                      />
+                      <CompactSelectionCard
+                        title="Sleep Onset (Wake-up Stroke)"
+                        description="Enter bedtime + wake-up time"
+                        selected={false}
+                        onClick={() => {
+                          clearCriteriaAnswers();
+                          setPendingOnsetMode('wake-up');
+                          setLkwPickerMode('sleep');
+                          setLkwPickerOpen(true);
+                        }}
+                        variant="warning"
+                      />
+                    </div>
                   </div>
                 ) : (
                   <div className={`flex items-center justify-between px-4 py-3 rounded-xl border-2 ${
-                    lkwUnknown ? 'bg-amber-50 border-amber-400' : 'bg-neuro-50 border-neuro-500'
+                    onsetMode === 'known' ? 'bg-neuro-50 border-neuro-500' : 'bg-amber-50 border-amber-400'
                   }`}>
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <Clock size={16} className={lkwUnknown ? 'text-amber-600' : 'text-neuro-600'} />
-                      <span className={`text-sm font-bold truncate ${lkwUnknown ? 'text-amber-800' : 'text-neuro-800'}`}>
+                      <Clock size={16} className={onsetMode === 'known' ? 'text-neuro-600' : 'text-amber-600'} />
+                      <span className={`text-sm font-bold truncate ${onsetMode === 'known' ? 'text-neuro-800' : 'text-amber-800'}`}>
                         {elapsedBadge?.label}
                       </span>
                     </div>
                     <button
                       onClick={() => {
-                        setLkwUnknown(false); setLkwTimestamp(null); setElapsedHours(null);
+                        clearCriteriaAnswers();
+                        setOnsetMode(null); setLkwTimestamp(null); setElapsedHours(null);
                         setWakeTimestamp(null); setMinutesSinceWaking(null); setHoursSinceMidpoint(null); setARecognition(null);
                       }}
                       className="text-xs text-slate-500 hover:text-slate-700 underline transition-colors flex-shrink-0 ml-2"
@@ -666,13 +780,13 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                       title="MRI"
                       description="DWI + FLAIR / PWI"
                       selected={imagingModality === 'mri'}
-                      onClick={() => setImagingModality('mri')}
+                      onClick={() => { clearCriteriaAnswers(); setImagingModality('mri'); }}
                     />
                     <CompactSelectionCard
                       title="CT Perfusion"
                       description="RAPID or equivalent"
                       selected={imagingModality === 'ctp'}
-                      onClick={() => setImagingModality('ctp')}
+                      onClick={() => { clearCriteriaAnswers(); setImagingModality('ctp'); }}
                     />
                   </div>
                 </div>
@@ -685,8 +799,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                     content={
                       <span>
                         <strong>Unknown onset + MRI → Path A</strong> (DWI-FLAIR, COR 2a) ·{' '}
-                        <strong>4.5–9h → Path B</strong> (Perfusion mismatch, COR 2a) ·{' '}
-                        <strong>9–24h → Path C</strong> (LVO or Non-LVO, COR 2b). CTP cannot replace MRI DWI-FLAIR for unknown onset.
+                        <strong>4.5–9h → Path B</strong> (perfusion mismatch, COR 2a) ·{' '}
+                        <strong>9–24h or unknown onset within 24h from LKW → Path C</strong> (LVO only, COR 2b). Late Path C requires LVO, no feasible rapid EVT, and expert thrombolytic stroke care.
                       </span>
                     }
                     variant="neuro"
@@ -713,7 +827,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
             <div className="space-y-6">
 
               {/* Redirect states */}
-              {pathAvail === 'standard' && (
+              {pathStage === 'standard' && (
                 <div className="flex items-start gap-3 px-4 py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm">
                   <Check size={16} className="shrink-0 mt-0.5" />
                   <div>
@@ -722,7 +836,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                   </div>
                 </div>
               )}
-              {pathAvail === 'outside' && (
+              {pathStage === 'outside' && (
                 <div className="flex items-start gap-3 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm">
                   <AlertTriangle size={16} className="shrink-0 mt-0.5" />
                   <div>
@@ -731,18 +845,18 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                   </div>
                 </div>
               )}
-              {pathAvail === 'none-mri' && (
+              {pathStage === 'lkw-required' && (
                 <div className="flex items-start gap-3 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm">
                   <AlertTriangle size={16} className="shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-bold">MRI required for unknown-onset stroke</p>
-                    <p className="text-xs mt-0.5 text-amber-700">CT Perfusion cannot substitute for DWI-FLAIR mismatch criteria (WAKE-UP). Obtain MRI if available.</p>
+                    <p className="font-bold">Usable LKW required for late-window routing</p>
+                    <p className="text-xs mt-0.5 text-amber-700">Without a reliable LKW, CT perfusion cannot support the 9–24h late-LVO pathway. Obtain LKW timing or use MRI DWI-FLAIR criteria if available for unknown-onset evaluation.</p>
                   </div>
                 </div>
               )}
 
               {/* ── PATH A ── */}
-              {pathAvail === 'A' && (
+              {pathStage === 'A' && (
                 <div className="space-y-6 animate-in slide-in-from-top-2">
                   <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                     <span className="text-xs font-bold uppercase tracking-wider text-neuro-600 bg-neuro-50 px-2 py-0.5 rounded">Path A — DWI-FLAIR Mismatch</span>
@@ -754,7 +868,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                     <p className="text-xs text-slate-500 mb-2">Time of awakening with symptoms, or time witness first noticed deficit</p>
 
                     {/* Auto-computed badge when sleep onset mode was used */}
-                    {wakeTimestamp && minutesSinceWaking !== null ? (
+                    {onsetMode === 'wake-up' && wakeTimestamp && minutesSinceWaking !== null ? (
                       <div className={`flex items-start gap-3 px-4 py-3 rounded-xl border-2 mb-2 ${
                         minutesSinceWaking <= 270
                           ? 'bg-emerald-50 border-emerald-400'
@@ -810,7 +924,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
               )}
 
               {/* ── PATH B ── */}
-              {pathAvail === 'B' && (
+              {pathStage === 'B' && (
                 <div className="space-y-6 animate-in slide-in-from-top-2">
                   <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                     <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2 py-0.5 rounded">
@@ -820,7 +934,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                   </div>
 
                   {/* Auto-computed time badge — sleep onset + CTP (EXTEND criterion) */}
-                  {lkwUnknown && wakeTimestamp && hoursSinceMidpoint !== null && imagingModality === 'ctp' && (
+                  {onsetMode === 'wake-up' && wakeTimestamp && hoursSinceMidpoint !== null && imagingModality === 'ctp' && (
                     <div className={`flex items-start gap-3 px-4 py-3 rounded-xl border-2 ${
                       hoursSinceMidpoint <= 9
                         ? 'bg-emerald-50 border-emerald-400'
@@ -898,11 +1012,11 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                       <h3 className="text-sm font-semibold text-slate-700 mb-1">EVT (thrombectomy) also indicated?</h3>
                       <p className="text-xs text-slate-500 mb-2">LVO confirmed and EVT-capable center accessible</p>
                       <div className="grid grid-cols-2 gap-2">
-                        <CompactSelectionCard title="Yes — EVT indicated" description="Prioritize thrombectomy" selected={bEvt === true} onClick={() => setBEvt(true)} variant="warning" />
+                        <CompactSelectionCard title="Yes — Rapid EVT planned" description="Do not endorse extended IVT" selected={bEvt === true} onClick={() => setBEvt(true)} variant="warning" />
                         <CompactSelectionCard title="No — IVT only" description="No LVO or EVT not available" selected={bEvt === false} onClick={() => setBEvt(false)} />
                       </div>
                       {bEvt !== null && (
-                        <LearningPearl title="IVT + EVT" content="For eligible LVO patients, EVT is preferred. IVT may be given as a bridge but should NOT delay transfer for thrombectomy. SWIFT-DIRECT and MR CLEAN-NoIV data showed non-inferiority of EVT alone for direct-to-EVT workflows." variant="amber" />
+                        <LearningPearl title="Late IVT vs Rapid EVT" content="In the extended window, IVT should not be endorsed when rapid thrombectomy is already planned. The late-window recommendation is intended for patients who cannot receive or will receive delayed EVT." variant="amber" />
                       )}
                     </div>
                   )}
@@ -910,15 +1024,15 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
               )}
 
               {/* ── PATH C ── */}
-              {pathAvail === 'C' && (
+              {pathStage === 'C' && (
                 <div className="space-y-6 animate-in slide-in-from-top-2">
                   <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-                    <span className="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded">Path C — 4.5–24h LVO / Non-LVO</span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded">Path C — Late-Window LVO Only</span>
                     <span className="text-xs text-slate-400">COR 2b · LOE B-R</span>
                   </div>
                   <div className="flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs">
                     <AlertTriangle size={14} className="shrink-0 mt-0.5" />
-                    <span><strong>COR 2b — Weaker Evidence.</strong> Expert discretion required. Document shared decision-making with patient/surrogate before administration.</span>
+                    <span><strong>COR 2b — Weaker Evidence.</strong> Path C is limited to LVO with salvageable penumbra when EVT cannot be performed promptly and treatment is directed by clinicians with expertise in thrombolytic stroke care.</span>
                   </div>
 
                   <div>
@@ -929,7 +1043,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                       <CompactSelectionCard title="No — No penumbra" description="No target mismatch" selected={cPenumbra === false} onClick={() => setCPenumbra(false)} variant="danger" />
                     </div>
                     {cPenumbra !== null && (
-                      <LearningPearl title="Path C Trials" content={`TIMELESS (Nogueira, NEJM 2024): TNK 0.25 mg/kg vs placebo for LVO 4.5–24h with perfusion mismatch — COR 2b. TRACE-3 (NEJM 2023): TNK for any occlusion 4.5–24h with mismatch — supports extended window. OPTION (JAMA 2024): TNK for non-LVO 4.5–24h — first RCT targeting non-LVO; not yet in 2026 AHA guideline.`} variant="amber" />
+                      <LearningPearl title="Path C Trials" content="TRACE-3 (NEJM 2023) and TIMELESS (NEJM 2024) inform the 2026 AHA/ASA late-window Class 2b recommendation for patients with LVO, salvageable penumbra, and no feasible rapid EVT pathway. This branch does not support non-LVO treatment." variant="amber" />
                     )}
                   </div>
 
@@ -939,7 +1053,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                       <p className="text-xs text-slate-500 mb-2">Internal carotid, M1/M2 MCA, basilar, or other proximal occlusion</p>
                       <div className="grid grid-cols-2 gap-2">
                         <CompactSelectionCard title="Yes — LVO confirmed" description="TIMELESS + TRACE-3 pathway" selected={cLvo === true} onClick={() => setCLvo(true)} />
-                        <CompactSelectionCard title="No — Non-LVO" description="OPTION + TRACE-3 pathway" selected={cLvo === false} onClick={() => setCLvo(false)} />
+                        <CompactSelectionCard title="No — Non-LVO" description="Late Path C does not apply" selected={cLvo === false} onClick={() => setCLvo(false)} variant="danger" />
                       </div>
                     </div>
                   )}
@@ -966,24 +1080,16 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                           </div>
                         </div>
                       )}
-                    </div>
-                  )}
-
-                  {/* C-NonLVO branch */}
-                  {cPenumbra === true && cLvo === false && (
-                    <div className="space-y-4 pl-4 border-l-2 border-slate-200 animate-in slide-in-from-top-2">
-                      <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">PATH C-NonLVO · OPTION + TRACE-3</p>
-                      <div className="px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs">
-                        <strong>★ Note:</strong> OPTION trial (JAMA 2024) was published after the 2026 AHA/ASA Guideline and is not yet formally incorporated. COR 2b status reflects TRACE-3 data; OPTION provides additional supporting evidence.
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-semibold text-slate-700 mb-1">Expertise in thrombolytic stroke care available?</h3>
-                        <p className="text-xs text-slate-500 mb-2">Neurology/stroke team available for monitoring and complication management</p>
-                        <div className="grid grid-cols-2 gap-2">
-                          <CompactSelectionCard title="Yes — Expert available" description="Proceed with treatment" selected={cNonLvoExpertise === true} onClick={() => setCNonLvoExpertise(true)} />
-                          <CompactSelectionCard title="No — Telehealth / Limited" description="Consider tele-stroke consult" selected={cNonLvoExpertise === false} onClick={() => setCNonLvoExpertise(false)} variant="warning" />
+                      {cLvoEvt === false && cLvoBarrier !== null && (
+                        <div>
+                          <h3 className="text-sm font-semibold text-slate-700 mb-1">Expertise in thrombolytic stroke care available?</h3>
+                          <p className="text-xs text-slate-500 mb-2">Stroke expertise available on site or through tele-stroke support</p>
+                          <div className="grid grid-cols-2 gap-2">
+                            <CompactSelectionCard title="Yes — Expert available" description="Late IVT can be directed safely" selected={cExpertise === true} onClick={() => setCExpertise(true)} />
+                            <CompactSelectionCard title="No — Expertise unavailable" description="Do not endorse late IVT at current site" selected={cExpertise === false} onClick={() => setCExpertise(false)} variant="warning" />
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -1123,7 +1229,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                 )}
 
                 {/* Standard-window redirect pearls */}
-                {pathAvail === 'standard' && (
+                {pathStage === 'standard' && (
                   <LearningPearl title="Standard IVT Protocol" content="For patients within 4.5h, use the standard IVT eligibility checklist. Tenecteplase 0.25 mg/kg (max 25 mg) is COR 1 per 2026 AHA/ASA for the standard window." variant="neuro" />
                 )}
 
@@ -1148,14 +1254,32 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
       <LKWTimePicker
         isOpen={lkwPickerOpen}
         onClose={() => setLkwPickerOpen(false)}
-        onConfirm={(date) => { setLkwTimestamp(date); setLkwUnknown(false); setWakeTimestamp(null); setMinutesSinceWaking(null); setLkwPickerOpen(false); }}
-        onUnknown={() => { setLkwUnknown(true); setLkwTimestamp(null); setWakeTimestamp(null); setMinutesSinceWaking(null); setLkwPickerOpen(false); }}
+        onConfirm={(date) => {
+          clearCriteriaAnswers();
+          setLkwTimestamp(date);
+          setOnsetMode(pendingOnsetMode);
+          setWakeTimestamp(null);
+          setMinutesSinceWaking(null);
+          setHoursSinceMidpoint(null);
+          setLkwPickerOpen(false);
+        }}
+        onUnknown={() => {
+          clearCriteriaAnswers();
+          setOnsetMode('unknown-no-lkw');
+          setLkwTimestamp(null);
+          setWakeTimestamp(null);
+          setMinutesSinceWaking(null);
+          setHoursSinceMidpoint(null);
+          setLkwPickerOpen(false);
+        }}
         showSleepOnset={true}
         defaultMode={lkwPickerMode}
         onSleepOnset={(bedtime, wakeTime) => {
+          clearCriteriaAnswers();
           setLkwTimestamp(bedtime);
-          setLkwUnknown(true);
+          setOnsetMode('wake-up');
           setWakeTimestamp(wakeTime);
+          setMinutesSinceWaking(null);
           setLkwPickerOpen(false);
         }}
       />

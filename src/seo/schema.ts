@@ -149,15 +149,15 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
   '/calculators/late-window-ivt': [
     {
       question: 'What is late window IVT and who is eligible?',
-      answer: 'Late window IVT refers to IV thrombolysis administered beyond the standard 4.5-hour window, typically 4.5–24 hours from last known well or in unknown onset/wake-up stroke. Eligibility depends on imaging selection: DWI-FLAIR mismatch on MRI (COR 2a, WAKE-UP trial) for unknown onset, CT or MRI perfusion mismatch for 4.5–9h (COR 2a, EXTEND trial), or LVO with perfusion mismatch at 4.5–24h (TIMELESS, TRACE-3 trials).',
+      answer: 'Late window IVT refers to IV thrombolysis beyond the standard 4.5-hour window. Eligibility depends on imaging and timing: DWI-FLAIR mismatch on MRI for unknown-onset stroke within 4.5 hours of symptom recognition (COR 2a, WAKE-UP), perfusion mismatch in the 4.5–9 hour window (COR 2a, EXTEND), or selected patients with LVO, salvageable penumbra, no feasible rapid EVT pathway, and expert thrombolytic stroke oversight in the late window up to 24 hours from last known well (COR 2b, TRACE-3/TIMELESS).',
     },
     {
       question: 'How is wake-up stroke treated with thrombolysis?',
-      answer: 'Wake-up stroke (unknown onset, found upon awakening) can be treated with IV alteplase or tenecteplase if MRI shows DWI-FLAIR mismatch — indicating the infarct is likely <4.5 hours old despite unknown onset time. This is a COR 2a recommendation per 2026 AHA/ASA guidelines, based on the WAKE-UP trial (NEJM 2018). If MRI is unavailable, CTP-based selection is an alternative.',
+      answer: 'Wake-up stroke can be treated with IV thrombolysis if MRI shows DWI-FLAIR mismatch and treatment can start within 4.5 hours of symptom recognition, consistent with the WAKE-UP trial and the 2026 AHA/ASA COR 2a recommendation. If MRI criteria are not met, patients with a known last-known-well time may still be considered for later LVO-only pathways using perfusion imaging and EVT/expertise screening.',
     },
     {
       question: 'What is the difference between COR 2a and COR 2b for late window thrombolysis?',
-      answer: 'COR 2a ("moderate benefit") applies when imaging selection strongly favors treatment — DWI-FLAIR mismatch for wake-up stroke, or perfusion mismatch in the 4.5–9h window (EXTEND, ECASS-4). COR 2b ("weak benefit/uncertain") applies to less supported scenarios — LVO patients at 4.5–24h (TIMELESS: missed primary endpoint; TRACE-3: positive but preliminary) or non-LVO patients beyond 4.5h without strong mismatch data.',
+      answer: 'COR 2a applies when imaging selection strongly favors treatment, such as DWI-FLAIR mismatch for wake-up stroke or perfusion mismatch in the 4.5–9 hour window. COR 2b applies to a narrower late-window group: patients with AIS due to LVO, salvageable penumbra, no feasible rapid EVT option, and treatment directed by clinicians with expertise in thrombolytic stroke care.',
     },
   ],
   '/calculators/elan-pathway': [
