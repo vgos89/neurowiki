@@ -282,7 +282,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Noninferiority confirmed: RR 1.03 (95% CI 0.97–1.09) — noninferiority margin of 0.937 met',
       'Symptomatic ICH (ECASS III definition): 1.2% in both groups (RR 1.01, 95% CI 0.37–2.70) — identical safety profiles',
       '90-day mortality: 4.6% (TNK) vs 5.8% (alteplase) — numerically lower with TNK but not statistically significant (RR 0.80, 95% CI 0.51–1.23)',
-      'Single-bolus advantage: Tenecteplase eliminates the need for a 60-minute IV infusion pump — critical for drip-and-ship and inter-hospital transfer',
+      'Single-bolus advantage: Tenecteplase eliminates the 60-minute IV infusion pump requirement — practical for drip-and-ship and inter-hospital transfer',
       'Population: Chinese patients with AIS, NIHSS 1–25, treated within 4.5h; 30.4% female; mean age ~65',
       'Alongside AcT (Canada 2022) and NOR-TEST 2 (Norway), this trial provides the multi-ethnic evidence base for AHA/ASA 2026 COR 1 equivalence',
       'Published: JAMA 2024; 332(17):1437–1445. DOI: 10.1001/jama.2024.14721'
@@ -350,7 +350,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Extended Window: Successfully expanded the treatment window to 4.5 hours for eligible patients',
       'Efficacy Decay: The treatment effect (OR 1.34) was smaller than in the 0-3 hour window (OR 1.7 in NINDS), reinforcing that earlier treatment is better',
       'Key Exclusions: Age > 80 years, baseline NIHSS > 25, patients taking oral anticoagulants (regardless of INR), and patients with both diabetes and prior stroke',
-      'Guideline Evolution: While the trial excluded Age > 80 and those on warfarin, modern guidelines often permit treatment in these groups within 3-4.5h after individual risk assessment',
+      'Guideline evolution: The trial excluded age >80 and warfarin users, but AHA/ASA 2026 guidelines support considering treatment in these groups within 3–4.5h after individual risk assessment',
       'Symptomatic ICH: 2.4% in tPA group vs 0.2% in Placebo group (P=0.008)'
     ],
     conclusion: 'Intravenous alteplase administered between 3 and 4.5 hours after the onset of symptoms significantly improved clinical outcomes in patients with acute ischemic stroke.',
@@ -725,7 +725,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Solitaire FR thrombectomy after IV alteplase',
       control: 'IV alteplase alone'
     },
-    clinicalContext: 'EXTEND-IA showed the power of advanced perfusion imaging to select patients most likely to benefit from thrombectomy, demonstrating dramatic gains in reperfusion and early recovery.',
+    clinicalContext: 'EXTEND-IA showed that CT perfusion imaging could identify patients with salvageable tissue most likely to benefit from thrombectomy — reperfusion at 24h improved from 37% to 100% in the EVT group.',
     pearls: [
       'Used CT perfusion to target salvageable tissue and avoid large completed infarcts',
       'Reperfusion at 24 hours improved from 37% to 100%',
@@ -847,7 +847,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'IV alteplase followed by mechanical thrombectomy',
       control: 'IV alteplase alone'
     },
-    clinicalContext: 'THRACE tested whether bridging thrombectomy improves outcomes after standard-dose alteplase in patients with proximal occlusions and helped solidify combined therapy as the dominant early EVT paradigm.',
+    clinicalContext: 'THRACE tested whether bridging thrombectomy improves outcomes after standard-dose alteplase in patients with proximal occlusions and supported bridging thrombectomy as the standard early EVT approach.',
     pearls: [
       'Functional independence increased from 42% to 53%',
       'Mortality and symptomatic intracranial hemorrhage were similar between groups',
@@ -1345,7 +1345,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Endovascular thrombectomy plus medical treatment',
       control: 'Medical treatment alone'
     },
-    clinicalContext: 'TENSION is important because it demonstrated large-core EVT benefit using mostly non-contrast CT, making large-core thrombectomy evidence more applicable to real-world stroke systems without advanced perfusion imaging.',
+    clinicalContext: 'TENSION demonstrated large-core EVT benefit using mostly non-contrast CT — making the evidence more applicable to real-world stroke systems without advanced perfusion imaging.',
     pearls: [
       'Functional outcome improved substantially with EVT (adjusted common OR 2.58)',
       'Mortality was lower with thrombectomy (hazard ratio 0.67)',
@@ -1474,7 +1474,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'No significant difference in final successful revascularization',
       'Clinical outcomes at 90 days were also similar',
       'Trial suggests either strategy is acceptable as a first-line approach',
-      'Important technical trial for device-selection rather than patient-selection questions'
+      'Addresses device selection rather than patient selection — aspiration and stent retriever are interchangeable as first-line approaches'
     ],
     conclusion: 'First-line contact aspiration did not improve successful revascularization compared with first-line stent retriever thrombectomy.',
     source: 'Lapergue et al. (JAMA 2017)',
@@ -1599,7 +1599,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Adjunct IA alteplase increased excellent outcome from 40.4% to 59.0%',
       'Symptomatic intracranial hemorrhage was not increased',
       'Trial stopped early and was relatively small, so replication is still needed',
-      'Important proof-of-concept study for post-thrombectomy rescue pharmacotherapy'
+      'Small study stopped early — replication needed before routine use of adjunct IA alteplase post-thrombectomy'
     ],
     conclusion: 'After successful thrombectomy, adjunct intra-arterial alteplase increased the likelihood of excellent 90-day outcome, though the preliminary finding requires replication.',
     source: 'Renu et al. (JAMA 2022)',
@@ -2098,7 +2098,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: 'Early decompressive craniectomy markedly reduced mortality in malignant MCA infarction, with a numerical but not statistically definitive improvement in moderate disability outcomes in this small trial.',
     source: 'Vahedi et al. (Stroke 2007)',
-    keyMessage: 'DECIMAL helped establish that early hemicraniectomy saves lives in malignant MCA infarction.',
+    keyMessage: 'Early hemicraniectomy reduces mortality in malignant MCA infarction — survivors often remain functionally dependent.',
   },
   'destiny-trial': {
     id: 'destiny-trial',
@@ -2208,7 +2208,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Decompressive surgery plus best medical treatment',
       control: 'Best medical treatment alone'
     },
-    clinicalContext: 'HAMLET extended the decompressive surgery question beyond the earliest time window and clarified that timing matters: surgery clearly reduces death, but functional benefit appears strongest when performed within 48 hours.',
+    clinicalContext: 'HAMLET extended the decompressive surgery question beyond the earliest time window and showed surgery reduces death, with functional benefit strongest when performed within 48 hours.',
     pearls: [
       'Primary outcome mRS 0-3 at 1 year was neutral overall',
       'Case fatality was reduced by an absolute 38%',
@@ -2483,24 +2483,24 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       }
     },
     pearls: [
-      'NEGATIVE trial - EVT provided NO disability reduction compared to medical treatment alone',
+      'EVT provided no disability reduction compared to medical treatment alone',
       'Primary outcome p=0.50 (not significant) - essentially no difference between groups',
-      'Median mRS was IDENTICAL: 2.0 in both groups at 90 days',
+      'Median mRS 2.0 in both groups at 90 days',
       'Only 71.7% achieved successful reperfusion - lower than large-vessel trials (85-90%)',
-      'Symptomatic ICH was DOUBLED with EVT (5.9% vs 2.6%) without mortality benefit',
+      'Symptomatic ICH doubled with EVT (5.9% vs 2.6%) without mortality benefit',
       'Median age 77 years, NIHSS 6 (relatively mild strokes)',
       'Occlusion locations: 44% M2, 27% M3, 13% P2, 6% P1',
       '65% received IV thrombolysis before/during EVT',
       'Imaging-to-puncture time: 70 min (exceeded 60-min target)',
-      'NO subgroup showed benefit: not younger patients, not higher NIHSS, not specific locations',
-      'Clinical implication: EVT should NOT be routinely used for medium/distal vessel occlusions',
-      'Possible reasons for failure: (1) low reperfusion rates, (2) treatment delays, (3) distal vessels may be "end arteries" with poor compensation ability, (4) technically challenging procedures'
+      'No subgroup showed benefit — not younger patients, not higher NIHSS, not specific occlusion locations',
+      'Clinical implication: EVT is not recommended for medium/distal vessel occlusions',
+      'Low reperfusion (71.7%), longer treatment delays, and technically demanding access to distal vessels likely contributed to the negative result'
     ],
-    conclusion: 'In persons with stroke due to medium or distal vessel occlusion, EVT plus best medical treatment did NOT result in lower disability or death compared to best medical treatment alone. Despite achieving reperfusion in 72% of cases, no clinical benefit was observed. Symptomatic hemorrhage was increased with EVT. These results suggest EVT should NOT be routinely performed for non-dominant M2, M3, M4, or small ACA/PCA occlusions. Future research should focus on: (1) better devices for distal access, (2) faster treatment times, (3) imaging selection to identify patients who might benefit.',
+    conclusion: 'In persons with stroke due to medium or distal vessel occlusion, EVT plus best medical treatment did not result in lower disability or death compared to best medical treatment alone. Despite achieving reperfusion in 72% of cases, no clinical benefit was observed. Symptomatic hemorrhage was increased with EVT. EVT is not recommended for non-dominant M2, M3, M4, or small ACA/PCA occlusions.',
     source: 'Psychogios M, Brehm A, et al. N Engl J Med. 2025;392(14):1374-1384',
     clinicalTrialsId: 'NCT05029414',
     specialDesign: 'negative-trial',
-    keyMessage: 'EVT does NOT work for medium/distal vessel occlusions - stick to medical treatment',
+    keyMessage: 'EVT is ineffective for medium/distal vessel occlusions; medical treatment is standard',
     listCategory: 'thrombectomy',
     listDescription: 'EVT for medium and distal vessel occlusions — negative trial (NEJM 2025).',
   },
@@ -2556,12 +2556,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       // Negative trial with harm signal - no NNT
     },
     pearls: [
-      'NEGATIVE TRIAL WITH HARM SIGNAL: No functional benefit (41.6% vs 43.1%, Adjusted Rate Ratio 0.95; P=0.61)',
-      'INCREASED MORTALITY: Statistically significant increase in 90-day mortality (13.3% vs 8.4%, Adjusted HR 1.82; 95% CI 1.06–3.12)',
-      'Increased Bleeding: Symptomatic intracranial hemorrhage (sICH) significantly more frequent in EVT arm (5.4% vs 2.2%)',
-      'Time Window: Within 12 hours of Last Known Well',
-      'Selection: High baseline NIHSS (>5 or disabling 3-5) and favorable baseline imaging',
-      'Implication: Routine EVT for medium vessel occlusions is NOT supported; risks of procedure in smaller vessels may outweigh benefits in unselected populations'
+      'No functional benefit (mRS 0–2: 41.6% vs 43.1%, ARR 0.95; P=0.61) — 90-day mortality was higher with EVT',
+      '90-day mortality 13.3% vs 8.4% (HR 1.82, 95% CI 1.06–3.12)',
+      'sICH significantly more frequent in EVT arm (5.4% vs 2.2%)',
+      '12-hour treatment window from last known well',
+      'NIHSS >5 or disabling deficit of 3–5, with favorable baseline imaging',
+      'EVT is not recommended for routine use in medium vessel occlusions — procedural risk in smaller vessels outweighs benefit in unselected patients'
     ],
     conclusion: 'Endovascular treatment for medium-vessel occlusion stroke within 12 hours did not lead to better functional outcomes and was associated with higher mortality compared to usual care.',
     source: 'Goyal et al. (NEJM 2025)',
@@ -3259,26 +3259,26 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         ]
       }
     },
-    clinicalContext: 'After TIA or minor stroke, 10-20% of patients have recurrent stroke within 3 months, with MOST occurring in the first 2 days. This "high-risk window" represents an opportunity for aggressive early prevention. Previous trials of long-term dual antiplatelet therapy (MATCH, CHARISMA, SPS3) showed no benefit and increased bleeding because they enrolled weeks/months after the event and did not target the acute high-risk period. CHANCE tested whether starting dual therapy within 24 hours and continuing for only 21 days (the highest-risk period) could prevent early recurrent strokes while minimizing bleeding risk. The mechanism: Aspirin and clopidogrel synergistically inhibit platelet aggregation through different mechanisms (COX-1 vs P2Y12 pathways). This dual inhibition is most beneficial when platelet activation is highest - immediately after an acute thrombotic event.',
+    clinicalContext: 'After TIA or minor stroke, 10-20% of patients have recurrent stroke within 3 months, with most occurring in the first 2 days. This "high-risk window" represents an opportunity for aggressive early prevention. Previous trials of long-term dual antiplatelet therapy (MATCH, CHARISMA, SPS3) showed no benefit and increased bleeding because they enrolled weeks/months after the event and did not target the acute high-risk period. CHANCE tested whether starting dual therapy within 24 hours and continuing for only 21 days (the highest-risk period) could prevent early recurrent strokes while minimizing bleeding risk. The mechanism: Aspirin and clopidogrel synergistically inhibit platelet aggregation through different mechanisms (COX-1 vs P2Y12 pathways). This dual inhibition is most beneficial when platelet activation is highest - immediately after an acute thrombotic event.',
     calculations: {
       nnt: 29, // 1 / (0.117 - 0.082) = 28.57 ≈ 29
       nntExplanation: 'For every 29 patients with minor stroke or high-risk TIA treated with DAPT for 21 days, one additional stroke recurrence is prevented compared to aspirin alone. The benefit was most pronounced in the first 7 days when stroke risk is highest, with Kaplan-Meier curves diverging dramatically in the first week then remaining parallel.'
     },
     pearls: [
-      'POSITIVE trial: Dual antiplatelet therapy reduced stroke by 32% (HR 0.68, p<0.001)',
+      'Clopidogrel + aspirin reduced stroke by 32% (HR 0.68, p<0.001)',
       'Absolute risk reduction: 3.5% → NNT = 29 to prevent one stroke over 90 days',
       'Benefit most pronounced in first 7 days when stroke risk is highest',
-      'NO increase in severe hemorrhage (0.3% both groups) - critical safety finding',
-      'NO increase in hemorrhagic stroke (0.3% both groups)',
+      'No increase in severe hemorrhage (0.3% both groups)',
+      'No increase in hemorrhagic stroke (0.3% both groups)',
       'Mild bleeding slightly increased (2.3% vs 1.6%, p=0.09 not significant)',
-      'Critical timing: Treatment must start within 24 hours of symptom onset',
+      'Treatment must start within 24 hours of symptom onset',
       'Treatment duration: 21 days of dual therapy, then clopidogrel alone to day 90',
       'Loading dose strategy: Clopidogrel 300mg + aspirin 75-300mg on Day 1',
       'Population: Minor stroke (NIHSS ≤3) or high-risk TIA (ABCD² ≥4) only',
       'Median NIHSS = 3, indicating mild deficits despite "minor" label',
       'Median time to treatment: 13 hours (range: 8-18 hours)',
-      '49.5% enrolled within 12 hours - ultra-early treatment is key',
-      'Benefit consistent across ALL subgroups - no significant interactions',
+      '49.5% enrolled within 12 hours',
+      'Benefit consistent across all subgroups — no significant interactions',
       'Excellent retention: Only 0.7% lost to follow-up (36/5170 patients)',
       'Conducted entirely in China - generalizability initially questioned',
       'POINT trial (US) later confirmed results with tighter time window (<12h)',
@@ -3286,14 +3286,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Changed international guidelines: AHA/ASA now recommends DAPT for 21 days (Class IIa)',
       'Combined with POINT, established DAPT as standard of care for minor stroke/high-risk TIA'
     ],
-    conclusion: 'Among patients with high-risk TIA or minor ischemic stroke who can be treated within 24 hours of symptom onset, the combination of clopidogrel and aspirin for 21 days, followed by clopidogrel alone to 90 days, is SUPERIOR to aspirin alone for reducing the risk of stroke. The treatment provides a 32% relative risk reduction (3.5% absolute, NNT=29) without increasing the risk of hemorrhage. Start clopidogrel + aspirin within 24 hours of minor stroke or high-risk TIA to prevent early recurrent stroke.',
+    conclusion: 'Among patients with high-risk TIA or minor ischemic stroke treated within 24 hours, clopidogrel + aspirin for 21 days followed by clopidogrel alone outperformed aspirin alone, with a 32% relative risk reduction (3.5% absolute, NNT=29) and no increase in hemorrhage.',
     source: 'Wang Y, Wang Y, Zhao X, et al. Clopidogrel with aspirin in acute minor stroke or transient ischemic attack. N Engl J Med. 2013;369(1):11-19.',
     doi: '10.1056/NEJMoa1215340',
     pmid: '23803136',
     clinicalTrialsId: 'NCT00979589',
     keyMessage: 'Start clopidogrel + aspirin within 24 hours of minor stroke or high-risk TIA to prevent early recurrent stroke. Dual therapy for 21 days, then clopidogrel alone.',
-    safetyData: 'CRITICAL SAFETY FINDING: NO increase in severe hemorrhage. Moderate-to-severe hemorrhage (GUSTO criteria): 0.3% (7/2584) in DAPT group vs 0.3% (8/2586) in aspirin group, p=0.73. Hemorrhagic stroke: 0.3% in both groups, p=0.98. Any bleeding: 2.3% vs 1.6%, p=0.09 (not significant), driven by MILD bleeding (bruising, oozing) that did not require transfusion. The trial demonstrated that short-term (21 days) dual antiplatelet therapy in carefully selected patients (minor stroke/high-risk TIA, no contraindications) can provide substantial benefit WITHOUT increasing the risk of major hemorrhage.',
-    educationalContext: 'WHY CHANCE SUCCEEDED WHEN PREVIOUS TRIALS FAILED: Previous trials (MATCH, CHARISMA, SPS3) enrolled weeks/months AFTER the index event (missing the high-risk window), included moderate-severity strokes (higher bleeding risk), used long-term dual therapy (months to years → increased bleeding), and did not target the critical first 48-72 hours when risk peaks. CHANCE SUCCESS FACTORS: (1) Ultra-early treatment within 24 hours (median 13 hours), (2) Targeted the highest-risk period (days 0-7), (3) Selected high-risk patients (minor stroke/high-risk TIA) who benefit most, (4) SHORT-duration therapy (21 days dual → monotherapy), (5) Excluded high-bleeding-risk patients (AF, recent surgery/GI bleed), (6) Captured the acute thrombotic phase when platelets most active. KEY INSIGHT: Stroke recurrence risk is NOT constant over time. It is HIGHEST in the first 48-72 hours after the index event, then drops dramatically. CHANCE captured this critical window with aggressive early treatment followed by de-escalation to monotherapy.',
+    safetyData: 'No increase in severe hemorrhage. Moderate-to-severe hemorrhage (GUSTO criteria): 0.3% (7/2584) in DAPT group vs 0.3% (8/2586) in aspirin group, p=0.73. Hemorrhagic stroke: 0.3% in both groups, p=0.98. Any bleeding: 2.3% vs 1.6%, p=0.09 (not significant), driven by MILD bleeding (bruising, oozing) that did not require transfusion. The trial demonstrated that short-term (21 days) dual antiplatelet therapy in carefully selected patients (minor stroke/high-risk TIA, no contraindications) can provide substantial benefit WITHOUT increasing the risk of major hemorrhage.',
+    educationalContext: 'CHANCE worked where MATCH, CHARISMA, and SPS3 failed by targeting the acute high-risk window. Those earlier trials enrolled patients weeks to months after the event and used long-term dual therapy — both decisions raised bleeding risk without capturing the period when recurrence risk peaks. Limiting dual therapy to 21 days starting within 24 hours hit the recurrence peak while keeping hemorrhage risk low.',
     clinicalApplication: 'ELIGIBLE PATIENTS: (1) Minor stroke (NIHSS ≤3) OR high-risk TIA (ABCD² ≥4), (2) Within 24 hours of symptom onset (ideally within 12 hours), (3) No contraindication to antiplatelet therapy, (4) No indication for anticoagulation (e.g., atrial fibrillation), (5) No recent major surgery or GI bleeding, (6) Independent at baseline (mRS ≤2). TREATMENT PROTOCOL: Day 1: Clopidogrel 300mg loading + aspirin 75-300mg; Days 2-21: Clopidogrel 75mg + aspirin 75mg daily; Days 22-90: Clopidogrel 75mg daily alone. EXPECTED BENEFIT: 32% relative risk reduction, 3.5% absolute reduction, NNT=29, no increase in severe bleeding. DO NOT USE IF: Atrial fibrillation, recent major surgery/GI bleeding (<3 months), severe stroke (NIHSS >3), low-risk TIA (ABCD² <4), known high bleeding risk, planned revascularization. PRACTICAL TIPS: Start ASAP after stroke/TIA onset, obtain brain imaging to exclude hemorrhage first, calculate ABCD² score for TIA patients, counsel about mild bleeding risk (bruising common but safe), transition to monotherapy at Day 22 (set reminder).',
     limitations: [
       'Conducted entirely in China - generalizability to other populations uncertain at time (later confirmed by POINT trial in US)',
@@ -3757,10 +3757,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       // Risk difference: -1.18% (95% CI: -2.84 to 0.47)
     },
     pearls: [
-      'ESTIMATION trial (not superiority) - establishes SAFE RANGE for practice',
+      'Estimation trial (not superiority) — establishes safe range for practice',
       'Risk difference: -1.18% (95% CI: -2.84 to 0.47) - early treatment ranges from 2.8% better to 0.5% worse',
       'Recurrent ischemic stroke: 1.4% (early) vs 2.5% (later) - trend favoring early treatment',
-      'Symptomatic ICH: 0.2% in BOTH groups - bleeding risk NOT increased with early treatment',
+      'Symptomatic ICH: 0.2% in both groups — bleeding risk not increased with early treatment',
       'Imaging-based classification (not NIHSS-based) used to determine timing',
       'Stroke severity: 37% minor, 40% moderate, 23% major',
       'Used any approved DOAC at appropriate dose (not drug-specific)',
@@ -3768,11 +3768,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Primary outcome at 90 days (exploratory): 3.7% (early) vs 5.6% (later)',
       'Most patients were from European centers - generalizability to other populations unclear'
     ],
-    conclusion: 'In this trial, the incidence of recurrent ischemic stroke, systemic embolism, major extracranial bleeding, symptomatic intracranial hemorrhage, or vascular death at 30 days was estimated to range from 2.8 percentage points LOWER to 0.5 percentage points HIGHER (based on 95% confidence interval) with early than with later use of DOACs. Early DOAC initiation (within 48h for minor/moderate stroke, day 6-7 for major stroke) using imaging-based selection appears SAFE and may prevent recurrent strokes without increasing bleeding risk.',
+    conclusion: 'In this trial, the incidence of recurrent ischemic stroke, systemic embolism, major extracranial bleeding, symptomatic intracranial hemorrhage, or vascular death at 30 days was estimated to range from 2.8 percentage points lower to 0.5 percentage points higher (95% CI) with early than with later use of DOACs. Early DOAC initiation (within 48h for minor/moderate stroke, day 6-7 for major stroke) using imaging-based selection appears safe and may prevent recurrent strokes without increasing bleeding risk.',
     source: 'Fischer U, et al. N Engl J Med. 2023;388(26):2411-2421',
     clinicalTrialsId: 'NCT03148457',
     specialDesign: 'estimation-trial',
-    keyMessage: 'Early DOAC initiation is SAFE - can be used in practice if clinically indicated',
+    keyMessage: 'Early DOAC initiation is safe — use if clinically indicated after imaging review',
     listCategory: 'antiplatelets',
     listDescription: 'Early vs delayed DOAC initiation after stroke with atrial fibrillation — early is safe.',
   },
@@ -5005,7 +5005,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Tenecteplase 0.4 mg/kg was not superior to alteplase',
       'Most patients had mild stroke, with median NIHSS 4',
       'Serious adverse events and mortality were similar between groups',
-      'The apparently neutral result in mild stroke set the stage for later concern about the 0.4 mg/kg dose in more severe stroke'
+      'The neutral result in mild stroke raised concern about whether the 0.4 mg/kg dose was adequate for more severe stroke'
     ],
     conclusion: 'NOR-TEST found similar efficacy and safety between high-dose tenecteplase and alteplase in a largely mild-stroke population, but it did not establish superiority and left uncertainty about the optimal tenecteplase dose.',
     source: 'Logallo N, et al. (Lancet Neurol 2017)',

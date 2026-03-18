@@ -22,6 +22,59 @@ import {
 
 // ─── COR helpers ──────────────────────────────────────────────────────────────
 
+function sentenceCase(text: string): string {
+  const trimmed = text.trim();
+  if (!trimmed) return trimmed;
+  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+}
+
+function stripGuidelineLeadIn(text: string): string {
+  return text
+    .replace(/^For the general public,\s*/i, '')
+    .replace(/^In adult patients with AIS,\s*/i, 'For adults with AIS, ')
+    .replace(/^In adult patients with suspected AIS,\s*/i, 'For adults with suspected AIS, ')
+    .replace(/^In adult patients with suspected stroke,\s*/i, 'For adults with suspected stroke, ')
+    .replace(/^In pediatric patients with suspected AIS,\s*/i, 'For pediatric patients with suspected AIS, ')
+    .replace(/^In pediatric patients with suspected stroke transported by ambulance,\s*/i, 'For pediatric prehospital stroke triage, ')
+    .replace(/^In patients with suspected stroke transported by ambulance,\s*/i, 'For prehospital stroke triage, ')
+    .replace(/^In patients with suspected stroke with LVO features,\s*/i, 'For suspected field LVO, ')
+    .replace(/^In patients who undergo EVT,\s*/i, 'After EVT, ')
+    .replace(/^Patients with AIS who /i, 'Patients with AIS who ')
+    .replace(/^In patients with AIS who /i, 'If the patient ')
+    .replace(/^In patients with AIS,\s*/i, 'For AIS, ');
+}
+
+function paraphraseGuidelineText(rec: GuidelineRec): string {
+  const prefix = rec.cor === '1'
+    ? 'Recommended: '
+    : rec.cor === '2a'
+    ? 'Reasonable option: '
+    : rec.cor === '2b'
+    ? 'May be considered: '
+    : rec.cor.startsWith('3')
+    ? 'Avoid routine use: '
+    : '';
+
+  const rewritten = stripGuidelineLeadIn(rec.text)
+    .replace(/\bNOT recommended\b/g, 'should not be used routinely')
+    .replace(/\bis not recommended\b/gi, 'should not be used routinely')
+    .replace(/\bare not recommended\b/gi, 'should not be used routinely')
+    .replace(/\bis recommended\b/gi, 'should be used')
+    .replace(/\bare recommended\b/gi, 'should be used')
+    .replace(/\bis reasonable\b/gi, 'can reasonably be considered')
+    .replace(/\bare reasonable\b/gi, 'can reasonably be considered')
+    .replace(/\bmay be reasonable\b/gi, 'may be considered')
+    .replace(/\bcan be beneficial to\b/gi, 'may help')
+    .replace(/\bcan be beneficial\b/gi, 'may help')
+    .replace(/\bdoes not improve functional outcome and is potentially harmful\b/gi, 'has not improved outcomes and may cause harm')
+    .replace(/\bdoes not improve functional outcome and is not recommended\b/gi, 'has not improved outcomes and should be avoided')
+    .replace(/\bdoes not improve functional outcome\b/gi, 'has not improved outcomes')
+    .replace(/\bis HARMFUL and not recommended\b/gi, 'is harmful and should be avoided')
+    .replace(/\s+/g, ' ');
+
+  return `${prefix}${sentenceCase(rewritten)}`;
+}
+
 function corClass(cor: string): string {
   if (cor === '1') return 'bg-emerald-100 text-emerald-800 border border-emerald-200';
   if (cor === '2a') return 'bg-blue-100 text-blue-800 border border-blue-200';
@@ -342,7 +395,7 @@ function DetailPanel({
                   <CORBadge cor={rec.cor} />
                   <LOEBadge loe={rec.loe} />
                 </div>
-                <p className="text-xs text-slate-700 leading-relaxed">{rec.text}</p>
+                <p className="text-xs text-slate-700 leading-relaxed">{paraphraseGuidelineText(rec)}</p>
               </div>
             ))}
           </div>
@@ -558,7 +611,7 @@ function BottomSheet({
                 <CORBadge cor={rec.cor} />
                 <LOEBadge loe={rec.loe} />
               </div>
-              <p className="text-xs text-slate-700 leading-relaxed">{rec.text}</p>
+              <p className="text-xs text-slate-700 leading-relaxed">{paraphraseGuidelineText(rec)}</p>
             </div>
           ))}
         </div>
