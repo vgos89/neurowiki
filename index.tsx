@@ -2,10 +2,6 @@ import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './src/App';
-import { handleLegacyHashRedirect } from './src/utils/legacyHashRedirect';
-
-// Handle legacy hash URLs BEFORE React mounts
-handleLegacyHashRedirect();
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

@@ -12,6 +12,15 @@ import {
   type TrialCategoryKey,
 } from '../data/trialListData';
 
+const categoryShortNames: Record<TrialCategoryKey, string> = {
+  'prehospital-triage': 'Prehospital',
+  ivt: 'IVT',
+  evt: 'EVT',
+  'acute-management': 'In-Hospital',
+  'surgical-interventions': 'Surgical',
+  'secondary-prevention': 'Prevention',
+};
+
 export default function TrialsPage() {
   const [searchParams] = useSearchParams();
   const [activeCategory, setActiveCategory] = useState<TrialCategoryKey | null>(null);
@@ -83,59 +92,46 @@ export default function TrialsPage() {
             </button>
           </div>
 
-          {/* All tab */}
-          <div className="flex gap-1 p-1 bg-slate-100 dark:bg-slate-700 rounded-lg mb-3">
+          {/* Filters row: All tab + category pills in one compact scrollable line */}
+          <div className="flex items-center gap-2 pb-3 overflow-x-auto scrollbar-hide -mx-1 px-1">
             <button
               onClick={() => { setShowFavoritesOnly(false); setActiveCategory(null); }}
-              className="flex-1 py-2 text-sm font-medium rounded-md transition-all bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm"
+              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all touch-manipulation ${
+                !activeCategory
+                  ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 border-slate-800 dark:border-slate-200'
+                  : 'bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600'
+              }`}
             >
-              All ({trials.length})
+              All {trials.length}
             </button>
-          </div>
 
-          {/* Category pills — wrapped so all are visible */}
-          <div className="flex flex-wrap gap-2 pb-3">
+            <div className="w-px h-4 bg-slate-200 dark:bg-slate-600 shrink-0" />
+
             {TRIAL_CATEGORY_IDS.map((category) => {
               const count = trials.filter((t) => t.category === category).length;
               if (count === 0) return null;
               const styles = categoryStyles[category];
+              const isActive = activeCategory === category;
               return (
                 <button
                   key={category}
                   onClick={() => filterByCategory(category)}
-                  className={`flex-shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium border transition-all min-h-[44px] touch-manipulation ${
-                    activeCategory === category ? styles.pillActive : `${styles.pillBg} ${styles.pillText} hover:opacity-80`
+                  className={`flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium border transition-all touch-manipulation ${
+                    isActive ? styles.pillActive : `${styles.pillBg} ${styles.pillText} hover:opacity-80`
                   }`}
                 >
-                  <span className={`w-2 h-2 rounded-full shrink-0 ${activeCategory === category ? 'bg-white' : styles.dot}`} />
-                  <span>{categoryNames[category]}</span>
-                  <span className={`text-xs shrink-0 ${activeCategory === category ? 'text-white/70' : 'opacity-60'}`}>{count}</span>
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isActive ? 'bg-white' : styles.dot}`} />
+                  {categoryShortNames[category]}
+                  <span className={`${isActive ? 'text-white/70' : 'opacity-50'}`}>{count}</span>
                 </button>
               );
             })}
-            {activeCategory && (
-              <button
-                onClick={() => setActiveCategory(null)}
-                className="flex-shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-600 transition-all min-h-[44px] touch-manipulation"
-              >
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                Clear
-              </button>
-            )}
           </div>
         </div>
       </div>
 
       {/* Main content */}
       <main className="max-w-2xl mx-auto px-5 md:px-8 py-6">
-        <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
-          Landmark clinical trials in vascular neurology — covering intravenous thrombolysis (alteplase, tenecteplase),
-          mechanical thrombectomy (EVT), prehospital triage, blood pressure management, surgical interventions, and
-          secondary prevention (DAPT, DOACs). Results include mRS outcomes, NNT, and AHA/ASA 2026 guideline impact.
-        </p>
-
         {showFavoritesOnly && (
           <div className="mb-4 px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/50 rounded-xl flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -153,7 +149,8 @@ export default function TrialsPage() {
         {TRIAL_CATEGORY_IDS.map((category) => {
           const categoryTrials = groupedTrials[category];
           if (!categoryTrials || categoryTrials.length === 0) return null;
-          const isCollapsed = collapsedCategories.has(category);
+          // When a filter is active, always show trials (ignore collapsed state)
+          const isCollapsed = !activeCategory && collapsedCategories.has(category);
 
           return (
             <div key={category} className="mb-8">
@@ -199,31 +196,28 @@ export default function TrialsPage() {
                             <div className="flex items-center gap-2 flex-wrap">
                               <h3 className="font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                                 {trial.name}
-                                {trial.year > 0 && <span className="ml-1 text-slate-400 dark:text-slate-500">({trial.year})</span>}
+                                {trial.year > 0 && <span className="ml-1 font-normal text-slate-400 dark:text-slate-500">({trial.year})</span>}
                               </h3>
                               <span
                                 className={`px-2 py-0.5 text-xs font-medium rounded ${
                                   trial.isPlaceholder
-                                    ? 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
+                                    ? 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
                                     : 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300'
                                 }`}
                               >
-                                {trial.isPlaceholder ? 'Blank Page' : 'Available'}
+                                {trial.isPlaceholder ? 'Coming soon' : 'Available'}
                               </span>
                             </div>
-                            {trial.description && (
-                              <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{trial.description}</p>
-                            )}
                             <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">DOI: {trial.doi}</p>
                           </div>
-                          <div className="flex items-center gap-1 ml-3 shrink-0">
+                          <div className="flex items-center gap-0.5 ml-3 shrink-0">
                             {trial.clinicalContext && (
                               <button
                                 onClick={(e) => handleContextClick(trial.id, e)}
-                                className={`p-2 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
+                                className={`p-2 rounded-lg transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center ${
                                   isContextOpen
-                                    ? 'text-neuro-500 dark:text-neuro-400 bg-neuro-50 dark:bg-neuro-900/20'
-                                    : 'text-slate-300 dark:text-slate-500 hover:text-neuro-400 dark:hover:text-neuro-400'
+                                    ? 'text-neuro-500 dark:text-neuro-400'
+                                    : 'text-slate-300 dark:text-slate-600 hover:text-neuro-400 dark:hover:text-neuro-400'
                                 }`}
                                 aria-label="Show clinical context"
                               >
@@ -234,16 +228,16 @@ export default function TrialsPage() {
                             )}
                             <button
                               onClick={(e) => handleFavoriteClick(trial.id, e)}
-                              className={`p-2 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
-                                isFavorite(trial.id) ? 'text-amber-500 dark:text-amber-400' : 'text-slate-300 dark:text-slate-500 hover:text-slate-400 dark:hover:text-slate-400'
+                              className={`p-2 rounded-lg transition-colors min-w-[36px] min-h-[36px] flex items-center justify-center ${
+                                isFavorite(trial.id) ? 'text-amber-500 dark:text-amber-400' : 'text-slate-300 dark:text-slate-600 hover:text-slate-400 dark:hover:text-slate-400'
                               }`}
                               aria-label={isFavorite(trial.id) ? 'Remove from favorites' : 'Add to favorites'}
                             >
-                              <svg className="w-5 h-5" fill={isFavorite(trial.id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-4 h-4" fill={isFavorite(trial.id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                               </svg>
                             </button>
-                            <svg className="w-5 h-5 text-slate-300 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4 text-slate-300 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
                             </svg>
                           </div>
@@ -262,7 +256,7 @@ export default function TrialsPage() {
           );
         })}
 
-        {Object.keys(groupedTrials).filter(k => groupedTrials[k as TrialCategoryKey]?.length > 0).length === 0 && (
+        {Object.values(groupedTrials).every((g) => !g || g.length === 0) && (
           <div className="text-center py-16">
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
               <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -272,10 +266,7 @@ export default function TrialsPage() {
             <p className="text-slate-600 dark:text-slate-300 font-medium mb-1">No trials found</p>
             <p className="text-sm text-slate-400">{showFavoritesOnly ? 'No favorites match' : 'Try a different filter'}</p>
             <button
-              onClick={() => {
-                setShowFavoritesOnly(false);
-                setActiveCategory(null);
-              }}
+              onClick={() => { setShowFavoritesOnly(false); setActiveCategory(null); }}
               className="mt-4 px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 font-medium"
             >
               Clear filters

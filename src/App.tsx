@@ -138,7 +138,6 @@ const App: React.FC = () => {
           <Route path="/trials/ecass3-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="/trials/extend-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="/trials/eagle-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/wake-up" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="/trials/wake-up-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
           {/* Thrombectomy Trials */}
           <Route path="/trials/distal-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />

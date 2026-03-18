@@ -65,17 +65,9 @@ export const contentStatus: ContentStatus = {
     published: true,
     comingSoonMessage: 'Myasthenia gravis guide coming soon',
   },
-  '/guide/myasthenia-crisis': {
-    published: true,
-    comingSoonMessage: 'Myasthenia crisis guide coming soon',
-  },
   '/guide/multiple-sclerosis': {
     published: true,
     comingSoonMessage: 'Multiple sclerosis guide coming soon',
-  },
-  '/guide/ms-relapse': {
-    published: true,
-    comingSoonMessage: 'MS relapse guide coming soon',
   },
   '/guide/seizure-workup': {
     published: true,
@@ -159,26 +151,6 @@ export const contentStatus: ContentStatus = {
     published: true,
     comingSoonMessage: 'Boston Criteria 2.0 for CAA',
   },
-  '/calculators/aspects': {
-    published: true,
-    comingSoonMessage: 'ASPECTS calculator coming soon',
-  },
-  '/calculators/tpa-dosing': {
-    published: true,
-    comingSoonMessage: 'tPA dosing calculator coming soon',
-  },
-  '/calculators/gcs': {
-    published: true,
-    comingSoonMessage: 'GCS calculator coming soon',
-  },
-  '/pathways/thrombectomy': {
-    published: true,
-    comingSoonMessage: 'Thrombectomy pathway coming soon',
-  },
-  '/pathways/status-epilepticus': {
-    published: true,
-    comingSoonMessage: 'Status epilepticus pathway coming soon',
-  },
 
   // ============ TRIALS ============
   '/trials/dawn-trial': {
@@ -252,6 +224,10 @@ export const contentStatus: ContentStatus = {
   '/trials/socrates-trial': { published: true, comingSoonMessage: 'SOCRATES trial summary coming soon' },
   '/trials/sps3-trial': { published: true, comingSoonMessage: 'SPS3 trial summary coming soon' },
   '/trials/sparcl-trial': { published: true, comingSoonMessage: 'SPARCL trial summary coming soon' },
+  '/trials/thales-trial': { published: true, comingSoonMessage: 'THALES trial summary coming soon' },
+  '/trials/inspires-trial': { published: true, comingSoonMessage: 'INSPIRES trial summary coming soon' },
+  '/trials/chance-2-trial': { published: true, comingSoonMessage: 'CHANCE-2 trial summary coming soon' },
+  '/trials/enrich-trial': { published: true, comingSoonMessage: 'ENRICH trial summary coming soon' },
 };
 
 // Check if content is published
