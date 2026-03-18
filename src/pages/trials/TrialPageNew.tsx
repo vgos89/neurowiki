@@ -7,6 +7,7 @@ import { TrialStats } from '../../components/TrialStats';
 import { MedicalTooltip } from '../../components/MedicalTooltip';
 import { MEDICAL_GLOSSARY } from '../../data/medicalGlossary';
 import { addTooltips } from '../../utils/addTooltips';
+import { categoryNames, findTrialById } from '../../data/trialListData';
 import ReactMarkdown from 'react-markdown';
 
 const TrialPageNew: React.FC = () => {
@@ -30,9 +31,59 @@ const TrialPageNew: React.FC = () => {
 
   const trial = GUIDE_CONTENT[trialId];
   const trialMetadata = TRIAL_DATA[trialId];
+  const catalogTrial = findTrialById(trialId);
+  const isPlaceholderTrial = !!catalogTrial?.isPlaceholder && !trial && !trialMetadata;
 
-  if (!trial && import.meta.env.DEV) {
+  if (!trial && !isPlaceholderTrial && import.meta.env.DEV) {
     console.error('TrialPageNew - TRIAL NOT FOUND:', { pathname, topicId, pathTrialId, trialId });
+  }
+
+  if (isPlaceholderTrial && catalogTrial) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <Link
+              to="/trials"
+              className="inline-flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-neuro-600 dark:hover:text-neuro-400 mb-4 transition-colors text-sm font-medium"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Neuro Trials</span>
+            </Link>
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-1">
+              {catalogTrial.name}
+            </h1>
+            <p className="text-slate-500 dark:text-slate-400 text-base">
+              {categoryNames[catalogTrial.category]}
+            </p>
+          </div>
+        </div>
+
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8">
+            <div className="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-700 px-3 py-1 text-xs font-medium text-slate-600 dark:text-slate-300 mb-4">
+              Blank page ready
+            </div>
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-3">Content coming soon</h2>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+              This trial has been added to the new catalog structure, but the detailed summary has not been written yet.
+            </p>
+            <div className="rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 p-4">
+              <div className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-2">Reference DOI</div>
+              <a
+                href={`https://doi.org/${catalogTrial.doi}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:underline break-all"
+              >
+                {catalogTrial.doi}
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (!trial) {
