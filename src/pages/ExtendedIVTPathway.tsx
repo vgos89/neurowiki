@@ -50,9 +50,10 @@ const TRIALS: Record<string, TrialInfo> = {
   'WAKE-UP':  { journal: 'NEJM',   year: 2018, cor: '2a'  },
   'THAWS':    { journal: 'Stroke', year: 2018, cor: '2a'  },
   'EXTEND':   { journal: 'NEJM',   year: 2019, cor: '2a'  },
+  'EPITHET':  { journal: 'Lancet Neurol', year: 2008, cor: '—' },
   'ECASS-4':  { journal: 'Stroke', year: 2019, cor: '—'   },
   'TIMELESS': { journal: 'NEJM',   year: 2024, cor: '2b'  },
-  'TRACE-3':  { journal: 'NEJM',   year: 2023, cor: '2b'  },
+  'TRACE-III': { journal: 'NEJM',  year: 2023, cor: '2b'  },
 };
 
 /* ─── EVT barriers ───────────────────────────────────────────────── */
@@ -386,8 +387,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
       if (aRecognition === true && aDwiSmall === true && aFlair === true) return {
         eligible: true, status: 'Eligible', variant: 'success', cor: '2a',
         path: 'A', trialsBasis: ['WAKE-UP', 'THAWS'], showBothAgents: true,
-        reason: 'Unknown Onset — DWI-FLAIR Mismatch (COR 2a)',
-        details: 'Patient meets imaging criteria for extended-window IVT in unknown-onset stroke. DWI-FLAIR mismatch confirms tissue viability. Administer thrombolytic therapy; document time of symptom recognition.',
+        reason: 'Path A — Unknown onset with MRI DWI-FLAIR mismatch',
+        details: 'In a wake-up or otherwise unknown-onset ischemic stroke, a visible DWI lesion without marked FLAIR hyperintensity acts as a tissue clock suggesting the event is likely within 4.5 hours. IVT is reasonable on this basis when treatment remains within 4.5 hours of symptom recognition.',
       };
     }
 
@@ -412,16 +413,16 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
       };
       if (bEvt === true) return {
         eligible: false, status: 'EVT Preferred', variant: 'warning',
-        reason: 'Rapid EVT planned — extended-window IVT not indicated',
-        details: 'Extended-window IVT is intended for patients who cannot receive or will receive delayed EVT. If rapid thrombectomy is already planned and available, proceed to EVT without endorsing late-window IVT.',
+        reason: 'Path B/C redirect — rapid EVT planned',
+        details: 'For patients beyond 4.5 hours with salvageable penumbra and rapid thrombectomy access, extended-window IVT is not indicated and should not delay mechanical reperfusion. TIMELESS did not show a functional-outcome benefit from tenecteplase when rapid EVT was already available.',
       };
       const q1Done = isCtp ? bCtpCore !== null : bMriPwi !== null;
       const q2Done = isCtp ? bCtpMismatch !== null : bMriMismatch !== null;
       if (q1Done && q2Done && bEvt === false) return {
         eligible: true, status: 'Eligible', variant: 'success', cor: '2a',
-        path: 'B', trialsBasis: ['EXTEND', 'THAWS', 'ECASS-4'], showBothAgents: true,
-        reason: `4.5–9h Perfusion Mismatch — ${isCtp ? 'CT Perfusion' : 'MRI PWI'} (COR 2a)`,
-        details: 'Salvageable penumbra confirmed on perfusion imaging. Patient meets EXTEND trial criteria for extended-window IVT. Proceed with thrombolytic therapy.',
+        path: 'B', trialsBasis: ['EXTEND', 'EPITHET', 'ECASS-4'], showBothAgents: true,
+        reason: `Path B — 4.5–9h perfusion mismatch on ${isCtp ? 'CT perfusion' : 'MRI DWI-PWI'}`,
+        details: 'IVT is reasonable 4.5 to 9 hours from last known well, or in wake-up stroke within 9 hours of the sleep midpoint, when automated perfusion imaging confirms salvageable ischemic penumbra. The current imaging profile fits that tissue-selected late-window pathway.',
       };
     }
 
@@ -431,20 +432,24 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
       if (cLvo === null || cPenumbra === null) return null;
       if (cLvo === false) return {
         eligible: false, status: 'Not Eligible', variant: 'danger',
-        reason: 'Late-window IVT beyond 9h is limited to LVO',
-        details: 'Current 2026 AHA/ASA late-window IVT guidance in the 9–24h range applies to patients with AIS due to LVO and salvageable penumbra when EVT cannot be performed. Non-LVO patients do not meet this Path C indication.',
+        reason: 'Path C requires an ICA or MCA (M1/M2) occlusion',
+        details: 'Patients presenting beyond 9 hours from last known well without a qualifying large-vessel occlusion are not eligible for Path C IVT. Current 2026 AHA/ASA late-window thrombolysis support is limited to ICA or MCA (M1/M2) occlusions, based on TRACE-III.',
       };
-      if (cLvoEvt === true) return { eligible: false, status: 'EVT Preferred', variant: 'warning', reason: 'LVO — proceed to thrombectomy', details: 'EVT is the preferred treatment for LVO in the late window. Transfer to an EVT-capable center immediately. Path C applies only when EVT cannot be performed promptly.' };
+      if (cLvoEvt === true) return {
+        eligible: false, status: 'EVT Preferred', variant: 'warning',
+        reason: 'Path B/C redirect — rapid EVT planned',
+        details: 'When a patient in the extended window has salvageable tissue and prompt thrombectomy access, EVT should proceed without endorsing late-window IVT. Extended-window thrombolysis in this setting is not supported as beneficial and should not delay mechanical reperfusion.',
+      };
       if (cLvoEvt === false && cLvoBarrier !== null && cExpertise === false) return {
         eligible: false, status: 'Not Eligible at Current Site', variant: 'warning',
-        reason: 'Expert thrombolytic stroke care not available',
-        details: 'The 2026 AHA/ASA Class 2b late-window IVT recommendation requires treatment directed by clinicians with expertise in thrombolytic stroke care. Obtain expert stroke guidance or transfer if feasible rather than endorsing IVT at the current site.',
+        reason: 'Late-window IVT requires expert stroke-thrombolysis oversight',
+        details: 'Late-window IVT from 9 to 24 hours carries a higher symptomatic intracranial hemorrhage risk and should be directed by clinicians with specialized thrombolytic stroke expertise. If that expertise is not available locally, do not endorse IVT at the current site; obtain telestroke support or transfer if feasible.',
       };
       if (cLvoEvt === false && cLvoBarrier !== null && cExpertise === true) return {
         eligible: true, status: 'Eligible', variant: 'warning', cor: '2b',
-        path: 'C-LVO', trialsBasis: ['TIMELESS', 'TRACE-3'], showBothAgents: false,
-        reason: 'LVO — Extended Window IVT (COR 2b)',
-        details: 'Patient meets criteria for extended-window IVT with LVO, salvageable penumbra, no feasible EVT option, and expert thrombolytic stroke oversight. COR 2b — weaker evidence; document shared decision-making with patient/surrogate.',
+        path: 'C-LVO', trialsBasis: ['TRACE-III'], showBothAgents: false,
+        reason: 'Path C — 9–24h LVO with no feasible EVT',
+        details: 'IVT with tenecteplase may be considered for acute ischemic stroke caused by an ICA or MCA (M1/M2) occlusion 9 to 24 hours from last known well, including wake-up or unwitnessed stroke when a usable last-known-well timestamp is available within 24 hours. This requires salvageable penumbra, no feasible rapid EVT pathway, and treatment directed by clinicians with expertise in thrombolytic stroke care.',
       };
     }
 
@@ -1043,16 +1048,16 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                       <CompactSelectionCard title="No — No penumbra" description="No target mismatch" selected={cPenumbra === false} onClick={() => setCPenumbra(false)} variant="danger" />
                     </div>
                     {cPenumbra !== null && (
-                      <LearningPearl title="Path C Trials" content="TRACE-3 (NEJM 2023) and TIMELESS (NEJM 2024) inform the 2026 AHA/ASA late-window Class 2b recommendation for patients with LVO, salvageable penumbra, and no feasible rapid EVT pathway. This branch does not support non-LVO treatment." variant="amber" />
+                      <LearningPearl title="Path C Trials" content="TRACE-III (NEJM 2023) supports the 2026 AHA/ASA late-window Class 2b recommendation for patients with ICA or MCA (M1/M2) occlusion, salvageable penumbra, no feasible rapid EVT pathway, and expert thrombolytic stroke oversight. TIMELESS informs the separate redirect away from extended-window IVT when rapid EVT is already available." variant="amber" />
                     )}
                   </div>
 
                   {cPenumbra === true && (
                     <div className="animate-in slide-in-from-top-2">
                       <h3 className="text-sm font-semibold text-slate-700 mb-1">LVO (large vessel occlusion) confirmed on CTA / MRA?</h3>
-                      <p className="text-xs text-slate-500 mb-2">Internal carotid, M1/M2 MCA, basilar, or other proximal occlusion</p>
+                      <p className="text-xs text-slate-500 mb-2">Qualifying Path C occlusion: internal carotid or MCA M1/M2</p>
                       <div className="grid grid-cols-2 gap-2">
-                        <CompactSelectionCard title="Yes — LVO confirmed" description="TIMELESS + TRACE-3 pathway" selected={cLvo === true} onClick={() => setCLvo(true)} />
+                        <CompactSelectionCard title="Yes — LVO confirmed" description="ICA or MCA (M1/M2) occlusion" selected={cLvo === true} onClick={() => setCLvo(true)} />
                         <CompactSelectionCard title="No — Non-LVO" description="Late Path C does not apply" selected={cLvo === false} onClick={() => setCLvo(false)} variant="danger" />
                       </div>
                     </div>
@@ -1061,7 +1066,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                   {/* C-LVO branch */}
                   {cPenumbra === true && cLvo === true && (
                     <div className="space-y-4 pl-4 border-l-2 border-slate-200 animate-in slide-in-from-top-2">
-                      <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">PATH C-LVO · TIMELESS + TRACE-3</p>
+                      <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">PATH C-LVO · TRACE-III late-window pathway</p>
                       <div>
                         <h3 className="text-sm font-semibold text-slate-700 mb-1">Is EVT (thrombectomy) feasible?</h3>
                         <p className="text-xs text-slate-500 mb-2">Transfer to EVT-capable center possible within reasonable time window</p>

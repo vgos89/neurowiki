@@ -13,6 +13,10 @@ export type ContentStatus = {
 
 export const contentStatus: ContentStatus = {
   // ============ GUIDES ============
+  '/guide/aha-2026-guideline': {
+    published: true,
+    comingSoonMessage: '2026 AHA/ASA Stroke Guideline mindmap coming soon',
+  },
   '/guide/stroke-basics': {
     published: true,
     comingSoonMessage: 'Stroke basics guide',

@@ -34,6 +34,7 @@ const StatusEpilepticusPathway = lazy(() => import('./pages/StatusEpilepticusPat
 const MigrainePathway = lazy(() => import('./pages/MigrainePathway'));
 const ExtendedIVTPathway = lazy(() => import('./pages/ExtendedIVTPathway'));
 const EmBillingCalculator = lazy(() => import('./pages/EmBillingCalculator'));
+const StrokeGuidelineMindmap = lazy(() => import('./pages/guide/StrokeGuidelineMindmap'));
 
 // Lazy load guide articles
 const StrokeBasics = lazy(() => import('./pages/guide/StrokeBasics'));
@@ -109,6 +110,7 @@ const App: React.FC = () => {
           <Route path="/calculators/stroke-code" element={<PublishGate><StrokeBasics /></PublishGate>} />
           <Route path="/calculators/em-billing" element={<PublishGate><EmBillingCalculator /></PublishGate>} />
           <Route path="/guide" element={<ResidentToolkit />} />
+          <Route path="/guide/aha-2026-guideline" element={<PublishGate routeId="/guide/aha-2026-guideline"><StrokeGuidelineMindmap /></PublishGate>} />
           <Route path="/guide/stroke-basics" element={<PublishGate><StrokeBasics /></PublishGate>} />
           <Route path="/guide/stroke-basics-desktop" element={<PublishGate><StrokeBasicsDesktop /></PublishGate>} />
           <Route path="/guide/stroke-basics-mobile" element={<PublishGate><StrokeBasicsMobile /></PublishGate>} />
