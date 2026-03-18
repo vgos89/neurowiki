@@ -218,7 +218,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Odds Ratio: 1.7 (95% CI 1.2–2.6) for favorable outcome',
       'Mortality: No significant difference in mortality at 3 months (17% vs 21%)'
     ],
-    conclusion: 'Despite an increased incidence of symptomatic intracerebral hemorrhage, treatment with intravenous tPA within 3 hours of the onset of ischemic stroke improved clinical outcome at 3 months.',
+    conclusion: '',
     source: 'The National Institute of Neurological Disorders and Stroke rt-PA Stroke Study Group (NEJM 1995)',
     clinicalTrialsId: 'NCT00000292',
     listCategory: 'thrombolysis',
@@ -287,7 +287,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Alongside AcT (Canada 2022) and NOR-TEST 2 (Norway), this trial provides the multi-ethnic evidence base for AHA/ASA 2026 COR 1 equivalence',
       'Published: JAMA 2024; 332(17):1437–1445. DOI: 10.1001/jama.2024.14721'
     ],
-    conclusion: 'In patients with acute ischemic stroke eligible for intravenous thrombolysis within 4.5 hours, tenecteplase 0.25 mg/kg was noninferior to alteplase 0.9 mg/kg for excellent functional outcome (mRS 0–1) at 90 days with a similar safety profile. Findings support tenecteplase as a suitable alternative to alteplase.',
+    conclusion: '',
     source: 'Meng X et al. (JAMA 2024)',
     clinicalTrialsId: 'NCT04915729',
     listCategory: 'thrombolysis',
@@ -353,7 +353,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Guideline evolution: The trial excluded age >80 and warfarin users, but AHA/ASA 2026 guidelines support considering treatment in these groups within 3–4.5h after individual risk assessment',
       'Symptomatic ICH: 2.4% in tPA group vs 0.2% in Placebo group (P=0.008)'
     ],
-    conclusion: 'Intravenous alteplase administered between 3 and 4.5 hours after the onset of symptoms significantly improved clinical outcomes in patients with acute ischemic stroke.',
+    conclusion: '',
     source: 'Hacke et al. (NEJM 2008)',
     clinicalTrialsId: 'NCT00153036',
     listCategory: 'thrombolysis',
@@ -420,7 +420,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Symptomatic ICH: 6.2% in Alteplase group vs 0.9% in Placebo group',
       'Adjusted Risk Ratio: 1.44 (P=0.04)'
     ],
-    conclusion: 'Among patients with ischemic stroke 4.5 to 9.0 hours after onset or wake-up stroke who had salvageable brain tissue on perfusion imaging, alteplase resulted in a higher percentage of patients with no or minor neurologic deficits.',
+    conclusion: '',
     source: 'Ma et al. (NEJM 2019)',
     clinicalTrialsId: 'NCT00887328',
     listCategory: 'thrombolysis',
@@ -485,7 +485,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Time Window: Within 20 hours of symptom onset',
       'Primary Outcome: Change in Best Corrected Visual Acuity (BCVA) at 1 month'
     ],
-    conclusion: 'In light of similar visual outcomes and a higher rate of adverse reactions associated with Local Intra-arterial Fibrinolysis (LIF), it cannot be recommended for the management of acute CRAO.',
+    conclusion: '',
     source: 'Schumacher et al. (Ophthalmology 2010)',
     clinicalTrialsId: 'NCT00622778',
     listCategory: 'thrombolysis',
@@ -547,7 +547,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Adjusted common odds ratio for better disability outcome was 1.67',
       'No significant increase in mortality or symptomatic intracerebral hemorrhage was seen'
     ],
-    conclusion: 'In patients with proximal anterior circulation occlusion treatable within 6 hours, intra-arterial treatment improved 90-day functional outcomes and was safe.',
+    conclusion: '',
     source: 'Berkhemer et al. (NEJM 2015)',
     specialDesign: 'landmark-evt',
     keyMessage: 'MR CLEAN established modern EVT as effective therapy for anterior circulation LVO.',
@@ -610,7 +610,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Used collateral imaging to exclude patients with poor tissue reserve',
       'One of the five 2015 trials that cemented EVT as standard of care'
     ],
-    conclusion: 'Among patients with proximal anterior circulation occlusion, small infarct core, and favorable collaterals, rapid EVT improved outcomes and reduced mortality.',
+    conclusion: '',
     source: 'Goyal et al. (NEJM 2015)',
     clinicalTrialsId: 'NCT01778335',
     listCategory: 'thrombectomy',
@@ -671,7 +671,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Symptomatic intracranial hemorrhage was identical in both groups at 1.9%',
       'Trial helped extend confidence in EVT use out to 8 hours in selected patients'
     ],
-    conclusion: 'Among anterior circulation LVO patients treatable within 8 hours, thrombectomy reduced disability and increased independence without excess hemorrhage.',
+    conclusion: '',
     source: 'Jovin et al. (NEJM 2015)',
     clinicalTrialsId: 'NCT01692379',
     listCategory: 'thrombectomy',
@@ -732,7 +732,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Early neurologic improvement at day 3 was 80% vs 37%',
       'Functional independence at 90 days rose to 71% vs 40%'
     ],
-    conclusion: 'In perfusion-selected patients receiving alteplase, early thrombectomy improved reperfusion, early neurologic recovery, and 90-day functional outcome.',
+    conclusion: '',
     source: 'Campbell et al. (NEJM 2015)',
     clinicalTrialsId: 'NCT01492725',
     listCategory: 'thrombectomy',
@@ -793,7 +793,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Median imaging-to-groin puncture time was 57 minutes',
       'No significant increase in mortality or symptomatic intracranial hemorrhage'
     ],
-    conclusion: 'Among patients already receiving IV tPA, rapid stent-retriever thrombectomy within 6 hours improved 90-day functional outcomes.',
+    conclusion: '',
     source: 'Saver et al. (NEJM 2015)',
     clinicalTrialsId: 'NCT01657461',
     listCategory: 'thrombectomy',
@@ -854,7 +854,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Supports bridging therapy for eligible anterior circulation large-vessel occlusions',
       'Conducted before the widespread consolidation of modern thrombectomy practice'
     ],
-    conclusion: 'Mechanical thrombectomy added to standard IV alteplase improved functional independence without excess mortality or symptomatic hemorrhage.',
+    conclusion: '',
     source: 'Bracard et al. (Lancet Neurol 2016)',
     clinicalTrialsId: 'NCT01062698',
     listCategory: 'thrombectomy',
@@ -916,7 +916,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Mortality was similar: 17.7% vs 18.8%',
       'Helped launch the direct-EVT versus bridging-therapy debate'
     ],
-    conclusion: 'In this Chinese noninferiority trial, thrombectomy alone was noninferior to bridging therapy for 90-day functional outcome, though reperfusion before thrombectomy was less frequent without alteplase.',
+    conclusion: '',
     source: 'Yang et al. (NEJM 2020)',
     clinicalTrialsId: 'NCT03469206',
     specialDesign: 'non-inferiority',
@@ -978,7 +978,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Symptomatic intracerebral hemorrhage and mortality were similar between groups',
       'Interpretation depends on whether clinicians accept the prespecified noninferiority margin'
     ],
-    conclusion: 'Among patients with proximal anterior circulation occlusion within 4.5 hours, direct EVT met the prespecified noninferiority threshold versus alteplase plus EVT.',
+    conclusion: '',
     source: 'Zi et al. (JAMA 2021)',
     specialDesign: 'non-inferiority',
     listCategory: 'thrombectomy',
@@ -1040,7 +1040,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Any intracerebral hemorrhage was lower without IV thrombolysis',
       'Symptomatic hemorrhage and mortality were similar'
     ],
-    conclusion: 'Mechanical thrombectomy alone failed to prove noninferiority to combined IV thrombolysis plus thrombectomy, though the trial also did not establish inferiority.',
+    conclusion: '',
     source: 'Suzuki et al. (JAMA 2021)',
     specialDesign: 'non-inferiority',
     keyMessage: 'SKIP was directionally reassuring for direct EVT but statistically inconclusive.',
@@ -1103,7 +1103,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Mortality was numerically higher with direct EVT: 20.5% vs 15.8%',
       'Symptomatic intracerebral hemorrhage was similar between groups'
     ],
-    conclusion: 'In this European trial, direct EVT was neither superior nor noninferior to alteplase followed by EVT for disability outcome at 90 days.',
+    conclusion: '',
     source: 'LeCouffe et al. (NEJM 2021)',
     specialDesign: 'negative-trial',
     keyMessage: 'MR CLEAN-NO IV argues against routinely skipping alteplase before EVT in eligible direct presenters.',
@@ -1166,7 +1166,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Safety outcomes were similar, including 1% symptomatic hemorrhage in both arms',
       'Guideline interpretation generally remains in favor of bridging therapy when alteplase eligible'
     ],
-    conclusion: 'DIRECT-SAFE failed to show noninferiority of direct thrombectomy compared with bridging therapy, supporting continued use of bridging treatment as standard care.',
+    conclusion: '',
     source: 'Mitchell et al. (Lancet 2022)',
     clinicalTrialsId: 'NCT03494920',
     specialDesign: 'negative-trial',
@@ -1229,7 +1229,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Successful reperfusion was lower without alteplase: 91% vs 96%',
       'Symptomatic intracranial hemorrhage remained low in both groups'
     ],
-    conclusion: 'SWIFT DIRECT did not support omitting IV alteplase before thrombectomy in eligible patients because noninferiority was not shown and reperfusion was lower with direct EVT.',
+    conclusion: '',
     source: 'Fischer et al. (Lancet 2022)',
     clinicalTrialsId: 'NCT03192332',
     specialDesign: 'negative-trial',
@@ -1291,7 +1291,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Symptomatic intracerebral hemorrhage was higher with thrombectomy: 9.6% vs 5.7%',
       'Supports EVT in selected large-core patients rather than excluding them automatically'
     ],
-    conclusion: 'For acute stroke with large infarct of unrestricted size, thrombectomy improved disability outcomes and lowered mortality, at the cost of more symptomatic hemorrhage.',
+    conclusion: '',
     source: 'Costalat et al. (NEJM 2024)',
     clinicalTrialsId: 'NCT03811769',
     listCategory: 'thrombectomy',
@@ -1352,7 +1352,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Used pragmatic ASPECTS 3-5 selection with non-contrast CT predominant',
       'Supports offering EVT to selected large-core patients even without advanced imaging'
     ],
-    conclusion: 'In patients with anterior circulation LVO and established large infarct selected mainly by non-contrast CT, thrombectomy improved outcomes and lowered mortality.',
+    conclusion: '',
     source: 'Bendszus et al. (Lancet 2023)',
     clinicalTrialsId: 'NCT03094715',
     listCategory: 'thrombectomy',
@@ -1413,7 +1413,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'All-cause mortality was identical at 22% in both groups',
       'Trial supported operator choice and device flexibility in modern EVT'
     ],
-    conclusion: 'Direct aspiration as first pass provided noninferior 90-day functional outcomes compared with first-line stent retriever thrombectomy.',
+    conclusion: '',
     source: 'Turk et al. (Lancet 2019)',
     clinicalTrialsId: 'NCT02466893',
     specialDesign: 'non-inferiority',
@@ -1476,7 +1476,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Trial suggests either strategy is acceptable as a first-line approach',
       'Addresses device selection rather than patient selection — aspiration and stent retriever are interchangeable as first-line approaches'
     ],
-    conclusion: 'First-line contact aspiration did not improve successful revascularization compared with first-line stent retriever thrombectomy.',
+    conclusion: '',
     source: 'Lapergue et al. (JAMA 2017)',
     clinicalTrialsId: 'NCT02523261',
     specialDesign: 'negative-trial',
@@ -1539,7 +1539,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Final clinical implication: routine combined first-line use was not established',
       'Useful trial for EVT technique optimization rather than selection of who should receive EVT'
     ],
-    conclusion: 'An initial combined aspiration and stent retriever strategy did not significantly improve final near-total or total reperfusion compared with stent retriever alone.',
+    conclusion: '',
     source: 'Lapergue et al. (JAMA 2021)',
     clinicalTrialsId: 'NCT03290885',
     specialDesign: 'negative-trial',
@@ -1601,7 +1601,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Trial stopped early and was relatively small, so replication is still needed',
       'Small study stopped early — replication needed before routine use of adjunct IA alteplase post-thrombectomy'
     ],
-    conclusion: 'After successful thrombectomy, adjunct intra-arterial alteplase increased the likelihood of excellent 90-day outcome, though the preliminary finding requires replication.',
+    conclusion: '',
     source: 'Renu et al. (JAMA 2022)',
     clinicalTrialsId: 'NCT03876119',
     listCategory: 'thrombectomy',
@@ -1663,7 +1663,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Mortality was similar between groups',
       'Does not support routine pre-EVT tirofiban use'
     ],
-    conclusion: 'Intravenous tirofiban before thrombectomy did not improve 90-day outcomes and does not support routine use in acute ischemic stroke EVT.',
+    conclusion: '',
     source: 'RESCUE BT Investigators (JAMA 2022)',
     specialDesign: 'negative-trial',
     listCategory: 'thrombectomy',
@@ -1725,7 +1725,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'The reduction in bleeding did not translate into better 90-day disability outcomes',
       'Supports the safety of modestly more aggressive BP control, but not a major change from standard alteplase-era targets'
     ],
-    conclusion: 'Among alteplase-treated acute ischemic stroke patients, intensive blood pressure lowering reduced intracranial hemorrhage but did not improve 90-day functional outcome compared with guideline treatment.',
+    conclusion: '',
     source: 'Anderson et al. (Lancet 2019)',
     clinicalTrialsId: 'NCT01422616',
     specialDesign: 'negative-trial',
@@ -1787,7 +1787,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Predicted probability of success for a future superiority trial was low: about 25% for <140 mm Hg and 14% for <160 mm Hg',
       'The highest-target group had the best mean utility-weighted mRS in this small phase 2 study'
     ],
-    conclusion: 'Lower post-EVT systolic blood pressure targets did not meet formal futility criteria, but the results suggested a low probability that aggressive BP lowering would prove beneficial in a larger trial.',
+    conclusion: '',
     source: 'Mistry et al. (JAMA 2023)',
     clinicalTrialsId: 'NCT04116112',
     specialDesign: 'futility-trial',
@@ -1849,7 +1849,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Functional outcomes at 3 months did not differ',
       'This early randomized signal did not support routine aggressive BP lowering after reperfusion'
     ],
-    conclusion: 'An intensive systolic blood pressure target of 100-129 mm Hg after successful EVT did not reduce radiographic intraparenchymal hemorrhage compared with standard care.',
+    conclusion: '',
     source: 'Mazighi et al. (Lancet Neurol 2021)',
     clinicalTrialsId: 'NCT03160677',
     specialDesign: 'negative-trial',
@@ -1911,7 +1911,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Symptomatic intracerebral hemorrhage rates were similar, so harm was not explained by more sICH',
       'Provides strong evidence to avoid routine aggressive BP lowering below 140 mm Hg after successful EVT'
     ],
-    conclusion: 'After successful EVT, intensive blood pressure management to a systolic target below 140 mm Hg reduced the likelihood of functional independence compared with conventional management.',
+    conclusion: '',
     source: 'Nam et al. (JAMA 2023)',
     clinicalTrialsId: 'NCT04205305',
     specialDesign: 'negative-trial',
@@ -1973,7 +1973,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Hypoglycemia was more common with glibenclamide: 6% vs 2%',
       'Trial was underpowered after early termination, so small subgroup effects remain uncertain'
     ],
-    conclusion: 'Intravenous glibenclamide did not improve 90-day functional outcome after large hemispheric infarction.',
+    conclusion: '',
     source: 'Sheth et al. (Lancet Neurol 2024)',
     clinicalTrialsId: 'NCT02864953',
     specialDesign: 'negative-trial',
@@ -2035,7 +2035,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'In the no-alteplase subgroup, mRS 0-2 was 59.3% with nerinetide vs 49.8% with placebo',
       'Findings raised concern for a drug-drug interaction between alteplase and nerinetide'
     ],
-    conclusion: 'Nerinetide did not improve functional outcomes overall after EVT, although exploratory analyses suggested a possible benefit in patients not treated with alteplase.',
+    conclusion: '',
     source: 'Hill et al. (Lancet 2020)',
     clinicalTrialsId: 'NCT02930018',
     specialDesign: 'negative-trial',
@@ -2096,7 +2096,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Mortality was reduced dramatically, with a 52.8% absolute reduction in death',
       'DECIMAL became most influential through its contribution to pooled European decompressive surgery analyses'
     ],
-    conclusion: 'Early decompressive craniectomy markedly reduced mortality in malignant MCA infarction, with a numerical but not statistically definitive improvement in moderate disability outcomes in this small trial.',
+    conclusion: '',
     source: 'Vahedi et al. (Stroke 2007)',
     keyMessage: 'Early hemicraniectomy reduces mortality in malignant MCA infarction — survivors often remain functionally dependent.',
   },
@@ -2155,7 +2155,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Distribution of mRS scores still favored surgery, and severe disability was not disproportionately increased',
       'DESTINY was central to the pooled European hemicraniectomy evidence base'
     ],
-    conclusion: 'DESTINY confirmed a major survival benefit from hemicraniectomy in malignant hemispheric stroke, though the trial alone was too small to prove superiority on its primary 6-month functional endpoint.',
+    conclusion: '',
     source: 'Juttler et al. (Stroke 2007)',
     keyMessage: 'DESTINY reinforced that early hemicraniectomy improves survival in malignant MCA infarction.',
   },
@@ -2215,7 +2215,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Meta-analysis of patients treated within 48 hours showed clearer benefit for both survival and poor outcome reduction',
       'The trial emphasized that delayed surgery up to 96 hours may save lives without clearly improving functional independence'
     ],
-    conclusion: 'HAMLET showed that decompressive surgery reduces case fatality, but meaningful functional benefit was not demonstrated when surgery was delayed up to 4 days; benefit is strongest within 48 hours.',
+    conclusion: '',
     source: 'Hofmeijer et al. (Lancet Neurol 2009)',
     keyMessage: 'For malignant hemispheric infarction, timing is critical: hemicraniectomy works best when done early.',
   },
@@ -2274,7 +2274,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Most survivors still had substantial disability, usually mRS 4 or 5',
       'The trial changed practice by showing age alone should not exclude surgery'
     ],
-    conclusion: 'Among patients 61 years or older with malignant MCA infarction, hemicraniectomy increased survival without severe disability, though most survivors remained dependent for daily care.',
+    conclusion: '',
     source: 'Juttler et al. (NEJM 2014)',
     keyMessage: 'Older age does not eliminate benefit from hemicraniectomy, but survival often comes with major residual disability.',
   },
@@ -2333,7 +2333,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Recurrent ischemic stroke and death were numerically lower with early initiation',
       'Registry-based randomization made the trial highly pragmatic and practice-relevant'
     ],
-    conclusion: 'Early NOAC initiation within 4 days was noninferior to delayed initiation after AF-related ischemic stroke and appeared safe in appropriately selected patients.',
+    conclusion: '',
     source: 'Oldgren et al. (Circulation 2022)',
     clinicalTrialsId: 'NCT02961348',
     specialDesign: 'non-inferiority',
@@ -2394,7 +2394,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Symptomatic intracranial hemorrhage was rare and similar in both groups',
       'The findings push against routine delayed DOAC initiation after AF-related stroke'
     ],
-    conclusion: 'Early DOAC initiation within 4 days after AF-related ischemic stroke was noninferior to delayed initiation and does not support routinely waiting 1-2 weeks in otherwise eligible patients.',
+    conclusion: '',
     source: 'Werring et al. (Lancet 2024)',
     clinicalTrialsId: 'NCT03759938',
     specialDesign: 'non-inferiority',
@@ -2496,7 +2496,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Clinical implication: EVT is not recommended for medium/distal vessel occlusions',
       'Low reperfusion (71.7%), longer treatment delays, and technically demanding access to distal vessels likely contributed to the negative result'
     ],
-    conclusion: 'In persons with stroke due to medium or distal vessel occlusion, EVT plus best medical treatment did not result in lower disability or death compared to best medical treatment alone. Despite achieving reperfusion in 72% of cases, no clinical benefit was observed. Symptomatic hemorrhage was increased with EVT. EVT is not recommended for non-dominant M2, M3, M4, or small ACA/PCA occlusions.',
+    conclusion: '',
     source: 'Psychogios M, Brehm A, et al. N Engl J Med. 2025;392(14):1374-1384',
     clinicalTrialsId: 'NCT05029414',
     specialDesign: 'negative-trial',
@@ -2563,7 +2563,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'NIHSS >5 or disabling deficit of 3–5, with favorable baseline imaging',
       'EVT is not recommended for routine use in medium vessel occlusions — procedural risk in smaller vessels outweighs benefit in unselected patients'
     ],
-    conclusion: 'Endovascular treatment for medium-vessel occlusion stroke within 12 hours did not lead to better functional outcomes and was associated with higher mortality compared to usual care.',
+    conclusion: '',
     source: 'Goyal et al. (NEJM 2025)',
     clinicalTrialsId: 'NCT05151172',
     listCategory: 'thrombectomy',
@@ -2630,7 +2630,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Safety: No significant difference in symptomatic intracranial hemorrhage (sICH) or serious adverse events',
       'Implementation: Requires automated perfusion software (e.g., RAPID) for standardized core/penumbra calculation'
     ],
-    conclusion: 'Thrombectomy for ischemic stroke 6 to 16 hours after onset plus standard medical therapy results in better functional outcomes and lower mortality than standard medical therapy alone in selected patients with salvageable tissue.',
+    conclusion: '',
     source: 'Albers et al. (NEJM 2018)',
     clinicalTrialsId: 'NCT02586415',
     listCategory: 'thrombectomy',
@@ -2696,7 +2696,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Wake-Up Strokes: Provided the first randomized evidence for treating patients with unknown onset time if physiology was favorable',
       'Clinical-Core Mismatch: Unlike DEFUSE-3 which uses flat core/penumbra cutoff, DAWN uses age/NIHSS-adjusted criteria'
     ],
-    conclusion: 'Among patients with acute stroke and mismatched clinical deficit and infarct volume, thrombectomy within 6 to 24 hours results in significantly better functional outcomes than standard care.',
+    conclusion: '',
     source: 'Nogueira et al. (NEJM 2018)',
     clinicalTrialsId: 'NCT02142283',
     listCategory: 'thrombectomy',
@@ -2761,7 +2761,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Risk/Benefit: While outcomes are generally poorer than small-core patients, EVT still provides significant shift towards lower disability (e.g., being able to walk vs bedbound)',
       'Safety: Symptomatic intracranial hemorrhage (sICH) was low and not significantly different between groups, though any ICH was more frequent in EVT group'
     ],
-    conclusion: 'Endovascular thrombectomy improves functional outcomes in patients with large ischemic strokes (ASPECTS 3-5 or Core ≥ 50 ml) compared to medical management alone.',
+    conclusion: '',
     source: 'Sarraj et al. (NEJM 2023)',
     clinicalTrialsId: 'NCT03876457',
     listCategory: 'thrombectomy',
@@ -2828,7 +2828,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Mortality: Despite higher hemorrhage risk, no difference in 90-day mortality, and functional outcomes were superior',
       'Higher Core Limit: Unlike SELECT2 (50ml), this trial included cores up to 100ml'
     ],
-    conclusion: 'In patients with large ischemic core volume, endovascular therapy resulted in better functional outcomes but was associated with more intracranial hemorrhages.',
+    conclusion: '',
     source: 'Huo et al. (NEJM 2023)',
     clinicalTrialsId: 'NCT04551664',
     listCategory: 'thrombectomy',
@@ -2891,7 +2891,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Safety: Symptomatic ICH was uncommon (1/71 vs 0/60), and 90-day mortality was 2/71 vs 2/60',
       'Case Mix: Investigators noted relatively mild strokes and frequent absence of large-artery occlusion'
     ],
-    conclusion: 'Among patients with MRI-selected stroke of unknown onset, low-dose alteplase did not improve 90-day functional outcomes compared with standard treatment. The early stop and small sample size limit definitive interpretation, so THAWS is best viewed as a neutral, underpowered trial.',
+    conclusion: '',
     source: 'Koga et al. (Stroke 2020)',
     doi: '10.1161/STROKEAHA.119.028127',
     clinicalTrialsId: 'NCT02002325',
@@ -2958,7 +2958,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Not a Bridging Trial: Patients were enrolled because thrombectomy was not available; this does not justify delaying rapid EVT',
       'Safety Trade-off: Symptomatic ICH was higher with tenecteplase (3.0% vs 0.8%), while mortality was similar (13.3% vs 13.1%)'
     ],
-    conclusion: 'In perfusion-selected patients with ICA or MCA occlusion who were 4.5 to 24 hours from last-known-well and lacked access to thrombectomy, tenecteplase improved 90-day functional outcomes compared with standard medical treatment.',
+    conclusion: '',
     source: 'Xiong et al. (NEJM 2024)',
     doi: '10.1056/NEJMoa2402980',
     clinicalTrialsId: 'NCT05141305',
@@ -3024,7 +3024,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Important Exclusion: Patients with planned thrombectomy were excluded from WAKE-UP',
       'Safety: Symptomatic ICH was 2.0% vs 0.4%, and mortality was numerically higher at 4.1% vs 1.2%'
     ],
-    conclusion: 'Among patients with acute ischemic stroke and unknown time of symptom onset who had MRI DWI-FLAIR mismatch, alteplase improved 90-day functional outcomes compared with placebo. WAKE-UP established imaging-selected thrombolysis as a valid strategy for wake-up and other unknown-onset strokes.',
+    conclusion: '',
     source: 'Thomalla et al. (NEJM 2018)',
     doi: '10.1056/NEJMoa1804355',
     clinicalTrialsId: 'NCT01525290',
@@ -3091,7 +3091,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Time Window: Within 12 hours of estimated onset',
       'Symptomatic ICH: 5% in EVT vs 0% in BMT (acceptable risk given mortality benefit)'
     ],
-    conclusion: 'In patients with basilar-artery occlusion presenting within 12 hours, endovascular thrombectomy led to better functional outcomes and lower mortality than best medical care.',
+    conclusion: '',
     source: 'Tao et al. (NEJM 2022)',
     clinicalTrialsId: 'NCT04751708',
     listCategory: 'thrombectomy',
@@ -3157,7 +3157,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Selection: Used clinical exclusion (severe disability) but did not strictly require perfusion imaging mismatch, though pc-ASPECTS was assessed',
       'Recommendation: EVT is now recommended for BAO up to 24 hours in eligible patients'
     ],
-    conclusion: 'Among patients with basilar-artery occlusion who presented between 6 and 24 hours after symptom onset, thrombectomy led to a higher rate of good functional status at 90 days than medical therapy.',
+    conclusion: '',
     source: 'Jovin et al. (NEJM 2022)',
     clinicalTrialsId: 'NCT02737189',
     listCategory: 'thrombectomy',
@@ -3286,7 +3286,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Changed international guidelines: AHA/ASA now recommends DAPT for 21 days (Class IIa)',
       'Combined with POINT, established DAPT as standard of care for minor stroke/high-risk TIA'
     ],
-    conclusion: 'Among patients with high-risk TIA or minor ischemic stroke treated within 24 hours, clopidogrel + aspirin for 21 days followed by clopidogrel alone outperformed aspirin alone, with a 32% relative risk reduction (3.5% absolute, NNT=29) and no increase in hemorrhage.',
+    conclusion: '',
     source: 'Wang Y, Wang Y, Zhao X, et al. Clopidogrel with aspirin in acute minor stroke or transient ischemic attack. N Engl J Med. 2013;369(1):11-19.',
     doi: '10.1056/NEJMoa1215340',
     pmid: '23803136',
@@ -3367,7 +3367,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Guideline Consensus: Combined with CHANCE, this led to guidelines recommending DAPT for 21 days only, rather than the 90 days tested in POINT, to balance efficacy vs safety',
       'Population: Minor ischemic stroke (NIHSS ≤ 3) or high-risk TIA (ABCD² ≥ 4) within 12 hours'
     ],
-    conclusion: 'In patients with minor ischemic stroke or high-risk TIA, DAPT with Clopidogrel and Aspirin reduced the risk of major ischemic events but increased the risk of major hemorrhage compared to Aspirin alone.',
+    conclusion: '',
     source: 'Johnston et al. (NEJM 2018)',
     clinicalTrialsId: 'NCT00991029',
     listCategory: 'antiplatelets',
@@ -3431,7 +3431,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Standard of Care: AMM is now the first-line treatment for symptomatic ICAD. Stenting is reserved for salvage cases failing AMM',
       'Population: Patients with 70-99% stenosis of a major intracranial artery and a recent (last 30 days) TIA or stroke'
     ],
-    conclusion: 'In patients with symptomatic intracranial arterial stenosis, aggressive medical management was superior to PTAS with the Wingspan stent system, primarily due to the high risk of periprocedural stroke in the stenting arm.',
+    conclusion: '',
     source: 'Chimowitz et al. (NEJM 2011)',
     clinicalTrialsId: 'NCT00576693',
     listCategory: 'carotid',
@@ -3495,7 +3495,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'On-Label Criteria: Symptomatic ICAD 70-99%, recurrent stroke despite medical therapy (at least 2 strokes in territory), Age 22-80, mRS ≤ 3, >8 days from most recent stroke',
       'Safety Benchmark: Significantly lower than the 4% safety benchmark set by the FDA'
     ],
-    conclusion: 'With experienced interventionalists and proper patient selection following on-label usage guidelines (specifically >7 days post-stroke), the use of the Wingspan stent for intracranial atherosclerotic disease demonstrated a low periprocedural complication rate.',
+    conclusion: '',
     source: 'Alexander et al. (Stroke 2019)',
     clinicalTrialsId: 'NCT02034058',
     listCategory: 'carotid',
@@ -3558,7 +3558,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Current Use: Clopidogrel + Aspirin remains the preferred DAPT regimen unless there is Clopidogrel resistance (CYP2C19 status)',
       'Population: Acute mild-to-moderate ischemic stroke (NIHSS ≤ 5) or high-risk TIA'
     ],
-    conclusion: 'In patients with acute ischemic stroke or high-risk TIA, Ticagrelor was not found to be superior to Aspirin in reducing the rate of stroke, myocardial infarction, or death at 90 days.',
+    conclusion: '',
     source: 'Johnston et al. (NEJM 2016)',
     clinicalTrialsId: 'NCT01994720',
     listCategory: 'antiplatelets',
@@ -3622,7 +3622,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Mechanism: Lacunar disease is often a small vessel lipohyalinosis pathology, which may be less responsive to aggressive platelet inhibition compared to large artery atherosclerosis, but is prone to hemorrhage',
       'Population: MRI-confirmed symptomatic lacunar infarctions'
     ],
-    conclusion: 'Among patients with recent lacunar strokes, the addition of clopidogrel to aspirin did not significantly reduce the risk of recurrent stroke and was associated with an increased risk of bleeding and death.',
+    conclusion: '',
     source: 'SPS3 Investigators (NEJM 2012)',
     clinicalTrialsId: 'NCT00059306',
     listCategory: 'antiplatelets',
@@ -3686,7 +3686,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Major Coronary Events: Significant reduction (HR 0.65)',
       'Population: Stroke or TIA within 1–6 months, LDL 100–190 mg/dL, and no known coronary heart disease'
     ],
-    conclusion: 'In patients with recent stroke or TIA and without known coronary heart disease, 80 mg of atorvastatin per day reduced the overall incidence of stroke and of cardiovascular events.',
+    conclusion: '',
     source: 'Amarenco et al. (NEJM 2006)',
     clinicalTrialsId: 'NCT00147602',
     listCategory: 'antiplatelets',
@@ -3768,7 +3768,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Primary outcome at 90 days (exploratory): 3.7% (early) vs 5.6% (later)',
       'Most patients were from European centers - generalizability to other populations unclear'
     ],
-    conclusion: 'In this trial, the incidence of recurrent ischemic stroke, systemic embolism, major extracranial bleeding, symptomatic intracranial hemorrhage, or vascular death at 30 days was estimated to range from 2.8 percentage points lower to 0.5 percentage points higher (95% CI) with early than with later use of DOACs. Early DOAC initiation (within 48h for minor/moderate stroke, day 6-7 for major stroke) using imaging-based selection appears safe and may prevent recurrent strokes without increasing bleeding risk.',
+    conclusion: '',
     source: 'Fischer U, et al. N Engl J Med. 2023;388(26):2411-2421',
     clinicalTrialsId: 'NCT03148457',
     specialDesign: 'estimation-trial',
@@ -3883,7 +3883,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Benefit consistent across atherosclerotic and non-atherosclerotic causes',
       'Published: Johnston SC et al. N Engl J Med. 2020;383(3):207–217. DOI: 10.1056/NEJMoa1916870'
     ],
-    conclusion: 'Ticagrelor + aspirin reduced stroke/death at 30 days vs aspirin alone (5.5% vs 6.6%, HR 0.83, p=0.02), but caused 5× more severe bleeding (0.5% vs 0.1%). AHA/ASA 2026 rates ticagrelor COR 3: No Benefit for minor stroke/TIA — NNT=91 is far inferior to clopidogrel DAPT (CHANCE NNT=28) with worse bleeding. Use clopidogrel+aspirin instead.',
+    conclusion: '',
     source: 'Johnston SC, et al. (NEJM 2020)',
     doi: '10.1056/NEJMoa1916870',
     pmid: '32668111',
@@ -4008,7 +4008,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Critical use case: patient arriving 30–72h after onset with confirmed stenosis on CTA/MRA',
       'Published: Zhao J, et al. N Engl J Med. 2024;390(3):203–213. DOI: 10.1056/NEJMoa2309137'
     ],
-    conclusion: 'Among patients with mild ischemic stroke or high-risk TIA of atherosclerotic cause treated within 72 hours, clopidogrel+aspirin × 21 days reduced new stroke at 90 days (7.3% vs 9.2%, HR 0.79, p=0.008) vs aspirin alone. Moderate-to-severe bleeding slightly increased (0.9% vs 0.4%). AHA/ASA 2026: COR 2a for atherosclerotic etiology within 24–72 hours.',
+    conclusion: '',
     source: 'Zhao J, et al. (NEJM 2024)',
     doi: '10.1056/NEJMoa2309137',
     pmid: '38157499',
@@ -4134,7 +4134,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'If testing unavailable within 24h: use clopidogrel DAPT NOW — do NOT delay treatment for genotyping',
       'Published: Wang Y, et al. N Engl J Med. 2021;385(27):2497–2505. DOI: 10.1056/NEJMoa2111749'
     ],
-    conclusion: 'In CYP2C19 LOF carriers with minor stroke or high-risk TIA, ticagrelor+aspirin × 21 days significantly reduced stroke recurrence vs clopidogrel+aspirin (6.0% vs 7.6%, HR 0.77, p=0.009) without increasing severe bleeding. AHA/ASA 2026: COR 2b — reasonable when CYP2C19 LOF confirmed within 24 hours. If testing unavailable, use clopidogrel DAPT immediately.',
+    conclusion: '',
     source: 'Wang Y, et al. (NEJM 2021)',
     doi: '10.1056/NEJMoa2111749',
     pmid: '34708996',
@@ -4262,7 +4262,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Bayesian adaptive design — statistically valid but smaller n than traditional RCTs',
       'Published: Hanley DF, et al. N Engl J Med. 2024;390(14):1277–1289. DOI: 10.1056/NEJMoa2308440'
     ],
-    conclusion: 'Among patients with lobar or anterior basal ganglia ICH (30–80 mL) treated within 24 hours, MIPS improved functional outcomes at 180 days (UW-mRS 0.458 vs 0.374, p=0.04) and dramatically reduced 30-day mortality (9.3% vs 18.0%) vs medical management alone. ENRICH is the first positive randomized surgical ICH trial — surgery now has a role for selected lobar and anterior basal ganglia ICH at centers with appropriate equipment and trained teams.',
+    conclusion: '',
     source: 'Hanley DF, et al. (NEJM 2024)',
     doi: '10.1056/NEJMoa2308440',
     pmid: '38598795',
@@ -4340,7 +4340,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Symptomatic secondary intracranial hemorrhage was similar between groups: 3.2% vs 2.8%',
       'Because this was not randomized, system-level confounding cannot be completely excluded despite adjustment'
     ],
-    conclusion: 'In Berlin, dispatching a mobile stroke unit was associated with lower global disability at 90 days than conventional ambulance dispatch alone. B_PROUD is one of the strongest pragmatic data sets supporting MSU deployment when systems can sustain it.',
+    conclusion: '',
     source: 'Ebinger M, et al. (JAMA 2020)',
     doi: '10.1001/jama.2020.26345',
     trialResult: 'POSITIVE',
@@ -4418,7 +4418,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'About one-third of MSU-treated patients received thrombolysis within 60 minutes of onset, compared with 2.6% in standard EMS',
       'Symptomatic intracerebral hemorrhage remained about 2% in both groups despite faster reperfusion'
     ],
-    conclusion: 'BEST-MSU showed that MSUs do more than improve door-to-needle metrics: in tPA-eligible patients they improved 90-day outcomes, increased treatment rates, and dramatically shortened time to reperfusion.',
+    conclusion: '',
     source: 'Grotta JC, et al. (NEJM 2021)',
     doi: '10.1056/NEJMoa2103879',
     clinicalTrialsId: 'NCT02190500',
@@ -4487,7 +4487,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'By hospital arrival, systolic BP was lowered by about 11 mm Hg (159 vs 170 mm Hg)',
       'Serious adverse events were similar overall, so the main issue was efficacy heterogeneity rather than clear global toxicity'
     ],
-    conclusion: 'INTERACT4 does not support indiscriminate prehospital blood-pressure lowering in undifferentiated stroke. Its central lesson is that what helps hemorrhage may hurt ischemia, so pre-imaging BP strategies must be diagnosis aware or highly selective.',
+    conclusion: '',
     source: 'INTERACT4 Investigators (NEJM 2024)',
     doi: '10.1056/NEJMoa2314741',
     trialResult: 'NEGATIVE',
@@ -4555,7 +4555,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Early death within 7 days was numerically higher with glyceryl trinitrate, especially in intracerebral hemorrhage',
       'The study reinforced the concern from RIGHT-2 that prehospital GTN should not be used before imaging excludes hemorrhage'
     ],
-    conclusion: 'MR ASAP found no functional benefit from prehospital glyceryl trinitrate and raised concern for early harm in intracerebral hemorrhage. The practical takeaway is to avoid routine GTN use in undifferentiated prehospital stroke.',
+    conclusion: '',
     source: 'van den Berg SA, et al. (Lancet Neurol 2022)',
     doi: '10.1016/S1474-4422(22)00333-7',
     trialResult: 'NEGATIVE',
@@ -4624,7 +4624,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'The trial was stopped early for futility after interim analysis',
       'RACECAT argues against a universal mothership strategy in nonurban suspected LVO systems'
     ],
-    conclusion: 'RACECAT found that sending all suspected LVO patients directly to a CSC in nonurban Catalonia increased EVT use but did not improve 90-day disability. The study supports tailoring prehospital routing to local geography and workflow rather than assuming direct CSC transport is always better.',
+    conclusion: '',
     source: 'Pérez de la Ossa N, et al. (JAMA 2022)',
     doi: '10.1001/jama.2022.4404',
     clinicalTrialsId: 'NCT02795962',
@@ -4694,7 +4694,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Secondary outcomes, death, and serious adverse events were not significantly improved',
       'Together with MR ASAP, RIGHT-2 largely closed the door on routine prehospital GTN for undifferentiated stroke'
     ],
-    conclusion: 'RIGHT-2 showed that ultra-early prehospital GTN does not improve outcomes in presumed stroke despite modest blood-pressure reduction. Routine ambulance use of GTN for stroke should not be part of standard care.',
+    conclusion: '',
     source: 'RIGHT-2 Investigators (Lancet 2019)',
     doi: '10.1016/S0140-6736(19)30194-1',
     trialResult: 'NEGATIVE'
@@ -4754,7 +4754,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'PSC-first routing shortened onset-to-needle time by 30 minutes',
       'Post hoc analysis suggested more patients achieved mRS 0-3 with CSC-first transport, but this was exploratory and should not override the neutral primary result'
     ],
-    conclusion: 'TRIAGE-STROKE illustrates the core IVT-versus-EVT routing tradeoff: CSC-first gets the catheter in sooner, PSC-first gets alteplase started sooner. Because the trial was small and underpowered, it is hypothesis-generating rather than definitive, but it provides useful mechanistic support for local-system decision making.',
+    conclusion: '',
     source: 'Behrndtz A, et al. (Stroke 2023)',
     doi: '10.1161/STROKEAHA.123.043875',
     clinicalTrialsId: 'NCT03542188',
@@ -4815,7 +4815,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Mortality at 90 days was essentially identical: 15.3% vs 15.4%',
       'AcT is a major modern practice-shaping trial supporting tenecteplase 0.25 mg/kg as a first-line alternative'
     ],
-    conclusion: 'In the corrected AcT trial data, 1600 patients were randomized and 1577 formed the ITT cohort. Tenecteplase 0.25 mg/kg was noninferior to alteplase for excellent functional outcome, with similar symptomatic intracranial hemorrhage and mortality, supporting tenecteplase as a practical alternative for standard IV thrombolysis.',
+    conclusion: '',
     source: 'Menon BK, et al. (Lancet 2022)',
     doi: '10.1016/S0140-6736(22)01054-6',
     clinicalTrialsId: 'NCT03889249',
@@ -4887,7 +4887,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Symptomatic intracranial hemorrhage remained rare and numerically lower with DAPT: 0.3% vs 0.9%',
       'ARAMIS complements PRISMS by strengthening the case against routine alteplase for clearly nondisabling deficits'
     ],
-    conclusion: 'ARAMIS showed that in minor nondisabling acute ischemic stroke, dual antiplatelet therapy is noninferior to alteplase for 90-day excellent outcome and avoids the need for thrombolysis in many low-risk patients.',
+    conclusion: '',
     source: 'Chen HS, et al. (JAMA 2023)',
     doi: '10.1001/jama.2023.7827',
     clinicalTrialsId: 'NCT03661411',
@@ -4947,7 +4947,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Mortality was identical at about 8% in both groups',
       'This large representative UK cohort strengthens the modern tenecteplase evidence base'
     ],
-    conclusion: 'ATTEST-2 confirmed that tenecteplase 0.25 mg/kg is noninferior to alteplase for IV thrombolysis within 4.5 hours, supporting its use as a simpler bolus-based alternative.',
+    conclusion: '',
     source: 'Muir KW, et al. (Lancet Neurol 2024)',
     doi: '10.1016/S1474-4422(24)00377-6',
     clinicalTrialsId: 'NCT02814409',
@@ -5007,7 +5007,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Serious adverse events and mortality were similar between groups',
       'The neutral result in mild stroke raised concern about whether the 0.4 mg/kg dose was adequate for more severe stroke'
     ],
-    conclusion: 'NOR-TEST found similar efficacy and safety between high-dose tenecteplase and alteplase in a largely mild-stroke population, but it did not establish superiority and left uncertainty about the optimal tenecteplase dose.',
+    conclusion: '',
     source: 'Logallo N, et al. (Lancet Neurol 2017)',
     doi: '10.1016/S1474-4422(17)30253-3',
     clinicalTrialsId: 'NCT01949948',
@@ -5067,7 +5067,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Mortality was also higher: 16% vs 5%',
       'NOR-TEST 2 was the key signal that the 0.4 mg/kg dose is too high for routine acute stroke use'
     ],
-    conclusion: 'NOR-TEST 2 Part A showed worse safety and functional outcomes with tenecteplase 0.4 mg/kg than with alteplase in moderate to severe stroke. The trial effectively ended enthusiasm for the 0.4 mg/kg tenecteplase dose in acute ischemic stroke.',
+    conclusion: '',
     source: 'Kvistad CE, et al. (Lancet Neurol 2022)',
     doi: '10.1016/S1474-4422(22)00124-7',
     clinicalTrialsId: 'NCT03854500',
@@ -5127,7 +5127,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'The trial was stopped early and therefore underpowered, but its direction did not favor alteplase',
       'PRISMS remains foundational when deciding against thrombolysis for clearly nondisabling deficits'
     ],
-    conclusion: 'PRISMS did not show benefit of alteplase over aspirin in minor nondisabling stroke and demonstrated nontrivial hemorrhage risk. In practice, it supports withholding thrombolysis when deficits are truly nondisabling.',
+    conclusion: '',
     source: 'Khatri P, et al. (JAMA 2018)',
     doi: '10.1001/jama.2018.8496',
     clinicalTrialsId: 'NCT02072226',
@@ -5187,7 +5187,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Systemic bleeding was markedly lower with rhPro-UK: 25.8% vs 42.2%',
       'PROST opened the door for additional alternative-fibrinolytic development beyond tenecteplase'
     ],
-    conclusion: 'PROST showed that recombinant human prourokinase is noninferior to alteplase for early-window ischemic stroke and may reduce systemic bleeding, making it a credible alternative thrombolytic strategy.',
+    conclusion: '',
     source: 'PROST Investigators (JAMA Netw Open 2023)',
     doi: '10.1001/jamanetworkopen.2023.25415',
     trialResult: 'POSITIVE'
@@ -5246,7 +5246,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Major bleeding at 7 days was also lower: 0.5% vs 2.1%',
       'PROST-2 suggests prourokinase may be both a supply alternative and a potentially cleaner bleeding-profile option'
     ],
-    conclusion: 'PROST-2 confirmed noninferiority of prourokinase to alteplase and suggested lower bleeding rates, strengthening the case for prourokinase as a viable IV thrombolytic alternative.',
+    conclusion: '',
     source: 'PROST-2 Investigators (Lancet Neurol 2024)',
     doi: '10.1016/S1474-4422(24)00436-8',
     clinicalTrialsId: 'NCT05700591',
@@ -5306,7 +5306,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Any intracranial hemorrhage and overall adverse events were higher with reteplase',
       'RAISE is one of the most provocative recent IVT trials because it suggests a thrombolytic may exceed alteplase rather than simply match it'
     ],
-    conclusion: 'RAISE showed superior functional outcome with reteplase compared with alteplase in early-window ischemic stroke, although any intracranial hemorrhage and adverse events were somewhat higher. The result is promising but would likely need replication before changing broad practice.',
+    conclusion: '',
     source: 'Li S, et al. (NEJM 2024)',
     doi: '10.1056/NEJMoa2400314',
     clinicalTrialsId: 'NCT05295173',
@@ -5366,7 +5366,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Symptomatic intracranial hemorrhage was low and similar: 3% vs 2%',
       'TASTE adds to the tenecteplase body of evidence but its result is less clear-cut than AcT or TRACE-2'
     ],
-    conclusion: 'TASTE generally supports tenecteplase in perfusion-selected early-window stroke, but its result was less definitive than other noninferiority trials because the per-protocol analysis was stronger than the intention-to-treat analysis.',
+    conclusion: '',
     source: 'TASTE Investigators (Lancet Neurol 2024)',
     doi: '10.1016/S1474-4422(24)00206-0',
     trialResult: 'NEUTRAL'
@@ -5425,7 +5425,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Recanalization at 24 hours was higher with tenecteplase, but clinical benefit did not emerge',
       'TIMELESS and TRACE-III together help define an important boundary: late-window IVT may be more useful when EVT is not available'
     ],
-    conclusion: 'TIMELESS did not show clinical benefit of late-window tenecteplase in a population where most patients underwent thrombectomy. It does not support routine tenecteplase use 4.5-24 hours when EVT is already readily available.',
+    conclusion: '',
     source: 'Albers GW, et al. (NEJM 2024)',
     doi: '10.1056/NEJMoa2310392',
     clinicalTrialsId: 'NCT03785678',
@@ -5485,7 +5485,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'TRACE-2 provides important non-Canadian confirmation of tenecteplase 0.25 mg/kg',
       'Together with AcT and ATTEST-2, it solidifies the 0.25 mg/kg tenecteplase dose'
     ],
-    conclusion: 'TRACE-2 confirmed that tenecteplase 0.25 mg/kg is noninferior to alteplase for standard-window IV thrombolysis in EVT-ineligible stroke, further supporting tenecteplase as a practical alteplase alternative.',
+    conclusion: '',
     source: 'Wang Y, et al. (Lancet 2023)',
     doi: '10.1016/S0140-6736(22)02600-9',
     clinicalTrialsId: 'NCT04797013',
@@ -5545,7 +5545,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'The trial does not support using non-contrast CT alone to select wake-up stroke patients for tenecteplase',
       'TWIST helps define the boundary between imaging simplification and overtreatment risk'
     ],
-    conclusion: 'TWIST did not show clinical benefit of tenecteplase in wake-up stroke selected only by non-contrast CT. Current evidence still favors MRI or perfusion-based selection rather than CT-only selection for unknown-onset reperfusion therapy.',
+    conclusion: '',
     source: 'Roaldsen MB, et al. (Lancet Neurol 2023)',
     doi: '10.1016/S1474-4422(22)00484-7',
     clinicalTrialsId: 'NCT03181360',

@@ -3,7 +3,8 @@
  * Structures the 2026 AHA/ASA Acute Ischemic Stroke Guideline into a
  * hierarchical tree for the interactive mindmap page.
  *
- * All recommendation text sourced from aha2026StrokeGuideline.ts
+ * Recommendation text is maintained as NeuroWiki house paraphrases derived
+ * from aha2026StrokeGuideline.ts
  * ~52 nodes, ~40 with recommendations, ~95 total recommendations
  */
 
@@ -157,17 +158,17 @@ export const mindmapRoot: MindmapNode = {
             {
               cor: '1',
               loe: 'A',
-              text: 'In patients with suspected stroke transported by ambulance, use of a brief stroke assessment tool (e.g. RACE, LAMS, NIHSS) by prehospital personnel is recommended to improve early stroke identification, including large vessel occlusion (LVO) stroke.',
+              text: 'For prehospital stroke triage, use of a brief stroke assessment tool (e.g. RACE, LAMS, NIHSS) by prehospital personnel should be used because it improves early stroke identification, including large vessel occlusion (LVO) stroke.',
             },
             {
               cor: '1',
               loe: 'B-NR',
-              text: 'The NIH Stroke Scale (NIHSS) is recommended as a validated, standardized neurological severity scale for all patients with acute ischemic stroke to guide therapy decisions and prognosis.',
+              text: 'The NIH Stroke Scale (NIHSS) should serve as the validated, standardized neurological severity scale for all patients with acute ischemic stroke to guide therapy decisions and prognosis.',
             },
             {
               cor: '2a',
               loe: 'B-NR',
-              text: 'A multidisciplinary stroke team — including neurology, nursing, pharmacy, and radiology — is recommended to coordinate rapid evaluation and treatment.',
+              text: 'A multidisciplinary stroke team — including neurology, nursing, pharmacy, and radiology — should coordinate rapid evaluation and treatment.',
             },
           ],
         },
@@ -182,12 +183,12 @@ export const mindmapRoot: MindmapNode = {
             {
               cor: '2a',
               loe: 'B-R',
-              text: 'CT perfusion (CTP) or MR perfusion imaging can be beneficial to select patients with AIS for late-window IVT (4.5–9 h) or EVT (6–24 h) by identifying salvageable ischemic penumbra.',
+              text: 'CT perfusion (CTP) or MR perfusion imaging may help select patients with AIS for late-window IVT (4.5–9 h) or EVT (6–24 h) by identifying salvageable ischemic penumbra.',
             },
             {
               cor: '2a',
               loe: 'B-R',
-              text: 'DWI-FLAIR mismatch on MRI is reasonable to identify patients with unknown stroke onset who may benefit from IVT within 4.5 hours of symptom recognition.',
+              text: 'DWI-FLAIR mismatch on MRI can reasonably be considered to identify patients with unknown stroke onset who may benefit from IVT within 4.5 hours of symptom recognition.',
             },
           ],
         },

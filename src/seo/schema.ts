@@ -5,6 +5,7 @@
  */
 
 import { TRIAL_DATA } from '../data/trialData';
+import { buildHouseConclusion } from '../utils/trialNarrative';
 
 const BASE_URL = 'https://neurowiki.ai';
 const LAST_REVIEWED = '2026-02-18';
@@ -389,10 +390,10 @@ function generateTrialFAQs(trialId: string): Array<{ question: string; answer: s
 
   const faqs: Array<{ question: string; answer: string }> = [];
 
-  // Q1: What did the trial show? (always present — uses verified conclusion field)
+  // Q1: What did the trial show? (always present — uses house summary built from structured data)
   faqs.push({
     question: `What did the ${trial.title} show?`,
-    answer: trial.conclusion,
+    answer: buildHouseConclusion(trial),
   });
 
   // Q2: Primary outcome / efficacy numbers

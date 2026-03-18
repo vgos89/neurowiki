@@ -31,9 +31,6 @@ The NINDS tPA Stroke Study was the landmark trial that established intravenous a
 *   **Safety Trade-off:** Established the classic risk profile of tPA: significantly improved functional outcomes at the cost of a ~6% risk of symptomatic hemorrhage, but with no increase in overall mortality.
 *   **BP Control:** Strict blood pressure control (< 185/110 mmHg) was mandatory and remains a cornerstone of safety.
 
-## Conclusion
-Despite an increased incidence of symptomatic intracerebral hemorrhage, treatment with intravenous tPA within 3 hours of the onset of ischemic stroke improved clinical outcome at 3 months.
-
 *Source: [The National Institute of Neurological Disorders and Stroke rt-PA Stroke Study Group (NEJM 1995)](https://www.nejm.org/doi/full/10.1056/NEJM199512143332401)*
 `
   },
@@ -60,9 +57,6 @@ ECASS III investigated whether the window for IV tPA could be safely extended fr
 *   **Extended Window:** Successfully expanded the treatment window to 4.5 hours for eligible patients.
 *   **Efficacy Decay:** The treatment effect (OR 1.34) was smaller than in the 0-3 hour window (OR 1.7 in NINDS), reinforcing that earlier treatment is better.
 *   **Guideline Evolution:** While the trial excluded Age > 80 and those on warfarin, modern guidelines often permit treatment in these groups within 3-4.5h after individual risk assessment (though caution remains for DOACs/Warfarin).
-
-## Conclusion
-Intravenous alteplase administered between 3 and 4.5 hours after the onset of symptoms significantly improved clinical outcomes in patients with acute ischemic stroke.
 
 *Source: [Hacke et al. (NEJM 2008)](https://www.nejm.org/doi/full/10.1056/NEJMoa0804656)*
 `
@@ -91,9 +85,6 @@ Can we thrombolyse patients beyond 4.5 hours if they have salvageable tissue? Th
 *   **Tissue Window:** Proved that the "tissue window" (perfusion mismatch) is more relevant than the rigid "time window" for thrombolysis, similar to mechanical thrombectomy.
 *   **Wake-Up Stroke:** Provided evidence for treating wake-up strokes guided by CTP (alternative to the MRI DWI-FLAIR mismatch strategy from WAKE-UP trial).
 *   **Clinical Implementation:** Many centers now utilize this protocol for patients < 9 hours who are not thrombectomy candidates (e.g., distal occlusions) but have favorable perfusion profiles.
-
-## Conclusion
-Among patients with ischemic stroke 4.5 to 9.0 hours after onset or wake-up stroke who had salvageable brain tissue on perfusion imaging, alteplase resulted in a higher percentage of patients with no or minor neurologic deficits.
 
 *Source: [Ma et al. (NEJM 2019)](https://www.nejm.org/doi/full/10.1056/NEJMoa1910355)*
 `
@@ -124,9 +115,6 @@ THAWS asked whether MRI-selected patients with wake-up or unclear-onset ischemic
 *   **Dose Matters:** THAWS is notable because it evaluated **0.6 mg/kg alteplase**, not the standard 0.9 mg/kg dose used in WAKE-UP.
 *   **Population Drift:** Investigators noted milder strokes and frequent absence of large-artery occlusion, which may have reduced the chance of showing benefit.
 
-## Conclusion
-Among patients with MRI-selected stroke of unknown onset, low-dose alteplase at 0.6 mg/kg did **not** improve 90-day functional outcomes compared with standard treatment, although safety appeared broadly similar. Because the study was stopped early, THAWS is best interpreted as a neutral, underpowered companion trial rather than definitive evidence against MRI-guided thrombolysis.
-
 *Source: [Koga et al. (Stroke 2020)](https://www.ahajournals.org/doi/10.1161/STROKEAHA.119.028127)*
 `
   },
@@ -155,9 +143,6 @@ TRACE-III tested whether **tenecteplase** could improve outcomes in patients wit
 *   **Tissue Selection:** The study reinforces that perfusion-defined penumbra, not clock time alone, can identify candidates for late reperfusion therapy.
 *   **Not a Bridging Trial:** TRACE-III does **not** support giving late-window IV thrombolysis when rapid EVT is already available.
 *   **Safety Trade-off:** Functional benefit came with a numerically higher risk of symptomatic intracranial hemorrhage.
-
-## Conclusion
-In perfusion-selected patients with ICA or MCA occlusion who were 4.5 to 24 hours from last-known-well and lacked access to thrombectomy, tenecteplase improved 90-day functional outcomes compared with standard medical treatment. TRACE-III is the main evidence base for late-window IVT when EVT is infeasible.
 
 *Source: [Xiong et al. (NEJM 2024)](https://www.nejm.org/doi/full/10.1056/NEJMoa2402980)*
 `
@@ -191,10 +176,6 @@ Approximately 14-27% of acute ischemic strokes are first recognized after waking
 *   **Important Boundary:** WAKE-UP excluded patients already planned for thrombectomy, so it supports thrombolysis only when EVT is not already the intended immediate strategy.
 *   **Safety:** Hemorrhage and death were numerically higher with alteplase, but the absolute rates were low and overall functional outcomes improved.
 
-## Conclusion
-
-Among patients with acute ischemic stroke and unknown time of onset who had MRI DWI-FLAIR mismatch, alteplase improved 90-day functional outcomes compared with placebo. WAKE-UP provided the landmark randomized evidence that imaging-selected wake-up stroke can be treated safely and effectively even when onset time is uncertain.
-
 *Source: [Thomalla et al. (NEJM 2018)](https://www.nejm.org/doi/full/10.1056/NEJMoa1804355)*
 `
   },
@@ -223,9 +204,6 @@ Central Retinal Artery Occlusion (CRAO) is an ophthalmologic emergency with poor
 *   **Safety Hazard:** The intervention carried significantly higher risks (hemorrhage, etc.) without benefit.
 *   **Study Stopped:** The trial was terminated early by the Data Safety Monitoring Board due to futility and safety concerns.
 *   **Guideline Impact:** Based on EAGLE, IA tPA is generally **not recommended** for CRAO in standard practice, though IV tPA within 4.5h is still considered by some centers (based on other non-randomized data, e.g., recent AHA statements).
-
-## Conclusion
-In light of similar visual outcomes and a higher rate of adverse reactions associated with Local Intra-arterial Fibrinolysis (LIF), it cannot be recommended for the management of acute CRAO.
 
 *Source: [Schumacher et al. (Ophthalmology 2010)](https://www.aaojournal.org/article/S0161-6420(10)00258-2/fulltext)*
 `
@@ -258,9 +236,6 @@ Tenecteplase (TNK) is a bioengineered variant of alteplase with greater fibrin s
 *   **Dose clarity:** Only 0.25 mg/kg (max 25 mg) is supported. Higher doses (0.4 mg/kg) increased hemorrhagic risk in earlier trials and are not approved.
 *   **Do not confuse with EAGLE:** The EAGLE trial (Ophthalmology 2010) tested intra-arterial tPA for central retinal artery occlusion — a completely different indication and negative trial.
 
-## Conclusion
-In patients with acute ischemic stroke eligible for intravenous thrombolysis within 4.5 hours, tenecteplase 0.25 mg/kg was **noninferior to alteplase 0.9 mg/kg** for excellent functional outcome (mRS 0–1) at 90 days, with an identical safety profile. These findings support tenecteplase as an equivalent alternative to alteplase, forming the evidence base for the 2026 AHA/ASA COR 1 recommendation for both agents.
-
 *Source: [Meng X et al. JAMA 2024;332(17):1437–1445. DOI: 10.1001/jama.2024.14721](https://doi.org/10.1001/jama.2024.14721) — ClinicalTrials.gov: NCT04915729*
 `
   },
@@ -289,9 +264,6 @@ Basilar Artery Occlusion (BAO) carries high mortality (>80% without treatment). 
 *   **Mortality Reduction:** One of the few stroke interventions shown to significantly reduce mortality (NNT ~ 5.5 to prevent death).
 *   **Bridging:** ~30% of patients received IV thrombolysis.
 
-## Conclusion
-In patients with basilar-artery occlusion presenting within 12 hours, endovascular thrombectomy led to better functional outcomes and lower mortality than best medical care.
-
 *Source: [Tao et al. (NEJM 2022)](https://www.nejm.org/doi/full/10.1056/NEJMoa2207576)*
 `
   },
@@ -318,9 +290,6 @@ Following the success of extended window thrombectomy in the anterior circulatio
 *   **Late Window Basilar:** Confirms that the basilar artery also has a "late window" benefit, likely due to collateral flow from the posterior communicating arteries.
 *   **High Efficacy:** The effect size was remarkably similar to the early window ATTENTION trial (46% good outcome in both).
 *   **Recommendation:** EVT is now recommended for BAO up to 24 hours in eligible patients.
-
-## Conclusion
-Among patients with basilar-artery occlusion who presented between 6 and 24 hours after symptom onset, thrombectomy led to a higher rate of good functional status at 90 days than medical therapy.
 
 *Source: [Jovin et al. (NEJM 2022)](https://www.nejm.org/doi/full/10.1056/NEJMoa2206317)*
 `
@@ -351,9 +320,6 @@ While Endovascular Thrombectomy (EVT) is the standard of care for Large Vessel O
 *   **Safety Signal:** Symptomatic intracranial hemorrhage (sICH) was more than double in the EVT group (5.9% vs 2.6%).
 *   **Workflow:** Median time from imaging to arterial puncture was 70 minutes, exceeding the 60-minute target.
 
-## Conclusion
-In patients with stroke due to medium or distal vessel occlusion, EVT did not result in less disability or death compared to best medical treatment alone.
-
 *Source: [Psychogios et al. (NEJM 2025)](https://www.nejm.org/doi/full/10.1056/NEJMoa2408954)*
 `
   },
@@ -382,9 +348,6 @@ Conducted in parallel with DISTAL, the ESCAPE-MeVO trial investigated the effica
 *   **Evidence of Harm:** There was a statistically significant increase in **90-day mortality** (aHR 1.82) in the EVT group.
 *   **Procedural Risk:** Symptomatic intracranial hemorrhage was significantly more frequent in the EVT arm.
 *   **Implication:** Routine EVT for medium vessel occlusions is not supported by current evidence; the risks of the procedure in these smaller vessels may outweigh benefits in unselected populations.
-
-## Conclusion
-Endovascular treatment for medium-vessel occlusion stroke within 12 hours did not lead to better functional outcomes and was associated with higher mortality compared to usual care.
 
 *Source: [Goyal et al. (NEJM 2025)](https://www.nejm.org/doi/full/10.1056/NEJMoa2411668)*
 `
@@ -416,9 +379,6 @@ Historically, mechanical thrombectomy was limited to 6 hours from symptom onset.
 *   **Late window:** Along with DAWN, DEFUSE-3 shifted selection from time-based to tissue-based — perfusion mismatch over clock.
 *   **Implementation:** Requires automated perfusion software (e.g., RAPID) for standardized core/penumbra calculation.
 
-## Conclusion
-Thrombectomy for ischemic stroke 6 to 16 hours after onset plus standard medical therapy results in better functional outcomes and lower mortality than standard medical therapy alone in selected patients with salvageable tissue.
-
 *Source: [Albers et al. (NEJM 2018)](https://www.nejm.org/doi/full/10.1056/NEJMoa1706442)*
 `
   },
@@ -446,9 +406,6 @@ The DAWN trial investigated whether thrombectomy is effective in patients with a
 *   **Massive Benefit:** The absolute difference in functional independence was **36%**, yielding a Number Needed to Treat (**NNT**) of **2.8**. This is one of the most potent effect sizes in stroke history.
 *   **Patient Selection:** Relies heavily on **age** and **[NIHSS](/calculators/nihss)** relative to core volume, unlike DEFUSE-3 which uses a flat core/penumbra cutoff.
 *   **Wake-Up Strokes:** Provided the first randomized evidence for treating patients with unknown onset time (e.g., waking up with symptoms) if physiology was favorable.
-
-## Conclusion
-Among patients with acute stroke and mismatched clinical deficit and infarct volume, thrombectomy within 6 to 24 hours results in significantly better functional outcomes than standard care.
 
 *Source: [Nogueira et al. (NEJM 2018)](https://www.nejm.org/doi/full/10.1056/NEJMoa1713973)*
 `
@@ -478,9 +435,6 @@ Patients with large ischemic cores (ASPECTS < 6 or Core Volume > 50ml) were hist
 *   **Risk/Benefit:** While outcomes are generally poorer than small-core patients, EVT still provides a significant shift towards lower disability (e.g., being able to walk vs bedbound).
 *   **Safety:** Symptomatic intracranial hemorrhage (sICH) was low and not significantly different between groups, though any ICH was more frequent in the EVT group.
 
-## Conclusion
-Endovascular thrombectomy improves functional outcomes in patients with large ischemic strokes (ASPECTS 3–5 or Core ≥ 50 ml) compared to medical management alone.
-
 *Source: [Sarraj et al. (NEJM 2023)](https://www.nejm.org/doi/full/10.1056/NEJMoa2214403)*
 `
   },
@@ -507,9 +461,6 @@ Conducted in China, ANGEL-ASPECT complemented SELECT2 by investigating thrombect
 *   **Hemorrhage Risk:** Unlike SELECT2, this trial showed a statistically significant increase in symptomatic intracranial hemorrhage (sICH) in the EVT group (6.1% vs 2.7%), emphasizing the need for careful patient selection and BP management.
 *   **Mortality:** Despite higher hemorrhage risk, there was no difference in 90-day mortality, and functional outcomes were superior.
 
-## Conclusion
-In patients with large ischemic core volume, endovascular therapy resulted in better functional outcomes but was associated with more intracranial hemorrhages.
-
 *Source: [Huo et al. (NEJM 2023)](https://www.nejm.org/doi/full/10.1056/NEJMoa2213379)*
 `
   },
@@ -533,9 +484,6 @@ Hyperglycemia occurs in up to 40% of patients with acute ischemic stroke and is 
 *   **Practical Threshold:** Current [Acute Stroke Management](/guide/acute-stroke-mgmt) protocols utilize a threshold of 180 mg/dL for treatment initiation based on these results.
 *   **Nursing Burden:** Intensive IV insulin required significantly more frequent monitoring (often hourly), which increased nursing workload without improving patient recovery.
 *   **Standard of Care:** Meticulous glucose monitoring is still required, but "permissive" hyperglycemia up to 180 mg/dL is safer than aggressive lowering.
-
-## Conclusion
-The SHINE trial reinforces that for acute ischemic stroke, "less is more" regarding glycemic intensity. Clinicians should prioritize avoiding hypoglycemia while maintaining blood glucose below 180 mg/dL using standard subcutaneous regimens.
 
 *Source: [SHINE Trial Investigators (JAMA 2019)](https://pmc.ncbi.nlm.nih.gov/articles/PMC6652154/)*
 `
@@ -565,9 +513,6 @@ Before NASCET, the benefit of Carotid Endarterectomy (CEA) for symptomatic carot
 *   **Timing:** Benefit is highest when performed within 2 weeks of the symptomatic event.
 *   **Gender:** In the moderate stenosis group (50-69%), benefit was significant for men but marginal/non-significant for women.
 
-## Conclusion
-Carotid endarterectomy is highly beneficial for symptomatic patients with severe (70-99%) stenosis and moderately beneficial for those with moderate (50-69%) stenosis.
-
 *Source: [Barnett et al. (Stroke 1999 / NEJM 1991)](https://www.ahajournals.org/doi/10.1161/01.str.30.9.1751)*
 `
   },
@@ -596,9 +541,6 @@ With the emergence of Carotid Artery Stenting (CAS) as a less invasive alternati
     *   **Age < 70:** Better outcomes with **CAS** (Stenting).
 *   **QOL:** Stroke had a larger impact on quality of life at 1 year than MI.
 
-## Conclusion
-Among patients with carotid stenosis, stenting and endarterectomy were associated with similar rates of the primary composite outcome. However, stenting carried a higher risk of stroke, while surgery carried a higher risk of MI.
-
 *Source: [Brott et al. (NEJM 2010)](https://www.nejm.org/doi/full/10.1056/NEJMoa0912321)*
 `
   },
@@ -625,9 +567,6 @@ For years, Aspirin monotherapy was standard for acute ischemic stroke. The CHANC
 *   **Standard of Care Change:** CHANCE provided the first major evidence that DAPT is superior to monotherapy for *minor* stroke and high-risk TIA in the acute phase.
 *   **Population Specificity:** Conducted entirely in China (CYP2C19 loss-of-function alleles are more common in Asian populations, yet Clopidogrel still worked).
 *   **21 Days:** The protocol used DAPT for only 21 days, establishing the concept of "short-term" DAPT to minimize bleeding risk while maximizing ischemic protection.
-
-## Conclusion
-Among patients with high-risk TIA or minor ischemic stroke, treatment with Clopidogrel plus Aspirin for 21 days reduced the risk of recurrent stroke compared to Aspirin alone.
 
 *Source: [Wang et al. (NEJM 2013)](https://www.nejm.org/doi/full/10.1056/NEJMoa1215340)*
 `
@@ -657,9 +596,6 @@ Following the CHANCE trial in China, the POINT trial sought to confirm the benef
 *   **Time Course:** Benefit was driven primarily by reduction in stroke during the first **7 to 21 days**. The bleeding risk persisted throughout the 90 days.
 *   **Guideline Consensus:** Combined with CHANCE, this led to guidelines recommending DAPT for **21 days only**, rather than the 90 days tested in POINT, to balance efficacy vs safety.
 
-## Conclusion
-In patients with minor ischemic stroke or high-risk TIA, DAPT with Clopidogrel and Aspirin reduced the risk of major ischemic events but increased the risk of major hemorrhage compared to Aspirin alone.
-
 *Source: [Johnston et al. (NEJM 2018)](https://www.nejm.org/doi/full/10.1056/NEJMoa1800410)*
 `
   },
@@ -685,9 +621,6 @@ Intracranial Atherosclerotic Disease (ICAD) carries a high risk of recurrent str
 *   **Stenting is Dangerous:** The trial was halted early because the stenting group had significantly higher rates of periprocedural stroke.
 *   **Aggressive Medical Management (AMM):** The "Control" group did surprisingly well compared to historical controls (WASID trial), proving that AMM (DAPT + High-intensity Statin + BP control) is a highly effective strategy.
 *   **Standard of Care:** AMM is now the first-line treatment for symptomatic ICAD. Stenting is reserved for salvage cases failing AMM.
-
-## Conclusion
-In patients with symptomatic intracranial arterial stenosis, aggressive medical management was superior to PTAS with the Wingspan stent system, primarily due to the high risk of periprocedural stroke in the stenting arm.
 
 *Source: [Chimowitz et al. (NEJM 2011)](https://www.nejm.org/doi/pdf/10.1056/nejmoa1105335)*
 `
@@ -718,9 +651,6 @@ Following the poor outcomes of intracranial stenting in SAMMPRIS (14.7% event ra
 *   **Experience Matters:** The trial utilized experienced interventionalists, which likely contributed to the lower complication rate.
 *   **Role of Stenting:** While WEAVE assessed safety (not efficacy vs medical therapy), it supports stenting as a salvage option for highly selected patients who fail medical therapy.
 
-## Conclusion
-With experienced interventionalists and proper patient selection following on-label usage guidelines (specifically >7 days post-stroke), the use of the Wingspan stent for intracranial atherosclerotic disease demonstrated a low periprocedural complication rate.
-
 *Source: [Alexander et al. (Stroke 2019)](https://www.ahajournals.org/doi/10.1161/STROKEAHA.118.023996)*
 `
   },
@@ -749,9 +679,6 @@ Ticagrelor is a potent antiplatelet agent used in cardiology. SOCRATES aimed to 
 *   **THALES Trial:** A subsequent trial (THALES) later showed that Ticagrelor + Aspirin (DAPT) was superior to Aspirin alone, but with increased bleeding, similar to the CHANCE/POINT results for Clopidogrel.
 *   **Current Use:** Clopidogrel + Aspirin remains the preferred DAPT regimen unless there is Clopidogrel resistance (CYP2C19 status).
 
-## Conclusion
-In patients with acute ischemic stroke or high-risk TIA, Ticagrelor was not found to be superior to Aspirin in reducing the rate of stroke, myocardial infarction, or death at 90 days.
-
 *Source: [Johnston et al. (NEJM 2016)](https://www.nejm.org/doi/full/10.1056/NEJMoa1603060)*
 `
   },
@@ -779,9 +706,6 @@ Small subcortical strokes (lacunar infarcts) are common. SPS3 investigated two q
 *   **Mortality Signal:** The trial was stopped early due to lack of benefit and increased mortality/bleeding in the DAPT arm.
 *   **Mechanism:** Lacunar disease is often a small vessel lipohyalinosis pathology, which may be less responsive to aggressive platelet inhibition compared to large artery atherosclerosis, but is prone to hemorrhage.
 
-## Conclusion
-Among patients with recent lacunar strokes, the addition of clopidogrel to aspirin did not significantly reduce the risk of recurrent stroke and was associated with an increased risk of bleeding and death.
-
 *Source: [SPS3 Investigators (NEJM 2012)](https://www.nejm.org/doi/full/10.1056/NEJMoa1204133)*
 `
   },
@@ -806,9 +730,6 @@ Statins are known to reduce stroke risk in patients with coronary artery disease
 *   **Standard of Care:** Established high-intensity statin (Atorvastatin 80mg) as the standard of care for secondary prevention of non-cardioembolic ischemic stroke.
 *   **Hemorrhage Risk:** There was a small but statistically significant increase in hemorrhagic stroke in the Atorvastatin group (2.3% vs 1.4%), though the overall benefit for ischemic stroke reduction outweighed this risk.
 *   **LDL Reduction:** The treatment group achieved a mean LDL of 73 mg/dL compared to 129 mg/dL in the placebo group.
-
-## Conclusion
-In patients with recent stroke or TIA and without known coronary heart disease, 80 mg of atorvastatin per day reduced the overall incidence of stroke and of cardiovascular events.
 
 *Source: [Amarenco et al. (NEJM 2006)](https://www.nejm.org/doi/full/10.1056/NEJMoa061894)*
 `
@@ -843,9 +764,6 @@ For patients with ischemic stroke and Atrial Fibrillation, the optimal timing to
 *   **Safety Confirmed:** Early initiation of DOACs did not increase the risk of symptomatic intracranial hemorrhage compared to later initiation.
 *   **Efficacy Signal:** While designed to estimate range (not superiority), the data suggests early initiation prevents more ischemic strokes.
 *   **Practice Change:** Supports starting DOACs earlier than historical guidelines (e.g., day 2 for moderate, day 6-7 for major) provided imaging excludes hemorrhagic transformation.
-
-## Conclusion
-Early initiation of DOAC treatment was non-inferior and appeared safe compared to later initiation in patients with ischemic stroke associated with atrial fibrillation.
 
 *Source: [Fischer et al. (NEJM 2023)](https://www.nejm.org/doi/full/10.1056/NEJMoa2303048)*
 `
@@ -1205,9 +1123,6 @@ The trial is statistically significant — but net clinical benefit is unfavorab
 *   THALES used 30-day therapy; CHANCE/POINT used 21-day — longer duration increases bleeding risk
 *   Broader eligibility (NIHSS ≤5) enrolled more severe minor strokes — different population than CHANCE
 
-## Conclusion
-Ticagrelor + aspirin statistically reduced stroke/death vs aspirin alone (HR 0.83, p=0.02), but caused 5× more severe bleeding with an NNT of 91. AHA/ASA 2026 rates this **COR 3: No Benefit**. Use clopidogrel-based DAPT instead. Ticagrelor is reserved for confirmed CYP2C19 loss-of-function carriers (CHANCE-2).
-
 *Source: [Johnston SC et al. N Engl J Med. 2020;383(3):207–217](https://www.nejm.org/doi/full/10.1056/NEJMoa1916870). DOI: 10.1056/NEJMoa1916870*
 `
   },
@@ -1245,9 +1160,6 @@ CHANCE established DAPT within 24 hours. INSPIRES extends the evidence to two im
 *   Same regimen as CHANCE: clopidogrel 300mg load → 75mg + aspirin × 21 days → clopidogrel alone to day 90
 *   2×2 factorial statin arm (atorvastatin 40mg vs 20mg) showed neutral effect in separate analysis
 *   Critical use case: patient presents 36–72h post-TIA with confirmed carotid stenosis on CTA → INSPIRES protocol applies
-
-## Conclusion
-Clopidogrel+aspirin × 21 days reduced new stroke at 90 days (7.3% vs 9.2%, HR 0.79, p=0.008) in patients with atherosclerotic minor stroke/TIA treated within 72 hours. AHA/ASA 2026: **COR 2a** — reasonable practice when ≥50% stenosis confirmed on vascular imaging.
 
 *Source: [Zhao J, et al. N Engl J Med. 2024;390(3):203–213](https://www.nejm.org/doi/full/10.1056/NEJMoa2309137). DOI: 10.1056/NEJMoa2309137*
 `
@@ -1300,9 +1212,6 @@ CHANCE-2 is the first large stroke trial using mandatory pharmacogenomic eligibi
 *   Only LOF carriers benefit from switching — normal metabolizers use standard clopidogrel DAPT
 *   COR 2b (weak) — practical barriers include testing availability, ticagrelor cost, and dyspnea side effect
 *   Do NOT confuse with THALES (ticagrelor vs aspirin alone, COR 3): CHANCE-2 compares vs clopidogrel DAPT in a specific genotype
-
-## Conclusion
-In CYP2C19 LOF carriers with minor stroke/TIA, ticagrelor+aspirin × 21 days significantly reduced stroke recurrence vs clopidogrel+aspirin (6.0% vs 7.6%, HR 0.77, p=0.009) without increasing severe bleeding. Benefit sustained at 1 year. AHA/ASA 2026: **COR 2b** — reasonable when CYP2C19 LOF confirmed within 24 hours.
 
 *Source: [Wang Y, et al. N Engl J Med. 2021;385(27):2497–2505](https://www.nejm.org/doi/full/10.1056/NEJMoa2111749). DOI: 10.1056/NEJMoa2111749*
 `
@@ -1368,9 +1277,6 @@ ENRICH used utility-weighted mRS (UW-mRS), which assigns quality-of-life weights
 *   **NOT for deep ICH** (thalamic/putaminal) — those patients excluded, different surgical risk profile
 *   Complements MISTIE III (stereotactic) and STICH (open): different technique, different results
 
-## Conclusion
-ENRICH is the first positive randomized surgical ICH trial. Among patients with lobar or anterior basal ganglia ICH (30–80 mL) within 24 hours, MIPS improved 180-day functional outcomes (UW-mRS 0.458 vs 0.374, p=0.04) and dramatically reduced 30-day mortality (9.3% vs 18.0%, NNT≈12) vs medical management alone. For the first time, a randomized trial confirms surgery improves outcomes in selected ICH patients — at centers with BrainPath+Myriad and trained neurosurgical teams.
-
 *Source: [Hanley DF, et al. N Engl J Med. 2024;390(14):1277–1289](https://www.nejm.org/doi/abs/10.1056/NEJMoa2308440). DOI: 10.1056/NEJMoa2308440*
 `
   },
@@ -1402,9 +1308,6 @@ Mobile stroke units (MSUs) consistently shorten time to imaging and thrombolysis
 *   MSU dispatch improved imaging and treatment speed without an obvious hemorrhage penalty
 *   Because the study was **not randomized**, some residual confounding is unavoidable even after adjustment
 
-## Conclusion
-In a real urban stroke system, dispatch of a mobile stroke unit was associated with lower disability at 90 days than conventional ambulance dispatch alone. B_PROUD supports MSU deployment where systems can sustain the operational complexity and cost.
-
 *Source: [Ebinger M, et al. JAMA. 2020](https://doi.org/10.1001/jama.2020.26345). DOI: 10.1001/jama.2020.26345*
 `
   },
@@ -1434,9 +1337,6 @@ BEST-MSU tested whether the advantages of mobile stroke units in the United Stat
 *   Roughly **one extra excellent outcome for every 12 to 13 patients** managed by MSU instead of standard EMS
 *   Symptomatic intracerebral hemorrhage remained about **2%** in both groups
 
-## Conclusion
-BEST-MSU showed that mobile stroke units improve 90-day functional outcomes in tPA-eligible patients while markedly accelerating reperfusion treatment. This trial strengthens the case for MSUs in mature, high-volume stroke systems.
-
 *Source: [Grotta JC, et al. N Engl J Med. 2021;385:971-981](https://doi.org/10.1056/NEJMoa2103879). DOI: 10.1056/NEJMoa2103879*
 `
   },
@@ -1464,9 +1364,6 @@ Before imaging distinguishes ischemic from hemorrhagic stroke, ambulance treatme
 *   Lowering BP before imaging did **not** improve outcomes overall
 *   The signal of benefit in hemorrhage and harm in ischemia argues against a one-size-fits-all ambulance BP strategy
 *   This trial matters especially in systems with a high proportion of hemorrhagic stroke among emergency presentations
-
-## Conclusion
-INTERACT4 does not support indiscriminate prehospital BP lowering in all acute stroke patients. The trial’s real value is conceptual: what helps hemorrhage may hurt ischemia when diagnosis is still uncertain.
 
 *Source: [INTERACT4 Investigators. N Engl J Med. 2024](https://doi.org/10.1056/NEJMoa2314741). DOI: 10.1056/NEJMoa2314741*
 `
@@ -1497,9 +1394,6 @@ Earlier pooled data suggested that very early glyceryl trinitrate (GTN) might im
 *   The safety signal matters because prehospital stroke treatment necessarily happens **before imaging**
 *   The current practical implication is to **avoid routine GTN** in undifferentiated presumed stroke
 
-## Conclusion
-MR ASAP found no functional benefit from prehospital GTN and raised concern for early harm in intracerebral hemorrhage. Together with RIGHT-2, it argues against prehospital GTN in presumed acute stroke.
-
 *Source: [van den Berg SA, et al. Lancet Neurol. 2022;21:971-981](https://doi.org/10.1016/S1474-4422(22)00333-7). DOI: 10.1016/S1474-4422(22)00333-7*
 `
   },
@@ -1529,9 +1423,6 @@ For patients in nonurban areas with suspected large-vessel occlusion, EMS must c
 *   The neutral primary outcome suggests that workflow gains from faster EVT can be offset by thrombolysis delays and overtriage
 *   This is a systems trial: local geography, CSC distribution, transfer efficiency, and field LVO accuracy all matter
 
-## Conclusion
-RACECAT found no disability benefit from routine direct CSC transport in nonurban suspected LVO stroke, despite higher thrombectomy rates. The trial supports tailoring routing policy to the local system rather than adopting a universal mothership strategy.
-
 *Source: [Pérez de la Ossa N, et al. JAMA. 2022](https://doi.org/10.1001/jama.2022.4404). DOI: 10.1001/jama.2022.4404*
 `
   },
@@ -1558,9 +1449,6 @@ GTN was attractive for ultra-acute stroke because it is easy to administer in th
 *   RIGHT-2 is one of the biggest prehospital drug trials in stroke and was decisively **negative**
 *   The trial showed that **feasible ambulance treatment** is not the same thing as **effective ambulance treatment**
 *   Its neutral result, together with MR ASAP, effectively ended enthusiasm for routine prehospital GTN in undifferentiated stroke
-
-## Conclusion
-RIGHT-2 showed no functional benefit from ultra-early prehospital GTN in presumed stroke. Despite modest blood-pressure reduction, routine ambulance GTN should not be part of standard stroke care.
 
 *Source: [RIGHT-2 Investigators. Lancet. 2019;393:1009-1020](https://doi.org/10.1016/S0140-6736(19)30194-1). DOI: 10.1016/S0140-6736(19)30194-1*
 `
@@ -1591,9 +1479,6 @@ TRIAGE-STROKE asked a narrower and clinically important question than RACECAT: i
 *   It captures the essential tension in prehospital stroke systems: **faster IVT vs faster EVT**
 *   A post hoc exploratory signal favored CSC-first for **mRS 0-3**, but the prespecified primary outcome remained neutral
 *   Because the sample was small, local workflow realities still dominate decision making
-
-## Conclusion
-TRIAGE-STROKE was underpowered and did not show a statistically significant functional advantage of CSC-first routing, but it clearly demonstrated the predictable process tradeoff: CSC-first accelerates EVT, whereas PSC-first accelerates IVT. The trial is useful for systems design but not definitive on its own.
 
 *Source: [Behrndtz A, et al. Stroke. 2023;54:2714-2723](https://doi.org/10.1161/STROKEAHA.123.043875). DOI: 10.1161/STROKEAHA.123.043875*
 `
