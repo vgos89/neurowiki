@@ -93,12 +93,12 @@ export const categoryDescriptions: Record<TrialCategoryKey, string> = {
 };
 
 export const TRIAL_CATEGORY_IDS: TrialCategoryKey[] = [
-  'prehospital-triage',
   'ivt',
   'evt',
-  'acute-management',
-  'surgical-interventions',
   'secondary-prevention',
+  'surgical-interventions',
+  'acute-management',
+  'prehospital-triage',
 ];
 
 const buildTrial = (
