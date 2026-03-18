@@ -53,6 +53,7 @@ type Result = {
   eligible: boolean; // loosely used for "Green/Yellow" status vs "Red"
   status: "Eligible" | "Not Eligible" | "Consult" | "Clinical Judgment" | "EVT Reasonable" | "BMT Preferred" | "High Uncertainty" | "Avoid EVT" | "Incomplete";
   criteriaName?: string;
+  evidenceBadge?: string;
   reason: string;
   details: string;
   exclusionReason?: string;
@@ -140,6 +141,67 @@ const getNihssNumeric = (nihss: NIHSSGroup): number => {
     case '20_plus': return 25;
     default: return 0;
   }
+};
+
+const getEvidenceBadge = (result: Result): string | null => {
+  if (result.evidenceBadge) return result.evidenceBadge;
+
+  switch (result.criteriaName) {
+    case "Basilar EVT - Class I":
+      return "COR 1 · ATTENTION/BAOCHE";
+    case "Basilar EVT - Class IIb":
+      return "COR 2b · BAOCHE";
+    case "Basilar EVT - Low NIHSS":
+      return "No Established LOE";
+    case "Basilar EVT - Baseline Function":
+      return "Outside Guideline";
+    case "Early Window (Low NIHSS)":
+      return "Guideline Caveat";
+    case "Early Window mRS 2 - Class IIa":
+      return "COR 2a · HERMES";
+    case "Early Window mRS 3-4 - Class IIb":
+      return "COR 2b · Cohort Data";
+    case "Standard Early Window - Class I":
+      return "COR 1 · HERMES";
+    case "Very Large Core (ASPECTS 0–2) - Severe Hypodensity Warning":
+      return "SELECT2 Safety Caveat";
+    case "Very Large Core (ASPECTS 0–2) - Class IIa":
+      return "COR 2a · SELECT2/ANGEL-ASPECT/LASTE";
+    case "Late Window mRS 2":
+    case "Late Window mRS 3-4":
+      return "Outside Guideline";
+    case "Late Window ASPECTS ≥6 - Class I":
+      return "COR 1 · DAWN/DEFUSE-3";
+    case "Late Window ASPECTS 3–5 - Severe Hypodensity Warning":
+      return "SELECT2 Safety Caveat";
+    case "Late Window ASPECTS 3–5 - Class I":
+      return "COR 1 · SELECT2/ANGEL-ASPECT/LASTE";
+    case "DAWN Criteria":
+      return "COR 1 · DAWN";
+    case "DEFUSE-3 Criteria":
+      return "COR 1 · DEFUSE-3";
+    case "Large Core (50-100 mL) - Class IIb":
+      return "COR 2b · SELECT2/ANGEL-ASPECT";
+    case "Selected MeVO":
+      return "COR 2a";
+    case "Class III: No Benefit":
+      return "COR 3 · ESCAPE-MeVO/DISTAL";
+    default:
+      break;
+  }
+
+  if (result.status === 'Incomplete') return "Data Required";
+  if (result.reason === 'Pending Imaging' || result.reason === 'Incomplete Imaging' || result.reason === 'Incomplete Data') return "Data Required";
+  if (result.reason === 'No Large Vessel Occlusion (LVO)') return "Selection Gate";
+  if (result.reason === 'Pre-stroke Disability (mRS > 4)') return "Outside Guideline";
+  if (result.reason === 'Pediatric Patient') return "Special Population";
+  if (result.reason === 'Baseline Dependency') return "Selection Exclusion";
+  if (result.reason === 'Non-disabling Deficit') return "Low Expected Benefit";
+  if (result.reason === 'Unfavorable Imaging' || result.reason?.startsWith('Extensive Infarct')) return "Imaging Exclusion";
+  if (result.reason?.startsWith('Very Large Core (')) return "No Benefit";
+  if (result.status === 'BMT Preferred') return "Evidence Limited";
+
+  return null;
 };
 
 const calculateLvoProtocol = (inputs: Inputs): Result => {
@@ -774,6 +836,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
   // Section 3 is only "complete" when we have a real decision — not a placeholder pending/incomplete result
   const isSection3Complete = !!result && result.status !== 'Incomplete' && result.reason !== 'Pending Imaging' && result.reason !== 'Complete clinical data first';
   const completedCount = [isSection0Complete, isSection1Complete, isSection2Complete, isSection3Complete].filter(Boolean).length;
+  const evidenceBadge = result ? getEvidenceBadge(result) : null;
 
   const getSummary = (idx: number) => {
     if (idx === 0) {
@@ -1368,6 +1431,15 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                 {result.status}
                             </div>
                             {result.criteriaName && <div className="text-lg font-medium text-slate-600 mt-1">{result.criteriaName}</div>}
+                            {evidenceBadge && (
+                                <div className={`mt-3 inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide
+                                    ${result.variant === 'success' ? 'bg-emerald-100/80 text-emerald-800' :
+                                      result.variant === 'warning' ? 'bg-amber-100/80 text-amber-800' :
+                                      result.variant === 'danger' ? 'bg-red-100/80 text-red-800' :
+                                      'bg-slate-200/80 text-slate-700'}`}>
+                                    {evidenceBadge}
+                                </div>
+                            )}
                         </div>
                         <div className="pt-6 border-t border-slate-200">
                              <div className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-2">Reasoning</div>
