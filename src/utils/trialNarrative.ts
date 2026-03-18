@@ -31,5 +31,5 @@ export function buildHouseConclusion(trialMetadata: TrialMetadata): string {
     return `${title} favored ${treatmentName} over ${controlName} for ${primaryEndpoint}, with event rates of ${treatmentRate}% versus ${controlRate}% (${delta}-point absolute difference). In practice, this supports using the intervention for patients who resemble the trial population and workflow.`;
   }
 
-  return `${title} numerically favored ${controlName} over ${treatmentName} for ${primaryEndpoint} (${controlRate}% vs ${treatmentRate}%). Even if the design was nuanced, the clinical takeaway is caution against adopting the intervention as a new default.`;
+  return `${title} numerically favored ${controlName} over ${treatmentName} for ${primaryEndpoint} (${controlRate}% vs ${treatmentRate}%). Even with a complex trial design, the clinical takeaway is caution against adopting the intervention as a new default.`;
 }

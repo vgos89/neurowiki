@@ -4813,7 +4813,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Tenecteplase achieved noninferiority to alteplase for excellent functional outcome',
       'Symptomatic intracranial hemorrhage was similar: 3.4% vs 3.2%',
       'Mortality at 90 days was essentially identical: 15.3% vs 15.4%',
-      'AcT is a major modern practice-shaping trial supporting tenecteplase 0.25 mg/kg as a first-line alternative'
+      'AcT is the largest pragmatic Canadian trial supporting tenecteplase 0.25 mg/kg as a first-line alternative'
     ],
     conclusion: '',
     source: 'Menon BK, et al. (Lancet 2022)',
@@ -5125,7 +5125,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Alteplase did not improve 90-day favorable outcome over aspirin',
       'Symptomatic intracranial hemorrhage occurred only in the alteplase arm: 3.2% vs 0%',
       'The trial was stopped early and therefore underpowered, but its direction did not favor alteplase',
-      'PRISMS remains foundational when deciding against thrombolysis for clearly nondisabling deficits'
+      'PRISMS is the best randomized evidence against routine alteplase in clearly nondisabling deficits'
     ],
     conclusion: '',
     source: 'Khatri P, et al. (JAMA 2018)',
@@ -5185,7 +5185,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'rhPro-UK was noninferior to alteplase for excellent 90-day outcome',
       'Symptomatic intracranial hemorrhage was similar: 1.5% vs 1.8%',
       'Systemic bleeding was markedly lower with rhPro-UK: 25.8% vs 42.2%',
-      'PROST opened the door for additional alternative-fibrinolytic development beyond tenecteplase'
+      'PROST showed a viable fibrinolytic alternative beyond tenecteplase, with lower systemic bleeding'
     ],
     conclusion: '',
     source: 'PROST Investigators (JAMA Netw Open 2023)',

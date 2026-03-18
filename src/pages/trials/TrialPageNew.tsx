@@ -16,7 +16,7 @@ import remarkGfm from 'remark-gfm';
 
 function sanitizeLegacyTrialContent(
   content: string,
-  options?: { removeClinicalContext?: boolean; removeSource?: boolean }
+  options?: { removeClinicalContext?: boolean; removePearls?: boolean; removeSource?: boolean }
 ): string {
   if (!content) return content;
 
@@ -24,6 +24,10 @@ function sanitizeLegacyTrialContent(
 
   if (options?.removeClinicalContext) {
     sanitized = sanitized.replace(/\n## Clinical Context[\s\S]*?(?=\n## |\n\*Source:|\n$|$)/g, '');
+  }
+
+  if (options?.removePearls) {
+    sanitized = sanitized.replace(/\n## Clinical PEARLS[\s\S]*?(?=\n## |\n\*Source:|\n$|$)/g, '');
   }
 
   if (options?.removeSource) {
@@ -69,9 +73,10 @@ const TrialPageNew: React.FC = () => {
     () =>
       sanitizeLegacyTrialContent(trial?.content ?? '', {
         removeClinicalContext: !!trialMetadata?.clinicalContext,
+        removePearls: !!trialMetadata?.pearls?.length,
         removeSource: !!trialMetadata?.source,
       }),
-    [trial?.content, trialMetadata?.clinicalContext, trialMetadata?.source]
+    [trial?.content, trialMetadata?.clinicalContext, trialMetadata?.pearls, trialMetadata?.source]
   );
   const renderedConclusion = useMemo(
     () => (trialMetadata ? buildHouseConclusion(trialMetadata) : null),
