@@ -381,14 +381,14 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
 
     // Path A
     if (pathStage === 'A') {
-      if (aRecognition === false) return { eligible: false, status: 'Not Eligible', variant: 'danger', reason: 'Outside recognition window', details: 'Patient not within 4.5h of symptom recognition. Path A (WAKE-UP/THAWS) requires treatment initiation within 4.5h of the time symptoms were first recognized (e.g., awakening).' };
+      if (aRecognition === false) return { eligible: false, status: 'Not Eligible', variant: 'danger', reason: 'Outside recognition window', details: 'Path A (WAKE-UP/THAWS) requires treatment within 4.5h of symptom recognition — this window has passed.' };
       if (aDwiSmall === false) return { eligible: false, status: 'Not Eligible', variant: 'danger', reason: 'DWI lesion ≥ 1/3 MCA territory', details: 'DWI lesion size criterion not met. Both WAKE-UP and THAWS required a DWI lesion smaller than 1/3 of the MCA territory.' };
       if (aFlair === false) return { eligible: false, status: 'Not Eligible', variant: 'danger', reason: 'No DWI-FLAIR mismatch', details: 'DWI-FLAIR mismatch not present. A FLAIR-positive lesion in the DWI territory indicates established infarct (>4.5h estimated age) — tissue no longer viable for thrombolysis.' };
       if (aRecognition === true && aDwiSmall === true && aFlair === true) return {
         eligible: true, status: 'Eligible', variant: 'success', cor: '2a',
         path: 'A', trialsBasis: ['WAKE-UP', 'THAWS'], showBothAgents: true,
         reason: 'Path A — Unknown onset with MRI DWI-FLAIR mismatch',
-        details: 'In a wake-up or otherwise unknown-onset ischemic stroke, a visible DWI lesion without marked FLAIR hyperintensity acts as a tissue clock suggesting the event is likely within 4.5 hours. IVT is reasonable on this basis when treatment remains within 4.5 hours of symptom recognition.',
+        details: 'In wake-up or unknown-onset stroke, a DWI lesion without FLAIR hyperintensity suggests onset within 4.5 hours. IVT is reasonable when treatment starts within 4.5 hours of symptom recognition.',
       };
     }
 
@@ -422,7 +422,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
         eligible: true, status: 'Eligible', variant: 'success', cor: '2a',
         path: 'B', trialsBasis: ['EXTEND', 'EPITHET', 'ECASS-4'], showBothAgents: true,
         reason: `Path B — 4.5–9h perfusion mismatch on ${isCtp ? 'CT perfusion' : 'MRI DWI-PWI'}`,
-        details: 'IVT is reasonable 4.5 to 9 hours from last known well, or in wake-up stroke within 9 hours of the sleep midpoint, when automated perfusion imaging confirms salvageable ischemic penumbra. The current imaging profile fits that tissue-selected late-window pathway.',
+        details: 'IVT is reasonable 4.5 to 9 hours from last known well, or in wake-up stroke within 9 hours of the sleep midpoint, when automated perfusion imaging confirms salvageable ischemic penumbra.',
       };
     }
 
@@ -449,7 +449,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
         eligible: true, status: 'Eligible', variant: 'warning', cor: '2b',
         path: 'C-LVO', trialsBasis: ['TRACE-III'], showBothAgents: false,
         reason: 'Path C — 9–24h LVO with no feasible EVT',
-        details: 'IVT with tenecteplase may be considered for acute ischemic stroke caused by an ICA or MCA (M1/M2) occlusion 9 to 24 hours from last known well, including wake-up or unwitnessed stroke when a usable last-known-well timestamp is available within 24 hours. This requires salvageable penumbra, no feasible rapid EVT pathway, and treatment directed by clinicians with expertise in thrombolytic stroke care.',
+        details: 'IVT with tenecteplase may be considered for acute ischemic stroke caused by an ICA or MCA (M1/M2) occlusion 9 to 24 hours from last known well, including wake-up or unwitnessed stroke with a usable last-known-well time within 24 hours. This requires salvageable penumbra, no feasible rapid EVT pathway, and treatment directed by clinicians with expertise in thrombolytic stroke care.',
       };
     }
 
@@ -1021,7 +1021,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                         <CompactSelectionCard title="No — IVT only" description="No LVO or EVT not available" selected={bEvt === false} onClick={() => setBEvt(false)} />
                       </div>
                       {bEvt !== null && (
-                        <LearningPearl title="Late IVT vs Rapid EVT" content="In the extended window, IVT should not be endorsed when rapid thrombectomy is already planned. The late-window recommendation is intended for patients who cannot receive or will receive delayed EVT." variant="amber" />
+                        <LearningPearl title="Late IVT vs Rapid EVT" content="In the extended window, IVT should not be endorsed when rapid thrombectomy is already planned. This pathway applies only when prompt EVT is unavailable." variant="amber" />
                       )}
                     </div>
                   )}

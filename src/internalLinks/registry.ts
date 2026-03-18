@@ -45,6 +45,12 @@ export const TRIAL_MODAL_PATTERNS: Record<string, string> = {
   'ECASS III trial': 'ecass3-trial',
   'EXTEND tPA': 'extend-trial',
   'EXTEND trial': 'extend-trial',
+  'THAWS': 'thaws-trial',
+  'THAWS trial': 'thaws-trial',
+  'TRACE-III': 'trace-iii-trial',
+  'TRACE III': 'trace-iii-trial',
+  'TRACE-III trial': 'trace-iii-trial',
+  'TRACE III trial': 'trace-iii-trial',
   'WAKE-UP': 'wake-up-trial',
   'WAKE-UP trial': 'wake-up-trial',
   'EAGLE': 'eagle-trial',
@@ -140,10 +146,13 @@ const getArticleAliases = (id: string, title: string): string[] => {
   if (id === 'attention-trial') aliases.push('ATTENTION', 'ATTENTION trial');
   if (id === 'baoche-trial') aliases.push('BAOCHE', 'BAOCHE trial');
   if (id === 'extend-trial') aliases.push('EXTEND', 'EXTEND trial');
+  if (id === 'thaws-trial') aliases.push('THAWS', 'THAWS trial');
+  if (id === 'trace-iii-trial') aliases.push('TRACE-III', 'TRACE III', 'TRACE-III trial', 'TRACE III trial');
   if (id === 'ninds-trial') aliases.push('NINDS', 'NINDS trial');
   if (id === 'ecass3-trial') aliases.push('ECASS III', 'ECASS 3', 'ECASS-3', 'ECASS III trial');
   if (id === 'weave-trial') aliases.push('WEAVE', 'WEAVE trial');
   if (id === 'eagle-trial') aliases.push('EAGLE', 'EAGLE trial');
+  if (id === 'wake-up-trial') aliases.push('WAKE-UP', 'WAKE-UP trial', 'WAKE UP trial');
 
   return aliases;
 };

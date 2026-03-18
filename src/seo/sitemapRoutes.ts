@@ -46,6 +46,8 @@ export const SITEMAP_ROUTES = [
   '/trials/ninds-trial',
   '/trials/ecass3-trial',
   '/trials/extend-trial',
+  '/trials/thaws-trial',
+  '/trials/trace-iii-trial',
   '/trials/eagle-trial',
   '/trials/original-trial',
   '/trials/wake-up-trial',

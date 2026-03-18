@@ -834,6 +834,209 @@ export const acuteComplicationsRecommendations = {
 } as const;
 
 // ─────────────────────────────────────────────────────────────────────────────
+// SECTION 4.6: OROLINGUAL ANGIOEDEMA
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const orolyngualAngioedemaRecommendations = [
+  {
+    cor: "1",
+    loe: "C-EO",
+    text: "In patients developing orolingual angioedema during or shortly after IV alteplase or tenecteplase administration, the infusion should be stopped immediately and the airway assessed and managed urgently with anesthesia/ENT backup.",
+  },
+  {
+    cor: "2a",
+    loe: "C-LD",
+    text: "In patients with orolingual angioedema related to ACE inhibitor use following IVT, icatibant (bradykinin B2-receptor antagonist, 30 mg SC) or C1-esterase inhibitor concentrate is reasonable to reverse angioedema rapidly.",
+  },
+  {
+    cor: "2a",
+    loe: "C-EO",
+    text: "In patients with orolingual angioedema after IVT, IV diphenhydramine, IV methylprednisolone (125 mg), and epinephrine (0.1% solution, 0.3 mL IM or as nebulizer) should be administered; airway protection is the immediate priority.",
+  },
+] as const;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 4.3: HEAD POSITIONING
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const headPositioningRecommendations = [
+  {
+    cor: "3: No Benefit",
+    loe: "B-R",
+    text: "Routine flat (0°) head positioning compared with 30° head elevation for the first 24 hours in patients with AIS is NOT recommended, as it does not improve functional outcomes or reduce stroke progression.",
+  },
+  {
+    cor: "2b",
+    loe: "C-EO",
+    text: "In patients with AIS and evidence of elevated intracranial pressure, head-of-bed elevation to 30° may be reasonable as a simple measure to reduce ICP and improve cerebral venous drainage.",
+  },
+] as const;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 6: HEMORRHAGIC TRANSFORMATION
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const hemorrhagicTransformationRecommendations = [
+  {
+    cor: "1",
+    loe: "C-EO",
+    text: "In patients with suspected symptomatic intracranial hemorrhage (sICH) after IVT: stop infusion immediately, obtain emergent CBC/PT/aPTT/fibrinogen and type & cross-match, and perform urgent noncontrast CT head.",
+  },
+  {
+    cor: "1",
+    loe: "C-EO",
+    text: "In patients with sICH after IVT, administer cryoprecipitate 10 U IV over 10–30 min (target fibrinogen ≥150 mg/dL) plus tranexamic acid 1000 mg IV over 10 min OR aminocaproic acid 4–5 g IV over 1 hour; obtain hematology and neurosurgery consultation.",
+  },
+  {
+    cor: "2a",
+    loe: "B-NR",
+    text: "In patients with asymptomatic hemorrhagic transformation (HI-1, HI-2, PH-1) on post-treatment imaging, continuation of antithrombotic therapy (if clinically indicated) is generally reasonable without mandatory interruption, with close clinical and imaging monitoring.",
+  },
+] as const;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 5: CARDIAC MONITORING
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const cardiacMonitoringRecommendations = [
+  {
+    cor: "1",
+    loe: "B-NR",
+    text: "In patients with AIS, cardiac monitoring (ECG and continuous cardiac telemetry) is recommended for at least the first 24 hours after stroke onset to detect atrial fibrillation and other potentially serious cardiac arrhythmias that may necessitate emergency cardiac interventions.",
+  },
+  {
+    cor: "2a",
+    loe: "B-NR",
+    text: "In patients with AIS without AF identified on initial evaluation, prolonged cardiac rhythm monitoring (at least 30 days) with ambulatory cardiac monitoring is reasonable to detect paroxysmal AF.",
+  },
+] as const;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 5: INFECTION MANAGEMENT
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const infectionManagementRecommendations = {
+  pneumonia: [
+    {
+      cor: "3: No Benefit",
+      loe: "B-R",
+      text: "Prophylactic antibiotics are NOT recommended in patients with AIS who do not have evidence of active infection, as they do not reduce risk of pneumonia or improve functional outcomes.",
+    },
+  ],
+  urinary: [
+    {
+      cor: "3: No Benefit",
+      loe: "B-R",
+      text: "Routine urinary catheterization for prevention of urinary tract infections is NOT recommended in patients with AIS without urinary retention, as it does not reduce UTI rates and may increase infections.",
+    },
+  ],
+} as const;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 5: NUTRITION & EARLY MOBILIZATION SUPPORT
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const nutritionRecommendations = [
+  {
+    cor: "1",
+    loe: "C-EO",
+    text: "In patients with AIS who cannot safely take food or fluids orally due to dysphagia or impaired consciousness, early nutritional support via nasogastric (NG) tube should be initiated within the first 24–48 hours.",
+  },
+  {
+    cor: "2b",
+    loe: "B-R",
+    text: "In patients with AIS who require long-term enteral nutrition (>2–3 weeks) and cannot swallow safely, percutaneous endoscopic gastrostomy (PEG) tube may be considered over continued NG tube feeding for comfort and patient preference.",
+  },
+] as const;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 3/5: TELEMEDICINE & TELESTROKE
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const telemedicineRecommendations = [
+  {
+    cor: "1",
+    loe: "B-R",
+    text: "Telestroke consultation — using audio-video technology to enable real-time neurological assessment by a remote stroke specialist — is recommended to increase access to IVT and EVT in hospitals without on-site stroke expertise.",
+  },
+  {
+    cor: "1",
+    loe: "B-NR",
+    text: "Teleradiology systems enabling remote review of CT/MRI brain imaging by qualified physicians are recommended to support time-sensitive stroke triage and treatment decisions at non-specialist centers.",
+  },
+  {
+    cor: "2a",
+    loe: "B-NR",
+    text: "Prehospital telemedicine — connecting paramedics in the ambulance directly to a remote stroke specialist for real-time evaluation — is reasonable to expedite stroke identification, triage, and destination decisions before hospital arrival.",
+  },
+] as const;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 5/7: SECONDARY PREVENTION (EARLY IN-HOSPITAL PHASE)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const secondaryPreventionEarlyRecommendations = {
+  statins: [
+    {
+      cor: "1",
+      loe: "A",
+      text: "In patients with AIS attributable to atherosclerosis, high-intensity statin therapy (e.g. atorvastatin 40–80 mg or rosuvastatin 20–40 mg daily) is recommended to reduce risk of recurrent stroke and major cardiovascular events.",
+    },
+    {
+      cor: "2a",
+      loe: "B-NR",
+      text: "In patients with AIS, initiating or continuing statin therapy during the acute hospitalization is reasonable to establish the habit and improve long-term medication adherence.",
+    },
+  ],
+  bloodPressureLowering: [
+    {
+      cor: "1",
+      loe: "A",
+      text: "After the hyperacute phase (>24–48 h post-AIS), antihypertensive therapy is recommended to reduce risk of recurrent stroke, with a general target of SBP <130 mm Hg in most patients with established hypertension.",
+    },
+  ],
+  afAnticoagulation: [
+    {
+      cor: "1",
+      loe: "A",
+      text: "In patients with AIS and AF (paroxysmal, persistent, or permanent), long-term anticoagulation with a DOAC is recommended over warfarin (when no contraindication) to prevent recurrent cardioembolic stroke.",
+    },
+    {
+      cor: "2a",
+      loe: "B-R",
+      text: "For most patients with AIS and AF, initiating anticoagulation at 4–14 days (guided by stroke severity: minor stroke early, severe stroke delayed) is reasonable to balance recurrent stroke prevention against hemorrhagic risk.",
+    },
+  ],
+} as const;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 8: QUALITY IMPROVEMENT
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const qualityImprovementRecommendations = [
+  {
+    cor: "1",
+    loe: "B-NR",
+    text: "Participation in organized stroke data registries (e.g., Get With The Guidelines–Stroke) with performance benchmarking is recommended to identify care gaps, implement best practices, and improve patient outcomes across institutions.",
+  },
+  {
+    cor: "1",
+    loe: "B-NR",
+    text: "Stroke programs should use validated risk-adjustment methods (incorporating NIHSS and other baseline variables) to enable fair comparison of outcomes across centers and over time.",
+  },
+  {
+    cor: "2a",
+    loe: "B-NR",
+    text: "Continuous quality feedback loops — including regular multidisciplinary case review, door-to-needle time tracking, and protocol update cycles — are reasonable to sustain improvements in stroke care delivery.",
+  },
+  {
+    cor: "2a",
+    loe: "B-NR",
+    text: "Systematic tracking of performance metrics (DTN time, door-to-groin time, TICI reperfusion scores, 90-day mRS distribution) and reporting to care teams is reasonable to drive accountability and guideline adherence.",
+  },
+] as const;
+
+// ─────────────────────────────────────────────────────────────────────────────
 // KEY ABBREVIATIONS (Guideline-Defined)
 // ─────────────────────────────────────────────────────────────────────────────
 

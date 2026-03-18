@@ -925,6 +925,137 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     listCategory: 'thrombectomy',
     listDescription: 'Large core thrombectomy; China cohort (ASPECTS 3–5 or core ≥70 mL).',
   },
+  'thaws-trial': {
+    id: 'thaws-trial',
+    title: 'THAWS Trial',
+    subtitle: 'Low-Dose Alteplase for Unknown-Onset Ischemic Stroke',
+    category: 'Neuro Trials',
+    trialResult: 'NEGATIVE',
+    stats: {
+      sampleSize: {
+        value: '131',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-1',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '0.89',
+        label: 'Not Significant'
+      },
+      effectSize: {
+        value: '-1.2%',
+        label: 'No Benefit'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter randomized trial',
+        'Open-label with blinded endpoint assessment',
+        'MRI DWI-positive / FLAIR-negative selection',
+        '1:1 allocation (Alteplase vs. Standard treatment)'
+      ],
+      timeline: 'Stopped early at 131 of planned 300 patients'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 47.1,
+        label: 'Favorable outcome (mRS 0-1) at 90 days',
+        name: 'Alteplase 0.6 mg/kg'
+      },
+      control: {
+        percentage: 48.3,
+        label: 'Favorable outcome (mRS 0-1) at 90 days',
+        name: 'Standard Medical Treatment'
+      }
+    },
+    intervention: {
+      treatment: 'IV Alteplase 0.6 mg/kg (10% bolus, remainder over 60 min)',
+      control: 'Standard medical treatment with antithrombotic therapy per local practice'
+    },
+    clinicalContext: 'THAWS tested whether MRI-selected wake-up or unclear-onset ischemic stroke could benefit from low-dose alteplase (0.6 mg/kg), the dose used in Japan, using a DWI-positive and FLAIR-negative selection strategy.',
+    pearls: [
+      'Neutral Trial: No difference in mRS 0-1 at 90 days (47.1% vs 48.3%; P=0.89)',
+      'Early Termination: The study stopped after WAKE-UP was published, leaving it underpowered for definitive conclusions',
+      'Dose Distinction: THAWS evaluated alteplase 0.6 mg/kg rather than the standard 0.9 mg/kg used in WAKE-UP',
+      'Safety: Symptomatic ICH was uncommon (1/71 vs 0/60), and 90-day mortality was 2/71 vs 2/60',
+      'Case Mix: Investigators noted relatively mild strokes and frequent absence of large-artery occlusion'
+    ],
+    conclusion: 'Among patients with MRI-selected stroke of unknown onset, low-dose alteplase did not improve 90-day functional outcomes compared with standard treatment. The early stop and small sample size limit definitive interpretation, so THAWS is best viewed as a neutral, underpowered trial.',
+    source: 'Koga et al. (Stroke 2020)',
+    doi: '10.1161/STROKEAHA.119.028127',
+    clinicalTrialsId: 'NCT02002325',
+    listCategory: 'thrombolysis',
+    listDescription: 'Low-dose alteplase 0.6 mg/kg for MRI-selected unknown-onset stroke; neutral trial.',
+  },
+  'trace-iii-trial': {
+    id: 'trace-iii-trial',
+    title: 'TRACE-III Trial',
+    subtitle: 'Tenecteplase for Ischemic Stroke 4.5-24 Hours Without Thrombectomy',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '516',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-1',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '0.03',
+        label: 'Statistically Sig.'
+      },
+      effectSize: {
+        value: '8.8%',
+        label: 'Absolute Increase'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter randomized controlled trial',
+        'Conducted in China',
+        'Perfusion imaging selection',
+        '1:1 allocation (Tenecteplase vs. Standard treatment)'
+      ],
+      timeline: 'Published 2024'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 33.0,
+        label: 'No disability (mRS 0-1) at 90 days',
+        name: 'Tenecteplase Group'
+      },
+      control: {
+        percentage: 24.2,
+        label: 'No disability (mRS 0-1) at 90 days',
+        name: 'Standard Medical Treatment'
+      }
+    },
+    intervention: {
+      treatment: 'IV Tenecteplase 0.25 mg/kg (max 25 mg)',
+      control: 'Standard medical treatment without routine thrombectomy access'
+    },
+    clinicalContext: 'TRACE-III tested late-window tenecteplase in patients with ICA or MCA occlusion, salvageable tissue on perfusion imaging, and no access to endovascular thrombectomy.',
+    calculations: {
+      nnt: 11.4,
+      nntExplanation: 'For every 11.4 perfusion-selected late-window LVO patients treated with tenecteplase when EVT is unavailable, one additional patient achieves mRS 0-1 at 90 days compared with standard medical treatment'
+    },
+    pearls: [
+      'Late-Window Basis: TRACE-III is the key trial supporting thrombolysis up to 24 hours for selected ICA/MCA occlusions when EVT cannot be performed',
+      'Selection Criteria: Required salvageable tissue on perfusion imaging and enrollment 4.5-24 hours from last-known-well',
+      'Wake-Up Eligible: Stroke on awakening and unwitnessed stroke were included if within 24 hours from last-known-well',
+      'Not a Bridging Trial: Patients were enrolled because thrombectomy was not available; this does not justify delaying rapid EVT',
+      'Safety Trade-off: Symptomatic ICH was higher with tenecteplase (3.0% vs 0.8%), while mortality was similar (13.3% vs 13.1%)'
+    ],
+    conclusion: 'In perfusion-selected patients with ICA or MCA occlusion who were 4.5 to 24 hours from last-known-well and lacked access to thrombectomy, tenecteplase improved 90-day functional outcomes compared with standard medical treatment.',
+    source: 'Xiong et al. (NEJM 2024)',
+    doi: '10.1056/NEJMoa2402980',
+    clinicalTrialsId: 'NCT05141305',
+    listCategory: 'thrombolysis',
+    listDescription: 'Late-window tenecteplase 4.5-24h for ICA/MCA occlusion when EVT is unavailable.',
+  },
   'wake-up-trial': {
     id: 'wake-up-trial',
     title: 'WAKE-UP Trial',
@@ -972,23 +1103,21 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: '0.9 mg/kg IV (10% bolus, 90% over 60 min)',
       control: 'Placebo + Best Medical Treatment'
     },
-    clinicalContext: 'Approximately 14-27% of acute ischemic strokes occur with an unknown time of onset, frequently recognized upon awakening from sleep. These "wake-up strokes" have traditionally been excluded from thrombolytic therapy due to the 4.5-hour treatment window requirement. However, MRI findings suggesting recent infarction—specifically DWI-FLAIR mismatch (visible ischemic lesion on diffusion-weighted imaging without corresponding FLAIR hyperintensity)—can identify patients likely within the treatment window. The WAKE-UP trial investigated whether this MRI-based patient selection could safely extend thrombolysis to patients with unknown symptom onset times.',
+    clinicalContext: 'WAKE-UP tested whether MRI DWI-FLAIR mismatch could identify patients with unknown-onset ischemic stroke who were still likely within a treatable thrombolysis window despite uncertain clock time.',
     calculations: {
       nnt: 8.7, // 1 / (0.533 - 0.418) = 8.70 ≈ 8.7
       nntExplanation: 'For every 8.7 patients with wake-up stroke and DWI-FLAIR mismatch treated with tPA, one additional patient achieves excellent outcome (mRS 0-1) compared to placebo'
     },
     pearls: [
-      'DWI-FLAIR mismatch identifies patients likely within 4.5-hour window despite unknown symptom onset',
-      'Number needed to treat (NNT) = 8.7 for excellent outcome (mRS 0-1)',
-      'Increased parenchymal hemorrhage type 2 (absolute difference 3.6%)',
-      'Most applicable to wake-up strokes (89% of enrolled patients)',
-      'Benefit consistent across age groups and baseline NIHSS scores',
-      'Trend toward increased mortality (4.1% vs 1.2%, p=0.07)',
-      'Requires MRI capability for emergency stroke imaging',
-      'DWI-FLAIR mismatch has 73-78% interobserver agreement'
+      'Landmark Positive Trial: First randomized evidence that MRI-selected unknown-onset stroke can benefit from alteplase',
+      'Tissue Clock: DWI-FLAIR mismatch identifies patients likely within the prior 4.5 hours despite uncertain onset',
+      'Functional Benefit: mRS 0-1 at 90 days improved from 41.8% to 53.3% (NNT 8.7)',
+      'Important Exclusion: Patients with planned thrombectomy were excluded from WAKE-UP',
+      'Safety: Symptomatic ICH was 2.0% vs 0.4%, and mortality was numerically higher at 4.1% vs 1.2%'
     ],
-    conclusion: 'Among patients with acute ischemic stroke and unknown time of symptom onset who had MRI findings of DWI-FLAIR mismatch, treatment with IV alteplase resulted in significantly better functional outcomes at 90 days compared to placebo (mRS 0-1: 53.3% vs 41.8%, OR 1.61). This represents an absolute benefit of 11.5 percentage points with an NNT of 8.7.',
-    source: 'Thomalla G, et al. N Engl J Med. 2018;379(7):611-622',
+    conclusion: 'Among patients with acute ischemic stroke and unknown time of symptom onset who had MRI DWI-FLAIR mismatch, alteplase improved 90-day functional outcomes compared with placebo. WAKE-UP established imaging-selected thrombolysis as a valid strategy for wake-up and other unknown-onset strokes.',
+    source: 'Thomalla et al. (NEJM 2018)',
+    doi: '10.1056/NEJMoa1804355',
     clinicalTrialsId: 'NCT01525290',
     listCategory: 'thrombolysis',
     listDescription: 'MRI DWI–FLAIR mismatch for thrombolysis in unknown-onset stroke.',

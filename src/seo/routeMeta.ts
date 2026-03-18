@@ -259,6 +259,18 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
     keywords: 'EXTEND trial stroke, late window tPA, tPA beyond 4.5 hours, perfusion-guided thrombolysis, wake-up stroke tPA, CT perfusion thrombolysis',
   },
 
+  '/trials/thaws-trial': {
+    title: 'THAWS Trial — Low-Dose Alteplase for Unknown-Onset Stroke | NeuroWiki',
+    description: 'THAWS trial (Stroke 2020): MRI-selected wake-up and unknown-onset stroke treated with alteplase 0.6 mg/kg vs standard therapy. Neutral trial stopped early after WAKE-UP.',
+    keywords: 'THAWS trial stroke, low dose alteplase wake-up stroke, unknown onset stroke alteplase 0.6 mg/kg, MRI selected thrombolysis THAWS',
+  },
+
+  '/trials/trace-iii-trial': {
+    title: 'TRACE-III Trial — Tenecteplase 4.5–24 Hours Without EVT | NeuroWiki',
+    description: 'TRACE-III trial (2024): tenecteplase for perfusion-selected ICA/MCA occlusion 4.5–24 hours from last-known-well when thrombectomy is unavailable. Basis for late-window IVT.',
+    keywords: 'TRACE-III trial, tenecteplase 4.5 to 24 hours stroke, late window TNK stroke, TRACE III LVO thrombolysis, no thrombectomy tenecteplase stroke',
+  },
+
   '/trials/eagle-trial': {
     title: 'EAGLE Trial — Intra-Arterial tPA for Central Retinal Artery Occlusion | NeuroWiki',
     description: 'EAGLE trial (Ophthalmology 2010): randomized trial of local intra-arterial fibrinolysis (IA tPA) vs conservative treatment for central retinal artery occlusion (CRAO). Negative trial — no visual benefit, higher adverse events.',

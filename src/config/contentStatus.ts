@@ -201,6 +201,14 @@ export const contentStatus: ContentStatus = {
     published: true,
     comingSoonMessage: 'EXTEND trial summary coming soon',
   },
+  '/trials/thaws-trial': {
+    published: true,
+    comingSoonMessage: 'THAWS trial summary coming soon',
+  },
+  '/trials/trace-iii-trial': {
+    published: true,
+    comingSoonMessage: 'TRACE-III trial summary coming soon',
+  },
   '/trials/attention-trial': {
     published: true,
     comingSoonMessage: 'ATTENTION trial summary coming soon',

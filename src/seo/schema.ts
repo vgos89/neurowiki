@@ -418,6 +418,8 @@ const TRIAL_LABELS: Record<string, string> = {
   '/trials/ninds-trial':        'NINDS Trial',
   '/trials/ecass3-trial':       'ECASS-3 Trial',
   '/trials/extend-trial':       'EXTEND Trial',
+  '/trials/thaws-trial':        'THAWS Trial',
+  '/trials/trace-iii-trial':    'TRACE-III Trial',
   '/trials/eagle-trial':        'EAGLE Trial',
   '/trials/wake-up-trial':      'WAKE-UP Trial',
   '/trials/dawn-trial':         'DAWN Trial',

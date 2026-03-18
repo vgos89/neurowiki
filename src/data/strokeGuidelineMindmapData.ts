@@ -1,9 +1,10 @@
 /**
- * Stroke Guideline Mindmap Data
+ * Stroke Guideline Mindmap Data — v2 (Full Coverage)
  * Structures the 2026 AHA/ASA Acute Ischemic Stroke Guideline into a
  * hierarchical tree for the interactive mindmap page.
  *
  * All recommendation text sourced from aha2026StrokeGuideline.ts
+ * ~52 nodes, ~40 with recommendations, ~95 total recommendations
  */
 
 import {
@@ -18,6 +19,17 @@ import {
   anticoagulationRecommendations,
   inHospitalManagementRecommendations,
   acuteComplicationsRecommendations,
+  adjunctiveTreatmentsNotRecommended,
+  topTakeHomeMessages,
+  orolyngualAngioedemaRecommendations,
+  headPositioningRecommendations,
+  hemorrhagicTransformationRecommendations,
+  cardiacMonitoringRecommendations,
+  infectionManagementRecommendations,
+  nutritionRecommendations,
+  telemedicineRecommendations,
+  secondaryPreventionEarlyRecommendations,
+  qualityImprovementRecommendations,
 } from './aha2026StrokeGuideline';
 
 export type GuidelineRec = {
@@ -50,35 +62,55 @@ export const mindmapRoot: MindmapNode = {
   label: '2026 AHA/ASA\nAcute Ischemic\nStroke Guideline',
   color: 'neuro',
   children: [
+
+    // ── ★ KEY 2026 UPDATES ─────────────────────────────────────────────────
+    {
+      id: 'key-updates',
+      label: 'Key 2026\nUpdates',
+      color: 'neuro',
+      description: 'The top take-home messages from the 2026 AHA/ASA Guideline — what changed from prior guidelines and what every clinician needs to know.',
+      recommendations: topTakeHomeMessages.map((text, i) => ({
+        cor: '★',
+        loe: String(i + 1),
+        text,
+      })),
+    },
+
     // ── 1. STROKE SYSTEMS OF CARE ──────────────────────────────────────────
     {
       id: 'systems',
       label: 'Stroke Systems\nof Care',
       color: 'neuro',
-      description: 'Public education, EMS infrastructure, and hospital capabilities to maximize access to time-sensitive stroke therapies.',
+      description: 'Public education, EMS infrastructure, telemedicine, and hospital capabilities to maximize access to time-sensitive stroke therapies.',
       children: [
         {
           id: 'awareness',
-          label: 'Stroke Awareness',
+          label: 'Stroke\nAwareness',
           color: 'neuro',
           description: 'Public and professional education programs to improve stroke recognition across all demographics.',
           recommendations: prehospitalRecommendations.strokeAwareness.map(toRec),
         },
         {
-          id: 'ems',
-          label: 'EMS & Prehospital',
+          id: 'ems-prehospital',
+          label: 'EMS &\nPrehospital',
           color: 'neuro',
-          description: 'EMS triage protocols, advance hospital notification, destination decisions, and mobile stroke units.',
+          description: 'EMS triage protocols, advance hospital notification, prehospital assessment tools, and destination decisions.',
           recommendations: [
             ...prehospitalRecommendations.emsSystems.map(toRec),
             ...prehospitalRecommendations.prehospitalAssessment.map(toRec),
             ...prehospitalRecommendations.emsDestination.map(toRec),
-            ...prehospitalRecommendations.mobileStrokeUnits.map(toRec),
           ],
         },
         {
+          id: 'msu',
+          label: 'Mobile\nStroke Units',
+          color: 'neuro',
+          description: 'Mobile stroke units (MSU) enable prehospital IVT administration — COR 1 recommendation and #1 Take-Home Message of the 2026 guideline.',
+          recommendations: prehospitalRecommendations.mobileStrokeUnits.map(toRec),
+        },
+        {
           id: 'hospital-capabilities',
-          label: 'Hospital Capabilities',
+          label: 'Hospital\nCapabilities',
           color: 'neuro',
           description: 'External certification, standardized protocols, and interhospital transfer agreements to ensure rapid access to EVT.',
           recommendations: [
@@ -99,6 +131,13 @@ export const mindmapRoot: MindmapNode = {
             },
           ],
         },
+        {
+          id: 'telemedicine',
+          label: 'Telemedicine\n& Telestroke',
+          color: 'neuro',
+          description: 'Telestroke and teleradiology extend stroke expertise to hospitals without on-site specialists, enabling faster IVT and EVT triage.',
+          recommendations: telemedicineRecommendations.map(toRec),
+        },
       ],
     },
 
@@ -111,7 +150,7 @@ export const mindmapRoot: MindmapNode = {
       children: [
         {
           id: 'assessment',
-          label: 'Assessment Tools',
+          label: 'Assessment\nTools',
           color: 'violet',
           description: 'Validated clinical tools and specialist resources for rapid stroke severity grading and decision-making.',
           recommendations: [
@@ -128,18 +167,13 @@ export const mindmapRoot: MindmapNode = {
             {
               cor: '2a',
               loe: 'B-NR',
-              text: 'Telestroke consultation is reasonable to extend stroke expertise to hospitals without on-site stroke specialists, enabling faster IVT administration and appropriate EVT triage.',
-            },
-            {
-              cor: '2a',
-              loe: 'B-NR',
               text: 'A multidisciplinary stroke team — including neurology, nursing, pharmacy, and radiology — is recommended to coordinate rapid evaluation and treatment.',
             },
           ],
         },
         {
           id: 'imaging',
-          label: 'Imaging Approaches',
+          label: 'Imaging\nApproaches',
           color: 'violet',
           description: 'Neuroimaging strategies to exclude hemorrhage, detect ischemia, identify LVO, and select patients for extended time-window therapies.',
           recommendations: [
@@ -167,6 +201,7 @@ export const mindmapRoot: MindmapNode = {
       color: 'emerald',
       description: 'Reperfusion therapies (IVT and EVT) and supportive care interventions during the acute hospitalization.',
       children: [
+        // IVT
         {
           id: 'ivt',
           label: 'IV Thrombolysis\n(IVT)',
@@ -211,8 +246,17 @@ export const mindmapRoot: MindmapNode = {
                 ...ivtRecommendations.contraindicated.map(toRec),
               ],
             },
+            {
+              id: 'ivt-angioedema',
+              label: 'Orolingual\nAngioedema',
+              color: 'rose',
+              description: 'Orolingual angioedema is a rare but life-threatening complication of IVT — stop infusion, secure airway, treat with epinephrine/icatibant.',
+              recommendations: orolyngualAngioedemaRecommendations.map(toRec),
+            },
           ],
         },
+
+        // EVT
         {
           id: 'evt',
           label: 'Endovascular\nThrombectomy (EVT)',
@@ -224,7 +268,9 @@ export const mindmapRoot: MindmapNode = {
               label: 'Anterior\nCirculation LVO',
               color: 'emerald',
               description: 'ICA and M1 occlusions: 0–6 h (ASPECTS 3–10) and 6–24 h windows, including large core (ASPECTS 3–5).',
-              recommendations: evtRecommendations.adults.map(toRec),
+              recommendations: evtRecommendations.adults
+                .filter(r => !r.text.includes('nondominant') && !r.text.includes('distal MCA') && !r.text.includes('ACA') && !r.text.includes('PCA'))
+                .map(toRec),
             },
             {
               id: 'evt-posterior',
@@ -233,13 +279,24 @@ export const mindmapRoot: MindmapNode = {
               description: 'EVT for basilar artery occlusion within 6 hours (COR 1) and 6–24 hours (COR 2a).',
               recommendations: evtRecommendations.posteriorCirculation.map(toRec),
             },
+            {
+              id: 'evt-mevo',
+              label: 'MeVO /\nDistal Vessels',
+              color: 'rose',
+              description: 'Medium vessel occlusions (M2–M3, ACA, PCA): EVT is NOT recommended for non-dominant/distal vessels based on current evidence.',
+              recommendations: evtRecommendations.adults
+                .filter(r => r.text.includes('nondominant') || r.text.includes('distal MCA') || r.text.includes('ACA') || r.text.includes('PCA') || r.cor.startsWith('3'))
+                .map(toRec),
+            },
           ],
         },
+
+        // Supportive Care
         {
           id: 'supportive',
-          label: 'Supportive Care',
+          label: 'Supportive\nCare',
           color: 'emerald',
-          description: 'Blood pressure targets, glucose management, temperature control, and antiplatelet/anticoagulation therapy.',
+          description: 'Blood pressure targets, glucose management, temperature control, head positioning, and antithrombotic therapy.',
           children: [
             {
               id: 'bp',
@@ -268,13 +325,35 @@ export const mindmapRoot: MindmapNode = {
               recommendations: temperatureRecommendations.map(toRec),
             },
             {
+              id: 'head-positioning',
+              label: 'Head\nPositioning',
+              color: 'slate',
+              description: 'Flat head positioning does NOT improve outcomes (COR 3: No Benefit); elevation to 30° may be reasonable if elevated ICP.',
+              recommendations: headPositioningRecommendations.map(toRec),
+            },
+            {
               id: 'antiplatelet',
               label: 'Antiplatelet\nTherapy (DAPT)',
               color: 'amber',
               description: 'Aspirin within 48 h; DAPT for minor AIS/high-risk TIA for 21 days then SAPT.',
-              recommendations: [
-                ...antiplateletRecommendations.general.map(toRec),
-                ...antiplateletRecommendations.daptForMinorAIS.map(toRec),
+              children: [
+                {
+                  id: 'antiplatelet-general',
+                  label: 'General\nAntiplatelet',
+                  color: 'amber',
+                  description: 'Aspirin for all; DAPT for minor AIS/high-risk TIA within 24–72 h.',
+                  recommendations: [
+                    ...antiplateletRecommendations.general.map(toRec),
+                    ...antiplateletRecommendations.daptForMinorAIS.map(toRec),
+                  ],
+                },
+                {
+                  id: 'antiplatelet-ivt',
+                  label: 'Antiplatelet\nAfter IVT',
+                  color: 'rose',
+                  description: 'Antiplatelet use within 24 h of IVT is generally not recommended — specific restrictions and rare exceptions.',
+                  recommendations: antiplateletRecommendations.inSettingOfIVT.map(toRec),
+                },
               ],
             },
             {
@@ -286,15 +365,26 @@ export const mindmapRoot: MindmapNode = {
             },
           ],
         },
+
+        // Adjunctive Tx Not Recommended
+        {
+          id: 'adjunctive',
+          label: 'Adjunctive Tx\n— Not Rec.',
+          color: 'rose',
+          description: 'Treatments with COR 3: No Benefit — hemodilution, neuroprotective agents, and emergency carotid endarterectomy without intracranial clot are not recommended.',
+          recommendations: adjunctiveTreatmentsNotRecommended.map(toRec),
+        },
+
+        // In-Hospital Management
         {
           id: 'inhospital',
           label: 'In-Hospital\nManagement',
           color: 'emerald',
-          description: 'Stroke unit care, dysphagia screening, VTE prevention, depression screening, and early mobilization.',
+          description: 'Stroke unit care, dysphagia screening, VTE prevention, monitoring, mobilization, and complications management.',
           children: [
             {
               id: 'stroke-unit',
-              label: 'Stroke Unit Care',
+              label: 'Stroke Unit\nCare',
               color: 'emerald',
               description: 'Organized interdisciplinary stroke care units reduce death and dependency.',
               recommendations: inHospitalManagementRecommendations.strokeUnit.map(toRec),
@@ -308,21 +398,115 @@ export const mindmapRoot: MindmapNode = {
             },
             {
               id: 'vte',
-              label: 'VTE Prevention',
+              label: 'VTE\nPrevention',
               color: 'emerald',
               description: 'Intermittent pneumatic compression for immobile patients; compression stockings are harmful.',
               recommendations: inHospitalManagementRecommendations.vtePrevention.map(toRec),
             },
             {
+              id: 'depression',
+              label: 'Poststroke\nDepression',
+              color: 'amber',
+              description: 'Screen for poststroke depression at regular intervals; treat with SSRIs. Prophylactic SSRIs in non-depressed patients are NOT recommended.',
+              recommendations: inHospitalManagementRecommendations.depression.map(toRec),
+            },
+            {
+              id: 'oxygenation-monitoring',
+              label: 'Oxygenation &\nCardiac Monitoring',
+              color: 'violet',
+              description: 'Supplemental O₂ is not recommended in non-hypoxic patients. Cardiac monitoring ≥24 h to detect paroxysmal AF.',
+              recommendations: [
+                ...inHospitalManagementRecommendations.oxygenation.map(toRec),
+                ...cardiacMonitoringRecommendations.map(toRec),
+              ],
+            },
+            {
+              id: 'mobilization-nutrition',
+              label: 'Mobilization\n& Nutrition',
+              color: 'slate',
+              description: 'Very early high-intensity mobilization is harmful. Early NG tube feeding for dysphagic patients within 24–48 h.',
+              recommendations: [
+                ...inHospitalManagementRecommendations.earlyMobilization.map(toRec),
+                ...nutritionRecommendations.map(toRec),
+              ],
+            },
+            {
+              id: 'infection-prevention',
+              label: 'Infection\nPrevention',
+              color: 'slate',
+              description: 'Prophylactic antibiotics and routine urinary catheterization are NOT recommended.',
+              recommendations: [
+                ...infectionManagementRecommendations.pneumonia.map(toRec),
+                ...infectionManagementRecommendations.urinary.map(toRec),
+              ],
+            },
+            // Acute Complications — now split into 4 individual nodes
+            {
               id: 'complications',
               label: 'Acute\nComplications',
               color: 'rose',
-              description: 'Malignant edema (hemicraniectomy), cerebellar infarction, and seizure management.',
-              recommendations: [
-                ...acuteComplicationsRecommendations.brainSwelling.map(toRec),
-                ...acuteComplicationsRecommendations.cerebellarInfarction.map(toRec),
-                ...acuteComplicationsRecommendations.seizures.map(toRec),
+              description: 'Management of malignant edema, cerebellar infarction, post-IVT hemorrhage, and seizures.',
+              children: [
+                {
+                  id: 'brain-swelling',
+                  label: 'Brain Swelling\n(Edema)',
+                  color: 'rose',
+                  description: 'Malignant cerebral edema: decompressive hemicraniectomy reduces mortality (COR 1 for ≤60 y); osmotic therapy as temporizing measure.',
+                  recommendations: acuteComplicationsRecommendations.brainSwelling.map(toRec),
+                },
+                {
+                  id: 'cerebellar-infarction',
+                  label: 'Cerebellar\nInfarction',
+                  color: 'rose',
+                  description: 'Large cerebellar infarction with mass effect: posterior fossa decompressive surgery recommended to reduce mortality.',
+                  recommendations: acuteComplicationsRecommendations.cerebellarInfarction.map(toRec),
+                },
+                {
+                  id: 'seizures',
+                  label: 'Seizure\nManagement',
+                  color: 'rose',
+                  description: 'Treat clinical seizures with AEDs; prophylactic AEDs are NOT recommended in patients without seizures.',
+                  recommendations: acuteComplicationsRecommendations.seizures.map(toRec),
+                },
+                {
+                  id: 'sich',
+                  label: 'sICH /\nHemorrhagic Tfm',
+                  color: 'rose',
+                  description: 'Symptomatic ICH after IVT: stop infusion, urgent CT, cryoprecipitate + tranexamic acid; asymptomatic HT may not require antithrombotic interruption.',
+                  recommendations: hemorrhagicTransformationRecommendations.map(toRec),
+                },
               ],
+            },
+          ],
+        },
+
+        // Secondary Prevention
+        {
+          id: 'secondary-prevention',
+          label: 'Secondary\nPrevention',
+          color: 'violet',
+          description: 'Early in-hospital secondary prevention: statins, blood pressure lowering, and AF anticoagulation timing.',
+          children: [
+            {
+              id: 'sp-statins',
+              label: 'Statin\nTherapy',
+              color: 'violet',
+              description: 'High-intensity statin therapy for atherosclerotic AIS; initiate during admission.',
+              recommendations: secondaryPreventionEarlyRecommendations.statins.map(toRec),
+            },
+            {
+              id: 'sp-bp',
+              label: 'BP Lowering\n(Post-Acute)',
+              color: 'violet',
+              description: 'After 24–48 h: target SBP <130 mmHg in hypertensive patients to reduce recurrent stroke.',
+              recommendations: secondaryPreventionEarlyRecommendations.bloodPressureLowering.map(toRec),
+            },
+            {
+              id: 'sp-af',
+              label: 'AF\nAnticoagulation',
+              color: 'violet',
+              description: 'Long-term DOAC for AF; initiate at 4–14 days guided by stroke severity.',
+              recommendations: secondaryPreventionEarlyRecommendations.afAnticoagulation.map(toRec),
             },
           ],
         },
@@ -367,28 +551,7 @@ export const mindmapRoot: MindmapNode = {
       label: 'Quality\nImprovement',
       color: 'slate',
       description: 'Data registries, performance benchmarking, and feedback loops to continuously improve stroke outcomes.',
-      recommendations: [
-        {
-          cor: '1',
-          loe: 'B-NR',
-          text: 'Participation in organized stroke data registries with performance benchmarking is recommended to identify gaps in care, implement best practices, and improve patient outcomes.',
-        },
-        {
-          cor: '1',
-          loe: 'B-NR',
-          text: 'Stroke programs should use standardized risk-adjustment methods (including NIHSS) to enable fair comparison of outcomes across centers.',
-        },
-        {
-          cor: '2a',
-          loe: 'B-NR',
-          text: 'Continuous quality feedback loops — including regular case review, door-to-needle time audits, and protocol updates — are reasonable to sustain improvements in stroke care delivery.',
-        },
-        {
-          cor: '2a',
-          loe: 'B-NR',
-          text: 'Performance metrics for IVT and EVT (door-to-needle, door-to-groin, TICI scores, 90-day mRS) should be tracked and reported to guide quality improvement initiatives.',
-        },
-      ],
+      recommendations: qualityImprovementRecommendations.map(toRec),
     },
   ],
 };
