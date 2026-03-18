@@ -270,10 +270,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       }
     },
     intervention: {
-      treatment: 'IV Tenecteplase 0.25 mg/kg (max 25 mg) — single IV bolus over 5–10 seconds',
-      control: 'IV Alteplase 0.9 mg/kg (max 90 mg) — 10% bolus + 60-minute infusion'
+      treatment: 'IV Tenecteplase 0.25 mg/kg (max 25 mg), given as a single IV bolus over 5–10 seconds',
+      control: 'IV Alteplase 0.9 mg/kg (max 90 mg), given as 10% bolus + 60-minute infusion'
     },
-    clinicalContext: 'Tenecteplase is a bioengineered variant of alteplase with greater fibrin specificity, longer half-life, and resistance to plasminogen activator inhibitor-1 — allowing single-bolus dosing. Prior trials (NOR-TEST, AcT) had shown mixed results. ORIGINAL tested noninferiority in a large Chinese population, directly comparing both agents head-to-head within the 4.5-hour thrombolysis window.',
+    clinicalContext: 'Tenecteplase is a bioengineered variant of alteplase with greater fibrin specificity, longer half-life, and resistance to plasminogen activator inhibitor-1, enabling single-bolus dosing. Prior trials (NOR-TEST, AcT) had shown mixed results. ORIGINAL tested noninferiority in a large Chinese population, directly comparing both agents head-to-head within the 4.5-hour thrombolysis window.',
     calculations: {
       nnt: null,
       nntExplanation: 'Noninferiority trial — NNT is not the primary framing. Tenecteplase was noninferior to alteplase (RR 1.03, 95% CI 0.97–1.09; noninferiority threshold of RR ≥0.937 met).'
@@ -725,7 +725,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Solitaire FR thrombectomy after IV alteplase',
       control: 'IV alteplase alone'
     },
-    clinicalContext: 'EXTEND-IA showed that CT perfusion imaging could identify patients with salvageable tissue most likely to benefit from thrombectomy — reperfusion at 24h improved from 37% to 100% in the EVT group.',
+    clinicalContext: 'EXTEND-IA showed that CT perfusion imaging could identify patients with salvageable tissue most likely to benefit from thrombectomy. Reperfusion at 24h improved from 37% to 100% in the EVT group.',
     pearls: [
       'Used CT perfusion to target salvageable tissue and avoid large completed infarcts',
       'Reperfusion at 24 hours improved from 37% to 100%',
@@ -1345,7 +1345,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Endovascular thrombectomy plus medical treatment',
       control: 'Medical treatment alone'
     },
-    clinicalContext: 'TENSION demonstrated large-core EVT benefit using mostly non-contrast CT — making the evidence more applicable to real-world stroke systems without advanced perfusion imaging.',
+    clinicalContext: 'TENSION demonstrated large-core EVT benefit using mostly non-contrast CT, making it more applicable to real-world stroke systems without advanced perfusion imaging.',
     pearls: [
       'Functional outcome improved substantially with EVT (adjusted common OR 2.58)',
       'Mortality was lower with thrombectomy (hazard ratio 0.67)',
@@ -1474,7 +1474,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'No significant difference in final successful revascularization',
       'Clinical outcomes at 90 days were also similar',
       'Trial suggests either strategy is acceptable as a first-line approach',
-      'Addresses device selection rather than patient selection — aspiration and stent retriever are interchangeable as first-line approaches'
+      'Addresses device selection rather than patient selection; aspiration and stent retriever are interchangeable as first-line approaches'
     ],
     conclusion: '',
     source: 'Lapergue et al. (JAMA 2017)',
@@ -3491,7 +3491,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     pearls: [
       'Patient Selection: This trial demonstrated that intracranial stenting can be performed safely (2.6% risk vs 14.7% in SAMMPRIS) if strict selection criteria are followed, particularly waiting >8 days after stroke and requiring demonstrated failure of medical therapy (2 recurrent strokes)',
       'Experience Matters: The trial used experienced interventionalists, which likely contributed to the lower complication rate',
-      'Role of Stenting: While WEAVE assessed safety (not efficacy vs medical therapy), it reopened the door for stenting as a viable salvage option for highly selected refractory patients',
+      'Role of Stenting: While WEAVE assessed safety (not efficacy vs medical therapy), it restored stenting as a viable salvage option for highly selected refractory patients',
       'On-Label Criteria: Symptomatic ICAD 70-99%, recurrent stroke despite medical therapy (at least 2 strokes in territory), Age 22-80, mRS ≤ 3, >8 days from most recent stroke',
       'Safety Benchmark: Significantly lower than the 4% safety benchmark set by the FDA'
     ],
@@ -3866,7 +3866,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         ]
       }
     },
-    clinicalContext: 'THALES tested ticagrelor (a more potent P2Y12 inhibitor than clopidogrel) vs aspirin alone for minor stroke/TIA. It enrolled a broader population (NIHSS ≤5 vs ≤3 in CHANCE) using a 30-day protocol. While statistically significant, the 2026 AHA/ASA guidelines rate ticagrelor as COR 3: No Benefit for this indication — the NNT of 91 is far worse than clopidogrel DAPT (NNT 28–67) and severe bleeding was 5× higher. Ticagrelor-based DAPT is only appropriate for confirmed CYP2C19 loss-of-function carriers (see CHANCE-2, COR 2b).',
+    clinicalContext: 'THALES tested ticagrelor (a more potent P2Y12 inhibitor than clopidogrel) vs aspirin alone for minor stroke/TIA. It enrolled a broader population (NIHSS ≤5 vs ≤3 in CHANCE) using a 30-day protocol. While statistically significant, the 2026 AHA/ASA guidelines rate ticagrelor as COR 3: No Benefit for this indication. The NNT of 91 is far worse than clopidogrel DAPT (NNT 28–67) and severe bleeding was 5× higher. Ticagrelor-based DAPT is only appropriate for confirmed CYP2C19 loss-of-function carriers (see CHANCE-2, COR 2b).',
     calculations: {
       nnt: 91,
       nntExplanation: 'NNT=91 at 30 days — 91 patients must be treated to prevent one stroke/death, while each patient faces severe bleeding risk 5× higher than aspirin alone.'
@@ -3991,7 +3991,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         ]
       }
     },
-    clinicalContext: 'CHANCE/POINT established DAPT within 24 hours for minor stroke/TIA. INSPIRES addresses two clinically important extensions: (1) the 24–72 hour window for delayed presenters, and (2) atherosclerotic etiology (≥50% stenosis) — a subtype particularly prone to early recurrence from in-situ thrombosis. AHA/ASA 2026 incorporated INSPIRES to support COR 2a: DAPT is reasonable for atherosclerotic minor stroke/TIA within 24–72 hours.',
+    clinicalContext: 'CHANCE/POINT established DAPT within 24 hours for minor stroke/TIA. INSPIRES addresses two clinically important extensions: (1) the 24–72 hour window for delayed presenters, and (2) atherosclerotic etiology (≥50% stenosis), a subtype particularly prone to early recurrence from in-situ thrombosis. AHA/ASA 2026 incorporated INSPIRES to support COR 2a: DAPT is reasonable for atherosclerotic minor stroke/TIA within 24–72 hours.',
     calculations: {
       nnt: 53,
       nntExplanation: 'NNT≈53 at 90 days. Benefit maintained even when DAPT started 24–72h post-onset in atherosclerotic etiology patients.'
@@ -4244,7 +4244,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         ]
       }
     },
-    clinicalContext: 'ICH carries ~30–40% 30-day mortality and only ~20% functional independence at 1 year. Prior surgical trials consistently failed — STICH I (2005), STICH II (2013), and MISTIE III (2019) all showed no benefit, largely due to open craniotomy trauma and non-selective patient selection. ENRICH tested MIPS, which avoids crossing brain parenchyma via natural sulcal corridors, in a tightly selected population: lobar or anterior basal ganglia ICH (30–80 mL) only — avoiding the deep and posterior fossa regions where surgical risk is highest.',
+    clinicalContext: 'ICH carries ~30–40% 30-day mortality and only ~20% functional independence at 1 year. Prior surgical trials consistently failed: STICH I (2005), STICH II (2013), and MISTIE III (2019) all showed no benefit, largely due to open craniotomy trauma and non-selective patient selection. ENRICH tested MIPS, which avoids crossing brain parenchyma via natural sulcal corridors, in a tightly selected population: lobar or anterior basal ganglia ICH (30–80 mL) only, avoiding the deep and posterior fossa regions where surgical risk is highest.',
     calculations: {
       nnt: 12,
       nntExplanation: 'NNT≈12 for 30-day mortality: 18.0% vs 9.3% = 8.7% absolute reduction. For every 12 MIPS-eligible patients treated surgically, one death is prevented at 30 days.'
@@ -4692,7 +4692,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Blood pressure did fall with GTN, but this did not translate into better functional outcome',
       'The signal trended in the wrong direction for confirmed stroke/TIA: adjusted OR 1.25 for poorer outcome',
       'Secondary outcomes, death, and serious adverse events were not significantly improved',
-      'Together with MR ASAP, RIGHT-2 largely closed the door on routine prehospital GTN for undifferentiated stroke'
+      'Together with MR ASAP, RIGHT-2 makes a strong case against routine prehospital GTN for undifferentiated stroke'
     ],
     conclusion: '',
     source: 'RIGHT-2 Investigators (Lancet 2019)',
@@ -4945,7 +4945,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Tenecteplase was noninferior, but not superior, to alteplase for 90-day ordinal mRS distribution',
       'Excellent recovery occurred in 44% vs 42%',
       'Mortality was identical at about 8% in both groups',
-      'This large representative UK cohort strengthens the modern tenecteplase evidence base'
+      'This large UK cohort confirms tenecteplase and alteplase are interchangeable at 0.25 mg/kg'
     ],
     conclusion: '',
     source: 'Muir KW, et al. (Lancet Neurol 2024)',
