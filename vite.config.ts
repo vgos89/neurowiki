@@ -1,11 +1,10 @@
 import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, '.', '');
     return {
       server: {
         port: parseInt(process.env.PORT || '3000'),
@@ -23,10 +22,6 @@ export default defineConfig(({ mode }) => {
         tailwindcss(),
         ...(process.env.ANALYZE === 'true' ? [visualizer({ open: false, filename: 'dist/stats.html', gzipSize: true })] : []),
       ],
-      define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
-      },
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '.'),
@@ -44,7 +39,6 @@ export default defineConfig(({ mode }) => {
               if (id.includes('node_modules')) {
                 if (id.includes('react-router-dom') || id.includes('react-dom') || (id.includes('/react/') && !id.includes('react-markdown'))) return 'react-vendor';
                 if (id.includes('lucide-react')) return 'lucide';
-                if (id.includes('@google/genai')) return 'genai';
               }
             },
           },

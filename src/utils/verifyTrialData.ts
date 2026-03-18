@@ -5,8 +5,8 @@
  * Run this script to check for template data, duplicate values, and calculation errors.
  */
 
-import { TRIAL_DATA } from '../../data/trialData';
-import type { TrialMetadata } from '../../data/trialData';
+import { TRIAL_DATA } from '../data/trialData';
+import type { TrialMetadata } from '../data/trialData';
 
 interface VerificationResult {
   trialId: string;

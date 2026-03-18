@@ -2370,5 +2370,486 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     listCategory: 'acute',
     listDescription: 'First positive surgical ICH trial — MIPS halves 30-day mortality (9.3% vs 18.0%). NEJM 2024.',
+  },
+  'b-proud-trial': {
+    id: 'b-proud-trial',
+    title: 'B_PROUD Trial',
+    subtitle: 'Mobile Stroke Unit Dispatch vs Conventional Ambulance in Berlin',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '1543',
+        label: 'Included Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '<0.001',
+        label: 'Statistically Sig.'
+      },
+      effectSize: {
+        value: 'OR 0.71',
+        label: 'Common OR for Worse mRS'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Prospective, nonrandomized controlled intervention study',
+        'MSU dispatch plus ambulance vs conventional ambulance alone',
+        'Pragmatic Berlin stroke system evaluation'
+      ],
+      timeline: 'Berlin, Germany; February 2017 to May 2019'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 80.3,
+        label: 'mRS 0-3 or living at home at 90 days',
+        name: 'MSU Dispatch'
+      },
+      control: {
+        percentage: 78.0,
+        label: 'mRS 0-3 or living at home at 90 days',
+        name: 'Conventional Ambulance'
+      }
+    },
+    intervention: {
+      treatment: 'Simultaneous dispatch of a mobile stroke unit with on-board CT, laboratory testing, and thrombolysis capability plus conventional ambulance',
+      control: 'Conventional ambulance transport to hospital stroke unit'
+    },
+    clinicalContext: 'Prehospital thrombolysis is highly time dependent, but prior MSU studies had focused mainly on process metrics. B_PROUD asked the more important clinical question: does dispatching an MSU actually improve 90-day disability outcomes for patients with acute ischemic stroke in a real urban stroke system?',
+    calculations: {
+      nnt: 43.5,
+      nntExplanation: 'Using the coprimary dichotomized disability outcome (80.3% vs 78.0%), about 44 patients would need MSU dispatch for one additional patient to be alive at home or with mRS 0-3 at 90 days. This underestimates the full benefit because the primary analysis used ordinal mRS shift.'
+    },
+    pearls: [
+      'Primary analysis showed a favorable ordinal shift in disability with MSU dispatch: common OR 0.71 for worse mRS',
+      'Median 90-day mRS was 1 with MSU dispatch vs 2 with conventional ambulance',
+      'MSU dispatch increased thrombolysis use: 60.2% vs 48.1%',
+      'Dispatch-to-imaging time improved by about 15 minutes, reinforcing that workflow gains translate into patient-centered outcomes',
+      'Symptomatic secondary intracranial hemorrhage was similar between groups: 3.2% vs 2.8%',
+      'Because this was not randomized, system-level confounding cannot be completely excluded despite adjustment'
+    ],
+    conclusion: 'In Berlin, dispatching a mobile stroke unit was associated with lower global disability at 90 days than conventional ambulance dispatch alone. B_PROUD is one of the strongest pragmatic data sets supporting MSU deployment when systems can sustain it.',
+    source: 'Ebinger M, et al. (JAMA 2020)',
+    doi: '10.1001/jama.2020.26345',
+    trialResult: 'POSITIVE',
+    safetyProfile: {
+      sICH: {
+        evt: 3.2,
+        control: 2.8,
+        label: 'Symptomatic secondary intracranial hemorrhage',
+        tooltip: 'Rates of symptomatic secondary intracranial hemorrhage were similar despite more frequent prehospital reperfusion treatment with MSU dispatch.'
+      },
+      mortality: {
+        evt: 7.1,
+        control: 8.8,
+        label: 'Death at 90 days',
+        tooltip: 'Death at 90 days was numerically lower with MSU dispatch in the coprimary disability categorization.'
+      }
+    }
+  },
+  'best-msu-trial': {
+    id: 'best-msu-trial',
+    title: 'BEST-MSU Trial',
+    subtitle: 'Mobile Stroke Units vs Standard EMS in Acute Stroke',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '1515',
+        label: 'Enrolled Patients'
+      },
+      primaryEndpoint: {
+        value: 'Utility-Weighted mRS',
+        label: 'at 90 Days in tPA-Eligible Patients'
+      },
+      pValue: {
+        value: '<0.001',
+        label: 'Statistically Sig.'
+      },
+      effectSize: {
+        value: 'OR 2.14',
+        label: 'Adjusted Odds of Excellent Outcome'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Prospective, multicenter, alternating-week controlled trial',
+        'Observational comparison of MSU vs standard EMS',
+        'Primary analysis in patients adjudicated eligible for thrombolysis'
+      ],
+      timeline: 'United States; August 2014 to August 2020'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 53.5,
+        label: 'mRS 0-1 at 90 days in tPA-eligible patients',
+        name: 'MSU Care'
+      },
+      control: {
+        percentage: 45.5,
+        label: 'mRS 0-1 at 90 days in tPA-eligible patients',
+        name: 'Standard EMS'
+      }
+    },
+    intervention: {
+      treatment: 'Mobile stroke unit evaluation with on-board CT, vascular imaging capability, stroke expertise, and prehospital tPA',
+      control: 'Standard EMS transport to hospital for in-hospital stroke evaluation and reperfusion treatment'
+    },
+    clinicalContext: 'BEST-MSU addressed whether the impressive process advantages of mobile stroke units in the US translate into better clinical outcomes. Unlike earlier feasibility studies, it focused on patient-centered 90-day outcomes in a multicenter real-world framework.',
+    calculations: {
+      nnt: 12.5,
+      nntExplanation: 'For every 12.5 tPA-eligible patients managed by MSU instead of standard EMS, one additional patient achieved mRS 0-1 at 90 days (53.5% vs 45.5%).'
+    },
+    pearls: [
+      'Median onset-to-tPA time was reduced from 108 minutes to 72 minutes with MSU care',
+      'Among tPA-eligible patients, 97.1% received thrombolysis with MSU vs 79.5% with standard EMS',
+      'Excellent 90-day outcome improved from 45.5% to 53.5%, with adjusted OR 2.14 for utility-weighted excellent outcome',
+      'About one-third of MSU-treated patients received thrombolysis within 60 minutes of onset, compared with 2.6% in standard EMS',
+      'Symptomatic intracerebral hemorrhage remained about 2% in both groups despite faster reperfusion'
+    ],
+    conclusion: 'BEST-MSU showed that MSUs do more than improve door-to-needle metrics: in tPA-eligible patients they improved 90-day outcomes, increased treatment rates, and dramatically shortened time to reperfusion.',
+    source: 'Grotta JC, et al. (NEJM 2021)',
+    doi: '10.1056/NEJMoa2103879',
+    clinicalTrialsId: 'NCT02190500',
+    trialResult: 'POSITIVE',
+    safetyProfile: {
+      mortality: {
+        evt: 8.9,
+        control: 11.9,
+        label: 'Death at 90 days',
+        tooltip: 'Mortality at 90 days was numerically lower with MSU care.'
+      }
+    }
+  },
+  'interact4-trial': {
+    id: 'interact4-trial',
+    title: 'INTERACT4 Trial',
+    subtitle: 'Prehospital Blood-Pressure Reduction Before Stroke Type Is Known',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '2404',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: '1.00',
+        label: 'Not Significant'
+      },
+      effectSize: {
+        value: 'OR 1.00',
+        label: 'Common OR for Poor Outcome'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Randomized, open-label, blinded-endpoint trial',
+        'Ambulance-based blood-pressure lowering before imaging diagnosis',
+        'Undifferentiated stroke population with SBP >=150 mm Hg within 2 hours'
+      ],
+      timeline: 'China; prehospital acute stroke network'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 40.7,
+        label: 'mRS 0-2 at 90 days',
+        name: 'Immediate BP Reduction'
+      },
+      control: {
+        percentage: 38.7,
+        label: 'mRS 0-2 at 90 days',
+        name: 'Usual Care'
+      }
+    },
+    intervention: {
+      treatment: 'Immediate ambulance blood-pressure lowering to a systolic target of 130-140 mm Hg',
+      control: 'Usual prehospital blood-pressure management'
+    },
+    clinicalContext: 'Before imaging distinguishes ischemic from hemorrhagic stroke, ambulance clinicians face a major uncertainty: aggressive blood-pressure lowering could help intracerebral hemorrhage but harm ischemic stroke by reducing perfusion. INTERACT4 directly tested that tradeoff in the field.',
+    pearls: [
+      'Overall trial result was neutral: common OR 1.00 for poor functional outcome',
+      'Stroke type mattered: prehospital BP reduction improved outcomes in hemorrhagic stroke (OR 0.75) but worsened outcomes in ischemic stroke (OR 1.30)',
+      'Almost half the cohort ultimately had hemorrhagic stroke, which is unusually high for many EMS systems',
+      'By hospital arrival, systolic BP was lowered by about 11 mm Hg (159 vs 170 mm Hg)',
+      'Serious adverse events were similar overall, so the main issue was efficacy heterogeneity rather than clear global toxicity'
+    ],
+    conclusion: 'INTERACT4 does not support indiscriminate prehospital blood-pressure lowering in undifferentiated stroke. Its central lesson is that what helps hemorrhage may hurt ischemia, so pre-imaging BP strategies must be diagnosis aware or highly selective.',
+    source: 'INTERACT4 Investigators (NEJM 2024)',
+    doi: '10.1056/NEJMoa2314741',
+    trialResult: 'NEGATIVE',
+    safetyProfile: {
+      mortality: {
+        evt: 22.5,
+        control: 22.6,
+        label: 'Death within 90 days',
+        tooltip: 'Overall 90-day mortality was essentially identical between groups.'
+      }
+    }
+  },
+  'mr-asap-trial': {
+    id: 'mr-asap-trial',
+    title: 'MR ASAP Trial',
+    subtitle: 'Prehospital Glyceryl Trinitrate Within 3 Hours of Presumed Stroke',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '325',
+        label: 'Included Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days'
+      },
+      pValue: {
+        value: 'NS',
+        label: 'Not Significant'
+      },
+      effectSize: {
+        value: 'OR 0.92',
+        label: 'Adjusted Common OR (Target Population)'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Phase 3, randomized, open-label, blinded-endpoint trial',
+        'Ambulance-based glyceryl trinitrate vs standard care',
+        'Deferred-consent prehospital stroke trial'
+      ],
+      timeline: 'Netherlands; April 2018 to February 2021'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 51,
+        label: 'mRS 0-2 at 90 days (target population)',
+        name: 'Glyceryl Trinitrate'
+      },
+      control: {
+        percentage: 49,
+        label: 'mRS 0-2 at 90 days (target population)',
+        name: 'Standard Care'
+      }
+    },
+    intervention: {
+      treatment: 'Transdermal glyceryl trinitrate 5 mg/day for 24 hours started prehospital plus standard care',
+      control: 'Standard prehospital and in-hospital stroke care alone'
+    },
+    clinicalContext: 'Earlier pooled analyses had suggested that very early glyceryl trinitrate might improve outcomes after stroke, but RIGHT-2 challenged that signal. MR ASAP revisited the question in a Dutch ambulance-based trial that treated presumed stroke within 3 hours of onset.',
+    pearls: [
+      'The trial was stopped early after only 380 randomizations because of safety concerns in patients with intracerebral hemorrhage',
+      'There was no overall functional benefit in either the total or target population',
+      'In the target population, mRS 0-2 at 90 days was essentially unchanged: 51% vs 49%',
+      'Early death within 7 days was numerically higher with glyceryl trinitrate, especially in intracerebral hemorrhage',
+      'The study reinforced the concern from RIGHT-2 that prehospital GTN should not be used before imaging excludes hemorrhage'
+    ],
+    conclusion: 'MR ASAP found no functional benefit from prehospital glyceryl trinitrate and raised concern for early harm in intracerebral hemorrhage. The practical takeaway is to avoid routine GTN use in undifferentiated prehospital stroke.',
+    source: 'van den Berg SA, et al. (Lancet Neurol 2022)',
+    doi: '10.1016/S1474-4422(22)00333-7',
+    trialResult: 'NEGATIVE',
+    safetyProfile: {
+      mortality: {
+        evt: 15,
+        control: 14,
+        label: 'Death within 90 days',
+        tooltip: 'Overall 90-day mortality was similar, but early death within 7 days was higher with glyceryl trinitrate.'
+      }
+    },
+    keyMessage: 'No benefit overall, with a signal of early harm in intracerebral hemorrhage. Prehospital GTN should be avoided in presumed stroke before imaging.'
+  },
+  'racecat-trial': {
+    id: 'racecat-trial',
+    title: 'RACECAT Trial',
+    subtitle: 'Direct CSC Transport vs Local Stroke Center for Suspected LVO',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '1401',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days in Ischemic Stroke'
+      },
+      pValue: {
+        value: 'NS',
+        label: 'Not Significant'
+      },
+      effectSize: {
+        value: 'OR 1.03',
+        label: 'Adjusted Common OR'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Population-based, cluster-randomized trial',
+        'Nonurban suspected LVO triage strategy study',
+        'Direct CSC routing vs nearest local stroke center first'
+      ],
+      timeline: 'Catalonia, Spain; March 2017 to June 2020'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 48.8,
+        label: 'Underwent thrombectomy in target ischemic stroke population',
+        name: 'Direct to CSC'
+      },
+      control: {
+        percentage: 39.4,
+        label: 'Underwent thrombectomy in target ischemic stroke population',
+        name: 'Local Stroke Center First'
+      }
+    },
+    intervention: {
+      treatment: 'Direct transport to a thrombectomy-capable comprehensive stroke center',
+      control: 'Initial transport to the nearest local stroke center with secondary transfer if needed'
+    },
+    clinicalContext: 'In nonurban systems, suspected LVO triage creates a classic tradeoff: bypassing the nearest stroke center may speed thrombectomy but can delay thrombolysis and overtriage patients without true LVO. RACECAT tested this in a real regional stroke network.',
+    pearls: [
+      'Primary outcome was neutral: no 90-day disability difference despite more direct access to thrombectomy-capable centers',
+      'Direct CSC routing decreased IV tPA use (47.5% vs 60.4%) but increased thrombectomy use (48.8% vs 39.4%)',
+      'Overall 90-day mortality was identical at about 27%',
+      'The trial was stopped early for futility after interim analysis',
+      'RACECAT argues against a universal mothership strategy in nonurban suspected LVO systems'
+    ],
+    conclusion: 'RACECAT found that sending all suspected LVO patients directly to a CSC in nonurban Catalonia increased EVT use but did not improve 90-day disability. The study supports tailoring prehospital routing to local geography and workflow rather than assuming direct CSC transport is always better.',
+    source: 'Pérez de la Ossa N, et al. (JAMA 2022)',
+    doi: '10.1001/jama.2022.4404',
+    clinicalTrialsId: 'NCT02795962',
+    trialResult: 'NEGATIVE',
+    safetyProfile: {
+      mortality: {
+        evt: 27.3,
+        control: 27.2,
+        label: 'Death at 90 days',
+        tooltip: 'Mortality was not different despite differences in thrombolysis and thrombectomy rates.'
+      }
+    },
+    keyMessage: 'More thrombectomy does not automatically translate into better functional outcomes when IVT delays and overtriage offset the gain.'
+  },
+  'right-2-trial': {
+    id: 'right-2-trial',
+    title: 'RIGHT-2 Trial',
+    subtitle: 'Ultra-Acute Prehospital Glyceryl Trinitrate in Presumed Stroke',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '1149',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days in Confirmed Stroke/TIA'
+      },
+      pValue: {
+        value: '0.083',
+        label: 'Not Significant'
+      },
+      effectSize: {
+        value: 'OR 1.25',
+        label: 'Adjusted OR for Poor Outcome'
+      }
+    },
+    trialDesign: {
+      type: [
+        'Paramedic-delivered, randomized, sham-controlled phase 3 trial',
+        'Prehospital GTN vs sham dressing',
+        'Blinded endpoint assessment'
+      ],
+      timeline: 'United Kingdom; October 2015 to May 2018'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 32,
+        label: 'mRS 0-2 at 90 days in confirmed stroke/TIA cohort',
+        name: 'GTN'
+      },
+      control: {
+        percentage: 31,
+        label: 'mRS 0-2 at 90 days in confirmed stroke/TIA cohort',
+        name: 'Sham'
+      }
+    },
+    intervention: {
+      treatment: 'Transdermal glyceryl trinitrate 5 mg once daily for 4 days started in the ambulance',
+      control: 'Sham dressing plus standard stroke care'
+    },
+    clinicalContext: 'RIGHT-2 tested whether nitroglycerin given in the first few hours after presumed stroke could improve outcome by lowering blood pressure and augmenting nitric oxide signaling. It was one of the largest ambulance-based stroke intervention trials ever performed.',
+    pearls: [
+      'RIGHT-2 was neutral for its primary endpoint: no improvement in 90-day disability with GTN',
+      'Blood pressure did fall with GTN, but this did not translate into better functional outcome',
+      'The signal trended in the wrong direction for confirmed stroke/TIA: adjusted OR 1.25 for poorer outcome',
+      'Secondary outcomes, death, and serious adverse events were not significantly improved',
+      'Together with MR ASAP, RIGHT-2 largely closed the door on routine prehospital GTN for undifferentiated stroke'
+    ],
+    conclusion: 'RIGHT-2 showed that ultra-early prehospital GTN does not improve outcomes in presumed stroke despite modest blood-pressure reduction. Routine ambulance use of GTN for stroke should not be part of standard care.',
+    source: 'RIGHT-2 Investigators (Lancet 2019)',
+    doi: '10.1016/S0140-6736(19)30194-1',
+    trialResult: 'NEGATIVE'
+  },
+  'triage-stroke-trial': {
+    id: 'triage-stroke-trial',
+    title: 'TRIAGE-STROKE Trial',
+    subtitle: 'PSC-First vs CSC-First Routing in IVT-Eligible Suspected LVO',
+    category: 'Neuro Trials',
+    stats: {
+      sampleSize: {
+        value: '171',
+        label: 'Randomized Patients'
+      },
+      primaryEndpoint: {
+        value: 'mRS Shift',
+        label: 'at 90 Days in AIS'
+      },
+      pValue: {
+        value: '0.31',
+        label: 'Not Significant'
+      },
+      effectSize: {
+        value: 'OR 1.42',
+        label: 'Ordinal OR for Better Outcome'
+      }
+    },
+    trialDesign: {
+      type: [
+        'National, multicenter, randomized assessor-blinded trial',
+        'IVT-eligible suspected LVO transport strategy study',
+        'Nearest PSC vs direct CSC admission'
+      ],
+      timeline: 'Denmark; September 2018 to May 2022'
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 83,
+        label: 'mRS 0-3 at 90 days (post hoc exploratory)',
+        name: 'Direct CSC First'
+      },
+      control: {
+        percentage: 64,
+        label: 'mRS 0-3 at 90 days (post hoc exploratory)',
+        name: 'PSC First'
+      }
+    },
+    intervention: {
+      treatment: 'Direct transport to comprehensive stroke center prioritizing EVT access',
+      control: 'Transport to nearest primary stroke center prioritizing IV thrombolysis'
+    },
+    clinicalContext: 'TRIAGE-STROKE focused on a narrower group than RACECAT: patients within 4 hours who were still eligible for IVT and had suspected LVO in the catchment of a PSC. It tested whether bypassing the PSC would improve outcomes enough to justify delayed thrombolysis.',
+    pearls: [
+      'The trial was underpowered after early termination and enrolled only 171 patients, 104 of whom had acute ischemic stroke',
+      'Primary outcome was neutral: ordinal OR 1.42 for better mRS, but with wide confidence intervals crossing no effect',
+      'Direct CSC routing shortened onset-to-groin time by 35 minutes for LVO patients',
+      'PSC-first routing shortened onset-to-needle time by 30 minutes',
+      'Post hoc analysis suggested more patients achieved mRS 0-3 with CSC-first transport, but this was exploratory and should not override the neutral primary result'
+    ],
+    conclusion: 'TRIAGE-STROKE illustrates the core IVT-versus-EVT routing tradeoff: CSC-first gets the catheter in sooner, PSC-first gets alteplase started sooner. Because the trial was small and underpowered, it is hypothesis-generating rather than definitive, but it provides useful mechanistic support for local-system decision making.',
+    source: 'Behrndtz A, et al. (Stroke 2023)',
+    doi: '10.1161/STROKEAHA.123.043875',
+    clinicalTrialsId: 'NCT03542188',
+    trialResult: 'NEGATIVE',
+    keyMessage: 'Underpowered but mechanistically informative: CSC-first speeds EVT, PSC-first speeds IVT, and the net clinical effect remains system dependent.'
   }
 };

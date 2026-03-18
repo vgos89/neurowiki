@@ -105,13 +105,34 @@ const buildTrial = (
 });
 
 export const trials: TrialItem[] = [
-  buildTrial('b-proud-trial', 'B_PROUD', 'prehospital-triage', '10.1001/jama.2020.26345'),
-  buildTrial('best-msu-trial', 'BEST-MSU', 'prehospital-triage', '10.1056/NEJMoa2103879'),
-  buildTrial('racecat-trial', 'RACECAT', 'prehospital-triage', '10.1001/jama.2022.4404'),
-  buildTrial('triage-stroke-trial', 'TRIAGE-STROKE', 'prehospital-triage', '10.1161/STROKEAHA.123.043875'),
-  buildTrial('right-2-trial', 'RIGHT-2', 'prehospital-triage', '10.1016/S0140-6736(19)30194-1'),
-  buildTrial('mr-asap-trial', 'MR ASAP', 'prehospital-triage', '10.1016/S1474-4422(22)00333-7'),
-  buildTrial('interact4-trial', 'INTERACT4', 'prehospital-triage', '10.1056/NEJMoa2314741'),
+  buildTrial('b-proud-trial', 'B_PROUD', 'prehospital-triage', '10.1001/jama.2020.26345', {
+    isPlaceholder: false,
+    description: 'Berlin prospective MSU dispatch study showing better 90-day disability outcomes than conventional ambulance alone.',
+  }),
+  buildTrial('best-msu-trial', 'BEST-MSU', 'prehospital-triage', '10.1056/NEJMoa2103879', {
+    isPlaceholder: false,
+    description: 'Multicenter US MSU trial showing faster thrombolysis and better 90-day outcomes in tPA-eligible patients.',
+  }),
+  buildTrial('racecat-trial', 'RACECAT', 'prehospital-triage', '10.1001/jama.2022.4404', {
+    isPlaceholder: false,
+    description: 'Cluster-randomized Catalonia trial comparing direct CSC transport with initial local stroke center routing for suspected LVO.',
+  }),
+  buildTrial('triage-stroke-trial', 'TRIAGE-STROKE', 'prehospital-triage', '10.1161/STROKEAHA.123.043875', {
+    isPlaceholder: false,
+    description: 'Randomized Danish transport trial in IVT-eligible suspected LVO patients comparing PSC-first vs CSC-first routing.',
+  }),
+  buildTrial('right-2-trial', 'RIGHT-2', 'prehospital-triage', '10.1016/S0140-6736(19)30194-1', {
+    isPlaceholder: false,
+    description: 'Ambulance-based sham-controlled trial of ultra-early glyceryl trinitrate in presumed stroke.',
+  }),
+  buildTrial('mr-asap-trial', 'MR ASAP', 'prehospital-triage', '10.1016/S1474-4422(22)00333-7', {
+    isPlaceholder: false,
+    description: 'Dutch prehospital GTN trial stopped early after a signal of early harm in intracerebral hemorrhage.',
+  }),
+  buildTrial('interact4-trial', 'INTERACT4', 'prehospital-triage', '10.1056/NEJMoa2314741', {
+    isPlaceholder: false,
+    description: 'Prehospital blood-pressure lowering before imaging confirmation: neutral overall, divergent by stroke type.',
+  }),
 
   buildTrial('timeless-trial', 'TIMELESS', 'ivt', '10.1056/NEJMoa2310392'),
   buildTrial('trace-iii-trial', 'TRACE-III', 'ivt', '10.1056/NEJMoa2402980', {

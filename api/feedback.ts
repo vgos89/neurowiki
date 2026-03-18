@@ -1,21 +1,35 @@
-interface Env {
-  TURNSTILE_SECRET_KEY: string;
-  RESEND_API_KEY: string;
-  FEEDBACK_EMAIL: string;
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+
+interface FeedbackPayload {
+  type?: string;
+  message?: string;
+  email?: string | null;
+  pageTitle?: string;
+  pageType?: string;
+  pagePath?: string;
+  turnstileToken?: string | null;
+  timestamp?: string;
 }
 
-export const onRequestPost: PagesFunction<Env> = async (context) => {
-  const { request, env } = context;
+interface TurnstileResponse {
+  success: boolean;
+}
 
-  // Parse body
-  let body;
-  try {
-    body = await request.json();
-  } catch {
-    return new Response(JSON.stringify({ error: 'Invalid request body' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  Object.entries(CORS_HEADERS).forEach(([key, value]) => res.setHeader(key, value));
+
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const {
@@ -26,12 +40,23 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     pageType,
     pagePath,
     turnstileToken,
-    timestamp
-  } = body;
+    timestamp,
+  } = (req.body ?? {}) as FeedbackPayload;
 
-  // Verify Turnstile token
+  if (!message?.trim()) {
+    return res.status(400).json({ error: 'Message is required' });
+  }
+
+  const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const feedbackEmail = process.env.FEEDBACK_EMAIL;
+
+  if (!turnstileSecret || !resendApiKey || !feedbackEmail) {
+    return res.status(500).json({ error: 'Feedback service is not configured' });
+  }
+
   try {
-    const turnstileResponse = await fetch(
+    const verificationResponse = await fetch(
       'https://challenges.cloudflare.com/turnstile/v0/siteverify',
       {
         method: 'POST',
@@ -39,39 +64,31 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
-          secret: env.TURNSTILE_SECRET_KEY,
-          response: turnstileToken || '',
+          secret: turnstileSecret,
+          response: turnstileToken ?? '',
         }),
       }
     );
 
-    const turnstileData = await turnstileResponse.json() as { success: boolean };
-
-    if (!turnstileData.success) {
-      return new Response(JSON.stringify({ error: 'Security verification failed' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+    const verificationData = await verificationResponse.json() as TurnstileResponse;
+    if (!verificationData.success) {
+      return res.status(400).json({ error: 'Security verification failed' });
     }
   } catch (error) {
     console.error('Turnstile verification error:', error);
-    return new Response(JSON.stringify({ error: 'Security verification failed' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(400).json({ error: 'Security verification failed' });
   }
 
-  // Send email via Resend
   try {
     const resendResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
+        Authorization: `Bearer ${resendApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         from: 'Neurowiki Feedback <onboarding@resend.dev>',
-        to: env.FEEDBACK_EMAIL,
+        to: feedbackEmail,
         subject: `[${type?.toUpperCase() || 'FEEDBACK'}] ${pageTitle || 'Feedback'}`,
         html: `
           <h2>New Feedback Received</h2>
@@ -103,32 +120,22 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
             </tr>
             ` : ''}
           </table>
-          
+
           <h3 style="margin-top: 24px;">Message:</h3>
-          <div style="padding: 16px; background: #f5f5f5; border-radius: 8px; white-space: pre-wrap;">${message || 'No message'}</div>
+          <div style="padding: 16px; background: #f5f5f5; border-radius: 8px; white-space: pre-wrap;">${message}</div>
         `,
       }),
     });
 
     if (!resendResponse.ok) {
-      const errorData = await resendResponse.json();
+      const errorData = await resendResponse.json().catch(() => ({}));
       console.error('Resend error:', errorData);
-      return new Response(JSON.stringify({ error: 'Failed to send email' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return res.status(500).json({ error: 'Failed to send email' });
     }
 
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
-
+    return res.status(200).json({ success: true });
   } catch (error) {
     console.error('Failed to send feedback email:', error);
-    return new Response(JSON.stringify({ error: 'Failed to send feedback' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(500).json({ error: 'Failed to send feedback' });
   }
-};
+}

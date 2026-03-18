@@ -2,19 +2,38 @@
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# Run and deploy your AI Studio app
+# NeuroWiki
 
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/drive/1tKsx6sQbeSKXSAfNm9bEyO1vq9xF7SMy
+Neurology calculators, clinical pathways, and trial summaries built with Vite, React, and TypeScript.
 
 ## Run Locally
 
-**Prerequisites:**  Node.js
-
+**Prerequisites:** Node.js
 
 1. Install dependencies:
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
+2. Start the app:
    `npm run dev`
+
+## Deploy on Vercel
+
+Build output is `dist`, and API routes live under [`api/`](/Users/vaibhav/Documents/NeuroWiki/Cursor/Neurowiki/neurowiki/api).
+
+Set these environment variables in Vercel if you want the feedback form enabled:
+
+- `TURNSTILE_SECRET_KEY`
+- `RESEND_API_KEY`
+- `FEEDBACK_EMAIL`
+- `VITE_TURNSTILE_SITE_KEY`
+
+Optional:
+
+- `VITE_FEEDBACK_API_URL` if you want the frontend to post somewhere other than `/api/feedback`
+
+## Scripts
+
+- `npm run dev`
+- `npm run build`
+- `npm run build:analyze`
+- `npm run preview`
+- `npm run typecheck`

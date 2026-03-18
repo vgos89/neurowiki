@@ -1,6 +1,7 @@
 export interface GuideTopic {
   id: string;
   title: string;
+  subtitle?: string;
   category: string;
   content: string;
 }
@@ -1371,6 +1372,230 @@ ENRICH used utility-weighted mRS (UW-mRS), which assigns quality-of-life weights
 ENRICH is the first positive randomized surgical ICH trial. Among patients with lobar or anterior basal ganglia ICH (30–80 mL) within 24 hours, MIPS improved 180-day functional outcomes (UW-mRS 0.458 vs 0.374, p=0.04) and dramatically reduced 30-day mortality (9.3% vs 18.0%, NNT≈12) vs medical management alone. For the first time, a randomized trial confirms surgery improves outcomes in selected ICH patients — at centers with BrainPath+Myriad and trained neurosurgical teams.
 
 *Source: [Hanley DF, et al. N Engl J Med. 2024;390(14):1277–1289](https://www.nejm.org/doi/abs/10.1056/NEJMoa2308440). DOI: 10.1056/NEJMoa2308440*
+`
+  },
+
+  // ─── PREHOSPITAL & TRIAGE ────────────────────────────────────────────────
+  'b-proud-trial': {
+    id: 'b-proud-trial',
+    title: 'B_PROUD Trial: Mobile Stroke Unit Dispatch in Berlin',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Mobile stroke units (MSUs) consistently shorten time to imaging and thrombolysis, but early MSU literature was criticized for emphasizing workflow rather than patient-centered outcomes. B_PROUD asked the practical question: does dispatching an MSU actually improve disability outcomes for real-world ischemic stroke patients?
+
+## Trial Summary
+*   **Design:** Prospective, nonrandomized controlled intervention study in Berlin.
+*   **Population:** **1543** patients with acute ischemic stroke eligible for MSU dispatch analysis.
+*   **Intervention:** Simultaneous MSU + conventional ambulance dispatch vs conventional ambulance alone.
+*   **Primary Outcome:** Ordinal **mRS shift at 90 days**.
+*   **Results:**
+    *   **Primary outcome:** better disability distribution with MSU dispatch, **common OR 0.71** for worse mRS (**P<0.001**)
+    *   **Median mRS:** **1** with MSU vs **2** with conventional ambulance
+    *   **mRS 0-3 or living at home:** **80.3% vs 78.0%**
+    *   **tPA use:** **60.2% vs 48.1%**
+    *   **Symptomatic secondary ICH:** **3.2% vs 2.8%**
+
+## Clinical PEARLS
+*   B_PROUD is one of the strongest pragmatic studies showing that MSU benefits extend beyond door-to-needle metrics
+*   The benefit was seen on the **full ordinal mRS distribution**, which is more sensitive than simple dichotomies
+*   MSU dispatch improved imaging and treatment speed without an obvious hemorrhage penalty
+*   Because the study was **not randomized**, some residual confounding is unavoidable even after adjustment
+
+## Conclusion
+In a real urban stroke system, dispatch of a mobile stroke unit was associated with lower disability at 90 days than conventional ambulance dispatch alone. B_PROUD supports MSU deployment where systems can sustain the operational complexity and cost.
+
+*Source: [Ebinger M, et al. JAMA. 2020](https://doi.org/10.1001/jama.2020.26345). DOI: 10.1001/jama.2020.26345*
+`
+  },
+  'best-msu-trial': {
+    id: 'best-msu-trial',
+    title: 'BEST-MSU Trial: Mobile Stroke Units vs Standard EMS',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+BEST-MSU tested whether the advantages of mobile stroke units in the United States translate into better outcomes, not just faster thrombolysis. This matters because MSUs are expensive, resource-intensive, and system dependent.
+
+## Trial Summary
+*   **Design:** Prospective, multicenter, alternating-week controlled trial.
+*   **Population:** **1515** enrolled patients; **1047** were adjudicated **tPA-eligible** for the primary analysis.
+*   **Intervention:** MSU care vs standard EMS transport and in-hospital treatment.
+*   **Primary Outcome:** **Utility-weighted mRS at 90 days** in tPA-eligible patients.
+*   **Results:**
+    *   **Mean utility-weighted mRS:** **0.73 vs 0.67**
+    *   **Adjusted OR for excellent outcome:** **2.14 (95% CI, 1.55-2.95; P<0.001)**
+    *   **mRS 0-1 at 90 days:** **53.5% vs 45.5%**
+    *   **Median onset-to-tPA time:** **72 vs 108 minutes**
+    *   **Received tPA among eligible patients:** **97.1% vs 79.5%**
+
+## Clinical PEARLS
+*   BEST-MSU provides some of the clearest US evidence that MSUs improve **patient-centered outcomes**
+*   The time gain was clinically meaningful: a **36-minute** median reduction to thrombolysis
+*   Roughly **one extra excellent outcome for every 12 to 13 patients** managed by MSU instead of standard EMS
+*   Symptomatic intracerebral hemorrhage remained about **2%** in both groups
+
+## Conclusion
+BEST-MSU showed that mobile stroke units improve 90-day functional outcomes in tPA-eligible patients while markedly accelerating reperfusion treatment. This trial strengthens the case for MSUs in mature, high-volume stroke systems.
+
+*Source: [Grotta JC, et al. N Engl J Med. 2021;385:971-981](https://doi.org/10.1056/NEJMoa2103879). DOI: 10.1056/NEJMoa2103879*
+`
+  },
+  'interact4-trial': {
+    id: 'interact4-trial',
+    title: 'INTERACT4 Trial: Prehospital Blood-Pressure Lowering in Undifferentiated Stroke',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Before imaging distinguishes ischemic from hemorrhagic stroke, ambulance treatment is risky: a therapy that helps ICH could plausibly worsen ischemic stroke. INTERACT4 directly tested whether lowering blood pressure in the ambulance helps overall.
+
+## Trial Summary
+*   **Design:** Randomized, open-label, blinded-endpoint trial.
+*   **Population:** **2404** patients with suspected acute stroke, motor deficit, and **SBP ≥150 mm Hg** assessed within **2 hours** of onset.
+*   **Intervention:** Immediate systolic BP lowering to **130-140 mm Hg** vs usual care.
+*   **Primary Outcome:** **Ordinal mRS at 90 days**.
+*   **Results:**
+    *   **Overall:** neutral primary result, **common OR 1.00** for poor functional outcome
+    *   **Hemorrhagic stroke subgroup:** favored intervention, **OR 0.75**
+    *   **Ischemic stroke subgroup:** favored usual care, **OR 1.30**
+    *   **Serious adverse events:** similar between groups
+
+## Clinical PEARLS
+*   INTERACT4 is one of the clearest demonstrations that **prehospital treatment can have opposite effects by stroke subtype**
+*   Lowering BP before imaging did **not** improve outcomes overall
+*   The signal of benefit in hemorrhage and harm in ischemia argues against a one-size-fits-all ambulance BP strategy
+*   This trial matters especially in systems with a high proportion of hemorrhagic stroke among emergency presentations
+
+## Conclusion
+INTERACT4 does not support indiscriminate prehospital BP lowering in all acute stroke patients. The trial’s real value is conceptual: what helps hemorrhage may hurt ischemia when diagnosis is still uncertain.
+
+*Source: [INTERACT4 Investigators. N Engl J Med. 2024](https://doi.org/10.1056/NEJMoa2314741). DOI: 10.1056/NEJMoa2314741*
+`
+  },
+  'mr-asap-trial': {
+    id: 'mr-asap-trial',
+    title: 'MR ASAP Trial: Prehospital Glyceryl Trinitrate in Presumed Acute Stroke',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+Earlier pooled data suggested that very early glyceryl trinitrate (GTN) might improve stroke outcomes, but RIGHT-2 cast doubt on that signal. MR ASAP revisited the question in a Dutch prehospital stroke trial with treatment started within **3 hours**.
+
+## Trial Summary
+*   **Design:** Ambulance-based, multicenter, randomized, open-label, blinded-endpoint phase 3 trial.
+*   **Population:** **380** randomized; **325** included in the total population, **291** in the target stroke/TIA population.
+*   **Intervention:** Prehospital **GTN 5 mg/day** for 24 hours vs standard care.
+*   **Primary Outcome:** **mRS at 90 days**.
+*   **Results:**
+    *   **Target population primary outcome:** neutral, **adjusted common OR 0.92**
+    *   **mRS 0-2 at 90 days:** **51% vs 49%**
+    *   **Death within 90 days:** **16% vs 15%** in the target population
+    *   **Early harm signal in ICH:** 7-day death **34% vs 10%** among patients with intracerebral hemorrhage
+*   **Important:** trial stopped early after a DSMB safety concern related to ICH
+
+## Clinical PEARLS
+*   MR ASAP was neutral overall but concerning for **early harm in hemorrhage**
+*   This trial reinforced the message from RIGHT-2 rather than reversing it
+*   The safety signal matters because prehospital stroke treatment necessarily happens **before imaging**
+*   The current practical implication is to **avoid routine GTN** in undifferentiated presumed stroke
+
+## Conclusion
+MR ASAP found no functional benefit from prehospital GTN and raised concern for early harm in intracerebral hemorrhage. Together with RIGHT-2, it argues against prehospital GTN in presumed acute stroke.
+
+*Source: [van den Berg SA, et al. Lancet Neurol. 2022;21:971-981](https://doi.org/10.1016/S1474-4422(22)00333-7). DOI: 10.1016/S1474-4422(22)00333-7*
+`
+  },
+  'racecat-trial': {
+    id: 'racecat-trial',
+    title: 'RACECAT Trial: Direct CSC vs Local Stroke Center for Suspected LVO',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+For patients in nonurban areas with suspected large-vessel occlusion, EMS must choose between a **mothership** strategy (direct CSC transport) and a **drip-and-ship** strategy (nearest stroke center first). RACECAT tested this tradeoff in Catalonia.
+
+## Trial Summary
+*   **Design:** Population-based, cluster-randomized clinical trial.
+*   **Population:** **1401** randomized patients with suspected LVO stroke in nonurban Catalonia; **949** formed the target ischemic stroke population.
+*   **Intervention:** Direct transport to a thrombectomy-capable CSC vs nearest local stroke center first.
+*   **Primary Outcome:** **Ordinal mRS at 90 days** in ischemic stroke.
+*   **Results:**
+    *   **Primary outcome:** neutral, **adjusted common OR 1.03**
+    *   **IV thrombolysis:** lower with direct CSC transport, **47.5% vs 60.4%**
+    *   **Thrombectomy:** higher with direct CSC transport, **48.8% vs 39.4%**
+    *   **90-day mortality:** **27.3% vs 27.2%**
+*   **Status:** enrollment stopped early for futility
+
+## Clinical PEARLS
+*   RACECAT is the landmark randomized challenge to the assumption that **more direct CSC access automatically improves outcomes**
+*   Direct CSC routing increased EVT but **reduced IVT**
+*   The neutral primary outcome suggests that workflow gains from faster EVT can be offset by thrombolysis delays and overtriage
+*   This is a systems trial: local geography, CSC distribution, transfer efficiency, and field LVO accuracy all matter
+
+## Conclusion
+RACECAT found no disability benefit from routine direct CSC transport in nonurban suspected LVO stroke, despite higher thrombectomy rates. The trial supports tailoring routing policy to the local system rather than adopting a universal mothership strategy.
+
+*Source: [Pérez de la Ossa N, et al. JAMA. 2022](https://doi.org/10.1001/jama.2022.4404). DOI: 10.1001/jama.2022.4404*
+`
+  },
+  'right-2-trial': {
+    id: 'right-2-trial',
+    title: 'RIGHT-2 Trial: Ultra-Acute Prehospital Glyceryl Trinitrate',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+GTN was attractive for ultra-acute stroke because it is easy to administer in the field, lowers blood pressure quickly, and had encouraging pooled signals from smaller studies. RIGHT-2 tested that hypothesis rigorously in a large ambulance-based phase 3 trial.
+
+## Trial Summary
+*   **Design:** Paramedic-delivered, randomized, sham-controlled, blinded-endpoint phase 3 trial.
+*   **Population:** **1149** patients with presumed stroke within **4 hours** of onset in the UK.
+*   **Intervention:** Prehospital **GTN patch** vs sham dressing, continued in hospital.
+*   **Primary Outcome:** **7-level mRS at 90 days** in confirmed stroke/TIA.
+*   **Results:**
+    *   **Primary outcome:** neutral, adjusted OR **1.25** for poorer outcome (**P=0.083**)
+    *   **mRS >2:** **68% vs 69%**
+    *   **No benefit** in secondary outcomes, death, or serious adverse events
+    *   GTN lowered systolic BP, but the physiologic effect did **not** translate into functional benefit
+
+## Clinical PEARLS
+*   RIGHT-2 is one of the biggest prehospital drug trials in stroke and was decisively **negative**
+*   The trial showed that **feasible ambulance treatment** is not the same thing as **effective ambulance treatment**
+*   Its neutral result, together with MR ASAP, effectively ended enthusiasm for routine prehospital GTN in undifferentiated stroke
+
+## Conclusion
+RIGHT-2 showed no functional benefit from ultra-early prehospital GTN in presumed stroke. Despite modest blood-pressure reduction, routine ambulance GTN should not be part of standard stroke care.
+
+*Source: [RIGHT-2 Investigators. Lancet. 2019;393:1009-1020](https://doi.org/10.1016/S0140-6736(19)30194-1). DOI: 10.1016/S0140-6736(19)30194-1*
+`
+  },
+  'triage-stroke-trial': {
+    id: 'triage-stroke-trial',
+    title: 'TRIAGE-STROKE Trial: PSC-First vs CSC-First in Suspected LVO',
+    category: 'Neuro Trials',
+    content: `
+## Clinical Context
+TRIAGE-STROKE asked a narrower and clinically important question than RACECAT: in **IVT-eligible**, early-presenting patients with suspected LVO from a PSC catchment area, is it better to go straight to a CSC or stop first at the nearest PSC?
+
+## Trial Summary
+*   **Design:** National, investigator-driven, randomized, assessor-blinded trial.
+*   **Population:** **171** randomized patients; **104** had acute ischemic stroke.
+*   **Intervention:** PSC-first vs direct CSC-first transport.
+*   **Primary Outcome:** **Ordinal mRS shift at 90 days** in patients with acute ischemic stroke.
+*   **Results:**
+    *   **Primary outcome:** neutral, OR **1.42** for functional improvement (**95% CI, 0.72-2.82; P=0.31**)
+    *   **Onset-to-groin time:** **35 minutes shorter** with CSC-first routing
+    *   **Onset-to-needle time:** **30 minutes shorter** with PSC-first routing
+    *   **IVT performed:** **67% vs 78%**
+    *   **EVT performed:** **53% vs 63%**
+*   **Important:** trial was stopped early and therefore **underpowered**
+
+## Clinical PEARLS
+*   TRIAGE-STROKE is best understood as a mechanistic routing trial rather than definitive practice-changing evidence
+*   It captures the essential tension in prehospital stroke systems: **faster IVT vs faster EVT**
+*   A post hoc exploratory signal favored CSC-first for **mRS 0-3**, but the prespecified primary outcome remained neutral
+*   Because the sample was small, local workflow realities still dominate decision making
+
+## Conclusion
+TRIAGE-STROKE was underpowered and did not show a statistically significant functional advantage of CSC-first routing, but it clearly demonstrated the predictable process tradeoff: CSC-first accelerates EVT, whereas PSC-first accelerates IVT. The trial is useful for systems design but not definitive on its own.
+
+*Source: [Behrndtz A, et al. Stroke. 2023;54:2714-2723](https://doi.org/10.1161/STROKEAHA.123.043875). DOI: 10.1161/STROKEAHA.123.043875*
 `
   }
 };
