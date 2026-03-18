@@ -263,10 +263,12 @@ function LOEBadge({ loe }: { loe: string }) {
 function DetailPanel({
   node,
   onClose,
+  onSelect,
   corFilter,
 }: {
   node: MindmapNode | null;
   onClose: () => void;
+  onSelect: (node: MindmapNode) => void;
   corFilter: string | null;
 }) {
   if (!node) return null;
@@ -297,16 +299,21 @@ function DetailPanel({
         </button>
       </div>
 
-      {/* No recommendations? Show children summary */}
+      {/* No recommendations? Show children as clickable sub-topics */}
       {recs.length === 0 && !node.recommendations?.length && node.children?.length ? (
         <div className="flex-1 overflow-y-auto p-4">
           <p className="text-xs text-slate-500 mb-3">This section contains sub-topics. Click a sub-topic to view its recommendations.</p>
           <div className="space-y-2">
             {node.children.map((child) => (
-              <div key={child.id} className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-100">
+              <button
+                key={child.id}
+                onClick={() => onSelect(child)}
+                className="w-full flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-100 hover:bg-neuro-50 hover:border-neuro-200 transition-colors text-left group"
+              >
                 <div className={`w-2 h-2 rounded-full shrink-0 ${nodeColorMap[child.color].dot}`} />
-                <span className="text-xs font-medium text-slate-700">{child.label.replace(/\n/g, ' ')}</span>
-              </div>
+                <span className="flex-1 text-xs font-medium text-slate-700 group-hover:text-neuro-700">{child.label.replace(/\n/g, ' ')}</span>
+                <ChevronRight className="w-3 h-3 text-slate-300 group-hover:text-neuro-500 shrink-0" />
+              </button>
             ))}
           </div>
         </div>
@@ -430,10 +437,12 @@ function MobileAccordionNode({
 function BottomSheet({
   node,
   onClose,
+  onSelect,
   corFilter,
 }: {
   node: MindmapNode | null;
   onClose: () => void;
+  onSelect: (node: MindmapNode) => void;
   corFilter: string | null;
 }) {
   const [isDragging, setIsDragging] = useState(false);
@@ -517,10 +526,15 @@ function BottomSheet({
               <p className="text-xs text-slate-500 mb-3">Sub-topics in this section:</p>
               <div className="space-y-2">
                 {node.children.map((child) => (
-                  <div key={child.id} className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-100">
+                  <button
+                    key={child.id}
+                    onClick={() => { onSelect(child); }}
+                    className="w-full flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-100 hover:bg-neuro-50 hover:border-neuro-200 transition-colors text-left group"
+                  >
                     <div className={`w-2 h-2 rounded-full shrink-0 ${nodeColorMap[child.color].dot}`} />
-                    <span className="text-xs font-medium text-slate-700">{child.label.replace(/\n/g, ' ')}</span>
-                  </div>
+                    <span className="flex-1 text-xs font-medium text-slate-700 group-hover:text-neuro-700">{child.label.replace(/\n/g, ' ')}</span>
+                    <ChevronRight className="w-3 h-3 text-slate-300 group-hover:text-neuro-500 shrink-0" />
+                  </button>
                 ))}
               </div>
             </div>
@@ -885,6 +899,7 @@ export default function StrokeGuidelineMindmap() {
               <DetailPanel
                 node={selectedNode}
                 onClose={() => setSelectedNode(null)}
+                onSelect={selectNode}
                 corFilter={corFilter}
               />
             </div>
@@ -897,6 +912,7 @@ export default function StrokeGuidelineMindmap() {
         <BottomSheet
           node={selectedNode}
           onClose={() => setSelectedNode(null)}
+          onSelect={selectNode}
           corFilter={corFilter}
         />
       )}
