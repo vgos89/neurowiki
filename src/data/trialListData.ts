@@ -17,6 +17,7 @@ export interface TrialItem {
   path: string;
   isPlaceholder: boolean;
   description?: string;
+  clinicalContext?: string;
 }
 
 export const categoryStyles: Record<
@@ -396,6 +397,7 @@ function enrichTrial(item: Omit<TrialItem, 'year'>): TrialItem {
   return {
     ...item,
     year: extractTrialYear(metadata?.source),
+    clinicalContext: metadata?.clinicalContext,
   };
 }
 
@@ -414,6 +416,7 @@ const restoredLegacyTrials: TrialItem[] = Object.entries(legacyTrialConfigs)
       path: `/trials/${id}`,
       isPlaceholder: false,
       description: getListDescription(id),
+      clinicalContext: metadata?.clinicalContext,
     };
   });
 

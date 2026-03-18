@@ -214,7 +214,7 @@ const Home: React.FC = () => {
                 <span className="text-xs font-bold text-neuro-700 dark:text-neuro-300 uppercase tracking-wider">About NeuroWiki</span>
               </div>
               <p className="text-xs text-neuro-700 dark:text-neuro-300 leading-relaxed">
-                Free neurology tools for physicians, built on <strong>AHA/ASA 2026 stroke guidelines</strong> and AMA 2021/2023 CPT guidelines. Not a substitute for clinical judgment.
+                Free neurology tools for physicians. Not a substitute for clinical judgment.
               </p>
             </div>
           </div>
