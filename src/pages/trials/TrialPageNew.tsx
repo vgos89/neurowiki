@@ -11,6 +11,7 @@ import { categoryNames, findTrialById } from '../../data/trialListData';
 import { TRIAL_VISUALIZATIONS } from '../../data/trialVisualizations';
 import { TrialVisualizationSection } from '../../components/trials/TrialVisualizations';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const TrialPageNew: React.FC = () => {
   const { topicId } = useParams<{ topicId: string }>();
@@ -593,12 +594,18 @@ const TrialPageNew: React.FC = () => {
             {trial.content && (
               <div className="prose prose-lg dark:prose-invert max-w-none">
                 <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
                   components={{
                     h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-slate-900 dark:text-white mt-8 mb-4" {...props} />,
                     h3: ({node, ...props}) => <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-6 mb-3" {...props} />,
                     p: ({node, ...props}) => <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4" {...props} />,
                     ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-2 mb-4 text-slate-700 dark:text-slate-300" {...props} />,
                     strong: ({node, ...props}) => <strong className="font-bold text-slate-900 dark:text-white" {...props} />,
+                    table: ({node, ...props}) => <div className="overflow-x-auto mb-6"><table className="w-full text-sm border-collapse border border-slate-200 dark:border-slate-700" {...props} /></div>,
+                    thead: ({node, ...props}) => <thead className="bg-slate-50 dark:bg-slate-800" {...props} />,
+                    th: ({node, ...props}) => <th className="border border-slate-200 dark:border-slate-700 px-3 py-2 text-left font-semibold text-slate-900 dark:text-white" {...props} />,
+                    td: ({node, ...props}) => <td className="border border-slate-200 dark:border-slate-700 px-3 py-2 text-slate-700 dark:text-slate-300" {...props} />,
+                    tr: ({node, ...props}) => <tr className="even:bg-slate-50 even:dark:bg-slate-800/50" {...props} />,
                   }}
                 >
                   {trial.content}
