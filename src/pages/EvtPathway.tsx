@@ -19,7 +19,7 @@ type TimeWindow = "0_6" | "6_24" | "unknown";
 type NIHSSGroup = "0_5" | "6_9" | "10_19" | "20_plus" | "unknown";
 type OcclusionType = "lvo" | "mevo" | "unknown";
 type LvoLocation = "anterior" | "basilar" | "unknown";
-type MevoLocation = "dominant_m2" | "nondominant_m2" | "distal" | "aca" | "pca" | "unknown";
+type MevoLocation = "dominant_m2" | "nondominant_m2" | "codominant_m2" | "distal" | "aca" | "pca" | "unknown";
 
 type Inputs = {
   // Path Selector
@@ -35,6 +35,7 @@ type Inputs = {
   aspects: string;
   pcAspects: string; // For Basilar
   massEffect: Tri; // Significant mass effect (AHA 2026: affects ASPECTS 0-2 / 6-24h selection)
+  severeHypodensity26: Tri; // Severe CT hypodensity >=26 mL in ASPECTS-based large-core pathways
   core: string;
   mismatchVol: string;
   mismatchRatio: string;
@@ -105,16 +106,20 @@ const getNextRenderedField = (
     if (isLvo && isBasilar) {
       ordered = ['pcAspects'];
     } else if (isLvo && isEarly) {
-      ordered = ['aspects', 'massEffect'];
+      const earlyAspects = parseInt(inputs.aspects, 10);
+      ordered = !isNaN(earlyAspects) && earlyAspects >= 0 && earlyAspects <= 2
+        ? ['aspects', 'massEffect', 'severeHypodensity26']
+        : ['aspects'];
     } else if (isLvo && isLate) {
       const lateAspects = parseInt(inputs.aspects, 10);
-      const aspectsHighEnough = !isNaN(lateAspects) && lateAspects >= 6;
-      if (aspectsHighEnough) {
+      if (!isNaN(lateAspects) && lateAspects >= 6) {
         // ASPECTS ≥6 → Class I (Rec #2): no mass effect question, no CTP needed
         ordered = ['aspects'];
+      } else if (!isNaN(lateAspects) && lateAspects >= 3 && lateAspects <= 5) {
+        ordered = ['aspects', 'massEffect', 'severeHypodensity26', 'core', 'mismatchVol', 'mismatchRatio'];
       } else {
-        // ASPECTS <6 or blank → show mass effect (for Rec #3) + CTP (for DAWN/DEFUSE-3)
-        ordered = ['aspects', 'massEffect', 'core', 'mismatchVol', 'mismatchRatio'];
+        // CTP supports fallback DAWN/DEFUSE-3 routing when no ASPECTS-based branch applies.
+        ordered = ['aspects', 'core', 'mismatchVol', 'mismatchRatio'];
       }
     } else if (isMevo) {
       ordered = ['mevoSalvageable', 'mevoTechnical'];
@@ -148,6 +153,17 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
 
   // --- BASILAR ARTERY PROTOCOL (2026 AHA/ASA Guidelines — pc-ASPECTS ≥6) ---
   if (inputs.lvoLocation === 'basilar') {
+      if (inputs.mrs !== 'yes') {
+          return {
+              eligible: false,
+              status: "Not Eligible",
+              criteriaName: "Basilar EVT - Baseline Function",
+              reason: "Basilar EVT recommendations require prestroke mRS 0–1",
+              details: "For basilar artery occlusion, the 2026 AHA/ASA guideline-supported EVT pathways within 24 hours are limited to patients with baseline mRS 0–1. Patients with prestroke mRS ≥2 do not meet this calculator's guideline-based basilar approval pathway.",
+              exclusionReason: "Basilar pathway limited to baseline mRS 0–1",
+              variant: 'danger'
+          };
+      }
       const pcScore = parseInt(inputs.pcAspects);
       const nihssNum = getNihssNumeric(inputs.nihss);
       
@@ -166,7 +182,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               status: "Eligible", 
               criteriaName: "Basilar EVT - Class I",
               reason: `Favorable Imaging (pc-ASPECTS ${pcScore}, NIHSS ${nihssNum})`, 
-              details: "Class I recommendation: EVT strongly recommended for Basilar Artery Occlusion within 24h with pc-ASPECTS ≥6 and NIHSS ≥10. Strong evidence from ATTENTION and BAOCHE trials. (2026 AHA/ASA Guidelines)", 
+              details: "Class I recommendation: EVT is recommended for basilar artery occlusion within 24 hours when baseline mRS is 0–1, pc-ASPECTS is ≥6, and NIHSS is ≥10. This posterior-circulation pathway does not require perfusion mismatch imaging; pc-ASPECTS provides the imaging selection anchor. (2026 AHA/ASA Guidelines; ATTENTION/BAOCHE)", 
               variant: 'success' 
           };
       }
@@ -178,7 +194,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               status: "Clinical Judgment",
               criteriaName: "Basilar EVT - Class IIb",
               reason: `Moderate Severity (pc-ASPECTS ${pcScore}, NIHSS 6–9)`,
-              details: "Class IIb recommendation: EVT may be considered for Basilar occlusion with pc-ASPECTS ≥6 and NIHSS 6–9. Individualized decision based on clinical context. (2026 AHA/ASA Guidelines)",
+              details: "Class IIb recommendation: EVT may be considered for basilar artery occlusion within 24 hours when baseline mRS is 0–1, pc-ASPECTS is ≥6, and NIHSS is 6–9. Benefit is less certain than in higher-severity basilar stroke, so specialist judgment is required. (2026 AHA/ASA Guidelines)",
               variant: 'warning'
           };
       }
@@ -190,7 +206,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
               status: "Consult",
               criteriaName: "Basilar EVT - Low NIHSS",
               reason: `Low NIHSS (< 6) — Specialist Consultation`,
-              details: "The 2026 AHA/ASA guidelines for Basilar EVT specify NIHSS ≥6 for Class I/IIb recommendations. For Basilar occlusion with low NIHSS (<6) and favorable imaging (pc-ASPECTS ≥6), individualized decision with Vascular Neurology and Neurointerventional is required. (AHA/ASA 2026, Section 4.7.2)",
+              details: "The 2026 AHA/ASA basilar EVT pathway within 24 hours requires baseline mRS 0–1, pc-ASPECTS ≥6, and NIHSS ≥6 for guideline-supported positive recommendations. For basilar occlusion with NIHSS <6, no approval branch is established; discuss urgently with Vascular Neurology and Neurointerventional.",
               variant: 'warning'
           };
       }
@@ -209,6 +225,7 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
   // --- ANTERIOR CIRCULATION (ICA / M1) — AHA/ASA 2026 Section 4.7.2 ---
   if (inputs.time === '0_6') {
      const aspects = parseInt(inputs.aspects);
+     const hasSevereHypodensity = inputs.severeHypodensity26 === 'yes';
      if (isNaN(aspects)) return { eligible: false, status: "Not Eligible", reason: "Pending Imaging", details: "", variant: 'neutral' };
      if (inputs.nihss === '0_5') return { eligible: true, status: "Clinical Judgment", reason: "Low NIHSS (< 6)", details: "Guidelines recommend EVT if deficit is disabling despite low score (e.g., aphasia, hemianopsia).", criteriaName: "Early Window (Low NIHSS)", variant: 'warning' };
 
@@ -256,6 +273,22 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
 
      // COR 2a: ASPECTS 0–2, age <80, without significant mass effect — EVT reasonable (2026 AHA/ASA 4.7.2)
      const isAgeUnder80 = inputs.age === '18_79';
+     if (aspects >= 0 && aspects <= 2 && inputs.massEffect === 'unknown') {
+         return { eligible: false, status: "Not Eligible", reason: "Pending Imaging", details: "Mass effect assessment is required for the early ASPECTS 0–2 pathway.", variant: 'neutral' };
+     }
+     if (aspects >= 0 && aspects <= 2 && inputs.severeHypodensity26 === 'unknown') {
+         return { eligible: false, status: "Not Eligible", reason: "Pending Imaging", details: "Severe CT hypodensity assessment (>=26 mL) is required for the early large-core pathway.", variant: 'neutral' };
+     }
+     if (aspects >= 0 && aspects <= 2 && hasSevereHypodensity) {
+         return {
+             eligible: true,
+             status: "Clinical Judgment",
+             criteriaName: "Very Large Core (ASPECTS 0–2) - Severe Hypodensity Warning",
+             reason: "Severe CT hypodensity >=26 mL",
+             details: "Exploratory SELECT2 data suggest patients with severe CT hypodensity >=26 mL may derive no functional benefit from EVT and may face higher risks of cerebral edema and decompressive hemicraniectomy. Do not use the automatic ASPECTS 0–2 approval branch; weigh risks and benefits case by case.",
+             variant: 'warning'
+         };
+     }
      if (aspects >= 0 && aspects <= 2 && isAgeUnder80 && inputs.massEffect === 'no') {
          return {
              eligible: true,
@@ -280,29 +313,30 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
       const mmVol = parseInt(inputs.mismatchVol);
       const ratio = parseFloat(inputs.mismatchRatio);
       const aspectsLate = parseInt(inputs.aspects);
+      const severeHypLate = inputs.severeHypodensity26 === 'yes';
 
       const nihssNumLate = getNihssNumeric(inputs.nihss);
 
-      // mRS 2 in late window — no guideline-supported Class I/IIa pathway; refer for specialist consultation
+      // mRS 2 in late window — no guideline-supported anterior pathway
       if (inputs.mrs === 'mrs2') {
           return {
               eligible: false,
-              status: "Consult",
+              status: "Not Eligible",
               criteriaName: "Late Window mRS 2",
-              reason: "Prestroke mRS 2 — Specialist Consultation",
-              details: "The 2026 AHA/ASA late-window recommendations (Recs #2 and #3) specify mRS 0–1. EVT in mRS 2 within the 6–24h window is not guideline-supported; individualized decision with Vascular Neurology and Neurointerventional is required.",
-              variant: 'warning'
+              reason: "Prestroke mRS 2 is outside the late anterior guideline pathway",
+              details: "The 2026 AHA/ASA late-window anterior EVT recommendations apply only to patients with prestroke mRS 0–1. Patients with prestroke mRS 2 do not meet the guideline-supported 6–24 hour approval pathway in this calculator.",
+              variant: 'danger'
           };
       }
 
-      // mRS 3–4 in late window — no guideline-supported pathway; requires specialist
+      // mRS 3–4 in late window — no guideline-supported anterior pathway
       if (inputs.mrs === 'mrs34') {
           return {
               eligible: false,
-              status: "Consult",
+              status: "Not Eligible",
               criteriaName: "Late Window mRS 3-4",
-              reason: "Prestroke mRS 3–4 — Specialist Consultation",
-              details: "The 2026 AHA/ASA late-window recommendations apply to mRS 0–1 only. EVT in mRS 3–4 in the 6–24h window has no guideline evidence base. Individualized decision with Vascular Neurology and Neurointerventional is required.",
+              reason: "Prestroke mRS 3–4 is outside the late anterior guideline pathway",
+              details: "The 2026 AHA/ASA late-window anterior EVT recommendations apply only to patients with prestroke mRS 0–1. Patients with prestroke mRS 3–4 do not meet the guideline-supported 6–24 hour approval pathway in this calculator.",
               variant: 'danger'
           };
       }
@@ -320,6 +354,22 @@ const calculateLvoProtocol = (inputs: Inputs): Result => {
       }
 
       // COR 1 (2026 Rec #3 — LOE A): Selected patients, mRS 0–1, age <80, NIHSS ≥6, ASPECTS 3–5, no significant mass effect
+      if (!isNaN(aspectsLate) && aspectsLate >= 3 && aspectsLate <= 5 && inputs.massEffect === 'unknown') {
+          return { eligible: false, status: "Not Eligible", reason: "Pending Imaging", details: "Mass effect assessment is required for the ASPECTS 3–5 late-window pathway.", variant: 'neutral' };
+      }
+      if (!isNaN(aspectsLate) && aspectsLate >= 3 && aspectsLate <= 5 && inputs.severeHypodensity26 === 'unknown') {
+          return { eligible: false, status: "Not Eligible", reason: "Pending Imaging", details: "Severe CT hypodensity assessment (>=26 mL) is required for the ASPECTS 3–5 late-window pathway.", variant: 'neutral' };
+      }
+      if (!isNaN(aspectsLate) && aspectsLate >= 3 && aspectsLate <= 5 && severeHypLate) {
+          return {
+              eligible: true,
+              status: "Clinical Judgment",
+              criteriaName: "Late Window ASPECTS 3–5 - Severe Hypodensity Warning",
+              reason: "Severe CT hypodensity >=26 mL",
+              details: "Exploratory SELECT2 data suggest patients with severe CT hypodensity >=26 mL may not gain functional benefit from EVT and may face higher risks of cerebral edema and decompressive hemicraniectomy. Do not use the automatic ASPECTS 3–5 approval branch; weigh risks and benefits case by case.",
+              variant: 'warning'
+          };
+      }
       if (inputs.age === '18_79' && nihssNumLate >= 6 && !isNaN(aspectsLate) && aspectsLate >= 3 && aspectsLate <= 5 && inputs.massEffect === 'no') {
           return {
               eligible: true,
@@ -420,17 +470,17 @@ const calculateMevoProtocol = (inputs: Inputs): Result => {
         };
     }
 
-    // Status C: Class III No Benefit — Nondominant M2 / Distal / ACA / PCA
-    // 2026 AHA/ASA 4.7.2 Rec #8 (COR 3: No Benefit, LOE A): EVT not recommended for nondominant M2, codominant M2, distal MCA, ACA, PCA
+    // Status C: Class III No Benefit — Nondominant/Codominant M2 / Distal / ACA / PCA
+    // 2026 AHA/ASA 4.7.2 Rec #8 (COR 3: No Benefit, LOE A)
     const isOtherLocation = inputs.mevoLocation !== 'dominant_m2' && inputs.mevoLocation !== 'unknown';
     if (isOtherLocation) {
         return {
             eligible: false,
             status: "Avoid EVT",
             criteriaName: "Class III: No Benefit",
-            reason: "Nondominant / Distal Vessel — Not Recommended",
-            details: "COR 3: No Benefit (LOE A) — The 2026 AHA/ASA Guidelines do not recommend EVT for nondominant or codominant proximal M2, distal MCA, ACA, or PCA occlusions. Based on ESCAPE-MeVO (2025) and DISTAL (2025), which showed no functional benefit and higher sICH rates. Specialist consultation required for exceptional cases. (AHA/ASA 2026, Section 4.7.2, Rec #8)",
-            exclusionReason: "COR 3: No Benefit — nondominant/distal vessel location.",
+            reason: "Stent-retriever EVT is not beneficial for this MeVO pattern",
+            details: "COR 3: No Benefit (LOE A) — In nondominant or codominant proximal M2, distal MCA, ACA, and PCA occlusions, EVT with stent retrievers is not recommended to improve functional outcomes. Other approaches remain investigational, so routine EVT should be avoided outside exceptional specialist-selected cases.",
+            exclusionReason: "COR 3: No Benefit — stent retriever EVT for nondominant/codominant or distal vessel location.",
             variant: 'danger'
         };
     }
@@ -532,7 +582,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
       occlusionType: 'unknown',
       lvoLocation: 'unknown',
       lvo: 'unknown', mrs: 'unknown', age: 'unknown', 
-      time: 'unknown', nihss: 'unknown', aspects: '', pcAspects: '', massEffect: 'unknown', core: '', mismatchVol: '', mismatchRatio: '',
+      time: 'unknown', nihss: 'unknown', aspects: '', pcAspects: '', massEffect: 'unknown', severeHypodensity26: 'unknown', core: '', mismatchVol: '', mismatchRatio: '',
       mevoLocation: 'unknown', mevoDependent: 'unknown', nihssNumeric: '', mevoDisabling: 'unknown', mevoSalvageable: 'unknown', mevoTechnical: 'unknown'
   });
   const [result, setResult] = useState<Result | null>(null);
@@ -643,7 +693,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           occlusionType: 'unknown',
           lvoLocation: 'unknown',
           lvo: 'unknown', mrs: 'unknown', age: 'unknown', 
-          time: 'unknown', nihss: 'unknown', aspects: '', pcAspects: '', massEffect: 'unknown', core: '', mismatchVol: '', mismatchRatio: '',
+          time: 'unknown', nihss: 'unknown', aspects: '', pcAspects: '', massEffect: 'unknown', severeHypodensity26: 'unknown', core: '', mismatchVol: '', mismatchRatio: '',
           mevoLocation: 'unknown', mevoDependent: 'unknown', nihssNumeric: '', mevoDisabling: 'unknown', mevoSalvageable: 'unknown', mevoTechnical: 'unknown'
       }); 
       setActiveSection(0); 
@@ -656,15 +706,19 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           const imagingLine = inputs.lvoLocation === 'basilar'
               ? `- pc-ASPECTS: ${inputs.pcAspects}`
               : inputs.time === '0_6'
-                  ? `- ASPECTS: ${inputs.aspects}`
+                  ? [
+                      inputs.aspects ? `- ASPECTS: ${inputs.aspects}` : '',
+                      inputs.severeHypodensity26 !== 'unknown' ? `- Severe CT hypodensity >=26 mL: ${inputs.severeHypodensity26.toUpperCase()}` : '',
+                    ].filter(Boolean).join('\n')
                   : [
                       inputs.aspects ? `- ASPECTS: ${inputs.aspects}` : '',
+                      inputs.severeHypodensity26 !== 'unknown' ? `- Severe CT hypodensity >=26 mL: ${inputs.severeHypodensity26.toUpperCase()}` : '',
                       inputs.core ? `- Core: ${inputs.core}ml` : '',
                       inputs.mismatchVol ? `- Mismatch: ${inputs.mismatchVol}ml | Ratio: ${inputs.mismatchRatio}` : '',
                     ].filter(Boolean).join('\n');
           summary = `LVO EVT Assessment\nType: ${inputs.lvoLocation === 'basilar' ? 'Basilar' : 'Anterior'}\nStatus: ${result.status.toUpperCase()}\nProtocol: ${result.criteriaName || 'Standard Screening'}\n\nClinical Data:\n- Time Window: ${inputs.time === '0_6' ? '0-6h' : '6-24h'}\n- NIHSS: ${inputs.nihss.replace('_', '-').replace('plus', '+')}\n- Age: ${inputs.age.replace('_', '-').replace('plus', '+')}\n\nImaging Data:\n${imagingLine}\n\nReason: ${result.reason}\n${result.details}`;
       } else {
-          summary = `MeVO EVT Assessment\nStatus: ${result.status.toUpperCase()}\nReason: ${result.reason}\n\nClinical Data:\n- Location: ${inputs.mevoLocation.replace('_', ' ').toUpperCase()}\n- NIHSS: ${inputs.nihssNumeric}\n- Disabling: ${inputs.mevoDisabling}\n- Dependent: ${inputs.mevoDependent}\n- Time: ${inputs.time === '0_6' ? '0-6h' : '6-24h'}\n- Favorable Imaging: ${inputs.mevoSalvageable.toUpperCase()}\n\nDetails:\n${result.details}`;
+          summary = `MeVO EVT Assessment\nStatus: ${result.status.toUpperCase()}\nReason: ${result.reason}\n\nClinical Data:\n- Location: ${inputs.mevoLocation.replace(/_/g, ' ').toUpperCase()}\n- NIHSS: ${inputs.nihssNumeric}\n- Disabling: ${inputs.mevoDisabling}\n- Dependent: ${inputs.mevoDependent}\n- Time: ${inputs.time === '0_6' ? '0-6h' : '6-24h'}\n- Favorable Imaging: ${inputs.mevoSalvageable.toUpperCase()}\n\nDetails:\n${result.details}`;
       }
       navigator.clipboard.writeText(summary.trim());
       setShowCopyToast(true);
@@ -699,12 +753,20 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
     if (inputs.occlusionType === 'lvo') {
       if (inputs.time === 'unknown') return false;
       if (inputs.lvoLocation === 'basilar') return inputs.pcAspects !== '';
-      if (inputs.time === '0_6') return inputs.aspects !== '';
+      if (inputs.time === '0_6') {
+        const aspectsNum = parseInt(inputs.aspects, 10);
+        if (isNaN(aspectsNum)) return false;
+        if (aspectsNum >= 0 && aspectsNum <= 2) {
+          return inputs.massEffect !== 'unknown' && inputs.severeHypodensity26 !== 'unknown';
+        }
+        return true;
+      }
       // 6-24h: complete if core entered, OR ASPECTS ≥6 entered (Class I Rec #2), OR ASPECTS 3-5 + mass effect set (Class I Rec #3)
       const aspectsNum = parseInt(inputs.aspects, 10);
       const hasAspectsClassI_HighScore = !isNaN(aspectsNum) && aspectsNum >= 6; // Rec #2: ASPECTS ≥6, no mass effect needed
-      const hasAspectsClassI_LowScore = !isNaN(aspectsNum) && aspectsNum >= 3 && aspectsNum <= 5 && inputs.massEffect !== 'unknown'; // Rec #3: ASPECTS 3-5
-      return inputs.core !== '' || hasAspectsClassI_HighScore || hasAspectsClassI_LowScore;
+      const hasHypodensityWarning = !isNaN(aspectsNum) && aspectsNum >= 3 && aspectsNum <= 5 && inputs.severeHypodensity26 === 'yes';
+      const hasAspectsClassI_LowScore = !isNaN(aspectsNum) && aspectsNum >= 3 && aspectsNum <= 5 && inputs.age === '18_79' && inputs.massEffect === 'no' && inputs.severeHypodensity26 !== 'unknown';
+      return inputs.core !== '' || hasAspectsClassI_HighScore || hasAspectsClassI_LowScore || hasHypodensityWarning;
     }
     return inputs.mevoSalvageable !== 'unknown' && inputs.mevoTechnical !== 'unknown';
   }, [inputs]);
@@ -717,7 +779,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
     if (idx === 0) {
       if (inputs.occlusionType === 'unknown') return undefined;
       if (inputs.occlusionType === 'lvo') return `LVO • ${inputs.lvoLocation === 'unknown' ? 'Location?' : inputs.lvoLocation}`;
-      return `MeVO • ${inputs.mevoLocation === 'unknown' ? 'Location?' : inputs.mevoLocation.replace('_', ' ')}`;
+      return `MeVO • ${inputs.mevoLocation === 'unknown' ? 'Location?' : inputs.mevoLocation.replace(/_/g, ' ')}`;
     }
     if (idx === 1) {
       if (inputs.time === 'unknown') return undefined;
@@ -884,7 +946,8 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         <div ref={el => { fieldRefs.current['mevoLocation'] = el; }} className="pt-4 border-t border-slate-100 grid grid-cols-1 gap-2 scroll-mb-24">
                             <h3 className="text-sm font-semibold text-slate-700 mb-2">Vessel Location</h3>
                             <CompactSelectionCard title="Dominant / Proximal M2" description="Eligible for EVT consideration" selected={inputs.mevoLocation === 'dominant_m2'} onClick={() => updateInput('mevoLocation', 'dominant_m2')} />
-                            <CompactSelectionCard title="Nondominant / Codominant M2" description="AHA 2026: Class III No Benefit" selected={inputs.mevoLocation === 'nondominant_m2'} onClick={() => updateInput('mevoLocation', 'nondominant_m2')} />
+                            <CompactSelectionCard title="Nondominant M2" description="AHA 2026: stent retriever EVT Class III No Benefit" selected={inputs.mevoLocation === 'nondominant_m2'} onClick={() => updateInput('mevoLocation', 'nondominant_m2')} />
+                            <CompactSelectionCard title="Codominant M2" description="AHA 2026: stent retriever EVT Class III No Benefit" selected={inputs.mevoLocation === 'codominant_m2'} onClick={() => updateInput('mevoLocation', 'codominant_m2')} />
                             <CompactSelectionCard title="Distal M2 / M3" description="AHA 2026: Class III No Benefit" selected={inputs.mevoLocation === 'distal'} onClick={() => updateInput('mevoLocation', 'distal')} />
                             <CompactSelectionCard title="ACA (A2 / A3)" description="AHA 2026: Class III No Benefit" selected={inputs.mevoLocation === 'aca'} onClick={() => updateInput('mevoLocation', 'aca')} />
                             <CompactSelectionCard title="PCA (P2 / P3)" description="AHA 2026: Class III No Benefit" selected={inputs.mevoLocation === 'pca'} onClick={() => updateInput('mevoLocation', 'pca')} />
@@ -907,7 +970,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         />
                         <LearningPearl
                             title="Exclusions"
-                            content="Hard exclusions: no LVO, pre-stroke dependence (mRS >4), age <18, terminal illness or limited goals of care. Note: mRS 2 is Class IIa and mRS 3–4 is Class IIb per 2026 guidelines — prior disability alone is not an exclusion. When in doubt, discuss with Vascular Neurology and Neurointerventional."
+                            content="Hard exclusions: no LVO, pre-stroke dependence (mRS >4), age <18, terminal illness or limited goals of care. Prior disability is not an absolute exclusion in early anterior EVT, but late anterior and guideline-supported basilar approval branches are limited to baseline mRS 0–1."
                         />
                     </div>
                 )}
@@ -971,7 +1034,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                     <div className="pt-2 border-t border-slate-100 space-y-1 mt-4">
                         <LearningPearl
                             title="2026 Guideline Update"
-                            content="The 2026 AHA/ASA Guidelines (Section 4.7.2) — Early window (0–6h): Class I for ASPECTS 3–10, NIHSS ≥6, mRS 0–1; Class IIa for ASPECTS 0–2 (age <80, no mass effect) and for mRS 2 with ASPECTS ≥6; Class IIb for mRS 3–4 with ASPECTS ≥6. Late window (6–24h): Class I for ASPECTS ≥6 with NIHSS ≥6 and mRS 0–1 (NEW — Rec #2, LOE A); Class I for ASPECTS 3–5 with age <80, no mass effect (Rec #3); DAWN/DEFUSE-3 criteria apply for perfusion-selected patients."
+                            content="The 2026 AHA/ASA Guidelines (Section 4.7.2) — Early anterior window (0–6h): Class I for ASPECTS 3–10, NIHSS ≥6, mRS 0–1; Class IIa for ASPECTS 0–2 (age <80, no mass effect) and for mRS 2 with ASPECTS ≥6; Class IIb for mRS 3–4 with ASPECTS ≥6. Late anterior window (6–24h): Class I for ASPECTS ≥6 with NIHSS ≥6 and mRS 0–1, and for selected ASPECTS 3–5 patients age <80 without significant mass effect. Basilar EVT uses a separate unified 0–24h pathway anchored by baseline mRS 0–1, pc-ASPECTS ≥6, and NIHSS severity."
                         />
                         {isLvo && (
                             <LearningPearl
@@ -1029,15 +1092,32 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                     <span className="material-symbols-outlined text-[18px]">calculate</span>
                                     Calculate ASPECTS →
                                 </button>
-                                <div ref={el => { fieldRefs.current['massEffect'] = el; }} className="mt-6 scroll-mb-24">
-                                    <h4 className="text-sm font-semibold text-slate-700 mb-2">Significant mass effect on imaging?</h4>
-                                    <p className="text-xs text-slate-500 mb-3">Relevant for ASPECTS 0–2 (Class IIa requires no significant mass effect per 2026 guidelines).</p>
-                                    <div className="grid grid-cols-3 gap-2">
-                                        <CompactSelectionCard title="No" description="No significant mass effect" selected={inputs.massEffect === 'no'} onClick={() => updateInput('massEffect', 'no')} />
-                                        <CompactSelectionCard title="Yes" description="Significant mass effect" selected={inputs.massEffect === 'yes'} onClick={() => updateInput('massEffect', 'yes')} />
-                                        <CompactSelectionCard title="Unknown" description="Not assessed" selected={inputs.massEffect === 'unknown'} onClick={() => updateInput('massEffect', 'unknown')} />
-                                    </div>
-                                </div>
+                                {(() => {
+                                    const earlyAspects = parseInt(inputs.aspects, 10);
+                                    const showEarlyLargeCoreFields = !isNaN(earlyAspects) && earlyAspects >= 0 && earlyAspects <= 2;
+                                    if (!showEarlyLargeCoreFields) return null;
+                                    return (
+                                        <div ref={el => { fieldRefs.current['massEffect'] = el; }} className="mt-6 scroll-mb-24">
+                                            <h4 className="text-sm font-semibold text-slate-700 mb-2">Significant mass effect on imaging?</h4>
+                                            <p className="text-xs text-slate-500 mb-3">Relevant for ASPECTS 0–2 (Class IIa requires no significant mass effect per 2026 guidelines).</p>
+                                            <div className="grid grid-cols-3 gap-2">
+                                                <CompactSelectionCard title="No" description="No significant mass effect" selected={inputs.massEffect === 'no'} onClick={() => updateInput('massEffect', 'no')} />
+                                                <CompactSelectionCard title="Yes" description="Significant mass effect" selected={inputs.massEffect === 'yes'} onClick={() => updateInput('massEffect', 'yes')} />
+                                                <CompactSelectionCard title="Unknown" description="Not assessed" selected={inputs.massEffect === 'unknown'} onClick={() => updateInput('massEffect', 'unknown')} />
+                                            </div>
+
+                                            <div ref={el => { fieldRefs.current['severeHypodensity26'] = el; }} className="mt-4 scroll-mb-24">
+                                                <h4 className="text-sm font-semibold text-slate-700 mb-2">Severe CT hypodensity &gt;=26 mL?</h4>
+                                                <p className="text-xs text-slate-500 mb-3">Exploratory SELECT2 data found no clear functional benefit and higher edema/hemicraniectomy risk above this threshold.</p>
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    <CompactSelectionCard title="No" description="No severe hypodensity" selected={inputs.severeHypodensity26 === 'no'} onClick={() => updateInput('severeHypodensity26', 'no')} />
+                                                    <CompactSelectionCard title="Yes" description=">=26 mL severe hypodensity" selected={inputs.severeHypodensity26 === 'yes'} onClick={() => updateInput('severeHypodensity26', 'yes')} variant="danger" />
+                                                    <CompactSelectionCard title="Unknown" description="Not assessed" selected={inputs.severeHypodensity26 === 'unknown'} onClick={() => updateInput('severeHypodensity26', 'unknown')} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })()}
                                 <div className="pt-2 border-t border-slate-100 space-y-1 mt-4">
                                     <LearningPearl
                                         title="Understanding ASPECTS"
@@ -1045,7 +1125,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                     />
                                     <LearningPearl
                                         title="AHA/ASA 2026 Early Window (Section 4.7.2)"
-                                        content="Class I: EVT recommended for ASPECTS 3–10 with NIHSS ≥6 and mRS 0–1. Class IIa: EVT reasonable for prestroke mRS 2 with ASPECTS ≥6; and for selected patients with ASPECTS 0–2, age <80 years, without significant mass effect. SELECT2/ANGEL-ASPECT support large-core selection."
+                                        content="Class I: EVT recommended for ASPECTS 3–10 with NIHSS ≥6 and mRS 0–1. Class IIa: EVT reasonable for prestroke mRS 2 with ASPECTS ≥6, and for selected patients with ASPECTS 0–2 who are age <80 years and have no significant mass effect. Severe CT hypodensity >=26 mL should trigger caution rather than automatic approval."
                                     />
                                 </div>
                             </div>
@@ -1063,7 +1143,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                 <div className="pt-2 border-t border-slate-100 space-y-1 mt-4">
                                     <LearningPearl
                                         title="pc-ASPECTS & 2026 Guidelines"
-                                        content="pc-ASPECTS scores the posterior circulation on a 10-point scale: Thalami (1 each), Occipital lobes (1 each), Midbrain (2), Pons (2), Cerebellar hemispheres (1 each). Per AHA/ASA 2026: pc-ASPECTS ≥6 with NIHSS ≥10 → Class I; pc-ASPECTS ≥6 with NIHSS 6–9 → Class IIb (EVT may be considered). pc-ASPECTS <6 → Avoid EVT. ATTENTION and BAOCHE trials support intervention up to 24h."
+                                        content="pc-ASPECTS scores the posterior circulation on a 10-point scale: Thalami (1 each), Occipital lobes (1 each), Midbrain (2), Pons (2), Cerebellar hemispheres (1 each). Per AHA/ASA 2026, basilar EVT is a unified 0–24h pathway requiring baseline mRS 0–1 and pc-ASPECTS ≥6, then stratified by NIHSS: ≥10 is the strongest recommendation, 6–9 is weaker, and <6 has no guideline-supported approval branch."
                                     />
                                 </div>
                             </div>
@@ -1073,7 +1153,8 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         {inputs.time === '6_24' && !isBasilar && (() => {
                             const lateAspectsNum = parseInt(inputs.aspects, 10);
                             const aspectsHighEnough = !isNaN(lateAspectsNum) && lateAspectsNum >= 6;
-                            const showMassEffect = !aspectsHighEnough; // not needed for ASPECTS ≥6 (Rec #2)
+                            const showLargeCoreAspects = !isNaN(lateAspectsNum) && lateAspectsNum >= 3 && lateAspectsNum <= 5;
+                            const showMassEffect = showLargeCoreAspects;
                             const showCtp = !aspectsHighEnough;        // CTP not required for ASPECTS ≥6
 
                             return (
@@ -1083,13 +1164,13 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                     {aspectsHighEnough ? (
                                         <p><strong>ASPECTS {lateAspectsNum} ≥ 6 — Class I criteria met.</strong> No perfusion imaging required per 2026 AHA/ASA guidelines (Rec #2, LOE A). Tap <strong>Next</strong> to see your result.</p>
                                     ) : (
-                                        <p><strong>ASPECTS ≥6 → Class I</strong> (Rec #2, LOE A) — no perfusion required. <strong>ASPECTS 3–5, age &lt;80, no mass effect → Class I</strong> (Rec #3, LOE A). For borderline/ASPECTS &lt;3, enter perfusion values (DAWN/DEFUSE-3 criteria below).</p>
+                                        <p><strong>ASPECTS ≥6 → Class I</strong> (Rec #2, LOE A) — no perfusion required. <strong>ASPECTS 3–5, age &lt;80, no mass effect, and no severe CT hypodensity &gt;=26 mL → Class I</strong> (Rec #3). For borderline/ASPECTS &lt;3 or non-qualifying large-core cases, enter perfusion values (DAWN/DEFUSE-3 criteria below).</p>
                                     )}
                                 </div>
                                 {/* ASPECTS — primary criterion for Class I in 6-24h (Recs #2 and #3) */}
                                 <div ref={el => { fieldRefs.current['aspects'] = el; }} className="mb-6 scroll-mb-24">
                                     <h4 className="text-sm font-semibold text-slate-700 mb-2">ASPECTS from NCCT</h4>
-                                    <p className="text-xs text-slate-500 mb-2">ASPECTS ≥6 → Class I (no other criteria needed). ASPECTS 3–5 → Class I if age &lt;80 + no mass effect. Enter 0–10 or leave blank to use perfusion criteria instead.</p>
+                                    <p className="text-xs text-slate-500 mb-2">ASPECTS ≥6 → Class I (no other criteria needed). ASPECTS 3–5 → Class I if age &lt;80 + no mass effect + no severe CT hypodensity &gt;=26 mL. Enter 0–10 or leave blank to use perfusion criteria instead.</p>
                                     <input type="number" inputMode="numeric" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 7" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
                                     <button
                                         type="button"
@@ -1109,6 +1190,16 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                                 <CompactSelectionCard title="No" description="No significant mass effect" selected={inputs.massEffect === 'no'} onClick={() => updateInput('massEffect', 'no')} />
                                                 <CompactSelectionCard title="Yes" description="Significant mass effect" selected={inputs.massEffect === 'yes'} onClick={() => updateInput('massEffect', 'yes')} />
                                                 <CompactSelectionCard title="Unknown" description="Not assessed" selected={inputs.massEffect === 'unknown'} onClick={() => updateInput('massEffect', 'unknown')} />
+                                            </div>
+
+                                            <div ref={el => { fieldRefs.current['severeHypodensity26'] = el; }} className="mt-4 scroll-mb-24">
+                                                <h4 className="text-sm font-semibold text-slate-700 mb-2">Severe CT hypodensity &gt;=26 mL?</h4>
+                                                <p className="text-xs text-slate-500 mb-2">If present, do not use the automatic ASPECTS 3–5 approval branch; SELECT2 exploratory data suggest higher edema/hemicraniectomy risk and no clear functional benefit.</p>
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    <CompactSelectionCard title="No" description="No severe hypodensity" selected={inputs.severeHypodensity26 === 'no'} onClick={() => updateInput('severeHypodensity26', 'no')} />
+                                                    <CompactSelectionCard title="Yes" description=">=26 mL severe hypodensity" selected={inputs.severeHypodensity26 === 'yes'} onClick={() => updateInput('severeHypodensity26', 'yes')} variant="danger" />
+                                                    <CompactSelectionCard title="Unknown" description="Not assessed" selected={inputs.severeHypodensity26 === 'unknown'} onClick={() => updateInput('severeHypodensity26', 'unknown')} />
+                                                </div>
                                             </div>
                                         </div>
                                     )}
@@ -1182,7 +1273,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                             />
                             <LearningPearl
                                 title="Procedural Risks"
-                                content="Distal access increases perforation and hemorrhage risk. Operator experience and device choice significantly influence MeVO outcomes."
+                                content="Distal access increases perforation and hemorrhage risk. For nondominant/codominant M2, distal MCA, ACA, and PCA occlusions, the 2026 guideline specifically states that stent-retriever EVT is of no benefit; other device strategies remain investigational."
                             />
                         </div>
                     </div>
@@ -1227,7 +1318,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         {isLvo && <li className="flex justify-between border-b border-slate-50 pb-2"><span>NIHSS</span><span className="font-bold">{inputs.nihss.replace('_', '-').replace('plus', '+')}</span></li>}
                         {isMevo && (
                             <>
-                                <li className="flex justify-between border-b border-slate-50 pb-2"><span>Location</span><span className="font-bold">{inputs.mevoLocation.replace('_', ' ').toUpperCase()}</span></li>
+                                <li className="flex justify-between border-b border-slate-50 pb-2"><span>Location</span><span className="font-bold">{inputs.mevoLocation.replace(/_/g, ' ').toUpperCase()}</span></li>
                                 <li className="flex justify-between border-b border-slate-50 pb-2"><span>NIHSS</span><span className="font-bold">{inputs.nihssNumeric}</span></li>
                                 <li className="flex justify-between border-b border-slate-50 pb-2"><span>Disabling</span><span className="font-bold capitalize">{inputs.mevoDisabling}</span></li>
                             </>

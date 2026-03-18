@@ -13,6 +13,7 @@ import {
   AlertCircle,
   TrendingUp,
   Star,
+  GitBranch,
 } from 'lucide-react';
 
 // ── Featured Tools (quick-access grid) ─────────────────────────────────────
@@ -181,6 +182,26 @@ const Home: React.FC = () => {
                 <div>
                   <div className="text-sm font-bold text-slate-800 dark:text-slate-200">All Calculators & Pathways</div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">NIHSS, ICH Score, EVT, SE, ELAN…</div>
+                </div>
+              </div>
+              <ChevronRight size={16} className="text-slate-300 dark:text-slate-600 group-hover:text-neuro-500 transition-colors flex-shrink-0" aria-hidden="true" />
+            </Link>
+
+            {/* 2026 AHA Stroke Guideline Mindmap */}
+            <Link
+              to="/guide/aha-2026-guideline"
+              className="flex items-center justify-between w-full p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-neuro-300 dark:hover:border-neuro-700 transition-colors group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center">
+                  <GitBranch size={16} className="text-emerald-600" aria-hidden="true" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <div className="text-sm font-bold text-slate-800 dark:text-slate-200">2026 AHA Stroke Guideline</div>
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 border border-emerald-200">NEW</span>
+                  </div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400">Interactive mindmap · IVT, EVT, BP, DAPT…</div>
                 </div>
               </div>
               <ChevronRight size={16} className="text-slate-300 dark:text-slate-600 group-hover:text-neuro-500 transition-colors flex-shrink-0" aria-hidden="true" />

@@ -72,7 +72,7 @@ mindmap
         No
           Eligible
           "COR 2a"
-          "Trials: EXTEND, THAWS, ECASS-4"
+          "Trials: EXTEND, EPITHET, ECASS-4"
           "TNK and alteplase shown"
       Failed imaging
         Path B not eligible
@@ -99,7 +99,7 @@ mindmap
                   Eligible
                   "Path C-LVO"
                   "COR 2b"
-                  "Trials: TIMELESS, TRACE-3"
+                  "Trial basis: TRACE-III"
                   "TNK only shown"
 ```
 
@@ -161,7 +161,7 @@ flowchart TD
     B6 -->|Yes| B3
 
     B3 -->|Yes| B3Y[EVT Preferred\nExtended-window IVT not indicated]
-    B3 -->|No| B3N[Eligible\nPath B COR 2a\nEXTEND + THAWS + ECASS-4]
+    B3 -->|No| B3N[Eligible\nPath B COR 2a\nEXTEND + EPITHET + ECASS-4]
     B4 -->|Yes| PCC
     B4 -->|No| B_N[Not Eligible]
 
@@ -169,14 +169,14 @@ flowchart TD
     C1 -->|No| C1N[Not Eligible\nNo salvageable penumbra]
     C1 -->|Yes| C2{LVO present?}
 
-    C2 -->|No| C2N[Not Eligible\nLate Path C requires LVO]
+    C2 -->|No| C2N[Not Eligible\nPath C requires ICA or MCA (M1/M2) occlusion]
     C2 -->|Yes| C3{EVT feasible?}
-    C3 -->|Yes| C3Y[EVT Preferred\nProceed to thrombectomy]
+    C3 -->|Yes| C3Y[EVT Preferred\nExtended-window IVT not indicated]
     C3 -->|No| C4{EVT barrier selected?}
     C4 -->|No| Z1[Incomplete]
     C4 -->|Yes| C5{Expert thrombolytic stroke care available?}
     C5 -->|No| C5N[Not Eligible at Current Site]
-    C5 -->|Yes| C5Y[Eligible\nPath C-LVO COR 2b\nTIMELESS + TRACE-3]
+    C5 -->|Yes| C5Y[Eligible\nPath C-LVO COR 2b\nTRACE-III]
 ```
 
 ## Updated Thinking Rationale
@@ -191,11 +191,12 @@ flowchart TD
   - Path B is the perfusion-selected 4.5–9 hour pathway.
   - Path C is a late fallback for patients still within 24 hours from LKW when the earlier branch does not apply or fails.
 - Path C is now intentionally narrower:
-  - LVO is required.
+  - ICA or MCA (M1/M2) occlusion is required.
   - salvageable penumbra is required.
   - EVT must not be feasible.
   - expert thrombolytic stroke care must be available.
 - Path B no longer treats rapid EVT as bridge-IVT eligibility. If rapid thrombectomy is already planned, the calculator redirects to EVT and suppresses IVT dosing/callback eligibility.
+- Path C uses `TRACE-III` for the positive late-window recommendation; `TIMELESS` informs the separate redirect away from extended-window IVT when rapid EVT is already available.
 - Unknown-onset patients are no longer excluded from late-window assessment if a usable LKW exists. This is the main reason the resolver now supports Path A/B failure falling through into Path C.
 - Unknown-onset patients without usable LKW remain eligible for MRI-based Path A, but CT perfusion alone cannot route them into the late-window branch.
 
@@ -204,3 +205,4 @@ flowchart TD
 - Exported `IVTResult.path` is now limited to `A`, `B`, or `C-LVO`.
 - The old `C-NonLVO` recommendation and `OPTION`-based late-path endorsement were removed from the calculator.
 - Path C expertise now changes the outcome: `No` produces `Not Eligible at Current Site` rather than a positive recommendation.
+- Path B evidence labels now use `EXTEND`, `EPITHET`, and `ECASS-4` in the result output.
