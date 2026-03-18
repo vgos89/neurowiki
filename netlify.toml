@@ -1,0 +1,23 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Force www → non-www canonical redirect (prevents duplicate content / split PageRank)
+[[redirects]]
+  from = "https://www.neurowiki.ai/*"
+  to = "https://neurowiki.ai/:splat"
+  status = 301
+  force = true
+
+# Legacy NIHSS URL redirect
+[[redirects]]
+  from = "/calculators"
+  to = "/calculators/nihss"
+  status = 301
+  query = {id = "nihss"}
+
+# SPA catch-all — React Router handles all client-side routes
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

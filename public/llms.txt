@@ -35,12 +35,12 @@
 - [ELAN Trial](https://neurowiki.ai/trials/elan-study): Early vs late DOAC after cardioembolic stroke
 - [ORIGINAL Trial](https://neurowiki.ai/trials/original-trial): Tenecteplase vs alteplase equivalence (JAMA 2024)
 - [SELECT-2 Trial](https://neurowiki.ai/trials/select2-trial): EVT for large infarct core (ASPECTS 3–5)
-- [All trials](https://neurowiki.ai/trials): 25+ landmark neurology trials
+- [All trials](https://neurowiki.ai/trials): 79 landmark stroke clinical trials (thrombolysis, thrombectomy, secondary prevention, surgical)
 
 ## About
 - Specialty: Neurology (Vascular, Neurocritical Care, Epilepsy, Neuromuscular)
 - Guideline source: AHA/ASA 2026 Guidelines for Early Management of AIS (Prabhakaran et al., DOI: 10.1161/STR.0000000000000513)
 - Audience: Neurologists, residents, emergency medicine physicians, medical students
 - Content type: Interactive clinical decision support tools (React SPA — JavaScript required)
-- Last updated: 2026-03-10
+- Last updated: 2026-03-18
 - Site: https://neurowiki.ai

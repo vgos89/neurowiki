@@ -707,11 +707,11 @@ export default function StrokeGuidelineMindmap() {
       <div className="bg-white border-b border-slate-200 px-4 py-3 flex-shrink-0 sticky top-0 z-40 -mx-4 md:-mx-8">
         <div className="max-w-screen-xl mx-auto">
           <Link
-            to="/guide"
+            to="/"
             className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-neuro-600 transition-colors mb-2"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            Resident Guide
+            Home
           </Link>
           <div className="flex items-start justify-between gap-4">
             <div>

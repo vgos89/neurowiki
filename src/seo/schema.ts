@@ -311,6 +311,8 @@ function calculatorSchema(
       },
       publisher: PUBLISHER,
       lastReviewed: LAST_REVIEWED,
+      datePublished: DATE_PUBLISHED,
+      dateModified: DATE_MODIFIED,
     },
     {
       '@type': 'BreadcrumbList',
@@ -351,6 +353,8 @@ function guideSchema(pathname: string, title: string, description: string, guide
       audience: { '@type': 'MedicalAudience', audienceType: 'Physician, Neurologist, Resident' },
       publisher: PUBLISHER,
       lastReviewed: LAST_REVIEWED,
+      datePublished: DATE_PUBLISHED,
+      dateModified: DATE_MODIFIED,
     },
     {
       '@type': 'BreadcrumbList',
