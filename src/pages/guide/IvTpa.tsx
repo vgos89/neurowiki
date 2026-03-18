@@ -136,7 +136,7 @@ export default function IvTpa() {
             viewMode={viewMode}
             detail="For drip-and-ship: give TNK at the referring hospital, patient transfers with no infusion pump needed. The bolus is already done before they get in the ambulance."
           >
-            <strong>Transferring for thrombectomy</strong> (drip-and-ship): single bolus means no IV pump during transport. Also preferred when <strong>rapid administration</strong> is critical or nursing resources are limited.
+            <strong>Transferring for thrombectomy</strong> (drip-and-ship): single bolus means no IV pump during transport. Also preferred when <strong>rapid administration</strong> is needed or nursing resources are limited.
           </Paragraph>
 
           <Paragraph viewMode={viewMode} detail="ORIGINAL trial (JAMA 2024, n=1,465): TNK 0.25 mg/kg vs alteplase 0.9 mg/kg within 4.5h. Primary outcome mRS 0–1 at 90 days: 72.7% vs 70.3% (RR 1.03, 95% CI 0.97–1.09). Symptomatic ICH 1.2% in both groups. Noninferiority margin (RR ≥0.937) met. 55 centers in China.">

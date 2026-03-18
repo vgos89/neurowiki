@@ -69,7 +69,7 @@ export const GlobalTrialModal: React.FC<GlobalTrialModalProps> = ({
           {/* Footer */}
           <div className="flex-shrink-0 border-t border-slate-100 px-6 py-4 bg-slate-50">
             <p className="text-xs text-slate-500 text-center">
-              Evidence-based clinical guidance
+              Clinical guidance with trial references
             </p>
           </div>
         </div>

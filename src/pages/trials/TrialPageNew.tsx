@@ -8,6 +8,8 @@ import { MedicalTooltip } from '../../components/MedicalTooltip';
 import { MEDICAL_GLOSSARY } from '../../data/medicalGlossary';
 import { addTooltips } from '../../utils/addTooltips';
 import { categoryNames, findTrialById } from '../../data/trialListData';
+import { TRIAL_VISUALIZATIONS } from '../../data/trialVisualizations';
+import { TrialVisualizationSection } from '../../components/trials/TrialVisualizations';
 import ReactMarkdown from 'react-markdown';
 
 const TrialPageNew: React.FC = () => {
@@ -30,6 +32,7 @@ const TrialPageNew: React.FC = () => {
   }
 
   const trialMetadata = TRIAL_DATA[trialId];
+  const visualizations = TRIAL_VISUALIZATIONS[trialId] ?? [];
   const trial = GUIDE_CONTENT[trialId] ?? (
     trialMetadata
       ? {
@@ -380,6 +383,8 @@ const TrialPageNew: React.FC = () => {
                 </div>
               </div>
             )}
+
+            <TrialVisualizationSection visualizations={visualizations} />
 
             {/* Clinical Context Section */}
             {trialMetadata?.clinicalContext && (

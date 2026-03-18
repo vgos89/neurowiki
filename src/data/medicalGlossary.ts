@@ -1,7 +1,7 @@
 /**
  * Medical Glossary
  * 
- * Comprehensive dictionary of medical terms, statistical measures, and clinical concepts
+ * Dictionary of medical terms, statistical measures, and clinical concepts
  * used throughout NeuroWiki. Terms are matched case-insensitively.
  * 
  * To add a new term:

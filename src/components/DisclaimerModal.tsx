@@ -93,7 +93,7 @@ export const DisclaimerModal: React.FC = () => {
         >
           <h3 className="font-semibold text-slate-900 mb-2">Important Notice</h3>
           <p className="mb-4">
-            The information provided on Neurowiki is intended for educational purposes only and is designed to assist healthcare professionals in their clinical decision-making.
+            The information on Neurowiki is for educational purposes only. It is not a substitute for clinical judgment by a qualified healthcare professional.
           </p>
 
           <h3 className="font-semibold text-slate-900 mb-2">Not a Substitute for Professional Judgment</h3>
@@ -108,7 +108,7 @@ export const DisclaimerModal: React.FC = () => {
 
           <h3 className="font-semibold text-slate-900 mb-2">Accuracy and Currency</h3>
           <p className="mb-4">
-            While we strive to keep information accurate and up-to-date, medical knowledge evolves rapidly. Always verify critical information with current guidelines and primary sources.
+            Medical knowledge changes over time. Always verify information against current guidelines and primary sources before clinical use.
           </p>
 
           <h3 className="font-semibold text-slate-900 mb-2">Limitation of Liability</h3>

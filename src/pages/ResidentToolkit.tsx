@@ -187,7 +187,7 @@ const GUIDE_CATEGORIES = [
 const FEATURED_TRIALS = [
   { name: 'DAWN', subtitle: 'Late-window EVT up to 24h', path: '/trials/dawn-trial', tag: 'Thrombectomy' },
   { name: 'DEFUSE-3', subtitle: 'Perfusion-guided late-window EVT', path: '/trials/defuse-3-trial', tag: 'Thrombectomy' },
-  { name: 'NINDS', subtitle: 'IV tPA within 3h — pivotal trial', path: '/trials/ninds-trial', tag: 'Thrombolysis' },
+  { name: 'NINDS', subtitle: 'IV tPA within 3h — landmark trial', path: '/trials/ninds-trial', tag: 'Thrombolysis' },
   { name: 'ELAN', subtitle: 'Early vs late anticoagulation after AF stroke', path: '/trials/elan-study', tag: 'Prevention' },
 ];
 
@@ -237,7 +237,7 @@ const ResidentToolkit: React.FC = () => {
                 Neurology Toolkit
               </h1>
               <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm md:text-base">
-                Evidence-based protocols, calculators, and clinical guides
+                Stroke protocols, calculators, and clinical guides
               </p>
             </div>
           </div>
@@ -461,7 +461,7 @@ const ResidentToolkit: React.FC = () => {
                 <span className="text-xs font-bold text-neuro-700 dark:text-neuro-300 uppercase tracking-wider">About NeuroWiki</span>
               </div>
               <p className="text-xs text-neuro-700 dark:text-neuro-300 leading-relaxed">
-                Free, evidence-based neurology tools for physicians. Stroke tools follow <strong>AHA/ASA 2026 guidelines</strong>; billing tools follow AMA 2021/2023 CPT guidelines. For clinical decision support — not a substitute for professional judgment.
+                Free neurology tools for physicians, built on <strong>AHA/ASA 2026 stroke guidelines</strong> and AMA 2021/2023 CPT guidelines. Not a substitute for clinical judgment.
               </p>
             </div>
 

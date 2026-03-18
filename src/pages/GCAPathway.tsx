@@ -484,7 +484,7 @@ ${result.notes.join('\n')}
                 </div>
 
                 <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Key Drivers (+Points)</h4>
+                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Score Drivers (+Points)</h4>
                   <ul className="space-y-2">
                     {result.reasons.length > 0 ? result.reasons.map((r, i) => (
                       <li key={i} className="text-sm font-medium text-slate-700 flex justify-between items-center border-b border-slate-50 pb-1 last:border-0 last:pb-0">

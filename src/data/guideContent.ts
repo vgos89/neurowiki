@@ -151,7 +151,7 @@ TRACE-III tested whether **tenecteplase** could improve outcomes in patients wit
     *   **Symptomatic ICH:** 3.0% vs 0.8%.
 
 ## Clinical PEARLS
-*   **Late-Window Basis:** TRACE-III is the key trial supporting thrombolysis beyond 9 hours for **selected LVO patients** when thrombectomy cannot be performed.
+*   **Late-Window Basis:** TRACE-III is the primary trial supporting thrombolysis beyond 9 hours for **selected LVO patients** when thrombectomy cannot be performed.
 *   **Tissue Selection:** The study reinforces that perfusion-defined penumbra, not clock time alone, can identify candidates for late reperfusion therapy.
 *   **Not a Bridging Trial:** TRACE-III does **not** support giving late-window IV thrombolysis when rapid EVT is already available.
 *   **Safety Trade-off:** Functional benefit came with a numerically higher risk of symptomatic intracranial hemorrhage.
@@ -347,7 +347,7 @@ While Endovascular Thrombectomy (EVT) is the standard of care for Large Vessel O
 
 ## Clinical PEARLS
 *   **Neutral Result:** The trial failed to show a benefit for EVT in this broad population of medium/distal occlusions.
-*   **Technical Challenges:** Successful reperfusion (TICI 2b-3) was achieved in only **71.7%** of EVT patients, significantly lower than typical LVO trials, highlighting the difficulty of accessing distal vessels.
+*   **Technical Challenges:** Successful reperfusion (TICI 2b-3) was achieved in only **71.7%** of EVT patients, significantly lower than typical LVO trials — distal vessels are harder to access and catheterize reliably.
 *   **Safety Signal:** Symptomatic intracranial hemorrhage (sICH) was more than double in the EVT group (5.9% vs 2.6%).
 *   **Workflow:** Median time from imaging to arterial puncture was 70 minutes, exceeding the 60-minute target.
 
@@ -445,7 +445,7 @@ The DAWN trial investigated whether thrombectomy is effective in patients with a
 ## Clinical PEARLS
 *   **Massive Benefit:** The absolute difference in functional independence was **36%**, yielding a Number Needed to Treat (**NNT**) of **2.8**. This is one of the most potent effect sizes in stroke history.
 *   **Patient Selection:** Relies heavily on **age** and **[NIHSS](/calculators/nihss)** relative to core volume, unlike DEFUSE-3 which uses a flat core/penumbra cutoff.
-*   **Wake-Up Strokes:** Provided the first robust evidence for treating patients with unknown onset time (e.g., waking up with symptoms) if physiology was favorable.
+*   **Wake-Up Strokes:** Provided the first randomized evidence for treating patients with unknown onset time (e.g., waking up with symptoms) if physiology was favorable.
 
 ## Conclusion
 Among patients with acute stroke and mismatched clinical deficit and infarct volume, thrombectomy within 6 to 24 hours results in significantly better functional outcomes than standard care.
@@ -1240,7 +1240,7 @@ CHANCE established DAPT within 24 hours. INSPIRES extends the evidence to two im
 5.  No indication for anticoagulation (e.g., AF)
 
 ## Clinical PEARLS
-*   **The 72-hour window is the key clinical advance** — for patients who miss the 24h CHANCE window
+*   **The 72-hour window is the main clinical advance** — for patients who miss the 24h CHANCE window
 *   **Must confirm atherosclerotic etiology on vascular imaging** — NOT applicable to cardioembolic, lacunar, or other etiologies
 *   Same regimen as CHANCE: clopidogrel 300mg load → 75mg + aspirin × 21 days → clopidogrel alone to day 90
 *   2×2 factorial statin arm (atorvastatin 40mg vs 20mg) showed neutral effect in separate analysis

@@ -214,7 +214,7 @@ export const PearlDetailView: React.FC<PearlDetailViewProps> = ({
             {/* Footer */}
             <div className="p-4 bg-gradient-to-t from-white to-transparent border-t border-gray-200 flex-shrink-0 rounded-b-2xl">
               <p className="text-xs text-gray-500 text-center">
-                Evidence-based clinical guidance
+                Clinical guidance with trial references
               </p>
             </div>
           </div>

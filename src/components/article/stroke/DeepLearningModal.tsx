@@ -155,7 +155,7 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
               {sectionTitle}
             </p>
             <p className="text-xs text-gray-500 mt-1">
-              {pearls.length} {pearls.length === 1 ? 'pearl' : 'pearls'} • Evidence-based
+              {pearls.length} {pearls.length === 1 ? 'pearl' : 'pearls'} • with trial citations
             </p>
           </div>
         </div>

@@ -293,7 +293,7 @@ const MigrainePathway: React.FC = () => {
                 </div>
                 <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Acute Migraine Pathway</h1>
             </div>
-            <p className="text-slate-500 font-medium">Evidence-based "Headache Cocktail" algorithm for ED & Inpatient management.</p>
+            <p className="text-slate-500 font-medium">"Headache Cocktail" algorithm for ED and inpatient headache management.</p>
         </div>
         <button 
             onClick={handleFavToggle}

@@ -175,8 +175,7 @@ export const TreatmentSection: React.FC<TreatmentSectionProps> = ({ isLearningMo
       {/* Intro text */}
       <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
         <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-          Comprehensive, evidence-based treatment orders for acute ischemic stroke management.
-          Each order includes AHA guideline classification and scientific rationale from landmark trials.
+          Treatment orders for acute ischemic stroke management, with AHA guideline classification and rationale from landmark trials.
         </p>
       </div>
 
@@ -261,8 +260,7 @@ export const TreatmentSection: React.FC<TreatmentSectionProps> = ({ isLearningMo
               Clinical Judgment Required
             </p>
             <p className="text-sm text-blue-700 dark:text-blue-300 leading-relaxed">
-              These orders represent standard evidence-based care. Individualize based on patient
-              comorbidities, contraindications, and clinical status. Consult specialists as needed.
+              These orders reflect standard stroke care. Adjust for patient comorbidities, contraindications, and clinical status. Consult specialists as needed.
             </p>
           </div>
         </div>

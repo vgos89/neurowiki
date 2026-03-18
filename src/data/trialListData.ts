@@ -225,7 +225,7 @@ const manualTrials: Omit<TrialItem, 'year'>[] = [
   }),
   buildTrial('swift-prime-trial', 'SWIFT PRIME', 'evt', '10.1056/NEJMoa1415061', {
     isPlaceholder: false,
-    description: 'Pivotal Solitaire thrombectomy trial demonstrating large gains over IV tPA alone.',
+    description: 'Solitaire thrombectomy trial showing large functional gains over IV tPA alone.',
   }),
   buildTrial('thrace-trial', 'THRACE', 'evt', '10.1016/S1474-4422(16)30177-6', {
     isPlaceholder: false,

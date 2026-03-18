@@ -325,7 +325,7 @@ const MainContent: React.FC = () => {
             <span className="hidden sm:flex items-center gap-1.5">
               {workflowMode === 'code'
                 ? <><Zap className="w-3.5 h-3.5 inline-block" /> Fast-track clinical decisions during active stroke code &bull; all 3 sections open immediately</>
-                : <><BookOpen className="w-3.5 h-3.5 inline-block" /> Evidence-based learning with trials and clinical pearls &bull; 3 sections</>}
+                : <><BookOpen className="w-3.5 h-3.5 inline-block" /> Learning mode with trials and clinical pearls &bull; 3 sections</>}
             </span>
           </p>
         </div>
@@ -412,7 +412,7 @@ const MainContent: React.FC = () => {
                   </summary>
                   <div className="px-4 pb-4 pt-1 space-y-3">
                     <p className="text-sm text-blue-800 leading-relaxed">
-                      The &quot;last known well&quot; (LKW) time is the most critical piece of information in acute stroke management, determining eligibility for time-sensitive reperfusion therapies. For IV thrombolysis (tPA/TNK), the standard window is <strong>0-4.5 hours</strong>, with extended windows possible up to 9 hours using perfusion imaging (EXTEND trial). For mechanical thrombectomy, treatment is possible <strong>up to 24 hours</strong> with appropriate imaging showing salvageable tissue (DAWN/DEFUSE-3 trials).
+                      The &quot;last known well&quot; (LKW) time determines eligibility for time-sensitive reperfusion therapies and is the most important piece of information in acute stroke management. For IV thrombolysis (tPA/TNK), the standard window is <strong>0-4.5 hours</strong>, with extended windows possible up to 9 hours using perfusion imaging (EXTEND trial). For mechanical thrombectomy, treatment is possible <strong>up to 24 hours</strong> with appropriate imaging showing salvageable tissue (DAWN/DEFUSE-3 trials).
                     </p>
                     <p className="text-sm text-blue-800 leading-relaxed">
                       <strong>Time is Brain:</strong> During untreated stroke, 1.9 million neurons die per minute. Every 15-minute delay in treatment reduces the probability of good outcome by 4% (Emberson et al, Lancet 2014).
@@ -586,10 +586,10 @@ const MainContent: React.FC = () => {
                     </summary>
                     <div className="px-4 pb-4 pt-1 space-y-3">
                       <p className="text-sm text-green-800 leading-relaxed">
-                        Comprehensive stroke code documentation serves multiple critical functions. Include precise LKW time, NIHSS subscores, contraindication assessment, door-to-needle time, and treatment rationale.
+                        Stroke code documentation should capture precise LKW time, NIHSS subscores, contraindication assessment, door-to-needle time, and treatment rationale.
                       </p>
                       <p className="text-sm text-green-800 leading-relaxed">
-                        <strong>Key Metrics:</strong> DTN &lt;60 min goal, &lt;30 min excellence. Dedicated stroke units reduce mortality by 18% (Stroke Unit Trialists Collaboration).
+                        <strong>Metrics:</strong> DTN &lt;60 min goal, &lt;30 min excellence. Dedicated stroke units reduce mortality by 18% (Stroke Unit Trialists Collaboration).
                       </p>
                     </div>
                   </details>

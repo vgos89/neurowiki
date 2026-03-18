@@ -206,7 +206,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'IV Alteplase (0.9 mg/kg, max 90 mg)',
       control: 'Placebo + Best Medical Treatment'
     },
-    clinicalContext: 'The NINDS tPA Stroke Study was the landmark trial that established intravenous alteplase (tPA) as the first FDA-approved treatment for acute ischemic stroke.',
+    clinicalContext: 'The NINDS tPA Stroke Study established intravenous alteplase (tPA) as the first FDA-approved treatment for acute ischemic stroke.',
     calculations: {
       nnt: 6.5, // 1 / (0.426 - 0.272) = 6.5
       nntExplanation: 'For every 6.5 patients treated with tPA, one additional patient achieves minimal disability (mRS 0-1) compared to placebo'
@@ -222,7 +222,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'The National Institute of Neurological Disorders and Stroke rt-PA Stroke Study Group (NEJM 1995)',
     clinicalTrialsId: 'NCT00000292',
     listCategory: 'thrombolysis',
-    listDescription: 'Landmark trial establishing IV tPA within 3 hours; 42.6% vs 27.2% favorable outcome.',
+    listDescription: 'Foundational trial establishing IV tPA within 3 hours; 42.6% vs 27.2% favorable outcome.',
   },
   'original-trial': {
     id: 'original-trial',
@@ -273,7 +273,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'IV Tenecteplase 0.25 mg/kg (max 25 mg) — single IV bolus over 5–10 seconds',
       control: 'IV Alteplase 0.9 mg/kg (max 90 mg) — 10% bolus + 60-minute infusion'
     },
-    clinicalContext: 'Tenecteplase is a bioengineered variant of alteplase with greater fibrin specificity, longer half-life, and resistance to plasminogen activator inhibitor-1, enabling single-bolus administration. Prior evidence (NOR-TEST, AcT trials) had shown mixed results. ORIGINAL was designed to establish noninferiority in a large Chinese population and directly compared the two agents head-to-head within the 4.5-hour thrombolysis window.',
+    clinicalContext: 'Tenecteplase is a bioengineered variant of alteplase with greater fibrin specificity, longer half-life, and resistance to plasminogen activator inhibitor-1 — allowing single-bolus dosing. Prior trials (NOR-TEST, AcT) had shown mixed results. ORIGINAL tested noninferiority in a large Chinese population, directly comparing both agents head-to-head within the 4.5-hour thrombolysis window.',
     calculations: {
       nnt: null,
       nntExplanation: 'Noninferiority trial — NNT is not the primary framing. Tenecteplase was noninferior to alteplase (RR 1.03, 95% CI 0.97–1.09; noninferiority threshold of RR ≥0.937 met).'
@@ -416,7 +416,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Tissue Window: Proved that the "tissue window" (perfusion mismatch) is more relevant than the rigid "time window" for thrombolysis, similar to mechanical thrombectomy',
       'Wake-Up Stroke: Provided evidence for treating wake-up strokes guided by CTP (alternative to the MRI DWI-FLAIR mismatch strategy from WAKE-UP trial)',
       'Selection Criteria: Core < 70 ml (CTP or DWI), Mismatch: Penumbra > 10 ml and > 1.2x Core volume',
-      'Clinical Implementation: Many centers now utilize this protocol for patients < 9 hours who are not thrombectomy candidates (e.g., distal occlusions) but have favorable perfusion profiles',
+      'Clinical Implementation: Many centers now use this protocol for patients < 9 hours who are not thrombectomy candidates (e.g., distal occlusions) but have favorable perfusion profiles',
       'Symptomatic ICH: 6.2% in Alteplase group vs 0.9% in Placebo group',
       'Adjusted Risk Ratio: 1.44 (P=0.04)'
     ],
@@ -541,7 +541,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     clinicalContext: 'MR CLEAN was the first modern positive thrombectomy trial and established that endovascular treatment improves disability outcomes for anterior circulation large-vessel occlusion when patients are selected with vessel imaging and treated rapidly.',
     pearls: [
-      'Landmark positive EVT trial that reopened the field after earlier neutral endovascular studies',
+      'First positive modern EVT trial that reopened the field after earlier neutral endovascular studies',
       'Most patients also received IV alteplase before randomization (89%)',
       'Functional independence improved from 19.1% to 32.6%',
       'Adjusted common odds ratio for better disability outcome was 1.67',
@@ -608,7 +608,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Mortality was reduced: 10.4% vs 19.0%',
       'Median CT-to-first reperfusion time in the EVT arm was only 84 minutes',
       'Used collateral imaging to exclude patients with poor tissue reserve',
-      'One of the pivotal 2015 trials that cemented EVT as standard of care'
+      'One of the five 2015 trials that cemented EVT as standard of care'
     ],
     conclusion: 'Among patients with proximal anterior circulation occlusion, small infarct core, and favorable collaterals, rapid EVT improved outcomes and reduced mortality.',
     source: 'Goyal et al. (NEJM 2015)',
@@ -797,7 +797,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Saver et al. (NEJM 2015)',
     clinicalTrialsId: 'NCT01657461',
     listCategory: 'thrombectomy',
-    listDescription: 'Pivotal Solitaire thrombectomy trial showing large gains over IV tPA alone.',
+    listDescription: 'Solitaire thrombectomy trial showing large gains over IV tPA alone.',
   },
   'thrace-trial': {
     id: 'thrace-trial',
@@ -1780,7 +1780,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Lower post-EVT systolic blood pressure target, primarily <140 mm Hg',
       control: 'Guideline-level post-EVT systolic blood pressure target <=180 mm Hg'
     },
-    clinicalContext: 'BEST-II was an early dose-finding and futility study designed to see whether pushing systolic blood pressure lower after technically successful EVT was promising enough to justify a large superiority trial.',
+    clinicalContext: 'BEST-II was a dose-finding and futility study testing whether a lower systolic BP target after technically successful EVT would be promising enough to justify a large superiority trial.',
     pearls: [
       'Neither lower target met prespecified futility boundaries, so definitive harm could not be declared',
       'Signals still favored the higher target rather than aggressive BP lowering',
@@ -2693,7 +2693,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'MASSIVE BENEFIT: Absolute difference in functional independence was 36%, yielding NNT of 2.8 - one of the most potent effect sizes in stroke history',
       'Probability of Superiority: >99.9%',
       'Patient Selection: Relies heavily on age and NIHSS relative to core volume (Group A: Age ≥80, NIHSS ≥10, Core <21ml; Group B: Age <80, NIHSS ≥10, Core <31ml; Group C: Age <80, NIHSS ≥20, Core 31-50ml)',
-      'Wake-Up Strokes: Provided first robust evidence for treating patients with unknown onset time if physiology was favorable',
+      'Wake-Up Strokes: Provided the first randomized evidence for treating patients with unknown onset time if physiology was favorable',
       'Clinical-Core Mismatch: Unlike DEFUSE-3 which uses flat core/penumbra cutoff, DAWN uses age/NIHSS-adjusted criteria'
     ],
     conclusion: 'Among patients with acute stroke and mismatched clinical deficit and infarct volume, thrombectomy within 6 to 24 hours results in significantly better functional outcomes than standard care.',
@@ -3018,7 +3018,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       nntExplanation: 'For every 8.7 patients with wake-up stroke and DWI-FLAIR mismatch treated with tPA, one additional patient achieves excellent outcome (mRS 0-1) compared to placebo'
     },
     pearls: [
-      'Landmark Positive Trial: First randomized evidence that MRI-selected unknown-onset stroke can benefit from alteplase',
+      'First randomized evidence that MRI-selected unknown-onset stroke can benefit from alteplase',
       'Tissue Clock: DWI-FLAIR mismatch identifies patients likely within the prior 4.5 hours despite uncertain onset',
       'Functional Benefit: mRS 0-1 at 90 days improved from 41.8% to 53.3% (NNT 8.7)',
       'Important Exclusion: Patients with planned thrombectomy were excluded from WAKE-UP',
@@ -3184,7 +3184,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       pValue: {
         value: '<0.001',
         label: 'Statistically Sig.',
-        info: 'p<0.001 means the benefit of dual antiplatelet therapy is EXTREMELY unlikely to be due to chance (less than 0.1% probability). This is one of the strongest levels of statistical significance in clinical trials, indicating robust and reliable treatment effect.',
+        info: 'p<0.001 means the benefit of dual antiplatelet therapy is EXTREMELY unlikely to be due to chance (less than 0.1% probability). This is one of the strongest levels of statistical significance in clinical trials.',
         highlight: true
       },
       effectSize: {
@@ -3490,7 +3490,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     pearls: [
       'Patient Selection: This trial demonstrated that intracranial stenting can be performed safely (2.6% risk vs 14.7% in SAMMPRIS) if strict selection criteria are followed, particularly waiting >8 days after stroke and requiring demonstrated failure of medical therapy (2 recurrent strokes)',
-      'Experience Matters: The trial utilized experienced interventionalists, which likely contributed to the lower complication rate',
+      'Experience Matters: The trial used experienced interventionalists, which likely contributed to the lower complication rate',
       'Role of Stenting: While WEAVE assessed safety (not efficacy vs medical therapy), it reopened the door for stenting as a viable salvage option for highly selected refractory patients',
       'On-Label Criteria: Symptomatic ICAD 70-99%, recurrent stroke despite medical therapy (at least 2 strokes in territory), Age 22-80, mRS ≤ 3, >8 days from most recent stroke',
       'Safety Benchmark: Significantly lower than the 4% safety benchmark set by the FDA'
@@ -5364,9 +5364,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'In intention-to-treat analysis, tenecteplase numerically favored alteplase but narrowly missed clean noninferiority',
       'Per-protocol analysis supported noninferiority more clearly',
       'Symptomatic intracranial hemorrhage was low and similar: 3% vs 2%',
-      'TASTE adds to the tenecteplase body of evidence but is more nuanced than AcT or TRACE-2'
+      'TASTE adds to the tenecteplase body of evidence but its result is less clear-cut than AcT or TRACE-2'
     ],
-    conclusion: 'TASTE generally supports tenecteplase in perfusion-selected early-window stroke, but its result was more nuanced than other noninferiority trials because the per-protocol analysis was stronger than the intention-to-treat analysis.',
+    conclusion: 'TASTE generally supports tenecteplase in perfusion-selected early-window stroke, but its result was less definitive than other noninferiority trials because the per-protocol analysis was stronger than the intention-to-treat analysis.',
     source: 'TASTE Investigators (Lancet Neurol 2024)',
     doi: '10.1016/S1474-4422(24)00206-0',
     trialResult: 'NEUTRAL'

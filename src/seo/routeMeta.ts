@@ -1,3 +1,4 @@
+import { TRIAL_DATA } from '../data/trialData';
 
 interface MetaData {
   title: string;
@@ -19,15 +20,15 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
 
   '/guide': {
     title: 'Neurology Toolkit — Clinical Guides, Protocols & Calculators | NeuroWiki',
-    description: 'Evidence-based neurology protocols and clinical guides for residents, attendings, and medical students. Stroke code, EVT, status epilepticus, ASPECTS, NIHSS, and more.',
+    description: 'Neurology protocols and clinical guides for residents, attendings, and medical students. Stroke code, EVT, status epilepticus, ASPECTS, NIHSS, and more.',
     keywords: 'neurology toolkit, neurology protocols for residents, neurology resident guide, clinical neurology reference, stroke guide, epilepsy protocol, neurology calculators',
     image: 'https://neurowiki.ai/og-image.png',
   },
 
   '/trials': {
-    title: 'Landmark Neurology Trials — Stroke, EVT & Antiplatelet | NeuroWiki',
-    description: 'Summaries of pivotal clinical trials in vascular neurology: DAWN, DEFUSE-3, NINDS, ELAN, CHANCE, POINT, and more. Evidence-based decision support.',
-    keywords: 'landmark neurology trials, stroke trials, EVT trials, DAWN trial, DEFUSE-3, NINDS trial, CHANCE trial, antiplatelet stroke',
+    title: 'Stroke Clinical Trials — Evidence Summaries for Neurologists | NeuroWiki',
+    description: 'Summaries of 79 landmark stroke clinical trials: DAWN, DEFUSE-3, NINDS, ORIGINAL, MR CLEAN, INSPIRES, ENRICH, TRACE-III, ELAN, CHANCE, POINT, and more. NNT, mRS outcomes, AHA/ASA 2026 guideline recommendations. For neurologists and residents.',
+    keywords: 'landmark stroke clinical trials, stroke trial results, thrombectomy trials, IV thrombolysis trials, DAWN trial, DEFUSE-3 trial, NINDS tPA trial, ORIGINAL tenecteplase trial, MR CLEAN trial, INSPIRES DAPT stroke, ENRICH ICH surgery, secondary prevention stroke trials, NNT stroke, NEJM stroke trials, vascular neurology clinical trials',
     image: 'https://neurowiki.ai/og-image.png',
   },
 
@@ -60,7 +61,7 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
 
   '/calculators/abcd2-score': {
     title: 'ABCD² Score Calculator — TIA Stroke Risk | NeuroWiki',
-    description: 'Calculate 2-day stroke risk after TIA using the ABCD² score. Free online calculator with clinical interpretation. Age, blood pressure, clinical features, duration, diabetes. AHA/ASA evidence-based.',
+    description: 'Calculate 2-day stroke risk after TIA using the ABCD² score. Free online calculator with clinical interpretation. Age, blood pressure, clinical features, duration, diabetes. Based on AHA/ASA guidelines.',
     keywords: 'ABCD2 calculator, ABCD2 score TIA, TIA stroke risk, transient ischemic attack risk calculator, 2-day stroke risk after TIA',
   },
 
@@ -104,7 +105,7 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
 
   '/calculators/elan-pathway': {
     title: 'ELAN Anticoagulation Pathway — Post-Stroke DOAC Timing | NeuroWiki',
-    description: 'Evidence-based timing of DOAC anticoagulation after acute ischemic stroke with atrial fibrillation. Based on ELAN trial (NEJM 2023) and AHA/ASA 2026 guidelines. Covers stroke size, hemorrhagic transformation, and timing.',
+    description: 'DOAC anticoagulation timing after acute ischemic stroke with atrial fibrillation. Based on ELAN trial (NEJM 2023) and AHA/ASA 2026 guidelines. Covers stroke size, hemorrhagic transformation, and timing.',
     keywords: 'ELAN anticoagulation pathway, post-stroke anticoagulation timing, DOAC after stroke, atrial fibrillation stroke anticoagulation, ELAN trial, post-stroke DOAC timing calculator',
   },
 
@@ -124,7 +125,7 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
 
   '/calculators/migraine-pathway': {
     title: 'Acute Migraine Pathway — ED & Inpatient Management | NeuroWiki',
-    description: 'Evidence-based acute migraine and headache management pathway for emergency department and inpatient settings. Migraine cocktail, abortive therapy, and refractory headache protocols.',
+    description: 'Acute migraine and headache management pathway for emergency department and inpatient settings. Migraine cocktail, abortive therapy, and refractory headache protocols.',
     keywords: 'acute migraine treatment protocol, migraine cocktail ED, inpatient migraine management, refractory migraine treatment, acute headache pathway, migraine abortive therapy',
   },
 
@@ -163,13 +164,13 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
 
   '/guide/thrombectomy': {
     title: 'Mechanical Thrombectomy Guide — EVT Criteria & Technique | NeuroWiki',
-    description: 'Evidence-based guide to mechanical thrombectomy for LVO stroke. EVT eligibility criteria, imaging selection (ASPECTS, perfusion), procedure overview, and post-procedure management. DAWN, DEFUSE-3, AHA/ASA 2026.',
+    description: 'Mechanical thrombectomy guide for LVO stroke. EVT eligibility criteria, imaging selection (ASPECTS, perfusion), procedure overview, and post-procedure management. DAWN, DEFUSE-3, AHA/ASA 2026.',
     keywords: 'mechanical thrombectomy guide, EVT stroke criteria, thrombectomy eligibility, LVO stroke treatment, ASPECTS score thrombectomy, thrombectomy time window, stent retriever thrombectomy',
   },
 
   '/guide/acute-stroke-mgmt': {
-    title: 'Acute Stroke Management — Comprehensive Inpatient Protocol | NeuroWiki',
-    description: 'Comprehensive acute ischemic stroke management protocol: BP targets, glucose control, dysphagia screening, antiplatelet initiation, DVT prophylaxis, and secondary prevention. AHA/ASA 2026 guidelines.',
+    title: 'Acute Stroke Management — Inpatient Protocol | NeuroWiki',
+    description: 'Acute ischemic stroke management protocol: BP targets, glucose control, dysphagia screening, antiplatelet initiation, DVT prophylaxis, and secondary prevention. AHA/ASA 2026 guidelines.',
     keywords: 'acute stroke management protocol, stroke inpatient management, stroke blood pressure targets, dual antiplatelet stroke, stroke glucose management, dysphagia stroke screening, secondary prevention stroke',
   },
 
@@ -181,13 +182,13 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
 
   '/guide/status-epilepticus': {
     title: 'Status Epilepticus Management Guide — First Line to Refractory | NeuroWiki',
-    description: 'Evidence-based status epilepticus management: lorazepam first-line, levetiracetam/valproate/fosphenytoin second-line, propofol/midazolam/ketamine for refractory SE. ESETT-based. For neurology residents.',
+    description: 'Status epilepticus management: lorazepam first-line, levetiracetam/valproate/fosphenytoin second-line, propofol/midazolam/ketamine for refractory SE. Based on ESETT trial. For neurology residents.',
     keywords: 'status epilepticus management, status epilepticus treatment protocol, refractory status epilepticus treatment, lorazepam status epilepticus, ESETT trial, super-refractory status epilepticus, SE benzodiazepine',
   },
 
   '/guide/meningitis': {
     title: 'Bacterial Meningitis — Workup & Treatment Protocol | NeuroWiki',
-    description: 'Evidence-based bacterial meningitis workup and treatment: empiric antibiotics, dexamethasone timing, LP interpretation, CSF analysis, and antibiotic tailoring. For emergency and inpatient neurology.',
+    description: 'Bacterial meningitis workup and treatment: empiric antibiotics, dexamethasone timing, LP interpretation, CSF analysis, and antibiotic tailoring. For emergency and inpatient neurology.',
     keywords: 'bacterial meningitis treatment, meningitis antibiotic protocol, meningitis LP CSF analysis, dexamethasone meningitis, empiric meningitis antibiotics, meningitis workup residents',
   },
 
@@ -217,7 +218,7 @@ const ROUTE_REGISTRY: Record<string, MetaData> = {
 
   '/guide/seizure-workup': {
     title: 'Seizure Workup — First Seizure Evaluation & Diagnostic Approach | NeuroWiki',
-    description: 'Evidence-based first seizure workup: EEG, MRI brain, LP indications, seizure mimics, AED initiation criteria, and recurrence risk. For emergency and neurology residents.',
+    description: 'First seizure workup: EEG, MRI brain, LP indications, seizure mimics, AED initiation criteria, and recurrence risk. For emergency and neurology residents.',
     keywords: 'first seizure workup, seizure evaluation, new onset seizure diagnosis, EEG first seizure, seizure vs syncope, seizure MRI protocol, AED initiation first seizure',
   },
 
@@ -431,6 +432,27 @@ export const getRouteMeta = (pathname: string): MetaData => {
 
   // 3. Dynamic Guide/Trial Match
   if (pathname.startsWith('/guide/') || pathname.startsWith('/trials/')) {
+    // For trial pages not in ROUTE_REGISTRY: generate rich meta from TRIAL_DATA
+    if (pathname.startsWith('/trials/')) {
+      const trialId = pathname.split('/').pop() ?? '';
+      const trial = TRIAL_DATA[trialId];
+      if (trial) {
+        const efResults = trial.efficacyResults
+          ? ` ${trial.efficacyResults.treatment.percentage}% vs ${trial.efficacyResults.control.percentage}% (${trial.efficacyResults.treatment.label}).`
+          : '';
+        const nnt = trial.calculations?.nnt ? ` NNT ${trial.calculations.nnt}.` : '';
+        const sourceYear = trial.source?.match(/\b(19|20)\d{2}\b/)?.[0] ?? '';
+        const sourceShort = sourceYear ? ` (${trial.source.split('(')[0].trim()}, ${sourceYear})` : '';
+        const rawDesc = `${trial.clinicalContext.split('. ').slice(0, 2).join('. ')}.${efResults}${nnt}${sourceShort}`;
+        return {
+          ...DEFAULT_META,
+          title: `${trial.title} — ${trial.subtitle} | NeuroWiki`,
+          description: rawDesc.trim().substring(0, 158),
+          keywords: `${trial.title} trial, ${trial.title} results, ${trial.title} stroke trial, ${trial.subtitle.toLowerCase()}, stroke clinical trial summary, neurology trial`,
+        };
+      }
+    }
+    // Generic fallback for guide pages or unknown trial slugs
     const slug = pathname.split('/').pop() || '';
     const title = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     const type = pathname.startsWith('/trials/') ? 'Clinical Trial' : 'Clinical Guide';

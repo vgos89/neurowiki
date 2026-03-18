@@ -47,8 +47,8 @@ export default function TrialsPage() {
         <div className="max-w-2xl mx-auto px-5 md:px-8">
           <div className="flex items-center justify-between py-3">
             <div>
-              <h1 className="text-lg font-bold text-slate-900 dark:text-white">Stroke Trials</h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Reorganized by clinical workflow</p>
+              <h1 className="text-lg font-bold text-slate-900 dark:text-white">Stroke Clinical Trials</h1>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Evidence summaries for 79 landmark trials, organized by clinical workflow</p>
             </div>
             <button
               onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
@@ -113,6 +113,11 @@ export default function TrialsPage() {
 
       {/* Main content — card list with left border, title, Trial tag, blurb, star, arrow */}
       <main className="max-w-2xl mx-auto px-5 md:px-8 py-6">
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
+          Landmark clinical trials in vascular neurology — covering intravenous thrombolysis (alteplase, tenecteplase),
+          mechanical thrombectomy (EVT), prehospital triage, blood pressure management, surgical interventions, and
+          secondary prevention (DAPT, DOACs). Results include mRS outcomes, NNT, and AHA/ASA 2026 guideline impact.
+        </p>
         {showFavoritesOnly && (
           <div className="mb-4 px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/50 rounded-xl flex items-center justify-between">
             <div className="flex items-center gap-2">

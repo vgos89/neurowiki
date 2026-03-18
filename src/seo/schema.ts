@@ -4,6 +4,8 @@
  * BreadcrumbList, FAQPage).
  */
 
+import { TRIAL_DATA } from '../data/trialData';
+
 const BASE_URL = 'https://neurowiki.ai';
 const LAST_REVIEWED = '2026-02-18';
 
@@ -20,7 +22,7 @@ const ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'NeuroWiki',
-  description: 'The Digital Neurology Companion — evidence-based protocols, calculators, and clinical guidelines for neurologists and residents.',
+  description: 'Free neurology protocols, calculators, and clinical guidelines for neurologists and residents. Built on AHA/ASA 2026 stroke guidelines.',
   url: BASE_URL,
   logo: `${BASE_URL}/favicon.png`,
   sameAs: [],
@@ -50,7 +52,7 @@ const CALCULATORS_HUB_SCHEMA = {
     {
       '@type': 'ItemList',
       name: 'Neurology Clinical Calculators',
-      description: 'Free, evidence-based neurology calculators for stroke, hemorrhage, TIA, and neurocritical care.',
+      description: 'Free neurology calculators for stroke, hemorrhage, TIA, and neurocritical care.',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'NIHSS Calculator', url: `${BASE_URL}/calculators/nihss` },
         { '@type': 'ListItem', position: 2, name: 'ICH Score Calculator', url: `${BASE_URL}/calculators/ich-score` },
@@ -72,7 +74,7 @@ const GUIDE_HUB_SCHEMA = {
     {
       '@type': 'WebPage',
       name: 'Neurology Resident Guide — Protocols & Clinical Reference | NeuroWiki',
-      description: 'Evidence-based neurology protocols and clinical guides for residents, attendings, and medical students.',
+      description: 'Neurology protocols and clinical guides for residents, attendings, and medical students.',
       url: `${BASE_URL}/guide`,
       audience: { '@type': 'MedicalAudience', audienceType: 'Physician, Neurologist, Resident' },
       publisher: PUBLISHER,
@@ -92,9 +94,10 @@ const TRIALS_HUB_SCHEMA = {
   '@graph': [
     {
       '@type': 'WebPage',
-      name: 'Landmark Neurology Trials — Stroke, EVT & Antiplatelet | NeuroWiki',
-      description: 'Summaries of pivotal clinical trials in vascular neurology: DAWN, DEFUSE-3, NINDS, ELAN, CHANCE, POINT, and more.',
+      name: 'Stroke Clinical Trials — Evidence Summaries for Neurologists | NeuroWiki',
+      description: 'Summaries of 79 landmark stroke clinical trials: DAWN, DEFUSE-3, NINDS, ORIGINAL, MR CLEAN, INSPIRES, ENRICH, TRACE-III, ELAN, CHANCE, POINT, and more. NNT, mRS outcomes, AHA/ASA 2026 guideline recommendations.',
       url: `${BASE_URL}/trials`,
+      medicalSpecialty: 'Neurology',
       audience: { '@type': 'MedicalAudience', audienceType: 'Physician, Neurologist, Resident' },
       publisher: PUBLISHER,
     },
@@ -103,6 +106,33 @@ const TRIALS_HUB_SCHEMA = {
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
         { '@type': 'ListItem', position: 2, name: 'Clinical Trials', item: `${BASE_URL}/trials` },
+      ],
+    },
+    {
+      '@type': 'ItemList',
+      name: 'Landmark Stroke Clinical Trials',
+      description: 'Evidence summaries for 79 landmark vascular neurology trials covering thrombolysis, thrombectomy, secondary prevention, and surgical interventions.',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1,  name: 'NINDS Trial — IV tPA 3-hour window',                  url: `${BASE_URL}/trials/ninds-trial` },
+        { '@type': 'ListItem', position: 2,  name: 'DAWN Trial — late-window thrombectomy 6–24h',         url: `${BASE_URL}/trials/dawn-trial` },
+        { '@type': 'ListItem', position: 3,  name: 'DEFUSE-3 — perfusion-selected EVT 6–16h',             url: `${BASE_URL}/trials/defuse-3-trial` },
+        { '@type': 'ListItem', position: 4,  name: 'ORIGINAL — tenecteplase vs alteplase',                url: `${BASE_URL}/trials/original-trial` },
+        { '@type': 'ListItem', position: 5,  name: 'TRACE-III — late-window tenecteplase',                url: `${BASE_URL}/trials/trace-iii-trial` },
+        { '@type': 'ListItem', position: 6,  name: 'MR CLEAN — first modern thrombectomy trial',          url: `${BASE_URL}/trials/mr-clean-trial` },
+        { '@type': 'ListItem', position: 7,  name: 'SELECT-2 — large core EVT (ASPECTS 3–5)',             url: `${BASE_URL}/trials/select2-trial` },
+        { '@type': 'ListItem', position: 8,  name: 'ANGEL-ASPECT — large core EVT',                      url: `${BASE_URL}/trials/angel-aspect-trial` },
+        { '@type': 'ListItem', position: 9,  name: 'LASTE — large core thrombectomy',                     url: `${BASE_URL}/trials/laste-trial` },
+        { '@type': 'ListItem', position: 10, name: 'TENSION — large core EVT (non-contrast CT)',          url: `${BASE_URL}/trials/tension-trial` },
+        { '@type': 'ListItem', position: 11, name: 'ELAN — DOAC timing after cardioembolic stroke',       url: `${BASE_URL}/trials/elan-study` },
+        { '@type': 'ListItem', position: 12, name: 'CHANCE — dual antiplatelet minor stroke/TIA',         url: `${BASE_URL}/trials/chance-trial` },
+        { '@type': 'ListItem', position: 13, name: 'POINT — clopidogrel + aspirin after TIA',             url: `${BASE_URL}/trials/point-trial` },
+        { '@type': 'ListItem', position: 14, name: 'INSPIRES — DAPT within 72h atherosclerotic stroke',   url: `${BASE_URL}/trials/inspires-trial` },
+        { '@type': 'ListItem', position: 15, name: 'ENRICH — minimally invasive ICH surgery',             url: `${BASE_URL}/trials/enrich-trial` },
+        { '@type': 'ListItem', position: 16, name: 'WAKE-UP — MRI-guided wake-up stroke thrombolysis',    url: `${BASE_URL}/trials/wake-up-trial` },
+        { '@type': 'ListItem', position: 17, name: 'ECASS-3 — alteplase 3–4.5h extended window',          url: `${BASE_URL}/trials/ecass3-trial` },
+        { '@type': 'ListItem', position: 18, name: 'RAISE — reteplase vs alteplase thrombolysis',         url: `${BASE_URL}/trials/raise-trial` },
+        { '@type': 'ListItem', position: 19, name: 'BEST-MSU — mobile stroke unit trial',                 url: `${BASE_URL}/trials/best-msu-trial` },
+        { '@type': 'ListItem', position: 20, name: 'SPARCL — high-dose statin after stroke',              url: `${BASE_URL}/trials/sparcl-trial` },
       ],
     },
   ],
@@ -346,31 +376,108 @@ function guideSchema(pathname: string, title: string, description: string, guide
 
 // ── Trial schema ──────────────────────────────────────────────────────────────
 
+/** Dynamically generates FAQs from TRIAL_DATA for any trial page — enables Google FAQ rich snippets. */
+function generateTrialFAQs(trialId: string): Array<{ question: string; answer: string }> | null {
+  const trial = TRIAL_DATA[trialId];
+  if (!trial) return null;
+
+  const faqs: Array<{ question: string; answer: string }> = [];
+
+  // Q1: What did the trial show? (always present — uses verified conclusion field)
+  faqs.push({
+    question: `What did the ${trial.title} show?`,
+    answer: trial.conclusion,
+  });
+
+  // Q2: Primary outcome / efficacy numbers
+  if (trial.efficacyResults) {
+    const { treatment, control } = trial.efficacyResults;
+    const ep =
+      trial.stats?.primaryEndpoint?.value ??
+      trial.trialDesign?.primaryEndpoint?.value ??
+      'the primary endpoint';
+    const pVal = trial.stats?.pValue?.value ? `, p ${trial.stats.pValue.value}` : '';
+    const nntLine = trial.calculations?.nntExplanation
+      ? ` NNT: ${trial.calculations.nntExplanation}.`
+      : '';
+    faqs.push({
+      question: `What were the key results of ${trial.title}?`,
+      answer: `${trial.title} enrolled ${trial.stats?.sampleSize?.value ?? 'participants'}. The primary outcome (${ep}) was achieved in ${treatment.percentage}% of the ${treatment.name} group vs ${control.percentage}% of the ${control.name} group${pVal}.${nntLine}`,
+    });
+  }
+
+  // Q3: Trial design and intervention
+  if (trial.intervention) {
+    const tx =
+      typeof trial.intervention.treatment === 'string'
+        ? trial.intervention.treatment
+        : `${trial.intervention.treatment.name}: ${trial.intervention.treatment.description}`;
+    const ctrl =
+      typeof trial.intervention.control === 'string'
+        ? trial.intervention.control
+        : `${trial.intervention.control.name}: ${trial.intervention.control.description}`;
+    const designType = trial.trialDesign?.type?.[0] ?? '';
+    faqs.push({
+      question: `What was the design of ${trial.title}?`,
+      answer: `${trial.title} (${trial.source}) compared ${tx} versus ${ctrl}. ${designType ? `${designType}. ` : ''}${trial.clinicalContext}`,
+    });
+  }
+
+  // Q4: Clinical application or key pearls
+  if (trial.clinicalApplication) {
+    faqs.push({
+      question: `How should ${trial.title} change clinical practice?`,
+      answer: trial.clinicalApplication,
+    });
+  } else if (trial.pearls?.length) {
+    faqs.push({
+      question: `What are the key clinical takeaways from ${trial.title}?`,
+      answer: trial.pearls.slice(0, 3).join(' '),
+    });
+  }
+
+  return faqs.length > 0 ? faqs : null;
+}
+
 function trialSchema(pathname: string, title: string, description: string, trialLabel: string): object {
   const url = `${BASE_URL}${pathname}`;
-  return {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'MedicalWebPage',
-        name: title,
-        description,
-        url,
-        audience: { '@type': 'MedicalAudience', audienceType: 'Physician, Neurologist, Resident' },
-        about: { '@type': 'MedicalScholarlyArticle', name: title },
-        publisher: PUBLISHER,
-        lastReviewed: LAST_REVIEWED,
-      },
-      {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
-          { '@type': 'ListItem', position: 2, name: 'Clinical Trials', item: `${BASE_URL}/trials` },
-          { '@type': 'ListItem', position: 3, name: trialLabel, item: url },
-        ],
-      },
-    ],
-  };
+  const trialId = pathname.split('/').pop() ?? '';
+  const faqs = generateTrialFAQs(trialId);
+
+  const graph: object[] = [
+    {
+      '@type': 'MedicalWebPage',
+      name: title,
+      description,
+      url,
+      medicalSpecialty: 'Neurology',
+      audience: { '@type': 'MedicalAudience', audienceType: 'Physician, Neurologist, Resident' },
+      about: { '@type': 'MedicalScholarlyArticle', name: trialLabel, url },
+      publisher: PUBLISHER,
+      lastReviewed: LAST_REVIEWED,
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+        { '@type': 'ListItem', position: 2, name: 'Clinical Trials', item: `${BASE_URL}/trials` },
+        { '@type': 'ListItem', position: 3, name: trialLabel, item: url },
+      ],
+    },
+  ];
+
+  if (faqs) {
+    graph.push({
+      '@type': 'FAQPage',
+      mainEntity: faqs.map(({ question, answer }) => ({
+        '@type': 'Question',
+        name: question,
+        acceptedAnswer: { '@type': 'Answer', text: answer },
+      })),
+    });
+  }
+
+  return { '@context': 'https://schema.org', '@graph': graph };
 }
 
 // ── Breadcrumb label maps ─────────────────────────────────────────────────────
@@ -415,19 +522,21 @@ const GUIDE_LABELS: Record<string, string> = {
 };
 
 const TRIAL_LABELS: Record<string, string> = {
+  // Legacy trials
   '/trials/ninds-trial':        'NINDS Trial',
   '/trials/ecass3-trial':       'ECASS-3 Trial',
   '/trials/extend-trial':       'EXTEND Trial',
   '/trials/thaws-trial':        'THAWS Trial',
   '/trials/trace-iii-trial':    'TRACE-III Trial',
   '/trials/eagle-trial':        'EAGLE Trial',
+  '/trials/original-trial':     'ORIGINAL Trial',
   '/trials/wake-up-trial':      'WAKE-UP Trial',
   '/trials/dawn-trial':         'DAWN Trial',
   '/trials/defuse-3-trial':     'DEFUSE-3 Trial',
   '/trials/select2-trial':      'SELECT-2 Trial',
   '/trials/angel-aspect-trial': 'ANGEL-ASPECT Trial',
   '/trials/distal-trial':       'DISTAL Trial',
-  '/trials/escape-mevo-trial':  'ESCAPE-MEVO Trial',
+  '/trials/escape-mevo-trial':  'ESCAPE-MeVO Trial',
   '/trials/attention-trial':    'ATTENTION Trial',
   '/trials/baoche-trial':       'BAOCHE Trial',
   '/trials/chance-trial':       'CHANCE Trial',
@@ -438,6 +547,67 @@ const TRIAL_LABELS: Record<string, string> = {
   '/trials/sps3-trial':         'SPS3 Trial',
   '/trials/sparcl-trial':       'SPARCL Trial',
   '/trials/elan-study':         'ELAN Study',
+  '/trials/thales-trial':       'THALES Trial',
+  '/trials/inspires-trial':     'INSPIRES Trial',
+  '/trials/chance-2-trial':     'CHANCE-2 Trial',
+  '/trials/enrich-trial':       'ENRICH Trial',
+  // Prehospital & Triage
+  '/trials/b-proud-trial':           'B_PROUD Trial',
+  '/trials/best-msu-trial':          'BEST-MSU Trial',
+  '/trials/racecat-trial':           'RACECAT Trial',
+  '/trials/triage-stroke-trial':     'TRIAGE-STROKE Trial',
+  '/trials/right-2-trial':           'RIGHT-2 Trial',
+  '/trials/mr-asap-trial':           'MR ASAP Trial',
+  '/trials/interact4-trial':         'INTERACT4 Trial',
+  // IVT
+  '/trials/timeless-trial':          'TIMELESS Trial',
+  '/trials/prisms-trial':            'PRISMS Trial',
+  '/trials/aramis-trial':            'ARAMIS Trial',
+  '/trials/act-trial':               'AcT Trial',
+  '/trials/attest-2-trial':          'ATTEST-2 Trial',
+  '/trials/nor-test-trial':          'NOR-TEST Trial',
+  '/trials/nor-test-2-part-a-trial': 'NOR-TEST 2 (Part A) Trial',
+  '/trials/trace-2-trial':           'TRACE-2 Trial',
+  '/trials/taste-trial':             'TASTE Trial',
+  '/trials/twist-trial':             'TWIST Trial',
+  '/trials/raise-trial':             'RAISE Trial',
+  '/trials/prost-trial':             'PROST Trial',
+  '/trials/prost-2-trial':           'PROST-2 Trial',
+  // EVT
+  '/trials/mr-clean-trial':          'MR CLEAN Trial',
+  '/trials/escape-trial':            'ESCAPE Trial',
+  '/trials/revascat-trial':          'REVASCAT Trial',
+  '/trials/extend-ia-trial':         'EXTEND-IA Trial',
+  '/trials/swift-prime-trial':       'SWIFT PRIME Trial',
+  '/trials/thrace-trial':            'THRACE Trial',
+  '/trials/direct-mt-trial':         'DIRECT-MT Trial',
+  '/trials/devt-trial':              'DEVT Trial',
+  '/trials/skip-trial':              'SKIP Trial',
+  '/trials/mr-clean-no-iv-trial':    'MR CLEAN-NO IV Trial',
+  '/trials/direct-safe-trial':       'DIRECT-SAFE Trial',
+  '/trials/swift-direct-trial':      'SWIFT DIRECT Trial',
+  '/trials/laste-trial':             'LASTE Trial',
+  '/trials/tension-trial':           'TENSION Trial',
+  '/trials/compass-trial':           'COMPASS Trial',
+  '/trials/aster-trial':             'ASTER Trial',
+  '/trials/aster2-trial':            'ASTER2 Trial',
+  '/trials/choice-trial':            'CHOICE Trial',
+  '/trials/rescue-bt-trial':         'RESCUE BT Trial',
+  // Acute Management
+  '/trials/enchanted-trial':         'ENCHANTED Trial',
+  '/trials/best-ii-trial':           'BEST-II Trial',
+  '/trials/bp-target-trial':         'BP-TARGET Trial',
+  '/trials/optimal-bp-trial':        'OPTIMAL-BP Trial',
+  '/trials/charm-trial':             'CHARM Trial',
+  '/trials/escape-na1-trial':        'ESCAPE-NA1 Trial',
+  // Surgical Interventions
+  '/trials/decimal-trial':           'DECIMAL Trial',
+  '/trials/destiny-trial':           'DESTINY Trial',
+  '/trials/hamlet-trial':            'HAMLET Trial',
+  '/trials/destiny-ii-trial':        'DESTINY II Trial',
+  // Secondary Prevention
+  '/trials/timing-trial':            'TIMING Trial',
+  '/trials/optimas-trial':           'OPTIMAS Trial',
 };
 
 // ── Main export ───────────────────────────────────────────────────────────────

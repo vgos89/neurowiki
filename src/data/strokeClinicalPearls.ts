@@ -68,7 +68,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         evidenceLevel: 'C',
         plainEnglish: 'LKW = last time patient was definitely normal. For wake-up stroke, LKW is bedtime.',
         detailedContent: {
-          overview: "The \"last known well\" (LKW) time is the precise moment when the patient was last confirmed to be at their baseline neurological function. This is the single most critical timestamp in acute stroke management as it determines eligibility for time-sensitive treatments including IV thrombolysis (4.5-hour window) and mechanical thrombectomy (6-24 hour window depending on imaging).",
+          overview: "The \"last known well\" (LKW) time is the precise moment when the patient was last confirmed to be at their baseline neurological function. It determines eligibility for time-sensitive treatments including IV thrombolysis (4.5-hour window) and mechanical thrombectomy (6-24 hour window depending on imaging).",
           clinicalTips: [
             "For wake-up strokes, LKW is bedtime, NOT when they woke up",
             "Interview family members, witnesses, EMS, and review any available documentation",
@@ -124,7 +124,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'wake-up-trial',
         title: 'WAKE-UP Trial',
-        content: 'MRI-guided thrombolysis in wake-up strokes using DWI-FLAIR mismatch. 53.3% vs 41.8% good outcome (mRS 0-1, OR 1.61). Revolutionized approach to unknown onset times - 25% of strokes occur during sleep.',
+        content: 'MRI-guided thrombolysis in wake-up strokes using DWI-FLAIR mismatch. 53.3% vs 41.8% good outcome (mRS 0-1, OR 1.61). Established MRI-guided treatment for unknown onset times - 25% of strokes occur during sleep.',
         type: 'trial',
         section: 'step-1',
         link: '/trials/wake-up',
@@ -135,7 +135,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'extend-trial',
         title: 'EXTEND Trial (4.5-9h)',
-        content: 'Perfusion-guided thrombolysis 4.5-9h from onset. 35.4% vs 29.5% excellent outcome (mRS 0-1). Requires CT/MR perfusion showing mismatch. Extended window safe and effective with imaging selection.',
+        content: 'Perfusion-guided thrombolysis 4.5-9h from onset. 35.4% vs 29.5% excellent outcome (mRS 0-1). Requires CT/MR perfusion showing mismatch. Extended window is safe and effective with imaging selection.',
         type: 'trial',
         section: 'step-1',
         link: '/trials/extend',
@@ -290,7 +290,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'dawn-trial',
         title: 'DAWN Trial (6-24h)',
-        content: 'Clinical-core mismatch for thrombectomy 6-24h. Selection by age, NIHSS, and core volume. 48.6% vs 13.1% functional independence (mRS 0-2, NNT=3). Revolutionary - showed benefit in extended window with proper patient selection.',
+        content: 'Clinical-core mismatch for thrombectomy 6-24h. Selection by age, NIHSS, and core volume. 48.6% vs 13.1% functional independence (mRS 0-2, NNT=3). Established benefit in the extended window with imaging-guided patient selection.',
         type: 'trial',
         section: 'step-2',
         link: '/trials/dawn',
@@ -302,7 +302,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'defuse3-trial',
         title: 'DEFUSE-3 Trial (6-16h)',
-        content: 'Perfusion-based selection for thrombectomy 6-16h. Criteria: Core <70ml, mismatch ratio ≥1.8, penumbra ≥15ml. 44.6% vs 16.7% functional independence (mRS 0-2). Validated perfusion imaging for late-window treatment.',
+        content: 'Perfusion-based selection for thrombectomy 6-16h. Criteria: Core <70ml, mismatch ratio ≥1.8, penumbra ≥15ml. 44.6% vs 16.7% functional independence (mRS 0-2). Validated perfusion imaging selection for late-window treatment.',
         type: 'trial',
         section: 'step-2',
         link: '/trials/defuse-3',
@@ -314,7 +314,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'lvo-workflow',
         title: 'LVO Detection Workflow',
-        content: 'If cortical signs present: (1) Give tPA if <4.5h (don\'t delay), (2) STAT CTA/CTP, (3) Alert IR team immediately, (4) Consider direct transfer to angio suite. LVO + tPA + thrombectomy = best outcomes. Sequential therapy is superior to either alone.',
+        content: 'If cortical signs present: (1) Give tPA if <4.5h (don\'t delay), (2) STAT CTA/CTP, (3) Alert IR team immediately, (4) Consider direct transfer to angio suite. LVO + tPA + thrombectomy = superior outcomes. Sequential therapy outperforms either alone.',
         type: 'pearl',
         section: 'step-2',
         evidenceClass: 'I',
@@ -360,7 +360,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'door-to-needle-deep',
         title: 'Door-to-Needle Benchmark',
-        content: 'Target: 60 minutes door-to-needle (benchmark). Excellence: 30 minutes. Every 15-minute reduction → 4% increase in good outcome. Fonarow (2014): D2N <60min vs >90min - 13% relative improvement in discharge home. Door-to-needle is the most modifiable factor in stroke care.',
+        content: 'Target: 60 minutes door-to-needle (benchmark). Excellence: 30 minutes. Every 15-minute reduction → 4% increase in good outcome. Fonarow (2014): D2N <60min vs >90min - 13% relative improvement in discharge home. Door-to-needle time is the most modifiable determinant of stroke outcomes.',
         type: 'pearl',
         section: 'step-3',
         evidence: 'Fonarow et al, Stroke 2014',
@@ -580,7 +580,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'sits-most-trial',
         title: 'SITS-MOST Registry',
-        content: 'Safe Implementation of Treatments in Stroke - Monitoring Study. 6,483 patients treated with tPA in clinical practice. 1.7% sICH rate with strict protocol adherence. Established standard monitoring protocols.',
+        content: 'Safe Implementation of Treatments in Stroke - Monitoring Study. 6,483 patients treated with tPA in clinical practice. 1.7% sICH rate with strict protocol adherence. Defined the monitoring protocols used in current practice.',
         type: 'trial',
         section: 'step-5',
         link: '/trials/sits-most',

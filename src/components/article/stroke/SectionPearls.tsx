@@ -157,7 +157,7 @@ export const SectionPearls: React.FC<SectionPearlsProps> = ({
       <div className="mt-4 pt-3 border-t-2 border-purple-200 dark:border-purple-800">
         <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
           {isDeepLearning 
-            ? '🔬 Deep Learning Mode: Comprehensive evidence-based content with trials and citations' 
+            ? '🔬 Deep Learning Mode: Full content with trials and citations'
             : '⚡ Quick Learning Mode: Essential clinical pearls for rapid review'}
         </p>
       </div>
