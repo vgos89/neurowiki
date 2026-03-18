@@ -8,6 +8,8 @@ import { TRIAL_DATA } from '../data/trialData';
 
 const BASE_URL = 'https://neurowiki.ai';
 const LAST_REVIEWED = '2026-02-18';
+const DATE_PUBLISHED = '2025-09-01';
+const DATE_MODIFIED = '2026-03-18';
 
 // ── Shared publisher/provider block ──────────────────────────────────────────
 const PUBLISHER = {
