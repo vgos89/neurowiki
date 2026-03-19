@@ -696,6 +696,31 @@ const TrialPageNew: React.FC = () => {
                     p: ({node, ...props}) => <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4" {...props} />,
                     ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-2 mb-4 text-slate-700 dark:text-slate-300" {...props} />,
                     strong: ({node, ...props}) => <strong className="font-bold text-slate-900 dark:text-white" {...props} />,
+                    a: ({node, href, children, ...props}) => {
+                      if (href?.startsWith('/')) {
+                        return (
+                          <Link
+                            to={href}
+                            className="text-neuro-600 dark:text-neuro-400 font-medium underline underline-offset-2 hover:opacity-80"
+                            {...props}
+                          >
+                            {children}
+                          </Link>
+                        );
+                      }
+
+                      return (
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-neuro-600 dark:text-neuro-400 font-medium underline underline-offset-2 hover:opacity-80"
+                          {...props}
+                        >
+                          {children}
+                        </a>
+                      );
+                    },
                     table: ({node, ...props}) => <div className="overflow-x-auto mb-6"><table className="w-full text-sm border-collapse border border-slate-200 dark:border-slate-700" {...props} /></div>,
                     thead: ({node, ...props}) => <thead className="bg-slate-50 dark:bg-slate-800" {...props} />,
                     th: ({node, ...props}) => <th className="border border-slate-200 dark:border-slate-700 px-3 py-2 text-left font-semibold text-slate-900 dark:text-white" {...props} />,
