@@ -2,7 +2,7 @@ import React, { useMemo, useEffect } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { GUIDE_CONTENT } from '../../data/guideContent';
-import { TRIAL_DATA } from '../../data/trialData';
+import { TRIAL_DATA, type TrialMetadata } from '../../data/trialData';
 import { TrialStats } from '../../components/TrialStats';
 import { MedicalTooltip } from '../../components/MedicalTooltip';
 import { MEDICAL_GLOSSARY } from '../../data/medicalGlossary';
@@ -16,7 +16,12 @@ import remarkGfm from 'remark-gfm';
 
 function sanitizeLegacyTrialContent(
   content: string,
-  options?: { removeClinicalContext?: boolean; removePearls?: boolean; removeSource?: boolean }
+  options?: {
+    removeClinicalContext?: boolean;
+    removeTrialSummary?: boolean;
+    removePearls?: boolean;
+    removeSource?: boolean;
+  }
 ): string {
   if (!content) return content;
 
@@ -24,6 +29,10 @@ function sanitizeLegacyTrialContent(
 
   if (options?.removeClinicalContext) {
     sanitized = sanitized.replace(/\n## Clinical Context[\s\S]*?(?=\n## |\n\*Source:|\n$|$)/g, '');
+  }
+
+  if (options?.removeTrialSummary) {
+    sanitized = sanitized.replace(/\n## Trial Summary[\s\S]*?(?=\n## |\n\*Source:|\n$|$)/g, '');
   }
 
   if (options?.removePearls) {
@@ -35,6 +44,32 @@ function sanitizeLegacyTrialContent(
   }
 
   return sanitized.replace(/\n{3,}/g, '\n\n').trim();
+}
+
+function formatTrialArm(arm: TrialMetadata['intervention']['treatment']): string {
+  if (typeof arm === 'string') return arm;
+  const details = arm.details?.length ? ` (${arm.details.join('; ')})` : '';
+  return `${arm.name}: ${arm.description}${details}`;
+}
+
+function buildTrialSummaryItems(trialMetadata: TrialMetadata) {
+  const design = [
+    ...trialMetadata.trialDesign.type,
+    trialMetadata.trialDesign.timeline,
+  ].filter(Boolean).join(' · ');
+
+  const population = `${trialMetadata.stats.sampleSize.value} ${trialMetadata.stats.sampleSize.label}`;
+  const intervention = `${formatTrialArm(trialMetadata.intervention.treatment)} vs ${formatTrialArm(trialMetadata.intervention.control)}`;
+  const primaryOutcome = `${trialMetadata.stats.primaryEndpoint.value} ${trialMetadata.stats.primaryEndpoint.label}`.trim();
+  const results = `${trialMetadata.efficacyResults.treatment.percentage}% with ${trialMetadata.efficacyResults.treatment.name} vs ${trialMetadata.efficacyResults.control.percentage}% with ${trialMetadata.efficacyResults.control.name} (${trialMetadata.stats.effectSize.label}: ${trialMetadata.stats.effectSize.value}; ${trialMetadata.stats.pValue.label}: ${trialMetadata.stats.pValue.value})`;
+
+  return [
+    { label: 'Design', value: design },
+    { label: 'Population', value: population },
+    { label: 'Intervention', value: intervention },
+    { label: 'Primary Outcome', value: primaryOutcome },
+    { label: 'Results', value: results },
+  ];
 }
 
 const TrialPageNew: React.FC = () => {
@@ -73,13 +108,18 @@ const TrialPageNew: React.FC = () => {
     () =>
       sanitizeLegacyTrialContent(trial?.content ?? '', {
         removeClinicalContext: !!trialMetadata?.clinicalContext,
+        removeTrialSummary: !!trialMetadata,
         removePearls: !!trialMetadata?.pearls?.length,
         removeSource: !!trialMetadata?.source,
       }),
-    [trial?.content, trialMetadata?.clinicalContext, trialMetadata?.pearls, trialMetadata?.source]
+    [trial?.content, trialMetadata, trialMetadata?.clinicalContext, trialMetadata?.pearls, trialMetadata?.source]
   );
   const renderedConclusion = useMemo(
     () => (trialMetadata ? buildHouseConclusion(trialMetadata) : null),
+    [trialMetadata]
+  );
+  const trialSummaryItems = useMemo(
+    () => (trialMetadata ? buildTrialSummaryItems(trialMetadata) : []),
     [trialMetadata]
   );
   const isPlaceholderTrial = !!catalogTrial?.isPlaceholder && !trial && !trialMetadata;
@@ -431,6 +471,24 @@ const TrialPageNew: React.FC = () => {
                 <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
                   {trialMetadata.clinicalContext}
                 </p>
+              </div>
+            )}
+
+            {trialSummaryItems.length > 0 && (
+              <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 mb-8">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Trial Summary</h3>
+                <div className="space-y-4">
+                  {trialSummaryItems.map((item) => (
+                    <div key={item.label}>
+                      <div className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
+                        {item.label}
+                      </div>
+                      <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+                        {addTooltips(item.value)}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
