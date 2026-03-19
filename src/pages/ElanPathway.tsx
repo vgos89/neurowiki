@@ -11,12 +11,14 @@ import { useNavigationSource } from '../hooks/useNavigationSource';
 
 // ... (KEEP ALL TYPES, INTERFACES, STEPS, LOGIC, COMPONENTS SAME UNTIL RENDER) ...
 type Tri = "yes" | "no" | "unknown";
-type StrokeSize = "minor" | "moderate" | "major" | "unknown";
+type StrokeSize = "tia" | "minor" | "moderate" | "major" | "unknown";
 
 type Inputs = {
   isIschemicAfib: Tri;
   hasBleed: Tri;
   hasMechanicalValve: Tri;
+  hasPetechialHt: Tri;
+  recentReperfusion: Tri;
   size: StrokeSize;
   onset: string;
 };
@@ -30,6 +32,7 @@ type Result = {
   lateText: string;
   lateDates: string;
   reasons: string[];
+  warnings: string[];
 };
 
 const STEPS = [
@@ -40,16 +43,25 @@ const STEPS = [
 ];
 
 const STEP_FIELDS: Record<number, string[]> = {
-  1: ['isIschemicAfib', 'hasBleed', 'hasMechanicalValve'],
+  1: ['isIschemicAfib', 'hasBleed', 'hasMechanicalValve', 'hasPetechialHt', 'recentReperfusion'],
   2: ['size'],
   3: ['onset']
 };
 
 const calculateElanProtocol = (inputs: Inputs): Result => {
-  if (inputs.isIschemicAfib === 'no') return { eligible: false, ineligibleReason: "Protocol applies to Ischemic Stroke with Atrial Fibrillation.", size: 'unknown', earlyText: '', earlyDates: '', lateText: '', lateDates: '', reasons: [] };
-  if (inputs.hasBleed === 'yes') return { eligible: false, ineligibleReason: "Significant hemorrhagic transformation or confluent parenchymal hematoma is an exclusion. Advise local protocol.", size: 'unknown', earlyText: '', earlyDates: '', lateText: '', lateDates: '', reasons: [] };
-  if (inputs.hasMechanicalValve === 'yes') return { eligible: false, ineligibleReason: "Mechanical heart valve requires warfarin therapy with specific INR targets (not DOAC). Consult cardiology for valve-specific anticoagulation protocol.", size: 'unknown', earlyText: '', earlyDates: '', lateText: '', lateDates: '', reasons: [] };
-  if (!inputs.onset) return { eligible: true, size: inputs.size, earlyText: '-', earlyDates: '-', lateText: '-', lateDates: '-', reasons: [] };
+  if (inputs.isIschemicAfib === 'no') return { eligible: false, ineligibleReason: "Protocol applies to ischemic stroke or TIA with atrial fibrillation.", size: 'unknown', earlyText: '', earlyDates: '', lateText: '', lateDates: '', reasons: [], warnings: [] };
+  if (inputs.hasBleed === 'yes') return { eligible: false, ineligibleReason: "Symptomatic intracranial hemorrhage, confluent parenchymal hematoma, or major hemorrhagic transformation is an exclusion from this DOAC timing pathway. Use local specialist protocol.", size: 'unknown', earlyText: '', earlyDates: '', lateText: '', lateDates: '', reasons: [], warnings: [] };
+  if (inputs.hasMechanicalValve === 'yes') return { eligible: false, ineligibleReason: "Mechanical heart valve requires warfarin therapy with specific INR targets rather than this DOAC pathway. Consult cardiology for valve-specific anticoagulation planning.", size: 'unknown', earlyText: '', earlyDates: '', lateText: '', lateDates: '', reasons: [], warnings: [] };
+
+  const warnings: string[] = [];
+  if (inputs.hasPetechialHt === 'yes') {
+    warnings.push("Petechial hemorrhagic transformation is not an automatic exclusion here, but it should trigger repeat imaging review and individualized timing rather than blind protocol use.");
+  }
+  if (inputs.recentReperfusion === 'yes') {
+    warnings.push("Recent IV thrombolysis or endovascular thrombectomy warrants extra caution because high-level evidence for immediate full-dose anticoagulation timing after reperfusion therapy remains limited.");
+  }
+
+  if (!inputs.onset) return { eligible: true, size: inputs.size, earlyText: '-', earlyDates: '-', lateText: '-', lateDates: '-', reasons: [], warnings };
 
   const [year, month, day] = inputs.onset.split('-').map(Number);
   const onsetDate = new Date(year, month - 1, day);
@@ -62,7 +74,13 @@ const calculateElanProtocol = (inputs: Inputs): Result => {
   let lateText = "";
   let lateDates = "";
 
-  if (inputs.size === 'minor') {
+  if (inputs.size === 'tia') {
+    reasons.push("TIA or no persistent infarct");
+    earlyText = "Within 48 hours";
+    earlyDates = `${formatDate(onsetDate)} – ${formatDate(addDays(onsetDate, 2))}`;
+    lateText = "Day 3 or 4";
+    lateDates = `${formatDate(addDays(onsetDate, 3))} – ${formatDate(addDays(onsetDate, 4))}`;
+  } else if (inputs.size === 'minor') {
     reasons.push("Minor Stroke (≤ 1.5 cm)");
     earlyText = "Within 48 hours";
     earlyDates = `${formatDate(onsetDate)} – ${formatDate(addDays(onsetDate, 2))}`;
@@ -82,7 +100,7 @@ const calculateElanProtocol = (inputs: Inputs): Result => {
     lateDates = `${formatDate(addDays(onsetDate, 12))} – ${formatDate(addDays(onsetDate, 14))}`;
   }
 
-  return { eligible: true, size: inputs.size, earlyText, earlyDates, lateText, lateDates, reasons };
+  return { eligible: true, size: inputs.size, earlyText, earlyDates, lateText, lateDates, reasons, warnings };
 };
 
 interface SelectionCardProps {
@@ -108,7 +126,7 @@ const ElanPathway: React.FC = () => {
   // ... (HOOKS AND HANDLERS SAME) ...
   const [step, setStep] = useState(1);
   const { getBackPath, getBackLabel } = useNavigationSource();
-  const [inputs, setInputs] = useState<Inputs>({ isIschemicAfib: 'unknown', hasBleed: 'unknown', hasMechanicalValve: 'unknown', size: 'unknown', onset: '' });
+  const [inputs, setInputs] = useState<Inputs>({ isIschemicAfib: 'unknown', hasBleed: 'unknown', hasMechanicalValve: 'unknown', hasPetechialHt: 'unknown', recentReperfusion: 'unknown', size: 'unknown', onset: '' });
   const [result, setResult] = useState<Result | null>(null);
   const stepContainerRef = useRef<HTMLDivElement>(null);
   const fieldRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -153,8 +171,20 @@ const ElanPathway: React.FC = () => {
 
   const handleNext = () => { if (step === 1 && (inputs.isIschemicAfib === 'no' || inputs.hasBleed === 'yes' || inputs.hasMechanicalValve === 'yes')) return; if (step < 4) setStep(step + 1); };
   const handleBack = () => { if (step > 1) setStep(step - 1); };
-  const handleReset = () => { setInputs({ isIschemicAfib: 'unknown', hasBleed: 'unknown', hasMechanicalValve: 'unknown', size: 'unknown', onset: '' }); setStep(1); };
-  const copySummary = () => { if (!result) return; let definition = ""; if (result.size === 'minor') definition = "infarct ≤ 1.5 cm"; else if (result.size === 'moderate') definition = "cortical superficial branch of MCA/ACA/PCA, deep branch MCA, or internal border-zone"; else if (result.size === 'major') definition = "large territory, ≥2 MCA cortical branches, or brainstem/cerebellum > 1.5 cm"; const summary = `Post-Stroke Anticoagulation Protocol Applied:\nImaging-based stroke size classified as ${result.size.charAt(0).toUpperCase() + result.size.slice(1)} per stroke size definitions (${definition}).\n\nAnticoagulation timing per ELAN-based protocol:\nEarly DOAC initiation window = ${result.earlyText} (${result.earlyDates}).\n\nDecision based on imaging-defined infarct size and absence of contraindicating hemorrhage.\n\nReference:\nBased on ELAN trial (Paciaroni et al., NEJM 2023), OPTIMAS trial (2024), TIMING trial (2024), and 2026 AHA/ASA Guideline for the Early Management of Patients with Acute Ischemic Stroke (COR 2a, LOE A).`.trim(); navigator.clipboard.writeText(summary); setShowCopyToast(true); setTimeout(() => setShowCopyToast(false), 2500); };
+  const handleReset = () => { setInputs({ isIschemicAfib: 'unknown', hasBleed: 'unknown', hasMechanicalValve: 'unknown', hasPetechialHt: 'unknown', recentReperfusion: 'unknown', size: 'unknown', onset: '' }); setStep(1); };
+  const copySummary = () => {
+    if (!result) return;
+    let definition = "";
+    if (result.size === 'tia') definition = "transient ischemic attack or no persistent infarct on follow-up imaging";
+    else if (result.size === 'minor') definition = "infarct ≤ 1.5 cm";
+    else if (result.size === 'moderate') definition = "cortical superficial branch of MCA/ACA/PCA, deep branch MCA, or internal border-zone";
+    else if (result.size === 'major') definition = "large territory, ≥2 MCA cortical branches, or brainstem/cerebellum > 1.5 cm";
+    const warningText = result.warnings.length ? `\n\nCaution flags:\n- ${result.warnings.join('\n- ')}` : '';
+    const summary = `Post-Stroke Anticoagulation Protocol Applied:\nImaging-based severity classified as ${result.size.charAt(0).toUpperCase() + result.size.slice(1)} (${definition}).\n\nThis calculator operationalizes the ELAN timing framework inside the broader AHA/ASA 2026 Class 2a recommendation for earlier DOAC initiation in carefully selected patients.\n\nEarlier ELAN-style DOAC window = ${result.earlyText} (${result.earlyDates}).\nLater comparator window = ${result.lateText} (${result.lateDates}).\n\nDecision based on imaging-defined infarct size, exclusion of major intracranial bleeding, and individualized review of hemorrhagic transformation and reperfusion therapy.${warningText}\n\nReference:\nELAN trial (NEJM 2023), OPTIMAS trial, TIMING trial, and 2026 AHA/ASA Guideline for the Early Management of Patients with Acute Ischemic Stroke.`.trim();
+    navigator.clipboard.writeText(summary);
+    setShowCopyToast(true);
+    setTimeout(() => setShowCopyToast(false), 2500);
+  };
   const isStep1Invalid = inputs.isIschemicAfib === 'no' || inputs.hasBleed === 'yes' || inputs.hasMechanicalValve === 'yes';
 
   return (
@@ -164,7 +194,7 @@ const ElanPathway: React.FC = () => {
         <div>
             <Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-500 mb-6 group"><div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-colors duration-150"><ArrowLeft size={16} /></div> {getBackLabel()}</Link>
             <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-purple-100 text-purple-700 rounded-lg"><Brain size={24} /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">Post-Stroke Anticoagulation Timing</h1></div>
-            <p className="text-slate-500 font-medium">Anticoagulation timing after acute ischemic stroke with atrial fibrillation, per ELAN trial and AHA/ASA 2026 guidelines.</p>
+            <p className="text-slate-500 font-medium">Operationalizes the ELAN trial timing framework within the broader AHA/ASA 2026 Class 2a recommendation for earlier DOAC initiation in carefully selected AF-related stroke or TIA.</p>
         </div>
         <button 
             onClick={handleFavToggle}
@@ -179,13 +209,77 @@ const ElanPathway: React.FC = () => {
 
       <div ref={stepContainerRef} className="space-y-6 min-h-[300px]">
         {/* Step 1-3 logic identical... */}
-        {step === 1 && (<div className="space-y-6 animate-in slide-in-from-right-4 duration-300"><div ref={el => { fieldRefs.current['isIschemicAfib'] = el; }}><h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Inclusion</h3><div className="grid grid-cols-1 gap-3"><SelectionCard title="Ischemic Stroke with Atrial Fibrillation?" description="Confirm imaging-proven ischemic stroke and history or new diagnosis of AF." selected={inputs.isIschemicAfib === 'yes'} onClick={() => updateInput('isIschemicAfib', 'yes')} /><SelectionCard title="No" selected={inputs.isIschemicAfib === 'no'} onClick={() => updateInput('isIschemicAfib', 'no')} /></div></div>{inputs.isIschemicAfib === 'yes' && (<div ref={el => { fieldRefs.current['hasBleed'] = el; }} className="animate-in fade-in slide-in-from-top-2"><h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide mt-6">Exclusion</h3><div className="grid grid-cols-1 gap-3"><SelectionCard title="Any significant hemorrhage?" description="Confluent parenchymal hematoma (PH type) or significant bleeding risk." selected={inputs.hasBleed === 'yes'} onClick={() => updateInput('hasBleed', 'yes')} variant="danger" /><SelectionCard title="No significant hemorrhage" description="Trace or petechial hemorrhagic transformation (HI1/HI2) is permitted." selected={inputs.hasBleed === 'no'} onClick={() => updateInput('hasBleed', 'no')} /></div></div>)}{inputs.hasBleed === 'no' && (<div ref={el => { fieldRefs.current['hasMechanicalValve'] = el; }} className="animate-in fade-in slide-in-from-top-2"><h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide mt-6">Additional Exclusion</h3><div className="grid grid-cols-1 gap-3"><SelectionCard title="Mechanical Heart Valve?" description="Mechanical valves require warfarin (not DOAC) with specific INR targets." selected={inputs.hasMechanicalValve === 'yes'} onClick={() => updateInput('hasMechanicalValve', 'yes')} variant="danger" /><SelectionCard title="No Mechanical Valve" description="Bioprosthetic valve or no valve replacement." selected={inputs.hasMechanicalValve === 'no'} onClick={() => updateInput('hasMechanicalValve', 'no')} /></div></div>)}{isStep1Invalid && (<div className="bg-red-50 border border-red-100 p-4 rounded-xl flex items-start space-x-3 text-red-800 animate-in zoom-in-95"><XCircle className="flex-shrink-0 mt-0.5" size={20} /><div><p className="font-bold">Not eligible for Post-Stroke Anticoagulation Protocol</p><p className="text-sm mt-1">{result?.ineligibleReason}</p></div></div>)}</div>)}
+        {step === 1 && (
+          <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
+            <div ref={el => { fieldRefs.current['isIschemicAfib'] = el; }}>
+              <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Inclusion</h3>
+              <div className="grid grid-cols-1 gap-3">
+                <SelectionCard title="Ischemic Stroke or TIA with Atrial Fibrillation?" description="Confirm ischemic event plus known or newly diagnosed AF." selected={inputs.isIschemicAfib === 'yes'} onClick={() => updateInput('isIschemicAfib', 'yes')} />
+                <SelectionCard title="No" selected={inputs.isIschemicAfib === 'no'} onClick={() => updateInput('isIschemicAfib', 'no')} />
+              </div>
+            </div>
+
+            {inputs.isIschemicAfib === 'yes' && (
+              <div ref={el => { fieldRefs.current['hasBleed'] = el; }} className="animate-in fade-in slide-in-from-top-2">
+                <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide mt-6">Major Bleeding Exclusion</h3>
+                <div className="grid grid-cols-1 gap-3">
+                  <SelectionCard title="Symptomatic ICH or major hemorrhagic transformation" description="Confluent PH-type hemorrhage, symptomatic intracranial bleeding, or another major bleed that makes immediate DOAC use unsafe." selected={inputs.hasBleed === 'yes'} onClick={() => updateInput('hasBleed', 'yes')} variant="danger" />
+                  <SelectionCard title="No major bleeding exclusion" description="No symptomatic ICH and no confluent parenchymal hematoma." selected={inputs.hasBleed === 'no'} onClick={() => updateInput('hasBleed', 'no')} />
+                </div>
+              </div>
+            )}
+
+            {inputs.hasBleed === 'no' && (
+              <div ref={el => { fieldRefs.current['hasMechanicalValve'] = el; }} className="animate-in fade-in slide-in-from-top-2">
+                <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide mt-6">Additional Exclusion</h3>
+                <div className="grid grid-cols-1 gap-3">
+                  <SelectionCard title="Mechanical Heart Valve" description="Mechanical valves require warfarin rather than this DOAC timing pathway." selected={inputs.hasMechanicalValve === 'yes'} onClick={() => updateInput('hasMechanicalValve', 'yes')} variant="danger" />
+                  <SelectionCard title="No Mechanical Valve" description="Native valve or bioprosthetic valve." selected={inputs.hasMechanicalValve === 'no'} onClick={() => updateInput('hasMechanicalValve', 'no')} />
+                </div>
+              </div>
+            )}
+
+            {inputs.hasMechanicalValve === 'no' && (
+              <div ref={el => { fieldRefs.current['hasPetechialHt'] = el; }} className="animate-in fade-in slide-in-from-top-2">
+                <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide mt-6">Caution Flags</h3>
+                <div className="grid grid-cols-1 gap-3">
+                  <SelectionCard title="Petechial hemorrhagic transformation present" description="HI1/HI2 or trace hemorrhagic transformation should trigger extra imaging review and individualized timing." selected={inputs.hasPetechialHt === 'yes'} onClick={() => updateInput('hasPetechialHt', 'yes')} />
+                  <SelectionCard title="No petechial hemorrhagic transformation" selected={inputs.hasPetechialHt === 'no'} onClick={() => updateInput('hasPetechialHt', 'no')} />
+                </div>
+              </div>
+            )}
+
+            {inputs.hasMechanicalValve === 'no' && (
+              <div ref={el => { fieldRefs.current['recentReperfusion'] = el; }} className="animate-in fade-in slide-in-from-top-2">
+                <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide mt-6">Recent Reperfusion Therapy</h3>
+                <div className="grid grid-cols-1 gap-3">
+                  <SelectionCard title="Recent IV thrombolysis or EVT" description="Flag this if the patient recently received alteplase, tenecteplase, thrombectomy, or both." selected={inputs.recentReperfusion === 'yes'} onClick={() => updateInput('recentReperfusion', 'yes')} />
+                  <SelectionCard title="No recent IVT or EVT" selected={inputs.recentReperfusion === 'no'} onClick={() => updateInput('recentReperfusion', 'no')} />
+                </div>
+              </div>
+            )}
+
+            {isStep1Invalid && (
+              <div className="bg-red-50 border border-red-100 p-4 rounded-xl flex items-start space-x-3 text-red-800 animate-in zoom-in-95">
+                <XCircle className="flex-shrink-0 mt-0.5" size={20} />
+                <div>
+                  <p className="font-bold">Not eligible for this DOAC timing pathway</p>
+                  <p className="text-sm mt-1">{result?.ineligibleReason}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
         {step === 2 && (
           <div className="space-y-5 animate-in slide-in-from-right-4 duration-300">
             {/* Imaging definitions — scannable mini-cards */}
             <div>
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center"><Info size={13} className="mr-1.5" /> Imaging-Based Size Definitions</h3>
               <div className="space-y-2">
+                <div className="bg-white border-l-4 border-emerald-400 rounded-r-xl px-4 py-3 shadow-sm">
+                  <span className="text-xs font-black text-emerald-600 uppercase tracking-wider">TIA</span>
+                  <p className="text-sm text-slate-700 mt-0.5">Transient ischemic attack or no persistent infarct on follow-up imaging</p>
+                </div>
                 <div className="bg-white border-l-4 border-teal-400 rounded-r-xl px-4 py-3 shadow-sm">
                   <span className="text-xs font-black text-teal-600 uppercase tracking-wider">Minor</span>
                   <p className="text-sm text-slate-700 mt-0.5">Single infarct ≤ 1.5 cm (any territory)</p>
@@ -202,8 +296,9 @@ const ElanPathway: React.FC = () => {
             </div>
             {/* Selection */}
             <div>
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Select stroke size</h3>
+              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Select event size</h3>
               <div className="grid gap-3" ref={el => { fieldRefs.current['size'] = el; }}>
+                <SelectionCard title="TIA" description="Transient event or no persistent infarct" selected={inputs.size === 'tia'} onClick={() => updateInput('size', 'tia')} />
                 <SelectionCard title="Minor" description="≤ 1.5 cm" selected={inputs.size === 'minor'} onClick={() => updateInput('size', 'minor')} />
                 <SelectionCard title="Moderate" description="Cortical branch, deep MCA, or border-zone" selected={inputs.size === 'moderate'} onClick={() => updateInput('size', 'moderate')} />
                 <SelectionCard title="Major" description="Large territory, ≥2 MCA branches, or brainstem/cerebellum > 1.5 cm" selected={inputs.size === 'major'} onClick={() => updateInput('size', 'major')} />
@@ -259,11 +354,11 @@ const ElanPathway: React.FC = () => {
                         <div className="relative z-10 flex items-center justify-between px-5 pt-5 pb-4 border-b border-white/10">
                             <div className="flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
                                 <Activity size={11} />
-                                <span>{result.size} stroke</span>
+                                <span>{result.size === 'tia' ? 'TIA' : `${result.size} stroke`}</span>
                             </div>
                             <div className="text-right">
                                 <div className="text-xs font-black text-purple-300 uppercase tracking-wider">COR 2a · LOE A</div>
-                                <div className="text-[10px] text-white/40 font-medium mt-0.5">AHA/ASA 2026</div>
+                                <div className="text-[10px] text-white/40 font-medium mt-0.5">ELAN framework within AHA/ASA 2026</div>
                             </div>
                         </div>
 
@@ -281,12 +376,26 @@ const ElanPathway: React.FC = () => {
                                 <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-2">Later Strategy</div>
                                 <div className="text-xl font-bold text-white/70 leading-snug">{result.lateText}</div>
                                 <div className="text-slate-600 text-xs font-medium mt-1">{result.lateDates}</div>
-                                <div className="text-[10px] text-slate-600 mt-2 leading-relaxed">Also acceptable per trial data</div>
+                                <div className="text-[10px] text-slate-600 mt-2 leading-relaxed">Comparator strategy used in the randomized trials</div>
                             </div>
                         </div>
 
+                        {result.warnings.length > 0 && (
+                            <div className="relative z-10 mx-4 mt-4 bg-amber-500/10 border border-amber-500/25 rounded-xl px-4 py-3">
+                                <p className="text-[10px] font-black text-amber-300 uppercase tracking-wider mb-2">Caution flags</p>
+                                <div className="space-y-2">
+                                    {result.warnings.map((warning) => (
+                                        <div key={warning} className="flex items-start space-x-2.5">
+                                            <AlertTriangle size={13} className="flex-shrink-0 text-amber-400 mt-0.5" />
+                                            <p className="text-xs text-amber-100 leading-relaxed">{warning}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
                         {/* Imaging warning */}
-                        <div className="relative z-10 mx-4 mb-4 bg-amber-500/10 border border-amber-500/25 rounded-xl px-4 py-3 flex items-start space-x-2.5">
+                        <div className="relative z-10 mx-4 my-4 bg-amber-500/10 border border-amber-500/25 rounded-xl px-4 py-3 flex items-start space-x-2.5">
                             <AlertTriangle size={13} className="flex-shrink-0 text-amber-400 mt-0.5" />
                             <p className="text-xs text-amber-200 leading-relaxed"><span className="font-bold">Repeat imaging required</span> — CT or MRI before starting to exclude hemorrhagic transformation.</p>
                         </div>
@@ -317,7 +426,7 @@ const ElanPathway: React.FC = () => {
                                 <div className="bg-white/5 px-5 pb-5 space-y-3 animate-in slide-in-from-top-2 duration-200">
                                     {/* Trial summaries */}
                                     {[
-                                        { label: 'ELAN Trial', year: 'NEJM 2023', detail: 'Early DOAC (per stroke-size windows) vs late: numerical reduction in events, not statistically significant. Established imaging-based timing framework.' },
+                                        { label: 'ELAN Trial', year: 'NEJM 2023', detail: 'Early DOAC used within 48 hours for TIA/minor/moderate events and day 6-7 for major stroke, versus a later comparator strategy. This tool operationalizes those ELAN timing bins.' },
                                         { label: 'OPTIMAS Trial', year: '2024', detail: 'Early DOAC (≤4 days) noninferior to delayed DOAC (7–14 days) in 3,648 patients with AIS + AF.' },
                                         { label: 'TIMING Trial', year: '2024', detail: 'Early (≤4 days) vs delayed (5–10 days): 6.9% vs 8.7% primary outcome rate. Noninferior.' },
                                     ].map(t => (
@@ -332,7 +441,7 @@ const ElanPathway: React.FC = () => {
                                     {/* Guideline statement */}
                                     <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl px-3 py-2.5 mt-1">
                                         <p className="text-[10px] font-black text-purple-300 uppercase tracking-wider mb-1">AHA/ASA 2026 · COR 2a · LOE A</p>
-                                        <p className="text-[11px] text-slate-400 leading-relaxed">Early oral anticoagulation in carefully selected AF patients is low-risk and reasonable compared to delayed initiation. Efficacy for preventing early recurrent stroke is not yet established.</p>
+                                        <p className="text-[11px] text-slate-400 leading-relaxed">The guideline gives a broad recommendation that earlier oral anticoagulation is reasonable and low risk in carefully selected patients. The exact day-by-day windows shown here are an ELAN-based operational framework rather than a single mandatory guideline timing table.</p>
                                     </div>
                                 </div>
                             )}
@@ -343,7 +452,7 @@ const ElanPathway: React.FC = () => {
                 {/* Disclaimer + Start Over (mobile) in one row */}
                 <div className="flex flex-col items-center space-y-2 pt-1">
                     <p className="text-xs text-slate-400 text-center px-2 leading-relaxed">
-                        {autoLinkReactNodes("Decision support only · ELAN (NEJM 2023) · OPTIMAS (2024) · TIMING (2024) · AHA/ASA 2026", openTrial)}
+                        {autoLinkReactNodes("Decision support only · ELAN timing framework · OPTIMAS (2024) · TIMING (2024) · AHA/ASA 2026", openTrial)}
                     </p>
                     <button onClick={handleReset} className="md:hidden flex items-center text-xs text-slate-400 hover:text-slate-600 font-bold py-2 px-4 rounded-lg transition-colors touch-manipulation min-h-[44px]">
                         <RotateCcw size={12} className="mr-1.5" /> Start Over

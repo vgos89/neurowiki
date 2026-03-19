@@ -196,11 +196,11 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
   '/calculators/elan-pathway': [
     {
       question: 'When should anticoagulation be started after stroke with atrial fibrillation?',
-      answer: 'Per the ELAN trial (NEJM 2023) and AHA/ASA 2026 guidelines: TIA/minor stroke (NIHSS 0–5) — within 48 hours; moderate stroke (NIHSS 6–15) — day 3–5; severe stroke (NIHSS ≥16) — day 6–7. These are for direct oral anticoagulants (DOACs). Prior anticoagulation may reduce window.',
+      answer: 'The 2026 AHA/ASA guideline gives a broad Class 2a recommendation that earlier DOAC initiation is reasonable in carefully selected patients with AF-related stroke. NeuroWiki operationalizes that recommendation using the ELAN trial framework: TIA/minor/moderate events within 48 hours, and major stroke on day 6–7, with a later comparator of day 3–4 for TIA/minor, day 6–7 for moderate, and day 12–14 for major stroke.',
     },
     {
       question: 'What is the ELAN trial and why does it matter?',
-      answer: 'The ELAN trial (2023, NEJM) randomized AF stroke patients to early vs. late DOAC initiation and found no significant difference in stroke recurrence or bleeding. This supports earlier anticoagulation than previously practiced, with the timing based on stroke severity rather than fixed calendar days.',
+      answer: 'The ELAN trial (2023, NEJM) randomized AF stroke patients to earlier versus later DOAC initiation and found that earlier treatment was low risk, with no excess symptomatic intracranial hemorrhage. It matters because it provides the specific timing framework many clinicians now use to operationalize the broader AHA/ASA recommendation for earlier anticoagulation.',
     },
     {
       question: 'Can anticoagulation be started if there is hemorrhagic transformation?',

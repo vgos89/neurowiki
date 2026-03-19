@@ -637,7 +637,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'anticoagulation-timing',
         title: 'Anticoagulation Restart Timing',
-        content: 'Hold ALL antithrombotics × 24h post-tPA (antiplatelets, anticoagulants). Mechanism: Systemic fibrinolysis affects all vascular beds - bleeding risk at all puncture sites. After 24h CT negative for hemorrhage: Start aspirin 81-325mg. For AF requiring anticoagulation: ELAN trial protocol - start DOAC based on stroke severity (mild: 3 days, moderate: 6 days, severe: 12 days).',
+        content: 'Hold ALL antithrombotics × 24h post-tPA (antiplatelets, anticoagulants). Mechanism: systemic fibrinolysis affects all vascular beds and increases bleeding risk at puncture sites. After 24h CT is negative for hemorrhage, start aspirin 81-325 mg. For AF requiring anticoagulation, AHA/ASA 2026 supports earlier DOAC initiation in carefully selected patients; the ELAN operational framework uses within 48 hours for TIA/minor/moderate events and day 6-7 for major stroke, with repeat imaging and caution after IVT or EVT.',
         type: 'pearl',
         section: 'step-5',
         evidence: 'ELAN trial 2023',

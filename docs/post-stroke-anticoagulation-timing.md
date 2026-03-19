@@ -29,7 +29,9 @@ The tool asks for:
 - `isIschemicAfib`: yes / no / unknown
 - `hasBleed`: yes / no / unknown
 - `hasMechanicalValve`: yes / no / unknown
-- `size`: minor / moderate / major / unknown
+- `hasPetechialHt`: yes / no / unknown
+- `recentReperfusion`: yes / no / unknown
+- `size`: tia / minor / moderate / major / unknown
 - `onset`: stroke onset date
 
 ## Eligibility Logic
@@ -45,11 +47,21 @@ The implemented pathway exits early as ineligible if any of the following are tr
 3. `hasMechanicalValve === 'yes'`
    - Message: mechanical valve requires warfarin rather than a DOAC-based pathway.
 
+The pathway does **not** automatically exclude:
+- petechial hemorrhagic transformation
+- recent IV thrombolysis or thrombectomy
+
+Instead, those are surfaced as **caution flags** requiring individualized review.
+
 If `onset` is missing, the tool returns an eligible result but does not calculate dates yet.
 
 ## Imaging-Based Stroke Size Definitions
 
 The implementation uses imaging size categories, not NIHSS categories.
+
+### TIA
+- transient ischemic attack
+- no persistent infarct on follow-up imaging
 
 ### Minor
 - single infarct `<= 1.5 cm`
@@ -71,6 +83,16 @@ The tool calculates **two windows**:
 - `Later Strategy`
 
 Day `0` is the onset date entered by the user.
+
+### TIA
+
+Earlier strategy:
+- `Within 48 hours`
+- displayed date range: `Day 0` to `Day 2`
+
+Later strategy:
+- `Day 3 or 4`
+- displayed date range: `Day 3` to `Day 4`
 
 ### Minor Stroke
 
@@ -117,6 +139,10 @@ if mechanical valve:
 if no onset date:
   eligible, but no dates calculated
 
+if stroke size == tia:
+  early = within 48h
+  late = day 3-4
+
 if stroke size == minor:
   early = within 48h
   late = day 3-4
@@ -136,6 +162,8 @@ The UI also adds these operational messages:
 - repeat CT or MRI before starting anticoagulation to exclude hemorrhagic transformation
 - use a DOAC
 - warfarin is required for mechanical valves
+- petechial hemorrhagic transformation should trigger individualized timing review
+- recent IVT or EVT should trigger extra caution because evidence remains limited in that subgroup
 
 ## Evidence Framing Used in the UI
 
@@ -158,40 +186,36 @@ These are the key implementation issues to compare against the actual guideline:
 
 The tool is fundamentally an **ELAN-derived decision aid** with later support text from OPTIMAS, TIMING, and AHA/ASA 2026.
 
-### 2. Repo text is internally inconsistent about moderate stroke timing
+### 2. The guideline statement in repo is broad, not a day-by-day protocol
 
-Current implementation in `ElanPathway.tsx`:
-- moderate stroke early = `within 48h`
+Current guideline text in repo states that early DOAC initiation is safe and reasonable versus delayed initiation, but it does not itself function as a fully explicit timing table in the same way the calculator does.
 
-But repo SEO copy in `schema.ts` says:
-- moderate stroke = `day 3-5`
+### 3. The calculator now separates TIA from infarct-size categories
 
-That is a real mismatch and should be resolved against the source trial/guideline.
-
-### 3. Repo text is internally inconsistent about minor stroke wording
-
-Some repo text describes:
-- `TIA/minor within 48h`
-
-The actual tool only classifies:
+The live implementation now includes:
+- TIA
 - minor
 - moderate
 - major
 
-There is no separate TIA branch in the implemented calculator.
+TIA is routed with the earliest ELAN-style bucket.
 
-### 4. The guideline statement in repo is broad, not a day-by-day protocol
+### 4. Caution flags are broader than hard exclusions
 
-Current guideline text in repo states that early DOAC initiation is safe and reasonable versus delayed initiation, but it does not itself function as a fully explicit timing table in the same way the calculator does.
+The live implementation now flags:
+- petechial hemorrhagic transformation
+- recent IV thrombolysis or thrombectomy
+
+These do not hard-stop the tool, but they deliberately break the impression that the pathway can be used mechanically without bedside judgment.
 
 ## Recommended Comparison Questions for Notebook LLM
 
 Ask the comparison model:
 
-1. Does ELAN actually support `moderate stroke within 48 hours` as the early arm used here?
-2. Does the 2026 AHA/ASA guideline explicitly endorse these exact timing bins, or only the general principle of earlier DOAC initiation?
-3. Should TIA be handled as a separate pathway branch rather than being folded into `minor` or omitted?
-4. Are the exclusions sufficient, or should there be additional branches for:
+1. Does the 2026 AHA/ASA guideline explicitly endorse these exact timing bins, or only the general principle of earlier DOAC initiation?
+2. For petechial hemorrhagic transformation, should the pathway remain a caution-only branch or should some imaging patterns trigger a delay recommendation directly?
+3. After recent IVT or EVT, should the pathway remain warning-based or should it force a separate decision branch?
+4. Are additional branches needed for:
    - petechial hemorrhagic transformation
    - large infarct with mass effect
    - severe renal dysfunction

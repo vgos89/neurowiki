@@ -9,8 +9,8 @@ export const EVT_CONTENT = {
 };
 
 export const ELAN_CONTENT = {
-  evidence: "Anticoagulation timing per the ELAN trial protocol. ELAN showed early initiation was non-inferior and appeared safe compared to later initiation.",
-  reference: "Paciaroni M et al. Early Recurrence and Cerebral Bleeding in Patients With Acute Ischemic Stroke and Atrial Fibrillation (ELAN Trial). NEJM 2023. Incorporated into AHA/ASA 2026 Guidelines for Secondary Stroke Prevention."
+  evidence: "This pathway operationalizes the ELAN trial timing framework inside the broader AHA/ASA 2026 recommendation that earlier DOAC initiation is reasonable in carefully selected patients.",
+  reference: "Fischer U et al. ELAN Trial. N Engl J Med 2023. Supported by TIMING, OPTIMAS, and the 2026 AHA/ASA acute ischemic stroke guideline."
 };
 
 export const SE_CONTENT = {
