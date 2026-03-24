@@ -1,9 +1,11 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { PublishGate } from './components/PublishGate';
 import { TrialModalProvider, useTrialModal } from './contexts/TrialModalContext';
 import Seo from './components/Seo';
+import { STATIC_ROUTE_DEFINITIONS, type StaticRouteKey } from './config/routeManifest';
 
 const DisclaimerModal = lazy(() => import('./components/DisclaimerModal'));
 const GlobalTrialModal = lazy(() =>
@@ -55,6 +57,49 @@ const HeadacheWorkup = lazy(() => import('./pages/guide/HeadacheWorkup'));
 const Vertigo = lazy(() => import('./pages/guide/Vertigo'));
 const WeaknessWorkup = lazy(() => import('./pages/guide/WeaknessWorkup'));
 
+const ROUTE_COMPONENTS: Record<StaticRouteKey, React.ReactNode> = {
+  home: <Home />,
+  calculators: <Calculators />,
+  'aspect-score': <AspectScoreCalculator />,
+  nihss: <NihssCalculator />,
+  'ich-score': <IchScoreCalculator />,
+  'abcd2-score': <Abcd2ScoreCalculator />,
+  'has-bled-score': <HasBledScoreCalculator />,
+  'rope-score': <RopeScoreCalculator />,
+  'glasgow-coma-scale': <GlasgowComaScaleCalculator />,
+  'heidelberg-bleeding-classification': <HeidelbergBleedingCalculator />,
+  'boston-criteria-caa': <BostonCriteriaCaaCalculator />,
+  'gca-pathway': <GCAPathway />,
+  'elan-pathway': <ElanPathway />,
+  'evt-pathway': <EvtPathway />,
+  'late-window-ivt': <ExtendedIVTPathway />,
+  'se-pathway': <StatusEpilepticusPathway />,
+  'migraine-pathway': <MigrainePathway />,
+  'stroke-code': <StrokeBasics />,
+  'em-billing': <EmBillingCalculator />,
+  'guide-hub': <ResidentToolkit />,
+  'aha-2026-guideline': <StrokeGuidelineMindmap />,
+  'stroke-basics': <StrokeBasics />,
+  'stroke-basics-desktop': <StrokeBasicsDesktop />,
+  'stroke-basics-mobile': <StrokeBasicsMobile />,
+  'iv-tpa': <IvTpa />,
+  'tpa-eligibility': <IvTpa />,
+  thrombectomy: <Thrombectomy />,
+  'acute-stroke-mgmt': <AcuteStrokeMgmt />,
+  'status-epilepticus': <StatusEpilepticus />,
+  'ich-management': <IchManagement />,
+  meningitis: <Meningitis />,
+  gbs: <Gbs />,
+  'myasthenia-gravis': <MyastheniaGravis />,
+  'multiple-sclerosis': <MultipleSclerosis />,
+  'seizure-workup': <SeizureWorkup />,
+  'altered-mental-status': <AlteredMentalStatus />,
+  'headache-workup': <HeadacheWorkup />,
+  vertigo: <Vertigo />,
+  'weakness-workup': <WeaknessWorkup />,
+  'trials-hub': <TrialsPage />,
+};
+
 const TrialModalWrapper: React.FC = () => {
   const { isOpen, trialSlug, closeTrial } = useTrialModal();
 
@@ -75,101 +120,37 @@ const App: React.FC = () => {
   return (
     <Router>
       <TrialModalProvider>
-        <Seo />
-        <Suspense fallback={null}>
-          <DisclaimerModal />
-        </Suspense>
-        <Layout>
-          <Suspense fallback={
-            <div className="min-h-screen flex items-center justify-center bg-slate-50">
-              <div className="text-center">
-                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-neuro-500"></div>
-                <p className="mt-4 text-slate-600">Loading...</p>
+        <ErrorBoundary>
+          <Seo />
+          <Suspense fallback={null}>
+            <DisclaimerModal />
+          </Suspense>
+          <Layout>
+            <Suspense fallback={
+              <div className="min-h-screen flex items-center justify-center bg-slate-50">
+                <div className="text-center">
+                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-neuro-500"></div>
+                  <p className="mt-4 text-slate-600">Loading...</p>
+                </div>
               </div>
-            </div>
-          }>
-          <Routes>
-          <Route path="/" element={<Home />} />
+            }>
+            <Routes>
+          {STATIC_ROUTE_DEFINITIONS.map((route) => (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={route.publishGate ? <PublishGate>{ROUTE_COMPONENTS[route.key]}</PublishGate> : ROUTE_COMPONENTS[route.key]}
+            />
+          ))}
           <Route path="/wiki/:topic" element={<Wiki />} />
-          <Route path="/calculators" element={<Calculators />} />
-          <Route path="/calculators/aspects-score" element={<PublishGate><AspectScoreCalculator /></PublishGate>} />
-          <Route path="/calculators/nihss" element={<PublishGate><NihssCalculator /></PublishGate>} />
-          <Route path="/calculators/ich-score" element={<PublishGate><IchScoreCalculator /></PublishGate>} />
-          <Route path="/calculators/abcd2-score" element={<PublishGate><Abcd2ScoreCalculator /></PublishGate>} />
-          <Route path="/calculators/has-bled-score" element={<PublishGate><HasBledScoreCalculator /></PublishGate>} />
-          <Route path="/calculators/rope-score" element={<PublishGate><RopeScoreCalculator /></PublishGate>} />
-          <Route path="/calculators/glasgow-coma-scale" element={<PublishGate><GlasgowComaScaleCalculator /></PublishGate>} />
-          <Route path="/calculators/heidelberg-bleeding-classification" element={<PublishGate><HeidelbergBleedingCalculator /></PublishGate>} />
-          <Route path="/calculators/boston-criteria-caa" element={<PublishGate><BostonCriteriaCaaCalculator /></PublishGate>} />
-          <Route path="/calculators/gca-pathway" element={<PublishGate><GCAPathway /></PublishGate>} />
-          <Route path="/calculators/elan-pathway" element={<PublishGate><ElanPathway /></PublishGate>} />
-          <Route path="/calculators/evt-pathway" element={<PublishGate><EvtPathway /></PublishGate>} />
-          <Route path="/calculators/se-pathway" element={<PublishGate><StatusEpilepticusPathway /></PublishGate>} />
-          <Route path="/calculators/migraine-pathway" element={<PublishGate><MigrainePathway /></PublishGate>} />
-          <Route path="/calculators/late-window-ivt" element={<PublishGate routeId="/calculators/late-window-ivt"><ExtendedIVTPathway /></PublishGate>} />
-          <Route path="/calculators/stroke-code" element={<PublishGate><StrokeBasics /></PublishGate>} />
-          <Route path="/calculators/em-billing" element={<PublishGate><EmBillingCalculator /></PublishGate>} />
-          <Route path="/guide" element={<ResidentToolkit />} />
-          <Route path="/guide/aha-2026-guideline" element={<PublishGate routeId="/guide/aha-2026-guideline"><StrokeGuidelineMindmap /></PublishGate>} />
-          <Route path="/guide/stroke-basics" element={<PublishGate><StrokeBasics /></PublishGate>} />
-          <Route path="/guide/stroke-basics-desktop" element={<PublishGate><StrokeBasicsDesktop /></PublishGate>} />
-          <Route path="/guide/stroke-basics-mobile" element={<PublishGate><StrokeBasicsMobile /></PublishGate>} />
-          <Route path="/guide/iv-tpa" element={<PublishGate><IvTpa /></PublishGate>} />
-          <Route path="/guide/tpa-eligibility" element={<PublishGate><IvTpa /></PublishGate>} />
-          <Route path="/guide/thrombectomy" element={<PublishGate><Thrombectomy /></PublishGate>} />
-          <Route path="/guide/acute-stroke-mgmt" element={<PublishGate><AcuteStrokeMgmt /></PublishGate>} />
-          <Route path="/guide/status-epilepticus" element={<PublishGate><StatusEpilepticus /></PublishGate>} />
-          <Route path="/guide/ich-management" element={<PublishGate><IchManagement /></PublishGate>} />
-          <Route path="/guide/meningitis" element={<PublishGate><Meningitis /></PublishGate>} />
-          <Route path="/guide/gbs" element={<PublishGate><Gbs /></PublishGate>} />
-          <Route path="/guide/myasthenia-gravis" element={<PublishGate><MyastheniaGravis /></PublishGate>} />
-          <Route path="/guide/multiple-sclerosis" element={<PublishGate><MultipleSclerosis /></PublishGate>} />
-          <Route path="/guide/seizure-workup" element={<PublishGate><SeizureWorkup /></PublishGate>} />
-          <Route path="/guide/altered-mental-status" element={<PublishGate><AlteredMentalStatus /></PublishGate>} />
-          <Route path="/guide/headache-workup" element={<PublishGate><HeadacheWorkup /></PublishGate>} />
-          <Route path="/guide/vertigo" element={<PublishGate><Vertigo /></PublishGate>} />
-          <Route path="/guide/weakness-workup" element={<PublishGate><WeaknessWorkup /></PublishGate>} />
           <Route path="/guide/:topicId" element={<PublishGate><ResidentGuide context="guide" /></PublishGate>} />
-          <Route path="/trials" element={<TrialsPage />} />
-          {/* Specific routes for trials using TrialPageNew - must come BEFORE catch-all */}
-          {/* Thrombolysis Trials */}
-          <Route path="/trials/ninds-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/original-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/ecass3-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/extend-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/eagle-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/wake-up-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          {/* Thrombectomy Trials */}
-          <Route path="/trials/distal-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/escape-mevo-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/defuse-3-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/dawn-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/select2-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/angel-aspect-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          {/* Basilar Artery Trials */}
-          <Route path="/trials/attention-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/baoche-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          {/* Antiplatelet & Secondary Prevention Trials */}
-          <Route path="/trials/chance-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/point-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/thales-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/inspires-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/chance-2-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/sammpris-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/weave-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/socrates-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/sps3-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/sparcl-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/elan-study" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          <Route path="/trials/enrich-trial" element={<PublishGate><TrialPageNew /></PublishGate>} />
-          {/* Catch-all for trials — TrialPageNew handles unknown IDs gracefully */}
-          {/* New trials added to TRIAL_DATA with listCategory will work without touching App.tsx */}
           <Route path="/trials/:topicId" element={<PublishGate><TrialPageNew /></PublishGate>} />
           <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-          </Suspense>
-        </Layout>
-        <TrialModalWrapper />
+            </Routes>
+            </Suspense>
+          </Layout>
+          <TrialModalWrapper />
+        </ErrorBoundary>
       </TrialModalProvider>
     </Router>
   );

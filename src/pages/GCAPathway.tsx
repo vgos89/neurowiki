@@ -6,6 +6,7 @@ import { useFavorites } from '../hooks/useFavorites';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { CollapsibleSection } from '../components/CollapsibleSection';
 import { useNavigationSource } from '../hooks/useNavigationSource';
+import { scrollMainToTop } from '../utils/mainScroll';
 
 // --- Types ---
 type Tri = "no" | "yes" | "unknown";
@@ -232,12 +233,7 @@ const GCAPathway: React.FC = () => {
   }, [inputs, trackResult]);
 
   useEffect(() => {
-     const mainElement = document.querySelector('main');
-     if (mainElement) {
-        mainElement.scrollTo({ top: 0, behavior: 'instant' });
-     } else {
-        window.scrollTo(0,0);
-     }
+     scrollMainToTop();
   }, [activeSection]);
 
   const updateInput = (field: keyof Inputs, value: string | boolean | number) => {

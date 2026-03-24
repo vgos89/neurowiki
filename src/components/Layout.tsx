@@ -18,6 +18,9 @@ import {
 } from 'lucide-react';
 import { FeedbackButton } from './FeedbackButton';
 import type { GuideTopic } from '../data/guideContent';
+import { findTrialById, trials, type TrialItem } from '../data/trialListData';
+import { normalizeTrialSlug } from '../data/trialPayload';
+import { getStorageItem, setStorageItem } from '../utils/storage';
 
 const ToolManagerModal = lazy(() => import('./ToolManagerModal'));
 
@@ -69,7 +72,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   // Lazy load guide/trials data only when user visits guide or trials section (reduces initial bundle)
   useEffect(() => {
-    if (location.pathname.startsWith('/guide') || location.pathname.startsWith('/trials')) {
+    if (location.pathname.startsWith('/guide')) {
       import('../data/guideContent').then((m) => setGuideContent(m.GUIDE_CONTENT));
     }
   }, [location.pathname]);
@@ -80,7 +83,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   // Load selected tools from localStorage
   const [selectedTools, setSelectedTools] = useState<string[]>(() => {
     try {
-      const saved = localStorage.getItem('neurowiki-sidebar-tools');
+      const saved = getStorageItem('neurowiki-sidebar-tools');
       if (saved) {
         const parsed = JSON.parse(saved);
         // Validate that all saved tools still exist
@@ -105,6 +108,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     (isOnGuidePage && location.pathname !== '/guide') ||
     (isOnTrialsPage && location.pathname !== '/trials')
   );
+  const currentTrialId = normalizeTrialSlug(location.pathname.split('/trials/')[1]?.split('?')[0]);
   
   // Content panel (sidebar) only for Resident Guide landing. Neuro Trials uses in-page filters — no sidebar.
   const showContentPanel = isOnGuidePage && !isViewingArticle;
@@ -165,14 +169,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   ];
 
   const guideContentMap = guideContent ?? {};
+  const trialLookup = useMemo<Record<string, TrialItem>>(
+    () => Object.fromEntries(trials.map((trial) => [trial.id, trial])),
+    []
+  );
 
   // Get orphan trials (not in structure)
   const trialOrphans = useMemo(() => {
     if (!isOnTrialsPage) return [];
     const structuredIds = new Set(TRIAL_STRUCTURE.flatMap(c => c.subcategories.flatMap(s => s.ids)));
-    return Object.values(guideContentMap)
-      .filter(t => t.category === 'Neuro Trials' && !structuredIds.has(t.id));
-  }, [isOnTrialsPage, guideContent]);
+    return trials.filter((trial) => !structuredIds.has(trial.id));
+  }, [isOnTrialsPage]);
 
   // Guide navigation structure - UPDATE PATHS TO MATCH YOUR ACTUAL ROUTES
   const GUIDE_NAVIGATION = [
@@ -265,7 +272,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   // Auto-expand trials subcategory when navigating to a trial page
   useEffect(() => {
     if (isOnTrialsPage && location.pathname.includes('/trials/')) {
-      const trialId = location.pathname.split('/trials/')[1]?.split('?')[0];
+      const trialId = currentTrialId;
       if (trialId) {
         // Find which subcategory contains this trial
         for (const cat of TRIAL_STRUCTURE) {
@@ -278,7 +285,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         }
       }
     }
-  }, [location.pathname, isOnTrialsPage, expandedTrialsSubcategories]);
+  }, [currentTrialId, isOnTrialsPage, expandedTrialsSubcategories, location.pathname]);
 
   // Get selected tools data
   const selectedToolsData = ALL_TOOLS.filter(tool => selectedTools.includes(tool.id));
@@ -287,7 +294,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const handleToolsChange = (toolIds: string[]) => {
     setSelectedTools(toolIds);
     try {
-      localStorage.setItem('neurowiki-sidebar-tools', JSON.stringify(toolIds));
+      setStorageItem('neurowiki-sidebar-tools', JSON.stringify(toolIds));
     } catch (error) {
       if (import.meta.env.DEV) console.error('Failed to save tools to localStorage:', error);
     }
@@ -569,9 +576,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                             // Filter trials based on search query
                             const filteredTrialIds = sidebarSearchQuery.trim()
                               ? sub.ids.filter(id => {
-                                  const trial = guideContentMap[id];
+                                  const trial = trialLookup[id] ?? findTrialById(id);
                                   if (!trial) return false;
-                                  const trialTitle = trial.title.replace(/Trial:|Study:/gi, '').trim();
+                                  const trialTitle = trial.name.replace(/Trial:|Study:/gi, '').trim();
                                   return trialTitle.toLowerCase().includes(sidebarSearchQuery.toLowerCase());
                                 })
                               : sub.ids;
@@ -608,9 +615,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                 {isOpen && (
                                   <div className="mt-1 space-y-0.5">
                                     {filteredTrialIds.map(id => {
-                                      const trial = guideContentMap[id];
+                                      const trial = trialLookup[id] ?? findTrialById(id);
                                       if (!trial) return null;
-                                      const itemActive = location.pathname === `/trials/${id}`;
+                                      const itemActive = currentTrialId === id;
                                       return (
                                         <Link
                                           key={id}
@@ -621,7 +628,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                               : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-200'
                                           }`}
                                         >
-                                          {trial.title.replace(/Trial:|Study:/gi, '').trim()}
+                                          {trial.name.replace(/Trial:|Study:/gi, '').trim()}
             </Link>
                                       );
                                     })}
@@ -639,7 +646,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       // Filter orphan trials based on search query
                       const filteredOrphans = sidebarSearchQuery.trim()
                         ? trialOrphans.filter(trial =>
-                            trial.title.toLowerCase().includes(sidebarSearchQuery.toLowerCase())
+                            trial.name.toLowerCase().includes(sidebarSearchQuery.toLowerCase())
                           )
                         : trialOrphans;
                       
@@ -654,7 +661,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                           </h3>
                           <div className="space-y-0.5">
                             {filteredOrphans.map(trial => {
-                              const itemActive = location.pathname === `/trials/${trial.id}`;
+                              const itemActive = currentTrialId === trial.id;
                               return (
                                 <Link
                                   key={trial.id}
@@ -665,7 +672,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                       : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-200'
                                   }`}
                                 >
-                                  {trial.title}
+                                  {trial.name}
                                 </Link>
                               );
                             })}

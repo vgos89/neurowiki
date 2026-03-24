@@ -8,6 +8,7 @@ import { useTrialModal } from '../contexts/TrialModalContext';
 import { useFavorites } from '../hooks/useFavorites';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { useNavigationSource } from '../hooks/useNavigationSource';
+import { scrollMainToTop } from '../utils/mainScroll';
 
 // ... (KEEP ALL TYPES, INTERFACES, STEPS, LOGIC, COMPONENTS SAME UNTIL RENDER) ...
 type Tri = "yes" | "no" | "unknown";
@@ -157,7 +158,7 @@ const ElanPathway: React.FC = () => {
       trackResult(newResult.size);
     }
   }, [inputs, trackResult]);
-  useEffect(() => { const mainElement = document.querySelector('main'); if (mainElement) mainElement.scrollTo({ top: 0, behavior: 'instant' }); else window.scrollTo(0,0); }, [step]);
+  useEffect(() => { scrollMainToTop(); }, [step]);
 
   const updateInput = useCallback((field: keyof Inputs, value: string | boolean | number) => {
     setInputs(prev => ({ ...prev, [field]: value }));

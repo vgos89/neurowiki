@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { getStorageItem, setStorageItem } from '../utils/storage';
 
 // Category styling
 const categoryStyles: Record<
@@ -109,7 +110,7 @@ export default function Calculators() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<string[]>(() => {
     try {
-      const saved = localStorage.getItem('neurowiki-favorites');
+      const saved = getStorageItem('neurowiki-favorites');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -154,9 +155,7 @@ export default function Calculators() {
     e.stopPropagation();
     setFavorites((prev) => {
       const updated = prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id];
-      try {
-        localStorage.setItem('neurowiki-favorites', JSON.stringify(updated));
-      } catch (_) {}
+      setStorageItem('neurowiki-favorites', JSON.stringify(updated));
       return updated;
     });
   };

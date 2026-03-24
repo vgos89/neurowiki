@@ -8,6 +8,7 @@ import { useLocation } from 'react-router-dom';
 import { GUIDE_CONTENT } from '../data/guideContent';
 import { processNodesForLinking } from '../internalLinks/autoLink';
 import { getBacklinks } from '../internalLinks/backlinks';
+import { getMainScrollElement, scrollMainToTop } from '../utils/mainScroll';
 
 const generateSlug = (text: string) => {
   if (!text) return '';
@@ -106,10 +107,7 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
 
   // Scroll to top when topic changes
   useEffect(() => {
-    const mainScroller = document.querySelector('main');
-    if (mainScroller) {
-        mainScroller.scrollTo({ top: 0, behavior: 'instant' });
-    }
+    scrollMainToTop();
   }, [topicId]);
 
   // --- Article Content Parsing (Sections for Accordion) ---
@@ -191,7 +189,7 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
-    const mainScroller = document.querySelector('main');
+    const mainScroller = getMainScrollElement();
     const handleScroll = () => {
       if (mainScroller) {
         setShowScrollTop(mainScroller.scrollTop > 300);
@@ -202,7 +200,7 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
   }, []);
 
   const scrollToTop = () => {
-    const mainScroller = document.querySelector('main');
+    const mainScroller = getMainScrollElement();
     mainScroller?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

@@ -4,8 +4,6 @@
  * BreadcrumbList, FAQPage).
  */
 
-import { TRIAL_DATA } from '../data/trialData';
-import { buildHouseConclusion } from '../utils/trialNarrative';
 
 const BASE_URL = 'https://neurowiki.ai';
 const LAST_REVIEWED = '2026-02-18';
@@ -383,73 +381,8 @@ function guideSchema(pathname: string, title: string, description: string, guide
 
 // ── Trial schema ──────────────────────────────────────────────────────────────
 
-/** Dynamically generates FAQs from TRIAL_DATA for any trial page — enables Google FAQ rich snippets. */
-function generateTrialFAQs(trialId: string): Array<{ question: string; answer: string }> | null {
-  const trial = TRIAL_DATA[trialId];
-  if (!trial) return null;
-
-  const faqs: Array<{ question: string; answer: string }> = [];
-
-  // Q1: What did the trial show? (always present — uses house summary built from structured data)
-  faqs.push({
-    question: `What did the ${trial.title} show?`,
-    answer: buildHouseConclusion(trial),
-  });
-
-  // Q2: Primary outcome / efficacy numbers
-  if (trial.efficacyResults) {
-    const { treatment, control } = trial.efficacyResults;
-    const ep =
-      trial.stats?.primaryEndpoint?.value ??
-      trial.trialDesign?.primaryEndpoint?.value ??
-      'the primary endpoint';
-    const pVal = trial.stats?.pValue?.value ? `, p ${trial.stats.pValue.value}` : '';
-    const nntLine = trial.calculations?.nntExplanation
-      ? ` NNT: ${trial.calculations.nntExplanation}.`
-      : '';
-    faqs.push({
-      question: `What were the key results of ${trial.title}?`,
-      answer: `${trial.title} enrolled ${trial.stats?.sampleSize?.value ?? 'participants'}. The primary outcome (${ep}) was achieved in ${treatment.percentage}% of the ${treatment.name} group vs ${control.percentage}% of the ${control.name} group${pVal}.${nntLine}`,
-    });
-  }
-
-  // Q3: Trial design and intervention
-  if (trial.intervention) {
-    const tx =
-      typeof trial.intervention.treatment === 'string'
-        ? trial.intervention.treatment
-        : `${trial.intervention.treatment.name}: ${trial.intervention.treatment.description}`;
-    const ctrl =
-      typeof trial.intervention.control === 'string'
-        ? trial.intervention.control
-        : `${trial.intervention.control.name}: ${trial.intervention.control.description}`;
-    const designType = trial.trialDesign?.type?.[0] ?? '';
-    faqs.push({
-      question: `What was the design of ${trial.title}?`,
-      answer: `${trial.title} (${trial.source}) compared ${tx} versus ${ctrl}. ${designType ? `${designType}. ` : ''}${trial.clinicalContext}`,
-    });
-  }
-
-  // Q4: Clinical application or key pearls
-  if (trial.clinicalApplication) {
-    faqs.push({
-      question: `How should ${trial.title} change clinical practice?`,
-      answer: trial.clinicalApplication,
-    });
-  } else if (trial.pearls?.length) {
-    faqs.push({
-      question: `What are the key clinical takeaways from ${trial.title}?`,
-      answer: trial.pearls.slice(0, 3).join(' '),
-    });
-  }
-
-  return faqs.length > 0 ? faqs : null;
-}
-
 function trialSchema(pathname: string, title: string, description: string, trialLabel: string): object {
   const url = `${BASE_URL}${pathname}`;
-  const trialId = pathname.split('/').pop() ?? '';
-  const faqs = generateTrialFAQs(trialId);
 
   const graph: object[] = [
     {
@@ -474,17 +407,6 @@ function trialSchema(pathname: string, title: string, description: string, trial
       ],
     },
   ];
-
-  if (faqs) {
-    graph.push({
-      '@type': 'FAQPage',
-      mainEntity: faqs.map(({ question, answer }) => ({
-        '@type': 'Question',
-        name: question,
-        acceptedAnswer: { '@type': 'Answer', text: answer },
-      })),
-    });
-  }
 
   return { '@context': 'https://schema.org', '@graph': graph };
 }

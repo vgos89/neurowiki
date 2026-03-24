@@ -4,6 +4,7 @@ import { useNavigationSource } from '../hooks/useNavigationSource';
 import { ArrowLeft, RefreshCw, Copy, Star, Info } from 'lucide-react';
 import { useFavorites } from '../hooks/useFavorites';
 import { NIHSS_ITEMS, calculateTotal, getItemWarning, calculateLvoProbability } from '../utils/nihssShortcuts';
+import { getMainScrollElement, scrollWithinMainOrWindow } from '../utils/mainScroll';
 import NihssItemCard from '../components/NihssItemCard';
 
 const NihssCalculator: React.FC = () => {
@@ -46,21 +47,18 @@ const NihssCalculator: React.FC = () => {
         const nextItem = NIHSS_ITEMS[idx + 1];
         const el = document.getElementById(`nihss-row-${nextItem.id}`);
         if (el) {
-          // Get the main scroll container
-          const main = document.querySelector('main');
-          const scrollContainer = main || window;
           // Scroll offset - account for main navigation header (64px) + NIHSS header height
           const mainNavHeight = 64;
           const nihssHeaderHeight = nihssHeaderRef.current?.offsetHeight || 120;
           const offset = mainNavHeight + nihssHeaderHeight + 20;
           
+          const main = getMainScrollElement();
           if (main) {
             const elementTop = el.offsetTop - main.offsetTop;
             const scrollPosition = elementTop - offset;
             main.scrollTo({ top: scrollPosition, behavior: 'smooth' });
           } else {
-            const elementTop = el.getBoundingClientRect().top + window.scrollY;
-            window.scrollTo({ top: elementTop - offset, behavior: 'smooth' });
+            scrollWithinMainOrWindow(el, offset);
           }
         }
       }, 300);

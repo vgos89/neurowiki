@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { getStorageItem, setStorageItem } from '../utils/storage';
 
 const DISCLAIMER_STORAGE_KEY = 'neurowiki-disclaimer-accepted';
 const DISCLAIMER_VERSION = '1.0'; // Increment to force re-acceptance
@@ -18,7 +19,7 @@ export const DisclaimerModal: React.FC = () => {
 
   // Check if already accepted
   useEffect(() => {
-    const stored = localStorage.getItem(DISCLAIMER_STORAGE_KEY);
+    const stored = getStorageItem(DISCLAIMER_STORAGE_KEY);
     if (stored) {
       try {
         const data: StoredDisclaimer = JSON.parse(stored);
@@ -61,7 +62,7 @@ export const DisclaimerModal: React.FC = () => {
       userAgent: navigator.userAgent,
     };
 
-    localStorage.setItem(DISCLAIMER_STORAGE_KEY, JSON.stringify(data));
+    setStorageItem(DISCLAIMER_STORAGE_KEY, JSON.stringify(data));
     setIsOpen(false);
   };
 

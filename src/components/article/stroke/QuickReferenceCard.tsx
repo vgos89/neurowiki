@@ -1,26 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { getStorageItem, setStorageItem } from '../../../utils/storage';
 
 const STORAGE_KEY = 'stroke-quick-ref-collapsed';
 
 export const QuickReferenceCard: React.FC = () => {
   const [collapsed, setCollapsed] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored !== null) return stored === 'true';
-      // Default: collapsed on mobile, expanded on desktop
-      return window.innerWidth < 640;
-    } catch {
-      return false;
-    }
+    const stored = getStorageItem(STORAGE_KEY);
+    if (stored !== null) return stored === 'true';
+    return typeof window !== 'undefined' ? window.innerWidth < 640 : false;
   });
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, String(collapsed));
-    } catch {
-      // ignore storage errors
-    }
+    setStorageItem(STORAGE_KEY, String(collapsed));
   }, [collapsed]);
 
   return (

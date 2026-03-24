@@ -1,5 +1,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
+import { getStorageItem, setStorageItem } from '../utils/storage';
 
 const STORAGE_KEY = 'neurowiki:favorites:v1';
 
@@ -10,7 +11,7 @@ export const useFavorites = () => {
   // Load from storage on mount
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
+      const stored = getStorageItem(STORAGE_KEY);
       if (stored) {
         setFavorites(JSON.parse(stored));
       }
@@ -25,7 +26,7 @@ export const useFavorites = () => {
   useEffect(() => {
     if (isLoaded) {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+        setStorageItem(STORAGE_KEY, JSON.stringify(favorites));
       } catch (e) {
         if (import.meta.env.DEV) console.warn('Failed to save favorites', e);
       }

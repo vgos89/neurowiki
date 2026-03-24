@@ -1,15 +1,14 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
-import { GUIDE_CONTENT } from '../../data/guideContent';
-import { TRIAL_DATA, type TrialMetadata } from '../../data/trialData';
+import { loadTrialPayload, normalizeTrialSlug, type TrialPayload } from '../../data/trialPayload';
+import type { TrialMetadata } from '../../data/trialData';
 import { TrialStats } from '../../components/TrialStats';
 import { MedicalTooltip } from '../../components/MedicalTooltip';
 import { MEDICAL_GLOSSARY } from '../../data/medicalGlossary';
 import { addTooltips } from '../../utils/addTooltips';
 import { buildHouseConclusion } from '../../utils/trialNarrative';
 import { categoryNames, findTrialById } from '../../data/trialListData';
-import { TRIAL_VISUALIZATIONS } from '../../data/trialVisualizations';
 import { TrialVisualizationSection } from '../../components/trials/TrialVisualizations';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -76,33 +75,55 @@ const TrialPageNew: React.FC = () => {
   const { topicId } = useParams<{ topicId: string }>();
   const location = useLocation();
 
-  // Extract trial ID from URL pathname (handles both /trials/wake-up and /trials/wake-up-trial)
   const pathname = location.pathname;
   const pathTrialId = pathname.replace('/trials/', '');
+  const requestedSlug = topicId ?? pathTrialId;
+  const initialTrialId = normalizeTrialSlug(requestedSlug);
+  const [payload, setPayload] = useState<TrialPayload>({
+    slug: requestedSlug,
+    trialId: initialTrialId,
+    visualizations: [],
+  });
+  const [isLoadingPayload, setIsLoadingPayload] = useState(true);
+  const [payloadError, setPayloadError] = useState<string | null>(null);
 
-  // Determine trial ID: prefer topicId param, fallback to pathname extraction
-  // Handle both 'wake-up' and 'wake-up-trial' IDs
-  let trialId = '';
-  if (topicId) {
-    // If topicId param exists (from /trials/:topicId route)
-    trialId = topicId === 'wake-up' ? 'wake-up-trial' : topicId;
-  } else {
-    // If no topicId param (from specific route like /trials/wake-up-trial)
-    trialId = pathTrialId === 'wake-up' ? 'wake-up-trial' : pathTrialId;
-  }
+  useEffect(() => {
+    let cancelled = false;
 
-  const trialMetadata = TRIAL_DATA[trialId];
-  const visualizations = TRIAL_VISUALIZATIONS[trialId] ?? [];
-  const trial = GUIDE_CONTENT[trialId] ?? (
-    trialMetadata
-      ? {
-          id: trialId,
-          title: trialMetadata.title,
-          category: trialMetadata.category,
-          content: '',
+    setIsLoadingPayload(true);
+    setPayloadError(null);
+
+    loadTrialPayload(requestedSlug)
+      .then((nextPayload) => {
+        if (!cancelled) {
+          setPayload(nextPayload);
         }
-      : undefined
-  );
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          setPayload({
+            slug: requestedSlug,
+            trialId: normalizeTrialSlug(requestedSlug),
+            visualizations: [],
+          });
+          setPayloadError(error instanceof Error ? error.message : 'Failed to load trial payload');
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setIsLoadingPayload(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [requestedSlug]);
+
+  const trialId = payload.trialId;
+  const trialMetadata = payload.metadata;
+  const trial = payload.trial;
+  const visualizations = payload.visualizations;
   const catalogTrial = findTrialById(trialId);
   const sanitizedTrialContent = useMemo(
     () =>
@@ -122,10 +143,21 @@ const TrialPageNew: React.FC = () => {
     () => (trialMetadata ? buildTrialSummaryItems(trialMetadata) : []),
     [trialMetadata]
   );
-  const isPlaceholderTrial = !!catalogTrial?.isPlaceholder && !trial && !trialMetadata;
+  const isPlaceholderTrial = !isLoadingPayload && !!catalogTrial?.isPlaceholder && !trial && !trialMetadata;
+
+  if (isLoadingPayload) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+        <div className="text-center">
+          <div className="inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-neuro-500" />
+          <p className="mt-4 text-slate-600 dark:text-slate-300">Loading trial summary...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!trial && !isPlaceholderTrial && import.meta.env.DEV) {
-    console.error('TrialPageNew - TRIAL NOT FOUND:', { pathname, topicId, pathTrialId, trialId });
+    console.error('TrialPageNew - TRIAL NOT FOUND:', { pathname, topicId, pathTrialId, trialId, payloadError });
   }
 
   if (isPlaceholderTrial && catalogTrial) {
