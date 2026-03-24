@@ -1,0 +1,178 @@
+export interface LegacyTrialCatalogMeta {
+  name: string;
+  year: number;
+  doi: string;
+  description: string;
+  clinicalContext: string;
+}
+
+export const LEGACY_TRIAL_CATALOG_META: Record<string, LegacyTrialCatalogMeta> = {
+  'ninds-trial': {
+    name: 'NINDS',
+    year: 1995,
+    doi: '10.1056/NEJM199512143332401',
+    description: 'Foundational IV alteplase trial establishing benefit within 3 hours of ischemic stroke onset.',
+    clinicalContext: 'Foundational IV alteplase trial establishing benefit within 3 hours of ischemic stroke onset.',
+  },
+  'original-trial': {
+    name: 'ORIGINAL',
+    year: 2024,
+    doi: '10.1001/jama.2024.14721',
+    description: 'Large noninferiority trial showing tenecteplase 0.25 mg/kg performed similarly to alteplase within 4.5 hours.',
+    clinicalContext: 'Large noninferiority trial showing tenecteplase 0.25 mg/kg performed similarly to alteplase within 4.5 hours.',
+  },
+  'ecass3-trial': {
+    name: 'ECASS III',
+    year: 2008,
+    doi: '10.1056/NEJMoa0804656',
+    description: 'Extended the alteplase treatment window to 4.5 hours in selected ischemic stroke patients.',
+    clinicalContext: 'Extended the alteplase treatment window to 4.5 hours in selected ischemic stroke patients.',
+  },
+  'extend-trial': {
+    name: 'EXTEND',
+    year: 2019,
+    doi: '10.1056/NEJMoa1813046',
+    description: 'Perfusion-selected late-window alteplase trial supporting tissue-based rather than strictly time-based thrombolysis.',
+    clinicalContext: 'Perfusion-selected late-window alteplase trial supporting tissue-based rather than strictly time-based thrombolysis.',
+  },
+  'eagle-trial': {
+    name: 'EAGLE',
+    year: 2010,
+    doi: '10.1016/j.ophtha.2010.03.061',
+    description: 'Negative intra-arterial fibrinolysis trial for central retinal artery occlusion with higher adverse events.',
+    clinicalContext: 'Negative intra-arterial fibrinolysis trial for central retinal artery occlusion with higher adverse events.',
+  },
+  'wake-up-trial': {
+    name: 'WAKE-UP',
+    year: 2018,
+    doi: '10.1056/NEJMoa1804355',
+    description: 'MRI DWI-FLAIR mismatch trial supporting alteplase for wake-up and unknown-onset stroke.',
+    clinicalContext: 'MRI DWI-FLAIR mismatch trial supporting alteplase for wake-up and unknown-onset stroke.',
+  },
+  'defuse-3-trial': {
+    name: 'DEFUSE-3',
+    year: 2018,
+    doi: '10.1056/NEJMoa1706442',
+    description: 'Late-window thrombectomy trial using perfusion imaging to identify salvageable tissue up to 16 hours.',
+    clinicalContext: 'Late-window thrombectomy trial using perfusion imaging to identify salvageable tissue up to 16 hours.',
+  },
+  'dawn-trial': {
+    name: 'DAWN',
+    year: 2018,
+    doi: '10.1056/NEJMoa1713973',
+    description: 'Clinical-imaging mismatch trial that redefined thrombectomy eligibility out to 24 hours.',
+    clinicalContext: 'Clinical-imaging mismatch trial that redefined thrombectomy eligibility out to 24 hours.',
+  },
+  'select2-trial': {
+    name: 'SELECT-2',
+    year: 2023,
+    doi: '10.1056/NEJMoa2214403',
+    description: 'Large-core stroke trial showing thrombectomy still benefits selected patients with substantial infarct burden.',
+    clinicalContext: 'Large-core stroke trial showing thrombectomy still benefits selected patients with substantial infarct burden.',
+  },
+  'angel-aspect-trial': {
+    name: 'ANGEL-ASPECT',
+    year: 2023,
+    doi: '10.1056/NEJMoa2213379',
+    description: 'Large-core thrombectomy trial supporting EVT in patients previously considered poor candidates.',
+    clinicalContext: 'Large-core thrombectomy trial supporting EVT in patients previously considered poor candidates.',
+  },
+  'attention-trial': {
+    name: 'ATTENTION',
+    year: 2022,
+    doi: '10.1056/NEJMoa2207576',
+    description: 'Basilar artery occlusion thrombectomy trial showing clear functional benefit within 12 hours.',
+    clinicalContext: 'Basilar artery occlusion thrombectomy trial showing clear functional benefit within 12 hours.',
+  },
+  'baoche-trial': {
+    name: 'BAOCHE',
+    year: 2022,
+    doi: '10.1056/NEJMoa2206317',
+    description: 'Late-window basilar thrombectomy trial extending posterior-circulation EVT evidence to 24 hours.',
+    clinicalContext: 'Late-window basilar thrombectomy trial extending posterior-circulation EVT evidence to 24 hours.',
+  },
+  'chance-trial': {
+    name: 'CHANCE',
+    year: 2013,
+    doi: '10.1056/NEJMoa1215340',
+    description: 'Established short-course clopidogrel plus aspirin after minor stroke or high-risk TIA in a Chinese population.',
+    clinicalContext: 'Established short-course clopidogrel plus aspirin after minor stroke or high-risk TIA in a Chinese population.',
+  },
+  'point-trial': {
+    name: 'POINT',
+    year: 2018,
+    doi: '10.1056/NEJMoa1800410',
+    description: 'Western DAPT replication trial showing reduced ischemic events but increased major bleeding.',
+    clinicalContext: 'Western DAPT replication trial showing reduced ischemic events but increased major bleeding.',
+  },
+  'sammpris-trial': {
+    name: 'SAMMPRIS',
+    year: 2011,
+    doi: '10.1056/NEJMoa1105335',
+    description: 'Showed aggressive medical therapy outperformed Wingspan stenting for symptomatic intracranial stenosis.',
+    clinicalContext: 'Showed aggressive medical therapy outperformed Wingspan stenting for symptomatic intracranial stenosis.',
+  },
+  'weave-trial': {
+    name: 'WEAVE',
+    year: 2019,
+    doi: '10.1161/STROKEAHA.118.023996',
+    description: 'Registry-based Wingspan safety study in highly selected intracranial stenosis patients after SAMMPRIS.',
+    clinicalContext: 'Registry-based Wingspan safety study in highly selected intracranial stenosis patients after SAMMPRIS.',
+  },
+  'socrates-trial': {
+    name: 'SOCRATES',
+    year: 2016,
+    doi: '10.1056/NEJMoa1603060',
+    description: 'Compared ticagrelor with aspirin after minor stroke or TIA and did not show overall superiority.',
+    clinicalContext: 'Compared ticagrelor with aspirin after minor stroke or TIA and did not show overall superiority.',
+  },
+  'sps3-trial': {
+    name: 'SPS3',
+    year: 2012,
+    doi: '10.1056/NEJMoa1204133',
+    description: 'Lacunar stroke trial showing more bleeding without benefit from long-term dual antiplatelet therapy.',
+    clinicalContext: 'Lacunar stroke trial showing more bleeding without benefit from long-term dual antiplatelet therapy.',
+  },
+  'sparcl-trial': {
+    name: 'SPARCL',
+    year: 2006,
+    doi: '10.1056/NEJMoa061894',
+    description: 'Established high-intensity atorvastatin as standard secondary prevention after stroke or TIA.',
+    clinicalContext: 'Established high-intensity atorvastatin as standard secondary prevention after stroke or TIA.',
+  },
+  'elan-study': {
+    name: 'ELAN',
+    year: 2023,
+    doi: '10.1056/NEJMoa2303048',
+    description: 'Early versus later DOAC initiation trial after AF-related ischemic stroke showing low bleeding risk with early treatment.',
+    clinicalContext: 'Early versus later DOAC initiation trial after AF-related ischemic stroke showing low bleeding risk with early treatment.',
+  },
+  'thales-trial': {
+    name: 'THALES',
+    year: 2020,
+    doi: '10.1056/NEJMoa1916870',
+    description: 'Ticagrelor plus aspirin trial after minor stroke or TIA with modest efficacy and substantially more bleeding.',
+    clinicalContext: 'Ticagrelor plus aspirin trial after minor stroke or TIA with modest efficacy and substantially more bleeding.',
+  },
+  'inspires-trial': {
+    name: 'INSPIRES',
+    year: 2024,
+    doi: '10.1056/NEJMoa2309137',
+    description: 'Atherosclerotic minor stroke and TIA trial extending the DAPT initiation window out to 72 hours.',
+    clinicalContext: 'Atherosclerotic minor stroke and TIA trial extending the DAPT initiation window out to 72 hours.',
+  },
+  'chance-2-trial': {
+    name: 'CHANCE-2',
+    year: 2021,
+    doi: '10.1056/NEJMoa2111749',
+    description: 'Pharmacogenomic DAPT trial favoring ticagrelor over clopidogrel in CYP2C19 loss-of-function carriers.',
+    clinicalContext: 'Pharmacogenomic DAPT trial favoring ticagrelor over clopidogrel in CYP2C19 loss-of-function carriers.',
+  },
+  'enrich-trial': {
+    name: 'ENRICH',
+    year: 2024,
+    doi: '10.1056/NEJMoa2308440',
+    description: 'Positive minimally invasive surgery trial for selected lobar and anterior basal ganglia ICH.',
+    clinicalContext: 'Positive minimally invasive surgery trial for selected lobar and anterior basal ganglia ICH.',
+  },
+};

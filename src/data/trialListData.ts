@@ -1,4 +1,4 @@
-import { TRIAL_DATA } from './trialData';
+import { LEGACY_TRIAL_CATALOG_META } from './trialCatalogMeta';
 
 export type TrialCategoryKey =
   | 'prehospital-triage'
@@ -345,78 +345,55 @@ const manualTrials: Omit<TrialItem, 'year'>[] = [
   }),
 ];
 
-const legacyTrialConfigs: Record<string, { category: TrialCategoryKey; doi: string }> = {
-  'ninds-trial': { category: 'ivt', doi: '10.1056/NEJM199512143332401' },
-  'original-trial': { category: 'ivt', doi: '10.1001/jama.2024.14721' },
-  'ecass3-trial': { category: 'ivt', doi: '10.1056/NEJMoa0804656' },
-  'extend-trial': { category: 'ivt', doi: '10.1056/NEJMoa1813046' },
-  'eagle-trial': { category: 'ivt', doi: '10.1016/j.ophtha.2010.03.061' },
-  'wake-up-trial': { category: 'ivt', doi: '10.1056/NEJMoa1804355' },
-  'defuse-3-trial': { category: 'evt', doi: '10.1056/NEJMoa1706442' },
-  'dawn-trial': { category: 'evt', doi: '10.1056/NEJMoa1713973' },
-  'select2-trial': { category: 'evt', doi: '10.1056/NEJMoa2214403' },
-  'angel-aspect-trial': { category: 'evt', doi: '10.1056/NEJMoa2213379' },
-  'attention-trial': { category: 'evt', doi: '10.1056/NEJMoa2207576' },
-  'baoche-trial': { category: 'evt', doi: '10.1056/NEJMoa2206317' },
-  'chance-trial': { category: 'secondary-prevention', doi: '10.1056/NEJMoa1215340' },
-  'point-trial': { category: 'secondary-prevention', doi: '10.1056/NEJMoa1800410' },
-  'sammpris-trial': { category: 'secondary-prevention', doi: '10.1056/NEJMoa1105335' },
-  'weave-trial': { category: 'secondary-prevention', doi: '10.1161/STROKEAHA.118.023996' },
-  'socrates-trial': { category: 'secondary-prevention', doi: '10.1056/NEJMoa1603060' },
-  'sps3-trial': { category: 'secondary-prevention', doi: '10.1056/NEJMoa1204133' },
-  'sparcl-trial': { category: 'secondary-prevention', doi: '10.1056/NEJMoa061894' },
-  'elan-study': { category: 'secondary-prevention', doi: '10.1056/NEJMoa2303048' },
-  'thales-trial': { category: 'secondary-prevention', doi: '10.1056/NEJMoa1916870' },
-  'inspires-trial': { category: 'secondary-prevention', doi: '10.1056/NEJMoa2309137' },
-  'chance-2-trial': { category: 'secondary-prevention', doi: '10.1056/NEJMoa2111749' },
-  'enrich-trial': { category: 'surgical-interventions', doi: '10.1056/NEJMoa2308440' },
+const legacyTrialCategories: Record<string, TrialCategoryKey> = {
+  'ninds-trial': 'ivt',
+  'original-trial': 'ivt',
+  'ecass3-trial': 'ivt',
+  'extend-trial': 'ivt',
+  'eagle-trial': 'ivt',
+  'wake-up-trial': 'ivt',
+  'defuse-3-trial': 'evt',
+  'dawn-trial': 'evt',
+  'select2-trial': 'evt',
+  'angel-aspect-trial': 'evt',
+  'attention-trial': 'evt',
+  'baoche-trial': 'evt',
+  'chance-trial': 'secondary-prevention',
+  'point-trial': 'secondary-prevention',
+  'sammpris-trial': 'secondary-prevention',
+  'weave-trial': 'secondary-prevention',
+  'socrates-trial': 'secondary-prevention',
+  'sps3-trial': 'secondary-prevention',
+  'sparcl-trial': 'secondary-prevention',
+  'elan-study': 'secondary-prevention',
+  'thales-trial': 'secondary-prevention',
+  'inspires-trial': 'secondary-prevention',
+  'chance-2-trial': 'secondary-prevention',
+  'enrich-trial': 'surgical-interventions',
 };
 
-function extractTrialYear(source?: string): number {
-  if (!source) return 0;
-  const match = source.match(/\b(19|20)\d{2}\b/);
-  return match ? Number(match[0]) : 0;
-}
-
-function formatTrialName(title?: string, fallbackId?: string): string {
-  if (title) return title.replace(/\s+Trial$/, '');
-  return fallbackId ?? 'Unknown Trial';
-}
-
-function getListDescription(id: string): string | undefined {
-  const metadata = TRIAL_DATA[id];
-  if (!metadata) return undefined;
-  if (metadata.listDescription) return metadata.listDescription;
-  const firstSentence = metadata.clinicalContext.split('. ')[0]?.trim();
-  if (!firstSentence) return undefined;
-  return firstSentence.endsWith('.') ? firstSentence : `${firstSentence}.`;
-}
-
 function enrichTrial(item: Omit<TrialItem, 'year'>): TrialItem {
-  const metadata = TRIAL_DATA[item.id];
   return {
     ...item,
-    year: extractTrialYear(metadata?.source),
-    clinicalContext: metadata?.clinicalContext,
+    year: 0,
   };
 }
 
 const manualTrialIds = new Set(manualTrials.map((trial) => trial.id));
 
-const restoredLegacyTrials: TrialItem[] = Object.entries(legacyTrialConfigs)
+const restoredLegacyTrials: TrialItem[] = Object.entries(LEGACY_TRIAL_CATALOG_META)
   .filter(([id]) => !manualTrialIds.has(id))
-  .map(([id, config]) => {
-    const metadata = TRIAL_DATA[id];
+  .map(([id, metadata]) => {
     return {
       id,
-      name: formatTrialName(metadata?.title, id),
-      year: extractTrialYear(metadata?.source),
-      category: config.category,
-      doi: metadata?.doi ?? config.doi,
+      name: metadata.name,
+      year: metadata.year,
+      category: legacyTrialCategories[id],
+      doi: metadata.doi,
       path: `/trials/${id}`,
       isPlaceholder: false,
-      description: getListDescription(id),
-      clinicalContext: metadata?.clinicalContext,
+      description: metadata.description,
+      clinicalContext: metadata.clinicalContext,
     };
   });
 
