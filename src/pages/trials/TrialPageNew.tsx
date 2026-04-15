@@ -8,7 +8,7 @@ import { MedicalTooltip } from '../../components/MedicalTooltip';
 import { MEDICAL_GLOSSARY } from '../../data/medicalGlossary';
 import { addTooltips } from '../../utils/addTooltips';
 import { buildHouseConclusion } from '../../utils/trialNarrative';
-import { categoryNames, findTrialById } from '../../data/trialListData';
+import { categoryNames, categoryStyles, findTrialById } from '../../data/trialListData';
 import { TrialVisualizationSection } from '../../components/trials/TrialVisualizations';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -125,6 +125,9 @@ const TrialPageNew: React.FC = () => {
   const trial = payload.trial;
   const visualizations = payload.visualizations;
   const catalogTrial = findTrialById(trialId);
+  const safeCategory = (catalogTrial?.category && categoryStyles[catalogTrial.category])
+    ? catalogTrial.category
+    : 'ivt';
   const sanitizedTrialContent = useMemo(
     () =>
       sanitizeLegacyTrialContent(trial?.content ?? '', {
@@ -177,7 +180,7 @@ const TrialPageNew: React.FC = () => {
               {catalogTrial.year > 0 ? <span className="ml-2 text-slate-400 dark:text-slate-500">({catalogTrial.year})</span> : null}
             </h1>
             <p className="text-slate-500 dark:text-slate-400 text-base">
-              {categoryNames[catalogTrial.category]}
+              {categoryNames[safeCategory]}
             </p>
           </div>
         </div>
