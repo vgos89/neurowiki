@@ -278,7 +278,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
                 name="treatment"
                 checked={treatmentGiven === 'tnk'}
                 onChange={() => setTreatmentGiven('tnk')}
-                className="w-4 h-4 text-purple-600 border-slate-300 focus:ring-purple-500"
+                className="w-4 h-4 text-neuro-600 border-slate-300 focus:ring-neuro-500"
               />
               <span className="font-medium text-slate-900">TNK</span>
               {weightKg > 0 && <span className="text-sm text-slate-500">({tnkDose} mg single bolus)</span>}

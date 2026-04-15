@@ -8,7 +8,6 @@ import {
 import { StrokeBasicsLayout } from './StrokeBasicsLayout';
 import { TimestampBubble } from '../../components/article/stroke/TimestampBubble';
 import { QuickReferenceCard } from '../../components/article/stroke/QuickReferenceCard';
-import { StrokeCardGrid } from '../../components/article/stroke/StrokeCardGrid';
 import type { ClinicalPearlsData } from '../../data/strokeClinicalPearls';
 import { CodeModeStep1 } from '../../components/article/stroke/CodeModeStep1';
 import type { Step1Data } from '../../components/article/stroke/CodeModeStep1';
@@ -370,15 +369,25 @@ const MainContent: React.FC = () => {
           </div>
         )}
 
-        <StrokeCardGrid
-          activeCard={activeCard}
-          onSelectCard={setActiveCard}
-          step1Data={step1DataLive}
-          step2Data={step2Data}
-          step4Orders={step4Orders}
-          doorTime={milestones.doorTime ?? new Date()}
-          tpaBolusTime={milestones.tpaBolusTime}
-        />
+        <div className="flex border-b border-slate-100 mb-0 sticky top-14 bg-white z-10">
+          {[
+            { id: 1, label: 'Vitals' },
+            { id: 2, label: 'Imaging' },
+            { id: 3, label: 'Summary' },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveCard(tab.id)}
+              className={`flex-1 py-2.5 text-xs font-medium transition-colors border-b-2 -mb-px ${
+                activeCard === tab.id
+                  ? 'border-neuro-500 text-neuro-500'
+                  : 'border-transparent text-slate-400 hover:text-slate-600'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
 
         <div id="card-content-panel" className="px-3 sm:px-6 mt-1 pb-2">
 
@@ -468,27 +477,27 @@ const MainContent: React.FC = () => {
                 />
               </Suspense>
               {workflowMode === 'study' && (
-                <details className="mt-4 group rounded-lg border border-purple-200 bg-purple-50 overflow-hidden">
-                  <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-semibold text-purple-800 hover:bg-purple-100/60 transition-colors list-none">
-                    <Eye className="w-4 h-4 text-purple-600 flex-shrink-0" aria-hidden />
+                <details className="mt-4 group rounded-lg border border-neuro-200 bg-neuro-50 overflow-hidden">
+                  <summary className="flex cursor-pointer items-center gap-2 px-4 py-3 text-sm font-semibold text-neuro-800 hover:bg-neuro-100/60 transition-colors list-none">
+                    <Eye className="w-4 h-4 text-neuro-600 flex-shrink-0" aria-hidden />
                     <span>Evidence: Large Vessel Occlusion &amp; EVT Windows</span>
-                    <ChevronDown className="w-4 h-4 text-purple-500 ml-auto group-open:rotate-180 transition-transform" aria-hidden />
+                    <ChevronDown className="w-4 h-4 text-neuro-500 ml-auto group-open:rotate-180 transition-transform" aria-hidden />
                   </summary>
                   <div className="px-4 pb-4 pt-1 space-y-3">
-                    <p className="text-sm text-purple-800 leading-relaxed">
+                    <p className="text-sm text-neuro-800 leading-relaxed">
                       Large vessel occlusion (LVO) occurs in approximately 30% of acute ischemic strokes. The HERMES meta-analysis (2016) demonstrated that mechanical thrombectomy achieves functional independence in 46% vs 29% with medical therapy alone (NNT = 2.6).
                     </p>
-                    <p className="text-sm text-purple-800 leading-relaxed">
+                    <p className="text-sm text-neuro-800 leading-relaxed">
                       <strong>Extended Time Windows:</strong> The DAWN trial (2018) showed benefit up to 24 hours using clinical-core mismatch criteria (48.6% vs 13.1% good outcome, NNT=3). DEFUSE-3 demonstrated efficacy in 6-16 hour window with perfusion imaging.
                     </p>
-                    <div className="pt-2 border-t border-purple-200">
-                      <p className="text-xs text-purple-700">
+                    <div className="pt-2 border-t border-neuro-200">
+                      <p className="text-xs text-neuro-700">
                         <strong>References:</strong>{' '}
-                        <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(15)01833-5/fulltext" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-900">HERMES Meta-Analysis</a>
+                        <a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(15)01833-5/fulltext" target="_blank" rel="noopener noreferrer" className="underline hover:text-neuro-900">HERMES Meta-Analysis</a>
                         {' '}•{' '}
-                        <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1706442" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-900">DAWN Trial</a>
+                        <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1706442" target="_blank" rel="noopener noreferrer" className="underline hover:text-neuro-900">DAWN Trial</a>
                         {' '}•{' '}
-                        <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1713973" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-900">DEFUSE-3 Trial</a>
+                        <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1713973" target="_blank" rel="noopener noreferrer" className="underline hover:text-neuro-900">DEFUSE-3 Trial</a>
                       </p>
                     </div>
                   </div>
@@ -611,19 +620,19 @@ const MainContent: React.FC = () => {
 
         {/* Thrombectomy Recommendation Card */}
         {thrombectomyRecommendation && (
-          <div className="mt-4 mx-3 sm:mx-6 p-5 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-2xl shadow-lg animate-in slide-in-from-bottom-4 duration-500">
+          <div className="mt-4 mx-3 sm:mx-6 p-5 bg-gradient-to-r from-neuro-50 to-blue-50 border-2 border-neuro-200 rounded-2xl shadow-lg animate-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 p-3 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl shadow-md">
+              <div className="flex-shrink-0 p-3 bg-gradient-to-br from-neuro-500 to-blue-600 rounded-xl shadow-md">
                 <Brain size={24} className="text-white" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <h4 className="text-lg font-bold text-purple-900">Thrombectomy Assessment</h4>
-                  <span className="px-2 py-0.5 bg-purple-600 text-white text-xs font-bold rounded-full uppercase tracking-wide">EVT</span>
+                  <h4 className="text-lg font-bold text-neuro-900">Thrombectomy Assessment</h4>
+                  <span className="px-2 py-0.5 bg-neuro-500 text-white text-xs font-bold rounded-full uppercase tracking-wide">EVT</span>
                 </div>
-                <p className="text-base text-purple-800 font-medium mb-3 leading-relaxed">{thrombectomyRecommendation}</p>
+                <p className="text-base text-neuro-800 font-medium mb-3 leading-relaxed">{thrombectomyRecommendation}</p>
                 <div className="flex flex-wrap gap-3">
-                  <button onClick={() => setThrombectomyModalOpen(true)} className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors shadow-sm">
+                  <button onClick={() => setThrombectomyModalOpen(true)} className="inline-flex items-center gap-2 px-4 py-2 bg-neuro-500 hover:bg-neuro-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm">
                     <ExternalLink size={16} />View Full Assessment
                   </button>
                   <button
@@ -633,15 +642,15 @@ const MainContent: React.FC = () => {
                         setTimeout(() => setToastMessage(null), 2500);
                       });
                     }}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-purple-50 text-purple-700 text-sm font-medium rounded-lg transition-colors border-2 border-purple-200 shadow-sm"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-neuro-50 text-neuro-700 text-sm font-medium rounded-lg transition-colors border-2 border-neuro-200 shadow-sm"
                   >
                     <Copy size={16} />Copy to Clipboard
                   </button>
                 </div>
               </div>
             </div>
-            <div className="mt-4 pt-4 border-t border-purple-200">
-              <p className="text-xs text-purple-600 flex items-center gap-2">
+            <div className="mt-4 pt-4 border-t border-neuro-200">
+              <p className="text-xs text-neuro-600 flex items-center gap-2">
                 <Info size={14} />Based on EVT Pathway criteria (DAWN, DEFUSE-3, SELECT2, ATTENTION/BAOCHE protocols)
               </p>
             </div>
@@ -649,20 +658,32 @@ const MainContent: React.FC = () => {
         )}
 
         {/* Emergency Protocols */}
-        <section className="mt-8 mx-4 sm:mx-6 pt-8 border-t border-slate-200" aria-labelledby="emergency-protocols-heading">
-          <h2 id="emergency-protocols-heading" className="text-lg font-bold text-slate-900 mb-2">Emergency Protocols</h2>
-          <p className="text-sm text-slate-600 mb-4">Complication protocols for use during or after thrombolysis (AHA/ASA 2026).</p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <button type="button" onClick={() => setTpaReversalModalOpen(true)} className="min-h-[44px] flex items-center gap-3 px-5 py-3 rounded-xl border-2 border-red-200 bg-red-50 hover:bg-red-100 text-red-900 font-semibold text-left transition-colors" aria-label="Open tPA/TNK Reversal Protocol">
-              <span className="flex-shrink-0 w-10 h-10 rounded-lg bg-red-200 flex items-center justify-center"><AlertTriangle className="w-5 h-5 text-red-700" aria-hidden /></span>
-              <span>tPA/TNK Reversal Protocol</span>
+        <div className="mx-4 sm:mx-6 mt-6 pt-4 border-t border-slate-100">
+          <p className="text-xs font-medium text-slate-400 uppercase tracking-widest mb-2">Emergency protocols</p>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setTpaReversalModalOpen(true)}
+              className="flex-1 min-h-[44px] py-2 px-3 rounded-lg border border-red-200 bg-red-50 text-red-700 text-xs font-medium text-left hover:bg-red-100 transition-colors"
+            >
+              tPA/TNK reversal
             </button>
-            <button type="button" onClick={() => setOrolingualEdemaModalOpen(true)} className="min-h-[44px] flex items-center gap-3 px-5 py-3 rounded-xl border-2 border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-900 font-semibold text-left transition-colors" aria-label="Open Orolingual Angioedema Protocol">
-              <span className="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-200 flex items-center justify-center"><AlertCircle className="w-5 h-5 text-amber-700" aria-hidden /></span>
-              <span>Orolingual Edema Protocol</span>
+            <button
+              type="button"
+              onClick={() => setOrolingualEdemaModalOpen(true)}
+              className="flex-1 min-h-[44px] py-2 px-3 rounded-lg border border-amber-200 bg-amber-50 text-amber-700 text-xs font-medium text-left hover:bg-amber-100 transition-colors"
+            >
+              Orolingual edema
+            </button>
+            <button
+              type="button"
+              onClick={() => setHemorrhageProtocolModalOpen(true)}
+              className="flex-1 min-h-[44px] py-2 px-3 rounded-lg border border-slate-200 bg-slate-50 text-slate-600 text-xs font-medium text-left hover:bg-slate-100 transition-colors"
+            >
+              ICH protocol
             </button>
           </div>
-        </section>
+        </div>
 
         {/* Related Resources */}
         <section className="mt-8 mx-4 sm:mx-6 pt-8 border-t border-slate-200" aria-labelledby="related-resources-heading">
@@ -672,8 +693,8 @@ const MainContent: React.FC = () => {
               <span className="text-xs font-bold text-neuro-600 group-hover:text-neuro-700 uppercase tracking-wide">Protocol</span>
               <span className="text-sm font-semibold text-slate-900">IV tPA Guide</span>
             </Link>
-            <Link to="/guide/thrombectomy" className="flex flex-col gap-1 p-3 rounded-xl border border-slate-200 bg-white hover:bg-purple-50 hover:border-purple-300 transition-colors group">
-              <span className="text-xs font-bold text-purple-600 group-hover:text-purple-700 uppercase tracking-wide">Protocol</span>
+            <Link to="/guide/thrombectomy" className="flex flex-col gap-1 p-3 rounded-xl border border-slate-200 bg-white hover:bg-neuro-50 hover:border-neuro-300 transition-colors group">
+              <span className="text-xs font-bold text-neuro-600 group-hover:text-neuro-700 uppercase tracking-wide">Protocol</span>
               <span className="text-sm font-semibold text-slate-900">EVT / Thrombectomy</span>
             </Link>
             <Link to="/guide/ich-management" className="flex flex-col gap-1 p-3 rounded-xl border border-slate-200 bg-white hover:bg-red-50 hover:border-red-300 transition-colors group">

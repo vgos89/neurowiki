@@ -271,7 +271,7 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
         <button
           type="button"
           onClick={() => onApply(total)}
-          className="min-h-[44px] px-6 py-2 text-sm font-semibold text-white bg-purple-600 hover:bg-purple-700 active:bg-purple-800 rounded-xl transition-colors"
+          className="min-h-[44px] px-6 py-2 text-sm font-semibold text-white bg-neuro-500 hover:bg-neuro-600 active:bg-neuro-700 rounded-xl transition-colors"
         >
           Apply score to workflow — {total}
         </button>

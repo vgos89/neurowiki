@@ -249,7 +249,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
                 <button
                   type="button"
                   onClick={onOpenNIHSS}
-                  className="flex-1 min-h-[44px] px-2 py-2 text-xs font-semibold text-violet-600 rounded-lg border border-violet-200 bg-violet-50 hover:bg-violet-100 transition-colors"
+                  className="flex-1 min-h-[44px] px-2 py-2 text-xs font-semibold text-neuro-600 rounded-lg border border-neuro-200 bg-neuro-50 hover:bg-neuro-100 transition-colors"
                 >
                   Calc
                 </button>

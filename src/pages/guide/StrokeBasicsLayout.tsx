@@ -58,7 +58,7 @@ export const StrokeBasicsLayout: React.FC<StrokeBasicsLayoutProps> = ({
 
   return (
     <LayoutContext.Provider value={layoutContextValue}>
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+      <div className="min-h-screen bg-white dark:bg-slate-950">
       {/* Desktop Layout: 3-column flex structure with floating toggles */}
       <div className="hidden lg:flex min-h-screen">
         {/* Left Sidebar - Optional, show/hide */}
@@ -75,7 +75,7 @@ export const StrokeBasicsLayout: React.FC<StrokeBasicsLayoutProps> = ({
         )}
 
         {/* Main Content - With floating toggle buttons */}
-        <main className="flex-1 min-w-0 relative bg-slate-50 dark:bg-slate-900">
+        <main className="flex-1 min-w-0 relative bg-white dark:bg-slate-900">
           {/* LEFT TOGGLE BUTTON - Only show if leftSidebar exists */}
           {leftSidebar && (
             <button
@@ -130,10 +130,10 @@ export const StrokeBasicsLayout: React.FC<StrokeBasicsLayoutProps> = ({
                 <div className="flex justify-end mb-4 border-b border-slate-200 dark:border-slate-800 pb-2">
                   <button
                     onClick={closeMobileLeft}
-                    className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                     aria-label="Close sidebar"
                   >
-                    <X className="w-5 h-5 text-gray-500" />
+                    <X className="w-5 h-5 text-slate-500" />
                   </button>
                 </div>
                 {leftSidebar}

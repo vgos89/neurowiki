@@ -367,9 +367,9 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
 
       {/* 5. Thrombectomy recommendation */}
       {thrombectomyRecommendation && (
-        <div className="rounded-lg p-4 bg-purple-50 border border-purple-200">
-          <h4 className="text-sm font-semibold text-purple-900 mb-2">Thrombectomy / Next Steps</h4>
-          <p className="text-sm text-purple-800 whitespace-pre-wrap">{thrombectomyRecommendation}</p>
+        <div className="rounded-lg p-4 bg-neuro-50 border border-neuro-200">
+          <h4 className="text-sm font-semibold text-neuro-900 mb-2">Thrombectomy / Next Steps</h4>
+          <p className="text-sm text-neuro-800 whitespace-pre-wrap">{thrombectomyRecommendation}</p>
         </div>
       )}
 
