@@ -275,49 +275,71 @@ const MainContent: React.FC = () => {
           }}
         />
 
-        <div className="bg-white border-b border-slate-100 sticky top-16 z-20">
-          <div className="flex items-center justify-between px-4 py-3">
-            <div className="flex items-center gap-3">
-              <Link
-                to="/guide"
-                className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-slate-100 transition-colors"
-                aria-label="Back"
-              >
-                <ArrowLeft className="w-4 h-4 text-slate-500" />
-              </Link>
-              <h1 className="text-lg font-semibold text-slate-900 tracking-tight">Stroke Code</h1>
-            </div>
-            <div className="flex items-center gap-1 bg-slate-100 rounded-lg p-1">
-              <button
-                type="button"
-                onClick={() => setWorkflowMode('code')}
-                aria-checked={workflowMode === 'code'}
-                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-                  workflowMode === 'code'
-                    ? 'bg-white shadow-sm text-neuro-500'
-                    : 'text-slate-400 hover:text-slate-600'
-                }`}
-              >
-                Code
-              </button>
-              <button
-                type="button"
-                onClick={() => setWorkflowMode('study')}
-                aria-checked={workflowMode === 'study'}
-                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-                  workflowMode === 'study'
-                    ? 'bg-white shadow-sm text-slate-900'
-                    : 'text-slate-400 hover:text-slate-600'
-                }`}
-              >
-                Study
-              </button>
+        {/* Sticky header + tab bar wrapper */}
+        <div className="sticky top-16 z-20 bg-white">
+          <div className="border-b border-slate-100">
+            <div className="flex items-center justify-between px-4 py-3">
+              <div className="flex items-center gap-3">
+                <Link
+                  to="/guide"
+                  className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-slate-100 transition-colors"
+                  aria-label="Back"
+                >
+                  <ArrowLeft className="w-4 h-4 text-slate-500" />
+                </Link>
+                <h1 className="text-lg font-semibold text-slate-900 tracking-tight">Stroke Code</h1>
+              </div>
+              <div className="flex items-center gap-1 bg-slate-100 rounded-lg p-1">
+                <button
+                  type="button"
+                  onClick={() => setWorkflowMode('code')}
+                  aria-checked={workflowMode === 'code'}
+                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
+                    workflowMode === 'code'
+                      ? 'bg-white shadow-sm text-neuro-500'
+                      : 'text-slate-400 hover:text-slate-600'
+                  }`}
+                >
+                  Code
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setWorkflowMode('study')}
+                  aria-checked={workflowMode === 'study'}
+                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
+                    workflowMode === 'study'
+                      ? 'bg-white shadow-sm text-slate-900'
+                      : 'text-slate-400 hover:text-slate-600'
+                  }`}
+                >
+                  Study
+                </button>
+              </div>
             </div>
           </div>
+          {workflowMode === 'study' && <QuickReferenceCard />}
+          <div className="flex border-b border-slate-100">
+            {[
+              { id: 1, label: 'Vitals' },
+              { id: 2, label: 'Imaging' },
+              { id: 3, label: 'Summary' },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveCard(tab.id)}
+                className={`flex-1 py-2.5 text-xs font-medium transition-colors border-b-2 -mb-px ${
+                  activeCard === tab.id
+                    ? 'border-neuro-500 text-neuro-500'
+                    : 'border-transparent text-slate-400 hover:text-slate-600'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
-        {workflowMode === 'study' && <QuickReferenceCard />}
 
-        {/* Clinical Context Bar */}
+        {/* Clinical Context Bar — outside sticky, scrolls away */}
         {step1DataLive && (
           <div className="mx-3 sm:mx-6 mb-3 px-4 py-2.5 rounded-xl bg-white border border-slate-100 flex flex-wrap items-center gap-x-4 gap-y-1.5" role="status" aria-label="Clinical context summary">
             <div className="flex items-center gap-1.5">
@@ -353,26 +375,6 @@ const MainContent: React.FC = () => {
             )}
           </div>
         )}
-
-        <div className="flex border-b border-slate-100 mb-0 sticky top-32 bg-white z-10">
-          {[
-            { id: 1, label: 'Vitals' },
-            { id: 2, label: 'Imaging' },
-            { id: 3, label: 'Summary' },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveCard(tab.id)}
-              className={`flex-1 py-2.5 text-xs font-medium transition-colors border-b-2 -mb-px ${
-                activeCard === tab.id
-                  ? 'border-neuro-500 text-neuro-500'
-                  : 'border-transparent text-slate-400 hover:text-slate-600'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
 
         <div id="card-content-panel" className="px-3 sm:px-6 mt-1 pb-2">
 
