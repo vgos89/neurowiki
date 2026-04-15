@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft, ExternalLink, Copy, Brain, Info, AlertTriangle, AlertCircle,
-  InfoIcon, FlaskConical, Eye, FileText as FileTextIcon, Zap, BookOpen,
+  InfoIcon, FlaskConical, Eye, FileText as FileTextIcon,
   ChevronDown, GraduationCap,
 } from 'lucide-react';
 import { StrokeBasicsLayout } from './StrokeBasicsLayout';
@@ -275,61 +275,47 @@ const MainContent: React.FC = () => {
           }}
         />
 
-        {/* Back + Header */}
-        <div className="mb-3 sm:mb-4 px-3 sm:px-6 pt-2 sm:pt-6">
-          <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
-            <Link
-              to="/guide"
-              className="inline-flex items-center gap-1.5 min-h-[44px] px-3 py-2 sm:px-4 sm:py-3 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors border border-slate-200 flex-shrink-0"
-              aria-label="Back to Resident Guide"
-            >
-              <ArrowLeft size={18} aria-hidden />
-              <span className="hidden sm:inline">Back to Resident Guide</span>
-              <span className="sm:hidden">Back</span>
-            </Link>
-            {/* LOW-05: role="radiogroup" on mode toggle */}
-            <div className="flex flex-col items-center gap-0.5 flex-shrink-0">
-              <div className="inline-flex rounded-2xl bg-slate-100/80 p-1" role="radiogroup" aria-label="Workflow mode">
-                <button
-                  role="radio"
-                  aria-checked={workflowMode === 'code'}
-                  onClick={() => setWorkflowMode('code')}
-                  className={`min-h-[40px] sm:min-h-[44px] px-3 sm:px-8 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all ${
-                    workflowMode === 'code' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-900'
-                  }`}
-                >
-                  <span className="hidden sm:inline">CODE MODE</span>
-                  <span className="sm:hidden">Code</span>
-                </button>
-                <button
-                  role="radio"
-                  aria-checked={workflowMode === 'study'}
-                  onClick={() => setWorkflowMode('study')}
-                  className={`min-h-[40px] sm:min-h-[44px] px-3 sm:px-8 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all ${
-                    workflowMode === 'study' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-900'
-                  }`}
-                >
-                  <span className="hidden sm:inline">STUDY MODE</span>
-                  <span className="sm:hidden">Study</span>
-                </button>
-              </div>
-              <p className="text-[10px] text-slate-400 font-medium">
-                {workflowMode === 'code' ? 'Fast-track decisions' : 'Evidence + clinical pearls'}
-              </p>
+        <div className="bg-white border-b border-slate-100 sticky top-16 z-20">
+          <div className="flex items-center justify-between px-4 py-3">
+            <div className="flex items-center gap-3">
+              <Link
+                to="/guide"
+                className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-slate-100 transition-colors"
+                aria-label="Back"
+              >
+                <ArrowLeft className="w-4 h-4 text-slate-500" />
+              </Link>
+              <h1 className="text-lg font-semibold text-slate-900 tracking-tight">Stroke Code</h1>
+            </div>
+            <div className="flex items-center gap-1 bg-slate-100 rounded-lg p-1">
+              <button
+                type="button"
+                onClick={() => setWorkflowMode('code')}
+                aria-checked={workflowMode === 'code'}
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
+                  workflowMode === 'code'
+                    ? 'bg-white shadow-sm text-neuro-500'
+                    : 'text-slate-400 hover:text-slate-600'
+                }`}
+              >
+                Code
+              </button>
+              <button
+                type="button"
+                onClick={() => setWorkflowMode('study')}
+                aria-checked={workflowMode === 'study'}
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
+                  workflowMode === 'study'
+                    ? 'bg-white shadow-sm text-slate-900'
+                    : 'text-slate-400 hover:text-slate-600'
+                }`}
+              >
+                Study
+              </button>
             </div>
           </div>
-          <h1 className="text-xl sm:text-3xl font-black text-slate-900 mb-0 sm:mb-1">Stroke Code Basics</h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0 flex items-center gap-1.5">
-            <span className="sm:hidden">3 sections · tap any to open</span>
-            <span className="hidden sm:flex items-center gap-1.5">
-              {workflowMode === 'code'
-                ? <><Zap className="w-3.5 h-3.5 inline-block" /> Fast-track clinical decisions during active stroke code &bull; all 3 sections open immediately</>
-                : <><BookOpen className="w-3.5 h-3.5 inline-block" /> Learning mode with trials and clinical pearls &bull; 3 sections</>}
-            </span>
-          </p>
         </div>
-
-        <QuickReferenceCard />
+        {workflowMode === 'study' && <QuickReferenceCard />}
 
         {/* Clinical Context Bar */}
         {step1DataLive && (
