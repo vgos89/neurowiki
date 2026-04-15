@@ -10,7 +10,7 @@ Fix what is broken today. Lock the design system. One canonical version of every
 - [ ] Split TrialPageNew bundle
 - [ ] Fix E/M billing calculator UX
 - [x] Enforce design token system (cobalt tokens live)
-- [ ] CodeModeStep1 visual rebuild
+- [x] CodeModeStep1 visual rebuild — commit d996fdb
 - [ ] Component library (Button, Card, Modal, Badge)
 - [ ] Full app component migration
 

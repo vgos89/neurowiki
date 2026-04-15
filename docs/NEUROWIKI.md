@@ -81,6 +81,7 @@ All clinical content must be traceable to a named guideline with year. No conten
 - Inline SVG logo mark used in Layout.tsx (desktop sidebar + mobile header) — brain+circuit mark, cobalt background `#1746A2`, white paths
 
 ## Fix History (never regress these)
+- [2026-04-15] CodeModeStep1 visual rebuild — section cards (white + border-slate-100 + rounded-xl), LKW time+badge+change row, BP/Glucose side-by-side colored cards, NIHSS score+severity+LVO row, tPA/TNK dosing pills, full-width cobalt CTA, clamp() in NIHSS onChange — commit d996fdb
 - [2026-04-14] Stroke pathway visual redesign — tab navigation (3 tabs: Vitals/Imaging/Summary), all purple/violet → cobalt, compact emergency protocol strip, white surfaces, mobile+desktop QA pass — commit 908916b
 - [2026-04-14] Cobalt design system — neuro-* tokens updated to cobalt scale (#1746A2 primary), brain+circuit logo, favicon, PWA manifest, manifest.json — commit a9df0ce
 - [2026-04-14] Mobile+desktop QA checklist added to AGENTS.md — commit d4ce376
@@ -90,18 +91,21 @@ All clinical content must be traceable to a named guideline with year. No conten
 - Duplicate fix — commit 35325c8
 
 ## Next Session Priority
-CodeModeStep1.tsx full visual rebuild.
-Data flow is confirmed working. Visual wrapper only.
-Match the approved mockup exactly:
-- Section cards: white bg, border border-slate-100, rounded-xl, proper padding
-- LKW: time display + Within 4.5h pill + Change link in one clean row
-- BP + Glucose: two side-by-side cards, BP red when above threshold, Glucose green when normal
-- NIHSS: score number large left, severity + LVO probability right, Calc button far right
-- Weight + Dosing: weight display top, tPA pill (bg-neuro-50 text-neuro-700) + TNK pill (bg-green-50 text-green-700) side by side below
-- Check eligibility: cobalt-tinted card with Review button
-- Next CTA: full-width bg-neuro-500 bar with "CT & Imaging →"
-- Emergency strip: three compact buttons at bottom, min-h-[44px]
-DO NOT touch any calculation logic, state, session persistence, or modal open/close handlers.
+Build src/components/ui/ component library — Button, Card, Modal, Badge.
+This is the prerequisite for CodeModeStep2/3/4 visual rebuilds and the full modal overhaul.
+
+Components to build:
+- Button: primary (bg-neuro-500), secondary (border + slate), danger (bg-red-600), ghost — all with min-h-[44px]
+- Card: white bg, border-slate-100, rounded-xl, optional header slot
+- Modal: standard header pattern from CLAUDE.md, z-[100], backdrop z-[80]
+- Badge: emerald (eligible), red (ineligible), amber (caution), neuro (info) — rounded-full, text-xs
+
+After component library exists:
+- CodeModeStep2 visual rebuild (TNK decision, EVT triage)
+- CodeModeStep3 visual rebuild (thrombectomy section)
+- CodeModeStep4 visual rebuild
+- All modals visual overhaul
+DO NOT rebuild any page that already has a working visual — components only.
 
 ## Performance Targets
 - TrialPageNew: under 150 kB gzipped (currently at limit — do not increase)

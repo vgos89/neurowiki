@@ -9,7 +9,7 @@
 ## PENDING
 
 ### P1 — Critical
-- [ ] [P1] CodeModeStep1.tsx full visual rebuild — match approved mockup exactly: section cards with borders, BP/glucose as colored side-by-side cards with inline status, NIHSS as score+severity+LVO probability compact row, weight+dosing as two colored pill cards (tPA blue, TNK green), full-width cobalt Next CTA bar. Data flow confirmed working — visual wrapper only.
+- [x] [P1] CodeModeStep1.tsx full visual rebuild — commit d996fdb
 - [ ] [P1] Build src/components/ui/ component library — Button, Card, Modal, Badge components. This unlocks the full app design overhaul without page-by-page rebuilds.
 - [ ] [P1] Apply component library across all pages — swap custom elements for shared components
 - [ ] [P1] CodeModeStep2, Step3, Step4 visual rebuild — match approved mockup after Step1 is done
@@ -41,6 +41,16 @@
 - [ ] [P4] Mobile app evaluation
 
 ## CONFIRMED CLEAN
+- [x] CodeModeStep1.tsx visual rebuild — commit d996fdb
+  - Section cards: white bg, border-slate-100, rounded-xl
+  - LKW: time display + WindowBadge pill + Change link in one row
+  - BP/Glucose: side-by-side colored cards (red when above threshold, amber/red/emerald for glucose)
+  - NIHSS: large score left, severity + LVO probability center, direct input + Calc button right
+  - Weight & Dosing: tPA pill (bg-neuro-50) + TNK pill (bg-emerald-50) after weight entry
+  - CTA: full-width bg-neuro-500 cobalt button
+  - clamp() used in NIHSS onChange (no unused locals)
+  - Zero changes to calculation logic, state, or modal handlers
+  - Mobile QA: pass · Desktop QA: pass
 - [x] Mobile/desktop QA checklist added to AGENTS.md — commit d4ce376
 - [x] Stroke pathway visual redesign Part A — commit 908916b
   - StrokeCardGrid replaced with sticky 3-tab bar (Vitals/Imaging/Summary), cobalt active state
