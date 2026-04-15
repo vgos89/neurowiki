@@ -30,7 +30,7 @@ Progress:
 - [x] Step1 visual rebuild — section cards, colored vitals, NIHSS row, dosing pills, cobalt CTA
 - [x] All purple/violet → cobalt across stroke components
 - [x] Compact emergency strip
-- [ ] Page header fix — remove subtitle clutter, clean Code/Study toggle, remove Quick Reference from code mode
+- [x] Page header fix — remove subtitle clutter, clean Code/Study toggle, remove Quick Reference from code mode — commit c379146
 - [ ] Step2 visual rebuild
 - [ ] Step3 visual rebuild
 - [ ] Step4 visual rebuild

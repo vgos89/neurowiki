@@ -9,7 +9,7 @@
 ## PENDING
 
 ### LAYER 2 — Stroke Pathway (do in order)
-- [ ] [L2] Fix stroke pathway page header — remove subtitle, clean Code/Study toggle to pill style, remove QuickReferenceCard from code mode (move to study mode only)
+- [x] [L2] Fix stroke pathway page header — commit c379146
 - [ ] [L2] Step2 visual rebuild — CT result as clean radio cards, treatment decision cards, cobalt Save button
 - [ ] [L2] Step3 visual rebuild — summary display, locked EMR template (Part B)
 - [ ] [L2] Step4 visual rebuild — orders layout
@@ -45,6 +45,15 @@
 - [ ] [P1] Part B EMR template — replace three separate EMR generators with one locked template
 
 ## CONFIRMED CLEAN
+- [x] Stroke header redesign — commit c379146
+  - "Stroke Code" title (text-lg font-semibold) + back arrow (w-8 h-8 icon) left
+  - Code/Study pill toggle: bg-slate-100 container, bg-white active pill, text-neuro-500 active, text-slate-400 inactive
+  - sticky top-16 clears global fixed header (h-16 = 64px)
+  - Subtitle "3 sections · tap any to open" removed
+  - "Fast-track decisions" / "Evidence + clinical pearls" caption removed
+  - QuickReferenceCard gated to workflowMode === 'study' only
+  - Zap + BookOpen imports removed (no longer used)
+  - Mobile QA: pass · Desktop QA: pass
 - [x] CodeModeStep1.tsx visual rebuild — commit d996fdb
   - Section cards: white bg, border-slate-100, rounded-xl
   - LKW: time display + WindowBadge pill + Change link in one row

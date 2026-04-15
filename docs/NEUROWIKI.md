@@ -109,6 +109,7 @@ All clinical content must be traceable to a named guideline with year. No conten
 - Inline SVG logo mark used in Layout.tsx (desktop sidebar + mobile header) — brain+circuit mark, cobalt background `#1746A2`, white paths
 
 ## Fix History (never regress these)
+- [2026-04-15] Stroke header redesign — compact sticky header: back arrow + "Stroke Code" title + Code/Study pill toggle. Subtitle and "3 sections" text removed. QuickReferenceCard gated to study mode only. sticky top-16 for global header clearance. Zap/BookOpen imports removed — commit c379146
 - [2026-04-15] CodeModeStep1 visual rebuild — section cards (white + border-slate-100 + rounded-xl), LKW time+badge+change row, BP/Glucose side-by-side colored cards, NIHSS score+severity+LVO row, tPA/TNK dosing pills, full-width cobalt CTA, clamp() in NIHSS onChange — commit d996fdb
 - [2026-04-14] Stroke pathway visual redesign — tab navigation (3 tabs: Vitals/Imaging/Summary), all purple/violet → cobalt, compact emergency protocol strip, white surfaces, mobile+desktop QA pass — commit 908916b
 - [2026-04-14] Cobalt design system — neuro-* tokens updated to cobalt scale (#1746A2 primary), brain+circuit logo, favicon, PWA manifest, manifest.json — commit a9df0ce
@@ -119,23 +120,19 @@ All clinical content must be traceable to a named guideline with year. No conten
 - Duplicate fix — commit 35325c8
 
 ## Next Session Priority
-Layer 2 — Stroke pathway page header fix (first L2 task).
+Layer 2 — Step2 visual rebuild (CodeModeStep2.tsx).
 
-File: src/pages/guide/StrokeBasicsWorkflowV2.tsx
-Changes (visual only — zero logic changes):
-- Remove the subtitle line ("3 sections · tap any to open" / "Fast-track clinical decisions..." text)
-- Clean up the Code/Study toggle to a simple pill style
-- Remove <QuickReferenceCard /> from code mode — keep it in study mode only (it's already conditionally rendered by workflowMode in some places, just move it fully behind workflowMode === 'study')
+Reference: docs/MOCKUPS.md Screen 4.
+File: src/components/article/stroke/CodeModeStep2.tsx
 
-DO NOT touch:
-- Any state, session persistence, or workflowMode logic
-- The tab bar (already correct)
-- CodeModeStep1/2/3/4 components
-- Emergency strip
-- Any modal open/close handlers
+Key changes (visual only — zero logic changes):
+- Step 1 summary bar at top: bg-slate-50 border border-slate-100 rounded-lg px-3 py-2 text-xs text-slate-400 — shows LKW · NIHSS · BP · Weight on one line
+- CT Result section: section card (bg-white border-slate-100 rounded-xl p-4), radio cards full-width p-3 rounded-lg border — selected: border-neuro-500 bg-neuro-50, unselected: border-slate-200 bg-white
+- Treatment Decision section: same radio card pattern — tPA option shows calculated dose inline, TNK option shows dose
+- CTA & LVO section: CTA ordered checkbox, LVO Yes/No/Pending as three horizontal pill buttons when ordered, EVT pathway button if LVO Yes
+- Save CTA: w-full bg-neuro-500 min-h-[52px]
 
-After header fix is done → proceed to Step2, Step3, Step4 visual rebuilds (in that order).
-Component library (Layer 3) starts only after all stroke steps are complete.
+DO NOT touch: any calculation logic, step1Data, imaging data state, modal handlers.
 
 ## Performance Targets
 - TrialPageNew: under 150 kB gzipped (currently at limit — do not increase)
