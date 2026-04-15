@@ -46,6 +46,11 @@
 - [ ] [P1] Part B EMR template — replace three separate EMR generators with one locked template
 
 ## CONFIRMED CLEAN
+- [x] Content area top margin fix — commit f2f4b8e
+  - card-content-panel: mt-3 (12px) → mt-16 (64px); scrollMarginTop: 99px → 163px
+  - mt-3 was insufficient — sticky visual offset is 64px, content was 52px inside sticky area
+  - content now starts at viewport y=163, exactly flush with sticky wrapper bottom
+  - Mobile QA: pass · Desktop QA: pass
 - [x] Stroke page pt-16 gap fixed — commit 81e41b5
   - Layout.tsx: isStrokePage flag (pathname /guide/stroke-basics | /calculators/stroke-code)
   - main: pt-16 → pt-0 on stroke routes; all other pages unchanged
