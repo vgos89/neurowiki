@@ -81,6 +81,7 @@ All clinical content must be traceable to a named guideline with year. No conten
 - Inline SVG logo mark used in Layout.tsx (desktop sidebar + mobile header) — brain+circuit mark, cobalt background `#1746A2`, white paths
 
 ## Fix History (never regress these)
+- [2026-04-14] Stroke pathway visual redesign Part A — StrokeCardGrid replaced with sticky 3-tab bar (Vitals/Imaging/Summary) with cobalt active underline; StrokeBasicsLayout bg-slate-50 → bg-white; all purple/violet → cobalt across WorkflowV2, CodeModeStep1-3, NihssCalculatorEmbed; emergency protocols compact strip with ICH protocol added; gray-* → slate-* in Layout mobile overlay — commit 908916b
 - [2026-04-14] Cobalt brand implementation — neuro-* tokens updated to cobalt palette (neuro-500: #1746A2); brain+circuit inline SVG logo replaces lucide Brain icon in both desktop and mobile nav; favicon assets, PWA manifest, theme-color meta added; bg-surface-50 ghost class fixed → bg-white; unused Brain/ChevronRight imports removed — commit a9df0ce
 - [2026-04-14] Stroke page consolidation — deleted StrokeBasicsDesktop.tsx and StrokeBasicsMobile.tsx (orphaned old UI with banned gray-* classes); removed routes /guide/stroke-basics-desktop and /guide/stroke-basics-mobile; StrokeBasicsWorkflowV2 via StrokeBasics.tsx is the single canonical stroke implementation — commit 2a53994
 - [2025-04-14] Trials production crash — legacyTrialCategories undefined category fixed with ?? 'ivt' fallback; safeCategory guard added to TrialPageNew; useMemo hooks order corrected — commits 2a39731, 2cc2bab, 6667ec0

@@ -9,7 +9,7 @@
 ## PENDING
 
 ### P1 — Critical
-- [ ] [P1] Redesign stroke pathway UX — progressive disclosure, one step at a time
+- [x] [P1] Redesign stroke pathway UX — progressive disclosure, one step at a time (Part A complete — commit 908916b)
 - [ ] [P1] Audit and fix all Copy to EMR outputs — one locked template per pathway
 - [ ] [P1] Split TrialPageNew chunk (485 kB) — lazy-load trial data
 - [ ] [P1] Fix E/M billing calculator UX — guided decision flow
@@ -34,6 +34,13 @@
 - [ ] [P4] Mobile app evaluation
 
 ## CONFIRMED CLEAN
+- [x] Stroke pathway visual redesign Part A — commit 908916b
+  - StrokeCardGrid replaced with sticky 3-tab bar (Vitals/Imaging/Summary), cobalt active state
+  - bg-slate-50 → bg-white in StrokeBasicsLayout (outer wrapper + desktop main)
+  - gray-* → slate-* in StrokeBasicsLayout mobile close button
+  - All purple/violet → cobalt: WorkflowV2 (study mode EVT block, thrombectomy card, related resources), CodeModeStep1 (NIHSS Calc), CodeModeStep2 (TNK radio), CodeModeStep3 (thrombectomy section), NihssCalculatorEmbed (Apply score button)
+  - Emergency protocols: compact 3-button strip (added ICH protocol button)
+  - Mobile QA: pass · Desktop QA: pass
 - [x] Production crash on all /trials/:id pages — fixed commits 2a39731, 2cc2bab, 6667ec0
   - legacyTrialCategories undefined → 'ivt' fallback
   - safeCategory guard in TrialPageNew
