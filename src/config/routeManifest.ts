@@ -28,8 +28,6 @@ export type StaticRouteKey =
   | 'guide-hub'
   | 'aha-2026-guideline'
   | 'stroke-basics'
-  | 'stroke-basics-desktop'
-  | 'stroke-basics-mobile'
   | 'iv-tpa'
   | 'tpa-eligibility'
   | 'thrombectomy'
@@ -345,32 +343,6 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
       title: 'Stroke Code Protocol — Acute Stroke Workflow for Residents | NeuroWiki',
       description: 'Complete acute stroke code protocol: last known well, tPA eligibility, NIHSS, CT/CTA imaging, thrombectomy criteria, GWTG metrics, and admit orders. AHA/ASA 2026 aligned. For neurology residents.',
       keywords: 'stroke code protocol, acute stroke management, stroke workflow residents, door to needle time, tPA eligibility criteria, stroke code steps, acute ischemic stroke protocol, LKW stroke',
-      image: DEFAULT_IMAGE,
-    },
-  },
-  {
-    key: 'stroke-basics-desktop',
-    path: '/guide/stroke-basics-desktop',
-    publishGate: true,
-    published: true,
-    comingSoonMessage: 'Stroke basics guide',
-    meta: {
-      title: 'Stroke Code Protocol — Desktop Layout | NeuroWiki',
-      description: 'Desktop-oriented stroke code workflow reference covering the same NeuroWiki acute stroke protocol with a wide-screen layout optimized for workstations.',
-      keywords: 'stroke code protocol desktop, acute stroke workflow desktop, stroke code residents desktop',
-      image: DEFAULT_IMAGE,
-    },
-  },
-  {
-    key: 'stroke-basics-mobile',
-    path: '/guide/stroke-basics-mobile',
-    publishGate: true,
-    published: true,
-    comingSoonMessage: 'Stroke basics guide',
-    meta: {
-      title: 'Stroke Code Protocol — Mobile Layout | NeuroWiki',
-      description: 'Mobile-oriented stroke code workflow reference covering last known well, thrombolysis, EVT escalation, and admit orders for bedside use.',
-      keywords: 'stroke code protocol mobile, stroke workflow mobile, bedside stroke guide',
       image: DEFAULT_IMAGE,
     },
   },

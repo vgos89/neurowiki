@@ -40,8 +40,6 @@ const StrokeGuidelineMindmap = lazy(() => import('./pages/guide/StrokeGuidelineM
 
 // Lazy load guide articles
 const StrokeBasics = lazy(() => import('./pages/guide/StrokeBasics'));
-const StrokeBasicsDesktop = lazy(() => import('./pages/guide/StrokeBasicsDesktop'));
-const StrokeBasicsMobile = lazy(() => import('./pages/guide/StrokeBasicsMobile'));
 const IvTpa = lazy(() => import('./pages/guide/IvTpa'));
 const Thrombectomy = lazy(() => import('./pages/guide/Thrombectomy'));
 const AcuteStrokeMgmt = lazy(() => import('./pages/guide/AcuteStrokeMgmt'));
@@ -80,8 +78,6 @@ const ROUTE_COMPONENTS: Record<StaticRouteKey, React.ReactNode> = {
   'guide-hub': <ResidentToolkit />,
   'aha-2026-guideline': <StrokeGuidelineMindmap />,
   'stroke-basics': <StrokeBasics />,
-  'stroke-basics-desktop': <StrokeBasicsDesktop />,
-  'stroke-basics-mobile': <StrokeBasicsMobile />,
   'iv-tpa': <IvTpa />,
   'tpa-eligibility': <IvTpa />,
   thrombectomy: <Thrombectomy />,
