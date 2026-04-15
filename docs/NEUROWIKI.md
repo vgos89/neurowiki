@@ -43,6 +43,34 @@ The core insight: 80% of a neurologist's daily decisions are routine but time-pr
 - No dark gradients, no heavy shadows, no cluttered layouts
 - Use only tokens defined in CLAUDE.md
 
+## Approved Mockup Spec (stroke pathway — locked)
+This is the visual reference for all stroke pathway work. Claude Code must match this spec exactly.
+
+Page structure top to bottom:
+1. Nav bar — NeuroWiki logo left, search right (from Layout.tsx — do not touch)
+2. Page header — "Stroke Code" title left, Code/Study pill toggle right. No subtitle. No "3 sections" text.
+3. Tab bar — Vitals | Imaging | Summary. Sticky. Cobalt active underline. Freely tappable.
+4. Step content — white cards with border-slate-100, rounded-xl, p-4, space-y-3
+5. Emergency strip — always visible at bottom. Three compact buttons min-h-44px.
+
+Step1 Vitals spec:
+- LKW: time large (text-2xl font-semibold), Within 4.5h pill (emerald), Change link — all in one row
+- LKW Unknown checkbox below
+- BP + Glucose: grid-cols-2, each a colored card. BP red when systolic>185 or diastolic>110. Glucose amber when <50, red when >400, green when normal and entered.
+- NIHSS: large score number left (text-4xl), severity label + LVO probability text right, input + Calc button far right
+- Weight + Dosing: weight input + unit select, then grid-cols-2 tPA pill (neuro-50/neuro-700) and TNK pill (emerald-50/emerald-700) when weight entered
+- Check eligibility: cobalt-tinted card when within window
+- CTA: full-width bg-neuro-500, min-h-52px
+
+Color rules for all pages:
+- Page background: bg-white
+- Section cards: bg-white border border-slate-100 rounded-xl p-4
+- Primary action: bg-neuro-500 hover:bg-neuro-600 text-white
+- Danger: border-red-200 bg-red-50 text-red-700
+- Warning: border-amber-200 bg-amber-50 text-amber-700
+- Success/safe: border-emerald-200 bg-emerald-50 text-emerald-700
+- Info: border-neuro-200 bg-neuro-50 text-neuro-700
+
 ## Critical Never-Do Rules
 - Never rebuild a component that already exists
 - Never add clinical content without a source
@@ -91,21 +119,23 @@ All clinical content must be traceable to a named guideline with year. No conten
 - Duplicate fix — commit 35325c8
 
 ## Next Session Priority
-Build src/components/ui/ component library — Button, Card, Modal, Badge.
-This is the prerequisite for CodeModeStep2/3/4 visual rebuilds and the full modal overhaul.
+Layer 2 — Stroke pathway page header fix (first L2 task).
 
-Components to build:
-- Button: primary (bg-neuro-500), secondary (border + slate), danger (bg-red-600), ghost — all with min-h-[44px]
-- Card: white bg, border-slate-100, rounded-xl, optional header slot
-- Modal: standard header pattern from CLAUDE.md, z-[100], backdrop z-[80]
-- Badge: emerald (eligible), red (ineligible), amber (caution), neuro (info) — rounded-full, text-xs
+File: src/pages/guide/StrokeBasicsWorkflowV2.tsx
+Changes (visual only — zero logic changes):
+- Remove the subtitle line ("3 sections · tap any to open" / "Fast-track clinical decisions..." text)
+- Clean up the Code/Study toggle to a simple pill style
+- Remove <QuickReferenceCard /> from code mode — keep it in study mode only (it's already conditionally rendered by workflowMode in some places, just move it fully behind workflowMode === 'study')
 
-After component library exists:
-- CodeModeStep2 visual rebuild (TNK decision, EVT triage)
-- CodeModeStep3 visual rebuild (thrombectomy section)
-- CodeModeStep4 visual rebuild
-- All modals visual overhaul
-DO NOT rebuild any page that already has a working visual — components only.
+DO NOT touch:
+- Any state, session persistence, or workflowMode logic
+- The tab bar (already correct)
+- CodeModeStep1/2/3/4 components
+- Emergency strip
+- Any modal open/close handlers
+
+After header fix is done → proceed to Step2, Step3, Step4 visual rebuilds (in that order).
+Component library (Layer 3) starts only after all stroke steps are complete.
 
 ## Performance Targets
 - TrialPageNew: under 150 kB gzipped (currently at limit — do not increase)

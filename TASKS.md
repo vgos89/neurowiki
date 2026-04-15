@@ -8,37 +8,41 @@
 
 ## PENDING
 
-### P1 — Critical
-- [x] [P1] CodeModeStep1.tsx full visual rebuild — commit d996fdb
-- [ ] [P1] Build src/components/ui/ component library — Button, Card, Modal, Badge components. This unlocks the full app design overhaul without page-by-page rebuilds.
-- [ ] [P1] Apply component library across all pages — swap custom elements for shared components
-- [ ] [P1] CodeModeStep2, Step3, Step4 visual rebuild — match approved mockup after Step1 is done
-- [ ] [P1] All modals visual overhaul — use new Modal component once component library exists
-- [ ] [P1] Part B — EMR template fix: replace three separate EMR generators with one locked template across CodeModeStep3.tsx and CodeModeStep4.tsx
-- [x] [P1] Redesign stroke pathway UX — progressive disclosure, one step at a time (Part A complete — commit 908916b)
-- [ ] [P1] Rotate Turnstile secret key (Cloudflare account deleted — assess if Turnstile can be removed entirely)
-- [ ] [P1] Audit and fix all Copy to EMR outputs — one locked template per pathway
-- [ ] [P1] Split TrialPageNew chunk (485 kB) — lazy-load trial data
-- [ ] [P1] Fix E/M billing calculator UX — guided decision flow
+### LAYER 2 — Stroke Pathway (do in order)
+- [ ] [L2] Fix stroke pathway page header — remove subtitle, clean Code/Study toggle to pill style, remove QuickReferenceCard from code mode (move to study mode only)
+- [ ] [L2] Step2 visual rebuild — CT result as clean radio cards, treatment decision cards, cobalt Save button
+- [ ] [L2] Step3 visual rebuild — summary display, locked EMR template (Part B)
+- [ ] [L2] Step4 visual rebuild — orders layout
+- [ ] [L2] All stroke modals visual overhaul — use white header, clean body, cobalt primary action
 
-### P2 — Stability
-- [ ] [P2] Add error monitoring (Sentry free tier)
-- [ ] [P2] Set up GitHub Actions CI — typecheck + build on every push to main
-- [ ] [P2] Install Vitest and write smoke tests for all calculator pages
-- [ ] [P2] Enforce design token usage — audit for arbitrary Tailwind values
-- [ ] [P2] Add source field to every clinical claim in pathway data files
+### LAYER 3 — Component Library (blocked until Layer 2 complete)
+- [ ] [L3] src/components/ui/Button.tsx
+- [ ] [L3] src/components/ui/Card.tsx
+- [ ] [L3] src/components/ui/Modal.tsx
+- [ ] [L3] src/components/ui/Badge.tsx
+- [ ] [L3] src/components/ui/SectionHeader.tsx
 
-### P3 — Growth
-- [ ] [P3] Trials page visual redesign — name, finding, key number, guideline implication in 10 seconds
-- [ ] [P3] SEO audit — all route meta titles and descriptions
-- [ ] [P3] Add JSON-LD structured data to all calculator and pathway pages
-- [ ] [P3] Lazy-load all page chunks over 50 kB
+### LAYER 4 — Pages (blocked until Layer 3 complete)
+- [ ] [L4] Home.tsx visual rebuild
+- [ ] [L4] TrialsPage + TrialPageNew visual rebuild
+- [ ] [L4] EmBillingCalculator UX rebuild — guided decision flow
+- [ ] [L4] Calculators.tsx rebuild
+- [ ] [L4] ResidentToolkit.tsx rebuild
+- [ ] [L4] StatusEpilepticusPathway visual rebuild
+- [ ] [L4] MigrainePathway visual rebuild
+- [ ] [L4] ExtendedIVTPathway visual rebuild
+- [ ] [L4] All guide/* pages consistent layout
 
-### P4 — Future
-- [ ] [P4] Auth system design
-- [ ] [P4] Event-level analytics per pathway step
-- [ ] [P4] Next.js migration assessment
-- [ ] [P4] Mobile app evaluation
+### LAYER 5 — Polish (blocked until Layer 4 complete)
+- [ ] [L5] Typography audit
+- [ ] [L5] Spacing consistency audit
+- [ ] [L5] Full mobile + desktop QA pass all pages
+- [ ] [L5] Performance audit
+
+### OTHER P1 (not layer-blocked)
+- [ ] [P1] Split TrialPageNew chunk (485kb) — lazy-load trial data
+- [ ] [P1] Turnstile removal — Cloudflare account deleted, assess removing Turnstile from feedback form entirely
+- [ ] [P1] Part B EMR template — replace three separate EMR generators with one locked template
 
 ## CONFIRMED CLEAN
 - [x] CodeModeStep1.tsx visual rebuild — commit d996fdb
