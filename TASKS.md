@@ -45,7 +45,15 @@
 - [ ] [P1] Turnstile removal — Cloudflare account deleted, assess removing Turnstile from feedback form entirely
 - [ ] [P1] Part B EMR template — replace three separate EMR generators with one locked template
 
+### OTHER P2 (not layer-blocked)
+- [ ] [P2] Fix 64px gap above stroke header on initial page load — caused by global main pt-16 padding. Stroke header sits at top:128 on load instead of flush to nav. Requires fixing Layout.tsx stroke page handling or converting stroke header to fixed positioning.
+
 ## CONFIRMED CLEAN
+- [x] Tab bar clip + layout padding fixes — commit a8c26dd
+  - StrokeBasicsLayout desktop container: removed px-6 (over-padding)
+  - StrokeBasicsLayout mobile wrapper: removed py-4 (unwanted vertical gap)
+  - WorkflowV2 tab bar: sticky top-28 (112px) → top-32 (128px); actual stroke header is 61px tall, top-28 caused 13px overlap
+  - Mobile QA: pass · Desktop QA: pass
 - [x] Stroke layout fixes — commit b41e644
   - Context bar: bg-slate-800 → bg-white border-slate-100; all text tokens → light equivalents
   - Window badges: solid dark fills → semantic emerald/amber/red-50 pill style
