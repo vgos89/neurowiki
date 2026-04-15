@@ -9,7 +9,14 @@
 ## PENDING
 
 ### P1 — Critical
+- [ ] [P1] CodeModeStep1.tsx full visual rebuild — match approved mockup exactly: section cards with borders, BP/glucose as colored side-by-side cards with inline status, NIHSS as score+severity+LVO probability compact row, weight+dosing as two colored pill cards (tPA blue, TNK green), full-width cobalt Next CTA bar. Data flow confirmed working — visual wrapper only.
+- [ ] [P1] Build src/components/ui/ component library — Button, Card, Modal, Badge components. This unlocks the full app design overhaul without page-by-page rebuilds.
+- [ ] [P1] Apply component library across all pages — swap custom elements for shared components
+- [ ] [P1] CodeModeStep2, Step3, Step4 visual rebuild — match approved mockup after Step1 is done
+- [ ] [P1] All modals visual overhaul — use new Modal component once component library exists
+- [ ] [P1] Part B — EMR template fix: replace three separate EMR generators with one locked template across CodeModeStep3.tsx and CodeModeStep4.tsx
 - [x] [P1] Redesign stroke pathway UX — progressive disclosure, one step at a time (Part A complete — commit 908916b)
+- [ ] [P1] Rotate Turnstile secret key (Cloudflare account deleted — assess if Turnstile can be removed entirely)
 - [ ] [P1] Audit and fix all Copy to EMR outputs — one locked template per pathway
 - [ ] [P1] Split TrialPageNew chunk (485 kB) — lazy-load trial data
 - [ ] [P1] Fix E/M billing calculator UX — guided decision flow
@@ -34,6 +41,7 @@
 - [ ] [P4] Mobile app evaluation
 
 ## CONFIRMED CLEAN
+- [x] Mobile/desktop QA checklist added to AGENTS.md — commit d4ce376
 - [x] Stroke pathway visual redesign Part A — commit 908916b
   - StrokeCardGrid replaced with sticky 3-tab bar (Vitals/Imaging/Summary), cobalt active state
   - bg-slate-50 → bg-white in StrokeBasicsLayout (outer wrapper + desktop main)

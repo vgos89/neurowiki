@@ -9,7 +9,10 @@ Fix what is broken today. Lock the design system. One canonical version of every
 - [ ] Fix all Copy to EMR outputs
 - [ ] Split TrialPageNew bundle
 - [ ] Fix E/M billing calculator UX
-- [ ] Enforce design token system
+- [x] Enforce design token system (cobalt tokens live)
+- [ ] CodeModeStep1 visual rebuild
+- [ ] Component library (Button, Card, Modal, Badge)
+- [ ] Full app component migration
 
 ## Phase 2 — Stability
 No more blind deploys. Tests and monitoring before any new feature.
