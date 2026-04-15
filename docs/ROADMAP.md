@@ -4,7 +4,7 @@
 Fix what is broken today. Lock the design system. One canonical version of every page.
 
 - [x] Rotate secrets out of committed files
-- [ ] Consolidate stroke page files (5 → 1)
+- [x] Consolidate stroke page files (5 → 1)
 - [ ] Redesign stroke pathway UX (progressive disclosure)
 - [ ] Fix all Copy to EMR outputs
 - [ ] Split TrialPageNew bundle

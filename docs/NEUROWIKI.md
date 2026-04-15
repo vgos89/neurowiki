@@ -66,6 +66,7 @@ Copy-to-EMR output templates are locked once approved. No agent may modify EMR o
 All clinical content must be traceable to a named guideline with year. No content ships without a source field populated.
 
 ## Fix History (never regress these)
+- [2026-04-14] Stroke page consolidation — deleted StrokeBasicsDesktop.tsx and StrokeBasicsMobile.tsx (orphaned old UI with banned gray-* classes); removed routes /guide/stroke-basics-desktop and /guide/stroke-basics-mobile; StrokeBasicsWorkflowV2 via StrokeBasics.tsx is the single canonical stroke implementation — commit 2a53994
 - [2025-04-14] Trials production crash — legacyTrialCategories undefined category fixed with ?? 'ivt' fallback; safeCategory guard added to TrialPageNew; useMemo hooks order corrected — commits 2a39731, 2cc2bab, 6667ec0
 - ELAN pathway fix — commit 92e0a84
 - Duplicate fix — commit 35325c8

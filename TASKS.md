@@ -9,7 +9,6 @@
 ## PENDING
 
 ### P1 — Critical
-- [ ] [P1] Consolidate stroke page: delete StrokeBasicsDesktop, StrokeBasicsMobile, StrokeBasicsLayout, StrokeBasicsWorkflowV2 — one canonical StrokeBasics only
 - [ ] [P1] Redesign stroke pathway UX — progressive disclosure, one step at a time
 - [ ] [P1] Audit and fix all Copy to EMR outputs — one locked template per pathway
 - [ ] [P1] Split TrialPageNew chunk (485 kB) — lazy-load trial data
@@ -44,3 +43,8 @@
   - All three untracked from git index (git rm --cached)
   - .env.example created with placeholder values
   - NOTE: keys already in history must be rotated separately (Turnstile, Resend)
+- [x] Stroke page consolidation — commit 2a53994
+  - Deleted StrokeBasicsDesktop.tsx (115 lines) and StrokeBasicsMobile.tsx (88 lines)
+  - Removed lazy imports and ROUTE_COMPONENTS entries from App.tsx
+  - Removed type union members and route objects from routeManifest.ts
+  - StrokeBasicsWorkflowV2 (via StrokeBasics.tsx) is the canonical implementation
