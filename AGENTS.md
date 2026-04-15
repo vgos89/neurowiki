@@ -54,3 +54,16 @@ Read docs/NEUROWIKI.md, docs/ROADMAP.md, and AGENTS.md completely before touchin
 6. Update TASKS.md — move completed task to CONFIRMED CLEAN
 7. Update docs/ROADMAP.md — check off completed item
 8. Update docs/NEUROWIKI.md — add to fix history if relevant
+
+## Mobile + Desktop QA Checklist (required before every commit touching UI)
+- [ ] Open the changed page on mobile viewport (375px) — verify layout, no overflow, no broken elements
+- [ ] Open the changed page on desktop viewport (1280px) — verify layout, sidebar, header
+- [ ] Check both viewports in browser dev tools if physical device not available
+- [ ] Navigation works on both viewports
+- [ ] No horizontal scroll on mobile
+- [ ] Touch targets minimum 44px on mobile
+- [ ] Logo renders correctly in both nav positions (desktop sidebar + mobile header)
+- [ ] No console errors on either viewport
+
+This checklist is NON-NEGOTIABLE before any UI commit.
+Claude Code must report: "Mobile QA: pass" and "Desktop QA: pass" before pushing.
