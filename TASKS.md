@@ -45,10 +45,12 @@
 - [ ] [P1] Turnstile removal — Cloudflare account deleted, assess removing Turnstile from feedback form entirely
 - [ ] [P1] Part B EMR template — replace three separate EMR generators with one locked template
 
-### OTHER P2 (not layer-blocked)
-- [ ] [P2] Fix 64px gap above stroke header on initial page load — caused by global main pt-16 padding. Stroke header sits at top:128 on load instead of flush to nav. Requires fixing Layout.tsx stroke page handling or converting stroke header to fixed positioning.
-
 ## CONFIRMED CLEAN
+- [x] Stroke page pt-16 gap fixed — commit 81e41b5
+  - Layout.tsx: isStrokePage flag (pathname /guide/stroke-basics | /calculators/stroke-code)
+  - main: pt-16 → pt-0 on stroke routes; all other pages unchanged
+  - Stroke header now flush to nav (gap = 0px); Home + Trials pt-16 intact
+  - Mobile QA: pass · Desktop QA: pass
 - [x] Tab bar clip + layout padding fixes — commit a8c26dd
   - StrokeBasicsLayout desktop container: removed px-6 (over-padding)
   - StrokeBasicsLayout mobile wrapper: removed py-4 (unwanted vertical gap)
