@@ -319,34 +319,33 @@ const MainContent: React.FC = () => {
 
         {/* Clinical Context Bar */}
         {step1DataLive && (
-          <div className="mx-3 sm:mx-6 mb-4 px-4 py-2.5 rounded-xl bg-slate-800 dark:bg-slate-900 border border-slate-700 flex flex-wrap items-center gap-x-4 gap-y-1.5" role="status" aria-label="Clinical context summary">
+          <div className="mx-3 sm:mx-6 mb-3 px-4 py-2.5 rounded-xl bg-white border border-slate-100 flex flex-wrap items-center gap-x-4 gap-y-1.5" role="status" aria-label="Clinical context summary">
             <div className="flex items-center gap-1.5">
               <span className="text-xs font-bold uppercase tracking-wide text-slate-400">NIHSS</span>
-              <span className="text-base font-mono font-bold text-white">{step1DataLive.nihssScore}</span>
+              <span className="text-base font-mono font-bold text-slate-900">{step1DataLive.nihssScore}</span>
             </div>
-            <div className="w-px h-4 bg-slate-600 hidden sm:block" aria-hidden />
+            <div className="w-px h-4 bg-slate-200 hidden sm:block" aria-hidden />
             <div className="flex items-center gap-1.5">
               <span className="text-xs font-bold uppercase tracking-wide text-slate-400">BP</span>
-              <span className="text-base font-mono font-bold text-white">{step1DataLive.systolicBP}/{step1DataLive.diastolicBP}</span>
+              <span className="text-base font-mono font-bold text-slate-900">{step1DataLive.systolicBP}/{step1DataLive.diastolicBP}</span>
             </div>
-            <div className="w-px h-4 bg-slate-600 hidden sm:block" aria-hidden />
+            <div className="w-px h-4 bg-slate-200 hidden sm:block" aria-hidden />
             <div className="flex items-center gap-1.5">
               <span className="text-xs font-bold uppercase tracking-wide text-slate-400">Glucose</span>
-              <span className="text-base font-mono font-bold text-white">{step1DataLive.glucose}</span>
+              <span className="text-base font-mono font-bold text-slate-900">{step1DataLive.glucose}</span>
             </div>
-            <div className="w-px h-4 bg-slate-600 hidden sm:block" aria-hidden />
+            <div className="w-px h-4 bg-slate-200 hidden sm:block" aria-hidden />
             <div className="flex items-center gap-1.5">
               <span className="text-xs font-bold uppercase tracking-wide text-slate-400">LKW</span>
               {step1DataLive.lkwUnknown
-                ? <span className="text-sm font-semibold text-amber-400">Unknown</span>
-                : <span className="text-base font-mono font-bold text-white">{liveLkwHours.toFixed(1)}h ago</span>}
+                ? <span className="text-sm font-semibold text-amber-600">Unknown</span>
+                : <span className="text-base font-mono font-bold text-slate-900">{liveLkwHours.toFixed(1)}h ago</span>}
             </div>
             {!step1DataLive.lkwUnknown && liveLkwHours > 0 && (
               <>
-                <div className="w-px h-4 bg-slate-600 hidden sm:block" aria-hidden />
-                {/* LOW-04: Tailwind tokens only, no hardcoded colors */}
+                <div className="w-px h-4 bg-slate-200 hidden sm:block" aria-hidden />
                 <span className={`text-xs font-bold px-2 py-1 rounded uppercase tracking-wide ${
-                  liveLkwHours <= 4.5 ? 'bg-emerald-600 text-white' : liveLkwHours <= 9 ? 'bg-amber-500 text-white' : 'bg-red-600 text-white'
+                  liveLkwHours <= 4.5 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : liveLkwHours <= 9 ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-red-50 text-red-700 border border-red-200'
                 }`}>
                   {liveLkwHours <= 4.5 ? 'IVT Window' : liveLkwHours <= 9 ? 'Extended Window' : 'Outside IVT'}
                 </span>
@@ -355,7 +354,7 @@ const MainContent: React.FC = () => {
           </div>
         )}
 
-        <div className="flex border-b border-slate-100 mb-0 sticky top-14 bg-white z-10">
+        <div className="flex border-b border-slate-100 mb-0 sticky top-[108px] bg-white z-10">
           {[
             { id: 1, label: 'Vitals' },
             { id: 2, label: 'Imaging' },
