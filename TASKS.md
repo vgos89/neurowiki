@@ -43,6 +43,14 @@
   - All three untracked from git index (git rm --cached)
   - .env.example created with placeholder values
   - NOTE: keys already in history must be rotated separately (Turnstile, Resend)
+- [x] Brand implementation — commit a9df0ce
+  - Cobalt neuro-* tokens (neuro-500: #1746A2), .active-pill updated
+  - Brain+circuit inline SVG logo in desktop sidebar + mobile header
+  - Brain and ChevronRight unused imports removed from Layout.tsx
+  - bg-surface-50 ghost class fixed → bg-white
+  - favicon-32.png, favicon-16.png, apple-touch-icon.png, icon-192.png, icon-512.png, icon-1024.png, logo-lockup.png added to public/
+  - public/manifest.json created (PWA)
+  - index.html: favicon links, manifest, theme-color meta, schema logo URL updated
 - [x] Stroke page consolidation — commit 2a53994
   - Deleted StrokeBasicsDesktop.tsx (115 lines) and StrokeBasicsMobile.tsx (88 lines)
   - Removed lazy imports and ROUTE_COMPONENTS entries from App.tsx

@@ -65,7 +65,23 @@ Copy-to-EMR output templates are locked once approved. No agent may modify EMR o
 ## Content Vetting Rule
 All clinical content must be traceable to a named guideline with year. No content ships without a source field populated.
 
+## Brand Colors
+- Primary: `#1746A2` (neuro-500 — cobalt blue)
+- Light accent: `#4A7FE5` (neuro-400)
+- Fill / tint: `#EEF2FF` (neuro-50)
+- Dark: `#06143D` (neuro-900)
+
+## Logo Assets (public/)
+- `favicon-16.png`, `favicon-32.png` — browser tab favicon
+- `apple-touch-icon.png` — iOS home screen (192px source)
+- `icon-192.png` — PWA icon
+- `icon-512.png` — PWA icon + schema logo
+- `icon-1024.png` — full resolution master
+- `logo-lockup.png` — horizontal wordmark (icon + "NeuroWiki" text)
+- Inline SVG logo mark used in Layout.tsx (desktop sidebar + mobile header) — brain+circuit mark, cobalt background `#1746A2`, white paths
+
 ## Fix History (never regress these)
+- [2026-04-14] Cobalt brand implementation — neuro-* tokens updated to cobalt palette (neuro-500: #1746A2); brain+circuit inline SVG logo replaces lucide Brain icon in both desktop and mobile nav; favicon assets, PWA manifest, theme-color meta added; bg-surface-50 ghost class fixed → bg-white; unused Brain/ChevronRight imports removed — commit a9df0ce
 - [2026-04-14] Stroke page consolidation — deleted StrokeBasicsDesktop.tsx and StrokeBasicsMobile.tsx (orphaned old UI with banned gray-* classes); removed routes /guide/stroke-basics-desktop and /guide/stroke-basics-mobile; StrokeBasicsWorkflowV2 via StrokeBasics.tsx is the single canonical stroke implementation — commit 2a53994
 - [2025-04-14] Trials production crash — legacyTrialCategories undefined category fixed with ?? 'ivt' fallback; safeCategory guard added to TrialPageNew; useMemo hooks order corrected — commits 2a39731, 2cc2bab, 6667ec0
 - ELAN pathway fix — commit 92e0a84
