@@ -3,7 +3,7 @@
 ## Phase 1 — Foundation (current)
 Fix what is broken today. Lock the design system. One canonical version of every page.
 
-- [ ] Rotate secrets out of committed files
+- [x] Rotate secrets out of committed files
 - [ ] Consolidate stroke page files (5 → 1)
 - [ ] Redesign stroke pathway UX (progressive disclosure)
 - [ ] Fix all Copy to EMR outputs

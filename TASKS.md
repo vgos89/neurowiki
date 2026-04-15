@@ -9,7 +9,6 @@
 ## PENDING
 
 ### P1 — Critical
-- [ ] [P1] Rotate and remove secrets from .env.development — move to Vercel dashboard only
 - [ ] [P1] Consolidate stroke page: delete StrokeBasicsDesktop, StrokeBasicsMobile, StrokeBasicsLayout, StrokeBasicsWorkflowV2 — one canonical StrokeBasics only
 - [ ] [P1] Redesign stroke pathway UX — progressive disclosure, one step at a time
 - [ ] [P1] Audit and fix all Copy to EMR outputs — one locked template per pathway
@@ -40,3 +39,8 @@
   - legacyTrialCategories undefined → 'ivt' fallback
   - safeCategory guard in TrialPageNew
   - useMemo hooks order violation corrected
+- [x] Secrets gitignore — commit 5367e66
+  - .env.local, .env.development, .env.production added to .gitignore
+  - All three untracked from git index (git rm --cached)
+  - .env.example created with placeholder values
+  - NOTE: keys already in history must be rotated separately (Turnstile, Resend)
