@@ -354,7 +354,7 @@ const MainContent: React.FC = () => {
           </div>
         )}
 
-        <div className="flex border-b border-slate-100 mb-0 sticky top-[108px] bg-white z-10">
+        <div className="flex border-b border-slate-100 mb-0 sticky top-32 bg-white z-10">
           {[
             { id: 1, label: 'Vitals' },
             { id: 2, label: 'Imaging' },

@@ -99,7 +99,7 @@ export const StrokeBasicsLayout: React.FC<StrokeBasicsLayoutProps> = ({
           <div className="min-h-screen">
             {/* Content Container - centered with max-width */}
             {/* Remove top padding to allow sticky header to stick to top */}
-            <div className="max-w-[900px] mx-auto px-6 pb-6">
+            <div className="max-w-[900px] mx-auto pb-6">
               {mainContent}
             </div>
           </div>
@@ -110,7 +110,7 @@ export const StrokeBasicsLayout: React.FC<StrokeBasicsLayoutProps> = ({
       <div className="lg:hidden">
         {/* Main Content - Mobile */}
         <main className="w-full">
-          <div className="px-4 py-4">
+          <div className="px-4">
             {mainContent}
           </div>
         </main>
