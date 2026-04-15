@@ -146,6 +146,92 @@ const TrialPageNew: React.FC = () => {
     () => (trialMetadata ? buildTrialSummaryItems(trialMetadata) : []),
     [trialMetadata]
   );
+  const stats = useMemo(() => {
+    if (trialMetadata) {
+      // Check if this is an estimation trial (not superiority)
+      const isEstimationTrial = trialMetadata.specialDesign === 'estimation-trial' ||
+        trialMetadata.stats.pValue.label.toLowerCase().includes('estimation');
+
+      // Check if this is a negative trial (no benefit or harm)
+      const isNegativeTrial =
+        trialMetadata.trialResult === 'NEGATIVE' ||
+        (!isEstimationTrial && (
+          trialMetadata.stats.pValue.label.toLowerCase().includes('not significant') ||
+          trialMetadata.stats.pValue.label.toLowerCase().includes('worse') ||
+          trialMetadata.stats.effectSize.value.toLowerCase().includes('no benefit') ||
+          trialMetadata.stats.effectSize.value.toLowerCase().includes('harm') ||
+          (trialMetadata.stats.pValue.value !== 'N/A' &&
+           !trialMetadata.stats.pValue.value.includes('<') &&
+           !trialMetadata.stats.pValue.value.includes('>') &&
+           parseFloat(trialMetadata.stats.pValue.value) >= 0.05)
+        ));
+
+      // Calculate NNT: 1 / (treatmentRate - controlRate) as decimal
+      // Or use stored calculation if available
+      // Estimation trials don't use traditional NNT
+      let nnt: string | number = 'N/A';
+      let nntExplanation: string | undefined;
+
+      if (!isNegativeTrial && !isEstimationTrial && trialMetadata.efficacyResults) {
+        const arr = (trialMetadata.efficacyResults.treatment.percentage - trialMetadata.efficacyResults.control.percentage) / 100;
+        if (arr > 0) {
+          // Use stored calculation if available, otherwise calculate
+          if (trialMetadata.calculations?.nnt) {
+            nnt = trialMetadata.calculations.nnt;
+            nntExplanation = trialMetadata.calculations.nntExplanation;
+          } else {
+            nnt = Math.round((1 / arr) * 10) / 10; // Round to 1 decimal place
+          }
+        }
+      }
+
+      return {
+        sampleSize: trialMetadata.stats.sampleSize.value,
+        sampleSizeLabel: trialMetadata.stats.sampleSize.label,
+        primaryEndpoint: trialMetadata.stats.primaryEndpoint.value,
+        primaryEndpointLabel: trialMetadata.stats.primaryEndpoint.label,
+        pValue: trialMetadata.stats.pValue.value,
+        pValueLabel: trialMetadata.stats.pValue.label,
+        effectSize: trialMetadata.stats.effectSize.value,
+        effectSizeLabel: trialMetadata.stats.effectSize.label,
+        nnt: typeof nnt === 'number' ? nnt.toFixed(1) : nnt,
+        nntExplanation,
+        treatmentRate: trialMetadata.efficacyResults.treatment.percentage,
+        controlRate: trialMetadata.efficacyResults.control.percentage,
+        treatmentLabel: trialMetadata.efficacyResults.treatment.label,
+        treatmentName: trialMetadata.efficacyResults.treatment.name,
+        controlName: trialMetadata.efficacyResults.control.name,
+        isNegativeTrial, // Flag for special handling
+        isEstimationTrial, // Flag for estimation trial design
+        keyMessage: trialMetadata.keyMessage, // Key clinical takeaway
+        additionalResults: trialMetadata.additionalResults, // Additional outcome data
+        proceduralDetails: trialMetadata.proceduralDetails, // Procedural/technical details
+        safetyProfile: trialMetadata.safetyProfile, // Safety outcomes
+      };
+    }
+    // Fallback for WAKE-UP if metadata not found
+    if (trialId === 'wake-up-trial') {
+      return {
+        sampleSize: '503',
+        sampleSizeLabel: 'Randomized Patients',
+        primaryEndpoint: 'mRS 0-1',
+        primaryEndpointLabel: 'at 90 Days',
+        pValue: '0.02',
+        pValueLabel: 'Statistically Sig.',
+        effectSize: '11.5%',
+        effectSizeLabel: 'Absolute Increase',
+        nnt: '8.7',
+        nntExplanation: 'For every 8.7 patients with wake-up stroke and DWI-FLAIR mismatch treated with tPA, one additional patient achieves excellent outcome (mRS 0-1) compared to placebo',
+        treatmentRate: 53.3,
+        controlRate: 41.8,
+        treatmentLabel: 'Excellent outcome (mRS 0-1) at 3 months',
+        treatmentName: 'Alteplase Group',
+        controlName: 'Placebo Group',
+        isNegativeTrial: false,
+      };
+    }
+    return null;
+  }, [trialId, trialMetadata]);
   const isPlaceholderTrial = !isLoadingPayload && !!catalogTrial?.isPlaceholder && !trial && !trialMetadata;
 
   if (isLoadingPayload) {
@@ -233,94 +319,6 @@ const TrialPageNew: React.FC = () => {
       </div>
     );
   }
-
-  // Use structured metadata if available, otherwise fallback to extracted stats
-  const stats = useMemo(() => {
-    if (trialMetadata) {
-      // Check if this is an estimation trial (not superiority)
-      const isEstimationTrial = trialMetadata.specialDesign === 'estimation-trial' ||
-        trialMetadata.stats.pValue.label.toLowerCase().includes('estimation');
-
-      // Check if this is a negative trial (no benefit or harm)
-      const isNegativeTrial =
-        trialMetadata.trialResult === 'NEGATIVE' ||
-        (!isEstimationTrial && (
-          trialMetadata.stats.pValue.label.toLowerCase().includes('not significant') ||
-          trialMetadata.stats.pValue.label.toLowerCase().includes('worse') ||
-          trialMetadata.stats.effectSize.value.toLowerCase().includes('no benefit') ||
-          trialMetadata.stats.effectSize.value.toLowerCase().includes('harm') ||
-          (trialMetadata.stats.pValue.value !== 'N/A' &&
-           !trialMetadata.stats.pValue.value.includes('<') &&
-           !trialMetadata.stats.pValue.value.includes('>') &&
-           parseFloat(trialMetadata.stats.pValue.value) >= 0.05)
-        ));
-
-      // Calculate NNT: 1 / (treatmentRate - controlRate) as decimal
-      // Or use stored calculation if available
-      // Estimation trials don't use traditional NNT
-      let nnt: string | number = 'N/A';
-      let nntExplanation: string | undefined;
-
-      if (!isNegativeTrial && !isEstimationTrial && trialMetadata.efficacyResults) {
-        const arr = (trialMetadata.efficacyResults.treatment.percentage - trialMetadata.efficacyResults.control.percentage) / 100;
-        if (arr > 0) {
-          // Use stored calculation if available, otherwise calculate
-          if (trialMetadata.calculations?.nnt) {
-            nnt = trialMetadata.calculations.nnt;
-            nntExplanation = trialMetadata.calculations.nntExplanation;
-          } else {
-            nnt = Math.round((1 / arr) * 10) / 10; // Round to 1 decimal place
-          }
-        }
-      }
-
-      return {
-        sampleSize: trialMetadata.stats.sampleSize.value,
-        sampleSizeLabel: trialMetadata.stats.sampleSize.label,
-        primaryEndpoint: trialMetadata.stats.primaryEndpoint.value,
-        primaryEndpointLabel: trialMetadata.stats.primaryEndpoint.label,
-        pValue: trialMetadata.stats.pValue.value,
-        pValueLabel: trialMetadata.stats.pValue.label,
-        effectSize: trialMetadata.stats.effectSize.value,
-        effectSizeLabel: trialMetadata.stats.effectSize.label,
-        nnt: typeof nnt === 'number' ? nnt.toFixed(1) : nnt,
-        nntExplanation,
-        treatmentRate: trialMetadata.efficacyResults.treatment.percentage,
-        controlRate: trialMetadata.efficacyResults.control.percentage,
-        treatmentLabel: trialMetadata.efficacyResults.treatment.label,
-        treatmentName: trialMetadata.efficacyResults.treatment.name,
-        controlName: trialMetadata.efficacyResults.control.name,
-        isNegativeTrial, // Flag for special handling
-        isEstimationTrial, // Flag for estimation trial design
-        keyMessage: trialMetadata.keyMessage, // Key clinical takeaway
-        additionalResults: trialMetadata.additionalResults, // Additional outcome data
-        proceduralDetails: trialMetadata.proceduralDetails, // Procedural/technical details
-        safetyProfile: trialMetadata.safetyProfile, // Safety outcomes
-      };
-    }
-    // Fallback for WAKE-UP if metadata not found
-    if (trialId === 'wake-up-trial') {
-      return {
-        sampleSize: '503',
-        sampleSizeLabel: 'Randomized Patients',
-        primaryEndpoint: 'mRS 0-1',
-        primaryEndpointLabel: 'at 90 Days',
-        pValue: '0.02',
-        pValueLabel: 'Statistically Sig.',
-        effectSize: '11.5%',
-        effectSizeLabel: 'Absolute Increase',
-        nnt: '8.7',
-        nntExplanation: 'For every 8.7 patients with wake-up stroke and DWI-FLAIR mismatch treated with tPA, one additional patient achieves excellent outcome (mRS 0-1) compared to placebo',
-        treatmentRate: 53.3,
-        controlRate: 41.8,
-        treatmentLabel: 'Excellent outcome (mRS 0-1) at 3 months',
-        treatmentName: 'Alteplase Group',
-        controlName: 'Placebo Group',
-        isNegativeTrial: false,
-      };
-    }
-    return null;
-  }, [trialId, trialMetadata]);
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
