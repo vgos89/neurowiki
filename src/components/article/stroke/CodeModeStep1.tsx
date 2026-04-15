@@ -138,208 +138,229 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 px-1">
 
-      {/* ── Main card ── */}
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-
-        {/* LKW */}
-        <div className="p-5 space-y-3">
-          <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Last Known Well</p>
-
+      {/* ── LKW Section ── */}
+      <div className="bg-white border border-slate-100 rounded-xl overflow-hidden">
+        <div className="px-4 pt-4 pb-1">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Last Known Well</p>
           {!lkwUnknown && (
-            <button
-              type="button"
-              onClick={() => setClockPickerOpen(true)}
-              className="w-full flex items-center justify-between gap-3 px-4 py-3.5 rounded-xl border-2 border-sky-200 bg-sky-50/40 hover:border-sky-300 hover:bg-sky-50 transition-colors text-left"
-            >
-              <span className="text-base font-semibold text-slate-800">🕐 {lkwTimeDisplay}</span>
-              <span className="shrink-0 text-xs font-bold uppercase tracking-wide text-sky-700 bg-sky-100 border border-sky-200 px-2.5 py-1 rounded-lg">
-                {lkwHours > 0 ? 'Change' : 'Set time'}
-              </span>
-            </button>
-          )}
-
-          <div className="flex items-center justify-between gap-3 flex-wrap">
-            <div className="flex items-center gap-2 flex-wrap">
-              {!lkwUnknown && lkwHours > 0 && (
-                <span className="text-sm text-slate-500">~{lkwHours.toFixed(1)}h ago</span>
-              )}
-              <WindowBadge />
-            </div>
-            <label className="flex items-center gap-2 cursor-pointer min-h-[36px]">
-              <input
-                type="checkbox"
-                checked={lkwUnknown}
-                onChange={(e) => { setLkwUnknown(e.target.checked); if (e.target.checked) setLkwHours(0); }}
-                className="w-4 h-4 rounded border-slate-300 text-red-600 focus:ring-red-500 flex-shrink-0"
-              />
-              <span className="text-sm text-slate-600 font-medium">LKW Unknown</span>
-            </label>
-          </div>
-
-          {lkwUnknown && (
-            <div className="flex items-start gap-2.5 px-3 py-2.5 bg-amber-50 border border-amber-200 rounded-lg">
-              <span className="text-amber-500 shrink-0 font-bold mt-0.5">⚠</span>
-              <p className="text-sm text-amber-800 font-medium">tPA contraindicated without known LKW. Proceed to EVT evaluation if LVO suspected.</p>
-            </div>
-          )}
-        </div>
-
-        <div className="border-t border-slate-100" />
-
-        {/* Vitals */}
-        <div className="p-5 space-y-4">
-          <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Vitals</p>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-
-            {/* BP */}
-            <div className="space-y-1.5">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">BP</p>
-              <div className="flex items-center gap-1">
-                <input
-                  type="number" min={0} max={300}
-                  value={systolicBP || ''}
-                  onChange={(e) => setSystolicBP(parseInt(e.target.value, 10) || 0)}
-                  onFocus={(e) => e.target.select()}
-                  placeholder="—"
-                  className="w-full min-h-[44px] px-1.5 py-2 rounded-lg border border-slate-200 text-slate-900 text-lg font-bold text-center bg-white focus:ring-2 focus:ring-neuro-400 focus:outline-none"
-                />
-                <span className="text-slate-300 font-semibold shrink-0">/</span>
-                <input
-                  type="number" min={0} max={200}
-                  value={diastolicBP || ''}
-                  onChange={(e) => setDiastolicBP(parseInt(e.target.value, 10) || 0)}
-                  onFocus={(e) => e.target.select()}
-                  placeholder="—"
-                  className="w-full min-h-[44px] px-1.5 py-2 rounded-lg border border-slate-200 text-slate-900 text-lg font-bold text-center bg-white focus:ring-2 focus:ring-neuro-400 focus:outline-none"
-                />
-              </div>
-              {bpTooHigh && <p className="text-xs font-semibold text-red-600">Above tPA threshold</p>}
-            </div>
-
-            {/* Glucose */}
-            <div className="space-y-1.5">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Glucose</p>
-              <input
-                type="number" min={0}
-                value={glucose || ''}
-                onChange={(e) => setGlucose(parseInt(e.target.value, 10) || 0)}
-                onFocus={(e) => e.target.select()}
-                placeholder="—"
-                className="w-full min-h-[44px] px-2 py-2 rounded-lg border border-slate-200 text-slate-900 text-lg font-bold text-center bg-white focus:ring-2 focus:ring-neuro-400 focus:outline-none"
-              />
-              {glucoseLow && <p className="text-xs font-semibold text-amber-600">Low — treat first</p>}
-              {glucoseHigh && <p className="text-xs font-semibold text-red-600">High</p>}
-            </div>
-
-            {/* NIHSS */}
-            <div className="space-y-1.5">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">NIHSS</p>
-              <div className="flex items-center gap-1.5">
-                <input
-                  type="number" min={0} max={42}
-                  value={nihssScore || ''}
-                  onChange={(e) => setNihssScore(clamp(parseInt(e.target.value, 10) || 0, 0, 42))}
-                  onFocus={(e) => e.target.select()}
-                  placeholder="—"
-                  className="w-14 min-h-[44px] px-1.5 py-2 rounded-lg border border-slate-200 text-slate-900 text-lg font-bold text-center bg-white focus:ring-2 focus:ring-neuro-400 focus:outline-none"
-                />
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <button
+                type="button"
+                onClick={() => setClockPickerOpen(true)}
+                className="text-2xl font-semibold text-slate-900 tracking-tight hover:text-neuro-600 transition-colors"
+              >
+                {lkwTimeDisplay}
+              </button>
+              <div className="flex items-center gap-2">
+                <WindowBadge />
                 <button
                   type="button"
-                  onClick={onOpenNIHSS}
-                  className="flex-1 min-h-[44px] px-2 py-2 text-xs font-semibold text-neuro-600 rounded-lg border border-neuro-200 bg-neuro-50 hover:bg-neuro-100 transition-colors"
+                  onClick={() => setClockPickerOpen(true)}
+                  className="text-xs text-slate-400 hover:text-slate-600 transition-colors"
                 >
-                  Calc
+                  Change
                 </button>
               </div>
             </div>
+          )}
+          {!lkwUnknown && lkwHours > 0 && (
+            <p className="text-xs text-slate-400 mb-2">~{lkwHours.toFixed(1)}h ago</p>
+          )}
+          <label className="flex items-center gap-2 cursor-pointer min-h-[36px] mb-3">
+            <input
+              type="checkbox"
+              checked={lkwUnknown}
+              onChange={(e) => { setLkwUnknown(e.target.checked); if (e.target.checked) setLkwHours(0); }}
+              className="w-4 h-4 rounded border-slate-300 text-red-600 focus:ring-red-500 flex-shrink-0"
+            />
+            <span className="text-sm text-slate-500">LKW Unknown</span>
+          </label>
+        </div>
 
-            {/* Weight */}
-            <div className="space-y-1.5">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Weight</p>
-              <div className="flex items-center gap-1">
-                <input
-                  type="number" min={0}
-                  value={weightValue || ''}
-                  onChange={(e) => setWeightValue(parseFloat(e.target.value) || 0)}
-                  onFocus={(e) => e.target.select()}
-                  placeholder="—"
-                  className="flex-1 min-w-0 min-h-[44px] px-1.5 py-2 rounded-lg border border-slate-200 text-slate-900 text-lg font-bold text-center bg-white focus:ring-2 focus:ring-neuro-400 focus:outline-none"
-                />
-                <select
-                  value={weightUnit}
-                  onChange={(e) => setWeightUnit(e.target.value as 'kg' | 'lbs')}
-                  className="min-h-[44px] px-1.5 py-2 rounded-lg border border-slate-200 text-slate-700 text-xs font-medium bg-white"
-                >
-                  <option value="kg">kg</option>
-                  <option value="lbs">lbs</option>
-                </select>
-              </div>
+        {lkwUnknown && (
+          <div className="px-4 pb-4 bg-amber-50 border-t border-amber-100">
+            <p className="text-xs font-semibold text-amber-700 pt-3 mb-1">Wake-up / unknown onset</p>
+            <p className="text-xs text-amber-600">Consider MRI DWI-FLAIR mismatch for late-window eligibility.</p>
+          </div>
+        )}
+      </div>
+
+      {/* ── Vitals Section ── */}
+      <div className="bg-white border border-slate-100 rounded-xl p-4">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Vitals</p>
+        <div className="grid grid-cols-2 gap-2 mb-3">
+
+          {/* BP Card */}
+          <div className={`p-3 rounded-lg border ${bpTooHigh ? 'bg-red-50 border-red-200' : 'bg-slate-50 border-slate-200'}`}>
+            <p className={`text-[10px] font-semibold uppercase tracking-wide mb-1.5 ${bpTooHigh ? 'text-red-600' : 'text-slate-400'}`}>
+              Blood pressure
+            </p>
+            <div className="flex items-center gap-1">
+              <input
+                type="number" min={0} max={300}
+                value={systolicBP || ''}
+                onChange={(e) => setSystolicBP(parseInt(e.target.value, 10) || 0)}
+                onFocus={(e) => e.target.select()}
+                placeholder="—"
+                className={`w-full min-h-[44px] px-1.5 py-2 rounded-lg border text-lg font-bold text-center bg-white focus:ring-2 focus:ring-neuro-400 focus:outline-none ${bpTooHigh ? 'border-red-200 text-red-700' : 'border-slate-200 text-slate-900'}`}
+              />
+              <span className="text-slate-400 text-sm font-medium flex-shrink-0">/</span>
+              <input
+                type="number" min={0} max={200}
+                value={diastolicBP || ''}
+                onChange={(e) => setDiastolicBP(parseInt(e.target.value, 10) || 0)}
+                onFocus={(e) => e.target.select()}
+                placeholder="—"
+                className={`w-full min-h-[44px] px-1.5 py-2 rounded-lg border text-lg font-bold text-center bg-white focus:ring-2 focus:ring-neuro-400 focus:outline-none ${bpTooHigh ? 'border-red-200 text-red-700' : 'border-slate-200 text-slate-900'}`}
+              />
             </div>
+            {bpTooHigh && <p className="text-[10px] font-semibold text-red-600 mt-1.5">Above tPA limit</p>}
           </div>
 
-          {/* Glucose guidance */}
-          {glucoseLow && (
-            <div className="rounded-lg px-3 py-2.5 bg-amber-50 border border-amber-200">
-              <button
-                type="button"
-                onClick={() => setLowGlucoseGuidanceViewed(true)}
-                className="text-sm font-semibold text-amber-700 hover:underline text-left"
-              >
-                AHA: treat hypoglycemia, then reassess for tPA →
-              </button>
-              {lowGlucoseGuidanceViewed && (
-                <p className="mt-1.5 text-sm text-amber-800">Give D50 50 mL IV, recheck glucose. If symptoms persist after normoglycemia, reassess for tPA.</p>
-              )}
-            </div>
-          )}
+          {/* Glucose Card */}
+          <div className={`p-3 rounded-lg border ${glucoseLow ? 'bg-amber-50 border-amber-200' : glucoseHigh ? 'bg-red-50 border-red-200' : 'bg-slate-50 border-slate-200'}`}>
+            <p className={`text-[10px] font-semibold uppercase tracking-wide mb-1.5 ${glucoseLow ? 'text-amber-600' : glucoseHigh ? 'text-red-600' : 'text-slate-400'}`}>
+              Glucose
+            </p>
+            <input
+              type="number" min={0} max={600}
+              value={glucose || ''}
+              onChange={(e) => setGlucose(parseInt(e.target.value, 10) || 0)}
+              onFocus={(e) => e.target.select()}
+              placeholder="—"
+              className={`w-full min-h-[44px] px-2 py-2 rounded-lg border text-lg font-bold text-center bg-white focus:ring-2 focus:ring-neuro-400 focus:outline-none ${glucoseLow ? 'border-amber-200 text-amber-700' : glucoseHigh ? 'border-red-200 text-red-700' : 'border-slate-200 text-slate-900'}`}
+            />
+            {glucoseLow && <p className="text-[10px] font-semibold text-amber-600 mt-1.5">Low — treat first</p>}
+            {glucoseHigh && <p className="text-[10px] font-semibold text-red-600 mt-1.5">High</p>}
+            {!glucoseLow && !glucoseHigh && glucose > 0 && <p className="text-[10px] font-semibold text-emerald-600 mt-1.5">Normal</p>}
+          </div>
+        </div>
 
-          {/* BP warning */}
-          {bpTooHigh && (
-            <div className="rounded-xl border-2 border-red-200 bg-red-50 p-4 space-y-3">
-              <div>
-                <p className="text-sm font-bold text-red-800">BP must be &lt;185/110 mmHg before tPA</p>
-                <p className="text-sm text-slate-700 mt-1.5">
-                  <strong>Labetalol</strong> 10–20 mg IV push, repeat q10–20 min (max 300 mg)
-                  &nbsp;·&nbsp;
-                  <strong>Nicardipine</strong> 5 mg/hr, ↑2.5 mg/hr q5–15 min (max 15 mg/hr)
+        {/* BP Alert */}
+        {bpTooHigh && (
+          <div className="rounded-lg border border-red-200 bg-red-50 p-3 space-y-2 mb-3">
+            <p className="text-xs font-bold text-red-800">BP must be &lt;185/110 mmHg before tPA</p>
+            <p className="text-xs text-slate-700">
+              <strong>Labetalol</strong> 10–20 mg IV push, repeat q10–20 min (max 300 mg)
+              &nbsp;·&nbsp;
+              <strong>Nicardipine</strong> 5 mg/hr, ↑2.5 mg/hr q5–15 min (max 15 mg/hr)
+            </p>
+            <p className="text-[10px] text-red-600">AHA/ASA 2026</p>
+            <label className="flex items-center gap-2 cursor-pointer min-h-[36px]">
+              <input
+                type="checkbox"
+                checked={bpControlled}
+                onChange={(e) => setBpControlled(e.target.checked)}
+                className="w-4 h-4 rounded border-slate-300 text-blue-600 flex-shrink-0"
+              />
+              <span className="text-xs text-slate-700 font-medium">BP being controlled / treated</span>
+            </label>
+          </div>
+        )}
+
+        {/* Glucose guidance */}
+        {glucoseLow && (
+          <div className="rounded-lg px-3 py-2.5 bg-amber-50 border border-amber-200 mb-3">
+            <button
+              type="button"
+              onClick={() => setLowGlucoseGuidanceViewed(true)}
+              className="text-xs font-semibold text-amber-700 hover:underline text-left"
+            >
+              AHA: treat hypoglycemia, then reassess for tPA →
+            </button>
+            {lowGlucoseGuidanceViewed && (
+              <p className="mt-1.5 text-xs text-amber-800">Give D50 50 mL IV, recheck glucose. If symptoms persist after normoglycemia, reassess for tPA.</p>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* ── NIHSS Section ── */}
+      <div className="bg-white border border-slate-100 rounded-xl p-4">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">NIHSS</p>
+        <div className="flex items-center gap-3">
+          <div className="flex-shrink-0">
+            <span className="text-4xl font-semibold text-slate-900 tabular-nums">
+              {nihssScore > 0 ? nihssScore : '—'}
+            </span>
+          </div>
+          <div className="flex-1 min-w-0">
+            {nihssScore > 0 && (
+              <>
+                <p className="text-sm font-semibold text-slate-900">
+                  {nihssScore <= 4 ? 'Minor' : nihssScore <= 10 ? 'Moderate' : nihssScore <= 20 ? 'Moderate-severe' : 'Severe'}
                 </p>
-                <p className="text-xs text-red-600 mt-1.5">AHA/ASA 2026</p>
-              </div>
-              <label className="flex items-center gap-2 cursor-pointer min-h-[36px]">
-                <input
-                  type="checkbox"
-                  checked={bpControlled}
-                  onChange={(e) => setBpControlled(e.target.checked)}
-                  className="w-4 h-4 rounded border-slate-300 text-blue-600 flex-shrink-0"
-                />
-                <span className="text-sm text-slate-700 font-medium">BP being controlled / treated</span>
-              </label>
-            </div>
-          )}
+                <p className="text-xs text-slate-400">
+                  LVO probability {nihssScore >= 10 ? '≥50%' : nihssScore >= 6 ? '~35%' : '<20%'}
+                </p>
+              </>
+            )}
+            {nihssScore === 0 && (
+              <p className="text-xs text-slate-400">Tap Calc to score</p>
+            )}
+          </div>
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            <input
+              type="number" min={0} max={42}
+              value={nihssScore || ''}
+              onChange={(e) => setNihssScore(clamp(parseInt(e.target.value, 10) || 0, 0, 42))}
+              onFocus={(e) => e.target.select()}
+              placeholder="—"
+              className="w-12 min-h-[44px] px-1 py-2 rounded-lg border border-slate-200 text-slate-900 text-sm font-bold text-center bg-white focus:ring-2 focus:ring-neuro-400 focus:outline-none"
+            />
+            <button
+              type="button"
+              onClick={onOpenNIHSS}
+              className="min-h-[44px] px-3 py-2 text-xs font-semibold text-neuro-600 rounded-lg border border-neuro-200 bg-neuro-50 hover:bg-neuro-100 transition-colors"
+            >
+              Calc
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* ── Dosing ── */}
-      {weightKg > 0 && (
-        <div className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400 shrink-0">Dosing ({weightKg} kg)</span>
-          <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
-            <span>
-              <span className="text-slate-500 mr-1">tPA</span>
-              <span className="font-mono font-bold text-slate-900">{tpaDose} mg</span>
-              <span className="text-slate-400 text-xs ml-1">(bolus {tpaBolus} + inf {tpaInfusion})</span>
-            </span>
-            <span>
-              <span className="text-slate-500 mr-1">TNK</span>
-              <span className="font-mono font-bold text-slate-900">{tnkDose} mg</span>
-              <span className="text-slate-400 text-xs ml-1">single bolus</span>
-            </span>
-          </div>
+      {/* ── Weight + Dosing Section ── */}
+      <div className="bg-white border border-slate-100 rounded-xl p-4">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Weight & Dosing</p>
+        <div className="flex items-center gap-2 mb-3">
+          <input
+            type="number" min={0}
+            value={weightValue || ''}
+            onChange={(e) => setWeightValue(parseFloat(e.target.value) || 0)}
+            onFocus={(e) => e.target.select()}
+            placeholder="—"
+            className="w-24 min-h-[44px] px-2 py-2 rounded-lg border border-slate-200 text-slate-900 text-xl font-semibold text-center bg-white focus:ring-2 focus:ring-neuro-400 focus:outline-none"
+          />
+          <select
+            value={weightUnit}
+            onChange={(e) => setWeightUnit(e.target.value as 'kg' | 'lbs')}
+            className="min-h-[44px] px-2 py-2 rounded-lg border border-slate-200 text-slate-700 text-xs font-medium bg-white"
+          >
+            <option value="kg">kg</option>
+            <option value="lbs">lbs</option>
+          </select>
+          {weightKg > 0 && (
+            <span className="text-xs text-slate-400 ml-1">— tap to edit</span>
+          )}
         </div>
-      )}
+
+        {weightKg > 0 && (
+          <div className="grid grid-cols-2 gap-2">
+            <div className="p-3 rounded-lg bg-neuro-50 border border-neuro-100">
+              <p className="text-[9px] font-bold uppercase tracking-widest text-neuro-500 mb-1">tPA</p>
+              <p className="text-base font-semibold text-neuro-700">{tpaDose} mg</p>
+              <p className="text-[10px] text-neuro-500">{tpaBolus} bolus + {tpaInfusion} inf</p>
+            </div>
+            <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-100">
+              <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-600 mb-1">TNK</p>
+              <p className="text-base font-semibold text-emerald-700">{tnkDose} mg</p>
+              <p className="text-[10px] text-emerald-500">Single bolus</p>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* ── Disabling symptoms ── */}
       {showDisablingSymptomsChecklist && (
@@ -374,23 +395,23 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
       )}
 
       {/* ── CTA ── */}
-      <div>
+      <div className="space-y-2">
         {withinTPAWindow && isComplete && onOpenEligibility ? (
           <button
             type="button"
             onClick={() => { handleComplete(); onOpenEligibility(); }}
-            className="w-full min-h-[48px] py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-sm"
+            className="w-full min-h-[52px] py-3.5 bg-neuro-500 hover:bg-neuro-600 text-white font-semibold rounded-xl transition-all text-sm"
           >
-            Save &amp; Check Eligibility →
+            Check tPA Eligibility →
           </button>
         ) : (
           <button
             type="button"
             onClick={handleComplete}
             disabled={!isComplete}
-            className="w-full min-h-[48px] py-3.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-all"
+            className="w-full min-h-[52px] py-3.5 bg-neuro-500 hover:bg-neuro-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all text-sm"
           >
-            {isComplete ? 'Save →' : `Still needed: ${missingFields.join(' · ')}`}
+            {isComplete ? 'Save & Continue →' : `Still needed: ${missingFields.join(' · ')}`}
           </button>
         )}
       </div>
