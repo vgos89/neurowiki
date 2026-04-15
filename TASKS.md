@@ -10,6 +10,7 @@
 
 ### LAYER 2 — Stroke Pathway (do in order)
 - [x] [L2] Fix stroke pathway page header — commit c379146
+- [x] [L2] Fix stroke pathway layout — white context bar, correct tab sticky offset — commit b41e644
 - [ ] [L2] Step2 visual rebuild — CT result as clean radio cards, treatment decision cards, cobalt Save button
 - [ ] [L2] Step3 visual rebuild — summary display, locked EMR template (Part B)
 - [ ] [L2] Step4 visual rebuild — orders layout
@@ -45,6 +46,11 @@
 - [ ] [P1] Part B EMR template — replace three separate EMR generators with one locked template
 
 ## CONFIRMED CLEAN
+- [x] Stroke layout fixes — commit b41e644
+  - Context bar: bg-slate-800 → bg-white border-slate-100; all text tokens → light equivalents
+  - Window badges: solid dark fills → semantic emerald/amber/red-50 pill style
+  - Tab bar: sticky top-14 → sticky top-[108px] (global nav 64px + stroke header ~44px)
+  - Mobile QA: pass · Desktop QA: pass
 - [x] Stroke header redesign — commit c379146
   - "Stroke Code" title (text-lg font-semibold) + back arrow (w-8 h-8 icon) left
   - Code/Study pill toggle: bg-slate-100 container, bg-white active pill, text-neuro-500 active, text-slate-400 inactive
