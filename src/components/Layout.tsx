@@ -1,8 +1,7 @@
 
 import React, { useState, useRef, useEffect, useMemo, lazy, Suspense } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { 
-  Brain,
+import {
   Search,
   Calculator,
   FlaskConical,
@@ -12,7 +11,6 @@ import {
   Trash2,
   Star,
   ChevronDown,
-  ChevronRight,
   Menu,
   PanelLeftClose
 } from 'lucide-react';
@@ -338,7 +336,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
 
   return (
-    <div className="flex h-screen bg-surface-50 dark:bg-slate-900 overflow-hidden transition-colors">
+    <div className="flex h-screen bg-white dark:bg-slate-900 overflow-hidden transition-colors">
       {/* Sidebar for Desktop */}
       <aside className="hidden md:flex h-screen">
         {/* ============================================ */}
@@ -347,12 +345,35 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className={`${isNavExpanded ? 'w-48' : 'w-16'} bg-white dark:bg-slate-800 border-r border-slate-100 dark:border-slate-700 flex flex-col transition-all duration-200 ${isNavExpanded ? 'items-stretch' : 'items-center'} py-4`}>
               {/* Logo */}
               <div className={`${isNavExpanded ? 'px-2 mb-4' : 'mb-4'} flex items-center ${isNavExpanded ? 'gap-2' : 'justify-center'}`}>
-                <div className="bg-neuro-500 p-2 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Brain className="text-white" size={isNavExpanded ? 20 : 24} />
+                <div className="flex items-center gap-2.5 flex-shrink-0">
+                  <svg width="28" height="28" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="52" height="52" rx="13" fill="#1746A2"/>
+                    <path d="M26 40 L22 40 C18 40 14 37 12.5 33 C11 29.5 11.5 26 13 23.5 C11.5 21.5 11.5 18.5 13 16.5 C14.5 14.5 17 14 19 15 C19.5 13 21 12 23 12 C24.5 12 25.5 12.5 26 13 L26 40Z" stroke="white" strokeWidth="1.8" fill="none" strokeLinejoin="round"/>
+                    <path d="M14.5 23 Q17 20.5 17.5 24 Q17 27 14.5 27.5" stroke="white" strokeWidth="1.4" fill="none" strokeLinecap="round" opacity="0.85"/>
+                    <path d="M14 30 Q16.5 28 17.5 31 Q17 33.5 14.5 34" stroke="white" strokeWidth="1.4" fill="none" strokeLinecap="round" opacity="0.85"/>
+                    <path d="M17 17 Q19.5 15.5 20 18.5" stroke="white" strokeWidth="1.4" fill="none" strokeLinecap="round" opacity="0.85"/>
+                    <line x1="26" y1="11" x2="26" y2="41" stroke="white" strokeWidth="1" strokeDasharray="2 2" opacity="0.4"/>
+                    <rect x="29" y="23" width="8" height="8" rx="1.5" fill="white" opacity="0.9"/>
+                    <rect x="30.5" y="24.5" width="5" height="5" rx="0.75" fill="#1746A2"/>
+                    <path d="M31 23 L31 19 L34 19" stroke="white" strokeWidth="1.3" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.9"/>
+                    <path d="M35 23 L35 17 L38 17" stroke="white" strokeWidth="1.3" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.9"/>
+                    <path d="M37 26 L40 26 L40 22" stroke="white" strokeWidth="1.3" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.9"/>
+                    <path d="M37 28.5 L41 28.5" stroke="white" strokeWidth="1.3" fill="none" strokeLinecap="round" opacity="0.9"/>
+                    <path d="M37 31 L40 31 L40 34" stroke="white" strokeWidth="1.3" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.7"/>
+                    <path d="M35 31 L35 36 L38 36" stroke="white" strokeWidth="1.3" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.9"/>
+                    <circle cx="34" cy="19" r="1.5" fill="white" opacity="0.95"/>
+                    <circle cx="38" cy="17" r="1.5" fill="white" opacity="0.95"/>
+                    <circle cx="40" cy="22" r="1.5" fill="white" opacity="0.95"/>
+                    <circle cx="41" cy="28.5" r="1.5" fill="white" opacity="0.95"/>
+                    <circle cx="40" cy="34" r="1.5" fill="white" opacity="0.95"/>
+                    <circle cx="38" cy="36" r="1.5" fill="white" opacity="0.95"/>
+                  </svg>
+                  {isNavExpanded && (
+                    <span className="font-semibold text-slate-900 text-base tracking-tight">
+                      Neuro<span className="text-neuro-500">Wiki</span>
+                    </span>
+                  )}
                 </div>
-                {isNavExpanded && (
-                  <span className="text-base font-black text-slate-900 dark:text-white tracking-tight">NeuroWiki</span>
-                )}
               </div>
 
               {/* Nav Icons */}
@@ -720,10 +741,33 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="flex items-center">
             {/* Logo Mobile */}
             <div className="md:hidden flex items-center space-x-2">
-              <div className="bg-neuro-500 p-3 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center">
-                 <Brain className="text-white" size={24} />
+              <div className="flex items-center gap-2.5 flex-shrink-0">
+                <svg width="28" height="28" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect width="52" height="52" rx="13" fill="#1746A2"/>
+                  <path d="M26 40 L22 40 C18 40 14 37 12.5 33 C11 29.5 11.5 26 13 23.5 C11.5 21.5 11.5 18.5 13 16.5 C14.5 14.5 17 14 19 15 C19.5 13 21 12 23 12 C24.5 12 25.5 12.5 26 13 L26 40Z" stroke="white" strokeWidth="1.8" fill="none" strokeLinejoin="round"/>
+                  <path d="M14.5 23 Q17 20.5 17.5 24 Q17 27 14.5 27.5" stroke="white" strokeWidth="1.4" fill="none" strokeLinecap="round" opacity="0.85"/>
+                  <path d="M14 30 Q16.5 28 17.5 31 Q17 33.5 14.5 34" stroke="white" strokeWidth="1.4" fill="none" strokeLinecap="round" opacity="0.85"/>
+                  <path d="M17 17 Q19.5 15.5 20 18.5" stroke="white" strokeWidth="1.4" fill="none" strokeLinecap="round" opacity="0.85"/>
+                  <line x1="26" y1="11" x2="26" y2="41" stroke="white" strokeWidth="1" strokeDasharray="2 2" opacity="0.4"/>
+                  <rect x="29" y="23" width="8" height="8" rx="1.5" fill="white" opacity="0.9"/>
+                  <rect x="30.5" y="24.5" width="5" height="5" rx="0.75" fill="#1746A2"/>
+                  <path d="M31 23 L31 19 L34 19" stroke="white" strokeWidth="1.3" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.9"/>
+                  <path d="M35 23 L35 17 L38 17" stroke="white" strokeWidth="1.3" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.9"/>
+                  <path d="M37 26 L40 26 L40 22" stroke="white" strokeWidth="1.3" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.9"/>
+                  <path d="M37 28.5 L41 28.5" stroke="white" strokeWidth="1.3" fill="none" strokeLinecap="round" opacity="0.9"/>
+                  <path d="M37 31 L40 31 L40 34" stroke="white" strokeWidth="1.3" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.7"/>
+                  <path d="M35 31 L35 36 L38 36" stroke="white" strokeWidth="1.3" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.9"/>
+                  <circle cx="34" cy="19" r="1.5" fill="white" opacity="0.95"/>
+                  <circle cx="38" cy="17" r="1.5" fill="white" opacity="0.95"/>
+                  <circle cx="40" cy="22" r="1.5" fill="white" opacity="0.95"/>
+                  <circle cx="41" cy="28.5" r="1.5" fill="white" opacity="0.95"/>
+                  <circle cx="40" cy="34" r="1.5" fill="white" opacity="0.95"/>
+                  <circle cx="38" cy="36" r="1.5" fill="white" opacity="0.95"/>
+                </svg>
+                <span className="font-semibold text-slate-900 text-base tracking-tight">
+                  Neuro<span className="text-neuro-500">Wiki</span>
+                </span>
               </div>
-              <span className="text-xl font-black text-slate-900 dark:text-white tracking-tight">NeuroWiki</span>
             </div>
           </div>
 
