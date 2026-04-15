@@ -384,11 +384,14 @@ const manualTrialIds = new Set(manualTrials.map((trial) => trial.id));
 const restoredLegacyTrials: TrialItem[] = Object.entries(LEGACY_TRIAL_CATALOG_META)
   .filter(([id]) => !manualTrialIds.has(id))
   .map(([id, metadata]) => {
+    if (import.meta.env.DEV && !legacyTrialCategories[id]) {
+      console.warn(`[trialListData] Legacy trial "${id}" has no category mapping — defaulting to 'ivt'. Add it to legacyTrialCategories.`);
+    }
     return {
       id,
       name: metadata.name,
       year: metadata.year,
-      category: legacyTrialCategories[id],
+      category: legacyTrialCategories[id] ?? 'ivt',
       doi: metadata.doi,
       path: `/trials/${id}`,
       isPlaceholder: false,
