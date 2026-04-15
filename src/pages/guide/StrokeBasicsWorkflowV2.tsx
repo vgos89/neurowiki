@@ -376,7 +376,7 @@ const MainContent: React.FC = () => {
           </div>
         )}
 
-        <div id="card-content-panel" className="px-3 sm:px-6 mt-1 pb-2">
+        <div id="card-content-panel" className="px-3 sm:px-6 mt-16 pb-2" style={{ scrollMarginTop: '163px' }}>
 
           {/* Card 1: LKW & Vitals */}
           {activeCard === 1 && (
