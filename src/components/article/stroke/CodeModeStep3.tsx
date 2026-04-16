@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Info, CheckCircle, Copy, Check, Printer } from 'lucide-react';
+import { Copy, Check, Printer } from 'lucide-react';
 import type { Step1Data } from './CodeModeStep1';
 import type { Step2Data } from './CodeModeStep2';
 
@@ -201,196 +201,158 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
   };
 
   return (
-    <div className="space-y-6">
-      {/* Incomplete data warning */}
-      {(!hasStep1 || !hasStep2) && (
-        <div className="rounded-lg p-4 bg-amber-50 border border-amber-200 flex items-start gap-3">
-          <Info className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="font-semibold text-amber-900">Incomplete data</p>
-            <p className="text-sm text-amber-800 mt-1">
-              Some fields are missing from earlier steps. You can still copy a partial note to EMR.
-            </p>
+    <div className="space-y-3 px-1">
+
+      {/* Header status */}
+      <div className="bg-white border border-slate-100 rounded-xl p-4">
+        <div className="flex items-center justify-between mb-1">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Code Summary</p>
+          {totalDurationMin != null && (
+            <span className="text-xs font-semibold text-slate-500">{totalDurationMin} min from door</span>
+          )}
+        </div>
+        <div className="flex items-center gap-2 mt-2">
+          <div className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0" />
+          <p className="text-sm font-semibold text-slate-900">Code complete — ready to document</p>
+        </div>
+      </div>
+
+      {/* Clinical summary */}
+      {hasStep1 && (
+        <div className="bg-white border border-slate-100 rounded-xl p-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Clinical Summary</p>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+            <div>
+              <p className="text-[10px] text-slate-400 uppercase tracking-wide">LKW</p>
+              <p className="text-sm font-medium text-slate-900">
+                {step1Data?.lkwUnknown ? 'Unknown' : step1Data?.lkwTimestamp ? step1Data.lkwTimestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : `${step1Data?.lkwHours?.toFixed(1) ?? '—'}h ago`}
+              </p>
+            </div>
+            <div>
+              <p className="text-[10px] text-slate-400 uppercase tracking-wide">NIHSS</p>
+              <p className="text-sm font-medium text-slate-900">{step1Data?.nihssScore ?? '—'}</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-slate-400 uppercase tracking-wide">BP</p>
+              <p className="text-sm font-medium text-slate-900">{step1Data?.systolicBP ?? '—'}/{step1Data?.diastolicBP ?? '—'} mmHg</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-slate-400 uppercase tracking-wide">Glucose</p>
+              <p className="text-sm font-medium text-slate-900">{step1Data?.glucose ?? '—'} mg/dL</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-slate-400 uppercase tracking-wide">Weight</p>
+              <p className="text-sm font-medium text-slate-900">{step1Data?.weightValue ?? '—'} {step1Data?.weightUnit ?? 'kg'}</p>
+            </div>
+            {hasStep2 && (
+              <div>
+                <p className="text-[10px] text-slate-400 uppercase tracking-wide">CT Result</p>
+                <p className="text-sm font-medium text-slate-900">
+                  {step2Data?.ctResult === 'bleed' ? 'ICH' : step2Data?.ctResult === 'no-bleed' ? 'No hemorrhage' : step2Data?.ctResult ?? '—'}
+                </p>
+              </div>
+            )}
+            {hasStep2 && (
+              <div className="col-span-2">
+                <p className="text-[10px] text-slate-400 uppercase tracking-wide">Treatment</p>
+                <p className="text-sm font-semibold text-neuro-700">{treatmentLabel}</p>
+              </div>
+            )}
           </div>
         </div>
       )}
 
-      {/* 1. Code Summary Header */}
-      <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm">
-        <h3 className="text-lg font-bold text-slate-900 mb-2">
-          Stroke Code Summary & Documentation
-        </h3>
-        <div className="flex flex-wrap gap-4 text-sm text-slate-600">
-          {doorTime && (
-            <span>Door: {doorTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
-          )}
-          {milestones?.neurologistEvaluationTime && (
-            <span>Neuro eval: {milestones.neurologistEvaluationTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-          )}
-          {totalDurationMin != null && (
-            <span className="font-mono font-semibold text-slate-800">
-              Duration: {totalDurationMin} min
-            </span>
-          )}
+      {/* Milestones */}
+      {(doorToCTMin != null || doorToNeedleMin != null || doorToGroinMin != null || milestones?.ctOrderedTime || milestones?.ctInterpretedTime) && (
+        <div className="bg-white border border-slate-100 rounded-xl p-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">GWTG Milestones</p>
+          <div className="space-y-2">
+            {milestones?.ctOrderedTime && doorToCTOrderedMin != null && (
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-slate-600">CT ordered</span>
+                <span className="text-sm font-mono text-slate-500">{doorToCTOrderedMin} min</span>
+              </div>
+            )}
+            {doorToCTMin != null && (
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-slate-600">CT first image</span>
+                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                  ctFirstImageMetTarget ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+                }`}>
+                  {doorToCTMin} min {ctFirstImageMetTarget ? '✓' : '· target ≤25'}
+                </span>
+              </div>
+            )}
+            {milestones?.ctInterpretedTime && doorToCTInterpretedMin != null && (
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-slate-600">CT interpreted</span>
+                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                  ctInterpretedMetTarget ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+                }`}>
+                  {doorToCTInterpretedMin} min {ctInterpretedMetTarget ? '✓' : '· target ≤45'}
+                </span>
+              </div>
+            )}
+            {doorToNeedleMin != null && (
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-slate-600">Door-to-Needle</span>
+                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                  needleMetTarget ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+                }`}>
+                  {doorToNeedleMin} min {needleMetTarget ? '✓' : '· target ≤60'}
+                </span>
+              </div>
+            )}
+            {lkwToNeedleMin != null && (
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-slate-600">LKW-to-Needle</span>
+                <span className="text-sm font-mono text-slate-500">{lkwToNeedleMin} min</span>
+              </div>
+            )}
+            {doorToGroinMin != null && (
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-slate-600">Door to groin</span>
+                <span className="text-sm font-mono text-slate-500">{doorToGroinMin} min</span>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* 2. Clinical Data Section */}
-      <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm">
-        <h4 className="text-base font-semibold text-slate-900 mb-3">Clinical Data</h4>
-        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
-          <div>
-            <dt className="text-slate-500">LKW</dt>
-            <dd className="font-medium text-slate-900">
-              {step1Data?.lkwUnknown ? 'Unknown' : step1Data?.lkwTimestamp ? step1Data.lkwTimestamp.toLocaleString() : `${step1Data?.lkwHours?.toFixed(1) ?? '—'}h ago`}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-slate-500">NIHSS</dt>
-            <dd className="font-medium text-slate-900">{step1Data?.nihssScore ?? '—'}</dd>
-          </div>
-          <div>
-            <dt className="text-slate-500">BP</dt>
-            <dd className="font-medium text-slate-900">
-              {step1Data?.systolicBP ?? '—'}/{step1Data?.diastolicBP ?? '—'} mmHg
-            </dd>
-          </div>
-          <div>
-            <dt className="text-slate-500">Glucose</dt>
-            <dd className="font-medium text-slate-900">{step1Data?.glucose ?? '—'} mg/dL</dd>
-          </div>
-          <div>
-            <dt className="text-slate-500">Weight</dt>
-            <dd className="font-medium text-slate-900">
-              {step1Data?.weightValue ?? '—'} {step1Data?.weightUnit ?? 'kg'}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-slate-500">CT Result</dt>
-            <dd className="font-medium text-slate-900">
-              {step2Data?.ctResult === 'bleed' ? 'Bleed/ICH' : step2Data?.ctResult === 'no-bleed' ? 'No acute hemorrhage' : step2Data?.ctResult ?? '—'}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-slate-500">Treatment</dt>
-            <dd className="font-medium text-slate-900">{treatmentLabel}</dd>
-          </div>
-        </dl>
-      </div>
-
-      {/* 3. Milestones Timeline */}
-      <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm">
-        <h4 className="text-base font-semibold text-slate-900 mb-3">Milestones</h4>
-        <ul className="space-y-2">
-          {milestones?.ctOrderedTime && doorToCTOrderedMin != null && (
-            <li className="flex items-center justify-between gap-4">
-              <span className="text-slate-700">CT ordered</span>
-              <span className="font-mono text-sm text-slate-600">{doorToCTOrderedMin} min from door</span>
-            </li>
-          )}
-          {doorToCTMin != null && (
-            <li className="flex items-center justify-between gap-4">
-              <span className="text-slate-700">CT first image</span>
-              <span
-                className={`font-mono font-semibold px-2 py-1 rounded ${
-                  ctFirstImageMetTarget
-                    ? 'bg-emerald-100 text-emerald-800'
-                    : 'bg-amber-100 text-amber-800'
-                }`}
-              >
-                {doorToCTMin} min {ctFirstImageMetTarget ? '✓' : '(target ≤25)'}
-              </span>
-            </li>
-          )}
-          {milestones?.ctInterpretedTime && doorToCTInterpretedMin != null && (
-            <li className="flex items-center justify-between gap-4">
-              <span className="text-slate-700">CT interpreted</span>
-              <span
-                className={`font-mono font-semibold px-2 py-1 rounded ${
-                  ctInterpretedMetTarget
-                    ? 'bg-emerald-100 text-emerald-800'
-                    : 'bg-amber-100 text-amber-800'
-                }`}
-              >
-                {doorToCTInterpretedMin} min {ctInterpretedMetTarget ? '✓' : '(target ≤45)'}
-              </span>
-            </li>
-          )}
-          {doorToNeedleMin != null && (
-            <li className="flex items-center justify-between gap-4">
-              <span className="text-slate-700">Door-to-Needle</span>
-              <span
-                className={`font-mono font-semibold px-2 py-1 rounded ${
-                  needleMetTarget
-                    ? 'bg-emerald-100 text-emerald-800'
-                    : 'bg-amber-100 text-amber-800'
-                }`}
-              >
-                {doorToNeedleMin} min {needleMetTarget ? '✓' : '(target ≤60)'}
-              </span>
-            </li>
-          )}
-          {lkwToNeedleMin != null && (
-            <li className="flex items-center justify-between gap-4">
-              <span className="text-slate-700">LKW-to-Needle</span>
-              <span className="font-mono text-sm text-slate-600">{lkwToNeedleMin} min (≤4.5h)</span>
-            </li>
-          )}
-          {doorToGroinMin != null && (
-            <li className="flex items-center justify-between gap-4">
-              <span className="text-slate-700">Door to groin puncture</span>
-              <span className="font-mono text-sm text-slate-600">{doorToGroinMin} min</span>
-            </li>
-          )}
-          {doorToCTMin == null && doorToNeedleMin == null && doorToGroinMin == null && (
-            <li className="text-slate-500 text-sm">No milestone times recorded.</li>
-          )}
-        </ul>
-      </div>
-
-      {/* 4. Orders Summary */}
-      <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm">
-        <h4 className="text-base font-semibold text-slate-900 mb-3">Orders Summary</h4>
-        {step4Orders?.length ? (
-          <ul className="space-y-1.5 text-sm text-slate-700">
+      {/* Orders */}
+      {step4Orders?.length > 0 && (
+        <div className="bg-white border border-slate-100 rounded-xl p-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Orders Placed</p>
+          <ul className="space-y-1.5">
             {step4Orders.map((order, i) => (
-              <li key={i} className="flex items-start gap-2">
-                <span className="text-slate-400">•</span>
+              <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                <span className="text-slate-300 mt-0.5">•</span>
                 <span>{order}</span>
               </li>
             ))}
           </ul>
-        ) : (
-          <p className="text-sm text-slate-500">No orders selected.</p>
-        )}
-      </div>
+        </div>
+      )}
 
-      {/* 5. Thrombectomy recommendation */}
+      {/* Thrombectomy recommendation */}
       {thrombectomyRecommendation && (
-        <div className="rounded-lg p-4 bg-neuro-50 border border-neuro-200">
-          <h4 className="text-sm font-semibold text-neuro-900 mb-2">Thrombectomy / Next Steps</h4>
+        <div className="bg-white border border-neuro-100 rounded-xl p-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Thrombectomy / Next Steps</p>
           <p className="text-sm text-neuro-800 whitespace-pre-wrap">{thrombectomyRecommendation}</p>
         </div>
       )}
 
-      {/* 6. EMR Note Preview & Action Buttons */}
-      <div className="bg-slate-50 border border-slate-200 rounded-lg p-5 shadow-sm">
-        <h4 className="text-base font-semibold text-slate-900 mb-3">EMR Note</h4>
-        <pre className="text-xs font-mono text-slate-700 bg-white p-4 rounded-lg border border-slate-200 overflow-x-auto max-h-64 overflow-y-auto whitespace-pre-wrap">
+      {/* EMR Note */}
+      <div className="bg-white border border-slate-100 rounded-xl p-4">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">EMR Note</p>
+        <pre className="text-xs font-mono text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100 overflow-x-auto max-h-48 overflow-y-auto whitespace-pre-wrap mb-3">
           {generateEMRNote()}
         </pre>
-        <div className="mt-4 p-4 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center gap-3">
-          <CheckCircle className="w-6 h-6 text-emerald-600 flex-shrink-0" />
-          <div>
-            <p className="font-semibold text-emerald-900">Code complete</p>
-            <p className="text-sm text-emerald-800">Copy to EMR for handoff.</p>
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-3 mt-4">
+        <div className="flex gap-2">
           <button
             type="button"
             onClick={handleCopyToEMR}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-colors shadow-sm"
+            className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-neuro-500 hover:bg-neuro-600 text-white font-semibold rounded-xl transition-colors text-sm"
           >
             {copied ? (
               <>
@@ -407,13 +369,14 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
           <button
             type="button"
             onClick={handlePrint}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold rounded-lg transition-colors"
+            className="min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold rounded-xl transition-colors text-sm"
           >
             <Printer className="w-4 h-4" />
-            Print Summary
+            Print
           </button>
         </div>
       </div>
+
     </div>
   );
 };
