@@ -16,7 +16,7 @@
 - [ ] [L2] Fix emergency strip text wrapping — "tPA/TNK reversal" and "Orolingual edema" wrapping to two lines on mobile, add whitespace-nowrap or shorten text
 - [ ] [L2] Improve disabled CTA visual state — "Select CT result to continue" button looks enabled when disabled, increase opacity-40 to opacity-50 and add italic text style to make inactive state clearer
 - [x] [L2] Step3 visual rebuild — summary display, locked EMR template (Part B) — commit ad51b4d
-- [ ] [L2] Step4 visual rebuild — orders layout
+- [x] [L2] Step4 visual polish — design system tokens, cobalt buttons, evidence badges — commit 684bf89
 - [ ] [L2] All stroke modals visual overhaul — use white header, clean body, cobalt primary action
 
 ### LAYER 3 — Component Library (blocked until Layer 2 complete)
@@ -59,6 +59,12 @@
 - [ ] [P2] All other pathway pages visual rebuild — StatusEpilepticusPathway, MigrainePathway, ExtendedIVTPathway, GCAPathway, ElanPathway, EvtPathway — apply same visual treatment as stroke pathway after component library exists.
 
 ## CONFIRMED CLEAN
+- [x] CodeModeStep4 design system polish — commit 684bf89
+  - Evidence badges: green→emerald-100/800, blue→neuro-50/700, yellow→amber-50/700, red→slate-100/600
+  - Copy to EMR button: bg-slate-700→bg-neuro-500, hover:neuro-600, green-600→emerald-500 (copied), rounded-xl, min-h-[44px]
+  - Save Orders button: bg-purple-600→bg-neuro-500, hover:neuro-600, rounded-xl, shadow-lg removed, min-h-[44px]
+  - Zero structural/logic changes — accordion, checkboxes, evidence expand all intact
+  - Mobile QA: pass · Desktop QA: pass
 - [x] CodeModeStep3 visual rebuild — commit ad51b4d
   - Code Summary card: emerald dot status, duration badge right
   - Clinical Summary: grid-cols-2, text-[10px] uppercase labels, hasStep1/hasStep2 gates

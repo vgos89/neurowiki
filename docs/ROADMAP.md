@@ -33,7 +33,7 @@ Progress:
 - [x] Page header fix — remove subtitle clutter, clean Code/Study toggle, remove Quick Reference from code mode — commit c379146
 - [ ] Step2 visual rebuild
 - [ ] Step3 visual rebuild
-- [ ] Step4 visual rebuild
+- [x] Step4 visual polish — cobalt buttons, evidence badge tokens, shadow removed — commit 684bf89
 - [ ] All stroke modals visual overhaul
 
 ### Layer 3 — Component Library (BLOCKED until Layer 2 complete)
