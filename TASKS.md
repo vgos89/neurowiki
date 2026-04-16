@@ -46,6 +46,11 @@
 - [ ] [P1] Part B EMR template — replace three separate EMR generators with one locked template
 
 ## CONFIRMED CLEAN
+- [x] Global white bg + tab focus ring + LKW nowrap — commit 043556a
+  - Layout.tsx: bg-slate-50 → bg-white on main (all pages)
+  - StrokeBasicsWorkflowV2.tsx: focus:outline-none on tab buttons
+  - CodeModeStep1.tsx: whitespace-nowrap on LKW time display
+  - Mobile QA: pass · Desktop QA: pass
 - [x] CodeModeStep2 visual rebuild — commit 27cf421
   - CT Head: custom button-based radio cards with cobalt dot indicators (was: native <input> labels)
   - Treatment Decision: custom radio cards with dose on sub-line (tPA: total / bolus / inf; TNK: single bolus)
