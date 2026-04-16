@@ -12,6 +12,9 @@
 - [x] [L2] Fix stroke pathway page header — commit c379146
 - [x] [L2] Fix stroke pathway layout — white context bar, correct tab sticky offset — commit b41e644
 - [x] [L2] Step2 visual rebuild — CT result as clean radio cards, treatment decision cards, cobalt Save button — commit 27cf421
+- [ ] [L2] Fix "Stamp CT Time" button focus ring box in CodeModeStep2.tsx — add focus:outline-none matching tab fix
+- [ ] [L2] Fix emergency strip text wrapping — "tPA/TNK reversal" and "Orolingual edema" wrapping to two lines on mobile, add whitespace-nowrap or shorten text
+- [ ] [L2] Improve disabled CTA visual state — "Select CT result to continue" button looks enabled when disabled, increase opacity-40 to opacity-50 and add italic text style to make inactive state clearer
 - [ ] [L2] Step3 visual rebuild — summary display, locked EMR template (Part B)
 - [ ] [L2] Step4 visual rebuild — orders layout
 - [ ] [L2] All stroke modals visual overhaul — use white header, clean body, cobalt primary action
@@ -44,6 +47,8 @@
 - [ ] [P1] Split TrialPageNew chunk (485kb) — lazy-load trial data
 - [ ] [P1] Turnstile removal — Cloudflare account deleted, assess removing Turnstile from feedback form entirely
 - [ ] [P1] Part B EMR template — replace three separate EMR generators with one locked template
+- [ ] [P1] Full connectivity audit — verify every button, modal, tab transition, and data flow works end to end across all stroke pathway steps. Build a manual test checklist in docs/QA_CHECKLIST.md
+- [ ] [P1] SEO agent setup — create docs/SEO_SPEC.md with meta title, description, and JSON-LD spec for every route. Implement missing meta tags and structured data across all calculator and pathway pages. Pull forward from Layer 5.
 
 ## CONFIRMED CLEAN
 - [x] Global white bg + tab focus ring + LKW nowrap — commit 043556a

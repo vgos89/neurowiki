@@ -109,6 +109,10 @@ All clinical content must be traceable to a named guideline with year. No conten
 - Inline SVG logo mark used in Layout.tsx (desktop sidebar + mobile header) — brain+circuit mark, cobalt background `#1746A2`, white paths
 
 ## Fix History (never regress these)
+- [2026-04-15] LKW time nowrap — whitespace-nowrap prevents time wrapping to two lines (CodeModeStep1.tsx) — commit 043556a
+- [2026-04-15] Tab focus ring fix — focus:outline-none on stroke tab buttons (StrokeBasicsWorkflowV2.tsx) — commit 043556a
+- [2026-04-15] Global white background — Layout.tsx bg-slate-50 → bg-white, all pages now pure white — commit 043556a
+- [2026-04-15] CodeModeStep2 visual rebuild — card radio selectors, cobalt CTA, LVO pill buttons, compact summary bar — commit 27cf421
 - [2026-04-15] Three targeted fixes — global bg-white (Layout.tsx main), tab focus:outline-none (StrokeBasicsWorkflowV2.tsx), LKW whitespace-nowrap (CodeModeStep1.tsx) — commit 043556a
 - [2026-04-15] CodeModeStep2 visual rebuild — custom button-based radio cards (CT result + treatment decision), cobalt dot indicators, dose sub-lines, three LVO pill buttons, amber EVT Pathway button, cobalt Save CTA (was emerald), Brain icon removed — commit 27cf421
 - [2026-04-15] Content area top margin — card-content-panel mt-3 → mt-16 (64px = sticky visual offset); scrollMarginTop 163px; content panel now starts exactly at sticky wrapper bottom (viewport y=163) — commit f2f4b8e
