@@ -49,6 +49,14 @@
 - [ ] [P1] Part B EMR template — replace three separate EMR generators with one locked template
 - [ ] [P1] Full connectivity audit — verify every button, modal, tab transition, and data flow works end to end across all stroke pathway steps. Build a manual test checklist in docs/QA_CHECKLIST.md
 - [ ] [P1] SEO agent setup — create docs/SEO_SPEC.md with meta title, description, and JSON-LD spec for every route. Implement missing meta tags and structured data across all calculator and pathway pages. Pull forward from Layer 5.
+- [ ] [P1] Design consistency audit — read every calculator and pathway page, compare against docs/MOCKUPS.md design tokens, output full report to docs/AUDIT.md. No fixes in this session, audit only. Pages to cover: all src/pages/guide/*, all calculator pages, TrialsPage, Home.
+- [ ] [P1] Calculator UI/UX fixes — after audit, fix every calculator page that does not match design system. Priority order: NIHSS, ICH Score, GCS, ASPECTS, HAS-BLED, ABCD2, ROPE, Heidelberg, Boston Criteria.
+- [ ] [P1] Trials page visual redesign — implement Screen 5 from docs/MOCKUPS.md. Trial card format: name, one-sentence finding, key stat (NNT or ARR), p-value, guideline implication. Readable in 10 seconds. Category filter pills. Left border color by category.
+- [ ] [P1] Trial interpretation agent — AI-powered layer that explains what each trial means clinically for a practicing neurologist. Requires component library (Layer 3) before implementation. Use Anthropic API in artifact pattern.
+
+### OTHER P2 (lower priority)
+- [ ] [P2] Stroke modals visual overhaul — after Step3/Step4 done, audit all stroke modals (tPA Reversal, Orolingual Edema, ICH Protocol, Thrombectomy, Eligibility, NIHSS) and apply design system consistently.
+- [ ] [P2] All other pathway pages visual rebuild — StatusEpilepticusPathway, MigrainePathway, ExtendedIVTPathway, GCAPathway, ElanPathway, EvtPathway — apply same visual treatment as stroke pathway after component library exists.
 
 ## CONFIRMED CLEAN
 - [x] Global white bg + tab focus ring + LKW nowrap — commit 043556a
