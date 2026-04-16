@@ -15,7 +15,7 @@
 - [ ] [L2] Fix "Stamp CT Time" button focus ring box in CodeModeStep2.tsx — add focus:outline-none matching tab fix
 - [ ] [L2] Fix emergency strip text wrapping — "tPA/TNK reversal" and "Orolingual edema" wrapping to two lines on mobile, add whitespace-nowrap or shorten text
 - [ ] [L2] Improve disabled CTA visual state — "Select CT result to continue" button looks enabled when disabled, increase opacity-40 to opacity-50 and add italic text style to make inactive state clearer
-- [ ] [L2] Step3 visual rebuild — summary display, locked EMR template (Part B)
+- [x] [L2] Step3 visual rebuild — summary display, locked EMR template (Part B) — commit ad51b4d
 - [ ] [L2] Step4 visual rebuild — orders layout
 - [ ] [L2] All stroke modals visual overhaul — use white header, clean body, cobalt primary action
 
@@ -59,6 +59,13 @@
 - [ ] [P2] All other pathway pages visual rebuild — StatusEpilepticusPathway, MigrainePathway, ExtendedIVTPathway, GCAPathway, ElanPathway, EvtPathway — apply same visual treatment as stroke pathway after component library exists.
 
 ## CONFIRMED CLEAN
+- [x] CodeModeStep3 visual rebuild — commit ad51b4d
+  - Code Summary card: emerald dot status, duration badge right
+  - Clinical Summary: grid-cols-2, text-[10px] uppercase labels, hasStep1/hasStep2 gates
+  - GWTG Milestones: emerald/amber rounded-full pill badges, conditional
+  - EMR Note: bg-slate-50 pre, cobalt Copy to EMR + white Print buttons
+  - generateEMRNote() and all clinical logic untouched
+  - Mobile QA: pass · Desktop QA: pass
 - [x] Global white bg + tab focus ring + LKW nowrap — commit 043556a
   - Layout.tsx: bg-slate-50 → bg-white on main (all pages)
   - StrokeBasicsWorkflowV2.tsx: focus:outline-none on tab buttons

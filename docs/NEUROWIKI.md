@@ -109,6 +109,7 @@ All clinical content must be traceable to a named guideline with year. No conten
 - Inline SVG logo mark used in Layout.tsx (desktop sidebar + mobile header) — brain+circuit mark, cobalt background `#1746A2`, white paths
 
 ## Fix History (never regress these)
+- [2026-04-15] CodeModeStep3 visual rebuild — Code Summary card (emerald dot + duration), Clinical Summary grid-cols-2 (LKW/NIHSS/BP/Glucose/Weight/CT/Treatment, hasStep1+hasStep2 gated), GWTG Milestones (emerald/amber rounded-full pills, conditional), EMR Note (bg-slate-50 pre max-h-48, cobalt Copy to EMR + white Print), generateEMRNote() untouched — commit ad51b4d
 - [2026-04-15] LKW time nowrap — whitespace-nowrap prevents time wrapping to two lines (CodeModeStep1.tsx) — commit 043556a
 - [2026-04-15] Tab focus ring fix — focus:outline-none on stroke tab buttons (StrokeBasicsWorkflowV2.tsx) — commit 043556a
 - [2026-04-15] Global white background — Layout.tsx bg-slate-50 → bg-white, all pages now pure white — commit 043556a
