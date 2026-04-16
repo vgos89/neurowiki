@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { AlertTriangle, ExternalLink, FlaskConical, Brain } from 'lucide-react';
+import { AlertTriangle, ExternalLink, FlaskConical } from 'lucide-react';
 import type { Step1Data } from './CodeModeStep1';
 import type { ThrombolysisEligibilityData } from './ThrombolysisEligibilityModal';
 import { getTNKDose, getTpaDoses, toKg } from '../../../utils/strokeDosing';
@@ -90,285 +90,239 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
   };
 
   return (
-    <div className="space-y-4">
-      {/* Step 1 summary */}
+    <div className="space-y-3 px-1">
+
+      {/* Step 1 summary bar */}
       {step1Data && (
-        <div className="bg-blue-50/50 p-4 rounded-lg border border-blue-100">
-          <div className="text-sm text-blue-800 space-y-1">
-            <div><strong>LKW:</strong> {step1Data.lkwUnknown ? 'Unknown' : `${step1Data.lkwHours?.toFixed(1) ?? 0}h ago`}</div>
-            <div><strong>NIHSS:</strong> {step1Data.nihssScore ?? '—'}</div>
-            <div><strong>BP:</strong> {step1Data.systolicBP}/{step1Data.diastolicBP} mmHg</div>
-            <div><strong>Weight:</strong> {step1Data.weightValue}{step1Data.weightUnit} ({weightKg}kg)</div>
-          </div>
+        <div className="bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">
+          <p className="text-xs text-slate-400">
+            LKW {step1Data.lkwUnknown ? 'Unknown' : `${step1Data.lkwHours?.toFixed(1) ?? 0}h ago`}
+            {' · '}NIHSS {step1Data.nihssScore ?? '—'}
+            {' · '}BP {step1Data.systolicBP}/{step1Data.diastolicBP}
+            {' · '}{weightKg > 0 ? `${weightKg} kg` : 'Weight not set'}
+          </p>
         </div>
       )}
 
-      {/* BP intervention prompts (AHA): pre-thrombolysis >185/110; general >220/120 */}
-      {step1Data && (step1Data.systolicBP > 185 || step1Data.diastolicBP > 110) && (
-        <div className="rounded-lg p-4 border-2 border-red-200 bg-red-50">
-          <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-            <div className="text-sm text-red-900 space-y-2">
-              {(treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (step1Data.systolicBP > 185 || step1Data.diastolicBP > 110) && (
-                <>
-                  <p className="font-bold">Pre-thrombolysis BP &gt;185/110 — treat before giving tPA/TNK (AHA)</p>
-                  <ul className="list-disc list-inside space-y-0.5 text-xs">
-                    <li><strong>Labetalol:</strong> 10–20 mg IV over 1–2 min; may repeat every 10–20 min (max 300 mg).</li>
-                    <li><strong>Nicardipine drip:</strong> Start 5 mg/h; titrate by 2.5 mg/h every 5–15 min, target SBP &lt;185 and DBP &lt;110.</li>
-                  </ul>
-                </>
-              )}
-              {(step1Data.systolicBP > 220 || step1Data.diastolicBP > 120) && (
-                <p className="font-bold">BP &gt;220/120: Consider treatment to lower BP (AHA), even when not a thrombolysis candidate.</p>
-              )}
-            </div>
-          </div>
+      {/* BP alert — only when BP high and treatment selected */}
+      {step1Data && (step1Data.systolicBP > 185 || step1Data.diastolicBP > 110) && (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
+        <div className="rounded-lg p-3 border border-red-200 bg-red-50">
+          <p className="text-xs font-bold text-red-800 mb-1">Pre-thrombolysis BP &gt;185/110 — treat before giving tPA/TNK (AHA)</p>
+          <p className="text-xs text-slate-700">
+            <strong>Labetalol</strong> 10–20 mg IV push, repeat q10–20 min (max 300 mg)
+            {' · '}
+            <strong>Nicardipine</strong> 5 mg/hr, ↑2.5 mg/hr q5–15 min (max 15 mg/hr)
+          </p>
         </div>
       )}
 
-      {/* CT Result Selection */}
-      <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
-        <div className="flex items-center justify-between gap-3 mb-4">
-          <div className="flex items-center gap-3">
-            <Brain className="w-5 h-5 text-slate-400" />
-            <h3 className="text-base font-semibold tracking-tight text-slate-900">CT Head Result</h3>
-          </div>
-          {/* CT Read Time stamp — syncs with TimestampBubble */}
+      {/* CT Head Result */}
+      <div className="bg-white border border-slate-100 rounded-xl p-4">
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">CT Head Result</p>
           <button
             type="button"
             onClick={handleStampCtRead}
             disabled={ctReadStamped}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
               ctReadStamped
-                ? 'bg-green-100 text-green-700 border border-green-200 cursor-default'
+                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 cursor-default'
                 : 'bg-neuro-50 text-neuro-700 border border-neuro-200 hover:bg-neuro-100'
             }`}
-            title="Record CT Read Time in timestamp tracker"
           >
-            {ctReadStamped ? (
-              <>
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                CT Read Stamped
-              </>
-            ) : (
-              <>
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10"/><path strokeLinecap="round" d="M12 6v6l4 2"/></svg>
-                Stamp CT Read Time
-              </>
-            )}
+            {ctReadStamped ? '✓ CT Stamped' : 'Stamp CT Time'}
           </button>
         </div>
-        <div className="space-y-3">
-          <label className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
-            <input
-              type="radio"
-              name="ctResult"
-              checked={ctResult === 'no-bleed'}
-              onChange={() => setCtResult('no-bleed')}
-              className="w-4 h-4 text-emerald-600 border-slate-300 focus:ring-emerald-500"
-            />
-            <span className="font-medium text-slate-900">No acute hemorrhage</span>
-          </label>
-          <label className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
-            <input
-              type="radio"
-              name="ctResult"
-              checked={ctResult === 'ich'}
-              onChange={() => {
-                setCtResult('ich');
-                onIchSelected?.();
+        <div className="space-y-2">
+          {[
+            { value: 'no-bleed', label: 'No acute hemorrhage' },
+            { value: 'ich', label: 'ICH detected' },
+            { value: 'other', label: 'Other finding' },
+          ].map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => {
+                setCtResult(option.value);
+                if (option.value === 'ich') onIchSelected?.();
               }}
-              className="w-4 h-4 text-rose-600 border-slate-300 focus:ring-rose-500"
-            />
-            <span className="font-medium text-slate-900">ICH detected</span>
-          </label>
-          <label className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
-            <input
-              type="radio"
-              name="ctResult"
-              checked={ctResult === 'other'}
-              onChange={() => setCtResult('other')}
-              className="w-4 h-4 text-slate-600 border-slate-300 focus:ring-slate-500"
-            />
-            <span className="font-medium text-slate-900">Other finding</span>
-          </label>
+              className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-colors text-left ${
+                ctResult === option.value
+                  ? 'border-neuro-500 bg-neuro-50'
+                  : 'border-slate-200 bg-white hover:bg-slate-50'
+              }`}
+            >
+              <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${
+                ctResult === option.value ? 'border-neuro-500' : 'border-slate-300'
+              }`}>
+                {ctResult === option.value && (
+                  <div className="w-2 h-2 rounded-full bg-neuro-500" />
+                )}
+              </div>
+              <span className={`text-sm font-medium ${
+                ctResult === option.value ? 'text-neuro-900' : 'text-slate-700'
+              }`}>
+                {option.label}
+              </span>
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* ICH callout + button to open hemorrhage protocol modal */}
+      {/* ICH — show protocol button */}
       {isICH && (
-        <div className="rounded-lg p-4 flex flex-col sm:flex-row sm:items-start gap-3 bg-amber-50 border border-amber-200">
-          <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-          <div className="flex-1">
-            <p className="font-bold text-amber-900">Thrombolysis contraindicated</p>
-            <p className="text-sm text-amber-800 mt-1">Proceed to hemorrhage protocol (2022 AHA/ASA ICH). Consider EVT pathway if LVO suspected with appropriate imaging.</p>
-            <button
-              type="button"
-              onClick={() => onIchSelected?.()}
-              className="mt-3 min-h-[44px] px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg transition-colors inline-flex items-center gap-2"
-            >
-              View hemorrhage protocol
-            </button>
-          </div>
+        <div className="rounded-lg p-3 border border-red-200 bg-red-50">
+          <p className="text-xs font-bold text-red-800 mb-2">ICH detected — do not give thrombolytics</p>
+          <button
+            type="button"
+            onClick={onIchSelected}
+            className="text-xs font-semibold text-red-700 underline"
+          >
+            View hemorrhage protocol →
+          </button>
         </div>
       )}
 
       {/* Eligibility not checked warning */}
       {isNoBleed && !eligibilityResult && (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
-        <div className="rounded-lg p-4 border-2 border-amber-300 bg-amber-50">
-          <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-            <div className="flex-1">
-              <p className="text-sm font-semibold text-amber-900">Eligibility not checked — screen for tPA/TNK contraindications before giving.</p>
-              {onOpenEligibility && (
-                <button
-                  type="button"
-                  onClick={onOpenEligibility}
-                  className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white rounded-lg transition-colors"
-                >
-                  Open tPA Eligibility Checklist →
-                </button>
-              )}
-            </div>
-          </div>
+        <div className="rounded-lg p-3 border border-amber-200 bg-amber-50">
+          <p className="text-xs font-semibold text-amber-900 mb-2">Eligibility not checked — screen for contraindications before giving.</p>
+          {onOpenEligibility && (
+            <button
+              type="button"
+              onClick={onOpenEligibility}
+              className="text-xs font-bold text-amber-700 underline"
+            >
+              Open tPA Eligibility Checklist →
+            </button>
+          )}
         </div>
       )}
 
-      {/* Eligibility mandatory prompts: absolute → do not give TNK; relative → discuss risk vs benefits */}
+      {/* Eligibility contraindication warning */}
       {isNoBleed && eligibilityResult &&
         (eligibilityResult.eligibilityStatus === 'absolute-contraindication' || eligibilityResult.eligibilityStatus === 'relative-contraindication') &&
         (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
-        <div className={`rounded-lg p-4 border-2 ${eligibilityResult.eligibilityStatus === 'absolute-contraindication' ? 'border-red-300 bg-red-50' : 'border-amber-300 bg-amber-50'}`}>
-          <div className="flex items-start gap-3">
-            <AlertTriangle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${eligibilityResult.eligibilityStatus === 'absolute-contraindication' ? 'text-red-600' : 'text-amber-600'}`} />
-            <div className="text-sm">
-              {eligibilityResult.eligibilityStatus === 'absolute-contraindication' && (
-                <p className="font-bold text-red-900">Do not give tPA/TNK — major exclusion(s) identified. Check eligibility in Step 1.</p>
-              )}
-              {eligibilityResult.eligibilityStatus === 'relative-contraindication' && (
-                <p className="font-bold text-amber-900">Discuss risk vs benefits with patient and other involved teams before proceeding (AHA).</p>
-              )}
-            </div>
-          </div>
+        <div className={`rounded-lg p-3 border ${
+          eligibilityResult.eligibilityStatus === 'absolute-contraindication'
+            ? 'border-red-200 bg-red-50'
+            : 'border-amber-200 bg-amber-50'
+        }`}>
+          <p className={`text-xs font-bold ${
+            eligibilityResult.eligibilityStatus === 'absolute-contraindication' ? 'text-red-900' : 'text-amber-900'
+          }`}>
+            {eligibilityResult.eligibilityStatus === 'absolute-contraindication'
+              ? 'Do not give tPA/TNK — major exclusion(s) identified.'
+              : 'Discuss risk vs benefits before proceeding (AHA).'}
+          </p>
         </div>
       )}
 
-      {/* Treatment Decision - only if no acute hemorrhage */}
+      {/* Treatment Decision */}
       {isNoBleed && (
-        <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
-          <div className="flex items-center gap-3 mb-4">
-            <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /><rect x="3" y="3" width="18" height="18" rx="3" /></svg>
-            <h3 className="text-base font-semibold tracking-tight text-slate-900">Treatment Decision</h3>
-          </div>
-          <div className="space-y-3">
-            <label className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
-              <input
-                type="radio"
-                name="treatment"
-                checked={treatmentGiven === 'tpa'}
-                onChange={() => setTreatmentGiven('tpa')}
-                className="w-4 h-4 text-blue-600 border-slate-300 focus:ring-blue-500"
-              />
-              <span className="font-medium text-slate-900">tPA</span>
-              {weightKg > 0 && <span className="text-sm text-slate-500">({tpaDose} mg — bolus {tpaBolus} + infusion {tpaInfusion})</span>}
-            </label>
-            <label className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
-              <input
-                type="radio"
-                name="treatment"
-                checked={treatmentGiven === 'tnk'}
-                onChange={() => setTreatmentGiven('tnk')}
-                className="w-4 h-4 text-neuro-600 border-slate-300 focus:ring-neuro-500"
-              />
-              <span className="font-medium text-slate-900">TNK</span>
-              {weightKg > 0 && <span className="text-sm text-slate-500">({tnkDose} mg single bolus)</span>}
-            </label>
-            <label className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors">
-              <input
-                type="radio"
-                name="treatment"
-                checked={treatmentGiven === 'none' || treatmentGiven === 'contraindicated'}
-                onChange={() => setTreatmentGiven('contraindicated')}
-                className="w-4 h-4 text-slate-600 border-slate-300 focus:ring-slate-500"
-              />
-              <span className="font-medium text-slate-900">None / Contraindicated</span>
-            </label>
+        <div className="bg-white border border-slate-100 rounded-xl p-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Treatment Decision</p>
+          <div className="space-y-2">
+            {[
+              {
+                value: 'tpa',
+                label: 'tPA',
+                sub: weightKg > 0 ? `${tpaDose} mg — bolus ${tpaBolus} + inf ${tpaInfusion}` : 'Enter weight for dose',
+              },
+              {
+                value: 'tnk',
+                label: 'TNK',
+                sub: weightKg > 0 ? `${tnkDose} mg single bolus` : 'Enter weight for dose',
+              },
+              {
+                value: 'contraindicated',
+                label: 'None / Contraindicated',
+                sub: 'No thrombolytic given',
+              },
+            ].map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => setTreatmentGiven(option.value)}
+                className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-colors text-left ${
+                  treatmentGiven === option.value
+                    ? 'border-neuro-500 bg-neuro-50'
+                    : 'border-slate-200 bg-white hover:bg-slate-50'
+                }`}
+              >
+                <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${
+                  treatmentGiven === option.value ? 'border-neuro-500' : 'border-slate-300'
+                }`}>
+                  {treatmentGiven === option.value && (
+                    <div className="w-2 h-2 rounded-full bg-neuro-500" />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className={`text-sm font-semibold ${treatmentGiven === option.value ? 'text-neuro-900' : 'text-slate-900'}`}>
+                    {option.label}
+                  </p>
+                  <p className="text-xs text-slate-400">{option.sub}</p>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       )}
 
       {/* CTA & LVO Screening */}
-      <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
-        <div className="flex items-center gap-3 mb-4">
-          <FlaskConical className="w-5 h-5 text-slate-400" />
-          <h3 className="text-base font-semibold tracking-tight text-slate-900">CTA & LVO Screening</h3>
-        </div>
-        <label className="flex items-center gap-3 cursor-pointer mb-4">
+      <div className="bg-white border border-slate-100 rounded-xl p-4">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">CTA & LVO Screening</p>
+        <label className="flex items-center gap-3 cursor-pointer min-h-[44px]">
           <input
             type="checkbox"
             checked={ctaOrdered}
             onChange={(e) => setCtaOrdered(e.target.checked)}
-            className="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+            className="w-5 h-5 rounded border-slate-300 text-neuro-600 focus:ring-neuro-500"
           />
-          <span className="text-slate-700 font-medium">CTA ordered</span>
+          <span className="text-sm font-medium text-slate-700">CTA ordered</span>
         </label>
         {ctaOrdered && (
-          <div className="space-y-3 pl-8 border-l-2 border-slate-200">
-            <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">LVO detected?</p>
-            <div className="flex flex-wrap gap-3">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="lvo"
-                  checked={lvoPresent === 'yes'}
-                  onChange={() => setLvoPresent('yes')}
-                  className="w-4 h-4 text-orange-600 border-slate-300 focus:ring-orange-500"
-                />
-                <span className="text-sm text-slate-700">Yes</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="lvo"
-                  checked={lvoPresent === 'no'}
-                  onChange={() => setLvoPresent('no')}
-                  className="w-4 h-4 text-slate-600 border-slate-300 focus:ring-slate-500"
-                />
-                <span className="text-sm text-slate-700">No</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="lvo"
-                  checked={lvoPresent === 'pending'}
-                  onChange={() => setLvoPresent('pending')}
-                  className="w-4 h-4 text-slate-600 border-slate-300 focus:ring-slate-500"
-                />
-                <span className="text-sm text-slate-700">Pending</span>
-              </label>
+          <div className="mt-3 space-y-3">
+            <p className="text-xs font-bold uppercase tracking-widest text-slate-400">LVO detected?</p>
+            <div className="flex gap-2">
+              {['yes', 'no', 'pending'].map((val) => (
+                <button
+                  key={val}
+                  type="button"
+                  onClick={() => setLvoPresent(val)}
+                  className={`flex-1 py-2 px-3 rounded-lg border text-xs font-semibold transition-colors capitalize ${
+                    lvoPresent === val
+                      ? 'border-neuro-500 bg-neuro-50 text-neuro-700'
+                      : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+                  }`}
+                >
+                  {val.charAt(0).toUpperCase() + val.slice(1)}
+                </button>
+              ))}
             </div>
             {lvoPresent === 'yes' && onOpenEVTPathway && (
               <button
                 type="button"
                 onClick={onOpenEVTPathway}
-                className="mt-3 w-full py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+                className="w-full min-h-[44px] py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
               >
-                <ExternalLink className="w-4 h-4" />
-                EVT Pathway
+                → EVT Pathway
               </button>
             )}
           </div>
         )}
       </div>
 
+      {/* Save CTA */}
       <button
         type="button"
         onClick={handleComplete}
         disabled={!canComplete}
-        className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-all"
+        className="w-full min-h-[52px] py-3.5 bg-neuro-500 hover:bg-neuro-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all text-sm"
       >
-        Save
+        {canComplete ? 'Save & Continue →' : 'Select CT result to continue'}
       </button>
+
     </div>
   );
 };
