@@ -55,10 +55,19 @@
 - [ ] [P1] Trial interpretation agent — AI-powered layer that explains what each trial means clinically for a practicing neurologist. Requires component library (Layer 3) before implementation. Use Anthropic API in artifact pattern.
 
 ### OTHER P2 (lower priority)
-- [ ] [P2] Stroke modals visual overhaul — after Step3/Step4 done, audit all stroke modals (tPA Reversal, Orolingual Edema, ICH Protocol, Thrombectomy, Eligibility, NIHSS) and apply design system consistently.
+- [x] [P2] tPA Reversal, Orolingual Edema, ICH Protocol modals — Stripe/Apple redesign — commits baecb1c, 10b6063
+- [ ] [P2] Stroke modals remaining — Thrombectomy, Eligibility, NIHSS — apply same Stripe/Apple pattern
 - [ ] [P2] All other pathway pages visual rebuild — StatusEpilepticusPathway, MigrainePathway, ExtendedIVTPathway, GCAPathway, ElanPathway, EvtPathway — apply same visual treatment as stroke pathway after component library exists.
 
 ## CONFIRMED CLEAN
+- [x] OrolingualEdema + HemorrhageProtocol modal redesign — commit 10b6063
+  - Both: max-w-lg, custom shadow, no min-h, circular close button, no header divider
+  - Left-border callouts (amber/red), cobalt numbered steps, cobalt Copy to EMR + rounded-xl
+  - AlertCircle + AlertTriangle removed from imports
+  - Mobile QA: pass · Desktop QA: pass
+- [x] TpaReversalProtocolModal redesign — commit baecb1c
+  - max-w-lg, clean header, left-border callout, cobalt numbered steps, cobalt CTA
+  - Mobile QA: pass · Desktop QA: pass
 - [x] Three L2 polish fixes — commit 0bfea9a
   - CodeModeStep2: Stamp CT Time + focus:outline-none (no focus box)
   - StrokeBasicsWorkflowV2: emergency strip text-center + whitespace-nowrap, "tPA/TNK reversal"→"tPA reversal"
