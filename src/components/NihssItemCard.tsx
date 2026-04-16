@@ -138,7 +138,7 @@ const NihssItemCard: React.FC<NihssItemCardProps> = ({
               onClick={() => onChange(opt.value)}
               className={`flex-1 min-w-0 px-3 py-2 md:px-5 md:py-3 rounded-full text-xs md:text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md'
+                  ? 'bg-neuro-500 dark:bg-white text-white dark:text-slate-900 shadow-md'
                   : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500'
               }`}
             >

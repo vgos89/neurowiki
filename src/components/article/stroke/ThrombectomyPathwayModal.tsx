@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, ArrowLeft, Zap } from 'lucide-react';
+import { X, ArrowLeft } from 'lucide-react';
 import EvtPathway from '../../../pages/EvtPathway';
 
 interface EvtResult {
@@ -43,23 +43,19 @@ export const ThrombectomyPathwayModal: React.FC<ThrombectomyPathwayModalProps> =
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
       <div className="relative w-full max-w-6xl max-h-[95vh] bg-white dark:bg-slate-900 rounded-xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300" style={{ boxShadow: '0 8px 40px rgba(0,0,0,0.18)' }}>
-        {/* Modal Header — matches standalone EVT Pathway header style */}
+        {/* Modal Header */}
         <div className="sticky top-0 bg-white border-b border-slate-100 z-10">
-          <div className="flex items-center justify-between h-14 px-4 gap-3">
-            {/* Left: Icon badge + Title */}
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-7 h-7 rounded-lg bg-neuro-500 flex items-center justify-center shrink-0">
-                <Zap className="w-4 h-4 text-white" />
-              </div>
-              <span className="text-sm font-bold text-slate-900 truncate">EVT / Thrombectomy</span>
+          <div className="flex items-center justify-between h-14 px-5 gap-4">
+            <div>
+              <p className="text-base font-semibold text-slate-900 tracking-tight">EVT / Thrombectomy</p>
+              <p className="text-xs text-slate-400">AHA/ASA 2019 · thrombectomy eligibility</p>
             </div>
-            {/* Right: Close button */}
             <button
               onClick={onClose}
-              className="p-2 rounded-full hover:bg-slate-100 transition-colors shrink-0 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+              className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors flex items-center justify-center"
               aria-label="Close"
             >
-              <X className="w-5 h-5 text-slate-500" />
+              <X className="w-4 h-4 text-slate-500" />
             </button>
           </div>
         </div>
