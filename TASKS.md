@@ -11,7 +11,7 @@
 ### LAYER 2 — Stroke Pathway (do in order)
 - [x] [L2] Fix stroke pathway page header — commit c379146
 - [x] [L2] Fix stroke pathway layout — white context bar, correct tab sticky offset — commit b41e644
-- [ ] [L2] Step2 visual rebuild — CT result as clean radio cards, treatment decision cards, cobalt Save button
+- [x] [L2] Step2 visual rebuild — CT result as clean radio cards, treatment decision cards, cobalt Save button — commit 27cf421
 - [ ] [L2] Step3 visual rebuild — summary display, locked EMR template (Part B)
 - [ ] [L2] Step4 visual rebuild — orders layout
 - [ ] [L2] All stroke modals visual overhaul — use white header, clean body, cobalt primary action
@@ -46,6 +46,15 @@
 - [ ] [P1] Part B EMR template — replace three separate EMR generators with one locked template
 
 ## CONFIRMED CLEAN
+- [x] CodeModeStep2 visual rebuild — commit 27cf421
+  - CT Head: custom button-based radio cards with cobalt dot indicators (was: native <input> labels)
+  - Treatment Decision: custom radio cards with dose on sub-line (tPA: total / bolus / inf; TNK: single bolus)
+  - CTA/LVO: three equal pill buttons (Yes/No/Pending) + amber EVT Pathway button when LVO=yes
+  - Save CTA: bg-emerald-600 → bg-neuro-500, rounded-xl, min-h-[52px], "Save & Continue →"
+  - Summary bar: multi-line blue → single-line slate-50 with · separators
+  - BP alert: condensed to inline prose (no icon, no bullet list)
+  - Brain icon removed from lucide import (was content-only, not logic)
+  - Mobile QA: pass · Desktop QA: pass
 - [x] Content area top margin fix — commit f2f4b8e
   - card-content-panel: mt-3 (12px) → mt-16 (64px); scrollMarginTop: 99px → 163px
   - mt-3 was insufficient — sticky visual offset is 64px, content was 52px inside sticky area
