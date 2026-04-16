@@ -465,7 +465,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
           <button
             type="button"
             onClick={handleCopyToEMR}
-            className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 border border-slate-200 hover:bg-slate-50 rounded-xl transition-colors"
           >
             {copiedToClipboard ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             {copiedToClipboard ? 'Copied!' : 'Copy to EMR'}
@@ -474,7 +474,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 hover:bg-slate-50 rounded-xl transition-colors"
             >
               {onComplete ? 'Cancel' : 'Close'}
             </button>
@@ -482,7 +482,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
               <button
                 type="button"
                 onClick={handleComplete}
-                className="px-4 py-2 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors"
+                className="min-h-[44px] px-5 text-sm font-semibold text-white bg-neuro-500 hover:bg-neuro-600 rounded-xl transition-colors"
               >
                 Save &amp; Return →
               </button>
