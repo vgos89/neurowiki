@@ -651,21 +651,21 @@ const MainContent: React.FC = () => {
             <button
               type="button"
               onClick={() => setTpaReversalModalOpen(true)}
-              className="flex-1 min-h-[44px] py-2 px-3 rounded-lg border border-red-200 bg-red-50 text-red-700 text-xs font-medium text-left hover:bg-red-100 transition-colors"
+              className="flex-1 min-h-[44px] py-2 px-3 rounded-lg border border-red-200 bg-red-50 text-red-700 text-xs font-medium text-center whitespace-nowrap hover:bg-red-100 transition-colors"
             >
-              tPA/TNK reversal
+              tPA reversal
             </button>
             <button
               type="button"
               onClick={() => setOrolingualEdemaModalOpen(true)}
-              className="flex-1 min-h-[44px] py-2 px-3 rounded-lg border border-amber-200 bg-amber-50 text-amber-700 text-xs font-medium text-left hover:bg-amber-100 transition-colors"
+              className="flex-1 min-h-[44px] py-2 px-3 rounded-lg border border-amber-200 bg-amber-50 text-amber-700 text-xs font-medium text-center whitespace-nowrap hover:bg-amber-100 transition-colors"
             >
               Orolingual edema
             </button>
             <button
               type="button"
               onClick={() => setHemorrhageProtocolModalOpen(true)}
-              className="flex-1 min-h-[44px] py-2 px-3 rounded-lg border border-slate-200 bg-slate-50 text-slate-600 text-xs font-medium text-left hover:bg-slate-100 transition-colors"
+              className="flex-1 min-h-[44px] py-2 px-3 rounded-lg border border-slate-200 bg-slate-50 text-slate-600 text-xs font-medium text-center whitespace-nowrap hover:bg-slate-100 transition-colors"
             >
               ICH protocol
             </button>

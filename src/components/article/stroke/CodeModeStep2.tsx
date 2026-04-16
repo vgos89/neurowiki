@@ -124,7 +124,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
             type="button"
             onClick={handleStampCtRead}
             disabled={ctReadStamped}
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors focus:outline-none ${
               ctReadStamped
                 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 cursor-default'
                 : 'bg-neuro-50 text-neuro-700 border border-neuro-200 hover:bg-neuro-100'
@@ -318,9 +318,9 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
         type="button"
         onClick={handleComplete}
         disabled={!canComplete}
-        className="w-full min-h-[52px] py-3.5 bg-neuro-500 hover:bg-neuro-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all text-sm"
+        className="w-full min-h-[52px] py-3.5 bg-neuro-500 hover:bg-neuro-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all text-sm"
       >
-        {canComplete ? 'Save & Continue →' : 'Select CT result to continue'}
+        {canComplete ? 'Save & Continue →' : <span className="italic opacity-75">Select CT result to continue</span>}
       </button>
 
     </div>
