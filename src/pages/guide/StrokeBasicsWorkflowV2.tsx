@@ -327,7 +327,7 @@ const MainContent: React.FC = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveCard(tab.id)}
-                className={`flex-1 py-2.5 text-xs font-medium transition-colors border-b-2 -mb-px ${
+                className={`flex-1 py-2.5 text-xs font-medium transition-colors border-b-2 -mb-px focus:outline-none ${
                   activeCard === tab.id
                     ? 'border-neuro-500 text-neuro-500'
                     : 'border-transparent text-slate-400 hover:text-slate-600'

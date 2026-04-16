@@ -149,7 +149,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
               <button
                 type="button"
                 onClick={() => setClockPickerOpen(true)}
-                className="text-2xl font-semibold text-slate-900 tracking-tight hover:text-neuro-600 transition-colors"
+                className="text-2xl font-semibold text-slate-900 tracking-tight hover:text-neuro-600 transition-colors whitespace-nowrap"
               >
                 {lkwTimeDisplay}
               </button>

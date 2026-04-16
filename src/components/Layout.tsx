@@ -810,7 +810,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </header>
 
         {/* Main Content with extra padding for mobile bottom nav + sticky actions */}
-        <main ref={mainRef} className={`flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-900 px-4 pb-24 ${isStrokePage ? 'pt-0' : 'pt-16'} md:px-8 md:pb-8 scroll-smooth`}>
+        <main ref={mainRef} className={`flex-1 overflow-y-auto bg-white dark:bg-slate-900 px-4 pb-24 ${isStrokePage ? 'pt-0' : 'pt-16'} md:px-8 md:pb-8 scroll-smooth`}>
           <div className="max-w-7xl mx-auto">
             {children}
           </div>
