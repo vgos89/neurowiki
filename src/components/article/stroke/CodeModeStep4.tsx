@@ -360,10 +360,10 @@ const CategoryIcon: React.FC<{ category: string; className?: string }> = ({ cate
 
 const getEvidenceBadgeStyle = (evidenceClass?: string) => {
   switch (evidenceClass) {
-    case 'I':   return 'bg-green-50 text-green-700 border-green-300';
-    case 'IIa': return 'bg-blue-50 text-blue-700 border-blue-300';
-    case 'IIb': return 'bg-yellow-50 text-yellow-700 border-yellow-300';
-    case 'III': return 'bg-red-50 text-red-700 border-red-300';
+    case 'I':   return 'bg-emerald-100 text-emerald-800';
+    case 'IIa': return 'bg-neuro-50 text-neuro-700';
+    case 'IIb': return 'bg-amber-50 text-amber-700';
+    case 'III': return 'bg-slate-100 text-slate-600';
     default:    return 'bg-slate-50 text-slate-700 border-slate-300';
   }
 };
@@ -556,12 +556,12 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
           type="button"
           onClick={handleCopyToEMR}
           disabled={selectedOrders.length === 0}
-          className={`flex items-center gap-2 px-6 py-2.5 font-bold rounded-lg transition-all ${
+          className={`flex items-center gap-2 px-6 py-2.5 font-semibold rounded-xl min-h-[44px] transition-all ${
             selectedOrders.length === 0
               ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
               : copied
-                ? 'bg-green-600 text-white'
-                : 'bg-slate-700 text-white hover:bg-slate-800'
+                ? 'bg-emerald-500 text-white'
+                : 'bg-neuro-500 text-white hover:bg-neuro-600'
           }`}
         >
           {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -571,7 +571,7 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
         <button
           type="button"
           onClick={handleComplete}
-          className="px-8 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg shadow-lg transition-all active:scale-[0.98] flex items-center gap-2"
+          className="px-8 py-2.5 min-h-[44px] bg-neuro-500 hover:bg-neuro-600 text-white font-semibold rounded-xl transition-colors active:scale-[0.98] flex items-center gap-2"
         >
           <span>Save Orders</span>
         </button>
