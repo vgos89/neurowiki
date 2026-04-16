@@ -12,9 +12,9 @@
 - [x] [L2] Fix stroke pathway page header — commit c379146
 - [x] [L2] Fix stroke pathway layout — white context bar, correct tab sticky offset — commit b41e644
 - [x] [L2] Step2 visual rebuild — CT result as clean radio cards, treatment decision cards, cobalt Save button — commit 27cf421
-- [ ] [L2] Fix "Stamp CT Time" button focus ring box in CodeModeStep2.tsx — add focus:outline-none matching tab fix
-- [ ] [L2] Fix emergency strip text wrapping — "tPA/TNK reversal" and "Orolingual edema" wrapping to two lines on mobile, add whitespace-nowrap or shorten text
-- [ ] [L2] Improve disabled CTA visual state — "Select CT result to continue" button looks enabled when disabled, increase opacity-40 to opacity-50 and add italic text style to make inactive state clearer
+- [x] [L2] Fix "Stamp CT Time" button focus ring box in CodeModeStep2.tsx — commit 0bfea9a
+- [x] [L2] Fix emergency strip text wrapping — whitespace-nowrap + text-center, "tPA/TNK reversal"→"tPA reversal" — commit 0bfea9a
+- [x] [L2] Improve disabled CTA visual state — opacity-40→50, italic span on disabled text — commit 0bfea9a
 - [x] [L2] Step3 visual rebuild — summary display, locked EMR template (Part B) — commit ad51b4d
 - [x] [L2] Step4 visual polish — design system tokens, cobalt buttons, evidence badges — commit 684bf89
 - [ ] [L2] All stroke modals visual overhaul — use white header, clean body, cobalt primary action
@@ -59,6 +59,11 @@
 - [ ] [P2] All other pathway pages visual rebuild — StatusEpilepticusPathway, MigrainePathway, ExtendedIVTPathway, GCAPathway, ElanPathway, EvtPathway — apply same visual treatment as stroke pathway after component library exists.
 
 ## CONFIRMED CLEAN
+- [x] Three L2 polish fixes — commit 0bfea9a
+  - CodeModeStep2: Stamp CT Time + focus:outline-none (no focus box)
+  - StrokeBasicsWorkflowV2: emergency strip text-center + whitespace-nowrap, "tPA/TNK reversal"→"tPA reversal"
+  - CodeModeStep2: disabled CTA opacity-40→50, italic span on disabled text
+  - Mobile QA: pass · Desktop QA: pass
 - [x] CodeModeStep4 design system polish — commit 684bf89
   - Evidence badges: green→emerald-100/800, blue→neuro-50/700, yellow→amber-50/700, red→slate-100/600
   - Copy to EMR button: bg-slate-700→bg-neuro-500, hover:neuro-600, green-600→emerald-500 (copied), rounded-xl, min-h-[44px]
