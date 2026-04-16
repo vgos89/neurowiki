@@ -42,9 +42,9 @@ export const ThrombectomyPathwayModal: React.FC<ThrombectomyPathwayModalProps> =
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="relative w-full max-w-6xl max-h-[95vh] bg-white dark:bg-gray-900 rounded-xl shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300">
+      <div className="relative w-full max-w-6xl max-h-[95vh] bg-white dark:bg-slate-900 rounded-xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-300" style={{ boxShadow: '0 8px 40px rgba(0,0,0,0.18)' }}>
         {/* Modal Header — matches standalone EVT Pathway header style */}
-        <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-slate-100 shadow-sm z-10">
+        <div className="sticky top-0 bg-white border-b border-slate-100 z-10">
           <div className="flex items-center justify-between h-14 px-4 gap-3">
             {/* Left: Icon badge + Title */}
             <div className="flex items-center gap-2.5 min-w-0">

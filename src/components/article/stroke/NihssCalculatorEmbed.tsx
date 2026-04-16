@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo } from 'react';
-import { Info, Copy, RefreshCw, Check } from 'lucide-react';
+import { Info, Copy, RefreshCw, Check, X } from 'lucide-react';
 import { NIHSS_ITEMS, calculateTotal, getItemWarning, calculateLvoProbability } from '../../../utils/nihssShortcuts';
 import NihssItemCard from '../../NihssItemCard';
 
@@ -80,7 +80,7 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
   return (
     <div className="flex flex-col h-full min-h-0">
       {/* ── Sticky control bar ─────────────────────────────────────────── */}
-      <div className="sticky top-0 z-10 bg-white border-b border-slate-100 shadow-sm px-1 py-2 flex items-center justify-between gap-2 flex-wrap">
+      <div className="sticky top-0 z-10 bg-white border-b border-slate-100 px-1 py-2 flex items-center justify-between gap-2 flex-wrap">
 
         {/* Score */}
         <div className="flex-shrink-0">
@@ -115,9 +115,10 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
             <div className="absolute left-4 right-4 mt-2 p-4 bg-white rounded-xl shadow-xl border border-slate-200 z-50">
               <button
                 onClick={() => setShowLvoTooltip(false)}
-                className="absolute top-2 right-3 text-slate-400 hover:text-slate-600 text-lg leading-none"
+                className="absolute top-2 right-3 w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center transition-colors"
+                aria-label="Close"
               >
-                ×
+                <X className="w-3 h-3 text-slate-500" />
               </button>
               <p className="text-sm font-bold text-slate-900 mb-3">LVO Probability (RACE Scale)</p>
               <div className="mb-3 p-2 bg-slate-50 rounded-lg">
@@ -273,7 +274,7 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
           onClick={() => onApply(total)}
           className="min-h-[44px] px-6 py-2 text-sm font-semibold text-white bg-neuro-500 hover:bg-neuro-600 active:bg-neuro-700 rounded-xl transition-colors"
         >
-          Apply score to workflow — {total}
+          Apply score — {total}
         </button>
       </div>
     </div>
