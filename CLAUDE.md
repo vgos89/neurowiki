@@ -1,6 +1,6 @@
 # NeuroWiki — CLAUDE.md (v3.1)
 
-> Operating manual for this repo. Every Claude Code session reads this on startup. This file is the **contract** — changes are deliberate and committed. Task-specific notes live in `tasks.md`. Architectural decisions live in `PRD.md` and `docs/adrs/`.
+> Operating manual for this repo. Every Claude Code session reads this on startup. This file is the **contract** — changes are deliberate and committed. Task-specific notes live in `TASKS.md`. Architectural decisions live in `PRD.md` and `docs/adrs/`.
 
 ---
 
@@ -41,7 +41,7 @@ Files in this repo can drift. When sources conflict, apply this order — higher
 
 1. **Most recent ADR** (`docs/adrs/`, dated) — architecture truth
 2. **PRD.md** — product intent. Beats task-level notes for product questions.
-3. **Most recent `tasks.md` entry** — execution state. Does *not* override an ADR or PRD without an explicit update to that higher source first.
+3. **Most recent `TASKS.md` entry** — execution state. Does *not* override an ADR or PRD without an explicit update to that higher source first.
 4. **CLAUDE.md** (this file) — governs process, not product or architecture truth
 5. **In-session conversation / chat context** — transient. Never overrides any committed file.
 
@@ -51,7 +51,7 @@ Files in this repo can drift. When sources conflict, apply this order — higher
 - **Explicit supersession only.** A newer source overrides an older one at the same tier *only when it explicitly names the older one as superseded*. Implicit contradiction is not supersession — it's a conflict to escalate.
 - **If scope is unclear, escalate before proceeding.** Do not average, synthesize, or pick the newer one by default.
 
-**When sources conflict, escalate — do not silently pick.** The orchestrator states the conflict, shows both sources, asks V for resolution, and commits the resolution (new ADR, PRD update, or `tasks.md` update) *before* proceeding with work.
+**When sources conflict, escalate — do not silently pick.** The orchestrator states the conflict, shows both sources, asks V for resolution, and commits the resolution (new ADR, PRD update, or `TASKS.md` update) *before* proceeding with work.
 
 ---
 
@@ -72,7 +72,7 @@ Example: `ui-architect` wants a cleaner component shape; `medical-scientist` say
 ## 5. Golden rules
 
 1. **Plan before execute** for Class C/D/E (see §6). No code until V has seen and approved a plan.
-2. **Chat thinks, Code executes, files remember.** Claude.ai chat is for strategy and translation. Claude Code executes. `CLAUDE.md`, `tasks.md`, `PRD.md`, `.claude/` are the persistent memory. Never ask V to re-explain what's in the files — read them.
+2. **Chat thinks, Code executes, files remember.** Claude.ai chat is for strategy and translation. Claude Code executes. `CLAUDE.md`, `TASKS.md`, `PRD.md`, `.claude/` are the persistent memory. Never ask V to re-explain what's in the files — read them.
 3. **Every output is bilingual.** Technical panel + English panel. See §10.
 4. **Safety over speed.** Clinical tool. No fabricated claims. See §13.
 5. **Silo wall.** This repo's agents, skills, lessons, and memory never cross over to Pager Flow, KinTrack, or Tidbit Health.
@@ -87,7 +87,7 @@ Not every task goes through the same machinery. Classify before acting.
 |---|---|---|---|---|---|
 | **A — Question** | Explanation, clarification, code-reading, no change | No | No | Main session only | None |
 | **B — Tiny Edit** | ≤5 lines, single file, obvious fix (typo, import, format) | No | No — proceed and report | Main session only | One-line PR title |
-| **C — Scoped Feature** | Normal feature work, single area of code | Yes | Yes — plan approval | 1–2 primary | Bilingual PR, test for new logic, `tasks.md` update |
+| **C — Scoped Feature** | Normal feature work, single area of code | Yes | Yes — plan approval | 1–2 primary | Bilingual PR, test for new logic, `TASKS.md` update |
 | **D — High-Risk Change** | Crosses boundaries, refactor, breaking change, new dep, schema change | Yes — architect-reviewed | Yes — plan + architect sign-off | Architect + specialists, serial preferred | C artifacts + ADR + rollback note + migration plan if schema + architect review artifact (§17) |
 | **E — Clinical Logic Change** | Algorithm thresholds, interpretation text, guideline updates, citation changes | Yes — full plan | Plan approval + pre-execution clinical-reviewer gate | Medical-scientist + clinical-reviewer + whoever else | C artifacts + citation record update + `last_reviewed` refresh + clinical review artifact (§17) + rollback plan |
 
@@ -139,7 +139,7 @@ When a classification is genuinely ambiguous, orchestrator presents the two cand
 
 ## 7. Task status lifecycle
 
-Every task in `tasks.md` has an explicit status. "Done" is not binary.
+Every task in `TASKS.md` has an explicit status. "Done" is not binary.
 
 | Status | Meaning |
 |---|---|
@@ -169,7 +169,7 @@ It **skips** for:
 - V-initiated Class B edits with explicit scope ("just fix the typo in X")
 - Re-entry within the same work day on a known task
 
-`/status` reads `tasks.md` and `PRD.md` and reports: what shipped last, what's open (by status — §7), what's blocked, what's in the parking lot, and a recommended next task with one-sentence rationale. Then asks V to confirm or pick differently.
+`/status` reads `TASKS.md` and `PRD.md` and reports: what shipped last, what's open (by status — §7), what's blocked, what's in the parking lot, and a recommended next task with one-sentence rationale. Then asks V to confirm or pick differently.
 
 Rule of thumb: *if you don't know where you are, `/status`.* Not: *you must always `/status`.*
 
@@ -180,7 +180,7 @@ Rule of thumb: *if you don't know where you are, `/status`.* Not: *you must alwa
 V is prone to mid-session segues — new feature ideas, bugs spotted, tangential questions, user feedback. Four triggers, all common, all legitimate. None belong in the middle of another task.
 
 - **`/focus`** — re-state current task goal and acceptance criteria. Refuse new scope. Ask if the new input should be parked.
-- **`/park <short description>`** — append to the Parking Lot section of `tasks.md` with timestamp and the task it came up during. Return to current work.
+- **`/park <short description>`** — append to the Parking Lot section of `TASKS.md` with timestamp and the task it came up during. Return to current work.
 - **Default posture:** if V mentions a new idea mid-task without using `/park`, *treat it as a park request*. Draft the parking-lot entry, show V for one-word approval, resume current task.
 - **Exception:** production bug, clinical safety issue, regulatory concern — say so explicitly and ask V to confirm the pivot.
 
@@ -332,7 +332,7 @@ The pre-commit hook scans all shipped phases. A new surface type requires a new 
 - Scans changed files for every tagging mechanism in §13.4 that is in its shipped phase
 - Fails the commit if any tagged claim has no entry in `CLAIM_REGISTRY`
 - Fails the commit if any mapped citation has no `last_reviewed` date
-- Fails the commit if any citation is older than its review window (§13.7) and not marked `blocked:awaiting-review` in `tasks.md`
+- Fails the commit if any citation is older than its review window (§13.7) and not marked `blocked:awaiting-review` in `TASKS.md`
 
 This is the hard gate. "No fabricated claims" is enforced here — but only to the extent of metadata completeness (see §13.1).
 
@@ -378,7 +378,7 @@ For Class D/E, a rollback plan is required in the PR body *before merge*. If a r
 
 1. **Immediate revert** — `git revert <merge-commit>` and push. If revert is not clean, proceed to step 2.
 2. **Feature flag disable** — if the change is behind a flag, disable via config; users see previous behavior.
-3. **Post-mortem task** — auto-created in `tasks.md` under `## Post-Mortems` with timestamp, symptom, suspected cause. Status: `reverted`.
+3. **Post-mortem task** — auto-created in `TASKS.md` under `## Post-Mortems` with timestamp, symptom, suspected cause. Status: `reverted`.
 4. **Post-mortem doc** — `docs/YYYY_MM_DD/post-mortem-<slug>.md`. Template in `docs/adrs/post-mortem-template.md`.
 5. **Re-enable gate** — `clinical-reviewer` + `system-architect` must both sign off (via §17 review artifacts) before the change re-enters.
 
@@ -386,7 +386,7 @@ For Class D/E, a rollback plan is required in the PR body *before merge*. If a r
 
 ## 15. Acceptance criteria — every Class C/D/E task
 
-When a task is created or planned, `tasks.md` entry must include:
+When a task is created or planned, `TASKS.md` entry must include:
 
 ```
 ### [Task slug] — Class [X][-clinical?]
@@ -411,7 +411,7 @@ What must exist after work is done, beyond the code itself:
 |---|---|
 | A | None |
 | B | One-line PR title |
-| C | Bilingual PR description · test for new logic · `tasks.md` status update |
+| C | Bilingual PR description · test for new logic · `TASKS.md` status update |
 | D | C artifacts + ADR in `docs/adrs/` + rollback note + migration plan (if schema) + **architect review artifact (§17)** |
 | E | D artifacts + citation record update + `last_reviewed` refresh via §13.6 + **clinical review artifact (§17)** + rollback plan |
 
@@ -554,12 +554,12 @@ docs/
 scripts/
 └── check-claims.ts             # Pre-commit claim/citation validator
 
-tasks.md                        # Living TODO + parking lot + stale content + post-mortems
+TASKS.md                        # Living TODO + parking lot + stale content + post-mortems
 PRD.md                          # Product decisions, appended with date
 CLAUDE.md                       # This file
 ```
 
-**Note on `src/pages/`:** despite the name, this is a Vite + React Router 7 SPA. `src/pages/` contains *page-level React components*, not Next.js pages. There is no file-based routing. If this naming causes confusion with agents that pattern-match on "pages" → Next.js, a future Class D refactor could rename to `src/routes/` or `src/views/`. Not urgent, but tracked as a `tasks.md` item under "Future Refactors."
+**Note on `src/pages/`:** despite the name, this is a Vite + React Router 7 SPA. `src/pages/` contains *page-level React components*, not Next.js pages. There is no file-based routing. If this naming causes confusion with agents that pattern-match on "pages" → Next.js, a future Class D refactor could rename to `src/routes/` or `src/views/`. Not urgent, but tracked as a `TASKS.md` item under "Future Refactors."
 
 ---
 
@@ -569,12 +569,12 @@ Every command has defined happy path *and* failure behavior. Commands defined in
 
 | Command | Happy path | On failure |
 |---|---|---|
-| `/status` | Report state, recommend next task | Missing `tasks.md` → report absence, offer to create; skip recommendation |
+| `/status` | Report state, recommend next task | Missing `TASKS.md` → report absence, offer to create; skip recommendation |
 | `/focus` | Re-state current task, refuse scope | No active task → ask V to pick or create one |
-| `/park <idea>` | Append to parking lot, resume current task | `tasks.md` not writable → console log + ask V to commit manually |
+| `/park <idea>` | Append to parking lot, resume current task | `TASKS.md` not writable → console log + ask V to commit manually |
 | `/classify <task>` | Assign class + flag, state reasoning (ref §6.1) | Ambiguous between classes → present the two candidates with trade-offs, ask V to decide |
 | `/plan-feature <goal>` | Bilingual plan; route to architect if D/E | Missing acceptance criteria → ask V to fill template first |
-| `/audit-citations` | List stale citations, create re-review tasks | Can't write `tasks.md` → console report, ask V to commit manually |
+| `/audit-citations` | List stale citations, create re-review tasks | Can't write `TASKS.md` → console report, ask V to commit manually |
 | `/pr-ready` | Run gates, prepare bilingual PR description | Partial artifacts → list exactly what's missing, refuse to open PR |
 | `/rollback <commit>` | Revert, flag-disable, post-mortem | Revert not clean → stop, escalate to V, no feature-flag action without explicit confirmation |
 
@@ -582,6 +582,6 @@ Every command has defined happy path *and* failure behavior. Commands defined in
 
 ## 23. What this file is not
 
-Not a place for in-progress notes, transient context, or task-specific work — those go in `tasks.md`. This file is the **contract** for how work gets done. Changes are deliberate.
+Not a place for in-progress notes, transient context, or task-specific work — those go in `TASKS.md`. This file is the **contract** for how work gets done. Changes are deliberate.
 
 **If this file drifts from how we actually work, update it.** A contract that's silently violated is worse than no contract.
