@@ -1,6 +1,6 @@
 # CALCULATOR_SPEC.md — NeuroWiki Calculator Design Specification
 
-**Version:** 1.0
+**Version:** 1.0.1
 **Status:** Locked after PM approval
 **Owner:** Design Guardian
 **Mockup:** docs/specs/mockups/calculator-reference.html
@@ -497,6 +497,66 @@ Content appears in this order, with no exceptions:
 
 Max drawer height when expanded: `max-h-[60vh] overflow-y-auto` on the content div.
 
+### 5.2 Drawer Header Text — Responsive Rules
+
+The collapsed drawer header must render in a **single line at 375px viewport width** (iPhone SE, the minimum supported device).
+
+**Format rule:**
+```
+{Severity label} · {primary stat}
+```
+- Severity label: "Low risk", "Moderate risk", "High risk"
+- Primary stat: percentage only — `{N}%`. No descriptor ("30-day mortality", "per 100 pt-yr", etc.).
+- Stat descriptors belong in the expanded drawer's `explanation` prose only.
+
+**Width budget at 375px:**
+- Viewport: 375px
+- Drawer `px-5` padding: 40px (20px each side)
+- "INTERPRETATION" label + `gap-3`: ~124px
+- Chevron + spacing: ~32px
+- Available for severity + stat text: ~179px
+
+**Maximum collapsed header string: 40 characters.** This provides margin against font rendering variation.
+
+Content Writer must verify character count before sign-off:
+```bash
+echo -n "Moderate risk · 26%" | wc -c  # → 19 — passes
+```
+
+Computed lengths for ICH Score (reference):
+| Score range | Collapsed header string | Length |
+|-------------|------------------------|--------|
+| 0 | "Low risk · 0%" | 13 |
+| 1 | "Low risk · 13%" | 14 |
+| 2 | "Moderate risk · 26%" | 19 |
+| 3 | "High risk · 72%" | 15 |
+| 4 | "High risk · 97%" | 15 |
+| 5–6 | "High risk · 100%" | 16 |
+
+### 5.3 Drawer Vertical Positioning
+
+The drawer portal must sit **above the global mobile tab bar**, not beneath it.
+
+**CSS variable (defined in `index.css @theme {}`):**
+```css
+--tab-bar-height: 4.5rem;  /* 72px — mobile bottom nav measured height */
+```
+
+The Layout.tsx mobile nav does not have an explicit `h-16` class; its height is content-driven (~73px on non-safe-area devices). `4.5rem` is the canonical value.
+
+**Drawer portal bottom offset:**
+```tsx
+style={{ bottom: 'calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))' }}
+```
+
+Do **not** hardcode a pixel value. If Layout.tsx changes the tab bar height, update `--tab-bar-height` in `index.css`; all calculator drawers inherit the fix automatically.
+
+**Z-index:** The drawer portal must use `z-[55]` — above the tab bar (`z-50`) and below toast notifications (`z-[60]`). This is a gap in the CLAUDE.md z-index table; `z-[55]` is the designated slot for calculator drawer portals.
+
+**Mobile-First Developer sign-off must verify:**
+- No tab bar overlap on 375px, 390px, 414px viewports
+- Drawer fully visible above tab bar in States C and D (both collapsed and expanded)
+
 ---
 
 ## §6 Severity Threshold Rules
@@ -636,6 +696,17 @@ This interface is the contract between the score data file and the page componen
 ## §9 Changelog
 
 ```
+2026-04-17 · v1.0.1 · Patch release.
+  Two additions to §5: drawer header text single-line rule (§5.2) and drawer
+  vertical positioning above global tab bar (§5.3). Both surfaced as bugs
+  during ICH Score rebuild browser testing on 375px viewport.
+  §5.2: collapsed header stat format shortened to "{N}%" only; descriptor
+    moves to expanded prose. 40-char maximum enforced.
+  §5.3: --tab-bar-height CSS variable (4.5rem) added to index.css @theme;
+    drawer portal uses calc(var(--tab-bar-height) + env(safe-area-inset-bottom))
+    instead of hardcoded pixel value. Drawer z-index raised to z-[55] (above
+    tab bar z-50, below toast z-[60]).
+
 2026-04-17 · v1.0 · Initial spec locked.
   Three archetypes documented. Bottom drawer state machine established.
   Severity thresholds sourced from primary literature (see §6).

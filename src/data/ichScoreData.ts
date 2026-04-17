@@ -182,7 +182,7 @@ export function calculateICHScore(inputs: ICHScoreInputs): ICHCalculatorResult {
     mortality,
     severity,
     label,
-    stat: `${mortality}% 30-day mortality`,
+    stat: `${mortality}%`,   // collapsed header only — "30-day mortality" context in explanation prose
     interpretation,
     explanation,
     seeAlso: ['calc/gcs', 'article/ich-management'],

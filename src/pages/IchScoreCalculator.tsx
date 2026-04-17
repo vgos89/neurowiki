@@ -763,8 +763,8 @@ const IchScoreCalculator: React.FC = () => {
       {/* ── Drawer portal — fixed above mobile bottom nav §1.3 ───────────── */}
       {createPortal(
         <div
-          className="fixed left-0 right-0 z-[45] bg-white"
-          style={{ bottom: 'calc(56px + env(safe-area-inset-bottom, 0px))' }}
+          className="fixed left-0 right-0 z-[55] bg-white"
+          style={{ bottom: 'calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))' }}
         >
           <Drawer />
         </div>,

@@ -19,6 +19,10 @@
   --color-neuro-700: #0E2D6B;
   --color-neuro-800: #0A2154;
   --color-neuro-900: #06143D;
+  /* Mobile bottom nav height (Layout.tsx — no explicit h-16; content-driven ~73px).
+     Drawer portals must offset by this value + env(safe-area-inset-bottom).
+     CALCULATOR_SPEC.md §5.3 */
+  --tab-bar-height: 4.5rem;
 }
 
 body {
