@@ -91,7 +91,7 @@ export default function HeidelbergBleedingCalculator() {
               <button onClick={handleReset} className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label="Reset calculator">
                 <RefreshCw size={18} className="text-slate-500 dark:text-slate-400" aria-hidden="true" />
               </button>
-              <button onClick={handleCopy} className="bg-slate-900 dark:bg-slate-700 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors">
+              <button onClick={handleCopy} className="bg-neuro-500 hover:bg-neuro-600 text-white px-3 md:px-4 py-2 rounded-xl text-sm font-semibold transition-colors">
                 <span className="hidden sm:inline">Copy</span>
                 <Copy size={18} className="sm:hidden inline" aria-hidden="true" />
               </button>
@@ -111,7 +111,7 @@ export default function HeidelbergBleedingCalculator() {
         </section>
 
         {result && (
-          <section className="mb-6 p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50" aria-live="polite">
+          <section className="mb-6 p-4 rounded-xl border border-slate-100 bg-white" aria-live="polite">
             <h2 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Interpretation</h2>
             <p className="text-slate-800 dark:text-slate-200 font-medium">{result.classification}</p>
             <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">{result.clinicalSignificance}</p>
@@ -130,7 +130,7 @@ export default function HeidelbergBleedingCalculator() {
                   role="radio"
                   aria-checked={inputs.bleedingClass === opt.value}
                   onClick={() => setClass(opt.value)}
-                  className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.bleedingClass === opt.value ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}
+                  className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.bleedingClass === opt.value ? 'border-neuro-500 bg-neuro-50 text-neuro-700' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}
                 >
                   <span className="font-semibold text-slate-900 dark:text-white">{opt.label}</span>
                   <span className="block text-xs text-slate-500 dark:text-slate-400 mt-0.5">{opt.description}</span>
@@ -144,8 +144,8 @@ export default function HeidelbergBleedingCalculator() {
               <h2 id="heidelberg-symptomatic-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Symptomatic ICH (SICH)?</h2>
               <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">New hemorrhage associated with ≥4 pt NIHSS increase, ≥2 pt in one subcategory, or leading to intubation/hemicraniectomy/EVD, with no other explanation.</p>
               <div role="radiogroup" aria-labelledby="heidelberg-symptomatic-label" className="flex gap-2">
-                <button type="button" role="radio" aria-checked={inputs.symptomatic === false} onClick={() => setSymptomatic(false)} className={`flex-1 py-3 px-4 rounded-xl border-2 min-h-[44px] font-medium transition-all ${inputs.symptomatic === false ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 bg-white dark:bg-slate-800'}`}>Asymptomatic (aSICH)</button>
-                <button type="button" role="radio" aria-checked={inputs.symptomatic === true} onClick={() => setSymptomatic(true)} className={`flex-1 py-3 px-4 rounded-xl border-2 min-h-[44px] font-medium transition-all ${inputs.symptomatic === true ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 bg-white dark:bg-slate-800'}`}>Symptomatic (SICH)</button>
+                <button type="button" role="radio" aria-checked={inputs.symptomatic === false} onClick={() => setSymptomatic(false)} className={`flex-1 py-3 px-4 rounded-xl border-2 min-h-[44px] font-medium transition-all ${inputs.symptomatic === false ? 'border-neuro-500 bg-neuro-50 text-neuro-700' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 bg-white dark:bg-slate-800'}`}>Asymptomatic (aSICH)</button>
+                <button type="button" role="radio" aria-checked={inputs.symptomatic === true} onClick={() => setSymptomatic(true)} className={`flex-1 py-3 px-4 rounded-xl border-2 min-h-[44px] font-medium transition-all ${inputs.symptomatic === true ? 'border-neuro-500 bg-neuro-50 text-neuro-700' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 bg-white dark:bg-slate-800'}`}>Symptomatic (SICH)</button>
               </div>
             </section>
           )}
@@ -154,7 +154,7 @@ export default function HeidelbergBleedingCalculator() {
         <footer className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
           <p className="text-xs text-slate-500 dark:text-slate-400">
             <strong>Source:</strong> <cite>{HEIDELBERG_CITATION.authors}. {HEIDELBERG_CITATION.title}. {HEIDELBERG_CITATION.journal}. {HEIDELBERG_CITATION.year};{HEIDELBERG_CITATION.volume}({HEIDELBERG_CITATION.issue}):{HEIDELBERG_CITATION.pages}.</cite>{' '}
-            <a href={`https://doi.org/${HEIDELBERG_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">DOI</a>
+            <a href={`https://doi.org/${HEIDELBERG_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-neuro-600 hover:underline">DOI</a>
           </p>
           <p className="mt-4 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
             <strong>Educational use only.</strong> For hemorrhagic transformation after reperfusion therapy. Does not replace clinical judgment. HI = hemorrhagic infarction; PH = parenchymal hematoma (ECASS terminology).

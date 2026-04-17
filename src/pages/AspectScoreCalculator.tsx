@@ -198,7 +198,7 @@ const AspectScoreCalculator: React.FC = () => {
               </button>
               <button
                 onClick={handleCopy}
-                className="bg-slate-900 dark:bg-slate-700 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors"
+                className="bg-neuro-500 hover:bg-neuro-600 text-white px-3 md:px-4 py-2 rounded-xl text-sm font-semibold transition-colors"
               >
                 <span className="hidden sm:inline">Copy</span>
                 <Copy size={18} className="sm:hidden inline" aria-hidden="true" />
@@ -391,7 +391,7 @@ const AspectScoreCalculator: React.FC = () => {
               href="https://doi.org/10.1016/s0140-6736(00)02237-6"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 dark:text-blue-400 hover:underline"
+              className="text-neuro-600 hover:underline"
             >
               DOI
             </a>

@@ -123,7 +123,7 @@ export default function HasBledScoreCalculator() {
               <button onClick={handleReset} className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label="Reset calculator">
                 <RefreshCw size={18} className="text-slate-500 dark:text-slate-400" aria-hidden="true" />
               </button>
-              <button onClick={handleCopy} className="bg-slate-900 dark:bg-slate-700 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors">
+              <button onClick={handleCopy} className="bg-neuro-500 hover:bg-neuro-600 text-white px-3 md:px-4 py-2 rounded-xl text-sm font-semibold transition-colors">
                 <span className="hidden sm:inline">Copy</span>
                 <Copy size={18} className="sm:hidden inline" aria-hidden="true" />
               </button>
@@ -142,7 +142,7 @@ export default function HasBledScoreCalculator() {
           </p>
         </section>
 
-        <section className="mb-6 p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50" aria-live="polite">
+        <section className="mb-6 p-4 rounded-xl border border-slate-100 bg-white" aria-live="polite">
           <h2 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Interpretation</h2>
           <p className="text-slate-800 dark:text-slate-200 font-medium">
             {HASBLED_RISK_LABELS[result.risk]} · <strong>{result.bleedsPer100PatientYears}</strong> major bleeds per 100 patient-years
@@ -158,12 +158,12 @@ export default function HasBledScoreCalculator() {
           {CHECKBOX_ITEMS.map(({ key, label, sublabel }) => (
             <section key={key} aria-labelledby={`hasbled-${key}`}>
               <h2 id={`hasbled-${key}`} className="sr-only">{label}</h2>
-              <label className="flex items-start gap-3 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer transition-all border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-blue-900/20">
+              <label className="flex items-start gap-3 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer transition-all border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 has-[:checked]:border-neuro-500 has-[:checked]:bg-neuro-50">
                 <input
                   type="checkbox"
                   checked={!!inputs[key]}
                   onChange={(e) => setCheck(key, e.target.checked)}
-                  className="mt-1 w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                  className="mt-1 w-5 h-5 rounded border-slate-300 text-neuro-600 focus:ring-neuro-500"
                   aria-describedby={sublabel ? `hasbled-desc-${key}` : undefined}
                 />
                 <span className="flex-1">
@@ -178,16 +178,16 @@ export default function HasBledScoreCalculator() {
             <h2 id="hasbled-warfarin-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Labile INR (only if on warfarin)</h2>
             <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">Add 1 point only when the patient is on warfarin and has labile INR (e.g. TTR &lt;60%). Not applicable for DOAC-only.</p>
             <div className="flex flex-wrap gap-2">
-              <label className="inline-flex items-center gap-2 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer border-slate-200 dark:border-slate-600 hover:border-slate-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-blue-900/20">
-                <input type="radio" name="warfarin" checked={!inputs.onWarfarin} onChange={() => setInputs((p) => ({ ...p, onWarfarin: false, labileINR: false }))} className="w-4 h-4 text-blue-600" />
+              <label className="inline-flex items-center gap-2 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer border-slate-200 dark:border-slate-600 hover:border-slate-300 has-[:checked]:border-neuro-500 has-[:checked]:bg-neuro-50">
+                <input type="radio" name="warfarin" checked={!inputs.onWarfarin} onChange={() => setInputs((p) => ({ ...p, onWarfarin: false, labileINR: false }))} className="w-4 h-4 text-neuro-600" />
                 <span className="font-medium text-slate-900 dark:text-white">Not on warfarin (0 pt)</span>
               </label>
-              <label className="inline-flex items-center gap-2 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer border-slate-200 dark:border-slate-600 hover:border-slate-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-blue-900/20">
-                <input type="radio" name="warfarin" checked={inputs.onWarfarin && !inputs.labileINR} onChange={() => setInputs((p) => ({ ...p, onWarfarin: true, labileINR: false }))} className="w-4 h-4 text-blue-600" />
+              <label className="inline-flex items-center gap-2 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer border-slate-200 dark:border-slate-600 hover:border-slate-300 has-[:checked]:border-neuro-500 has-[:checked]:bg-neuro-50">
+                <input type="radio" name="warfarin" checked={inputs.onWarfarin && !inputs.labileINR} onChange={() => setInputs((p) => ({ ...p, onWarfarin: true, labileINR: false }))} className="w-4 h-4 text-neuro-600" />
                 <span className="font-medium text-slate-900 dark:text-white">On warfarin, stable INR (0 pt)</span>
               </label>
-              <label className="inline-flex items-center gap-2 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer border-slate-200 dark:border-slate-600 hover:border-slate-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-blue-900/20">
-                <input type="radio" name="warfarin" checked={inputs.onWarfarin && inputs.labileINR} onChange={() => setInputs((p) => ({ ...p, onWarfarin: true, labileINR: true }))} className="w-4 h-4 text-blue-600" />
+              <label className="inline-flex items-center gap-2 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer border-slate-200 dark:border-slate-600 hover:border-slate-300 has-[:checked]:border-neuro-500 has-[:checked]:bg-neuro-50">
+                <input type="radio" name="warfarin" checked={inputs.onWarfarin && inputs.labileINR} onChange={() => setInputs((p) => ({ ...p, onWarfarin: true, labileINR: true }))} className="w-4 h-4 text-neuro-600" />
                 <span className="font-medium text-slate-900 dark:text-white">On warfarin, labile INR (1 pt)</span>
               </label>
             </div>
@@ -197,7 +197,7 @@ export default function HasBledScoreCalculator() {
         <footer className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
           <p className="text-xs text-slate-500 dark:text-slate-400">
             <strong>Source:</strong> <cite>{HASBLED_CITATION.authors}. {HASBLED_CITATION.title}. {HASBLED_CITATION.journal}. {HASBLED_CITATION.year};{HASBLED_CITATION.volume}({HASBLED_CITATION.issue}):{HASBLED_CITATION.pages}.</cite>{' '}
-            <a href={`https://doi.org/${HASBLED_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">DOI</a>
+            <a href={`https://doi.org/${HASBLED_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-neuro-600 hover:underline">DOI</a>
           </p>
           <p className="mt-4 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
             <strong>Educational use only.</strong> High HAS-BLED does not contraindicate anticoagulation. Use to address modifiable risks and guide monitoring.

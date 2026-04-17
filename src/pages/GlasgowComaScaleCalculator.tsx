@@ -131,7 +131,7 @@ export default function GlasgowComaScaleCalculator() {
               <button onClick={handleReset} className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label="Reset calculator">
                 <RefreshCw size={18} className="text-slate-500 dark:text-slate-400" aria-hidden="true" />
               </button>
-              <button onClick={handleCopy} className="bg-slate-900 dark:bg-slate-700 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors">
+              <button onClick={handleCopy} className="bg-neuro-500 hover:bg-neuro-600 text-white px-3 md:px-4 py-2 rounded-xl text-sm font-semibold transition-colors">
                 <span className="hidden sm:inline">Copy</span>
                 <Copy size={18} className="sm:hidden inline" aria-hidden="true" />
               </button>
@@ -143,7 +143,7 @@ export default function GlasgowComaScaleCalculator() {
       <main className="max-w-2xl mx-auto px-4 md:px-6 py-6 pb-12">
         <h1 className="sr-only">Glasgow Coma Scale Calculator</h1>
 
-        <section className="mb-6 p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50" aria-live="polite">
+        <section className="mb-6 p-4 rounded-xl border border-slate-100 bg-white" aria-live="polite">
           <h2 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Interpretation</h2>
           {result ? (
             <>
@@ -154,7 +154,7 @@ export default function GlasgowComaScaleCalculator() {
                 GCS ≤8 often indicates need for airway protection. Document &quot;T&quot; when verbal is not testable (e.g. intubated). GCS = global consciousness (trauma, coma, ICU); NIHSS = focal stroke severity.
               </p>
               <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                Used in <Link to="/calculators/ich-score" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">ICH Score</Link> (GCS 13–15 = 0 pt, 5–12 = 1 pt, 3–4 = 2 pt).
+                Used in <Link to="/calculators/ich-score" className="text-neuro-600 hover:underline font-medium">ICH Score</Link> (GCS 13–15 = 0 pt, 5–12 = 1 pt, 3–4 = 2 pt).
               </p>
             </>
           ) : (
@@ -166,13 +166,13 @@ export default function GlasgowComaScaleCalculator() {
           <section aria-labelledby="gcs-eye-label">
             <h2 id="gcs-eye-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Eye (1–4)</h2>
             <label className="flex items-center gap-2 mb-2 p-2 rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-900/20">
-              <input type="checkbox" checked={!!inputs.eyeNotTestable} onChange={(e) => setEyeNotTestable(e.target.checked)} className="w-4 h-4 rounded text-blue-600" />
+              <input type="checkbox" checked={!!inputs.eyeNotTestable} onChange={(e) => setEyeNotTestable(e.target.checked)} className="w-4 h-4 rounded text-neuro-600" />
               <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Eye not testable (e.g. closed, swollen)</span>
             </label>
             {!inputs.eyeNotTestable && (
               <div role="radiogroup" aria-labelledby="gcs-eye-label" className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {GCS_EYE_OPTIONS.map((opt) => (
-                  <button key={opt.value} type="button" role="radio" aria-checked={inputs.eye === opt.value} onClick={() => setEye(opt.value)} className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.eye === opt.value ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}>
+                  <button key={opt.value} type="button" role="radio" aria-checked={inputs.eye === opt.value} onClick={() => setEye(opt.value)} className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.eye === opt.value ? 'border-neuro-500 bg-neuro-50 text-neuro-700' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}>
                     <span className="font-semibold text-slate-900 dark:text-white">{opt.label}</span>
                     <span className="block text-xs text-slate-500 dark:text-slate-400 mt-0.5">{opt.description}</span>
                   </button>
@@ -184,13 +184,13 @@ export default function GlasgowComaScaleCalculator() {
           <section aria-labelledby="gcs-verbal-label">
             <h2 id="gcs-verbal-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Verbal (1–5)</h2>
             <label className="flex items-center gap-2 mb-2 p-2 rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-900/20">
-              <input type="checkbox" checked={!!inputs.verbalNotTestable} onChange={(e) => setVerbalNotTestable(e.target.checked)} className="w-4 h-4 rounded text-blue-600" />
+              <input type="checkbox" checked={!!inputs.verbalNotTestable} onChange={(e) => setVerbalNotTestable(e.target.checked)} className="w-4 h-4 rounded text-neuro-600" />
               <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Verbal not testable (e.g. intubated)</span>
             </label>
             {!inputs.verbalNotTestable && (
               <div role="radiogroup" aria-labelledby="gcs-verbal-label" className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {GCS_VERBAL_OPTIONS.map((opt) => (
-                  <button key={opt.value} type="button" role="radio" aria-checked={inputs.verbal === opt.value} onClick={() => setVerbal(opt.value)} className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.verbal === opt.value ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}>
+                  <button key={opt.value} type="button" role="radio" aria-checked={inputs.verbal === opt.value} onClick={() => setVerbal(opt.value)} className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.verbal === opt.value ? 'border-neuro-500 bg-neuro-50 text-neuro-700' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}>
                     <span className="font-semibold text-slate-900 dark:text-white">{opt.label}</span>
                     <span className="block text-xs text-slate-500 dark:text-slate-400 mt-0.5">{opt.description}</span>
                   </button>
@@ -203,7 +203,7 @@ export default function GlasgowComaScaleCalculator() {
             <h2 id="gcs-motor-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Motor (1–6)</h2>
             <div role="radiogroup" aria-labelledby="gcs-motor-label" className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {GCS_MOTOR_OPTIONS.map((opt) => (
-                <button key={opt.value} type="button" role="radio" aria-checked={inputs.motor === opt.value} onClick={() => setMotor(opt.value)} className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.motor === opt.value ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}>
+                <button key={opt.value} type="button" role="radio" aria-checked={inputs.motor === opt.value} onClick={() => setMotor(opt.value)} className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.motor === opt.value ? 'border-neuro-500 bg-neuro-50 text-neuro-700' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}>
                   <span className="font-semibold text-slate-900 dark:text-white">{opt.label}</span>
                   <span className="block text-xs text-slate-500 dark:text-slate-400 mt-0.5">{opt.description}</span>
                 </button>
@@ -215,7 +215,7 @@ export default function GlasgowComaScaleCalculator() {
         <footer className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
           <p className="text-xs text-slate-500 dark:text-slate-400">
             <strong>Source:</strong> <cite>{GCS_CITATION.authors}. {GCS_CITATION.title}. {GCS_CITATION.journal}. {GCS_CITATION.year};{GCS_CITATION.volume}({GCS_CITATION.issue}):{GCS_CITATION.pages}.</cite>{' '}
-            <a href={`https://doi.org/${GCS_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">DOI</a>
+            <a href={`https://doi.org/${GCS_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-neuro-600 hover:underline">DOI</a>
           </p>
           <p className="mt-4 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
             <strong>Educational use only.</strong> Confounders (sedation, aphasia, intubation) affect interpretation; document not-testable components.

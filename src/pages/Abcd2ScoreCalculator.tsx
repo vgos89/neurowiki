@@ -124,7 +124,7 @@ export default function Abcd2ScoreCalculator() {
               <button onClick={handleReset} className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label="Reset calculator">
                 <RefreshCw size={18} className="text-slate-500 dark:text-slate-400" aria-hidden="true" />
               </button>
-              <button onClick={handleCopy} className="bg-slate-900 dark:bg-slate-700 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors">
+              <button onClick={handleCopy} className="bg-neuro-500 hover:bg-neuro-600 text-white px-3 md:px-4 py-2 rounded-xl text-sm font-semibold transition-colors">
                 <span className="hidden sm:inline">Copy</span>
                 <Copy size={18} className="sm:hidden inline" aria-hidden="true" />
               </button>
@@ -136,7 +136,7 @@ export default function Abcd2ScoreCalculator() {
       <main className="max-w-2xl mx-auto px-4 md:px-6 py-6 pb-12">
         <h1 className="sr-only">ABCD² Score Calculator</h1>
 
-        <section className="mb-6 p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50" aria-live="polite">
+        <section className="mb-6 p-4 rounded-xl border border-slate-100 bg-white" aria-live="polite">
           <h2 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Interpretation</h2>
           {result ? (
             <>
@@ -159,7 +159,7 @@ export default function Abcd2ScoreCalculator() {
             <h2 id="abcd2-age-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Age</h2>
             <div role="radiogroup" aria-labelledby="abcd2-age-label" className="grid grid-cols-2 gap-2">
               {ABCD2_AGE_OPTIONS.map((opt) => (
-                <button key={opt.value} type="button" role="radio" aria-checked={inputs.age === opt.value} onClick={() => setAge(opt.value)} className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.age === opt.value ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}>
+                <button key={opt.value} type="button" role="radio" aria-checked={inputs.age === opt.value} onClick={() => setAge(opt.value)} className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.age === opt.value ? 'border-neuro-500 bg-neuro-50 text-neuro-700' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}>
                   <span className="font-semibold text-slate-900 dark:text-white">{opt.label}</span>
                   <span className="text-[10px] font-bold text-slate-400 mt-1 block">{opt.points} pt</span>
                 </button>
@@ -171,7 +171,7 @@ export default function Abcd2ScoreCalculator() {
             <h2 id="abcd2-bp-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Blood pressure at presentation</h2>
             <div role="radiogroup" aria-labelledby="abcd2-bp-label" className="grid grid-cols-2 gap-2">
               {ABCD2_BP_OPTIONS.map((opt) => (
-                <button key={opt.value} type="button" role="radio" aria-checked={inputs.bloodPressure === opt.value} onClick={() => setBP(opt.value)} className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.bloodPressure === opt.value ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}>
+                <button key={opt.value} type="button" role="radio" aria-checked={inputs.bloodPressure === opt.value} onClick={() => setBP(opt.value)} className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.bloodPressure === opt.value ? 'border-neuro-500 bg-neuro-50 text-neuro-700' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}>
                   <span className="font-semibold text-slate-900 dark:text-white">{opt.label}</span>
                   <span className="text-[10px] font-bold text-slate-400 mt-1 block">{opt.points} pt</span>
                 </button>
@@ -183,7 +183,7 @@ export default function Abcd2ScoreCalculator() {
             <h2 id="abcd2-clinical-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Clinical features</h2>
             <div role="radiogroup" aria-labelledby="abcd2-clinical-label" className="grid grid-cols-1 gap-2">
               {ABCD2_CLINICAL_OPTIONS.map((opt) => (
-                <button key={opt.value} type="button" role="radio" aria-checked={inputs.clinicalFeatures === opt.value} onClick={() => setClinical(opt.value)} className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.clinicalFeatures === opt.value ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}>
+                <button key={opt.value} type="button" role="radio" aria-checked={inputs.clinicalFeatures === opt.value} onClick={() => setClinical(opt.value)} className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.clinicalFeatures === opt.value ? 'border-neuro-500 bg-neuro-50 text-neuro-700' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}>
                   <span className="font-semibold text-slate-900 dark:text-white">{opt.label}</span>
                   <span className="text-[10px] font-bold text-slate-400 mt-1 block">{opt.points} pt</span>
                 </button>
@@ -195,7 +195,7 @@ export default function Abcd2ScoreCalculator() {
             <h2 id="abcd2-duration-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Duration of symptoms</h2>
             <div role="radiogroup" aria-labelledby="abcd2-duration-label" className="grid grid-cols-1 gap-2">
               {ABCD2_DURATION_OPTIONS.map((opt) => (
-                <button key={opt.value} type="button" role="radio" aria-checked={inputs.duration === opt.value} onClick={() => setDuration(opt.value)} className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.duration === opt.value ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}>
+                <button key={opt.value} type="button" role="radio" aria-checked={inputs.duration === opt.value} onClick={() => setDuration(opt.value)} className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.duration === opt.value ? 'border-neuro-500 bg-neuro-50 text-neuro-700' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}>
                   <span className="font-semibold text-slate-900 dark:text-white">{opt.label}</span>
                   <span className="text-[10px] font-bold text-slate-400 mt-1 block">{opt.points} pt</span>
                 </button>
@@ -206,8 +206,8 @@ export default function Abcd2ScoreCalculator() {
           <section aria-labelledby="abcd2-diabetes-label">
             <h2 id="abcd2-diabetes-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Diabetes</h2>
             <div role="radiogroup" aria-labelledby="abcd2-diabetes-label" className="flex gap-2">
-              <button type="button" role="radio" aria-checked={inputs.diabetes === false} onClick={() => setDiabetes(false)} className={`flex-1 py-3 px-4 rounded-xl border-2 min-h-[44px] font-medium transition-all ${inputs.diabetes === false ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 bg-white dark:bg-slate-800'}`}>No (0 pt)</button>
-              <button type="button" role="radio" aria-checked={inputs.diabetes === true} onClick={() => setDiabetes(true)} className={`flex-1 py-3 px-4 rounded-xl border-2 min-h-[44px] font-medium transition-all ${inputs.diabetes === true ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 bg-white dark:bg-slate-800'}`}>Yes (1 pt)</button>
+              <button type="button" role="radio" aria-checked={inputs.diabetes === false} onClick={() => setDiabetes(false)} className={`flex-1 py-3 px-4 rounded-xl border-2 min-h-[44px] font-medium transition-all ${inputs.diabetes === false ? 'border-neuro-500 bg-neuro-50 text-neuro-700' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 bg-white dark:bg-slate-800'}`}>No (0 pt)</button>
+              <button type="button" role="radio" aria-checked={inputs.diabetes === true} onClick={() => setDiabetes(true)} className={`flex-1 py-3 px-4 rounded-xl border-2 min-h-[44px] font-medium transition-all ${inputs.diabetes === true ? 'border-neuro-500 bg-neuro-50 text-neuro-700' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 bg-white dark:bg-slate-800'}`}>Yes (1 pt)</button>
             </div>
           </section>
         </div>
@@ -215,7 +215,7 @@ export default function Abcd2ScoreCalculator() {
         <footer className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
           <p className="text-xs text-slate-500 dark:text-slate-400">
             <strong>Source:</strong> <cite>{ABCD2_CITATION.authors}. {ABCD2_CITATION.title}. {ABCD2_CITATION.journal}. {ABCD2_CITATION.year};{ABCD2_CITATION.volume}({ABCD2_CITATION.issue}):{ABCD2_CITATION.pages}.</cite>{' '}
-            <a href={`https://doi.org/${ABCD2_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">DOI</a>
+            <a href={`https://doi.org/${ABCD2_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-neuro-600 hover:underline">DOI</a>
           </p>
           <p className="mt-4 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
             <strong>Educational use only.</strong> All TIA patients need urgent evaluation. ABCD² does not include imaging; consider ABCD²-I if DWI available. Do not use to delay workup.

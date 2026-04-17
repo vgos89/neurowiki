@@ -146,7 +146,7 @@ const IchScoreCalculator: React.FC = () => {
               </button>
               <button
                 onClick={handleCopy}
-                className="bg-slate-900 dark:bg-slate-700 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors"
+                className="bg-neuro-500 hover:bg-neuro-600 text-white px-3 md:px-4 py-2 rounded-xl text-sm font-semibold transition-colors"
               >
                 <span className="hidden sm:inline">Copy</span>
                 <Copy size={18} className="sm:hidden inline" aria-hidden="true" />
@@ -161,7 +161,7 @@ const IchScoreCalculator: React.FC = () => {
 
         {/* Interpretation */}
         <section
-          className="mb-6 p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50"
+          className="mb-6 p-4 rounded-xl border border-slate-100 bg-white"
           aria-live="polite"
         >
           <h2 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">
@@ -196,7 +196,7 @@ const IchScoreCalculator: React.FC = () => {
                   onClick={() => setGcs(opt.points as 0 | 1 | 2)}
                   className={`p-3 rounded-xl border-2 text-left transition-all min-h-[44px] ${
                     inputs.gcsPoints === opt.points
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200'
+                      ? 'border-neuro-500 bg-neuro-50 text-neuro-700'
                       : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'
                   }`}
                 >
@@ -223,7 +223,7 @@ const IchScoreCalculator: React.FC = () => {
                   onClick={() => setVolume(opt.value)}
                   className={`flex-1 py-3 px-4 rounded-xl border-2 min-h-[44px] font-medium transition-all ${
                     inputs.volume30OrMore === opt.value
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200'
+                      ? 'border-neuro-500 bg-neuro-50 text-neuro-700'
                       : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300'
                   }`}
                 >
@@ -251,7 +251,7 @@ const IchScoreCalculator: React.FC = () => {
                   onClick={() => setIvh(opt.value)}
                   className={`flex-1 py-3 px-4 rounded-xl border-2 min-h-[44px] font-medium transition-all ${
                     inputs.ivh === opt.value
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200'
+                      ? 'border-neuro-500 bg-neuro-50 text-neuro-700'
                       : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300'
                   }`}
                 >
@@ -276,7 +276,7 @@ const IchScoreCalculator: React.FC = () => {
                   onClick={() => setOrigin(opt.value === 'infratentorial')}
                   className={`flex-1 py-3 px-4 rounded-xl border-2 min-h-[44px] font-medium transition-all ${
                     inputs.infratentorial === (opt.value === 'infratentorial')
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200'
+                      ? 'border-neuro-500 bg-neuro-50 text-neuro-700'
                       : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300'
                   }`}
                 >
@@ -301,7 +301,7 @@ const IchScoreCalculator: React.FC = () => {
                   onClick={() => setAge(opt.value)}
                   className={`flex-1 py-3 px-4 rounded-xl border-2 min-h-[44px] font-medium transition-all ${
                     inputs.age80OrOlder === opt.value
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200'
+                      ? 'border-neuro-500 bg-neuro-50 text-neuro-700'
                       : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300'
                   }`}
                 >
@@ -326,7 +326,7 @@ const IchScoreCalculator: React.FC = () => {
               href={`https://doi.org/${ICH_SCORE_CITATION.doi}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 dark:text-blue-400 hover:underline"
+              className="text-neuro-600 hover:underline"
             >
               DOI
             </a>
