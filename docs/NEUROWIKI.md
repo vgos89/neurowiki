@@ -109,6 +109,22 @@ All clinical content must be traceable to a named guideline with year. No conten
 - Inline SVG logo mark used in Layout.tsx (desktop sidebar + mobile header) — brain+circuit mark, cobalt background `#1746A2`, white paths
 
 ## Fix History (never regress these)
+- [2026-04-16] Calculator design system — cobalt tokens across 7 calculators — commit cff25ed
+  - Files: Abcd2ScoreCalculator, GlasgowComaScaleCalculator, HasBledScoreCalculator, HeidelbergBleedingCalculator, RopeScoreCalculator, IchScoreCalculator, AspectScoreCalculator
+  - Selected button: border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 → border-neuro-500 bg-neuro-50 text-neuro-700
+  - Checkbox has-[:checked]: blue-500/blue-50 → neuro-500/neuro-50
+  - Input elements: text-blue-600 focus:ring-blue-500 → text-neuro-600 focus:ring-neuro-500
+  - Copy button: bg-slate-900 rounded-lg font-medium → bg-neuro-500 rounded-xl font-semibold
+  - Interpretation card: border-2 border-slate-200 bg-slate-50/50 → border border-slate-100 bg-white
+  - Citation links: text-blue-600 dark:text-blue-400 → text-neuro-600
+  - 51 total replacements, zero blue-* remaining, zero logic changes
+- [2026-04-16] NIHSS and EVT modal shells — commit dd5bddc
+  - ThrombectomyPathwayModal: Zap icon badge removed from header, title "EVT / Thrombectomy" (text-base font-semibold) + subtitle "AHA/ASA 2019 · thrombectomy eligibility" (text-xs text-slate-400), close button → w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200, Zap removed from lucide import
+  - StrokeBasicsWorkflowV2 NIHSS modal shell: close button → w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center
+  - NihssItemCard: selected pill bg-slate-900 → bg-neuro-500 (cobalt active state matches design system)
+- [2026-04-16] ThrombectomyPathwayModal + NihssCalculatorEmbed design system polish — commit 341d9a4
+  - ThrombectomyModal: dark:bg-gray-900→dark:bg-slate-900, shadow-2xl removed, custom boxShadow '0 8px 40px rgba(0,0,0,0.18)', sticky header bg-white/95 backdrop-blur-sm shadow-sm → bg-white
+  - NihssEmbed: X added to lucide imports, shadow-sm removed from sticky control bar, raw × char → circular X icon button (w-6 h-6 rounded-full bg-slate-100, aria-label="Close", <X w-3 h-3 text-slate-500>), CTA text → "Apply score — {total}"
 - [2026-04-16] OrolingualEdemaProtocolModal + HemorrhageProtocolModal redesign — Stripe/Apple pattern: max-w-lg, custom shadow, circular close, no header divider, left-border callouts, cobalt numbered steps, cobalt Copy to EMR rounded-xl, unused icon imports removed — commit 10b6063
 - [2026-04-16] TpaReversalProtocolModal redesign — Stripe/Apple pattern: max-w-lg, clean header, left-border callout, cobalt 01–07 numbered steps, cobalt CTA, AlertTriangle removed — commit baecb1c
 - [2026-04-16] CodeModeStep4 design system polish — evidence badges (green→emerald-100/800, blue→neuro-50/700, yellow→amber-50/700, red→slate-100/600), Copy to EMR cobalt (slate-700→neuro-500), Save Orders cobalt (purple-606→neuro-500), shadow-lg removed, rounded-xl on both buttons, min-h-[44px] — commit 684bf89
@@ -131,22 +147,22 @@ All clinical content must be traceable to a named guideline with year. No conten
 - ELAN pathway fix — commit 92e0a84
 - Duplicate fix — commit 35325c8
 
-## Next Session Priority
-Layer 2 — Step2 visual rebuild (CodeModeStep2.tsx).
+## Current State (as of 2026-04-16)
 
-Reference: docs/MOCKUPS.md Screen 4.
-File: src/components/article/stroke/CodeModeStep2.tsx
+**Layer 1 — Foundation:** COMPLETE
+**Layer 2 — Stroke Pathway:** COMPLETE (all steps, modals, header, tabs shipped)
+**Layer 3 — Component Library:** SKIPPED BY AGREEMENT (commit history shows this was deferred in favor of section specs)
+**Layer 4 — Pages:** IN PROGRESS — Calculator redesign is the active workstream
+**Layer 5 — Polish:** PENDING
 
-Key changes (visual only — zero logic changes):
-- Step 1 summary bar at top: bg-slate-50 border border-slate-100 rounded-lg px-3 py-2 text-xs text-slate-400 — shows LKW · NIHSS · BP · Weight on one line
-- CT Result section: section card (bg-white border-slate-100 rounded-xl p-4), radio cards full-width p-3 rounded-lg border — selected: border-neuro-500 bg-neuro-50, unselected: border-slate-200 bg-white
-- Treatment Decision section: same radio card pattern — tPA option shows calculated dose inline, TNK option shows dose
-- CTA & LVO section: CTA ordered checkbox, LVO Yes/No/Pending as three horizontal pill buttons when ordered, EVT pathway button if LVO Yes
-- Save CTA: w-full bg-neuro-500 min-h-[52px]
+## Active Workstream
+Calculator visual redesign — full rebuild against a locked master spec, not patches. Plan:
+1. Calculator spec written to docs/specs/CALCULATOR_SPEC.md with HTML mockup in docs/specs/mockups/
+2. ICH Score rebuilt as the reference implementation
+3. All other calculators rebuilt to match: NIHSS, GCS, ASPECTS, HAS-BLED, ABCD2, ROPE, Heidelberg, Boston Criteria
 
-DO NOT touch: any calculation logic, step1Data, imaging data state, modal handlers.
-
-Note: Tab bar sticky uses top-[108px] (64px global nav + ~44px stroke header). Do not change this value.
+## Swarm System (installed 2026-04-16, commits b502fea + db9c6af)
+The project now uses a multi-agent swarm architecture. See ORCHESTRATION.md for the protocol. Agent roster in agents/active/ and agents/dormant/. Every swarm must cite the relevant spec file, pass all 5 gates, and update the link graph before commit.
 
 ## Performance Targets
 - TrialPageNew: under 150 kB gzipped (currently at limit — do not increase)

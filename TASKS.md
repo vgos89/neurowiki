@@ -1,7 +1,7 @@
 # TASKS.md — NeuroWiki Task Ledger
 
 ## ACTIVE
-(none)
+- [ACTIVE] [L4] Calculator visual redesign — full rebuild against docs/specs/CALCULATOR_SPEC.md (pending draft). ICH Score is the reference implementation. Then batch: NIHSS, GCS, ASPECTS, HAS-BLED, ABCD2, ROPE, Heidelberg, Boston Criteria.
 
 ## BLOCKED
 (none)
@@ -17,16 +17,12 @@
 - [x] [L2] Improve disabled CTA visual state — opacity-40→50, italic span on disabled text — commit 0bfea9a
 - [x] [L2] Step3 visual rebuild — summary display, locked EMR template (Part B) — commit ad51b4d
 - [x] [L2] Step4 visual polish — design system tokens, cobalt buttons, evidence badges — commit 684bf89
-- [ ] [L2] All stroke modals visual overhaul — use white header, clean body, cobalt primary action
+- [x] [L2] All stroke modals visual overhaul — use white header, clean body, cobalt primary action — commits baecb1c, 10b6063, fdec23f, 341d9a4
 
-### LAYER 3 — Component Library (blocked until Layer 2 complete)
-- [ ] [L3] src/components/ui/Button.tsx
-- [ ] [L3] src/components/ui/Card.tsx
-- [ ] [L3] src/components/ui/Modal.tsx
-- [ ] [L3] src/components/ui/Badge.tsx
-- [ ] [L3] src/components/ui/SectionHeader.tsx
+### LAYER 3 — Component Library (SKIPPED BY AGREEMENT)
+Deferred in favor of section specs (docs/specs/*.md). Each section (calculators, pathways, trials, articles) gets its own locked master spec + HTML mockup. Component library can be revisited after section specs are mature.
 
-### LAYER 4 — Pages (blocked until Layer 3 complete)
+### LAYER 4 — Pages (unblocked; Calculator redesign is active)
 - [ ] [L4] Home.tsx visual rebuild
 - [ ] [L4] TrialsPage + TrialPageNew visual rebuild
 - [ ] [L4] EmBillingCalculator UX rebuild — guided decision flow
@@ -50,16 +46,34 @@
 - [ ] [P1] Full connectivity audit — verify every button, modal, tab transition, and data flow works end to end across all stroke pathway steps. Build a manual test checklist in docs/QA_CHECKLIST.md
 - [ ] [P1] SEO agent setup — create docs/SEO_SPEC.md with meta title, description, and JSON-LD spec for every route. Implement missing meta tags and structured data across all calculator and pathway pages. Pull forward from Layer 5.
 - [ ] [P1] Design consistency audit — read every calculator and pathway page, compare against docs/MOCKUPS.md design tokens, output full report to docs/AUDIT.md. No fixes in this session, audit only. Pages to cover: all src/pages/guide/*, all calculator pages, TrialsPage, Home.
-- [ ] [P1] Calculator UI/UX fixes — after audit, fix every calculator page that does not match design system. Priority order: NIHSS, ICH Score, GCS, ASPECTS, HAS-BLED, ABCD2, ROPE, Heidelberg, Boston Criteria.
 - [ ] [P1] Trials page visual redesign — implement Screen 5 from docs/MOCKUPS.md. Trial card format: name, one-sentence finding, key stat (NNT or ARR), p-value, guideline implication. Readable in 10 seconds. Category filter pills. Left border color by category.
 - [ ] [P1] Trial interpretation agent — AI-powered layer that explains what each trial means clinically for a practicing neurologist. Requires component library (Layer 3) before implementation. Use Anthropic API in artifact pattern.
 
 ### OTHER P2 (lower priority)
 - [x] [P2] tPA Reversal, Orolingual Edema, ICH Protocol modals — Stripe/Apple redesign — commits baecb1c, 10b6063
-- [ ] [P2] Stroke modals remaining — Thrombectomy, Eligibility, NIHSS — apply same Stripe/Apple pattern
+- [x] [P2] Stroke modals remaining — Thrombectomy, Eligibility, NIHSS — apply same Stripe/Apple pattern — commits fdec23f, 341d9a4
 - [ ] [P2] All other pathway pages visual rebuild — StatusEpilepticusPathway, MigrainePathway, ExtendedIVTPathway, GCAPathway, ElanPathway, EvtPathway — apply same visual treatment as stroke pathway after component library exists.
 
 ## CONFIRMED CLEAN
+- [x] Calculator design system — cobalt tokens across 7 calculators — commit cff25ed
+  - Files: Abcd2, GCS, HAS-BLED, Heidelberg, ROPE, ICH Score, ASPECTS
+  - Selected state: blue → neuro-500/neuro-50/neuro-700 (18×)
+  - Checkbox has-[:checked]: blue → neuro (5×)
+  - Input color: text-blue-600 focus:ring-blue-500 → neuro (7×)
+  - Copy button: bg-slate-900 rounded-lg → bg-neuro-500 rounded-xl font-semibold (7×)
+  - Interpretation card: border-2 border-slate-200 bg-slate-50/50 → border border-slate-100 bg-white (6×)
+  - Citation links: text-blue-600 dark:text-blue-400 → text-neuro-600 (8×)
+  - Zero blue-* remaining in all 7 files
+  - Mobile QA: pass (ABCD2) · Desktop QA: pass (ICH Score, 1280×800)
+- [x] NIHSS and EVT modal shells — circular close buttons, cobalt selected state, clean headers — commit dd5bddc
+  - ThrombectomyPathwayModal: Zap badge removed, title+subtitle text pair, close button → w-8 h-8 rounded-full bg-slate-100, Zap import removed
+  - StrokeBasicsWorkflowV2: NIHSS modal close button → w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center
+  - NihssItemCard: selected pill bg-slate-900 → bg-neuro-500 (cobalt)
+  - Mobile QA: pass · Desktop QA: pass (1280×800)
+- [x] ThrombectomyPathwayModal + NihssCalculatorEmbed design system polish — commit 341d9a4
+  - ThrombectomyModal: dark:bg-gray-900→slate-900, shadow-2xl→custom boxShadow style, sticky header bg-white/95 backdrop-blur shadow-sm removed
+  - NihssEmbed: X import added, shadow-sm removed from sticky bar, × char→circular X icon button (rounded-full bg-slate-100 aria-label="Close"), CTA text "Apply score — {total}"
+  - Mobile QA: pass · Desktop QA: pass
 - [x] OrolingualEdema + HemorrhageProtocol modal redesign — commit 10b6063
   - Both: max-w-lg, custom shadow, no min-h, circular close button, no header divider
   - Left-border callouts (amber/red), cobalt numbered steps, cobalt Copy to EMR + rounded-xl
