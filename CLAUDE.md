@@ -139,21 +139,33 @@ When a classification is genuinely ambiguous, orchestrator presents the two cand
 
 ## 7. Task status lifecycle
 
-Every task in `TASKS.md` has an explicit status. "Done" is not binary.
+`TASKS.md` is organized into named sections. Each section is the physical home for a category of work. Inline markers record the current state of individual items within a section.
 
-| Status | Meaning |
+### File sections — where work lives
+
+| Section | What lives there |
 |---|---|
-| `planned` | Acceptance criteria written (§15), not started |
-| `in_progress` | Actively being worked |
-| `blocked:<reason>` | Cannot proceed (e.g., `blocked:awaiting-clinical-review`) |
-| `ready_for_review` | Code complete, PR open, awaiting review |
-| `ready_for_merge` | Review passed, awaiting merge |
-| `merged` | Shipped to main |
-| `parked` | Intentionally set aside; rationale in Parking Lot |
-| `reverted` | Shipped then rolled back (see §14); post-mortem required |
-| `archived` | Merged and dropped from active view after 30 days |
+| `## ACTIVE` | Currently in-progress work. Usually one item. Carries `[ACTIVE]` marker. |
+| `## BLOCKED` | Items that cannot proceed. Each entry states the blocking reason explicitly. |
+| `## PENDING` | Forward work, organized by layer (`L2`–`L5`) and priority (`P1`/`P2`). Open items use `[ ]`; completed items use `[x]` with commit SHA. |
+| `## PARKING LOT` | Ideas deferred mid-session. Not yet triaged into PENDING. Entries carry a date and the task they were parked during. |
+| `## CONFIRMED CLEAN` | Running log of merged work with commit hashes and QA results. Append-only; never edited after entry. |
+| `## POST-MORTEMS` | Regressions that required rollback. Each entry links to a post-mortem doc. |
 
-Transitions are stated explicitly. A task can sit at `ready_for_merge` for days awaiting clinical review — that's a legitimate steady state, not a problem.
+### Inline status markers
+
+These markers appear inside entries, primarily within `## PENDING` items, to record state without moving the item between sections:
+
+| Marker | Meaning |
+|---|---|
+| `[ACTIVE]` | Currently being worked (mirrors the `## ACTIVE` section for clarity) |
+| `[ ]` | Open — not yet started |
+| `[x]` | Done — merged, with commit SHA |
+| `[SKIPPED BY AGREEMENT]` | Explicitly deferred with rationale recorded |
+| `blocked:<reason>` | Cannot proceed (e.g., `blocked:awaiting-clinical-review`) |
+| `reverted` | Shipped then rolled back (see §14); post-mortem required |
+
+Transitions are stated explicitly. A task can sit at `blocked:awaiting-clinical-review` for days — that's a legitimate steady state, not a problem.
 
 ---
 
@@ -169,7 +181,9 @@ It **skips** for:
 - V-initiated Class B edits with explicit scope ("just fix the typo in X")
 - Re-entry within the same work day on a known task
 
-`/status` reads `TASKS.md` and `PRD.md` and reports: what shipped last, what's open (by status — §7), what's blocked, what's in the parking lot, and a recommended next task with one-sentence rationale. Then asks V to confirm or pick differently.
+`/status` reads `PRD.md` and the `## ACTIVE`, `## BLOCKED`, `## PENDING`, and `## PARKING LOT` sections of `TASKS.md`. It reports: what's actively in progress, what's open (by layer and priority — §7), what's blocked and why, what's parked, and a recommended next task with one-sentence rationale. Then asks V to confirm or pick differently.
+
+`## CONFIRMED CLEAN` is intentionally skipped — the running merge log is too long to summarize each session.
 
 Rule of thumb: *if you don't know where you are, `/status`.* Not: *you must always `/status`.*
 
@@ -180,7 +194,7 @@ Rule of thumb: *if you don't know where you are, `/status`.* Not: *you must alwa
 V is prone to mid-session segues — new feature ideas, bugs spotted, tangential questions, user feedback. Four triggers, all common, all legitimate. None belong in the middle of another task.
 
 - **`/focus`** — re-state current task goal and acceptance criteria. Refuse new scope. Ask if the new input should be parked.
-- **`/park <short description>`** — append to the Parking Lot section of `TASKS.md` with timestamp and the task it came up during. Return to current work.
+- **`/park <short description>`** — append to the `## PARKING LOT` section of `TASKS.md` using the format `- [YYYY-MM-DD] <idea> (parked during: <task>)`. Return to current work.
 - **Default posture:** if V mentions a new idea mid-task without using `/park`, *treat it as a park request*. Draft the parking-lot entry, show V for one-word approval, resume current task.
 - **Exception:** production bug, clinical safety issue, regulatory concern — say so explicitly and ask V to confirm the pivot.
 
@@ -378,7 +392,7 @@ For Class D/E, a rollback plan is required in the PR body *before merge*. If a r
 
 1. **Immediate revert** — `git revert <merge-commit>` and push. If revert is not clean, proceed to step 2.
 2. **Feature flag disable** — if the change is behind a flag, disable via config; users see previous behavior.
-3. **Post-mortem task** — auto-created in `TASKS.md` under `## Post-Mortems` with timestamp, symptom, suspected cause. Status: `reverted`.
+3. **Post-mortem task** — auto-created in `TASKS.md` under `## POST-MORTEMS` with timestamp, symptom, suspected cause. Status: `reverted`.
 4. **Post-mortem doc** — `docs/YYYY_MM_DD/post-mortem-<slug>.md`. Template in `docs/adrs/post-mortem-template.md`.
 5. **Re-enable gate** — `clinical-reviewer` + `system-architect` must both sign off (via §17 review artifacts) before the change re-enters.
 
@@ -387,6 +401,8 @@ For Class D/E, a rollback plan is required in the PR body *before merge*. If a r
 ## 15. Acceptance criteria — every Class C/D/E task
 
 When a task is created or planned, `TASKS.md` entry must include:
+
+The `Status:` field uses inline markers (see §7) — these are state labels written inside a `## PENDING` entry, not file section names.
 
 ```
 ### [Task slug] — Class [X][-clinical?]
@@ -554,7 +570,7 @@ docs/
 scripts/
 └── check-claims.ts             # Pre-commit claim/citation validator
 
-TASKS.md                        # Living TODO + parking lot + stale content + post-mortems
+TASKS.md                        # Layered ledger: ACTIVE / BLOCKED / PENDING (L2-L5, P1-P2) / PARKING LOT / CONFIRMED CLEAN / POST-MORTEMS
 PRD.md                          # Product decisions, appended with date
 CLAUDE.md                       # This file
 ```
