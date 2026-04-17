@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "generated": null,
+  "nodes": {},
+  "_schema": {
+    "nodes": {
+      "_description": "Each key is a node ID like 'calc/ich-score' or 'article/stroke-basics'. Values contain type, title, route, references (outbound), referencedBy (inbound).",
+      "_example": {
+        "calc/ich-score": {
+          "type": "calculator",
+          "title": "ICH Score Calculator",
+          "route": "/calculators/ich-score",
+          "references": ["trial/hemphill-2001"],
+          "referencedBy": ["pathway/stroke/step-2"]
+        }
+      }
+    }
+  }
+}
