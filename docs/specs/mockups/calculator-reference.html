@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calculator Reference Mockup — NeuroWiki</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --color-neuro-50:  #EEF2FF;
+    --color-neuro-100: #C7D7FA;
+    --color-neuro-400: #4A7FE5;
+    --color-neuro-500: #1746A2;
+    --color-neuro-600: #123988;
+    --color-neuro-700: #0E2D6B;
+    --color-neuro-900: #06143D;
+  }
+  .bg-neuro-50  { background-color: var(--color-neuro-50); }
+  .bg-neuro-500 { background-color: var(--color-neuro-500); }
+  .bg-neuro-600 { background-color: var(--color-neuro-600); }
+  .hover\:bg-neuro-600:hover { background-color: var(--color-neuro-600); }
+  .text-neuro-500 { color: var(--color-neuro-500); }
+  .text-neuro-600 { color: var(--color-neuro-600); }
+  .text-neuro-700 { color: var(--color-neuro-700); }
+  .border-neuro-500 { border-color: var(--color-neuro-500); }
+
+  .divider-hair { border-top: 1px solid #e2e8f0; }
+
+  .selected-option {
+    background-color: var(--color-neuro-50);
+    color: var(--color-neuro-700);
+    position: relative;
+  }
+  .selected-option::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background-color: var(--color-neuro-500);
+    border-radius: 1px;
+  }
+
+  @keyframes chevron-bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-3px); }
+  }
+  .drawer-chevron-hint {
+    animation: chevron-bounce 2.4s ease-in-out infinite;
+  }
+
+  @keyframes drawer-pulse {
+    0% { box-shadow: 0 -4px 20px rgba(23, 70, 162, 0); }
+    50% { box-shadow: 0 -6px 24px rgba(23, 70, 162, 0.25); }
+    100% { box-shadow: 0 -4px 20px rgba(23, 70, 162, 0); }
+  }
+  .drawer-just-available {
+    animation: drawer-pulse 1.6s ease-out 1;
+  }
+
+  .drawer-collapsed { box-shadow: 0 -2px 12px rgba(15, 23, 42, 0.08); }
+  .drawer-expanded  { box-shadow: 0 -4px 24px rgba(15, 23, 42, 0.12); }
+
+  body { background: #f1f5f9; }
+  .mockup-frame {
+    max-width: 440px;
+    margin: 0 auto;
+    background: white;
+    min-height: 100vh;
+    position: relative;
+  }
+  .state-divider {
+    background: #f8fafc;
+    border-top: 1px dashed #cbd5e1;
+    border-bottom: 1px dashed #cbd5e1;
+  }
+  .archetype-banner {
+    background: #0f172a;
+    color: white;
+    padding: 1.25rem 1.5rem;
+  }
+  .drawer-spacer-collapsed { height: 80px; }
+  .drawer-spacer-expanded  { height: 380px; }
+</style>
+</head>
+<body class="text-slate-900 antialiased">
+
+<div class="bg-slate-900 text-white px-6 py-4 text-sm">
+  <div class="max-w-5xl mx-auto">
+    <div class="font-bold text-base mb-1">Calculator Reference Mockup — NeuroWiki</div>
+    <div class="text-slate-300 text-xs leading-relaxed">
+      Three archetypes (single-page radio, multi-item assessment, mixed input). Each demonstrates the persistent bottom drawer pattern for interpretation. Empty states show progress; complete high-risk auto-expands; complete low/moderate stays collapsed with chevron hint. Copy button stays in sticky header. Severity color (red/amber/slate) drives drawer-header tint and top-header severity text.
+    </div>
+  </div>
+</div>
+
+<!-- ARCHETYPE 1 — ICH SCORE -->
+<div class="archetype-banner">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Archetype 1 — Single-page radio</div>
+    <div class="text-sm text-slate-300 mt-1">Reference: ICH Score. Also: GCS, ABCD2, RoPE, Heidelberg.</div>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">ICH · Empty · Drawer muted (progress indicator)</div>
+
+<div class="mockup-frame">
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="px-5 py-4">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ICH Score</div>
+            <div class="flex items-baseline gap-1.5 mt-0.5">
+              <span class="text-2xl font-semibold text-slate-900 tabular-nums leading-none">—</span>
+              <span class="text-slate-400 text-sm leading-none">/ 6</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-0.5 flex-shrink-0">
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Favorite">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </button>
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Reset">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+          <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">Copy</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="px-5 pt-6 pb-4">
+    <div class="space-y-10">
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Glasgow Coma Scale</h2>
+        <div role="radiogroup">
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">GCS 13–15</span><span class="text-sm text-slate-400">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">GCS 5–12</span><span class="text-sm text-slate-400">1 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">GCS 3–4</span><span class="text-sm text-slate-400">2 pt</span></button>
+        </div>
+      </section>
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">ICH Volume</h2>
+        <div role="radiogroup">
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">&lt; 30 cm³</span><span class="text-sm text-slate-400">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">≥ 30 cm³</span><span class="text-sm text-slate-400">1 pt</span></button>
+        </div>
+      </section>
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Intraventricular Hemorrhage</h2>
+        <div role="radiogroup">
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">No</span><span class="text-sm text-slate-400">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">Yes</span><span class="text-sm text-slate-400">1 pt</span></button>
+        </div>
+      </section>
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Infratentorial Origin</h2>
+        <div role="radiogroup">
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">No</span><span class="text-sm text-slate-400">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">Yes</span><span class="text-sm text-slate-400">1 pt</span></button>
+        </div>
+      </section>
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Age</h2>
+        <div role="radiogroup">
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">&lt; 80</span><span class="text-sm text-slate-400">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">≥ 80</span><span class="text-sm text-slate-400">1 pt</span></button>
+        </div>
+      </section>
+    </div>
+    <footer class="mt-14 pt-6 border-t border-slate-100">
+      <p class="text-xs text-slate-400 leading-relaxed">Hemphill JC 3rd, Bonovich DC, Besmertis L, Manley GT, Johnston SC. The ICH score. <em>Stroke.</em> 2001;32(4):891–897. <a href="#" class="text-neuro-600 hover:underline ml-0.5">View source</a></p>
+      <p class="mt-3 text-xs text-slate-400 leading-relaxed">Educational use only.</p>
+    </footer>
+  </main>
+  <div class="drawer-spacer-collapsed"></div>
+  <div class="absolute bottom-0 left-0 right-0 bg-slate-100 drawer-collapsed">
+    <div class="px-5 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Interpretation</div>
+        <div class="text-sm text-slate-500">0 of 5 selected</div>
+      </div>
+      <div class="text-xs text-slate-400">Appears when complete</div>
+    </div>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 mt-8 text-xs font-bold uppercase tracking-widest text-slate-500">ICH · Partial · Drawer shows progress</div>
+
+<div class="mockup-frame">
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="px-5 py-4">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ICH Score</div>
+            <div class="flex items-baseline gap-1.5 mt-0.5">
+              <span class="text-2xl font-semibold text-slate-900 tabular-nums leading-none">—</span>
+              <span class="text-slate-400 text-sm leading-none">/ 6</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-0.5 flex-shrink-0">
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Favorite"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Reset"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>
+          <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">Copy</button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="px-5 pt-6 pb-4">
+    <div class="space-y-10">
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Glasgow Coma Scale</h2>
+        <div role="radiogroup">
+          <button type="button" aria-checked="true" class="selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg"><span class="font-semibold">GCS 13–15</span><span class="text-sm opacity-75">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">GCS 5–12</span><span class="text-sm text-slate-400">1 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">GCS 3–4</span><span class="text-sm text-slate-400">2 pt</span></button>
+        </div>
+      </section>
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">ICH Volume</h2>
+        <div role="radiogroup">
+          <button type="button" aria-checked="true" class="selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg"><span class="font-semibold">&lt; 30 cm³</span><span class="text-sm opacity-75">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">≥ 30 cm³</span><span class="text-sm text-slate-400">1 pt</span></button>
+        </div>
+      </section>
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Intraventricular Hemorrhage</h2>
+        <div role="radiogroup">
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">No</span><span class="text-sm text-slate-400">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" aria-checked="true" class="selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg"><span class="font-semibold">Yes</span><span class="text-sm opacity-75">1 pt</span></button>
+        </div>
+      </section>
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Infratentorial Origin</h2>
+        <div role="radiogroup">
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">No</span><span class="text-sm text-slate-400">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">Yes</span><span class="text-sm text-slate-400">1 pt</span></button>
+        </div>
+      </section>
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Age</h2>
+        <div role="radiogroup">
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">&lt; 80</span><span class="text-sm text-slate-400">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">≥ 80</span><span class="text-sm text-slate-400">1 pt</span></button>
+        </div>
+      </section>
+    </div>
+  </main>
+  <div class="drawer-spacer-collapsed"></div>
+  <div class="absolute bottom-0 left-0 right-0 bg-slate-100 drawer-collapsed">
+    <div class="px-5 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Interpretation</div>
+        <div class="text-sm text-slate-600 font-medium">3 of 5 selected</div>
+      </div>
+      <div class="text-xs text-slate-400">2 more to complete</div>
+    </div>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 mt-8 text-xs font-bold uppercase tracking-widest text-slate-500">ICH · Complete · High risk · Drawer auto-expanded</div>
+
+<div class="mockup-frame">
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="px-5 py-4">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ICH Score</div>
+            <div class="flex items-baseline gap-1.5 mt-0.5">
+              <span class="text-2xl font-semibold text-slate-900 tabular-nums leading-none">3</span>
+              <span class="text-slate-400 text-sm leading-none">/ 6</span>
+              <span class="text-xs font-medium text-red-600 ml-1.5">High</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-0.5 flex-shrink-0">
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Favorite"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-amber-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Reset"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>
+          <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">Copy</button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="px-5 pt-6 pb-4">
+    <div class="space-y-10">
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Glasgow Coma Scale</h2>
+        <div role="radiogroup">
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">GCS 13–15</span><span class="text-sm text-slate-400">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" aria-checked="true" class="selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg"><span class="font-semibold">GCS 5–12</span><span class="text-sm opacity-75">1 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">GCS 3–4</span><span class="text-sm text-slate-400">2 pt</span></button>
+        </div>
+      </section>
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">ICH Volume</h2>
+        <div role="radiogroup">
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">&lt; 30 cm³</span><span class="text-sm text-slate-400">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" aria-checked="true" class="selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg"><span class="font-semibold">≥ 30 cm³</span><span class="text-sm opacity-75">1 pt</span></button>
+        </div>
+      </section>
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Intraventricular Hemorrhage</h2>
+        <div role="radiogroup">
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">No</span><span class="text-sm text-slate-400">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" aria-checked="true" class="selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg"><span class="font-semibold">Yes</span><span class="text-sm opacity-75">1 pt</span></button>
+        </div>
+      </section>
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Infratentorial Origin</h2>
+        <div role="radiogroup">
+          <button type="button" aria-checked="true" class="selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg"><span class="font-semibold">No</span><span class="text-sm opacity-75">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">Yes</span><span class="text-sm text-slate-400">1 pt</span></button>
+        </div>
+      </section>
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Age</h2>
+        <div role="radiogroup">
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">&lt; 80</span><span class="text-sm text-slate-400">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" aria-checked="true" class="selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg"><span class="font-semibold">≥ 80</span><span class="text-sm opacity-75">1 pt</span></button>
+        </div>
+      </section>
+    </div>
+  </main>
+  <div class="drawer-spacer-expanded"></div>
+  <div class="absolute bottom-0 left-0 right-0 bg-white drawer-expanded drawer-just-available" style="border-top: 1px solid #fecaca;">
+    <button class="w-full flex items-center justify-between px-5 py-3 bg-red-50 hover:bg-red-100 transition-colors">
+      <div class="flex items-center gap-3">
+        <div class="text-[10px] font-bold text-red-700 uppercase tracking-widest">Interpretation</div>
+        <div class="text-sm font-medium text-red-700">High risk · 72% mortality</div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-600"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="px-5 py-5 max-h-[60vh] overflow-y-auto">
+      <p class="text-slate-900 text-xl leading-tight font-semibold">High-risk intracerebral hemorrhage.</p>
+      <p class="text-slate-600 leading-relaxed mt-3">An ICH Score of 3 corresponds to 72% 30-day mortality. This score reflects prognosis at admission and is not a decision rule for withdrawal of care. Outcomes improve with aggressive ICU management, BP control (SBP &lt;140), and reversal of anticoagulation. <span class="text-slate-800 font-medium">Avoid early pessimism.</span></p>
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">See also</div>
+        <p class="text-sm text-slate-600 leading-relaxed"><a href="#" class="text-neuro-600 hover:underline">Glasgow Coma Scale</a><span class="text-slate-300 mx-2">·</span><a href="#" class="text-neuro-600 hover:underline">Heidelberg Bleeding</a><span class="text-slate-300 mx-2">·</span><a href="#" class="text-neuro-600 hover:underline">AHA/ASA 2022 ICH Guidelines</a></p>
+      </div>
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <p class="text-xs text-slate-400 leading-relaxed">Hemphill JC 3rd, Bonovich DC, Besmertis L, Manley GT, Johnston SC. The ICH score: a simple, reliable grading scale for intracerebral hemorrhage. <em>Stroke.</em> 2001;32(4):891–897. <a href="#" class="text-neuro-600 hover:underline">View source</a></p>
+        <p class="mt-2 text-xs text-slate-400 leading-relaxed">Educational use only.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 mt-8 text-xs font-bold uppercase tracking-widest text-slate-500">ICH · Complete · Low risk · Drawer collapsed with chevron hint</div>
+
+<div class="mockup-frame">
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="px-5 py-4">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ICH Score</div>
+            <div class="flex items-baseline gap-1.5 mt-0.5">
+              <span class="text-2xl font-semibold text-slate-900 tabular-nums leading-none">0</span>
+              <span class="text-slate-400 text-sm leading-none">/ 6</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-0.5 flex-shrink-0">
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Favorite"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Reset"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>
+          <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">Copy</button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="px-5 pt-6 pb-4">
+    <div class="space-y-10">
+      <section>
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Glasgow Coma Scale</h2>
+        <div role="radiogroup">
+          <button type="button" aria-checked="true" class="selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg"><span class="font-semibold">GCS 13–15</span><span class="text-sm opacity-75">0 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">GCS 5–12</span><span class="text-sm text-slate-400">1 pt</span></button>
+          <div class="divider-hair"></div>
+          <button type="button" class="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">GCS 3–4</span><span class="text-sm text-slate-400">2 pt</span></button>
+        </div>
+      </section>
+      <p class="text-center text-xs text-slate-300 italic pt-4">[other 4 sections with 0-pt selections omitted for preview brevity]</p>
+    </div>
+  </main>
+  <div class="drawer-spacer-collapsed"></div>
+  <div class="absolute bottom-0 left-0 right-0 bg-white drawer-collapsed" style="border-top: 1px solid #e2e8f0;">
+    <button class="w-full flex items-center justify-between px-5 py-3.5 hover:bg-slate-50 transition-colors">
+      <div class="flex items-center gap-3">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Interpretation</div>
+        <div class="text-sm font-medium text-slate-900">Low risk · 13% mortality</div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 drawer-chevron-hint"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ARCHETYPE 2 — NIHSS -->
+<div class="archetype-banner mt-12">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Archetype 2 — Multi-item assessment</div>
+    <div class="text-sm text-slate-300 mt-1">Reference: NIHSS. Sticky header has two rows (LVO + mode). Drawer behaves identically.</div>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">NIHSS · Moderate · Drawer expanded</div>
+
+<div class="mockup-frame">
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="px-5 py-3">
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">NIHSS</div>
+            <div class="flex items-baseline gap-1.5 mt-0.5">
+              <span class="text-2xl font-semibold text-slate-900 tabular-nums leading-none">14</span>
+              <span class="text-slate-400 text-sm leading-none">/ 42</span>
+              <span class="text-xs font-medium text-amber-600 ml-1.5">Moderate</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-0.5 flex-shrink-0">
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Reset"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>
+          <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">Copy</button>
+        </div>
+      </div>
+      <div class="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
+        <div class="flex items-baseline gap-2">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">LVO</span>
+          <span class="text-sm font-medium text-red-600">High · 85%</span>
+          <button class="text-slate-300 hover:text-slate-500 transition-colors" aria-label="LVO info"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></button>
+        </div>
+        <div class="flex items-center gap-0.5 bg-slate-100 rounded-full p-0.5">
+          <button class="px-3 py-1 rounded-full text-xs font-medium bg-white text-slate-900 transition-colors">Rapid</button>
+          <button class="px-3 py-1 rounded-full text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors">Detailed</button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="px-5 pt-6 pb-4">
+    <section class="mb-8">
+      <div class="flex items-baseline justify-between mb-3">
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">1a · Level of consciousness</h2>
+        <span class="text-[10px] font-medium text-slate-400">1 pt</span>
+      </div>
+      <div role="radiogroup">
+        <button type="button" class="w-full flex items-baseline justify-between py-3 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">Alert, keenly responsive</span><span class="text-sm text-slate-400">0</span></button>
+        <div class="divider-hair"></div>
+        <button type="button" aria-checked="true" class="selected-option w-full flex items-baseline justify-between py-3 pl-4 pr-3 text-left rounded-lg"><span class="font-semibold">Arousable to minor stimulation</span><span class="text-sm opacity-75">1</span></button>
+        <div class="divider-hair"></div>
+        <button type="button" class="w-full flex items-baseline justify-between py-3 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">Requires repeated or painful stimulation</span><span class="text-sm text-slate-400">2</span></button>
+      </div>
+    </section>
+    <section class="mb-8">
+      <div class="flex items-baseline justify-between mb-3">
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">2 · Best gaze</h2>
+        <span class="text-[10px] font-medium text-slate-400">2 pt</span>
+      </div>
+      <div role="radiogroup">
+        <button type="button" class="w-full flex items-baseline justify-between py-3 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"><span class="font-medium text-slate-900">Normal</span><span class="text-sm text-slate-400">0</span></button>
+        <div class="divider-hair"></div>
+        <button type="button" aria-checked="true" class="selected-option w-full flex items-baseline justify-between py-3 pl-4 pr-3 text-left rounded-lg"><span class="font-semibold">Forced deviation</span><span class="text-sm opacity-75">2</span></button>
+      </div>
+      <div class="mt-3 pl-3 border-l-2 border-amber-400">
+        <p class="text-xs text-amber-700 leading-relaxed">Forced gaze deviation with high NIHSS suggests LVO. Escalate to CTA.</p>
+      </div>
+    </section>
+    <p class="text-center text-xs text-slate-300 italic py-4">[items 3–15 continue below]</p>
+  </main>
+  <div class="drawer-spacer-expanded"></div>
+  <div class="absolute bottom-0 left-0 right-0 bg-white drawer-expanded" style="border-top: 1px solid #fed7aa;">
+    <button class="w-full flex items-center justify-between px-5 py-3 bg-amber-50 hover:bg-amber-100 transition-colors">
+      <div class="flex items-center gap-3">
+        <div class="text-[10px] font-bold text-amber-700 uppercase tracking-widest">Interpretation</div>
+        <div class="text-sm font-medium text-amber-700">Moderate · LVO likely</div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="px-5 py-5 max-h-[60vh] overflow-y-auto">
+      <p class="text-slate-900 text-xl leading-tight font-semibold">Moderate-to-severe stroke.</p>
+      <p class="text-slate-600 leading-relaxed mt-3">NIHSS 14 with a RACE sub-score ≥5 suggests probable large-vessel occlusion. Urgent vascular imaging (CTA) and thrombectomy evaluation are indicated.</p>
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">See also</div>
+        <p class="text-sm text-slate-600 leading-relaxed"><a href="#" class="text-neuro-600 hover:underline">Stroke Code pathway</a><span class="text-slate-300 mx-2">·</span><a href="#" class="text-neuro-600 hover:underline">Thrombectomy eligibility</a></p>
+      </div>
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <p class="text-xs text-slate-400 leading-relaxed">Brott T, Adams HP Jr, Olinger CP, et al. Measurements of acute cerebral infarction: a clinical examination scale. <em>Stroke.</em> 1989;20(7):864–870. <a href="#" class="text-neuro-600 hover:underline">View source</a></p>
+        <p class="mt-2 text-xs text-slate-400 leading-relaxed">Educational use only.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARCHETYPE 3 — HAS-BLED -->
+<div class="archetype-banner mt-12">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Archetype 3 — Mixed input</div>
+    <div class="text-sm text-slate-300 mt-1">Reference: HAS-BLED. Important callout lives inside the expanded drawer alongside interpretation.</div>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">HAS-BLED · Moderate · Drawer expanded</div>
+
+<div class="mockup-frame">
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="px-5 py-4">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">HAS-BLED</div>
+            <div class="flex items-baseline gap-1.5 mt-0.5">
+              <span class="text-2xl font-semibold text-slate-900 tabular-nums leading-none">3</span>
+              <span class="text-slate-400 text-sm leading-none">/ 9</span>
+              <span class="text-xs font-medium text-amber-600 ml-1.5">Moderate</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-0.5 flex-shrink-0">
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Favorite"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Reset"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>
+          <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">Copy</button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="px-5 pt-6 pb-4">
+    <section class="mb-10">
+      <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Risk factors</h2>
+      <div>
+        <label class="flex items-start gap-3 py-3.5 px-3 rounded-lg hover:bg-slate-50/60 cursor-pointer transition-colors bg-neuro-50">
+          <input type="checkbox" checked class="mt-0.5 w-5 h-5 rounded border-slate-300 text-neuro-500 accent-neuro-500" />
+          <div class="flex-1 min-w-0 flex items-baseline justify-between"><span class="font-semibold text-neuro-700">Hypertension (SBP &gt;160)</span><span class="text-sm text-neuro-700 opacity-75">1 pt</span></div>
+        </label>
+        <div class="divider-hair"></div>
+        <label class="flex items-start gap-3 py-3.5 px-3 rounded-lg hover:bg-slate-50/60 cursor-pointer transition-colors bg-neuro-50">
+          <input type="checkbox" checked class="mt-0.5 w-5 h-5 rounded border-slate-300 text-neuro-500 accent-neuro-500" />
+          <div class="flex-1 min-w-0 flex items-baseline justify-between"><span class="font-semibold text-neuro-700">Stroke history</span><span class="text-sm text-neuro-700 opacity-75">1 pt</span></div>
+        </label>
+        <div class="divider-hair"></div>
+        <label class="flex items-start gap-3 py-3.5 px-3 rounded-lg hover:bg-slate-50/60 cursor-pointer transition-colors bg-neuro-50">
+          <input type="checkbox" checked class="mt-0.5 w-5 h-5 rounded border-slate-300 text-neuro-500 accent-neuro-500" />
+          <div class="flex-1 min-w-0 flex items-baseline justify-between"><span class="font-semibold text-neuro-700">Elderly (&gt;65 years)</span><span class="text-sm text-neuro-700 opacity-75">1 pt</span></div>
+        </label>
+        <p class="text-center text-xs text-slate-300 italic pt-4">[other checkboxes + warfarin subgroup continue]</p>
+      </div>
+    </section>
+  </main>
+  <div class="drawer-spacer-expanded"></div>
+  <div class="absolute bottom-0 left-0 right-0 bg-white drawer-expanded" style="border-top: 1px solid #fed7aa;">
+    <button class="w-full flex items-center justify-between px-5 py-3 bg-amber-50 hover:bg-amber-100 transition-colors">
+      <div class="flex items-center gap-3">
+        <div class="text-[10px] font-bold text-amber-700 uppercase tracking-widest">Interpretation</div>
+        <div class="text-sm font-medium text-amber-700">Moderate · 3.74 bleeds / 100 pt-yr</div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="px-5 py-5 max-h-[60vh] overflow-y-auto">
+      <p class="text-slate-900 text-xl leading-tight font-semibold">Moderate bleeding risk.</p>
+      <p class="text-slate-600 leading-relaxed mt-3">Approximately 3.74 major bleeds per 100 patient-years. Address modifiable factors and monitor. Do not withhold anticoagulation for stroke prevention based on HAS-BLED alone.</p>
+      <div class="mt-5 pl-3 border-l-2 border-amber-400">
+        <div class="text-[10px] font-bold text-amber-700 uppercase tracking-widest mb-1">Important</div>
+        <p class="text-sm text-slate-700 leading-relaxed">HAS-BLED estimates bleeding risk. It does not mean "do not anticoagulate." Use it to address modifiable factors (BP, alcohol, NSAIDs, labile INR). Anticoagulation is driven by stroke risk (CHA₂DS₂-VASc) and shared decision-making.</p>
+      </div>
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">See also</div>
+        <p class="text-sm text-slate-600 leading-relaxed"><a href="#" class="text-neuro-600 hover:underline">CHA₂DS₂-VASc</a><span class="text-slate-300 mx-2">·</span><a href="#" class="text-neuro-600 hover:underline">Anticoagulation in AF guidelines</a></p>
+      </div>
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <p class="text-xs text-slate-400 leading-relaxed">Pisters R, Lane DA, Nieuwlaat R, et al. A novel user-friendly score (HAS-BLED) to assess 1-year risk of major bleeding in patients with atrial fibrillation. <em>Chest.</em> 2010;138(5):1093–1100. <a href="#" class="text-neuro-600 hover:underline">View source</a></p>
+        <p class="mt-2 text-xs text-slate-400 leading-relaxed">Educational use only. High HAS-BLED does not contraindicate anticoagulation.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="h-32"></div>
+</body>
+</html>
