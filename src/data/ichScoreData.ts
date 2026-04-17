@@ -134,13 +134,13 @@ const INTERPRETATION: Record<ICHSeverity, {
     interpretation: 'A score of 2 carries approximately 26% 30-day mortality.',
     explanation:
       'In Hemphill et al. (Stroke 2001), patients scoring 2 on the ICH Score had a' +
-      ' 30-day mortality of 26% in a derivation cohort of 152 patients. This band' +
-      ' captures a heterogeneous population — the same total score can arise from' +
-      ' different combinations of GCS impairment, volume, and location, so two patients' +
-      ' with identical scores may have substantially different clinical trajectories.' +
-      ' The score was derived to predict population-level outcomes and performs less' +
-      ' reliably at the individual patient level. Clinical context — hemorrhage location,' +
-      ' expansion risk, and patient baseline — should guide care planning alongside it.',
+      ' 30-day mortality of 26% in a derivation cohort of 152 patients. The same total' +
+      ' score can arise from different combinations of GCS impairment, volume, and' +
+      ' location; two patients with identical scores may have substantially different' +
+      ' clinical trajectories. Hemphill et al. designed the score to predict' +
+      ' population-level outcomes; it performs less reliably for individual patients.' +
+      ' Hemorrhage location, expansion risk, and patient baseline should all inform' +
+      ' care planning alongside the score.',
   },
   high: {
     label: 'High risk',
@@ -152,7 +152,7 @@ const INTERPRETATION: Record<ICHSeverity, {
       ' populations where aggressive care is provided, observed mortality may differ from' +
       ' these estimates. The score should anchor goals-of-care conversations, not replace' +
       ' them. Clinical judgment, patient values, hemorrhage trajectory, and reversible' +
-      ' contributors — including treatable coagulopathy or hydrocephalus — all bear on' +
+      ' contributors (including treatable coagulopathy or hydrocephalus) all bear on' +
       ' individual prognosis.',
   },
 };

@@ -127,11 +127,11 @@ const IchScoreCalculator: React.FC = () => {
   // ── State ──────────────────────────────────────────────────────────────────
   const [inputs, setInputs] = useState<ICHScoreInputs>(DEFAULT_INPUTS);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [showPulse, setShowPulse] = useState(false);
+  const [justCompleted, setJustCompleted] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Refs — not state: mutations must not trigger re-renders
-  const hasAutoExpanded = useRef<boolean>(false);
+  const wasCompleteRef = useRef<boolean>(false);
   const gcsGroupRef    = useRef<HTMLDivElement>(null);
   const volGroupRef    = useRef<HTMLDivElement>(null);
   const ivhGroupRef    = useRef<HTMLDivElement>(null);
@@ -148,25 +148,31 @@ const IchScoreCalculator: React.FC = () => {
   const isComplete = selectedCount === 5;
   const result: ICHCalculatorResult | null = isComplete ? calculateICHScore(inputs) : null;
 
-  /** Drawer state machine — CALCULATOR_SPEC.md §5 */
-  const drawerState: 'A' | 'B' | 'C' | 'D' =
-    selectedCount === 0       ? 'A' :
-    !isComplete               ? 'B' :
-    result!.severity === 'high' ? 'D' : 'C';
+  /** Drawer state machine — CALCULATOR_SPEC.md §5
+   *  A = empty  B = partial  C = complete (all severities)
+   *  State D removed: drawer no longer auto-expands. §5.4 discovery animation
+   *  signals completion instead. */
+  const drawerState: 'A' | 'B' | 'C' =
+    selectedCount === 0 ? 'A' :
+    !isComplete         ? 'B' : 'C';
 
   const isFav = isFavorite('ich');
 
   // ── Effects ────────────────────────────────────────────────────────────────
-  /** Auto-expand on first State D entry (§5 State D) */
+  /** Discovery animation — fires once per completion event (§5.4).
+   *  Drawer stays collapsed; chevron bounces 3× to signal "tap me". */
   useEffect(() => {
-    if (drawerState === 'D' && !hasAutoExpanded.current) {
-      setDrawerOpen(true);
-      setShowPulse(true);
-      hasAutoExpanded.current = true;
-      const timer = setTimeout(() => setShowPulse(false), 1600);
+    if (isComplete && !wasCompleteRef.current) {
+      wasCompleteRef.current = true;
+      setJustCompleted(true);
+      const timer = setTimeout(() => setJustCompleted(false), 1800); // 3 × 600ms
       return () => clearTimeout(timer);
     }
-  }, [drawerState]);
+    if (!isComplete && wasCompleteRef.current) {
+      wasCompleteRef.current = false;
+      setJustCompleted(false);
+    }
+  }, [isComplete]);
 
   // ── Setters ────────────────────────────────────────────────────────────────
   const setGcs = useCallback((points: 0 | 1 | 2) => {
@@ -226,7 +232,7 @@ const IchScoreCalculator: React.FC = () => {
   const handleReset = useCallback(() => {
     setInputs(DEFAULT_INPUTS);
     setDrawerOpen(false);
-    // hasAutoExpanded stays true — per spec, pulse fires only once per session
+    // wasCompleteRef resets via isComplete effect — discovery animation re-arms on next completion
     resetTracking();
     setToastMessage('Reset');
     setTimeout(() => setToastMessage(null), 1500);
@@ -340,13 +346,12 @@ const IchScoreCalculator: React.FC = () => {
       );
     }
 
-    // State C / D — complete, tappable header
+    // State C — complete, tappable header (all severities)
     if (!tokens || !result) return null;
     const isExpanded = drawerOpen;
 
     return (
       <div
-        className={showPulse ? 'drawer-just-available' : ''}
         style={{
           borderTop: `1px solid ${tokens.borderColor}`,
           boxShadow: isExpanded ? drawerExpandedShadow : drawerCollapsedShadow,
@@ -378,12 +383,15 @@ const IchScoreCalculator: React.FC = () => {
               {result.label} · {result.stat}
             </div>
           </div>
+          {/* Chevron: discovery bounce fires once on completion; hint bounce after (§5.4) */}
           <Chevron
             direction={isExpanded ? 'down' : 'up'}
             className={
               isExpanded
                 ? tokens.chevronClass
-                : `text-slate-400${drawerState === 'C' && !isExpanded ? ' drawer-chevron-hint' : ''}`
+                : justCompleted
+                  ? `${tokens.chevronClass} drawer-discovery-chevron`
+                  : 'text-slate-400 drawer-chevron-hint'
             }
           />
         </button>
