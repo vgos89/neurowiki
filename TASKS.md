@@ -6,6 +6,11 @@
 ## BLOCKED
 (none)
 
+## PARKING LOT
+Ideas deferred from in-progress sessions. Not yet triaged into PENDING.
+Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
+(none yet)
+
 ## PENDING
 
 ### LAYER 2 — Stroke Pathway (do in order)
@@ -183,3 +188,8 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
   - Removed lazy imports and ROUTE_COMPONENTS entries from App.tsx
   - Removed type union members and route objects from routeManifest.ts
   - StrokeBasicsWorkflowV2 (via StrokeBasics.tsx) is the canonical implementation
+
+## POST-MORTEMS
+Regressions that required rollback. Each entry links to a post-mortem
+doc in docs/YYYY_MM_DD/post-mortem-<slug>.md.
+(none yet)
