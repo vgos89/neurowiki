@@ -119,8 +119,8 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     includeInSitemap: true,
     comingSoonMessage: 'ICH Score calculator',
     meta: {
-      title: 'ICH Score Calculator — Hemorrhage Mortality Prediction | NeuroWiki',
-      description: 'Calculate ICH Score for 30-day mortality prediction in intracerebral hemorrhage. Includes GCS, hemorrhage volume, IVH, infratentorial location, and age. Based on Hemphill et al., Stroke 2001.',
+      title: 'ICH Score Calculator — Hemorrhage Prognosis | NeuroWiki',
+      description: 'ICH Score calculator for 30-day mortality prediction in intracerebral hemorrhage. Covers GCS, volume, IVH, location, and age. Neurology clinical tool.',
       keywords: 'ICH score calculator, intracerebral hemorrhage mortality, ICH prognosis, GCS ICH, hemorrhage volume calculator, stroke calculator',
     },
   },

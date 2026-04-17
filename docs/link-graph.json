@@ -1,7 +1,23 @@
 {
   "version": 1,
-  "generated": null,
-  "nodes": {},
+  "generated": "2026-04-17",
+  "nodes": {
+    "calc/ich-score": {
+      "type": "calculator",
+      "title": "ICH Score Calculator",
+      "route": "/calculators/ich-score",
+      "references": [
+        "trial/hemphill-2001",
+        "calc/gcs",
+        "calc/heidelberg",
+        "guideline/aha-ich-2022"
+      ],
+      "referencedBy": [
+        "pathway/stroke/step-2",
+        "article/ich-management"
+      ]
+    }
+  },
   "_schema": {
     "nodes": {
       "_description": "Each key is a node ID like 'calc/ich-score' or 'article/stroke-basics'. Values contain type, title, route, references (outbound), referencedBy (inbound).",
