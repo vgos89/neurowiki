@@ -70,7 +70,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] Evaluate whether .claude/agents/accessibility-specialist.md should be split — ARIA patterns and code examples may belong in .claude/skills/accessibility.md, with the agent file reduced to role + activation triggers + decision rubric. Evaluate after W3.5 when the full agent roster is in place.
 
 ## CONFIRMED CLEAN
-- [x] 2026-04-17 — GCS Calculator rebuild (Class D-clinical) — commit TBD (feat/rebuild-gcs)
+- [x] 2026-04-17 — GCS Calculator rebuild (Class D-clinical) — commit 0605c53 (feat/rebuild-gcs)
   - Full Archetype 1 rebuild per CALCULATOR_SPEC v1.1; first live Class D-clinical workflow
   - Files: GlasgowComaScaleCalculator.tsx (full rewrite), gcsScoreData.ts (threshold + types + citations),
     routeManifest.ts (GCS title/desc), link-graph.json (new nodes + stubs), ADR-001, arch review, clinical review
