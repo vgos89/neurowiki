@@ -16,11 +16,50 @@
         "pathway/stroke/step-2",
         "article/ich-management"
       ]
+    },
+    "calc/gcs": {
+      "type": "calculator",
+      "title": "Glasgow Coma Scale (GCS) Score Calculator",
+      "route": "/calculators/glasgow-coma-scale",
+      "references": [
+        "calc/ich-score",
+        "calc/nihss"
+      ],
+      "referencedBy": [
+        "calc/ich-score",
+        "article/ich-management",
+        "pathway/stroke/step-2"
+      ]
+    },
+    "calc/nihss": {
+      "type": "calculator",
+      "title": "NIHSS Calculator",
+      "route": "/calculators/nihss",
+      "references": [],
+      "referencedBy": [
+        "calc/gcs"
+      ]
+    },
+    "article/ich-management": {
+      "type": "article",
+      "title": "ICH Management",
+      "route": "/guide/ich-management",
+      "references": [
+        "calc/ich-score",
+        "calc/gcs"
+      ],
+      "referencedBy": []
     }
   },
+  "stubs": [
+    "pathway/stroke/step-2",
+    "trial/hemphill-2001",
+    "guideline/aha-ich-2022",
+    "calc/heidelberg"
+  ],
   "_schema": {
     "nodes": {
-      "_description": "Each key is a node ID like 'calc/ich-score' or 'article/stroke-basics'. Values contain type, title, route, references (outbound), referencedBy (inbound).",
+      "_description": "Each key is a node ID like 'calc/ich-score' or 'article/stroke-basics'. Values contain type, title, route, references (outbound links), referencedBy (inbound links).",
       "_example": {
         "calc/ich-score": {
           "type": "calculator",
@@ -30,6 +69,9 @@
           "referencedBy": ["pathway/stroke/step-2"]
         }
       }
+    },
+    "stubs": {
+      "_description": "Node IDs intentionally without app routes. Referenced by nodes but not yet routable (unbuilt calculators, external sources, pathway steps). Prevents orphan-check false positives. CALCULATOR_SPEC.md §7.4."
     }
   }
 }
