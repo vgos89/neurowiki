@@ -222,40 +222,63 @@ For multi-file changes, group by file. For plans, lead with numbered English ste
 
 ---
 
-## 11. Agent roster — 8 core specialists
+## 11. Agent roster
 
 All in `.claude/agents/`. Each has frontmatter-enforced scope: `name`, `description`, `tools:`, `model:`. Main session acts as **orchestrator** — plans, classifies, delegates.
-
-| # | Agent | Scope | Tool bounds |
-|---|---|---|---|
-| 1 | `system-architect` | Structural decisions, client/view boundaries, composability, duplication prevention, long-term maintainability. Reviews plans on Class D/E before execution. | Read, Grep, Glob (read-only) |
-| 2 | `ui-architect` | Design system, layouts, component patterns, responsive behavior, shadcn/ui usage | Read, Write, Edit, Glob, Grep |
-| 3 | `medical-scientist` | Clinical accuracy, guideline alignment, evidence grading, trial references. Owns semantic validity of claims. | Read, Write, Edit, WebFetch, WebSearch |
-| 4 | `calculator-engineer` | Scoring logic, interpretation thresholds, clinical algorithm correctness | Read, Write, Edit, Bash (test runner) |
-| 5 | `data-architect` | Schemas, TypeScript models, citation registry, API integration, **owns adding new claim-surface handlers to the scanner (§13.3)** | Read, Write, Edit, Bash |
-| 6 | `content-writer` | Educational prose, pearls, study-mode content, plain-language explanations | Read, Write, Edit |
-| 7 | `qa-engineer` | Tests, validation, performance budgets, deployment checks | Read, Write, Edit, Bash |
-| 8 | `clinical-reviewer` | **Tripwire.** Final gate on Class E and any `-clinical`-flagged PR. Reviews semantic validity per standard defined in `.claude/agents/clinical-reviewer.md`. Can block merge. | Read, Grep, Glob (read-only) |
 
 **Role split — orchestrator vs architect.** Orchestrator = foreman: takes goal, picks crews, makes schedule. Architect = blueprint designer: *does this fit the existing structure, or are we building the third different way to do the same thing?* Orchestrator plans the work; architect reviews the shape of the plan on Class D/E before the work starts.
 
 **Semantic review standard.** The definition of "approve" for clinical content — exact match, fair paraphrase, acceptable synthesis, block-on-evidence-conflict — lives in the `clinical-reviewer` agent brief, not in this file. CLAUDE.md assigns the responsibility; the agent file defines the standard.
 
+### Core 6 — mandatory on every UI-touching swarm
+
+| # | Agent | Scope | Tool bounds |
+|---|---|---|---|
+| 1 | `ui-architect` | Design system, layouts, component patterns, responsive behavior, shadcn/ui usage | Read, Write, Edit, Glob, Grep |
+| 2 | `mobile-first-developer` | Mobile UX, 375px viewport QA, touch targets, safe-area. Signs off every UI PR. | Read, Write, Edit, Glob, Grep |
+| 3 | `medical-scientist` | Clinical accuracy, guideline alignment, evidence grading, trial references. Owns semantic validity of claims. | Read, Write, Edit, WebFetch, WebSearch |
+| 4 | `clinical-reviewer` | **Tripwire.** Final gate on Class E and any `-clinical`-flagged PR. Reviews semantic validity per standard defined in `.claude/agents/clinical-reviewer.md`. Can block merge. | Read, Grep, Glob (read-only) |
+| 5 | `content-writer` | Educational prose, pearls, study-mode content, plain-language explanations | Read, Write, Edit |
+| 6 | `quality-assurance` | Tests, validation, performance budgets, deployment checks | Read, Write, Edit, Bash |
+
+### Contextual 8 — task-activated per brief
+
+| # | Agent | Activates when | Tool bounds |
+|---|---|---|---|
+| 1 | `calculator-engineer` | Scoring logic, interpretation thresholds, clinical algorithm correctness | Read, Write, Edit, Bash |
+| 2 | `design-prototyper` | New mockup needed at `docs/specs/mockups/` | Read, Write, Edit |
+| 3 | `design-guardian` | `docs/specs/*.md` creation or change | Read, Write, Edit, Grep, Glob |
+| 4 | `librarian` | Post-flight after every swarm | Read, Write, Edit, Grep, Glob |
+| 5 | `accessibility-specialist` | Interactive UI, ARIA, keyboard nav, focus management | Read, Write, Edit, Glob, Grep |
+| 6 | `seo-specialist` | New routes, `src/seo/`, structured data, metadata, pre-publish | Read, Write, Edit, Glob, Grep |
+| 7 | `compliance-legal` | Auth flows, privacy/ToS, PHI paths, disclaimers, GDPR/CCPA | Read, Write, Edit, Glob, Grep |
+| 8 | `system-architect` | Class D/E plan review; structural decisions, composability, duplication prevention | Read, Grep, Glob (read-only) |
+
+### Meta 3 — not invoked as subagents
+
+| # | Agent | Role |
+|---|---|---|
+| 1 | `pm-agent` | Chat-side PM in Claude.ai; human↔Claude Code translator |
+| 2 | `orchestrator` | Swarm composition model; main Claude Code session absorbs this function |
+| 3 | `build-engineer` | Claude Code IS the build engineer when running |
+
 ---
 
 ## 12. Skills library — on-demand knowledge
 
-In `.claude/skills/`. Agents load via `skills:` frontmatter when the task touches the domain. Not every task needs every skill.
+In `.claude/skills/`. Agents load via `skills:` frontmatter when the task touches the domain.
 
-- `seo-optimization` — content-writer + ui-architect on new public pages
-- `accessibility` — ui-architect on interactive UI (WCAG 2.1 AA)
-- `compliance-legal` — content-writer on user-facing medical text; disclaimers, PHI rules
-- `performance` — qa-engineer + ui-architect on Core Web Vitals work
-- `error-handling` — qa-engineer on bug triage, error boundaries
-- `api-integration` — data-architect on PubMed / ClinicalTrials.gov
-- `analytics-insights` — product decisions, data-driven choices
-- `internationalization` — dormant; activate only when expansion is scheduled
-- `onboarding-docs` — content-writer on tutorials, help content
+### Shipped
+
+| Skill | Domain | Loaded by |
+|---|---|---|
+| `stroke-guidelines` | AHA/ASA 2026 + 2022 ICH guidelines, evidence classification, key trials | `medical-scientist` |
+| `performance` | Core Web Vitals, bundle budgets, Lighthouse targets, network resilience | `quality-assurance`, `ui-architect` |
+
+### Pending (not yet written)
+
+- `humanizer` — prose style guide for `content-writer`
+- Domain skills — calculator-specific guidelines, disease-area knowledge (ICH, seizure, headache)
 
 ---
 
@@ -561,7 +584,7 @@ docs/
 └── post-mortem-template.md
 
 .claude/
-├── agents/                     # 8 core agent briefs
+├── agents/                     # agent briefs (17 agents across Core 6 / Contextual 8 / Meta 3) + 2 skills; see §11–§12
 ├── skills/                     # On-demand knowledge bundles
 ├── commands/                   # Slash commands
 └── hooks/                      # Pre-commit, pre-push enforcement scripts
