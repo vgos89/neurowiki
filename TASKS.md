@@ -18,7 +18,7 @@
 ## PARKING LOT
 Ideas deferred from in-progress sessions. Not yet triaged into PENDING.
 Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
-(none yet)
+- [2026-04-17] Evaluate Claude Design (Anthropic Labs research preview, launched 2026-04-17) for potential integration with design-prototyper workflow. Currently research preview with ~50% reliability on complex tasks; revisit when maturity improves (~3-6 months). Could replace or augment HTML mockup authoring at docs/specs/mockups/. (parked during: W5.1 / end-of-session cleanup)
 
 ## PENDING
 
