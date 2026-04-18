@@ -1,6 +1,6 @@
 # CALCULATOR_SPEC.md — NeuroWiki Calculator Design Specification
 
-**Version:** 1.0.2
+**Version:** 1.1
 **Status:** Locked after PM approval
 **Owner:** Design Guardian
 **Mockup:** docs/specs/mockups/calculator-reference.html
@@ -67,7 +67,7 @@ text-xs font-medium [severity-color] ml-1.5
 ```
 Severity colors:
 - High / Severe: `text-red-600`
-- Moderate: `text-amber-600`
+- Moderate: `text-amber-700`
 - Low: no severity text shown (score alone is sufficient)
 
 **Right cluster — action buttons:**
@@ -116,6 +116,14 @@ The drawer is always rendered. It changes state (see §5) but never disappears f
 The spacer div beneath main content must match drawer height to prevent content from hiding behind the drawer:
 - Collapsed drawer: `.drawer-spacer-collapsed { height: 80px }`
 - Expanded drawer: `.drawer-spacer-expanded { height: 380px }`
+
+**Production implementation — React Portal:** In React production, implement the drawer via `createPortal(drawer, document.body)` with `position: fixed`. The `absolute bottom-0` annotation in the mockup HTML describes the static preview context only and does not work inside `overflow-y-auto` scroll containers. Production drawer positioning:
+- `position: fixed`
+- `bottom: calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))`
+- `left: 0`, `right: 0`
+- `z-index: 55` (above tab bar `z-50`, below toast `z-[60]`)
+
+A spacer div inside `<main>` reserves vertical space equal to the drawer's collapsed height so final content is not hidden beneath the drawer. See §5.3 for the full positioning spec.
 
 ---
 
@@ -617,7 +625,7 @@ Note: GCS is inverse — lower score indicates worse severity. The severity mapp
 | Severity | Border-top | Header bg | Header text | Chevron |
 |----------|-----------|-----------|-------------|---------|
 | Low | slate-200 `#e2e8f0` | white | `text-slate-900` | `text-slate-400` |
-| Moderate | amber-200 `#fed7aa` | amber-50 | `text-amber-700` | `text-amber-600` |
+| Moderate | amber-200 `#fed7aa` | amber-50 | `text-amber-700` | `text-amber-700` |
 | High | red-200 `#fecaca` | red-50 | `text-red-700` | `text-red-600` |
 
 ---
@@ -628,7 +636,7 @@ Every calculator page must satisfy these requirements before any commit that tou
 
 ### 7.1 Route Metadata
 
-Entry in `src/seo/routeMeta.ts`:
+Entry in `src/config/routeManifest.ts`:
 - `title`: `"[Calculator Name] Calculator | NeuroWiki"` — 50–60 chars
 - `description`: keyword-rich, 150–160 chars, includes primary search term and clinical use case
 - `keywords`: primary term + "calculator", "score", "neurology", relevant condition
@@ -681,14 +689,32 @@ Each calculator registers in `docs/link-graph.json` as:
 
 The "See also" links in the expanded drawer must exactly match the `references` array for that node. No link appears in the UI without a corresponding edge in the graph, and vice versa.
 
-### 7.4 Heading Hierarchy
+**Stub-node exception:** When a referenced node has no registered route in `src/config/routeManifest.ts`, the "See also" link may be omitted from the rendered UI to avoid dead links. However, the edge must remain in `link-graph.json` for graph integrity. Referenced node IDs without routes should be added to the `stubs` array at the top of `link-graph.json` so orphan checks can distinguish intentional stubs from bugs. See §7.4 for the stubs array format.
+
+### 7.4 Link-Graph Stubs Array Convention
+
+Top-level `stubs` array in `link-graph.json` lists node IDs that are intentionally unrouted (referenced in the graph but have no live page yet):
+
+```json
+{
+  "stubs": [
+    "trial/hemphill-2001",
+    "guideline/aha-ich-2022"
+  ],
+  "nodes": { ... }
+}
+```
+
+**Orphan check protocol:** For every node ID referenced in any node's `references` or `referencedBy` array, confirm it exists as either a key in `nodes` or a string in `stubs`. Anything else is a broken reference and must be flagged before merge.
+
+### 7.5 Heading Hierarchy
 
 Each calculator page must have:
 - Exactly one `<h1>`: the calculator name (visually present or as screen-reader-only — consult with Accessibility Specialist)
 - `<h2>` for each input section (already specified as the section label)
 - No `<h3>` or deeper without a parent `<h2>`
 
-### 7.5 Canonical Tags
+### 7.6 Canonical Tags
 
 Each calculator page must emit a canonical `<link>` pointing to its own URL. No calculator page should be reachable at more than one URL without a canonical redirect.
 
@@ -703,7 +729,7 @@ Each calculator page must emit a canonical `<link>` pointing to its own URL. No 
 | Calculator types | Defined in score data file: `CalculatorInputs`, `CalculatorResult`, `CalculatorSeverity` |
 | Shared utilities | `src/utils/clipboard.ts` — `copyToClipboard()` |
 | Route registration | `src/config/routeManifest.ts` |
-| SEO metadata | `src/seo/routeMeta.ts` |
+| SEO metadata | `src/config/routeManifest.ts` |
 | Link graph | `docs/link-graph.json` |
 
 **Shared patterns — do not reinvent:**
@@ -733,6 +759,22 @@ This interface is the contract between the score data file and the page componen
 ## §9 Changelog
 
 ```
+2026-04-17 · v1.1 · Five amendments based on first swarm run (ICH Score).
+  §1.3: Production Portal guidance added — drawer must use createPortal(drawer,
+    document.body) with position fixed; absolute bottom-0 is mockup-only.
+    Bottom offset: calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px)).
+    z-index: 55 (above tab bar z-50, below toast z-[60]).
+  §7 (§7.1, §8): SEO file path corrected from src/seo/routeMeta.ts to
+    src/config/routeManifest.ts (old path does not exist in the repo).
+  §1.1, §6: text-amber-600 changed to text-amber-700 throughout for WCAG AA
+    compliance. amber-600 = 3.09:1 against white (FAIL); amber-700 = 5.14:1 (PASS).
+  §7.3: Stub-node exception added — unrouted referenced nodes may be omitted
+    from UI "See also" links; edge must remain in link-graph.json; node ID must
+    appear in stubs array.
+  §7.4: New section added documenting link-graph.json stubs array convention and
+    orphan check protocol. Former §7.4 (Heading Hierarchy) → §7.5.
+    Former §7.5 (Canonical Tags) → §7.6.
+
 2026-04-17 · v1.0.2 · Patch release.
   Removed State D auto-expand behavior. Drawer now always defaults collapsed.
   Added §5.4: discovery animation (chevron bounce 3×0.6s) fires once when score

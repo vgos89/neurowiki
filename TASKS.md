@@ -65,6 +65,12 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] Migrate humanizer as a standalone skill — either from Anthropic's environment skill at /mnt/skills/user/humanizer or authored fresh by extracting content-writer's internal humanizer checklist (lines 319–417 of content-writer.md). Once the skill file exists at .claude/skills/humanizer.md, add it to the frontmatter of medical-scientist and content-writer.
 
 ## CONFIRMED CLEAN
+- [x] 2026-04-17 — CALCULATOR_SPEC v1.1 consolidation — commit 71176ec
+  - Five amendments: §1.3 drawer Portal (createPortal + position fixed), §7.1/§8 SEO path
+    corrected (routeMeta.ts → routeManifest.ts), §1.1/§6 amber-600 → amber-700 (WCAG AA),
+    §7.3 stub-node exception, §7.4 stubs array documentation
+  - Based on ICH Score first swarm run findings
+  - No clinical content changed; no clinical-reviewer gate required
 - [x] Calculator design system — cobalt tokens across 7 calculators — commit cff25ed
   - Files: Abcd2, GCS, HAS-BLED, Heidelberg, ROPE, ICH Score, ASPECTS
   - Selected state: blue → neuro-500/neuro-50/neuro-700 (18×)
