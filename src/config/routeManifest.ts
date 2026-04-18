@@ -171,8 +171,8 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     includeInSitemap: true,
     comingSoonMessage: 'GCS calculator',
     meta: {
-      title: 'Glasgow Coma Scale (GCS) Calculator | NeuroWiki',
-      description: 'Standard GCS calculator for consciousness and neurological assessment. Handles intubated patients and not-testable responses. Eye, verbal, and motor scoring with clinical interpretation.',
+      title: 'Glasgow Coma Scale (GCS) Score Calculator | NeuroWiki',
+      description: 'GCS calculator for bedside consciousness assessment. Handles intubated patients and not-testable responses. Eye, verbal, and motor scoring with severity band.',
       keywords: 'Glasgow Coma Scale calculator, GCS calculator, GCS score, consciousness assessment, neurological exam, intubated GCS',
     },
   },
