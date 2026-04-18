@@ -3,6 +3,15 @@
 ## ACTIVE
 - [ACTIVE] [L4] Calculator visual redesign — full rebuild against docs/specs/CALCULATOR_SPEC.md (pending draft). ICH Score is the reference implementation. Then batch: NIHSS, GCS, ASPECTS, HAS-BLED, ABCD2, ROPE, Heidelberg, Boston Criteria.
 
+### W5.1 — Citation schema foundation — Class D
+- **Status:** in_progress
+- **User-visible goal:** none (foundational infrastructure)
+- **Non-goals:** no clinical content changes, no registry entries, no scanner, no pre-commit hook
+- **Files likely touched:** src/lib/citations/schema.ts (new), src/lib/citations/claim.ts (new), docs/adrs/ADR-002-citation-schema.md (new)
+- **Acceptance checks:** tsc passes on schema.ts · all 5 types exported · ADR-002 committed · architect review artifact exists with approve-with-conditions decision
+- **Clinical impact:** none
+- **Rollback plan:** git revert the W5.1 commit. No downstream consumers until W5.5+; rollback is clean and side-effect-free.
+
 ## BLOCKED
 (none)
 
