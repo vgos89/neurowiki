@@ -68,6 +68,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] Audit .claude/skills/performance.md for Next.js-specific code examples (next.config.js, next/font/google, pages/ router structure). Replace with Vite + React Router 7 equivalents where the pattern is transferable, or flag as non-applicable. Substantive performance knowledge (Core Web Vitals, code splitting, caching) applies regardless.
 - [ ] Fix stray 'ç' character on line ~111 of .claude/skills/performance.md ("**Impact:**ç" → "**Impact:**") inherited from legacy source typo.
 - [ ] Evaluate whether .claude/agents/accessibility-specialist.md should be split — ARIA patterns and code examples may belong in .claude/skills/accessibility.md, with the agent file reduced to role + activation triggers + decision rubric. Evaluate after W3.5 when the full agent roster is in place.
+- [ ] Audit .claude/agents/mobile-first-developer.md for non-design-system Tailwind colors (blue-*, gray-*, etc.) inherited from legacy source. Replace with neuro-* tokens per CALCULATOR_SPEC. Also update @performance-optimizer handoff reference to .claude/skills/performance.md skill-load pattern.
 
 ## CONFIRMED CLEAN
 - [x] 2026-04-17 — GCS Calculator rebuild (Class D-clinical) — merge 375d9cf (feat/rebuild-gcs → main)
