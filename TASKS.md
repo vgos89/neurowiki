@@ -1,16 +1,15 @@
 # TASKS.md — NeuroWiki Task Ledger
 
 ## ACTIVE
-- [ACTIVE] [L4] Calculator visual redesign — full rebuild against docs/specs/CALCULATOR_SPEC.md (pending draft). ICH Score is the reference implementation. Then batch: NIHSS, GCS, ASPECTS, HAS-BLED, ABCD2, ROPE, Heidelberg, Boston Criteria.
+- [x] [L4] Calculator visual redesign — GCS rebuilt via parallel swarm (375d9cf); CALCULATOR_SPEC.md locked. Remaining per-calculator audits (ICH, ROPE, HAS-BLED, ABCD2, Boston, Heidelberg) scheduled as Wave 5 Tier 1 audits after W5.4 ships. Entry retired 2026-04-19.
 
 ### W5.1 — Citation schema foundation — Class D
-- **Status:** in_progress
+- **Status:** done — commit 8bf8cc8 (2026-04-17)
 - **User-visible goal:** none (foundational infrastructure)
 - **Non-goals:** no clinical content changes, no registry entries, no scanner, no pre-commit hook
-- **Files likely touched:** src/lib/citations/schema.ts (new), src/lib/citations/claim.ts (new), docs/adrs/ADR-002-citation-schema.md (new)
-- **Acceptance checks:** tsc passes on schema.ts · all 5 types exported · ADR-002 committed · architect review artifact exists with approve-with-conditions decision
+- **Files touched:** src/lib/citations/schema.ts · src/lib/citations/claim.ts · src/lib/citations/claims.ts (stub) · docs/adrs/ADR-002-citation-schema.md · docs/reviews/arch-PR-W5-1-citation-schema.md
+- **Acceptance checks:** all passed — tsc clean · 5 types exported · ADR-002 committed · architect review approve · build green
 - **Clinical impact:** none
-- **Rollback plan:** git revert the W5.1 commit. No downstream consumers until W5.5+; rollback is clean and side-effect-free.
 
 ### W5.2 — Citation registry population — Class E (IN PROGRESS)
 
