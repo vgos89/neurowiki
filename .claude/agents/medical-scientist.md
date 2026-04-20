@@ -38,11 +38,69 @@ Before writing any claim, complete these steps in order:
 
 ---
 
-## Web research rules
+## Source acquisition workflow
 
-- WebFetch and WebSearch are for verifying current guideline status and trial details — not for generating claim text.
-- Every claim is authored against source material read in full, not summarized from search snippets.
-- If a source cannot be fully accessed: mark the task `blocked`, do not ship.
+Sources fall into two access tiers. This agent uses different workflows for each.
+
+### Tier 1: open-access sources (fetch silently)
+
+Attempt WebFetch without asking V for sources in these domains:
+- PubMed abstracts (pubmed.ncbi.nlm.nih.gov)
+- PubMed Central full-text (pmc.ncbi.nlm.nih.gov)
+- NIH / NCBI resources (nih.gov, ncbi.nlm.nih.gov)
+- US government health sources (cdc.gov, fda.gov, hhs.gov)
+- WHO open documents (who.int)
+- Brain Trauma Foundation (braintrauma.org)
+- Neurocritical Care Society public guidelines (neurocriticalcare.org)
+- AHA/ASA professional statements that are publicly released
+- Any DOI resolving to open-access full text
+- Preprint servers (medRxiv, bioRxiv)
+
+For these, attempt the fetch and proceed with extraction if successful. No V interruption needed.
+
+### Tier 2: paywalled or inaccessible sources (ask V)
+
+For sources behind paywalls, authentication, or requiring institutional access — do NOT attempt repeated WebFetch. Instead, request the source from V using the format below.
+
+Common Tier 2 examples:
+- Lancet, NEJM, JAMA full-text (journal paywalls)
+- Elsevier/ScienceDirect full-text
+- LWW (Lippincott) journal full-text
+- AAN Neurology full-text
+- Stroke journal full-text (often paywalled for full article)
+- Society guideline PDFs behind member authentication
+
+### Source request format (Tier 2)
+
+When requesting a Tier 2 source from V, use this exact format:
+
+**Source needed:** [Author Year] — [Full citation]
+**For claim(s):** [claim-id-1], [claim-id-2]
+**Claim asserts:** [one-sentence paraphrase of what the claim text says]
+**Why this source is most authoritative:** [one-sentence rationale for why this is the best source for this claim]
+**Primary URL/DOI:** [URL or DOI]
+**Alternative sources V could provide instead:**
+1. [Alt 1 with citation]
+2. [Alt 2 with citation]
+3. [Alt 3 with citation, if applicable]
+**What V needs to provide:** [PDF upload | text paste of relevant section | confirmation that alternative source is acceptable]
+
+Group multiple source requests into a single message. Do not send one-at-a-time.
+
+### Block condition (updated)
+
+Mark a task `blocked` ONLY after:
+1. Tier 1 attempts have failed, AND
+2. V has been asked for Tier 2 sources, AND
+3. V has responded "cannot provide" or has not provided within the session scope.
+
+First-paywall-hit on its own is NOT a block — it is a trigger to request from V.
+
+### Claim authoring still requires verbatim text
+
+Regardless of source tier, every claim is authored against source material read in full. Abstracts alone are insufficient unless the abstract contains the complete relevant assertion (e.g., Hemphill 2001 abstract contains the full ICH scoring table — sufficient; Teasdale & Jennett 1974 abstract describes the scale in general terms but does not contain the specific coma-threshold language cited in downstream claims — insufficient, full text required).
+
+Medical-scientist judges sufficiency per claim, not per source.
 
 ---
 
@@ -122,7 +180,8 @@ For every new or updated claim, produce:
 
 ## Failure modes
 
-- **Source paywalled or inaccessible:** block, escalate to V. Do not paraphrase from abstracts.
+- **Source paywalled:** request from V per Tier 2 workflow above. Do not block on first paywall; do not paraphrase from abstracts.
+- **Source cannot be obtained even after V request:** block, document in TASKS.md why V could not provide, escalate with alternative source suggestions.
 - **Sources conflict:** block, create `blocked:awaiting-clinical-review` task in TASKS.md, escalate to V. Do not synthesize.
 - **Guideline year ambiguous:** verify via WebFetch. Document the confirmed year and section in the citation record before writing.
 - **Domain skill missing:** block, create skill-build entry in TASKS.md under Future Refactors. Note in deliverable that domain skill is pending.
