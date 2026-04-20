@@ -12,6 +12,26 @@
 - **Clinical impact:** none
 - **Rollback plan:** git revert the W5.1 commit. No downstream consumers until W5.5+; rollback is clean and side-effect-free.
 
+### W5.2 — Citation registry population — Class E (IN PROGRESS)
+
+**Status:** in_progress (Phase 1 complete, Phases 2–4 pending)
+
+**Completed in current session:**
+- Phase 1 plan produced with full source extraction report
+- Decision 2 resolved: ACRM 1993 uses longer verbatim text (PMC5575625 / legal-reference match), url = PMC3477558, notes field required in registry entry to document access situation
+
+**Pending V decisions before resume:**
+- Blocker 1 (Teasdale & Jennett 1974): paywalled. Options are defer via institutional access, substitute secondary, or use replacement foundational source. Affects: gcs-mild-threshold (co-citation), gcs-airway-threshold, gcs-t-suffix.
+- Blocker 3 (gcs-moderate-threshold, gcs-severe-threshold): current code attributes these to ACRM 1993 which only defines mild TBI. Need: BTF Severe TBI Guidelines, AAN 1994 mild TBI practice parameters, or rewording to remove ACRM attribution.
+- Blocker 4 (gcs-airway-reflex-caveat, gcs-sedation-caveat): no citation identified. Clinically sound but need authoritative source or claim rewording.
+
+**Verified and ready to ship when V resumes:**
+- hemphill-2001-ich-score citation entry (PubMed abstract provides verbatim scoring text)
+- gcs-ich-score-weights claim (fully supported by Hemphill abstract)
+
+**Next session (W5.2 resume):**
+V decides remaining blockers. Most likely path: ship Hemphill-only registry entry + gcsScoreData.ts migration as W5.2a. Defer 8 other claims to W5.2b with targeted source-hunting.
+
 ## BLOCKED
 (none)
 
