@@ -109,3 +109,73 @@ export function classifyHeidelbergBleeding(input: HeidelbergInputs): HeidelbergR
       : base.managementNote,
   };
 }
+
+// ─── Canonical CALCULATOR_SPEC.md v1.1 §8 exports ────────────────────────────
+// Additive: exports above are preserved byte-for-byte. Added 2026-04-21 for the
+// Archetype 1 rebuild of HeidelbergBleedingCalculator.tsx.
+
+export type HeidelbergSeverity = 'low' | 'moderate' | 'high';
+
+/**
+ * Clinical categorization of each class to a 3-tier visual token.
+ * Approved by medical-scientist 2026-04-21; 3c revised moderate→high because
+ * post-reperfusion SAH mandates urgent exclusion of aneurysm rupture or
+ * procedural arterial injury. See docs/reviews/clinical-PR-heidelberg-rebuild.md
+ * and docs/adrs/ADR-004-heidelberg-severity-mapping.md.
+ *
+ * Mapping is visual-token-only: drives drawer border color (slate-200 /
+ * amber-200 / red-200) per CALCULATOR_SPEC §6. No classification prose or
+ * management guidance is altered by this mapping.
+ */
+export const HEIDELBERG_SEVERITY_MAP: Record<HeidelbergClass, HeidelbergSeverity> = {
+  '1a': 'low',
+  '1b': 'low',
+  '1c': 'moderate',
+  '2':  'high',
+  '3a': 'high',
+  '3b': 'high',
+  '3c': 'high',
+  '3d': 'moderate',
+};
+
+/**
+ * Canonical calculator result shape per CALCULATOR_SPEC.md §8.
+ * Wraps HeidelbergResult with drawer-anatomy fields. No prose is transformed —
+ * `interpretation` and `explanation` are byte-for-byte passthroughs of
+ * `clinicalSignificance` and `managementNote` (which already carries the
+ * SICH append when symptomatic=true).
+ */
+export interface HeidelbergCalculatorResult {
+  classification: string;
+  shortLabel: string;
+  severity: HeidelbergSeverity;
+  label: string;
+  stat: string | null;
+  interpretation: string;
+  explanation: string;
+  seeAlso: string[];
+}
+
+/**
+ * calculateHeidelberg — canonical calculator function per §8.
+ * Delegates to classifyHeidelbergBleeding() for classification and management
+ * note (including the SICH append). Adds severity, label, stat, and seeAlso.
+ */
+export function calculateHeidelberg(inputs: HeidelbergInputs): HeidelbergCalculatorResult {
+  const base = classifyHeidelbergBleeding(inputs);
+  const stat = inputs.symptomatic === true
+    ? 'Symptomatic (SICH)'
+    : inputs.symptomatic === false
+      ? 'Asymptomatic (aSICH)'
+      : null;
+  return {
+    classification: base.classification,
+    shortLabel: base.shortLabel,
+    severity: HEIDELBERG_SEVERITY_MAP[inputs.bleedingClass],
+    label: base.classification,
+    stat,
+    interpretation: base.clinicalSignificance,
+    explanation: base.managementNote,
+    seeAlso: ['calc/nihss'],
+  };
+}

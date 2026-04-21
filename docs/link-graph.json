@@ -37,7 +37,19 @@
       "route": "/calculators/nihss",
       "references": [],
       "referencedBy": [
-        "calc/gcs"
+        "calc/gcs",
+        "calc/heidelberg"
+      ]
+    },
+    "calc/heidelberg": {
+      "type": "calculator",
+      "title": "Heidelberg Bleeding Classification Calculator",
+      "route": "/calculators/heidelberg-bleeding-classification",
+      "references": [
+        "calc/nihss"
+      ],
+      "referencedBy": [
+        "calc/ich-score"
       ]
     },
     "article/ich-management": {
@@ -54,8 +66,7 @@
   "stubs": [
     "pathway/stroke/step-2",
     "trial/hemphill-2001",
-    "guideline/aha-ich-2022",
-    "calc/heidelberg"
+    "guideline/aha-ich-2022"
   ],
   "_schema": {
     "nodes": {
