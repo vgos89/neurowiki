@@ -157,6 +157,92 @@ with `set -e`. Do not bypass.
 - Do not dismiss a pre-commit hook failure as a test issue. The
   hook catches real content drift.
 
+## Design work scope
+
+If you are doing design work — landing pages, modals, page layouts,
+components, visual polish on pathways or trials — the following
+boundaries are non-negotiable:
+
+### What design work CAN change
+
+- Layout, spacing, alignment, grid structure
+- Tokens: colors, typography, elevation, border-radius, opacity
+- Animations and transitions
+- Component composition (which primitives are used)
+- Responsive breakpoints and viewport behavior
+- Interaction patterns (hover, focus, active, disabled states)
+- Icon choices and iconography
+- Microcopy for UI chrome (button labels like "Copy", "Reset",
+  "Next", "Back") — but only if already existing in the design
+  system
+- Route manifest titles and descriptions if they violate §7.1 SEO
+  budgets (with V approval)
+
+### What design work CANNOT change
+
+- **Clinical prose.** Every word of clinical content — treatment
+  algorithms, trial outcomes, statistics, recommendation text,
+  severity interpretations, eligibility criteria — is preserved
+  byte-for-byte during any design work. If design restructure
+  requires a sentence to be reworded, STOP and ask V.
+
+- **Severity signaling.** Do not change color mapping for clinical
+  tiers (e.g., moving "Class I" from green to amber, "severe" from
+  red to yellow). Severity tokens are clinical categorization, not
+  visual preference.
+
+- **Warning intensity.** Safety callouts, "Do not use" warnings,
+  contraindication banners, scope restrictions — do not soften
+  visually. If content says "Do not use below age 18," the visual
+  treatment must match the severity of the restriction.
+
+- **Granularity.** Do not collapse multi-band data (e.g., 7-band
+  mRS distributions into 3-band, 8-class Heidelberg into 3-tier).
+  Information density is clinical, not visual.
+
+- **Citations and references.** Citation text, PMID/DOI fields,
+  "Reference:" footers — byte-for-byte preserved.
+
+- **Order of clinical decision points.** If a pathway presents
+  steps 1, 2, 3 in a specific order, that order is clinical logic,
+  not narrative preference.
+
+### Mandatory checks for design work
+
+Before any commit:
+1. git diff must show only layout, token, or component changes
+2. No changes to clinical prose (interpretation text, explanation
+   text, labels that include clinical content)
+3. No changes to citation objects or registry entries
+4. All existing tests pass
+5. Pre-commit hook (check:claims, check:routes) passes
+
+### When in doubt — ask V
+
+If a design change might plausibly affect clinical interpretation,
+urgency signaling, or reading comprehension of clinical content,
+STOP and ask V before proceeding. This includes:
+- Changes to color mapping on any clinical data
+- Changes to warning/callout placement or prominence
+- Changes to data display granularity
+- Restructuring that moves clinical content into a different
+  visual hierarchy (e.g., demoting a warning from H2 to body copy)
+
+The rule: if a clinician reading the page would experience the
+information differently after the change, it is not "just design."
+
+### For pathways and trials specifically
+
+No canonical spec exists yet (TRIALS_SPEC.md and PATHWAY_SPEC.md
+are Wave 6 work, unauthored). In the absence of a canonical spec:
+- Mirror patterns from CALCULATOR_SPEC.md where applicable (tokens,
+  drawer patterns, header anatomy)
+- Use Heidelberg (76fa99b) and ABCD² (c0d1020) rebuilds as
+  implementation reference for token usage
+- Do NOT invent new design patterns without V approval
+- Document any pattern decision in docs/reviews/ as you go so it
+  can feed into the eventual TRIALS_SPEC / PATHWAY_SPEC authoring
+
 ## When you are unsure
 
 Stop and ask V. This project prioritizes correctness over velocity.
