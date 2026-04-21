@@ -9,7 +9,8 @@
     "build:analyze": "ANALYZE=true vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "check:routes": "node scripts/validateRouteManifest.mjs"
+    "check:routes": "node scripts/validateRouteManifest.mjs",
+    "check:claims": "tsx scripts/check-claims.ts"
   },
   "dependencies": {
     "lucide-react": "^0.562.0",
@@ -31,6 +32,7 @@
     "react-snap": "^1.23.0",
     "rollup-plugin-visualizer": "^6.0.5",
     "tailwindcss": "^4.1.18",
+    "tsx": "^4.21.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   },
