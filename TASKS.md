@@ -19,11 +19,6 @@
 - Phase 1 plan produced with full source extraction report
 - Decision 2 resolved: ACRM 1993 uses longer verbatim text (PMC5575625 / legal-reference match), url = PMC3477558, notes field required in registry entry to document access situation
 
-**Pending V decisions before resume:**
-- Blocker 1 (Teasdale & Jennett 1974): paywalled. Options are defer via institutional access, substitute secondary, or use replacement foundational source. Affects: gcs-mild-threshold (co-citation), gcs-airway-threshold, gcs-t-suffix.
-- Blocker 3 (gcs-moderate-threshold, gcs-severe-threshold): current code attributes these to ACRM 1993 which only defines mild TBI. Need: BTF Severe TBI Guidelines, AAN 1994 mild TBI practice parameters, or rewording to remove ACRM attribution.
-- Blocker 4 (gcs-airway-reflex-caveat, gcs-sedation-caveat): no citation identified. Clinically sound but need authoritative source or claim rewording.
-
 **Verified and ready to ship when V resumes:**
 - hemphill-2001-ich-score citation entry (PubMed abstract provides verbatim scoring text)
 - gcs-ich-score-weights claim (fully supported by Hemphill abstract)
@@ -56,6 +51,13 @@ V decides remaining blockers. Most likely path: ship Hemphill-only registry entr
 *Critical content finding:* existing gcsScoreData.ts has attribution errors — ACRM 1993 is cited for moderate and severe TBI which it does not define. Resolution is a clinical content correction, not a W5.2 registry gap.
 
 *Swarm architecture:* medical-scientist used Tier 1/2 workflow correctly (a276442), produced properly-formatted Tier 2 request, stopped at checkpoint per protocol.
+
+### L5.5 — Calculator compliance check swarm — Class B read-only
+- **Status:** planned
+- **Goal:** read 7 non-GCS/non-ICH calculators against CALCULATOR_SPEC.md v1.1. Produce prioritized rebuild list.
+- **Files:** src/pages/Abcd2ScoreCalculator.tsx, AspectScoreCalculator.tsx, BostonCriteriaCaaCalculator.tsx, HasBledScoreCalculator.tsx, HeidelbergBleedingCalculator.tsx, NihssCalculator.tsx, RopeScoreCalculator.tsx
+- **Not in scope:** clinical content audit, rebuilds themselves
+- **Rollback:** no writes to source
 
 ## BLOCKED
 (none)
@@ -270,6 +272,15 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
   - Removed lazy imports and ROUTE_COMPONENTS entries from App.tsx
   - Removed type union members and route objects from routeManifest.ts
   - StrokeBasicsWorkflowV2 (via StrokeBasics.tsx) is the canonical implementation
+- [x] 2026-04-17 — ICH Score calculator rebuild — commits 02fd51d, 3be3879
+  - Rebuilt IchScoreCalculator.tsx against CALCULATOR_SPEC v1.0; drawer header responsive + positioned above tab bar
+- [x] 2026-04-19/20 — W5.2 Phase 1 swarm + checkpoint — commits eb29cf1, 5b0a88a, a276442, dffce50
+  - W5.2 in-progress checkpoint (eb29cf1, 5b0a88a, 2026-04-19); medical-scientist Tier 1/2 workflow (a276442, 2026-04-20); Phase 1 swarm findings (dffce50, 2026-04-20)
+  - Phase 1 complete: 2 claims ready (gcs-ich-score-weights, gcs-airway-threshold), 5 V decisions pending
+- [x] 2026-04-20 — W5.3 citation scanner — commit 91bee2b
+  - scripts/check-claims.ts: unregistered claim IDs, bidirectional surface cross-check, freshness check; tsx devDep; test fixtures; arch review approve-with-conditions
+- [x] 2026-04-20 — W5.4 pre-commit hook — commit 83b80bd
+  - .husky/pre-commit: set -e + check:claims + check:routes; husky v9; arch review approve
 
 ## POST-MORTEMS
 Regressions that required rollback. Each entry links to a post-mortem
