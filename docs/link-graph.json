@@ -52,6 +52,13 @@
         "calc/ich-score"
       ]
     },
+    "calc/abcd2": {
+      "type": "calculator",
+      "title": "ABCD² Score Calculator",
+      "route": "/calculators/abcd2-score",
+      "references": [],
+      "referencedBy": []
+    },
     "article/ich-management": {
       "type": "article",
       "title": "ICH Management",

@@ -80,3 +80,63 @@ export function calculateABCD2Score(inputs: ABCD2Inputs): ABCD2Result {
 
   return { score, risk, twoDayRiskPercent };
 }
+
+// ─── Canonical CALCULATOR_SPEC.md v1.1 §8 exports ────────────────────────────
+// Additive: exports above are preserved byte-for-byte. Added 2026-04-21 for the
+// Archetype 1 rebuild of Abcd2ScoreCalculator.tsx.
+
+export type ABCD2Severity = ABCD2Risk;
+
+/**
+ * Per-tier action directives — relocated byte-for-byte from the pre-rebuild
+ * Abcd2ScoreCalculator.tsx inline JSX (lines 147–149 of the pre-rebuild file).
+ * Not new prose; preserved text.
+ */
+const ABCD2_DRAWER_EXPLANATION: Record<ABCD2Risk, string> = {
+  low: 'Urgent outpatient workup within 48h. All TIA patients need urgent evaluation regardless of score.',
+  moderate: 'Consider admission or same-day/urgent evaluation.',
+  high: 'Admit for workup and stroke prevention.',
+};
+
+/**
+ * Canonical calculator result shape per CALCULATOR_SPEC.md §8. Wraps
+ * ABCD2Result with drawer-anatomy fields. `severity` is a type alias of
+ * `risk` — ABCD² encodes severity in its validated risk tiers (Johnston et al.
+ * Lancet 2007); no new clinical categorization is introduced by the wrapper.
+ */
+export interface ABCD2CalculatorResult {
+  score: number;
+  maxScore: 7;
+  risk: ABCD2Risk;
+  severity: ABCD2Severity;
+  twoDayRiskPercent: number;
+  label: string;
+  stat: string;
+  interpretation: string;
+  explanation: string;
+  seeAlso: string[];
+}
+
+/**
+ * calculateABCD2 — canonical calculator function per §8.
+ * Delegates to calculateABCD2Score() for the score and risk tier. Adds label,
+ * stat, interpretation, explanation. All clinical strings are drawn from
+ * existing exports (ABCD2_RISK_LABELS, ABCD2_TWO_DAY_RISK) or the relocated
+ * pre-rebuild component text in ABCD2_DRAWER_EXPLANATION.
+ */
+export function calculateABCD2(inputs: ABCD2Inputs): ABCD2CalculatorResult {
+  const base = calculateABCD2Score(inputs);
+  const label = ABCD2_RISK_LABELS[base.risk];
+  return {
+    score: base.score,
+    maxScore: 7,
+    risk: base.risk,
+    severity: base.risk,
+    twoDayRiskPercent: base.twoDayRiskPercent,
+    label,
+    stat: `${base.twoDayRiskPercent}%`,
+    interpretation: `${label} · 2-day stroke risk: ${base.twoDayRiskPercent}%.`,
+    explanation: ABCD2_DRAWER_EXPLANATION[base.risk],
+    seeAlso: [],
+  };
+}
