@@ -31,6 +31,32 @@
 **Next session (W5.2 resume):**
 V decides remaining blockers. Most likely path: ship Hemphill-only registry entry + gcsScoreData.ts migration as W5.2a. Defer 8 other claims to W5.2b with targeted source-hunting.
 
+**Phase 1 swarm findings (2026-04-20):**
+
+*Claims ready to register:*
+- gcs-ich-score-weights — Hemphill 2001 PubMed abstract (PMID 11283388) sufficient; full scoring table in abstract
+- gcs-airway-threshold — BTF Prehospital 2023 PMC10627685 (Strong rec); confirmed better source than T&J 1974 per prior clinical review follow-up #1
+
+*Tier 1 sources fetched and verified:*
+- ACRM 1993 via PMC5575625 (inline prose version with "any period of", "neurological", "posttraumatic") — confirmed
+- BTF Prehospital 2023 via PMC10627685 (airway threshold + partial sedation caveat) — confirmed
+- Hemphill 2001 via PubMed abstract PMID 11283388 (full scoring table in abstract) — confirmed
+- Rotheray 2012 abstract only, PMID 21787740 (Elsevier paywall blocks full text; GCS 9–14 data, not 9–12)
+
+*Tier 2 source pending V:*
+- Teasdale & Jennett 1974 (Lancet paywall; V has institutional access) — needed for gcs-mild-threshold, gcs-severe-threshold, gcs-t-suffix
+
+*V decisions pending before Phase 2 architect review can run:*
+1. T&J 1974 PDF or alternative source
+2. gcs-moderate-threshold: ACRM 1993 attribution is wrong — ACRM defines mild TBI only; need citation strategy (T&J 1974 if it supports / BTF-implicit / remove attribution)
+3. gcs-mild-ct-caveat: no Tier 1 source found; NICE head injury guidelines candidate (nice.org.uk)
+4. gcs-airway-reflex-caveat: Rotheray 2012 covers GCS 9–14 not 9–12; V decides: accept with range correction / reword softer / drop / provide full text
+5. gcs-sedation-caveat: "metabolic encephalopathy" not in BTF 2023; verb drift "must be considered" vs BTF "should be documented"; reword to match BTF / V provides alternate source / split claim
+
+*Critical content finding:* existing gcsScoreData.ts has attribution errors — ACRM 1993 is cited for moderate and severe TBI which it does not define. Resolution is a clinical content correction, not a W5.2 registry gap.
+
+*Swarm architecture:* medical-scientist used Tier 1/2 workflow correctly (a276442), produced properly-formatted Tier 2 request, stopped at checkpoint per protocol.
+
 ## BLOCKED
 (none)
 
