@@ -747,8 +747,8 @@ const Abcd2ScoreCalculator: React.FC = () => {
       {/* ── Drawer portal — fixed above mobile bottom nav §1.3 ───────────── */}
       {createPortal(
         <div
-          className="fixed left-0 right-0 z-[55] bg-white"
-          style={{ bottom: 'calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))' }}
+          className="fixed right-0 z-[55] bg-white"
+          style={{ bottom: 'calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))', left: 'var(--nav-rail-width, 0px)' }}
         >
           <Drawer />
         </div>,
