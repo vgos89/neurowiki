@@ -369,6 +369,10 @@ const TrialPageNew: React.FC = () => {
             >
               {trialMetadata.title}: {trialMetadata.subtitle}
             </h1>
+            {/* TRIALS_SPEC §1.3 question lede — 14/15px, slate-600, no section label */}
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with acute ischemic stroke presenting 4.5 to 9 hours after onset, or on awakening from sleep, does IV alteplase improve outcomes when imaging shows salvageable brain tissue?
+            </p>
             <p className="text-sm text-slate-500 mt-1">
               {trialMetadata.source}
               {trialMetadata.doi && (
@@ -448,6 +452,16 @@ const TrialPageNew: React.FC = () => {
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm={isPositive ? 'treatment' : 'none'}
               />
+              {/* NNT row — reads calculations.nnt, displayed as integer with ~ prefix */}
+              {trialMetadata.calculations?.nnt != null && (
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-sm font-semibold text-slate-700">
+                    ~{Math.round(trialMetadata.calculations.nnt as number)}
+                  </span>
+                  <span className="text-xs text-slate-500">to gain one additional excellent recovery (mRS 0-1)</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -554,6 +568,20 @@ const TrialPageNew: React.FC = () => {
                   <p className="text-[10px] uppercase tracking-widest text-slate-400">N</p>
                   <p className="text-sm font-medium text-slate-700">{trialMetadata.stats.sampleSize.value}</p>
                 </div>
+              </div>
+              {/* Sample size detail — 113 alteplase / 112 placebo of 310 planned; stopped June 2018 */}
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Enrollment detail</p>
+                <p className="text-sm text-slate-700">
+                  113 alteplase / 112 placebo (225 of 310 planned). Stopped early in June 2018 at 73% enrollment after interim efficacy signal.
+                </p>
+              </div>
+              {/* Subgroup signals — time-window distribution + interaction test */}
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Subgroup composition</p>
+                <p className="text-sm text-slate-700">
+                  Wake-up stroke: 65% of participants. Window 4.5 to 6 hours: 10%. Window 6 to 9 hours: 25%. No significant treatment-by-subgroup interaction was detected.
+                </p>
               </div>
               {trialMetadata.doi && (
                 <div>

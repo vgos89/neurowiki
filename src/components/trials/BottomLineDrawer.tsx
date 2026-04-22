@@ -172,7 +172,7 @@ export const BottomLineDrawer: React.FC<BottomLineDrawerProps> = ({
       style={{
         position: 'fixed',
         bottom: 'calc(var(--tab-bar-height, 4.5rem) + env(safe-area-inset-bottom, 0px))',
-        left: 0,
+        left: 'var(--nav-rail-width, 0px)',
         right: 0,
         zIndex: 55,
         background: 'white',

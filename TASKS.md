@@ -66,6 +66,8 @@ V decides remaining blockers. Most likely path: ship Hemphill-only registry entr
 Ideas deferred from in-progress sessions. Not yet triaged into PENDING.
 Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - [2026-04-17] Evaluate Claude Design (Anthropic Labs research preview, launched 2026-04-17) for potential integration with design-prototyper workflow. Currently research preview with ~50% reliability on complex tasks; revisit when maturity improves (~3-6 months). Could replace or augment HTML mockup authoring at docs/specs/mockups/. (parked during: W5.1 / end-of-session cleanup)
+- [2026-04-21] Patch C desktop drawer fix (--nav-rail-width) still needed for HeidelbergBleedingCalculator and ABCD2 calculator inline createPortal drawers — same left-0 bug. Out of scope this patch (only GCS + ICH were explicitly included). Tracked for next calculator audit wave. (parked during: Patches A/B/C)
+- [2026-04-21] Consider adding `clinicalQuestion?: string` field to TrialMetadata schema (trialData.ts) so the §1.3 question lede can be data-driven rather than hardcoded per trial page. Not urgent — only EXTEND page exists today. (parked during: Patches A/B/C)
 
 ## PENDING
 

@@ -117,6 +117,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   // Navigation expanded state - defaults to true (open) on first load
   const [isNavExpanded, setIsNavExpanded] = useState(true);
 
+  // Sync --nav-rail-width on :root for portal-mounted drawers (Patch C)
+  // Mobile (< md): 0px. Desktop expanded: 192px (w-48). Desktop collapsed: 64px (w-16).
+  useEffect(() => {
+    function updateNavWidth() {
+      const isMd = window.matchMedia('(min-width: 768px)').matches;
+      document.documentElement.style.setProperty(
+        '--nav-rail-width',
+        isMd ? (isNavExpanded ? '192px' : '64px') : '0px'
+      );
+    }
+    updateNavWidth();
+    const mq = window.matchMedia('(min-width: 768px)');
+    mq.addEventListener('change', updateNavWidth);
+    return () => mq.removeEventListener('change', updateNavWidth);
+  }, [isNavExpanded]);
+
   // Expanded guide categories
   const [expandedCategories, setExpandedCategories] = useState<string[]>(['Vascular Neurology']);
 
