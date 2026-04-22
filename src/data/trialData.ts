@@ -156,6 +156,18 @@ export interface TrialMetadata {
   listCategory?: 'thrombolysis' | 'thrombectomy' | 'antiplatelets' | 'carotid' | 'acute';
   /** One-line resident-focused blurb shown on the /trials listing page. Falls back to truncated clinicalContext if omitted. */
   listDescription?: string;
+  /** Inclusion criteria for the trial. One string per criterion. */
+  inclusionCriteria?: string[];
+  /** Exclusion criteria for the trial. One string per criterion. */
+  exclusionCriteria?: string[];
+  /** Q&A pairs for the 'How to read this chart' teaching well (Archetype A). */
+  howToReadChart?: { question: string; answer: string }[];
+  /** Structured interpretation for the 'How to interpret this trial' teaching well. */
+  howToInterpret?: { proves: string; doesNotProve: string; cautions: string };
+  /** Single plain-text string shown in the bedside pearl block. No em dashes. */
+  bedsidePearl?: string;
+  /** 1-2 sentence plain-language summary for the bottom-line drawer body. No em dashes. */
+  bottomLineSummary?: string;
 }
 
 export const TRIAL_DATA: Record<string, TrialMetadata> = {
@@ -425,6 +437,65 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT00887328',
     listCategory: 'thrombolysis',
     listDescription: 'tPA 4.5–9h and wake-up stroke with perfusion mismatch selection.',
+    trialResult: 'POSITIVE',
+    doi: '10.1056/NEJMoa1813046',
+    safetyProfile: {
+      sICH: {
+        /* claimId: extend.sich | source: NEJM 2019 Table 2 p.1800 */
+        evt: 6.2,
+        control: 0.9,
+        label: 'Symptomatic ICH within 36h',
+        tooltip: 'Parenchymal hematoma type 2 with NIHSS increase of 4 or more points within 36h of intervention. Adjusted RR 7.22 (95% CI 0.97 to 53.54), P=0.053. Source: Ma et al., NEJM 2019 Table 2 p.1800.',
+        color: 'danger',
+      },
+      mortality: {
+        /* claimId: extend.mortality | source: NEJM 2019 Table 2 p.1800 */
+        evt: 11.5,
+        control: 8.9,
+        label: 'Mortality at 90 days',
+        tooltip: 'Death within 90 days after intervention. Adjusted RR 1.17 (95% CI 0.57 to 2.40), P=0.67. Not significantly different between groups. Source: Ma et al., NEJM 2019 Table 2 p.1800.',
+      },
+    },
+    inclusionCriteria: [
+      'Age 18 years or older',
+      'Acute ischemic stroke with onset 4.5 to 9 hours prior (or wake-up stroke)',
+      'CT perfusion or DWI/FLAIR mismatch confirming ischemic penumbra',
+      'Core infarct volume under 70 mL on perfusion imaging',
+      'Penumbra volume over 10 mL',
+      'Penumbra-to-core ratio above 1.2',
+    ],
+    exclusionCriteria: [
+      'Prior stroke within 3 months',
+      'Intracranial hemorrhage on baseline imaging',
+      'NIHSS above 25 or below 4',
+      'Blood glucose below 50 or above 400 mg/dL',
+      'Platelet count below 100,000',
+      'Anticoagulation with INR above 1.7 or direct anticoagulant taken within 48 hours',
+      'Any standard contraindication to IV alteplase',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: '100 dots stand for 100 patients in each group. A filled dot is a patient who had an excellent recovery at 90 days (mRS 0 or 1); an empty dot is one who did not.',
+      },
+      {
+        question: 'What should I look at first?',
+        answer: 'Count the filled dots in each group. The difference is the absolute benefit. The cobalt band marks exactly those extra patients.',
+      },
+      {
+        question: 'What does it mean for my patient?',
+        answer: '6 more patients per 100 recovered with alteplase. You would need to treat roughly 17 patients to help one additional person reach this outcome (NNT 17).',
+      },
+    ],
+    howToInterpret: {
+      /* claimId: extend.interpret | source: NEJM 2019 p.1798-1801, Table 2 p.1800 */
+      proves: 'In the specific group of patients selected by perfusion imaging (small core, large penumbra), giving alteplase between 4.5 and 9 hours improved the chance of an excellent recovery at 90 days.',
+      doesNotProve: 'It does not show benefit in patients without perfusion mismatch. It also does not prove a shift across the full mRS scale, because the secondary ordinal analysis did not reach significance.',
+      cautions: 'The trial stopped early at 73% of planned enrollment, which reduced statistical power. The confidence interval barely excluded 1.0 (lower bound 1.01), so the true effect could be smaller than the point estimate suggests. The adjusted analysis was significant; the unadjusted analysis was not.',
+    },
+    /* claimId: extend.bedside-pearl | source: NEJM 2019 Table 2 p.1800 */
+    bedsidePearl: 'Symptomatic ICH ran 6.2% vs 0.9% in EXTEND. When you consent, quote both numbers: the 6 extra recoveries and the 5 extra hemorrhages per 100 treated. The trial\'s answer applies to perfusion-selected patients only.',
+    bottomLineSummary: 'EXTEND showed that alteplase given 4.5 to 9 hours after stroke onset, or within 9 hours of the midpoint of sleep for wake-up stroke, improved excellent outcome at 90 days in patients selected by perfusion mismatch. The benefit was modest and the confidence interval was wide because the trial stopped early.',
   },
   'eagle-trial': {
     id: 'eagle-trial',

@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Trial Reference Mockup — NeuroWiki</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --cobalt:     #1746A2;
+    --cobalt-50:  #EEF2FF;
+    --cobalt-100: #C7D7FA;
+    --cobalt-700: #0E2D6B;
+    --hair:       #f1f5f9;
+    --border:     #e2e8f0;
+    --purple:     #7c3aed;
+    --purple-dot: #a78bfa;
+  }
+
+  body {
+    background: #f1f5f9;
+    font-family: Inter, -apple-system, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Stage scaffolding ── */
+  .state-divider {
+    background: #f8fafc;
+    border-top: 1px dashed #cbd5e1;
+    border-bottom: 1px dashed #cbd5e1;
+  }
+  .arch-banner {
+    background: #0f172a;
+    color: white;
+    padding: 1.25rem 1.5rem;
+  }
+  .stage-row {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    overflow-x: auto;
+    padding: 0 24px 40px;
+  }
+  .stage-single {
+    padding: 0 24px 40px;
+  }
+
+  /* ── Frames ── */
+  .mock-frame {
+    background: white;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .f-mobile  { width: 375px; }
+  .f-desktop { width: 720px; }
+
+  /* ── Tokens ── */
+  .divider-hair    { border-top: 1px solid #f1f5f9; }
+  .divider-section { border-top: 1px solid #e2e8f0; }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #94a3b8;
+    margin-bottom: 10px;
+  }
+
+  /* ── Teaching well ── */
+  .teaching-well {
+    background: #f8fafc;
+    border-left: 2px solid var(--cobalt);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 16px;
+    margin-top: 16px;
+  }
+  .well-q {
+    font-size: 13px;
+    font-weight: 500;
+    color: #0f172a;
+    margin-bottom: 4px;
+  }
+  .well-a {
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .well-a:last-child { margin-bottom: 0; }
+  .well-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748b;
+    margin-bottom: 4px;
+  }
+  .well-body {
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  .well-body:last-child { margin-bottom: 0; }
+
+  /* ── Winning arm (Intervention) ── */
+  .winning-arm {
+    background: var(--cobalt-50);
+    color: var(--cobalt-700);
+    position: relative;
+    padding: 12px 12px 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .winning-arm::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 6px; bottom: 6px;
+    width: 2px;
+    background: var(--cobalt);
+    border-radius: 1px;
+  }
+  .control-arm {
+    padding: 12px 12px 12px 16px;
+    color: #475569;
+  }
+
+  /* ── Dot grid ── */
+  .dot-grid {
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    gap: 3px;
+  }
+  .dot {
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+  }
+  .grid-wrap { position: relative; }
+
+  /* ── Delta band ── */
+  .delta-band {
+    position: absolute;
+    display: none;
+    background: rgba(23, 70, 162, 0.12);
+    border-top: 1.5px solid #1746A2;
+    border-bottom: 1.5px solid #1746A2;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── Stat ratio row ── */
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .stat-label { font-size: 12px; color: #64748b; }
+  .stat-val   { font-size: 12px; font-weight: 500; color: #0f172a; }
+  .stat-val-green { color: #059669; }
+  .info-btn {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 1px solid #cbd5e1;
+    color: #94a3b8;
+    font-size: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    cursor: pointer;
+    vertical-align: middle;
+    margin-left: 4px;
+    flex-shrink: 0;
+  }
+
+  /* ── Tooltip popover ── */
+  .tooltip-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 12px 14px;
+    box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+    width: 260px;
+    position: relative;
+  }
+  .tooltip-card::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 20px;
+    width: 10px;
+    height: 10px;
+    background: white;
+    border-left: 1px solid #e2e8f0;
+    border-top: 1px solid #e2e8f0;
+    transform: rotate(45deg);
+  }
+
+  /* ── Bottom-line drawer ── */
+  .drawer-bar {
+    border-top: 1px solid #e2e8f0;
+    box-shadow: 0 -2px 12px rgba(15, 23, 42, 0.08);
+    background: white;
+  }
+
+  /* ── Safety bars ── */
+  .sbar-track {
+    flex: 1;
+    height: 6px;
+    background: #f1f5f9;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .sbar-fill-red  { height: 100%; border-radius: 3px; background: #ef4444; }
+  .sbar-fill-pink { height: 100%; border-radius: 3px; background: #fca5a5; }
+
+  /* ── Mobile tab bar ── */
+  .tab-bar {
+    display: flex;
+    border-top: 1px solid #e2e8f0;
+    background: white;
+  }
+  .tab-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 4px 10px;
+    font-size: 10px;
+    color: #94a3b8;
+    gap: 3px;
+  }
+  .tab-item.active { color: #1746A2; }
+
+  /* ── Key-value rows (Trial at a glance) ── */
+  .kv-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 9px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 13px;
+  }
+  .kv-key { color: #64748b; }
+  .kv-val { color: #0f172a; font-weight: 500; text-align: right; max-width: 60%; }
+
+  /* ── Clinical pearl bullet ── */
+  .pearl-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.6;
+  }
+  .pearl-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--purple-dot);
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  /* ── Placeholder ellipsis ── */
+  .truncated {
+    text-align: center;
+    font-size: 11px;
+    color: #cbd5e1;
+    font-style: italic;
+    padding: 14px 0;
+    border-top: 1px solid #f1f5f9;
+  }
+
+  /* ── "Not significant" badge ── */
+  .ns-badge {
+    font-size: 10px;
+    font-weight: 600;
+    color: #64748b;
+    background: #f1f5f9;
+    border-radius: 4px;
+    padding: 2px 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body class="text-slate-900 antialiased">
+
+<!-- ══════════════════════════════════════════════════════════
+     PAGE BANNER
+══════════════════════════════════════════════════════════ -->
+<div class="arch-banner">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="font-weight: 700; font-size: 15px; margin-bottom: 4px;">Trial Reference Mockup — NeuroWiki</div>
+    <div style="color: #94a3b8; font-size: 12px; line-height: 1.6;">
+      EXTEND trial page redesign. Five stages: Stage 1 default view (mobile 375px + desktop 720px), Stage 2 "How to read" teaching well expanded (mobile + desktop), Stage 3 stat tooltip open on 95% CI (desktop), Stage 4 "How to interpret" well expanded (desktop), Stage 5 bottom-line drawer expanded (mobile + desktop). No dark sidebar. Section order locked. Delta band positioned via inline JS at end of file.
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     STAGE 1 — DEFAULT VIEW
+══════════════════════════════════════════════════════════ -->
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">
+  Stage 1 · Default view · All teaching wells collapsed · Bottom-line drawer collapsed · Mobile 375px + Desktop 720px
+</div>
+
+<div class="stage-row" style="padding-top: 24px;">
+
+  <!-- ── MOBILE 375px ── -->
+  <div class="mock-frame f-mobile">
+
+    <header style="position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid #f1f5f9;">
+      <div style="padding:12px 20px;display:flex;align-items:center;gap:12px;">
+        <button style="padding:6px;margin:-6px;color:#64748b;background:none;border:none;cursor:pointer;" aria-label="Back">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#0f172a;letter-spacing:0.02em;line-height:1.2;">EXTEND Trial</div>
+          <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:#94a3b8;margin-top:1px;">2019 · NEJM</div>
+        </div>
+      </div>
+    </header>
+
+    <main style="padding:20px 20px 16px;">
+
+      <!-- Title block -->
+      <div style="padding-bottom:20px;margin-bottom:24px;border-bottom:1px solid #f1f5f9;">
+        <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.12em;color:#94a3b8;margin-bottom:10px;">EXTEND Trial · Ma et al · 2019</div>
+        <h1 style="font-size:19px;font-weight:500;color:#1746A2;letter-spacing:-0.01em;line-height:1.3;margin:0 0 12px;">Thrombolysis guided by perfusion imaging up to 9 hours after stroke onset</h1>
+        <p style="font-size:14px;color:#475569;line-height:1.6;margin:0;">In patients with acute ischemic stroke presenting 4.5 to 9 hours after onset (or on awakening from sleep), does IV alteplase improve outcomes when imaging shows salvageable brain tissue?</p>
+      </div>
+
+      <!-- 1. Primary Outcome -->
+      <section style="margin-bottom:28px;">
+        <div class="section-label">Primary Outcome</div>
+        <div style="font-size:12px;color:#64748b;margin-bottom:12px;">Excellent recovery (mRS 0-1) at 90 days</div>
+
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+          <span style="font-size:11px;font-weight:600;color:#0E2D6B;">Alteplase</span>
+          <span style="font-size:11px;color:#94a3b8;">35 of 100</span>
+        </div>
+        <div class="grid-wrap" style="margin-bottom:10px;">
+          <div class="alteplase-grid dot-grid"></div>
+          <div class="delta-band"></div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+          <span style="font-size:11px;font-weight:500;color:#475569;">Placebo</span>
+          <span style="font-size:11px;color:#94a3b8;">29 of 100</span>
+        </div>
+        <div class="placebo-grid dot-grid" style="margin-bottom:12px;"></div>
+
+        <div style="display:flex;gap:16px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:5px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#1746A2;flex-shrink:0;"></div>
+            <span style="font-size:11px;color:#64748b;">Recovered</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#e2e8f0;flex-shrink:0;"></div>
+            <span style="font-size:11px;color:#64748b;">Did not</span>
+          </div>
+        </div>
+        <p style="font-size:12px;color:#64748b;line-height:1.5;margin-bottom:12px;">The cobalt band covers the <strong style="font-weight:500;color:#1746A2;">6 extra recoveries</strong> from alteplase compared with placebo.</p>
+
+        <div style="border-top:1px solid #f1f5f9;padding-top:12px;">
+          <div class="stat-row"><span class="stat-label">Risk ratio</span><span class="stat-val">1.44</span></div>
+          <div class="stat-row">
+            <span class="stat-label">95% CI <button class="info-btn">i</button></span>
+            <span class="stat-val">1.01 to 2.06</span>
+          </div>
+          <div class="stat-row" style="margin-bottom:0;">
+            <span class="stat-label">p-value</span>
+            <span class="stat-val stat-val-green">0.04</span>
+          </div>
+        </div>
+
+        <!-- Teaching well collapsed -->
+        <div class="teaching-well" style="cursor:pointer;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;font-weight:500;color:#0f172a;">How to read this chart</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1746A2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+      </section>
+
+      <div class="truncated">[Population · Inclusion · Exclusion · Intervention · At a glance · Safety · Interpret · Pearls · Source continue below]</div>
+
+    </main>
+
+    <div class="tab-bar">
+      <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</div>
+      <div class="tab-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Trials</div>
+      <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Calcs</div>
+      <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Favourites</div>
+    </div>
+
+    <!-- State C (discovery-chevron): visually identical to Stage 1
+         collapsed. Fires once, 3 seconds after loadTrialPayload()
+         resolves. Chevron animates: 3 x translateY(0 to 4px to 0),
+         duration 0.6s each, then stops. Does not repeat if drawer
+         was opened. One-time per browser session. No layout change,
+         no new elements. CSS: @keyframes bounce-hint { 0%,100%
+         {transform:translateY(0)} 50% {transform:translateY(4px)} } -->
+    <div class="drawer-bar" style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#94a3b8;margin-bottom:3px;">BOTTOM LINE</div>
+        <div style="font-size:14px;font-weight:500;color:#0f172a;">Positive trial</div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+
+  </div><!-- /mobile Stage 1 -->
+
+  <!-- ── DESKTOP 720px ── -->
+  <div class="mock-frame f-desktop">
+
+    <header style="position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid #f1f5f9;">
+      <div style="padding:12px 28px;display:flex;align-items:center;gap:14px;">
+        <button style="padding:6px;margin:-6px;color:#64748b;background:none;border:none;cursor:pointer;" aria-label="Back">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#0f172a;letter-spacing:0.02em;">EXTEND Trial</div>
+          <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:#94a3b8;margin-top:1px;">2019 · NEJM</div>
+        </div>
+      </div>
+    </header>
+
+    <main style="padding:28px 32px 120px;">
+
+      <!-- Title block -->
+      <div style="padding-bottom:20px;margin-bottom:24px;border-bottom:1px solid #f1f5f9;">
+        <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.12em;color:#94a3b8;margin-bottom:10px;">EXTEND Trial · Ma et al · 2019</div>
+        <h1 style="font-size:22px;font-weight:500;color:#1746A2;letter-spacing:-0.01em;line-height:1.3;margin:0 0 14px;">Thrombolysis guided by perfusion imaging up to 9 hours after stroke onset</h1>
+        <p style="font-size:15px;color:#475569;line-height:1.6;margin:0;">In patients with acute ischemic stroke presenting 4.5 to 9 hours after onset (or on awakening from sleep), does IV alteplase improve outcomes when imaging shows salvageable brain tissue?</p>
+      </div>
+
+      <!-- 1. Primary Outcome — 2-col dot grids on desktop -->
+      <section style="margin-bottom:32px;">
+        <div class="section-label">Primary Outcome</div>
+        <div style="font-size:13px;color:#64748b;margin-bottom:14px;">Excellent recovery (mRS 0-1) at 90 days</div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:14px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+              <span style="font-size:12px;font-weight:600;color:#0E2D6B;">Alteplase</span>
+              <span style="font-size:12px;color:#94a3b8;">35 of 100</span>
+            </div>
+            <div class="grid-wrap">
+              <div class="alteplase-grid dot-grid"></div>
+              <div class="delta-band"></div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+              <span style="font-size:12px;font-weight:500;color:#475569;">Placebo</span>
+              <span style="font-size:12px;color:#94a3b8;">29 of 100</span>
+            </div>
+            <div class="placebo-grid dot-grid"></div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:16px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:5px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#1746A2;flex-shrink:0;"></div>
+            <span style="font-size:12px;color:#64748b;">Recovered</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#e2e8f0;flex-shrink:0;"></div>
+            <span style="font-size:12px;color:#64748b;">Did not</span>
+          </div>
+        </div>
+        <p style="font-size:13px;color:#64748b;margin-bottom:14px;">The cobalt band covers the <strong style="font-weight:500;color:#1746A2;">6 extra recoveries</strong> from alteplase compared with placebo.</p>
+
+        <div style="border-top:1px solid #f1f5f9;padding-top:12px;display:flex;gap:32px;flex-wrap:wrap;">
+          <div class="stat-row" style="margin-bottom:0;"><span class="stat-label">Risk ratio&nbsp;</span><span class="stat-val">1.44</span></div>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <span class="stat-label">95% CI</span>
+            <button class="info-btn">i</button>
+            <span class="stat-val">&nbsp;1.01 to 2.06</span>
+          </div>
+          <div class="stat-row" style="margin-bottom:0;"><span class="stat-label">p-value&nbsp;</span><span class="stat-val stat-val-green">0.04</span></div>
+        </div>
+
+        <!-- Teaching well collapsed -->
+        <div class="teaching-well" style="cursor:pointer;max-width:560px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;font-weight:500;color:#0f172a;">How to read this chart</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1746A2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Population -->
+      <section style="margin-bottom:24px;">
+        <div class="section-label">Population</div>
+        <p style="font-size:13px;color:#475569;line-height:1.6;margin:0;">Adults with acute ischemic stroke presenting 4.5 to 9 hours after onset, or on awakening from sleep, with CT perfusion or MRI diffusion showing ischemic penumbra (core under 70 mL, penumbra over 10 mL, and penumbra-to-core ratio above 1.2).</p>
+      </section>
+
+      <!-- 3. Inclusion criteria -->
+      <section style="margin-bottom:24px;">
+        <div class="section-label">Inclusion Criteria</div>
+        <ul style="margin:0;padding:0;list-style:none;">
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Age 18 years or older</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Acute ischemic stroke with onset 4.5 to 9 hours prior (or wake-up stroke)</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>CT perfusion or DWI/FLAIR mismatch confirming ischemic penumbra</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Core infarct volume under 70 mL on perfusion imaging</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Penumbra volume over 10 mL</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Penumbra-to-core ratio above 1.2</li>
+        </ul>
+      </section>
+
+      <!-- 4. Exclusion criteria -->
+      <section style="margin-bottom:24px;">
+        <div class="section-label">Exclusion Criteria</div>
+        <ul style="margin:0;padding:0;list-style:none;">
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Prior stroke within 3 months</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Intracranial hemorrhage on baseline imaging</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>NIHSS above 25 or below 4</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Blood glucose below 50 or above 400 mg/dL</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Platelet count below 100,000</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Anticoagulation with INR above 1.7 or direct anticoagulant taken within 48 hours</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Any standard contraindication to IV alteplase</li>
+        </ul>
+      </section>
+
+      <!-- 5. Intervention -->
+      <!-- Winning-arm accent applies ONLY to positive trials. For negative or neutral trials, both arms render unstyled. -->
+      <section style="margin-bottom:24px;">
+        <div class="section-label">Intervention</div>
+        <div class="winning-arm">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#0E2D6B;margin-bottom:3px;">IV Alteplase 0.9 mg/kg (max 90 mg)</div>
+              <div style="font-size:12px;color:#1746A2;opacity:0.85;">10% IV bolus, 90% over 60 minutes</div>
+            </div>
+            <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#0E2D6B;opacity:0.75;white-space:nowrap;flex-shrink:0;">Winning arm</span>
+          </div>
+        </div>
+        <div class="control-arm">
+          <div style="font-size:13px;font-weight:500;margin-bottom:3px;">Placebo</div>
+          <div style="font-size:12px;color:#64748b;">Plus best medical treatment</div>
+        </div>
+      </section>
+
+      <!-- 6. Trial at a glance -->
+      <section style="margin-bottom:24px;">
+        <div class="section-label">Trial at a Glance</div>
+        <div class="kv-row"><span class="kv-key">Type</span><span class="kv-val">Multicenter randomized controlled trial</span></div>
+        <div class="kv-row"><span class="kv-key">Enrolled</span><span class="kv-val">2010 to 2018</span></div>
+        <div class="kv-row"><span class="kv-key">Sites</span><span class="kv-val">36 hospitals (Australia, Europe, Asia)</span></div>
+        <div class="kv-row"><span class="kv-key">Sample size</span><span class="kv-val">225 patients (stopped at 73% of planned enrollment)</span></div>
+        <div class="kv-row" style="border-bottom:none;"><span class="kv-key">Primary endpoint</span><span class="kv-val">mRS 0-1 at 90 days</span></div>
+      </section>
+
+      <!-- 7. Safety -->
+      <section style="margin-bottom:24px;">
+        <div class="section-label">Safety</div>
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Symptomatic ICH</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+            <span style="font-size:12px;font-weight:500;color:#0E2D6B;width:72px;">Alteplase</span>
+            <div class="sbar-track"><div class="sbar-fill-red" style="width:62%;"></div></div>
+            <span style="font-size:12px;font-weight:600;color:#dc2626;width:36px;">6.2%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:12px;color:#64748b;width:72px;">Placebo</span>
+            <div class="sbar-track"><div class="sbar-fill-pink" style="width:9%;"></div></div>
+            <span style="font-size:12px;font-weight:600;color:#f87171;width:36px;">0.9%</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid #f1f5f9;">
+          <div style="font-size:13px;color:#475569;">Mortality (90 days): Alteplase 9.7% vs Placebo 8.9%</div>
+          <span class="ns-badge">Not significant</span>
+        </div>
+      </section>
+
+      <!-- 8. How to interpret (collapsed) -->
+      <section style="margin-bottom:24px;">
+        <div class="section-label">How to Interpret This Trial</div>
+        <div class="teaching-well" style="cursor:pointer;max-width:560px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;font-weight:500;color:#0f172a;">How to interpret this trial</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1746A2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. Clinical Pearls -->
+      <section style="margin-bottom:32px;">
+        <div class="section-label" style="color:#7c3aed;">Clinical Pearls</div>
+        <div class="pearl-item"><div class="pearl-dot"></div><span>First RCT evidence that perfusion imaging extends the IV thrombolysis window beyond 4.5 hours.</span></div>
+        <div class="pearl-item"><div class="pearl-dot"></div><span>Supports treating wake-up stroke when CTP or DWI shows mismatch.</span></div>
+        <div class="pearl-item" style="margin-bottom:0;"><div class="pearl-dot"></div><span>Selection thresholds: core under 70 mL, penumbra over 10 mL and more than 1.2 times core volume.</span></div>
+      </section>
+
+      <!-- 10. Source footer -->
+      <div style="border-top:1px solid #e2e8f0;padding-top:18px;margin-top:32px;">
+        <p style="font-size:12px;color:#64748b;line-height:1.6;margin:0 0 6px;">Ma H, Campbell BCV, Parsons MW, et al. Thrombolysis guided by perfusion imaging up to 9 hours after onset of stroke. N Engl J Med 2019;380:1795-1803.</p>
+        <p style="font-size:12px;color:#94a3b8;margin:0 0 12px;">DOI: 10.1056/NEJMoa1813046 · ClinicalTrials.gov: NCT00887328</p>
+        <p style="font-size:12px;color:#94a3b8;margin:0;">Educational use only.</p>
+      </div>
+
+    </main>
+
+    <div class="drawer-bar" style="padding:14px 28px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#94a3b8;margin-bottom:3px;">BOTTOM LINE</div>
+        <div style="font-size:14px;font-weight:500;color:#0f172a;">Positive trial</div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+
+  </div><!-- /desktop Stage 1 -->
+
+</div><!-- /stage-row -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     STAGE 2 — "HOW TO READ" TEACHING WELL EXPANDED
+══════════════════════════════════════════════════════════ -->
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">
+  Stage 2 · "How to read this chart" teaching well expanded · Mobile 375px + Desktop 720px
+</div>
+
+<div class="stage-row" style="padding-top:24px;">
+
+  <!-- MOBILE -->
+  <div class="mock-frame f-mobile">
+    <header style="position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid #f1f5f9;">
+      <div style="padding:12px 20px;display:flex;align-items:center;gap:12px;">
+        <button style="padding:6px;margin:-6px;color:#64748b;background:none;border:none;" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#0f172a;letter-spacing:0.02em;">EXTEND Trial</div>
+          <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:#94a3b8;margin-top:1px;">2019 · NEJM</div>
+        </div>
+      </div>
+    </header>
+    <main style="padding:20px;">
+      <div class="truncated" style="margin-bottom:16px;">[Title block above]</div>
+      <section>
+        <div class="section-label">Primary Outcome</div>
+        <div style="font-size:12px;color:#64748b;margin-bottom:12px;">Excellent recovery (mRS 0-1) at 90 days</div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+          <span style="font-size:11px;font-weight:600;color:#0E2D6B;">Alteplase</span>
+          <span style="font-size:11px;color:#94a3b8;">35 of 100</span>
+        </div>
+        <div class="grid-wrap" style="margin-bottom:10px;">
+          <div class="alteplase-grid dot-grid"></div>
+          <div class="delta-band"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+          <span style="font-size:11px;font-weight:500;color:#475569;">Placebo</span>
+          <span style="font-size:11px;color:#94a3b8;">29 of 100</span>
+        </div>
+        <div class="placebo-grid dot-grid" style="margin-bottom:12px;"></div>
+        <div style="display:flex;gap:16px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:10px;border-radius:50%;background:#1746A2;flex-shrink:0;"></div><span style="font-size:11px;color:#64748b;">Recovered</span></div>
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:10px;border-radius:50%;background:#e2e8f0;flex-shrink:0;"></div><span style="font-size:11px;color:#64748b;">Did not</span></div>
+        </div>
+        <p style="font-size:12px;color:#64748b;line-height:1.5;margin-bottom:12px;">The cobalt band covers the <strong style="font-weight:500;color:#1746A2;">6 extra recoveries</strong> from alteplase compared with placebo.</p>
+        <div style="border-top:1px solid #f1f5f9;padding-top:12px;margin-bottom:0;">
+          <div class="stat-row"><span class="stat-label">Risk ratio</span><span class="stat-val">1.44</span></div>
+          <div class="stat-row"><span class="stat-label">95% CI <button class="info-btn">i</button></span><span class="stat-val">1.01 to 2.06</span></div>
+          <div class="stat-row" style="margin-bottom:0;"><span class="stat-label">p-value</span><span class="stat-val stat-val-green">0.04</span></div>
+        </div>
+
+        <!-- Teaching well EXPANDED -->
+        <div class="teaching-well">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;cursor:pointer;">
+            <span style="font-size:13px;font-weight:500;color:#0f172a;">How to read this chart</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1746A2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 9 12 15 6 9"/></svg>
+          </div>
+          <div class="well-q">What does the chart show?</div>
+          <div class="well-a">100 dots stand for 100 patients in each group. A filled dot is a patient who had an excellent recovery at 90 days (mRS 0 or 1); an empty dot is one who did not.</div>
+          <div class="well-q">What should I look at first?</div>
+          <div class="well-a">Count the filled dots in each group. The difference is the absolute benefit. The cobalt band marks exactly those extra patients.</div>
+          <div class="well-q">What does it mean for my patient?</div>
+          <div class="well-a" style="margin-bottom:0;">6 more patients per 100 recovered with alteplase. You would need to treat roughly 17 patients to help one additional person reach this outcome (NNT 17).</div>
+        </div>
+      </section>
+    </main>
+    <div class="drawer-bar" style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+      <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#94a3b8;margin-bottom:3px;">BOTTOM LINE</div><div style="font-size:14px;font-weight:500;color:#0f172a;">Positive trial</div></div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+  </div><!-- /mobile Stage 2 -->
+
+  <!-- DESKTOP -->
+  <div class="mock-frame f-desktop">
+    <header style="position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid #f1f5f9;">
+      <div style="padding:12px 28px;display:flex;align-items:center;gap:14px;">
+        <button style="padding:6px;margin:-6px;color:#64748b;background:none;border:none;" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#0f172a;letter-spacing:0.02em;">EXTEND Trial</div>
+          <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:#94a3b8;margin-top:1px;">2019 · NEJM</div>
+        </div>
+      </div>
+    </header>
+    <main style="padding:28px 32px 80px;">
+      <div class="truncated" style="margin-bottom:20px;">[Title block above]</div>
+      <section>
+        <div class="section-label">Primary Outcome</div>
+        <div style="font-size:13px;color:#64748b;margin-bottom:14px;">Excellent recovery (mRS 0-1) at 90 days</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:14px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;font-weight:600;color:#0E2D6B;">Alteplase</span><span style="font-size:12px;color:#94a3b8;">35 of 100</span></div>
+            <div class="grid-wrap"><div class="alteplase-grid dot-grid"></div><div class="delta-band"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;font-weight:500;color:#475569;">Placebo</span><span style="font-size:12px;color:#94a3b8;">29 of 100</span></div>
+            <div class="placebo-grid dot-grid"></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:10px;border-radius:50%;background:#1746A2;"></div><span style="font-size:12px;color:#64748b;">Recovered</span></div>
+          <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:10px;border-radius:50%;background:#e2e8f0;"></div><span style="font-size:12px;color:#64748b;">Did not</span></div>
+        </div>
+        <p style="font-size:13px;color:#64748b;margin-bottom:14px;">The cobalt band covers the <strong style="font-weight:500;color:#1746A2;">6 extra recoveries</strong> from alteplase compared with placebo.</p>
+        <div style="border-top:1px solid #f1f5f9;padding-top:12px;display:flex;gap:32px;flex-wrap:wrap;margin-bottom:0;">
+          <div><span class="stat-label">Risk ratio </span><span class="stat-val">1.44</span></div>
+          <div style="display:flex;align-items:center;gap:4px;"><span class="stat-label">95% CI</span><button class="info-btn">i</button><span class="stat-val"> 1.01 to 2.06</span></div>
+          <div><span class="stat-label">p-value </span><span class="stat-val stat-val-green">0.04</span></div>
+        </div>
+
+        <!-- Teaching well EXPANDED — desktop -->
+        <div class="teaching-well" style="max-width:560px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;cursor:pointer;">
+            <span style="font-size:13px;font-weight:500;color:#0f172a;">How to read this chart</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1746A2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 9 12 15 6 9"/></svg>
+          </div>
+          <div class="well-q">What does the chart show?</div>
+          <div class="well-a">100 dots stand for 100 patients in each group. A filled dot is a patient who had an excellent recovery at 90 days (mRS 0 or 1); an empty dot is one who did not.</div>
+          <div class="well-q">What should I look at first?</div>
+          <div class="well-a">Count the filled dots in each group. The difference is the absolute benefit. The cobalt band marks exactly those extra patients.</div>
+          <div class="well-q">What does it mean for my patient?</div>
+          <div class="well-a" style="margin-bottom:0;">6 more patients per 100 recovered with alteplase. You would need to treat roughly 17 patients to help one additional person reach this outcome (NNT 17).</div>
+        </div>
+      </section>
+    </main>
+    <div class="drawer-bar" style="padding:14px 28px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+      <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#94a3b8;margin-bottom:3px;">BOTTOM LINE</div><div style="font-size:14px;font-weight:500;color:#0f172a;">Positive trial</div></div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+  </div><!-- /desktop Stage 2 -->
+
+</div><!-- /stage-row -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     STAGE 3 — STAT TOOLTIP OPEN ON 95% CI (DESKTOP)
+══════════════════════════════════════════════════════════ -->
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">
+  Stage 3 · Stat tooltip open on 95% CI · Desktop 720px · Popover positioned below the info icon
+</div>
+
+<div class="stage-single" style="padding-top:24px;">
+  <div class="mock-frame" style="width:720px;background:white;">
+    <header style="position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid #f1f5f9;">
+      <div style="padding:12px 28px;display:flex;align-items:center;gap:14px;">
+        <button style="padding:6px;margin:-6px;color:#64748b;background:none;border:none;" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+        <div><div style="font-size:13px;font-weight:700;color:#0f172a;letter-spacing:0.02em;">EXTEND Trial</div><div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:#94a3b8;margin-top:1px;">2019 · NEJM</div></div>
+      </div>
+    </header>
+    <main style="padding:28px 32px 80px;">
+      <div class="truncated" style="margin-bottom:20px;">[Title block · dot grids · legend · caption above]</div>
+      <!-- Stat ratio block with tooltip open -->
+      <div style="border-top:1px solid #f1f5f9;padding-top:12px;max-width:400px;position:relative;">
+        <div class="stat-row"><span class="stat-label">Risk ratio</span><span class="stat-val">1.44</span></div>
+
+        <!-- CI row with tooltip anchored -->
+        <div style="position:relative;">
+          <div class="stat-row" style="margin-bottom:0;">
+            <div style="display:flex;align-items:center;gap:5px;">
+              <span class="stat-label">95% CI</span>
+              <button class="info-btn" style="border-color:#1746A2;color:#1746A2;background:#EEF2FF;">i</button>
+            </div>
+            <span class="stat-val">1.01 to 2.06</span>
+          </div>
+          <!-- Tooltip popover -->
+          <div class="tooltip-card" style="position:absolute;top:28px;left:0;z-index:50;">
+            <div style="font-size:13px;font-weight:500;color:#0f172a;margin-bottom:6px;">95% confidence interval</div>
+            <p style="font-size:12px;color:#475569;line-height:1.6;margin:0 0 8px;">If we repeated this trial many times, 95% of these intervals would contain the true effect.</p>
+            <p style="font-size:12px;color:#475569;line-height:1.6;margin:0;">EXTEND's interval runs from 1.01 to 2.06. It does not cross 1.0, so the result is statistically significant, but the lower bound of 1.01 is very close to 1.0, meaning the benefit could be small.</p>
+          </div>
+        </div>
+
+        <div class="stat-row" style="margin-top:80px;margin-bottom:0;"><span class="stat-label">p-value</span><span class="stat-val stat-val-green">0.04</span></div>
+      </div>
+      <div class="truncated" style="margin-top:20px;">[Teaching well · Population · Inclusion · Exclusion · Intervention · etc. continue]</div>
+    </main>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     STAGE 4 — "HOW TO INTERPRET" WELL EXPANDED (DESKTOP)
+══════════════════════════════════════════════════════════ -->
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">
+  Stage 4 · "How to interpret this trial" teaching well expanded · Desktop 720px
+</div>
+
+<div class="stage-single" style="padding-top:24px;">
+  <div class="mock-frame" style="width:720px;">
+    <header style="position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid #f1f5f9;">
+      <div style="padding:12px 28px;display:flex;align-items:center;gap:14px;">
+        <button style="padding:6px;margin:-6px;color:#64748b;background:none;border:none;" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+        <div><div style="font-size:13px;font-weight:700;color:#0f172a;letter-spacing:0.02em;">EXTEND Trial</div><div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:#94a3b8;margin-top:1px;">2019 · NEJM</div></div>
+      </div>
+    </header>
+    <main style="padding:28px 32px 80px;">
+      <div class="truncated" style="margin-bottom:20px;">[Primary outcome · Population · Inclusion · Exclusion · Intervention · At a glance · Safety above]</div>
+
+      <!-- Interpret well EXPANDED -->
+      <section style="margin-bottom:24px;">
+        <div class="section-label">How to Interpret This Trial</div>
+        <div class="teaching-well" style="max-width:600px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;cursor:pointer;">
+            <span style="font-size:13px;font-weight:500;color:#0f172a;">How to interpret this trial</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1746A2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 9 12 15 6 9"/></svg>
+          </div>
+          <div class="well-label">What this trial proves</div>
+          <div class="well-body">In the specific group of patients selected by perfusion imaging (small core, large penumbra), giving alteplase between 4.5 and 9 hours improved the chance of an excellent recovery at 90 days.</div>
+          <div class="well-label">What this trial does not prove</div>
+          <div class="well-body">It does not show benefit in patients without perfusion mismatch. It also does not prove a shift across the full mRS scale, because the secondary ordinal analysis did not reach significance.</div>
+          <div class="well-label">Cautions</div>
+          <div class="well-body" style="margin-bottom:0;">The trial stopped early at 73% of planned enrollment, which reduced statistical power. The confidence interval barely excluded 1.0 (lower bound 1.01), so the true effect could be smaller than the point estimate suggests. The adjusted analysis was significant; the unadjusted analysis was not.</div>
+        </div>
+      </section>
+
+      <div class="truncated">[Clinical pearls · Source footer continue below]</div>
+    </main>
+    <div class="drawer-bar" style="padding:14px 28px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+      <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#94a3b8;margin-bottom:3px;">BOTTOM LINE</div><div style="font-size:14px;font-weight:500;color:#0f172a;">Positive trial</div></div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     STAGE 5 — BOTTOM-LINE DRAWER EXPANDED
+══════════════════════════════════════════════════════════ -->
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">
+  Stage 5 · Bottom-line drawer expanded · Cobalt bedside pearl + See also · Mobile 375px + Desktop 720px
+</div>
+
+<div class="stage-row" style="padding-top:24px;">
+
+  <!-- MOBILE -->
+  <div class="mock-frame f-mobile">
+    <header style="position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid #f1f5f9;">
+      <div style="padding:12px 20px;display:flex;align-items:center;gap:12px;">
+        <button style="padding:6px;margin:-6px;color:#64748b;background:none;border:none;" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+        <div><div style="font-size:13px;font-weight:700;color:#0f172a;letter-spacing:0.02em;">EXTEND Trial</div><div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:#94a3b8;margin-top:1px;">2019 · NEJM</div></div>
+      </div>
+    </header>
+
+    <!-- Page content (scrolled near bottom) -->
+    <main style="padding:20px;">
+      <div class="truncated" style="margin-bottom:12px;">[Page content above — user has scrolled down]</div>
+      <!-- Pearls visible at scroll position -->
+      <section style="margin-bottom:20px;">
+        <div class="section-label" style="color:#7c3aed;">Clinical Pearls</div>
+        <div class="pearl-item"><div class="pearl-dot"></div><span>First RCT evidence that perfusion imaging extends the IV thrombolysis window beyond 4.5 hours.</span></div>
+        <div class="pearl-item"><div class="pearl-dot"></div><span>Supports treating wake-up stroke when CTP or DWI shows mismatch.</span></div>
+        <div class="pearl-item" style="margin-bottom:0;"><div class="pearl-dot"></div><span>Selection thresholds: core under 70 mL, penumbra over 10 mL and more than 1.2 times core volume.</span></div>
+      </section>
+      <div style="border-top:1px solid #e2e8f0;padding-top:18px;">
+        <p style="font-size:12px;color:#64748b;margin:0 0 6px;">Ma H, Campbell BCV, Parsons MW, et al. N Engl J Med 2019;380:1795-1803.</p>
+        <p style="font-size:12px;color:#94a3b8;margin:0;">Educational use only.</p>
+      </div>
+    </main>
+
+    <div class="tab-bar">
+      <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</div>
+      <div class="tab-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Trials</div>
+      <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Calcs</div>
+      <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Favourites</div>
+    </div>
+
+    <!-- Drawer EXPANDED -->
+    <div class="drawer-bar">
+      <!-- Tappable header row -->
+      <div style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid #f1f5f9;">
+        <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#94a3b8;margin-bottom:3px;">BOTTOM LINE</div><div style="font-size:14px;font-weight:500;color:#0f172a;">Positive trial</div></div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1746A2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <!-- Expanded content -->
+      <div style="padding:16px 20px 20px;max-height:55vh;overflow-y:auto;">
+        <div style="font-size:18px;font-weight:500;color:#0f172a;line-height:1.3;margin-bottom:10px;">Extends IV thrombolysis to 9 hours in imaging-selected patients.</div>
+        <p style="font-size:14px;color:#475569;line-height:1.6;margin-bottom:14px;">EXTEND showed that alteplase given 4.5 to 9 hours after stroke onset, or within 9 hours of the midpoint of sleep for wake-up stroke, improved excellent outcome at 90 days in patients selected by perfusion mismatch. The benefit was modest and the confidence interval was wide because the trial stopped early.</p>
+
+        <!-- Cobalt bedside pearl block -->
+        <div style="border-left:2px solid #1746A2;padding:8px 0 8px 14px;margin-bottom:16px;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#0E2D6B;margin-bottom:5px;">BEDSIDE PEARL</div>
+          <p style="font-size:13px;color:#334155;line-height:1.6;margin:0;">Symptomatic ICH ran 6.2% vs 0.9% in EXTEND. When you consent, quote both numbers: the 6 extra recoveries and the 5 extra hemorrhages per 100 treated. The trial's answer applies to perfusion-selected patients only.</p>
+        </div>
+
+        <!-- See also -->
+        <div style="border-top:1px solid #f1f5f9;padding-top:12px;margin-bottom:12px;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#94a3b8;margin-bottom:6px;">See also</div>
+          <p style="font-size:13px;color:#475569;line-height:1.8;">
+            <a href="#" style="color:#1746A2;text-decoration:none;">WAKE-UP</a><span style="color:#cbd5e1;margin:0 6px;">·</span><a href="#" style="color:#1746A2;text-decoration:none;">DAWN</a><span style="color:#cbd5e1;margin:0 6px;">·</span><a href="#" style="color:#1746A2;text-decoration:none;">DEFUSE 3</a><span style="color:#cbd5e1;margin:0 6px;">·</span><a href="#" style="color:#1746A2;text-decoration:none;">Thrombolysis pathway</a>
+          </p>
+        </div>
+
+        <!-- Citation -->
+        <div style="border-top:1px solid #f1f5f9;padding-top:12px;">
+          <p style="font-size:12px;color:#94a3b8;margin:0;">Ma H, et al. N Engl J Med 2019;380:1795-1803. Educational use only.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /mobile Stage 5 -->
+
+  <!-- DESKTOP -->
+  <div class="mock-frame f-desktop">
+    <header style="position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid #f1f5f9;">
+      <div style="padding:12px 28px;display:flex;align-items:center;gap:14px;">
+        <button style="padding:6px;margin:-6px;color:#64748b;background:none;border:none;" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+        <div><div style="font-size:13px;font-weight:700;color:#0f172a;letter-spacing:0.02em;">EXTEND Trial</div><div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:#94a3b8;margin-top:1px;">2019 · NEJM</div></div>
+      </div>
+    </header>
+
+    <main style="padding:28px 32px 20px;">
+      <div class="truncated" style="margin-bottom:16px;">[Page content above — user has scrolled down]</div>
+      <!-- Pearls visible -->
+      <section style="margin-bottom:24px;">
+        <div class="section-label" style="color:#7c3aed;">Clinical Pearls</div>
+        <div class="pearl-item"><div class="pearl-dot"></div><span>First RCT evidence that perfusion imaging extends the IV thrombolysis window beyond 4.5 hours.</span></div>
+        <div class="pearl-item"><div class="pearl-dot"></div><span>Supports treating wake-up stroke when CTP or DWI shows mismatch.</span></div>
+        <div class="pearl-item" style="margin-bottom:0;"><div class="pearl-dot"></div><span>Selection thresholds: core under 70 mL, penumbra over 10 mL and more than 1.2 times core volume.</span></div>
+      </section>
+      <div style="border-top:1px solid #e2e8f0;padding-top:18px;margin-top:0;">
+        <p style="font-size:12px;color:#64748b;margin:0 0 6px;">Ma H, Campbell BCV, Parsons MW, et al. Thrombolysis guided by perfusion imaging up to 9 hours after onset of stroke. N Engl J Med 2019;380:1795-1803.</p>
+        <p style="font-size:12px;color:#94a3b8;margin:0 0 12px;">DOI: 10.1056/NEJMoa1813046 · ClinicalTrials.gov: NCT00887328</p>
+        <p style="font-size:12px;color:#94a3b8;margin:0;">Educational use only.</p>
+      </div>
+    </main>
+
+    <!-- Drawer EXPANDED -->
+    <div class="drawer-bar">
+      <div style="padding:14px 28px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid #f1f5f9;">
+        <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#94a3b8;margin-bottom:3px;">BOTTOM LINE</div><div style="font-size:14px;font-weight:500;color:#0f172a;">Positive trial</div></div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1746A2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div style="padding:20px 28px 24px;display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;">
+        <!-- Left col: headline + explanation -->
+        <div>
+          <div style="font-size:18px;font-weight:500;color:#0f172a;line-height:1.3;margin-bottom:10px;">Extends IV thrombolysis to 9 hours in imaging-selected patients.</div>
+          <p style="font-size:14px;color:#475569;line-height:1.6;margin-bottom:14px;">EXTEND showed that alteplase given 4.5 to 9 hours after stroke onset, or within 9 hours of the midpoint of sleep for wake-up stroke, improved excellent outcome at 90 days in patients selected by perfusion mismatch. The benefit was modest and the confidence interval was wide because the trial stopped early.</p>
+          <!-- Cobalt bedside pearl -->
+          <div style="border-left:2px solid #1746A2;padding:8px 0 8px 14px;">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#0E2D6B;margin-bottom:5px;">BEDSIDE PEARL</div>
+            <p style="font-size:13px;color:#334155;line-height:1.6;margin:0;">Symptomatic ICH ran 6.2% vs 0.9% in EXTEND. When you consent, quote both numbers: the 6 extra recoveries and the 5 extra hemorrhages per 100 treated. The trial's answer applies to perfusion-selected patients only.</p>
+          </div>
+        </div>
+        <!-- Right col: See also + citation -->
+        <div>
+          <div style="border-bottom:1px solid #f1f5f9;padding-bottom:14px;margin-bottom:14px;">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#94a3b8;margin-bottom:8px;">See also</div>
+            <p style="font-size:13px;color:#475569;line-height:2;">
+              <a href="#" style="color:#1746A2;text-decoration:none;">WAKE-UP</a><span style="color:#cbd5e1;margin:0 6px;">·</span><a href="#" style="color:#1746A2;text-decoration:none;">DAWN</a><span style="color:#cbd5e1;margin:0 6px;">·</span><a href="#" style="color:#1746A2;text-decoration:none;">DEFUSE 3</a><span style="color:#cbd5e1;margin:0 6px;">·</span><a href="#" style="color:#1746A2;text-decoration:none;">Thrombolysis pathway</a>
+            </p>
+          </div>
+          <p style="font-size:12px;color:#94a3b8;margin:0;line-height:1.6;">Ma H, et al. N Engl J Med 2019;380:1795-1803. Educational use only.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /desktop Stage 5 -->
+
+</div><!-- /stage-row -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     STAGE 6: SECTIONS 3-8 AT MOBILE 375px
+     Mobile-only. No sticky header. No tab bar. No drawer.
+     Purpose: show all six layout-critical sections at 375px so
+     implementers can verify bullet wrapping, winning-arm row
+     fit, safety bar row fit, and kv-row wrapping before coding.
+══════════════════════════════════════════════════════════ -->
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">
+  Stage 6 · Mobile 375px · Sections 3-8 (Population through Safety) · No header, no drawer
+</div>
+
+<div class="stage-single" style="padding-top:24px;">
+  <div class="mock-frame f-mobile">
+    <main style="padding:20px 20px 24px;">
+
+      <!-- 3. Population -->
+      <section style="margin-bottom:24px;">
+        <div class="section-label">Population</div>
+        <p style="font-size:13px;color:#475569;line-height:1.6;margin:0;">Adults with acute ischemic stroke presenting 4.5 to 9 hours after onset, or on awakening from sleep, with CT perfusion or MRI diffusion showing ischemic penumbra (core under 70 mL, penumbra over 10 mL, and penumbra-to-core ratio above 1.2).</p>
+      </section>
+
+      <!-- 4. Inclusion Criteria (6 items) -->
+      <section style="margin-bottom:24px;">
+        <div class="section-label">Inclusion Criteria</div>
+        <ul style="margin:0;padding:0;list-style:none;">
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Age 18 years or older</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Acute ischemic stroke with onset 4.5 to 9 hours prior (or wake-up stroke)</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>CT perfusion or DWI/FLAIR mismatch confirming ischemic penumbra</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Core infarct volume under 70 mL on perfusion imaging</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Penumbra volume over 10 mL</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Penumbra-to-core ratio above 1.2</li>
+        </ul>
+      </section>
+
+      <!-- 5. Exclusion Criteria (7 items, matches Stage 1 desktop) -->
+      <section style="margin-bottom:24px;">
+        <div class="section-label">Exclusion Criteria</div>
+        <ul style="margin:0;padding:0;list-style:none;">
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Prior stroke within 3 months</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Intracranial hemorrhage on baseline imaging</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>NIHSS above 25 or below 4</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Blood glucose below 50 or above 400 mg/dL</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Platelet count below 100,000</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;border-bottom:1px solid #f1f5f9;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Anticoagulation with INR above 1.7 or direct anticoagulant taken within 48 hours</li>
+          <li style="font-size:13px;color:#475569;line-height:1.6;padding:5px 0 5px 14px;position:relative;"><span style="position:absolute;left:0;color:#94a3b8;">•</span>Any standard contraindication to IV alteplase</li>
+        </ul>
+      </section>
+
+      <!-- 6. Intervention: winning-arm at 375px -->
+      <!-- Winning-arm accent: applies only when trialResult === 'POSITIVE'.
+           At 375px: min-width:0 + flex:1 on arm-name div allows ellipsis truncation if needed.
+           flex-shrink:0 on tag keeps "Winning arm" visible on the same row. -->
+      <section style="margin-bottom:24px;">
+        <div class="section-label">Intervention</div>
+        <div class="winning-arm">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+            <div style="min-width:0;flex:1;">
+              <div style="font-size:13px;font-weight:600;color:#0E2D6B;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">IV Alteplase 0.9 mg/kg (max 90 mg)</div>
+              <div style="font-size:12px;color:#1746A2;opacity:0.85;">10% IV bolus, 90% over 60 minutes</div>
+            </div>
+            <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#0E2D6B;opacity:0.75;white-space:nowrap;flex-shrink:0;">Winning arm</span>
+          </div>
+        </div>
+        <div class="control-arm">
+          <div style="font-size:13px;font-weight:500;margin-bottom:3px;">Placebo</div>
+          <div style="font-size:12px;color:#64748b;">Plus best medical treatment</div>
+        </div>
+      </section>
+
+      <!-- 7. Trial at a Glance: kv-row wrapping visible at 375px -->
+      <!-- kv-val max-width:60% of 335px available = 201px; long values wrap naturally -->
+      <section style="margin-bottom:24px;">
+        <div class="section-label">Trial at a Glance</div>
+        <div class="kv-row"><span class="kv-key">Type</span><span class="kv-val">Multicenter randomized controlled trial</span></div>
+        <div class="kv-row"><span class="kv-key">Enrolled</span><span class="kv-val">2010 to 2018</span></div>
+        <div class="kv-row"><span class="kv-key">Sites</span><span class="kv-val">36 hospitals (Australia, Europe, Asia)</span></div>
+        <div class="kv-row"><span class="kv-key">Sample size</span><span class="kv-val">225 patients (stopped at 73% of planned enrollment)</span></div>
+        <div class="kv-row" style="border-bottom:none;"><span class="kv-key">Primary endpoint</span><span class="kv-val">mRS 0-1 at 90 days</span></div>
+      </section>
+
+      <!-- 8. Safety: bar row at 375px, label 72px + gap 10px + track flex:1 + gap 10px + pct 36px -->
+      <!-- Available width = 375 - 40px padding = 335px. Track = 335 - 128px fixed = 207px. Fits. -->
+      <!-- Mortality row: flex-wrap:wrap applied so badge drops to new line if text overflows -->
+      <section>
+        <div class="section-label">Safety</div>
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Symptomatic ICH</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+            <span style="font-size:12px;font-weight:500;color:#0E2D6B;width:72px;">Alteplase</span>
+            <div class="sbar-track"><div class="sbar-fill-red" style="width:62%;"></div></div>
+            <span style="font-size:12px;font-weight:600;color:#dc2626;width:36px;">6.2%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:12px;color:#64748b;width:72px;">Placebo</span>
+            <div class="sbar-track"><div class="sbar-fill-pink" style="width:9%;"></div></div>
+            <span style="font-size:12px;font-weight:600;color:#f87171;width:36px;">0.9%</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid #f1f5f9;flex-wrap:wrap;gap:6px;">
+          <div style="font-size:13px;color:#475569;">Mortality (90 days): Alteplase 9.7% vs Placebo 8.9%</div>
+          <span class="ns-badge">Not significant</span>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- /mobile Stage 6 -->
+</div><!-- /stage-single Stage 6 -->
+
+
+<div style="height:48px;"></div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     INLINE JS — dot generation + delta band positioning
+     No external scripts. Delta band offset: -4px horizontal, -3px vertical.
+══════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+
+  // Generate 100 dots into a grid element
+  function makeDots(gridEl, filledCount, filledColor) {
+    for (var i = 0; i < 100; i++) {
+      var d = document.createElement('div');
+      d.className = 'dot';
+      d.style.background = i < filledCount ? filledColor : '#e2e8f0';
+      gridEl.appendChild(d);
+    }
+  }
+
+  // Position the delta band overlay over dots[29] through dots[34]
+  // (0-indexed: 30th through 35th dot = the 5-dot absolute difference)
+  function positionBand(gridEl, bandEl) {
+    var dots = gridEl.querySelectorAll('.dot');
+    if (dots.length < 35) return;
+    var containerRect = gridEl.parentElement.getBoundingClientRect();
+    var r29 = dots[29].getBoundingClientRect();
+    var r34 = dots[34].getBoundingClientRect();
+    bandEl.style.left   = (r29.left - containerRect.left - 4) + 'px';
+    bandEl.style.top    = (r29.top  - containerRect.top  - 3) + 'px';
+    bandEl.style.width  = (r34.right - r29.left + 8) + 'px';
+    bandEl.style.height = (r34.bottom - r29.top + 6) + 'px';
+    bandEl.style.display = 'block';
+  }
+
+  function init() {
+    // Populate all alteplase grids
+    document.querySelectorAll('.alteplase-grid').forEach(function (grid) {
+      makeDots(grid, 35, '#1746A2');
+      var band = grid.parentElement.querySelector('.delta-band');
+      if (band) positionBand(grid, band);
+    });
+
+    // Populate all placebo grids
+    document.querySelectorAll('.placebo-grid').forEach(function (grid) {
+      makeDots(grid, 29, '#64748b');
+    });
+  }
+
+  function reposition() {
+    document.querySelectorAll('.alteplase-grid').forEach(function (grid) {
+      var band = grid.parentElement.querySelector('.delta-band');
+      if (band) positionBand(grid, band);
+    });
+  }
+
+  window.addEventListener('load', init);
+  window.addEventListener('resize', reposition);
+})();
+</script>
+
+</body>
+</html>

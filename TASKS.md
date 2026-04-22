@@ -94,6 +94,63 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] [L4] ExtendedIVTPathway visual rebuild
 - [ ] [L4] All guide/* pages consistent layout
 
+### WAVE 6 — Trial Page Redesign
+
+#### W6.1 — TRIALS_SPEC.md v1.0 + ADR-005 authoring — Class C
+- **Status:** done — 2026-04-21
+- **User-visible goal:** none (spec + ADR + mockup; foundational ground truth for Prompt 3 rebuild)
+- **Non-goals:** no code changes, no clinical content changes, no trial UI work
+- **Files touched:** docs/specs/TRIALS_SPEC.md (created, ~1,100 lines) · docs/specs/mockups/trial-reference.html (created, 5 stages) · docs/adrs/ADR-005-trials-spec-v1.md (created)
+- **Acceptance checks:** spec covers §0–§20 · mockup covers 5 interaction stages · ADR documents 5 decisions · no code modified · tsc unaffected
+- **Clinical impact:** none
+- **Rollback plan:** n/a
+
+#### W6.2 — Prerequisite: glossary additions — Class B
+- **Status:** done — 2026-04-21
+- **User-visible goal:** ARR, RRR, NNH, and standalone RR terms resolve in the bedside glossary tooltip layer
+- **Non-goals:** no new tooltip UI patterns; no clinical claim changes; no registry entries required (definitions, not claims)
+- **Files touched:** src/data/medicalGlossary.ts (8 new entries: absolute-risk-reduction, arr, relative-risk-reduction, rrr, number-needed-to-harm, nnh, risk-ratio, rr)
+- **Acceptance checks:** 4 new terms (8 keys with aliases) added · tsc clean · existing terms unchanged · no claim IDs needed ✓
+- **Clinical impact:** low — definitional, not interpretive
+- **Rollback plan:** n/a
+
+#### W6.3 — Prerequisite: TrialMetadata schema extensions — Class C
+- **Status:** done — 2026-04-21
+- **User-visible goal:** none (schema + EXTEND data; enables Prompt 3 teaching surfaces and eligibility sections)
+- **Non-goals:** no UI changes
+- **Files touched:** src/data/trialData.ts (6 new optional fields: inclusionCriteria, exclusionCriteria, howToReadChart, howToInterpret, bedsidePearl, bottomLineSummary; EXTEND entry fully populated with PDF-sourced values)
+- **Acceptance checks:** 6 new optional fields in TrialMetadata · tsc clean · existing trial objects compile · EXTEND safetyProfile uses PDF Table 2 values (mortality 11.5%/8.9%, sICH 6.2%/0.9%) ✓
+- **Clinical impact:** none (schema + data layer; presentation change only)
+- **Rollback plan:** n/a
+
+#### W6.1b — Design-guardian co-sign patches (4 conditions) — Class B
+- **Status:** done — 2026-04-21 (all 4 conditions patched; follow-up APPROVE co-sign pending)
+- **User-visible goal:** none (spec + mockup documentation fixes)
+- **Conditions to resolve (from design-guardian APPROVE-WITH-CONDITIONS verdict, 2026-04-21):**
+  - C1: TRIALS_SPEC.md §18.3 lines 1055-1056: replace `—` with `:` in two TypeScript code comments (em dashes in code block)
+  - C2: TRIALS_SPEC.md §10.3: add prose exception for desktop 2-col drawer citation border-top omission
+  - C3: trial-reference.html Stage 1 drawer: add HTML comment annotating State C discovery-chevron behavior
+  - C4: V decides Option A (add Stage 6 mobile-only frame for sections 3-8) or Option B (add spec prose for §11.2, §12.2, §13.1 mobile layout contracts)
+- **Files:** docs/specs/TRIALS_SPEC.md · docs/specs/mockups/trial-reference.html
+- **Acceptance:** all 4 conditions resolved · design-guardian follow-up APPROVE issued · spec status changes to "locked 2026-04-21"
+- **Clinical impact:** none
+- **Rollback plan:** n/a
+
+#### W6.4 — TrialPageNew.tsx rebuild (Prompt 3) — Class C
+- **Status:** done — 2026-04-21
+- **User-visible goal:** EXTEND trial page renders per TRIALS_SPEC.md v1.0 and trial-reference.html mockup; sticky header, dot grid, delta band, teaching well, interpret well, 4-state bottom-line drawer
+- **Non-goals:** archetypes B–F not implemented; other trials not migrated; full citation registry not required (stub-ready per ADR-005 Decision 1)
+- **Files touched:**
+  - src/components/trials/archetypes/DeltaBandChart.tsx (CREATED — 20-col dot grid, delta band, stat row)
+  - src/components/trials/TeachingWell.tsx (CREATED — Q&A and Interpret accordion modes)
+  - src/components/trials/BottomLineDrawer.tsx (CREATED — 4-state portal drawer)
+  - src/pages/trials/TrialPageNew.tsx (EDITED — EXTEND branch, JSON-LD useEffect, 3 new imports)
+  - docs/link-graph.json (EDITED — trial/extend-trial node + pathway/late-window-ivt stub)
+- **Acceptance checks:** tsc clean ✓ · check:claims passed ✓ · build green ✓ (508kB pre-existing chunk warning, was 486kB before) · EXTEND branch returns 11-section layout · DISTAL hardcoded blocks at lines 633-690 untouched ✓ · no em dashes in output ✓ · dark sidebar absent from EXTEND branch ✓
+- **Clinical impact:** low — presentation change only; clinical text byte-for-byte preserved from trialData.ts
+- **Rollback plan:** git revert merge commit; trial pages return to current layout instantly
+- **Technical debt:** EXTEND safetyProfile stub entries require W5.2 upgrade to full registry (ADR-005 Decision 1)
+
 ### LAYER 5 — Polish (blocked until Layer 4 complete)
 - [ ] [L5] Typography audit
 - [ ] [L5] Spacing consistency audit

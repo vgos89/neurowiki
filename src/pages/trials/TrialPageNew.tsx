@@ -12,6 +12,9 @@ import { categoryNames, categoryStyles, findTrialById } from '../../data/trialLi
 import { TrialVisualizationSection } from '../../components/trials/TrialVisualizations';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { DeltaBandChart } from '../../components/trials/archetypes/DeltaBandChart';
+import { TeachingWell } from '../../components/trials/TeachingWell';
+import { BottomLineDrawer } from '../../components/trials/BottomLineDrawer';
 
 function sanitizeLegacyTrialContent(
   content: string,
@@ -234,6 +237,34 @@ const TrialPageNew: React.FC = () => {
   }, [trialId, trialMetadata]);
   const isPlaceholderTrial = !isLoadingPayload && !!catalogTrial?.isPlaceholder && !trial && !trialMetadata;
 
+  // JSON-LD structured data for EXTEND trial (MedicalScholarlyArticle — TRIALS_SPEC §16)
+  useEffect(() => {
+    if (trialId !== 'extend-trial' || !trialMetadata) return;
+    const doi = trialMetadata.doi ?? '';
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'extend-trial-jsonld';
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'MedicalScholarlyArticle',
+      name: 'Thrombolysis Guided by Perfusion Imaging up to 9 Hours after Onset of Stroke',
+      abstract: trialMetadata.clinicalContext,
+      ...(doi
+        ? {
+            url: `https://doi.org/${doi}`,
+            identifier: { '@type': 'PropertyValue', propertyID: 'doi', value: doi },
+          }
+        : {}),
+      datePublished: '2019',
+      publisher: { '@type': 'Organization', name: 'New England Journal of Medicine' },
+    });
+    document.head.appendChild(script);
+    return () => {
+      const el = document.getElementById('extend-trial-jsonld');
+      if (el) el.remove();
+    };
+  }, [trialId, trialMetadata]);
+
   if (isLoadingPayload) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
@@ -297,6 +328,322 @@ const TrialPageNew: React.FC = () => {
       </div>
     );
   }
+
+  // ── EXTEND canary: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ──────────────
+  if (trialId === 'extend-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+
+        {/* Section 1: Sticky header — abbreviated name + category badge */}
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link
+              to="/trials"
+              className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors"
+              aria-label="Back to Neuro Trials"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              {/* ADR-005 Decision 4: sticky header name — 13px bold slate-800, tracking 0.02em */}
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>
+                EXTEND
+              </span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">
+              {categoryBadgeLabel}
+            </span>
+          </div>
+        </div>
+
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+          {/* Section 2: Cobalt H1 — ADR-005 Decision 4 */}
+          <div>
+            <h1
+              className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]"
+              style={{ color: '#1746A2' }}
+            >
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}
+              {trialMetadata.doi && (
+                <>
+                  {' '}·{' '}
+                  <a
+                    href={`https://doi.org/${trialMetadata.doi}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                  >
+                    doi:{trialMetadata.doi}
+                  </a>
+                </>
+              )}
+              {' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+
+          {/* Section 3: Population snapshot — inclusion + exclusion criteria */}
+          {(trialMetadata.inclusionCriteria?.length || trialMetadata.exclusionCriteria?.length) && (
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                  Population
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 dark:divide-slate-700">
+                {trialMetadata.inclusionCriteria && (
+                  <div className="p-4">
+                    <p className="text-xs font-semibold text-slate-500 mb-2">Included</p>
+                    <ul className="space-y-1.5">
+                      {trialMetadata.inclusionCriteria.map((c, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                          <span className="text-emerald-500 flex-shrink-0 mt-0.5" aria-hidden="true">✓</span>
+                          {c}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {trialMetadata.exclusionCriteria && (
+                  <div className="p-4">
+                    <p className="text-xs font-semibold text-slate-500 mb-2">Excluded</p>
+                    <ul className="space-y-1.5">
+                      {trialMetadata.exclusionCriteria.map((c, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                          <span className="text-red-400 flex-shrink-0 mt-0.5" aria-hidden="true">✕</span>
+                          {c}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Section 4: Primary outcome — Archetype A DeltaBandChart */}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                Primary Outcome
+              </p>
+            </div>
+            <div className="p-4">
+              {/* ADR-005 Decision 3: winning-arm cobalt accent when trialResult === 'POSITIVE' */}
+              <DeltaBandChart
+                treatmentPct={trialMetadata.efficacyResults.treatment.percentage}
+                controlPct={trialMetadata.efficacyResults.control.percentage}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint={`${trialMetadata.stats.primaryEndpoint.value} ${trialMetadata.stats.primaryEndpoint.label}`.trim()}
+                riskRatio="1.44"
+                ciLow="1.01"
+                ciHigh="2.06"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+            </div>
+          </div>
+
+          {/* Section 5: How to read this chart — TeachingWell Q&A */}
+          {trialMetadata.howToReadChart && (
+            <TeachingWell
+              mode="qa"
+              title="How to read this chart"
+              items={trialMetadata.howToReadChart}
+            />
+          )}
+
+          {/* Section 6: How to interpret this trial — TeachingWell Interpret */}
+          {trialMetadata.howToInterpret && (
+            <TeachingWell
+              mode="interpret"
+              title="How to interpret this trial"
+              sections={trialMetadata.howToInterpret}
+            />
+          )}
+
+          {/* Section 7: Safety profile */}
+          {trialMetadata.safetyProfile && (
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                  Safety
+                </p>
+              </div>
+              <div className="divide-y divide-slate-100 dark:divide-slate-700">
+                {trialMetadata.safetyProfile.sICH && (
+                  <div className="p-4">
+                    <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                      {trialMetadata.safetyProfile.sICH.label}
+                    </p>
+                    <div className="flex items-end gap-6">
+                      <div>
+                        <span className="text-[10px] uppercase tracking-widest text-slate-400">Alteplase</span>
+                        <p className="text-2xl font-bold text-red-600">{trialMetadata.safetyProfile.sICH.evt}%</p>
+                      </div>
+                      <div>
+                        <span className="text-[10px] uppercase tracking-widest text-slate-400">Placebo</span>
+                        <p className="text-2xl font-bold text-slate-400">{trialMetadata.safetyProfile.sICH.control}%</p>
+                      </div>
+                    </div>
+                    {trialMetadata.safetyProfile.sICH.tooltip && (
+                      <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                        {trialMetadata.safetyProfile.sICH.tooltip}
+                      </p>
+                    )}
+                  </div>
+                )}
+                {trialMetadata.safetyProfile.mortality && (
+                  <div className="p-4">
+                    <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                      {trialMetadata.safetyProfile.mortality.label}
+                    </p>
+                    <div className="flex items-end gap-6">
+                      <div>
+                        <span className="text-[10px] uppercase tracking-widest text-slate-400">Alteplase</span>
+                        <p className="text-2xl font-bold text-slate-700">{trialMetadata.safetyProfile.mortality.evt}%</p>
+                      </div>
+                      <div>
+                        <span className="text-[10px] uppercase tracking-widest text-slate-400">Placebo</span>
+                        <p className="text-2xl font-bold text-slate-400">{trialMetadata.safetyProfile.mortality.control}%</p>
+                      </div>
+                    </div>
+                    {trialMetadata.safetyProfile.mortality.tooltip && (
+                      <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                        {trialMetadata.safetyProfile.mortality.tooltip}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Section 8: Trial design */}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                Trial Design
+              </p>
+            </div>
+            <div className="p-4 space-y-3">
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Type</p>
+                <ul className="space-y-0.5">
+                  {trialMetadata.trialDesign.type.map((t, i) => (
+                    <li key={i} className="flex items-start gap-1.5 text-sm text-slate-700 dark:text-slate-300">
+                      <span className="text-slate-300 flex-shrink-0" aria-hidden="true">·</span>
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="flex flex-wrap items-start gap-6">
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-slate-400">Timeline</p>
+                  <p className="text-sm font-medium text-slate-700">{trialMetadata.trialDesign.timeline}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-slate-400">N</p>
+                  <p className="text-sm font-medium text-slate-700">{trialMetadata.stats.sampleSize.value}</p>
+                </div>
+              </div>
+              {trialMetadata.doi && (
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">DOI</p>
+                  <a
+                    href={`https://doi.org/${trialMetadata.doi}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-[#1746A2] hover:underline"
+                  >
+                    {trialMetadata.doi}
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              )}
+              {trialMetadata.clinicalTrialsId && (
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">ClinicalTrials.gov</p>
+                  <a
+                    href={`https://clinicaltrials.gov/study/${trialMetadata.clinicalTrialsId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-[#1746A2] hover:underline"
+                  >
+                    {trialMetadata.clinicalTrialsId}
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Section 9: Bedside pearl */}
+          {trialMetadata.bedsidePearl && (
+            <div
+              style={{
+                background: '#EEF2FF',
+                borderLeft: '3px solid #1746A2',
+                borderRadius: '0 10px 10px 0',
+                padding: '16px 18px',
+              }}
+            >
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">
+                Bedside Pearl
+              </p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+
+          {/* Section 10: See-also links */}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                to="/guide/stroke-code"
+                className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors"
+              >
+                Stroke Code pathway
+              </Link>
+              <Link
+                to="/calculators/nihss"
+                className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors"
+              >
+                NIHSS Calculator
+              </Link>
+            </div>
+          </div>
+
+        </div>{/* end content wrapper */}
+
+        {/* Section 11: BottomLineDrawer — portal-mounted (TRIALS_SPEC §10.3) */}
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="EXTEND"
+            body={trialMetadata.bottomLineSummary}
+            bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[
+              { label: 'Stroke Code pathway', href: '/guide/stroke-code' },
+              { label: 'NIHSS Calculator', href: '/calculators/nihss' },
+            ]}
+            citation={trialMetadata.source}
+            doi={trialMetadata.doi}
+            trialResult={trialMetadata.trialResult}
+          />
+        )}
+
+      </div>
+    );
+  }
+  // ─────────────────────────────────────────────────────────────────────────
 
   if (!trial) {
     return (

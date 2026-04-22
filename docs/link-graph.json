@@ -68,12 +68,22 @@
         "calc/gcs"
       ],
       "referencedBy": []
+    },
+    "trial/extend-trial": {
+      "type": "trial",
+      "title": "EXTEND Trial",
+      "route": "/trials/extend-trial",
+      "references": [
+        "pathway/late-window-ivt"
+      ],
+      "referencedBy": []
     }
   },
   "stubs": [
     "pathway/stroke/step-2",
     "trial/hemphill-2001",
-    "guideline/aha-ich-2022"
+    "guideline/aha-ich-2022",
+    "pathway/late-window-ivt"
   ],
   "_schema": {
     "nodes": {
