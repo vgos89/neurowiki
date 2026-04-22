@@ -109,20 +109,21 @@ export interface ProceduralDetails {
   };
 }
 
+export interface SafetyMetricEntry {
+  evt: number;
+  control: number;
+  label: string;
+  tooltip?: string;
+  color?: 'warning' | 'success' | 'danger';
+}
+
 export interface SafetyProfile {
-  mortality?: {
-    evt: number;
-    control: number;
-    label: string;
-    tooltip?: string;
-  };
-  sICH?: {
-    evt: number;
-    control: number;
-    label: string;
-    tooltip?: string;
-    color?: 'warning' | 'success' | 'danger';
-  };
+  mortality?: SafetyMetricEntry;
+  sICH?: SafetyMetricEntry;
+  majorBleeding?: SafetyMetricEntry;
+  hemorrhagicStroke?: SafetyMetricEntry;
+  adverseEvents?: SafetyMetricEntry;
+  severeHemorrhage?: SafetyMetricEntry;
 }
 
 export interface TrialMetadata {
@@ -561,6 +562,49 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT00622778',
     listCategory: 'thrombolysis',
     listDescription: 'IA tPA for central retinal artery occlusion — negative trial; stopped early for futility.',
+    trialResult: 'NEGATIVE',
+    safetyProfile: {
+      adverseEvents: {
+        evt: 37.1,
+        control: 4.3,
+        label: 'Adverse events (LIF vs conservative)',
+        tooltip: 'Adverse events including 2 procedure-related intracranial hemorrhages in the LIF arm; 0 hemorrhages in the conservative arm. The 8.6x higher adverse event rate with no efficacy signal was the basis for early DSMB termination. /* claimId: eagle-safety-ae | source: Schumacher Ophthalmology 2010 Table 3 */',
+        color: 'danger',
+      },
+    },
+    inclusionCriteria: [
+      'Central retinal artery occlusion with onset within 20 hours of symptom onset',
+      'BCVA of hand motion or worse in the affected eye',
+      'Age 18 years or older',
+      'Appropriate for catheter angiography',
+    ],
+    exclusionCriteria: [
+      'Onset more than 20 hours prior to treatment',
+      'Contraindication to fibrinolytic therapy',
+      'Prior significant ocular disease in the affected eye',
+      'Evidence of carotid or aortic dissection',
+    ],
+    howToReadChart: [
+      {
+        question: 'What endpoint does this chart display -- and why not the primary?',
+        answer: 'The chart displays the secondary dichotomized endpoint: proportion of patients with clinically meaningful visual improvement (gain of 15 or more ETDRS letters) at 1 month. The primary endpoint was continuous change in logMAR BCVA, which showed P=0.69 (no significant difference). The dichotomized secondary is shown here for visual clarity because the continuous primary cannot be meaningfully represented in a dot proportion chart. /* claimId: eagle-primary-negative | source: Schumacher Ophthalmology 2010 */',
+      },
+      {
+        question: 'Why does the conservative arm appear to have a higher rate?',
+        answer: 'CST (conservative treatment) showed 60.0% with visual improvement vs 57.1% in the LIF (IA tPA) arm, a difference that was not statistically significant. The key finding is that there is no benefit from IA fibrinolysis in either the primary or secondary analysis. The DSMB stopped the trial at 84 of 200 planned patients for futility and safety.',
+      },
+      {
+        question: 'How serious was the safety signal?',
+        answer: 'Adverse events occurred in 37.1% of the LIF arm versus 4.3% of the conservative arm, including 2 procedure-related intracranial hemorrhages with no hemorrhages in the control arm. This 8-fold difference in adverse events with zero efficacy gain defines the unfavorable risk-benefit profile. /* claimId: eagle-safety-ae | source: Schumacher Ophthalmology 2010 */',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In patients with CRAO presenting within 20 hours, local intra-arterial fibrinolysis (up to 50 mg tPA via ophthalmic artery microcatheter) did not improve visual acuity compared with conservative treatment on either the primary continuous BCVA endpoint (P=0.69) or the secondary dichotomized endpoint (57.1% vs 60.0% with meaningful improvement). The trial was stopped early for futility and safety by the DSMB. /* claimId: eagle-primary-negative | source: Schumacher Ophthalmology 2010 */',
+      doesNotProve: 'It does not prove that any thrombolytic approach is ineffective in CRAO within the first few hours. IV tPA within 4.5 hours of CRAO onset was outside the EAGLE protocol window and is still considered by some centers based on stroke-mechanism analogy. EAGLE was conducted with a 20-hour window; early window trials are a separate question.',
+      cautions: 'The trial enrolled only 84 of 200 planned patients before early stopping, reducing statistical power and widening confidence intervals. Open-label design prevents blinding of treatment allocation. The heterogeneous conservative treatment (hemodilution, ocular massage, timolol, acetazolamide) may not reflect current standard of care.',
+    },
+    bedsidePearl: 'EAGLE definitively showed that IA tPA for CRAO causes significant harm (37% adverse events including intracranial hemorrhage) with no visual benefit -- the procedure is not indicated for CRAO. The current clinical debate is about IV tPA in the very early window (within 4.5 hours), which was not tested in EAGLE. If a CRAO patient presents within hours, the stroke team conversation is about IV tPA eligibility, not IA fibrinolysis.',
+    bottomLineSummary: 'Local intra-arterial fibrinolysis for CRAO presenting within 20 hours showed no improvement in visual acuity compared with conservative treatment (primary P=0.69; secondary dichotomized endpoint 57.1% vs 60.0% with clinically meaningful improvement) and caused significantly more adverse events (37.1% vs 4.3%), including procedure-related intracranial hemorrhage. The DSMB stopped the trial at 84 patients for futility and safety. IA tPA is not recommended for CRAO.',
   },
   'mr-clean-trial': {
     id: 'mr-clean-trial',
@@ -2586,7 +2630,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'Randomized Patients'
       },
       primaryEndpoint: {
-        value: 'mRS 0-1',
+        value: 'mRS 0-2',
         label: 'at 90 Days'
       },
       pValue: {
@@ -2609,12 +2653,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     efficacyResults: {
       treatment: {
         percentage: 41.6,
-        label: 'Excellent outcome (mRS 0-1) at 90 days',
+        label: 'Functional independence (mRS 0-2) at 90 days',
         name: 'EVT + Usual Care'
       },
       control: {
         percentage: 43.1,
-        label: 'Excellent outcome (mRS 0-1) at 90 days',
+        label: 'Functional independence (mRS 0-2) at 90 days',
         name: 'Usual Care Alone'
       }
     },
@@ -2627,18 +2671,75 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       // Negative trial with harm signal - no NNT
     },
     pearls: [
-      'No functional benefit (mRS 0–2: 41.6% vs 43.1%, ARR 0.95; P=0.61) — 90-day mortality was higher with EVT',
-      '90-day mortality 13.3% vs 8.4% (HR 1.82, 95% CI 1.06–3.12)',
+      'No functional benefit (mRS 0-2: 41.6% vs 43.1%, rate ratio 0.95; P=0.61) — 90-day mortality was higher with EVT',
+      '90-day mortality 13.3% vs 8.4% (HR 1.82, 95% CI 1.06-3.12)',
       'sICH significantly more frequent in EVT arm (5.4% vs 2.2%)',
       '12-hour treatment window from last known well',
-      'NIHSS >5 or disabling deficit of 3–5, with favorable baseline imaging',
-      'EVT is not recommended for routine use in medium vessel occlusions — procedural risk in smaller vessels outweighs benefit in unselected patients'
+      'NIHSS above 5 or disabling deficit of 3 to 5, with favorable baseline imaging',
+      'EVT is not recommended for routine use in medium vessel occlusions'
     ],
     conclusion: '',
     source: 'Goyal et al. (NEJM 2025)',
     clinicalTrialsId: 'NCT05151172',
+    trialResult: 'NEGATIVE',
+    safetyProfile: {
+      sICH: {
+        /* claimId: escape-mevo.sich | source: ESCAPE-MeVO Investigators, NEJM 2025, Table 2 */
+        evt: 5.4,
+        control: 2.2,
+        label: 'Symptomatic ICH',
+        tooltip: 'Symptomatic intracranial hemorrhage occurred in 5.4% of the EVT group vs 2.2% of the usual-care group. Procedural risk in medium-caliber vessels contributed to the absence of net benefit. Source: ESCAPE-MeVO Investigators, NEJM 2025, Table 2.',
+        color: 'danger',
+      },
+      mortality: {
+        /* claimId: escape-mevo.mortality | source: ESCAPE-MeVO Investigators, NEJM 2025, Table 2 */
+        evt: 13.3,
+        control: 8.4,
+        label: 'Mortality at 90 days',
+        tooltip: 'All-cause mortality at 90 days was 13.3% (EVT) vs 8.4% (usual care), HR 1.82 (95% CI 1.06-3.12). Higher sICH and mortality without functional gain led to the NEGATIVE overall verdict. Source: ESCAPE-MeVO Investigators, NEJM 2025, Table 2.',
+        color: 'danger',
+      },
+    },
+    inclusionCriteria: [
+      'Age 18 years or older',
+      'Acute ischemic stroke with medium vessel occlusion confirmed on vessel imaging (M2, M3, A1, A2, P1, P2 segments)',
+      'NIHSS score above 5, or disabling neurological deficit with NIHSS 3 to 5',
+      'Treatment possible within 12 hours of last known well',
+      'Favorable baseline imaging without large established infarct',
+      'Pre-stroke modified Rankin Scale 0 to 2',
+    ],
+    exclusionCriteria: [
+      'Large vessel occlusion (ICA, M1, basilar) — EVT-eligible by established evidence',
+      'Large established infarct on baseline imaging',
+      'Pre-stroke mRS above 2',
+      'Recent major surgery or intracranial bleeding within 3 months',
+      'Contraindication to contrast or thrombectomy procedure',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: '100 dots represent 100 patients in each arm. A filled dot is a patient who was functionally independent at 90 days (mRS 0-2); an open dot is one who was not.',
+      },
+      {
+        question: 'What should I look at first?',
+        answer: 'The EVT arm has slightly fewer filled dots than the medical arm (42 vs 43). The direction is reversed compared to a positive trial. There is no cobalt band because the result is negative.',
+      },
+      {
+        question: 'What does this mean for my patient?',
+        answer: 'Routine EVT for medium vessel occlusion is not supported. Procedural risk in smaller caliber vessels (sICH 5.4% vs 2.2%, mortality 13.3% vs 8.4%) without functional gain argues against standard EVT for MeVO. Highly selected cases at centers with specific expertise remain a clinical judgment.',
+      },
+    ],
+    howToInterpret: {
+      /* claimId: escape-mevo.interpret | source: ESCAPE-MeVO Investigators, NEJM 2025 */
+      proves: 'In unselected patients with medium vessel occlusion treated within 12 hours, EVT did not improve 90-day functional independence compared with best medical management.',
+      doesNotProve: 'It does not prove that no MeVO patient can benefit from EVT. It does not generalize to all imaging selection strategies, all device approaches, or centers with exceptional MeVO-specific technical expertise.',
+      cautions: 'EVT carries real procedural risk in medium caliber vessels: sICH was more than doubled (5.4% vs 2.2%) and mortality was significantly higher (13.3% vs 8.4%, HR 1.82). The rate ratio for functional independence was 0.95 (95% CI 0.82 to 1.10), consistent with possible modest harm. Parallel neutral results from DISTAL reinforce this finding for unselected MeVO populations.',
+    },
+    /* claimId: escape-mevo.bedside-pearl | source: ESCAPE-MeVO Investigators, NEJM 2025 */
+    bedsidePearl: 'ESCAPE-MeVO stopped the routine-EVT-for-MeVO question: sICH was 5.4% vs 2.2% and mortality was 13.3% vs 8.4% with no functional gain. Medium vessel occlusion is not a thrombectomy trigger by default. Procedural risk vs uncertain benefit must be discussed individually.',
+    bottomLineSummary: 'ESCAPE-MeVO showed that EVT for medium vessel occlusion (M2, M3, ACA, PCA branches) did not improve functional independence at 90 days compared with best medical management, and was associated with higher rates of symptomatic hemorrhage and 90-day mortality. Routine EVT for MeVO is not supported by this evidence.',
     listCategory: 'thrombectomy',
-    listDescription: 'EVT for medium vessel occlusion (MeVO) — no benefit over medical care (NEJM 2025).',
+    listDescription: 'EVT for medium vessel occlusion (MeVO) — no functional benefit, higher sICH and mortality (NEJM 2025).',
   },
   'defuse-3-trial': {
     id: 'defuse-3-trial',
@@ -3099,8 +3200,64 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Thomalla et al. (NEJM 2018)',
     doi: '10.1056/NEJMoa1804355',
     clinicalTrialsId: 'NCT01525290',
+    trialResult: 'POSITIVE',
+    safetyProfile: {
+      sICH: {
+        /* claimId: wake-up.sich | source: Thomalla et al. NEJM 2018;379:617 Table 2 */
+        evt: 2.0,
+        control: 0.4,
+        label: 'Symptomatic ICH at 7 days (ECASS III definition)',
+        tooltip: 'Parenchymal hematoma type 2 with NIHSS worsening of 4 or more points within 7 days. 2.0% alteplase vs 0.4% placebo; P=0.15 (not statistically significant in this sample of 503 patients). Source: Thomalla et al., NEJM 2018, Table 2.',
+        color: 'warning',
+      },
+      mortality: {
+        /* claimId: wake-up.mortality | source: Thomalla et al. NEJM 2018;379:617 Table 2 */
+        evt: 4.1,
+        control: 1.2,
+        label: 'Mortality at 90 days',
+        tooltip: 'All-cause mortality at 90 days was 4.1% (alteplase) vs 1.2% (placebo). This numerical difference should be interpreted cautiously: the trial enrolled 503 of 800 planned patients and was not powered to detect mortality differences reliably. Source: Thomalla et al., NEJM 2018, Table 2.',
+      },
+    },
+    inclusionCriteria: [
+      'Age 18 to 80 years',
+      'Acute ischemic stroke with wake-up presentation or unknown time of onset',
+      'MRI showing positive DWI lesion with negative FLAIR in the same territory (tissue-based mismatch)',
+      'NIHSS score 1 to 25',
+      'Treatment able to start within 4.5 hours of first recognition of deficit',
+      'No plan for mechanical thrombectomy',
+    ],
+    exclusionCriteria: [
+      'FLAIR lesion clearly positive in the same territory as DWI (suggesting onset over 4.5 hours)',
+      'DWI lesion exceeding one third of the MCA territory',
+      'Standard contraindication to IV alteplase (active hemorrhage, recent surgery, anticoagulation)',
+      'NIHSS below 1 or above 25',
+      'Planned or already performed mechanical thrombectomy',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: '100 dots represent 100 patients in each group. A filled dot is a patient who reached excellent recovery at 90 days (mRS 0 or 1); an open dot is one who did not.',
+      },
+      {
+        question: 'What should I look at first?',
+        answer: 'Count the filled dots in each arm. The cobalt band spans the roughly 11 extra recoveries in the alteplase arm (53 vs 42 per 100). That is the absolute benefit driving the NNT of approximately 9.',
+      },
+      {
+        question: 'What does this mean at the bedside?',
+        answer: 'About 9 patients with DWI-FLAIR mismatch wake-up stroke would need alteplase for one additional person to achieve excellent recovery. Mortality was numerically higher in the alteplase arm (4.1% vs 1.2%), though this difference did not reach significance in this small sample.',
+      },
+    ],
+    howToInterpret: {
+      /* claimId: wake-up.interpret | source: Thomalla et al. NEJM 2018;379:611-622 */
+      proves: 'In patients with acute ischemic stroke of unknown onset selected by DWI-FLAIR mismatch on MRI, IV alteplase improved the chance of excellent functional outcome (mRS 0-1) at 90 days, with an adjusted odds ratio of 1.61.',
+      doesNotProve: 'It does not show that all wake-up strokes benefit, only those with DWI-FLAIR mismatch. It does not establish safety in patients with DWI lesions larger than one third of the MCA territory, and it does not confirm a mortality benefit.',
+      cautions: 'The trial enrolled only 503 of 800 planned patients before funding lapsed; this was not a prespecified efficacy stopping rule. The wide confidence interval (1.09 to 2.36) reflects limited precision. Mortality was numerically higher in the alteplase arm (4.1% vs 1.2%) and symptomatic ICH was numerically higher (2.0% vs 0.4%); neither difference reached statistical significance, but the small sample limits interpretation of these safety signals.',
+    },
+    /* claimId: wake-up.bedside-pearl | source: Thomalla et al. NEJM 2018;379:617 Table 2 */
+    bedsidePearl: 'WAKE-UP showed an NNT of roughly 9 for excellent recovery, better than EXTEND (NNT 17). The tradeoff is real: sICH was 2.0% vs 0.4% and mortality was numerically higher (4.1% vs 1.2%) in the alteplase arm, though neither reached significance in 503 patients. The DWI-FLAIR mismatch criterion is the gatekeeping rule; without it, you do not have WAKE-UP evidence.',
+    bottomLineSummary: 'In wake-up stroke and unknown-onset ischemic stroke selected by DWI-FLAIR mismatch on MRI, IV alteplase improved excellent functional outcome at 90 days compared with placebo. The trial stopped early due to funding constraints rather than a prespecified stopping rule, so estimates are imprecise and the numerical excess in mortality warrants discussion during consent.',
     listCategory: 'thrombolysis',
-    listDescription: 'MRI DWI–FLAIR mismatch for thrombolysis in unknown-onset stroke.',
+    listDescription: 'MRI DWI-FLAIR mismatch for thrombolysis in unknown-onset stroke.',
   },
   // ========== BASILAR ARTERY TRIALS ==========
   'attention-trial': {
@@ -3377,6 +3534,54 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Short follow-up (90 days) - long-term outcomes unknown',
       'TIA diagnosis can be challenging - potential for enrollment of "TIA mimics" despite exclusion criteria'
     ],
+    safetyProfile: {
+      sICH: {
+        /* claimId: chance.hemorrhage | source: Wang Y et al. NEJM 2013;369:17 Table 2 */
+        evt: 0.3,
+        control: 0.3,
+        label: 'Moderate-to-severe hemorrhage at 90 days',
+        tooltip: 'Moderate-to-severe hemorrhage (GUSTO criteria): 0.3% DAPT vs 0.3% aspirin (P=0.73). No significant increase in severe bleeding with short-term dual antiplatelet therapy. Hemorrhagic stroke was 0.3% in both groups (P=0.98). Source: Wang Y et al., NEJM 2013, Table 2.',
+        color: 'success',
+      },
+    },
+    inclusionCriteria: [
+      'Age 40 years or older',
+      'Minor ischemic stroke (NIHSS 0 to 3) or high-risk TIA (ABCD2 score 4 or higher)',
+      'Randomization within 24 hours of symptom onset',
+      'No clear indication for anticoagulation (no atrial fibrillation, no prosthetic valve)',
+      'Independent at baseline',
+    ],
+    exclusionCriteria: [
+      'Hemorrhagic stroke on baseline imaging',
+      'Severe stroke (NIHSS 4 or higher)',
+      'Low-risk TIA (ABCD2 below 4)',
+      'Clear indication for anticoagulation (atrial fibrillation, valvular disease)',
+      'Recent major surgery or GI bleeding within 3 months',
+      'Contraindication to clopidogrel or aspirin',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: '100 dots represent 100 patients in each group. A filled dot is a patient who was stroke-free at 90 days; an open dot is one who had a recurrent stroke. The treatment arm (DAPT) has more stroke-free patients (92 vs 88 per 100).',
+      },
+      {
+        question: 'What should I look at first?',
+        answer: 'The cobalt band spans 4 extra stroke-free patients in the DAPT arm. That is the absolute benefit: 3.5 percentage points fewer strokes with dual therapy, driving an NNT of 29.',
+      },
+      {
+        question: 'What does this mean at the bedside?',
+        answer: '29 patients with TIA or minor stroke need dual antiplatelet therapy for 21 days to prevent one recurrent stroke. The benefit was concentrated in the first 7 days when stroke risk is highest. Major hemorrhage was identical at 0.3% in both groups.',
+      },
+    ],
+    howToInterpret: {
+      /* claimId: chance.interpret | source: Wang Y et al. NEJM 2013;369:11-19 */
+      proves: 'In patients with minor ischemic stroke (NIHSS 0-3) or high-risk TIA (ABCD2 at least 4) enrolled within 24 hours, clopidogrel plus aspirin for 21 days reduced stroke recurrence at 90 days compared with aspirin alone, with a hazard ratio of 0.68 and an NNT of 29.',
+      doesNotProve: 'It does not apply to moderate or severe stroke (NIHSS 4 or higher), low-risk TIA (ABCD2 below 4), or patients with atrial fibrillation. It does not show benefit for dual therapy extending beyond 21 days (the POINT trial showed increasing hemorrhage risk with longer duration).',
+      cautions: 'The trial was conducted entirely in China, where higher rates of intracranial atherosclerosis and different CYP2C19 metabolizer frequencies may affect generalizability. The POINT trial confirmed the finding in a Western population but with a 600mg clopidogrel load and 90-day duration, where bleeding risk was significantly increased. The 21-day duration used in CHANCE represents the current guideline recommendation to capture benefit while limiting hemorrhage.',
+    },
+    /* claimId: chance.bedside-pearl | source: Wang Y et al. NEJM 2013;369:11-19 */
+    bedsidePearl: 'CHANCE: start clopidogrel 300mg load + aspirin within 24 hours of minor stroke or high-risk TIA. Run dual therapy for 21 days, then switch to monotherapy. NNT=29, major hemorrhage 0.3% in both groups. Do not extend to 90 days without considering POINT bleeding data.',
+    bottomLineSummary: 'CHANCE showed that clopidogrel plus aspirin started within 24 hours of minor stroke or high-risk TIA reduced 90-day stroke recurrence by 32% (NNT 29) without increasing major hemorrhage. The 21-day dual therapy duration is the guideline standard; AHA/ASA 2026 rates this strategy Class I.',
     listCategory: 'antiplatelets',
     listDescription: 'DAPT (clopidogrel + aspirin) after TIA/minor stroke; NNT=29. AHA 2026 COR 1.',
   },
@@ -3440,9 +3645,59 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: '',
     source: 'Johnston et al. (NEJM 2018)',
+    doi: '10.1056/NEJMoa1800410',
     clinicalTrialsId: 'NCT00991029',
+    trialResult: 'POSITIVE',
+    safetyProfile: {
+      sICH: {
+        /* claimId: point.hemorrhage | source: Johnston SC et al. NEJM 2018;379:222 Table 2 */
+        evt: 0.9,
+        control: 0.4,
+        label: 'Major hemorrhage at 90 days',
+        tooltip: 'Major hemorrhage: 0.9% DAPT vs 0.4% aspirin (HR 2.32, 95% CI 1.10-4.87, P=0.02). Unlike CHANCE, POINT showed a statistically significant increase in major hemorrhage with 90-day dual therapy. This excess risk, concentrated after day 21, drove the guideline recommendation to limit DAPT to 21 days. Source: Johnston SC et al., NEJM 2018, Table 2.',
+        color: 'warning',
+      },
+    },
+    inclusionCriteria: [
+      'Age 18 years or older',
+      'Minor ischemic stroke (NIHSS 0 to 3) or high-risk TIA (ABCD2 score 4 or higher)',
+      'Randomization within 12 hours of symptom onset',
+      'No clear indication for anticoagulation',
+      'Independent at baseline (mRS 0 to 2)',
+    ],
+    exclusionCriteria: [
+      'Hemorrhagic stroke on baseline imaging',
+      'Severe stroke (NIHSS 4 or higher)',
+      'Low-risk TIA (ABCD2 below 4)',
+      'Indication for anticoagulation (atrial fibrillation)',
+      'Recent major surgery or GI bleeding',
+      'Contraindication to clopidogrel or aspirin',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: '100 dots represent 100 patients in each group. A filled dot is a patient free of major ischemic events at 90 days; an open dot had a stroke, MI, or ischemic vascular death. The DAPT arm has 2 fewer events per 100 patients (95 vs 93.5 stroke-free).',
+      },
+      {
+        question: 'What should I look at first?',
+        answer: 'The cobalt band spans the 1.5 extra event-free patients in the DAPT arm. The absolute benefit is modest (NNT 67), but major hemorrhage was significantly higher in the DAPT arm (0.9% vs 0.4%).',
+      },
+      {
+        question: 'What does this mean at the bedside?',
+        answer: 'POINT confirms CHANCE in a Western population: DAPT reduces early stroke risk after TIA/minor stroke. But major hemorrhage rose significantly with 90-day dual therapy, concentrated after day 21. Guidelines therefore recommend 21-day DAPT (CHANCE protocol) rather than the 90-day protocol tested here.',
+      },
+    ],
+    howToInterpret: {
+      /* claimId: point.interpret | source: Johnston SC et al. NEJM 2018;379:215-225 */
+      proves: 'In patients with minor ischemic stroke (NIHSS 0-3) or high-risk TIA (ABCD2 at least 4) enrolled within 12 hours, clopidogrel plus aspirin for 90 days reduced major ischemic events at 90 days vs aspirin alone (HR 0.75, NNT 67) in an international Western population, confirming CHANCE.',
+      doesNotProve: 'It does not prove that 90-day DAPT is safe: major hemorrhage was significantly increased (HR 2.32, P=0.02). It does not compare different DAPT durations head-to-head. It does not apply to severe stroke (NIHSS 4 or higher) or patients with atrial fibrillation.',
+      cautions: 'Major hemorrhage risk was significantly higher with 90-day dual therapy (0.9% vs 0.4%, P=0.02), driven primarily by events after day 21. The benefit-to-risk ratio favored DAPT overall at 90 days, but the temporal pattern led guidelines to recommend the shorter 21-day protocol from CHANCE. The loading dose in POINT was 600mg clopidogrel vs 300mg in CHANCE; this pharmacologic difference may contribute to the higher hemorrhage rate but has not been tested head-to-head.',
+    },
+    /* claimId: point.bedside-pearl | source: Johnston SC et al. NEJM 2018;379:222 Table 2 */
+    bedsidePearl: 'POINT confirmed CHANCE in Western patients but showed major hemorrhage was significantly higher at 90 days (0.9% vs 0.4%, P=0.02). The hemorrhage excess emerged after day 21. Use the 21-day CHANCE protocol, not the 90-day POINT duration.',
+    bottomLineSummary: 'POINT confirmed in an international population that clopidogrel plus aspirin reduces major ischemic events after TIA or minor stroke, but also showed significantly increased major hemorrhage with 90-day dual therapy. Together with CHANCE, it established that the optimal DAPT duration is 21 days rather than 90.',
     listCategory: 'antiplatelets',
-    listDescription: 'Dual antiplatelet in TIA and minor stroke (Western population); NNT=67.',
+    listDescription: 'Dual antiplatelet in TIA and minor stroke (Western population); confirms CHANCE but major hemorrhage higher at 90 days.',
   },
   'sammpris-trial': {
     id: 'sammpris-trial',
@@ -3634,6 +3889,50 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT01994720',
     listCategory: 'antiplatelets',
     listDescription: 'Ticagrelor vs aspirin monotherapy in acute ischemic stroke — not superior.',
+    trialResult: 'NEGATIVE',
+    safetyProfile: {
+      majorBleeding: {
+        evt: 0.5,
+        control: 0.6,
+        label: 'Major bleeding at 90 days',
+        tooltip: 'No significant difference in major bleeding between ticagrelor and aspirin (P=NS). /* claimId: socrates-safety-bleed | source: Johnston NEJM 2016 Table 2 */',
+        color: 'success',
+      },
+    },
+    inclusionCriteria: [
+      'Age 40 years or older',
+      'Acute non-cardioembolic ischemic stroke with NIHSS score 5 or less, or high-risk TIA (ABCD2 score 4 or higher)',
+      'Able to randomize within 24 hours of symptom onset',
+      'No definite indication for anticoagulation',
+    ],
+    exclusionCriteria: [
+      'Cardioembolic source requiring anticoagulation',
+      'Prior stroke with modified Rankin Score greater than 2',
+      'Planned carotid revascularization within 90 days',
+      'Concomitant antiplatelet therapy other than the study drug',
+      'High bleeding risk or active bleeding',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'Each arm shows the percentage of patients free from composite events (stroke, MI, or death) at 90 days. Ticagrelor 93.3% vs Aspirin 92.5% -- a 0.8 percentage-point difference that did not reach significance.',
+      },
+      {
+        question: 'Why is there no cobalt band?',
+        answer: 'SOCRATES is a NEGATIVE trial (HR 0.89, 95% CI 0.78 to 1.01, P=0.07). The confidence interval crosses 1.0, meaning no statistically significant difference was demonstrated. /* claimId: socrates-primary-hr | source: Johnston NEJM 2016 Table 2 */',
+      },
+      {
+        question: 'What does 0.8% absolute difference mean at the bedside?',
+        answer: 'If the result had been significant it would imply NNT of roughly 125 -- a modest clinical effect even under the most optimistic reading. Given non-significance, no NNT should be applied clinically.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'SOCRATES enrolled 13,199 patients and found a composite event rate of 6.7% with ticagrelor versus 7.5% with aspirin (HR 0.89, 95% CI 0.78 to 1.01, P=0.07). Ticagrelor monotherapy was not statistically superior to aspirin monotherapy for prevention of stroke, MI, or death at 90 days. /* claimId: socrates-primary-result | source: Johnston NEJM 2016 */',
+      doesNotProve: 'It does not prove that ticagrelor monotherapy is equivalent to aspirin; the confidence interval is wide and includes a modest benefit. An exploratory subgroup suggested possible benefit in patients with ipsilateral atherosclerotic stenosis, but this finding requires prospective confirmation.',
+      cautions: 'The trial tested monotherapy head-to-head, not dual antiplatelet therapy. Subsequent trials (THALES) tested ticagrelor plus aspirin versus aspirin alone and found superiority with increased bleeding. SOCRATES does not speak to the DAPT question. Generalizability to patients with CYP2C19 loss-of-function variants is untested in this dataset.',
+    },
+    bedsidePearl: 'SOCRATES showed ticagrelor monotherapy did not beat aspirin alone (P=0.07). The relevant question at the bedside is now DAPT composition -- CHANCE/POINT established clopidogrel plus aspirin reduces early recurrence by roughly 30%; THALES showed ticagrelor plus aspirin works similarly but bleeds more. In patients with known or suspected CYP2C19 loss-of-function, ticagrelor-based DAPT may be considered, though direct head-to-head DAPT comparison data are limited.',
+    bottomLineSummary: 'In acute non-cardioembolic minor ischemic stroke or high-risk TIA, ticagrelor monotherapy was not superior to aspirin monotherapy for the 90-day composite of stroke, MI, or death (HR 0.89, 95% CI 0.78 to 1.01, P=0.07). Major bleeding was similar between arms. The result supports aspirin as the appropriate monotherapy comparator and does not justify substituting ticagrelor for aspirin outside of a DAPT regimen.',
   },
   'sps3-trial': {
     id: 'sps3-trial',
@@ -3698,6 +3997,56 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT00059306',
     listCategory: 'antiplatelets',
     listDescription: 'DAPT not beneficial in lacunar stroke — increased bleeding without stroke reduction.',
+    trialResult: 'NEGATIVE',
+    safetyProfile: {
+      mortality: {
+        evt: 2.1,
+        control: 1.4,
+        label: 'All-cause mortality (DAPT arm higher, HR 1.52, P=0.004)',
+        tooltip: 'Mortality was significantly higher in the DAPT arm. This finding triggered early stopping. /* claimId: sps3-mortality-harm | source: SPS3 Investigators NEJM 2012 Table 3 */',
+        color: 'danger',
+      },
+      majorBleeding: {
+        evt: 2.1,
+        control: 1.1,
+        label: 'Major bleeding (DAPT vs Aspirin)',
+        tooltip: 'Major hemorrhage nearly doubled in the DAPT arm. /* claimId: sps3-bleeding-harm | source: SPS3 Investigators NEJM 2012 Table 3 */',
+        color: 'danger',
+      },
+    },
+    inclusionCriteria: [
+      'MRI-confirmed symptomatic lacunar infarction within the prior 6 months',
+      'No significant ipsilateral large-artery disease or cardioembolic source',
+      'Modified Rankin Scale 3 or less at entry',
+      'Able to tolerate aspirin and clopidogrel',
+    ],
+    exclusionCriteria: [
+      'Cortical infarct or infarct larger than 1.5 cm on MRI (non-lacunar mechanism)',
+      'Significant carotid or intracranial stenosis as likely cause',
+      'Cardioembolic source requiring anticoagulation',
+      'Prior intracranial hemorrhage or high bleeding risk',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'Annual recurrent stroke rate: DAPT 2.5% vs aspirin 2.7% per year -- a 0.2 percentage-point difference that was not significant (P=0.48). The chart uses annual event rates because the trial ran for a median of 3.4 years, not a fixed short window.',
+      },
+      {
+        question: 'Why is this labeled NEGATIVE with a harm signal?',
+        answer: 'SPS3 found no reduction in recurrent stroke with DAPT but did find significantly higher mortality (HR 1.52, P=0.004) and near-doubled major bleeding (2.1% vs 1.1%). The trial was stopped early by the DSMB because of this harm signal, not futility alone. /* claimId: sps3-stopped-harm | source: SPS3 Investigators NEJM 2012 */',
+      },
+      {
+        question: 'How does this differ from CHANCE and POINT?',
+        answer: 'CHANCE and POINT used DAPT for 21-90 days in the hyperacute period of TIA or minor stroke and found net benefit. SPS3 used long-term DAPT (mean 3.4 years) in patients with established lacunar stroke and found net harm. Duration and timing are the key variables.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In patients with MRI-confirmed symptomatic lacunar infarction, long-term DAPT (aspirin plus clopidogrel) did not reduce recurrent stroke compared with aspirin alone (2.5% vs 2.7% per year, HR 0.92, 95% CI 0.72 to 1.16, P=0.48) and significantly increased mortality (HR 1.52, P=0.004) and major bleeding (2.1% vs 1.1%). /* claimId: sps3-primary-result | source: SPS3 Investigators NEJM 2012 */',
+      doesNotProve: 'It does not prove that any antiplatelet is ineffective in lacunar stroke -- aspirin monotherapy remains standard. It also does not generalize to short-duration DAPT (21 days or less) in acute presentations, which is the CHANCE/POINT evidence base.',
+      cautions: 'The trial was stopped early (3,020 of planned 3,600 enrolled), which may reduce statistical precision for secondary endpoints. The dose of aspirin (325 mg) is higher than commonly used in Europe. The BP-lowering arm of SPS3 ran in parallel; interpretation of the antiplatelet arm is independent but conducted in the same population.',
+    },
+    bedsidePearl: 'SPS3 is a HARM signal trial: long-term DAPT in lacunar stroke increases mortality and bleeding with no stroke reduction. This is the opposite of CHANCE/POINT, which show short-term DAPT benefit in acute presentations. The practical rule: DAPT is for the first 21 days after TIA or minor stroke, not for chronic secondary prevention in lacunar disease. Aspirin monotherapy remains the long-term standard in this population.',
+    bottomLineSummary: 'In patients with MRI-confirmed symptomatic lacunar infarction, long-term DAPT (aspirin 325 mg plus clopidogrel 75 mg) was stopped early because DAPT did not reduce recurrent stroke (HR 0.92, P=0.48) and significantly increased all-cause mortality (HR 1.52, P=0.004) and major bleeding. Aspirin monotherapy remains the standard of long-term secondary prevention in established lacunar stroke. Short-duration DAPT immediately following TIA or minor stroke is a separate evidence base and is not contraindicated by SPS3.',
   },
   'sparcl-trial': {
     id: 'sparcl-trial',
@@ -3762,6 +4111,49 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT00147602',
     listCategory: 'antiplatelets',
     listDescription: 'High-intensity statin (atorvastatin 80mg) for secondary stroke prevention; NNT=53.',
+    trialResult: 'POSITIVE',
+    safetyProfile: {
+      hemorrhagicStroke: {
+        evt: 2.3,
+        control: 1.4,
+        label: 'Hemorrhagic stroke (atorvastatin vs placebo)',
+        tooltip: 'Atorvastatin significantly increased hemorrhagic stroke risk (HR 1.66, P=0.02). The absolute excess was 0.9 percentage points over 4.9 years. This risk is highest in patients with prior hemorrhagic stroke -- atorvastatin is relatively contraindicated in that group. /* claimId: sparcl-hemorrhagic-stroke | source: Amarenco NEJM 2006 Table 3 */',
+        color: 'warning',
+      },
+    },
+    inclusionCriteria: [
+      'Age 18 years or older',
+      'Ischemic stroke or TIA within 1 to 6 months of randomization',
+      'LDL cholesterol 100 to 190 mg/dL (2.6 to 4.9 mmol/L)',
+      'No known coronary heart disease at entry',
+    ],
+    exclusionCriteria: [
+      'Known coronary heart disease or prior coronary revascularization',
+      'Prior statin use within 3 months (washout required)',
+      'Cardioembolic stroke requiring anticoagulation as primary prevention',
+      'Severe hepatic disease or creatine kinase elevation',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'Cumulative 5-year recurrent stroke rates: atorvastatin 11.2% vs placebo 13.1%. The chart displays stroke-free survival, so more filled dots represent better outcomes in the atorvastatin arm. The absolute difference translates to an NNT of 53 over 4.9 years. /* claimId: sparcl-primary-result | source: Amarenco NEJM 2006 Table 2 */',
+      },
+      {
+        question: 'Why is there a warning in the safety section despite a positive result?',
+        answer: 'Hemorrhagic stroke was significantly higher with atorvastatin (2.3% vs 1.4%, HR 1.66, P=0.02). The overall ischemic benefit outweighed this risk in the trial population, but the hemorrhagic signal is clinically important, especially in patients with prior hemorrhagic stroke.',
+      },
+      {
+        question: 'What is the NNT and how should it be framed?',
+        answer: 'NNT is 53 over 4.9 years (1 stroke prevented per 53 patients treated). In absolute terms, one additional hemorrhagic stroke occurs per roughly 111 patients treated over the same period, yielding a net benefit ratio of approximately 2:1 for ischemic prevention versus hemorrhagic harm.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In patients with recent non-cardioembolic stroke or TIA and LDL 100 to 190 mg/dL without known coronary heart disease, high-dose atorvastatin (80 mg daily) reduced fatal or non-fatal recurrent stroke over 4.9 years (11.2% vs 13.1%, HR 0.84, 95% CI 0.71 to 0.99, P=0.03) and significantly reduced major coronary events (HR 0.65). /* claimId: sparcl-primary-result | source: Amarenco NEJM 2006 */',
+      doesNotProve: 'It does not prove that all statins at all doses are equivalent. The trial used atorvastatin 80 mg. Patients with known coronary heart disease were excluded, so SPARCL evidence is specific to the secondary stroke prevention population without established CAD.',
+      cautions: 'Hemorrhagic stroke was significantly increased (HR 1.66, P=0.02). In patients with prior hemorrhagic stroke, this risk-benefit calculation shifts materially; most guideline bodies consider prior ICH a relative contraindication to high-intensity statin therapy. Liver enzyme elevations were more common in the atorvastatin group.',
+    },
+    bedsidePearl: 'SPARCL established atorvastatin 80 mg as a standard in secondary stroke prevention -- but the hemorrhagic stroke signal (HR 1.66) is real and matters. The net benefit is favorable in ischemic stroke patients, but in a patient with prior hemorrhagic stroke, you are adding a drug that independently increases hemorrhagic stroke by 66% without clear ischemic benefit in that subgroup. In hemorrhagic stroke, statin use post-discharge is a shared decision, not a reflex.',
+    bottomLineSummary: 'In patients with recent ischemic stroke or TIA and LDL 100 to 190 mg/dL without known coronary heart disease, atorvastatin 80 mg reduced recurrent stroke by 16% relative (NNT=53 over 4.9 years) but significantly increased hemorrhagic stroke risk (HR 1.66, 2.3% vs 1.4%). High-intensity statin therapy is now standard secondary prevention for ischemic stroke; caution is warranted in patients with prior hemorrhagic stroke.',
   },
   'elan-study': {
     id: 'elan-study',
@@ -3843,9 +4235,48 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Fischer U, et al. N Engl J Med. 2023;388(26):2411-2421',
     clinicalTrialsId: 'NCT03148457',
     specialDesign: 'estimation-trial',
+    trialResult: 'NEUTRAL',
     keyMessage: 'Early DOAC initiation is safe — use if clinically indicated after imaging review',
+    inclusionCriteria: [
+      'Age 18 years or older',
+      'Acute ischemic stroke with confirmed atrial fibrillation (permanent, persistent, or paroxysmal)',
+      'Imaging-based stroke severity classification: minor (small infarct, NIHSS 0-5), moderate (NIHSS 6-15, non-cortical dominant or non-large infarct), or major (NIHSS 16 or higher, or large cortical/hemispheric infarct)',
+      'Planned DOAC anticoagulation for secondary prevention',
+      'Randomization within 48 hours for minor or moderate stroke; within 6 to 24 hours for major stroke',
+    ],
+    exclusionCriteria: [
+      'Hemorrhagic transformation on baseline imaging (symptomatic)',
+      'Very large infarct with high hemorrhagic transformation risk at the treating clinician\'s discretion',
+      'Prior stroke within 3 months',
+      'Contraindication to anticoagulation (active bleeding, severe thrombocytopenia)',
+      'Mechanical prosthetic heart valve (requires warfarin)',
+      'Severe renal impairment precluding DOAC use',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: '100 dots represent 100 patients in each group. A filled dot is a patient who had the primary composite event (recurrent ischemic stroke, symptomatic ICH, systemic embolism, major extracranial bleeding, or vascular death) within 30 days. This is a low-event-rate trial: only 3 dots (early) vs 4 dots (later) per 100 are filled.',
+      },
+      {
+        question: 'Why is there no significance value and no cobalt band?',
+        answer: 'ELAN was an estimation trial, not a superiority test. The goal was to establish whether the confidence interval around the risk difference was narrow enough to support safe early treatment. No p-value was the primary framing; the CI (-2.84 to +0.47 percentage points) was the result.',
+      },
+      {
+        question: 'What does this mean at the bedside?',
+        answer: 'Early DOAC initiation was not significantly worse than delayed, with the upper 95% confidence limit suggesting early treatment increases composite risk by at most 0.47 percentage points. Symptomatic ICH was 0.2% in both groups. The trial supports early initiation when clinically indicated, with individualized imaging review.',
+      },
+    ],
+    howToInterpret: {
+      /* claimId: elan.interpret | source: Fischer U et al. NEJM 2023;388:2411-2421 */
+      proves: 'In patients with AF-related acute ischemic stroke, early DOAC initiation (within 48 hours for minor/moderate, within 6-24 hours for major stroke) was not significantly worse than delayed initiation, with a primary composite event rate of 2.9% vs 4.1% and a risk difference of -1.18 percentage points (95% CI -2.84 to +0.47).',
+      doesNotProve: 'ELAN was not designed to show that early anticoagulation is superior to delayed. It does not establish the optimal DOAC or dose, and it does not apply to patients with prosthetic heart valves or those requiring warfarin. It does not prove that early initiation is safe in all large infarcts.',
+      cautions: 'This is an estimation trial with an open-label design (blinded endpoint assessment). The 95% CI upper bound of +0.47 percentage points means early treatment could be slightly worse than delayed in some scenarios. The trial used imaging-based severity classification rather than NIHSS alone, which requires familiarity with the ELAN definitions. The primary composite included heterogeneous outcomes (ischemic stroke, ICH, systemic embolism, major extracranial bleeding, vascular death), making interpretation of individual component trends exploratory.',
+    },
+    /* claimId: elan.bedside-pearl | source: Fischer U et al. NEJM 2023;388:2411-2421 */
+    bedsidePearl: 'ELAN showed sICH 0.2% in both groups, recurrent ischemic stroke 1.4% (early) vs 2.5% (later). The trial supports early DOAC in AF stroke when imaging allows it. The risk difference upper bound of +0.47pp means early treatment could be at most marginally worse than delayed, not substantially more dangerous.',
+    bottomLineSummary: 'ELAN was an estimation trial showing that early DOAC initiation after AF-related ischemic stroke, timed by imaging-based severity classification, was not significantly more harmful than the traditional delayed approach. The primary composite event rate was 2.9% with early vs 4.1% with later initiation, with identical symptomatic ICH rates. The result supports early anticoagulation when clinically indicated and imaging permits.',
     listCategory: 'antiplatelets',
-    listDescription: 'Early vs delayed DOAC initiation after stroke with atrial fibrillation — early is safe.',
+    listDescription: 'Early vs delayed DOAC in AF stroke: estimation trial supporting early initiation when imaging allows it.',
   },
 
   // ─── THALES TRIAL ─────────────────────────────────────────────────────────
@@ -3854,8 +4285,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'THALES Trial',
     subtitle: 'Ticagrelor + Aspirin vs Aspirin Alone After Minor Stroke or TIA',
     category: 'Neuro Trials',
-    trialResult: 'NEGATIVE',
-    specialDesign: 'negative-trial',
+    trialResult: 'POSITIVE',
     stats: {
       sampleSize: {
         value: '11,016',
@@ -3969,6 +4399,49 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     listCategory: 'antiplatelets',
     listDescription: 'Ticagrelor + aspirin vs aspirin alone — AHA 2026 COR 3: No Benefit. NNT=91, bleeding 5× higher.',
+    safetyProfile: {
+      severeHemorrhage: {
+        evt: 0.5,
+        control: 0.1,
+        label: 'Severe hemorrhage at 30 days (ticagrelor+ASA vs ASA alone)',
+        tooltip: 'Severe bleeding was 5x higher with ticagrelor plus aspirin versus aspirin alone (0.5% vs 0.1%, P<0.001). This disproportionate hemorrhagic risk relative to the 1.1% absolute efficacy gain is the basis for the AHA/ASA 2026 COR 3 downgrade. /* claimId: thales-severe-hemorrhage | source: Johnston NEJM 2020 Table 3 */',
+        color: 'danger',
+      },
+    },
+    inclusionCriteria: [
+      'Age 40 years or older',
+      'Acute non-cardioembolic ischemic stroke with NIHSS score 5 or less, or high-risk TIA (ABCD2 score 6 or higher)',
+      'Randomization within 24 hours of symptom onset',
+      'No indication for anticoagulation',
+    ],
+    exclusionCriteria: [
+      'NIHSS score greater than 5 at baseline',
+      'Planned carotid endarterectomy or stenting within 30 days',
+      'Prior hemorrhagic stroke or significant bleeding risk',
+      'Concurrent anticoagulation requirement',
+      'Thrombolysis or thrombectomy for the index event',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'Event-free rates at 30 days: ticagrelor plus aspirin 94.5% vs aspirin alone 93.4%. The 1.1% absolute difference was statistically significant (HR 0.83, 95% CI 0.71 to 0.96, P=0.02, NNT=91). /* claimId: thales-primary-result | source: Johnston NEJM 2020 Table 2 */',
+      },
+      {
+        question: 'If this trial is POSITIVE, why does the AHA 2026 give COR 3 (No Benefit)?',
+        answer: 'COR 3 reflects net clinical benefit versus available alternatives, not just statistical significance. The NNT is 91 versus CHANCE NNT of 28 for clopidogrel-based DAPT, and severe bleeding is 5x higher (0.5% vs 0.1%). Guideline bodies concluded that ticagrelor DAPT is statistically significant but clinically inferior to clopidogrel DAPT in most patients.',
+      },
+      {
+        question: 'When might ticagrelor DAPT still be chosen?',
+        answer: 'In confirmed CYP2C19 loss-of-function carriers, clopidogrel is less effective and ticagrelor-based DAPT may be preferred (CHANCE-2 trial; AHA/ASA 2026 COR 2b for this specific subgroup). Genetic testing informs this decision.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In patients with acute non-cardioembolic minor ischemic stroke or high-risk TIA enrolled within 24 hours, ticagrelor plus aspirin for 30 days reduced composite stroke or death compared with aspirin alone (5.5% vs 6.6%, HR 0.83, 95% CI 0.71 to 0.96, P=0.02, NNT=91). /* claimId: thales-primary-result | source: Johnston NEJM 2020 */',
+      doesNotProve: 'It does not prove that ticagrelor DAPT is preferable to clopidogrel DAPT. No head-to-head comparison exists within THALES. The trial does not establish whether extending the treatment window from 21 to 30 days adds incremental benefit over clopidogrel-based protocols.',
+      cautions: 'Severe hemorrhage was significantly higher with ticagrelor plus aspirin (0.5% vs 0.1%, P<0.001). The AHA/ASA 2026 downgraded this regimen to COR 3 (No Benefit over alternatives) for the general population. Ticagrelor-related dyspnea affected approximately 12% of the treatment arm and may have influenced discontinuation. Asian patients made up 57% of the trial, limiting generalizability in Western populations.',
+    },
+    bedsidePearl: 'THALES is statistically positive (P=0.02) but the guideline verdict is COR 3 (No Benefit) because the NNT of 91 and a 5x increase in severe bleeding make it clinically inferior to clopidogrel DAPT (CHANCE NNT=28, similar safety). In practice: use aspirin plus clopidogrel for 21 days in most patients with TIA or minor stroke. Reserve ticagrelor-based DAPT for confirmed CYP2C19 poor metabolizers (CHANCE-2, COR 2b), where clopidogrel is pharmacologically inadequate.',
+    bottomLineSummary: 'Ticagrelor plus aspirin for 30 days statistically reduced composite stroke or death versus aspirin alone after minor stroke or TIA (HR 0.83, P=0.02, NNT=91), but severe hemorrhage was 5x higher (0.5% vs 0.1%). AHA/ASA 2026 guidelines rate ticagrelor DAPT COR 3: No Benefit for the general population given unfavorable risk-benefit versus clopidogrel-based DAPT. Clopidogrel plus aspirin remains the preferred DAPT regimen; ticagrelor is considered only in confirmed CYP2C19 poor metabolizers (COR 2b).',
   },
 
   // ─── INSPIRES TRIAL ───────────────────────────────────────────────────────

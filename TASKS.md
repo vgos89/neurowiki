@@ -66,6 +66,8 @@ V decides remaining blockers. Most likely path: ship Hemphill-only registry entr
 Ideas deferred from in-progress sessions. Not yet triaged into PENDING.
 Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - [2026-04-17] Evaluate Claude Design (Anthropic Labs research preview, launched 2026-04-17) for potential integration with design-prototyper workflow. Currently research preview with ~50% reliability on complex tasks; revisit when maturity improves (~3-6 months). Could replace or augment HTML mockup authoring at docs/specs/mockups/. (parked during: W5.1 / end-of-session cleanup)
+- [2026-04-22] W6.5 — Archetype B/Grotta Bar + DISTAL trial rebuild. DISTAL is a non-inferiority/negative MeVO trial; requires Grotta Bar component (mRS distribution shift) before page can be built. Park until Archetype B component is implemented. (parked during: W6 10-trial Archetype A rebuild)
+- [2026-04-22] W6.6 — Archetype G + WEAVE trial rebuild. WEAVE is a single-arm safety registry; requires Archetype G (single-arm registry display) before page can be built. Park until Archetype G component is implemented. (parked during: W6 10-trial Archetype A rebuild)
 - [2026-04-21] Patch C desktop drawer fix (--nav-rail-width) still needed for HeidelbergBleedingCalculator and ABCD2 calculator inline createPortal drawers — same left-0 bug. Out of scope this patch (only GCS + ICH were explicitly included). Tracked for next calculator audit wave. (parked during: Patches A/B/C)
 - [2026-04-21] Consider adding `clinicalQuestion?: string` field to TrialMetadata schema (trialData.ts) so the §1.3 question lede can be data-driven rather than hardcoded per trial page. Not urgent — only EXTEND page exists today. (parked during: Patches A/B/C)
 
@@ -137,6 +139,24 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Acceptance:** all 4 conditions resolved · design-guardian follow-up APPROVE issued · spec status changes to "locked 2026-04-21"
 - **Clinical impact:** none
 - **Rollback plan:** n/a
+
+#### W6.4b — 10-trial Archetype A rebuild — Class C
+- **Status:** done — 2026-04-22
+- **User-visible goal:** 10 trial detail pages (WAKE-UP, ESCAPE-MeVO, ELAN, CHANCE, POINT, SOCRATES, SPS3, SPARCL, THALES, EAGLE) rebuilt to TRIALS_SPEC v1.0 Archetype A pattern matching EXTEND canary
+- **Non-goals:** Archetype B/G not implemented; full citation registry not required (stub claimId comments per ADR-005 Option C)
+- **Files touched:**
+  - src/data/trialData.ts (10 existing entries extended with new fields; SafetyProfile interface extended; q/a keys fixed to question/answer)
+  - src/pages/trials/TrialPageNew.tsx (10 new id-gated branches + 3 shared render helpers)
+  - docs/link-graph.json (10 new trial nodes)
+  - tasks.md (W6.5 + W6.6 parked)
+- **Acceptance checks:** tsc clean ✓ · build green ✓ · all 10 branches render Archetype A layout · EAGLE shows amber primary-endpoint note + secondary header · SPS3 surfaces DSMB harm signal · THALES trialResult corrected NEGATIVE→POSITIVE · specialDesign removed from THALES ✓
+- **Clinical impact:** low — presentation and teaching content; no algorithm logic changes
+- **Rollback plan:** git revert; all 10 branches removed, data fields are additive (legacy pages unaffected)
+
+#### W6.5-6.6 — DISTAL (Archetype B) + WEAVE (Archetype G) rebuilds — Class C
+- **Status:** parked — 2026-04-22
+- **Blocking:** Archetype B (Grotta Bar mRS shift component) and Archetype G (single-arm registry display) not yet implemented. Cannot build pages without components.
+- **Rollback:** n/a (not started)
 
 #### W6.4 — TrialPageNew.tsx rebuild (Prompt 3) — Class C
 - **Status:** done — 2026-04-21

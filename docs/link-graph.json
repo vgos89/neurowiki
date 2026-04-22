@@ -77,6 +77,76 @@
         "pathway/late-window-ivt"
       ],
       "referencedBy": []
+    },
+    "trial/wake-up-trial": {
+      "type": "trial",
+      "title": "WAKE-UP Trial",
+      "route": "/trials/wake-up-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/escape-mevo-trial": {
+      "type": "trial",
+      "title": "ESCAPE-MeVO Trial",
+      "route": "/trials/escape-mevo-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/elan-study": {
+      "type": "trial",
+      "title": "ELAN Trial",
+      "route": "/trials/elan-study",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/chance-trial": {
+      "type": "trial",
+      "title": "CHANCE Trial",
+      "route": "/trials/chance-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/point-trial": {
+      "type": "trial",
+      "title": "POINT Trial",
+      "route": "/trials/point-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/socrates-trial": {
+      "type": "trial",
+      "title": "SOCRATES Trial",
+      "route": "/trials/socrates-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/sps3-trial": {
+      "type": "trial",
+      "title": "SPS3 Trial",
+      "route": "/trials/sps3-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/sparcl-trial": {
+      "type": "trial",
+      "title": "SPARCL Trial",
+      "route": "/trials/sparcl-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/thales-trial": {
+      "type": "trial",
+      "title": "THALES Trial",
+      "route": "/trials/thales-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/eagle-trial": {
+      "type": "trial",
+      "title": "EAGLE Trial",
+      "route": "/trials/eagle-trial",
+      "references": [],
+      "referencedBy": []
     }
   },
   "stubs": [

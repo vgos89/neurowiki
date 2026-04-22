@@ -671,6 +671,944 @@ const TrialPageNew: React.FC = () => {
       </div>
     );
   }
+
+  // ── Shared safety renderer helper (used across all Archetype A branches) ──
+  const renderSafetySection = (tm: TrialMetadata) => {
+    if (!tm.safetyProfile) return null;
+    const sp = tm.safetyProfile;
+    const items = [sp.sICH, sp.mortality, sp.majorBleeding, sp.hemorrhagicStroke, sp.adverseEvents, sp.severeHemorrhage]
+      .filter((m): m is NonNullable<typeof m> => m != null);
+    if (items.length === 0) return null;
+    return (
+      <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Safety</p>
+        </div>
+        <div className="divide-y divide-slate-100 dark:divide-slate-700">
+          {items.map((metric, idx) => {
+            const evtColor = metric.color === 'danger' ? 'text-red-600' : metric.color === 'warning' ? 'text-amber-600' : metric.color === 'success' ? 'text-emerald-600' : 'text-slate-700';
+            return (
+              <div key={idx} className="p-4">
+                <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">{metric.label}</p>
+                <div className="flex items-end gap-6">
+                  <div>
+                    <span className="text-[10px] uppercase tracking-widest text-slate-400">{tm.efficacyResults.treatment.name}</span>
+                    <p className={`text-2xl font-bold ${evtColor}`}>{metric.evt}%</p>
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase tracking-widest text-slate-400">{tm.efficacyResults.control.name}</span>
+                    <p className="text-2xl font-bold text-slate-400">{metric.control}%</p>
+                  </div>
+                </div>
+                {metric.tooltip && <p className="text-xs text-slate-500 mt-2 leading-relaxed">{metric.tooltip}</p>}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  // ── Shared population section (Sections 3) ────────────────────────────────
+  const renderPopulationSection = (tm: TrialMetadata) => {
+    if (!tm.inclusionCriteria?.length && !tm.exclusionCriteria?.length) return null;
+    return (
+      <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Population</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 dark:divide-slate-700">
+          {tm.inclusionCriteria && (
+            <div className="p-4">
+              <p className="text-xs font-semibold text-slate-500 mb-2">Included</p>
+              <ul className="space-y-1.5">
+                {tm.inclusionCriteria.map((c, i) => (
+                  <li key={i} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                    <span className="text-emerald-500 flex-shrink-0 mt-0.5" aria-hidden="true">✓</span>
+                    {c}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {tm.exclusionCriteria && (
+            <div className="p-4">
+              <p className="text-xs font-semibold text-slate-500 mb-2">Excluded</p>
+              <ul className="space-y-1.5">
+                {tm.exclusionCriteria.map((c, i) => (
+                  <li key={i} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                    <span className="text-red-400 flex-shrink-0 mt-0.5" aria-hidden="true">✕</span>
+                    {c}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // ── Shared trial design section (Section 8) ───────────────────────────────
+  const renderTrialDesign = (tm: TrialMetadata, enrollmentDetail?: string) => (
+    <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+        <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Trial Design</p>
+      </div>
+      <div className="p-4 space-y-3">
+        <div>
+          <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Type</p>
+          <ul className="space-y-0.5">
+            {tm.trialDesign.type.map((t, i) => (
+              <li key={i} className="flex items-start gap-1.5 text-sm text-slate-700 dark:text-slate-300">
+                <span className="text-slate-300 flex-shrink-0" aria-hidden="true">·</span>
+                {t}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="flex flex-wrap items-start gap-6">
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-slate-400">Timeline</p>
+            <p className="text-sm font-medium text-slate-700">{tm.trialDesign.timeline}</p>
+          </div>
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-slate-400">N</p>
+            <p className="text-sm font-medium text-slate-700">{tm.stats.sampleSize.value}</p>
+          </div>
+        </div>
+        {enrollmentDetail && (
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Enrollment</p>
+            <p className="text-sm text-slate-700">{enrollmentDetail}</p>
+          </div>
+        )}
+        {tm.doi && (
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">DOI</p>
+            <a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-[#1746A2] hover:underline">
+              {tm.doi}<ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        )}
+        {tm.clinicalTrialsId && (
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">ClinicalTrials.gov</p>
+            <a href={`https://clinicaltrials.gov/study/${tm.clinicalTrialsId}`} target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-[#1746A2] hover:underline">
+              {tm.clinicalTrialsId}<ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  // ── WAKE-UP: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ─────────────────
+  if (trialId === 'wake-up-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>WAKE-UP</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with acute ischemic stroke of unknown onset or on awakening, does IV alteplase improve outcome when DWI-FLAIR mismatch on MRI suggests the stroke is within a treatable time window?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={53.3}
+                controlPct={41.8}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="mRS 0-1 at 90 Days"
+                riskRatio="1.61"
+                ciLow="1.09"
+                ciHigh="2.36"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              {trialMetadata.calculations?.nnt != null && (
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
+                  <span className="text-xs text-slate-500">to gain one additional excellent recovery (mRS 0-1)</span>
+                </div>
+              )}
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '503 of 800 planned patients (251 alteplase / 252 placebo). Stopped early when funding lapsed. Enrolled Sep 2012 to Jun 2017.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="WAKE-UP" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }, { label: 'NIHSS Calculator', href: '/calculators/nihss' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── ESCAPE-MeVO: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ─────────────
+  if (trialId === 'escape-mevo-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ESCAPE-MeVO</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with acute ischemic stroke from medium vessel occlusion, does endovascular thrombectomy plus best medical therapy improve functional independence at 90 days compared with best medical therapy alone?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={trialMetadata.efficacyResults.treatment.percentage}
+                controlPct={trialMetadata.efficacyResults.control.percentage}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="mRS 0-2 at 90 Days"
+                riskRatio="0.97"
+                ciLow="0.80"
+                ciHigh="1.17"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '530 patients at 48 centers across 8 countries. Enrolled 2019 to 2024. Published NEJM 2024.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="ESCAPE-MeVO" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }, { label: 'NIHSS Calculator', href: '/calculators/nihss' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── ELAN: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ────────────────────
+  if (trialId === 'elan-study' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ELAN</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with acute ischemic stroke and atrial fibrillation, does early DOAC initiation (within 48 hours for minor to moderate stroke) result in fewer recurrent events, hemorrhagic transformations, or deaths at 30 days compared with later initiation using the 1-3-6-12 day rule?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+            </div>
+            <div className="p-4">
+              {/* ELAN is an estimation trial. No superiority test; complementary event-free rates shown. */}
+              <DeltaBandChart
+                treatmentPct={97.1}
+                controlPct={95.9}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Event-free at 30 Days (complement of composite)"
+                riskRatio="RD −1.18 pp"
+                ciLow="−2.84"
+                ciHigh="+0.47"
+                pValue="n/a (estimation design)"
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '2,013 patients across 103 sites in 15 countries. Enrolled Nov 2017 to Sep 2022.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="ELAN" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── CHANCE: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ──────────────────
+  if (trialId === 'chance-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CHANCE</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with high-risk TIA or minor ischemic stroke presenting within 24 hours, does dual antiplatelet therapy with clopidogrel plus aspirin reduce recurrent stroke at 90 days compared with aspirin monotherapy?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+            </div>
+            <div className="p-4">
+              {/* Complement rates: 100 - stroke recurrence. More filled = stroke-free = better. */}
+              <DeltaBandChart
+                treatmentPct={91.8}
+                controlPct={88.3}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Stroke-free at 90 Days"
+                riskRatio="0.68"
+                ciLow="0.57"
+                ciHigh="0.81"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              {trialMetadata.calculations?.nnt != null && (
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
+                  <span className="text-xs text-slate-500">to prevent one recurrent stroke at 90 days</span>
+                </div>
+              )}
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '5,170 patients at 114 centers in China. Enrolled 2009 to 2012.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="CHANCE" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }, { label: 'NIHSS Calculator', href: '/calculators/nihss' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── POINT: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ───────────────────
+  if (trialId === 'point-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>POINT</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with high-risk TIA or minor ischemic stroke presenting within 12 hours, does dual antiplatelet therapy with clopidogrel plus aspirin reduce major ischemic events at 90 days compared with aspirin monotherapy?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+            </div>
+            <div className="p-4">
+              {/* Complement rates: 100 - major ischemic event rate. More filled = event-free = better. */}
+              <DeltaBandChart
+                treatmentPct={95.0}
+                controlPct={93.5}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Major-event-free at 90 Days"
+                riskRatio="0.75"
+                ciLow="0.59"
+                ciHigh="0.95"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              {trialMetadata.calculations?.nnt != null && (
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
+                  <span className="text-xs text-slate-500">to prevent one major ischemic event at 90 days</span>
+                </div>
+              )}
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '4,881 patients at 269 sites in 10 countries. Enrolled 2010 to 2017. Stopped early for efficacy at the prespecified 90-day interim analysis.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="POINT" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }, { label: 'NIHSS Calculator', href: '/calculators/nihss' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── SOCRATES: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ────────────────
+  if (trialId === 'socrates-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>SOCRATES</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with acute non-cardioembolic minor ischemic stroke or high-risk TIA, does ticagrelor monotherapy reduce the composite of stroke, MI, or death at 90 days compared with aspirin monotherapy?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source} · {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+            </div>
+            <div className="p-4">
+              {/* Complement rates: 100 - event rate. More filled = event-free = better. */}
+              <DeltaBandChart
+                treatmentPct={93.3}
+                controlPct={92.5}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Event-free at 90 Days"
+                riskRatio="0.89"
+                ciLow="0.78"
+                ciHigh="1.01"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '13,199 patients at 674 centers in 33 countries. Enrolled 2014 to 2015. Published NEJM 2016.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="SOCRATES" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }, { label: 'NIHSS Calculator', href: '/calculators/nihss' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── SPS3: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ────────────────────
+  if (trialId === 'sps3-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>SPS3</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with MRI-confirmed symptomatic lacunar infarction, does long-term dual antiplatelet therapy (aspirin plus clopidogrel) reduce recurrent stroke compared with aspirin monotherapy?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source} · {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+            </div>
+            <div className="p-4">
+              {/* Complement of annual recurrent stroke rate. More filled = stroke-free = better. */}
+              <DeltaBandChart
+                treatmentPct={97.5}
+                controlPct={97.3}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Stroke-free (annual rate per year)"
+                riskRatio="0.92"
+                ciLow="0.72"
+                ciHigh="1.16"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '3,020 of 3,600 planned patients enrolled. Stopped early by DSMB for harm (increased mortality in DAPT arm). Enrolled 2003 to 2011.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="SPS3" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── SPARCL: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ──────────────────
+  if (trialId === 'sparcl-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>SPARCL</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with recent ischemic stroke or TIA and LDL 100 to 190 mg/dL without known coronary heart disease, does high-intensity atorvastatin (80 mg daily) reduce recurrent stroke compared with placebo?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source} · {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+            </div>
+            <div className="p-4">
+              {/* Complement of 5-year recurrent stroke rate. More filled = stroke-free = better. */}
+              <DeltaBandChart
+                treatmentPct={88.8}
+                controlPct={86.9}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Stroke-free at 5 Years"
+                riskRatio="0.84"
+                ciLow="0.71"
+                ciHigh="0.99"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              {trialMetadata.calculations?.nnt != null && (
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
+                  <span className="text-xs text-slate-500">to prevent one stroke recurrence over 5 years</span>
+                </div>
+              )}
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '4,731 patients across 205 centers in 27 countries. Enrolled 2001 to 2005. Median follow-up 4.9 years.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="SPARCL" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── THALES: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ──────────────────
+  if (trialId === 'thales-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>THALES</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with acute non-cardioembolic minor ischemic stroke or high-risk TIA presenting within 24 hours, does ticagrelor plus aspirin reduce composite stroke or death at 30 days compared with aspirin alone?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+            </div>
+            <div className="p-4">
+              {/* Complement: 100 - event rate. More filled = event-free = better. */}
+              <DeltaBandChart
+                treatmentPct={94.5}
+                controlPct={93.4}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Event-free at 30 Days"
+                riskRatio="0.83"
+                ciLow="0.71"
+                ciHigh="0.96"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              {trialMetadata.calculations?.nnt != null && (
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
+                  <span className="text-xs text-slate-500">to prevent one stroke or death at 30 days</span>
+                </div>
+              )}
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '11,016 patients at 414 sites in 28 countries. Enrolled 2018 to 2019. Published NEJM 2020.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="THALES" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }, { label: 'NIHSS Calculator', href: '/calculators/nihss' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── EAGLE CRAO: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ─────────────
+  if (trialId === 'eagle-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>EAGLE</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with central retinal artery occlusion presenting within 20 hours, does local intra-arterial fibrinolysis via ophthalmic artery microcatheter improve visual acuity compared with conservative standard treatment?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source} · {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          {/* Section 4: Secondary outcome chart — EAGLE primary was negative; chart shows secondary dichotomized endpoint */}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Secondary outcome: ≥15-letter improvement (dichotomized)</p>
+            </div>
+            <div className="p-4">
+              <div className="mb-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
+                <p className="text-xs text-amber-800 leading-relaxed">
+                  <strong>Primary endpoint note:</strong> The trial primary endpoint was continuous change in logMAR BCVA at 1 month, which was not significant (P=0.69). This chart displays the secondary dichotomized endpoint (proportion with clinically meaningful visual improvement of 15 or more ETDRS letters) for visual clarity.
+                </p>
+              </div>
+              <DeltaBandChart
+                treatmentPct={trialMetadata.efficacyResults.treatment.percentage}
+                controlPct={trialMetadata.efficacyResults.control.percentage}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="≥15-Letter Visual Improvement at 1 Month"
+                riskRatio="0.95"
+                ciLow="0.73"
+                ciHigh="1.24"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '84 of 200 planned patients (42 LIF / 42 CST). Stopped early by DSMB for futility and safety. Enrolled 2002 to 2007.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="EAGLE" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
   // ─────────────────────────────────────────────────────────────────────────
 
   if (!trial) {
