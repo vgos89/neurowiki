@@ -189,6 +189,15 @@ const GlasgowComaScaleCalculator: React.FC = () => {
     }
   }, [isComplete]);
 
+  // Fix 3: Publish drawer floor height so FeedbackButton lifts above the drawer.
+  // 52px ≈ py-3.5 (14px × 2) + content row (~24px).
+  useEffect(() => {
+    document.documentElement.style.setProperty('--drawer-floor-height', '52px');
+    return () => {
+      document.documentElement.style.setProperty('--drawer-floor-height', '0px');
+    };
+  }, []);
+
   // ── Setters ────────────────────────────────────────────────────────────────
   const setEye      = useCallback((v: 1 | 2 | 3 | 4)         => setInputs(p => ({ ...p, eye: v })),      []);
   const setVerbal   = useCallback((v: 1 | 2 | 3 | 4 | 5)     => setInputs(p => ({ ...p, verbal: v })),   []);

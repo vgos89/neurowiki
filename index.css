@@ -226,3 +226,31 @@ details > summary::-webkit-details-marker {
 /* Drawer content spacers — reserve room in scroll flow (§1.3) */
 .drawer-spacer-collapsed { height: 80px; }
 .drawer-spacer-expanded  { height: 380px; }
+
+/* ─── Desktop drawer fixes ───────────────────────────────────────────────── */
+
+/* Fix 1: On desktop (≥768px) there is no mobile tab bar, so resolve
+   --tab-bar-height to 0 so the drawer calc() produces flush bottom. */
+@media (min-width: 768px) {
+  :root {
+    --tab-bar-height: 0rem;
+  }
+}
+
+/* Fix 2: BottomLineDrawer collapsed handle — more vertical presence on
+   desktop. Mobile py-3 (12px) is unchanged; desktop overrides to 18px. */
+@media (min-width: 768px) {
+  .bldr-handle {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+}
+
+/* Fix 3: Feedback button — lifts above the drawer floor on desktop.
+   --drawer-floor-height is set by each drawer component on mount (0px
+   when no drawer). Outside @layer, so beats Tailwind's md:bottom-8. */
+@media (min-width: 768px) {
+  .feedback-btn {
+    bottom: calc(var(--drawer-floor-height, 0px) + 2rem);
+  }
+}

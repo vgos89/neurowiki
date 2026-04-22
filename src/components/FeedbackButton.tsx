@@ -39,7 +39,7 @@ export const FeedbackButton: React.FC<FeedbackButtonProps> = (props) => {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-24 right-5 md:bottom-8 md:right-8 z-40 flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-full shadow-lg hover:shadow-xl hover:border-slate-300 transition-all group"
+        className="feedback-btn fixed bottom-24 right-5 md:right-8 z-40 flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-full shadow-lg hover:shadow-xl hover:border-slate-300 transition-all group"
         aria-label="Send feedback"
       >
         <svg

@@ -122,6 +122,15 @@ export const BottomLineDrawer: React.FC<BottomLineDrawerProps> = ({
     }
   }, []);
 
+  // Fix 3: Publish drawer floor height so FeedbackButton can lift above it.
+  // 60px = collapsed handle after Fix 2 (18px top + 18px bottom + ~24px content).
+  useEffect(() => {
+    document.documentElement.style.setProperty('--drawer-floor-height', '60px');
+    return () => {
+      document.documentElement.style.setProperty('--drawer-floor-height', '0px');
+    };
+  }, []);
+
   // A → B when loading resolves
   useEffect(() => {
     if (!isLoading && drawerState === 'A') {
@@ -196,7 +205,7 @@ export const BottomLineDrawer: React.FC<BottomLineDrawerProps> = ({
           <button
             type="button"
             onClick={toggle}
-            className="w-full flex items-center justify-between px-4 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1746A2] focus-visible:ring-inset"
+            className="bldr-handle w-full flex items-center justify-between px-4 py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1746A2] focus-visible:ring-inset"
             aria-expanded={drawerState === 'D'}
             aria-label="Bottom line summary — tap to expand"
           >
