@@ -144,7 +144,7 @@ export interface TrialMetadata {
   additionalResults?: AdditionalResults; // Additional outcome data (e.g., ELAN)
   specialDesign?: string; // Special trial design (e.g., 'estimation-trial', 'non-inferiority', 'negative-trial')
   keyMessage?: string; // Key clinical takeaway message
-  trialResult?: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL'; // Overall trial result
+  trialResult?: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL' | 'HARM'; // Overall trial result
   proceduralDetails?: ProceduralDetails; // Procedural/technical details
   safetyProfile?: SafetyProfile; // Safety outcomes
   doi?: string; // DOI for the publication
@@ -3068,7 +3068,40 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1161/STROKEAHA.119.028127',
     clinicalTrialsId: 'NCT02002325',
     listCategory: 'thrombolysis',
-    listDescription: 'Low-dose alteplase 0.6 mg/kg for MRI-selected unknown-onset stroke; neutral trial.',
+    listDescription: 'Low-dose alteplase 0.6 mg/kg for MRI-selected unknown-onset stroke; stopped early after WAKE-UP — inconclusive.',
+    inclusionCriteria: [
+      'Acute ischemic stroke with unknown time of onset (including wake-up stroke)',
+      'DWI-positive and FLAIR-negative on MRI (DWI-FLAIR mismatch)',
+      'Met standard thrombolysis criteria except for unknown onset time',
+      'Age 18 or older',
+    ],
+    exclusionCriteria: [
+      'Known time of onset within the standard treatment window',
+      'FLAIR hyperintensity in the DWI lesion region (established infarct)',
+      'Contraindication to IV thrombolysis',
+      'Severe stroke with NIHSS >25',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'mRS 0-1 at 90 days. Alteplase 0.6 mg/kg reached 47.1 per 100 patients; standard medical treatment 48.3. The relative risk 0.97 (95% CI 0.68-1.41, P=0.892) shows no difference. The two groups were essentially identical in outcomes.',
+      },
+      {
+        question: 'Why was THAWS stopped early?',
+        answer: 'THAWS was not stopped for harm — it was stopped pragmatically after the WAKE-UP trial demonstrated efficacy of alteplase 0.9 mg/kg in the same DWI-FLAIR mismatch population. With WAKE-UP already providing an answer for the 0.9 mg/kg dose, continuing THAWS for the Japan-specific 0.6 mg/kg dose was considered impractical with only 131 of 300 planned patients enrolled.',
+      },
+      {
+        question: 'Can we conclude 0.6 mg/kg does not work for wake-up stroke?',
+        answer: 'No. THAWS enrolled only 131 patients (44% of planned 300) and is severely underpowered. Findings should be interpreted as inconclusive rather than definitively negative. The numerical similarity (47.1% vs 48.3%) could represent a true null effect or simply insufficient power. WAKE-UP with 0.9 mg/kg provides the more reliable answer.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In MRI-selected unknown-onset stroke patients (DWI-positive, FLAIR-negative), low-dose alteplase 0.6 mg/kg did not demonstrate benefit over standard medical treatment for mRS 0-1 at 90 days (47.1% vs 48.3%, RR 0.97, 95% CI 0.68-1.41, P=0.892), with one sICH in the alteplase arm and none in controls.',
+      doesNotProve: 'THAWS does not definitively prove that low-dose alteplase 0.6 mg/kg is ineffective in wake-up stroke. The trial was stopped at 44% enrollment and was severely underpowered. It also does not apply to standard-dose alteplase 0.9 mg/kg, which showed efficacy in WAKE-UP using the same imaging selection strategy.',
+      cautions: 'The trial was stopped early following publication of WAKE-UP — not for safety reasons. At 131 of 300 planned patients (44% enrollment), findings are inconclusive rather than definitively negative; the observed null result may reflect insufficient power rather than true absence of effect. The 0.6 mg/kg dose is specific to Japan-approved practice and is not the internationally used dose.',
+    },
+    bedsidePearl: 'THAWS tested the Japan-specific 0.6 mg/kg alteplase dose in DWI-FLAIR mismatch wake-up stroke and found no benefit, but the trial was stopped at 44% enrollment — findings are inconclusive. The correct reference for MRI-guided wake-up stroke treatment is WAKE-UP (alteplase 0.9 mg/kg, mRS 0-1 53.3% vs 41.8%, OR 1.61, P=0.02). Use standard-dose alteplase.',
+    bottomLineSummary: 'THAWS found no benefit of low-dose alteplase 0.6 mg/kg vs standard medical treatment in DWI-FLAIR mismatch wake-up stroke (47.1% vs 48.3%, P=0.892), but was stopped at 44% of planned enrollment after WAKE-UP demonstrated efficacy of 0.9 mg/kg. Results are inconclusive due to severe underpowering. The 0.6 mg/kg dose is specific to Japanese practice guidelines.',
   },
   'trace-iii-trial': {
     id: 'trace-iii-trial',
@@ -3135,7 +3168,50 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1056/NEJMoa2402980',
     clinicalTrialsId: 'NCT05141305',
     listCategory: 'thrombolysis',
-    listDescription: 'Late-window tenecteplase 4.5-24h for ICA/MCA occlusion when EVT is unavailable.',
+    listDescription: 'Late-window tenecteplase 4.5-24h for ICA/MCA occlusion without EVT access; POSITIVE — NNT 11.',
+    trialResult: 'POSITIVE',
+    safetyProfile: {
+      sICH: {
+        evt: 3.0,
+        control: 0.8,
+        label: 'Symptomatic intracranial hemorrhage within 36 hours',
+        color: 'warning',
+        tooltip: 'sICH was higher with tenecteplase (3.0% vs 0.8%), a tradeoff to weigh against the 8.8 pp efficacy gain. Mortality was similar (13.3% vs 13.1%).',
+      },
+    },
+    inclusionCriteria: [
+      'ICA or MCA occlusion confirmed on vascular imaging',
+      'Salvageable tissue on perfusion imaging (mismatch criteria)',
+      '4.5 to 24 hours from last known well (including wake-up and unwitnessed stroke)',
+      'No access to or not proceeding with endovascular thrombectomy',
+    ],
+    exclusionCriteria: [
+      'Access to and agreement to endovascular thrombectomy',
+      'Large established infarct core (no mismatch on perfusion imaging)',
+      'Contraindication to IV thrombolysis',
+      'Prior stroke with significant disability (mRS >1)',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does this chart show?',
+        answer: 'mRS 0-1 (no disability) at 90 days in patients with ICA/MCA occlusion treated 4.5-24 hours after stroke onset when EVT was not available. Tenecteplase reached 33.0 per 100; standard medical treatment 24.2. The 8.8 pp absolute difference (relative rate 1.37, P=0.03, NNT 11) was statistically significant.',
+      },
+      {
+        question: 'Why is sICH higher but mortality similar?',
+        answer: 'Late-window IVT carries higher hemorrhagic risk than the standard window (ischemic core is more established). Tenecteplase caused 3.0% sICH versus 0.8% — but the 8.8 pp efficacy gain outweighed this hemorrhagic risk on net for the enrolled population. Mortality was 13.3% vs 13.1% (not different), suggesting sICH events were nonfatal in most cases.',
+      },
+      {
+        question: 'How does TRACE-III compare to TIMELESS?',
+        answer: 'Both tested tenecteplase 4.5-24 hours in LVO patients with perfusion mismatch. TIMELESS (N=458) enrolled patients who mostly proceeded to EVT — tenecteplase added nothing when thrombectomy was available. TRACE-III (N=516) enrolled patients without EVT access — tenecteplase was beneficial. Together they define the boundary: late IVT helps when EVT is unavailable.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In patients with ICA or MCA occlusion, salvageable tissue on perfusion imaging, and no access to endovascular thrombectomy, tenecteplase administered 4.5 to 24 hours after stroke onset achieved a higher rate of no disability at 90 days compared with standard medical treatment (33.0% vs 24.2%, relative rate 1.37, 95% CI 1.04-1.81, P=0.03, NNT 11). This is the late window (4.5-24h) and EVT-unavailable population.',
+      doesNotProve: 'TRACE-III does not prove late-window tenecteplase is beneficial when EVT is available (see TIMELESS — neutral result in that population). It does not establish safety in patients outside the trial criteria (non-LVO, no perfusion mismatch). The China-only setting and absence of EVT access limit generalizability to systems where EVT is routinely available.',
+      cautions: 'TRACE-III was conducted exclusively in China, where EVT access is limited. This is not a "bridging" IVT-before-EVT trial — it is specifically for settings without EVT access. sICH was higher with tenecteplase (3.0% vs 0.8%); this tradeoff is acceptable at the population level but should inform individual patient counseling. Perfusion imaging selection is required — do not apply to unselected patients.',
+    },
+    bedsidePearl: 'TRACE-III is the key trial for late-window IVT when EVT cannot be performed. In perfusion-selected LVO patients 4.5-24 hours from onset without EVT access, tenecteplase 0.25 mg/kg improved mRS 0-1 from 24.2% to 33.0% (NNT 11, P=0.03). This is not a reason to delay EVT when it is available — TIMELESS showed no benefit when EVT was performed.',
+    bottomLineSummary: 'TRACE-III showed tenecteplase 0.25 mg/kg improved functional independence at 90 days versus standard medical treatment in perfusion-selected LVO patients treated 4.5-24 hours after stroke onset when EVT was unavailable (33.0% vs 24.2%, relative rate 1.37, P=0.03, NNT 11). sICH was higher (3.0% vs 0.8%). Results apply specifically to EVT-unavailable settings with LVO confirmed on imaging.',
   },
   'wake-up-trial': {
     id: 'wake-up-trial',
@@ -4974,7 +5050,41 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'Death at 90 days',
         tooltip: 'Mortality at 90 days was numerically lower with MSU care.'
       }
-    }
+    },
+    listCategory: 'acute',
+    listDescription: 'Prehospital mobile stroke unit vs standard EMS in tPA-eligible stroke; positive quasi-experimental study.',
+    inclusionCriteria: [
+      'Acute stroke symptoms within 24 hours',
+      'Located within the MSU service area of Houston, TX',
+      'Alert or minimally drowsy on initial evaluation',
+      'Age 18 or older',
+    ],
+    exclusionCriteria: [
+      'Comatose or unresponsive at presentation',
+      'Traumatic etiology',
+      'Location outside MSU service area at time of activation',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does this chart show?',
+        answer: 'mRS 0-1 (excellent functional outcome) at 90 days in patients adjudicated as tPA-eligible. MSU care reached 53.5 per 100; standard EMS reached 45.5 per 100 — an 8 percentage point absolute difference driven by a 36-minute reduction in onset-to-treatment time.',
+      },
+      {
+        question: 'Why is AOR used instead of a standard risk ratio?',
+        answer: 'The primary endpoint was utility-weighted mRS — a composite ordinal score. The AOR 2.14 reflects adjusted odds of excellent outcome across all mRS categories. The 53.5% vs 45.5% shown here is the secondary dichotomized mRS 0-1 rate, presented for visual clarity.',
+      },
+      {
+        question: 'What is the NNT?',
+        answer: 'NNT ≈ 13: approximately 13 tPA-eligible stroke patients must be managed by MSU instead of standard EMS for one additional patient to achieve mRS 0-1 at 90 days. The benefit is time-mediated — faster treatment, fewer dead neurons.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In tPA-eligible patients with acute ischemic stroke in Houston, TX, MSU-based prehospital care improved excellent functional outcome at 90 days compared with standard EMS transport (53.5% vs 45.5%, AOR 2.14, P<0.001), with median onset-to-treatment time 36 minutes shorter than EMS.',
+      doesNotProve: 'BEST-MSU does not prove benefit for non-tPA-eligible patients or those with hemorrhagic stroke. The single-city US setting may not generalize to different health systems, hospital proximity patterns, or EMS infrastructure. The benefit is not separable from other concurrent quality improvements during the study period.',
+      cautions: 'Design quality: BEST-MSU used alternating-week allocation rather than individual randomization, making it a quasi-experimental controlled study. Secular trends, seasonal variation, or unmeasured confounders across alternating weeks could bias results. The infrastructure cost of MSU deployment is high, limiting generalizability to resource-limited settings.',
+    },
+    bedsidePearl: 'BEST-MSU showed that prehospital MSU care saved 36 minutes and improved outcomes in tPA-eligible patients (NNT 13). The mechanism is faster treatment, not better treatment. For hospitals without MSU access, the equivalent message is: every minute saved on door-to-needle time translates to measurable benefit.',
+    bottomLineSummary: 'In a quasi-experimental alternating-week study from Houston, mobile stroke unit care reduced onset-to-treatment time by 36 minutes and improved excellent functional outcome at 90 days in tPA-eligible patients (53.5% vs 45.5%, AOR 2.14, P<0.001). The benefit is time-mediated; the non-randomized design limits causal certainty.',
   },
   'interact4-trial': {
     id: 'interact4-trial',
@@ -5363,7 +5473,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Menon BK, et al. (Lancet 2022)',
     doi: '10.1016/S0140-6736(22)01054-6',
     clinicalTrialsId: 'NCT03889249',
-    trialResult: 'POSITIVE',
+    trialResult: 'NEUTRAL',
     safetyProfile: {
       sICH: {
         evt: 3.4,
@@ -5375,7 +5485,41 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         control: 15.4,
         label: 'Death within 90 days'
       }
-    }
+    },
+    listCategory: 'thrombolysis',
+    listDescription: 'Tenecteplase vs alteplase in routine Canadian stroke practice; non-inferiority confirmed.',
+    inclusionCriteria: [
+      'Acute ischemic stroke with disabling deficits',
+      'Treatable within 4.5 hours of symptom onset',
+      'Standard IV thrombolysis criteria met per local guidelines',
+      'Age 18 or older',
+    ],
+    exclusionCriteria: [
+      'Contraindication to IV thrombolysis per local guidelines',
+      'Hemorrhagic stroke on baseline imaging',
+      'Received tenecteplase or alteplase before enrolment',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'mRS 0-1 (excellent functional outcome) at 90-120 days in routine Canadian practice. Tenecteplase reached 36.9 per 100 patients; alteplase reached 34.8. The 2.1 percentage point numerical advantage for tenecteplase is within the prespecified NI margin of −5 pp, confirming non-inferiority.',
+      },
+      {
+        question: 'Why is there no delta band?',
+        answer: 'AcT was designed to prove non-inferiority, not superiority. The superiority p-value was 0.21 — not significant. A delta band would misrepresent the result as an efficacy advantage. The two arms meet the prespecified non-inferiority margin for this endpoint.',
+      },
+      {
+        question: 'What does NI P<0.001 mean?',
+        answer: 'The lower 95% CI bound for the risk difference was −1.4 pp, comfortably above the NI margin of −5 pp. AcT provides strong evidence that tenecteplase does not clinically sacrifice efficacy versus alteplase in routine stroke care.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In patients with disabling acute ischemic stroke treated within 4.5 hours in routine Canadian practice, tenecteplase 0.25 mg/kg showed non-inferiority to alteplase 0.9 mg/kg for excellent functional outcome at 90-120 days within the prespecified margin of −5 percentage points (RD +2.1 pp, 95% CI −1.4 to +5.6, NI P<0.001).',
+      doesNotProve: 'AcT does not prove superiority of tenecteplase over alteplase for functional outcomes. It does not establish equivalent benefit in bridging EVT patients, who were not the primary population. Registry-linked outcome ascertainment differs from blinded endpoint adjudication in traditional RCTs.',
+      cautions: 'Open-label design with registry-based outcomes may introduce assessment bias. The NI margin of −5 pp, while prespecified, means a difference up to 5% would still be declared non-inferior. Superiority was not met (P=0.21), so the trial supports replacement of alteplase but does not establish tenecteplase as the superior agent.',
+    },
+    bedsidePearl: 'AcT confirmed tenecteplase 0.25 mg/kg as a practical replacement for alteplase in routine IVT (NI met, RD +2.1 pp). The workflow advantage is the single-bolus administration versus a bolus-plus-infusion for alteplase. Symptomatic ICH rates were similar (3.4% vs 3.2%). Together with TRACE-2 and ATTEST-2, AcT supports the 2026 guideline endorsement of tenecteplase.',
+    bottomLineSummary: 'AcT showed non-inferiority of tenecteplase 0.25 mg/kg to alteplase 0.9 mg/kg for excellent 90-day outcome in routine Canadian stroke practice (36.9% vs 34.8%, RD +2.1 pp, 95% CI −1.4 to +5.6). The single-bolus advantage is validated without sacrificing efficacy or safety.',
   },
   'aramis-trial': {
     id: 'aramis-trial',
@@ -5435,7 +5579,51 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Chen HS, et al. (JAMA 2023)',
     doi: '10.1001/jama.2023.7827',
     clinicalTrialsId: 'NCT03661411',
-    trialResult: 'POSITIVE'
+    trialResult: 'NEUTRAL',
+    safetyProfile: {
+      sICH: {
+        evt: 0.3,
+        control: 0.9,
+        label: 'Symptomatic intracranial hemorrhage at 24 hours',
+        color: 'success',
+        tooltip: 'sICH was numerically lower with DAPT (0.3% vs 0.9%), consistent with an antithrombotic approach without plasminogen activation.',
+      },
+    },
+    listCategory: 'thrombolysis',
+    listDescription: 'Dual antiplatelet therapy vs alteplase for minor nondisabling stroke; non-inferiority confirmed.',
+    inclusionCriteria: [
+      'Acute minor nondisabling ischemic stroke (not causing significant disability)',
+      'NIHSS ≤5 at presentation',
+      'Treatable within 4.5 hours of onset',
+      'Age 18 or older',
+    ],
+    exclusionCriteria: [
+      'Disabling stroke (significant functional impairment)',
+      'Prior use of antiplatelet or anticoagulant therapy',
+      'Contraindication to clopidogrel or aspirin',
+      'Planned IV alteplase treatment',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'mRS 0-1 (excellent outcome) at 90 days in patients with minor nondisabling acute ischemic stroke. DAPT reached 93.8 per 100 patients; alteplase reached 91.4. The 2.4 pp difference favors DAPT numerically, and non-inferiority was confirmed (NI P<0.001).',
+      },
+      {
+        question: 'Why are both rates so high?',
+        answer: 'Minor nondisabling stroke has a good baseline prognosis — most patients recover regardless of treatment. This is precisely why thrombolysis was uncertain in this population: when baseline outcomes are already excellent, even a low rate of alteplase-related sICH (0.9%) tips the benefit-risk balance unfavorably.',
+      },
+      {
+        question: 'Does DAPT superiority follow from these rates?',
+        answer: 'No. ARAMIS was a non-inferiority trial. The numerically higher DAPT rate is consistent with NI, not with proven superiority. The superiority P-value was not separately reported. The conclusion is that DAPT is a safe alternative to alteplase for clearly nondisabling deficits, not that it is better.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In patients with minor nondisabling acute ischemic stroke treated within 4.5 hours, dual antiplatelet therapy showed non-inferiority to IV alteplase for excellent functional outcome at 90 days within the prespecified margin of −3 percentage points (DAPT 93.8% vs alteplase 91.4%, RD +2.4 pp, NI P<0.001), with lower sICH (0.3% vs 0.9%).',
+      doesNotProve: 'ARAMIS does not prove DAPT is superior to alteplase. It does not apply to patients with disabling neurological deficits, where alteplase retains standard-of-care status. The benefit may be partly driven by avoiding alteplase-associated sICH in a population with otherwise-favorable prognosis.',
+      cautions: 'Open-label design. The enrolled population had NIHSS ≤5 with nondisabling deficits — not the typical thrombolysis candidate. ARAMIS complements but does not replace alteplase for patients with disabling stroke. Results require careful patient selection to apply correctly in practice.',
+    },
+    bedsidePearl: 'ARAMIS showed DAPT is non-inferior to alteplase for minor nondisabling stroke (NNT context: both arms excellent, 93.8% vs 91.4%). The key bedside application: for clearly minor, nondisabling deficits within 4.5 hours, DAPT is a reasonable alternative that avoids the 0.9% sICH risk of alteplase. Do not apply to disabling stroke.',
+    bottomLineSummary: 'In patients with minor nondisabling acute ischemic stroke, DAPT was non-inferior to IV alteplase for excellent 90-day outcome (93.8% vs 91.4%, RD +2.4 pp, NI P<0.001), with lower sICH (0.3% vs 0.9%). ARAMIS supports DAPT as an alternative to thrombolysis for clearly nondisabling deficits but does not displace alteplase for disabling stroke.',
   },
   'attest-2-trial': {
     id: 'attest-2-trial',
@@ -5555,7 +5743,41 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Logallo N, et al. (Lancet Neurol 2017)',
     doi: '10.1016/S1474-4422(17)30253-3',
     clinicalTrialsId: 'NCT01949948',
-    trialResult: 'NEUTRAL'
+    trialResult: 'NEUTRAL',
+    listCategory: 'thrombolysis',
+    listDescription: 'Tenecteplase 0.4 mg/kg vs alteplase; not superior in a predominantly mild-stroke cohort.',
+    inclusionCriteria: [
+      'Acute ischemic stroke within 4.5 hours',
+      'Standard thrombolysis criteria met',
+      'NIHSS ≥2 (broad eligibility; most enrolled had NIHSS ≤4)',
+      'Age 18 or older',
+    ],
+    exclusionCriteria: [
+      'Contraindication to thrombolysis',
+      'Hemorrhagic stroke on baseline imaging',
+      'Severe stroke (high NIHSS) — enrolled in small numbers',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'mRS 0-1 at 3 months. Tenecteplase reached 64 per 100; alteplase 63. The 1% absolute difference and OR 1.08 (95% CI 0.84-1.38) show no meaningful difference. The trial tested superiority and did not find it (P=0.52).',
+      },
+      {
+        question: 'Why did NOR-TEST fail to show superiority?',
+        answer: 'The enrolled population had median NIHSS 4 — very mild stroke. With a baseline excellent-outcome rate of 63%, the ceiling effect was substantial. Even an effective treatment would struggle to show improvement. NOR-TEST is considered underpowered to detect benefit in more severe stroke.',
+      },
+      {
+        question: 'How does NOR-TEST relate to NOR-TEST 2?',
+        answer: 'NOR-TEST used 0.4 mg/kg and enrolled mainly mild stroke — null result. NOR-TEST 2 (Part A) tested the same 0.4 mg/kg dose in moderate-severe stroke and had to be stopped for harm. Together, they establish that 0.4 mg/kg is not the right dose: it does not improve mild stroke and causes harm in severe stroke.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In a predominantly mild-stroke population (median NIHSS 4) treated within 4.5 hours, tenecteplase 0.4 mg/kg was not superior to alteplase 0.9 mg/kg for excellent functional outcome at 3 months (64% vs 63%, OR 1.08, 95% CI 0.84-1.38, P=0.52).',
+      doesNotProve: 'NOR-TEST does not prove tenecteplase is equivalent to alteplase — it was a superiority trial, not an NI trial. Nor does it prove tenecteplase is safe in moderate-severe stroke. The mild case mix substantially limits the interpretability of the efficacy estimate.',
+      cautions: 'The case mix (median NIHSS 4) was dominated by mild and potentially nondisabling stroke, including possible stroke mimics. This severely limits the ability to generalize results to the broader thrombolysis population. The 0.4 mg/kg dose has since been shown harmful in NOR-TEST 2 Part A and is not the dose used in contemporary practice.',
+    },
+    bedsidePearl: 'NOR-TEST tested tenecteplase 0.4 mg/kg in predominantly mild stroke and found no benefit — but the case mix was too mild to show it even if it existed. The 0.4 mg/kg dose is not used in current practice; guideline-endorsed dose is 0.25 mg/kg. NOR-TEST is historically important context for NOR-TEST 2 Part A (harm signal at 0.4 mg/kg in moderate-severe stroke).',
+    bottomLineSummary: 'NOR-TEST found tenecteplase 0.4 mg/kg was not superior to alteplase for mRS 0-1 at 3 months in a predominantly mild-stroke cohort (64% vs 63%, OR 1.08, P=0.52). The mild case mix limits interpretability, and the 0.4 mg/kg dose was subsequently shown harmful in moderate-severe stroke in NOR-TEST 2 Part A.',
   },
   'nor-test-2-part-a-trial': {
     id: 'nor-test-2-part-a-trial',
@@ -5615,7 +5837,57 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Kvistad CE, et al. (Lancet Neurol 2022)',
     doi: '10.1016/S1474-4422(22)00124-7',
     clinicalTrialsId: 'NCT03854500',
-    trialResult: 'NEGATIVE'
+    trialResult: 'HARM',
+    safetyProfile: {
+      sICH: {
+        evt: 6,
+        control: 1,
+        label: 'Symptomatic intracranial hemorrhage',
+        color: 'danger',
+        tooltip: 'sICH was 6× higher with tenecteplase 0.4 mg/kg (6% vs 1%), the primary safety signal that prompted DSMB-mandated trial termination.',
+      },
+      mortality: {
+        evt: 16,
+        control: 5,
+        label: 'Mortality at 3 months',
+        color: 'danger',
+        tooltip: 'Mortality was 3× higher with tenecteplase 0.4 mg/kg (16% vs 5%). This finding was the key harm signal alongside the sICH excess.',
+      },
+    },
+    listCategory: 'thrombolysis',
+    listDescription: 'Tenecteplase 0.4 mg/kg vs alteplase in moderate-severe stroke; STOPPED FOR HARM — sICH 6x higher, mortality 3x higher.',
+    inclusionCriteria: [
+      'Acute ischemic stroke within 4.5 hours of onset',
+      'NIHSS ≥6 (moderate-severe stroke only)',
+      'Standard thrombolysis criteria met',
+      'Age 18 or older',
+    ],
+    exclusionCriteria: [
+      'Mild stroke (NIHSS <6) — enrolled in NOR-TEST, not NOR-TEST 2',
+      'Contraindication to IV thrombolysis',
+      'Hemorrhagic transformation or large established infarct on baseline imaging',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does this chart show?',
+        answer: 'mRS 0-1 at 3 months. Alteplase (control) reached 51 per 100; tenecteplase 0.4 mg/kg (treatment) reached only 32 per 100. This 19 percentage point gap — with OR 0.45, P=0.006 — was the efficacy signal that reinforced the DSMB safety findings and led to trial termination.',
+      },
+      {
+        question: 'Why does the control arm have the winning accent?',
+        answer: 'Standard-dose alteplase was clearly the better treatment in this trial. Tenecteplase 0.4 mg/kg caused substantially more harm (sICH 6% vs 1%, mortality 16% vs 5%) and worse functional outcomes. The control arm represents the safer, more effective therapy in this comparison.',
+      },
+      {
+        question: 'How does this harm square with the 0.25 mg/kg NI results?',
+        answer: 'Dose matters. The 0.25 mg/kg dose (used in AcT, TRACE-2, ATTEST-2) consistently showed safety similar to alteplase. The 0.4 mg/kg dose in NOR-TEST 2 caused clear harm in moderate-severe stroke. NOR-TEST 2 Part A effectively closes the question on 0.4 mg/kg — it is too high.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'STOPPED FOR HARM. In patients with moderate-to-severe acute ischemic stroke (NIHSS ≥6) treated within 4.5 hours, tenecteplase 0.4 mg/kg was inferior to standard-dose alteplase for excellent functional outcome (32% vs 51%, OR 0.45, 95% CI 0.25-0.82, P=0.006), with 6× higher sICH (6% vs 1%) and 3× higher mortality (16% vs 5%). The DSMB terminated the trial early for safety.',
+      doesNotProve: 'NOR-TEST 2 Part A does not prove that tenecteplase at any dose is harmful. The harm was specific to the 0.4 mg/kg dose in moderate-severe stroke. It does not apply to tenecteplase 0.25 mg/kg, which has been validated as safe and non-inferior to alteplase in multiple large RCTs.',
+      cautions: 'N=204 (stopped early), so estimates are imprecise. The trial was designed as a non-inferiority study for the 0.4 mg/kg dose; the harm signal emerged despite, not because of, the NI framing. The confidence interval for OR (0.25-0.82) does not cross 1.0, making the harm finding robust despite small sample size.',
+    },
+    bedsidePearl: 'NOR-TEST 2 Part A is a clear harm signal: tenecteplase 0.4 mg/kg in moderate-severe stroke caused 6× more sICH and 3× more deaths than alteplase. The 0.4 mg/kg dose is not used in practice. Current guidelines endorse tenecteplase 0.25 mg/kg as a safe alternative based on entirely separate trials (AcT, TRACE-2). Do not conflate the doses.',
+    bottomLineSummary: 'NOR-TEST 2 Part A was stopped early for harm after tenecteplase 0.4 mg/kg showed substantially worse outcomes than alteplase in moderate-severe stroke: mRS 0-1 32% vs 51%, sICH 6% vs 1%, and mortality 16% vs 5%. The 0.4 mg/kg dose is contraindicated. This trial does not affect the safety profile of tenecteplase 0.25 mg/kg.',
   },
   'prisms-trial': {
     id: 'prisms-trial',
@@ -5675,7 +5947,51 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Khatri P, et al. (JAMA 2018)',
     doi: '10.1001/jama.2018.8496',
     clinicalTrialsId: 'NCT02072226',
-    trialResult: 'NEGATIVE'
+    trialResult: 'NEGATIVE',
+    safetyProfile: {
+      sICH: {
+        evt: 3.2,
+        control: 0,
+        label: 'Symptomatic intracranial hemorrhage',
+        color: 'danger',
+        tooltip: 'sICH occurred in 3.2% of alteplase-treated patients and 0% of aspirin-treated patients. This hemorrhagic risk with no efficacy benefit is the core finding against routine alteplase in nondisabling minor stroke.',
+      },
+    },
+    listCategory: 'thrombolysis',
+    listDescription: 'Alteplase vs aspirin for minor nondisabling stroke; no efficacy benefit with sICH signal — stopped early at 33%.',
+    inclusionCriteria: [
+      'Minor ischemic stroke not causing significant disability',
+      'NIHSS ≤5 at enrollment',
+      'Treatable within 3 hours of symptom onset',
+      'Age 18 or older',
+    ],
+    exclusionCriteria: [
+      'Disabling neurological deficits (significant motor, language, or visual impairment)',
+      'NIHSS >5',
+      'Prior stroke with residual deficits',
+      'Contraindication to alteplase or aspirin',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does this chart show?',
+        answer: 'mRS 0-1 at 90 days. Aspirin (control) reached 81.5 per 100; alteplase (treatment) reached only 78.2. The adjusted risk difference was −1.1% (95% CI −5.6 to +3.4%), not statistically significant. Aspirin arm had marginally better outcomes and zero sICH.',
+      },
+      {
+        question: 'Why does the aspirin (control) arm have the winning accent?',
+        answer: 'Aspirin numerically outperformed alteplase and had zero sICH versus 3.2% for alteplase. In a population with excellent baseline prognosis (81.5% excellent outcome on aspirin), alteplase added bleeding risk without measurable functional benefit. The aspirin arm represents the better net-benefit option.',
+      },
+      {
+        question: 'Can we conclude alteplase is harmful in minor stroke?',
+        answer: 'PRISMS was stopped at 33% of its planned sample (313 of 948 patients), leaving it severely underpowered. Findings should be interpreted as inconclusive rather than definitively negative — the direction disfavors alteplase but the true effect cannot be established from this underpowered sample. The sICH signal is the most interpretable finding.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In patients with minor nondisabling acute ischemic stroke treated within 3 hours, alteplase 0.9 mg/kg did not improve excellent functional outcome at 90 days versus aspirin (78.2% vs 81.5%, adjusted RD −1.1%, 95% CI −5.6 to +3.4%, P not significant), with symptomatic intracranial hemorrhage occurring only in the alteplase arm (3.2% vs 0%).',
+      doesNotProve: 'PRISMS does not definitively prove that alteplase is harmful or ineffective in minor stroke — the trial was stopped at 33% enrollment and was severely underpowered for its primary endpoint. It also does not apply to patients with disabling stroke, where alteplase retains a strong evidence base.',
+      cautions: 'The trial was stopped early after the steering committee determined it was unlikely to achieve its primary endpoint — not for a formal safety finding. At 33% enrollment, findings are inconclusive rather than definitively negative; the observed direction may not represent the true effect. The sICH signal (3.2% vs 0%) is the most robust finding and aligns with the known hemorrhagic risk of alteplase.',
+    },
+    bedsidePearl: 'PRISMS tested alteplase vs aspirin in minor nondisabling stroke and found no functional benefit with a 3.2% sICH rate vs 0% for aspirin. The trial was underpowered (stopped at 33%), so findings are inconclusive rather than definitively negative. In clinical practice: for clearly nondisabling minor stroke, shared decision-making about thrombolysis is appropriate, with aspirin or DAPT as reasonable alternatives.',
+    bottomLineSummary: 'PRISMS found no functional benefit of alteplase over aspirin in minor nondisabling stroke (78.2% vs 81.5%, adjusted RD −1.1%, NS) and a 3.2% sICH rate versus 0% for aspirin. The trial was stopped at 33% enrollment and results are inconclusive for the primary endpoint. The sICH signal supports caution about routine thrombolysis for clearly nondisabling deficits.',
   },
   'prost-trial': {
     id: 'prost-trial',
@@ -5734,7 +6050,50 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     source: 'PROST Investigators (JAMA Netw Open 2023)',
     doi: '10.1001/jamanetworkopen.2023.25415',
-    trialResult: 'POSITIVE'
+    trialResult: 'NEUTRAL',
+    safetyProfile: {
+      sICH: {
+        evt: 1.5,
+        control: 1.8,
+        label: 'Symptomatic intracranial hemorrhage at 90 days',
+        color: 'success',
+        tooltip: 'sICH was similar and numerically lower with rhPro-UK (1.5% vs 1.8%, P>0.99). Systemic bleeding was significantly lower: 25.8% vs 42.2%.',
+      },
+    },
+    listCategory: 'thrombolysis',
+    listDescription: 'Recombinant human prourokinase vs alteplase within 4.5 hours; non-inferiority confirmed with lower systemic bleeding.',
+    inclusionCriteria: [
+      'Acute ischemic stroke within 4.5 hours of onset',
+      'Age 18 to 80 years',
+      'Standard thrombolysis criteria met',
+      'NIHSS assessed at baseline',
+    ],
+    exclusionCriteria: [
+      'Hemorrhagic stroke or large established infarct on baseline imaging',
+      'Contraindication to IV thrombolysis',
+      'Severe hepatic or renal impairment',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'mRS 0-1 at 90 days. rhPro-UK reached 65.2 per 100 patients; alteplase 64.3. The risk difference of 0.89 pp (95.4% CI −6.52 to +8.29%) is well within the prespecified NI margin of 10 percentage points, confirming non-inferiority.',
+      },
+      {
+        question: 'Why is the CI so wide?',
+        answer: 'The NI margin for PROST was relatively generous at 10%, reflecting the early-phase nature of the trial. N=663 provides adequate power for NI within this wide margin but would be underpowered for a more stringent margin (e.g., −5%). PROST-2 (N=1552) confirmed NI with a tighter estimate.',
+      },
+      {
+        question: 'What makes rhPro-UK distinctive from tenecteplase?',
+        answer: 'rhPro-UK is a fibrin-specific plasminogen activator that acts mainly at the thrombus site, reducing systemic fibrinogen depletion. PROST showed systemic bleeding (25.8% vs 42.2%) was dramatically lower with rhPro-UK — not a trivial safety advantage in patients at risk of systemic complications.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In patients with acute ischemic stroke treated within 4.5 hours, recombinant human prourokinase (rhPro-UK) showed non-inferiority to alteplase for excellent functional outcome at 90 days within the prespecified 10 percentage point margin (65.2% vs 64.3%, RD +0.89 pp, 95.4% CI −6.52 to +8.29, NI met). Systemic bleeding was significantly lower with rhPro-UK (25.8% vs 42.2%, P<0.001).',
+      doesNotProve: 'PROST does not prove rhPro-UK is superior to alteplase for functional outcomes. The NI margin of 10% is wider than used in most modern NI thrombolysis trials. PROST is a Chinese single-country trial; generalizability to other populations and health systems is uncertain.',
+      cautions: 'Open-label design. The NI margin of 10 pp is generous — a 10% absolute difference in mRS 0-1 outcomes would be clinically significant. PROST-2 used a tighter NI margin and larger sample (N=1552), providing more definitive evidence. rhPro-UK is not yet approved outside China.',
+    },
+    bedsidePearl: 'PROST showed rhPro-UK was non-inferior to alteplase with dramatically lower systemic bleeding (25.8% vs 42.2%). For patients at high risk of systemic complications (active GI ulcer, recent surgery, coagulopathy), rhPro-UK may offer a meaningful safety advantage if approved in your setting. Confirmed and expanded in PROST-2.',
+    bottomLineSummary: 'PROST demonstrated non-inferiority of rhPro-UK to alteplase for excellent 90-day outcome in acute ischemic stroke within 4.5 hours (65.2% vs 64.3%, RD +0.89 pp). Systemic bleeding was significantly lower with rhPro-UK (25.8% vs 42.2%). Results confirmed and expanded in PROST-2 (N=1552).',
   },
   'prost-2-trial': {
     id: 'prost-2-trial',
@@ -5794,7 +6153,57 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'PROST-2 Investigators (Lancet Neurol 2024)',
     doi: '10.1016/S1474-4422(24)00436-8',
     clinicalTrialsId: 'NCT05700591',
-    trialResult: 'POSITIVE'
+    trialResult: 'NEUTRAL',
+    safetyProfile: {
+      sICH: {
+        evt: 0.3,
+        control: 1.3,
+        label: 'Symptomatic intracranial hemorrhage',
+        color: 'success',
+        tooltip: 'sICH was significantly lower with prourokinase (0.3% vs 1.3%), a key safety advantage alongside lower major bleeding (0.5% vs 2.1%).',
+      },
+      majorBleeding: {
+        evt: 0.5,
+        control: 2.1,
+        label: 'Major bleeding at 7 days',
+        color: 'success',
+        tooltip: 'Major bleeding was significantly lower with prourokinase (0.5% vs 2.1%), consistent with its fibrin-specific mechanism limiting systemic plasminogen activation.',
+      },
+    },
+    listCategory: 'thrombolysis',
+    listDescription: 'Prourokinase vs alteplase (N=1552) within 4.5 hours; non-inferiority with better safety profile confirmed.',
+    inclusionCriteria: [
+      'Acute ischemic stroke within 4.5 hours of onset',
+      'Ineligible for or refusing endovascular thrombectomy',
+      'Standard thrombolysis criteria met',
+      'Age 18 or older',
+    ],
+    exclusionCriteria: [
+      'Eligible for and agreeing to endovascular thrombectomy',
+      'Hemorrhagic stroke or large infarct core on baseline imaging',
+      'Contraindication to IV thrombolysis',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'mRS 0-1 at 90 days. Prourokinase reached 72.0 per 100; alteplase 68.7. The risk ratio 1.04 (lower bound above the prespecified NI margin of 0.93) confirms non-inferiority. The 3.3 pp numerical advantage is consistent with NI but superiority was not separately tested.',
+      },
+      {
+        question: 'Why was the NI margin set at RR 0.93?',
+        answer: 'A risk ratio NI margin of 0.93 means prourokinase must achieve at least 93% of alteplase\'s efficacy. With alteplase achieving 68.7%, this requires prourokinase to reach at least 63.9% — and it reached 72.0%, far exceeding the margin. PROST-2 provides strong NI evidence with a rigorous margin.',
+      },
+      {
+        question: 'How does PROST-2 build on PROST?',
+        answer: 'PROST-2 enrolled 1552 patients (vs 663 in PROST), used a stricter NI margin (RR ≥0.93 vs RD ≤10%), and confirmed sICH was lower (0.3% vs 1.3%) and major bleeding lower (0.5% vs 2.1%). PROST-2 is the definitive prourokinase trial; PROST was the Phase 3 pilot.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In patients with acute ischemic stroke within 4.5 hours who were ineligible for or refusing EVT, prourokinase showed non-inferiority to alteplase within the prespecified RR margin of 0.93 for excellent functional outcome at 90 days (72.0% vs 68.7%, RR 1.04, NI P<0.0001), with lower sICH (0.3% vs 1.3%) and lower major bleeding (0.5% vs 2.1%).',
+      doesNotProve: 'PROST-2 does not prove prourokinase is superior to alteplase for functional outcomes. It does not establish whether prourokinase is beneficial as a bridging agent before EVT. Trial was conducted exclusively in China; generalizability to other populations is uncertain.',
+      cautions: 'Open-label design. The population was restricted to patients ineligible for or refusing EVT, limiting generalizability to the broader thrombolysis population. Prourokinase is not approved outside of China. The regulatory pathway to broad clinical use is unclear.',
+    },
+    bedsidePearl: 'PROST-2 confirmed prourokinase as non-inferior to alteplase with better safety: sICH 0.3% vs 1.3% and major bleeding 0.5% vs 2.1%. It is currently available only in China. For clinicians in systems where prourokinase is approved, PROST-2 supports it as a first-line IVT alternative — particularly when minimizing bleeding is a priority.',
+    bottomLineSummary: 'PROST-2 demonstrated non-inferiority of prourokinase to alteplase for excellent 90-day outcome in EVT-ineligible stroke patients (72.0% vs 68.7%, RR 1.04, NI P<0.0001), with significantly lower sICH (0.3% vs 1.3%) and major bleeding (0.5% vs 2.1%). Results confirm and extend PROST, but are currently applicable only in China where prourokinase is approved.',
   },
   'raise-trial': {
     id: 'raise-trial',
@@ -5854,7 +6263,56 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Li S, et al. (NEJM 2024)',
     doi: '10.1056/NEJMoa2400314',
     clinicalTrialsId: 'NCT05295173',
-    trialResult: 'POSITIVE'
+    trialResult: 'POSITIVE',
+    safetyProfile: {
+      sICH: {
+        evt: 2.4,
+        control: 2.0,
+        label: 'Symptomatic intracranial hemorrhage within 36 hours',
+        color: 'warning',
+        tooltip: 'sICH was similar between arms (RR 1.21, 95% CI 0.54-2.75, P not significant). Any intracranial hemorrhage at 90 days was higher with reteplase (7.7% vs 4.9%, RR 1.59, 95% CI 1.00-2.51).',
+      },
+      adverseEvents: {
+        evt: 91.6,
+        control: 82.4,
+        label: 'Any adverse events',
+        color: 'warning',
+        tooltip: 'Overall adverse events were higher with reteplase (91.6% vs 82.4%, RR 1.11, 95% CI 1.03-1.20). Any intracranial hemorrhage was 7.7% vs 4.9%.',
+      },
+    },
+    listCategory: 'thrombolysis',
+    listDescription: 'Reteplase double-bolus vs alteplase; superior for mRS 0-1 but higher ICH and adverse event rates.',
+    inclusionCriteria: [
+      'Acute ischemic stroke within 4.5 hours of onset',
+      'Standard IV thrombolysis criteria met',
+      'Age 18 or older',
+    ],
+    exclusionCriteria: [
+      'Contraindication to thrombolysis',
+      'Hemorrhagic stroke on baseline imaging',
+      'Severe hepatic impairment or known bleeding diathesis',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'mRS 0-1 at 90 days. Reteplase reached 79.5 per 100 patients; alteplase 70.4. The risk ratio 1.13 (95% CI 1.05-1.21) was significant for both non-inferiority (P<0.001) and superiority (P=0.002). This is one of the few IVT trials where a new agent was statistically superior to alteplase.',
+      },
+      {
+        question: 'Why is the delta band wide despite the high rates?',
+        answer: 'The 9.1 percentage point absolute difference between reteplase (79.5%) and alteplase (70.4%) is large by IVT trial standards. NNT ≈ 11. However, any intracranial hemorrhage was also higher with reteplase (7.7% vs 4.9%), creating a meaningful safety tradeoff to weigh against the efficacy benefit.',
+      },
+      {
+        question: 'Does this mean reteplase is now the preferred thrombolytic?',
+        answer: 'Not in current guidelines. RAISE is a single trial from China, and reteplase is approved for stroke only in selected regions. The elevated any-ICH rate (7.7% vs 4.9%) and higher adverse event burden (91.6% vs 82.4%) mean the net benefit across all patients is uncertain. Independent replication and guideline assessment are needed.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In patients with acute ischemic stroke within 4.5 hours, reteplase double-bolus (18 mg + 18 mg) was superior to alteplase for excellent functional outcome at 90 days (79.5% vs 70.4%, RR 1.13, 95% CI 1.05-1.21, superiority P=0.002), with similar symptomatic ICH (2.4% vs 2.0%).',
+      doesNotProve: 'RAISE does not prove reteplase is safe for all patients or should replace alteplase or tenecteplase in routine practice. Any intracranial hemorrhage was higher (7.7% vs 4.9%), and adverse events were higher (91.6% vs 82.4%). A single Chinese trial cannot establish a new standard of care without independent replication.',
+      cautions: 'RAISE is currently the only large RCT showing a thrombolytic superior to alteplase for stroke. Any-ICH was higher with reteplase (RR 1.59, CI 1.00-2.51 — borderline significant). High adverse event rates (91.6%) warrant scrutiny. Reteplase is not approved for stroke in the US or most of Europe. Independent replication is needed before practice change.',
+    },
+    bedsidePearl: 'RAISE is the first RCT showing a thrombolytic (reteplase) superior to alteplase for stroke (79.5% vs 70.4%, NNT 11, P=0.002). However, any-ICH was higher (7.7% vs 4.9%) and adverse events were higher (91.6%). Reteplase is not guideline-endorsed for stroke outside of select regions. Watch for replication trials and guideline updates.',
+    bottomLineSummary: 'RAISE demonstrated reteplase double-bolus was superior to alteplase for mRS 0-1 at 90 days in Chinese stroke patients within 4.5 hours (79.5% vs 70.4%, RR 1.13, P=0.002). Any intracranial hemorrhage was higher with reteplase (7.7% vs 4.9%). RAISE is provocative but requires independent replication before guideline adoption.',
   },
   'taste-trial': {
     id: 'taste-trial',
@@ -5913,7 +6371,50 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     source: 'TASTE Investigators (Lancet Neurol 2024)',
     doi: '10.1016/S1474-4422(24)00206-0',
-    trialResult: 'NEUTRAL'
+    trialResult: 'NEUTRAL',
+    safetyProfile: {
+      sICH: {
+        evt: 3,
+        control: 2,
+        label: 'Symptomatic intracranial hemorrhage',
+        color: 'warning',
+        tooltip: 'sICH was similar between arms (3% vs 2%, unadjusted RD 0.01, 95% CI −0.01 to +0.03). Mortality at 90 days: 7% tenecteplase vs 4% alteplase.',
+      },
+    },
+    listCategory: 'thrombolysis',
+    listDescription: 'Tenecteplase vs alteplase in perfusion-selected early-window stroke; NI met in per-protocol analysis only.',
+    inclusionCriteria: [
+      'Acute ischemic stroke within 4.5 hours or last known well',
+      'Aged 18 or older',
+      'Not being considered for EVT',
+      'Target mismatch on brain perfusion imaging (CT or MRI)',
+    ],
+    exclusionCriteria: [
+      'Planned endovascular thrombectomy',
+      'Contraindication to IV thrombolysis',
+      'Large established infarct core on perfusion imaging',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'mRS 0-1 at 3 months. Tenecteplase reached 57 per 100; alteplase 55. The standardized risk difference of 0.03 (95% CI −0.033 to +0.10) met the NI threshold only in the per-protocol analysis (p=0.01) and narrowly missed in the intention-to-treat analysis (p=0.031). Non-inferiority was partially met.',
+      },
+      {
+        question: 'Why did the trial stop early?',
+        answer: 'TASTE was stopped after other trials (including AcT and TRACE-2) conclusively demonstrated NI of tenecteplase in the broader standard-window population. With those results available, continuing to enroll for a more selected subgroup was considered unnecessary. The early stop means TASTE is underpowered for its prespecified margin in the ITT analysis.',
+      },
+      {
+        question: 'What does the nuanced NI result mean in practice?',
+        answer: 'TASTE adds to the body of evidence supporting tenecteplase 0.25 mg/kg but its result is less definitive than AcT or TRACE-2. The per-protocol result supports NI; the ITT result is borderline. Most clinicians and guidelines weigh the totality of tenecteplase evidence, not TASTE alone. TASTE does not change the current endorsement of tenecteplase.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In perfusion-imaging-selected patients with early-window acute ischemic stroke not proceeding to EVT, tenecteplase 0.25 mg/kg showed non-inferiority to alteplase for mRS 0-1 at 3 months in the per-protocol analysis (57% vs 55%, SRD 0.05, 95% CI −0.02 to +0.12, NI p=0.01). ITT NI was borderline (SRD 0.03, p=0.031).',
+      doesNotProve: 'TASTE does not prove clean non-inferiority in the ITT population — the NI threshold was missed by a narrow margin. It does not establish efficacy for perfusion-selected patients beyond what is already known from larger unselected trials. It does not prove superiority.',
+      cautions: 'TASTE stopped early at 680 of 832 planned patients, meaning it was underpowered for its prespecified ITT analysis. The NI margin was SRD ≥−0.03, which the ITT result did not meet. Perfusion-imaging selection adds workflow complexity not present in routine practice. The nuanced result warrants care when extrapolating TASTE alone; the broader tenecteplase evidence base is more reliable.',
+    },
+    bedsidePearl: 'TASTE supports tenecteplase in perfusion-selected early-window stroke (per-protocol NI met, ITT borderline). This does not change practice — tenecteplase is already endorsed based on larger, cleaner trials (AcT, TRACE-2). TASTE is relevant for centers considering perfusion-CT-guided patient selection for thrombolysis, where it confirms feasibility.',
+    bottomLineSummary: 'TASTE demonstrated non-inferiority of tenecteplase 0.25 mg/kg to alteplase in the per-protocol analysis (57% vs 55% mRS 0-1, SRD 0.05, NI p=0.01) in perfusion-selected early-window stroke, but the ITT result was borderline. Stopped early at 680 of 832 patients. Adds to the tenecteplase evidence base without changing current practice.',
   },
   'timeless-trial': {
     id: 'timeless-trial',
@@ -6033,7 +6534,52 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Wang Y, et al. (Lancet 2023)',
     doi: '10.1016/S0140-6736(22)02600-9',
     clinicalTrialsId: 'NCT04797013',
-    trialResult: 'POSITIVE'
+    trialResult: 'NEUTRAL',
+    safetyProfile: {
+      sICH: {
+        evt: 2,
+        control: 2,
+        label: 'Symptomatic intracranial hemorrhage within 36 hours',
+        color: 'success',
+        tooltip: 'sICH was identical between arms (2% each, RR 1.18, 95% CI 0.56-2.50). Mortality was 7% tenecteplase vs 5% alteplase (RR 1.31, CI 0.86-2.01, not significant).',
+      },
+    },
+    listCategory: 'thrombolysis',
+    listDescription: 'Tenecteplase vs alteplase (N=1430) in EVT-ineligible stroke; non-inferiority confirmed.',
+    inclusionCriteria: [
+      'Acute ischemic stroke within 4.5 hours of onset',
+      'Eligible for standard IV thrombolysis',
+      'Ineligible for or refusing EVT',
+      'NIHSS 5-25 at enrollment',
+      'Premorbid mRS ≤1',
+    ],
+    exclusionCriteria: [
+      'Eligible for and agreeing to endovascular thrombectomy',
+      'NIHSS <5 or >25',
+      'Premorbid disability (mRS >1)',
+      'Contraindication to IV thrombolysis',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'mRS 0-1 at 90 days in EVT-ineligible or EVT-refusing stroke patients. Tenecteplase reached 62 per 100; alteplase 58. RR 1.07 (95% CI 0.98-1.16) — the lower bound (0.98) exceeds the prespecified NI margin of 0.937, confirming non-inferiority.',
+      },
+      {
+        question: 'Why is TRACE-2 considered a landmark trial for tenecteplase?',
+        answer: 'TRACE-2 (N=1430) is one of the largest tenecteplase vs alteplase RCTs and was conducted in a strictly defined EVT-ineligible population — the most common IVT candidate. It was published in the Lancet (2023) and provided major international validation (Chinese population) of AcT\'s Canadian findings.',
+      },
+      {
+        question: 'Does TRACE-2 show superiority?',
+        answer: 'No. The RR of 1.07 and the CI of 0.98-1.16 are consistent with NI. The CI crosses 1.0 for superiority would require the lower bound to exceed 1.0. TRACE-2 confirms equivalence, not superiority. Combined with AcT and ATTEST-2, it firmly establishes tenecteplase as a non-inferior alternative.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In patients with acute ischemic stroke (NIHSS 5-25) within 4.5 hours who were ineligible for or refusing EVT, tenecteplase 0.25 mg/kg showed non-inferiority to alteplase 0.9 mg/kg for excellent functional outcome at 90 days within the prespecified RR margin of 0.937 (62% vs 58%, RR 1.07, 95% CI 0.98-1.16, NI confirmed), with similar sICH (2% each).',
+      doesNotProve: 'TRACE-2 does not prove superiority of tenecteplase over alteplase. It does not establish NI for mild stroke (NIHSS <5 were excluded), severe stroke (NIHSS >25 excluded), or bridging EVT candidates. The Chinese-only population limits generalizability.',
+      cautions: 'Open-label design. NIHSS eligibility range (5-25) excludes the mild-stroke gray zone where ARAMIS and PRISMS are more relevant. Mortality at 90 days was numerically higher with tenecteplase (7% vs 5%, RR 1.31, CI 0.86-2.01), though not statistically significant — this warrants monitoring across the tenecteplase literature.',
+    },
+    bedsidePearl: 'TRACE-2 is a major validation of tenecteplase 0.25 mg/kg for standard-window IVT in EVT-ineligible patients (NI confirmed, RR 1.07, sICH 2% each). Together with AcT and ATTEST-2, TRACE-2 provides the evidence base for the 2026 guideline endorsement of tenecteplase as an acceptable alternative to alteplase. Single-bolus administration simplifies door-to-needle workflows.',
+    bottomLineSummary: 'TRACE-2 confirmed non-inferiority of tenecteplase 0.25 mg/kg to alteplase 0.9 mg/kg for mRS 0-1 at 90 days in EVT-ineligible stroke patients (62% vs 58%, RR 1.07, 95% CI 0.98-1.16, NI P confirmed). Safety was similar (sICH 2% each). TRACE-2 is a key pillar of the tenecteplase evidence base alongside AcT and ATTEST-2.',
   },
   'twist-trial': {
     id: 'twist-trial',

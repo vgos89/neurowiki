@@ -147,6 +147,97 @@
       "route": "/trials/eagle-trial",
       "references": [],
       "referencedBy": []
+    },
+    "trial/best-msu-trial": {
+      "type": "trial",
+      "title": "BEST-MSU Trial",
+      "route": "/trials/best-msu-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/act-trial": {
+      "type": "trial",
+      "title": "AcT Trial",
+      "route": "/trials/act-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/aramis-trial": {
+      "type": "trial",
+      "title": "ARAMIS Trial",
+      "route": "/trials/aramis-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/nor-test-trial": {
+      "type": "trial",
+      "title": "NOR-TEST Trial",
+      "route": "/trials/nor-test-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/nor-test-2-part-a-trial": {
+      "type": "trial",
+      "title": "NOR-TEST 2 (Part A) Trial",
+      "route": "/trials/nor-test-2-part-a-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/prisms-trial": {
+      "type": "trial",
+      "title": "PRISMS Trial",
+      "route": "/trials/prisms-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/prost-trial": {
+      "type": "trial",
+      "title": "PROST Trial",
+      "route": "/trials/prost-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/prost-2-trial": {
+      "type": "trial",
+      "title": "PROST-2 Trial",
+      "route": "/trials/prost-2-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/raise-trial": {
+      "type": "trial",
+      "title": "RAISE Trial",
+      "route": "/trials/raise-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/taste-trial": {
+      "type": "trial",
+      "title": "TASTE Trial",
+      "route": "/trials/taste-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/thaws-trial": {
+      "type": "trial",
+      "title": "THAWS Trial",
+      "route": "/trials/thaws-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/trace-2-trial": {
+      "type": "trial",
+      "title": "TRACE-2 Trial",
+      "route": "/trials/trace-2-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/trace-iii-trial": {
+      "type": "trial",
+      "title": "TRACE-III Trial",
+      "route": "/trials/trace-iii-trial",
+      "references": [],
+      "referencedBy": []
     }
   },
   "stubs": [

@@ -153,6 +153,40 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Clinical impact:** low — presentation and teaching content; no algorithm logic changes
 - **Rollback plan:** git revert; all 10 branches removed, data fields are additive (legacy pages unaffected)
 
+#### W6.4c — 13-trial IVT + Prehospital Archetype A rebuild — Class C
+- **Status:** done — 2026-04-22
+- **User-visible goal:** 13 trial detail pages (BEST-MSU, AcT, ARAMIS, NOR-TEST, NOR-TEST 2 Part A, PRISMS, PROST, PROST-2, RAISE, TASTE, THAWS, TRACE-2, TRACE-III) rebuilt to TRIALS_SPEC v1.0 Archetype A pattern
+- **Non-goals:** Archetype B/G not implemented; W6.5-W6.8 parked
+- **Files touched:**
+  - src/data/trialData.ts (13 entries extended; HARM added to trialResult union; duplicate listCategory removed from TRACE-III)
+  - src/pages/trials/TrialPageNew.tsx (13 new id-gated branches)
+  - src/components/trials/BottomLineDrawer.tsx (HARM added to trialResult prop type, resultLabel map, RESULT_BADGE)
+  - docs/link-graph.json (13 new trial nodes)
+  - TASKS.md (this entry; W6.5/W6.6/W6.7/W6.8 parking entries below)
+- **Acceptance checks:** tsc clean ✓ · build green ✓ · NOR-TEST 2 HARM framing with red box + control winnerArm ✓ · BEST-MSU amber quasi-experimental disclaimer ✓ · TRACE-III late-window lede prominent ✓ · PRISMS control arm (aspirin) cobalt accent ✓ · NI trials use non-inferiority language in howToInterpret ✓
+- **Clinical impact:** low — presentation and teaching content; no algorithm logic
+- **Rollback plan:** git revert; all 13 branches removed; data fields are additive (legacy pages unaffected)
+
+#### W6.5 — Archetype B (Grotta Bar) + 8-trial rebuild — Class C
+- **Status:** parked — 2026-04-22
+- **Blocking:** Grotta Bar mRS shift component not yet implemented. Trials: INTERACT4, MR ASAP, RACECAT, RIGHT-2, TRIAGE-STROKE, ATTEST-2, TIMELESS, TWIST.
+- **Rollback:** n/a (not started)
+
+#### W6.6 — Observational B_PROUD rebuild — Class C
+- **Status:** parked — 2026-04-22
+- **Blocking:** Archetype for single-arm/observational display not yet implemented.
+- **Rollback:** n/a (not started)
+
+#### W6.7 — Design-quality disclaimer pattern in TRIALS_SPEC — Class C
+- **Status:** parked — 2026-04-22
+- **Context:** BEST-MSU quasi-experimental design requires a standardized amber disclaimer block. Pattern should be formalized in TRIALS_SPEC before next quasi-experimental trial rebuild.
+- **Rollback:** n/a (docs only)
+
+#### W6.8 — Surgical decompression category + DESTINY rebuild — Class C
+- **Status:** parked — 2026-04-22
+- **Context:** DESTINY (N=32, surgical decompression) is wrong category for IVT batch. Needs its own category page and archetype before rebuild.
+- **Rollback:** n/a (not started)
+
 #### W6.5-6.6 — DISTAL (Archetype B) + WEAVE (Archetype G) rebuilds — Class C
 - **Status:** parked — 2026-04-22
 - **Blocking:** Archetype B (Grotta Bar mRS shift component) and Archetype G (single-arm registry display) not yet implemented. Cannot build pages without components.

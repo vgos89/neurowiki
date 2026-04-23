@@ -42,7 +42,7 @@ export interface BottomLineDrawerProps {
   /** DOI string (without https://doi.org/ prefix), e.g. "10.1056/NEJMoa1813046". */
   doi?: string;
   /** Controls the result badge in the handle. */
-  trialResult?: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL';
+  trialResult?: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL' | 'HARM';
   /** When true, renders state A (skeleton). Switches to B on false. */
   isLoading?: boolean;
 }
@@ -83,6 +83,16 @@ const RESULT_BADGE: Record<string, React.CSSProperties> = {
     background: '#F8FAFC',
     color: '#64748b',
     border: '1px solid #e2e8f0',
+    borderRadius: 9999,
+    padding: '1px 8px',
+    fontSize: 10,
+    fontWeight: 600,
+    lineHeight: 1.6,
+  },
+  HARM: {
+    background: '#FEF2F2',
+    color: '#7f1d1d',
+    border: '1px solid #fca5a5',
     borderRadius: 9999,
     padding: '1px 8px',
     fontSize: 10,
@@ -174,6 +184,7 @@ export const BottomLineDrawer: React.FC<BottomLineDrawerProps> = ({
     POSITIVE: 'Positive',
     NEGATIVE: 'Negative',
     NEUTRAL: 'Neutral',
+    HARM: 'Harm Signal',
   }[trialResult] : null;
 
   const drawerEl = (
