@@ -42,7 +42,7 @@ export interface BottomLineDrawerProps {
   /** DOI string (without https://doi.org/ prefix), e.g. "10.1056/NEJMoa1813046". */
   doi?: string;
   /** Controls the result badge in the handle. */
-  trialResult?: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL' | 'HARM';
+  trialResult?: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL' | 'HARM' | 'SAFETY_MET' | 'SAFETY_FAILED' | 'INCONCLUSIVE';
   /** When trialResult='NEUTRAL' and resultSubtype='non-inferiority', badge reads "Non-inferiority met" with cobalt styling. */
   resultSubtype?: 'non-inferiority' | 'superiority' | 'safety';
   /** When true, renders state A (skeleton). Switches to B on false. */
@@ -74,6 +74,9 @@ const RESULT_BADGE: Record<string, React.CSSProperties> = {
   NEUTRAL: { ...BADGE_BASE, background: '#F8FAFC', color: '#64748b', border: '1px solid #e2e8f0' },
   NEUTRAL_NI: { ...BADGE_BASE, background: '#EEF2FF', color: '#1746A2', border: '1px solid #c7d2fe' },
   HARM: { ...BADGE_BASE, background: '#FEF2F2', color: '#7f1d1d', border: '1px solid #fca5a5' },
+  SAFETY_MET: { ...BADGE_BASE, background: 'rgba(16,185,129,0.12)', color: '#047857', border: '1px solid #6ee7b7' },
+  SAFETY_FAILED: { ...BADGE_BASE, background: 'rgba(239,68,68,0.12)', color: '#991b1b', border: '1px solid #fca5a5' },
+  INCONCLUSIVE: { ...BADGE_BASE, background: '#f1f5f9', color: '#64748b', border: '1px solid #e2e8f0' },
 };
 
 function getHintKey(trialName: string) {
@@ -163,6 +166,9 @@ export const BottomLineDrawer: React.FC<BottomLineDrawerProps> = ({
       NEGATIVE: 'Negative',
       NEUTRAL: 'Neutral',
       HARM: 'Harm Signal',
+      SAFETY_MET: 'Safety benchmark met',
+      SAFETY_FAILED: 'Safety benchmark exceeded',
+      INCONCLUSIVE: 'Inconclusive',
     }[trialResult]
   ) : null;
   const badgeKey = isNonInferiority ? 'NEUTRAL_NI' : (trialResult ?? '');

@@ -144,7 +144,7 @@ export interface TrialMetadata {
   additionalResults?: AdditionalResults; // Additional outcome data (e.g., ELAN)
   specialDesign?: string; // Special trial design (e.g., 'estimation-trial', 'non-inferiority', 'negative-trial')
   keyMessage?: string; // Key clinical takeaway message
-  trialResult?: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL' | 'HARM'; // Overall trial result
+  trialResult?: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL' | 'HARM' | 'SAFETY_MET' | 'SAFETY_FAILED' | 'INCONCLUSIVE'; // Overall trial result
   proceduralDetails?: ProceduralDetails; // Procedural/technical details
   safetyProfile?: SafetyProfile; // Safety outcomes
   doi?: string; // DOI for the publication
@@ -169,8 +169,8 @@ export interface TrialMetadata {
   bedsidePearl?: string;
   /** 1-2 sentence plain-language summary for the bottom-line drawer body. No em dashes. */
   bottomLineSummary?: string;
-  /** Archetype identifier for the new trial page layout. 'A' = DeltaBand; 'B' = GrottaBar. Omitted = legacy layout. */
-  archetypeId?: 'A' | 'B';
+  /** Archetype identifier for the new trial page layout. 'A' = DeltaBand; 'B' = GrottaBar; 'G' = BenchmarkThreshold. Omitted = legacy layout. */
+  archetypeId?: 'A' | 'B' | 'G';
   /** Result subtype for BottomLineDrawer badge variant. 'non-inferiority' drives "Non-inferiority met" pill when trialResult='NEUTRAL'. */
   resultSubtype?: 'non-inferiority' | 'superiority' | 'safety';
   /** mRS 0-6 distribution per arm. Required for Archetype B. pct[i] is % of patients in mRS i; should sum to ~100. */
@@ -198,6 +198,35 @@ export interface TrialMetadata {
   }[];
   /** Amber caveat text shown at top of subgroup well. Required when subgroupAnalyses is present. */
   subgroupCaveat?: string;
+  // ── Archetype G: Benchmark-Threshold (TRIALS_SPEC v1.1 §7a, W6.6.1) ──
+  /** Pre-specified safety/efficacy benchmark (Archetype G). */
+  benchmark?: {
+    rate: number;
+    label: string;
+    direction: 'below-is-good' | 'above-is-good';
+    scaleMax?: number;
+  };
+  /** Observed event rate and CI (Archetype G). */
+  observedEventRate?: {
+    rate: number;
+    ciLow: number;
+    ciHigh: number;
+    ciMethod: string;
+    numEvents: number;
+    total: number;
+    description: string;
+  };
+  /** Historical comparator rows promoted to first-class section (Archetype G §7a.4). Null explicitly omits the section. */
+  historicalContext?: {
+    rows: {
+      label: string;
+      year: number;
+      n: number;
+      design?: string;
+      rate: number;
+      isCurrentTrial?: boolean;
+    }[];
+  } | null;
 }
 
 export const TRIAL_DATA: Record<string, TrialMetadata> = {
@@ -3891,15 +3920,24 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
   'weave-trial': {
     id: 'weave-trial',
     title: 'WEAVE Trial',
-    subtitle: 'Wingspan Stent On-Label',
+    subtitle: 'Wingspan Stent System Post-Market Surveillance',
     category: 'Neuro Trials',
+    // ── Archetype G canary (W6.6.1) — BenchmarkThresholdChart ───────────────
+    archetypeId: 'G',
+    trialResult: 'SAFETY_MET',
+    doi: '10.1161/STROKEAHA.118.023468',
+    clinicalTrialsId: 'NCT02034058',
+    source: 'Alexander et al. (Stroke 2019;50:889-894)',
+    listCategory: 'carotid',
+    listDescription: 'FDA-mandated post-market surveillance: on-label Wingspan stenting met the 4% periprocedural safety benchmark.',
+    // ── Legacy required fields (not used by Archetype G rendering) ─────────
     stats: {
       sampleSize: {
         value: '152',
         label: 'Consecutive Patients'
       },
       primaryEndpoint: {
-        value: 'Stroke/death',
+        value: 'Stroke or death',
         label: 'within 72 Hours'
       },
       pValue: {
@@ -3914,43 +3952,131 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     trialDesign: {
       type: [
         'Prospective single-arm post-market surveillance',
-        'FDA-mandated safety study',
-        'On-label usage only'
+        'FDA-mandated safety study (IDE S140022)',
+        'On-label use only at experienced neurointerventional centers',
       ],
-      timeline: 'Enrolled 2014-2017'
+      timeline: 'Enrolled 2014 to 2017'
     },
     efficacyResults: {
+      // Single-arm: "control" field holds SAMMPRIS stent arm for legacy compatibility only.
+      // Archetype G rendering uses observedEventRate + benchmark, not these fields.
       treatment: {
         percentage: 2.6,
-        label: 'Periprocedural stroke/death within 72 hours',
-        name: 'Wingspan Stent'
+        label: 'Periprocedural stroke or death within 72 hours',
+        name: 'Wingspan Stent (on-label)'
       },
       control: {
         percentage: 14.7,
-        label: 'Historical control (SAMMPRIS stenting arm)',
-        name: 'SAMMPRIS Stenting'
+        label: 'Historical reference (SAMMPRIS stenting arm)',
+        name: 'SAMMPRIS Stent Arm'
       }
     },
     intervention: {
-      treatment: 'Angioplasty and Stenting with Wingspan Stent System (strict on-label criteria)',
-      control: 'Historical control: SAMMPRIS stenting arm (14.7% event rate)'
+      treatment: 'Angioplasty and Stenting with Wingspan Stent System (strict on-label criteria, experienced operators)',
+      control: 'No randomized control arm. FDA pre-specified safety benchmark: periprocedural event rate below 4%.'
     },
-    clinicalContext: 'Following the poor outcomes of intracranial stenting in SAMMPRIS (14.7% event rate), the FDA mandated a post-market surveillance study to assess the safety of the Wingspan stent when used strictly "on-label" by experienced interventionalists.',
-    calculations: {
-      // Safety trial - no NNT calculation
-    },
+    clinicalContext: 'After SAMMPRIS demonstrated a 14.7% periprocedural stroke or death rate with off-label Wingspan use, the FDA mandated the WEAVE post-market surveillance study to test whether strict on-label use by experienced operators could achieve an acceptable safety profile. The pre-specified benchmark was a 72-hour stroke or death rate below 4%.',
+    calculations: {},
     pearls: [
-      'Patient Selection: This trial demonstrated that intracranial stenting can be performed safely (2.6% risk vs 14.7% in SAMMPRIS) if strict selection criteria are followed, particularly waiting >8 days after stroke and requiring demonstrated failure of medical therapy (2 recurrent strokes)',
-      'Experience Matters: The trial used experienced interventionalists, which likely contributed to the lower complication rate',
-      'Role of Stenting: While WEAVE assessed safety (not efficacy vs medical therapy), it restored stenting as a viable salvage option for highly selected refractory patients',
-      'On-Label Criteria: Symptomatic ICAD 70-99%, recurrent stroke despite medical therapy (at least 2 strokes in territory), Age 22-80, mRS ≤ 3, >8 days from most recent stroke',
-      'Safety Benchmark: Significantly lower than the 4% safety benchmark set by the FDA'
+      'Patient selection: 2.6% event rate vs 14.7% in SAMMPRIS demonstrates that strict on-label criteria and operator experience are critical determinants of safety',
+      'Role of stenting: WEAVE restored Wingspan as a viable salvage option for patients with refractory intracranial atherosclerotic disease who fail optimal medical therapy',
+      'On-label criteria: symptomatic ICAD 70-99%, at least 2 strokes in territory despite medical therapy, age 22-80, mRS 3 or less, more than 8 days from last stroke',
+      'Study design: single-arm benchmark study -- does not establish superiority or non-inferiority to medical therapy',
     ],
     conclusion: '',
-    source: 'Alexander et al. (Stroke 2019)',
-    clinicalTrialsId: 'NCT02034058',
-    listCategory: 'carotid',
-    listDescription: 'Perioperative outcomes of Wingspan carotid stenting with strict on-label criteria.',
+    // ── Archetype G specific fields ───────────────────────────────────────────
+    benchmark: {
+      rate: 4,
+      label: 'FDA pre-specified benchmark',
+      direction: 'below-is-good',
+      scaleMax: 10,
+    },
+    observedEventRate: {
+      rate: 2.6,
+      ciLow: 0.7,
+      ciHigh: 6.6,
+      ciMethod: 'Clopper-Pearson exact',
+      numEvents: 4,
+      total: 152,
+      description: 'Periprocedural stroke or death within 72 hours',
+    },
+    historicalContext: {
+      rows: [
+        {
+          label: 'HDE Approval Study',
+          year: 2007,
+          n: 44,
+          design: 'Single-arm, initial FDA approval data',
+          rate: 4.5,
+        },
+        {
+          label: 'NIH Wingspan Registry',
+          year: 2008,
+          n: 158,
+          design: 'Registry, mixed on/off-label use',
+          rate: 6.2,
+        },
+        {
+          label: 'US Wingspan Registry',
+          year: 2007,
+          n: 129,
+          design: 'Registry, mixed on/off-label use',
+          rate: 6.2,
+        },
+        {
+          label: 'SAMMPRIS stent arm',
+          year: 2011,
+          n: 224,
+          design: 'Randomized vs medical therapy, off-label use',
+          rate: 14.7,
+        },
+        {
+          label: 'WEAVE Trial',
+          year: 2019,
+          n: 152,
+          design: 'Single-arm, on-label only, experienced operators',
+          rate: 2.6,
+          isCurrentTrial: true,
+        },
+      ],
+    },
+    inclusionCriteria: [
+      'Symptomatic intracranial atherosclerotic stenosis 70 to 99%',
+      'At least 2 strokes or TIAs in the territory of the stenotic vessel despite optimal medical therapy',
+      'Age 22 to 80 years',
+      'Modified Rankin Score 3 or less at enrollment',
+      'More than 8 days since most recent qualifying ischemic event',
+      'Target vessel diameter 2.0 to 4.5 mm; lesion length 9 mm or less',
+    ],
+    exclusionCriteria: [
+      'Off-label use of the Wingspan stent system',
+      'Acute stroke or TIA within 8 days of enrollment',
+      'Allergy to aspirin, clopidogrel, or contrast media',
+      'Untreated coagulopathy or platelet count below 100,000',
+      'Pregnancy or breastfeeding',
+      'Concurrent participation in another investigational device trial',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the horizontal bar show?',
+        answer: 'The green bar represents the observed 72-hour periprocedural stroke or death rate: 4 events in 152 patients (2.6%). The bar length is proportional to this rate on the 0 to 20% scale. A shorter bar closer to zero indicates fewer events.',
+      },
+      {
+        question: 'What is the shaded CI band?',
+        answer: 'The shaded region spans the 95% confidence interval from 0.7% to 6.6% (Clopper-Pearson exact method). With only 4 events, the CI is wide. The point estimate (2.6%) falls well below the benchmark, and the upper CI bound (6.6%) exceeds it -- meaning the benchmark-met result has meaningful uncertainty at the boundary.',
+      },
+      {
+        question: 'What does the dashed vertical line represent?',
+        answer: 'The amber dashed line is the FDA pre-specified safety benchmark of 4%. The primary analysis was a one-sample test asking: does the observed event rate fall below this threshold? A result to the left of the dashed line means the benchmark was met. This is not a comparison to a concurrent control arm.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In 152 consecutive patients undergoing Wingspan stenting under strict on-label criteria at experienced centers, the 72-hour periprocedural stroke or death rate was 2.6% (4 events; 95% CI 0.7 to 6.6% by Clopper-Pearson exact method). This result met the FDA pre-specified safety benchmark of a rate below 4%. /* claimId: weave-primary-result | source: Alexander Stroke 2019 Table 1 */',
+      doesNotProve: 'WEAVE does not demonstrate that Wingspan stenting is superior to or equivalent to optimal medical therapy for preventing recurrent stroke. The study has no randomized control arm and provides no efficacy data against medical management. Long-term outcomes beyond 72 hours were not the primary focus of this mandated safety study. The result does not generalize to lower-volume centers, off-label use, or broader patient populations.',
+      cautions: 'All patients were enrolled at experienced neurointerventional centers; the result reflects operator expertise and strict case selection that may not be reproducible in general practice. The upper bound of the CI (6.6%) exceeds the 4% benchmark, meaning the result is statistically uncertain near the boundary. The minimum 8-day waiting period and requirement for demonstrated medical therapy failure narrow the eligible population substantially. The study cannot address whether stenting improves outcomes compared to continued medical management.',
+    },
+    bedsidePearl: 'WEAVE restored Wingspan stenting as a salvage option for highly selected patients who fail optimal medical therapy for intracranial atherosclerotic disease. The criteria are strict: 70 to 99% symptomatic stenosis, 2 or more strokes in territory despite optimal medications, mRS 3 or less, more than 8 days from last stroke, and experienced operator. The 2.6% periprocedural event rate met the FDA benchmark under these conditions. For most patients with intracranial atherosclerotic disease, optimal medical therapy (high-intensity statin plus dual antiplatelet therapy) remains first-line.',
+    bottomLineSummary: 'In 152 consecutive patients with symptomatic intracranial atherosclerotic stenosis undergoing Wingspan stenting under strict on-label criteria at experienced centers, the 72-hour periprocedural stroke or death rate was 2.6% (4 events; 95% CI 0.7 to 6.6%), meeting the FDA pre-specified safety benchmark of below 4%. WEAVE does not assess efficacy versus medical therapy; it provides regulatory safety evidence for stenting in a highly selected, refractory population only.',
   },
   'socrates-trial': {
     id: 'socrates-trial',

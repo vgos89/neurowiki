@@ -14,9 +14,11 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { DeltaBandChart } from '../../components/trials/archetypes/DeltaBandChart';
 import { GrottaBarChart } from '../../components/trials/archetypes/GrottaBarChart';
+import { BenchmarkThresholdChart } from '../../components/trials/archetypes/BenchmarkThresholdChart';
 import { SubgroupWell } from '../../components/trials/SubgroupWell';
 import { TeachingWell } from '../../components/trials/TeachingWell';
 import { BottomLineDrawer } from '../../components/trials/BottomLineDrawer';
+import { HistoricalContextSection } from '../../components/trials/HistoricalContextSection';
 
 function sanitizeLegacyTrialContent(
   content: string,
@@ -3380,6 +3382,192 @@ const TrialPageNew: React.FC = () => {
             trialResult={tm.trialResult}
           />
         )}
+      </div>
+    );
+  }
+
+  // ── WEAVE: W6.6.1 Archetype G canary (TRIALS_SPEC v1.1 §7a) ─────────────
+  if (trialId === 'weave-trial' && trialMetadata) {
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+
+    // Archetype G: derive benchmarkMet from direction and rates
+    const bm = trialMetadata.benchmark;
+    const oer = trialMetadata.observedEventRate;
+    const benchmarkMet = bm && oer
+      ? (bm.direction === 'below-is-good'
+          ? oer.rate < bm.rate
+          : oer.rate > bm.rate)
+      : false;
+
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+
+        {/* Section 1: Sticky header */}
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link
+              to="/trials"
+              className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors"
+              aria-label="Back to Neuro Trials"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>
+                WEAVE
+              </span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">
+              {categoryBadgeLabel}
+            </span>
+          </div>
+        </div>
+
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+          {/* Section 2: Title block */}
+          <div>
+            <h1
+              className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]"
+              style={{ color: '#1746A2' }}
+            >
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            {/* TRIALS_SPEC §7a question lede */}
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with symptomatic intracranial atherosclerotic stenosis who meet strict on-label criteria for Wingspan stenting, does the periprocedural 72-hour stroke or death rate fall below the FDA pre-specified safety benchmark of 4%?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}
+              {trialMetadata.doi && (
+                <>
+                  {' '}·{' '}
+                  <a
+                    href={`https://doi.org/${trialMetadata.doi}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                  >
+                    doi:{trialMetadata.doi}
+                  </a>
+                </>
+              )}
+              {' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+
+          {/* Section 3: Population */}
+          {renderPopulationSection(trialMetadata)}
+
+          {/* Section 4: Primary Outcome — BenchmarkThresholdChart (Archetype G) */}
+          {bm && oer && (
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                  Primary Outcome
+                </p>
+              </div>
+              <div className="p-4">
+                <BenchmarkThresholdChart
+                  observedRate={oer.rate}
+                  ciLow={oer.ciLow}
+                  ciHigh={oer.ciHigh}
+                  benchmarkRate={bm.rate}
+                  benchmarkLabel={bm.label}
+                  scaleMax={bm.scaleMax}
+                  benchmarkMet={benchmarkMet}
+                  endpoint={oer.description}
+                  ciMethod={oer.ciMethod}
+                  numEvents={oer.numEvents}
+                  total={oer.total}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Section 2a: Historical Context — first-class section (ADR-006 Decision 2) */}
+          {trialMetadata.historicalContext && (
+            <HistoricalContextSection
+              rows={trialMetadata.historicalContext.rows}
+              caveat="Historical rates come from different patient populations, study designs, era, and operator experience levels. Direct comparison to WEAVE is exploratory. These data provide context only, not a randomized control arm."
+            />
+          )}
+
+          {/* Section 5: How to read this chart */}
+          {trialMetadata.howToReadChart && (
+            <TeachingWell
+              mode="qa"
+              title="How to read this chart"
+              items={trialMetadata.howToReadChart}
+            />
+          )}
+
+          {/* Section 6: How to interpret this trial */}
+          {trialMetadata.howToInterpret && (
+            <TeachingWell
+              mode="interpret"
+              title="How to interpret this trial"
+              sections={trialMetadata.howToInterpret}
+            />
+          )}
+
+          {/* Section 7: Trial Design */}
+          {renderTrialDesign(
+            trialMetadata,
+            '152 consecutive patients at 24 US centers. Enrolled October 2014 to March 2017. FDA-mandated post-market surveillance under IDE S140022. Published Stroke 2019.',
+          )}
+
+          {/* Section 8: Bedside Pearl */}
+          {trialMetadata.bedsidePearl && (
+            <div
+              style={{
+                background: '#EEF2FF',
+                borderLeft: '3px solid #1746A2',
+                borderRadius: '0 10px 10px 0',
+                padding: '16px 18px',
+              }}
+            >
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">
+                Bedside Pearl
+              </p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">
+                {trialMetadata.bedsidePearl}
+              </p>
+            </div>
+          )}
+
+          {/* Section 9: See also */}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">
+              See also
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                to="/trials/sammpris-trial"
+                className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors"
+              >
+                SAMMPRIS Trial
+              </Link>
+            </div>
+          </div>
+
+        </div>{/* end content wrapper */}
+
+        {/* Section 10: BottomLineDrawer — portal-mounted */}
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="WEAVE"
+            body={trialMetadata.bottomLineSummary}
+            bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[
+              { label: 'SAMMPRIS Trial', href: '/trials/sammpris-trial' },
+            ]}
+            citation={trialMetadata.source}
+            doi={trialMetadata.doi}
+            trialResult={trialMetadata.trialResult}
+          />
+        )}
+
       </div>
     );
   }

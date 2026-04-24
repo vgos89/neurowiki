@@ -249,6 +249,13 @@
       "route": "/trials/trace-iii-trial",
       "references": [],
       "referencedBy": []
+    },
+    "trial/weave-trial": {
+      "type": "trial",
+      "title": "WEAVE Trial",
+      "route": "/trials/weave-trial",
+      "references": [],
+      "referencedBy": []
     }
   },
   "stubs": [
