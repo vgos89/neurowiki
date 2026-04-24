@@ -5485,7 +5485,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     clinicalContext: 'RIGHT-2 tested whether nitroglycerin given in the first few hours after presumed stroke could improve outcome by lowering blood pressure and augmenting nitric oxide signaling. It was one of the largest ambulance-based stroke intervention trials ever performed.',
     pearls: [
-      'RIGHT-2 was neutral for its primary endpoint: no improvement in 90-day disability with GTN',
+      'RIGHT-2 was negative for its primary endpoint: no improvement in 90-day disability with GTN',
       'Blood pressure did fall with GTN, but this did not translate into better functional outcome',
       'The signal trended in the wrong direction for confirmed stroke/TIA: adjusted OR 1.25 for poorer outcome',
       'Secondary outcomes, death, and serious adverse events were not significantly improved',
@@ -5494,7 +5494,33 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     source: 'RIGHT-2 Investigators (Lancet 2019)',
     doi: '10.1016/S0140-6736(19)30194-1',
-    trialResult: 'NEGATIVE'
+    trialResult: 'NEGATIVE',
+    archetypeId: 'B' as const,
+    /* claimId: right-2.inclusion | source: RIGHT-2 Investigators, Lancet 2019 */
+    inclusionCriteria: [
+      'Adults (18 years or older) with presumed acute stroke',
+      'FAST score 2 or 3 on paramedic assessment',
+      'Systolic blood pressure 120 mm Hg or higher',
+      'Able to start treatment within 4 hours of symptom onset',
+      'Randomized and treated by trained paramedic in the ambulance',
+    ],
+    exclusionCriteria: [
+      'Residence in a nursing home',
+      'Reduced consciousness (GCS below 8)',
+      'Hypoglycemia (capillary glucose below 2.5 mmol/L)',
+      'Witnessed seizure at onset',
+      'Recent nitrate use or PDE-5 inhibitor use',
+    ],
+    /* claimId: right-2.interpret | source: RIGHT-2 Investigators, Lancet 2019, Table 2 */
+    howToInterpret: {
+      proves: 'RIGHT-2 showed that transdermal GTN started in the ambulance within 4 hours of presumed stroke did not improve 90-day functional outcome in patients with confirmed stroke or TIA. The trial also demonstrated that ambulance-based paramedic-delivered stroke intervention trials are feasible in the UK.',
+      doesNotProve: 'This trial does not support transdermal GTN as an ultra-acute prehospital treatment for undifferentiated stroke. It does not establish whether later in-hospital administration has different effects.',
+      cautions: 'Safety signals were concentrated in patients with intracerebral hemorrhage: larger hematoma, more mass effect, and a non-significant trend toward worse functional outcome (OR 1.87, 95% CI 0.98 to 3.57, p=0.057). The ICH subgroup was small and these analyses are hypothesis-generating. GTN may be particularly hazardous in very early ICH due to disruption of early vasoconstrictive hemostasis. Adherence was low -- only 36% of cohort 2 received all 4 days of treatment -- which may have reduced exposure and attenuated any potential effect. RIGHT-2 completed planned enrollment, unlike the related prehospital nitrate trial MR ASAP which was stopped early for an ICH harm signal.',
+    },
+    /* claimId: right-2.bedside-pearl | source: RIGHT-2 Investigators, Lancet 2019 */
+    bedsidePearl: 'In ultra-acute presumed stroke, transdermal GTN shows no functional benefit and a safety signal in intracerebral hemorrhage patients treated before imaging. The trial\'s main contribution is feasibility: UK paramedics can randomize and treat stroke patients in the ambulance. For blood pressure management in suspected stroke before imaging, RIGHT-2 argues against routine prehospital intervention.',
+    /* claimId: right-2.bottom-line | source: RIGHT-2 Investigators, Lancet 2019 */
+    bottomLineSummary: 'In the RIGHT-2 trial, transdermal glyceryl trinitrate started by paramedics within 4 hours of presumed stroke did not improve 90-day mRS distribution in patients with confirmed stroke or TIA (cohort 1, N=852; adjusted common OR for poor outcome 1.25, 95% CI 0.97 to 1.60, p=0.083). The full ITT result was similarly null (cohort 2, N=1149; OR 1.04, 95% CI 0.84 to 1.29, p=0.69). Safety signals including symptomatic hypotension and larger hematoma with GTN in ICH patients reinforce the case against prehospital nitrates before imaging.',
   },
   'triage-stroke-trial': {
     id: 'triage-stroke-trial',

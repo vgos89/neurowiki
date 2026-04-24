@@ -210,6 +210,16 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Clinical impact:** low — presentation; no algorithm changes
 - **Rollback plan:** git revert; WEAVE falls back to prior page; BottomLineDrawer badge extension is additive (existing POSITIVE/NEGATIVE/NEUTRAL/HARM cases unaffected)
 
+#### W6.5.4 — Codify Archetype B prose-narrative variant in TRIALS_SPEC — Class C
+- **Status:** planned — 2026-04-24
+- **User-visible goal:** n/a (spec update only; no user-visible change)
+- **Non-goals:** no code change; no new component; no trial page rebuild
+- **Context:** RIGHT-2 used a prose-narrative fallback for the primary outcome because Figure 2 is a raster image and per-segment percentages cannot be extracted without fabrication. This pattern (prose + stat row in place of Grotta Bar) is undocumented in TRIALS_SPEC v1.1. A future session should add a §3.5 "Prose-narrative variant" subsection specifying: when to apply (figure not text-extractable, mrsDistribution absent), required elements (prose paragraph, stat row, chart-absent note), and accessibility requirements. The RIGHT-2 branch in TrialPageNew.tsx is the reference implementation.
+- **Files likely touched:** docs/specs/TRIALS_SPEC.md (§3.5 new subsection)
+- **Acceptance checks:** spec section added · design-guardian co-sign issued
+- **Clinical impact:** none
+- **Rollback plan:** n/a
+
 #### W6.6.2 — B_PROUD rebuild approach decision — Class A
 - **Status:** planned — 2026-04-24
 - **User-visible goal:** n/a (decision artifact only)
@@ -270,6 +280,14 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] CLAUDE.md §13.3 references data-architect agent that does not exist in .claude/agents/. Decide when Wave 5 citation scanner work begins: create data-architect agent file, or reassign scanner ownership to system-architect or calculator-engineer. Update §13.3 accordingly.
 
 ## CONFIRMED CLEAN
+- [x] 2026-04-24 — RIGHT-2 trial rebuild (Class C-clinical) — Phase C / prose-narrative Archetype B
+  - trialResult NEUTRAL→NEGATIVE; inclusionCriteria/exclusionCriteria added; howToInterpret added;
+    bedsidePearl/bottomLineSummary added; prose-narrative primary outcome branch in TrialPageNew.tsx
+  - Clinical-reviewer pass 1: block (trialResult reclassification + ENOS reference + governance items)
+  - Clinical-reviewer pass 2: approve-with-conditions (pearl[0] neutral→negative resolved inline)
+  - ADR-005 Option C hybrid cited for citation-infrastructure governance items; escalation note in re-review artifact
+  - tsc clean · build green (2.35s) · all 6 patch resolutions + 1 condition applied before merge
+  - Review artifacts: docs/reviews/clinical-right-2-rebuild.md (block) + docs/reviews/clinical-right-2-rebuild-rereview.md (approve-with-conditions)
 - [x] 2026-04-17 — GCS Calculator rebuild (Class D-clinical) — merge 375d9cf (feat/rebuild-gcs → main)
   - Full Archetype 1 rebuild per CALCULATOR_SPEC v1.1; first live Class D-clinical workflow
   - Files: GlasgowComaScaleCalculator.tsx (full rewrite), gcsScoreData.ts (threshold + types + citations),

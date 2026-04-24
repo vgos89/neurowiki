@@ -69,6 +69,17 @@
       ],
       "referencedBy": []
     },
+    "trial/right-2-trial": {
+      "type": "trial",
+      "title": "RIGHT-2 Trial",
+      "route": "/trials/right-2-trial",
+      "references": [
+        "trial/mr-asap-trial"
+      ],
+      "referencedBy": [
+        "trial/mr-asap-trial"
+      ]
+    },
     "trial/extend-trial": {
       "type": "trial",
       "title": "EXTEND Trial",

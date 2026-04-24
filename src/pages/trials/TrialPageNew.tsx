@@ -3241,6 +3241,149 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── RIGHT-2: W6.5.1 Archetype B / prose-narrative primary (TRIALS_SPEC v1.1 §3) ──
+  // Grotta Bar omitted — Figure 2 is a raster image; per-segment percentages
+  // unavailable without fabrication. Primary outcome rendered as prose + stat row.
+  if (trialId === 'right-2-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory
+      ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+
+        {/* Sticky header */}
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>RIGHT-2</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+          {/* H1 + question lede + source */}
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with presumed stroke and elevated blood pressure, does transdermal glyceryl trinitrate started by paramedics in the ambulance within 4 hours of symptom onset improve 90-day functional outcome compared with sham?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}
+              {tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}
+              {' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+
+          {/* Population */}
+          {renderPopulationSection(tm)}
+
+          {/* Primary outcome — prose-narrative variant (no Grotta Bar) */}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome · mRS Shift at 90 Days</p>
+              <p className="text-xs text-slate-500 mt-0.5">Confirmed stroke or TIA (cohort 1, N=852); full ITT (cohort 2, N=1149)</p>
+            </div>
+            <div className="p-4 space-y-4">
+              {/* Prose paragraph */}
+              <p className="text-sm text-slate-700 leading-relaxed">
+                In patients with confirmed stroke or transient ischemic attack (cohort 1, N=852), the distribution of mRS scores at 90 days did not differ significantly between groups. Median mRS was 3 (IQR 2 to 5) in both arms. The adjusted common odds ratio for a poor outcome was 1.25 (95% CI 0.97 to 1.60, p=0.083), a trend favoring sham that did not reach statistical significance. In the full intention-to-treat population (cohort 2, N=1149), the common odds ratio was 1.04 (95% CI 0.84 to 1.29, p=0.69).
+              </p>
+
+              {/* Stat row */}
+              <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                  <span style={{ fontSize: 12, color: '#64748b', display: 'flex', alignItems: 'center', gap: 4 }}>
+                    Common OR (cohort 1)
+                    <span
+                      title="Reported as OR for poor outcome (higher = worse). Values above 1 suggest a trend toward worse outcomes in the treatment group."
+                      style={{ cursor: 'help', color: '#94a3b8', fontSize: 11 }}
+                      aria-label="Common OR explanation"
+                    >ⓘ</span>
+                  </span>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: '#0f172a' }}>1.25</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                  <span style={{ fontSize: 12, color: '#64748b' }}>95% CI</span>
+                  <span style={{ fontSize: 12, fontWeight: 500, color: '#0f172a' }}>0.97 to 1.60</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: 12, color: '#64748b' }}>Shift in distribution</span>
+                  <span style={{
+                    fontSize: 10,
+                    fontWeight: 600,
+                    color: '#64748b',
+                    background: '#f1f5f9',
+                    padding: '2px 8px',
+                    borderRadius: 9999,
+                  }}>Not significant</span>
+                </div>
+              </div>
+
+              {/* Chart-absent note */}
+              <p style={{ fontSize: 11, color: '#94a3b8', fontStyle: 'italic', marginTop: 4 }}>
+                Distribution chart not shown. See source Figure 2 for per-segment breakdown.
+              </p>
+            </div>
+          </div>
+
+          {/* Safety — prose card (slate, not red: trial not stopped for harm) */}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Safety Signals</p>
+            </div>
+            <div className="p-4">
+              <p className="text-sm text-slate-700 leading-relaxed">
+                Symptomatic hypotension occurred in 21 of 568 (4%) GTN patients versus 9 of 581 (2%) sham patients (adjusted OR 2.49, 95% CI 1.11 to 5.57). In the ICH subgroup, GTN was associated with larger hematoma (adjusted OR 1.95, 95% CI 1.07 to 3.58) and more mass effect on imaging (adjusted OR 2.42, 95% CI 1.26 to 4.68). Serious adverse events were 188 (33%) with GTN versus 170 (29%) with sham (p=0.16, not significant). The trial was not stopped for harm; these findings are considered hypothesis-generating, particularly for the ICH subgroup.
+              </p>
+            </div>
+          </div>
+
+          {/* How to interpret teaching well */}
+          {tm.howToInterpret && (
+            <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />
+          )}
+
+          {/* Trial design */}
+          {renderTrialDesign(tm, 'Randomized October 2015 to May 2018 across the United Kingdom. Paramedic-delivered, randomized, sham-controlled phase 3 trial with blinded endpoint assessment. 1149 patients enrolled across multiple UK ambulance services.')}
+
+          {/* Bedside pearl */}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+
+          {/* See also */}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/mr-asap-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">MR ASAP</Link>
+            </div>
+          </div>
+        </div>
+
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="RIGHT-2"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'MR ASAP', href: '/trials/mr-asap-trial' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
   // ─────────────────────────────────────────────────────────────────────────
 
   if (!trial) {
