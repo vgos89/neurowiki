@@ -202,7 +202,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Rollback plan:** git revert; INTERACT4 falls back to prior page or Archetype A stub; new component is additive
 
 #### W6.6.1 — BenchmarkThresholdChart + BottomLineDrawer extension — Class C
-- **Status:** planned — 2026-04-24
+- **Status:** [x] merged — commit a25a6fd (2026-04-24)
 - **User-visible goal:** Single-arm benchmark trials (Archetype G) render the track-and-threshold visualization with promoted historical context matching TRIALS_SPEC v1.1 §7a and trial-reference.html Stage 8 (WEAVE canary)
 - **Non-goals:** no Grotta Bar work; no B_PROUD rebuild; no citation registry entries required
 - **Files likely touched:** src/components/trials/BenchmarkThresholdChart.tsx (new) · src/components/trials/BottomLineDrawer.tsx (SAFETY_MET / SAFETY_FAILED / INCONCLUSIVE badge variants) · src/data/trialData.ts (benchmark, observedEventRate, historicalContext fields on WEAVE entry) · src/pages/trials/TrialPageNew.tsx (Archetype G branch for WEAVE) · src/types/trial.ts (Archetype G optional fields + trialResult union extension)
@@ -280,6 +280,18 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] CLAUDE.md §13.3 references data-architect agent that does not exist in .claude/agents/. Decide when Wave 5 citation scanner work begins: create data-architect agent file, or reassign scanner ownership to system-architect or calculator-engineer. Update §13.3 accordingly.
 
 ## CONFIRMED CLEAN
+- [x] 2026-04-24 — W6.6.1 Archetype G WEAVE canary — commit a25a6fd
+  - BenchmarkThresholdChart.tsx (new): 14px/18px track, green/red fill, CI band 20% opacity, dashed amber threshold
+  - HistoricalContextSection.tsx (new): amber caveat mandatory first, 5-row table, current-trial cobalt-50 highlight
+  - BottomLineDrawer.tsx: trialResult union extended (SAFETY_MET, SAFETY_FAILED, INCONCLUSIVE) + badge/label entries
+  - trialData.ts: TrialMetadata schema (benchmark, observedEventRate, historicalContext fields); WEAVE rebuilt as Archetype G
+    with trialResult=SAFETY_MET, scaleMax=10, full clinical content; link-graph.json weave-trial node added
+  - TrialPageNew.tsx: WEAVE id-gated branch (sticky header, Primary Outcome chart, Historical Context section 2a,
+    TeachingWell qa/interpret, bedside pearl, BottomLineDrawer)
+  - Gate 1: tsc clean · build 2.34s. Gate 2: clinical-reviewer approve (both sessions — approve-with-conditions
+    with 1 pre-merge condition resolved; full approve on second pass)
+  - Review artifacts: docs/reviews/clinical-weave-archetype-g.md + docs/reviews/clinical-weave-w661.md
+  - Pre-merge condition resolved: HistoricalContextSection footer includes "outcome assessment windows" caveat
 - [x] 2026-04-24 — RIGHT-2 trial rebuild (Class C-clinical) — Phase C / prose-narrative Archetype B
   - trialResult NEUTRAL→NEGATIVE; inclusionCriteria/exclusionCriteria added; howToInterpret added;
     bedsidePearl/bottomLineSummary added; prose-narrative primary outcome branch in TrialPageNew.tsx
