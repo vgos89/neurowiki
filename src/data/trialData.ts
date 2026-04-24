@@ -169,6 +169,35 @@ export interface TrialMetadata {
   bedsidePearl?: string;
   /** 1-2 sentence plain-language summary for the bottom-line drawer body. No em dashes. */
   bottomLineSummary?: string;
+  /** Archetype identifier for the new trial page layout. 'A' = DeltaBand; 'B' = GrottaBar. Omitted = legacy layout. */
+  archetypeId?: 'A' | 'B';
+  /** Result subtype for BottomLineDrawer badge variant. 'non-inferiority' drives "Non-inferiority met" pill when trialResult='NEUTRAL'. */
+  resultSubtype?: 'non-inferiority' | 'superiority' | 'safety';
+  /** mRS 0-6 distribution per arm. Required for Archetype B. pct[i] is % of patients in mRS i; should sum to ~100. */
+  mrsDistribution?: { arm: string; n: number; pct: number[] }[];
+  /** Common odds ratio from ordinal logistic regression. Required for Archetype B primary stat row (TRIALS_SPEC v1.1 §3.3). */
+  ordinalStats?: {
+    commonOR: number;
+    ciLow: number;
+    ciHigh: number;
+    direction: 'positive' | 'negative' | 'neutral' | 'harm';
+    pValue?: number;
+  };
+  /** Pre-specified subgroup analyses rendered in the collapsible subgroup-well (TRIALS_SPEC v1.1 §3.4a). */
+  subgroupAnalyses?: {
+    label: string;
+    description?: string;
+    winnerArm: 'intervention' | 'control' | null;
+    armDistributions: { arm: string; n: number; pct: number[] }[];
+    stats: {
+      commonOR: number;
+      ciLow: number;
+      ciHigh: number;
+      direction: 'positive' | 'negative' | 'neutral' | 'harm';
+    };
+  }[];
+  /** Amber caveat text shown at top of subgroup well. Required when subgroupAnalyses is present. */
+  subgroupCaveat?: string;
 }
 
 export const TRIAL_DATA: Record<string, TrialMetadata> = {
@@ -2618,6 +2647,26 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     keyMessage: 'EVT is ineffective for medium/distal vessel occlusions; medical treatment is standard',
     listCategory: 'thrombectomy',
     listDescription: 'EVT for medium and distal vessel occlusions — negative trial (NEJM 2025).',
+    archetypeId: 'B' as const,
+    inclusionCriteria: [
+      'Medium or distal vessel occlusion (M2, M3, M4, ACA, or PCA segment)',
+      'Age 18 or older',
+      'NIHSS 4 or higher',
+      'Pre-morbid mRS 2 or lower',
+      'Last known well within 24 hours',
+    ],
+    exclusionCriteria: [
+      'Large vessel occlusion (ICA, M1, or basilar artery)',
+      'ASPECTS below 4 on CT or DWI-ASPECTS below 4 on MRI',
+      'Severe comorbidity',
+    ],
+    mrsDistribution: [
+      { arm: 'EVT + Best Medical Treatment', n: 271, pct: [13.3, 21.4, 21.8, 17.3, 9.6, 1.1, 15.5] },
+      { arm: 'Best Medical Treatment Alone', n: 269, pct: [17.5, 20.1, 17.1, 21.2, 8.9, 1.2, 14.0] },
+    ],
+    ordinalStats: { commonOR: 0.90, ciLow: 0.67, ciHigh: 1.22, direction: 'negative' as const, pValue: 0.50 },
+    bedsidePearl: 'DISTAL and ESCAPE-MeVO together provide strong evidence against routine EVT for unselected medium or distal vessel occlusions. The 71.7% reperfusion rate -- well below the 85-90% seen in large-vessel trials -- reflects the technical challenge of accessing M3-M4 and ACA/PCA segments. Symptomatic ICH was more than doubled with EVT (5.9% vs 2.6%) without mortality benefit. Current evidence does not support routine EVT for MeVO outside of highly selected cases or ongoing trials.',
+    bottomLineSummary: 'In 543 patients with medium or distal vessel occlusion (M2-M4, ACA, or PCA) treated within 24 hours, EVT plus best medical treatment did not improve 90-day mRS distribution versus medical treatment alone (cOR 0.90, 95% CI 0.67-1.22, p=0.50). Median mRS was 2.0 in both groups. Symptomatic ICH was more than doubled with EVT (5.9% vs 2.6%). Reperfusion was achieved in only 71.7% of EVT patients. Together with ESCAPE-MeVO, DISTAL argues strongly against routine EVT for unselected medium or distal vessel occlusions.',
   },
   'escape-mevo-trial': {
     id: 'escape-mevo-trial',
@@ -5144,7 +5193,64 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     source: 'INTERACT4 Investigators (NEJM 2024)',
     doi: '10.1056/NEJMoa2314741',
-    trialResult: 'NEGATIVE',
+    trialResult: 'NEUTRAL',
+    archetypeId: 'B',
+    inclusionCriteria: [
+      'Age 18 or older',
+      'FAST score ≥2 with arm motor deficit',
+      'Systolic BP ≥150 mm Hg',
+      'Treatment initiation within 2 hours of onset or last known well',
+    ],
+    exclusionCriteria: [
+      'Coma or severe comorbidity',
+      'Epilepsy, recent head injury, or hypoglycemia',
+      'Inability to confirm eligibility or initiate treatment within 2 hours',
+    ],
+    bottomLineSummary: 'Prehospital IV blood-pressure reduction in undifferentiated acute stroke had no overall effect on 90-day functional outcome (cOR 1.00, 95% CI 0.87-1.15). The critical finding is the divergent subgroup effect: the intervention significantly reduced poor outcomes in hemorrhagic stroke (cOR 0.75, 95% CI 0.60-0.92) but significantly increased poor outcomes in ischemic stroke (cOR 1.30, 95% CI 1.06-1.60). Because nearly half the cohort had hemorrhagic stroke (unusually high for many EMS systems), the net result was null. In populations with a lower hemorrhagic fraction, the same intervention would likely cause net harm.',
+    bedsidePearl: 'Type-blind prehospital BP lowering is a zero-sum strategy: you help your hemorrhagic strokes and hurt your ischemic strokes in roughly equal measure. The overall null result is not reassurance that early BP reduction is safe across the board. Without imaging to confirm stroke type, aggressive prehospital BP reduction is not routinely indicated.',
+    mrsDistribution: [
+      { arm: 'Intensive BP Reduction', n: 1205, pct: [13.8, 19.0, 7.9, 14.0, 11.1, 11.6, 22.5] },
+      { arm: 'Usual Care', n: 1199, pct: [16.1, 16.3, 6.3, 14.8, 10.9, 13.0, 22.6] },
+    ],
+    ordinalStats: {
+      commonOR: 1.00,
+      ciLow: 0.87,
+      ciHigh: 1.15,
+      direction: 'neutral',
+    },
+    subgroupAnalyses: [
+      {
+        label: 'Ischemic stroke',
+        description: 'Pre-specified subgroup; includes 53 patients with TIA. OR reported as for poor functional outcome.',
+        winnerArm: 'control',
+        armDistributions: [
+          { arm: 'Intensive BP Reduction', n: 599, pct: [18.6, 19.6, 7.9, 12.2, 8.8, 10.5, 22.5] },
+          { arm: 'Usual Care', n: 600, pct: [21.8, 19.9, 8.4, 13.0, 7.9, 11.8, 17.1] },
+        ],
+        stats: {
+          commonOR: 1.30,
+          ciLow: 1.06,
+          ciHigh: 1.60,
+          direction: 'negative',
+        },
+      },
+      {
+        label: 'Hemorrhagic stroke',
+        description: 'Pre-specified subgroup; includes 12 patients with subarachnoid hemorrhage. OR reported as for poor functional outcome.',
+        winnerArm: 'intervention',
+        armDistributions: [
+          { arm: 'Intensive BP Reduction', n: 522, pct: [3.9, 18.1, 8.3, 16.9, 14.2, 14.4, 24.3] },
+          { arm: 'Usual Care', n: 519, pct: [5.5, 11.4, 3.9, 17.8, 15.0, 15.6, 30.8] },
+        ],
+        stats: {
+          commonOR: 0.75,
+          ciLow: 0.60,
+          ciHigh: 0.92,
+          direction: 'positive',
+        },
+      },
+    ],
+    subgroupCaveat: 'These subgroup analyses were pre-specified but not part of a hierarchical testing plan with adjustment for multiple comparisons. The divergent effects by stroke type are hypothesis-generating and should not override the overall null primary result for clinical decision-making without imaging confirmation of stroke type.',
     safetyProfile: {
       mortality: {
         evt: 22.5,
@@ -5221,7 +5327,27 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         tooltip: 'Overall 90-day mortality was similar, but early death within 7 days was higher with glyceryl trinitrate.'
       }
     },
-    keyMessage: 'No benefit overall, with a signal of early harm in intracerebral hemorrhage. Prehospital GTN should be avoided in presumed stroke before imaging.'
+    keyMessage: 'No benefit overall, with a signal of early harm in intracerebral hemorrhage. Prehospital GTN should be avoided in presumed stroke before imaging.',
+    archetypeId: 'B' as const,
+    inclusionCriteria: [
+      'Age 18 or older',
+      'Presumed stroke with FAST score 2 or higher',
+      'Onset or last known well within 3 hours',
+      'Systolic blood pressure 120 mm Hg or higher',
+    ],
+    exclusionCriteria: [
+      'Hypotension (systolic BP below 120 mm Hg)',
+      'Nitrate use within 12 hours',
+      'Known intracranial hemorrhage',
+      'Severe comorbidity or reduced life expectancy',
+    ],
+    mrsDistribution: [
+      { arm: 'Glyceryl Trinitrate', n: 170, pct: [6, 19, 26, 13, 12, 8, 15] },
+      { arm: 'Standard Care', n: 148, pct: [13, 17, 22, 18, 11, 6, 14] },
+    ],
+    ordinalStats: { commonOR: 0.97, ciLow: 0.65, ciHigh: 1.47, direction: 'neutral' as const },
+    bedsidePearl: 'MR ASAP and RIGHT-2 together make the strongest case against prehospital GTN for undifferentiated stroke: no functional benefit in either trial, and an early harm signal in ICH patients treated before imaging. Early 7-day mortality was numerically higher with GTN in the ICH subgroup. Do not administer prehospital nitrates for presumed stroke before CT excludes hemorrhage.',
+    bottomLineSummary: 'In ambulance-treated patients with presumed stroke within 3 hours of onset, prehospital transdermal glyceryl trinitrate did not improve 90-day mRS distribution (cOR 0.97, 95% CI 0.65-1.47 in target population). The trial was stopped after 380 randomizations due to a safety signal in ICH patients: early 7-day mortality was numerically higher with GTN in this subgroup. mRS 0-2 at 90 days was 51% vs 49% in the target population.',
   },
   'racecat-trial': {
     id: 'racecat-trial',
@@ -5291,7 +5417,24 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         tooltip: 'Mortality was not different despite differences in thrombolysis and thrombectomy rates.'
       }
     },
-    keyMessage: 'More thrombectomy does not automatically translate into better functional outcomes when IVT delays and overtriage offset the gain.'
+    keyMessage: 'More thrombectomy does not automatically translate into better functional outcomes when IVT delays and overtriage offset the gain.',
+    archetypeId: 'B' as const,
+    inclusionCriteria: [
+      'Suspected large vessel occlusion in nonurban ambulance catchment',
+      'Onset within the acute treatment window',
+      'Age 18 or older',
+    ],
+    exclusionCriteria: [
+      'Direct CSC admission clinically indicated',
+      'Participation in another trial',
+    ],
+    mrsDistribution: [
+      { arm: 'Direct to CSC', n: 467, pct: [10.8, 11.8, 10.8, 17.2, 12.0, 14.5, 22.9] },
+      { arm: 'Local Stroke Center First', n: 482, pct: [9.0, 12.0, 11.8, 19.5, 12.0, 12.2, 23.5] },
+    ],
+    ordinalStats: { commonOR: 1.03, ciLow: 0.82, ciHigh: 1.29, direction: 'positive' as const },
+    bedsidePearl: 'RACECAT shows that in a real nonurban stroke network, bypassing the nearest center to speed thrombectomy did not improve population-level outcomes -- the thrombectomy gains were offset by IVT delays and overtriage of non-LVO patients. This is a strong argument against a universal mothership (CSC-direct) protocol in nonurban systems. Triage algorithms should account for LVO prevalence, transfer times, and IVT eligibility window for your specific system.',
+    bottomLineSummary: 'In a cluster-randomized nonurban Catalan stroke network, direct transport to a thrombectomy-capable CSC did not improve 90-day mRS distribution in ischemic stroke or TIA compared with nearest local stroke center first (adjusted cOR 1.03, 95% CI 0.82-1.29). More patients in the CSC-direct group underwent thrombectomy (48.8% vs 39.4%) but fewer received IVT (47.5% vs 60.4%). Mortality at 90 days was identical at approximately 27%. The trial was stopped early for futility.',
   },
   'right-2-trial': {
     id: 'right-2-trial',
@@ -5413,7 +5556,27 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1161/STROKEAHA.123.043875',
     clinicalTrialsId: 'NCT03542188',
     trialResult: 'NEGATIVE',
-    keyMessage: 'Underpowered but mechanistically informative: CSC-first speeds EVT, PSC-first speeds IVT, and the net clinical effect remains system dependent.'
+    keyMessage: 'Underpowered but mechanistically informative: CSC-first speeds EVT, PSC-first speeds IVT, and the net clinical effect remains system dependent.',
+    archetypeId: 'B' as const,
+    inclusionCriteria: [
+      'Age 18 or older',
+      'Suspected LVO stroke (RACE score 5 or higher)',
+      'Within 4 hours of onset or last known well',
+      'Eligible for IV thrombolysis',
+      'Within catchment area of a primary stroke center',
+    ],
+    exclusionCriteria: [
+      'Pre-morbid mRS greater than 2',
+      'Direct CSC admission clinically indicated',
+      'Enrollment in another trial',
+    ],
+    mrsDistribution: [
+      { arm: 'Direct CSC First', n: 52, pct: [17, 24, 15, 26, 4, 9, 4] },
+      { arm: 'PSC First', n: 52, pct: [19, 17, 16, 12, 12, 12, 12] },
+    ],
+    ordinalStats: { commonOR: 1.42, ciLow: 0.72, ciHigh: 2.82, direction: 'positive' as const, pValue: 0.31 },
+    bedsidePearl: 'TRIAGE-STROKE was stopped early (N=171 of planned 424) and cannot provide definitive guidance on bypass strategy. The mechanistic signal is informative: CSC-first shortened onset-to-groin time by 35 minutes; PSC-first shortened onset-to-needle time by 30 minutes. The net clinical effect is system dependent and this underpowered trial should not be used alone to mandate a bypass protocol.',
+    bottomLineSummary: 'In IVT-eligible patients with suspected LVO within 4 hours of onset, direct routing to a CSC versus PSC-first transport did not significantly improve 90-day functional outcome in the acute ischemic stroke population (ordinal OR 1.42, 95% CI 0.72-2.82, p=0.31). The trial was stopped early at 171 of a planned 424 patients. Direct CSC routing shortened onset-to-groin time by 35 minutes; PSC-first shortened onset-to-needle time by 30 minutes.',
   },
   'act-trial': {
     id: 'act-trial',
@@ -5683,7 +5846,27 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Muir KW, et al. (Lancet Neurol 2024)',
     doi: '10.1016/S1474-4422(24)00377-6',
     clinicalTrialsId: 'NCT02814409',
-    trialResult: 'POSITIVE'
+    trialResult: 'NEUTRAL',
+    resultSubtype: 'non-inferiority' as const,
+    archetypeId: 'B' as const,
+    inclusionCriteria: [
+      'Acute ischemic stroke eligible for IV thrombolysis',
+      'Within 4.5 hours of onset',
+      'Age 18 or older',
+      'NIHSS 4 or higher, or disabling deficit',
+    ],
+    exclusionCriteria: [
+      'Standard thrombolysis contraindications',
+      'Prior thrombolysis within 3 months',
+      'Significant anticoagulation',
+    ],
+    mrsDistribution: [
+      { arm: 'Tenecteplase 0.25 mg/kg', n: 889, pct: [15, 30, 24, 12, 9, 3, 8] },
+      { arm: 'Alteplase 0.9 mg/kg', n: 888, pct: [15, 28, 22, 14, 8, 4, 9] },
+    ],
+    ordinalStats: { commonOR: 1.07, ciLow: 0.90, ciHigh: 1.27, direction: 'positive' as const },
+    bedsidePearl: 'ATTEST-2 is the largest UK trial confirming that tenecteplase 0.25 mg/kg is noninferior to alteplase 0.9 mg/kg for standard-window IVT (NI p<0.0001). The single-bolus dosing advantage is now validated across three major trials (AcT, TRACE-2, ATTEST-2). Symptomatic ICH and mortality were identical in both arms. For centers transitioning to tenecteplase, ATTEST-2 provides reassurance that this is a direct substitution, not a clinical downgrade.',
+    bottomLineSummary: 'In 1777 treated patients across 39 UK stroke centres, tenecteplase 0.25 mg/kg was noninferior to alteplase 0.9 mg/kg for 90-day mRS distribution (adjusted OR 1.07, 95% CI 0.90-1.27; NI p<0.0001). Superiority was not demonstrated. mRS 0-1 was achieved in 44% vs 42%. Mortality was approximately 8% in both groups. Together with AcT and TRACE-2, ATTEST-2 firmly establishes tenecteplase 0.25 mg/kg as a noninferior replacement for alteplase in standard-window IVT.',
   },
   'nor-test-trial': {
     id: 'nor-test-trial',
@@ -6474,7 +6657,26 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Albers GW, et al. (NEJM 2024)',
     doi: '10.1056/NEJMoa2310392',
     clinicalTrialsId: 'NCT03785678',
-    trialResult: 'NEGATIVE'
+    trialResult: 'NEGATIVE',
+    archetypeId: 'B' as const,
+    inclusionCriteria: [
+      'ICA or MCA (M1 or proximal M2) occlusion on CTA',
+      'Perfusion imaging mismatch confirming salvageable tissue',
+      '4.5 to 24 hours from stroke onset',
+      'Age 18 or older',
+    ],
+    exclusionCriteria: [
+      'ASPECTS below 6 on CT or DWI-ASPECTS below 6 on MRI',
+      'Contraindication to thrombolysis',
+      'No large vessel occlusion on imaging',
+    ],
+    mrsDistribution: [
+      { arm: 'Tenecteplase', n: 226, pct: [15.5, 16.8, 13.7, 15.0, 12.8, 6.6, 19.5] },
+      { arm: 'Placebo', n: 229, pct: [13.5, 13.1, 15.7, 14.8, 17.9, 5.7, 19.2] },
+    ],
+    ordinalStats: { commonOR: 1.13, ciLow: 0.82, ciHigh: 1.57, direction: 'positive' as const, pValue: 0.45 },
+    bedsidePearl: 'TIMELESS is not evidence against late-window IVT in all settings -- it is specifically negative for bridging tenecteplase before thrombectomy in the 4.5-24 hour window (77% of patients underwent EVT). The contrast is TRACE-III: in perfusion-selected LVO patients without EVT access, late-window tenecteplase improved mRS 0-1 from 24.2% to 33.0% (NNT 11). The rule is: late-window IVT may help when EVT is unavailable; it adds nothing as a bridge when EVT is being performed.',
+    bottomLineSummary: 'In perfusion-selected LVO patients treated 4.5-24 hours after stroke onset, tenecteplase 0.25 mg/kg before planned thrombectomy (77% of patients) did not improve 90-day mRS distribution (adjusted cOR 1.13, 95% CI 0.82-1.57, p=0.45). Functional independence occurred in 46.0% vs 42.4%. Symptomatic ICH was 2.0% vs 2.2%. TIMELESS and TRACE-III together define the role of late-window IVT: benefit only when EVT is unavailable.',
   },
   'trace-2-trial': {
     id: 'trace-2-trial',
@@ -6639,6 +6841,25 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Roaldsen MB, et al. (Lancet Neurol 2023)',
     doi: '10.1016/S1474-4422(22)00484-7',
     clinicalTrialsId: 'NCT03181360',
-    trialResult: 'NEGATIVE'
+    trialResult: 'NEGATIVE',
+    archetypeId: 'B' as const,
+    inclusionCriteria: [
+      'Wake-up stroke or stroke with unwitnessed onset',
+      'Treatable within 4.5 hours of awakening or recognition',
+      'ASPECTS 4 or higher on non-contrast CT',
+      'Age 18 to 80',
+    ],
+    exclusionCriteria: [
+      'Known time of symptom onset (wake-up criterion not met)',
+      'Early ischemic changes beyond one-third MCA territory on NCCT',
+      'Standard thrombolysis contraindications',
+    ],
+    mrsDistribution: [
+      { arm: 'Tenecteplase', n: 289, pct: [14, 31, 16, 20, 7, 2, 10] },
+      { arm: 'Control', n: 289, pct: [11, 27, 21, 20, 9, 3, 8] },
+    ],
+    ordinalStats: { commonOR: 1.18, ciLow: 0.88, ciHigh: 1.58, direction: 'positive' as const, pValue: 0.27 },
+    bedsidePearl: 'TWIST is a negative trial for non-contrast CT-only selection of wake-up stroke for tenecteplase. Numerically more patients achieved mRS 0-1 with tenecteplase (45% vs 38%) but the ordinal shift was not significant. The take-home is imaging-specific: NCCT alone cannot reliably select patients likely to benefit. MRI DWI-FLAIR mismatch (WAKE-UP trial) or CTP penumbra remain the evidence-based selection strategies where available.',
+    bottomLineSummary: 'In wake-up stroke patients selected by non-contrast CT (ASPECTS 4 or higher), tenecteplase 0.25 mg/kg within 4.5 hours of awakening did not significantly improve 90-day mRS distribution compared with no thrombolysis (adjusted OR 1.18, 95% CI 0.88-1.58, p=0.27). mRS 0-1 was achieved in 45% vs 38% (exploratory). Symptomatic ICH was 2% vs 1%. TWIST does not support non-contrast CT as the sole imaging modality for wake-up stroke thrombolytic selection.',
   }
 };

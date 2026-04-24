@@ -13,6 +13,8 @@ import { TrialVisualizationSection } from '../../components/trials/TrialVisualiz
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { DeltaBandChart } from '../../components/trials/archetypes/DeltaBandChart';
+import { GrottaBarChart } from '../../components/trials/archetypes/GrottaBarChart';
+import { SubgroupWell } from '../../components/trials/SubgroupWell';
 import { TeachingWell } from '../../components/trials/TeachingWell';
 import { BottomLineDrawer } from '../../components/trials/BottomLineDrawer';
 
@@ -2609,6 +2611,631 @@ const TrialPageNew: React.FC = () => {
           <BottomLineDrawer trialName="TRACE-III" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
             seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
             citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── INTERACT4 canary: W6.5.1 Archetype B (TRIALS_SPEC v1.1 §3) ──────────────
+  if (trialId === 'interact4-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory
+      ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
+      : 'Trial';
+
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+
+        {/* Section 1: Sticky header */}
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>INTERACT4</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+          {/* Section 2: H1 + question lede + source */}
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with suspected acute stroke and hypertension managed in the ambulance, does initiating intensive IV blood-pressure reduction before imaging diagnosis improve functional outcome at 90 days?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}
+              {tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}
+              {' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+
+          {/* Section 3: Population */}
+          {renderPopulationSection(tm)}
+
+          {/* Section 4: Primary outcome — Archetype B GrottaBarChart */}
+          {tm.mrsDistribution && tm.ordinalStats && (
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-xs text-slate-500 mt-0.5">Undifferentiated stroke (all patients)</p>
+              </div>
+              <div className="p-4">
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="none"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Section 5: Subgroup analyses */}
+          {tm.subgroupAnalyses && tm.subgroupAnalyses.length > 0 && tm.subgroupCaveat && (
+            <SubgroupWell analyses={tm.subgroupAnalyses} caveat={tm.subgroupCaveat} />
+          )}
+
+          {/* Section 6: Trial design */}
+          {renderTrialDesign(tm, 'Randomized Mar 2020 to Aug 2023 at 51 hospitals in China. Open-label, blinded endpoint (PROBE design).')}
+
+          {/* Section 7: Bedside pearl */}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+
+          {/* Section 8: See also */}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+            </div>
+          </div>
+        </div>
+
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="INTERACT4"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── DISTAL: W6.5.1 Archetype B (TRIALS_SPEC v1.1 §3) ────────────────────
+  if (trialId === 'distal-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory
+      ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>DISTAL</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with medium or distal vessel occlusion (M2, M3, M4, ACA, or PCA), does endovascular thrombectomy plus best medical treatment improve 90-day functional outcome compared with best medical treatment alone?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}
+              {tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}
+              {' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          {tm.mrsDistribution && tm.ordinalStats && (
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-xs text-slate-500 mt-0.5">All randomized patients (medium/distal vessel occlusion)</p>
+              </div>
+              <div className="p-4">
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="none"
+                />
+              </div>
+            </div>
+          )}
+          {renderTrialDesign(tm, 'Randomized December 2021 to July 2024 at 55 sites across 11 countries (predominantly Europe). International, assessor-blinded RCT. Any EVT technique allowed; treated within 24 hours of last known well.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/escape-mevo-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">ESCAPE-MeVO</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="DISTAL"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── MR ASAP: W6.5.1 Archetype B (TRIALS_SPEC v1.1 §3) ───────────────────
+  if (trialId === 'mr-asap-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory
+      ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>MR ASAP</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In ambulance-treated patients with presumed stroke within 3 hours of onset, does prehospital transdermal glyceryl trinitrate improve 90-day functional outcome compared with standard care?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}
+              {tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}
+              {' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          {tm.mrsDistribution && tm.ordinalStats && (
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-xs text-slate-500 mt-0.5">Total population (presumed stroke within 3 hours)</p>
+              </div>
+              <div className="p-4">
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="none"
+                />
+              </div>
+            </div>
+          )}
+          {renderTrialDesign(tm, 'Randomized April 2018 to February 2021 in the Netherlands. Phase 3, ambulance-based, open-label, blinded-endpoint trial. Stopped after 380 of planned 1200 randomizations due to a safety signal in ICH patients.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/right-2-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">RIGHT-2</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="MR ASAP"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── RACECAT: W6.5.1 Archetype B (TRIALS_SPEC v1.1 §3) ───────────────────
+  if (trialId === 'racecat-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory
+      ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>RACECAT</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In nonurban patients with suspected large vessel occlusion, does direct transport to a thrombectomy-capable comprehensive stroke center improve 90-day functional outcome compared with initial transport to the nearest local stroke center?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}
+              {tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}
+              {' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          {tm.mrsDistribution && tm.ordinalStats && (
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-xs text-slate-500 mt-0.5">Ischemic stroke or TIA population (primary endpoint, n=949)</p>
+              </div>
+              <div className="p-4">
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="none"
+                />
+              </div>
+            </div>
+          )}
+          {renderTrialDesign(tm, 'Population-based cluster-randomized trial in Catalonia, Spain. Enrollment March 2017 to June 2020. Stopped early for futility after interim analysis. Nonurban network with real-world ambulance routing.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/triage-stroke-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">TRIAGE-STROKE</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="RACECAT"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── TRIAGE-STROKE: W6.5.1 Archetype B (TRIALS_SPEC v1.1 §3) ─────────────
+  if (trialId === 'triage-stroke-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory
+      ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>TRIAGE-STROKE</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In IVT-eligible patients with suspected LVO stroke within 4 hours of onset, does direct routing to a thrombectomy-capable comprehensive stroke center improve 90-day functional outcome compared with initial transport to the nearest primary stroke center?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}
+              {tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}
+              {' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          {tm.mrsDistribution && tm.ordinalStats && (
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-xs text-slate-500 mt-0.5">Acute ischemic stroke population (primary endpoint, n=104)</p>
+              </div>
+              <div className="p-4">
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="none"
+                />
+              </div>
+            </div>
+          )}
+          {renderTrialDesign(tm, 'Randomized September 2018 to May 2022 across Denmark. National, multicenter, assessor-blinded trial. Stopped early at 171 of 424 planned patients. Ambulance-based randomization.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/racecat-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">RACECAT</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="TRIAGE-STROKE"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── ATTEST-2: W6.5.1 Archetype B (TRIALS_SPEC v1.1 §3) ──────────────────
+  if (trialId === 'attest-2-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory
+      ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ATTEST-2</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In acute ischemic stroke patients eligible for IV thrombolysis within 4.5 hours, is tenecteplase 0.25 mg/kg noninferior to alteplase 0.9 mg/kg for 90-day functional outcome?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}
+              {tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}
+              {' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          {tm.mrsDistribution && tm.ordinalStats && (
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-xs text-slate-500 mt-0.5">All treated patients (1777 patients, 39 UK centres)</p>
+              </div>
+              <div className="p-4">
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="none"
+                />
+              </div>
+            </div>
+          )}
+          {renderTrialDesign(tm, 'Randomized January 2017 to May 2023 at 39 UK stroke centres. Open-label, masked-endpoint (PROBE design). Primary analysis was noninferiority in the treated population.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/act-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">AcT</Link>
+              <Link to="/trials/trace-2-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">TRACE-2</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="ATTEST-2"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+            resultSubtype={tm.resultSubtype}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── TIMELESS: W6.5.1 Archetype B (TRIALS_SPEC v1.1 §3) ──────────────────
+  if (trialId === 'timeless-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory
+      ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>TIMELESS</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with LVO and perfusion-imaging evidence of salvageable tissue presenting 4.5 to 24 hours after stroke onset, does tenecteplase 0.25 mg/kg improve 90-day functional outcome compared with placebo?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}
+              {tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}
+              {' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          {tm.mrsDistribution && tm.ordinalStats && (
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-xs text-slate-500 mt-0.5">All randomized patients (458 patients, 77% underwent EVT)</p>
+              </div>
+              <div className="p-4">
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="none"
+                />
+              </div>
+            </div>
+          )}
+          {renderTrialDesign(tm, 'Multicenter, double-blind, placebo-controlled trial. ICA or MCA occlusion with CTP-confirmed salvageable tissue. 4.5-24 hours from onset. Published NEJM 2024. 77% of patients proceeded to EVT.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/trace-iii-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">TRACE-III</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="TIMELESS"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── TWIST: W6.5.1 Archetype B (TRIALS_SPEC v1.1 §3) ─────────────────────
+  if (trialId === 'twist-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory
+      ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>TWIST</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In wake-up stroke patients selected by non-contrast CT alone, does tenecteplase 0.25 mg/kg administered within 4.5 hours of awakening improve 90-day functional outcome compared with no thrombolysis?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}
+              {tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}
+              {' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          {tm.mrsDistribution && tm.ordinalStats && (
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-xs text-slate-500 mt-0.5">All randomized patients (578 patients, non-contrast CT selection)</p>
+              </div>
+              <div className="p-4">
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="none"
+                />
+              </div>
+            </div>
+          )}
+          {renderTrialDesign(tm, 'Randomized June 2017 to September 2021 across 10 countries. Investigator-initiated, multicenter, open-label trial. Wake-up stroke or unwitnessed onset; selected by NCCT alone (ASPECTS 4 or higher).')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/timeless-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">TIMELESS</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="TWIST"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
         )}
       </div>
     );

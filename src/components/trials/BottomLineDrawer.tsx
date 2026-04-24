@@ -43,6 +43,8 @@ export interface BottomLineDrawerProps {
   doi?: string;
   /** Controls the result badge in the handle. */
   trialResult?: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL' | 'HARM';
+  /** When trialResult='NEUTRAL' and resultSubtype='non-inferiority', badge reads "Non-inferiority met" with cobalt styling. */
+  resultSubtype?: 'non-inferiority' | 'superiority' | 'safety';
   /** When true, renders state A (skeleton). Switches to B on false. */
   isLoading?: boolean;
 }
@@ -58,47 +60,20 @@ const KEYFRAMES_CSS = `
   .bldr-bounce { animation: bounce-hint 0.6s ease-in-out 3; }
 `;
 
+const BADGE_BASE: React.CSSProperties = {
+  borderRadius: 9999,
+  padding: '1px 8px',
+  fontSize: 10,
+  fontWeight: 600,
+  lineHeight: 1.6,
+};
+
 const RESULT_BADGE: Record<string, React.CSSProperties> = {
-  POSITIVE: {
-    background: '#EEF2FF',
-    color: '#1746A2',
-    border: '1px solid #c7d2fe',
-    borderRadius: 9999,
-    padding: '1px 8px',
-    fontSize: 10,
-    fontWeight: 600,
-    lineHeight: 1.6,
-  },
-  NEGATIVE: {
-    background: '#FEF2F2',
-    color: '#dc2626',
-    border: '1px solid #fca5a5',
-    borderRadius: 9999,
-    padding: '1px 8px',
-    fontSize: 10,
-    fontWeight: 600,
-    lineHeight: 1.6,
-  },
-  NEUTRAL: {
-    background: '#F8FAFC',
-    color: '#64748b',
-    border: '1px solid #e2e8f0',
-    borderRadius: 9999,
-    padding: '1px 8px',
-    fontSize: 10,
-    fontWeight: 600,
-    lineHeight: 1.6,
-  },
-  HARM: {
-    background: '#FEF2F2',
-    color: '#7f1d1d',
-    border: '1px solid #fca5a5',
-    borderRadius: 9999,
-    padding: '1px 8px',
-    fontSize: 10,
-    fontWeight: 600,
-    lineHeight: 1.6,
-  },
+  POSITIVE: { ...BADGE_BASE, background: '#EEF2FF', color: '#1746A2', border: '1px solid #c7d2fe' },
+  NEGATIVE: { ...BADGE_BASE, background: '#FEF2F2', color: '#dc2626', border: '1px solid #fca5a5' },
+  NEUTRAL: { ...BADGE_BASE, background: '#F8FAFC', color: '#64748b', border: '1px solid #e2e8f0' },
+  NEUTRAL_NI: { ...BADGE_BASE, background: '#EEF2FF', color: '#1746A2', border: '1px solid #c7d2fe' },
+  HARM: { ...BADGE_BASE, background: '#FEF2F2', color: '#7f1d1d', border: '1px solid #fca5a5' },
 };
 
 function getHintKey(trialName: string) {
@@ -115,6 +90,7 @@ export const BottomLineDrawer: React.FC<BottomLineDrawerProps> = ({
   citation,
   doi,
   trialResult,
+  resultSubtype,
   isLoading = false,
 }) => {
   const [drawerState, setDrawerState] = useState<DrawerState>(isLoading ? 'A' : 'B');
@@ -180,12 +156,16 @@ export const BottomLineDrawer: React.FC<BottomLineDrawerProps> = ({
     setDrawerState((prev) => (prev === 'D' ? 'B' : 'D'));
   }
 
-  const resultLabel = trialResult ? {
-    POSITIVE: 'Positive',
-    NEGATIVE: 'Negative',
-    NEUTRAL: 'Neutral',
-    HARM: 'Harm Signal',
-  }[trialResult] : null;
+  const isNonInferiority = trialResult === 'NEUTRAL' && resultSubtype === 'non-inferiority';
+  const resultLabel = trialResult ? (
+    isNonInferiority ? 'Non-inferiority met' : {
+      POSITIVE: 'Positive',
+      NEGATIVE: 'Negative',
+      NEUTRAL: 'Neutral',
+      HARM: 'Harm Signal',
+    }[trialResult]
+  ) : null;
+  const badgeKey = isNonInferiority ? 'NEUTRAL_NI' : (trialResult ?? '');
 
   const drawerEl = (
     <div
@@ -224,8 +204,8 @@ export const BottomLineDrawer: React.FC<BottomLineDrawerProps> = ({
               <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 shrink-0">
                 Bottom Line
               </span>
-              {resultLabel && trialResult && (
-                <span style={RESULT_BADGE[trialResult]}>{resultLabel}</span>
+              {resultLabel && badgeKey && (
+                <span style={RESULT_BADGE[badgeKey]}>{resultLabel}</span>
               )}
               <span className="text-xs text-slate-500 truncate ml-0.5">
                 {trialName}

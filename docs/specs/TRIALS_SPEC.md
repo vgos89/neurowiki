@@ -1,7 +1,7 @@
 # TRIALS_SPEC.md — NeuroWiki Trial Page Design Specification
 
-**Version:** 1.0 — locked 2026-04-21
-**Status:** Locked — design-guardian co-sign issued 2026-04-21
+**Version:** 1.0 — locked 2026-04-21 | v1.1 — locked 2026-04-24
+**Status:** Locked — design-guardian co-sign issued 2026-04-21; v1.1 co-sign APPROVED 2026-04-24 (14/14 conditions resolved)
 **Owner:** Design Guardian
 **Mockup:** docs/specs/mockups/trial-reference.html
 **ADR:** docs/adrs/ADR-005-trials-spec-v1.md
@@ -18,7 +18,7 @@ The EXTEND trial (slug `extend-trial`) is the **Archetype A canary**: the first 
 ### 0.1 In scope
 
 - Trial detail pages at `/trials/:topicId`
-- All six visualization archetypes (§2-§7)
+- All eight visualization archetypes (§2-§7a)
 - Bottom-line drawer behavior (§10)
 - Population, inclusion, exclusion, intervention, safety, pearls, source sections (§11-§14)
 - Teaching surfaces: "How to read this chart" and "How to interpret this trial" (§8)
@@ -333,28 +333,176 @@ The "How to read this chart" teaching well appears immediately below the stat ra
 
 ## §3 Archetype B — Ordinal Shift (Grotta Bar)
 
-**Status: SPECIFIED — not yet implemented**
+**Status: SPECIFIED — implementation pending (W6.5.1)**
 **Applies to:** Trials where the primary outcome is a shift across the full modified Rankin Scale distribution (mRS 0-6), analyzed via ordinal logistic regression or common odds ratio.
-**Example trials:** MR CLEAN, DAWN, ESCAPE, DEFUSE-3
+**Example trials:** MR CLEAN, ESCAPE, SWIFT PRIME, REVASCAT, INTERACT4
+**Mockup reference:** Stage 7 (INTERACT4 reference)
 
-### 3.1 Description
+### 3.1 When to Use
 
-Two stacked horizontal bar charts, one per arm, each divided into seven color-coded bands representing mRS 0-6. The bands are color-coded by functional outcome severity. A connecting line between the two bars at each mRS threshold boundary shows the shift.
+- Trials with ordinal mRS distribution as the primary outcome
+- Primary statistic is a common odds ratio (cOR) from ordinal logistic regression
+- Always prefer Archetype B over dichotomizing a 7-level scale to a binary endpoint when ordinal data are available
 
-This visualization uses the existing `GrottaBarChart` component in `src/components/trials/TrialVisualizations.tsx`.
+### 3.2 Visual Anatomy
 
-### 3.2 Data Contract
+Two stacked horizontal bars, one per arm, each rendered at 100% container width. Seven segments per bar represent mRS 0 through 6, with widths proportional to the observed percentage in each category.
 
-```typescript
-// Requires a visualizations entry of type 'grotta' in TRIAL_VISUALIZATIONS
-// with mRS band percentages for treatment and control arms
+**Segment color gradient (mRS 0 to 6):**
+
+| mRS | Hex | Clinical meaning |
+|---|---|---|
+| 0 | `#10b981` | No symptoms |
+| 1 | `#34d399` | No significant disability |
+| 2 | `#fbbf24` | Slight disability |
+| 3 | `#fb923c` | Moderate disability |
+| 4 | `#f97316` | Moderately severe disability |
+| 5 | `#ef4444` | Severe disability |
+| 6 | `#991b1b` | Death |
+
+**Segment text color:** mRS 0 and mRS 3-6 use white text. mRS 1 (`#34d399`) and mRS 2 (`#fbbf24`) are lighter fills and require dark text: `color: #0f172a`.
+
+**Label rule:** Show the percentage text centered inside the segment when the segment width is at least 5% of the bar. Segments narrower than 5% render no label. Exception: on mobile viewports (≤375px), segments narrower than 9% may be unlabeled; their value is shown in a tooltip on tap instead. This exception accommodates the physical width of narrow segments at 375px — a 7% segment at 375px renders at roughly 19px wide, insufficient for a legible percentage. The 5% rule governs all other viewports.
+
+**Bar height:** 28px base (mobile). Desktop override: 32px via `@media (min-width: 768px)`.
+
+**Legend:** Below both bars, a flex-wrap row of seven color chips with mRS level number and brief plain-text meaning. Both mobile and desktop use the same `display: flex; flex-wrap: wrap; gap: 4px` layout — no two-column grid.
+
+**Arm label:** Arm name renders above its bar in `font-size: 12px`. For a POSITIVE trial, the winning arm name renders in cobalt `#0E2D6B` (font-weight 600); the other arm renders in slate-500 `#64748b` (font-weight 500). For NEGATIVE and NEUTRAL trials, both primary-bar arm names render in slate-500 (font-weight 500). Per §12.2 cobalt accent rule. Exception for subgroup pairs: see §3.4a.
+
+### 3.3 Stat Row
+
+Immediately below the bars and legend, a hairline-top stat row:
+
+```
+border-top: 1px solid #f1f5f9; padding-top: 12px; margin-top: 10px;
 ```
 
-The `howToReadChart` data for Archetype B must include an explanation of how to read stacked proportions and what a leftward shift indicates.
+Three items, mobile stacked (label left, value right) / desktop inline (flex row, gap 32px):
 
-### 3.3 Teaching Well
+1. **Common OR** — point estimate, labeled `"Common OR"`
+2. **95% CI** — with info tooltip icon (§9)
+3. **Shift in distribution** (desktop) / **Shift** (mobile ≤375px) — one of three states:
 
-Q&A pairs (minimum 3) must explain: what the bars show, what a left-shift means, and what the common odds ratio captures that the bar does not.
+| CI position relative to 1 | Text | Color |
+|---|---|---|
+| CI crosses 1 | "Not significant" | `#64748b` |
+| OR > 1 and CI excludes 1 | "Favors treatment" | `#047857` |
+| OR < 1 and CI excludes 1 | "Favors control" | `#ef4444` |
+
+For HARM-coded trials (where OR > 1 but the primary outcome is an adverse event), the direction text color is red `#ef4444`. The winning-arm rule (§12.2) inverts to accent the control arm.
+
+### 3.4 Subgroup Handling
+
+When a trial has clinically meaningful subgroup analyses that appear in the primary paper (for example, hemorrhagic vs ischemic stroke in INTERACT4), render subgroup Grotta Bar pairs inside a collapsible teaching well below the primary result section. Default state: collapsed.
+
+**Subgroup well header:** "Subgroup analyses" with chevron (same visual treatment as §8.1).
+
+**Each subgroup pair renders (in order):**
+1. Heading label (e.g., "Hemorrhagic stroke subgroup")
+2. Treatment bar + arm label
+3. Control bar + arm label
+4. Stat row (common OR, 95% CI, direction)
+
+**Mandatory amber caveat** at the bottom of the subgroup well, after all pairs:
+
+```css
+background: #fef3c7;
+border-left: 2px solid #fbbf24;
+border-radius: 2px;
+padding: 10px 12px;
+margin-top: 12px;
+font-size: 12px;
+color: #92400e;
+line-height: 1.5;
+```
+
+Caveat text pattern: "These subgroup analyses were not part of the pre-specified hierarchical testing plan. They are hypothesis-generating only and should not be used to guide treatment decisions independently of the primary result." Adapt hedge language to match the paper's own framing exactly.
+
+**Constraints:**
+- Do NOT render subgroup analyses outside this teaching well
+- Do NOT surface subgroup results in the bedsidePearl or bottom-line drawer unless the paper's abstract or conclusions lead with the subgroup finding
+
+### 3.4a Subgroup Accent Rule and "Better Outcome" Pill
+
+**Subgroup accent rule (NEUTRAL primary exception):**
+
+When a trial's overall primary result is NEUTRAL (or NEGATIVE), the primary-bar pair follows §12.2 strictly — no cobalt accent on either arm. However, each subgroup Grotta Bar pair inside the collapsible subgroup well MAY apply the cobalt winning-arm accent (§12.2) to the subgroup-winning arm, independent of the primary `trialResult`. This is the only case where §12.2's trial-level rule is overridden at the subgroup level.
+
+Conditions for applying the subgroup accent:
+1. The subgroup analyses appear explicitly in the primary paper's methods or results
+2. The subgroup well is rendered with the mandatory amber caveat (§3.4)
+3. The primary bar pair retains the trial-level rule — no accent for NEUTRAL/NEGATIVE primary
+
+Rationale: Surfacing directional signals within a constrained, caveat-wrapped teaching well is clinically useful without implying confirmatory evidence. The amber caveat is the guard; the subgroup scope boundary (collapsible well) is the container.
+
+Cross-reference: §12.2 Winning-Arm Cobalt Accent Rule. §12.2 governs the §12 Intervention section rows; this section (§3.4a) governs Grotta Bar pair rows within the §3.4 subgroup well.
+
+**"Better outcome" pill:**
+
+Each subgroup Grotta Bar pair's winning arm also carries a "Better outcome" pill adjacent to the arm name, to the right of the arm label:
+
+```css
+background: #1746A2;    /* cobalt */
+color: white;
+font-size: 10px;
+font-weight: 500;
+padding: 2px 8px;
+border-radius: 4px;
+white-space: nowrap;
+```
+
+Display text: "Better outcome" (title case). This pill is shown only inside the subgroup well — never on primary-bar arm labels.
+
+When the primary result is POSITIVE, the primary-bar arm labels do NOT carry this pill; the §12.2 cobalt row accent on the §12 Intervention section already signals the winning arm. The "Better outcome" pill is scoped to subgroup pairs where the primary layout provides no arm-level accent.
+
+### 3.5 Teaching Well: "How to Read This Chart"
+
+Same visual treatment as §8.1. Three mandatory Q&A pairs:
+
+1. Q: "What does each colored bar show?"
+   A: Each bar represents 100% of patients in that arm, divided into seven color segments by final mRS score at 90 days. Greener segments (left) indicate better outcomes; darker red and dark red (right) indicate severe disability or death.
+
+2. Q: "What is a shift in the distribution?"
+   A: A leftward shift means more patients ended up with lower (better) mRS scores in one arm compared to the other. The common odds ratio captures this shift across the entire scale, not just at one threshold.
+
+3. Q: "What does the common odds ratio mean?"
+   A: A common OR greater than 1 means the treatment arm had consistently better outcomes across the scale. An OR of 1.5 means each mRS level was approximately 1.5 times more likely to be achieved (or surpassed) in the treatment arm. Values near 1 with CI crossing 1 indicate no significant shift.
+
+Content ownership follows §8.3.
+
+### 3.6 Data Contract
+
+The following fields drive Archetype B rendering. They are documented here and added to `TrialMetadata` in the W6.5.1 implementation prompt (see §18.3):
+
+```typescript
+mrsDistribution?: {
+  arm: string;    // arm name, e.g. "EVT" or "Medical"
+  n:   number;    // patients enrolled in this arm
+  pct: number[];  // exactly 7 values: mRS 0-6 percentages (must sum to ~100)
+}[];
+
+ordinalStats?: {
+  commonOR:  number;    // common odds ratio point estimate
+  ciLow:     number;    // lower bound of 95% CI
+  ciHigh:    number;    // upper bound of 95% CI
+  direction: 'positive' | 'negative' | 'neutral' | 'harm';
+};
+
+subgroupAnalyses?: {
+  label:        string;                // subgroup name, e.g. "Hemorrhagic stroke"
+  treatment:    { pct: number[] };     // 7-value mRS pct array for treatment arm
+  control:      { pct: number[] };     // 7-value mRS pct array for control arm
+  ordinalStats?: {
+    commonOR: number;
+    ciLow:    number;
+    ciHigh:   number;
+    direction: string;
+  };
+}[];
+```
+
+No additional data fields are required for bar rendering beyond `mrsDistribution[].pct`.
 
 ---
 
@@ -431,6 +579,212 @@ Q&A pairs must explain: how to read a box plot, what the whiskers represent, and
 
 ---
 
+## §7a Archetype G — Single-Arm / Benchmark-Threshold
+
+**Status: SPECIFIED — implementation pending (W6.6.1)**
+**Applies to:** Single-arm prospective studies (typically FDA 522 post-market studies or prospective registries) with a pre-specified safety or efficacy threshold that the observed event rate must meet or beat.
+**Example trials:** WEAVE (Wingspan intracranial stent post-market study)
+**Mockup reference:** Stage 8 (WEAVE reference)
+
+### 7a.1 When to Use
+
+- Single-arm studies where no concurrent randomized control arm exists
+- The study protocol pre-specified a numerical benchmark before enrollment began
+- The primary analysis is whether the observed event rate meets (or beats) the benchmark
+
+Does NOT apply to:
+- Non-randomized comparison studies that compare observed rates to historical cohorts without a pre-specified threshold
+- Registries without a protocol-specified benchmark (archetype H or future pattern required)
+- The B_PROUD cohort study — no pre-specified threshold exists; remains parked pending a separate pattern
+
+### 7a.2 Visual Anatomy
+
+A horizontal track visualization representing the event rate on a linear scale from 0% to 2x the benchmark (minimum scale max: 10%).
+
+**Track specification:**
+
+```css
+height: 14px;           /* base (mobile) */
+border-radius: 4px;
+background: #f1f5f9;    /* slate-100 — unfilled track */
+overflow: visible;       /* allows CI band and threshold line to extend */
+position: relative;
+```
+
+Desktop override via `@media (min-width: 768px)`: `height: 18px`.
+
+**Filled portion:** width = (observedRate / scaleMax) * 100%. `border-radius: 4px 0 0 4px` (rounds only the left edge).
+
+- Color when rate is below benchmark (benchmark met): `#10b981`
+- Color when rate is at or above benchmark (benchmark failed): `#ef4444`
+
+**Confidence interval band:** a semi-transparent band at 20% opacity of the fill color, spanning (ciLow / scaleMax) to (ciHigh / scaleMax) as a percentage of track width. Renders behind the filled portion as an absolutely-positioned overlay.
+
+**Threshold line:** a dashed vertical line at (benchmark / scaleMax) * 100% of track width:
+
+```css
+border-left: 2px dashed #92400e;
+position: absolute; top: -6px; bottom: -20px;
+```
+
+**Callout labels:**
+- Observed rate: above the fill's right edge at `top: -22px; transform: translateX(-50%)` — `font-size: 12px; font-weight: 600`
+- Benchmark label: above the threshold line at `top: -22px; transform: translateX(-50%)` — `font-size: 11px; color: #92400e; font-weight: 600`
+- Scale ticks: below the track — `font-size: 11px; color: #94a3b8`
+  - Mobile: 3 ticks at 0%, midpoint, and scale maximum
+  - Desktop: 5 ticks at 0%, 25%, 50%, 75%, and scale maximum (expressed as percentages of the scale range)
+
+### 7a.3 Stat Row
+
+Immediately below the track, two lines of plain text:
+
+```
+font-size: 13px; color: #475569; line-height: 1.8;
+```
+
+1. **CI line:** `"95% CI: X% to Y% ([method])"` — method is the construction method used, e.g. "Clopper-Pearson exact"
+2. **Result line:** benchmark-met pill followed by a plain sentence
+
+**Benchmark-met pill:**
+
+```css
+/* Met */
+background: rgba(16, 185, 129, 0.12);
+color: #047857;
+border-radius: 4px;
+padding: 3px 10px;
+font-size: 11px;
+font-weight: 600;
+/* No text-transform — render as title case: "Benchmark met" */
+
+/* Failed */
+background: rgba(239, 68, 68, 0.12);
+color: #991b1b;
+border-radius: 4px;
+padding: 3px 10px;
+font-size: 11px;
+font-weight: 600;
+/* No text-transform — render as title case: "Benchmark failed" */
+```
+
+Plain sentence pattern: `"The observed [event label] rate of [X]% met the pre-specified benchmark of [Y]% (upper CI [Z]%, below benchmark)."`
+
+### 7a.4 Historical Context Section
+
+This section is **promoted** — it renders as a first-class section immediately after Primary Outcome and before Population in the §1.2 mandatory section order, NOT inside a teaching well.
+
+**Mandatory section order amendment for Archetype G:**
+
+```
+1.  Title block                (§1.3)
+2.  Primary Outcome            (§7a: track + stat row + teaching well)
+2a. Historical Context         (§7a.4 — Archetype G only, 3+ comparators required)
+3.  Population                 (§11.1)
+...
+```
+
+If fewer than 3 historical comparators can be identified, omit the section entirely. Do not render a partial table.
+
+**Visual treatment:**
+
+```css
+background: #f8fafc;
+border-top: 1px solid #f1f5f9;    /* section separator — no border-radius, no margin-bottom */
+padding: 20px;
+```
+
+**Mandatory amber caveat (first element in the section, before the table):**
+
+```css
+background: #fef3c7;
+border-left: 2px solid #fbbf24;
+border-radius: 2px;
+padding: 10px 12px;
+font-size: 12px;
+color: #92400e;
+margin-bottom: 14px;
+line-height: 1.5;
+```
+
+Caveat text pattern: "These historical trials differ in patient selection, enrollment era, operator experience, device generation, and study design. They are shown for orientation only and do not represent a randomized comparison."
+
+**Table columns:**
+- Desktop: Trial | Year | N | Design | Rate
+- Mobile: Design column is omitted
+
+**Current trial row highlighting:**
+
+```css
+background: #EEF2FF;    /* cobalt-50 */
+color: #0E2D6B;         /* cobalt-700 */
+font-weight: 600;
+```
+
+All other rows: `font-size: 13px; color: #475569`.
+
+Table header: `font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b`.
+
+### 7a.5 Teaching Well: "How to Read This Chart"
+
+Same visual treatment as §8.1. Three mandatory Q&A pairs:
+
+1. Q: "What is different about a single-arm trial?"
+   A: There is no concurrent randomized control group. All patients received the device or treatment. A pre-specified benchmark (set before enrollment) serves as the reference instead of a control arm.
+
+2. Q: "What is a pre-specified benchmark?"
+   A: Before the study began, the investigators and regulators agreed on a threshold that the observed event rate must meet. Meeting the benchmark is not the same as proving superiority over another treatment.
+
+3. Q: "Why can we not compare this directly to other trials?"
+   A: Different trials enroll different patients, use different levels of operator experience and device generations, and measure events differently. Historical rates in the table are shown for orientation, not for statistical comparison.
+
+Content ownership follows §8.3.
+
+### 7a.6 Drawer Behavior and trialResult Extension
+
+`trialResult` values for Archetype G extend the union (implementation deferred to W6.6.1):
+
+| Value | Result word in collapsed bar |
+|---|---|
+| `'SAFETY_MET'` | Safety benchmark met |
+| `'SAFETY_FAILED'` | Safety benchmark exceeded |
+| `'INCONCLUSIVE'` | Inconclusive |
+
+Until W6.6.1 ships: use `'POSITIVE'` as a stand-in for `'SAFETY_MET'` and `'NEGATIVE'` for `'SAFETY_FAILED'`. The BottomLineDrawer rebuild is tracked as W6.6.1; do NOT implement prematurely.
+
+### 7a.7 Data Contract
+
+The following fields drive Archetype G rendering. Added to `TrialMetadata` in the W6.6.1 implementation prompt (see §18.3):
+
+```typescript
+benchmark?: {
+  rate:       number;    // pre-specified threshold percentage, e.g. 4.0
+  label:      string;    // short event description, e.g. "72-hr stroke/death/MI"
+  scaleMax?:  number;    // override auto-computed scale max (2x benchmark) if needed
+};
+
+observedEventRate?: {
+  rate:       number;    // observed percentage, e.g. 2.6
+  ciLow:      number;    // lower bound of 95% CI, e.g. 1.8
+  ciHigh:     number;    // upper bound of 95% CI, e.g. 3.6
+  ciMethod:   string;    // CI construction method, e.g. "Clopper-Pearson exact"
+  numEvents:  number;    // count of events
+  total:      number;    // total patients in denominator
+};
+
+historicalContext?: {
+  rows: {
+    label:          string;    // trial or study name
+    year:           number;
+    n:              number;
+    design:         string;    // e.g. "RCT" or "Registry"
+    rate:           number;    // event rate percentage
+    isCurrentTrial?: boolean;  // true highlights the row in cobalt-50
+  }[];
+} | null;    // null explicitly omits the section
+```
+
+---
+
 ## §8 Teaching Surfaces
 
 Trial pages have two collapsible teaching wells. Both use the same visual treatment. Neither auto-expands on page load. Both expand on tap/click.
@@ -471,7 +825,7 @@ Last answer: `margin-bottom: 0`
 2. Q: "What should I look at first?" A: explains counting filled dots per group, delta = absolute benefit, cobalt band marks the extra patients
 3. Q: "What does it mean for my patient?" A: states the absolute difference and NNT in plain language
 
-For archetypes B-F, the Q&A content is archetype-specific (see §3-§7).
+For archetypes B-G, the Q&A content is archetype-specific (see §3, §4, §5, §6, §7, §7a).
 
 **Content ownership:** content-writer drafts all Q&A pairs. medical-scientist source-backs any claim made in the answer text. clinical-reviewer verifies that no answer text overstates the evidence or introduces hedging drift. See §8.3.
 
@@ -804,6 +1158,8 @@ color: #475569;
 
 Rule comment required in JSX: `{/* Winning-arm accent: applies only when trialResult === 'POSITIVE'. Negative/neutral: both arms plain. Harm: control arm gets accent. */}`
 
+**Exception for Grotta Bar subgroup pairs:** inside the §3.4 subgroup well, individual subgroup pairs may apply the cobalt accent to the subgroup-winning arm even when the primary `trialResult` is NEUTRAL or NEGATIVE, provided the mandatory amber caveat is present. This is the only override of the trial-level rule. See §3.4a for the full Subgroup Accent Rule.
+
 ---
 
 ## §13 Safety Section
@@ -1045,7 +1401,14 @@ No standalone statistician agent. Statistical interpretation is owned jointly by
 
 ### 18.2 New files required (authored in Prompt 3)
 
-None required at the component level — the existing component set covers all six archetypes. The primary change is a rebuild of `TrialPageNew.tsx` to implement this spec's anatomy and section order.
+Archetype A reuses existing components. Archetypes B and G require new components (tracked as W6.5.1 and W6.6.1 respectively):
+
+| Component | Archetype | Task |
+|---|---|---|
+| `GrottaBarChart.tsx` | B — Ordinal Shift | W6.5.1 |
+| `BenchmarkThresholdChart.tsx` | G — Single-Arm Benchmark | W6.6.1 |
+
+The primary change for Archetype A canary is a rebuild of `TrialPageNew.tsx` to implement this spec's anatomy and section order.
 
 ### 18.3 TrialMetadata Schema Extensions
 
@@ -1059,7 +1422,7 @@ exclusionCriteria?: string[];   // §11.3: one string per criterion
 
 // Teaching well content
 howToReadChart?: {
-  archetypeId: 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
+  archetypeId: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
   pairs: Array<{ q: string; a: string }>;  // Minimum 3 pairs
 };
 
@@ -1073,6 +1436,81 @@ bedsidePearl?: string;  // §10.3: single plain-text string, no em dashes
 ```
 
 For the EXTEND canary, all five fields are populated. For all other trials, the fields are omitted until that trial's rebuild swarm.
+
+### 18.3a Schema Extensions for Archetype B (Grotta Bar) — Flagged for W6.5.1
+
+These fields are documented here and added to `TrialMetadata` in the W6.5.1 implementation prompt. Do NOT add them before that prompt.
+
+```typescript
+// Archetype B: ordinal mRS distribution data
+mrsDistribution?: {
+  arm: string;    // arm name, e.g. "EVT" or "Medical"
+  n:   number;    // patients enrolled in this arm
+  pct: number[];  // exactly 7 values for mRS 0-6; must sum to ~100
+}[];
+
+// Archetype B: ordinal shift statistics
+ordinalStats?: {
+  commonOR:  number;    // common odds ratio point estimate
+  ciLow:     number;    // lower bound of 95% CI
+  ciHigh:    number;    // upper bound of 95% CI
+  direction: 'positive' | 'negative' | 'neutral' | 'harm';
+};
+
+// Archetype B: subgroup pairs for teaching well (§3.4)
+subgroupAnalyses?: {
+  label:         string;
+  treatment:     { pct: number[] };
+  control:       { pct: number[] };
+  ordinalStats?: { commonOR: number; ciLow: number; ciHigh: number; direction: string };
+}[];
+```
+
+### 18.3b Schema Extensions for Archetype G (Benchmark-Threshold) — Flagged for W6.6.1
+
+These fields are documented here and added to `TrialMetadata` in the W6.6.1 implementation prompt. Do NOT add them before that prompt.
+
+```typescript
+// Archetype G: pre-specified benchmark
+benchmark?: {
+  rate:      number;   // threshold percentage, e.g. 4.0
+  label:     string;   // event description, e.g. "72-hr stroke/death/MI"
+  scaleMax?: number;   // override auto-computed scale max (2x benchmark)
+};
+
+// Archetype G: observed event rate
+observedEventRate?: {
+  rate:      number;   // observed percentage, e.g. 2.6
+  ciLow:     number;   // lower bound of 95% CI
+  ciHigh:    number;   // upper bound of 95% CI
+  ciMethod:  string;   // e.g. "Clopper-Pearson exact"
+  numEvents: number;
+  total:     number;
+};
+
+// Archetype G: historical comparators (§7a.4)
+historicalContext?: {
+  rows: {
+    label:          string;
+    year:           number;
+    n:              number;
+    design:         string;
+    rate:           number;
+    isCurrentTrial?: boolean;
+  }[];
+} | null;
+```
+
+### 18.3c trialResult Union Extension — Flagged for W6.6.1
+
+The `BottomLineDrawer` `trialResult` union adds three values in W6.6.1:
+
+```typescript
+trialResult?: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL' | 'HARM'
+            | 'SAFETY_MET' | 'SAFETY_FAILED' | 'INCONCLUSIVE';
+```
+
+Until W6.6.1: use `'POSITIVE'` as stand-in for `'SAFETY_MET'`, `'NEGATIVE'` for `'SAFETY_FAILED'`.
 
 ### 18.4 Data Population for EXTEND Canary
 
@@ -1162,3 +1600,5 @@ Every trial page rebuild must pass all items before the PR opens. Partial passes
 | Version | Date | Author | Changes |
 |---|---|---|---|
 | 1.0 | 2026-04-21 | orchestrator | Initial authoring. Six archetypes specified; Archetype A fully implemented. Companion mockup: trial-reference.html. ADR-005 records major decisions. Pending design-guardian mockup co-sign. |
+| 1.1 | 2026-04-24 | orchestrator | Expanded §3 Archetype B (Grotta Bar) from stub to full spec: visual anatomy, 7-segment color gradient, label rules, stat row with direction logic, subgroup handling in teaching well, data contract. Added §7a Archetype G (benchmark-threshold): track viz, CI band, threshold line, historical context as promoted first-class section, drawer extension. Added §18.3a-c schema fields (Archetype B fields, Archetype G fields, trialResult union extension) flagged for W6.5.1 and W6.6.1. Companion mockup: Stage 7 (INTERACT4) + Stage 8 (WEAVE) added to trial-reference.html. ADR-006 records decisions. Design-guardian co-sign issued 2026-04-24 (APPROVE-WITH-CONDITIONS, 14 conditions). |
+| 1.1 patch | 2026-04-24 | orchestrator | Resolved all 14 design-guardian conditions. §3.2: corrected bar height (28px mobile / 32px desktop), added mRS text-color rule (mRS 1+2 dark text), aligned label threshold (5% rule + mobile ≤375px exception at 9%), fixed legend to flex-wrap row. §3.3: stat-row label standardized to "Shift in distribution" (desktop) / "Shift" (mobile). §3.4: amber caveat CSS aligned to mockup (left-border, #fef3c7, border-radius 2px). §3.4a (new): Subgroup Accent Rule (NEUTRAL primary exception) and "Better outcome" pill documented. §7a.2: track height (14px mobile / 18px desktop), background (#f1f5f9), threshold line (top:-6px bottom:-20px), callout label positions, scale tick counts. §7a.3: benchmark-met pill aligned to mockup (rgba bg, #047857, fw 600, title case). §7a.4: historical-section container (border-top, no border-radius), caveat CSS unified to left-border treatment. §8.1: "B-F" → "B-G". §12.2: cross-ref to §3.4a subgroup exception. §18.2: updated component table (GrottaBarChart, BenchmarkThresholdChart). §18.3: archetypeId union includes 'G'. ADR-006 updated (bar height, track dims, §3.4a decisions). |

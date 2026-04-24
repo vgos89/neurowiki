@@ -192,6 +192,34 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Blocking:** Archetype B (Grotta Bar mRS shift component) and Archetype G (single-arm registry display) not yet implemented. Cannot build pages without components.
 - **Rollback:** n/a (not started)
 
+#### W6.5.1 — GrottaBarChart component implementation — Class C
+- **Status:** planned — 2026-04-24
+- **User-visible goal:** Trials with ordinal mRS shift outcomes (Archetype B) render the Grotta Bar stacked visualization matching TRIALS_SPEC v1.1 §3 and trial-reference.html Stage 7 (INTERACT4 canary)
+- **Non-goals:** no Archetype G work; no B_PROUD rebuild; no citation registry entries required (stub claimId per ADR-005 Option C)
+- **Files likely touched:** src/components/trials/GrottaBarChart.tsx (new) · src/data/trialData.ts (mrsDistribution, ordinalStats, subgroupAnalyses fields on INTERACT4 entry) · src/pages/trials/TrialPageNew.tsx (Archetype B branch for INTERACT4) · src/types/trial.ts (new optional fields)
+- **Acceptance checks:** tsc clean · build green · INTERACT4 renders Grotta Bar primary + collapsed subgroup well · mRS 1+2 dark text (#0f172a) · amber caveat present · BottomLineDrawer trialResult=NEUTRAL · no em dashes in rendered content
+- **Clinical impact:** low — presentation; no algorithm changes
+- **Rollback plan:** git revert; INTERACT4 falls back to prior page or Archetype A stub; new component is additive
+
+#### W6.6.1 — BenchmarkThresholdChart + BottomLineDrawer extension — Class C
+- **Status:** planned — 2026-04-24
+- **User-visible goal:** Single-arm benchmark trials (Archetype G) render the track-and-threshold visualization with promoted historical context matching TRIALS_SPEC v1.1 §7a and trial-reference.html Stage 8 (WEAVE canary)
+- **Non-goals:** no Grotta Bar work; no B_PROUD rebuild; no citation registry entries required
+- **Files likely touched:** src/components/trials/BenchmarkThresholdChart.tsx (new) · src/components/trials/BottomLineDrawer.tsx (SAFETY_MET / SAFETY_FAILED / INCONCLUSIVE badge variants) · src/data/trialData.ts (benchmark, observedEventRate, historicalContext fields on WEAVE entry) · src/pages/trials/TrialPageNew.tsx (Archetype G branch for WEAVE) · src/types/trial.ts (Archetype G optional fields + trialResult union extension)
+- **Acceptance checks:** tsc clean · build green · WEAVE renders track + CI band + dashed threshold + historical table (5 rows, amber caveat first, WEAVE row cobalt-50 highlight) · drawer badge SAFETY_MET renders correctly · no em dashes in rendered content
+- **Clinical impact:** low — presentation; no algorithm changes
+- **Rollback plan:** git revert; WEAVE falls back to prior page; BottomLineDrawer badge extension is additive (existing POSITIVE/NEGATIVE/NEUTRAL/HARM cases unaffected)
+
+#### W6.6.2 — B_PROUD rebuild approach decision — Class A
+- **Status:** planned — 2026-04-24
+- **User-visible goal:** n/a (decision artifact only)
+- **Non-goals:** no code; no component build; no clinical content changes
+- **Context:** B_PROUD is a prospective observational cohort study of the Wingspan stent. Archetype G does not apply (no pre-specified benchmark; ADR-006 Decision 5). Options: (a) custom Archetype H for prospective-cohort studies if multiple similar trials exist in the corpus; (b) simplified descriptive layout (no visualization) until a pattern is warranted; (c) permanent park if the trial has insufficient clinical relevance for the target audience. V decides.
+- **Files likely touched:** docs/adrs/ADR-007-archetype-h-or-b-proud-decision.md (new, if decision is (a)); TASKS.md (this entry updated to reflect decision)
+- **Acceptance checks:** decision recorded in ADR or TASKS note · B_PROUD rebuild path clear
+- **Clinical impact:** none (decision only)
+- **Rollback plan:** n/a
+
 #### W6.4 — TrialPageNew.tsx rebuild (Prompt 3) — Class C
 - **Status:** done — 2026-04-21
 - **User-visible goal:** EXTEND trial page renders per TRIALS_SPEC.md v1.0 and trial-reference.html mockup; sticky header, dot grid, delta band, teaching well, interpret well, 4-state bottom-line drawer
