@@ -1530,7 +1530,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'SKIP Trial',
     subtitle: 'Mechanical Thrombectomy Without vs With IV Thrombolysis',
     category: 'Neuro Trials',
-    trialResult: 'NEUTRAL',
+    trialResult: 'NEGATIVE',
     stats: {
       sampleSize: {
         value: '204',
@@ -1583,10 +1583,49 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: '',
     source: 'Suzuki et al. (JAMA 2021)',
+    doi: '10.1001/jama.2021.4807',
     specialDesign: 'non-inferiority',
-    keyMessage: 'SKIP was directionally reassuring for direct EVT but statistically inconclusive.',
+    archetypeId: 'A' as const,
+    keyMessage: 'SKIP tested direct EVT against low-dose alteplase plus EVT in Japan and failed to demonstrate non-inferiority; statistically inconclusive.',
     listCategory: 'thrombectomy',
     listDescription: 'Japanese direct-EVT study that was inconclusive for noninferiority.',
+    howToReadChart: [
+      {
+        question: 'What does the bar show?',
+        answer: 'The bar compares the proportion of patients reaching mRS 0-2 (functional independence) at 90 days in the thrombectomy-alone arm versus the alteplase-plus-thrombectomy arm. SKIP used Japan-approved low-dose alteplase 0.6 mg/kg in the bridging arm, not the Western 0.9 mg/kg dose.',
+      },
+      {
+        question: 'How is non-inferiority judged here?',
+        answer: 'The pre-specified non-inferiority margin was a one-sided lower 97.5% CI bound of common OR greater than 0.75. The observed OR was 1.09 (95% CI 0.72-1.64) with P for non-inferiority = 0.18. Because the lower CI bound (0.72) fell below the 0.75 threshold, non-inferiority was not met despite numerically similar mRS 0-2 rates (59.4% vs 57.3%).',
+      },
+      {
+        question: 'What about safety and secondary outcomes?',
+        answer: 'Any intracranial hemorrhage was significantly lower with thrombectomy alone (19.6% vs 28.4%, P = 0.04). Symptomatic ICH was numerically lower (4.9% vs 7.8%, not significant). 90-day mortality was similar (11.8% vs 13.7%).',
+      },
+    ],
+    /* claimId: skip-noninferiority | source: Suzuki JAMA 2021 */
+    howToInterpret: {
+      proves: 'In a Japanese population using low-dose alteplase 0.6 mg/kg, mRS 0-2 rates at 90 days were numerically similar between thrombectomy alone and bridging alteplase plus thrombectomy (59.4% vs 57.3%, OR 1.09). However, the pre-specified non-inferiority threshold was not met: the lower 95% CI bound (0.72) fell below the margin of 0.75. Any ICH was significantly lower with thrombectomy alone (19.6% vs 28.4%, P = 0.04).',
+      doesNotProve: 'Similar point estimates do not establish non-inferiority; the confidence interval was too wide to exclude clinically meaningful inferiority. SKIP does not support omitting alteplase before thrombectomy. Findings do not generalize to standard-dose alteplase (0.9 mg/kg) or to non-Japanese populations, and cannot be extrapolated to settings outside the 4.5-hour window.',
+      cautions: 'The bridging comparator used Japan-approved 0.6 mg/kg alteplase, which is lower-intensity than the 0.9 mg/kg dose used in MR CLEAN-NO IV and SWIFT DIRECT. Even against this weaker comparator, non-inferiority failed. The trial was open-label and modestly sized (N=204), limiting precision. Numerical direction favored thrombectomy alone, but statistical inconclusiveness must be respected at the bedside.',
+    },
+    /* claimId: skip-bedside | source: Suzuki JAMA 2021 */
+    bedsidePearl: 'Do not skip alteplase before thrombectomy on the basis of SKIP. Even with low-dose Japanese alteplase as comparator, non-inferiority failed. Give standard-dose IV thrombolysis in eligible LVO patients while activating the EVT pathway in parallel.',
+    bottomLineSummary: 'Japanese non-inferiority trial of thrombectomy alone vs low-dose alteplase plus thrombectomy in LVO stroke within 4.5 hours. mRS 0-2 was numerically similar (59.4% vs 57.3%) but non-inferiority was not met (OR 1.09, 95% CI 0.72-1.64, lower bound below 0.75 margin). Lower any-ICH with direct EVT.',
+    inclusionCriteria: [
+      'Age 18 or older',
+      'Acute ischemic stroke with LVO of intracranial ICA, M1, M2, or basilar artery',
+      'NIHSS 6 to 29',
+      'Eligible for IV thrombolysis',
+      'Treatment within 4.5 hours of last known well',
+      'Pre-stroke mRS 0 or 1',
+    ],
+    exclusionCriteria: [
+      'Contraindication to IV alteplase',
+      'Pre-stroke mRS greater than 1',
+      'NIHSS less than 6 or greater than 29',
+      'Presentation beyond 4.5 hours from last known well',
+    ],
   },
   'mr-clean-no-iv-trial': {
     id: 'mr-clean-no-iv-trial',
@@ -1646,10 +1685,50 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: '',
     source: 'LeCouffe et al. (NEJM 2021)',
-    specialDesign: 'negative-trial',
+    doi: '10.1056/NEJMoa2106494',
+    specialDesign: 'non-inferiority',
+    archetypeId: 'B' as const,
     keyMessage: 'MR CLEAN-NO IV argues against routinely skipping alteplase before EVT in eligible direct presenters.',
     listCategory: 'thrombectomy',
     listDescription: 'European direct-EVT trial showing neither superiority nor noninferiority over bridging therapy.',
+    ordinalStats: { commonOR: 0.84, ciLow: 0.62, ciHigh: 1.15, direction: 'negative' as const, pValue: 0.28 },
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'The forest-style display shows the adjusted common odds ratio for the ordinal mRS shift at 90 days, comparing direct EVT to alteplase 0.9 mg/kg plus EVT in patients presenting directly to an EVT-capable center. An OR less than 1.0 favors the bridging (alteplase plus EVT) arm.',
+      },
+      {
+        question: 'How is the test judged here?',
+        answer: 'The trial tested both superiority and non-inferiority. The adjusted common OR was 0.84 (95% CI 0.62-1.15, P = 0.28), so superiority of direct EVT was not demonstrated. The non-inferiority margin (-10 percentage points on mRS 0-2) was also not met. The point estimate (0.84) numerically favors bridging therapy.',
+      },
+      {
+        question: 'What about safety and secondary outcomes?',
+        answer: 'Median mRS was 3 with direct EVT vs 2 with bridging. mRS 0-2 was approximately 39.7% vs 44.3%. sICH was similar (5.9% vs 5.3%). 90-day mortality was numerically higher with direct EVT (20.5% vs 15.8%) but not statistically significant. TICI 2b-3 reperfusion was similar between arms.',
+      },
+    ],
+    /* claimId: mr-clean-no-iv-ordinal | source: LeCouffe NEJM 2021 */
+    howToInterpret: {
+      proves: 'In a European population presenting directly to EVT centers within 4.5 hours, direct EVT was neither superior nor non-inferior to alteplase 0.9 mg/kg plus EVT for ordinal mRS at 90 days (adjusted common OR 0.84, 95% CI 0.62-1.15, P = 0.28). The non-inferiority margin was not met. The point estimate numerically favored bridging therapy, with median mRS of 2 (bridging) vs 3 (direct EVT).',
+      doesNotProve: 'The trial does not prove that omitting alteplase causes harm; the CI crosses 1.0. However, near-equal numbers do not establish non-inferiority either. The confidence interval was too wide to exclude clinically meaningful inferiority of direct EVT, and the point estimate is on the harm side.',
+      cautions: 'This is the most consistently negative trial in the direct-EVT family: numerically lower mRS 0-2 and numerically higher mortality with direct EVT, against the strongest comparator (standard-dose alteplase in a Western population). Patients arrived directly at EVT-capable centers; results do not address drip-and-ship workflows. Both superiority and non-inferiority were tested and neither was met, which is methodologically distinct from a pure non-inferiority design.',
+    },
+    /* claimId: mr-clean-no-iv-bedside | source: LeCouffe NEJM 2021 */
+    bedsidePearl: 'Even at an EVT-capable center with thrombectomy minutes away, give IV alteplase 0.9 mg/kg first if the patient is eligible. MR CLEAN-NO IV showed numerically worse functional outcomes and higher mortality without alteplase, with the entire point estimate favoring bridging.',
+    bottomLineSummary: 'European trial of direct EVT vs alteplase 0.9 mg/kg plus EVT in direct presenters at EVT centers within 4.5 hours. Adjusted common OR 0.84 (95% CI 0.62-1.15, P = 0.28). Neither superiority nor non-inferiority of direct EVT was demonstrated. Point estimate favors bridging therapy.',
+    inclusionCriteria: [
+      'Age 18 or older',
+      'Direct presentation at an EVT-capable center',
+      'Anterior or posterior circulation LVO',
+      'Eligible for IV alteplase within 4.5 hours of symptom onset',
+      'Eligible for endovascular treatment',
+      'Pre-stroke mRS 0 to 2',
+    ],
+    exclusionCriteria: [
+      'Contraindication to IV alteplase',
+      'Transferred from a non-EVT center',
+      'Pre-stroke mRS greater than 2',
+      'Presentation beyond 4.5 hours from symptom onset',
+    ],
   },
   'direct-safe-trial': {
     id: 'direct-safe-trial',
@@ -1709,10 +1788,48 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: '',
     source: 'Mitchell et al. (Lancet 2022)',
+    doi: '10.1016/S0140-6736(22)01564-5',
     clinicalTrialsId: 'NCT03494920',
-    specialDesign: 'negative-trial',
+    specialDesign: 'non-inferiority',
+    archetypeId: 'A' as const,
     listCategory: 'thrombectomy',
     listDescription: 'International direct-EVT trial that did not support skipping thrombolysis.',
+    howToReadChart: [
+      {
+        question: 'What does the bar show?',
+        answer: 'The bar compares the proportion of patients achieving mRS 0-2 or return to pre-stroke neurological baseline at 90 days, in direct EVT vs IV thrombolysis (alteplase or tenecteplase) plus EVT. Both arms received thrombectomy.',
+      },
+      {
+        question: 'How is non-inferiority judged here?',
+        answer: 'The pre-specified non-inferiority margin was -12 percentage points on adjusted risk difference. The observed primary outcome was 55.0% (direct EVT) vs 61.4% (bridging), with adjusted RD -5.1% (95% CI -15.4% to 5.3%). Because the lower CI bound (-15.4%) crossed the -12 pp margin, non-inferiority was not met.',
+      },
+      {
+        question: 'What about safety and secondary outcomes?',
+        answer: 'Symptomatic ICH was identical and very low in both arms (1.0% vs 1.0%), suggesting thrombolytics were not driving harm. 90-day mortality was similar between arms. Tenecteplase was permitted in some centers within the bridging arm.',
+      },
+    ],
+    /* claimId: direct-safe-noninferiority | source: Mitchell Lancet 2022 */
+    howToInterpret: {
+      proves: 'In a geographically diverse cohort across Australia, New Zealand, China, and Vietnam, direct EVT did not meet non-inferiority versus IV thrombolysis plus EVT for the composite of mRS 0-2 or return to pre-stroke baseline at 90 days (55.0% vs 61.4%; adjusted RD -5.1%, 95% CI -15.4% to 5.3%). The lower CI bound (-15.4%) crossed the pre-specified non-inferiority margin of -12 percentage points. sICH was identical at 1.0% in both arms.',
+      doesNotProve: 'Similar point estimates do not establish non-inferiority; the confidence interval was too wide to exclude clinically meaningful inferiority, and the lower bound crossed the margin by more than 3 percentage points. The trial does not support omitting thrombolysis before thrombectomy.',
+      cautions: 'Tenecteplase was allowed alongside alteplase in the bridging arm, introducing heterogeneity that cannot be resolved at this sample size (N=295). The cohort included posterior circulation and M2 occlusions, broadening generalizability but reducing precision within subgroups. The very low sICH rate (1%) in both arms differs from other direct-EVT trials and may reflect population or technique differences.',
+    },
+    /* claimId: direct-safe-bedside | source: Mitchell Lancet 2022 */
+    bedsidePearl: 'Give IV thrombolysis (alteplase or tenecteplase) in eligible LVO patients within 4.5 hours and do not delay for thrombectomy. DIRECT-SAFE failed non-inferiority by more than 3 percentage points beyond the margin, across diverse geography and vascular anatomy.',
+    bottomLineSummary: 'International non-inferiority trial of direct EVT vs IV thrombolysis (alteplase or tenecteplase) plus EVT in LVO stroke within 4.5 hours. mRS 0-2 or pre-stroke baseline: 55.0% vs 61.4%; adjusted RD -5.1% (95% CI -15.4% to 5.3%). Non-inferiority not met (lower CI crossed -12 pp margin). sICH 1.0% in both arms.',
+    inclusionCriteria: [
+      'Age 18 or older',
+      'Acute ischemic stroke with LVO of ICA, M1, M2, or basilar artery',
+      'NIHSS 2 or greater',
+      'Eligible for IV thrombolysis within 4.5 hours of symptom onset',
+      'Pre-stroke mRS 0 to 2',
+    ],
+    exclusionCriteria: [
+      'Contraindication to IV thrombolysis',
+      'Pre-stroke mRS greater than 2',
+      'Presentation beyond 4.5 hours from symptom onset',
+      'NIHSS less than 2',
+    ],
   },
   'swift-direct-trial': {
     id: 'swift-direct-trial',
@@ -1772,10 +1889,51 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: '',
     source: 'Fischer et al. (Lancet 2022)',
+    doi: '10.1016/S0140-6736(22)01622-5',
     clinicalTrialsId: 'NCT03192332',
-    specialDesign: 'negative-trial',
+    specialDesign: 'non-inferiority',
+    archetypeId: 'A' as const,
     listCategory: 'thrombectomy',
     listDescription: 'Western direct-EVT trial that missed noninferiority and had lower reperfusion without alteplase.',
+    howToReadChart: [
+      {
+        question: 'What does the bar show?',
+        answer: 'The bar compares the proportion of patients reaching mRS 0-2 (functional independence) at 90 days in stent-retriever thrombectomy alone vs alteplase 0.9 mg/kg plus stent-retriever thrombectomy. The trial enrolled direct presenters at comprehensive stroke centers within 4.5 hours.',
+      },
+      {
+        question: 'How is non-inferiority judged here?',
+        answer: 'The pre-specified non-inferiority margin was -10 percentage points on adjusted risk difference. The observed mRS 0-2 was 57.0% (thrombectomy alone) vs 65.0% (bridging), with adjusted RD -7.3% (95% CI -14.0% to -0.6%). The lower CI bound (-14.0%) crossed the -10 pp margin AND the upper bound (-0.6%) is also negative: the entire plausible range favors bridging.',
+      },
+      {
+        question: 'What about safety and secondary outcomes?',
+        answer: 'Final TICI 2b-3 reperfusion was significantly lower without alteplase (91% vs 96%). Pre-EVT vessel reopening on first angiogram was also significantly lower (1.4% vs 5.7%). sICH was similar (4.4% vs 3.3%) and 90-day mortality was approximately 15% in both arms.',
+      },
+    ],
+    /* claimId: swift-direct-noninferiority | source: Fischer Lancet 2022 */
+    howToInterpret: {
+      proves: 'In a European and Canadian cohort presenting directly to comprehensive stroke centers within 4.5 hours, stent-retriever thrombectomy alone did not meet non-inferiority versus alteplase 0.9 mg/kg plus thrombectomy (mRS 0-2: 57.0% vs 65.0%; adjusted RD -7.3%, 95% CI -14.0% to -0.6%). The lower CI bound crossed the -10 pp non-inferiority margin, and the entire CI is negative: even the most optimistic plausible estimate favors bridging therapy. Reperfusion was also lower without alteplase (TICI 2b-3: 91% vs 96%).',
+      doesNotProve: 'Similar point estimates do not establish non-inferiority. SWIFT DIRECT goes further than other direct-EVT trials: the upper CI bound (-0.6%) is below zero, so the data do not support equivalence either. The trial does not prove harm at the individual patient level, but it does rule out that thrombectomy alone is at least as good as bridging.',
+      cautions: 'Restricted to anterior circulation proximal LVO (ICA or M1), age 18-80, and stent-retriever technique; does not address aspiration-first or distal occlusions. The mechanistic finding of lower reperfusion without alteplase (91% vs 96%) is biologically plausible: alteplase appears to assist catheter-based revascularization, not just precede it. Together with MR CLEAN-NO IV and DIRECT-SAFE, SWIFT DIRECT is the Western counterpart to the Asian direct-EVT trials and most strongly argues against omitting alteplase.',
+    },
+    /* claimId: swift-direct-bedside | source: Fischer Lancet 2022 */
+    bedsidePearl: 'Give IV alteplase 0.9 mg/kg before thrombectomy in eligible anterior-circulation LVO. SWIFT DIRECT showed an 8-point absolute reduction in mRS 0-2 and 5-point lower TICI 2b-3 without alteplase, with the entire confidence interval favoring bridging therapy.',
+    bottomLineSummary: 'European and Canadian non-inferiority trial of stent-retriever thrombectomy alone vs alteplase 0.9 mg/kg plus thrombectomy in anterior-circulation LVO within 4.5 hours. mRS 0-2: 57.0% vs 65.0%; adjusted RD -7.3% (95% CI -14.0% to -0.6%). Non-inferiority not met; the entire CI favors bridging. TICI 2b-3 reperfusion was significantly lower without alteplase.',
+    inclusionCriteria: [
+      'Age 18 to 80',
+      'Direct presentation at a comprehensive stroke center',
+      'Anterior circulation proximal LVO (ICA or M1)',
+      'NIHSS 2 or greater',
+      'Eligible for IV alteplase within 4.5 hours of symptom onset',
+      'Pre-stroke mRS 0 to 2',
+    ],
+    exclusionCriteria: [
+      'Contraindication to IV alteplase',
+      'Posterior circulation occlusion',
+      'M2 or more distal occlusion',
+      'Age greater than 80',
+      'Transferred from non-EVT center',
+      'Pre-stroke mRS greater than 2',
+    ],
   },
   'laste-trial': {
     id: 'laste-trial',
@@ -2458,9 +2616,49 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: '',
     source: 'RESCUE BT Investigators (JAMA 2022)',
+    doi: '10.1001/jama.2022.9570',
     specialDesign: 'negative-trial',
+    archetypeId: 'B' as const,
     listCategory: 'thrombectomy',
     listDescription: 'Adjunct pre-EVT tirofiban trial showing no functional benefit.',
+    ordinalStats: { commonOR: 1.08, ciLow: 0.87, ciHigh: 1.34, direction: 'positive' as const, pValue: 0.51 },
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'The forest-style display shows the adjusted common odds ratio for the ordinal mRS shift at 90 days, comparing IV tirofiban (10 mcg/kg bolus then 0.15 mcg/kg/min for 24 hours) given before and during thrombectomy vs IV placebo. Both arms received endovascular thrombectomy.',
+      },
+      {
+        question: 'How is the test judged here?',
+        answer: 'The trial was a superiority design. Adjusted common OR was 1.08 (95% CI 0.87-1.34, P = 0.51), which crosses 1.0 and is not statistically significant. mRS 0-1 was 36.3% (tirofiban) vs 32.4% (placebo) and mRS 0-2 was approximately 53-54% in both arms.',
+      },
+      {
+        question: 'What about safety and secondary outcomes?',
+        answer: 'Symptomatic ICH was significantly higher with tirofiban (9.7% vs 6.4%, P = 0.04). 90-day mortality was similar (18.3% vs 17.3%). Successful reperfusion (TICI 2b-3) was approximately 83% in both arms. The combination of null efficacy and increased sICH represents a net harm signal.',
+      },
+    ],
+    /* claimId: rescue-bt-ordinal | source: RESCUE BT Investigators JAMA 2022 */
+    howToInterpret: {
+      proves: 'In Chinese patients with acute LVO stroke treated with thrombectomy within 24 hours, peri-procedural IV tirofiban did not improve 90-day functional outcome compared with placebo (adjusted common OR 1.08, 95% CI 0.87-1.34, P = 0.51). Symptomatic ICH was significantly higher with tirofiban (9.7% vs 6.4%, P = 0.04). The combination of null efficacy and a significant safety signal argues against routine peri-EVT tirofiban use.',
+      doesNotProve: 'The trial does not exclude potential benefit in narrowly defined subgroups (for example, intracranial atherosclerotic disease with rescue stenting), which were not the primary question. It does not address tirofiban given for other indications such as carotid stenting or post-procedural reocclusion management.',
+      cautions: 'Single-country (China) cohort, which limits generalizability; population includes posterior circulation and broader LVO definitions. The sICH increase (P = 0.04) is the most actionable finding from a null efficacy trial: when adding an antiplatelet agent does not help and increases bleeding, the default position is not to add it. Reperfusion rates were similar (~83%), so the harm is not offset by mechanical benefit.',
+    },
+    /* claimId: rescue-bt-bedside | source: RESCUE BT Investigators JAMA 2022 */
+    bedsidePearl: 'Do not give peri-procedural IV tirofiban as routine adjunct to thrombectomy. RESCUE BT showed no functional benefit and a significant increase in symptomatic ICH (9.7% vs 6.4%). Reserve GP IIb/IIIa inhibitors for selected indications such as rescue stenting in intracranial atherosclerosis, not for general LVO thrombectomy.',
+    bottomLineSummary: 'Chinese double-blind placebo-controlled trial of peri-procedural IV tirofiban vs placebo during thrombectomy in LVO stroke within 24 hours. Adjusted common OR 1.08 (95% CI 0.87-1.34, P = 0.51): no functional benefit. Symptomatic ICH significantly higher with tirofiban (9.7% vs 6.4%, P = 0.04). Net harm signal.',
+    inclusionCriteria: [
+      'Age 18 to 80',
+      'Acute ischemic stroke with intracranial LVO (anterior or posterior circulation)',
+      'NIHSS 4 or greater',
+      'Treatment within 24 hours of last known well',
+      'Pre-stroke mRS 0 to 2',
+    ],
+    exclusionCriteria: [
+      'Active bleeding or high bleeding risk',
+      'Recent major surgery or trauma',
+      'Contraindication to GP IIb/IIIa inhibitors',
+      'Pre-stroke mRS greater than 2',
+      'Presentation beyond 24 hours from last known well',
+    ],
   },
   'enchanted-trial': {
     id: 'enchanted-trial',
@@ -3314,7 +3512,27 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       { arm: 'Best Medical Treatment Alone', n: 269, pct: [17.5, 20.1, 17.1, 21.2, 8.9, 1.2, 14.0] },
     ],
     ordinalStats: { commonOR: 0.90, ciLow: 0.67, ciHigh: 1.22, direction: 'negative' as const, pValue: 0.50 },
-    bedsidePearl: 'DISTAL and ESCAPE-MeVO together provide strong evidence against routine EVT for unselected medium or distal vessel occlusions. The 71.7% reperfusion rate -- well below the 85-90% seen in large-vessel trials -- reflects the technical challenge of accessing M3-M4 and ACA/PCA segments. Symptomatic ICH was more than doubled with EVT (5.9% vs 2.6%) without mortality benefit. Current evidence does not support routine EVT for MeVO outside of highly selected cases or ongoing trials.',
+    howToReadChart: [
+      {
+        question: 'What does the bar chart show?',
+        answer: 'The Grotta-style stacked bar shows the full mRS distribution from 0 to 6 at 90 days for each arm: EVT plus best medical therapy vs best medical therapy alone in medium and distal vessel occlusions. Each color band represents one mRS grade. Median mRS was 2 in both arms.',
+      },
+      {
+        question: 'How is the ordinal shift judged here?',
+        answer: 'The primary endpoint was the ordinal mRS shift at 90 days. Adjusted common OR was 0.90 (95% CI 0.67-1.22, P = 0.50), which crosses 1.0 and is not statistically significant. mRS 0-2 rates were essentially equal: 56.5% (EVT) vs 54.7% (BMT). The EVT arm shows slightly more deaths (mRS 6: 15.5% vs 14.0%), but the distributions overlap heavily.',
+      },
+      {
+        question: 'What about safety and reperfusion?',
+        answer: 'Symptomatic ICH more than doubled with EVT (5.9% vs 2.6%). TICI 2b-3 reperfusion was 71.7%, notably lower than the 85-90% typical of large-vessel EVT, reflecting technical difficulty in distal vasculature. 90-day mortality was similar (15.5% vs 14.0%). The safety cost without functional benefit is the central trade-off.',
+      },
+    ],
+    /* claimId: distal-noninferiority | source: Psychogios NEJM 2025 */
+    howToInterpret: {
+      proves: 'In medium and distal vessel occlusions (predominantly M2, M3, P1, and P2) treated within 24 hours, adding EVT to best medical therapy did not improve 90-day ordinal mRS compared with BMT alone (adjusted common OR 0.90, 95% CI 0.67-1.22, P = 0.50). mRS 0-2 was nearly identical (56.5% vs 54.7%) and median mRS was 2 in both arms. Symptomatic ICH was more than doubled with EVT (5.9% vs 2.6%), and TICI 2b-3 reperfusion was only 71.7%.',
+      doesNotProve: 'The neutral primary result does not exclude benefit in selected subgroups (for example, dominant M2 with high NIHSS, or specific posterior circulation segments) that were underpowered individually. It also does not extend to large-vessel occlusions, where EVT benefit remains established. A negative trial in a heterogeneous population does not equal absence of benefit in every patient within that population.',
+      cautions: 'Distal vessels are technically harder: TICI 2b-3 of 71.7% is meaningfully lower than the 85-90% seen in large-vessel EVT. The doubled sICH rate (5.9% vs 2.6%) is the dominant safety signal. Predominantly European cohort (11 countries, 55 sites). Any EVT technique was allowed, reflecting real-world practice but limiting inference about specific devices. Treatment window extended to 24 hours; results may not apply uniformly across that range.',
+    },
+    bedsidePearl: 'DISTAL and ESCAPE-MeVO together provide strong evidence against routine EVT for unselected medium or distal vessel occlusions. The 71.7% reperfusion rate, well below the 85-90% seen in large-vessel trials, reflects the technical challenge of accessing M3-M4 and ACA/PCA segments. Symptomatic ICH was more than doubled with EVT (5.9% vs 2.6%) without mortality benefit. Current evidence does not support routine EVT for MeVO outside of highly selected cases or ongoing trials.',
     bottomLineSummary: 'In 543 patients with medium or distal vessel occlusion (M2-M4, ACA, or PCA) treated within 24 hours, EVT plus best medical treatment did not improve 90-day mRS distribution versus medical treatment alone (cOR 0.90, 95% CI 0.67-1.22, p=0.50). Median mRS was 2.0 in both groups. Symptomatic ICH was more than doubled with EVT (5.9% vs 2.6%). Reperfusion was achieved in only 71.7% of EVT patients. Together with ESCAPE-MeVO, DISTAL argues strongly against routine EVT for unselected medium or distal vessel occlusions.',
   },
   'escape-mevo-trial': {
@@ -3380,6 +3598,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Goyal et al. (NEJM 2025)',
     clinicalTrialsId: 'NCT05151172',
     trialResult: 'NEGATIVE',
+    archetypeId: 'A' as const,
     safetyProfile: {
       sICH: {
         /* claimId: escape-mevo.sich | source: ESCAPE-MeVO Investigators, NEJM 2025, Table 2 */
