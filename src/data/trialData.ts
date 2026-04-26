@@ -1375,10 +1375,53 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: '',
     source: 'Yang et al. (NEJM 2020)',
+    doi: '10.1056/NEJMoa2001123',
     clinicalTrialsId: 'NCT03469206',
     specialDesign: 'non-inferiority',
     listCategory: 'thrombectomy',
     listDescription: 'Early direct-EVT noninferiority trial that intensified the bridge-vs-direct debate.',
+    archetypeId: 'A',
+    trialResult: 'NEUTRAL',
+    resultSubtype: 'non-inferiority',
+    inclusionCriteria: [
+      'Age 18 years or older',
+      'Acute ischemic stroke with anterior circulation large vessel occlusion (intracranial ICA, M1, or proximal M2)',
+      'Eligible for IV alteplase per Chinese guidelines',
+      'Endovascular treatment initiable within 4.5 hours of last known well',
+      'NIHSS 2 or greater at presentation',
+      'Pre-stroke mRS 0 or 1',
+    ],
+    exclusionCriteria: [
+      'Contraindication to IV alteplase',
+      'Posterior circulation occlusion',
+      'Pre-existing functional disability (mRS 2 or greater)',
+      'Anticipated delay in EVT initiation beyond 4.5 hours',
+      'Pregnancy',
+      'Life expectancy under 6 months',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the bar show?',
+        answer: 'Adjusted common odds ratio for the ordinal mRS shift at 90 days, comparing direct EVT to IV alteplase plus EVT. The point estimate is 1.07 with 95% CI 0.81 to 1.40. Values near 1.0 indicate similar distributions of disability across both arms.',
+      },
+      {
+        question: 'How is non-inferiority judged here?',
+        answer: 'The pre-specified non-inferiority margin was a lower 95% CI bound above 0.80 for the common OR. The observed lower bound was 0.81, just clearing the margin (P for NI = 0.04). Functional independence (mRS 0-2) at 90 days was 62.0% with direct EVT vs 58.5% with bridging.',
+      },
+      {
+        question: 'What about pre-EVT reperfusion?',
+        answer: 'Pre-EVT reperfusion was lower without alteplase: 2.4% (direct EVT) vs 7.0% (bridging). sICH (4.3% in both arms) and 90-day mortality (17.7% vs 18.8%) were similar.',
+      },
+    ],
+    /* claimId: direct-mt-noninferiority | source: Yang NEJM 2020 */
+    howToInterpret: {
+      proves: 'In a Chinese tertiary-center population presenting within 4.5 hours of LVO stroke, omitting IV alteplase before EVT produced 90-day functional outcomes non-inferior to bridging therapy at a non-inferiority margin of OR 0.80. The lower bound of the CI cleared the margin by a narrow margin (0.81 vs 0.80).',
+      doesNotProve: 'The trial does not establish superiority of direct EVT. It does not generalize to populations with longer EMS-to-EVT transfer times, to drip-and-ship workflows, or to non-Chinese cohorts where alteplase practice patterns and stroke-system logistics differ. It does not address tenecteplase.',
+      cautions: 'Pre-EVT reperfusion was lower without alteplase (2.4% vs 7.0%), which matters for cases where EVT is delayed or fails. The narrow CI margin (lower bound 0.81 vs threshold 0.80) means the NI result is statistically fragile. Most patients were transferred directly to EVT-capable centers; results may not apply to mothership versus drip-and-ship decisions.',
+    },
+    /* claimId: direct-mt-bedside | source: Yang NEJM 2020 */
+    bedsidePearl: 'DIRECT-MT met non-inferiority for direct EVT vs bridging in Chinese centers with short door-to-puncture times. Do not extrapolate to systems where transfer delays make pre-EVT reperfusion (lost from 7.0% to 2.4%) clinically meaningful. Continue IV thrombolysis per AHA/ASA recommendations unless local data and workflow support omission.',
+    bottomLineSummary: 'Direct EVT was non-inferior to IV alteplase plus EVT for 90-day mRS shift in Chinese centers with rapid EVT access. The CI just cleared the pre-specified margin. Pre-EVT reperfusion was lower without alteplase. Does not establish superiority and does not generalize to drip-and-ship workflows.',
   },
   'devt-trial': {
     id: 'devt-trial',
@@ -1437,9 +1480,50 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: '',
     source: 'Zi et al. (JAMA 2021)',
+    doi: '10.1001/jama.2020.23092',
     specialDesign: 'non-inferiority',
     listCategory: 'thrombectomy',
     listDescription: 'Chinese direct-EVT trial meeting noninferiority against alteplase plus thrombectomy.',
+    archetypeId: 'A',
+    trialResult: 'NEUTRAL',
+    resultSubtype: 'non-inferiority',
+    inclusionCriteria: [
+      'Age 18 years or older',
+      'Acute ischemic stroke with anterior circulation proximal large vessel occlusion (ICA or M1)',
+      'Eligible for both IV alteplase and EVT',
+      'Treatment initiable within 4.5 hours of symptom onset',
+      'Pre-stroke mRS 0 or 1',
+    ],
+    exclusionCriteria: [
+      'Contraindication to IV alteplase',
+      'Posterior circulation or distal M2 occlusion',
+      'Pre-existing functional disability',
+      'Anticipated EVT initiation beyond 4.5-hour window',
+      'Severe comorbidity limiting 90-day follow-up',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the bar show?',
+        answer: 'Proportion achieving functional independence (mRS 0-2) at 90 days. Direct EVT 54.3% vs IV alteplase plus EVT 46.6%. Risk difference +7.7 percentage points (95% CI -2.9 to 18.2).',
+      },
+      {
+        question: 'How is non-inferiority judged here?',
+        answer: 'The pre-specified non-inferiority margin was -10 percentage points. The lower CI bound (-2.9 pp) cleared this margin (P for NI = 0.003), meeting the NI threshold. The trial was stopped early at interim analysis.',
+      },
+      {
+        question: 'Why is the wide NI margin a concern?',
+        answer: 'A -10 pp margin is clinically large. The trial could meet NI while still permitting up to a 10-percentage-point absolute reduction in functional independence. Early stopping further inflates effect estimates. sICH (4.3% vs 3.4%) and mortality (14.7% vs 18.8%) were not significantly different.',
+      },
+    ],
+    /* claimId: devt-noninferiority | source: Zi JAMA 2021 */
+    howToInterpret: {
+      proves: 'In Chinese stroke centers within 4.5 hours of proximal anterior circulation LVO, direct EVT met non-inferiority for 90-day mRS 0-2 vs IV alteplase plus EVT at a -10 percentage point margin. The trial was stopped early for efficacy of non-inferiority.',
+      doesNotProve: 'The numerical advantage for direct EVT (54.3% vs 46.6%) does not establish superiority. Early stopping inflates the apparent effect size, and the wide -10 pp NI margin permits clinically meaningful harm that the data cannot exclude. Results do not generalize to populations with longer transfer logistics or different alteplase eligibility patterns.',
+      cautions: 'The -10 pp NI margin is wider than most clinicians would accept as clinically equivalent. Early stopping limits precision. Sample size (N=234) is modest. Apply only to populations and workflows resembling Chinese tertiary centers with rapid EVT access.',
+    },
+    /* claimId: devt-bedside | source: Zi JAMA 2021 */
+    bedsidePearl: 'DEVT met its non-inferiority threshold but at a -10 pp margin and after early stopping. The numerical 7.7 pp benefit favoring direct EVT is not superiority; treat as hypothesis-generating. Continue IV thrombolysis per guidelines unless local data and workflow specifically support omission.',
+    bottomLineSummary: 'Direct EVT met non-inferiority vs alteplase plus EVT at a -10 pp margin in 234 Chinese patients with proximal LVO. Trial was stopped early. The wide margin and early stopping mean the numerical advantage for direct EVT cannot be interpreted as superiority. Does not change guideline-recommended bridging therapy.',
   },
   'skip-trial': {
     id: 'skip-trial',
@@ -1965,17 +2049,59 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: '',
     source: 'Turk et al. (Lancet 2019)',
+    doi: '10.1016/S0140-6736(19)30297-1',
     clinicalTrialsId: 'NCT02466893',
     specialDesign: 'non-inferiority',
     listCategory: 'thrombectomy',
     listDescription: 'Device-strategy trial showing aspiration-first thrombectomy was noninferior to stent retrievers.',
+    archetypeId: 'A',
+    trialResult: 'NEUTRAL',
+    resultSubtype: 'non-inferiority',
+    inclusionCriteria: [
+      'Age 18 years or older',
+      'Acute ischemic stroke with anterior circulation large vessel occlusion (ICA terminus, M1, or M2)',
+      'Groin puncture initiable within 6 hours of last known well',
+      'NIHSS 6 or greater',
+      'Pre-stroke mRS 0 or 1',
+      'ASPECTS 6 or greater',
+    ],
+    exclusionCriteria: [
+      'Posterior circulation occlusion',
+      'Pre-existing functional disability (mRS 2 or greater)',
+      'Tandem cervical occlusion requiring stenting',
+      'Contraindication to contrast or anesthesia',
+      'Life expectancy under 6 months',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the bar show?',
+        answer: 'Proportion achieving functional independence (mRS 0-2) at 90 days. Aspiration-first 52% vs stent-retriever-first 50%. Difference +2 percentage points (95% CI -8 to 11).',
+      },
+      {
+        question: 'How is non-inferiority judged here?',
+        answer: 'The pre-specified non-inferiority margin was -7 percentage points. The primary Bayesian analysis met NI (P for NI = 0.0014), though the frequentist CI lower bound (-8 pp) marginally crossed the margin. Despite lower aspiration first-pass reperfusion (68.9% vs 76.3% with stent retriever), clinical outcomes were equivalent.',
+      },
+      {
+        question: 'What about reperfusion rates and procedure time?',
+        answer: 'First-pass reperfusion was lower with aspiration first (68.9% vs 76.3% with stent retriever). Aspiration was faster (24 min vs 35 min to first reperfusion attempt). Mortality was identical at 22% in both arms. Overall mTICI 2b-3 at end of procedure was approximately 83% in both arms, with rescue device crossover closing the first-pass gap.',
+      },
+    ],
+    /* claimId: compass-noninferiority | source: Turk Lancet 2019 */
+    howToInterpret: {
+      proves: 'In North American comprehensive stroke centers, contact-aspiration as first-line technique was non-inferior to stent-retriever first-line for 90-day mRS 0-2 in anterior circulation LVO treated within 6 hours. Operator and device flexibility is supported.',
+      doesNotProve: 'The trial does not establish superiority of either technique. It does not address combined techniques (BADDASS), distal-medium-vessel occlusion, or basilar occlusion. It does not address newer-generation aspiration catheters or stent retrievers introduced after 2019.',
+      cautions: 'Aspiration first-pass produced lower first-pass reperfusion rates (68.9% vs 76.3%); rescue with stent retriever was common and partially closed the gap. The frequentist CI lower bound (-8 pp) marginally crossed the -7 pp NI threshold. Results assume operator proficiency in both techniques and ready availability of rescue devices.',
+    },
+    /* claimId: compass-bedside | source: Turk Lancet 2019 */
+    bedsidePearl: 'COMPASS supports operator choice between aspiration-first and stent-retriever-first as initial EVT technique. Lower first-pass reperfusion with aspiration (68.9% vs 76.3%) did not translate to worse 90-day outcomes when rescue devices were available. Choose based on clot characteristics, operator experience, and access anatomy.',
+    bottomLineSummary: 'Contact-aspiration as first-line technique was non-inferior to stent-retriever first-line for 90-day functional outcome in anterior circulation LVO. Aspiration produced lower first-pass reperfusion but equivalent clinical outcomes. Supports flexibility in initial technique choice.',
   },
   'aster-trial': {
     id: 'aster-trial',
     title: 'ASTER Trial',
     subtitle: 'Contact Aspiration vs Stent Retriever Revascularization',
     category: 'Neuro Trials',
-    trialResult: 'NEGATIVE',
+    trialResult: 'NEUTRAL',
     stats: {
       sampleSize: {
         value: '381',
@@ -2028,17 +2154,56 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: '',
     source: 'Lapergue et al. (JAMA 2017)',
+    doi: '10.1001/jama.2017.9644',
     clinicalTrialsId: 'NCT02523261',
-    specialDesign: 'negative-trial',
+    specialDesign: 'neutral-trial',
     listCategory: 'thrombectomy',
     listDescription: 'Device-comparison trial showing no clear advantage for aspiration over stent retrievers.',
+    archetypeId: 'A',
+    inclusionCriteria: [
+      'Age 18 years or older',
+      'Acute ischemic stroke with anterior circulation large vessel occlusion (ICA, M1, or M2)',
+      'Groin puncture initiable within 6 hours of symptom onset',
+      'NIHSS 6 or greater',
+      'Pre-stroke mRS 0 or 1',
+    ],
+    exclusionCriteria: [
+      'Posterior circulation occlusion',
+      'Pre-existing functional disability',
+      'Contraindication to general anesthesia or sedation',
+      'Tandem cervical lesion requiring stenting',
+      'Life expectancy under 6 months',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the bar show?',
+        answer: 'Successful revascularization (mTICI 2b-3) at end of procedure: 85.4% with contact aspiration first vs 83.1% with stent retriever first. P = 0.53. Note: this is a procedural endpoint, not a clinical outcome measure.',
+      },
+      {
+        question: 'What about clinical outcomes?',
+        answer: 'mRS 0-2 at 90 days was 45.3% (aspiration) vs 50.3% (stent retriever); P = 0.19. sICH was identical at 8.8% in both arms. Mortality was 25.0% vs 21.9% (P = 0.49). No statistically significant difference in any clinical endpoint.',
+      },
+      {
+        question: 'Why does the rescue rate matter?',
+        answer: 'Rescue stent retriever was used in 25.2% of patients in the aspiration arm. The 85.4% reperfusion figure includes patients who needed crossover. Operator readiness to switch techniques is part of how this equivalent result was achieved.',
+      },
+    ],
+    /* claimId: aster-null-difference | source: Lapergue JAMA 2017 */
+    howToInterpret: {
+      proves: 'Contact aspiration as first-line technique produced similar end-of-procedure revascularization rates to stent retriever first-line in French comprehensive stroke centers. Clinical outcomes including mRS 0-2 (45.3% vs 50.3%) were not significantly different between arms.',
+      doesNotProve: 'The primary endpoint was procedural (mTICI 2b-3), not clinical. The trial was not powered to detect modest clinical differences. The numerically lower mRS 0-2 rate with aspiration (45.3% vs 50.3%) is not statistically significant but is not excluded by the data. The trial does not address combined techniques or distal occlusions.',
+      cautions: 'Rescue stent retriever was used in 25.2% of the aspiration arm; the headline reperfusion figure depends on this crossover. Procedural endpoints do not always translate to clinical outcomes. ASTER chose mTICI as primary, which limits clinical inference. Single-country (French) cohort enrolled 2015 to 2016.',
+    },
+    /* claimId: aster-bedside | source: Lapergue JAMA 2017 */
+    bedsidePearl: 'ASTER showed no significant difference between aspiration-first and stent-retriever-first for revascularization or 90-day outcomes, but rescue device use was 25.2% in the aspiration arm. Choice of first-line technique is operator-dependent; readiness to switch techniques is part of getting equivalent outcomes.',
+    bottomLineSummary: 'No significant difference between contact-aspiration first-line and stent-retriever first-line for end-of-procedure revascularization (85.4% vs 83.1%) or 90-day mRS 0-2 (45.3% vs 50.3%). Rescue stent retriever was used in 25.2% of the aspiration arm. Supports operator choice with readiness to switch.',
   },
   'aster2-trial': {
     id: 'aster2-trial',
     title: 'ASTER2 Trial',
     subtitle: 'Combined Aspiration + Stent Retriever vs Stent Retriever Alone',
     category: 'Neuro Trials',
-    trialResult: 'NEGATIVE',
+    trialResult: 'NEUTRAL',
     stats: {
       sampleSize: {
         value: '408',
@@ -2091,10 +2256,49 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: '',
     source: 'Lapergue et al. (JAMA 2021)',
+    doi: '10.1001/jama.2021.15004',
     clinicalTrialsId: 'NCT03290885',
-    specialDesign: 'negative-trial',
+    specialDesign: 'neutral-trial',
     listCategory: 'thrombectomy',
     listDescription: 'Technical EVT trial showing no clear final reperfusion advantage from upfront combined strategy.',
+    archetypeId: 'A',
+    inclusionCriteria: [
+      'Age 18 years or older',
+      'Acute ischemic stroke with anterior circulation large vessel occlusion (ICA, M1, or M2)',
+      'Groin puncture initiable within 8 hours of symptom onset',
+      'NIHSS 6 or greater',
+      'Pre-stroke mRS 0 or 1',
+    ],
+    exclusionCriteria: [
+      'Posterior circulation occlusion',
+      'Pre-existing functional disability',
+      'Contraindication to anesthesia or contrast',
+      'Tandem cervical lesion requiring stenting',
+      'Life expectancy under 6 months',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the bar show?',
+        answer: 'Near-total reperfusion (eTICI 2c-3) at end of procedure: 64.5% with combined aspiration plus stent retriever (BADDASS technique) vs 57.9% with stent retriever alone. P = 0.17. Note: this is a procedural endpoint, not a clinical outcome measure.',
+      },
+      {
+        question: 'What about clinical outcomes?',
+        answer: 'mRS 0-2 at 90 days was 48.5% (combined) vs 49.5% (stent retriever alone). Mortality was 21.7% vs 19.7% (P = 0.58). sICH was 6.9% vs 5.4%. No clinical endpoint differed significantly.',
+      },
+      {
+        question: 'Why does eTICI 2c-3 matter?',
+        answer: 'eTICI 2c-3 represents near-complete reperfusion, which correlates more tightly with good clinical outcome than mTICI 2b. ASTER2 hypothesized that combining techniques would improve this endpoint. The 6.6 pp numerical advantage was not statistically significant, and combined technique required longer procedure time.',
+      },
+    ],
+    /* claimId: aster2-null-difference | source: Lapergue JAMA 2021 */
+    howToInterpret: {
+      proves: 'Combining contact aspiration with stent retriever (BADDASS technique) as first-pass technique did not significantly improve near-total reperfusion (eTICI 2c-3) compared to stent retriever alone in French comprehensive stroke centers. Clinical outcomes including mRS 0-2 (48.5% vs 49.5%) were not significantly different.',
+      doesNotProve: 'The trial does not exclude a small benefit from combined technique that this sample size could not detect. It does not address the role of combined technique as rescue after stent-retriever failure. It does not address newer aspiration catheters or balloon-guide configurations.',
+      cautions: 'Combined technique required longer procedure time and higher device burden. The 6.6 pp numerical advantage in eTICI 2c-3 (64.5% vs 57.9%) was not statistically significant but is not excluded. Procedural endpoint was primary; clinical inference is secondary. Single-country (French) cohort enrolled 2017 to 2018.',
+    },
+    /* claimId: aster2-bedside | source: Lapergue JAMA 2021 */
+    bedsidePearl: 'ASTER2 did not show that routine first-pass combined aspiration plus stent retriever improves reperfusion or clinical outcome over stent retriever alone. The 6.6 pp numerical advantage in eTICI 2c-3 came at the cost of longer procedure time and added device burden. Reserve combined technique for rescue or operator-specific indications.',
+    bottomLineSummary: 'Routine first-pass combined aspiration plus stent retriever (BADDASS) did not significantly improve near-total reperfusion (64.5% vs 57.9%) or 90-day mRS 0-2 (48.5% vs 49.5%) compared to stent retriever alone. Combined technique took longer. Does not support routine first-pass combination; reserve for rescue.',
   },
   'choice-trial': {
     id: 'choice-trial',
