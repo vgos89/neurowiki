@@ -1277,6 +1277,45 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT01062698',
     listCategory: 'thrombectomy',
     listDescription: 'French bridging-therapy trial showing benefit from adding thrombectomy to alteplase.',
+    archetypeId: 'A',
+    trialResult: 'POSITIVE',
+    inclusionCriteria: [
+      'Age 18 to 80 years',
+      'Acute ischemic stroke with NIHSS 10 to 25',
+      'Proximal anterior circulation occlusion (intracranial ICA, M1, or upper basilar) confirmed by CTA or MRA',
+      'IV alteplase started within 4 hours of symptom onset (0.9 mg/kg, max 90 mg)',
+      'Mechanical thrombectomy able to begin within 5 hours of symptom onset',
+    ],
+    exclusionCriteria: [
+      'Standard contraindications to IV alteplase',
+      'Pre-stroke mRS greater than 1',
+      'Intracranial hemorrhage on baseline imaging',
+      'Established large infarct on baseline CT or MRI',
+      'Severe comorbid disease limiting expected survival',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'Functional independence (mRS 0 to 2) at 3 months in each arm. The bars compare IV alteplase plus thrombectomy versus IV alteplase alone for proximal anterior circulation occlusions treated within the early window.',
+      },
+      {
+        question: 'What do the numbers mean clinically?',
+        answer: 'Functional independence was 53% with bridging thrombectomy versus 42% with alteplase alone (OR 1.55, 95% CI 1.05 to 2.30, P=0.028). The 11 percentage point absolute gain corresponds to a number needed to treat of 9 for one additional patient to be independent at 3 months.',
+      },
+      {
+        question: 'What is the key limitation to keep in mind?',
+        answer: 'THRACE enrolled from 2010 to 2015, before modern device standardization and before the direct-EVT trials. Results predate DIRECT-MT, MR CLEAN NO IV, SWIFT-DIRECT, and DEVT, so THRACE speaks to bridging therapy versus alteplase alone, not to whether alteplase can be safely skipped.',
+      },
+    ],
+    howToInterpret: {
+      /* claimId: thrace-primary-result | source: Bracard Lancet Neurol 2016 */
+      proves: 'In alteplase-eligible patients aged 18 to 80 with proximal anterior circulation occlusion and NIHSS 10 to 25, adding mechanical thrombectomy to IV alteplase within 5 hours of onset increased functional independence (mRS 0 to 2) at 3 months from 42% to 53% (OR 1.55, 95% CI 1.05 to 2.30, P=0.028) without increasing mortality or symptomatic intracranial hemorrhage.',
+      doesNotProve: 'It does not address whether direct thrombectomy without IV alteplase produces comparable outcomes. It does not extend evidence beyond 5 hours from onset, and it does not speak to patients with low NIHSS, distal occlusions, or large established infarcts.',
+      cautions: 'THRACE predates the direct-EVT era (DIRECT-MT 2020, MR CLEAN NO IV 2021, SWIFT-DIRECT 2022, DEVT 2021), so its result that bridging therapy works does not settle the modern question of whether alteplase can be omitted. Devices, technique, and time-to-puncture metrics have all evolved since enrollment closed in 2015. Read THRACE alongside the 2015 stent-retriever trials, not as a stand-alone modern reference.',
+    },
+    /* claimId: thrace-bedside-pearl | source: Bracard Lancet Neurol 2016 */
+    bedsidePearl: 'For an alteplase-eligible patient with proximal anterior circulation LVO and NIHSS 10 to 25 inside the early window, THRACE supports starting IV alteplase and proceeding to thrombectomy without delay. The 53% versus 42% gain (NNT 9) is consistent with the broader 2015 stent-retriever evidence base.',
+    bottomLineSummary: 'THRACE showed that adding mechanical thrombectomy to IV alteplase in proximal anterior circulation LVO patients treated within 5 hours raised functional independence from 42% to 53% at 3 months, without increasing mortality or symptomatic hemorrhage.',
   },
   'direct-mt-trial': {
     id: 'direct-mt-trial',
@@ -1714,6 +1753,52 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT03811769',
     listCategory: 'thrombectomy',
     listDescription: 'Large-core thrombectomy trial showing better outcomes and lower mortality despite more bleeding.',
+    archetypeId: 'B',
+    trialResult: 'POSITIVE',
+    inclusionCriteria: [
+      'Age 18 years or older (no upper age limit)',
+      'Acute ischemic stroke from anterior circulation large vessel occlusion (intracranial ICA or M1)',
+      'Large established infarct on imaging defined as ASPECTS 5 or lower on non-contrast CT, or DWI ASPECTS 5 or lower on MRI, with no lower limit on ASPECTS or infarct volume',
+      'Treatment feasible within 6.5 hours of last-known-well',
+      'Pre-stroke mRS 0 or 1',
+    ],
+    exclusionCriteria: [
+      'Pre-stroke mRS greater than 1',
+      'Intracranial hemorrhage on baseline imaging',
+      'Posterior circulation occlusion',
+      'Standard contraindications to endovascular thrombectomy',
+      'Comorbid illness expected to limit 90-day follow-up',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'The full mRS 0 to 6 distribution at 90 days for each arm. Because LASTE included unrestricted infarct size, the medical-care arm carries a heavy concentration in mRS 5 and 6, and the thrombectomy arm shifts that mass leftward toward lower disability scores.',
+      },
+      {
+        question: 'What do the numbers mean clinically?',
+        answer: 'The median 90-day mRS was 4 with thrombectomy versus 6 with medical care alone. The generalized odds ratio for a one-step better mRS was 1.63 (95% CI 1.29 to 2.06, P less than 0.001), and 90-day mortality fell from 55.5% to 36.1% (adjusted RR 0.65, 95% CI 0.50 to 0.84). The number needed to treat for one patient to have a lower mRS at 90 days was 4.',
+      },
+      {
+        question: 'What is the key limitation to keep in mind?',
+        answer: 'Symptomatic intracerebral hemorrhage was higher with thrombectomy (9.6% versus 5.7%), and the trial was stopped early after external positive large-core data emerged. Most patients still ended with substantial disability; LASTE moves the curve, it does not normalize outcomes.',
+      },
+    ],
+    howToInterpret: {
+      /* claimId: laste-primary-result | source: Costalat NEJM 2024 */
+      proves: 'In patients with anterior circulation LVO and a large established infarct (ASPECTS 5 or lower, with no lower limit on ASPECTS or infarct volume) treated within 6.5 hours, thrombectomy plus medical care shifted the full mRS distribution toward better outcomes at 90 days (generalized OR 1.63, 95% CI 1.29 to 2.06, P less than 0.001) and lowered all-cause mortality from 55.5% to 36.1% (adjusted RR 0.65, 95% CI 0.50 to 0.84). The median 90-day mRS improved from 6 to 4.',
+      doesNotProve: 'It does not establish benefit beyond 6.5 hours from last-known-well, and it does not test thrombectomy in posterior circulation large infarcts. It does not show that most LASTE patients return to functional independence; the shift is from death and severe disability toward moderate or moderately-severe disability.',
+      cautions: 'Symptomatic intracerebral hemorrhage was higher with thrombectomy (9.6% versus 5.7%), and 11 procedure-related complications occurred in the EVT arm. Most surviving patients remained dependent. The trial was stopped early on the basis of external large-core data, which can amplify estimated effect size. Selection of which large-core patients gain the most still requires individualized judgment about pre-stroke function, comorbidity, and goals of care.',
+    },
+    /* claimId: laste-bedside-pearl | source: Costalat NEJM 2024 */
+    bedsidePearl: 'A very low ASPECTS is no longer an automatic disqualifier. For an anterior circulation LVO patient inside 6.5 hours with ASPECTS 5 or lower, even with no measured floor on infarct volume, LASTE supports offering thrombectomy. Frame the conversation around mortality reduction (55.5% to 36.1%) and median mRS shift from 6 to 4, not around full functional recovery.',
+    bottomLineSummary: 'LASTE showed that thrombectomy benefits patients with large established infarcts (ASPECTS 5 or lower, with no lower bound) treated within 6.5 hours, shifting median 90-day mRS from 6 to 4 and lowering mortality from 55.5% to 36.1%, at the cost of more symptomatic hemorrhage.',
+    ordinalStats: {
+      commonOR: 1.63,
+      ciLow: 1.29,
+      ciHigh: 2.06,
+      direction: 'positive',
+      pValue: 0.0009, // Published Costalat NEJM 2024 reports P<0.001; store <0.001 so JSX conditional renders correctly
+    },
   },
   'tension-trial': {
     id: 'tension-trial',
@@ -1775,6 +1860,53 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT03094715',
     listCategory: 'thrombectomy',
     listDescription: 'Large-core EVT trial using pragmatic non-contrast CT selection rather than perfusion imaging.',
+    archetypeId: 'B',
+    trialResult: 'POSITIVE',
+    inclusionCriteria: [
+      'Age 18 years or older, with a pre-specified upper bound of 80 years per protocol',
+      'Acute ischemic stroke from anterior circulation large vessel occlusion (intracranial ICA or M1)',
+      'Large established infarct defined as ASPECTS 3 to 5 on non-contrast CT or DWI; perfusion imaging not required',
+      'Treatment feasible within 12 hours of stroke onset or last-known-well',
+      'NIHSS less than 26',
+      'Pre-stroke mRS 0 or 1',
+    ],
+    exclusionCriteria: [
+      'Pre-stroke mRS greater than 1',
+      'High-grade extracranial stenosis requiring stent placement during EVT',
+      'Vascular access or anatomy precluding endovascular thrombectomy',
+      'Acute intracranial hemorrhage or significant mass effect',
+      'Standard contraindications to endovascular thrombectomy',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'The full mRS 0 to 6 distribution at 90 days in each arm. The TENSION population was selected almost entirely by non-contrast CT ASPECTS 3 to 5, so the chart represents pragmatic real-world selection without perfusion imaging.',
+      },
+      {
+        question: 'What do the numbers mean clinically?',
+        answer: 'The median 90-day mRS was 4 with thrombectomy versus 5 with medical treatment alone. The adjusted common odds ratio for a one-step better mRS was 2.58 (95% CI 1.60 to 4.15, P=0.0001), and 90-day mortality fell from 51% to 40% (P=0.038). Symptomatic intracranial hemorrhage was similar in both arms (5%).',
+      },
+      {
+        question: 'What is the key limitation to keep in mind?',
+        answer: 'TENSION enrolled 253 patients before stopping early at the first interim analysis, which can inflate estimated effect size. The trial used pragmatic ASPECTS 3 to 5 selection and did not extend below ASPECTS 3, so it does not directly inform decisions in patients with ASPECTS 0 to 2.',
+      },
+    ],
+    howToInterpret: {
+      /* claimId: tension-primary-result | source: Bendszus Lancet 2023 */
+      proves: 'In patients with anterior circulation LVO and a large established infarct defined as ASPECTS 3 to 5 by mostly non-contrast CT (perfusion imaging not required) treated within 12 hours, endovascular thrombectomy plus medical treatment shifted the full mRS distribution toward better outcomes at 90 days (adjusted common OR 2.58, 95% CI 1.60 to 4.15, P=0.0001) and lowered 90-day mortality from 51% to 40% without increasing symptomatic hemorrhage. Median 90-day mRS improved from 5 to 4.',
+      doesNotProve: 'It does not establish benefit for ASPECTS 0 to 2, for posterior circulation large infarcts, or for treatment beyond 12 hours. It does not test thrombectomy versus medical treatment in patients with NIHSS 26 or higher. The trial was not powered to compare CT-only versus perfusion-based selection head to head.',
+      cautions: 'TENSION used pragmatic ASPECTS 3 to 5 selection by non-contrast CT, often without CT perfusion or MRI; this is a feature for generalizability but means the trial cannot adjudicate whether perfusion imaging would identify a non-responder subset. The trial stopped early at the first interim analysis at 253 of a planned 665 patients, which can inflate estimated effect size. As with all large-core EVT, most surviving patients remain dependent.',
+    },
+    /* claimId: tension-bedside-pearl | source: Bendszus Lancet 2023 */
+    bedsidePearl: 'For an anterior circulation LVO patient with ASPECTS 3 to 5 inside 12 hours, TENSION supports proceeding to thrombectomy on non-contrast CT alone; you do not need to wait for perfusion imaging to make the decision. Frame the discussion around mortality reduction (51% to 40%) and median mRS shift from 5 to 4, not around independence.',
+    bottomLineSummary: 'TENSION showed that endovascular thrombectomy benefits anterior circulation LVO patients with large established infarcts (ASPECTS 3 to 5) selected mainly by non-contrast CT and treated within 12 hours, shifting median 90-day mRS from 5 to 4 and lowering mortality from 51% to 40% with no increase in symptomatic hemorrhage.',
+    ordinalStats: {
+      commonOR: 2.58,
+      ciLow: 1.60,
+      ciHigh: 4.15,
+      direction: 'positive',
+      pValue: 0.0001,
+    },
   },
   'compass-trial': {
     id: 'compass-trial',
@@ -2024,6 +2156,45 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT03876119',
     listCategory: 'thrombectomy',
     listDescription: 'Post-thrombectomy adjunct IA alteplase trial suggesting better excellent outcomes.',
+    archetypeId: 'A',
+    trialResult: 'POSITIVE',
+    inclusionCriteria: [
+      'Age 18 years or older',
+      'Acute ischemic stroke from large vessel occlusion treated with thrombectomy within 24 hours of onset',
+      'Successful reperfusion after thrombectomy defined as expanded TICI (eTICI) 2b50 or higher',
+      'Pre-stroke functional independence',
+      'Adjunct intra-arterial alteplase administered immediately after the procedure (0.225 mg/kg, max 22.5 mg, infused over 15 to 30 minutes)',
+    ],
+    exclusionCriteria: [
+      'Any contraindication to IV alteplase per local guidelines (other than time to therapy)',
+      'Admission NIHSS greater than 25',
+      'Complete clinical recovery during the angiography procedure',
+      'ASPECTS less than 6 on non-contrast CT if symptom duration was less than 4.5 hours',
+      'Use of oral anticoagulants (a major exclusion in practice)',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'The proportion of patients reaching an excellent outcome (mRS 0 to 1) at 90 days in each arm after successful reperfusion (eTICI 2b50 or higher) from thrombectomy. The comparator is placebo, not no thrombectomy.',
+      },
+      {
+        question: 'What do the numbers mean clinically?',
+        answer: 'Excellent outcome was 59.0% with adjunct intra-arterial alteplase versus 40.4% with placebo (adjusted risk difference 18.4%, 95% CI 0.3% to 36.4%, P=0.047). Functional independence (mRS 0 to 2) was 83.6% versus 63.5%. Symptomatic intracranial hemorrhage at 24 hours was 0% versus 3.8%.',
+      },
+      {
+        question: 'What is the key limitation to keep in mind?',
+        answer: 'CHOICE was a Phase 2b trial that enrolled only 121 of a planned 200 patients before stopping early during the COVID-19 pandemic and placebo supply expiration. The 95% CI for the primary outcome reached the floor of 0.3%, meaning the result is statistically significant but borderline. Replication in a larger Phase 3 trial is needed before routine adoption.',
+      },
+    ],
+    howToInterpret: {
+      /* claimId: choice-primary-result | source: Renu JAMA 2022 */
+      proves: 'In a Phase 2b trial of 121 patients with large vessel occlusion stroke who achieved eTICI 2b50 or higher reperfusion from thrombectomy, adjunct intra-arterial alteplase (0.225 mg/kg, max 22.5 mg) immediately after the procedure increased the rate of excellent functional outcome (mRS 0 to 1) at 90 days from 40.4% to 59.0% (adjusted risk difference 18.4%, 95% CI 0.3% to 36.4%, P=0.047), with no excess symptomatic intracranial hemorrhage at 24 hours.',
+      doesNotProve: 'Because the primary endpoint was mRS 0 to 1 rather than mRS 0 to 2, CHOICE does not establish a benefit for the standard functional independence threshold used in most thrombectomy trials. It does not establish a population-wide standard of care; the 95% CI lower bound of 0.3% means the magnitude of benefit is highly uncertain. It does not address adjunct intra-arterial therapy after incomplete reperfusion (eTICI less than 2b50).',
+      cautions: 'CHOICE is Phase 2b evidence (N=121), stopped early at 60% of planned enrollment during the pandemic, with a confidence interval that nearly crosses zero. Patients on oral anticoagulants were excluded, and only about 7% of thrombectomy patients in participating centers were eligible, limiting generalizability. Replication in a larger Phase 3 trial is required before routine use of adjunct intra-arterial alteplase after successful thrombectomy.',
+    },
+    /* claimId: choice-bedside-pearl | source: Renu JAMA 2022 */
+    bedsidePearl: 'CHOICE is hypothesis-generating, not practice-changing. After successful thrombectomy (eTICI 2b50 or higher), adjunct intra-arterial alteplase improved excellent outcome from 40.4% to 59.0% in 121 patients, but the trial was stopped early during COVID and the lower bound of the 95% CI was 0.3%. Wait for Phase 3 replication before adopting routinely.',
+    bottomLineSummary: 'CHOICE was a small Phase 2b trial (N=121) suggesting that adjunct intra-arterial alteplase after successful thrombectomy improves excellent functional outcome (mRS 0 to 1) at 90 days from 40.4% to 59.0%. The trial stopped early during COVID, the confidence interval was wide, and replication is needed before routine use.',
   },
   'rescue-bt-trial': {
     id: 'rescue-bt-trial',

@@ -4014,6 +4014,431 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── THRACE: Batch 2 Archetype A (TRIALS_SPEC v1.1 §3) ───────────────────
+  if (trialId === 'thrace-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const isPositive = tm.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>THRACE</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In alteplase-eligible patients with proximal anterior circulation LVO and NIHSS 10 to 25 treated within 5 hours, does adding mechanical thrombectomy to IV alteplase improve functional independence at 3 months compared with alteplase alone?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 3 Months</p>
+              <p className="text-xs text-slate-500 mt-0.5">All randomized patients (proximal anterior circulation LVO, NIHSS 10 to 25)</p>
+            </div>
+            <div className="p-4">
+              {tm.mrsDistribution && tm.ordinalStats ? (
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="intervention"
+                />
+              ) : (
+                <DeltaBandChart
+                  treatmentPct={tm.efficacyResults.treatment.percentage}
+                  controlPct={tm.efficacyResults.control.percentage}
+                  treatmentLabel={tm.efficacyResults.treatment.name}
+                  controlLabel={tm.efficacyResults.control.name}
+                  endpoint="mRS 0-2 at 3 Months"
+                  riskRatio="1.55"
+                  ciLow="1.05"
+                  ciHigh="2.30"
+                  pValue="0.028"
+                  winnerArm={isPositive ? 'treatment' : 'none'}
+                />
+              )}
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, 'French multicenter RCT enrolling 414 patients across 26 centers between 2010 and 2015 (Bracard Lancet Neurol 2016).')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/trials/mr-clean-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">MR CLEAN</Link>
+              <Link to="/trials/escape-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ESCAPE</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="THRACE"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── LASTE: Batch 2 Archetype B (TRIALS_SPEC v1.1 §3) ────────────────────
+  if (trialId === 'laste-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const isPositive = tm.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>LASTE</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with anterior circulation LVO and a large established infarct (ASPECTS 5 or lower, no lower limit on infarct volume) treatable within 6.5 hours, does thrombectomy plus medical care shift the mRS distribution toward better outcomes and reduce mortality compared with medical care alone?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
+              <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, ASPECTS 5 or lower)</p>
+            </div>
+            <div className="p-4">
+              {tm.mrsDistribution && tm.ordinalStats ? (
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="intervention"
+                />
+              ) : tm.ordinalStats ? (
+                <div className="space-y-4">
+                  <div style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 12, padding: '20px 24px', textAlign: 'center' }}>
+                    <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#15803d', marginBottom: 6 }}>
+                      mRS Ordinal Shift at 90 Days
+                    </p>
+                    <p style={{ fontSize: 38, fontWeight: 700, color: '#15803d', lineHeight: 1, marginBottom: 6 }}>
+                      cOR {tm.ordinalStats.commonOR}
+                    </p>
+                    <p style={{ fontSize: 13, color: '#166534' }}>
+                      95% CI {tm.ordinalStats.ciLow} to {tm.ordinalStats.ciHigh}
+                      {tm.ordinalStats.pValue !== undefined
+                        ? (tm.ordinalStats.pValue < 0.001 ? ' · P <0.001' : ` · P = ${tm.ordinalStats.pValue}`)
+                        : ' · P <0.001'}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
+                      <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#15803d', marginBottom: 4 }}>
+                        Median mRS — Thrombectomy
+                      </p>
+                      <p style={{ fontSize: 32, fontWeight: 700, color: '#15803d', lineHeight: 1.1 }}>4</p>
+                    </div>
+                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
+                      <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748b', marginBottom: 4 }}>
+                        Median mRS — Medical Care
+                      </p>
+                      <p style={{ fontSize: 32, fontWeight: 700, color: '#475569', lineHeight: 1.1 }}>6</p>
+                    </div>
+                  </div>
+                  <p style={{ fontSize: 11, color: '#94a3b8', textAlign: 'center' }}>
+                    Mortality: 36.1% (thrombectomy) vs 55.5% (medical care) · sICH: 9.6% vs 5.7%
+                  </p>
+                </div>
+              ) : (
+                <DeltaBandChart
+                  treatmentPct={tm.efficacyResults.treatment.percentage}
+                  controlPct={tm.efficacyResults.control.percentage}
+                  treatmentLabel={tm.efficacyResults.treatment.name}
+                  controlLabel={tm.efficacyResults.control.name}
+                  endpoint="mRS Ordinal Shift at 90 Days"
+                  riskRatio={String(tm.efficacyResults.treatment.percentage)}
+                  ciLow=""
+                  ciHigh=""
+                  pValue="<0.001"
+                  winnerArm={isPositive ? 'treatment' : 'none'}
+                />
+              )}
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, 'French multicenter RCT enrolling 333 patients across multiple centers (Costalat NEJM 2024). Stopped early after external positive large-core data emerged from ANGEL-ASPECT, SELECT2, and TESLA.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/trials/tension-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">TENSION</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="LASTE"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── TENSION: Batch 2 Archetype B (TRIALS_SPEC v1.1 §3) ──────────────────
+  if (trialId === 'tension-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const isPositive = tm.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>TENSION</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with anterior circulation LVO and ASPECTS 3 to 5 selected predominantly by non-contrast CT treated within 12 hours, does endovascular thrombectomy plus medical treatment shift the mRS distribution toward better outcomes at 90 days compared with medical treatment alone?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
+              <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, ASPECTS 3 to 5)</p>
+            </div>
+            <div className="p-4">
+              {tm.mrsDistribution && tm.ordinalStats ? (
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="intervention"
+                />
+              ) : tm.ordinalStats ? (
+                <div className="space-y-4">
+                  <div style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 12, padding: '20px 24px', textAlign: 'center' }}>
+                    <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#15803d', marginBottom: 6 }}>
+                      mRS Ordinal Shift at 90 Days
+                    </p>
+                    <p style={{ fontSize: 38, fontWeight: 700, color: '#15803d', lineHeight: 1, marginBottom: 6 }}>
+                      cOR {tm.ordinalStats.commonOR}
+                    </p>
+                    <p style={{ fontSize: 13, color: '#166534' }}>
+                      95% CI {tm.ordinalStats.ciLow} to {tm.ordinalStats.ciHigh}
+                      {tm.ordinalStats.pValue !== undefined
+                        ? (tm.ordinalStats.pValue < 0.001 ? ' · P <0.001' : ` · P = ${tm.ordinalStats.pValue}`)
+                        : ' · P <0.001'}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
+                      <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#15803d', marginBottom: 4 }}>
+                        Median mRS — EVT
+                      </p>
+                      <p style={{ fontSize: 32, fontWeight: 700, color: '#15803d', lineHeight: 1.1 }}>4</p>
+                    </div>
+                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
+                      <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748b', marginBottom: 4 }}>
+                        Median mRS — Medical Treatment
+                      </p>
+                      <p style={{ fontSize: 32, fontWeight: 700, color: '#475569', lineHeight: 1.1 }}>5</p>
+                    </div>
+                  </div>
+                  <p style={{ fontSize: 11, color: '#94a3b8', textAlign: 'center' }}>
+                    Mortality: 40% (EVT) vs 51% (medical treatment) · sICH: 5% both arms
+                  </p>
+                </div>
+              ) : (
+                <DeltaBandChart
+                  treatmentPct={tm.efficacyResults.treatment.percentage}
+                  controlPct={tm.efficacyResults.control.percentage}
+                  treatmentLabel={tm.efficacyResults.treatment.name}
+                  controlLabel={tm.efficacyResults.control.name}
+                  endpoint="mRS Ordinal Shift at 90 Days"
+                  riskRatio={String(tm.efficacyResults.treatment.percentage)}
+                  ciLow=""
+                  ciHigh=""
+                  pValue="0.0001"
+                  winnerArm={isPositive ? 'treatment' : 'none'}
+                />
+              )}
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, 'European multicenter RCT enrolling 253 patients between 2018 and 2023 (Bendszus Lancet 2023). Stopped early at the first interim analysis for efficacy.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/trials/laste-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">LASTE</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="TENSION"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── CHOICE: Batch 2 Archetype A (TRIALS_SPEC v1.1 §3) ───────────────────
+  if (trialId === 'choice-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const isPositive = tm.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CHOICE</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with large vessel occlusion stroke who achieved successful reperfusion (eTICI 2b50 or higher) after thrombectomy, does adjunct intra-arterial alteplase improve excellent functional outcome (mRS 0 to 1) at 90 days compared with placebo?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-1 at 90 Days</p>
+              <p className="text-xs text-slate-500 mt-0.5">All randomized patients (LVO, eTICI 2b50+ reperfusion after thrombectomy)</p>
+            </div>
+            <div className="p-4">
+              {tm.mrsDistribution && tm.ordinalStats ? (
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="intervention"
+                />
+              ) : (
+                <DeltaBandChart
+                  treatmentPct={tm.efficacyResults.treatment.percentage}
+                  controlPct={tm.efficacyResults.control.percentage}
+                  treatmentLabel={tm.efficacyResults.treatment.name}
+                  controlLabel={tm.efficacyResults.control.name}
+                  endpoint="mRS 0-1 at 90 Days"
+                  riskRatio="RD +18.4 pp"
+                  ciLow="0.3 pp"
+                  ciHigh="36.4 pp"
+                  pValue="0.047"
+                  winnerArm={isPositive ? 'treatment' : 'none'}
+                />
+              )}
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, 'Phase 2b randomized double-blind placebo-controlled trial enrolling 121 patients across 7 stroke centers in Catalonia between 2018 and 2021 (Renu JAMA 2022). Stopped early during the COVID-19 pandemic.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/trials/mr-clean-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">MR CLEAN</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="CHOICE"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
   // ─────────────────────────────────────────────────────────────────────────
 
   if (!trial) {
