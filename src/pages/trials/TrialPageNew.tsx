@@ -3572,6 +3572,448 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── MR CLEAN: Batch 1 Archetype B (TRIALS_SPEC v1.1 §3) ──────────────────
+  if (trialId === 'mr-clean-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const isPositive = tm.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>MR CLEAN</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with proximal anterior circulation large-vessel occlusion treatable within 6 hours, does intra-arterial treatment added to usual care improve functional outcome at 90 days compared with usual care alone?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+              <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO)</p>
+            </div>
+            <div className="p-4">
+              {tm.mrsDistribution && tm.ordinalStats ? (
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="intervention"
+                />
+              ) : (
+                <DeltaBandChart
+                  treatmentPct={tm.efficacyResults.treatment.percentage}
+                  controlPct={tm.efficacyResults.control.percentage}
+                  treatmentLabel={tm.efficacyResults.treatment.name}
+                  controlLabel={tm.efficacyResults.control.name}
+                  endpoint="mRS 0-2 at 90 Days"
+                  riskRatio="1.67"
+                  ciLow="1.21"
+                  ciHigh="2.30"
+                  pValue="0.003"
+                  winnerArm={isPositive ? 'treatment' : 'none'}
+                />
+              )}
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, 'Pragmatic phase 3 RCT enrolling 500 patients across 16 Dutch centers between December 2010 and June 2014 (Berkhemer NEJM 2015).')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/trials/escape-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ESCAPE</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="MR CLEAN"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── ESCAPE: Batch 1 Archetype B (TRIALS_SPEC v1.1 §3) ────────────────────
+  if (trialId === 'escape-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const isPositive = tm.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ESCAPE</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with disabling anterior circulation LVO, small infarct cores, and good collaterals on multiphase CTA, does rapid endovascular thrombectomy added to standard care within 12 hours improve functional outcome at 90 days compared with standard care alone?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+              <p className="text-xs text-slate-500 mt-0.5">All randomized patients (small core, good collaterals)</p>
+            </div>
+            <div className="p-4">
+              {tm.mrsDistribution && tm.ordinalStats ? (
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="intervention"
+                />
+              ) : (
+                <DeltaBandChart
+                  treatmentPct={tm.efficacyResults.treatment.percentage}
+                  controlPct={tm.efficacyResults.control.percentage}
+                  treatmentLabel={tm.efficacyResults.treatment.name}
+                  controlLabel={tm.efficacyResults.control.name}
+                  endpoint="mRS 0-2 at 90 Days"
+                  riskRatio="2.60"
+                  ciLow="1.70"
+                  ciHigh="3.80"
+                  pValue="<0.001"
+                  winnerArm={isPositive ? 'treatment' : 'none'}
+                />
+              )}
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, 'International phase 3 RCT enrolling 316 patients across 22 centers between February 2013 and October 2014 (Goyal NEJM 2015). Stopped early for efficacy.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/trials/mr-clean-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">MR CLEAN</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="ESCAPE"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── REVASCAT: Batch 1 Archetype B (TRIALS_SPEC v1.1 §3) ──────────────────
+  if (trialId === 'revascat-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const isPositive = tm.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>REVASCAT</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with anterior circulation LVO presenting up to 8 hours from onset who were ineligible for or refractory to IV alteplase, does Solitaire stent-retriever thrombectomy added to medical therapy improve functional outcome at 90 days compared with medical therapy alone?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+              <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, within 8 hours)</p>
+            </div>
+            <div className="p-4">
+              {tm.mrsDistribution && tm.ordinalStats ? (
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="intervention"
+                />
+              ) : (
+                <DeltaBandChart
+                  treatmentPct={tm.efficacyResults.treatment.percentage}
+                  controlPct={tm.efficacyResults.control.percentage}
+                  treatmentLabel={tm.efficacyResults.treatment.name}
+                  controlLabel={tm.efficacyResults.control.name}
+                  endpoint="mRS 0-2 at 90 Days"
+                  riskRatio="1.70"
+                  ciLow="1.05"
+                  ciHigh="2.80"
+                  pValue="0.009"
+                  winnerArm={isPositive ? 'treatment' : 'none'}
+                />
+              )}
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, 'Phase 3 RCT embedded in a population-based stroke registry, enrolling 206 patients across 4 Catalan centers between November 2012 and December 2014 (Jovin NEJM 2015). Stopped early after the other 2015 EVT trials reported positive results.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/trials/escape-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ESCAPE</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="REVASCAT"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── EXTEND-IA: Batch 1 Archetype A — co-primary endpoint note (TRIALS_SPEC v1.1 §3.5) ──
+  if (trialId === 'extend-ia-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const isPositive = tm.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>EXTEND-IA</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with anterior circulation LVO and CT-perfusion mismatch who had received IV alteplase, does adding Solitaire FR thrombectomy improve early reperfusion and neurological recovery compared with alteplase alone?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          {/* Secondary outcome chart — primary was co-primary reperfusion + neurological improvement */}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Secondary outcome: mRS 0-2 at 90 days</p>
+            </div>
+            <div className="p-4">
+              <div className="mb-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
+                <p className="text-xs text-amber-800 leading-relaxed">
+                  <strong>Co-primary endpoint note:</strong> Both co-primary endpoints were met: reperfusion at 24 hours (100% vs 37%, P less than 0.001) and early neurological improvement at day 3 (80% vs 37%, P less than 0.001). The chart below shows the secondary functional outcome (mRS 0 to 2 at 90 days) for bedside context.
+                </p>
+              </div>
+              <DeltaBandChart
+                treatmentPct={tm.efficacyResults.treatment.percentage}
+                controlPct={tm.efficacyResults.control.percentage}
+                treatmentLabel={tm.efficacyResults.treatment.name}
+                controlLabel={tm.efficacyResults.control.name}
+                endpoint="mRS 0-2 at 90 Days (Secondary Outcome)"
+                riskRatio="2.92"
+                ciLow="1.20"
+                ciHigh="7.11"
+                pValue="0.02"
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, 'Investigator-initiated multicenter RCT enrolling 70 patients in Australia and New Zealand between August 2012 and October 2014 (Campbell NEJM 2015). Stopped early for efficacy after 70 of 100 planned patients.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/trials/swift-prime-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">SWIFT PRIME</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="EXTEND-IA"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── SWIFT PRIME: Batch 1 Archetype B (TRIALS_SPEC v1.1 §3) ───────────────
+  if (trialId === 'swift-prime-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const isPositive = tm.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>SWIFT PRIME</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with anterior circulation LVO who had received IV alteplase within 4.5 hours, does adding Solitaire stent-retriever thrombectomy improve functional outcome at 90 days compared with alteplase alone?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+              <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, IV alteplase within 4.5 hours)</p>
+            </div>
+            <div className="p-4">
+              {tm.mrsDistribution && tm.ordinalStats ? (
+                <GrottaBarChart
+                  arms={tm.mrsDistribution as [{ arm: string; n: number; pct: number[] }, { arm: string; n: number; pct: number[] }]}
+                  ordinalStats={tm.ordinalStats}
+                  winnerArm="intervention"
+                />
+              ) : (
+                <DeltaBandChart
+                  treatmentPct={tm.efficacyResults.treatment.percentage}
+                  controlPct={tm.efficacyResults.control.percentage}
+                  treatmentLabel={tm.efficacyResults.treatment.name}
+                  controlLabel={tm.efficacyResults.control.name}
+                  endpoint="mRS 0-2 at 90 Days"
+                  riskRatio="2.75"
+                  ciLow="1.53"
+                  ciHigh="4.95"
+                  pValue="<0.001"
+                  winnerArm={isPositive ? 'treatment' : 'none'}
+                />
+              )}
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, 'International multicenter RCT enrolling 196 patients across 39 centers between December 2012 and November 2014 (Saver NEJM 2015). Stopped early for efficacy at 196 of a planned 833 patients.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/trials/escape-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ESCAPE</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="SWIFT PRIME"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
   // ─────────────────────────────────────────────────────────────────────────
 
   if (!trial) {

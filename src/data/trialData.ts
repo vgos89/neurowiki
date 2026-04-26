@@ -726,6 +726,53 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     keyMessage: 'MR CLEAN established modern EVT as effective therapy for anterior circulation LVO.',
     listCategory: 'thrombectomy',
     listDescription: 'First modern positive thrombectomy trial for anterior circulation large-vessel occlusion.',
+    archetypeId: 'B',
+    trialResult: 'POSITIVE',
+    doi: '10.1056/NEJMoa1411587',
+    pmid: '25517348',
+    inclusionCriteria: [
+      'Age 18 years or older',
+      'Acute ischemic stroke with NIHSS of 2 or more',
+      'Proximal arterial occlusion in the anterior circulation (intracranial ICA, M1 or M2 of MCA, A1 or A2 of ACA) confirmed on CTA, MRA, or DSA',
+      'Intra-arterial treatment feasible within 6 hours of symptom onset',
+      'Pre-stroke functional independence (mRS 0 to 2 by history)',
+    ],
+    exclusionCriteria: [
+      'Onset of stroke symptoms more than 6 hours before groin puncture',
+      'No demonstrable proximal anterior circulation occlusion on vessel imaging',
+      'Severe pre-existing dependency (mRS greater than 2)',
+      'Pregnancy or breastfeeding',
+      'Standard contraindications to endovascular treatment, including uncorrectable coagulopathy',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'A stacked bar across mRS 0 to 6 for each arm, where mRS 0 is no symptoms and mRS 6 is death. The width of each segment is the percentage of patients in that disability category at 90 days.',
+      },
+      {
+        question: 'What do the numbers mean clinically?',
+        answer: 'Functional independence (mRS 0 to 2) was 32.6% with intra-arterial treatment versus 19.1% with usual care. The full ordinal shift is captured by the adjusted common odds ratio of 1.67, meaning intervention patients had 1.67 times the odds of being one mRS point better.',
+      },
+      {
+        question: 'What is the key limitation to keep in mind?',
+        answer: 'MR CLEAN was a pragmatic trial done in 16 Dutch centers with no perfusion or collateral imaging requirement, and only 89% received IV alteplase. Workflow times and patient selection in current practice are tighter, which can shift baseline outcomes.',
+      },
+    ],
+    howToInterpret: {
+      /* claimId: mr-clean-primary-result | source: Berkhemer NEJM 2015 */
+      proves: 'In patients with imaging-confirmed proximal anterior circulation large-vessel occlusion treatable within 6 hours, intra-arterial treatment (predominantly stent-retriever thrombectomy) added to usual care reduced disability across the full mRS distribution at 90 days (adjusted common OR 1.67, 95% CI 1.21 to 2.30) and increased functional independence from 19.1% to 32.6%.',
+      doesNotProve: 'It does not address late-window EVT (beyond 6 hours), which was tested by DAWN and DEFUSE-3. It does not establish efficacy in posterior circulation occlusion, large established infarcts (low ASPECTS), or patients with severe pre-stroke disability, all of which were excluded.',
+      cautions: 'Pragmatic Dutch trial with heterogeneous device use including older first-generation devices in some patients; modern stent-retriever and aspiration platforms produce higher reperfusion rates. About 89% received IV alteplase. ASPECTS was not required for enrollment, so a small fraction of patients had low ASPECTS and may not represent current selection. Open-label design with blinded outcome assessment.',
+    },
+    /* claimId: mr-clean-bedside-pearl | source: Berkhemer NEJM 2015 */
+    bedsidePearl: 'When CTA confirms a proximal anterior circulation occlusion within 6 hours and the patient was independent before the stroke, MR CLEAN is consistent with proceeding to thrombectomy without waiting for IV alteplase to finish, in line with current AHA/ASA practice. The absolute gain in functional independence was 13.5 percentage points (NNT about 7).',
+    bottomLineSummary: 'MR CLEAN was the first modern positive thrombectomy trial. In anterior circulation LVO treated within 6 hours, adding intra-arterial therapy to usual care raised functional independence from 19.1% to 32.6% and shifted the entire mRS distribution toward better outcomes.',
+    ordinalStats: {
+      commonOR: 1.67,
+      ciLow: 1.21,
+      ciHigh: 2.30,
+      direction: 'positive',
+    },
   },
   'escape-trial': {
     id: 'escape-trial',
@@ -788,6 +835,63 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT01778335',
     listCategory: 'thrombectomy',
     listDescription: 'Fast thrombectomy trial using collateral-based CT selection and strict workflow targets.',
+    archetypeId: 'B',
+    trialResult: 'POSITIVE',
+    doi: '10.1056/NEJMoa1414905',
+    pmid: '25671798',
+    inclusionCriteria: [
+      'Age 18 years or older with disabling acute ischemic stroke',
+      'NIHSS greater than 5',
+      'Pre-stroke functional independence (Barthel index 90 or higher)',
+      'Small infarct core on noncontrast CT (ASPECTS 6 to 10)',
+      'Moderate to good collateral circulation on multiphase CTA (filling of 50% or more of pial arterial circulation in the affected MCA territory)',
+      'Proximal anterior circulation occlusion (intracranial ICA or M1 MCA, including M1-equivalent)',
+      'Treatment achievable within 12 hours of symptom onset',
+    ],
+    exclusionCriteria: [
+      'Large established infarct core (ASPECTS less than 6)',
+      'Poor collateral circulation on multiphase CTA',
+      'Posterior circulation stroke',
+      'Severe pre-stroke disability',
+      'Standard contraindications to endovascular therapy',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'Stacked distribution of mRS 0 to 6 at 90 days for each arm. The fraction of dark green segments (mRS 0 to 2) reflects functional independence; the rightmost segment (mRS 6) is mortality.',
+      },
+      {
+        question: 'What do the numbers mean clinically?',
+        answer: 'Functional independence rose from 29.3% to 53.0% with EVT. The common odds ratio of 2.6 (95% CI 1.7 to 3.8) means EVT patients had 2.6 times the odds of being at a better mRS level. Mortality also fell from 19.0% to 10.4%.',
+      },
+      {
+        question: 'What is the key limitation to keep in mind?',
+        answer: 'ESCAPE selected patients with small infarct cores and good collaterals using multiphase CTA. The benefit shown does not generalize to patients with low ASPECTS or poor collaterals, who were specifically excluded. The trial was stopped early for efficacy, which can inflate effect estimates.',
+      },
+    ],
+    howToInterpret: {
+      /* claimId: escape-primary-result | source: Goyal NEJM 2015 */
+      proves: 'In patients with small infarct cores (ASPECTS 6 to 10) and moderate-to-good collaterals on multiphase CTA, rapid endovascular thrombectomy added to standard care within 12 hours of onset reduced disability across the full mRS distribution (common OR 2.6, 95% CI 1.7 to 3.8; P less than 0.001), increased functional independence from 29.3% to 53.0%, and reduced 90-day mortality from 19.0% to 10.4%.',
+      doesNotProve: 'It does not establish benefit in patients excluded by the imaging selection criteria, particularly low ASPECTS or poor collaterals. It does not address EVT beyond 12 hours, which was later tested by DAWN and DEFUSE-3 with perfusion-based selection.',
+      cautions: 'ESCAPE was stopped early at 316 of a planned 500 patients after positive interim analysis, which can overestimate effect size. Workflow times in ESCAPE were exceptional (median CT-to-first-reperfusion 84 minutes) and may not be reproducible in less specialized centers. Multiphase CTA collateral assessment requires reader expertise.',
+    },
+    /* claimId: escape-bedside-pearl | source: Goyal NEJM 2015 */
+    bedsidePearl: 'For an LVO patient up to 12 hours from onset with ASPECTS of 6 or higher and good collaterals on multiphase CTA, ESCAPE supports thrombectomy with a striking absolute mortality reduction of about 9 percentage points. Aim to keep the CT-to-puncture interval as short as the trial achieved.',
+    bottomLineSummary: 'ESCAPE showed that rapid thrombectomy in patients with small infarct cores and good collaterals improves functional outcome and reduces mortality within a 12-hour window. Both effects were large enough to stop the trial early.',
+    /* mrsDistribution — source: Wiki Journal Club secondary summary of Goyal NEJM 2015 Figure 2.
+       Primary-source extraction against Goyal Figure 2 deferred to W5.2 (citation registry milestone).
+       Values are provisional placeholders; clinical-reviewer to re-verify when W5.2 ships. */
+    mrsDistribution: [
+      { arm: 'EVT + Standard Care', n: 165, pct: [15, 21, 18, 16, 13, 7, 10] },
+      { arm: 'Standard Care Alone', n: 150, pct: [7, 10, 12, 15, 25, 12, 19] },
+    ],
+    ordinalStats: {
+      commonOR: 2.6,
+      ciLow: 1.7,
+      ciHigh: 3.8,
+      direction: 'positive',
+      pValue: 0.001,
+    },
   },
   'revascat-trial': {
     id: 'revascat-trial',
@@ -849,6 +953,55 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT01692379',
     listCategory: 'thrombectomy',
     listDescription: 'Spanish registry-embedded RCT confirming Solitaire thrombectomy benefit within 8 hours.',
+    archetypeId: 'B',
+    trialResult: 'POSITIVE',
+    doi: '10.1056/NEJMoa1503780',
+    pmid: '25882510',
+    inclusionCriteria: [
+      'Age 18 to 80 years (extended to 85 years during the trial)',
+      'Acute ischemic stroke with proximal anterior circulation occlusion (intracranial ICA or M1 MCA)',
+      'NIHSS of 6 or greater at the time of randomization',
+      'Pre-stroke functional independence (mRS 0 or 1)',
+      'Treatment feasible within 8 hours of symptom onset',
+      'Absence of large infarct on imaging (ASPECTS 7 or greater on CT, or 6 or greater on diffusion MRI)',
+      'Contraindication to IV alteplase, or failure of alteplase to recanalize after 30 minutes',
+    ],
+    exclusionCriteria: [
+      'Large established infarct on baseline imaging',
+      'Severe pre-stroke disability',
+      'Comorbidities or coagulopathy precluding endovascular treatment',
+      'Pregnancy',
+      'Symptom onset to randomization beyond 8 hours',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'Distribution of mRS scores at 90 days as stacked segments per arm. Each segment is the percentage of patients at that disability level. Lower scores (left side) are better.',
+      },
+      {
+        question: 'What do the numbers mean clinically?',
+        answer: 'Functional independence (mRS 0 to 2) was 43.7% with Solitaire thrombectomy versus 28.2% with medical therapy alone, an absolute increase of 15.5 percentage points. The adjusted common odds ratio for shifting one mRS level was 1.7 (95% CI 1.05 to 2.8).',
+      },
+      {
+        question: 'What is the key limitation to keep in mind?',
+        answer: 'REVASCAT enrolled within an 8-hour window in 4 Catalan centers and required either alteplase contraindication or alteplase failure to enter. The 206-patient sample is relatively small, and some patients in the medical arm crossed over after the 8-hour window. Late-window selection now uses perfusion or clinical-core mismatch (DAWN, DEFUSE-3).',
+      },
+    ],
+    howToInterpret: {
+      /* claimId: revascat-primary-result | source: Jovin NEJM 2015 */
+      proves: 'In patients with proximal anterior circulation occlusion presenting up to 8 hours from onset, Solitaire stent-retriever thrombectomy added to medical therapy reduced disability across the full mRS distribution at 90 days (adjusted OR for one-point shift 1.7, 95% CI 1.05 to 2.8) and increased functional independence from 28.2% to 43.7%.',
+      doesNotProve: 'It does not establish benefit beyond 8 hours, which required perfusion or clinical-core mismatch selection in DAWN and DEFUSE-3. It does not address patients with large established infarcts (ASPECTS less than 7 on CT) or those with severe pre-stroke disability, who were excluded.',
+      cautions: 'Modest sample size (n=206) and registry-embedded design at 4 Spanish centers. Most patients had ICA or M1 occlusion; M2 occlusions were not the focus. Mortality was not reduced (18.4% vs 15.5%). The trial was stopped early after positive interim analyses in the other 2015 trials, which can inflate effect estimates.',
+    },
+    /* claimId: revascat-bedside-pearl | source: Jovin NEJM 2015 */
+    bedsidePearl: 'For an anterior circulation LVO patient between 4.5 and 8 hours from onset, especially when alteplase is contraindicated or has failed, REVASCAT supports proceeding to Solitaire thrombectomy provided ASPECTS is 7 or higher on CT. The functional independence gain is about 15 percentage points (NNT about 7).',
+    bottomLineSummary: 'REVASCAT showed that Solitaire stent-retriever thrombectomy improved 90-day functional outcome in anterior circulation LVO treated within 8 hours, including in patients ineligible for or refractory to IV alteplase. The mRS distribution shifted toward better outcomes despite no mortality reduction.',
+    ordinalStats: {
+      commonOR: 1.7,
+      ciLow: 1.05,
+      ciHigh: 2.8,
+      direction: 'positive',
+    },
   },
   'extend-ia-trial': {
     id: 'extend-ia-trial',
@@ -910,6 +1063,48 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT01492725',
     listCategory: 'thrombectomy',
     listDescription: 'Perfusion-imaging thrombectomy trial showing major reperfusion and functional gains.',
+    archetypeId: 'A',
+    trialResult: 'POSITIVE',
+    doi: '10.1056/NEJMoa1414792',
+    pmid: '25671797',
+    inclusionCriteria: [
+      'Age 18 years or older',
+      'Acute ischemic stroke with anterior circulation large-vessel occlusion (intracranial ICA or M1 or M2 MCA) on CTA or MRA',
+      'IV alteplase started within 4.5 hours of symptom onset',
+      'Endovascular thrombectomy achievable within 6 hours of onset',
+      'CT perfusion or MRI perfusion-diffusion mismatch confirming salvageable tissue (ischemic core less than 70 mL, mismatch ratio greater than 1.2, mismatch volume greater than 10 mL)',
+      'Pre-stroke functional independence (mRS 0 to 1)',
+    ],
+    exclusionCriteria: [
+      'Large established infarct core (greater than 70 mL)',
+      'No perfusion mismatch (target mismatch profile not met)',
+      'Severe pre-stroke disability',
+      'Standard contraindications to endovascular treatment',
+      'Posterior circulation stroke',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'The chart displays the secondary functional outcome (mRS 0 to 2 at 90 days): 71% with thrombectomy plus alteplase versus 40% with alteplase alone. The two co-primary endpoints (24-hour reperfusion of 100% vs 37% and early neurological improvement at day 3 of 80% vs 37%) were both met before this secondary outcome was assessed.',
+      },
+      {
+        question: 'What do the numbers mean clinically?',
+        answer: 'A 31 percentage point absolute gain in functional independence corresponds to an NNT of about 3 in this perfusion-selected population, the largest absolute effect in any 2015 EVT trial. Reperfusion was near-complete in the EVT arm (100% versus 37% with alteplase alone).',
+      },
+      {
+        question: 'What is the key limitation to keep in mind?',
+        answer: 'Only 70 patients were randomized before the trial was stopped early for efficacy. The very strict CT perfusion selection (small core, large mismatch) limits generalizability. Most patients received alteplase before randomization, so the trial does not address direct thrombectomy without bridging.',
+      },
+    ],
+    howToInterpret: {
+      /* claimId: extend-ia-primary-result | source: Campbell NEJM 2015 */
+      proves: 'In patients with anterior circulation LVO selected by CT perfusion (core less than 70 mL, mismatch ratio greater than 1.2) who had received IV alteplase within 4.5 hours, adding Solitaire FR thrombectomy markedly improved both co-primary endpoints: reperfusion at 24 hours (100% vs 37%, P less than 0.001) and early neurological improvement at day 3 (80% vs 37%, P less than 0.001). The secondary outcome of functional independence at 90 days (71% vs 40%) was consistent with these effects.',
+      doesNotProve: 'It does not establish thrombectomy benefit in patients without perfusion mismatch, who were specifically excluded. With only 70 patients and early termination, the trial cannot precisely estimate the size of the mRS shift, and subgroup analyses are underpowered. It does not test direct thrombectomy without alteplase.',
+      cautions: 'Stopped early at 70 patients after positive interim analysis, which inflates effect estimates and widens confidence intervals. CT perfusion automated post-processing (RAPID) may not be available at all centers and requires consistent quality control. Strict mismatch criteria selected an enriched population likely to benefit; real-world effect sizes are typically smaller.',
+    },
+    /* claimId: extend-ia-bedside-pearl | source: Campbell NEJM 2015 */
+    bedsidePearl: 'When CT perfusion shows a small core and a large penumbra in an LVO patient who has just received alteplase, EXTEND-IA supports moving immediately to thrombectomy. The reperfusion gap (100% vs 37%) is the mechanistic anchor for the functional benefit; the mRS gain (71% vs 40%) is the bedside number to quote.',
+    bottomLineSummary: 'EXTEND-IA established that adding Solitaire thrombectomy to alteplase in patients with perfusion-imaging mismatch dramatically improves reperfusion and early neurological recovery, with a large secondary gain in 90-day functional independence (71% vs 40%). The trial was stopped early after only 70 patients.',
   },
   'swift-prime-trial': {
     id: 'swift-prime-trial',
@@ -971,6 +1166,56 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT01657461',
     listCategory: 'thrombectomy',
     listDescription: 'Solitaire thrombectomy trial showing large gains over IV tPA alone.',
+    archetypeId: 'B',
+    trialResult: 'POSITIVE',
+    doi: '10.1056/NEJMoa1415061',
+    pmid: '25882376',
+    inclusionCriteria: [
+      'Age 18 to 80 years',
+      'Acute ischemic stroke with NIHSS 8 to 29',
+      'Proximal anterior circulation occlusion (intracranial ICA or M1 MCA) on CTA or MRA',
+      'IV alteplase initiated within 4.5 hours of symptom onset',
+      'Groin puncture achievable within 6 hours of onset',
+      'Pre-stroke functional independence (mRS 0 or 1)',
+      'Imaging selection excluding large established infarct core (initially RAPID-based core less than 50 mL; later simplified to ASPECTS 6 or higher)',
+    ],
+    exclusionCriteria: [
+      'Large established infarct on baseline imaging',
+      'Severe pre-stroke disability',
+      'Standard contraindications to endovascular treatment',
+      'Posterior circulation stroke',
+      'Symptom onset to anticipated puncture beyond 6 hours',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'Distribution of mRS 0 to 6 at 90 days for each arm as stacked segments. The shift toward lower scores in the EVT arm reflects the primary mRS shift analysis.',
+      },
+      {
+        question: 'What do the numbers mean clinically?',
+        answer: 'Functional independence (mRS 0 to 2) was 60% with stent retriever plus alteplase versus 35% with alteplase alone, a 25 percentage point absolute gain (NNT of 4). The mRS shift analysis was significant at P less than 0.001.',
+      },
+      {
+        question: 'What is the key limitation to keep in mind?',
+        answer: 'SWIFT PRIME was stopped early at 196 of a planned 833 patients after positive interim analysis, which can inflate effect estimates. The trial is industry-sponsored (Covidien/Medtronic) and used the Solitaire device exclusively. Imaging selection criteria evolved during the trial.',
+      },
+    ],
+    howToInterpret: {
+      /* claimId: swift-prime-primary-result | source: Saver NEJM 2015 */
+      proves: 'In patients with anterior circulation LVO who had started IV alteplase within 4.5 hours, Solitaire stent-retriever thrombectomy added to alteplase reduced disability across the full mRS distribution at 90 days (P less than 0.001 for shift analysis) and increased functional independence from 35% to 60%.',
+      doesNotProve: 'It does not establish efficacy beyond the 6-hour treatment window or in patients without alteplase eligibility. It does not test direct thrombectomy without alteplase. With early termination at 196 patients, subgroup precision is limited.',
+      cautions: 'Stopped early after 196 of 833 planned patients, increasing the risk of overestimating treatment effect. Industry-sponsored. Imaging eligibility criteria changed mid-trial from RAPID core to ASPECTS, limiting consistency. The high reperfusion rate (88% TICI 2b/3) and median imaging-to-puncture time of 57 minutes reflect highly experienced centers.',
+    },
+    /* claimId: swift-prime-bedside-pearl | source: Saver NEJM 2015 */
+    bedsidePearl: 'For an alteplase-eligible LVO patient inside 6 hours with a small infarct core, SWIFT PRIME supports proceeding to Solitaire thrombectomy without delay. The primary mRS shift was significant and the functional independence gap was the largest of any 2015 trial that used a uniform device protocol (60% vs 35%, NNT of 4).',
+    bottomLineSummary: 'SWIFT PRIME showed that adding Solitaire stent-retriever thrombectomy to IV alteplase in anterior circulation LVO patients within 6 hours of onset shifted the entire mRS distribution toward better outcomes and raised functional independence from 35% to 60%. The trial was stopped early for efficacy.',
+    ordinalStats: {
+      commonOR: 2.75,
+      ciLow: 1.53,
+      ciHigh: 4.95,
+      direction: 'positive',
+      pValue: 0.001,
+    },
   },
   'thrace-trial': {
     id: 'thrace-trial',
