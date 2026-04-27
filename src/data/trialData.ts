@@ -2783,6 +2783,47 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT04116112',
     specialDesign: 'futility-trial',
     keyMessage: 'BEST-II did not definitively close the question, but it made meaningful benefit from lower post-EVT BP look unlikely.',
+    archetypeId: 'A' as const,
+    doi: '10.1001/jama.2023.14330',
+    listCategory: 'acute',
+    listDescription: 'Phase 2 futility trial: lower post-EVT BP targets showed low predicted success (14-25%) vs <=180 mm Hg. JAMA 2023.',
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'The chart compares utility-weighted mRS at 90 days, scaled by 100. Utility-weighted mRS assigns quality-of-life weights to each mRS level (0 for death, 1 for no symptoms). The <140 mm Hg arm scored 51 versus 58 for the <=180 mm Hg arm on this 0-100 scale.',
+      },
+      {
+        question: 'Why are both values so close?',
+        answer: 'This was a small 3-arm phase 2 futility study with approximately 40 patients per arm, not a superiority trial. The close values reflect limited statistical power and absence of a large treatment effect. Futility designs are built to flag whether further study is worthwhile, not to prove superiority.',
+      },
+      {
+        question: 'What does futility P=0.93 mean?',
+        answer: 'A high futility p-value means neither lower target formally crossed the futility boundary -- definitive harm cannot be declared. But the predicted probability of success in a future large superiority trial was only 14-25% for the lower targets, casting significant doubt on their promise. OPTIMAL-BP subsequently demonstrated functional harm from SBP <140 mm Hg.',
+      },
+    ],
+    /* claimId: best-ii-interpret | source: Mistry et al. JAMA 2023 */
+    howToInterpret: {
+      proves: 'In 120 patients at three US comprehensive stroke centers, no lower post-EVT BP target formally crossed the futility boundary (futility P=0.93). The highest-target arm (<=180 mm Hg) produced the best utility-weighted mRS: 0.58 versus 0.51 for <140 mm Hg and 0.55 for <160 mm Hg. The predicted probability of success in a future large superiority trial was 14-25% for the lower targets.',
+      doesNotProve: 'BEST-II does not prove that lower BP targets cause harm; the formal futility boundary was not crossed. It also cannot confirm any benefit; the 120-patient phase 2 design lacked statistical power. The trial does not address patients with unsuccessful EVT, posterior circulation LVO, or baseline mRS greater than 2.',
+      cautions: 'Open-label phase 2 design with approximately 40 patients per arm. Utility-weighted mRS is not a standard clinical metric in daily practice. OPTIMAL-BP subsequently enrolled 306 patients and showed significant functional harm from SBP <140 mm Hg after successful EVT, providing stronger and more definitive evidence.',
+    },
+    /* claimId: best-ii-pearl | source: Mistry et al. JAMA 2023 */
+    bedsidePearl: 'BEST-II and OPTIMAL-BP together make a consistent case: permissive BP management (SBP up to 180 mm Hg) is safer than aggressive lowering after successful EVT. BEST-II showed low predicted benefit from lower targets; OPTIMAL-BP confirmed functional harm. Do not force SBP below 140 mm Hg in the first 24 hours after successful reperfusion.',
+    bottomLineSummary: 'Phase 2 futility trial testing three BP targets after successful EVT in 120 patients. The <=180 mm Hg arm had the highest utility-weighted mRS (0.58 vs 0.51 for <140 mm Hg). No lower target formally crossed the futility boundary, but predicted success in a future superiority trial was only 14-25%. OPTIMAL-BP later confirmed functional harm from SBP <140 mm Hg after EVT.',
+    inclusionCriteria: [
+      'Age 18 or older',
+      'Anterior circulation LVO stroke',
+      'Successful EVT (mTICI 2c or better)',
+      'BP target initiated within 60 minutes of procedure end',
+      'Treatment maintained for 24 hours',
+    ],
+    exclusionCriteria: [
+      'Unsuccessful EVT (mTICI below 2c)',
+      'Severe heart failure (EF below 30%)',
+      'LVAD or extracorporeal membrane oxygenation',
+      'Pre-stroke mRS greater than 2',
+      'Unable to maintain assigned BP target',
+    ],
   },
   'bp-target-trial': {
     id: 'bp-target-trial',
@@ -2845,13 +2886,54 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT03160677',
     specialDesign: 'negative-trial',
     keyMessage: 'Lowering SBP aggressively after successful thrombectomy did not improve post-EVT hemorrhage outcomes.',
+    archetypeId: 'A' as const,
+    doi: '10.1016/S1474-4422(20)30483-X',
+    listCategory: 'acute',
+    listDescription: 'First RCT of post-EVT BP: intensive SBP 100-129 mm Hg did not reduce radiographic hemorrhage vs standard 130-185 mm Hg. Lancet Neurol 2021.',
+    howToReadChart: [
+      {
+        question: 'What does the primary outcome measure?',
+        answer: 'The primary endpoint was any radiographic intraparenchymal hemorrhage (iPH) on 24-36 hour imaging -- not symptomatic ICH or functional outcome. Both arms showed essentially identical iPH rates: 42% intensive versus 43% standard.',
+      },
+      {
+        question: 'What does aOR 0.96 mean here?',
+        answer: 'An adjusted odds ratio of 0.96 (95% CI 0.60-1.51, P=0.84) means patients in the intensive BP arm had essentially the same odds of radiographic hemorrhage as the standard arm. An aOR of 1.0 is perfect equivalence; 0.96 is statistically indistinguishable from no difference.',
+      },
+      {
+        question: 'Why was radiographic hemorrhage the primary endpoint rather than mRS?',
+        answer: 'BP-TARGET was a phase 2 signal-finding trial. Radiographic iPH was chosen as a measurable surrogate to detect any hemorrhage-prevention signal. Functional outcome (mRS) was pre-specified as a secondary endpoint. The null radiographic result removed the primary rationale for aggressive BP lowering as a hemorrhage-prevention strategy after successful reperfusion.',
+      },
+    ],
+    /* claimId: bp-target-interpret | source: Mazighi et al. Lancet Neurol 2021 */
+    howToInterpret: {
+      proves: 'BP-TARGET was the first randomized trial designed to test whether intensive BP management (SBP 100-129 mm Hg) after successful EVT reduces post-reperfusion hemorrhage. In 324 patients at four French academic stroke centers, the intensive arm showed no reduction in any radiographic iPH (42% vs 43%, aOR 0.96, 95% CI 0.60-1.51, P=0.84). Symptomatic ICH rates were similar. Functional independence at 3 months trended numerically lower in the intensive arm (58% vs 65%) without statistical significance.',
+      doesNotProve: 'BP-TARGET was underpowered to detect functional harm from intensive BP lowering; it was designed to show hemorrhage reduction. It does not establish the optimal post-EVT BP target -- only that SBP 100-129 mm Hg does not reduce radiographic iPH compared with SBP 130-185 mm Hg.',
+      cautions: 'Open-label design with blinded endpoint assessment. Surrogate primary endpoint (radiographic iPH rather than functional outcome). Single-country French cohort at four centers, limiting generalizability. The standard arm permitted SBP up to 185 mm Hg, which is wider than current guideline recommendations.',
+    },
+    /* claimId: bp-target-pearl | source: Mazighi et al. Lancet Neurol 2021 */
+    bedsidePearl: 'BP-TARGET answered a narrow question: intensive BP lowering after successful EVT does not reduce radiographic hemorrhage. Combined with OPTIMAL-BP confirming functional harm from SBP <140 mm Hg, the evidence base is consistent. Do not target SBP below 140 mm Hg after successful reperfusion.',
+    bottomLineSummary: 'First RCT of post-EVT BP management: 324 patients randomized to intensive (SBP 100-129 mm Hg) vs standard (130-185 mm Hg) at four French centers. Primary endpoint of any radiographic iPH at 24-36 hours was identical (42% vs 43%, aOR 0.96, P=0.84). Functional outcomes numerically favored standard management. No benefit from intensive BP lowering was demonstrated.',
+    inclusionCriteria: [
+      'Age 18 or older',
+      'Anterior circulation LVO stroke',
+      'Successful EVT (mTICI 2b or better)',
+      'SBP greater than 130 mm Hg within 1 hour of EVT',
+      'Randomization within 1 hour of procedure end',
+      'Pre-stroke mRS 0 to 2',
+    ],
+    exclusionCriteria: [
+      'SBP below 130 mm Hg at eligibility',
+      'Hemorrhagic complication occurring during EVT',
+      'Severe comorbidity precluding 24-hour protocol participation',
+      'Pre-stroke mRS greater than 2',
+    ],
   },
   'optimal-bp-trial': {
     id: 'optimal-bp-trial',
     title: 'OPTIMAL-BP Trial',
     subtitle: 'Intensive vs Conventional BP Lowering After EVT',
     category: 'Neuro Trials',
-    trialResult: 'NEGATIVE',
+    trialResult: 'HARM',
     stats: {
       sampleSize: {
         value: '306',
@@ -2907,6 +2989,47 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT04205305',
     specialDesign: 'negative-trial',
     keyMessage: 'Do not routinely target SBP <140 mm Hg after successful thrombectomy.',
+    archetypeId: 'A' as const,
+    doi: '10.1001/jama.2023.14590',
+    listCategory: 'acute',
+    listDescription: 'STOPPED FOR SAFETY: intensive SBP <140 mm Hg after EVT reduced functional independence 15 pp and increased malignant edema 8-fold. JAMA 2023.',
+    howToReadChart: [
+      {
+        question: 'What does the primary outcome measure?',
+        answer: 'The primary endpoint was functional independence (mRS 0-2) at 3 months -- the most clinically meaningful stroke outcome. The intensive BP arm (SBP <140 mm Hg) achieved only 39.4% functional independence versus 54.4% in the conventional arm (SBP 140-180 mm Hg), a 15.1 percentage-point difference favoring conventional management.',
+      },
+      {
+        question: 'Why does the control arm appear as the winner?',
+        answer: 'OPTIMAL-BP was stopped early for safety by the DSMB: the intensive BP arm showed significantly worse functional outcomes. The chart correctly marks conventional BP management as the winning arm. This is a trial where the treatment caused harm rather than benefit.',
+      },
+      {
+        question: 'What does adjusted OR 0.56 mean?',
+        answer: 'An adjusted OR of 0.56 for functional independence (95% CI 0.33-0.96, P=0.03) means patients on intensive BP management had 44% lower odds of achieving mRS 0-2 at 3 months. Combined with nearly 8-fold higher malignant cerebral edema (adjusted OR 7.88, 95% CI 1.05-59.0, P=0.01), the signal against SBP <140 mm Hg after successful EVT is consistent across multiple outcomes.',
+      },
+    ],
+    /* claimId: optimal-bp-interpret | source: Nam et al. JAMA 2023 */
+    howToInterpret: {
+      proves: 'STOPPED FOR SAFETY. In 306 patients at 19 South Korean stroke centers, intensive BP management targeting SBP <140 mm Hg after successful EVT caused significantly lower functional independence compared with conventional management targeting SBP 140-180 mm Hg (39.4% vs 54.4%, absolute difference -15.1 percentage points, adjusted OR 0.56, 95% CI 0.33-0.96, P=0.03). Malignant cerebral edema was nearly 8-fold more frequent in the intensive arm (adjusted OR 7.88, 95% CI 1.05-59.0, P=0.01). The DSMB terminated enrollment at 306 of 450 planned patients.',
+      doesNotProve: 'The harm is specific to targeting SBP <140 mm Hg; it does not prove that any BP reduction below 180 mm Hg is harmful. Symptomatic ICH rates did not significantly differ between groups, so sICH was not the mechanism of harm. This was a Korean population; the magnitude of harm may differ in other populations.',
+      cautions: 'Open-label design with blinded endpoint assessment. Terminated early at 68% of planned enrollment; early stopping can inflate treatment effect estimates. Single-country Korean cohort at 19 centers. The mechanism by which intensive BP lowering increased malignant edema (possibly reduced collateral perfusion post-reperfusion) is biologically plausible but not definitively established.',
+    },
+    /* claimId: optimal-bp-pearl | source: Nam et al. JAMA 2023 */
+    bedsidePearl: 'OPTIMAL-BP stopped early for harm: SBP <140 mm Hg after successful EVT reduced functional independence by 15 percentage points and increased malignant cerebral edema 8-fold. After successful reperfusion, allow SBP up to 180 mm Hg. Do not target SBP below 140 mm Hg.',
+    bottomLineSummary: 'OPTIMAL-BP randomized 306 patients to intensive BP management (SBP <140 mm Hg) vs conventional (140-180 mm Hg) for 24 hours after successful EVT at 19 South Korean centers. Stopped early by DSMB for safety: functional independence at 3 months was 39.4% vs 54.4% (P=0.03) and malignant cerebral edema was nearly 8-fold higher in the intensive arm. Do not target SBP below 140 mm Hg after successful thrombectomy.',
+    inclusionCriteria: [
+      'Age 20 or older',
+      'LVO stroke with successful EVT (mTICI 2b or better)',
+      'SBP 140 mm Hg or greater on two measurements within 2 hours of final reperfusion',
+      'Randomization within 2 hours of final reperfusion',
+      'Pre-stroke mRS 0 to 2',
+    ],
+    exclusionCriteria: [
+      'SBP below 140 mm Hg at eligibility',
+      'Symptomatic ICH after EVT',
+      'Serious concurrent illness',
+      'Pre-stroke mRS 3 to 5',
+      'Planned hemicraniectomy',
+    ],
   },
   'charm-trial': {
     id: 'charm-trial',

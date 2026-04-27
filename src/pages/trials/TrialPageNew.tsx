@@ -5343,6 +5343,258 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── BP-TARGET: W6.6.3 Archetype A (TRIALS_SPEC v1.0) ────────────────────
+  if (trialId === 'bp-target-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>BP-TARGET</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1e293b' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with acute LVO stroke who achieved successful recanalization after EVT, does targeting systolic blood pressure 100-129 mm Hg reduce post-reperfusion hemorrhage compared with a standard target of 130-185 mm Hg in the first 24 hours?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Radiographic iPH at 24-36 hours</p>
+              <p className="text-xs text-slate-500 mt-0.5">324 patients; SBP 100-129 mm Hg vs 130-185 mm Hg after successful EVT</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={tm.efficacyResults.treatment.percentage}
+                controlPct={tm.efficacyResults.control.percentage}
+                treatmentLabel={tm.efficacyResults.treatment.name}
+                controlLabel={tm.efficacyResults.control.name}
+                endpoint="Any Radiographic iPH at 24-36 hours"
+                riskRatio="aOR 0.96"
+                ciLow="0.60"
+                ciHigh="1.51"
+                pValue="0.84"
+                winnerArm="none"
+              />
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, '324 patients at four French academic stroke centers. Open-label randomized controlled trial with blinded endpoint assessment. Intensive BP target (SBP 100-129 mm Hg) achieved within 1 hour and maintained for 24 hours. Published Lancet Neurol 2021.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/trials/best-ii-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">BEST-II</Link>
+              <Link to="/trials/optimal-bp-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">OPTIMAL-BP</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="BP-TARGET"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── BEST-II: W6.6.3 Archetype A (TRIALS_SPEC v1.0) — Futility design ─────
+  if (trialId === 'best-ii-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>BEST-II</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1e293b' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              After successful EVT, does targeting a lower systolic blood pressure (SBP less than 140 or less than 160 mm Hg) improve utility-weighted functional outcomes at 90 days compared with permissive control (SBP at or below 180 mm Hg)?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div style={{ background: '#fffbeb', borderLeft: '3px solid #f59e0b', borderRadius: '0 10px 10px 0', padding: '14px 18px' }}>
+            <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Futility design: low predicted success for lower BP targets</p>
+            <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>BEST-II was a phase 2 futility trial. Neither lower target formally crossed the futility boundary (P=0.93), but predicted success in a future superiority trial was only 14-25% for lower targets. The highest-target arm (SBP &lt;=180 mm Hg) produced the best utility-weighted mRS (0.58 vs 0.51). OPTIMAL-BP subsequently confirmed functional harm from SBP &lt;140 mm Hg.</p>
+          </div>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Utility-Weighted mRS at 90 days (x100)</p>
+              <p className="text-xs text-slate-500 mt-0.5">120 patients; 3-arm futility trial: SBP &lt;140, &lt;160, or &lt;=180 mm Hg after successful EVT</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={tm.efficacyResults.treatment.percentage}
+                controlPct={tm.efficacyResults.control.percentage}
+                treatmentLabel={tm.efficacyResults.treatment.name}
+                controlLabel={tm.efficacyResults.control.name}
+                endpoint="Utility-Weighted mRS at 90 days (x100)"
+                riskRatio="Delta -0.07"
+                ciLow="N/A"
+                ciHigh="N/A"
+                pValue="Futility P=0.93"
+                winnerArm="none"
+              />
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, '120 patients at three US comprehensive stroke centers. Phase 2 open-label randomized futility trial with three arms. BP targeting initiated within 60 minutes of successful EVT and maintained for 24 hours. Published JAMA 2023.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/trials/bp-target-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">BP-TARGET</Link>
+              <Link to="/trials/optimal-bp-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">OPTIMAL-BP</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="BEST-II"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── OPTIMAL-BP: W6.6.3 Archetype A (TRIALS_SPEC v1.0) — HARM framing ─────
+  if (trialId === 'optimal-bp-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const isHarm = tm.trialResult === 'HARM';
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>OPTIMAL-BP</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: isHarm ? '#7f1d1d' : '#1e293b' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with LVO stroke who achieved successful recanalization after EVT, does intensive systolic BP management targeting SBP less than 140 mm Hg improve functional independence at 3 months compared with conventional management targeting SBP 140-180 mm Hg? (Stopped by DSMB for harm.)
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Functional Independence (mRS 0-2) at 3 Months</p>
+            </div>
+            <div className="p-4">
+              <div className="mb-3 rounded-lg bg-red-50 border border-red-200 px-3 py-2">
+                <p className="text-xs text-red-800 leading-relaxed">
+                  <strong>STOPPED FOR SAFETY:</strong> Intensive BP management (SBP &lt;140 mm Hg) led to significantly lower functional independence (39.4% vs 54.4%, adjusted OR 0.56, P=0.03) and nearly 8-fold higher malignant cerebral edema (adjusted OR 7.88, P=0.01) after successful EVT. The DSMB terminated the trial at 306 of 450 planned patients.
+                </p>
+              </div>
+              <DeltaBandChart
+                treatmentPct={tm.efficacyResults.treatment.percentage}
+                controlPct={tm.efficacyResults.control.percentage}
+                treatmentLabel={tm.efficacyResults.treatment.name}
+                controlLabel={tm.efficacyResults.control.name}
+                endpoint="Functional Independence (mRS 0-2) at 3 Months"
+                riskRatio="RD -15.1 pp"
+                ciLow="-26.2 pp"
+                ciHigh="-3.9 pp"
+                pValue="0.03 (HARM)"
+                winnerArm="control"
+              />
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, '306 patients at 19 South Korean stroke centers. Open-label randomized trial with blinded endpoint assessment. Stopped early by DSMB for safety at 68% of planned enrollment. Intensive BP strategy (SBP &lt;140 mm Hg) maintained for 24 hours. Published JAMA 2023.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#FEF2F2', borderLeft: '3px solid #b91c1c', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-red-700 mb-2">Bedside Pearl</p>
+              <p className="text-sm text-red-900 leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/trials/bp-target-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">BP-TARGET</Link>
+              <Link to="/trials/best-ii-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">BEST-II</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="OPTIMAL-BP"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
   // ─────────────────────────────────────────────────────────────────────────
 
   if (!trial) {
