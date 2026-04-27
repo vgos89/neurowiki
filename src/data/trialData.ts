@@ -3309,15 +3309,20 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       ],
       timeline: 'France, 2001-2005; stopped early for pooled analysis'
     },
+    trialResult: 'NEUTRAL',
+    specialDesign: 'neutral-trial',
+    archetypeId: 'A' as const,
+    doi: '10.1161/STROKEAHA.106.483622',
+    listCategory: 'acute',
     efficacyResults: {
       treatment: {
-        percentage: 25.0,
-        label: 'Survival with moderate disability or better (mRS <=3) at 6 months',
+        percentage: 75,
+        label: '6-month survival (mortality 25%)',
         name: 'Decompressive Craniectomy'
       },
       control: {
-        percentage: 5.6,
-        label: 'Survival with moderate disability or better (mRS <=3) at 6 months',
+        percentage: 22,
+        label: '6-month survival (mortality 78%)',
         name: 'Medical Therapy Alone'
       }
     },
@@ -3325,16 +3330,52 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Early decompressive hemicraniectomy plus standard medical therapy',
       control: 'Standard medical therapy alone'
     },
-    clinicalContext: 'DECIMAL was one of the foundational European decompressive hemicraniectomy trials for malignant middle cerebral artery infarction, focusing on whether surgery could reduce the otherwise extreme mortality of space-occupying infarction.',
-    pearls: [
-      'Small trial stopped early, so it was underpowered for its primary functional endpoint',
-      'Primary 6-month mRS <=3 outcome favored surgery numerically: 25.0% vs 5.6%',
-      'Mortality was reduced dramatically, with a 52.8% absolute reduction in death',
-      'DECIMAL became most influential through its contribution to pooled European decompressive surgery analyses'
+    clinicalContext: 'DECIMAL was one of the foundational European decompressive hemicraniectomy trials for malignant middle cerebral artery infarction, evaluating whether early surgery could reduce the extreme mortality of space-occupying infarction.',
+    inclusionCriteria: [
+      'Age 18-55 years',
+      'Clinical and imaging signs of malignant MCA infarction (diffusion-restricted volume greater than 145 mL or greater than 50% of MCA territory)',
+      'Randomization within 24 hours of symptom onset (extended to 30 hours in some patients)',
+      'NIHSS greater than 15',
     ],
+    exclusionCriteria: [
+      'Age greater than 55 years',
+      'Significant pre-existing disability (mRS greater than 1)',
+      'Bilateral fixed dilated pupils or other signs of herniation before randomization',
+      'Hemorrhagic transformation before randomization',
+      'Major comorbidities limiting life expectancy',
+    ],
+    pearls: [
+      'Small trial stopped early at 38 patients; underpowered for its primary functional endpoint',
+      'Primary 6-month mRS less than or equal to 3 was not statistically significant (P=0.18)',
+      'Mortality was reduced from 78% to 25%, an absolute reduction of 52.8 percentage points (P=0.001)',
+      'DECIMAL is most influential through its contribution to pooled European craniectomy analyses',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the bar chart show here?',
+        answer: '6-month survival rates, not functional independence rates. Treatment arm: 75% survived (25% mortality). Control arm: 22% survived (78% mortality). Absolute risk reduction in mortality: 52.8 percentage points.',
+      },
+      {
+        question: 'Why is mortality shown instead of the primary endpoint?',
+        answer: "DECIMAL's primary endpoint was mRS less than or equal to 3 at 6 months. That endpoint was not statistically significant (P=0.18) because the trial enrolled only 38 patients -- far too few for functional outcome detection. Mortality, though a secondary endpoint, reached significance and is the clinically meaningful finding.",
+      },
+      {
+        question: 'Does surviving mean recovering?',
+        answer: 'Not reliably. Most surgical survivors in DECIMAL had mRS 4 or 5, meaning severe disability or complete dependence. Surgery prevents death, not functional recovery. Families must understand this distinction clearly before consent.',
+      },
+    ],
+    /* claimId: decimal-interpret | source: Vahedi et al. Stroke 2007 */
+    howToInterpret: {
+      proves: 'In 38 patients (20 surgery, 18 medical therapy), early decompressive hemicraniectomy reduced 6-month mortality from 78% to 25%, an absolute reduction of 52.8 percentage points (P=0.001). This mortality benefit is the primary established finding from DECIMAL. The trial was stopped early at 38 of a planned 70 patients because pooled European analysis data became available.',
+      doesNotProve: 'The primary endpoint -- mRS less than or equal to 3 at 6 months -- was not statistically significant in this sample (25% surgery vs 5.6% medical, P=0.18). DECIMAL does not prove that surgery restores functional independence. Survivors in the surgical arm were predominantly mRS 4 or mRS 5. The trial cannot establish quality of life or long-term functional benefit.',
+      cautions: 'DECIMAL enrolled only 38 of a planned 70 patients; small sample inflates observed effect sizes. All patients were aged 18-55 years, limiting generalizability to older patients. Surgery was performed within approximately 30-35 hours of symptom onset; results may not apply to delayed intervention. Pooled analysis of DECIMAL, DESTINY, and HAMLET within 48 hours of stroke onset (HAMLET 2009, Figure 3) showed mortality ARR 49.9 percentage points (95% CI 33.9-65.9) and mRS greater than 4 ARR 41.9 percentage points (95% CI 25.2-58.6) favoring surgery.',
+    },
+    /* claimId: decimal-pearl | source: Vahedi et al. Stroke 2007 */
+    bedsidePearl: 'DECIMAL shows hemicraniectomy prevents death in malignant MCA infarction for patients under 56 years. Before consent, tell the family explicitly: most survivors will have severe disability (mRS 4-5) and will not return to independent function. Surgery saves life, not function. The pooled analysis (DECIMAL, DESTINY, HAMLET within 48 hours) provides the most reliable estimate of benefit and risk -- use it for family counseling.',
+    bottomLineSummary: 'Early hemicraniectomy (within 30-35 hours) reduces mortality by 52.8 percentage points in malignant MCA infarction in patients aged 18-55. The primary functional endpoint was not met due to small sample size. Most survivors remain severely disabled.',
     conclusion: '',
     source: 'Vahedi et al. (Stroke 2007)',
-    keyMessage: 'Early hemicraniectomy reduces mortality in malignant MCA infarction — survivors often remain functionally dependent.',
+    keyMessage: 'Early hemicraniectomy reduces mortality in malignant MCA infarction. Most survivors remain severely disabled.',
   },
   'destiny-trial': {
     id: 'destiny-trial',
@@ -3368,15 +3409,19 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       ],
       timeline: 'Germany; stopped after pooled European data emerged'
     },
+    trialResult: 'NEUTRAL',
+    specialDesign: 'neutral-trial',
+    archetypeId: 'A' as const,
+    listCategory: 'acute',
     efficacyResults: {
       treatment: {
-        percentage: 47,
-        label: 'mRS 0-3 at 6 months',
+        percentage: 88,
+        label: '30-day and 6-month survival (mortality 12%)',
         name: 'Hemicraniectomy'
       },
       control: {
-        percentage: 27,
-        label: 'mRS 0-3 at 6 months',
+        percentage: 47,
+        label: '30-day and 6-month survival (mortality 53%)',
         name: 'Conservative Therapy'
       }
     },
@@ -3385,15 +3430,51 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       control: 'Conservative medical management'
     },
     clinicalContext: 'DESTINY evaluated whether the mortality benefit of hemicraniectomy in malignant MCA infarction could be achieved without merely shifting patients into extremely severe disability.',
-    pearls: [
-      '30-day survival improved substantially: 88% vs 47%',
-      'The prespecified 6-month primary endpoint mRS 0-3 was not statistically significant in this small sample',
-      'Distribution of mRS scores still favored surgery, and severe disability was not disproportionately increased',
-      'DESTINY was central to the pooled European hemicraniectomy evidence base'
+    inclusionCriteria: [
+      'Age 18-60 years',
+      'Clinical and imaging criteria for malignant MCA infarction',
+      'Randomization within 36 hours of symptom onset',
+      'NIHSS greater than 18 for non-dominant hemisphere or greater than 20 for dominant hemisphere',
     ],
+    exclusionCriteria: [
+      'Age greater than 60 years',
+      'Significant pre-existing disability',
+      'Signs of herniation before randomization',
+      'Bilateral infarcts or brainstem involvement',
+      'Major organ failure or terminal illness',
+    ],
+    pearls: [
+      '30-day survival improved substantially: 88% vs 47% (P=0.02)',
+      'The prespecified 6-month primary endpoint mRS 0-3 was not statistically significant (P=0.23) in this 32-patient sample',
+      'Distribution of mRS scores showed numerical improvement favoring surgery across categories',
+      'DESTINY was central to the pooled European hemicraniectomy evidence base',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the bar chart show here?',
+        answer: '30-day and 6-month survival rates. Treatment arm: 88% survived (12% mortality). Control arm: 47% survived (53% mortality). Absolute risk reduction in mortality: 41 percentage points (P=0.02).',
+      },
+      {
+        question: 'Why is survival shown instead of the primary endpoint?',
+        answer: "DESTINY's primary endpoint was mRS 0-3 at 6 months. In only 32 patients, 47% of surgical patients versus 27% of medical patients achieved mRS 0-3, but this did not reach statistical significance (P=0.23). Survival reached significance and reflects the dominant clinical reality: this surgery is a life-saving, not function-restoring, intervention.",
+      },
+      {
+        question: 'If the functional primary was not significant, does surgery help functional outcomes at all?',
+        answer: 'DESTINY showed a numerical shift in mRS distribution favoring surgery, but functional independence (mRS 0-2) was rare in both groups. Surgery prevents death more reliably than it restores function. The pooled analysis of all three European craniectomy trials provides the strongest evidence for family counseling.',
+      },
+    ],
+    /* claimId: destiny-interpret | source: Juttler et al. Stroke 2007 */
+    howToInterpret: {
+      proves: 'In 32 patients (17 surgery, 15 conservative therapy), early hemicraniectomy reduced 30-day mortality from 53% to 12%, an absolute reduction of 41 percentage points (P=0.02). Six-month survival rates were consistent: 88% vs 47%. This survival benefit is the primary established finding from DESTINY.',
+      doesNotProve: 'The primary endpoint -- mRS 0-3 at 6 months -- was not statistically significant in this 32-patient sample (47% surgery vs 27% conservative, P=0.23). DESTINY does not prove that surgery restores functional independence. The mRS distribution shift observed was numerical only. The trial cannot establish quality of life benefit.',
+      cautions: 'DESTINY enrolled only 32 patients; effect sizes should be interpreted with caution due to wide confidence intervals expected from small samples. All patients were aged 18-60 years, limiting generalizability to patients over 60. The trial was stopped early when pooled European analysis data became available. Pooled analysis of DECIMAL, DESTINY, and HAMLET within 48 hours of stroke onset (HAMLET 2009, Figure 3) showed mortality ARR 49.9 percentage points (95% CI 33.9-65.9) and mRS greater than 4 ARR 41.9 percentage points (95% CI 25.2-58.6) favoring surgery.',
+    },
+    /* claimId: destiny-pearl | source: Juttler et al. Stroke 2007 */
+    bedsidePearl: 'DESTINY confirms the pattern from DECIMAL: hemicraniectomy prevents death in malignant MCA infarction in patients under 61 years, but does not reliably restore functional independence. For family counseling, lead with the survival benefit, then explicitly state that most survivors will have severe to moderate disability and will not return to independent living. Use the pooled analysis (DECIMAL, DESTINY, HAMLET within 48 hours) for the most precise risk-benefit estimate.',
+    bottomLineSummary: 'Early hemicraniectomy reduces 30-day and 6-month mortality by approximately 41 percentage points in malignant MCA infarction in patients aged 18-60. The primary functional endpoint (mRS 0-3 at 6 months) was not met in this 32-patient trial. The pooled European analysis is the more reliable efficacy estimate.',
     conclusion: '',
     source: 'Juttler et al. (Stroke 2007)',
-    keyMessage: 'DESTINY reinforced that early hemicraniectomy improves survival in malignant MCA infarction.',
+    keyMessage: 'DESTINY reinforced that early hemicraniectomy improves survival in malignant MCA infarction. Most survivors have severe disability.',
   },
   'hamlet-trial': {
     id: 'hamlet-trial',
@@ -3428,15 +3509,19 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       ],
       timeline: 'Netherlands, 2002-2007'
     },
+    specialDesign: 'neutral-trial',
+    archetypeId: 'A' as const,
+    doi: '10.1016/S1474-4422(09)70047-X',
+    listCategory: 'acute',
     efficacyResults: {
       treatment: {
-        percentage: 62,
-        label: 'Survival at 1 year',
+        percentage: 78,
+        label: '1-year survival (mortality 22%)',
         name: 'Surgical Decompression'
       },
       control: {
-        percentage: 24,
-        label: 'Survival at 1 year',
+        percentage: 41,
+        label: '1-year survival (mortality 59%)',
         name: 'Best Medical Treatment'
       }
     },
@@ -3444,16 +3529,52 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Decompressive surgery plus best medical treatment',
       control: 'Best medical treatment alone'
     },
-    clinicalContext: 'HAMLET extended the decompressive surgery question beyond the earliest time window and showed surgery reduces death, with functional benefit strongest when performed within 48 hours.',
-    pearls: [
-      'Primary outcome mRS 0-3 at 1 year was neutral overall',
-      'Case fatality was reduced by an absolute 38%',
-      'Meta-analysis of patients treated within 48 hours showed clearer benefit for both survival and poor outcome reduction',
-      'The trial emphasized that delayed surgery up to 96 hours may save lives without clearly improving functional independence'
+    clinicalContext: 'HAMLET extended the decompressive surgery question beyond the earliest time window and showed surgery reduces death, with functional benefit strongest when performed within 48 hours of onset.',
+    inclusionCriteria: [
+      'Age 18-60 years',
+      'Space-occupying hemispheric infarction with declining consciousness',
+      'Randomization within 4 days (96 hours) of symptom onset',
+      'CT or MRI confirmation of malignant MCA infarction',
     ],
+    exclusionCriteria: [
+      'Age greater than 60 years',
+      'Pre-existing severe disability',
+      'Bilateral infarcts or posterior fossa involvement',
+      'Terminal illness or major organ failure',
+      'Hemorrhagic transformation before randomization',
+    ],
+    pearls: [
+      'Primary outcome mRS 0-3 at 1 year was neutral overall; patients randomized after 48 hours diluted the treatment effect',
+      'Case fatality was reduced by an absolute 38 percentage points (P=0.002)',
+      'Functional benefit -- and strongest mortality benefit -- was concentrated in patients operated within 48 hours',
+      'The trial showed that delayed surgery (48-96 hours) may save lives without clearly improving functional independence',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the bar chart show here?',
+        answer: '1-year survival rates for the overall trial (enrollment up to 96 hours). Treatment arm: 78% survived (22% mortality). Control arm: 41% survived (59% mortality). Absolute case fatality reduction: 38 percentage points.',
+      },
+      {
+        question: 'Why is the primary endpoint listed as neutral?',
+        answer: "HAMLET's primary endpoint was mRS 0-3 at 1 year. In 64 patients enrolled up to 96 hours after onset, the difference in mRS 0-3 rates was not statistically significant. Patients randomized after 48 hours diluted the functional treatment effect. Mortality was significantly reduced across all timing groups.",
+      },
+      {
+        question: 'What is the significance of the 48-hour window?',
+        answer: "HAMLET's within-48-hour subgroup, when pooled with DECIMAL and DESTINY patients also treated within 48 hours, showed both mortality reduction and reduction in poor functional outcome (mRS greater than 4). The primary endpoint neutrality is attributable to including patients enrolled up to 96 hours, in whom functional benefit was not observed. Timing is the decisive variable.",
+      },
+    ],
+    /* claimId: hamlet-interpret | source: Hofmeijer et al. Lancet Neurol 2009 */
+    howToInterpret: {
+      proves: 'In 64 patients (32 surgical, 32 medical), decompressive surgery reduced 1-year case fatality from 59% to 22%, an absolute reduction of 38 percentage points (P=0.002). This mortality benefit was consistent across the enrollment window up to 96 hours. HAMLET established that surgery saves lives even beyond the 30-48 hour window studied by DECIMAL and DESTINY.',
+      doesNotProve: 'The primary endpoint -- mRS 0-3 at 1 year -- was not statistically significant overall, due to inclusion of patients randomized up to 96 hours after onset, in whom functional benefit was not demonstrated. HAMLET does not prove that surgery improves functional independence when performed beyond 48 hours. The overall neutral primary endpoint means this trial alone cannot support a broad functional benefit claim.',
+      cautions: 'HAMLET enrolled patients up to 96 hours after onset; functional benefit was concentrated in patients treated within 48 hours and was not demonstrated for patients treated between 48 and 96 hours. Patients were aged 18-60 years. The 64-patient sample is small. Pooled analysis of DECIMAL, DESTINY, and HAMLET within 48 hours of stroke onset (HAMLET 2009, Figure 3) showed mortality ARR 49.9 percentage points (95% CI 33.9-65.9) and mRS greater than 4 ARR 41.9 percentage points (95% CI 25.2-58.6) favoring surgery.',
+    },
+    /* claimId: hamlet-pearl | source: Hofmeijer et al. Lancet Neurol 2009 */
+    bedsidePearl: "HAMLET's most important teaching is the 48-hour window. Mortality benefit from hemicraniectomy is seen across the enrollment window (up to 96 hours), but functional benefit -- and the strongest mortality benefit -- is concentrated in patients operated within 48 hours of onset. For patients presenting after 48 hours and before 96 hours, surgery may still reduce death but does not reliably improve functional independence. Tell families explicitly: operating after 48 hours means accepting a higher chance the patient survives with severe disability. The pooled analysis (DECIMAL, DESTINY, HAMLET within 48 hours) is the definitive evidence base for counseling when operating within the 48-hour window.",
+    bottomLineSummary: 'HAMLET demonstrates mortality benefit from decompressive surgery up to 96 hours after malignant MCA infarction onset (38 percentage point case fatality reduction, P=0.002). The primary functional endpoint was neutral overall. Functional benefit is restricted to the within-48-hour window per pooled analysis.',
     conclusion: '',
     source: 'Hofmeijer et al. (Lancet Neurol 2009)',
-    keyMessage: 'For malignant hemispheric infarction, timing is critical: hemicraniectomy works best when done early.',
+    keyMessage: 'For malignant hemispheric infarction, timing is critical: hemicraniectomy within 48 hours offers both mortality and functional benefit. After 48 hours, surgery may save life but functional benefit is not established.',
   },
   'destiny-ii-trial': {
     id: 'destiny-ii-trial',
