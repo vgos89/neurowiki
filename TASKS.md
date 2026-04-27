@@ -1,6 +1,19 @@
 # TASKS.md — NeuroWiki Task Ledger
 
 ## ACTIVE
+
+### W6.6.3 — Clinical content for remaining trial stubs — Class E-clinical [ACTIVE]
+- **Status:** in_progress — Batches 5A/5B/5C done; Batch 5D next
+- **User-visible goal:** 13 trial stubs gain full clinical content (howToInterpret, bedsidePearl, bottomLineSummary, howToReadChart, inclusionCriteria, exclusionCriteria, archetypeId, doi, listCategory)
+- **Batch 5A** (done — commit 8dcec26): BP-TARGET (negative, aOR 0.96), BEST-II (futility amber banner), OPTIMAL-BP (HARM, DSMB-stopped, trialResult NEGATIVE→HARM). Clinical review: docs/reviews/clinical-batch5a-w663.md (approve).
+- **Batch 5B** (done — commit 898ec2d + 379c5b1): ENCHANTED (specialDesign neutral-trial, ordinalStats archetypeB, secondary ICH discipline), ESCAPE-NA1 (alteplase-free subgroup guarded in cautions), CHARM (COVID early-stop amber banner, core-volume subgroup guarded), ELAN (metadata fix only). Clinical review: docs/reviews/clinical-batch5b-w663.md (approve).
+- **Batch 5C** (done — commit 379c5b1 trialData + 3ed5d2e JSX): DECIMAL (trialResult NEUTRAL, mortality 75%/22%, primary functional null P=0.18), DESTINY (NEUTRAL, 88%/47%, primary null P=0.23), HAMLET (NEUTRAL, 78%/41%, primary neutral overall, 48h window key teaching). Modification 3 pooled-analysis sentence identical across all three cautions. Clinical review: docs/reviews/clinical-batch5c-w663.md (approve).
+- **Batch 5D** (next): DESTINY II (POSITIVE per Modification 1 — equal-weight QoL caveat, 0% mRS 0-2, severe disability framing), TIMING (NEUTRAL NI-met), OPTIMAS (NEUTRAL NI-met).
+- **Non-goals:** CLAIM_REGISTRY wiring, last_reviewed dates (all deferred to W5.2)
+- **Files touched:** src/data/trialData.ts · src/pages/trials/TrialPageNew.tsx · docs/reviews/clinical-batch5[a-d]-w663.md
+- **Clinical impact:** high
+- **Rollback plan:** git revert per-batch merge commit
+
 - [x] [L4] Calculator visual redesign — GCS rebuilt via parallel swarm (375d9cf); CALCULATOR_SPEC.md locked. Remaining per-calculator audits (ICH, ROPE, HAS-BLED, ABCD2, Boston, Heidelberg) scheduled as Wave 5 Tier 1 audits after W5.4 ships. Entry retired 2026-04-19.
 
 ### W5.1 — Citation schema foundation — Class D
@@ -452,6 +465,20 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
   - scripts/check-claims.ts: unregistered claim IDs, bidirectional surface cross-check, freshness check; tsx devDep; test fixtures; arch review approve-with-conditions
 - [x] 2026-04-20 — W5.4 pre-commit hook — commit 83b80bd
   - .husky/pre-commit: set -e + check:claims + check:routes; husky v9; arch review approve
+
+- [x] 2026-04-27 — W6.6.3 Batch 5A: BP-TARGET, BEST-II, OPTIMAL-BP — commits 8dcec26
+  - trialData.ts: BP-TARGET (archetypeA, aOR 0.96, iPH null negative), BEST-II (archetypeA, futility-trial, amber banner, winnerArm=none), OPTIMAL-BP (trialResult NEGATIVE→HARM, archetypeA, stopped-for-safety red banner, winnerArm=control per Modification 2)
+  - TrialPageNew.tsx: 3 new branches — BP-TARGET (standard negative), BEST-II (futility amber), OPTIMAL-BP (HARM red + stopped banner)
+  - Gate: tsc clean · build green · clinical-reviewer approve (docs/reviews/clinical-batch5a-w663.md)
+- [x] 2026-04-27 — W6.6.3 Batch 5B: ENCHANTED, ESCAPE-NA1, CHARM, ELAN — commits 898ec2d + 379c5b1
+  - trialData.ts: ENCHANTED (specialDesign neutral-trial corrected, archetypeB, ordinalStats OR 1.01, secondary ICH discipline per carry-forward Modification), ESCAPE-NA1 (archetypeA, alteplase-free subgroup confined to cautions), CHARM (archetypeB, COVID early-stop discipline, core-volume subgroup guarded), ELAN (archetypeA + doi metadata fix)
+  - TrialPageNew.tsx: 3 new branches — ENCHANTED (ordinalStats card + amber secondary note), ESCAPE-NA1 (DeltaBandChart winnerArm=none), CHARM (ordinalStats card + amber COVID banner above chart)
+  - Gate: tsc clean · build green · clinical-reviewer approve (docs/reviews/clinical-batch5b-w663.md) — all three carry-forward modification constraints verified
+- [x] 2026-04-27 — W6.6.3 Batch 5C: DECIMAL, DESTINY, HAMLET — commits 379c5b1 + 3ed5d2e
+  - trialData.ts: DECIMAL (trialResult NEUTRAL, archetypeA, efficacyResults 75%/22% survival, primary mRS null P=0.18, Modification 3 pooled sentence in cautions), DESTINY (NEUTRAL, 88%/47%, primary null P=0.23), HAMLET (NEUTRAL, efficacyResults corrected 78%/41%, primary neutral overall, 48h window bedsidePearl, Modification 3)
+  - TrialPageNew.tsx: 3 new branches — all archetype A, DeltaBandChart survival rates winnerArm=treatment, amber note box inside chart for null primary; DECIMAL/DESTINY/HAMLET cross-links
+  - Modification 3 gate: pooled-analysis sentence character-identical across all three cautions (HAMLET 2009 Figure 3, mortality ARR 49.9 pp, mRS>4 ARR 41.9 pp)
+  - Gate: tsc clean · build green · clinical-reviewer approve (docs/reviews/clinical-batch5c-w663.md)
 
 ## POST-MORTEMS
 Regressions that required rollback. Each entry links to a post-mortem
