@@ -2,13 +2,13 @@
 
 ## ACTIVE
 
-### W6.6.3 — Clinical content for remaining trial stubs — Class E-clinical [ACTIVE]
-- **Status:** in_progress — Batches 5A/5B/5C done; Batch 5D next
+### W6.6.3 — Clinical content for remaining trial stubs — Class E-clinical [DONE]
+- **Status:** done — Batches 5A/5B/5C/5D all merged
 - **User-visible goal:** 13 trial stubs gain full clinical content (howToInterpret, bedsidePearl, bottomLineSummary, howToReadChart, inclusionCriteria, exclusionCriteria, archetypeId, doi, listCategory)
 - **Batch 5A** (done — commit 8dcec26): BP-TARGET (negative, aOR 0.96), BEST-II (futility amber banner), OPTIMAL-BP (HARM, DSMB-stopped, trialResult NEGATIVE→HARM). Clinical review: docs/reviews/clinical-batch5a-w663.md (approve).
 - **Batch 5B** (done — commit 898ec2d + 379c5b1): ENCHANTED (specialDesign neutral-trial, ordinalStats archetypeB, secondary ICH discipline), ESCAPE-NA1 (alteplase-free subgroup guarded in cautions), CHARM (COVID early-stop amber banner, core-volume subgroup guarded), ELAN (metadata fix only). Clinical review: docs/reviews/clinical-batch5b-w663.md (approve).
 - **Batch 5C** (done — commit 379c5b1 trialData + 3ed5d2e JSX): DECIMAL (trialResult NEUTRAL, mortality 75%/22%, primary functional null P=0.18), DESTINY (NEUTRAL, 88%/47%, primary null P=0.23), HAMLET (NEUTRAL, 78%/41%, primary neutral overall, 48h window key teaching). Modification 3 pooled-analysis sentence identical across all three cautions. Clinical review: docs/reviews/clinical-batch5c-w663.md (approve).
-- **Batch 5D** (next): DESTINY II (POSITIVE per Modification 1 — equal-weight QoL caveat, 0% mRS 0-2, severe disability framing), TIMING (NEUTRAL NI-met), OPTIMAS (NEUTRAL NI-met).
+- **Batch 5D** (done — commit 0a8f4a8): DESTINY II (POSITIVE per Modification 1 — proves co-locates primary endpoint + 0% mRS 0-2, doesNotProve disclaims functional independence/QoL in ≥60, family-counseling-grade bedsidePearl, amber QoL caveat banner above chart), TIMING (NEUTRAL NI-met, proves uses "non-inferior to", doesNotProve disclaims superiority), OPTIMAS (NEUTRAL NI-met, identical NI framing). Clinical review: docs/reviews/clinical-batch5d-w663.md (approve).
 - **Non-goals:** CLAIM_REGISTRY wiring, last_reviewed dates (all deferred to W5.2)
 - **Files touched:** src/data/trialData.ts · src/pages/trials/TrialPageNew.tsx · docs/reviews/clinical-batch5[a-d]-w663.md
 - **Clinical impact:** high
@@ -479,6 +479,11 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
   - TrialPageNew.tsx: 3 new branches — all archetype A, DeltaBandChart survival rates winnerArm=treatment, amber note box inside chart for null primary; DECIMAL/DESTINY/HAMLET cross-links
   - Modification 3 gate: pooled-analysis sentence character-identical across all three cautions (HAMLET 2009 Figure 3, mortality ARR 49.9 pp, mRS>4 ARR 41.9 pp)
   - Gate: tsc clean · build green · clinical-reviewer approve (docs/reviews/clinical-batch5c-w663.md)
+- [x] 2026-04-27 — W6.6.3 Batch 5D: DESTINY II, TIMING, OPTIMAS — commit 0a8f4a8
+  - trialData.ts: DESTINY II (trialResult POSITIVE, archetypeA, efficacyResults 38%/18% mRS 0-4, Modification 1 — proves co-locates OR 2.91 P=0.04 + 0% mRS 0-2, doesNotProve disclaims QoL in ≥60), TIMING (NEUTRAL, resultSubtype non-inferiority, RD -1.79pp, P NI=0.004), OPTIMAS (NEUTRAL NI, RD 0.000, P NI=0.0003, N=3621)
+  - TrialPageNew.tsx: 3 new branches — DESTINY II (amber QoL caveat banner ABOVE DeltaBandChart, winnerArm=treatment), TIMING (amber NI banner ABOVE chart, winnerArm=none), OPTIMAS (amber NI banner ABOVE chart, winnerArm=none)
+  - Modification 1 gate: 0% mRS 0-2 co-located in proves, prominent in bedsidePearl, amber banner above chart, doesNotProve disclaims functional independence AND QoL
+  - Gate: tsc clean · build green · clinical-reviewer approve (docs/reviews/clinical-batch5d-w663.md)
 
 ## POST-MORTEMS
 Regressions that required rollback. Each entry links to a post-mortem
