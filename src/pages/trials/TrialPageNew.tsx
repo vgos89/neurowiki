@@ -5595,6 +5595,268 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── ENCHANTED: W6.6.3 Archetype B (TRIALS_SPEC v1.0) — primary null ───────
+  if (trialId === 'enchanted-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ENCHANTED</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1e293b' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with acute ischemic stroke eligible for IV alteplase, does intensive SBP lowering (target 130-140 mm Hg for 72 hours) during and after thrombolysis improve 90-day functional outcomes compared with guideline management (SBP below 180 mm Hg)?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
+              <p className="text-xs text-slate-500 mt-0.5">2196 patients; intensive SBP 130-140 mm Hg vs guideline below 180 mm Hg for 72 hours</p>
+            </div>
+            <div className="p-4">
+              {tm.ordinalStats && (
+                <div className="space-y-4">
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, padding: '20px 24px', textAlign: 'center' }}>
+                    <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#64748b', marginBottom: 6 }}>
+                      mRS Ordinal Shift at 90 Days (Primary)
+                    </p>
+                    <p style={{ fontSize: 38, fontWeight: 700, color: '#1e293b', lineHeight: 1, marginBottom: 6 }}>
+                      OR {tm.ordinalStats.commonOR}
+                    </p>
+                    <p style={{ fontSize: 13, color: '#475569' }}>
+                      95% CI {tm.ordinalStats.ciLow} to {tm.ordinalStats.ciHigh}
+                      {tm.ordinalStats.pValue !== undefined ? ` · P = ${tm.ordinalStats.pValue}` : ''}
+                    </p>
+                  </div>
+                  <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
+                    <p className="text-xs text-amber-800 leading-relaxed">
+                      <strong>Pre-specified secondary — any ICH at 24 hours:</strong> 14.8% (intensive) vs 18.7% (guideline), OR 0.75, P=0.014. Significant reduction in hemorrhage was not accompanied by improvement in the primary functional outcome.
+                    </p>
+                  </div>
+                  <p style={{ fontSize: 11, color: '#94a3b8', textAlign: 'center' }}>
+                    Mortality similar between groups · 110 sites, 15 countries
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, '2196 patients at 110 sites across 15 countries. Open-label trial with blinded endpoint assessment. Intensive SBP target 130-140 mm Hg vs guideline less than 180 mm Hg for 72 hours. Published Lancet 2019.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+              <Link to="/trials/bp-target-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">BP-TARGET</Link>
+              <Link to="/trials/optimal-bp-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">OPTIMAL-BP</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="ENCHANTED"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── ESCAPE-NA1: W6.6.3 Archetype A (TRIALS_SPEC v1.0) ───────────────────
+  if (trialId === 'escape-na1-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ESCAPE-NA1</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1e293b' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with LVO stroke undergoing EVT within 12 hours with favorable imaging, does a single IV dose of nerinetide improve functional independence (mRS 0-2) at 90 days compared with placebo?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Functional Independence (mRS 0-2) at 90 Days</p>
+              <p className="text-xs text-slate-500 mt-0.5">1105 patients; nerinetide vs placebo before or during EVT within 12 hours</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={tm.efficacyResults.treatment.percentage}
+                controlPct={tm.efficacyResults.control.percentage}
+                treatmentLabel={tm.efficacyResults.treatment.name}
+                controlLabel={tm.efficacyResults.control.name}
+                endpoint="Functional Independence (mRS 0-2) at 90 Days"
+                riskRatio="RR 1.04"
+                ciLow="0.96"
+                ciHigh="1.13"
+                pValue="0.35"
+                winnerArm="none"
+              />
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, '1105 patients at 48 hospitals across 8 countries. Double-blind placebo-controlled randomized trial. Single IV nerinetide dose before or during EVT. Treatment window up to 12 hours with favorable imaging. Published Lancet 2020.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="ESCAPE-NA1"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── CHARM: W6.6.3 Archetype B (TRIALS_SPEC v1.0) — stopped early, COVID ──
+  if (trialId === 'charm-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CHARM</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1e293b' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with large hemispheric infarction (ASPECTS 1-5 or DWI core 80-300 mL), does IV glibenclamide 8.6 mg over 72 hours improve 90-day functional outcomes compared with placebo?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div style={{ background: '#fffbeb', borderLeft: '3px solid #f59e0b', borderRadius: '0 10px 10px 0', padding: '14px 18px' }}>
+            <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Stopped early: findings are inconclusive</p>
+            <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>CHARM was halted before planned enrollment (535 of approximately 750 patients) due to COVID-19 operational disruptions. The trial was neither futile nor stopped for safety -- it was underpowered. Results should be interpreted with this context: the confidence interval (0.80-1.71) excludes neither meaningful benefit nor meaningful harm.</p>
+          </div>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days (age 18-70)</p>
+              <p className="text-xs text-slate-500 mt-0.5">535 patients; IV glibenclamide vs placebo within 10 hours of onset</p>
+            </div>
+            <div className="p-4">
+              {tm.ordinalStats && (
+                <div className="space-y-4">
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, padding: '20px 24px', textAlign: 'center' }}>
+                    <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#64748b', marginBottom: 6 }}>
+                      mRS Ordinal Shift at 90 Days
+                    </p>
+                    <p style={{ fontSize: 38, fontWeight: 700, color: '#1e293b', lineHeight: 1, marginBottom: 6 }}>
+                      cOR {tm.ordinalStats.commonOR}
+                    </p>
+                    <p style={{ fontSize: 13, color: '#475569' }}>
+                      95% CI {tm.ordinalStats.ciLow} to {tm.ordinalStats.ciHigh}
+                      {tm.ordinalStats.pValue !== undefined ? ` · P = ${tm.ordinalStats.pValue}` : ''}
+                    </p>
+                  </div>
+                  <p style={{ fontSize: 11, color: '#94a3b8', textAlign: 'center' }}>
+                    Mortality: numerically higher with glibenclamide · Hypoglycemia: 6% vs 2% · Stopped early for COVID-19
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, '535 patients at 143 stroke centers across 21 countries. Phase 3 double-blind placebo-controlled trial. IV glibenclamide 8.6 mg over 72 hours started within 10 hours of onset. Stopped early for COVID-19 operational disruptions. Published Lancet Neurol 2024.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="CHARM"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
   // ─────────────────────────────────────────────────────────────────────────
 
   if (!trial) {

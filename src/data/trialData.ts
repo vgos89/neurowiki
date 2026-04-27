@@ -2719,8 +2719,49 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     source: 'Anderson et al. (Lancet 2019)',
     clinicalTrialsId: 'NCT01422616',
-    specialDesign: 'negative-trial',
-    keyMessage: 'Lower post-alteplase blood pressure reduced bleeding, but not disability.',
+    specialDesign: 'neutral-trial',
+    keyMessage: 'Intensive post-alteplase BP lowering reduced any-ICH as a secondary outcome but did not improve 90-day disability. Primary functional endpoint was null.',
+    archetypeId: 'B' as const,
+    doi: '10.1016/S0140-6736(19)30038-8',
+    listCategory: 'acute',
+    listDescription: 'Null primary (mRS shift OR 1.01, P=0.87); secondary any-ICH reduced (14.8% vs 18.7%) but did not translate to functional benefit. Lancet 2019.',
+    ordinalStats: { commonOR: 1.01, ciLow: 0.87, ciHigh: 1.17, direction: 'neutral' as const, pValue: 0.87 },
+    howToReadChart: [
+      {
+        question: 'What does OR 1.01 represent?',
+        answer: 'OR 1.01 is the adjusted odds ratio for the PRIMARY outcome: mRS ordinal shift at 90 days in 2196 patients. OR 1.01 (95% CI 0.87-1.17, P=0.87) is clinically and statistically indistinguishable from no difference. A pre-specified secondary outcome -- any ICH at 24 hours -- was reduced (14.8% vs 18.7%, OR 0.75, P=0.014), labeled separately because it is secondary.',
+      },
+      {
+        question: 'Why is the secondary ICH finding shown separately and not as the main result?',
+        answer: 'ENCHANTED was powered and pre-specified to detect a functional benefit on mRS ordinal shift. The primary endpoint was null. Surfacing the secondary ICH reduction as the main result would misrepresent the trial design and overstate the clinical significance of a significant secondary finding in a null primary trial.',
+      },
+      {
+        question: 'Why did reducing ICH not improve functional outcomes?',
+        answer: 'ENCHANTED reduced all-grade any-ICH, including small asymptomatic hemorrhagic transformation -- not specifically symptomatic or large ICH. Asymptomatic radiographic hemorrhage may not be a primary driver of 90-day disability. The disconnect between bleeding reduction and functional improvement is the defining finding of this trial.',
+      },
+    ],
+    /* claimId: enchanted-interpret | source: Anderson et al. Lancet 2019 */
+    howToInterpret: {
+      proves: 'In 2196 patients with acute ischemic stroke eligible for IV alteplase, intensive BP lowering (target SBP 130-140 mm Hg for 72 hours) did not improve the primary outcome of mRS ordinal shift at 90 days compared with guideline management (SBP below 180 mm Hg): adjusted OR 1.01, 95% CI 0.87-1.17, P=0.87. A pre-specified secondary outcome (any ICH at 24 hours) was reduced: 14.8% vs 18.7%, OR 0.75, P=0.014. This secondary finding did not alter the null primary result.',
+      doesNotProve: 'A statistically significant secondary outcome (ICH reduction) does not establish clinical benefit when the primary endpoint is null. ENCHANTED does not prove that intensive BP lowering after alteplase improves functional outcome or reduces clinically important ICH. Reducing all-grade any-ICH, which includes small asymptomatic hemorrhagic transformation, did not shift 90-day disability. This trial does not provide functional evidence to justify adopting stricter post-alteplase BP targets.',
+      cautions: 'Open-label trial with blinded endpoint assessment across 110 sites in 15 countries. The secondary ICH reduction was in all-grade any-ICH, not restricted to symptomatic or large hemorrhages. Inference to clinical practice based on the secondary ICH finding requires explicit recognition that the primary function-based endpoint was null. International heterogeneity across 15 countries is substantial.',
+    },
+    /* claimId: enchanted-pearl | source: Anderson et al. Lancet 2019 */
+    bedsidePearl: 'ENCHANTED showed intensive post-alteplase BP lowering reduced any-ICH as a secondary outcome but did not improve 90-day disability (primary null). Do not use the secondary ICH finding to justify changing post-alteplase BP targets. Current standard (SBP below 180 mm Hg) remains the evidence-based practice.',
+    bottomLineSummary: 'Multicenter RCT in 2196 alteplase-eligible patients: intensive SBP target 130-140 mm Hg vs guideline less than 180 mm Hg for 72 hours. Primary outcome (mRS ordinal shift at 90 days) was null: OR 1.01, 95% CI 0.87-1.17, P=0.87. Pre-specified secondary any-ICH was reduced (14.8% vs 18.7%, P=0.014) but did not translate to functional benefit.',
+    inclusionCriteria: [
+      'Age 18 or older',
+      'Acute ischemic stroke eligible for IV alteplase',
+      'SBP 150 mm Hg or greater at randomization',
+      'Measurable neurological deficit on NIHSS',
+      'Randomization within 6 hours of symptom onset',
+    ],
+    exclusionCriteria: [
+      'SBP below 150 mm Hg at presentation',
+      'Contraindication to antihypertensive therapy',
+      'Hemorrhagic stroke on baseline imaging',
+      'Pre-stroke mRS 3 or greater',
+    ],
   },
   'best-ii-trial': {
     id: 'best-ii-trial',
@@ -3092,6 +3133,46 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT02864953',
     specialDesign: 'negative-trial',
     keyMessage: 'CHARM does not support routine intravenous glibenclamide for malignant edema prevention after large hemispheric stroke.',
+    archetypeId: 'B' as const,
+    listCategory: 'acute',
+    listDescription: 'Phase 3 glibenclamide for large hemispheric infarction: null primary (cOR 1.17, P=0.42); stopped early for COVID. Lancet Neurol 2024.',
+    ordinalStats: { commonOR: 1.17, ciLow: 0.80, ciHigh: 1.71, direction: 'neutral' as const, pValue: 0.42 },
+    howToReadChart: [
+      {
+        question: 'What does cOR 1.17 represent?',
+        answer: 'The common odds ratio of 1.17 (95% CI 0.80-1.71, P=0.42) is the primary result of ordinal logistic regression on mRS at 90 days in patients aged 18-70. An OR above 1.0 nominally favors glibenclamide, but the confidence interval spans both benefit and harm -- and P=0.42 confirms this is not statistically significant.',
+      },
+      {
+        question: 'Why is the confidence interval so wide?',
+        answer: 'CHARM was stopped early due to COVID-19 operational disruptions before completing planned enrollment. At 535 patients (approximately 71% of target), the trial was substantially underpowered. Wide confidence intervals reflect this loss of precision -- any effect estimate from this trial is highly uncertain.',
+      },
+      {
+        question: 'Does an OR above 1.0 suggest a trend toward benefit?',
+        answer: 'No reliable trend conclusion can be drawn from an underpowered early-stopped trial. The CI (0.80-1.71) spans meaningful harm to meaningful benefit. Mortality was numerically higher in the glibenclamide arm and hypoglycemia was 3-fold more common (6% vs 2%). These safety signals add to the uncertainty.',
+      },
+    ],
+    /* claimId: charm-interpret | source: Sheth et al. Lancet Neurol 2024 */
+    howToInterpret: {
+      proves: 'In 535 patients with large hemispheric infarction (ASPECTS 1-5 or DWI core 80-300 mL, age 18-70), IV glibenclamide 8.6 mg over 72 hours did not improve 90-day mRS ordinal shift compared with placebo: cOR 1.17, 95% CI 0.80-1.71, P=0.42. Mortality was not improved and was numerically higher with glibenclamide. Hypoglycemia occurred in 6% of glibenclamide patients vs 2% of placebo patients. The trial was stopped early due to COVID-19 operational disruptions before reaching planned enrollment.',
+      doesNotProve: 'CHARM does not establish that glibenclamide is effective in large hemispheric stroke, nor does it definitively establish inefficacy -- the trial was substantially underpowered after early stopping. An exploratory analysis in patients with core volume less than 125 mL showed a numerically larger effect, but this is hypothesis-generating only and cannot serve as a clinical recommendation.',
+      cautions: 'Stopped early for COVID-19 operational reasons (not for safety or futility) at approximately 71% of planned enrollment; findings are inconclusive. The confidence interval (0.80-1.71) is too wide to exclude clinically meaningful benefit or harm. Hypoglycemia monitoring is required with glibenclamide. The core volume less than 125 mL exploratory subgroup should not change clinical practice.',
+    },
+    /* claimId: charm-pearl | source: Sheth et al. Lancet Neurol 2024 */
+    bedsidePearl: 'CHARM stopped early for COVID and was underpowered; results are inconclusive. Glibenclamide did not significantly improve disability and caused 3-fold higher hypoglycemia. Do not use IV glibenclamide for malignant edema outside a clinical trial. Hemicraniectomy (DESTINY II, HAMLET, DECIMAL) remains the only intervention with survival evidence in eligible malignant MCA infarction patients.',
+    bottomLineSummary: 'Phase 3 double-blind trial of IV glibenclamide vs placebo for large hemispheric infarction in 535 patients across 143 centers. Stopped early for COVID-19. Primary outcome (mRS ordinal shift at 90 days, age 18-70) was null: cOR 1.17, 95% CI 0.80-1.71, P=0.42. Mortality numerically higher with glibenclamide; hypoglycemia 6% vs 2%. Findings are inconclusive due to underpowering from early stopping.',
+    inclusionCriteria: [
+      'Age 18-80 (primary efficacy analysis age 18-70)',
+      'Large hemispheric infarction: ASPECTS 1-5 or DWI core 80-300 mL',
+      'Study drug initiated within 10 hours of stroke onset',
+      'Patient or surrogate able to provide consent',
+    ],
+    exclusionCriteria: [
+      'Core volume below 80 mL or above 300 mL',
+      'Severe hepatic or renal impairment',
+      'Known sulfonylurea hypersensitivity',
+      'Planned early hemicraniectomy precluding 72-hour drug administration',
+      'Pregnancy',
+    ],
   },
   'escape-na1-trial': {
     id: 'escape-na1-trial',
@@ -3153,7 +3234,48 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Hill et al. (Lancet 2020)',
     clinicalTrialsId: 'NCT02930018',
     specialDesign: 'negative-trial',
-    keyMessage: 'ESCAPE-NA1 was negative overall but reopened interest in neuroprotection for EVT patients not receiving alteplase.',
+    keyMessage: 'ESCAPE-NA1 was negative overall. The alteplase-free subgroup interaction is hypothesis-generating only and does not establish clinical benefit.',
+    archetypeId: 'A' as const,
+    doi: '10.1016/S0140-6736(20)30069-6',
+    listCategory: 'acute',
+    listDescription: 'Nerinetide neuroprotection in EVT: null overall (mRS 0-2, 61.4% vs 59.2%, P=0.35). Alteplase-free subgroup interaction is hypothesis-generating only. Lancet 2020.',
+    howToReadChart: [
+      {
+        question: 'What does the primary outcome show?',
+        answer: 'The chart shows the proportion achieving functional independence (mRS 0-2) at 90 days. Nerinetide: 61.4%, placebo: 59.2%. The 2.2 percentage point difference was not statistically significant (adjusted RR 1.04, 95% CI 0.96-1.13, P=0.35). The trial was adequately powered and clearly null overall.',
+      },
+      {
+        question: 'Why are both bars so similar?',
+        answer: 'ESCAPE-NA1 enrolled patients with LVO stroke undergoing EVT within 12 hours with favorable imaging -- a population that already achieves high functional outcomes (59.2% mRS 0-2 in the placebo arm). High baseline outcome rates limit room for improvement, but the trial was powered to detect this benefit if present.',
+      },
+      {
+        question: 'What about the alteplase-free subgroup?',
+        answer: 'A prespecified interaction analysis showed a numerically larger effect in patients not receiving alteplase (nerinetide 59.3% vs placebo 49.8%), raising a hypothesis about alteplase degrading nerinetide. This is hypothesis-generating only -- it cannot be used to recommend nerinetide (an unapproved drug) or to alter alteplase decisions.',
+      },
+    ],
+    /* claimId: escape-na1-interpret | source: Hill et al. Lancet 2020 */
+    howToInterpret: {
+      proves: 'In 1105 patients with LVO stroke undergoing EVT within 12 hours with favorable imaging, a single IV dose of nerinetide did not improve functional independence (mRS 0-2) at 90 days compared with placebo: 61.4% vs 59.2%, adjusted RR 1.04, 95% CI 0.96-1.13, P=0.35. Mortality and symptomatic ICH rates were similar between groups.',
+      doesNotProve: 'ESCAPE-NA1 does not establish benefit of nerinetide in any subpopulation. The prespecified interaction suggesting differential benefit in alteplase-free patients (59.3% vs 49.8%) is hypothesis-generating only and does not constitute clinical evidence for any practice change. Nerinetide is not approved for clinical use. No clinical decision, including alteplase withholding, should be based on a subgroup interaction in an overall neutral trial.',
+      cautions: 'The alteplase-free subgroup (approximately 30% of enrolled patients) showed a numerically large difference (59.3% vs 49.8%), and the interaction was prespecified. However, this requires independent replication before clinical translation. Nerinetide is not approved; the ESCAPE-NEXT trial was designed to address this interaction in the alteplase-free population. Any inference of clinical actionability from this subgroup is premature.',
+    },
+    /* claimId: escape-na1-pearl | source: Hill et al. Lancet 2020 */
+    bedsidePearl: 'ESCAPE-NA1 was negative overall for nerinetide in EVT patients. The alteplase-free subgroup signal is hypothesis-generating only -- do not alter thrombolysis decisions or advocate for nerinetide use based on this finding. Neuroprotection after EVT remains unproven.',
+    bottomLineSummary: 'Double-blind RCT of nerinetide in 1105 LVO stroke patients undergoing EVT within 12 hours. Primary endpoint (mRS 0-2 at 90 days) was null: 61.4% vs 59.2%, adjusted RR 1.04, P=0.35. A prespecified interaction showed numerically larger effect in alteplase-free patients (59.3% vs 49.8%), raising a hypothesis about alteplase-nerinetide interaction that requires dedicated confirmation.',
+    inclusionCriteria: [
+      'Age 18 or older',
+      'Acute ischemic stroke with LVO (anterior or posterior circulation)',
+      'EVT eligible and planned within 12 hours of last known well',
+      'ASPECTS 5 or greater or equivalent favorable perfusion imaging',
+      'Pre-stroke mRS 0-1',
+    ],
+    exclusionCriteria: [
+      'ASPECTS below 5 on baseline CT',
+      'Pre-stroke mRS 2 or greater',
+      'Contraindication to contrast or study drug',
+      'Large intracranial hemorrhage on baseline imaging',
+      'Pregnant or breastfeeding',
+    ],
   },
   'decimal-trial': {
     id: 'decimal-trial',
@@ -5490,6 +5612,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     bottomLineSummary: 'ELAN was an estimation trial showing that early DOAC initiation after AF-related ischemic stroke, timed by imaging-based severity classification, was not significantly more harmful than the traditional delayed approach. The primary composite event rate was 2.9% with early vs 4.1% with later initiation, with identical symptomatic ICH rates. The result supports early anticoagulation when clinically indicated and imaging permits.',
     listCategory: 'antiplatelets',
     listDescription: 'Early vs delayed DOAC in AF stroke: estimation trial supporting early initiation when imaging allows it.',
+    archetypeId: 'A' as const,
+    doi: '10.1056/NEJMoa2303048',
   },
 
   // ─── THALES TRIAL ─────────────────────────────────────────────────────────
