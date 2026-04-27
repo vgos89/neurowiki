@@ -3608,32 +3608,73 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       ],
       timeline: 'Germany; patients aged 61-82 years'
     },
+    trialResult: 'POSITIVE',
+    specialDesign: 'positive-trial',
+    archetypeId: 'A' as const,
+    doi: '10.1056/NEJMoa1400249',
+    listCategory: 'acute',
     efficacyResults: {
       treatment: {
         percentage: 38,
-        label: 'Survival without severe disability (mRS 0-4) at 6 months',
+        label: 'Survived without being bedbound or dead (mRS 0-4) at 6 months',
         name: 'Hemicraniectomy'
       },
       control: {
         percentage: 18,
-        label: 'Survival without severe disability (mRS 0-4) at 6 months',
+        label: 'Survived without being bedbound or dead (mRS 0-4) at 6 months',
         name: 'Conservative Treatment'
       }
     },
     intervention: {
-      treatment: 'Early decompressive hemicraniectomy',
+      treatment: 'Early decompressive hemicraniectomy within 48 hours',
       control: 'Conservative intensive care treatment'
     },
-    clinicalContext: 'DESTINY II addressed the major unresolved question left by the earlier decompressive trials: whether older patients also benefit from surgery for malignant MCA infarction.',
-    pearls: [
-      'Hemicraniectomy improved the primary endpoint in patients older than 60 years',
-      'Mortality was markedly lower with surgery: 33% vs 70%',
-      'Most survivors still had substantial disability, usually mRS 4 or 5',
-      'The trial changed practice by showing age alone should not exclude surgery'
+    clinicalContext: 'DESTINY II addressed the unresolved question left by the earlier decompressive trials: whether patients over 60 years also benefit from surgery for malignant MCA infarction. The trial is positive for its primary endpoint, but the clinical interpretation requires careful attention to the functional outcomes of survivors.',
+    inclusionCriteria: [
+      'Age 61 years or older',
+      'Malignant MCA infarction with clinical and imaging criteria for expected fatal brain swelling',
+      'Surgery within 48 hours of stroke onset',
+      'Pre-stroke mRS 0-1',
     ],
+    exclusionCriteria: [
+      'Age younger than 61 years',
+      'Pre-existing disability (mRS 2 or higher)',
+      'Posterior circulation or bilateral infarcts',
+      'Hemorrhagic transformation before randomization',
+      'Major comorbidities limiting life expectancy',
+    ],
+    pearls: [
+      'Primary endpoint (mRS 0-4) was met: 38% vs 18%, OR 2.91, P=0.04',
+      'Mortality was dramatically reduced: 33% vs 70% -- a real, large survival benefit',
+      '0% of patients in either group achieved mRS 0-2 (good functional outcome)',
+      'Virtually all surgical survivors who met the primary endpoint had mRS 4 (severe disability, dependent for most bodily needs)',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the bar chart show?',
+        answer: "The bars show the primary endpoint: survival without being bedbound or dead (mRS 0-4) at 6 months. Treatment arm: 38%. Control arm: 18%. The 20 percentage point difference is the trial's positive result. Critically: 0% of patients in either group achieved mRS 0-2 (good outcome -- able to perform daily activities independently).",
+      },
+      {
+        question: 'What does mRS 0-4 actually mean clinically?',
+        answer: 'mRS 0-4 is a wide range. In DESTINY II, virtually all surgical survivors who counted toward the primary endpoint were mRS 4: severe disability, unable to walk unaided, requiring assistance for most bodily needs. The primary outcome difference in this trial is largely the difference between severe disability (alive but highly dependent) and bedbound or dead. mRS 0-2 (independent function) was achieved by no patient in either arm.',
+      },
+      {
+        question: 'Why does mortality matter separately from the primary endpoint?',
+        answer: 'Surgery reduced mortality from 70% to 33%, a 37 percentage point reduction. That is a real and large survival benefit. But survival and functional recovery are different outcomes. Of surgical survivors, nearly all were mRS 4 or mRS 5 (requires constant nursing care and cannot be left alone). DESTINY II is a positive trial for preventing death -- not a trial demonstrating functional recovery in this age group.',
+      },
+    ],
+    /* claimId: destiny-ii-interpret | source: Juttler et al. NEJM 2014 */
+    howToInterpret: {
+      proves: 'In 112 patients aged 61-82 years, early hemicraniectomy significantly improved the primary endpoint of survival without being bedbound or dead (mRS 0-4) at 6 months: 38% vs 18%, OR 2.91, 95% CI 1.06-7.49, P=0.04. Mortality was dramatically reduced: 33% vs 70%. However, 0% of patients in either group achieved mRS 0-2 (functional independence). Virtually all surgical survivors who met the primary endpoint had mRS 4, meaning severe disability requiring assistance for most bodily needs. The trial proves that surgery prevents death and completely bedbound status in patients over 60 -- not that it restores function.',
+      doesNotProve: 'DESTINY II does not prove that hemicraniectomy preserves functional independence or quality of life in patients aged 60 or older. The 0% mRS 0-2 rate in both arms means no patient achieved good functional recovery regardless of treatment assignment. The trial does not establish a meaningful rate of independence, return to daily activities, or quality of life that patients or families might find acceptable. It does not generalize to patients under 60 (DECIMAL, DESTINY, HAMLET address that population). The trial also cannot inform decisions about individual patients\' values or their definition of an acceptable outcome.',
+      cautions: 'DESTINY II enrolled 112 of a planned 188 patients; stopped early for enrollment difficulty, which may inflate effect estimates. The CI is wide (OR 1.06-7.49), meaning the true effect could be modest. Mean age was approximately 70 years; results may not apply uniformly across the 61-82 age range. Most surgical survivors had severe disability (mRS 4), not moderate disability -- clinicians should not present this trial to families as evidence of recovery. The trial defines the ethical question for older patients: whether survival with severe disability is consistent with the patient\'s values is not answerable by the trial.',
+    },
+    /* claimId: destiny-ii-pearl | source: Juttler et al. NEJM 2014 */
+    bedsidePearl: "DESTINY II is a positive trial for survival and surgery is a legitimate option -- but it must be offered with the right framing. Tell the family: 'Surgery reduces the chance of dying from 70% to 33%. But 0% of patients who had surgery regained the ability to care for themselves. Nearly all surgical survivors needed help for most bodily needs (mRS 4).' Do not show this trial to a family as evidence that their loved one will do well. Show it as evidence that surgery shifts the outcome from death to severe disability. The family and patient (if able) must decide whether that shift is consistent with their values.",
+    bottomLineSummary: 'DESTINY II randomized 112 patients aged 61-82 to early hemicraniectomy vs conservative intensive care. Primary endpoint (mRS 0-4 at 6 months) was met: 38% vs 18%, OR 2.91 (95% CI 1.06-7.49), P=0.04. Mortality was reduced: 33% vs 70%. But 0% of patients in either group achieved mRS 0-2 (independent function). Virtually all surgical survivors had mRS 4 (severe disability). The trial is positive for preventing death; it does not establish good functional recovery in this age group.',
     conclusion: '',
     source: 'Juttler et al. (NEJM 2014)',
-    keyMessage: 'Older age does not eliminate benefit from hemicraniectomy, but survival often comes with major residual disability.',
+    keyMessage: 'DESTINY II is positive for preventing death in older patients, but 0% achieved good functional recovery. Surgery shifts the outcome from death to severe disability -- families must decide whether that is consistent with patient values.',
   },
   'timing-trial': {
     id: 'timing-trial',
@@ -3667,16 +3708,20 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       ],
       timeline: 'Swedish Stroke Register, 2017-2020'
     },
+    trialResult: 'NEUTRAL',
+    resultSubtype: 'non-inferiority',
+    archetypeId: 'A' as const,
+    listCategory: 'acute',
     efficacyResults: {
       treatment: {
         percentage: 6.89,
-        label: 'Primary composite outcome at 90 days',
-        name: 'Early NOAC Start'
+        label: 'Composite: recurrent stroke, sICH, or death at 90 days',
+        name: 'Early NOAC (within 4 days)'
       },
       control: {
         percentage: 8.68,
-        label: 'Primary composite outcome at 90 days',
-        name: 'Delayed NOAC Start'
+        label: 'Composite: recurrent stroke, sICH, or death at 90 days',
+        name: 'Delayed NOAC (5-10 days)'
       }
     },
     intervention: {
@@ -3684,17 +3729,52 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       control: 'NOAC initiated 5-10 days after ischemic stroke onset'
     },
     clinicalContext: 'TIMING addressed a common bedside question in atrial-fibrillation stroke care: how soon can oral anticoagulation be restarted without provoking intracranial hemorrhage.',
-    pearls: [
-      'Early NOAC start was noninferior to delayed initiation',
-      'No symptomatic intracerebral hemorrhages occurred in either group',
-      'Recurrent ischemic stroke and death were numerically lower with early initiation',
-      'Registry-based randomization made the trial highly pragmatic and practice-relevant'
+    inclusionCriteria: [
+      'Acute ischemic stroke with atrial fibrillation',
+      'Indication for long-term oral anticoagulation',
+      'Randomized via the Swedish Stroke Register',
+      'Ability to initiate NOAC within 4 days or 5-10 days of stroke onset',
     ],
+    exclusionCriteria: [
+      'Mechanical heart valve',
+      'Prior therapeutic anticoagulation at time of stroke',
+      'Severe renal failure (eGFR below 15 mL/min)',
+      'High bleeding risk precluding any anticoagulation',
+    ],
+    pearls: [
+      'Early NOAC initiation (within 4 days) was non-inferior to delayed initiation (5-10 days) for the 90-day composite endpoint',
+      'Zero symptomatic intracranial hemorrhages in either arm',
+      'Recurrent ischemic stroke and death were numerically lower with early initiation',
+      'Registry-based randomization made the trial highly pragmatic and practice-relevant',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'Rates of the composite primary endpoint (recurrent stroke, symptomatic ICH, or death at 90 days). Early arm: 6.89%. Delayed arm: 8.68%. Absolute risk difference: -1.79 percentage points. This is a noninferiority result -- early NOAC was not worse than delayed, and events trended numerically lower with early initiation.',
+      },
+      {
+        question: 'Why is P=0.004 for NI -- how does that differ from P=0.05 for superiority?',
+        answer: 'In a noninferiority trial, the P-value tests whether the risk difference exceeds the prespecified NI margin (here: 3 percentage points absolute). P=0.004 means strong evidence that early NOAC does not cause an unacceptable increase in adverse events relative to delayed. It does not mean early is superior to delayed.',
+      },
+      {
+        question: 'Zero symptomatic ICH in either arm -- what does that mean?',
+        answer: 'No symptomatic intracranial hemorrhages occurred in either arm, a reassuring finding suggesting that early NOAC initiation within 4 days did not produce detectable bleeding harm in this registry-based trial. This supports moving away from the traditional practice of waiting 2 weeks.',
+      },
+    ],
+    /* claimId: timing-interpret | source: Oldgren et al. Circulation 2022 */
+    howToInterpret: {
+      proves: 'In 888 patients with AF-related ischemic stroke, early NOAC initiation within 4 days was non-inferior to delayed initiation (5-10 days) for the 90-day composite of recurrent stroke, symptomatic ICH, or death. The absolute risk difference was -1.79 percentage points (early 6.89% vs delayed 8.68%), and the upper confidence interval bound did not exceed the prespecified non-inferiority margin (P for NI = 0.004). No symptomatic intracranial hemorrhages occurred in either arm.',
+      doesNotProve: 'TIMING does not establish superiority of early over delayed NOAC initiation. The trial cannot determine the optimal specific day of initiation within the early window (any day from 1-4 was grouped together). It does not address initiation within 24 hours, or patients with large infarcts, active hemorrhagic transformation, or significant leukoaraiosis. The open-label design means prescribing behavior could differ between arms.',
+      cautions: 'Registry-based randomization via the Swedish Stroke Register is pragmatic but less controlled than a hospital-based double-blind RCT. The sample size (888 patients) was designed for a 3 percentage point NI margin; smaller absolute differences would require larger trials. Event rates were low overall (6.89% and 8.68%), meaning conclusions apply primarily to patients at modest-to-moderate risk. OPTIMAS (3621 patients, 100 UK hospitals) provides a larger, more definitive NI result with a wider delayed-initiation window (7-14 days).',
+    },
+    /* claimId: timing-pearl | source: Oldgren et al. Circulation 2022 */
+    bedsidePearl: 'TIMING met its non-inferiority margin and supports early NOAC initiation within 4 days after AF-related ischemic stroke as safe. This does not mandate same-day initiation -- the early window was days 1-4. Individualize timing based on infarct size, hemorrhagic transformation risk, and NIHSS. OPTIMAS (N=3621) provides larger, more definitive evidence and reached the same NI conclusion with a delayed window of 7-14 days.',
+    bottomLineSummary: 'Registry-based randomized noninferiority trial of 888 patients with AF-related stroke. Early NOAC within 4 days was non-inferior to delayed (5-10 days) for the 90-day composite of recurrent stroke, sICH, or death (6.89% vs 8.68%, risk difference -1.79 pp, P for NI = 0.004). Zero sICH in either arm. Noninferiority met; superiority not tested. Published Circulation 2022.',
     conclusion: '',
     source: 'Oldgren et al. (Circulation 2022)',
     clinicalTrialsId: 'NCT02961348',
     specialDesign: 'non-inferiority',
-    keyMessage: 'TIMING supports starting NOACs early after AF-related ischemic stroke when clinically appropriate.',
+    keyMessage: 'TIMING supports early NOAC initiation within 4 days after AF-related ischemic stroke. Noninferiority met; superiority not established.',
   },
   'optimas-trial': {
     id: 'optimas-trial',
@@ -3728,34 +3808,72 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       ],
       timeline: '100 UK hospitals, 2019-2024'
     },
+    trialResult: 'NEUTRAL',
+    resultSubtype: 'non-inferiority',
+    archetypeId: 'A' as const,
+    listCategory: 'acute',
     efficacyResults: {
       treatment: {
         percentage: 3.3,
-        label: 'Primary composite outcome at 90 days',
-        name: 'Early DOAC Start'
+        label: 'Composite: recurrent stroke, sICH, or systemic embolism at 90 days',
+        name: 'Early DOAC (within 4 days)'
       },
       control: {
         percentage: 3.3,
-        label: 'Primary composite outcome at 90 days',
-        name: 'Delayed DOAC Start'
+        label: 'Composite: recurrent stroke, sICH, or systemic embolism at 90 days',
+        name: 'Delayed DOAC (7-14 days)'
       }
     },
     intervention: {
       treatment: 'Direct oral anticoagulant initiated within 4 days of stroke onset',
       control: 'Direct oral anticoagulant initiated 7-14 days after stroke onset'
     },
-    clinicalContext: 'OPTIMAS provided a large contemporary randomized test of early versus delayed anticoagulation after atrial-fibrillation-associated ischemic stroke and directly challenged the traditional tendency to wait.',
-    pearls: [
-      'Primary composite event rates were identical: 3.3% vs 3.3%',
-      'Early initiation met noninferiority but not superiority',
-      'Symptomatic intracranial hemorrhage was rare and similar in both groups',
-      'The findings push against routine delayed DOAC initiation after AF-related stroke'
+    clinicalContext: 'OPTIMAS provided the largest randomized test of early versus delayed anticoagulation timing after atrial-fibrillation-associated ischemic stroke, directly challenging the traditional tendency to delay for 2 weeks.',
+    inclusionCriteria: [
+      'Adults with acute ischemic stroke and confirmed atrial fibrillation',
+      'Clinical indication for long-term anticoagulation',
+      'Randomization at 100 UK stroke centers',
     ],
+    exclusionCriteria: [
+      'Mechanical heart valve',
+      'Active major bleeding or very high bleeding risk',
+      'Severe renal impairment precluding DOAC use',
+      'Inability to consent or take oral medication',
+    ],
+    pearls: [
+      'Primary composite event rates were identical: 3.3% vs 3.3% (risk difference 0.000)',
+      'Noninferiority was met (P = 0.0003); superiority was not demonstrated',
+      'Symptomatic ICH was rare and similar in both groups',
+      'Largest trial of DOAC timing after AF-related stroke (N=3621); provides most definitive evidence',
+    ],
+    howToReadChart: [
+      {
+        question: 'What do the identical bars mean?',
+        answer: 'Both bars show 3.3% event rates for the 90-day composite endpoint (recurrent stroke, symptomatic ICH, systemic embolism). The risk difference is 0.000 -- identical rates. In a noninferiority context, this is the most favorable possible result: early DOAC was not worse than delayed, with exactly equal event rates.',
+      },
+      {
+        question: 'With identical rates, why was superiority not declared?',
+        answer: 'OPTIMAS used a gatekeeper design -- noninferiority was tested first, then superiority. Superiority requires demonstrating that early initiation is significantly better than delayed. With identical event rates (3.3% vs 3.3%), there is no numerical advantage to test. The trial met its primary NI objective; it cannot support superiority claims.',
+      },
+      {
+        question: 'How does OPTIMAS compare to TIMING?',
+        answer: 'OPTIMAS (3621 patients, 100 UK hospitals) is more than four times larger than TIMING (888 patients, Swedish registry). Both met noninferiority. OPTIMAS tested a wider delayed window (7-14 days vs 5-10 days in TIMING) and was powered to detect smaller absolute differences. Consistent NI results across different countries and delayed-window definitions strengthens confidence in early DOAC initiation.',
+      },
+    ],
+    /* claimId: optimas-interpret | source: Werring et al. Lancet 2024 */
+    howToInterpret: {
+      proves: 'In 3621 patients with AF-related acute ischemic stroke at 100 UK hospitals, early DOAC initiation within 4 days was non-inferior to delayed initiation (7-14 days) for the primary composite of recurrent stroke, symptomatic ICH, or systemic embolism at 90 days. Event rates were identical: 3.3% in both arms (absolute risk difference 0.000, P for NI = 0.0003). Symptomatic ICH was rare and similar in both groups.',
+      doesNotProve: 'OPTIMAS does not establish superiority of early over delayed DOAC initiation. The trial cannot determine the optimal specific day within the early window (days 1-4 were grouped together). It does not address patients with large hemispheric infarcts or active hemorrhagic transformation at randomization. The open-label design means the clinical team knew the assigned treatment.',
+      cautions: 'The delayed window in OPTIMAS (7-14 days) differs from TIMING (5-10 days), making direct numerical comparison between trials difficult. Event rates were very low (3.3%), limiting power to detect rare outcomes like sICH. The 100 UK hospitals reflect organized stroke services; generalizability to less-resourced settings requires consideration. The trial included only patients with clear indication for long-term anticoagulation.',
+    },
+    /* claimId: optimas-pearl | source: Werring et al. Lancet 2024 */
+    bedsidePearl: 'OPTIMAS is the largest and most definitive trial supporting early DOAC initiation after AF-related stroke. Early within 4 days was non-inferior to waiting 7-14 days, with identical 3.3% event rates. This does not mandate same-day initiation -- individualize based on infarct size and hemorrhagic transformation risk. For most patients with small-to-moderate AF-related stroke without hemorrhagic transformation, starting within 4 days is well-supported by the evidence.',
+    bottomLineSummary: 'Largest trial of DOAC timing after AF-related stroke: 3621 patients at 100 UK hospitals. Early DOAC within 4 days was non-inferior to delayed (7-14 days) for the 90-day composite of recurrent stroke, sICH, or systemic embolism. Event rates were identical (3.3% vs 3.3%, risk difference 0.000, P for NI = 0.0003). Superiority not demonstrated. Provides the most robust evidence for early DOAC initiation in AF-related ischemic stroke. Published Lancet 2024.',
     conclusion: '',
     source: 'Werring et al. (Lancet 2024)',
     clinicalTrialsId: 'NCT03759938',
     specialDesign: 'non-inferiority',
-    keyMessage: 'OPTIMAS strengthens the case for earlier anticoagulation after AF-related ischemic stroke.',
+    keyMessage: 'OPTIMAS provides the most definitive evidence for early DOAC initiation after AF-related stroke. Noninferiority met; superiority not established.',
   },
   'distal-trial': {
     id: 'distal-trial',

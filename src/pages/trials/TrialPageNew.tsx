@@ -6109,6 +6109,266 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── DESTINY II: W6.6.3 POSITIVE — QoL caveat equal weight (Modification 1) ─
+  if (trialId === 'destiny-ii-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>DESTINY II</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1e293b' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients aged 61 or older with malignant MCA infarction, does early decompressive hemicraniectomy within 48 hours improve survival and functional outcome compared with conservative intensive care?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Survival Without Severe Disability (mRS 0-4) at 6 Months</p>
+              <p className="text-xs text-slate-500 mt-0.5">112 patients aged 61-82; early hemicraniectomy vs conservative intensive care</p>
+            </div>
+            {/* Mandatory QoL caveat banner — equal weight to the positive result per Modification 1 */}
+            <div style={{ background: '#fffbeb', borderLeft: '3px solid #f59e0b', margin: '12px 16px 0', borderRadius: '0 6px 6px 0', padding: '12px 14px' }} role="note">
+              <p style={{ fontSize: 10, fontWeight: 700, color: '#92400e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>Primary endpoint met — but no patient achieved good functional outcome</p>
+              <p style={{ fontSize: 12, color: '#78350f', lineHeight: 1.5 }}>
+                0% of patients in <strong>either group</strong> achieved mRS 0-2 (independent function). Virtually all surgical survivors who met the primary endpoint had mRS 4 (severe disability, dependent for most bodily needs). Surgery reduces the chance of dying from 70% to 33% — it does not restore function.
+              </p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={tm.efficacyResults.treatment.percentage}
+                controlPct={tm.efficacyResults.control.percentage}
+                treatmentLabel={tm.efficacyResults.treatment.name}
+                controlLabel={tm.efficacyResults.control.name}
+                endpoint="Survival Without Being Bedbound or Dead (mRS 0-4) at 6 Months"
+                riskRatio="OR 2.91"
+                ciLow="1.06"
+                ciHigh="7.49"
+                pValue="0.04"
+                winnerArm="treatment"
+              />
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, '112 patients aged 61-82 at multiple German centers (planned 188; stopped early for enrollment difficulty). Open-label randomized trial with blinded outcome assessment. Surgery within 48 hours of stroke onset. Published NEJM 2014.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/decimal-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DECIMAL (under 56)</Link>
+              <Link to="/trials/destiny-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DESTINY (under 61)</Link>
+              <Link to="/trials/hamlet-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">HAMLET (under 61)</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="DESTINY II"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'DECIMAL', href: '/trials/decimal-trial' }, { label: 'DESTINY', href: '/trials/destiny-trial' }, { label: 'HAMLET', href: '/trials/hamlet-trial' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── TIMING: W6.6.3 Archetype A NI-met (TRIALS_SPEC v1.0) ─────────────────
+  if (trialId === 'timing-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>TIMING</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1e293b' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with acute AF-related ischemic stroke, is early NOAC initiation within 4 days non-inferior to delayed initiation (5-10 days) for the composite of recurrent stroke, symptomatic ICH, or death at 90 days?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Composite at 90 Days (Non-inferiority)</p>
+              <p className="text-xs text-slate-500 mt-0.5">888 patients; early NOAC within 4 days vs delayed 5-10 days after AF-related stroke</p>
+            </div>
+            <div style={{ background: '#FFFBEB', borderLeft: '3px solid #D97706', margin: '12px 16px 0', borderRadius: '0 6px 6px 0', padding: '10px 14px' }} role="note">
+              <p style={{ fontSize: 10, fontWeight: 700, color: '#92400e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>Non-inferiority design</p>
+              <p style={{ fontSize: 12, color: '#78350f', lineHeight: 1.5 }}>
+                This trial tested whether early NOAC is <strong>no worse than</strong> delayed initiation, not whether it is better. Non-inferiority met (P=0.004 for NI). Zero symptomatic ICH in either arm.
+              </p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={tm.efficacyResults.treatment.percentage}
+                controlPct={tm.efficacyResults.control.percentage}
+                treatmentLabel={tm.efficacyResults.treatment.name}
+                controlLabel={tm.efficacyResults.control.name}
+                endpoint="Composite: Recurrent Stroke, sICH, or Death at 90 Days"
+                riskRatio="RD -1.79 pp"
+                ciLow="N/A"
+                ciHigh="N/A"
+                pValue="0.004 (NI)"
+                winnerArm="none"
+              />
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, '888 patients randomized via the Swedish Stroke Register. Registry-based open-label randomized noninferiority trial. NOAC started within 4 days (early) or 5-10 days (delayed). Published Circulation 2022.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/optimas-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">OPTIMAS</Link>
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="TIMING"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'OPTIMAS', href: '/trials/optimas-trial' }, { label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // ── OPTIMAS: W6.6.3 Archetype A NI-met (TRIALS_SPEC v1.0) ────────────────
+  if (trialId === 'optimas-trial' && trialMetadata) {
+    const tm = trialMetadata;
+    const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>OPTIMAS</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1e293b' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with AF-related acute ischemic stroke, is early DOAC initiation within 4 days non-inferior to delayed initiation (7-14 days) for the composite of recurrent stroke, symptomatic ICH, or systemic embolism at 90 days?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}{tm.doi && (<>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>)}{' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(tm)}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Composite at 90 Days (Non-inferiority)</p>
+              <p className="text-xs text-slate-500 mt-0.5">3621 patients at 100 UK hospitals; early DOAC within 4 days vs delayed 7-14 days</p>
+            </div>
+            <div style={{ background: '#FFFBEB', borderLeft: '3px solid #D97706', margin: '12px 16px 0', borderRadius: '0 6px 6px 0', padding: '10px 14px' }} role="note">
+              <p style={{ fontSize: 10, fontWeight: 700, color: '#92400e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>Non-inferiority design</p>
+              <p style={{ fontSize: 12, color: '#78350f', lineHeight: 1.5 }}>
+                This trial tested whether early DOAC is <strong>no worse than</strong> delayed initiation, not whether it is better. Event rates were identical (3.3% vs 3.3%). Non-inferiority met (P=0.0003); superiority was not demonstrated.
+              </p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={tm.efficacyResults.treatment.percentage}
+                controlPct={tm.efficacyResults.control.percentage}
+                treatmentLabel={tm.efficacyResults.treatment.name}
+                controlLabel={tm.efficacyResults.control.name}
+                endpoint="Composite: Recurrent Stroke, sICH, or Systemic Embolism at 90 Days"
+                riskRatio="RD 0.000"
+                ciLow="N/A"
+                ciHigh="N/A"
+                pValue="0.0003 (NI)"
+                winnerArm="none"
+              />
+            </div>
+          </div>
+          {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
+          {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
+          {renderTrialDesign(tm, '3621 patients at 100 UK hospitals (2019-2024). Multicenter open-label blinded-endpoint phase 4 randomized trial. Early DOAC within 4 days vs delayed 7-14 days. Gatekeeper design: NI tested first, then superiority. Published Lancet 2024.')}
+          {tm.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/timing-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">TIMING</Link>
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
+            </div>
+          </div>
+        </div>
+        {tm.bottomLineSummary && tm.bedsidePearl && (
+          <BottomLineDrawer
+            trialName="OPTIMAS"
+            body={tm.bottomLineSummary}
+            bedsidePearl={tm.bedsidePearl}
+            seeAlsoLinks={[{ label: 'TIMING', href: '/trials/timing-trial' }, { label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  }
+
   // ─────────────────────────────────────────────────────────────────────────
 
   if (!trial) {
