@@ -504,6 +504,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT00153036',
     listCategory: 'thrombolysis',
     listDescription: 'Extended IV tPA window to 4.5 hours; 52.4% vs 45.2% mRS 0-1.',
+    legend: {
+      finding: 'Alteplase benefit extends from 3 h to 4.5 h after onset.',
+      bottomLineTag: '+7 / 100',
+      keyStat: 'NNT 14',
+    },
   },
   'extend-trial': {
     id: 'extend-trial',
@@ -630,6 +635,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: extend.bedside-pearl | source: NEJM 2019 Table 2 p.1800 */
     bedsidePearl: 'Symptomatic ICH ran 6.2% vs 0.9% in EXTEND. When you consent, quote both numbers: the 6 extra recoveries and the 5 extra hemorrhages per 100 treated. The trial\'s answer applies to perfusion-selected patients only.',
     bottomLineSummary: 'EXTEND showed that alteplase given 4.5 to 9 hours after stroke onset, or within 9 hours of the midpoint of sleep for wake-up stroke, improved excellent outcome at 90 days in patients selected by perfusion mismatch. The benefit was modest and the confidence interval was wide because the trial stopped early.',
+    legend: {
+      finding: 'Alteplase 4.5–9 h with perfusion-selected imaging improves recovery.',
+      bottomLineTag: '+6 / 100',
+      keyStat: 'NNT 17',
+    },
   },
   'eagle-trial': {
     id: 'eagle-trial',
@@ -847,6 +857,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       ciLow: 1.21,
       ciHigh: 2.30,
       direction: 'positive',
+    },
+    legend: {
+      finding: 'First positive EVT trial — thrombectomy benefit in proximal LVO.',
+      bottomLineTag: '+13 / 100',
+      keyStat: 'NNT 7',
     },
   },
   'escape-trial': {
