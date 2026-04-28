@@ -274,6 +274,105 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] [P1] Trials page visual redesign — implement Screen 5 from docs/MOCKUPS.md. Trial card format: name, one-sentence finding, key stat (NNT or ARR), p-value, guideline implication. Readable in 10 seconds. Category filter pills. Left border color by category.
 - [ ] [P1] Trial interpretation agent — AI-powered layer that explains what each trial means clinically for a practicing neurologist. Requires component library (Layer 3) before implementation. Use Anthropic API in artifact pattern.
 
+---
+
+## W7.0 — Predecessor Trial Stubs
+
+> Planning doc: docs/specs/predecessor-map.md (produced 2026-04-27)
+> Gate: W6.9 (wiring historical context into landmark trials) is **blocked** until the relevant stubs below exist.
+> Design note: HistoricalContextSection.tsx (TRIALS_SPEC §7a.4) is Archetype G only. A new RCT predecessor display pattern must be designed before any wiring begins — W6.9 tracks that design task.
+
+### W6.9 — Wire historical context into landmark trials — Class C [BLOCKED]
+- **Status:** blocked — pending (a) RCT predecessor display pattern design, (b) predecessor stubs from W7.0 below
+- **User-visible goal:** Major trial pages show the "what changed" predecessor chain: failed trials in context, with a brief table and teaching blurb
+- **Non-goals:** Archetype G / WEAVE historicalContext is already wired — this is for RCT chains only
+- **Blocked on:** W7.0 stubs; new UI pattern for RCT predecessor chains (not currently in TRIALS_SPEC)
+- **Chains to wire first (per predecessor-map.md §4.1):**
+  1. EVT 2015 chain — IMS-III/SYNTHESIS/MR RESCUE → MR CLEAN/ESCAPE/REVASCAT/EXTEND-IA/SWIFT PRIME/THRACE
+  2. ICH surgery chain — STICH I/STICH II/MISTIE III → ENRICH
+  3. Acute DAPT chain — MATCH/CHARISMA → CHANCE/POINT/INSPIRES
+  4. Basilar EVT chain — BEST/BASICS → ATTENTION/BAOCHE
+  5. Hemicraniectomy chain — DECIMAL/DESTINY/HAMLET → DESTINY II (all predecessors already in app)
+
+---
+
+### W7.0 — Predecessor Trial Stubs (Priority 1 — EVT 2015 chain)
+
+> These three trials are cited by 6 modern thrombectomy trials each. Building them unlocks the EVT 2015 chain wiring in W6.9.
+> Open question (Section 6.5): should these be separate pages or a combined "EVT 2013 failures" page? V decides before stub work begins.
+
+- [ ] W7.0.1 — Build stub for IMS-III (2013, NEJM, Broderick et al.)
+  - Cited by: MR CLEAN, ESCAPE, REVASCAT, EXTEND-IA, SWIFT PRIME, THRACE
+  - Priority: 1 (6 modern trials)
+  - Chain: EVT 2015 predecessor
+  - Key story: EVT failed in 2013 because no CTA-confirmed LVO requirement, coil-based devices, low reperfusion rates; NIHSS-only enrollment
+  - Requires medical-scientist source verification (Section 6.1 of predecessor-map.md)
+
+- [ ] W7.0.2 — Build stub for SYNTHESIS Expansion (2013, NEJM, Ciccone et al.)
+  - Cited by: MR CLEAN, ESCAPE, REVASCAT, EXTEND-IA, SWIFT PRIME, THRACE
+  - Priority: 1 (6 modern trials)
+  - Chain: EVT 2015 predecessor
+  - Key story: Italian trial; no CTA confirmation; EVT not consistently faster than IV tPA; older devices
+  - Requires medical-scientist source verification (Section 6.1)
+
+- [ ] W7.0.3 — Build stub for MR RESCUE (2013, NEJM, Kidwell et al.)
+  - Cited by: MR CLEAN, ESCAPE, REVASCAT, EXTEND-IA, SWIFT PRIME, THRACE
+  - Priority: 1 (6 modern trials)
+  - Chain: EVT 2015 predecessor
+  - Key story: Penumbral selection with older MERCI/Penumbra devices; small N=118; low reperfusion rates despite imaging selection
+  - Requires medical-scientist source verification (Section 6.1)
+
+### W7.0 — Priority 2 — Basilar EVT chain
+
+- [ ] W7.0.4 — Build stub for BEST (basilar artery EVT, 2020, NEJM, Liu et al.)
+  - Cited by: ATTENTION, BAOCHE
+  - Priority: 2 (2 modern trials)
+  - Chain: Basilar EVT predecessor
+  - Key story: N=131; stopped early; 28% crossover from medical to EVT arm; inconclusive result due to methodology
+  - Note: trialData.ts ATTENTION clinicalContext names this trial directly
+
+- [ ] W7.0.5 — Build stub for BASICS (basilar artery EVT, 2021, NEJM, Langezaal et al.)
+  - Cited by: ATTENTION, BAOCHE
+  - Priority: 2 (2 modern trials)
+  - Chain: Basilar EVT predecessor
+  - Key story: N=300; European; crossover; included mild deficits (NIHSS <10) unlikely to benefit; inconclusive
+  - Note: trialData.ts ATTENTION clinicalContext names this trial directly
+
+- [ ] W7.0.6 — Build stub for MATCH (2004, Lancet, Diener et al.)
+  - Cited by: CHANCE (directly in clinicalContext); INSPIRES (via CHANCE chain)
+  - Priority: 2 (direct CHANCE predecessor)
+  - Chain: Acute DAPT predecessor
+  - Key story: 18-month DAPT after TIA/stroke; no benefit; significant bleeding (RR 1.26); enrolled weeks to months post-event — wrong timing, wrong duration
+
+- [ ] W7.0.7 — Build stub for CHARISMA (2006, NEJM, Bhatt et al.)
+  - Cited by: CHANCE (directly in clinicalContext); INSPIRES (via CHANCE chain)
+  - Priority: 2 (direct CHANCE predecessor)
+  - Chain: Acute DAPT predecessor
+  - Key story: N=15603; long-term DAPT for atherothrombotic prevention; no benefit in primary prevention; possible harm; did not target acute recurrence window
+
+### W7.0 — Priority 3 — ICH surgery chain
+
+- [ ] W7.0.8 — Build stub for STICH I (2005, Lancet, Mendelow et al.)
+  - Cited by: ENRICH (directly in clinicalContext)
+  - Priority: 3 (1 modern trial, but critical predecessor for the first positive ICH surgery trial)
+  - Chain: ICH surgery predecessor
+  - Key story: N=1033; open craniotomy vs medical management for spontaneous ICH; neutral; surgical trauma negated any benefit of clot removal
+
+- [ ] W7.0.9 — Build stub for STICH II (2013, Lancet, Mendelow et al.)
+  - Cited by: ENRICH (directly in clinicalContext)
+  - Priority: 3
+  - Chain: ICH surgery predecessor
+  - Key story: N=601; lobar ICH only (refined selection); still neutral; open craniotomy; crossover to surgery
+
+- [ ] W7.0.10 — Build stub for MISTIE III (2019, Lancet, Hanley et al.)
+  - Cited by: ENRICH (directly in clinicalContext)
+  - Priority: 3
+  - Chain: ICH surgery predecessor
+  - Key story: N=506; minimally invasive catheter drainage + rt-PA instillation; achieved clot reduction but failed functional endpoint at 365 days; design limitation: residual clot volume, not trans-sulcal access
+  - Note (Section 6.4): V decision needed on whether this is a brief stub or a near-full page (MISTIE III is a high-profile trial in its own right)
+
+---
+
 ### OTHER P2 (lower priority)
 - [x] [P2] tPA Reversal, Orolingual Edema, ICH Protocol modals — Stripe/Apple redesign — commits baecb1c, 10b6063
 - [x] [P2] Stroke modals remaining — Thrombectomy, Eligibility, NIHSS — apply same Stripe/Apple pattern — commits fdec23f, 341d9a4
