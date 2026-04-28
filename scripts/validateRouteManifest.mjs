@@ -57,9 +57,11 @@ if (!appSource.includes('<Route path="/trials/:topicId" element={<PublishGate><T
   throw new Error('Dynamic trial route is missing from App.tsx');
 }
 
+// Filter to static (non-dynamic) per-trial routes — routes with ':' are dynamic sub-namespaces
+// and are intentionally allowed (e.g. /trials/q/:questionId for the questions detail surface).
 const manualTrialRoutes = [...appSource.matchAll(/<Route path="(\/trials\/[^":*][^"]*)"/g)]
   .map((match) => match[1])
-  .filter((route) => route !== '/trials');
+  .filter((route) => route !== '/trials' && !route.includes(':'));
 
 if (manualTrialRoutes.length > 0) {
   throw new Error(`Manual per-trial routes remain in App.tsx: ${manualTrialRoutes.join(', ')}`);
