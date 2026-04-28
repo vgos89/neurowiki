@@ -83,7 +83,8 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - [2026-04-22] W6.6 — Archetype G + WEAVE trial rebuild. WEAVE is a single-arm safety registry; requires Archetype G (single-arm registry display) before page can be built. Park until Archetype G component is implemented. (parked during: W6 10-trial Archetype A rebuild)
 - [2026-04-21] Patch C desktop drawer fix (--nav-rail-width) still needed for HeidelbergBleedingCalculator and ABCD2 calculator inline createPortal drawers — same left-0 bug. Out of scope this patch (only GCS + ICH were explicitly included). Tracked for next calculator audit wave. (parked during: Patches A/B/C)
 - [2026-04-21] Consider adding `clinicalQuestion?: string` field to TrialMetadata schema (trialData.ts) so the §1.3 question lede can be data-driven rather than hardcoded per trial page. Not urgent — only EXTEND page exists today. (parked during: Patches A/B/C)
-- [2026-04-28] Backfill `legend` slice on remaining trials — Class C-clinical-editorial. Schema: TrialMetadata.legend (finding ≤120 chars, bottomLineTag 6–16 chars, keyStat 6–24 chars) in src/data/trialData.ts. Three trials populated in commits 4c40e41 + 35d7c68 (ECASS III, EXTEND, MR CLEAN); four more (NINDS, DAWN, DEFUSE-3, ESCAPE) blocked on numeric conflict resolution with V (see conflict report 2026-04-28). ~20 other trials have bottomLineSummary and are ready for authoring once approach is confirmed. Card renders gracefully with absent legend (falls back to listDescription for finding; omits chip and stat slots). Also: SWIFT PRIME, REVASCAT, EXTEND-IA, THRACE, DIRECT-MT, DEVT, SKIP, MR CLEAN NO-IV, DIRECT-SAFE, SWIFT-DIRECT, LASTE, TENSION, COMPASS, ASTER, ASTER 2, CHOICE, RESCUE-BT, ENCHANTED, BEST-II, BP-TARGET, OPTIMAL-BP, CHARM, ESCAPE-NA1 all have bottomLineSummary — ready for legend authoring in a bulk C-clinical-editorial pass. (parked during: W7.1 legend slice + page rebuild)
+- [2026-04-28] [DONE — commit TBD] Four conflicting legend values resolved: NINDS (+15/100, NNT 6.5), ESCAPE (+24/100, NNT 4.2), DEFUSE-3 (+28/100, NNT 3.6), DAWN (+36/100, NNT 2.8). All sourced from efficacyResults and calculations.nnt in trialData.ts. No conflicts with existing data.
+- [2026-04-28] Backfill `legend` slice on remaining ~20 trials — Class C-clinical-editorial. Seven trials now done (ECASS III, EXTEND, MR CLEAN, NINDS, ESCAPE, DEFUSE-3, DAWN). Ready for bulk authoring pass: SWIFT PRIME, REVASCAT, EXTEND-IA, THRACE, DIRECT-MT, DEVT, SKIP, MR CLEAN NO-IV, DIRECT-SAFE, SWIFT-DIRECT, LASTE, TENSION, COMPASS, ASTER, ASTER 2, CHOICE, RESCUE-BT, ENCHANTED, BEST-II, BP-TARGET, OPTIMAL-BP, CHARM, ESCAPE-NA1. Card renders gracefully with absent legend (falls back to listDescription; omits chip/stat slots). (parked during: W7.1 legend slice + page rebuild)
 
 ## PENDING
 
@@ -283,8 +284,8 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 > Gate: W6.9 (wiring historical context into landmark trials) is **blocked** until the relevant stubs below exist.
 > Design note: HistoricalContextSection.tsx (TRIALS_SPEC §7a.4) is Archetype G only. A new RCT predecessor display pattern must be designed before any wiring begins — W6.9 tracks that design task.
 
-### W6.9 — Wire historical context into landmark trials — Class C [BLOCKED]
-- **Status:** blocked — pattern locked (TRIALS_SPEC §7b), component shipped (RCTChainSection.tsx); wiring blocked on W7.0 predecessor stubs
+### W6.9 — Wire historical context into landmark trials — Class C [UNBLOCKED]
+- **Status:** unblocked (2026-04-28) — all 10 W7.0 predecessor stubs now exist; wiring can begin
 - **User-visible goal:** Major trial pages show the "what changed" predecessor chain: failed trials in context, with a brief vertical timeline and teaching blurb
 - **Non-goals:** Archetype G / WEAVE historicalContext is already wired — this is for RCT chains only
 - **Pattern:** RCTChainSection.tsx (src/components/trials/RCTChainSection.tsx) — spec at TRIALS_SPEC §7b (v1.2, 2026-04-27)
@@ -303,7 +304,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 > These three trials are cited by 6 modern thrombectomy trials each. Building them unlocks the EVT 2015 chain wiring in W6.9.
 > Open question (Section 6.5 of predecessor-map.md): separate pages vs combined "EVT 2013 failures" page — RESOLVED: separate pages (canary batch implements separate pages).
-> Stub pattern locked via TRIALS_SPEC §7c (2026-04-27). W7.0.4–W7.0.10 blocked on PM verification of canary batch.
+> Stub pattern locked via TRIALS_SPEC §7c (2026-04-27). W7.0.4–W7.0.10 complete (2026-04-28).
 
 - [x] W7.0.1 — Build stub for IMS-III (2013, NEJM, Broderick et al.) — commit: see W7.0 canary batch commit
   - trialId: 'ims-iii-trial' · trialResult: NEGATIVE · archetypeId: 'A'
@@ -322,52 +323,43 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 ### W7.0 — Priority 2 — Basilar EVT chain
 
-- [ ] W7.0.4 — Build stub for BEST (basilar artery EVT, 2020, NEJM, Liu et al.)
-  - Cited by: ATTENTION, BAOCHE
-  - Priority: 2 (2 modern trials)
-  - Chain: Basilar EVT predecessor
-  - Key story: N=131; stopped early; 28% crossover from medical to EVT arm; inconclusive result due to methodology
-  - Note: trialData.ts ATTENTION clinicalContext names this trial directly
+- [x] W7.0.4 — Build stub for BEST (basilar artery EVT, 2020, Lancet Neurol, Liu et al.)
+  - trialId: 'best-trial' · trialResult: NEUTRAL (ITT non-significant; 34% crossover + early termination → inconclusive) · archetypeId: 'A'
+  - URL: /trials/best-trial · successorTrialId: 'attention-trial'
+  - Clinical review: docs/reviews/clinical-W7.0-subbatch1-basilar.md (approve)
 
-- [ ] W7.0.5 — Build stub for BASICS (basilar artery EVT, 2021, NEJM, Langezaal et al.)
-  - Cited by: ATTENTION, BAOCHE
-  - Priority: 2 (2 modern trials)
-  - Chain: Basilar EVT predecessor
-  - Key story: N=300; European; crossover; included mild deficits (NIHSS <10) unlikely to benefit; inconclusive
-  - Note: trialData.ts ATTENTION clinicalContext names this trial directly
+- [x] W7.0.5 — Build stub for BASICS (basilar artery EVT, 2021, NEJM, Langezaal et al.)
+  - trialId: 'basics-trial' · trialResult: NEUTRAL (CI 0.92–1.50; underpowered; didn't falsify directional hypothesis) · archetypeId: 'A'
+  - URL: /trials/basics-trial · successorTrialId: 'attention-trial'
+  - Clinical review: docs/reviews/clinical-W7.0-subbatch1-basilar.md (approve)
 
-- [ ] W7.0.6 — Build stub for MATCH (2004, Lancet, Diener et al.)
-  - Cited by: CHANCE (directly in clinicalContext); INSPIRES (via CHANCE chain)
-  - Priority: 2 (direct CHANCE predecessor)
-  - Chain: Acute DAPT predecessor
-  - Key story: 18-month DAPT after TIA/stroke; no benefit; significant bleeding (RR 1.26); enrolled weeks to months post-event — wrong timing, wrong duration
+- [x] W7.0.6 — Build stub for MATCH (2004, Lancet, Diener et al.)
+  - trialId: 'match-trial' · trialResult: NEGATIVE · archetypeId: 'A' · listCategory: 'antiplatelets'
+  - URL: /trials/match-trial · successorTrialId: 'point-trial'
+  - Clinical review: docs/reviews/clinical-W7.0-subbatch2-antiplatelet.md (approve, conditions resolved)
 
-- [ ] W7.0.7 — Build stub for CHARISMA (2006, NEJM, Bhatt et al.)
-  - Cited by: CHANCE (directly in clinicalContext); INSPIRES (via CHANCE chain)
-  - Priority: 2 (direct CHANCE predecessor)
-  - Chain: Acute DAPT predecessor
-  - Key story: N=15603; long-term DAPT for atherothrombotic prevention; no benefit in primary prevention; possible harm; did not target acute recurrence window
+- [x] W7.0.7 — Build stub for CHARISMA (2006, NEJM, Bhatt et al.)
+  - trialId: 'charisma-trial' · trialResult: NEGATIVE · archetypeId: 'A' · listCategory: 'antiplatelets'
+  - URL: /trials/charisma-trial · successorTrialId: 'point-trial'
+  - Clinical review: docs/reviews/clinical-W7.0-subbatch2-antiplatelet.md (approve, conditions resolved)
 
 ### W7.0 — Priority 3 — ICH surgery chain
 
-- [ ] W7.0.8 — Build stub for STICH I (2005, Lancet, Mendelow et al.)
-  - Cited by: ENRICH (directly in clinicalContext)
-  - Priority: 3 (1 modern trial, but critical predecessor for the first positive ICH surgery trial)
-  - Chain: ICH surgery predecessor
-  - Key story: N=1033; open craniotomy vs medical management for spontaneous ICH; neutral; surgical trauma negated any benefit of clot removal
+- [x] W7.0.8 — Build stub for STICH I (2005, Lancet, Mendelow et al.)
+  - trialId: 'stich-i-trial' · trialResult: NEGATIVE · archetypeId: 'A' (no listCategory — ICH not in union)
+  - URL: /trials/stich-i-trial · successorTrialId: 'enrich-trial'
+  - Clinical review: docs/reviews/clinical-W7.0-subbatch3-ich-surgical.md (approve, editorial conditions resolved)
 
-- [ ] W7.0.9 — Build stub for STICH II (2013, Lancet, Mendelow et al.)
-  - Cited by: ENRICH (directly in clinicalContext)
-  - Priority: 3
-  - Chain: ICH surgery predecessor
-  - Key story: N=601; lobar ICH only (refined selection); still neutral; open craniotomy; crossover to surgery
+- [x] W7.0.9 — Build stub for STICH II (2013, Lancet, Mendelow et al.)
+  - trialId: 'stich-ii-trial' · trialResult: NEGATIVE · archetypeId: 'A' (no listCategory)
+  - URL: /trials/stich-ii-trial · successorTrialId: 'enrich-trial'
+  - Clinical review: docs/reviews/clinical-W7.0-subbatch3-ich-surgical.md (approve, editorial conditions resolved)
 
-- [ ] W7.0.10 — Build stub for MISTIE III (2019, Lancet, Hanley et al.)
-  - Cited by: ENRICH (directly in clinicalContext)
-  - Priority: 3
-  - Chain: ICH surgery predecessor
-  - Key story: N=506; minimally invasive catheter drainage + rt-PA instillation; achieved clot reduction but failed functional endpoint at 365 days; design limitation: residual clot volume, not trans-sulcal access
-  - Note (Section 6.4): V decision needed on whether this is a brief stub or a near-full page (MISTIE III is a high-profile trial in its own right)
+- [x] W7.0.10 — Build stub for MISTIE III (2019, Lancet, Hanley et al.)
+  - trialId: 'mistie-iii-trial' · trialResult: NEGATIVE · archetypeId: 'A' (no listCategory)
+  - URL: /trials/mistie-iii-trial · successorTrialId: 'enrich-trial'
+  - Clinical review: docs/reviews/clinical-W7.0-subbatch3-ich-surgical.md (approve, editorial conditions resolved)
+  - Note: stub scope selected (brief predecessor pattern, not full page) per §7c
 
 ---
 
@@ -417,7 +409,18 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
   - trialResult calls: IMS-III=NEGATIVE ✓; SYNTHESIS=NEGATIVE ✓; MR RESCUE=NEUTRAL ✓ (reviewer confirmed)
   - tsc clean · build green (2.28s)
   - URLs: /trials/ims-iii-trial · /trials/synthesis-expansion-trial · /trials/mr-rescue-trial
-  - W7.0.4–W7.0.10 blocked on PM verification of canary batch
+- [x] 2026-04-28 — W7.0 batch 2: 7 predecessor stubs (BEST, BASICS, MATCH, CHARISMA, STICH I, STICH II, MISTIE III)
+  - chainContext fix (pre-batch): bedsidePearl slot now data-driven via `chainContext` field; successorTrialClause field added for chain-neutral amber banner; all 3 EVT stubs backfilled; TRIALS_SPEC §7c.4 updated
+  - 7 new stub entries in trialData.ts: best-trial · basics-trial · match-trial · charisma-trial · stich-i-trial · stich-ii-trial · mistie-iii-trial
+  - 7 new id-gated branches in TrialPageNew.tsx
+  - Sub-batch clinical reviews: all 3 sub-batches approved
+    - Sub-batch 1 (basilar): docs/reviews/clinical-W7.0-subbatch1-basilar.md — approve
+    - Sub-batch 2 (antiplatelet): docs/reviews/clinical-W7.0-subbatch2-antiplatelet.md — approve (3 conditions resolved: CHARISMA successorTrialClause scope, subgroup language, double-hyphens)
+    - Sub-batch 3 (ICH surgical): docs/reviews/clinical-W7.0-subbatch3-ich-surgical.md — approve (editorial conditions resolved: STICH I mortality precision, double-hyphens)
+  - trialResult calls: BEST=NEUTRAL ✓ · BASICS=NEUTRAL ✓ · MATCH=NEGATIVE ✓ · CHARISMA=NEGATIVE ✓ · STICH I=NEGATIVE ✓ · STICH II=NEGATIVE ✓ · MISTIE III=NEGATIVE ✓ (all confirmed by clinical-reviewer)
+  - tsc clean · build green (1.93s)
+  - W6.9 unblocked — all 10 predecessor stubs now exist
+  - URLs: /trials/best-trial · /trials/basics-trial · /trials/match-trial · /trials/charisma-trial · /trials/stich-i-trial · /trials/stich-ii-trial · /trials/mistie-iii-trial
 - [x] 2026-04-27 — RCTChainSection component and TRIALS_SPEC §7b — commit 12b24de
   - TRIALS_SPEC §7b (RCT Chain Section) appended; rctChain? field added to TrialMetadata; RCTChainSection.tsx created; dev route /dev/rct-chain-test; TASKS.md W6.9 updated
 - [x] 2026-04-24 — W6.6.1 Archetype G WEAVE canary — commit a25a6fd

@@ -369,6 +369,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT00000292',
     listCategory: 'thrombolysis',
     listDescription: 'Foundational trial establishing IV tPA within 3 hours; 42.6% vs 27.2% favorable outcome.',
+    legend: {
+      finding: 'Alteplase within 3 h improves functional independence (42.6% vs 27.2% mRS 0–1).',
+      bottomLineTag: '+15 / 100',
+      keyStat: 'NNT 6.5',
+    },
   },
   'original-trial': {
     id: 'original-trial',
@@ -981,6 +986,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       ciHigh: 3.8,
       direction: 'positive',
       pValue: 0.001,
+    },
+    legend: {
+      finding: 'Small-core LVO thrombectomy raised independence to 53% vs 29%; mortality cut from 19% to 10%.',
+      bottomLineTag: '+24 / 100',
+      keyStat: 'NNT 4.2',
     },
   },
   'revascat-trial': {
@@ -4298,6 +4308,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT02586415',
     listCategory: 'thrombectomy',
     listDescription: 'Thrombectomy 6–16 hours with perfusion imaging selection.',
+    legend: {
+      finding: 'Perfusion-selected thrombectomy at 6–16 h triples functional independence (45% vs 17%).',
+      bottomLineTag: '+28 / 100',
+      keyStat: 'NNT 3.6',
+    },
   },
   'dawn-trial': {
     id: 'dawn-trial',
@@ -4364,6 +4379,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT02142283',
     listCategory: 'thrombectomy',
     listDescription: 'Thrombectomy 6–24 hours with clinical–imaging mismatch.',
+    legend: {
+      finding: 'Thrombectomy to 24 h with clinical–core mismatch: 49% vs 13% independence, NNT 2.8.',
+      bottomLineTag: '+36 / 100',
+      keyStat: 'NNT 2.8',
+    },
   },
   'select2-trial': {
     id: 'select2-trial',
@@ -8846,14 +8866,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: match-outcomes | source: Diener et al., Lancet 2004, doi: 10.1016/S0140-6736(04)16721-4 */
     primaryOutcomeProse: 'In 7,599 patients with recent ischemic stroke or TIA plus at least one additional vascular risk factor already receiving clopidogrel, adding aspirin 75 mg/day did not reduce the composite endpoint of ischemic stroke, myocardial infarction, vascular death, or rehospitalization for acute ischemia over 18 months. The primary endpoint occurred in 15.7% of the combination group versus 16.7% of the clopidogrel-alone group (relative risk 0.94, 95% CI 0.84 to 1.05, P=0.244). Major bleeding and life-threatening bleeding were both significantly higher with the combination (2.6% vs 1.3%), establishing that adding aspirin to long-term clopidogrel causes harm without efficacy benefit.',
     /* claimId: match-design | source: Diener et al., Lancet 2004 */
-    trialDesignNarrative: 'MATCH enrolled patients within 3 months of a qualifying ischemic stroke or TIA who had at least one additional vascular risk factor (prior stroke or TIA, diabetes, symptomatic peripheral arterial disease, or ischemic heart disease). All patients were already receiving clopidogrel 75 mg/day and were randomized to aspirin 75 mg/day or matching placebo for 18 months. The comparator arm was clopidogrel monotherapy, not aspirin monotherapy -- a critical design difference from CHARISMA. The primary composite endpoint included ischemic stroke, MI, vascular death, and rehospitalization for acute ischemia.',
+    trialDesignNarrative: 'MATCH enrolled patients within 3 months of a qualifying ischemic stroke or TIA who had at least one additional vascular risk factor (prior stroke or TIA, diabetes, symptomatic peripheral arterial disease, or ischemic heart disease). All patients were already receiving clopidogrel 75 mg/day and were randomized to aspirin 75 mg/day or matching placebo for 18 months. The comparator arm was clopidogrel monotherapy, not aspirin monotherapy, a critical design difference from CHARISMA. The primary composite endpoint included ischemic stroke, MI, vascular death, and rehospitalization for acute ischemia.',
     safetyBrief: 'Life-threatening bleeding occurred in 2.6% of the combination group versus 1.3% of the clopidogrel-alone group (absolute difference 1.3%). Major bleeding was similarly doubled. Fatal and intracranial hemorrhage were both numerically higher with the combination. The net harm of adding aspirin to long-term clopidogrel was unambiguous and statistically significant.',
     successorTrialId: 'point-trial',
     successorTrialDisplay: 'POINT (2018)',
     successorTrialClause: 'for the modern successor trial that defined the appropriate short-duration window for dual antiplatelet therapy after minor stroke',
     chainContext: 'short-duration dual antiplatelet therapy after minor stroke or high-risk TIA',
     /* claimId: match-bottom-line | source: Diener et al., Lancet 2004 */
-    bottomLineSummary: 'MATCH enrolled 7,599 patients with recent stroke/TIA on clopidogrel and randomized them to add aspirin vs continue clopidogrel alone for 18 months. No efficacy benefit: 15.7% vs 16.7% composite endpoint (RR 0.94, CI 0.84–1.05, P=0.244). Major bleeding doubled: 2.6% vs 1.3%. Established that long-duration DAPT after stroke causes net harm. POINT (2018) subsequently showed short-duration DAPT (21 days) is beneficial -- duration is the key variable.',
+    bottomLineSummary: 'MATCH enrolled 7,599 patients with recent stroke/TIA on clopidogrel and randomized them to add aspirin vs continue clopidogrel alone for 18 months. No efficacy benefit: 15.7% vs 16.7% composite endpoint (RR 0.94, CI 0.84–1.05, P=0.244). Major bleeding doubled: 2.6% vs 1.3%. Established that long-duration DAPT after stroke causes net harm. POINT (2018) subsequently showed short-duration DAPT (21 days) is beneficial; duration is the key variable.',
     inclusionCriteria: [
       'Age 40 years or older',
       'Recent ischemic stroke (within 3 months) or TIA with at least one additional vascular risk factor',
@@ -8915,16 +8935,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     questionLede: 'In patients with established cardiovascular disease or multiple cardiovascular risk factors, does adding clopidogrel to aspirin reduce MI, stroke, or cardiovascular death over a median 28-month follow-up?',
     /* claimId: charisma-outcomes | source: Bhatt et al., NEJM 2006, doi: 10.1056/NEJMoa060989 */
-    primaryOutcomeProse: 'In 15,603 patients with established cardiovascular disease or multiple cardiovascular risk factors, aspirin plus clopidogrel did not significantly reduce the composite of myocardial infarction, stroke, or cardiovascular death over a median 28 months. The primary endpoint occurred in 6.8% of the combination group versus 7.3% of the aspirin-alone group (relative risk 0.93, 95% CI 0.83 to 1.05, P=0.22). A pre-specified symptomatic subgroup analysis showed a modest benefit for patients with prior symptomatic atherothrombotic disease (RR 0.88, 95% CI 0.77 to 0.99), while the asymptomatic primary-prevention subgroup showed excess harm (RR 1.20, 95% CI 0.91 to 1.59). Overall there was no significant benefit and a clear bleeding excess with combination therapy.',
+    primaryOutcomeProse: 'In 15,603 patients with established cardiovascular disease or multiple cardiovascular risk factors, aspirin plus clopidogrel did not significantly reduce the composite of myocardial infarction, stroke, or cardiovascular death over a median 28 months. The primary endpoint occurred in 6.8% of the combination group versus 7.3% of the aspirin-alone group (relative risk 0.93, 95% CI 0.83 to 1.05, P=0.22). A pre-specified symptomatic subgroup analysis showed a nominally favorable signal in patients with prior symptomatic atherothrombotic disease (RR 0.88, 95% CI 0.77 to 0.99), interpreted as hypothesis-generating, while the asymptomatic primary-prevention subgroup showed excess harm (RR 1.20, 95% CI 0.91 to 1.59). Overall there was no significant benefit and a clear bleeding excess with combination therapy.',
     /* claimId: charisma-design | source: Bhatt et al., NEJM 2006 */
-    trialDesignNarrative: 'CHARISMA enrolled patients from two populations: established symptomatic atherothrombotic disease (prior MI, ischemic stroke, or symptomatic peripheral arterial disease) and asymptomatic patients with multiple cardiovascular risk factors. All received aspirin at country-standard dose (75–162 mg/day) and were randomized to clopidogrel 75 mg/day or matching placebo. The trial was conducted across 768 centers in 45 countries with a median 28-month follow-up -- far longer than the short-duration DAPT studied in CHANCE (2013) and POINT (2018). The duration difference is central to understanding why CHARISMA was negative while short-term trials were positive.',
+    trialDesignNarrative: 'CHARISMA enrolled patients from two populations: established symptomatic atherothrombotic disease (prior MI, ischemic stroke, or symptomatic peripheral arterial disease) and asymptomatic patients with multiple cardiovascular risk factors. All received aspirin at country-standard dose (75–162 mg/day) and were randomized to clopidogrel 75 mg/day or matching placebo. The trial was conducted across 768 centers in 45 countries with a median 28-month follow-up, far longer than the short-duration DAPT studied in CHANCE (2013) and POINT (2018). The duration difference is central to understanding why CHARISMA was negative while short-term trials were positive.',
     safetyBrief: 'Moderate bleeding occurred in 2.1% of the combination group versus 1.3% of the aspirin-alone group (P<0.001). Severe bleeding was similar between groups. There was no significant difference in fatal bleeding. The bleeding excess persisted across the 28-month treatment period, with absolute risk increasing over time.',
     successorTrialId: 'point-trial',
     successorTrialDisplay: 'POINT (2018)',
-    successorTrialClause: 'for the modern successor trial that defined the appropriate short-duration window for dual antiplatelet therapy after minor stroke',
+    successorTrialClause: 'for the modern successor trial that defined the appropriate short-duration window for DAPT in the cerebrovascular subset of patients CHARISMA studied',
     chainContext: 'short-duration dual antiplatelet therapy after minor stroke or high-risk TIA',
     /* claimId: charisma-bottom-line | source: Bhatt et al., NEJM 2006 */
-    bottomLineSummary: 'CHARISMA enrolled 15,603 patients with established CV disease or multiple risk factors and compared aspirin+clopidogrel vs aspirin alone over median 28 months. Primary (MI/stroke/CV death): 6.8% vs 7.3% (RR 0.93, CI 0.83–1.05, P=0.22) — not significant overall. Symptomatic subgroup: modest benefit (RR 0.88). Asymptomatic subgroup: excess harm (RR 1.20). Moderate bleeding doubled. POINT (2018) showed short-duration DAPT after minor stroke/TIA is beneficial.',
+    bottomLineSummary: 'CHARISMA enrolled 15,603 patients with established CV disease or multiple risk factors and compared aspirin+clopidogrel vs aspirin alone over median 28 months. Primary (MI/stroke/CV death): 6.8% vs 7.3% (RR 0.93, CI 0.83–1.05, P=0.22), not significant overall. Symptomatic subgroup: nominally favorable signal (RR 0.88, hypothesis-generating). Asymptomatic subgroup: excess harm (RR 1.20). Moderate bleeding doubled. POINT (2018) showed short-duration DAPT after minor stroke/TIA is beneficial.',
     inclusionCriteria: [
       'Age 45 years or older',
       'Established cardiovascular disease (prior MI, ischemic stroke, or symptomatic PAD) OR multiple cardiovascular risk factors without established disease',
@@ -8991,7 +9011,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     primaryOutcomeProse: 'In 1,033 patients with spontaneous supratentorial ICH enrolled at 83 centers across 27 countries, early surgery did not significantly improve favorable functional outcome at 6 months compared with initial conservative management. A favorable outcome on the Glasgow Outcome Scale was achieved in 26% of the early surgery group versus 24% of the initial conservative group (OR 0.89, 95% CI 0.66 to 1.19, P=0.414). The conservative arm allowed delayed surgery if neurological deterioration occurred; 26% of initially conservative patients ultimately underwent surgery. A post-hoc subgroup analysis suggested a possible benefit for superficial lobar ICH within 1 cm of the cortical surface, generating the hypothesis tested in STICH II.',
     /* claimId: stich-i-design | source: Mendelow et al., Lancet 2005 */
     trialDesignNarrative: 'STICH I enrolled patients with spontaneous supratentorial ICH within 72 hours of onset at centers across 27 countries. The critical design feature was the equipoise requirement: surgeons enrolled only those patients for whom they were genuinely uncertain whether surgery or conservative management was superior. This excluded patients with clear indications in either direction. Most surgical procedures were open craniotomies, which carry their own morbidity from brain retraction and cortical transgression. The primary outcome was the Glasgow Outcome Scale (GOS) at 6 months, dichotomized as favorable (good recovery or moderate disability) versus unfavorable.',
-    safetyBrief: 'Unfavorable outcome (death or severe disability on GOS) at 6 months was 74% in the surgical group versus 76% in the conservative group -- a non-significant difference. Mortality at 6 months was approximately 36% in each arm. No significant difference in safety outcomes was demonstrated between early surgery and conservative management.',
+    safetyBrief: 'Unfavorable outcome (death or severe disability on GOS) at 6 months was 74% in the surgical group versus 76% in the conservative group, a non-significant difference. Mortality at 6 months was approximately 36% in the surgical group and 37% in the conservative group, a non-significant difference. No significant difference in safety outcomes was demonstrated between early surgery and conservative management.',
     successorTrialId: 'enrich-trial',
     successorTrialDisplay: 'ENRICH (2024)',
     successorTrialClause: 'for the modern successor trial that established minimally invasive evacuation for selected lobar intracerebral hemorrhage',
@@ -9062,7 +9082,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     primaryOutcomeProse: 'In 601 patients with spontaneous superficial lobar ICH (10–100 mL, within 1 cm of the cortical surface, no intraventricular extension) enrolled using equipoise-based randomization, early surgical evacuation did not significantly reduce unfavorable functional outcome at 6 months. Unfavorable outcome occurred in 59% (174 of 307) of the surgical group versus 62% (178 of 286) of the conservative group (OR 0.86, 95% CI 0.62 to 1.20, P=0.367). The STICH I lobar subgroup signal was not confirmed in this dedicated, adequately powered trial.',
     /* claimId: stich-ii-design | source: Mendelow et al., Lancet 2013 */
     trialDesignNarrative: 'STICH II was designed based on the STICH I post-hoc finding that lobar ICH within 1 cm of the cortical surface might benefit from early surgery. The trial enrolled patients with spontaneous superficial lobar ICH (10–100 mL, within 1 cm of cortex, no intraventricular extension, GCS 5 or greater) using the same equipoise-based design as STICH I. Early surgery was required within 12 hours of randomization and was predominantly craniotomy. The conservative arm allowed delayed surgery if the patient deteriorated; 21% of initially conservative patients ultimately required surgery. The primary outcome was a prognosis-adjusted endpoint: favorable or unfavorable outcome at 6 months.',
-    safetyBrief: 'Mortality at 6 months was 18% in the surgical group versus 24% in the conservative group (not statistically significant). Surgical complications and rebleeding were not significantly different between groups. The surgical arm had more early procedure-related events but achieved numerically lower mortality -- neither difference was statistically significant.',
+    safetyBrief: 'Mortality at 6 months was 18% in the surgical group versus 24% in the conservative group (not statistically significant). Surgical complications and rebleeding were not significantly different between groups. The surgical arm had more early procedure-related events but achieved numerically lower mortality; neither difference was statistically significant.',
     successorTrialId: 'enrich-trial',
     successorTrialDisplay: 'ENRICH (2024)',
     successorTrialClause: 'for the modern successor trial that established minimally invasive evacuation for selected lobar intracerebral hemorrhage',
