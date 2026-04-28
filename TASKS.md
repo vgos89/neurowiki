@@ -370,6 +370,24 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 ---
 
+### W7.1 — Trials listing page design — mockup only — Class C
+
+#### W7.1.0 — trials-legend-reference.html visual ground truth — Class B
+- **Status:** [x] done — 2026-04-28
+- **User-visible goal:** none (mockup only; visual spec for the trials listing / legend page)
+- **Non-goals:** no code; no React component; no route wiring; no clinical content
+- **Files touched:** docs/specs/mockups/trials-legend-reference.html (created, 3 stages) · index.css (6 new CSS tokens added to :root + font-feature-settings cv11 on body)
+- **Acceptance checks:** file renders all 3 stages · token values trace to trial-reference.html lines 8–540 and v4 token sheet §1–6 · new tokens committed to index.css · no invented values
+- **Stages delivered:**
+  - Stage 1: Default landing, Questions view, Mobile 380px + Desktop 1180px
+  - Stage 2: Catalog view, filter bar + IVT section header + 4 trial cards, Mobile 380px + Desktop 1180px
+  - Stage 3: Toggle states A/B/C at 340px + spec block (exact radii, timing, easing, new tokens, ARIA notes)
+- **New CSS tokens added to index.css:** --cobalt-soft, --ease-discovery, --shadow-card-hover, --cat-ivt, --cat-prevention, --cat-surgical, font-feature-settings cv11 on body
+- **Clinical impact:** none (design mockup; no clinical claims)
+- **Rollback plan:** n/a
+
+---
+
 ### OTHER P2 (lower priority)
 - [x] [P2] tPA Reversal, Orolingual Edema, ICH Protocol modals — Stripe/Apple redesign — commits baecb1c, 10b6063
 - [x] [P2] Stroke modals remaining — Thrombectomy, Eligibility, NIHSS — apply same Stripe/Apple pattern — commits fdec23f, 341d9a4

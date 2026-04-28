@@ -6527,7 +6527,7 @@ const TrialPageNew: React.FC = () => {
           <BottomLineDrawer
             trialName={shortName}
             body={tm.bottomLineSummary}
-            bedsidePearl={`Historical reference trial predating modern stent-retriever technology and CTA-based patient selection. See ${tm.successorTrialDisplay ?? tm.successorTrialId ?? 'the modern successor trial'} for current evidence.`}
+            bedsidePearl={`Historical reference trial predating ${tm.chainContext ?? '[chain context missing]'}. See ${tm.successorTrialDisplay ?? tm.successorTrialId ?? 'the modern successor trial'} for current evidence.`}
             seeAlsoLinks={[
               ...(tm.successorTrialId ? [{ label: tm.successorTrialDisplay ?? tm.successorTrialId, href: `/trials/${tm.successorTrialId}` }] : []),
               { label: 'Stroke Code pathway', href: '/guide/stroke-code' },

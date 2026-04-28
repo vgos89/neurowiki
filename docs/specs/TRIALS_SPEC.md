@@ -1000,6 +1000,10 @@ trialDesignNarrative?: string;// one paragraph trial design (replaces structured
 safetyBrief?: string;         // 1-2 sentence safety summary
 successorTrialId?: string;    // ID of the representative successor trial (used for Link href)
 successorTrialDisplay?: string;// Display name for amber banner + see-also chip, e.g. "ESCAPE (2015)"
+chainContext?: string;        // REQUIRED on stubs. Chain-specific phrase used in the bedsidePearl slot,
+                              // e.g. "modern stent-retriever technology and CTA-based patient selection"
+                              // or "short-duration dual antiplatelet therapy after minor stroke".
+                              // If absent, renders fallback "[chain context missing]" as a visible warning.
 ```
 
 Stubs still provide the base required fields (`stats`, `trialDesign`, `efficacyResults`, `intervention`, `clinicalContext`, `pearls`, `conclusion`, `source`) to satisfy the TypeScript interface. These are used by the BottomLineDrawer and by any fallback path that loads the legacy page layout.

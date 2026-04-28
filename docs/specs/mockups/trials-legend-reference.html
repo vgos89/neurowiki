@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Trials Legend Reference Mockup — NeuroWiki</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* ─────────────────────────────────────────────────────────────────────────
+     CSS TOKENS
+     Existing tokens sourced from: trial-reference.html lines 9–18
+     New tokens: --cobalt-soft, --ease-discovery, --shadow-card-hover,
+                 --cat-ivt, --cat-prevention, --cat-surgical
+     (--cat-evt maps to --cobalt; no new token needed)
+     font-feature-settings "cv11" sourced from: index.css body (to be added)
+  ───────────────────────────────────────────────────────────────────────── */
+  :root {
+    /* ── Existing tokens (trial-reference.html lines 9–18) ── */
+    --cobalt:            #1746A2;
+    --cobalt-50:         #EEF2FF;
+    --cobalt-100:        #C7D7FA;
+    --cobalt-700:        #0E2D6B;
+    --hair:              #f1f5f9;   /* --border-hairline alias */
+    --border:            #e2e8f0;   /* --border-section alias */
+
+    /* ── New tokens — add to index.css :root ── */
+    --cobalt-soft:       rgba(23, 70, 162, 0.08);
+    --ease-discovery:    cubic-bezier(0.16, 1, 0.3, 1);
+    --shadow-card-hover: 0 2px 8px rgba(15, 23, 42, 0.06);
+    --cat-ivt:           #10b981;
+    --cat-evt:           var(--cobalt);   /* no new token — reuse cobalt */
+    --cat-prevention:    #0891b2;
+    --cat-surgical:      #7c3aed;
+  }
+
+  /* ── Typography baseline — font-feature-settings per v4 token sheet §1 ── */
+  body {
+    background: #f1f5f9;
+    font-family: Inter, -apple-system, 'Segoe UI', sans-serif;
+    font-feature-settings: "cv11";   /* tabular numerals on stats */
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     STAGE SCAFFOLDING
+     Sourced from: trial-reference.html lines 26–55
+  ───────────────────────────────────────────────────────────────────────── */
+  .state-divider {
+    background: #f8fafc;
+    border-top: 1px dashed #cbd5e1;
+    border-bottom: 1px dashed #cbd5e1;
+  }
+  .arch-banner {
+    background: #0f172a;
+    color: white;
+    padding: 1.25rem 1.5rem;
+  }
+  .stage-row {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    overflow-x: auto;
+    padding: 0 24px 40px;
+  }
+
+  /* ── Mock frames (trial-reference.html lines 49–55) ── */
+  .mock-frame {
+    background: white;
+    position: relative;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .f-mobile  { width: 380px; }        /* Stage 1–2: 380px per spec */
+  .f-desktop { width: 1180px; }       /* Stage 1–2: 1180px per spec */
+  .f-toggle  { width: 340px; }        /* Stage 3: toggle detail panels */
+
+  /* ── Dividers (trial-reference.html lines 58–59) ── */
+  .divider-hair    { border-top: 1px solid var(--hair); }
+  .divider-section { border-top: 1px solid var(--border); }
+
+  /* ── Section label (trial-reference.html lines 61–68) ── */
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #94a3b8;
+    margin-bottom: 10px;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     HERO BLOCK
+     v4 token sheet §2: hero padding, H1 sizes, sub copy
+  ───────────────────────────────────────────────────────────────────────── */
+  .hero {
+    padding: 24px 20px 20px;    /* mobile: 24px 20px per spec */
+    border-bottom: 1px solid var(--hair);
+  }
+  .hero-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #94a3b8;
+    margin-bottom: 10px;
+  }
+  .hero-h1 {
+    font-size: 22px;            /* mobile: 22px per spec */
+    font-weight: 500;
+    color: #1e293b;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin: 0 0 8px;
+  }
+  .hero-h1-desktop {
+    font-size: 32px;            /* desktop: 32px per spec */
+    font-weight: 500;
+    color: #1e293b;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin: 0 0 10px;
+  }
+  .hero-sub {
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.55;          /* body: 1.55 per spec */
+    margin: 0 0 16px;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     SEARCH BAR
+     v4 token sheet §2: radius 12px, height 44px mobile / 48px desktop
+     Focus: border cobalt + 4px var(--cobalt-soft) halo, 150ms ease
+  ───────────────────────────────────────────────────────────────────────── */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;        /* search bar radius: 12px */
+    padding: 0 14px;
+    height: 44px;               /* mobile height: 44px */
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+    margin-bottom: 14px;
+  }
+  .search-bar.desktop { height: 48px; } /* desktop height: 48px */
+  .search-bar:focus-within {
+    border-color: var(--cobalt);
+    box-shadow: 0 0 0 4px var(--cobalt-soft);
+  }
+  .search-placeholder {
+    font-size: 14px;
+    color: #94a3b8;
+    flex: 1;
+  }
+  .kbd-hint {
+    font-size: 11px;
+    color: #cbd5e1;
+    font-weight: 500;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     CHIP RAIL + CHIP
+     v4 token sheet §2: chip radius 9999px, filter chips
+     calculator-reference.html lines 62–85 for chip scrollbar-hide pattern
+  ───────────────────────────────────────────────────────────────────────── */
+  .chip-rail {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .chip-rail::-webkit-scrollbar { display: none; }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border-radius: 9999px;      /* chip radius: 9999px per spec */
+    font-size: 12px;
+    font-weight: 500;
+    background: white;
+    border: 1px solid var(--border);
+    color: #475569;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .chip.active {
+    background: var(--cobalt-soft);
+    border-color: rgba(23, 70, 162, 0.2);
+    color: var(--cobalt);
+  }
+  .chip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     TOGGLE
+     v4 token sheet §3 (Toggle spec):
+       Track radius: 12px | Pill radius: 9px
+       Track: slate-100 (#f1f5f9) | Pill: white
+       Pill shadow: 0 1px 4px rgba(15,23,42,0.08)
+       Animation: 220ms var(--ease-discovery)
+       Hover color: #334155 (slate-700) — no bg change
+  ───────────────────────────────────────────────────────────────────────── */
+  .toggle {
+    display: flex;
+    background: #f1f5f9;
+    border-radius: 12px;        /* track radius: 12px */
+    padding: 3px;
+    gap: 2px;
+  }
+  .toggle-segment {
+    flex: 1;
+    padding: 9px 16px;
+    border-radius: 9px;         /* pill radius: 9px */
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    color: #64748b;
+    transition: background 220ms var(--ease-discovery),
+                color      220ms var(--ease-discovery),
+                box-shadow 220ms var(--ease-discovery);
+    user-select: none;
+  }
+  .toggle-segment.active {
+    background: white;
+    color: #0f172a;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
+  }
+  .toggle-segment.hover-state {
+    color: #334155;             /* slate-700 hover — no bg change */
+  }
+  .toggle-wrap {
+    padding: 20px 20px 16px;   /* mobile toggle wrap: 20px 20px 16px per spec */
+    background: white;
+    border-bottom: 1px solid var(--hair);
+    position: sticky;
+    top: 0;
+    z-index: 30;
+  }
+  .toggle-wrap-desktop {
+    padding: 16px 0 14px;
+    background: white;
+    border-bottom: 1px solid var(--hair);
+    position: sticky;
+    top: 0;
+    z-index: 30;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     QUESTION ITEMS
+     v4 token sheet §4: q-icon tile at 10px radius
+     (calculator-reference.html line 80 for mockup-frame pattern)
+  ───────────────────────────────────────────────────────────────────────── */
+  .question-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--hair);
+    cursor: pointer;
+    background: white;
+    transition: background 120ms ease-out;
+  }
+  .question-item:hover { background: #f8fafc; }
+  .question-item:last-child { border-bottom: none; }
+
+  .q-icon-tile {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;        /* q-icon tile: 10px radius per spec */
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #64748b;
+  }
+  .q-text {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+    color: #0f172a;
+    line-height: 1.4;
+  }
+  .q-count {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #94a3b8;
+    white-space: nowrap;
+  }
+  .q-chevron { color: #cbd5e1; flex-shrink: 0; }
+
+  /* Desktop question grid */
+  .desktop-q-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .desktop-q-grid .question-item {
+    border-right: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
+    padding: 16px 24px;
+  }
+  .desktop-q-grid .question-item:nth-child(even) { border-right: none; }
+  .desktop-q-grid .question-item:nth-last-child(-n+2) { border-bottom: none; }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     CATALOG: FILTER BAR + FILTER PILLS
+     v4 token sheet §5: filter pills radius 9999px, category dots
+  ───────────────────────────────────────────────────────────────────────── */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--hair);
+    background: white;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .filter-pills {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    flex: 1;
+  }
+  .filter-pills::-webkit-scrollbar { display: none; }
+  .filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 9999px;      /* filter chips: 9999px per spec */
+    font-size: 12px;
+    font-weight: 500;
+    background: white;
+    border: 1px solid var(--border);
+    color: #475569;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 120ms ease-out;
+  }
+  .filter-pill.active {
+    background: var(--cobalt-soft);
+    border-color: rgba(23, 70, 162, 0.2);
+    color: var(--cobalt);
+    font-weight: 600;
+  }
+  .sort-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 500;
+    background: white;
+    border: 1px solid var(--border);
+    color: #475569;
+    cursor: pointer;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     CATALOG: SECTION HEADER
+     v4 token sheet §5: section header padding 16px 20px 12px
+     Chevron rotates 200ms var(--ease-discovery) when section collapses
+  ───────────────────────────────────────────────────────────────────────── */
+  .cat-section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 20px 12px;   /* section header: 16px 20px 12px per spec */
+    background: white;
+    border-bottom: 1px solid var(--hair);
+  }
+  .cat-section-left { flex: 1; }
+  .cat-section-name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .cat-section-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .cat-section-name { font-size: 13px; font-weight: 600; }
+  .cat-section-count { font-size: 12px; color: #64748b; }
+  .cat-section-blurb { font-size: 12px; color: #94a3b8; padding-left: 16px; }
+  .section-chevron {
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: transform 200ms var(--ease-discovery);
+  }
+  .section-chevron.expanded { transform: rotate(180deg); }
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     TRIAL CARD — v4 anatomy
+     v4 token sheet §6:
+       NO border-radius on cards (hairline separators only)
+       padding: 14px 20px (cat dot inside this at left:20px, top:20px)
+       cat dot: 6px, position-absolute
+       Line 1: trial ID (14px/600/0.01em) + meta (11px/500/0.04em/uppercase/slate-400) + star
+       Line 2: finding (14px/400/slate-600/1.55lh)
+       Line 3: bl-tag (cobalt-soft bg, cobalt fg, 600) + key stat (slate-500 + slate-900 num)
+       Hover: 120ms ease-out, bg slate-50 + var(--shadow-card-hover)
+  ───────────────────────────────────────────────────────────────────────── */
+  .trial-card {
+    position: relative;
+    padding: 14px 20px 14px 34px;  /* left 34px = 20px base + 8px dot zone + 6px gap */
+    border-bottom: 1px solid var(--hair);
+    cursor: pointer;
+    background: white;
+    /* no border-radius — cards use hairlines only */
+    transition: background 120ms ease-out, box-shadow 120ms ease-out;
+  }
+  .trial-card:hover {
+    background: #f8fafc;
+    box-shadow: var(--shadow-card-hover);
+  }
+  .trial-card:last-child { border-bottom: none; }
+
+  .cat-dot {
+    position: absolute;
+    left: 20px;     /* cat dot: position-absolute at left:20px, top:20px per spec */
+    top: 20px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  /* Card line 1 */
+  .trial-card-line1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .trial-id-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
+  }
+  .trial-id {
+    font-size: 14px;             /* trial ID: 14px/600/0.01em per spec */
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: #0f172a;
+    white-space: nowrap;
+  }
+  .trial-meta {
+    font-size: 11px;             /* meta: 11px/500/0.04em/uppercase/slate-400 per spec */
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #94a3b8;
+    white-space: nowrap;
+  }
+  .trial-star { color: #cbd5e1; padding: 2px; flex-shrink: 0; }
+  .trial-star.fav { color: #fbbf24; }
+
+  /* Card line 2 */
+  .trial-finding {
+    font-size: 14px;             /* finding: 14px/400/slate-600/1.55lh per spec */
+    font-weight: 400;
+    color: #475569;
+    line-height: 1.55;
+    margin-bottom: 8px;
+  }
+
+  /* Card line 3 */
+  .trial-card-line3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .bl-tag {
+    font-size: 11px;
+    font-weight: 600;            /* bl-tag: cobalt-soft bg / cobalt fg / 600 per spec */
+    background: var(--cobalt-soft);
+    color: var(--cobalt);
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .bl-tag.neutral {
+    background: rgba(100, 116, 139, 0.08);
+    color: #475569;
+  }
+  .key-stat {
+    font-size: 12px;
+    color: #64748b;              /* key stat: slate-500 label + slate-900 num per spec */
+  }
+  .key-stat-num {
+    color: #0f172a;
+    font-weight: 600;
+    font-feature-settings: "cv11";
+  }
+
+  /* ── Mobile tab bar (trial-reference.html lines 221–236) ── */
+  .tab-bar {
+    display: flex;
+    border-top: 1px solid var(--border);
+    background: white;
+  }
+  .tab-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 4px 10px;
+    font-size: 10px;
+    color: #94a3b8;
+    gap: 3px;
+  }
+  .tab-item.active { color: var(--cobalt); }
+
+  /* ── Desktop layout helpers ── */
+  .desktop-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .desktop-hero { padding: 48px 0 24px; }  /* desktop hero: 48px 24px per spec */
+
+  /* ── Placeholder ellipsis (trial-reference.html lines 269–276) ── */
+  .truncated {
+    text-align: center;
+    font-size: 11px;
+    color: #cbd5e1;
+    font-style: italic;
+    padding: 14px 0;
+    border-top: 1px solid var(--hair);
+  }
+
+  /* ── Annotation strips ── */
+  .annotation-strip {
+    background: #0f172a;
+    padding: 18px 24px 22px;
+  }
+  .annotation-heading {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #94a3b8;
+    margin-bottom: 10px;
+  }
+  .annotation-list {
+    font-size: 12px;
+    color: #cbd5e1;
+    line-height: 1.75;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .annotation-list li::before { content: "→ "; color: #475569; }
+
+  /* ── Spec block (Stage 3) ── */
+  .spec-block {
+    background: #1e293b;
+    border-left: 2px solid var(--cobalt);
+    padding: 16px 20px;
+    margin: 0 24px 24px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11.5px;
+    color: #94a3b8;
+    line-height: 2;
+  }
+  .spec-heading {
+    font-size: 11px;
+    font-weight: 700;
+    color: #7dd3fc;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+    margin-top: 14px;
+    font-family: Inter, sans-serif;
+  }
+  .spec-heading:first-child { margin-top: 0; }
+  .spec-key { color: #7dd3fc; }
+  .spec-val { color: #86efac; }
+</style>
+</head>
+<body class="text-slate-900 antialiased">
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE BANNER
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="arch-banner">
+  <div style="max-width:1300px;margin:0 auto;">
+    <div style="font-weight:700;font-size:15px;margin-bottom:6px;">Trials Legend Reference Mockup — NeuroWiki</div>
+    <div style="font-size:12px;color:#94a3b8;line-height:1.65;max-width:900px;">
+      Visual ground truth for the trials listing / legend page. Peer to trial-reference.html (EXTEND detail) and calculator-reference.html. Three stages: (1) default landing, Questions view; (2) Catalog view with filter bar, category section, and trial cards; (3) toggle state detail at spec fidelity. Sources: trial-reference.html lines 8–540 (CSS tokens, stage scaffolding, tab bar, dividers, section label, kv-row, truncated); calculator-reference.html lines 1–85 (mockup-frame pattern, scrollbar-hide, state-divider); index.css lines 1–257 (global tokens, font-feature-settings, scrollbar-hide). v4 token sheet §1–6.
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     STAGE 1 — DEFAULT LANDING · QUESTIONS VIEW ACTIVE
+     Mobile 380px + Desktop 1180px side by side.
+     Hero fully visible (page has not scrolled).
+     Toggle below hero; Questions pill active.
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">
+  Stage 1 · Default landing · Questions view active · Mobile 380px + Desktop 1180px
+</div>
+
+<div class="stage-row" style="padding-top:24px;">
+
+  <!-- ────────────── MOBILE 380px ────────────── -->
+  <div class="mock-frame f-mobile">
+
+    <!-- Hero block -->
+    <div class="hero">
+      <div class="hero-eyebrow">NeuroWiki · Trials Reference</div>
+      <h1 class="hero-h1">79 trials.<br>One search box.</h1>
+      <p class="hero-sub">Evidence summaries, organized by clinical question or category.</p>
+
+      <!-- Search bar -->
+      <div class="search-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <span class="search-placeholder">Search trials, conditions, authors&hellip;</span>
+      </div>
+
+      <!-- Chip rail -->
+      <div class="chip-rail">
+        <div class="chip">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Favourites
+        </div>
+        <div class="chip">Recent</div>
+        <div class="chip">New 2024–25</div>
+        <div class="chip">Guidelines</div>
+      </div>
+    </div>
+
+    <!-- Toggle — Questions active -->
+    <div class="toggle-wrap">
+      <div class="toggle">
+        <div class="toggle-segment active">Questions</div>
+        <div class="toggle-segment">Catalog</div>
+      </div>
+    </div>
+
+    <!-- Questions list — mobile single column -->
+    <div>
+
+      <!-- Q1: tPA timing -->
+      <div class="question-item">
+        <div class="q-icon-tile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="q-text">When can I give tPA?</div>
+        <span class="q-count">7 trials</span>
+        <svg class="q-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <!-- Q2: LVO / EVT -->
+      <div class="question-item">
+        <div class="q-icon-tile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8" stroke-dasharray="3 2"/></svg>
+        </div>
+        <div class="q-text">Does my LVO patient need EVT?</div>
+        <span class="q-count">11 trials</span>
+        <svg class="q-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <!-- Q3: Anticoagulation -->
+      <div class="question-item">
+        <div class="q-icon-tile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="4"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
+        </div>
+        <div class="q-text">Should I anticoagulate this patient?</div>
+        <span class="q-count">9 trials</span>
+        <svg class="q-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <!-- Q4: Hemicraniectomy -->
+      <div class="question-item">
+        <div class="q-icon-tile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 017 7c0 4-3 6-3 9H8c0-3-3-5-3-9a7 7 0 017-7z"/><line x1="9" y1="21" x2="15" y2="21"/></svg>
+        </div>
+        <div class="q-text">Is hemicraniectomy indicated?</div>
+        <span class="q-count">3 trials</span>
+        <svg class="q-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <!-- Q5: BP control -->
+      <div class="question-item">
+        <div class="q-icon-tile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="q-text">How aggressive should BP control be?</div>
+        <span class="q-count">5 trials</span>
+        <svg class="q-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+      <!-- Q6: DAPT -->
+      <div class="question-item" style="border-bottom:none;">
+        <div class="q-icon-tile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="8" width="9" height="5" rx="2.5"/><rect x="14" y="11" width="9" height="5" rx="2.5"/></svg>
+        </div>
+        <div class="q-text">DAPT after stroke or TIA — yes or no?</div>
+        <span class="q-count">4 trials</span>
+        <svg class="q-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+
+    </div><!-- /questions list -->
+
+    <!-- Mobile tab bar (trial-reference.html lines 1610–1624) -->
+    <div class="tab-bar">
+      <div class="tab-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home
+      </div>
+      <div class="tab-item active">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Trials
+      </div>
+      <div class="tab-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Calcs
+      </div>
+      <div class="tab-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Saved
+      </div>
+    </div>
+
+  </div><!-- /mobile Stage 1 -->
+
+
+  <!-- ────────────── DESKTOP 1180px ────────────── -->
+  <div class="mock-frame f-desktop" style="background:#f8fafc;">
+
+    <!-- White hero + toggle block (sticks on scroll) -->
+    <div style="background:white;border-bottom:1px solid var(--hair);">
+      <div class="desktop-inner">
+
+        <!-- Desktop hero — padding 48px per spec -->
+        <div class="desktop-hero">
+          <div class="hero-eyebrow">NeuroWiki · Trials Reference</div>
+          <h1 class="hero-h1-desktop">79 trials. One search box.</h1>
+          <p class="hero-sub" style="max-width:540px;margin-bottom:20px;">Evidence summaries organized by clinical question or category. Updated with each major guideline cycle.</p>
+
+          <!-- Desktop search bar — 48px, ⌘K hint -->
+          <div class="search-bar desktop" style="max-width:600px;margin-bottom:16px;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <span class="search-placeholder">Search trials, conditions, authors&hellip;</span>
+            <span class="kbd-hint">⌘K</span>
+          </div>
+
+          <!-- Desktop chip rail (no horizontal scroll needed at desktop) -->
+          <div class="chip-rail" style="gap:8px;">
+            <div class="chip">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              Favourites
+            </div>
+            <div class="chip">Recent</div>
+            <div class="chip">New 2024–25</div>
+            <div class="chip">Guidelines</div>
+          </div>
+        </div>
+
+        <!-- Desktop toggle — Questions active -->
+        <div class="toggle-wrap-desktop">
+          <div class="toggle" style="max-width:320px;">
+            <div class="toggle-segment active">Questions</div>
+            <div class="toggle-segment">Catalog</div>
+          </div>
+        </div>
+
+      </div><!-- /desktop-inner -->
+    </div><!-- /white hero block -->
+
+    <!-- Desktop questions — 2-col grid inside card -->
+    <div style="padding:24px;">
+      <div style="background:white;border:1px solid var(--hair);border-radius:8px;overflow:hidden;">
+        <div class="desktop-q-grid">
+
+          <div class="question-item">
+            <div class="q-icon-tile"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div style="flex:1;"><div class="q-text">When can I give tPA?</div></div>
+            <span class="q-count">7 trials</span>
+            <svg class="q-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </div>
+
+          <div class="question-item">
+            <div class="q-icon-tile"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8" stroke-dasharray="3 2"/></svg></div>
+            <div style="flex:1;"><div class="q-text">Does my LVO patient need EVT?</div></div>
+            <span class="q-count">11 trials</span>
+            <svg class="q-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </div>
+
+          <div class="question-item">
+            <div class="q-icon-tile"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="4"/><line x1="12" y1="8" x2="12" y2="16"/></svg></div>
+            <div style="flex:1;"><div class="q-text">Should I anticoagulate this patient?</div></div>
+            <span class="q-count">9 trials</span>
+            <svg class="q-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </div>
+
+          <div class="question-item">
+            <div class="q-icon-tile"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 017 7c0 4-3 6-3 9H8c0-3-3-5-3-9a7 7 0 017-7z"/><line x1="9" y1="21" x2="15" y2="21"/></svg></div>
+            <div style="flex:1;"><div class="q-text">Is hemicraniectomy indicated?</div></div>
+            <span class="q-count">3 trials</span>
+            <svg class="q-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </div>
+
+          <div class="question-item" style="border-bottom:none;">
+            <div class="q-icon-tile"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <div style="flex:1;"><div class="q-text">How aggressive should BP control be?</div></div>
+            <span class="q-count">5 trials</span>
+            <svg class="q-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </div>
+
+          <div class="question-item" style="border-bottom:none;border-right:none;">
+            <div class="q-icon-tile"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="8" width="9" height="5" rx="2.5"/><rect x="14" y="11" width="9" height="5" rx="2.5"/></svg></div>
+            <div style="flex:1;"><div class="q-text">DAPT after stroke or TIA — yes or no?</div></div>
+            <span class="q-count">4 trials</span>
+            <svg class="q-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </div>
+
+        </div><!-- /desktop-q-grid -->
+      </div><!-- /white card -->
+    </div>
+
+  </div><!-- /desktop Stage 1 -->
+
+</div><!-- /stage-row Stage 1 -->
+
+<!-- Stage 1 annotation -->
+<div class="annotation-strip">
+  <div style="max-width:1300px;margin:0 auto;">
+    <div class="annotation-heading">Stage 1 — Intent</div>
+    <ul class="annotation-list">
+      <li>Hero: eyebrow (10px/700/0.12em/slate-400) → H1 22px mobile / 32px desktop, Inter 500, tracking -0.01em → sub 14px/slate-600/1.55lh → search bar (12px radius, 44px mobile / 48px desktop, 150ms focus halo) → chip rail (9999px chips, horizontal scroll on mobile).</li>
+      <li>Toggle: track 12px radius / pill 9px radius / #f1f5f9 track / white pill / 0 1px 4px shadow / 220ms var(--ease-discovery). Questions active on default landing.</li>
+      <li>Question items: 36×36px q-icon tile at 10px radius (hairline border, #f8fafc bg, slate-400 icon). Question text 14px/500/slate-900. Count 11px/500/0.04em uppercase/slate-400. Chevron slate-300. Hairline separators. Last item no border-bottom.</li>
+      <li>Desktop: 2-col grid inside a white card with 8px radius. Column separator via border-right on even items. Row separator via border-bottom. Last two items (nth-last-child &lt;= 2) have no border-bottom.</li>
+      <li>Desktop search bar: adds ⌘K kbd-hint pill right-aligned. Max-width 600px. Chip rail does not need horizontal scroll at 1180px.</li>
+      <li>Desktop toggle: max-width 320px, left-aligned. Inside desktop-inner (max-width 800px centered within 1180px frame).</li>
+      <li>Mobile tab bar: Trials tab cobalt-active. 4 tabs: Home · Trials · Calcs · Saved. Source: trial-reference.html lines 1610–1624.</li>
+      <li>Sticky behavior: mobile — hero scrolls away first; .toggle-wrap sticks at top:0 (z-index 30). Desktop — whole white hero+toggle block sticks as a unit via sticky on the outer white div.</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     STAGE 2 — CATALOG TAB ACTIVE
+     Mobile 380px + Desktop 1180px.
+     Toggle flipped to Catalog. Filter bar + IVT section + 4 trial cards.
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">
+  Stage 2 · Catalog tab active · Filter bar · IVT section header · Trial cards · Mobile 380px + Desktop 1180px
+</div>
+
+<div class="stage-row" style="padding-top:24px;">
+
+  <!-- ────────────── MOBILE 380px ────────────── -->
+  <div class="mock-frame f-mobile">
+
+    <!-- Hero (identical to Stage 1) -->
+    <div class="hero">
+      <div class="hero-eyebrow">NeuroWiki · Trials Reference</div>
+      <h1 class="hero-h1">79 trials.<br>One search box.</h1>
+      <p class="hero-sub">Evidence summaries, organized by clinical question or category.</p>
+      <div class="search-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <span class="search-placeholder">Search trials, conditions, authors&hellip;</span>
+      </div>
+      <div class="chip-rail">
+        <div class="chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Favourites</div>
+        <div class="chip">Recent</div>
+        <div class="chip">New 2024–25</div>
+        <div class="chip">Guidelines</div>
+      </div>
+    </div>
+
+    <!-- Toggle — Catalog active -->
+    <div class="toggle-wrap">
+      <div class="toggle">
+        <div class="toggle-segment">Questions</div>
+        <div class="toggle-segment active">Catalog</div>
+      </div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <div class="filter-pills">
+        <div class="filter-pill">All</div>
+        <div class="filter-pill active">
+          <div class="chip-dot" style="background:var(--cat-ivt);"></div>IVT
+        </div>
+        <div class="filter-pill">
+          <div class="chip-dot" style="background:var(--cobalt);"></div>EVT
+        </div>
+        <div class="filter-pill">
+          <div class="chip-dot" style="background:var(--cat-prevention);"></div>Prevention
+        </div>
+        <div class="filter-pill">
+          <div class="chip-dot" style="background:var(--cat-surgical);"></div>Surgical
+        </div>
+      </div>
+      <div class="sort-pill">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>Sort
+      </div>
+    </div>
+
+    <!-- IVT section header -->
+    <div class="cat-section-header">
+      <div class="cat-section-left">
+        <div class="cat-section-name-row">
+          <div class="cat-section-dot" style="background:var(--cat-ivt);"></div>
+          <span class="cat-section-name" style="color:var(--cat-ivt);">IV Thrombolysis</span>
+          <span class="cat-section-count">12 trials</span>
+        </div>
+        <div class="cat-section-blurb">Alteplase and tenecteplase window and selection trials</div>
+      </div>
+      <!-- Chevron up = section is expanded -->
+      <svg class="section-chevron expanded" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+
+    <!-- IVT trial cards -->
+
+    <!-- Card 1: EXTEND — POSITIVE -->
+    <div class="trial-card">
+      <div class="cat-dot" style="background:var(--cat-ivt);"></div>
+      <div class="trial-card-line1">
+        <div class="trial-id-meta">
+          <span class="trial-id">EXTEND</span>
+          <span class="trial-meta">2019 · NEJM</span>
+        </div>
+        <svg class="trial-star" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <div class="trial-finding">IV alteplase at 4.5 to 9 hours in perfusion-selected patients improved functional independence at 90 days.</div>
+      <div class="trial-card-line3">
+        <span class="bl-tag">Extends tPA window</span>
+        <span class="key-stat">mRS 0–1: <span class="key-stat-num">35%</span> vs <span class="key-stat-num">29%</span></span>
+      </div>
+    </div>
+
+    <!-- Card 2: WAKE-UP — POSITIVE (favourited) -->
+    <div class="trial-card">
+      <div class="cat-dot" style="background:var(--cat-ivt);"></div>
+      <div class="trial-card-line1">
+        <div class="trial-id-meta">
+          <span class="trial-id">WAKE-UP</span>
+          <span class="trial-meta">2018 · NEJM</span>
+        </div>
+        <svg class="trial-star fav" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <div class="trial-finding">MRI-guided alteplase for wake-up stroke with DWI–FLAIR mismatch improved 90-day functional outcome.</div>
+      <div class="trial-card-line3">
+        <span class="bl-tag">MRI unlocks late tPA</span>
+        <span class="key-stat">mRS 0–1: <span class="key-stat-num">53%</span> vs <span class="key-stat-num">42%</span></span>
+      </div>
+    </div>
+
+    <!-- Card 3: ECASS III — POSITIVE -->
+    <div class="trial-card">
+      <div class="cat-dot" style="background:var(--cat-ivt);"></div>
+      <div class="trial-card-line1">
+        <div class="trial-id-meta">
+          <span class="trial-id">ECASS III</span>
+          <span class="trial-meta">2008 · NEJM</span>
+        </div>
+        <svg class="trial-star" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <div class="trial-finding">Alteplase 3 to 4.5 hours after stroke onset significantly improved functional outcome; established the extended treatment window.</div>
+      <div class="trial-card-line3">
+        <span class="bl-tag">Established 3–4.5h window</span>
+        <span class="key-stat">mRS 0–1: <span class="key-stat-num">52%</span> vs <span class="key-stat-num">45%</span></span>
+      </div>
+    </div>
+
+    <!-- Card 4: IST-3 — NEUTRAL (neutral tag variant) -->
+    <div class="trial-card" style="border-bottom:none;">
+      <div class="cat-dot" style="background:var(--cat-ivt);"></div>
+      <div class="trial-card-line1">
+        <div class="trial-id-meta">
+          <span class="trial-id">IST-3</span>
+          <span class="trial-meta">2012 · Lancet</span>
+        </div>
+        <svg class="trial-star" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <div class="trial-finding">IV alteplase up to 6 hours showed no significant benefit on primary outcome; ordinal shift analysis suggested modest late benefit.</div>
+      <div class="trial-card-line3">
+        <span class="bl-tag neutral">No overall benefit at 6h</span>
+        <span class="key-stat">mRS 0–2: <span class="key-stat-num">37%</span> vs <span class="key-stat-num">35%</span></span>
+      </div>
+    </div>
+
+    <div class="truncated">[EVT · Prevention · Surgical sections continue below]</div>
+
+    <!-- Mobile tab bar -->
+    <div class="tab-bar">
+      <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</div>
+      <div class="tab-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Trials</div>
+      <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Calcs</div>
+      <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Saved</div>
+    </div>
+
+  </div><!-- /mobile Stage 2 -->
+
+
+  <!-- ────────────── DESKTOP 1180px ────────────── -->
+  <div class="mock-frame f-desktop" style="background:#f8fafc;">
+
+    <!-- Hero + toggle (Catalog active) -->
+    <div style="background:white;border-bottom:1px solid var(--hair);">
+      <div class="desktop-inner">
+        <div class="desktop-hero">
+          <div class="hero-eyebrow">NeuroWiki · Trials Reference</div>
+          <h1 class="hero-h1-desktop">79 trials. One search box.</h1>
+          <p class="hero-sub" style="max-width:540px;margin-bottom:20px;">Evidence summaries organized by clinical question or category.</p>
+          <div class="search-bar desktop" style="max-width:600px;margin-bottom:16px;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <span class="search-placeholder">Search trials, conditions, authors&hellip;</span>
+            <span class="kbd-hint">⌘K</span>
+          </div>
+          <div class="chip-rail">
+            <div class="chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Favourites</div>
+            <div class="chip">Recent</div>
+            <div class="chip">New 2024–25</div>
+            <div class="chip">Guidelines</div>
+          </div>
+        </div>
+        <!-- Toggle — Catalog active -->
+        <div class="toggle-wrap-desktop">
+          <div class="toggle" style="max-width:320px;">
+            <div class="toggle-segment">Questions</div>
+            <div class="toggle-segment active">Catalog</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop catalog body -->
+    <div style="padding:24px;">
+      <div class="desktop-inner" style="padding:0;">
+
+        <!-- Desktop filter bar -->
+        <div style="background:white;border:1px solid var(--hair);border-radius:8px 8px 0 0;border-bottom:none;padding:14px 20px;display:flex;align-items:center;gap:10px;">
+          <div class="filter-pills">
+            <div class="filter-pill">All</div>
+            <div class="filter-pill active"><div class="chip-dot" style="background:var(--cat-ivt);"></div>IVT</div>
+            <div class="filter-pill"><div class="chip-dot" style="background:var(--cobalt);"></div>EVT</div>
+            <div class="filter-pill"><div class="chip-dot" style="background:var(--cat-prevention);"></div>Prevention</div>
+            <div class="filter-pill"><div class="chip-dot" style="background:var(--cat-surgical);"></div>Surgical</div>
+          </div>
+          <div class="sort-pill" style="margin-left:auto;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>Year (newest)</div>
+        </div>
+
+        <!-- IVT section -->
+        <div style="background:white;border:1px solid var(--hair);border-radius:0 0 8px 8px;overflow:hidden;">
+
+          <!-- Desktop section header — padding 16px 24px 12px at desktop -->
+          <div class="cat-section-header" style="padding:16px 24px 12px;">
+            <div class="cat-section-left">
+              <div class="cat-section-name-row">
+                <div class="cat-section-dot" style="background:var(--cat-ivt);width:10px;height:10px;"></div>
+                <span class="cat-section-name" style="color:var(--cat-ivt);font-size:14px;">IV Thrombolysis</span>
+                <span class="cat-section-count">12 trials</span>
+              </div>
+              <div class="cat-section-blurb" style="padding-left:18px;">Alteplase and tenecteplase window and selection trials</div>
+            </div>
+            <svg class="section-chevron expanded" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+          </div>
+
+          <!-- Desktop trial cards — tag + stat pulled to line 1 right -->
+
+          <!-- EXTEND -->
+          <div class="trial-card" style="padding:16px 24px 14px 36px;">
+            <div class="cat-dot" style="background:var(--cat-ivt);top:23px;left:22px;"></div>
+            <div class="trial-card-line1" style="margin-bottom:6px;">
+              <div class="trial-id-meta">
+                <span class="trial-id">EXTEND</span>
+                <span class="trial-meta">2019 · N Engl J Med</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:14px;flex-shrink:0;">
+                <span class="bl-tag">Extends tPA window</span>
+                <span class="key-stat">mRS 0–1: <span class="key-stat-num">35%</span> vs <span class="key-stat-num">29%</span></span>
+                <svg class="trial-star" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+            </div>
+            <div class="trial-finding" style="margin-bottom:0;">IV alteplase at 4.5 to 9 hours in perfusion-selected patients improved functional independence at 90 days.</div>
+          </div>
+
+          <!-- WAKE-UP -->
+          <div class="trial-card" style="padding:16px 24px 14px 36px;">
+            <div class="cat-dot" style="background:var(--cat-ivt);top:23px;left:22px;"></div>
+            <div class="trial-card-line1" style="margin-bottom:6px;">
+              <div class="trial-id-meta">
+                <span class="trial-id">WAKE-UP</span>
+                <span class="trial-meta">2018 · N Engl J Med</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:14px;flex-shrink:0;">
+                <span class="bl-tag">MRI unlocks late tPA</span>
+                <span class="key-stat">mRS 0–1: <span class="key-stat-num">53%</span> vs <span class="key-stat-num">42%</span></span>
+                <svg class="trial-star fav" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+            </div>
+            <div class="trial-finding" style="margin-bottom:0;">MRI-guided alteplase for wake-up stroke with DWI–FLAIR mismatch improved 90-day functional outcome.</div>
+          </div>
+
+          <!-- ECASS III -->
+          <div class="trial-card" style="padding:16px 24px 14px 36px;">
+            <div class="cat-dot" style="background:var(--cat-ivt);top:23px;left:22px;"></div>
+            <div class="trial-card-line1" style="margin-bottom:6px;">
+              <div class="trial-id-meta">
+                <span class="trial-id">ECASS III</span>
+                <span class="trial-meta">2008 · N Engl J Med</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:14px;flex-shrink:0;">
+                <span class="bl-tag">Established 3–4.5h window</span>
+                <span class="key-stat">mRS 0–1: <span class="key-stat-num">52%</span> vs <span class="key-stat-num">45%</span></span>
+                <svg class="trial-star" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+            </div>
+            <div class="trial-finding" style="margin-bottom:0;">Alteplase 3 to 4.5 hours after stroke onset significantly improved functional outcome; established the extended treatment window.</div>
+          </div>
+
+          <!-- IST-3 — neutral tag -->
+          <div class="trial-card" style="padding:16px 24px 14px 36px;border-bottom:none;">
+            <div class="cat-dot" style="background:var(--cat-ivt);top:23px;left:22px;"></div>
+            <div class="trial-card-line1" style="margin-bottom:6px;">
+              <div class="trial-id-meta">
+                <span class="trial-id">IST-3</span>
+                <span class="trial-meta">2012 · Lancet</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:14px;flex-shrink:0;">
+                <span class="bl-tag neutral">No overall benefit at 6h</span>
+                <span class="key-stat">mRS 0–2: <span class="key-stat-num">37%</span> vs <span class="key-stat-num">35%</span></span>
+                <svg class="trial-star" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+            </div>
+            <div class="trial-finding" style="margin-bottom:0;">IV alteplase up to 6 hours showed no significant benefit on primary outcome; ordinal shift analysis suggested modest late benefit.</div>
+          </div>
+
+        </div><!-- /IVT section card -->
+
+        <div class="truncated" style="background:white;border-radius:8px;margin-top:16px;border:1px solid var(--hair);">[EVT · Prevention · Surgical sections continue below]</div>
+
+      </div><!-- /desktop-inner -->
+    </div><!-- /desktop catalog body -->
+
+  </div><!-- /desktop Stage 2 -->
+
+</div><!-- /stage-row Stage 2 -->
+
+<!-- Stage 2 annotation -->
+<div class="annotation-strip">
+  <div style="max-width:1300px;margin:0 auto;">
+    <div class="annotation-heading">Stage 2 — Intent</div>
+    <ul class="annotation-list">
+      <li>Toggle: Catalog pill active. White pill slides right via 220ms var(--ease-discovery). Track, pill radii, and shadow unchanged.</li>
+      <li>Filter bar: pills with 6px colored category dot prefix. Active pill: var(--cobalt-soft) bg + rgba(23,70,162,0.2) border + cobalt text + font-weight 600. Sort pill right-aligned. All pills 9999px radius.</li>
+      <li>Section header: padding 16px 20px 12px mobile / 16px 24px 12px desktop. Cat dot 8px mobile / 10px desktop, tinted with category color. Name tinted to category color. Count slate-500. Blurb 12px/slate-400. Chevron rotates 180deg when expanded (class .expanded), 200ms var(--ease-discovery).</li>
+      <li>Trial cards: NO border-radius. Hairlines only. Cat dot 6px position-absolute at left:20px, top:20px (inside 20px card padding). Trial ID 14px/600/0.01em. Meta 11px/500/0.04em uppercase/slate-400. Finding 14px/400/slate-600/1.55lh. bl-tag: cobalt-soft bg + cobalt + weight 600 + 4px radius. Key stat: slate-500 + slate-900 num (font-feature-settings cv11). Hover: #f8fafc bg + var(--shadow-card-hover) / 120ms ease-out.</li>
+      <li>Mobile card anatomy: tag + stat on line 3 below finding. Desktop card anatomy: tag + stat pulled into line 1 right (alongside trial ID/meta), finding drops to single line below (margin-bottom:0).</li>
+      <li>Neutral/negative tag variant (IST-3): rgba(100,116,139,0.08) bg + #475569 fg instead of cobalt-soft + cobalt. Class .bl-tag.neutral.</li>
+      <li>Favourite star: amber fill (.fav: color #fbbf24, fill currentColor). Unfav: slate-300 stroke, no fill. WAKE-UP shown as favourited.</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     STAGE 3 — TOGGLE STATES DETAIL
+     Three 340px frames side by side:
+       A · Questions active (default)
+       B · Hovering Catalog (text only, no bg)
+       C · Catalog active
+     Spec block below frames.
+══════════════════════════════════════════════════════════════════════════ -->
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">
+  Stage 3 · Toggle states detail · A: Questions active · B: Hovering Catalog · C: Catalog active
+</div>
+
+<div class="stage-row" style="padding-top:24px;align-items:stretch;">
+
+  <!-- ── STATE A: Questions active ── -->
+  <div class="mock-frame f-toggle" style="padding:24px;">
+    <div class="section-label" style="margin-bottom:16px;">A · Questions active (default landing)</div>
+    <div class="toggle">
+      <div class="toggle-segment active">Questions</div>
+      <div class="toggle-segment">Catalog</div>
+    </div>
+    <div style="margin-top:14px;font-size:12px;color:#64748b;line-height:1.65;">
+      White pill left. Questions: #0f172a. Catalog: #64748b (slate-400). Track: #f1f5f9.
+    </div>
+    <div style="margin-top:12px;display:flex;align-items:center;gap:6px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:#e2e8f0;border:1px solid #cbd5e1;"></div>
+      <span style="font-size:10px;color:#94a3b8;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;">Pointer: none</span>
+    </div>
+  </div>
+
+  <!-- ── STATE B: Hovering Catalog ── -->
+  <div class="mock-frame f-toggle" style="padding:24px;">
+    <div class="section-label" style="margin-bottom:16px;">B · Hovering Catalog segment</div>
+    <div class="toggle">
+      <div class="toggle-segment active">Questions</div>
+      <div class="toggle-segment hover-state">Catalog</div>
+    </div>
+    <div style="margin-top:14px;font-size:12px;color:#64748b;line-height:1.65;">
+      Questions pill remains active (no change). Catalog: #64748b → #334155 (slate-700). NO background or pill slide. Text color transition only, 120ms ease (faster than pill slide).
+    </div>
+    <div style="margin-top:12px;display:flex;align-items:center;gap:6px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--cobalt-soft);border:1px solid rgba(23,70,162,0.2);"></div>
+      <span style="font-size:10px;color:#94a3b8;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;">Pointer: over Catalog</span>
+    </div>
+  </div>
+
+  <!-- ── STATE C: Catalog active ── -->
+  <div class="mock-frame f-toggle" style="padding:24px;">
+    <div class="section-label" style="margin-bottom:16px;">C · Catalog active</div>
+    <div class="toggle">
+      <div class="toggle-segment">Questions</div>
+      <div class="toggle-segment active">Catalog</div>
+    </div>
+    <div style="margin-top:14px;font-size:12px;color:#64748b;line-height:1.65;">
+      White pill slides right via 220ms var(--ease-discovery). Questions: #64748b (slate-400). Catalog: #0f172a. Same track, same shadow on pill.
+    </div>
+    <div style="margin-top:12px;display:flex;align-items:center;gap:6px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:#e2e8f0;border:1px solid #cbd5e1;"></div>
+      <span style="font-size:10px;color:#94a3b8;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;">Pointer: none</span>
+    </div>
+  </div>
+
+</div><!-- /stage-row Stage 3 -->
+
+
+<!-- Spec block -->
+<div class="spec-block">
+  <div class="spec-heading">Toggle v4 — Exact Spec</div>
+  <div><span class="spec-key">Track border-radius: </span><span class="spec-val">12px</span></div>
+  <div><span class="spec-key">Pill  border-radius:  </span><span class="spec-val">9px</span></div>
+  <div><span class="spec-key">Track background:    </span><span class="spec-val">#f1f5f9  (same as --border-hairline / --hair)</span></div>
+  <div><span class="spec-key">Track padding:       </span><span class="spec-val">3px (uniform)</span></div>
+  <div><span class="spec-key">Pill background:     </span><span class="spec-val">white</span></div>
+  <div><span class="spec-key">Pill box-shadow:     </span><span class="spec-val">0 1px 4px rgba(15, 23, 42, 0.08)</span></div>
+  <div><span class="spec-key">Pill animation:      </span><span class="spec-val">background + color + box-shadow, 220ms var(--ease-discovery)</span></div>
+  <div><span class="spec-key">Hover animation:     </span><span class="spec-val">color only, 120ms ease  (no bg, no pill, no slide)</span></div>
+  <div><span class="spec-key">--ease-discovery:    </span><span class="spec-val">cubic-bezier(0.16, 1, 0.3, 1)</span></div>
+  <div><span class="spec-key">Segment font-size:   </span><span class="spec-val">13px</span></div>
+  <div><span class="spec-key">Segment font-weight: </span><span class="spec-val">500</span></div>
+  <div><span class="spec-key">Segment padding:     </span><span class="spec-val">9px 16px</span></div>
+  <div><span class="spec-key">Active text color:   </span><span class="spec-val">#0f172a (slate-900)</span></div>
+  <div><span class="spec-key">Inactive text color: </span><span class="spec-val">#64748b (slate-500)</span></div>
+  <div><span class="spec-key">Hover text color:    </span><span class="spec-val">#334155 (slate-700) — no bg, no pill</span></div>
+
+  <div class="spec-heading">Sticky Behavior</div>
+  <div><span class="spec-key">Mobile scroll:       </span><span class="spec-val">hero scrolls away; .toggle-wrap sticks at top:0 / z-index:30</span></div>
+  <div><span class="spec-key">Desktop scroll:      </span><span class="spec-val">white hero block (search + toggle inside desktop-inner) sticks as unit</span></div>
+  <div><span class="spec-key">Toggle wrap mobile:  </span><span class="spec-val">padding 20px 20px 16px; background white; border-bottom 1px hairline</span></div>
+  <div><span class="spec-key">Toggle wrap desktop: </span><span class="spec-val">padding 16px 0 14px inside .desktop-inner; same border-bottom</span></div>
+  <div><span class="spec-key">Max-width desktop:   </span><span class="spec-val">toggle constrained to 320px; desktop-inner content max-width 800px</span></div>
+
+  <div class="spec-heading">New Tokens — Add to index.css :root</div>
+  <div><span class="spec-key">--cobalt-soft:       </span><span class="spec-val">rgba(23, 70, 162, 0.08)   /* focus halos, bl-tag bg, active chip bg */</span></div>
+  <div><span class="spec-key">--ease-discovery:    </span><span class="spec-val">cubic-bezier(0.16, 1, 0.3, 1)  /* toggle, section chevron */</span></div>
+  <div><span class="spec-key">--shadow-card-hover: </span><span class="spec-val">0 2px 8px rgba(15, 23, 42, 0.06)  /* trial card hover */</span></div>
+  <div><span class="spec-key">--cat-ivt:           </span><span class="spec-val">#10b981  /* IV Thrombolysis */</span></div>
+  <div><span class="spec-key">--cat-evt:           </span><span class="spec-val">var(--cobalt) /* no new token; reuse existing */</span></div>
+  <div><span class="spec-key">--cat-prevention:    </span><span class="spec-val">#0891b2  /* Prevention */</span></div>
+  <div><span class="spec-key">--cat-surgical:      </span><span class="spec-val">#7c3aed  /* Surgical */</span></div>
+  <div><span class="spec-key">font-feature-settings</span><span class="spec-val">: "cv11" — add to body {} in index.css (tabular numerals on stats)</span></div>
+
+  <div class="spec-heading">Trial Card — No Border-Radius Rule</div>
+  <div><span class="spec-key">Card radius:         </span><span class="spec-val">none — cards use hairlines only (1px solid #f1f5f9)</span></div>
+  <div><span class="spec-key">Section container:   </span><span class="spec-val">8px radius on the section wrapper, not individual cards</span></div>
+  <div><span class="spec-key">Card hover:          </span><span class="spec-val">background #f8fafc + var(--shadow-card-hover) / 120ms ease-out</span></div>
+
+  <div class="spec-heading">Accessibility Notes</div>
+  <div><span class="spec-key">Toggle ARIA:         </span><span class="spec-val">role="tablist" on .toggle; role="tab" + aria-selected on each segment</span></div>
+  <div><span class="spec-key">Toggle keyboard:     </span><span class="spec-val">Enter/Space to activate; Left/Right arrow moves focus between segments</span></div>
+  <div><span class="spec-key">Filter pills:        </span><span class="spec-val">role="radio" in role="radiogroup"; aria-checked on active pill</span></div>
+  <div><span class="spec-key">Question items:      </span><span class="spec-val">role="button" or anchor; aria-label includes trial count</span></div>
+</div>
+
+
+<!-- Stage 3 annotation -->
+<div class="annotation-strip">
+  <div style="max-width:1300px;margin:0 auto;">
+    <div class="annotation-heading">Stage 3 — Intent</div>
+    <ul class="annotation-list">
+      <li>State A (Questions): white pill left, Catalog text slate-400 (#64748b). Default landing. CSS: .toggle-segment.active { background:white; color:#0f172a; box-shadow:0 1px 4px rgba(15,23,42,0.08); }.</li>
+      <li>State B (Hover over Catalog): NO pill, NO bg, NO slide. Only text color #64748b → #334155. CSS: .toggle-segment:hover:not(.active) { color:#334155; } transition 120ms ease. Faster than pill slide (220ms) so it responds immediately on cursor-over but doesn't flash on quick pass-through.</li>
+      <li>State C (Catalog active): white pill right. In implementation, the active class moves from left to right segment. Pill position transitions via background-color animation on the segments (simplest approach) or via a transform on a positioned pseudo-element. Both are correct; background transition avoids layout shift.</li>
+      <li>Section chevron (Stage 2): .section-chevron { transition: transform 200ms var(--ease-discovery); } .section-chevron.expanded { transform: rotate(180deg); }. Points up when section is open (showing arrow that would collapse it on click).</li>
+      <li>Search bar focus ring: border-color var(--cobalt) + box-shadow 0 0 0 4px var(--cobalt-soft). 150ms ease transition. Mirrors the cobalt-soft alpha overlay used in calculator-reference.html (lines 29–43 selected-option pattern).</li>
+      <li>Implementation priority order: toggle → trial cards → filter pills → search bar → hero H1 size responsiveness → section chevron → question items. Toggle and cards are load-bearing for the page; hero animation and section chevron are polish.</li>
+    </ul>
+  </div>
+</div>
+
+<div style="height:48px;"></div>
+
+</body>
+</html>

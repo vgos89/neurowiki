@@ -241,8 +241,15 @@ export interface TrialMetadata {
   /** ID of the representative successor trial for the mandatory amber banner link (§7c.5). */
   successorTrialId?: string;
   /** Display name for the successor trial shown in the amber banner link and see-also chip,
-   *  e.g. "ESCAPE (2015)" or "ENRICH (2023)". Stub pages use this instead of hardcoding. */
+   *  e.g. "ESCAPE (2015)" or "ENRICH (2024)". Stub pages use this instead of hardcoding. */
   successorTrialDisplay?: string;
+  // Chain-specific summary used in stub pages (e.g. for the bedsidePearl slot).
+  // Examples:
+  //   EVT chain → "modern stent-retriever technology and CTA-based patient selection"
+  //   Basilar chain → "selective use of EVT for basilar artery occlusion based on imaging and time"
+  //   Antiplatelet chain → "short-duration dual antiplatelet therapy after minor stroke"
+  //   ICH surgery chain → "minimally invasive evacuation of selected lobar hematomas"
+  chainContext?: string;
   // ─────────────────────────────────────────────────────────────────────────
   /** RCT predecessor chain for "what changed" teaching (TRIALS_SPEC v1.2 §7b).
    *  Mutually exclusive with historicalContext -- a trial should not have both. */
@@ -8428,6 +8435,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     safetyBrief: 'Symptomatic intracranial hemorrhage was 6.2% endovascular versus 5.9% IV-only (p=0.83). Mortality at 90 days was 19.1% versus 21.6% (p=0.33). No significant safety difference between arms.',
     successorTrialId: 'escape-trial',
     successorTrialDisplay: 'ESCAPE (2015)',
+    chainContext: 'modern stent-retriever technology and CTA-based patient selection',
     /* claimId: ims-iii-bottom-line | source: Broderick et al., NEJM 2013 */
     bottomLineSummary: 'IMS-III stopped early for futility after enrolling 656 of 900 planned patients. In moderate-severe stroke (NIHSS >=8) treated with IV alteplase within 3 hours, adding endovascular therapy (mostly older coil-based devices, no mandatory vessel-occlusion confirmation) did not improve 90-day mRS 0-2: 40.8% vs 38.7% (adjusted RR 1.05, 95% CI 0.83-1.30). The trial predates modern stent retrievers and CTA-based patient selection.',
     inclusionCriteria: [
@@ -8498,6 +8506,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     safetyBrief: 'Symptomatic intracranial hemorrhage was similar between groups (6% endovascular vs 6% alteplase). Mortality at 3 months was 10% versus 8%, a non-significant difference (p=0.53). No significant safety signal in either direction.',
     successorTrialId: 'escape-trial',
     successorTrialDisplay: 'ESCAPE (2015)',
+    chainContext: 'modern stent-retriever technology and CTA-based patient selection',
     /* claimId: synthesis-expansion-bottom-line | source: Ciccone et al., NEJM 2013 */
     bottomLineSummary: 'SYNTHESIS Expansion randomized 362 patients with ischemic stroke to endovascular therapy alone (no IV tPA, window up to 6 hours) or standard IV alteplase within 4.5 hours. Disability-free survival (mRS 0-1) at 90 days: 30.4% endovascular vs 34.8% alteplase (adjusted OR 0.71, 95% CI 0.44-1.14, p=0.16). Endovascular therapy did not demonstrate superiority. The trial used older devices and did not require confirmed vessel occlusion.',
     inclusionCriteria: [
@@ -8568,6 +8577,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     safetyBrief: 'Symptomatic intracranial hemorrhage occurred in 9% of the embolectomy group versus 4% of the standard-care group (not statistically significant in this small trial). Mortality at 90 days was 21% versus 17% (NS). No significant safety difference was demonstrated.',
     successorTrialId: 'escape-trial',
     successorTrialDisplay: 'ESCAPE (2015)',
+    chainContext: 'modern stent-retriever technology and CTA-based patient selection',
     /* claimId: mr-rescue-bottom-line | source: Kidwell et al., NEJM 2013 */
     bottomLineSummary: 'MR RESCUE randomized 118 patients with proximal LVO stroke to mechanical embolectomy (MERCI or Penumbra) or standard care within 8 hours, stratified by penumbral imaging pattern. Mean mRS at 90 days was 3.9 in both arms. Penumbral imaging did not identify a benefiting subgroup (interaction p=0.56). Successful reperfusion was achieved in only 27% of the embolectomy arm, reflecting low first-generation device efficacy. The trial does not establish benefit or harm; its teaching value is illustrating why device generation and imaging selection were insufficient in the first-generation EVT era.',
     inclusionCriteria: [
