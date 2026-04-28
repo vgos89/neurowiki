@@ -227,6 +227,24 @@ export interface TrialMetadata {
       isCurrentTrial?: boolean;
     }[];
   } | null;
+  /** RCT predecessor chain for "what changed" teaching (TRIALS_SPEC v1.2 §7b).
+   *  Mutually exclusive with historicalContext -- a trial should not have both. */
+  rctChain?: {
+    chainName: string;
+    chainNarrative: string;
+    predecessors: Array<{
+      trialId?: string;
+      trialName: string;
+      year: number;
+      journal: string;
+      n?: number;
+      designNotes?: string;
+      keyResult: string;
+      whatWasMissing: string;
+    }>;
+    currentTrialResult: string;
+    whatChanged: string;
+  };
 }
 
 export const TRIAL_DATA: Record<string, TrialMetadata> = {

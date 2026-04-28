@@ -785,6 +785,181 @@ historicalContext?: {
 
 ---
 
+## §7b RCT Chain Section
+
+### 7b.1 When to use
+
+Use `RCTChainSection` when the current trial is the endpoint of a series of **RCTs that progressively improved on each other** (e.g., IMS-III → SYNTHESIS → MR RESCUE → ESCAPE chain). Each predecessor is a real randomized trial, not a historical cohort or registry benchmark.
+
+**Decision rule — RCTChainSection vs HistoricalContextSection:**
+
+| Scenario | Component |
+|---|---|
+| Predecessors are single-arm cohorts, registries, or surgical case series | `HistoricalContextSection` (§7a) |
+| Predecessors are RCTs that directly precede this one in a design evolution | `RCTChainSection` (this section) |
+| Both types exist for one trial | Use only `RCTChainSection`; do not wire both |
+
+**No amber caveat** for `RCTChainSection`. Comparing RCT to RCT is epistemically valid; no equivalence-of-arms warning is needed. (Contrast with §7a where the amber caveat is **mandatory**.)
+
+### 7b.2 Data shape
+
+```typescript
+rctChain?: {
+  chainName: string;            // e.g. "EVT 2015 Wave"
+  chainNarrative: string;       // 2-4 sentence prose; renders above card stack
+  predecessors: Array<{
+    trialId?: string;           // absent = stub; no link rendered
+    trialName: string;
+    year: number;
+    journal: string;
+    n?: number;
+    designNotes?: string;       // e.g. "open-label RCT"
+    keyResult: string;          // one sentence of headline numbers
+    whatWasMissing: string;     // what gap this trial left open
+  }>;
+  currentTrialResult: string;   // one sentence -- matches trial's proves field
+  whatChanged: string;          // one sentence -- why this trial resolved the gap
+};
+```
+
+`rctChain` and `historicalContext` are mutually exclusive. A trial may have one or the other, not both.
+
+### 7b.3 Visual pattern
+
+**Container:** `bg-white dark:bg-slate-800 rounded-xl border border-slate-200`
+
+**Section header row** (identical treatment to §7a.4 header):
+- Left: uppercase label `HISTORICAL CONTEXT` — `font-size: 11px; font-weight: 700; color: #64748b; letter-spacing: 0.08em; text-transform: uppercase`
+- Right: `"{N} trials · {year_range}"` — `font-size: 11px; color: #94a3b8`
+- `year_range` = earliest predecessor year to current trial year
+
+**Title:** `<h3>` — `"The road to {currentTrialName}"` — `font-size: 15px; font-weight: 500; color: #0f172a`
+
+**Chain narrative:** prose paragraph — `font-size: 14px; color: #475569; line-height: 1.55; margin-top: 8px`
+
+**Card stack:** vertical, `gap: 14px`
+
+### 7b.4 Card content rules — predecessor cards
+
+Each predecessor renders as a two-column row:
+
+**Year column:** `width: 56px; flex-shrink: 0`
+- Year label: `font-size: 12px; font-weight: 600; color: #64748b`
+- Connector line below: `width: 2px; background: #cbd5e1; flex: 1; min-height: 20px; margin: 4px auto 0`
+- No connector below the last predecessor card (or below card 4 when capped — connector resumes at the expand button)
+
+**Card body:** `border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px`
+
+**Card header row:**
+- Trial name: `font-size: 13px; font-weight: 600; color: #0f172a`
+- Right metadata: `journal · year · N={n}` (omit N if absent) — `font-size: 11px; color: #94a3b8`
+- Design note below trial name (if present): `font-size: 11px; color: #64748b; margin-top: 2px`
+
+**Result line:** `font-size: 13px; color: #374151; margin-top: 6px`
+
+**"What was missing" footer:**
+```css
+border-left: 2px solid #cbd5e1;
+background: #f8fafc;
+color: #64748b;
+font-size: 12px;
+padding: 6px 10px;
+border-radius: 0 4px 4px 0;
+margin-top: 8px;
+```
+Label prefix: `"What was missing: "` — `font-weight: 600; color: #475569`
+
+**Link behaviour:** if `trialId` is present, the trial name is a `<Link>` to `/trials/{trialId}`. If absent (stub), render as `<span>` — no link; no visual indication of absence beyond the section-level footnote.
+
+### 7b.5 Current trial card (cobalt)
+
+The current trial always renders at the bottom of the stack.
+
+```css
+border: 2px solid #185FA5;         /* cobalt-700 */
+background: #E6F1FB;               /* cobalt-50 */
+border-radius: 8px;
+padding: 10px 12px;
+```
+
+**"THIS TRIAL" pill:** inline beside the trial name
+```css
+background: #1746A2;               /* cobalt-600 */
+color: #ffffff;
+font-size: 10px;
+font-weight: 500;
+letter-spacing: 0.05em;
+text-transform: uppercase;
+padding: 1px 6px;
+border-radius: 4px;
+```
+
+**Year column:** `color: #0C447C` (cobalt-800) — same width/connector rules as predecessor year column; no connector below (last card)
+
+**Trial name:** `font-size: 13px; font-weight: 600; color: #042C53` (cobalt-900)
+
+**Result line:** `font-size: 13px; color: #1e3a5f`
+
+**"What changed" footer** (not "what was missing"):
+```css
+border-left: 2px solid #185FA5;
+background: #cce0f5;               /* cobalt-100 */
+color: #0C447C;
+font-size: 12px;
+padding: 6px 10px;
+border-radius: 0 4px 4px 0;
+margin-top: 8px;
+```
+Label prefix: `"What changed: "` — `font-weight: 600`
+
+### 7b.6 No amber caveat
+
+`RCTChainSection` **never** renders an amber caveat. RCT-to-RCT comparison is epistemically valid. Any caveat about the current trial's result scope belongs in the trial's `doesNotProve` field and amber banners in the primary outcome section -- not here.
+
+### 7b.7 Chain narrative authoring
+
+The `chainNarrative` string (2--4 sentences) renders as a prose paragraph above the card stack. It explains:
+1. What clinical problem the chain was trying to solve
+2. Why the earlier RCTs failed (shared design flaw or technology gap)
+3. What this trial did differently to resolve that gap
+
+The chain narrative is authored by `medical-scientist` and gated by `clinical-reviewer` before merge (§6 Class E workflow).
+
+### 7b.8 Mobile behaviour
+
+At ≤375px viewport:
+- Year column narrows to `44px`
+- Card body font sizes unchanged (13px / 12px / 11px)
+- Connector line hidden on mobile -- vertical rhythm is preserved by card gap alone
+- "THIS TRIAL" pill wraps to a new line below the trial name if the trial name exceeds approximately 160px
+
+### 7b.9 Edge cases
+
+**5-card visible cap:** If `predecessors.length >= 5`, render the first 4 predecessor cards, then an expand button, then the current trial card. Clicking the expand button inserts the remaining predecessor cards between card 4 and the current trial card.
+
+Expand button spec:
+```
+"Show all {N} predecessors"
+font-size: 12px; color: #1746A2; font-weight: 500
+border: 1px solid #bfdbfe; border-radius: 6px
+padding: 6px 14px; background: #eff6ff
+```
+
+No collapse-back affordance; once expanded, stays expanded.
+
+**Stub footnote:** If any predecessor in the array has no `trialId`, render a footnote **below the current trial card**:
+```
+"Some predecessor trial pages are forthcoming."
+font-size: 11px; color: #94a3b8; margin-top: 12px; text-align: center
+```
+This footnote is always shown when stubs are present -- not dev-only.
+
+**Empty predecessors array:** Do not render the section at all (treat as null / absent).
+
+**Single predecessor:** Render normally; connector line and 5-card cap are irrelevant; section renders correctly.
+
+---
+
 ## §8 Teaching Surfaces
 
 Trial pages have two collapsible teaching wells. Both use the same visual treatment. Neither auto-expands on page load. Both expand on tap/click.
@@ -1602,3 +1777,4 @@ Every trial page rebuild must pass all items before the PR opens. Partial passes
 | 1.0 | 2026-04-21 | orchestrator | Initial authoring. Six archetypes specified; Archetype A fully implemented. Companion mockup: trial-reference.html. ADR-005 records major decisions. Pending design-guardian mockup co-sign. |
 | 1.1 | 2026-04-24 | orchestrator | Expanded §3 Archetype B (Grotta Bar) from stub to full spec: visual anatomy, 7-segment color gradient, label rules, stat row with direction logic, subgroup handling in teaching well, data contract. Added §7a Archetype G (benchmark-threshold): track viz, CI band, threshold line, historical context as promoted first-class section, drawer extension. Added §18.3a-c schema fields (Archetype B fields, Archetype G fields, trialResult union extension) flagged for W6.5.1 and W6.6.1. Companion mockup: Stage 7 (INTERACT4) + Stage 8 (WEAVE) added to trial-reference.html. ADR-006 records decisions. Design-guardian co-sign issued 2026-04-24 (APPROVE-WITH-CONDITIONS, 14 conditions). |
 | 1.1 patch | 2026-04-24 | orchestrator | Resolved all 14 design-guardian conditions. §3.2: corrected bar height (28px mobile / 32px desktop), added mRS text-color rule (mRS 1+2 dark text), aligned label threshold (5% rule + mobile ≤375px exception at 9%), fixed legend to flex-wrap row. §3.3: stat-row label standardized to "Shift in distribution" (desktop) / "Shift" (mobile). §3.4: amber caveat CSS aligned to mockup (left-border, #fef3c7, border-radius 2px). §3.4a (new): Subgroup Accent Rule (NEUTRAL primary exception) and "Better outcome" pill documented. §7a.2: track height (14px mobile / 18px desktop), background (#f1f5f9), threshold line (top:-6px bottom:-20px), callout label positions, scale tick counts. §7a.3: benchmark-met pill aligned to mockup (rgba bg, #047857, fw 600, title case). §7a.4: historical-section container (border-top, no border-radius), caveat CSS unified to left-border treatment. §8.1: "B-F" → "B-G". §12.2: cross-ref to §3.4a subgroup exception. §18.2: updated component table (GrottaBarChart, BenchmarkThresholdChart). §18.3: archetypeId union includes 'G'. ADR-006 updated (bar height, track dims, §3.4a decisions). |
+| 1.2 | 2026-04-27 | orchestrator | Added §7b RCT Chain Section: when-to-use decision rule (RCT chain vs §7a benchmark), data shape (rctChain? field, mutually exclusive with historicalContext), visual pattern (container, header row, title, narrative, card stack), card content rules (year column 56px, connector line, card body, result line, "what was missing" footer, link/stub behaviour), current-trial cobalt card (cobalt-700 border, cobalt-50 bg, cobalt-900 text, THIS TRIAL pill, "what changed" footer), no-amber-caveat rationale, chain narrative authoring rules, mobile behaviour at 375px, edge cases (5-card cap with expand button, stub footnote always-shown, empty array guard, single-predecessor). |

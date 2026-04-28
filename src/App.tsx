@@ -38,6 +38,11 @@ const ExtendedIVTPathway = lazy(() => import('./pages/ExtendedIVTPathway'));
 const EmBillingCalculator = lazy(() => import('./pages/EmBillingCalculator'));
 const StrokeGuidelineMindmap = lazy(() => import('./pages/guide/StrokeGuidelineMindmap'));
 
+// Dev-only pages — not included in production bundle
+const RCTChainTest = import.meta.env.DEV
+  ? lazy(() => import('./pages/dev/RCTChainTest'))
+  : null;
+
 // Lazy load guide articles
 const StrokeBasics = lazy(() => import('./pages/guide/StrokeBasics'));
 const IvTpa = lazy(() => import('./pages/guide/IvTpa'));
@@ -141,6 +146,9 @@ const App: React.FC = () => {
           <Route path="/wiki/:topic" element={<Wiki />} />
           <Route path="/guide/:topicId" element={<PublishGate><ResidentGuide context="guide" /></PublishGate>} />
           <Route path="/trials/:topicId" element={<PublishGate><TrialPageNew /></PublishGate>} />
+          {import.meta.env.DEV && RCTChainTest && (
+            <Route path="/dev/rct-chain-test" element={<RCTChainTest />} />
+          )}
           <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
             </Suspense>

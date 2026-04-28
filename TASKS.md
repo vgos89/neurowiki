@@ -283,10 +283,12 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 > Design note: HistoricalContextSection.tsx (TRIALS_SPEC §7a.4) is Archetype G only. A new RCT predecessor display pattern must be designed before any wiring begins — W6.9 tracks that design task.
 
 ### W6.9 — Wire historical context into landmark trials — Class C [BLOCKED]
-- **Status:** blocked — pending (a) RCT predecessor display pattern design, (b) predecessor stubs from W7.0 below
-- **User-visible goal:** Major trial pages show the "what changed" predecessor chain: failed trials in context, with a brief table and teaching blurb
+- **Status:** blocked — pattern locked (TRIALS_SPEC §7b), component shipped (RCTChainSection.tsx); wiring blocked on W7.0 predecessor stubs
+- **User-visible goal:** Major trial pages show the "what changed" predecessor chain: failed trials in context, with a brief vertical timeline and teaching blurb
 - **Non-goals:** Archetype G / WEAVE historicalContext is already wired — this is for RCT chains only
-- **Blocked on:** W7.0 stubs; new UI pattern for RCT predecessor chains (not currently in TRIALS_SPEC)
+- **Pattern:** RCTChainSection.tsx (src/components/trials/RCTChainSection.tsx) — spec at TRIALS_SPEC §7b (v1.2, 2026-04-27)
+- **Dev route:** /dev/rct-chain-test — verify rendering with ESCAPE chain mockup (5-card cap, stub footnote, cobalt current card)
+- **Blocked on:** W7.0 stubs (trialId values needed for Link rendering in predecessor cards)
 - **Chains to wire first (per predecessor-map.md §4.1):**
   1. EVT 2015 chain — IMS-III/SYNTHESIS/MR RESCUE → MR CLEAN/ESCAPE/REVASCAT/EXTEND-IA/SWIFT PRIME/THRACE
   2. ICH surgery chain — STICH I/STICH II/MISTIE III → ENRICH
