@@ -6369,6 +6369,220 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── Stub helper — shared layout for §7c predecessor reference pages ──────
+  const renderStubPage = (
+    tm: TrialMetadata,
+    shortName: string,
+    outcomeSectionLabel: string,
+    outcomeSectionMeta: string,
+    statLabel: string,
+    statValue: string,
+    ciValue: string,
+    pLabel: string,
+  ) => {
+    const categoryBadge = tm.listCategory
+      ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+        {/* Sticky header */}
+        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <Link to="/trials" className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>{shortName}</span>
+            </Link>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadge}</span>
+          </div>
+        </div>
+
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+          {/* Mandatory amber historical-reference banner (TRIALS_SPEC §7c.5) */}
+          <div
+            role="note"
+            style={{
+              background: '#fffbeb',
+              borderLeft: '3px solid #f59e0b',
+              borderRadius: '0 6px 6px 0',
+              padding: '10px 14px',
+            }}
+          >
+            <p style={{ fontSize: 11, fontWeight: 700, color: '#92400e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>
+              Historical Reference Page
+            </p>
+            <p style={{ fontSize: 12, color: '#78350f', lineHeight: 1.5 }}>
+              This trial preceded the modern EVT evidence base. It is presented as a predecessor reference.
+              {tm.successorTrialId && (
+                <> See{' '}
+                  <Link
+                    to={`/trials/${tm.successorTrialId}`}
+                    style={{ color: '#1746A2', fontWeight: 600, textDecoration: 'underline' }}
+                  >
+                    ESCAPE (2015)
+                  </Link>
+                  {' '}for the modern successor trial that established EVT as standard of care.
+                </>
+              )}
+            </p>
+          </div>
+
+          {/* H1 + question lede + source */}
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {tm.title}: {tm.subtitle}
+            </h1>
+            {tm.questionLede && (
+              <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+                {tm.questionLede}
+              </p>
+            )}
+            <p className="text-sm text-slate-500 mt-1">
+              {tm.source}
+              {tm.doi && (
+                <>{' '}·{' '}<a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{tm.doi}</a></>
+              )}
+              {' '}· {tm.stats.sampleSize.value} patients
+            </p>
+          </div>
+
+          {/* Population */}
+          {renderPopulationSection(tm)}
+
+          {/* Primary outcome — prose-narrative variant (no archetype viz) */}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">{outcomeSectionLabel}</p>
+              <p className="text-xs text-slate-500 mt-0.5">{outcomeSectionMeta}</p>
+            </div>
+            <div className="p-4 space-y-4">
+              {tm.primaryOutcomeProse && (
+                <p className="text-sm text-slate-700 leading-relaxed">{tm.primaryOutcomeProse}</p>
+              )}
+              {/* Stat row */}
+              <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                  <span style={{ fontSize: 12, color: '#64748b' }}>{statLabel}</span>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: '#0f172a' }}>{statValue}</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                  <span style={{ fontSize: 12, color: '#64748b' }}>95% CI</span>
+                  <span style={{ fontSize: 12, fontWeight: 500, color: '#0f172a' }}>{ciValue}</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: 12, color: '#64748b' }}>Result</span>
+                  <span style={{ fontSize: 10, fontWeight: 600, color: '#64748b', background: '#f1f5f9', padding: '2px 8px', borderRadius: 9999 }}>
+                    {pLabel}
+                  </span>
+                </div>
+              </div>
+              <p style={{ fontSize: 11, color: '#94a3b8', fontStyle: 'italic', marginTop: 4 }}>
+                Visualization not shown for predecessor reference pages. See source paper for figures.
+              </p>
+            </div>
+          </div>
+
+          {/* Trial design narrative */}
+          {tm.trialDesignNarrative && (
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Trial Design</p>
+              </div>
+              <div className="p-4">
+                <p className="text-sm text-slate-700 leading-relaxed">{tm.trialDesignNarrative}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Safety brief */}
+          {tm.safetyBrief && (
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Safety</p>
+              </div>
+              <div className="p-4">
+                <p className="text-sm text-slate-700 leading-relaxed">{tm.safetyBrief}</p>
+              </div>
+            </div>
+          )}
+
+          {/* See also */}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              {tm.successorTrialId && (
+                <Link to={`/trials/${tm.successorTrialId}`} className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">
+                  ESCAPE Trial (modern successor)
+                </Link>
+              )}
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">
+                Stroke Code pathway
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* BottomLineDrawer — historical-reference bedsidePearl slot */}
+        {tm.bottomLineSummary && (
+          <BottomLineDrawer
+            trialName={shortName}
+            body={tm.bottomLineSummary}
+            bedsidePearl={`Historical reference trial predating modern stent-retriever technology and CTA-based patient selection. See ESCAPE (2015) for the modern EVT evidence base.`}
+            seeAlsoLinks={[
+              ...(tm.successorTrialId ? [{ label: 'ESCAPE Trial', href: `/trials/${tm.successorTrialId}` }] : []),
+              { label: 'Stroke Code pathway', href: '/guide/stroke-code' },
+            ]}
+            citation={tm.source}
+            doi={tm.doi}
+            trialResult={tm.trialResult}
+          />
+        )}
+      </div>
+    );
+  };
+
+  // ── IMS-III — W7.0.1 stub (TRIALS_SPEC §7c) ──────────────────────────────
+  if (trialId === 'ims-iii-trial' && trialMetadata) {
+    return renderStubPage(
+      trialMetadata,
+      'IMS-III',
+      'Primary Outcome — mRS 0-2 at 90 Days',
+      '656 patients; endovascular therapy plus IV alteplase vs IV alteplase alone',
+      'Adjusted RR (mRS 0-2)',
+      '1.05',
+      '0.83 to 1.30',
+      'Not significant',
+    );
+  }
+
+  // ── SYNTHESIS Expansion — W7.0.2 stub (TRIALS_SPEC §7c) ──────────────────
+  if (trialId === 'synthesis-expansion-trial' && trialMetadata) {
+    return renderStubPage(
+      trialMetadata,
+      'SYNTHESIS',
+      'Primary Outcome — Disability-Free Survival (mRS 0-1) at 90 Days',
+      '362 patients; endovascular therapy alone vs IV alteplase within 4.5 hours',
+      'Adjusted OR (mRS 0-1)',
+      '0.71',
+      '0.44 to 1.14',
+      'Not significant (p=0.16)',
+    );
+  }
+
+  // ── MR RESCUE — W7.0.3 stub (TRIALS_SPEC §7c) ────────────────────────────
+  if (trialId === 'mr-rescue-trial' && trialMetadata) {
+    return renderStubPage(
+      trialMetadata,
+      'MR RESCUE',
+      'Primary Outcome — Mean mRS at 90 Days',
+      '118 patients; mechanical embolectomy vs standard care; penumbral imaging stratified',
+      'Mean mRS (embolectomy vs standard care)',
+      '3.9 vs 3.9',
+      'N/A (identical means)',
+      'Not significant',
+    );
+  }
+
   // ─────────────────────────────────────────────────────────────────────────
 
   if (!trial) {

@@ -301,28 +301,23 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ### W7.0 — Predecessor Trial Stubs (Priority 1 — EVT 2015 chain)
 
 > These three trials are cited by 6 modern thrombectomy trials each. Building them unlocks the EVT 2015 chain wiring in W6.9.
-> Open question (Section 6.5): should these be separate pages or a combined "EVT 2013 failures" page? V decides before stub work begins.
+> Open question (Section 6.5 of predecessor-map.md): separate pages vs combined "EVT 2013 failures" page — RESOLVED: separate pages (canary batch implements separate pages).
+> Stub pattern locked via TRIALS_SPEC §7c (2026-04-27). W7.0.4–W7.0.10 blocked on PM verification of canary batch.
 
-- [ ] W7.0.1 — Build stub for IMS-III (2013, NEJM, Broderick et al.)
-  - Cited by: MR CLEAN, ESCAPE, REVASCAT, EXTEND-IA, SWIFT PRIME, THRACE
-  - Priority: 1 (6 modern trials)
-  - Chain: EVT 2015 predecessor
-  - Key story: EVT failed in 2013 because no CTA-confirmed LVO requirement, coil-based devices, low reperfusion rates; NIHSS-only enrollment
-  - Requires medical-scientist source verification (Section 6.1 of predecessor-map.md)
+- [x] W7.0.1 — Build stub for IMS-III (2013, NEJM, Broderick et al.) — commit: see W7.0 canary batch commit
+  - trialId: 'ims-iii-trial' · trialResult: NEGATIVE · archetypeId: 'A'
+  - URL: /trials/ims-iii-trial
+  - Clinical review: docs/reviews/clinical-PR-W7.0-predecessor-stubs.md (approve, condition resolved: CI corrected to 0.83-1.30)
 
-- [ ] W7.0.2 — Build stub for SYNTHESIS Expansion (2013, NEJM, Ciccone et al.)
-  - Cited by: MR CLEAN, ESCAPE, REVASCAT, EXTEND-IA, SWIFT PRIME, THRACE
-  - Priority: 1 (6 modern trials)
-  - Chain: EVT 2015 predecessor
-  - Key story: Italian trial; no CTA confirmation; EVT not consistently faster than IV tPA; older devices
-  - Requires medical-scientist source verification (Section 6.1)
+- [x] W7.0.2 — Build stub for SYNTHESIS Expansion (2013, NEJM, Ciccone et al.) — commit: see W7.0 canary batch commit
+  - trialId: 'synthesis-expansion-trial' · trialResult: NEGATIVE · archetypeId: 'A'
+  - URL: /trials/synthesis-expansion-trial
+  - Clinical review: docs/reviews/clinical-PR-W7.0-predecessor-stubs.md (approve)
 
-- [ ] W7.0.3 — Build stub for MR RESCUE (2013, NEJM, Kidwell et al.)
-  - Cited by: MR CLEAN, ESCAPE, REVASCAT, EXTEND-IA, SWIFT PRIME, THRACE
-  - Priority: 1 (6 modern trials)
-  - Chain: EVT 2015 predecessor
-  - Key story: Penumbral selection with older MERCI/Penumbra devices; small N=118; low reperfusion rates despite imaging selection
-  - Requires medical-scientist source verification (Section 6.1)
+- [x] W7.0.3 — Build stub for MR RESCUE (2013, NEJM, Kidwell et al.) — commit: see W7.0 canary batch commit
+  - trialId: 'mr-rescue-trial' · trialResult: NEUTRAL (confirmed by clinical-reviewer; zero effect size, underpowered, no directional signal) · archetypeId: 'A'
+  - URL: /trials/mr-rescue-trial
+  - Clinical review: docs/reviews/clinical-PR-W7.0-predecessor-stubs.md (approve)
 
 ### W7.0 — Priority 2 — Basilar EVT chain
 
@@ -394,6 +389,18 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] CLAUDE.md §13.3 references data-architect agent that does not exist in .claude/agents/. Decide when Wave 5 citation scanner work begins: create data-architect agent file, or reassign scanner ownership to system-architect or calculator-engineer. Update §13.3 accordingly.
 
 ## CONFIRMED CLEAN
+- [x] 2026-04-27 — W7.0 canary batch: IMS-III, SYNTHESIS Expansion, MR RESCUE predecessor stubs (§7c pattern)
+  - TRIALS_SPEC §7c locked (stub page pattern: mandatory amber banner, prose-narrative outcome, no teaching wells, successorTrialId)
+  - trialData.ts: 3 new stub entries + 6 new TrialMetadata fields (isStub, questionLede, primaryOutcomeProse, trialDesignNarrative, safetyBrief, successorTrialId)
+  - TrialPageNew.tsx: renderStubPage helper + 3 id-gated branches (ims-iii-trial, synthesis-expansion-trial, mr-rescue-trial)
+  - Clinical-reviewer: approve-with-conditions; condition resolved (IMS-III CI corrected 0.85→0.83); full approve at commit
+  - Review artifact: docs/reviews/clinical-PR-W7.0-predecessor-stubs.md
+  - trialResult calls: IMS-III=NEGATIVE ✓; SYNTHESIS=NEGATIVE ✓; MR RESCUE=NEUTRAL ✓ (reviewer confirmed)
+  - tsc clean · build green (2.28s)
+  - URLs: /trials/ims-iii-trial · /trials/synthesis-expansion-trial · /trials/mr-rescue-trial
+  - W7.0.4–W7.0.10 blocked on PM verification of canary batch
+- [x] 2026-04-27 — RCTChainSection component and TRIALS_SPEC §7b — commit 12b24de
+  - TRIALS_SPEC §7b (RCT Chain Section) appended; rctChain? field added to TrialMetadata; RCTChainSection.tsx created; dev route /dev/rct-chain-test; TASKS.md W6.9 updated
 - [x] 2026-04-24 — W6.6.1 Archetype G WEAVE canary — commit a25a6fd
   - BenchmarkThresholdChart.tsx (new): 14px/18px track, green/red fill, CI band 20% opacity, dashed amber threshold
   - HistoricalContextSection.tsx (new): amber caveat mandatory first, 5-row table, current-trial cobalt-50 highlight

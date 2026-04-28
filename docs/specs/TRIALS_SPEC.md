@@ -960,6 +960,99 @@ This footnote is always shown when stubs are present -- not dev-only.
 
 ---
 
+## §7c Stub Trials (Predecessor References)
+
+### 7c.1 Why stubs exist
+
+Predecessor trials cited by modern trials need **linkable, content-rich pages** that a clinician can navigate to from a predecessor chain card (§7b) or from a cross-reference link. They do not need the full new-design archetype treatment. Stubs carry enough content for understanding historical context -- population, primary outcome, trial design, safety brief -- without teaching wells or archetype-specific visualizations that require full editorial effort and clinical-reviewer investment.
+
+Any stub may be upgraded to a full page later. The schema accommodates upgrade: full-page fields (howToReadChart, howToInterpret, bedsidePearl) are simply absent on stubs and added during upgrade.
+
+### 7c.2 What stubs contain
+
+1. **Sticky header** -- same as full trial pages (trial abbreviation + category badge)
+2. **Mandatory amber "historical reference" banner** -- rendered at the very top of the content area, above the H1. Required, not optional. See §7c.5.
+3. **Cobalt H1 + question lede** -- question lede stored in `questionLede` field
+4. **Source line** -- author, journal, year, DOI link, N patients
+5. **Population** -- inclusion and exclusion criteria rendered via `renderPopulationSection` helper
+6. **Primary outcome -- prose-narrative variant** -- prose paragraph stored in `primaryOutcomeProse` + a stat row with effect measure, 95% CI, and significance badge. No DeltaBandChart, GrottaBar, or BenchmarkThresholdChart.
+7. **Trial design** -- one paragraph from `trialDesignNarrative`
+8. **Safety brief** -- 1--2 sentences from `safetyBrief` in a prose card
+9. **BottomLineDrawer** -- rendered with correct `trialResult` badge; `bedsidePearl` slot receives a fixed historical-reference note (not a data field -- see §7c.4)
+
+### 7c.3 What stubs do NOT contain
+
+- Teaching wells (`howToReadChart`, `howToInterpret` are absent from data and not rendered)
+- Bedside pearl (no `bedsidePearl` data field; the BottomLineDrawer `bedsidePearl` prop receives a fixed "Historical reference" note)
+- Subgroup analyses
+- `RCTChainSection` or `HistoricalContextSection` (stubs ARE predecessors -- they are not their own chain endpoints)
+- Archetype-specific visualizations (DeltaBandChart, GrottaBar, BenchmarkThresholdChart)
+
+### 7c.4 TrialMetadata stub schema fields
+
+Stubs add the following optional fields to `TrialMetadata` (all optional; absent on full-page trials):
+
+```typescript
+isStub?: boolean;             // marks page as a stub; used for display and query filtering
+questionLede?: string;        // PICO-style question lede rendered below H1
+primaryOutcomeProse?: string; // prose paragraph for the primary outcome card (no chart)
+trialDesignNarrative?: string;// one paragraph trial design (replaces structured rendering)
+safetyBrief?: string;         // 1-2 sentence safety summary
+successorTrialId?: string;    // ID of a representative successor trial for the amber banner link
+```
+
+Stubs still provide the base required fields (`stats`, `trialDesign`, `efficacyResults`, `intervention`, `clinicalContext`, `pearls`, `conclusion`, `source`) to satisfy the TypeScript interface. These are used by the BottomLineDrawer and by any fallback path that loads the legacy page layout.
+
+`trialResult` and `archetypeId` must be correctly populated on stubs. Classification accuracy is gated by `clinical-reviewer` (same as full pages).
+
+### 7c.5 Mandatory amber banner
+
+The amber "historical reference" banner renders **above the H1**, first in the content area.
+
+Required text: `"This is a historical reference page. This trial preceded the modern evidence base for [clinical area]. See [successor trial name] for current evidence."` where `[successor trial name]` is a `<Link>` to `/trials/{successorTrialId}`.
+
+```css
+background: #fffbeb;
+border-left: 3px solid #f59e0b;
+border-radius: 0 6px 6px 0;
+padding: 10px 14px;
+```
+
+Banner is mandatory for all stubs. A stub without a `successorTrialId` should render the banner with generic text (no link).
+
+### 7c.6 Classification
+
+`trialResult` values for stubs follow the same taxonomy as full pages:
+- `NEGATIVE` -- trial designed to show benefit, failed to do so (primary endpoint not met)
+- `NEUTRAL` -- trial found no meaningful difference; underpowered or effect size zero
+- `POSITIVE` -- rarely applicable to stubs (stubs are predecessor trials, not landmark positive trials)
+
+`archetypeId` is populated for schema completeness but drives no rendering on stub pages (the archetype-specific visualization is absent).
+
+Clinical-reviewer gating applies: classification accuracy is verified before merge.
+
+### 7c.7 Upgrade path
+
+To upgrade a stub to a full page:
+1. Add `howToReadChart`, `howToInterpret`, `bedsidePearl` to the `TrialMetadata` entry
+2. Add the trial's id-gated JSX branch using the appropriate archetype pattern (§3 Archetype A, §3b Archetype B, §7a Archetype G)
+3. Remove the stub `if` branch that renders the abbreviated stub layout
+4. Run clinical-reviewer gate on the new clinical content
+5. Mark `isStub: false` or remove the field
+
+The stub branch and full-page branch are mutually exclusive by id-gate. Upgrade is a single PR.
+
+### 7c.8 Claim surface handling
+
+Stubs are abbreviated but still contain clinical claims:
+- `primaryOutcomeProse` -- tagged with `/* claimId: {id}-outcomes | source: {citation} */` inline comment above the field
+- `trialDesignNarrative` -- tagged with `/* claimId: {id}-design | source: {citation} */`
+- `bottomLineSummary` -- tagged with `/* claimId: {id}-bottom-line | source: {citation} */`
+
+W5.2 registry wiring is deferred for stubs (same as full pages) -- inline comment stubs are the current standard until the citation registry builds out.
+
+---
+
 ## §8 Teaching Surfaces
 
 Trial pages have two collapsible teaching wells. Both use the same visual treatment. Neither auto-expands on page load. Both expand on tap/click.
@@ -1777,4 +1870,5 @@ Every trial page rebuild must pass all items before the PR opens. Partial passes
 | 1.0 | 2026-04-21 | orchestrator | Initial authoring. Six archetypes specified; Archetype A fully implemented. Companion mockup: trial-reference.html. ADR-005 records major decisions. Pending design-guardian mockup co-sign. |
 | 1.1 | 2026-04-24 | orchestrator | Expanded §3 Archetype B (Grotta Bar) from stub to full spec: visual anatomy, 7-segment color gradient, label rules, stat row with direction logic, subgroup handling in teaching well, data contract. Added §7a Archetype G (benchmark-threshold): track viz, CI band, threshold line, historical context as promoted first-class section, drawer extension. Added §18.3a-c schema fields (Archetype B fields, Archetype G fields, trialResult union extension) flagged for W6.5.1 and W6.6.1. Companion mockup: Stage 7 (INTERACT4) + Stage 8 (WEAVE) added to trial-reference.html. ADR-006 records decisions. Design-guardian co-sign issued 2026-04-24 (APPROVE-WITH-CONDITIONS, 14 conditions). |
 | 1.1 patch | 2026-04-24 | orchestrator | Resolved all 14 design-guardian conditions. §3.2: corrected bar height (28px mobile / 32px desktop), added mRS text-color rule (mRS 1+2 dark text), aligned label threshold (5% rule + mobile ≤375px exception at 9%), fixed legend to flex-wrap row. §3.3: stat-row label standardized to "Shift in distribution" (desktop) / "Shift" (mobile). §3.4: amber caveat CSS aligned to mockup (left-border, #fef3c7, border-radius 2px). §3.4a (new): Subgroup Accent Rule (NEUTRAL primary exception) and "Better outcome" pill documented. §7a.2: track height (14px mobile / 18px desktop), background (#f1f5f9), threshold line (top:-6px bottom:-20px), callout label positions, scale tick counts. §7a.3: benchmark-met pill aligned to mockup (rgba bg, #047857, fw 600, title case). §7a.4: historical-section container (border-top, no border-radius), caveat CSS unified to left-border treatment. §8.1: "B-F" → "B-G". §12.2: cross-ref to §3.4a subgroup exception. §18.2: updated component table (GrottaBarChart, BenchmarkThresholdChart). §18.3: archetypeId union includes 'G'. ADR-006 updated (bar height, track dims, §3.4a decisions). |
+| 1.3 | 2026-04-27 | orchestrator | Added §7c Stub Trials (Predecessor References): why stubs exist, what stubs contain (sticky header, mandatory amber banner, H1+lede, population, prose-narrative primary outcome, design narrative, safety brief, BottomLineDrawer), what stubs do NOT contain (teaching wells, bedsidePearl field, subgroup analyses, RCTChainSection, archetype viz), TrialMetadata stub schema fields (isStub, questionLede, primaryOutcomeProse, trialDesignNarrative, safetyBrief, successorTrialId), mandatory amber banner spec, classification rules (trialResult/archetypeId still required), upgrade path, claim surface handling. |
 | 1.2 | 2026-04-27 | orchestrator | Added §7b RCT Chain Section: when-to-use decision rule (RCT chain vs §7a benchmark), data shape (rctChain? field, mutually exclusive with historicalContext), visual pattern (container, header row, title, narrative, card stack), card content rules (year column 56px, connector line, card body, result line, "what was missing" footer, link/stub behaviour), current-trial cobalt card (cobalt-700 border, cobalt-50 bg, cobalt-900 text, THIS TRIAL pill, "what changed" footer), no-amber-caveat rationale, chain narrative authoring rules, mobile behaviour at 375px, edge cases (5-card cap with expand button, stub footnote always-shown, empty array guard, single-predecessor). |
