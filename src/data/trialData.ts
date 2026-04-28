@@ -243,6 +243,14 @@ export interface TrialMetadata {
   /** Display name for the successor trial shown in the amber banner link and see-also chip,
    *  e.g. "ESCAPE (2015)" or "ENRICH (2024)". Stub pages use this instead of hardcoding. */
   successorTrialDisplay?: string;
+  /** Completes the amber banner sentence "See [successor] [clause]."
+   *  REQUIRED on stubs. Examples:
+   *    EVT chain → "for the modern successor trial that established EVT as standard of care"
+   *    Basilar chain → "for the modern successor trial that established endovascular thrombectomy for basilar artery occlusion"
+   *    Antiplatelet chain → "for the modern successor trial that defined the appropriate short-duration window for dual antiplatelet therapy after minor stroke"
+   *    ICH surgery chain → "for the modern successor trial that established minimally invasive evacuation for selected lobar intracerebral hemorrhage"
+   *  Fallback if absent: "for current evidence". */
+  successorTrialClause?: string;
   // Chain-specific summary used in stub pages (e.g. for the bedsidePearl slot).
   // Examples:
   //   EVT chain → "modern stent-retriever technology and CTA-based patient selection"
@@ -250,6 +258,31 @@ export interface TrialMetadata {
   //   Antiplatelet chain → "short-duration dual antiplatelet therapy after minor stroke"
   //   ICH surgery chain → "minimally invasive evacuation of selected lobar hematomas"
   chainContext?: string;
+  /**
+   * Legend-card presentation slice. The headline values shown on the /trials list page.
+   * Authored per trial; do not derive at render time.
+   */
+  legend?: {
+    /**
+     * One-line plain-English finding. ≤120 chars. Sentence case, ends with a period.
+     * Falls back to listDescription if absent.
+     * Example: "Alteplase 4.5–9 h with perfusion-selected imaging improves recovery."
+     */
+    finding?: string;
+    /**
+     * Verdict tag for the .bl-tag chip. 6–16 chars, no trailing period. Categorical or numeric.
+     * Examples: "+6 / 100" · "Non-inferior" · "No benefit" · "NNT 17" · "Superior" · "Harm"
+     * If absent, the chip slot is omitted on render.
+     */
+    bottomLineTag?: string;
+    /**
+     * Key statistic for the slate-trailing stat. 6–24 chars including unit.
+     * Examples: "NNT 17" · "aOR 1.61 (1.06–1.6)" · "HR 0.92" · "N = 1,430"
+     * Should be a DIFFERENT facet of the trial than bottomLineTag — tag = verdict, keyStat = number behind it.
+     * If absent, the slot is omitted on render.
+     */
+    keyStat?: string;
+  };
   // ─────────────────────────────────────────────────────────────────────────
   /** RCT predecessor chain for "what changed" teaching (TRIALS_SPEC v1.2 §7b).
    *  Mutually exclusive with historicalContext -- a trial should not have both. */
@@ -8435,6 +8468,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     safetyBrief: 'Symptomatic intracranial hemorrhage was 6.2% endovascular versus 5.9% IV-only (p=0.83). Mortality at 90 days was 19.1% versus 21.6% (p=0.33). No significant safety difference between arms.',
     successorTrialId: 'escape-trial',
     successorTrialDisplay: 'ESCAPE (2015)',
+    successorTrialClause: 'for the modern successor trial that established EVT as standard of care',
     chainContext: 'modern stent-retriever technology and CTA-based patient selection',
     /* claimId: ims-iii-bottom-line | source: Broderick et al., NEJM 2013 */
     bottomLineSummary: 'IMS-III stopped early for futility after enrolling 656 of 900 planned patients. In moderate-severe stroke (NIHSS >=8) treated with IV alteplase within 3 hours, adding endovascular therapy (mostly older coil-based devices, no mandatory vessel-occlusion confirmation) did not improve 90-day mRS 0-2: 40.8% vs 38.7% (adjusted RR 1.05, 95% CI 0.83-1.30). The trial predates modern stent retrievers and CTA-based patient selection.',
@@ -8506,6 +8540,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     safetyBrief: 'Symptomatic intracranial hemorrhage was similar between groups (6% endovascular vs 6% alteplase). Mortality at 3 months was 10% versus 8%, a non-significant difference (p=0.53). No significant safety signal in either direction.',
     successorTrialId: 'escape-trial',
     successorTrialDisplay: 'ESCAPE (2015)',
+    successorTrialClause: 'for the modern successor trial that established EVT as standard of care',
     chainContext: 'modern stent-retriever technology and CTA-based patient selection',
     /* claimId: synthesis-expansion-bottom-line | source: Ciccone et al., NEJM 2013 */
     bottomLineSummary: 'SYNTHESIS Expansion randomized 362 patients with ischemic stroke to endovascular therapy alone (no IV tPA, window up to 6 hours) or standard IV alteplase within 4.5 hours. Disability-free survival (mRS 0-1) at 90 days: 30.4% endovascular vs 34.8% alteplase (adjusted OR 0.71, 95% CI 0.44-1.14, p=0.16). Endovascular therapy did not demonstrate superiority. The trial used older devices and did not require confirmed vessel occlusion.',
@@ -8577,6 +8612,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     safetyBrief: 'Symptomatic intracranial hemorrhage occurred in 9% of the embolectomy group versus 4% of the standard-care group (not statistically significant in this small trial). Mortality at 90 days was 21% versus 17% (NS). No significant safety difference was demonstrated.',
     successorTrialId: 'escape-trial',
     successorTrialDisplay: 'ESCAPE (2015)',
+    successorTrialClause: 'for the modern successor trial that established EVT as standard of care',
     chainContext: 'modern stent-retriever technology and CTA-based patient selection',
     /* claimId: mr-rescue-bottom-line | source: Kidwell et al., NEJM 2013 */
     bottomLineSummary: 'MR RESCUE randomized 118 patients with proximal LVO stroke to mechanical embolectomy (MERCI or Penumbra) or standard care within 8 hours, stratified by penumbral imaging pattern. Mean mRS at 90 days was 3.9 in both arms. Penumbral imaging did not identify a benefiting subgroup (interaction p=0.56). Successful reperfusion was achieved in only 27% of the embolectomy arm, reflecting low first-generation device efficacy. The trial does not establish benefit or harm; its teaching value is illustrating why device generation and imaging selection were insufficient in the first-generation EVT era.',
@@ -8593,6 +8629,518 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Established large infarct (ASPECTS below 6 or equivalent)',
       'Unable to undergo MRI or CT perfusion',
       'Posterior circulation stroke',
+    ],
+  },
+
+  // ── W7.0 Predecessor Stubs — Batch 2 ─────────────────────────────────────
+  // Sub-batch 1: Basilar EVT chain (§7c) — BEST, BASICS → ATTENTION (2022)
+  // Sub-batch 2: Antiplatelet chain (§7c) — MATCH, CHARISMA → POINT (2018)
+  // Sub-batch 3: ICH surgical chain (§7c) — STICH I, STICH II, MISTIE III → ENRICH (2024)
+
+  'best-trial': {
+    id: 'best-trial',
+    title: 'BEST Trial',
+    subtitle: 'Basilar Artery Occlusion — Endovascular Intervention vs Standard Medical Treatment',
+    category: 'Neuro Trials',
+    isStub: true,
+    trialResult: 'NEUTRAL',
+    archetypeId: 'A' as const,
+    doi: '10.1016/S1474-4422(19)30395-3',
+    source: 'Liu et al. (Lancet Neurol 2020)',
+    listCategory: 'thrombectomy',
+    listDescription: 'First RCT of EVT for basilar artery occlusion. ITT primary (mRS 0-3 at 90 days): 42% vs 32% (OR 1.74, CI 0.81–3.74, p=0.23). Terminated early for crossover and low enrollment. Preceded ATTENTION (2022).',
+    stats: {
+      sampleSize: { value: '131', label: 'Randomized Patients' },
+      primaryEndpoint: { value: 'mRS 0-3', label: 'at 90 Days' },
+      pValue: { value: '0.23', label: 'Not Significant (ITT)' },
+      effectSize: { value: 'OR 1.74', label: 'Favors EVT, CI 0.81–3.74' },
+    },
+    trialDesign: {
+      type: [
+        'Multicenter open-label RCT, 28 centers in China',
+        'CTA-confirmed basilar artery occlusion required',
+        'EVT arm: any approved stent retriever or aspiration device',
+        'Treatment window: within 8 hours of onset or last known well',
+      ],
+      timeline: 'Terminated early: 131 of 240 planned patients enrolled',
+    },
+    efficacyResults: {
+      treatment: { percentage: 42, label: 'mRS 0-3 at 90 days (ITT)', name: 'Endovascular Therapy' },
+      control: { percentage: 32, label: 'mRS 0-3 at 90 days (ITT)', name: 'Best Medical Management' },
+    },
+    intervention: {
+      treatment: 'Endovascular thrombectomy (stent retriever, aspiration, or combined) within 8 hours',
+      control: 'Best medical management including IV alteplase if eligible',
+    },
+    clinicalContext: 'BEST was the first RCT to directly compare EVT versus medical management in basilar artery occlusion. It preceded the definitive ATTENTION and BAOCHE trials. High crossover (22 of 65 medical-arm patients received EVT) and premature termination substantially compromised the ITT analysis. The per-protocol analysis showed a nominally significant benefit, but early termination limits interpretation. BEST established neither definitive benefit nor harm for basilar EVT.',
+    pearls: [
+      'Terminated early: 131 of 240 planned patients due to slow enrollment and crossover',
+      'ITT primary: mRS 0-3 at 90 days 42% vs 32%, OR 1.74 (CI 0.81–3.74), p=0.23 — not significant',
+      'Per-protocol: OR 2.90 (CI 1.20–7.03), p=0.016 — nominally significant; cautious interpretation required',
+      '22 of 65 medical-arm patients crossed over to EVT, diluting the ITT effect toward null',
+      'sICH higher in EVT arm (~14%) vs medical arm (~3%); 90-day mortality similar between arms',
+    ],
+    conclusion: '',
+    questionLede: 'In patients with acute basilar artery occlusion within 8 hours, does endovascular thrombectomy improve 90-day favorable functional outcome (mRS 0-3) compared with best medical management?',
+    /* claimId: best-outcomes | source: Liu et al., Lancet Neurol 2020, doi: 10.1016/S1474-4422(19)30395-3 */
+    primaryOutcomeProse: 'In 131 patients with CTA-confirmed basilar artery occlusion randomized at 28 Chinese centers, endovascular thrombectomy did not significantly improve favorable functional outcome (mRS 0-3) at 90 days in the intention-to-treat analysis. mRS 0-3 was achieved in 42% of the EVT group versus 32% of the medical management group (OR 1.74, 95% CI 0.81 to 3.74, P=0.23). The trial was terminated early after enrolling 131 of 240 planned patients due to slow enrollment and high crossover: 22 patients randomized to medical management crossed over to EVT, substantially diluting the ITT analysis toward the null. A per-protocol analysis was nominally significant (OR 2.90, 95% CI 1.20 to 7.03, P=0.016), which is hypothesis-generating given the early termination and crossover contamination.',
+    /* claimId: best-design | source: Liu et al., Lancet Neurol 2020 */
+    trialDesignNarrative: 'BEST enrolled patients with acute basilar artery occlusion confirmed by CTA at 28 Chinese stroke centers between 2015 and 2019. Patients within 8 hours of symptom onset (or last known well) were randomized 1:1 to EVT (any available stent retriever or aspiration device) or best medical management (including IV alteplase at 0.9 mg/kg if eligible). Enrollment was hampered because physicians and families were reluctant to accept randomization to medical management alone for a high-mortality condition when EVT was available -- 22 medical-arm patients crossed over, leading to termination at 131 of 240 participants. Crossover diluted the ITT analysis toward the null; per-protocol analysis showed nominal significance.',
+    safetyBrief: 'Symptomatic intracranial hemorrhage was higher in the EVT group (approximately 14%) than the medical group (approximately 3%). Mortality at 90 days was similar between arms (approximately 32% EVT vs 35% medical, non-significant). The elevated sICH rate in the EVT arm reflects reperfusion hemorrhage in basilar territory.',
+    successorTrialId: 'attention-trial',
+    successorTrialDisplay: 'ATTENTION (2022)',
+    successorTrialClause: 'for the modern successor trial that established endovascular thrombectomy for basilar artery occlusion',
+    chainContext: 'selective use of endovascular thrombectomy for basilar artery occlusion based on imaging and time window',
+    /* claimId: best-bottom-line | source: Liu et al., Lancet Neurol 2020 */
+    bottomLineSummary: 'BEST was the first RCT for basilar EVT and was terminated early (131/240 patients) due to crossover and slow enrollment. ITT primary (mRS 0-3 at 90 days): 42% EVT vs 32% medical (OR 1.74, 95% CI 0.81–3.74, P=0.23) — not significant. Per-protocol: OR 2.90 (1.20–7.03, P=0.016) — nominally significant but requires cautious interpretation. ATTENTION (2022) provided definitive evidence for basilar EVT.',
+    inclusionCriteria: [
+      'Age 18 to 80 years',
+      'CTA-confirmed acute basilar artery occlusion',
+      'Symptom onset or last known well within 8 hours',
+      'No large established infarct on baseline CT',
+      'Ability to undergo EVT at study center',
+    ],
+    exclusionCriteria: [
+      'Intracranial hemorrhage on baseline CT',
+      'Large established infarct on baseline imaging',
+      'Rapidly improving neurological status',
+      'Pre-stroke severe disability (mRS 3 or greater)',
+      'Life expectancy less than 90 days',
+    ],
+  },
+
+  'basics-trial': {
+    id: 'basics-trial',
+    title: 'BASICS Trial',
+    subtitle: 'Basilar Artery International Cooperation Study — EVT vs Best Medical Treatment',
+    category: 'Neuro Trials',
+    isStub: true,
+    trialResult: 'NEUTRAL',
+    archetypeId: 'A' as const,
+    doi: '10.1056/NEJMoa2030297',
+    source: 'Langezaal et al. (NEJM 2021)',
+    listCategory: 'thrombectomy',
+    listDescription: 'Multinational RCT of EVT for basilar artery occlusion within 6 hours. Primary (mRS 0-3 at 90 days): 44.2% EVT vs 37.7% medical (RR 1.18, CI 0.92–1.50, P=0.19). Statistically negative; CI did not rule out meaningful benefit. Preceded ATTENTION (2022).',
+    stats: {
+      sampleSize: { value: '300', label: 'Randomized Patients' },
+      primaryEndpoint: { value: 'mRS 0-3', label: 'at 90 Days' },
+      pValue: { value: '0.19', label: 'Not Significant' },
+      effectSize: { value: 'RR 1.18', label: 'Favors EVT, CI 0.92–1.50' },
+    },
+    trialDesign: {
+      type: [
+        'Multicenter open-label RCT, 11 countries (Europe and Asia)',
+        'CTA- or MRA-confirmed basilar artery occlusion',
+        'EVT plus best medical treatment vs best medical treatment alone',
+        'Treatment window: within 6 hours of onset',
+        'Best medical treatment included IV alteplase if eligible (~40% of medical arm)',
+      ],
+      timeline: '300 patients enrolled; full enrollment target achieved',
+    },
+    efficacyResults: {
+      treatment: { percentage: 44.2, label: 'mRS 0-3 at 90 days', name: 'EVT + Best Medical Treatment' },
+      control: { percentage: 37.7, label: 'mRS 0-3 at 90 days', name: 'Best Medical Treatment Alone' },
+    },
+    intervention: {
+      treatment: 'Endovascular thrombectomy (any approved technique) plus best medical treatment within 6 hours',
+      control: 'Best medical treatment alone, including IV alteplase (0.9 mg/kg) if eligible within 4.5 hours',
+    },
+    clinicalContext: 'BASICS was a multinational trial that attempted to resolve the equipoise left by BEST. It achieved full enrollment (300 patients) but was underpowered to detect a clinically plausible treatment effect. The primary endpoint was statistically non-significant, but the confidence interval included a relative rate increase of up to 50%, leaving the true treatment effect uncertain. ATTENTION and BAOCHE (both NEJM 2022) subsequently provided definitive evidence that basilar EVT is beneficial.',
+    pearls: [
+      'Primary: mRS 0-3 at 90 days 44.2% EVT vs 37.7% medical (RR 1.18, CI 0.92–1.50, P=0.19) — not significant',
+      'CI upper bound 1.50: a 50% relative increase in favorable outcome was not excluded',
+      '~40% of the medical arm received IV alteplase as part of best medical treatment',
+      'Mortality numerically lower with EVT (38.0% vs 43.2%), not statistically significant',
+      'sICH 4.5% EVT vs 0.7% medical (P=0.07) — trending toward significance',
+    ],
+    conclusion: '',
+    questionLede: 'In patients with acute basilar artery occlusion within 6 hours, does EVT plus best medical treatment improve 90-day favorable functional outcome (mRS 0-3) compared with best medical treatment alone?',
+    /* claimId: basics-outcomes | source: Langezaal et al., NEJM 2021, doi: 10.1056/NEJMoa2030297 */
+    primaryOutcomeProse: 'In 300 patients with CTA- or MRA-confirmed basilar artery occlusion enrolled across 11 countries, EVT plus best medical treatment did not significantly improve favorable functional outcome (mRS 0-3) at 90 days compared with best medical treatment alone. mRS 0-3 was achieved in 44.2% (68 of 154) of the EVT group versus 37.7% (55 of 146) of the medical group (rate ratio 1.18, 95% CI 0.92 to 1.50, P=0.19). The confidence interval was wide and included a potential 50% relative increase in favorable outcomes with EVT, meaning the trial did not exclude a clinically meaningful benefit. Mortality was numerically lower in the EVT arm (38.0% vs 43.2%), though not statistically significant.',
+    /* claimId: basics-design | source: Langezaal et al., NEJM 2021 */
+    trialDesignNarrative: 'BASICS was an international open-label RCT enrolling patients with acute basilar artery occlusion at centers in Europe and Asia. Patients within 6 hours of onset (or last known well) with CTA- or MRA-confirmed basilar occlusion were randomized to EVT plus best medical treatment or best medical treatment alone. Best medical treatment included IV alteplase (0.9 mg/kg) if eligible; approximately 40% of the medical arm received alteplase. EVT could use any approved thrombectomy technique. The trial was designed to detect a 10-percentage-point difference in mRS 0-3 but the enrolled population had higher baseline severity than anticipated, limiting statistical power.',
+    safetyBrief: 'Symptomatic intracranial hemorrhage occurred in 4.5% of the EVT group versus 0.7% of the medical group (P=0.07). Mortality at 90 days was 38.0% EVT versus 43.2% medical, a non-significant difference. The sICH difference trended toward significance, consistent with reperfusion hemorrhage risk in the basilar territory.',
+    successorTrialId: 'attention-trial',
+    successorTrialDisplay: 'ATTENTION (2022)',
+    successorTrialClause: 'for the modern successor trial that established endovascular thrombectomy for basilar artery occlusion',
+    chainContext: 'selective use of endovascular thrombectomy for basilar artery occlusion based on imaging and time window',
+    /* claimId: basics-bottom-line | source: Langezaal et al., NEJM 2021 */
+    bottomLineSummary: 'BASICS randomized 300 patients with basilar artery occlusion at international centers within 6 hours. Primary (mRS 0-3 at 90 days): 44.2% EVT vs 37.7% medical (RR 1.18, CI 0.92–1.50, P=0.19) — not significant but with wide CI not ruling out meaningful benefit. Mortality favored EVT numerically (38.0% vs 43.2%). sICH higher in EVT (4.5% vs 0.7%). ATTENTION (2022) subsequently demonstrated definitive benefit for basilar EVT.',
+    inclusionCriteria: [
+      'Age 18 years or older',
+      'CTA- or MRA-confirmed basilar artery occlusion',
+      'Symptom onset or last known well within 6 hours',
+      'No contraindication to EVT or best medical treatment',
+    ],
+    exclusionCriteria: [
+      'Bilateral fixed dilated pupils or GCS 5 or lower (catastrophic presentation)',
+      'Large established infarct on baseline imaging',
+      'Intracranial hemorrhage on baseline CT',
+      'Pre-stroke severe disability (mRS 3 or greater)',
+      'Contraindication to antiplatelet or antithrombotic therapy',
+    ],
+  },
+
+  // ── Sub-batch 2: Antiplatelet chain ────────────────────────────────────────
+
+  'match-trial': {
+    id: 'match-trial',
+    title: 'MATCH Trial',
+    subtitle: 'Management of Atherothrombosis with Clopidogrel in High-Risk Patients',
+    category: 'Neuro Trials',
+    isStub: true,
+    trialResult: 'NEGATIVE',
+    archetypeId: 'A' as const,
+    doi: '10.1016/S0140-6736(04)16721-4',
+    source: 'Diener et al. (Lancet 2004)',
+    listCategory: 'antiplatelets',
+    listDescription: 'Aspirin added to clopidogrel vs clopidogrel alone for 18 months after stroke/TIA: no efficacy benefit (15.7% vs 16.7%, RR 0.94, CI 0.84–1.05, P=0.244) and major bleeding doubled (2.6% vs 1.3%). Preceded POINT (2018).',
+    stats: {
+      sampleSize: { value: '7,599', label: 'Randomized Patients' },
+      primaryEndpoint: { value: 'Composite', label: 'Stroke/MI/Vascular Death/Rehospitalization' },
+      pValue: { value: '0.244', label: 'Not Significant' },
+      effectSize: { value: 'RR 0.94', label: 'No Benefit, Harm Signal (CI 0.84–1.05)' },
+    },
+    trialDesign: {
+      type: [
+        'Multinational double-blind placebo-controlled RCT',
+        'Recent ischemic stroke or TIA plus at least one additional vascular risk factor',
+        'Aspirin 75 mg/day added to clopidogrel 75 mg/day vs clopidogrel alone for 18 months',
+        'Comparator arm was clopidogrel monotherapy, not aspirin monotherapy',
+      ],
+      timeline: '7,599 patients enrolled; 18-month follow-up per patient',
+    },
+    efficacyResults: {
+      treatment: { percentage: 15.7, label: 'Composite endpoint at 18 months', name: 'Aspirin + Clopidogrel' },
+      control: { percentage: 16.7, label: 'Composite endpoint at 18 months', name: 'Clopidogrel Alone' },
+    },
+    intervention: {
+      treatment: 'Aspirin 75 mg/day plus clopidogrel 75 mg/day for 18 months',
+      control: 'Clopidogrel 75 mg/day plus aspirin-matched placebo for 18 months',
+    },
+    clinicalContext: 'MATCH tested whether adding aspirin to long-term clopidogrel therapy after stroke or TIA would reduce recurrent vascular events. It found no efficacy benefit and a doubling of major bleeding, establishing that long-duration DAPT causes net harm. This set the stage for CHANCE (2013) and POINT (2018), which showed that short-duration DAPT (21 days) is beneficial. The critical teaching insight: duration of DAPT, not the combination itself, is the key variable.',
+    pearls: [
+      'No efficacy benefit: 15.7% vs 16.7% composite endpoint (RR 0.94, CI 0.84–1.05, P=0.244)',
+      'Major bleeding doubled: 2.6% combination vs 1.3% clopidogrel alone',
+      'Comparator was clopidogrel alone, not aspirin alone -- important for interpreting results vs CHARISMA',
+      '18-month treatment duration -- harm emerged with prolonged exposure',
+      'Established that long-term DAPT after stroke causes net harm; duration is the critical variable',
+    ],
+    conclusion: '',
+    questionLede: 'In patients with recent ischemic stroke or TIA with at least one additional vascular risk factor already receiving clopidogrel, does adding aspirin reduce recurrent vascular events over 18 months?',
+    /* claimId: match-outcomes | source: Diener et al., Lancet 2004, doi: 10.1016/S0140-6736(04)16721-4 */
+    primaryOutcomeProse: 'In 7,599 patients with recent ischemic stroke or TIA plus at least one additional vascular risk factor already receiving clopidogrel, adding aspirin 75 mg/day did not reduce the composite endpoint of ischemic stroke, myocardial infarction, vascular death, or rehospitalization for acute ischemia over 18 months. The primary endpoint occurred in 15.7% of the combination group versus 16.7% of the clopidogrel-alone group (relative risk 0.94, 95% CI 0.84 to 1.05, P=0.244). Major bleeding and life-threatening bleeding were both significantly higher with the combination (2.6% vs 1.3%), establishing that adding aspirin to long-term clopidogrel causes harm without efficacy benefit.',
+    /* claimId: match-design | source: Diener et al., Lancet 2004 */
+    trialDesignNarrative: 'MATCH enrolled patients within 3 months of a qualifying ischemic stroke or TIA who had at least one additional vascular risk factor (prior stroke or TIA, diabetes, symptomatic peripheral arterial disease, or ischemic heart disease). All patients were already receiving clopidogrel 75 mg/day and were randomized to aspirin 75 mg/day or matching placebo for 18 months. The comparator arm was clopidogrel monotherapy, not aspirin monotherapy -- a critical design difference from CHARISMA. The primary composite endpoint included ischemic stroke, MI, vascular death, and rehospitalization for acute ischemia.',
+    safetyBrief: 'Life-threatening bleeding occurred in 2.6% of the combination group versus 1.3% of the clopidogrel-alone group (absolute difference 1.3%). Major bleeding was similarly doubled. Fatal and intracranial hemorrhage were both numerically higher with the combination. The net harm of adding aspirin to long-term clopidogrel was unambiguous and statistically significant.',
+    successorTrialId: 'point-trial',
+    successorTrialDisplay: 'POINT (2018)',
+    successorTrialClause: 'for the modern successor trial that defined the appropriate short-duration window for dual antiplatelet therapy after minor stroke',
+    chainContext: 'short-duration dual antiplatelet therapy after minor stroke or high-risk TIA',
+    /* claimId: match-bottom-line | source: Diener et al., Lancet 2004 */
+    bottomLineSummary: 'MATCH enrolled 7,599 patients with recent stroke/TIA on clopidogrel and randomized them to add aspirin vs continue clopidogrel alone for 18 months. No efficacy benefit: 15.7% vs 16.7% composite endpoint (RR 0.94, CI 0.84–1.05, P=0.244). Major bleeding doubled: 2.6% vs 1.3%. Established that long-duration DAPT after stroke causes net harm. POINT (2018) subsequently showed short-duration DAPT (21 days) is beneficial -- duration is the key variable.',
+    inclusionCriteria: [
+      'Age 40 years or older',
+      'Recent ischemic stroke (within 3 months) or TIA with at least one additional vascular risk factor',
+      'Currently receiving clopidogrel 75 mg/day',
+      'No contraindication to antiplatelet therapy',
+    ],
+    exclusionCriteria: [
+      'Contraindication to aspirin or clopidogrel',
+      'Planned surgical procedure requiring antiplatelet discontinuation',
+      'Active bleeding or high bleeding risk',
+      'Use of warfarin or other anticoagulation',
+      'Severe renal or hepatic impairment',
+    ],
+  },
+
+  'charisma-trial': {
+    id: 'charisma-trial',
+    title: 'CHARISMA Trial',
+    subtitle: 'Clopidogrel for High Atherothrombotic Risk and Ischemic Stabilization, Management, and Avoidance',
+    category: 'Neuro Trials',
+    isStub: true,
+    trialResult: 'NEGATIVE',
+    archetypeId: 'A' as const,
+    doi: '10.1056/NEJMoa060989',
+    source: 'Bhatt et al. (NEJM 2006)',
+    listCategory: 'antiplatelets',
+    listDescription: 'Aspirin + clopidogrel vs aspirin alone for median 28 months in broad CV risk population: no overall benefit (6.8% vs 7.3%, RR 0.93, CI 0.83–1.05, P=0.22) and harm in asymptomatic subgroup. Preceded POINT (2018).',
+    stats: {
+      sampleSize: { value: '15,603', label: 'Randomized Patients' },
+      primaryEndpoint: { value: 'MI/Stroke/CV Death', label: 'Median 28 Months Follow-up' },
+      pValue: { value: '0.22', label: 'Not Significant (Overall)' },
+      effectSize: { value: 'RR 0.93', label: 'No Significant Overall Benefit (CI 0.83–1.05)' },
+    },
+    trialDesign: {
+      type: [
+        'International double-blind placebo-controlled RCT, 45 countries',
+        'Broad CV risk: established CV disease (symptomatic) OR multiple CV risk factors (asymptomatic)',
+        'Aspirin + clopidogrel 75 mg/day vs aspirin + placebo; median 28 months',
+        'Enrolled both symptomatic (prior stroke/TIA/MI) and asymptomatic high-risk patients',
+      ],
+      timeline: '15,603 patients; median 28-month follow-up',
+    },
+    efficacyResults: {
+      treatment: { percentage: 6.8, label: 'MI/stroke/CV death (28 months)', name: 'Aspirin + Clopidogrel' },
+      control: { percentage: 7.3, label: 'MI/stroke/CV death (28 months)', name: 'Aspirin Alone' },
+    },
+    intervention: {
+      treatment: 'Aspirin (75–162 mg/day per local standard) plus clopidogrel 75 mg/day',
+      control: 'Aspirin (75–162 mg/day) plus clopidogrel-matched placebo',
+    },
+    clinicalContext: 'CHARISMA used a broader population than MATCH, comparing aspirin plus clopidogrel versus aspirin alone across a large heterogeneous cardiovascular risk cohort. The overall trial was negative. A pre-specified subgroup showed modest benefit in symptomatic patients (prior MI, stroke, or ACS) but excess harm in asymptomatic primary-prevention patients. This reinforced that long-duration DAPT is not appropriate as a general cardiovascular prevention strategy and contributed to the design of POINT (2018), which focused on short-duration DAPT in high-risk symptomatic stroke and TIA patients.',
+    pearls: [
+      'Overall primary: 6.8% combination vs 7.3% aspirin alone (RR 0.93, CI 0.83–1.05, P=0.22) — not significant',
+      'Pre-specified symptomatic subgroup: RR 0.88 (CI 0.77–0.99) — modest benefit signal, not practice-changing alone',
+      'Pre-specified asymptomatic subgroup: RR 1.20 (CI 0.91–1.59) — excess harm with combination',
+      'Moderate bleeding significantly higher with combination: 2.1% vs 1.3%',
+      'Reinforced that DAPT harm scales with duration and is especially pronounced in low-risk primary prevention',
+    ],
+    conclusion: '',
+    questionLede: 'In patients with established cardiovascular disease or multiple cardiovascular risk factors, does adding clopidogrel to aspirin reduce MI, stroke, or cardiovascular death over a median 28-month follow-up?',
+    /* claimId: charisma-outcomes | source: Bhatt et al., NEJM 2006, doi: 10.1056/NEJMoa060989 */
+    primaryOutcomeProse: 'In 15,603 patients with established cardiovascular disease or multiple cardiovascular risk factors, aspirin plus clopidogrel did not significantly reduce the composite of myocardial infarction, stroke, or cardiovascular death over a median 28 months. The primary endpoint occurred in 6.8% of the combination group versus 7.3% of the aspirin-alone group (relative risk 0.93, 95% CI 0.83 to 1.05, P=0.22). A pre-specified symptomatic subgroup analysis showed a modest benefit for patients with prior symptomatic atherothrombotic disease (RR 0.88, 95% CI 0.77 to 0.99), while the asymptomatic primary-prevention subgroup showed excess harm (RR 1.20, 95% CI 0.91 to 1.59). Overall there was no significant benefit and a clear bleeding excess with combination therapy.',
+    /* claimId: charisma-design | source: Bhatt et al., NEJM 2006 */
+    trialDesignNarrative: 'CHARISMA enrolled patients from two populations: established symptomatic atherothrombotic disease (prior MI, ischemic stroke, or symptomatic peripheral arterial disease) and asymptomatic patients with multiple cardiovascular risk factors. All received aspirin at country-standard dose (75–162 mg/day) and were randomized to clopidogrel 75 mg/day or matching placebo. The trial was conducted across 768 centers in 45 countries with a median 28-month follow-up -- far longer than the short-duration DAPT studied in CHANCE (2013) and POINT (2018). The duration difference is central to understanding why CHARISMA was negative while short-term trials were positive.',
+    safetyBrief: 'Moderate bleeding occurred in 2.1% of the combination group versus 1.3% of the aspirin-alone group (P<0.001). Severe bleeding was similar between groups. There was no significant difference in fatal bleeding. The bleeding excess persisted across the 28-month treatment period, with absolute risk increasing over time.',
+    successorTrialId: 'point-trial',
+    successorTrialDisplay: 'POINT (2018)',
+    successorTrialClause: 'for the modern successor trial that defined the appropriate short-duration window for dual antiplatelet therapy after minor stroke',
+    chainContext: 'short-duration dual antiplatelet therapy after minor stroke or high-risk TIA',
+    /* claimId: charisma-bottom-line | source: Bhatt et al., NEJM 2006 */
+    bottomLineSummary: 'CHARISMA enrolled 15,603 patients with established CV disease or multiple risk factors and compared aspirin+clopidogrel vs aspirin alone over median 28 months. Primary (MI/stroke/CV death): 6.8% vs 7.3% (RR 0.93, CI 0.83–1.05, P=0.22) — not significant overall. Symptomatic subgroup: modest benefit (RR 0.88). Asymptomatic subgroup: excess harm (RR 1.20). Moderate bleeding doubled. POINT (2018) showed short-duration DAPT after minor stroke/TIA is beneficial.',
+    inclusionCriteria: [
+      'Age 45 years or older',
+      'Established cardiovascular disease (prior MI, ischemic stroke, or symptomatic PAD) OR multiple cardiovascular risk factors without established disease',
+      'Stable on aspirin (75–162 mg/day)',
+      'No recent unstable coronary syndrome requiring immediate revascularization',
+    ],
+    exclusionCriteria: [
+      'Need for oral anticoagulation or NSAID therapy',
+      'High bleeding risk (recent surgery, active peptic ulcer)',
+      'Prior intolerance to aspirin or clopidogrel',
+      'Severe renal impairment (creatinine above 2.0 mg/dL)',
+      'Life expectancy less than 2 years',
+    ],
+  },
+
+  // ── Sub-batch 3: ICH surgical chain ────────────────────────────────────────
+
+  'stich-i-trial': {
+    id: 'stich-i-trial',
+    title: 'STICH I Trial',
+    subtitle: 'Surgical Treatment of Intracerebral Hemorrhage',
+    category: 'Neuro Trials',
+    isStub: true,
+    trialResult: 'NEGATIVE',
+    archetypeId: 'A' as const,
+    doi: '10.1016/S0140-6736(05)17826-X',
+    source: 'Mendelow et al. (Lancet 2005)',
+    listDescription: 'Early surgery vs initial conservative management for supratentorial ICH: no benefit (favorable GOS 26% vs 24%, OR 0.89, CI 0.66–1.19, P=0.414). Post-hoc lobar subgroup signal led to STICH II. Preceded ENRICH (2024).',
+    stats: {
+      sampleSize: { value: '1,033', label: 'Randomized Patients' },
+      primaryEndpoint: { value: 'Favorable GOS', label: 'at 6 Months' },
+      pValue: { value: '0.414', label: 'Not Significant' },
+      effectSize: { value: 'OR 0.89', label: 'No Benefit (CI 0.66–1.19)' },
+    },
+    trialDesign: {
+      type: [
+        'International multicenter RCT, 83 centers in 27 countries',
+        'Spontaneous supratentorial ICH within 72 hours of onset',
+        'Early surgery (within 24 hours of randomization) vs initial conservative management',
+        'Conservative arm permitted delayed surgery if clinical deterioration',
+        'Equipoise required: surgeon must have been uncertain which treatment was better',
+      ],
+      timeline: '1,033 patients enrolled; 27 countries; 6-month follow-up',
+    },
+    efficacyResults: {
+      treatment: { percentage: 26, label: 'Favorable GOS at 6 months', name: 'Early Surgery' },
+      control: { percentage: 24, label: 'Favorable GOS at 6 months', name: 'Initial Conservative Management' },
+    },
+    intervention: {
+      treatment: 'Early surgical evacuation within 24 hours of randomization (craniotomy in most cases)',
+      control: 'Initial best medical management; delayed surgery permitted if neurological deterioration',
+    },
+    clinicalContext: 'STICH I was the largest surgical ICH trial of its era. The equipoise requirement excluded definitive surgical and medical candidates, selecting a middle-ground population. Most procedures were open craniotomies, whose invasiveness may have offset the benefit of hematoma removal. A post-hoc subgroup suggested that lobar ICH within 1 cm of the cortical surface might benefit from surgery -- the hypothesis pursued in STICH II. ENRICH (2024) later demonstrated benefit using minimally invasive trans-sulcal surgery, suggesting technique was the barrier, not the concept of hematoma evacuation.',
+    pearls: [
+      'No significant benefit of early surgery: favorable GOS 26% vs 24% (OR 0.89, CI 0.66–1.19, P=0.414)',
+      'Equipoise requirement excluded the clearest surgical and medical candidates',
+      'Post-hoc lobar subgroup (ICH within 1 cm of cortex): trend toward benefit — hypothesis-generating only',
+      'Predominantly open craniotomy — surgical trauma may have offset hematoma evacuation benefit',
+      'Led directly to STICH II targeting the lobar subgroup signal in a dedicated trial',
+    ],
+    conclusion: '',
+    questionLede: 'In patients with spontaneous supratentorial intracerebral hemorrhage, does early surgical evacuation improve 6-month functional outcome compared with initial best medical management?',
+    /* claimId: stich-i-outcomes | source: Mendelow et al., Lancet 2005, doi: 10.1016/S0140-6736(05)17826-X */
+    primaryOutcomeProse: 'In 1,033 patients with spontaneous supratentorial ICH enrolled at 83 centers across 27 countries, early surgery did not significantly improve favorable functional outcome at 6 months compared with initial conservative management. A favorable outcome on the Glasgow Outcome Scale was achieved in 26% of the early surgery group versus 24% of the initial conservative group (OR 0.89, 95% CI 0.66 to 1.19, P=0.414). The conservative arm allowed delayed surgery if neurological deterioration occurred; 26% of initially conservative patients ultimately underwent surgery. A post-hoc subgroup analysis suggested a possible benefit for superficial lobar ICH within 1 cm of the cortical surface, generating the hypothesis tested in STICH II.',
+    /* claimId: stich-i-design | source: Mendelow et al., Lancet 2005 */
+    trialDesignNarrative: 'STICH I enrolled patients with spontaneous supratentorial ICH within 72 hours of onset at centers across 27 countries. The critical design feature was the equipoise requirement: surgeons enrolled only those patients for whom they were genuinely uncertain whether surgery or conservative management was superior. This excluded patients with clear indications in either direction. Most surgical procedures were open craniotomies, which carry their own morbidity from brain retraction and cortical transgression. The primary outcome was the Glasgow Outcome Scale (GOS) at 6 months, dichotomized as favorable (good recovery or moderate disability) versus unfavorable.',
+    safetyBrief: 'Unfavorable outcome (death or severe disability on GOS) at 6 months was 74% in the surgical group versus 76% in the conservative group -- a non-significant difference. Mortality at 6 months was approximately 36% in each arm. No significant difference in safety outcomes was demonstrated between early surgery and conservative management.',
+    successorTrialId: 'enrich-trial',
+    successorTrialDisplay: 'ENRICH (2024)',
+    successorTrialClause: 'for the modern successor trial that established minimally invasive evacuation for selected lobar intracerebral hemorrhage',
+    chainContext: 'minimally invasive evacuation of selected lobar intracerebral hematomas',
+    /* claimId: stich-i-bottom-line | source: Mendelow et al., Lancet 2005 */
+    bottomLineSummary: 'STICH I enrolled 1,033 patients with supratentorial ICH from 27 countries. Early surgery showed no significant benefit: favorable GOS at 6 months 26% vs 24% (OR 0.89, CI 0.66–1.19, P=0.414). The equipoise requirement and predominant use of open craniotomy limited the detectable benefit. Post-hoc lobar subgroup signal led to STICH II. ENRICH (2024) later showed benefit with minimally invasive trans-sulcal surgery in selected lobar ICH.',
+    inclusionCriteria: [
+      'Spontaneous supratentorial ICH confirmed on CT',
+      'Within 72 hours of ictus',
+      'Surgeon uncertain whether surgery or conservative management was better (equipoise required)',
+      'Hematoma volume and location deemed surgically accessible',
+    ],
+    exclusionCriteria: [
+      'Infratentorial hemorrhage (posterior fossa)',
+      'ICH secondary to known cause (aneurysm, AVM, tumor, anticoagulation)',
+      'GCS 3 or 4 (catastrophic)',
+      'Definitive surgical or definitive conservative indication (no equipoise)',
+      'Significant pre-stroke disability',
+    ],
+  },
+
+  'stich-ii-trial': {
+    id: 'stich-ii-trial',
+    title: 'STICH II Trial',
+    subtitle: 'Surgical Treatment of Intracerebral Hemorrhage II — Superficial Lobar ICH',
+    category: 'Neuro Trials',
+    isStub: true,
+    trialResult: 'NEGATIVE',
+    archetypeId: 'A' as const,
+    doi: '10.1016/S0140-6736(13)60986-1',
+    source: 'Mendelow et al. (Lancet 2013)',
+    listDescription: 'Early surgery vs conservative management for superficial lobar ICH (10–100 mL, within 1 cm of cortex): no significant benefit (unfavorable outcome 59% surgery vs 62% conservative, OR 0.86, CI 0.62–1.20, P=0.367). STICH I lobar subgroup signal not confirmed. Preceded ENRICH (2024).',
+    stats: {
+      sampleSize: { value: '601', label: 'Randomized Patients' },
+      primaryEndpoint: { value: 'Unfavorable Outcome', label: 'at 6 Months' },
+      pValue: { value: '0.367', label: 'Not Significant' },
+      effectSize: { value: 'OR 0.86', label: 'Slight Favor Surgery, Not Significant (CI 0.62–1.20)' },
+    },
+    trialDesign: {
+      type: [
+        'International multicenter RCT; designed to test STICH I lobar subgroup signal',
+        'Lobar ICH only: 10–100 mL, within 1 cm of cortical surface, no IVH',
+        'Early craniotomy within 12 hours of randomization vs initial conservative management',
+        'GCS 5 or greater required at enrollment',
+        'Equipoise requirement retained from STICH I design',
+      ],
+      timeline: '601 patients enrolled; full enrollment target achieved',
+    },
+    efficacyResults: {
+      treatment: { percentage: 59, label: 'Unfavorable outcome at 6 months', name: 'Early Surgery' },
+      control: { percentage: 62, label: 'Unfavorable outcome at 6 months', name: 'Initial Conservative Management' },
+    },
+    intervention: {
+      treatment: 'Early craniotomy and hematoma evacuation within 12 hours of randomization',
+      control: 'Initial best medical management; delayed surgery permitted if clinical deterioration',
+    },
+    clinicalContext: 'STICH II was a focused test of the hypothesis that superficial lobar ICH specifically benefits from early surgery. Despite recruiting 601 patients meeting these criteria, the primary endpoint was not met. The absolute difference was 3 percentage points (59% vs 62% unfavorable) with a wide confidence interval. Open craniotomy remained the predominant technique. ENRICH (2024) later tested minimally invasive trans-sulcal surgery in a similar population and demonstrated a positive result, suggesting that the surgical approach rather than the concept was the barrier.',
+    pearls: [
+      'Lobar ICH-specific: excluded all deep and posterior fossa hemorrhages',
+      'Primary (unfavorable outcome at 6 months): 59% surgery vs 62% conservative (OR 0.86, CI 0.62–1.20, P=0.367)',
+      'STICH I lobar subgroup signal was not confirmed in this dedicated powered trial',
+      'Absolute difference was 3 percentage points with wide CI -- insufficient precision',
+      'Predominantly used open craniotomy -- same technique limitation as STICH I',
+    ],
+    conclusion: '',
+    questionLede: 'In patients with spontaneous superficial lobar intracerebral hemorrhage (10–100 mL, within 1 cm of cortex), does early surgical evacuation improve 6-month functional outcome compared with initial best medical management?',
+    /* claimId: stich-ii-outcomes | source: Mendelow et al., Lancet 2013, doi: 10.1016/S0140-6736(13)60986-1 */
+    primaryOutcomeProse: 'In 601 patients with spontaneous superficial lobar ICH (10–100 mL, within 1 cm of the cortical surface, no intraventricular extension) enrolled using equipoise-based randomization, early surgical evacuation did not significantly reduce unfavorable functional outcome at 6 months. Unfavorable outcome occurred in 59% (174 of 307) of the surgical group versus 62% (178 of 286) of the conservative group (OR 0.86, 95% CI 0.62 to 1.20, P=0.367). The STICH I lobar subgroup signal was not confirmed in this dedicated, adequately powered trial.',
+    /* claimId: stich-ii-design | source: Mendelow et al., Lancet 2013 */
+    trialDesignNarrative: 'STICH II was designed based on the STICH I post-hoc finding that lobar ICH within 1 cm of the cortical surface might benefit from early surgery. The trial enrolled patients with spontaneous superficial lobar ICH (10–100 mL, within 1 cm of cortex, no intraventricular extension, GCS 5 or greater) using the same equipoise-based design as STICH I. Early surgery was required within 12 hours of randomization and was predominantly craniotomy. The conservative arm allowed delayed surgery if the patient deteriorated; 21% of initially conservative patients ultimately required surgery. The primary outcome was a prognosis-adjusted endpoint: favorable or unfavorable outcome at 6 months.',
+    safetyBrief: 'Mortality at 6 months was 18% in the surgical group versus 24% in the conservative group (not statistically significant). Surgical complications and rebleeding were not significantly different between groups. The surgical arm had more early procedure-related events but achieved numerically lower mortality -- neither difference was statistically significant.',
+    successorTrialId: 'enrich-trial',
+    successorTrialDisplay: 'ENRICH (2024)',
+    successorTrialClause: 'for the modern successor trial that established minimally invasive evacuation for selected lobar intracerebral hemorrhage',
+    chainContext: 'minimally invasive evacuation of selected lobar intracerebral hematomas',
+    /* claimId: stich-ii-bottom-line | source: Mendelow et al., Lancet 2013 */
+    bottomLineSummary: 'STICH II enrolled 601 patients with superficial lobar ICH to test the STICH I lobar subgroup signal. Primary (unfavorable outcome at 6 months): 59% surgery vs 62% conservative (OR 0.86, CI 0.62–1.20, P=0.367) — not significant. The STICH I hypothesis was not confirmed. ENRICH (2024) subsequently demonstrated benefit using minimally invasive trans-sulcal surgery, suggesting technique was the critical variable.',
+    inclusionCriteria: [
+      'Spontaneous lobar ICH confirmed on CT',
+      'Hematoma volume 10 to 100 mL',
+      'Hematoma within 1 cm of the cortical surface (superficial lobar)',
+      'No intraventricular hemorrhage',
+      'GCS 5 or greater at enrollment',
+      'Surgeon uncertain whether surgery or conservative management was better',
+    ],
+    exclusionCriteria: [
+      'Deep ICH (basal ganglia, thalamus, internal capsule)',
+      'Posterior fossa hemorrhage',
+      'Intraventricular extension',
+      'ICH secondary to identified cause (AVM, aneurysm, tumor)',
+      'GCS 3 or 4 (catastrophic presentation)',
+      'Significant pre-stroke disability',
+    ],
+  },
+
+  'mistie-iii-trial': {
+    id: 'mistie-iii-trial',
+    title: 'MISTIE III Trial',
+    subtitle: 'Minimally Invasive Surgery Plus rt-PA for ICH Evacuation',
+    category: 'Neuro Trials',
+    isStub: true,
+    trialResult: 'NEGATIVE',
+    archetypeId: 'A' as const,
+    doi: '10.1016/S0140-6736(19)30195-3',
+    source: 'Hanley et al. (Lancet 2019)',
+    listDescription: 'Image-guided catheter plus alteplase vs conservative management for ICH 30 mL or larger: no primary benefit (mRS 0-3 at 1 year 45% vs 41%, OR 1.20, CI 0.81–1.81, P=0.33). Pre-specified end-of-treatment hematoma ≤15 mL subgroup showed benefit. Preceded ENRICH (2024).',
+    stats: {
+      sampleSize: { value: '506', label: 'Randomized Patients' },
+      primaryEndpoint: { value: 'mRS 0-3', label: 'at 1 Year' },
+      pValue: { value: '0.33', label: 'Not Significant' },
+      effectSize: { value: 'OR 1.20', label: 'No Significant Benefit (CI 0.81–1.81)' },
+    },
+    trialDesign: {
+      type: [
+        'International multicenter phase 3 RCT',
+        'Supratentorial ICH 30 mL or larger confirmed on CT',
+        'CT-guided stereotactic catheter into hematoma; intermittent alteplase (1 mg every 8 hours, up to 9 doses)',
+        'Treatment target: residual hematoma volume 15 mL or less before catheter removal',
+        'Compared with standard medical management (no hematoma evacuation)',
+      ],
+      timeline: '506 patients; completed as planned; 1-year follow-up',
+    },
+    efficacyResults: {
+      treatment: { percentage: 45, label: 'mRS 0-3 at 1 year', name: 'MISTIE (Catheter + Alteplase)' },
+      control: { percentage: 41, label: 'mRS 0-3 at 1 year', name: 'Standard Medical Management' },
+    },
+    intervention: {
+      treatment: 'CT-guided stereotactic catheter into hematoma with intermittent alteplase (1 mg every 8 hours, up to 9 doses) targeting residual volume 15 mL or less',
+      control: 'Standard medical management (no hematoma evacuation)',
+    },
+    clinicalContext: 'MISTIE III tested a catheter-based approach to hematoma evacuation: image-guided placement followed by intermittent alteplase to lyse and drain the clot. The overall trial was negative, but a pre-specified subgroup showed benefit in patients achieving end-of-treatment hematoma volume 15 mL or less, suggesting that the degree of clot clearance, not just the technique, is the critical variable. This observation informed ENRICH, which used a trans-sulcal surgical approach achieving faster and more complete evacuation in selected lobar ICH.',
+    pearls: [
+      'Primary negative: mRS 0-3 at 1 year 45% vs 41% (OR 1.20, CI 0.81–1.81, P=0.33)',
+      'Pre-specified end-of-treatment hematoma ≤15 mL subgroup: OR approximately 1.79 (CI 1.03–3.12) — significant',
+      'Procedural sICH 5.8% MISTIE vs 1.9% control during treatment period',
+      'Established that greater hematoma reduction (≤15 mL residual) correlates with better outcomes',
+      'ENRICH (2024) achieved more complete evacuation with trans-sulcal surgery — positive result',
+    ],
+    conclusion: '',
+    questionLede: 'In patients with supratentorial intracerebral hemorrhage of 30 mL or larger, does image-guided catheter placement plus intermittent alteplase improve 1-year functional outcome compared with standard medical management?',
+    /* claimId: mistie-iii-outcomes | source: Hanley et al., Lancet 2019, doi: 10.1016/S0140-6736(19)30195-3 */
+    primaryOutcomeProse: 'In 506 patients with supratentorial ICH 30 mL or larger randomized to image-guided catheter plus alteplase or standard medical management, MISTIE did not significantly improve functional independence (mRS 0-3) at 1 year. mRS 0-3 was achieved in 45% (110 of 245) in the MISTIE group versus 41% (103 of 250) in the standard care group (adjusted OR 1.20, 95% CI 0.81 to 1.81, P=0.33). A pre-specified subgroup analysis showed a significant benefit in patients achieving end-of-treatment hematoma volume 15 mL or less (OR approximately 1.79, 95% CI 1.03 to 3.12), suggesting that the degree of hematoma reduction, not just the technique, is the critical determinant of outcome.',
+    /* claimId: mistie-iii-design | source: Hanley et al., Lancet 2019 */
+    trialDesignNarrative: 'MISTIE III was an international phase 3 RCT enrolling patients with supratentorial ICH 30 mL or larger who were at least 12 hours from ictus and clinically stable. A CT-guided stereotactic catheter was placed into the hematoma and alteplase (1 mg every 8 hours, up to 9 doses over approximately 72 hours) was instilled to lyse the clot; fluid was drained passively. The target was residual hematoma 15 mL or less before catheter removal. The 1-year follow-up was longer than most surgical ICH trials. MISTIE differed fundamentally from ENRICH in technique: catheter-based lysis versus trans-sulcal surgical aspiration, with the latter achieving faster and more complete evacuation.',
+    safetyBrief: 'Procedural symptomatic intracranial hemorrhage occurred in 5.8% of MISTIE patients during the treatment period versus 1.9% in the standard care group. Bacterial meningitis or ventriculitis occurred in 5.7% of MISTIE patients from prolonged catheter indwelling. There was no significant difference in overall 1-year mortality between groups.',
+    successorTrialId: 'enrich-trial',
+    successorTrialDisplay: 'ENRICH (2024)',
+    successorTrialClause: 'for the modern successor trial that established minimally invasive evacuation for selected lobar intracerebral hemorrhage',
+    chainContext: 'minimally invasive evacuation of selected lobar intracerebral hematomas',
+    /* claimId: mistie-iii-bottom-line | source: Hanley et al., Lancet 2019 */
+    bottomLineSummary: 'MISTIE III enrolled 506 patients with ICH 30 mL or larger and tested catheter-based clot lysis vs standard care. Primary negative: mRS 0-3 at 1 year 45% vs 41% (OR 1.20, CI 0.81–1.81, P=0.33). Pre-specified end-of-treatment hematoma ≤15 mL subgroup showed benefit (OR ~1.79, CI 1.03–3.12). Established that greater hematoma reduction correlates with better outcomes. ENRICH (2024) achieved this more reliably with trans-sulcal surgical access.',
+    inclusionCriteria: [
+      'Supratentorial spontaneous ICH 30 mL or larger on baseline CT',
+      'Age 18 years or older',
+      'At least 12 hours post-ictus (clinical stability required)',
+      'Hematoma accessible for stereotactic catheter placement',
+      'GCS 5 or greater',
+    ],
+    exclusionCriteria: [
+      'Infratentorial (posterior fossa) hemorrhage',
+      'ICH secondary to anticoagulation, AVM, aneurysm, or tumor',
+      'Planned early craniotomy within 24 hours',
+      'Intraventricular hemorrhage causing obstructive hydrocephalus requiring immediate intervention',
+      'INR above 1.5 or platelets below 100,000 at enrollment',
     ],
   },
 };

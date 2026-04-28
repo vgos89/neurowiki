@@ -1,4 +1,5 @@
 import { LEGACY_TRIAL_CATALOG_META } from './trialCatalogMeta';
+import { TRIAL_DATA } from './trialData';
 
 export type TrialCategoryKey =
   | 'prehospital-triage'
@@ -18,6 +19,12 @@ export interface TrialItem {
   isPlaceholder: boolean;
   description?: string;
   clinicalContext?: string;
+  /** Legend-card presentation slice. Projected from TrialMetadata.legend. */
+  legend?: {
+    finding?: string;
+    bottomLineTag?: string;
+    keyStat?: string;
+  };
 }
 
 export const categoryStyles: Record<
@@ -376,6 +383,7 @@ function enrichTrial(item: Omit<TrialItem, 'year'>): TrialItem {
   return {
     ...item,
     year: 0,
+    legend: TRIAL_DATA[item.id]?.legend,
   };
 }
 
@@ -397,6 +405,7 @@ const restoredLegacyTrials: TrialItem[] = Object.entries(LEGACY_TRIAL_CATALOG_ME
       isPlaceholder: false,
       description: metadata.description,
       clinicalContext: metadata.clinicalContext,
+      legend: TRIAL_DATA[id]?.legend,
     };
   });
 
