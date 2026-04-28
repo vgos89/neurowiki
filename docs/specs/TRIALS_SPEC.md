@@ -998,7 +998,8 @@ questionLede?: string;        // PICO-style question lede rendered below H1
 primaryOutcomeProse?: string; // prose paragraph for the primary outcome card (no chart)
 trialDesignNarrative?: string;// one paragraph trial design (replaces structured rendering)
 safetyBrief?: string;         // 1-2 sentence safety summary
-successorTrialId?: string;    // ID of a representative successor trial for the amber banner link
+successorTrialId?: string;    // ID of the representative successor trial (used for Link href)
+successorTrialDisplay?: string;// Display name for amber banner + see-also chip, e.g. "ESCAPE (2015)"
 ```
 
 Stubs still provide the base required fields (`stats`, `trialDesign`, `efficacyResults`, `intervention`, `clinicalContext`, `pearls`, `conclusion`, `source`) to satisfy the TypeScript interface. These are used by the BottomLineDrawer and by any fallback path that loads the legacy page layout.

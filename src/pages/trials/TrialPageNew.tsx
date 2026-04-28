@@ -6419,7 +6419,7 @@ const TrialPageNew: React.FC = () => {
                     to={`/trials/${tm.successorTrialId}`}
                     style={{ color: '#1746A2', fontWeight: 600, textDecoration: 'underline' }}
                   >
-                    ESCAPE (2015)
+                    {tm.successorTrialDisplay ?? tm.successorTrialId}
                   </Link>
                   {' '}for the modern successor trial that established EVT as standard of care.
                 </>
@@ -6512,7 +6512,7 @@ const TrialPageNew: React.FC = () => {
             <div className="flex flex-wrap gap-2">
               {tm.successorTrialId && (
                 <Link to={`/trials/${tm.successorTrialId}`} className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">
-                  ESCAPE Trial (modern successor)
+                  {tm.successorTrialDisplay ?? tm.successorTrialId} (modern successor)
                 </Link>
               )}
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">
@@ -6527,9 +6527,9 @@ const TrialPageNew: React.FC = () => {
           <BottomLineDrawer
             trialName={shortName}
             body={tm.bottomLineSummary}
-            bedsidePearl={`Historical reference trial predating modern stent-retriever technology and CTA-based patient selection. See ESCAPE (2015) for the modern EVT evidence base.`}
+            bedsidePearl={`Historical reference trial predating modern stent-retriever technology and CTA-based patient selection. See ${tm.successorTrialDisplay ?? tm.successorTrialId ?? 'the modern successor trial'} for current evidence.`}
             seeAlsoLinks={[
-              ...(tm.successorTrialId ? [{ label: 'ESCAPE Trial', href: `/trials/${tm.successorTrialId}` }] : []),
+              ...(tm.successorTrialId ? [{ label: tm.successorTrialDisplay ?? tm.successorTrialId, href: `/trials/${tm.successorTrialId}` }] : []),
               { label: 'Stroke Code pathway', href: '/guide/stroke-code' },
             ]}
             citation={tm.source}

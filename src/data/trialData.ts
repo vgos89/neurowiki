@@ -240,6 +240,9 @@ export interface TrialMetadata {
   safetyBrief?: string;
   /** ID of the representative successor trial for the mandatory amber banner link (§7c.5). */
   successorTrialId?: string;
+  /** Display name for the successor trial shown in the amber banner link and see-also chip,
+   *  e.g. "ESCAPE (2015)" or "ENRICH (2023)". Stub pages use this instead of hardcoding. */
+  successorTrialDisplay?: string;
   // ─────────────────────────────────────────────────────────────────────────
   /** RCT predecessor chain for "what changed" teaching (TRIALS_SPEC v1.2 §7b).
    *  Mutually exclusive with historicalContext -- a trial should not have both. */
@@ -8424,6 +8427,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     trialDesignNarrative: 'IMS-III enrolled patients who received IV alteplase (0.9 mg/kg standard dose) within 3 hours of stroke onset and had an NIHSS of 8 or greater. Patients were randomized within 40 minutes of alteplase infusion start to continue IV alteplase alone or proceed to endovascular therapy. The endovascular arm used intra-arterial tPA and, in many cases, coil-based mechanical devices (MERCI retriever, early Penumbra system). Critically, CTA or MRA confirmation of large-vessel occlusion was not required -- a substantial proportion of enrolled patients likely had no retrievable thrombus, diluting any treatment effect.',
     safetyBrief: 'Symptomatic intracranial hemorrhage was 6.2% endovascular versus 5.9% IV-only (p=0.83). Mortality at 90 days was 19.1% versus 21.6% (p=0.33). No significant safety difference between arms.',
     successorTrialId: 'escape-trial',
+    successorTrialDisplay: 'ESCAPE (2015)',
     /* claimId: ims-iii-bottom-line | source: Broderick et al., NEJM 2013 */
     bottomLineSummary: 'IMS-III stopped early for futility after enrolling 656 of 900 planned patients. In moderate-severe stroke (NIHSS >=8) treated with IV alteplase within 3 hours, adding endovascular therapy (mostly older coil-based devices, no mandatory vessel-occlusion confirmation) did not improve 90-day mRS 0-2: 40.8% vs 38.7% (adjusted RR 1.05, 95% CI 0.83-1.30). The trial predates modern stent retrievers and CTA-based patient selection.',
     inclusionCriteria: [
@@ -8493,6 +8497,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     trialDesignNarrative: 'SYNTHESIS Expansion randomized patients with ischemic stroke to endovascular therapy alone (without IV alteplase) or IV alteplase (0.9 mg/kg standard dose within 4.5 hours). The endovascular group had a longer treatment window -- up to 6 hours from onset. Endovascular therapy used intra-arterial recombinant tPA and first-generation mechanical devices. Enrollment did not require CTA or MRA confirmation of large-vessel occlusion, meaning a substantial proportion of enrolled patients may have had occlusions not amenable to endovascular retrieval. This design difference from IMS-III (which used bridging therapy) makes direct comparison difficult.',
     safetyBrief: 'Symptomatic intracranial hemorrhage was similar between groups (6% endovascular vs 6% alteplase). Mortality at 3 months was 10% versus 8%, a non-significant difference (p=0.53). No significant safety signal in either direction.',
     successorTrialId: 'escape-trial',
+    successorTrialDisplay: 'ESCAPE (2015)',
     /* claimId: synthesis-expansion-bottom-line | source: Ciccone et al., NEJM 2013 */
     bottomLineSummary: 'SYNTHESIS Expansion randomized 362 patients with ischemic stroke to endovascular therapy alone (no IV tPA, window up to 6 hours) or standard IV alteplase within 4.5 hours. Disability-free survival (mRS 0-1) at 90 days: 30.4% endovascular vs 34.8% alteplase (adjusted OR 0.71, 95% CI 0.44-1.14, p=0.16). Endovascular therapy did not demonstrate superiority. The trial used older devices and did not require confirmed vessel occlusion.',
     inclusionCriteria: [
@@ -8562,6 +8567,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     trialDesignNarrative: 'MR RESCUE enrolled patients with proximal anterior circulation LVO (ICA or M1 MCA, confirmed on CTA or MRA) within 8 hours of symptom onset and performed penumbral imaging (MRI or CT perfusion) to classify patients as having favorable mismatch (large penumbra, small core) or unfavorable pattern (large established infarct). Patients were randomized within each stratum to mechanical embolectomy or standard care. Embolectomy used the MERCI retriever or Penumbra aspiration system -- first-generation devices with substantially lower reperfusion efficacy than modern stent retrievers. Only 27% of the embolectomy arm achieved TIMI 2-3 reperfusion.',
     safetyBrief: 'Symptomatic intracranial hemorrhage occurred in 9% of the embolectomy group versus 4% of the standard-care group (not statistically significant in this small trial). Mortality at 90 days was 21% versus 17% (NS). No significant safety difference was demonstrated.',
     successorTrialId: 'escape-trial',
+    successorTrialDisplay: 'ESCAPE (2015)',
     /* claimId: mr-rescue-bottom-line | source: Kidwell et al., NEJM 2013 */
     bottomLineSummary: 'MR RESCUE randomized 118 patients with proximal LVO stroke to mechanical embolectomy (MERCI or Penumbra) or standard care within 8 hours, stratified by penumbral imaging pattern. Mean mRS at 90 days was 3.9 in both arms. Penumbral imaging did not identify a benefiting subgroup (interaction p=0.56). Successful reperfusion was achieved in only 27% of the embolectomy arm, reflecting low first-generation device efficacy. The trial does not establish benefit or harm; its teaching value is illustrating why device generation and imaging selection were insufficient in the first-generation EVT era.',
     inclusionCriteria: [
