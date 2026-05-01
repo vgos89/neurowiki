@@ -6412,7 +6412,7 @@ const TrialPageNew: React.FC = () => {
               Historical Reference Page
             </p>
             <p style={{ fontSize: 12, color: '#78350f', lineHeight: 1.5 }}>
-              This trial preceded the modern EVT evidence base. It is presented as a predecessor reference.
+              This is a historical reference page. This trial preceded the modern evidence base. It is presented as a predecessor reference.
               {tm.successorTrialId && (
                 <> See{' '}
                   <Link
@@ -6421,7 +6421,7 @@ const TrialPageNew: React.FC = () => {
                   >
                     {tm.successorTrialDisplay ?? tm.successorTrialId}
                   </Link>
-                  {' '}for the modern successor trial that established EVT as standard of care.
+                  {' '}{tm.successorTrialClause ?? 'for current evidence'}.
                 </>
               )}
             </p>
@@ -6580,6 +6580,104 @@ const TrialPageNew: React.FC = () => {
       '3.9 vs 3.9',
       'N/A (identical means)',
       'Not significant',
+    );
+  }
+
+  // ── BEST — W7.0.4 stub (basilar EVT chain, TRIALS_SPEC §7c) ─────────────
+  if (trialId === 'best-trial' && trialMetadata) {
+    return renderStubPage(
+      trialMetadata,
+      'BEST',
+      'Primary Outcome — mRS 0-3 at 90 Days (ITT)',
+      '131 patients; endovascular thrombectomy vs best medical management; basilar artery occlusion',
+      'OR (mRS 0-3, ITT)',
+      '1.74',
+      '0.81 to 3.74',
+      'Not significant (P=0.23)',
+    );
+  }
+
+  // ── BASICS — W7.0.5 stub (basilar EVT chain, TRIALS_SPEC §7c) ───────────
+  if (trialId === 'basics-trial' && trialMetadata) {
+    return renderStubPage(
+      trialMetadata,
+      'BASICS',
+      'Primary Outcome — mRS 0-3 at 90 Days',
+      '300 patients; EVT plus best medical treatment vs best medical treatment alone; basilar artery occlusion',
+      'Rate Ratio (mRS 0-3)',
+      '1.18',
+      '0.92 to 1.50',
+      'Not significant (P=0.19)',
+    );
+  }
+
+  // ── MATCH — W7.0.6 stub (antiplatelet chain, TRIALS_SPEC §7c) ───────────
+  if (trialId === 'match-trial' && trialMetadata) {
+    return renderStubPage(
+      trialMetadata,
+      'MATCH',
+      'Primary Outcome — Composite (Stroke/MI/Vascular Death/Rehospitalization) at 18 Months',
+      '7,599 patients; aspirin added to clopidogrel vs clopidogrel alone; recent stroke or TIA',
+      'RR (composite endpoint)',
+      '0.94',
+      '0.84 to 1.05',
+      'Not significant (P=0.244)',
+    );
+  }
+
+  // ── CHARISMA — W7.0.7 stub (antiplatelet chain, TRIALS_SPEC §7c) ────────
+  if (trialId === 'charisma-trial' && trialMetadata) {
+    return renderStubPage(
+      trialMetadata,
+      'CHARISMA',
+      'Primary Outcome — MI/Stroke/Cardiovascular Death at Median 28 Months',
+      '15,603 patients; aspirin + clopidogrel vs aspirin alone; established CV disease or high-risk',
+      'RR (MI/stroke/CV death)',
+      '0.93',
+      '0.83 to 1.05',
+      'Not significant (P=0.22)',
+    );
+  }
+
+  // ── STICH I — W7.0.8 stub (ICH surgical chain, TRIALS_SPEC §7c) ─────────
+  if (trialId === 'stich-i-trial' && trialMetadata) {
+    return renderStubPage(
+      trialMetadata,
+      'STICH I',
+      'Primary Outcome — Favorable Glasgow Outcome Scale at 6 Months',
+      '1,033 patients; early surgery vs initial conservative management; supratentorial ICH',
+      'OR (favorable GOS)',
+      '0.89',
+      '0.66 to 1.19',
+      'Not significant (P=0.414)',
+    );
+  }
+
+  // ── STICH II — W7.0.9 stub (ICH surgical chain, TRIALS_SPEC §7c) ────────
+  if (trialId === 'stich-ii-trial' && trialMetadata) {
+    return renderStubPage(
+      trialMetadata,
+      'STICH II',
+      'Primary Outcome — Unfavorable Outcome at 6 Months',
+      '601 patients; early craniotomy vs initial conservative management; superficial lobar ICH',
+      'OR (unfavorable outcome)',
+      '0.86',
+      '0.62 to 1.20',
+      'Not significant (P=0.367)',
+    );
+  }
+
+  // ── MISTIE III — W7.0.10 stub (ICH surgical chain, TRIALS_SPEC §7c) ─────
+  if (trialId === 'mistie-iii-trial' && trialMetadata) {
+    return renderStubPage(
+      trialMetadata,
+      'MISTIE III',
+      'Primary Outcome — mRS 0-3 at 1 Year',
+      '506 patients; image-guided catheter + alteplase vs standard medical management; supratentorial ICH ≥30 mL',
+      'OR (mRS 0-3 at 1 year)',
+      '1.20',
+      '0.81 to 1.81',
+      'Not significant (P=0.33)',
     );
   }
 
