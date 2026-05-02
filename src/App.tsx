@@ -30,6 +30,7 @@ const ResidentToolkit = lazy(() => import('./pages/ResidentToolkit'));
 const TrialsPage = lazy(() => import('./pages/TrialsPage'));
 const TrialPageNew = lazy(() => import('./pages/trials/TrialPageNew'));
 const ComingSoon = lazy(() => import('./components/ComingSoon').then((m) => ({ default: m.ComingSoon })));
+const QuestionDetailPage = lazy(() => import('./pages/QuestionDetailPage'));
 const GCAPathway = lazy(() => import('./pages/GCAPathway'));
 const ElanPathway = lazy(() => import('./pages/ElanPathway'));
 const EvtPathway = lazy(() => import('./pages/EvtPathway'));
@@ -146,7 +147,7 @@ const App: React.FC = () => {
           ))}
           <Route path="/wiki/:topic" element={<Wiki />} />
           <Route path="/guide/:topicId" element={<PublishGate><ResidentGuide context="guide" /></PublishGate>} />
-          <Route path="/trials/q/:questionId" element={<ComingSoon />} />
+          <Route path="/trials/q/:questionId" element={<QuestionDetailPage />} />
           <Route path="/trials/:topicId" element={<PublishGate><TrialPageNew /></PublishGate>} />
           {import.meta.env.DEV && RCTChainTest && (
             <Route path="/dev/rct-chain-test" element={<RCTChainTest />} />

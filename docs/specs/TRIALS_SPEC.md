@@ -2151,14 +2151,64 @@ Schema lives in `src/data/trialListData.ts`. The slice is projected at build tim
 
 ---
 
-### §L5.3 Question-detail page (`/trials/q/:questionId`) — PLACEHOLDER
+### §L5.3 Question-detail page (`/trials/q/:questionId`) — SHELL SHIPPED
 
-**Status:** Placeholder. Route registered in `src/App.tsx` as `<ComingSoon />`.
+**Status:** Shell shipped. Route registered in `src/App.tsx` as `<QuestionDetailPage />` (lazy, no PublishGate).
+**Component:** `src/pages/QuestionDetailPage.tsx`
 **Six question IDs:** Defined in `src/data/trial-questions.ts` — `tpa-timing`, `lvo-evt`, `anticoagulation`, `hemicraniectomy`, `bp-control`, `dapt`.
 
-Building question-detail pages is a **separate workstream, Class D-clinical**, gated by `clinical-reviewer`. Each page synthesizes evidence from multiple trials around a clinical question — this is new clinical synthesis content and requires the full Class D-clinical gate (medical-scientist authoring + clinical-reviewer approval + citation trace for every claim).
+#### Shell anatomy (as-built)
 
-Question taxonomy expansion (6 → ~24 questions) is also a separate task, parked in TASKS.md.
+| Zone | Content | Notes |
+|---|---|---|
+| Header strip | Back link + "CLINICAL QUESTION" eyebrow | Matches TrialPageNew pattern |
+| Hero | H1 (`question.text`, 22/28px, 500 weight, -0.01em) + sub (synthesises N trials · meta) | SEO: `document.title = "{text} · NeuroWiki Trials"` |
+| Status banner | "CLINICAL SYNTHESIS" eyebrow + "Curated answer in progress" body | `var(--cobalt-soft)` bg, `3px solid var(--color-neuro-500)` left border |
+| Trial list | `TrialLegendCard` per resolved trial ID, wrapped in `rounded-xl border` container | Ordered by `trialIds[]` (chronological) |
+| Empty state | "Trials being curated" dashed-border box | Renders when `resolvedTrials.length === 0` |
+| Footer | "Was this useful?" feedback button | Triggers existing Feedback button via DOM query |
+| 404 state | "QUESTION NOT FOUND" + back-link | Renders when `questionId` not in TRIAL_QUESTIONS; no throw |
+
+#### `TrialQuestion` schema extension (trial-questions.ts)
+
+```typescript
+export interface TrialQuestion {
+  id: string;
+  text: string;
+  icon: QuestionIconKey;
+  meta: string;          // NEW — short contextual phrase, e.g. "early & late window EVT"
+  trialCount: number;    // Kept explicit; matches trialIds.length after V review
+  trialIds: string[];    // NEW — ordered trial IDs verified in TRIAL_DATA 2026-05-01
+}
+```
+
+#### trialIds population (2026-05-01 baseline)
+
+| Question | Resolved IDs | Count | TODO |
+|---|---|---|---|
+| tpa-timing | ninds, ecass3, wake-up, extend, thaws, original, act | 7 | Consider nor-test, attest-2, trace-iii in future pass |
+| lvo-evt | mr-clean, escape, extend-ia, swift-prime, revascat, defuse-3, dawn, laste, tension, select2, angel-aspect | 11 | thrace + escape-mevo may need separate EVT-strategy question |
+| anticoagulation | timing, optimas, elan-study | 3 | 6 additional (NAVIGATE-ESUS, ENGAGE, ARISTOTLE, RESPECT, REDUCE, CLOSE) needed when added to data layer; trialCount updated 9→3 |
+| hemicraniectomy | decimal, destiny, hamlet | 3 | destiny-ii in data; raise to 4 in editorial pass |
+| bp-control | enchanted, best-ii, bp-target, optimal-bp, interact4 | 5 | — |
+| dapt | chance, point, thales, inspires | 4 | chance-2 (subgroup) parked |
+
+#### IDs that did NOT resolve (excluded at data-prep time)
+
+- `eagle-trial` → CRAO (retinal artery occlusion), not ischaemic stroke — excluded from tpa-timing
+- `mr-clean-late-trial` → ID does not exist; `laste-trial` covers late-window EVT
+
+#### What remains — Class D-clinical, gated
+
+Building question-detail pages is a **separate workstream, Class D-clinical**, gated by `clinical-reviewer`. Each page synthesizes evidence from multiple trials — this is new clinical synthesis content. The curated answer paragraph (to replace the status banner body) requires:
+
+1. `medical-scientist` authoring + evidence trace
+2. `clinical-reviewer` approval
+3. Citation record update + `last_reviewed` per §13.6
+
+The paragraph will render inside the cobalt-soft status banner replacing "Curated answer in progress."
+
+Question taxonomy expansion (6 → ~24 questions) is also a separate parked task.
 
 ---
 
@@ -2279,3 +2329,4 @@ Every external reference this Part II depends on:
 | 1.3 | 2026-04-27 | orchestrator | Added §7c Stub Trials (Predecessor References): why stubs exist, what stubs contain (sticky header, mandatory amber banner, H1+lede, population, prose-narrative primary outcome, design narrative, safety brief, BottomLineDrawer), what stubs do NOT contain (teaching wells, bedsidePearl field, subgroup analyses, RCTChainSection, archetype viz), TrialMetadata stub schema fields (isStub, questionLede, primaryOutcomeProse, trialDesignNarrative, safetyBrief, successorTrialId), mandatory amber banner spec, classification rules (trialResult/archetypeId still required), upgrade path, claim surface handling. |
 | 1.2 | 2026-04-27 | orchestrator | Added §7b RCT Chain Section: when-to-use decision rule (RCT chain vs §7a benchmark), data shape (rctChain? field, mutually exclusive with historicalContext), visual pattern (container, header row, title, narrative, card stack), card content rules (year column 56px, connector line, card body, result line, "what was missing" footer, link/stub behaviour), current-trial cobalt card (cobalt-700 border, cobalt-50 bg, cobalt-900 text, THIS TRIAL pill, "what changed" footer), no-amber-caveat rationale, chain narrative authoring rules, mobile behaviour at 375px, edge cases (5-card cap with expand button, stub footnote always-shown, empty array guard, single-predecessor). |
 | 1.4 | 2026-05-01 | orchestrator | Added Part II: Legend Listing Page. Scope extended to include `/trials` listing page (§0.1 updated; §0.2 "separate spec pending" retired). New sections §L1–§L8: purpose/intent (3 user intents), locked decisions (effectiveView auto-switch, dual-sticky pattern, card anatomy hairlines-only), component inventory (Toggle, Chip, TrialLegendCard with full CSS specs + accessibility notes), token contract (8 tokens in index.css; all 6 category accents now defined: --cat-ivt, --cat-prevention, --cat-surgical, --cat-acute, --cat-prehospital added; EVT uses var(--color-neuro-500) directly), per-page specs (legend page §L5.1, detail cross-ref §L5.2, question-detail placeholder §L5.3), patterns (NNT-as-stat backfill recipe + 7-trial population table, dynamic-route validator fix), governance (classification table, clinical gate triggers, detail page gate unchanged), hard-cite ledger. Route validator fix documented (validateRouteManifest.mjs line 64). CAT_COLOR maps in TrialLegendCard.tsx and TrialsPage.tsx fully tokenised — no inline hex remains. |
+| 1.5 | 2026-05-01 | orchestrator | §L5.3 updated: question-detail page shell shipped. ComingSoon replaced by QuestionDetailPage (src/pages/QuestionDetailPage.tsx). TrialQuestion schema extended: meta and trialIds fields added to trial-questions.ts. trialIds populated for all 6 questions (verified against TRIAL_DATA); IDs that did not resolve excluded with reasoning. §L5.3 now documents full shell anatomy (header, hero, status banner, trial list, empty state, 404 state), schema extension, per-question trialIds baseline, and remaining Class D-clinical gate for synthesis paragraph authoring. |
