@@ -17,13 +17,14 @@ import type { TrialItem, TrialCategoryKey } from '../../data/trialListData';
  */
 
 // ── Category color map (v4 tokens) ───────────────────────────────────────────
+// All values are CSS custom properties defined in index.css :root (§L4 tokens).
 const CAT_COLOR: Record<TrialCategoryKey, string> = {
-  ivt: '#10b981',                   // --cat-ivt
-  evt: '#1746A2',                   // --cobalt (no new token)
-  'secondary-prevention': '#0891b2', // --cat-prevention
-  'surgical-interventions': '#7c3aed', // --cat-surgical
-  'acute-management': '#f59e0b',    // amber — no dedicated token
-  'prehospital-triage': '#f59e0b',  // amber — no dedicated token
+  ivt:                    'var(--cat-ivt)',           // #10b981
+  evt:                    'var(--color-neuro-500)',    // #1746A2 cobalt; no --cat-evt needed
+  'secondary-prevention': 'var(--cat-prevention)',    // #0891b2
+  'surgical-interventions':'var(--cat-surgical)',     // #7c3aed
+  'acute-management':     'var(--cat-acute)',         // #f59e0b amber
+  'prehospital-triage':   'var(--cat-prehospital)',   // #f59e0b amber
 };
 
 interface TrialLegendCardProps {

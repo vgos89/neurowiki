@@ -35,6 +35,9 @@
   --cat-ivt:           #10b981;    /* IV Thrombolysis category accent        */
   --cat-prevention:    #0891b2;    /* Prevention category accent             */
   --cat-surgical:      #7c3aed;    /* Surgical category accent               */
+  --cat-acute:         #f59e0b;    /* Acute in-hospital management accent    */
+  --cat-prehospital:   #f59e0b;    /* Prehospital & triage accent            */
+  /* EVT uses var(--color-neuro-500) = #1746A2 (cobalt); no --cat-evt needed */
 }
 
 body {
