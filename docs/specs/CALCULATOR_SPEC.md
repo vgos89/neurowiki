@@ -14,6 +14,8 @@ This spec is the single source of truth for the anatomy, behavior, and SEO of ev
 
 Every calculator has exactly these three elements, in this order, regardless of archetype. No additional top-level layout elements are permitted.
 
+> **See also:** `TRIALS_SPEC.md` Part II §L3 documents three UI primitives — `Toggle` (segmented 2-option control), `Chip` (quick-access filter pill), and `TrialLegendCard` — that are reusable across any listing or index page, including a future calculator-list page if one is built. They are not calculator-specific.
+
 ### 1.1 Sticky Top Header
 
 **Mockup reference:** Lines 76–104 (ICH empty state), lines 228–252 (NIHSS two-row variant)

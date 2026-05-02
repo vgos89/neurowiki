@@ -1,11 +1,11 @@
 # TRIALS_SPEC.md — NeuroWiki Trial Page Design Specification
 
-**Version:** 1.0 — locked 2026-04-21 | v1.1 — locked 2026-04-24
-**Status:** Locked — design-guardian co-sign issued 2026-04-21; v1.1 co-sign APPROVED 2026-04-24 (14/14 conditions resolved)
+**Version:** 1.0 — locked 2026-04-21 | v1.1 — locked 2026-04-24 | v1.3 — locked 2026-04-27 | v1.4 — locked 2026-05-01
+**Status:** Locked — design-guardian co-sign issued 2026-04-21; v1.1 co-sign APPROVED 2026-04-24 (14/14 conditions resolved); v1.4 amendment adds Part II (legend listing page)
 **Owner:** Design Guardian
-**Mockup:** docs/specs/mockups/trial-reference.html
+**Mockups:** docs/specs/mockups/trial-reference.html (detail pages) · docs/specs/mockups/trials-legend-reference.html (listing page)
 **ADR:** docs/adrs/ADR-005-trials-spec-v1.md
-**Scope:** Trial detail pages rendered by `src/pages/trials/TrialPageNew.tsx` at route `/trials/:topicId`
+**Scope:** Part I — Trial detail pages (`src/pages/trials/TrialPageNew.tsx` at `/trials/:topicId`); Part II — Legend listing page (`src/pages/TrialsPage.tsx` at `/trials`)
 
 This spec is the single source of truth for the anatomy, behavior, and SEO of every trial detail page in NeuroWiki. Every swarm touching a trial page must cite section IDs and line numbers from this file in pre-flight. The companion mockup (`trial-reference.html`) is the visual ground truth; this prose is the behavioral ground truth. Neither is complete without the other.
 
@@ -17,6 +17,7 @@ The EXTEND trial (slug `extend-trial`) is the **Archetype A canary**: the first 
 
 ### 0.1 In scope
 
+- Legend listing page at `/trials` (Part II of this spec, added v1.4)
 - Trial detail pages at `/trials/:topicId`
 - All eight visualization archetypes (§2-§7a)
 - Bottom-line drawer behavior (§10)
@@ -31,7 +32,7 @@ The EXTEND trial (slug `extend-trial`) is the **Archetype A canary**: the first 
 
 ### 0.2 Not in scope (explicit exclusions)
 
-- `/trials` listing page — separate spec pending
+- `/trials` listing page — **now covered in Part II of this spec** (added v1.4)
 - Trial agent (AI-powered interpretation layer) — separate spec pending
 - Pathway pages (`src/pages/guide/`) — PATHWAY_SPEC.md pending (Wave 6)
 - Article pages — ARTICLE_SPEC.md pending
@@ -1868,6 +1869,402 @@ Every trial page rebuild must pass all items before the PR opens. Partial passes
 
 ---
 
+---
+
+# PART II — Legend Listing Page (`/trials`)
+
+*Added v1.4 · 2026-05-01. Commits: 4c40e41 (legend type extension), 35d7c68 (ECASS III / EXTEND / MR CLEAN), 60048e2 (page rebuild), 142815e (NINDS / ESCAPE / DEFUSE-3 / DAWN).*
+
+---
+
+## §L1 Purpose and Intent
+
+The `/trials` listing page serves three distinct user intents:
+
+1. **Named lookup** — the clinician knows the trial name and wants to reach its detail page quickly. Served by the search box and Catalog view.
+2. **Clinical question** — the clinician has a bedside question ("When can I give tPA?") and wants to see which trials address it. Served by the Questions view.
+3. **Browse** — the clinician wants to survey the evidence base by category (IVT, EVT, etc.) without a specific target. Served by the Catalog view with category chips.
+
+All three intents are served from a single route. The toggle (Questions / Catalog) and search box are always visible. The search box is shared across both views.
+
+**Ground-truth mockups:**
+- `docs/specs/mockups/trials-legend-reference.html` — commit fa91384 · 1329 lines · legend listing page (this Part)
+- `docs/specs/mockups/trial-reference.html` — commit 63adbed · 2135 lines · detail pages (Part I)
+
+---
+
+## §L2 Locked Decisions
+
+### L2.1 View model
+- Exactly two views: **Questions** and **Catalog**, toggled by the `.toggle` segmented control.
+- The toggle is the single source of truth for view state; it is never hidden.
+- `effectiveView = searchQuery ? 'catalog' : view` — when a search query is present, the page auto-displays Catalog regardless of toggle position. This is a deliberate UX behavior, not an implementation detail. The toggle pill visually tracks the active `effectiveView`, so when search is active the Catalog tab appears selected. Cite: `src/pages/TrialsPage.tsx` line 124.
+
+### L2.2 Hero block
+- The hero block (eyebrow, H1, sub-copy, search bar, chip rail) always appears above the toggle.
+- H1 text: `{n} trials.<br class="md:hidden" /> One search box.` — the line break is mobile-only.
+- H1 uses Inter 500 (matches the detail page title weight). Trial names in cards use Inter 600 (scannable list anchor).
+- Quick-access chips (Favourites, Recent, New 2024–25, Guidelines) are visible in **both** views.
+- Filter category pills (All, IVT, EVT, Prevention, Surgical, In-Hosp, Prehospital) are **Catalog-only**.
+
+### L2.3 Card anatomy
+- Cards are separated by hairlines only. **No border-radius on cards.** The wrapping section panel has no radius either.
+- Each card follows the three-line anatomy (§L3.3). The category dot is the only color element per card.
+- Desktop: `bottomLineTag` + `keyStat` migrate from line 3 to the right side of line 1 (`hidden md:inline-flex` / `hidden md:inline`). Line 3 is `md:hidden`.
+
+### L2.4 Sticky behavior (dual-sticky pattern)
+Two sticky elements with different behaviors at different breakpoints:
+
+```
+Outer wrapper:  md:sticky md:top-0 md:z-30      ← desktop: full hero+toggle block sticks
+Toggle-wrap:    sticky top-0 z-30 md:relative md:top-auto md:z-auto   ← mobile: only toggle sticks
+```
+
+On **mobile**: the hero scrolls away; the toggle-wrap independently sticks at `top:0`. The user always has access to the toggle while reading the list.
+On **desktop**: the entire outer block (hero + toggle) sticks as one unit. The toggle-wrap is `relative` (dominated by the sticky parent).
+
+Cite: `src/pages/TrialsPage.tsx` lines 482–499. Mockup reference: `trials-legend-reference.html` lines 871 (sticky behavior note) and 249–257 (`.toggle-wrap` / `.toggle-wrap-desktop` CSS).
+
+---
+
+## §L3 Component Inventory
+
+Three new components produced by this workstream. All three are candidates for reuse on future listing or index pages.
+
+### L3.1 Toggle — segmented 2-option control
+
+**Purpose:** Switch between two mutually exclusive views on any single-chrome page. Currently used for Questions / Catalog on `/trials`.
+
+**Source:** `src/components/ui/Toggle.tsx`
+**Mockup:** `trials-legend-reference.html` lines 220–248 (`.toggle`, `.toggle-segment`, `.toggle-segment.active`)
+
+**CSS spec:**
+
+| Property | Value | Notes |
+|---|---|---|
+| Track background | `#f1f5f9` (`bg-slate-100`) | Tailwind: `bg-slate-100` |
+| Track padding | `3px` uniform | `p-[3px]` |
+| Track radius | `12px` | `rounded-[12px]` |
+| Pill background | `white` | Active segment only |
+| Pill radius | `9px` | `rounded-[9px]` |
+| Pill shadow | `0 1px 4px rgba(15,23,42,0.08)` | Active segment only |
+| Gap between segments | `2px` | `style={{ gap: '2px' }}` |
+| Font | `13px / 500` | `text-[13px] font-medium` |
+| Active text | `#0f172a` (`slate-900`) | |
+| Inactive text | `#64748b` (`slate-500`) | |
+| Hover (inactive text) | `#334155` (`slate-700`) | `hover:text-[#334155]` |
+| Motion — bg + shadow | `220ms cubic-bezier(0.16,1,0.3,1)` | `var(--ease-discovery)` |
+| Motion — color only | `120ms ease` | Hover text color |
+| Padding per segment | `9px 16px` | Inline style (not Tailwind) |
+
+**Accessibility:** `role="tablist"` on wrapper; `role="tab"` on each segment; `aria-selected={isActive}`; `tabIndex={isActive ? 0 : -1}`; ArrowLeft/ArrowRight keyboard navigation between segments with `focus()` call.
+
+**Reuse:** Any "two views, one chrome" page. The component accepts generic `[ToggleOption, ToggleOption]` — it is not trials-specific.
+
+---
+
+### L3.2 Chip — quick-access filter pill
+
+**Purpose:** Pre-built shortcut that applies a filter state to the current view. Distinct from category filter pills (those are internal to the Catalog view; Chips appear above the toggle and are view-agnostic).
+
+**Source:** `src/components/ui/Chip.tsx`
+**Mockup:** `trials-legend-reference.html` lines 184–211 (`.chip`, `.chip.active`, `.chip-dot`)
+
+**CSS spec:**
+
+| Property | Value | Notes |
+|---|---|---|
+| Padding | `6px 14px` | `px-[14px] py-[6px]` |
+| Radius | `9999px` (pill) | `rounded-full` |
+| Font | `12px / 500` | `text-[12px] font-medium` |
+| Active bg | `rgba(23,70,162,0.08)` | `var(--cobalt-soft)` |
+| Active border | `rgba(23,70,162,0.2)` | — |
+| Active text | `#1746A2` (cobalt) | — |
+| Default bg | `white` | Dark: `bg-slate-700` |
+| Default border | `slate-200` | Dark: `border-slate-600` |
+| Default text | `slate-500` | Dark: `text-slate-400` |
+| Hover (default) | `bg-slate-50` | Dark: `bg-slate-600` |
+| Touch target | `touch-manipulation` | Prevents 300ms tap delay |
+
+**Reuse:** Any index or listing page that needs pre-built view shortcuts. The `.chip` class is distinct from the category `.filter-pill` class (§L5.2); do not conflate.
+
+---
+
+### L3.3 TrialLegendCard — legend listing card
+
+**Purpose:** A single trial row in the Catalog view. Three-line anatomy on mobile; two-line on desktop (tag+stat move to line 1 right).
+
+**Source:** `src/components/trials/TrialLegendCard.tsx`
+**Mockup:** `trials-legend-reference.html` lines 435–531 (`.trial-card`, `.cat-dot`, `.trial-card-line1`, `.trial-card-line3`, `.bl-tag`, `.key-stat`)
+
+**Card anatomy (mobile, top-to-bottom):**
+
+```
+[cat-dot]  Line 1: trial name (14px/600/0.01em) · year meta (11px/500/0.04em/uppercase/slate-400)
+                   [right: star]
+           Line 2: finding (14px/400/slate-600/1.55lh)   [mb-2 if line 3 present]
+           Line 3: bl-tag · keyStat                       [md:hidden]
+```
+
+**Desktop collapse:** `bottomLineTag` renders `hidden md:inline-flex` in line 1 right; `keyStat` renders `hidden md:inline` in line 1 right. Both are omitted from line 3 via `md:hidden`.
+
+**Cat-dot spec:**
+
+| Property | Value |
+|---|---|
+| Position | `absolute left-5 top-5` |
+| Size | `6px × 6px` |
+| Shape | `rounded-full` |
+| Color | per category (§L4.2) |
+
+**Category color map:**
+
+| Category key | Color | Token |
+|---|---|---|
+| `ivt` | `#10b981` | `var(--cat-ivt)` |
+| `evt` | `#1746A2` | cobalt (no separate token) |
+| `secondary-prevention` | `#0891b2` | `var(--cat-prevention)` |
+| `surgical-interventions` | `#7c3aed` | `var(--cat-surgical)` |
+| `acute-management` | `#f59e0b` | amber (no token yet) |
+| `prehospital-triage` | `#f59e0b` | amber (no token yet) |
+
+**bl-tag (bottomLineTag chip) spec:**
+
+| Property | Value | Source |
+|---|---|---|
+| Font | `11px / 600` | — |
+| Background | `rgba(23,70,162,0.08)` | `var(--cobalt-soft)` |
+| Text color | `#1746A2` | cobalt |
+| Padding | `2px 8px` | `px-2 py-0.5` |
+| Radius | `4px` | `rounded` |
+| Omitted if | `bottomLineTag` absent | graceful fallback |
+
+**keyStat spec:** `12px / slate-500 / whitespace-nowrap`. Omitted if `keyStat` absent.
+
+**Finding fallback chain:** `legend?.finding ?? description ?? name`. The card never renders an empty line 2.
+
+**Card container:**
+
+```
+pl-[34px] pr-5 py-3.5
+border-b border-slate-100 dark:border-slate-700/60
+last:border-b-0
+hover:bg-slate-50 dark:hover:bg-slate-700/40
+hover:shadow-[0_2px_8px_rgba(15,23,42,0.06)]   ← var(--shadow-card-hover)
+transition-[background,box-shadow] 120ms ease-out
+No border-radius. No outer border.
+```
+
+---
+
+## §L4 Token Contract
+
+Six tokens added to `index.css` `:root` block by this workstream. All are defined exactly once. File path: `/neurowiki/index.css` (project root, not `src/`).
+
+| Token | Value | Purpose | Used in |
+|---|---|---|---|
+| `--cobalt-soft` | `rgba(23, 70, 162, 0.08)` | Focus halos, bl-tag background, active chip background | TrialLegendCard `.bl-tag`, Chip active state, any cobalt-tinted surface |
+| `--ease-discovery` | `cubic-bezier(0.16, 1, 0.3, 1)` | Toggle pill motion, bottom-line drawer discovery chevron | Toggle bg/shadow transition, drawer bounce |
+| `--shadow-card-hover` | `0 2px 8px rgba(15, 23, 42, 0.06)` | Card hover elevation | TrialLegendCard `:hover` |
+| `--cat-ivt` | `#10b981` | IV Thrombolysis category accent | Cat-dot, section header label |
+| `--cat-prevention` | `#0891b2` | Prevention category accent | Cat-dot, section header label |
+| `--cat-surgical` | `#7c3aed` | Surgical category accent | Cat-dot, section header label |
+
+**Missing category tokens (not yet added):** `--cat-evt` and `--cat-acute` are absent from the token sheet. The card currently inlines `#1746A2` (cobalt) for EVT and `#f59e0b` (amber) for `acute-management` / `prehospital-triage`. These should be added when the color system is next audited. Track in TASKS.md.
+
+**Font feature:** `font-feature-settings: "cv11"` is applied to `body` in `index.css` line 42. This enables tabular-style numerals for stats rendered in cards.
+
+---
+
+## §L5 Per-Page Specs
+
+### §L5.1 Legend page (`/trials`)
+
+**Component:** `src/pages/TrialsPage.tsx`
+**Route:** `/trials` (registered in `src/config/routeManifest.ts`)
+**Data source:** `src/data/trialListData.ts` → `trials: TrialItem[]`
+
+**Three-layer structure:**
+
+```
+Layer 1: Hero block          (always visible, scrolls on mobile)
+Layer 2: Toggle + Chips      (dual-sticky; see §L2.4)
+Layer 3: Body                (Questions view OR Catalog view; effectiveView governs)
+```
+
+**Mockup references:**
+- Layer 1 (hero): `trials-legend-reference.html` lines 95–168 (`.hero`, `.hero-eyebrow`, `.hero-h1`, `.hero-sub`, `.search-bar`)
+- Layer 2 (toggle + chip rail): lines 174–268 (`.chip-rail`, `.chip`, `.toggle`, `.toggle-segment`, `.toggle-wrap`)
+- Layer 3A (Questions view, mobile): lines 271–312 (`.question-item`)
+- Layer 3A (Questions view, desktop 2-col grid): lines 313–338 (`.desktop-q-grid`)
+- Layer 3B (Catalog view): lines 340–532 (`.filter-pills`, `.cat-section-header`, `.trial-card` et al.)
+
+**State model:**
+
+| State variable | Type | Purpose |
+|---|---|---|
+| `view` | `'questions' \| 'catalog'` | Toggle selection |
+| `searchQuery` | `string` | Shared across views |
+| `activeCategory` | `TrialCategoryKey \| null` | Catalog filter pill selection |
+| `showFavoritesOnly` | `boolean` | Favorites chip state |
+| `collapsedCategories` | `Set<TrialCategoryKey>` | Section collapse state |
+
+`effectiveView` is a derived value (`searchQuery ? 'catalog' : view`), not state. Cite: `TrialsPage.tsx` line 124.
+
+**URL params:** `?favorites=true` on mount → `setShowFavoritesOnly(true)` + `setView('catalog')`. Allows deep-linking into the favorites filtered view.
+
+**Data contract — `TrialItem.legend` slice:**
+
+```typescript
+legend?: {
+  finding?: string;       // ≤120 chars, sentence case, ends with period
+  bottomLineTag?: string; // 6–16 chars, no trailing period
+  keyStat?: string;       // 6–24 chars including unit
+};
+```
+
+Schema lives in `src/data/trialListData.ts`. The slice is projected at build time via `TRIAL_DATA[id]?.legend` in both `enrichTrial()` and `restoredLegacyTrials` mapper. Card renders gracefully with any combination present: `finding` falls back to `listDescription ?? name`; `bottomLineTag` and `keyStat` slots are simply omitted if absent.
+
+**Questions view — desktop 2-col grid:**
+- Items are in a 2-col grid with `border-r` on left-column items (where `(i + 1) % 2 !== 0`)
+- Items have `border-b` except the last two rows (where `i >= length - 2`)
+- Mockup reference: lines 313–338
+
+**Catalog view — category sections:**
+- Sections are collapsible (chevron toggle). Collapse is blocked when `activeCategory` or `searchQuery` are active (single-category or search result views never collapse).
+- Section header shows category name, trial count, and collapse chevron.
+- Empty sections (0 trials after filtering) are hidden entirely.
+
+**Empty state:** Rendered when filtered `trials.length === 0`. Shows a "No trials found" message with a clear-filters link. Mockup reference: lines 533–563.
+
+---
+
+### §L5.2 Detail page (`/trials/:trialId`)
+
+**Component:** `src/pages/trials/TrialPageNew.tsx`
+**Spec:** Part I of this document (§0–§19)
+**No changes** from this workstream. Cross-reference only.
+
+---
+
+### §L5.3 Question-detail page (`/trials/q/:questionId`) — PLACEHOLDER
+
+**Status:** Placeholder. Route registered in `src/App.tsx` as `<ComingSoon />`.
+**Six question IDs:** Defined in `src/data/trial-questions.ts` — `tpa-timing`, `lvo-evt`, `anticoagulation`, `hemicraniectomy`, `bp-control`, `dapt`.
+
+Building question-detail pages is a **separate workstream, Class D-clinical**, gated by `clinical-reviewer`. Each page synthesizes evidence from multiple trials around a clinical question — this is new clinical synthesis content and requires the full Class D-clinical gate (medical-scientist authoring + clinical-reviewer approval + citation trace for every claim).
+
+Question taxonomy expansion (6 → ~24 questions) is also a separate task, parked in TASKS.md.
+
+---
+
+## §L6 Patterns Introduced by This Workstream
+
+### §L6.1 NNT-as-stat backfill pattern
+
+**Pattern name:** legend-slice mechanical backfill
+**First use:** v4 page rebuild (commits 35d7c68, 142815e)
+
+When a trial in `trialData.ts` has both `efficacyResults` (treatment% and control%) and `calculations.nnt`, the `legend` slice can be populated mechanically:
+
+```
+bottomLineTag = "+{round(treatment% - control%)} / 100"
+               derived from: efficacyResults.treatment.percentage - efficacyResults.control.percentage
+               rounded to nearest integer
+
+keyStat       = "NNT {calculations.nnt}"
+               derived from: calculations.nnt (already computed and stored)
+```
+
+No editorial or clinical judgment is required beyond verifying that the derived values match the published data. This unblocks the remaining ~16 trial backfill (parked in TASKS.md).
+
+**Trials populated mechanically (ordered by commit):**
+
+| Trial | `bottomLineTag` | `keyStat` | Absolute diff source | Commit |
+|---|---|---|---|---|
+| ECASS III | `+7 / 100` | `NNT 14` | 52.4% − 45.2% = 7.2pp | 35d7c68 |
+| EXTEND | `+6 / 100` | `NNT 17` | 35.4% − 29.5% = 5.9pp | 35d7c68 |
+| MR CLEAN | `+13 / 100` | `NNT 7` | 32.6% − 19.1% = 13.5pp | 35d7c68 |
+| NINDS | `+15 / 100` | `NNT 6.5` | 42.6% − 27.2% = 15.4pp | 142815e |
+| ESCAPE | `+24 / 100` | `NNT 4.2` | 53.0% − 29.3% = 23.7pp | 142815e |
+| DEFUSE-3 | `+28 / 100` | `NNT 3.6` | 45% − 17% = 28pp | 142815e |
+| DAWN | `+36 / 100` | `NNT 2.8` | 49% − 13% = 36pp | 142815e |
+
+**Hard stop rule:** If the prompted `bottomLineTag` or `keyStat` value diverges materially from what `efficacyResults` and `calculations.nnt` in `trialData.ts` show, **stop and surface to V before writing**. The data file is the source of truth. (Divergence was detected for 4 of the original 7 prompted values; resolution involved reading the data file and using its numbers.)
+
+---
+
+### §L6.2 Dynamic-route validator pattern
+
+**Pattern name:** Dynamic sub-namespace exclusion in `validateRouteManifest.mjs`
+**First use:** Route addition of `/trials/q/:questionId` (commit 60048e2)
+**File:** `scripts/validateRouteManifest.mjs` line 64
+
+The validator's literal-path scanner blocks any hardcoded per-trial slug (`/trials/ninds-trial`, etc.) to enforce manifest-driven routing. Original regex:
+
+```javascript
+// Old — false-positive: caught /trials/q/:questionId because 'q' is not ':', '"', or '*'
+.filter((route) => route !== '/trials')
+```
+
+Fix: dynamic routes always contain `:` somewhere. Exclude them explicitly:
+
+```javascript
+// New — correct: routes with ':' are dynamic by definition and pass through
+.filter((route) => route !== '/trials' && !route.includes(':'))
+```
+
+**Future routes** — `/trials/q/:questionId`, `/calcs/:calcId`, `/pathways/:pathwayId` — all inherit this exclusion automatically without further validator changes.
+
+---
+
+## §L7 Governance
+
+### L7.1 Classification of this workstream
+
+| Component | Class | Gate |
+|---|---|---|
+| Legend type extension (`TrialMetadata.legend`, `TrialItem.legend`) | C | Standard PR review |
+| Page rebuild (`TrialsPage.tsx`, Toggle, Chip, TrialLegendCard) | C | Standard PR review |
+| Legend data population (7 trials) | C-clinical-editorial | Sourced from existing `efficacyResults` + `calculations.nnt`; no new clinical reasoning |
+| Remaining ~16 trial backfill (parked) | C-clinical-editorial | Same gate — mechanical derivation from existing data |
+
+The `clinical-reviewer` gate was **not invoked** for this workstream. The legend slice fields (`finding`, `bottomLineTag`, `keyStat`) are derived summary strings, not new clinical claims with independent evidence assertions. They surface values already present in `efficacyResults` and `bottomLineSummary`.
+
+### L7.2 Clinical gate triggers
+
+The following related tasks **do** require clinical-reviewer:
+- **Question-detail pages** (`/trials/q/:questionId`): each page synthesizes multiple trials around a clinical question. This is new clinical synthesis content. Class D-clinical. Gate: medical-scientist authoring + clinical-reviewer approval + citation trace.
+- **Question taxonomy expansion** (6 → ~24): editorial classification of which trials address which questions. Class C-clinical-editorial + clinical-reviewer review of the taxonomy itself (the classification constitutes a clinical assertion).
+- **Any `finding` string that introduces new clinical language** not already present in `bottomLineSummary` / `primaryOutcomeProse` / `clinicalContext` would re-trigger the gate. Paraphrase of existing text does not.
+
+### L7.3 Detail pages remain Class D-clinical
+
+Trial detail pages (Part I, §0–§19) are governed by the existing clinical gate. This Part II amendment does not modify that governance.
+
+---
+
+## §L8 Hard-Cite Ledger
+
+Every external reference this Part II depends on:
+
+| Source | Commit / Path | Lines | Notes |
+|---|---|---|---|
+| `docs/specs/mockups/trials-legend-reference.html` | fa91384 | 1329 | Legend listing page visual ground truth |
+| `docs/specs/mockups/trial-reference.html` | 63adbed | 2135 | Detail page visual ground truth (Part I) |
+| `docs/specs/mockups/calculator-reference.html` | — | — | Chip scrollbar-hide pattern cited in mockup line 172 |
+| `index.css` `:root` block | — | lines 32–37, 42 | Six tokens + font-feature-settings |
+| `src/pages/TrialsPage.tsx` | 60048e2 | lines 106–109, 124, 482–499 | State model, effectiveView, sticky pattern |
+| `src/components/ui/Toggle.tsx` | 60048e2 | all | Toggle component implementation |
+| `src/components/ui/Chip.tsx` | 60048e2 | all | Chip component implementation |
+| `src/components/trials/TrialLegendCard.tsx` | 60048e2 | all | Card component implementation |
+| `src/data/trial-questions.ts` | 60048e2 | all | Six question stubs |
+| `src/data/trialListData.ts` | 4c40e41 | — | `TrialItem.legend` interface + mapper |
+| `src/data/trialData.ts` | 4c40e41, 35d7c68, 142815e | — | `TrialMetadata.legend` interface + 7 trial populations |
+| `scripts/validateRouteManifest.mjs` | 60048e2 | line 64 | Dynamic-route exclusion pattern (§L6.2) |
+
+---
+
 ## §20 Changelog
 
 | Version | Date | Author | Changes |
@@ -1877,3 +2274,4 @@ Every trial page rebuild must pass all items before the PR opens. Partial passes
 | 1.1 patch | 2026-04-24 | orchestrator | Resolved all 14 design-guardian conditions. §3.2: corrected bar height (28px mobile / 32px desktop), added mRS text-color rule (mRS 1+2 dark text), aligned label threshold (5% rule + mobile ≤375px exception at 9%), fixed legend to flex-wrap row. §3.3: stat-row label standardized to "Shift in distribution" (desktop) / "Shift" (mobile). §3.4: amber caveat CSS aligned to mockup (left-border, #fef3c7, border-radius 2px). §3.4a (new): Subgroup Accent Rule (NEUTRAL primary exception) and "Better outcome" pill documented. §7a.2: track height (14px mobile / 18px desktop), background (#f1f5f9), threshold line (top:-6px bottom:-20px), callout label positions, scale tick counts. §7a.3: benchmark-met pill aligned to mockup (rgba bg, #047857, fw 600, title case). §7a.4: historical-section container (border-top, no border-radius), caveat CSS unified to left-border treatment. §8.1: "B-F" → "B-G". §12.2: cross-ref to §3.4a subgroup exception. §18.2: updated component table (GrottaBarChart, BenchmarkThresholdChart). §18.3: archetypeId union includes 'G'. ADR-006 updated (bar height, track dims, §3.4a decisions). |
 | 1.3 | 2026-04-27 | orchestrator | Added §7c Stub Trials (Predecessor References): why stubs exist, what stubs contain (sticky header, mandatory amber banner, H1+lede, population, prose-narrative primary outcome, design narrative, safety brief, BottomLineDrawer), what stubs do NOT contain (teaching wells, bedsidePearl field, subgroup analyses, RCTChainSection, archetype viz), TrialMetadata stub schema fields (isStub, questionLede, primaryOutcomeProse, trialDesignNarrative, safetyBrief, successorTrialId), mandatory amber banner spec, classification rules (trialResult/archetypeId still required), upgrade path, claim surface handling. |
 | 1.2 | 2026-04-27 | orchestrator | Added §7b RCT Chain Section: when-to-use decision rule (RCT chain vs §7a benchmark), data shape (rctChain? field, mutually exclusive with historicalContext), visual pattern (container, header row, title, narrative, card stack), card content rules (year column 56px, connector line, card body, result line, "what was missing" footer, link/stub behaviour), current-trial cobalt card (cobalt-700 border, cobalt-50 bg, cobalt-900 text, THIS TRIAL pill, "what changed" footer), no-amber-caveat rationale, chain narrative authoring rules, mobile behaviour at 375px, edge cases (5-card cap with expand button, stub footnote always-shown, empty array guard, single-predecessor). |
+| 1.4 | 2026-05-01 | orchestrator | Added Part II: Legend Listing Page. Scope extended to include `/trials` listing page (§0.1 updated; §0.2 "separate spec pending" retired). New sections §L1–§L8: purpose/intent (3 user intents), locked decisions (effectiveView auto-switch, dual-sticky pattern, card anatomy hairlines-only), component inventory (Toggle, Chip, TrialLegendCard with full CSS specs + accessibility notes), token contract (6 tokens in index.css, missing --cat-evt / --cat-acute flagged), per-page specs (legend page §L5.1, detail cross-ref §L5.2, question-detail placeholder §L5.3), patterns (NNT-as-stat backfill recipe + 7-trial population table, dynamic-route validator fix), governance (classification table, clinical gate triggers, detail page gate unchanged), hard-cite ledger. Route validator fix documented (validateRouteManifest.mjs line 64). |
