@@ -30,6 +30,16 @@
       ]
     }
   ],
+  "redirects": [
+    { "source": "/calculators/stroke-code", "destination": "/pathways/stroke-code", "permanent": true },
+    { "source": "/calculators/evt-pathway", "destination": "/pathways/evt-pathway", "permanent": true },
+    { "source": "/calculators/evt", "destination": "/pathways/evt-pathway", "permanent": true },
+    { "source": "/calculators/late-window-ivt", "destination": "/pathways/late-window-ivt", "permanent": true },
+    { "source": "/calculators/elan-pathway", "destination": "/pathways/elan-pathway", "permanent": true },
+    { "source": "/calculators/se-pathway", "destination": "/pathways/se-pathway", "permanent": true },
+    { "source": "/calculators/migraine-pathway", "destination": "/pathways/migraine-pathway", "permanent": true },
+    { "source": "/calculators/gca-pathway", "destination": "/pathways/gca-pathway", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }

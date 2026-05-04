@@ -67,19 +67,14 @@ interface Tool {
   path: string;
 }
 
+// Pathway items have moved to /pathways/* — see src/pages/Pathways.tsx (Prompt 5b Part 3)
 const tools: Tool[] = [
   { id: 'aspects', name: 'ASPECTS Score', description: 'Alberta Stroke Program Early CT Score — EVT core assessment', category: 'vascular', type: 'calculator', path: '/calculators/aspects-score' },
   { id: 'nihss', name: 'NIHSS', description: 'NIH Stroke Scale assessment', category: 'vascular', type: 'calculator', path: '/calculators/nihss' },
-  { id: 'evt-pathway', name: 'Thrombectomy Pathway', description: 'EVT eligibility for early and late windows', category: 'vascular', type: 'pathway', path: '/calculators/evt-pathway' },
-  { id: 'late-window-ivt', name: 'Late Window IVT', description: 'Wake-up stroke & late window thrombolysis eligibility (4.5–24h)', category: 'vascular', type: 'pathway', path: '/calculators/late-window-ivt' },
-  { id: 'elan-pathway', name: 'Post-Stroke Anticoagulation Timing', description: 'Anticoagulation timing after ischemic stroke with AF', category: 'vascular', type: 'pathway', path: '/calculators/elan-pathway' },
   { id: 'abcd2', name: 'ABCD² Score', description: 'TIA stroke risk within 2 days', category: 'vascular', type: 'calculator', path: '/calculators/abcd2-score' },
   { id: 'ich', name: 'ICH Score', description: '30-day mortality prediction for intracerebral hemorrhage', category: 'vascular', type: 'calculator', path: '/calculators/ich-score' },
   { id: 'has-bled', name: 'HAS-BLED', description: 'Major bleeding risk on anticoagulation', category: 'vascular', type: 'calculator', path: '/calculators/has-bled-score' },
   { id: 'rope', name: 'RoPE Score', description: 'PFO-attributable fraction in cryptogenic stroke', category: 'vascular', type: 'calculator', path: '/calculators/rope-score' },
-  { id: 'se-pathway', name: 'Status Epilepticus', description: 'Stage 1–3 SE management pathway', category: 'epilepsy', type: 'pathway', path: '/calculators/se-pathway' },
-  { id: 'migraine-pathway', name: 'Migraine & Headache', description: 'ED and inpatient management', category: 'headache', type: 'pathway', path: '/calculators/migraine-pathway' },
-  { id: 'gca-pathway', name: 'GCA / PMR Pathway', description: 'Suspected giant cell arteritis workup', category: 'headache', type: 'pathway', path: '/calculators/gca-pathway' },
   { id: 'gcs', name: 'Glasgow Coma Scale', description: 'Consciousness level assessment', category: 'general', type: 'calculator', path: '/calculators/glasgow-coma-scale' },
   { id: 'heidelberg-bleeding', name: 'Heidelberg Bleeding Classification', description: 'Hemorrhagic transformation after reperfusion (tPA/thrombectomy)', category: 'vascular', type: 'calculator', path: '/calculators/heidelberg-bleeding-classification' },
   { id: 'boston-caa', name: 'Boston Criteria 2.0 for CAA', description: 'Diagnose cerebral amyloid angiopathy from MRI findings', category: 'vascular', type: 'calculator', path: '/calculators/boston-criteria-caa' },

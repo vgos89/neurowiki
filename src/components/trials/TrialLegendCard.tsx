@@ -16,15 +16,14 @@ import type { TrialItem, TrialCategoryKey } from '../../data/trialListData';
  * Fallback: finding ← legend?.finding ?? description ?? name
  */
 
-// ── Category color map (v4 tokens) ───────────────────────────────────────────
-// All values are CSS custom properties defined in index.css :root (§L4 tokens).
-const CAT_COLOR: Record<TrialCategoryKey, string> = {
-  ivt:                    'var(--cat-ivt)',           // #10b981
-  evt:                    'var(--color-neuro-500)',    // #1746A2 cobalt; no --cat-evt needed
-  'secondary-prevention': 'var(--cat-prevention)',    // #0891b2
-  'surgical-interventions':'var(--cat-surgical)',     // #7c3aed
-  'acute-management':     'var(--cat-acute)',         // #f59e0b amber
-  'prehospital-triage':   'var(--cat-prehospital)',   // #f59e0b amber
+// HUB_SPEC Appendix A — canonical category colors (replaces --cat-* CSS custom properties)
+const CAT_DOT_COLOR: Record<TrialCategoryKey, string> = {
+  ivt:                    '#10b981',
+  evt:                    'var(--color-neuro-500)',  // cobalt #1746A2
+  'secondary-prevention': '#0891b2',
+  'surgical-interventions': '#7c3aed',
+  'acute-management':     '#f59e0b',
+  'prehospital-triage':   '#f59e0b',
 };
 
 interface TrialLegendCardProps {
@@ -37,7 +36,7 @@ export function TrialLegendCard({ trial, isFav, onFavToggle }: TrialLegendCardPr
   const finding = trial.legend?.finding ?? trial.description ?? trial.name;
   const tag = trial.legend?.bottomLineTag;
   const stat = trial.legend?.keyStat;
-  const dotColor = CAT_COLOR[trial.category] ?? '#94a3b8';
+  const dotColor = CAT_DOT_COLOR[trial.category] ?? '#94a3b8';
   const hasLine3 = Boolean(tag || stat);
 
   return (

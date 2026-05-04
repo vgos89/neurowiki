@@ -32,12 +32,6 @@
   --cobalt-soft:       rgba(23, 70, 162, 0.08);   /* focus halos, bl-tag bg */
   --ease-discovery:    cubic-bezier(0.16, 1, 0.3, 1); /* toggle, chevron    */
   --shadow-card-hover: 0 2px 8px rgba(15, 23, 42, 0.06); /* card hover      */
-  --cat-ivt:           #10b981;    /* IV Thrombolysis category accent        */
-  --cat-prevention:    #0891b2;    /* Prevention category accent             */
-  --cat-surgical:      #7c3aed;    /* Surgical category accent               */
-  --cat-acute:         #f59e0b;    /* Acute in-hospital management accent    */
-  --cat-prehospital:   #f59e0b;    /* Prehospital & triage accent            */
-  /* EVT uses var(--color-neuro-500) = #1746A2 (cobalt); no --cat-evt needed */
 }
 
 /* ── Width zone utilities — LAYOUT_SPEC §7 ──────────────────────────────── */
@@ -75,6 +69,70 @@
   background-color: var(--color-neuro-500, #1746A2);
   border-radius: 1px;
 }
+
+/* ── Row card + dot utilities — HUB_SPEC §1.6.2 + Appendix A ──────────── */
+/* .rowcard — base row card. Dot rendered as ::before pseudo-element.       */
+/* .row-{slug} — sets ::before color only. NEVER sets row background.       */
+/* .dot-{slug} — sets background-color on the dot element itself.           */
+/* HUB_SPEC §1.6.2 v1.1 BUG FIX: category class scoped to ::before only.  */
+
+.rowcard {
+  padding: 14px 0;
+  padding-left: 18px;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+  position: relative;
+  width: 100%;
+  text-align: left;
+  background-color: transparent;
+}
+.rowcard:hover {
+  background-color: rgba(248, 250, 252, 0.6);
+}
+.rowcard::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 21px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #94a3b8; /* fallback slate-400 */
+}
+
+/* Category indicator — scoped to ::before ONLY. NEVER sets row background. */
+/* HUB_SPEC Appendix A — canonical color reference */
+.rowcard.row-ivt::before        { background-color: #10b981; }
+.rowcard.row-evt::before        { background-color: var(--color-neuro-500); }
+.rowcard.row-prevention::before { background-color: #0891b2; }
+.rowcard.row-surgical::before   { background-color: #7c3aed; }
+.rowcard.row-status::before     { background-color: #f59e0b; }
+.rowcard.row-cobalt::before     { background-color: var(--color-neuro-500); }
+.rowcard.row-general::before    { background-color: #94a3b8; }
+.rowcard.row-vascular::before   { background-color: var(--color-neuro-500); }
+.rowcard.row-epilepsy::before   { background-color: #f59e0b; }
+.rowcard.row-critical::before   { background-color: #7c3aed; }
+.rowcard.row-acute::before      { background-color: var(--color-neuro-500); }
+.rowcard.row-severity::before   { background-color: var(--color-neuro-500); }
+.rowcard.row-risk::before       { background-color: #0891b2; }
+.rowcard.row-classification::before { background-color: #7c3aed; }
+
+/* Dot utilities — HUB_SPEC §1.6 — use ONLY on dot elements, never on row cards */
+/* HUB_SPEC Appendix A naming rule: .dot-{slug} sets background-color on the element itself */
+.dot-ivt        { background-color: #10b981; }
+.dot-evt        { background-color: var(--color-neuro-500); }
+.dot-prevention { background-color: #0891b2; }
+.dot-surgical   { background-color: #7c3aed; }
+.dot-status     { background-color: #f59e0b; }
+.dot-cobalt     { background-color: var(--color-neuro-500); }
+.dot-general    { background-color: #94a3b8; }
+.dot-vascular   { background-color: var(--color-neuro-500); }
+.dot-epilepsy   { background-color: #f59e0b; }
+.dot-critical   { background-color: #7c3aed; }
+.dot-acute      { background-color: var(--color-neuro-500); }
+.dot-severity   { background-color: var(--color-neuro-500); }
+.dot-risk       { background-color: #0891b2; }
+.dot-classification { background-color: #7c3aed; }
 
 body {
   font-family: var(--font-sans);

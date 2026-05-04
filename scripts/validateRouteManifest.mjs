@@ -28,7 +28,7 @@ if (duplicatePaths.length > 0) {
   throw new Error(`Duplicate manifest paths detected: ${duplicatePaths.join(', ')}`);
 }
 
-const requiredStaticPaths = ['/', '/calculators', '/guide', '/trials', '/calculators/stroke-code', '/guide/aha-2026-guideline'];
+const requiredStaticPaths = ['/', '/calculators', '/guide', '/trials', '/pathways', '/pathways/stroke-code', '/guide/aha-2026-guideline'];
 for (const requiredPath of requiredStaticPaths) {
   if (!STATIC_ROUTE_LOOKUP[requiredPath]) {
     throw new Error(`Required static route missing from manifest: ${requiredPath}`);
@@ -74,6 +74,15 @@ if (missingRailItem.length > 0) {
   throw new Error(
     `Routes missing valid railItem field: ${missingRailItem.map((r) => r.path).join(', ')}`
   );
+}
+
+// Part 3 — verify no /calculators/{pathway-slug} entries remain in the manifest
+const pathwaySlugsThatMoved = ['stroke-code', 'evt-pathway', 'late-window-ivt', 'elan-pathway', 'se-pathway', 'migraine-pathway', 'gca-pathway'];
+const stranded = STATIC_ROUTE_DEFINITIONS.filter(
+  (r) => r.path.startsWith('/calculators/') && pathwaySlugsThatMoved.some((s) => r.path.endsWith(s))
+);
+if (stranded.length > 0) {
+  throw new Error(`Pathway routes still under /calculators/ — should have moved to /pathways/: ${stranded.map(r => r.path).join(', ')}`);
 }
 
 const missingSitemapRoutes = STATIC_ROUTE_DEFINITIONS

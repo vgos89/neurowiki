@@ -16,6 +16,7 @@ const GlobalTrialModal = lazy(() =>
 const Home = lazy(() => import('./pages/Home'));
 const Wiki = lazy(() => import('./pages/Wiki'));
 const Calculators = lazy(() => import('./pages/Calculators'));
+const Pathways = lazy(() => import('./pages/Pathways'));
 const NihssCalculator = lazy(() => import('./pages/NihssCalculator'));
 const IchScoreCalculator = lazy(() => import('./pages/IchScoreCalculator'));
 const Abcd2ScoreCalculator = lazy(() => import('./pages/Abcd2ScoreCalculator'));
@@ -74,14 +75,15 @@ const ROUTE_COMPONENTS: Record<StaticRouteKey, React.ReactNode> = {
   'glasgow-coma-scale': <GlasgowComaScaleCalculator />,
   'heidelberg-bleeding-classification': <HeidelbergBleedingCalculator />,
   'boston-criteria-caa': <BostonCriteriaCaaCalculator />,
-  'gca-pathway': <GCAPathway />,
-  'elan-pathway': <ElanPathway />,
-  'evt-pathway': <EvtPathway />,
-  'late-window-ivt': <ExtendedIVTPathway />,
-  'se-pathway': <StatusEpilepticusPathway />,
-  'migraine-pathway': <MigrainePathway />,
-  'stroke-code': <StrokeBasics />,
   'em-billing': <EmBillingCalculator />,
+  'pathways-hub': <Pathways />,
+  'pathways-gca': <GCAPathway />,
+  'pathways-elan': <ElanPathway />,
+  'pathways-evt': <EvtPathway />,
+  'pathways-late-ivt': <ExtendedIVTPathway />,
+  'pathways-se': <StatusEpilepticusPathway />,
+  'pathways-migraine': <MigrainePathway />,
+  'pathways-stroke-code': <StrokeBasics />,
   'guide-hub': <ResidentToolkit />,
   'aha-2026-guideline': <StrokeGuidelineMindmap />,
   'stroke-basics': <StrokeBasics />,
@@ -145,6 +147,15 @@ const App: React.FC = () => {
               element={route.publishGate ? <PublishGate>{ROUTE_COMPONENTS[route.key]}</PublishGate> : ROUTE_COMPONENTS[route.key]}
             />
           ))}
+          {/* Client-side fallback redirects for pathway routes moved to /pathways/* — Part 3 */}
+          <Route path="/calculators/stroke-code" element={<Navigate to="/pathways/stroke-code" replace />} />
+          <Route path="/calculators/evt-pathway" element={<Navigate to="/pathways/evt-pathway" replace />} />
+          <Route path="/calculators/evt" element={<Navigate to="/pathways/evt-pathway" replace />} />
+          <Route path="/calculators/late-window-ivt" element={<Navigate to="/pathways/late-window-ivt" replace />} />
+          <Route path="/calculators/elan-pathway" element={<Navigate to="/pathways/elan-pathway" replace />} />
+          <Route path="/calculators/se-pathway" element={<Navigate to="/pathways/se-pathway" replace />} />
+          <Route path="/calculators/migraine-pathway" element={<Navigate to="/pathways/migraine-pathway" replace />} />
+          <Route path="/calculators/gca-pathway" element={<Navigate to="/pathways/gca-pathway" replace />} />
           <Route path="/wiki/:topic" element={<Wiki />} />
           <Route path="/guide/:topicId" element={<PublishGate><ResidentGuide context="guide" /></PublishGate>} />
           <Route path="/trials/q/:questionId" element={<QuestionDetailPage />} />

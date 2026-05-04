@@ -22,14 +22,15 @@ export type StaticRouteKey =
   | 'glasgow-coma-scale'
   | 'heidelberg-bleeding-classification'
   | 'boston-criteria-caa'
-  | 'gca-pathway'
-  | 'elan-pathway'
-  | 'evt-pathway'
-  | 'late-window-ivt'
-  | 'se-pathway'
-  | 'migraine-pathway'
-  | 'stroke-code'
   | 'em-billing'
+  | 'pathways-hub'
+  | 'pathways-gca'
+  | 'pathways-elan'
+  | 'pathways-evt'
+  | 'pathways-late-ivt'
+  | 'pathways-se'
+  | 'pathways-migraine'
+  | 'pathways-stroke-code'
   | 'guide-hub'
   | 'aha-2026-guideline'
   | 'stroke-basics'
@@ -244,14 +245,28 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     },
   },
   {
-    key: 'gca-pathway',
-    path: '/calculators/gca-pathway',
+    key: 'pathways-hub',
+    path: '/pathways',
+    published: true,
+    includeInSitemap: true,
+    zone: 'reference',
+    bottomNavTab: 'pathways',
+    railItem: 'pathways',
+    meta: {
+      title: 'Clinical Pathways — Decision Support for Neurology | NeuroWiki',
+      description: 'Step-through clinical decision pathways for neurology: Stroke Code, EVT, Extended IVT, ELAN anticoagulation, Status Epilepticus, Migraine, and GCA. Evidence-based and updated for AHA/ASA 2026.',
+      keywords: 'neurology clinical pathways, stroke pathway, EVT decision tool, status epilepticus protocol, migraine pathway, GCA pathway, neurology workflows',
+    },
+  },
+  {
+    key: 'pathways-gca',
+    path: '/pathways/gca-pathway',
     publishGate: true,
     published: true,
-    comingSoonMessage: 'GCA pathway',
     zone: 'reading',
     bottomNavTab: 'pathways',
     railItem: 'pathways',
+    comingSoonMessage: 'GCA pathway',
     meta: {
       title: 'GCA Pathway — Giant Cell Arteritis Diagnostic Workup | NeuroWiki',
       description: 'Risk stratification and diagnostic pathway for giant cell arteritis (GCA) and polymyalgia rheumatica (PMR). Covers clinical features, ESR/CRP, temporal artery biopsy, and corticosteroid initiation.',
@@ -259,15 +274,15 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     },
   },
   {
-    key: 'elan-pathway',
-    path: '/calculators/elan-pathway',
+    key: 'pathways-elan',
+    path: '/pathways/elan-pathway',
     publishGate: true,
     published: true,
     includeInSitemap: true,
-    comingSoonMessage: 'ELAN pathway',
     zone: 'reading',
     bottomNavTab: 'pathways',
     railItem: 'pathways',
+    comingSoonMessage: 'ELAN pathway',
     meta: {
       title: 'ELAN Anticoagulation Pathway — Post-Stroke DOAC Timing | NeuroWiki',
       description: 'DOAC anticoagulation timing after acute ischemic stroke with atrial fibrillation. Based on ELAN trial (NEJM 2023) and AHA/ASA 2026 guidelines. Covers stroke size, hemorrhagic transformation, and timing.',
@@ -275,65 +290,62 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     },
   },
   {
-    key: 'evt-pathway',
-    path: '/calculators/evt-pathway',
+    key: 'pathways-evt',
+    path: '/pathways/evt-pathway',
     publishGate: true,
     published: true,
     includeInSitemap: true,
-    comingSoonMessage: 'EVT pathway',
     zone: 'reading',
     bottomNavTab: 'pathways',
     railItem: 'pathways',
+    comingSoonMessage: 'EVT pathway',
     meta: {
       title: 'EVT Eligibility Tool — Thrombectomy Decision Support | NeuroWiki',
       description: 'Interactive EVT eligibility pathway for mechanical thrombectomy in acute ischemic stroke. Based on DAWN, DEFUSE-3, SELECT-2, ANGEL-ASPECT, and AHA/ASA 2026 guidelines. Covers LVO, ASPECTS, time windows.',
       keywords: 'EVT eligibility calculator, thrombectomy eligibility criteria, mechanical thrombectomy decision support, DAWN trial criteria, DEFUSE-3 criteria, EVT pathway stroke, ASPECTS score stroke',
-      image: DEFAULT_IMAGE,
     },
   },
   {
-    key: 'late-window-ivt',
-    path: '/calculators/late-window-ivt',
+    key: 'pathways-late-ivt',
+    path: '/pathways/late-window-ivt',
     publishGate: true,
     published: true,
     includeInSitemap: true,
-    comingSoonMessage: 'Late Window IVT',
     zone: 'reading',
     bottomNavTab: 'pathways',
     railItem: 'pathways',
+    comingSoonMessage: 'Late Window IVT',
     meta: {
       title: 'Late Window IVT — Wake-Up Stroke & Thrombolysis Eligibility | NeuroWiki',
       description: 'Interactive late window IVT eligibility pathway for wake-up stroke, perfusion-selected 4.5–9h thrombolysis, and selected late-window LVO cases up to 24h from last known well. Based on WAKE-UP, EXTEND, TIMELESS, TRACE-3, and 2026 AHA/ASA guidelines.',
       keywords: 'late window IVT, wake-up stroke thrombolysis, extended window tPA, DWI FLAIR mismatch eligibility, WAKE-UP trial criteria, TIMELESS trial tenecteplase, late window thrombolysis calculator, unknown onset stroke tPA',
-      image: DEFAULT_IMAGE,
     },
   },
   {
-    key: 'se-pathway',
-    path: '/calculators/se-pathway',
+    key: 'pathways-se',
+    path: '/pathways/se-pathway',
     publishGate: true,
     published: true,
     includeInSitemap: true,
-    comingSoonMessage: 'Status epilepticus pathway',
     zone: 'reading',
     bottomNavTab: 'pathways',
     railItem: 'pathways',
+    comingSoonMessage: 'Status epilepticus pathway',
     meta: {
       title: 'Status Epilepticus Protocol — Interactive Management Pathway | NeuroWiki',
       description: 'Step-by-step interactive status epilepticus management pathway. Covers early SE, established SE, refractory SE, and super-refractory SE. Based on ESETT trial and neurocritical care guidelines.',
       keywords: 'status epilepticus protocol, status epilepticus treatment algorithm, refractory status epilepticus, status epilepticus first line treatment, benzodiazepine status epilepticus, SE management pathway',
-      image: DEFAULT_IMAGE,
     },
   },
   {
-    key: 'migraine-pathway',
-    path: '/calculators/migraine-pathway',
+    key: 'pathways-migraine',
+    path: '/pathways/migraine-pathway',
     publishGate: true,
     published: true,
-    comingSoonMessage: 'Migraine pathway',
     zone: 'reading',
     bottomNavTab: 'pathways',
     railItem: 'pathways',
+    comingSoonMessage: 'Migraine pathway',
     meta: {
       title: 'Acute Migraine Pathway — ED & Inpatient Management | NeuroWiki',
       description: 'Acute migraine and headache management pathway for emergency department and inpatient settings. Migraine cocktail, abortive therapy, and refractory headache protocols.',
@@ -341,8 +353,8 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     },
   },
   {
-    key: 'stroke-code',
-    path: '/calculators/stroke-code',
+    key: 'pathways-stroke-code',
+    path: '/pathways/stroke-code',
     publishGate: true,
     published: true,
     includeInSitemap: true,
@@ -353,7 +365,6 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
       title: 'Stroke Code Protocol — Acute Stroke Workflow for Residents | NeuroWiki',
       description: 'Interactive stroke code workflow covering last known well, thrombolysis eligibility, CTA decision-making, thrombectomy escalation, and resident-ready admit orders.',
       keywords: 'stroke code protocol, acute stroke workflow, stroke code steps, stroke resident guide, thrombolysis checklist, thrombectomy workflow',
-      image: DEFAULT_IMAGE,
     },
   },
   {

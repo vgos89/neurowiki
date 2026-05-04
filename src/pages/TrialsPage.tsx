@@ -21,15 +21,14 @@ const TOGGLE_OPTIONS: [ToggleOption, ToggleOption] = [
   { value: 'catalog', label: 'Catalog' },
 ];
 
-// ── Category v4 colors ─────────────────────────────────────────────────────
-// All values are CSS custom properties defined in index.css :root (§L4 tokens).
+// HUB_SPEC Appendix A — category colors replacing --cat-* tokens (removed in 5b commit 2)
 const CAT_COLOR: Record<TrialCategoryKey, string> = {
-  ivt:                    'var(--cat-ivt)',           // #10b981
-  evt:                    'var(--color-neuro-500)',    // #1746A2 cobalt; no --cat-evt needed
-  'secondary-prevention': 'var(--cat-prevention)',    // #0891b2
-  'surgical-interventions':'var(--cat-surgical)',     // #7c3aed
-  'acute-management':     'var(--cat-acute)',         // #f59e0b amber
-  'prehospital-triage':   'var(--cat-prehospital)',   // #f59e0b amber
+  ivt:                    '#10b981',
+  evt:                    'var(--color-neuro-500)',
+  'secondary-prevention': '#0891b2',
+  'surgical-interventions': '#7c3aed',
+  'acute-management':     '#f59e0b',
+  'prehospital-triage':   '#f59e0b',
 };
 
 const CAT_SHORT: Record<TrialCategoryKey, string> = {
