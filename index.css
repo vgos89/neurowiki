@@ -19,10 +19,10 @@
   --color-neuro-700: #0E2D6B;
   --color-neuro-800: #0A2154;
   --color-neuro-900: #06143D;
-  /* Mobile bottom nav height (Layout.tsx — no explicit h-16; content-driven ~73px).
+  /* Mobile bottom nav height — LAYOUT_SPEC §2 (60px fixed).
      Drawer portals must offset by this value + env(safe-area-inset-bottom).
      CALCULATOR_SPEC.md §5.3 */
-  --tab-bar-height: 4.5rem;
+  --tab-bar-height: 60px;
 }
 
 /* ─── Trials legend design tokens (trials-legend-reference.html §3) ────── */
@@ -38,6 +38,42 @@
   --cat-acute:         #f59e0b;    /* Acute in-hospital management accent    */
   --cat-prehospital:   #f59e0b;    /* Prehospital & triage accent            */
   /* EVT uses var(--color-neuro-500) = #1746A2 (cobalt); no --cat-evt needed */
+}
+
+/* ── Width zone utilities — LAYOUT_SPEC §7 ──────────────────────────────── */
+/* Applied by Layout.tsx to the page-content wrapper based on route manifest. */
+/* Pages opt in via their route manifest zone field — never auto-applied.      */
+
+.zone-reading {
+  /* LAYOUT_SPEC §7.1 — long-form reading: 768px (max-w-3xl equivalent) */
+  max-width: 48rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.zone-reference {
+  /* LAYOUT_SPEC §7.2 — scanning / hub: 1024px (max-w-5xl equivalent) */
+  max-width: 64rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Desktop rail active state — LAYOUT_SPEC §6.1.3 ────────────────────── */
+.rail-item-active {
+  background-color: var(--color-neuro-50, #EEF2FF);
+  color: var(--color-neuro-500, #1746A2);
+  font-weight: 600;
+  position: relative;
+}
+.rail-item-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background-color: var(--color-neuro-500, #1746A2);
+  border-radius: 1px;
 }
 
 body {

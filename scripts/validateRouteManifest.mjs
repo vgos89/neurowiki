@@ -45,6 +45,37 @@ if (missingPublishedFlag.length > 0) {
   throw new Error(`Publish-gated routes missing published flag: ${missingPublishedFlag.map((route) => route.path).join(', ')}`);
 }
 
+// LAYOUT_SPEC §7, §2, §6.1.2 — every route must declare zone, bottomNavTab, railItem
+const VALID_ZONES = ['reading', 'reference', 'none'];
+const VALID_TABS = ['home', 'trials', 'calculators', 'pathways', 'guide'];
+
+const missingZone = STATIC_ROUTE_DEFINITIONS.filter(
+  (route) => !VALID_ZONES.includes(route.zone)
+);
+if (missingZone.length > 0) {
+  throw new Error(
+    `Routes missing valid zone field (${VALID_ZONES.join('|')}): ${missingZone.map((r) => r.path).join(', ')}`
+  );
+}
+
+const missingBottomNavTab = STATIC_ROUTE_DEFINITIONS.filter(
+  (route) => !VALID_TABS.includes(route.bottomNavTab)
+);
+if (missingBottomNavTab.length > 0) {
+  throw new Error(
+    `Routes missing valid bottomNavTab field: ${missingBottomNavTab.map((r) => r.path).join(', ')}`
+  );
+}
+
+const missingRailItem = STATIC_ROUTE_DEFINITIONS.filter(
+  (route) => !VALID_TABS.includes(route.railItem)
+);
+if (missingRailItem.length > 0) {
+  throw new Error(
+    `Routes missing valid railItem field: ${missingRailItem.map((r) => r.path).join(', ')}`
+  );
+}
+
 const missingSitemapRoutes = STATIC_ROUTE_DEFINITIONS
   .filter((route) => route.includeInSitemap)
   .map((route) => route.path)

@@ -5,6 +5,11 @@ export interface MetaData {
   image?: string;
 }
 
+// LAYOUT_SPEC §7 — width zone for main content wrapper
+export type Zone = 'reading' | 'reference' | 'none';
+// LAYOUT_SPEC §2 / §6.1.2 — nav tab identifiers
+export type NavTab = 'home' | 'trials' | 'calculators' | 'pathways' | 'guide';
+
 export type StaticRouteKey =
   | 'home'
   | 'calculators'
@@ -53,6 +58,9 @@ export interface RouteDefinition {
   includeInSitemap?: boolean;
   comingSoonMessage?: string;
   meta: MetaData;
+  zone: Zone;           // LAYOUT_SPEC §7 — width zone for main content wrapper
+  bottomNavTab: NavTab; // LAYOUT_SPEC §2 — which mobile nav tab is active on this route
+  railItem: NavTab;     // LAYOUT_SPEC §6.1.2 — which desktop rail item is active
 }
 
 const DEFAULT_IMAGE = 'https://neurowiki.ai/og-image.png';
@@ -70,6 +78,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     path: '/',
     published: true,
     includeInSitemap: true,
+    zone: 'reference',
+    bottomNavTab: 'home',
+    railItem: 'home',
     meta: DEFAULT_META,
   },
   {
@@ -77,6 +88,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     path: '/calculators',
     published: true,
     includeInSitemap: true,
+    zone: 'reference',
+    bottomNavTab: 'calculators',
+    railItem: 'calculators',
     meta: {
       title: 'Neurology Calculators — NIHSS, ICH Score, GCS & More | NeuroWiki',
       description: 'Free online neurology calculators: NIHSS, ICH Score, ABCD2, GCS, HAS-BLED, RoPE, Heidelberg, Boston Criteria 2.0. Stroke and neurocritical care tools for physicians.',
@@ -91,6 +105,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'ASPECTS Score calculator',
+    zone: 'reading',
+    bottomNavTab: 'calculators',
+    railItem: 'calculators',
     meta: {
       title: 'ASPECTS Score Calculator — Alberta Stroke Program Early CT Score | NeuroWiki',
       description: 'Free ASPECTS calculator for MCA stroke. Score 10 regions (M1–M6, Caudate, Lentiform, Internal Capsule, Insular Ribbon) on non-contrast CT. Color-coded EVT eligibility per AHA/ASA 2026 guidelines.',
@@ -104,6 +121,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'NIHSS calculator',
+    zone: 'reading',
+    bottomNavTab: 'calculators',
+    railItem: 'calculators',
     meta: {
       title: 'NIHSS Calculator — NIH Stroke Scale Online | NeuroWiki',
       description: 'Free NIHSS calculator for stroke severity assessment. Step-by-step NIH Stroke Scale scoring with LVO probability estimate and clinical interpretation.',
@@ -118,6 +138,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'ICH Score calculator',
+    zone: 'reading',
+    bottomNavTab: 'calculators',
+    railItem: 'calculators',
     meta: {
       title: 'ICH Score Calculator — Hemorrhage Prognosis | NeuroWiki',
       description: 'ICH Score calculator for 30-day mortality prediction in intracerebral hemorrhage. Covers GCS, volume, IVH, location, and age. Neurology clinical tool.',
@@ -131,6 +154,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'ABCD² Score calculator',
+    zone: 'reading',
+    bottomNavTab: 'calculators',
+    railItem: 'calculators',
     meta: {
       title: 'ABCD² Score Calculator — TIA Stroke Risk | NeuroWiki',
       description: 'Calculate 2-day stroke risk after TIA using the ABCD² score. Free online calculator with clinical interpretation. Age, blood pressure, clinical features, duration, diabetes. Based on AHA/ASA guidelines.',
@@ -144,6 +170,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'HAS-BLED calculator',
+    zone: 'reading',
+    bottomNavTab: 'calculators',
+    railItem: 'calculators',
     meta: {
       title: 'HAS-BLED Score — Bleeding Risk on Anticoagulation | NeuroWiki',
       description: 'Estimate major bleeding risk with the HAS-BLED score for patients on anticoagulation. Identifies modifiable risk factors. Note: not a reason to withhold anticoagulation in high-stroke-risk AF.',
@@ -157,6 +186,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'RoPE Score calculator',
+    zone: 'reading',
+    bottomNavTab: 'calculators',
+    railItem: 'calculators',
     meta: {
       title: 'RoPE Score — PFO-Attributable Stroke Risk | NeuroWiki',
       description: 'Calculate PFO-attributable fraction in cryptogenic stroke using the RoPE Score. Supports shared decision-making for PFO closure. Based on Kent et al.',
@@ -170,6 +202,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'GCS calculator',
+    zone: 'reading',
+    bottomNavTab: 'calculators',
+    railItem: 'calculators',
     meta: {
       title: 'Glasgow Coma Scale (GCS) Score Calculator | NeuroWiki',
       description: 'GCS calculator for bedside consciousness assessment. Handles intubated patients and not-testable responses. Eye, verbal, and motor scoring with severity band.',
@@ -183,6 +218,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Heidelberg bleeding classification',
+    zone: 'reading',
+    bottomNavTab: 'calculators',
+    railItem: 'calculators',
     meta: {
       title: 'Heidelberg Bleeding Classification — Hemorrhagic Transformation | NeuroWiki',
       description: 'Classify hemorrhagic transformation after ischemic stroke and reperfusion therapy. Free online calculator per von Kummer et al. Stroke 2015. Guides post-tPA and post-thrombectomy management.',
@@ -196,6 +234,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Boston Criteria 2.0 for CAA',
+    zone: 'reading',
+    bottomNavTab: 'calculators',
+    railItem: 'calculators',
     meta: {
       title: 'Boston Criteria 2.0 for CAA — Cerebral Amyloid Angiopathy | NeuroWiki',
       description: 'Diagnose cerebral amyloid angiopathy using Boston Criteria 2.0. MRI-based CAA classification with anticoagulation risk stratification. Charidimou et al., Lancet Neurology 2022.',
@@ -208,6 +249,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     publishGate: true,
     published: true,
     comingSoonMessage: 'GCA pathway',
+    zone: 'reading',
+    bottomNavTab: 'pathways',
+    railItem: 'pathways',
     meta: {
       title: 'GCA Pathway — Giant Cell Arteritis Diagnostic Workup | NeuroWiki',
       description: 'Risk stratification and diagnostic pathway for giant cell arteritis (GCA) and polymyalgia rheumatica (PMR). Covers clinical features, ESR/CRP, temporal artery biopsy, and corticosteroid initiation.',
@@ -221,6 +265,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'ELAN pathway',
+    zone: 'reading',
+    bottomNavTab: 'pathways',
+    railItem: 'pathways',
     meta: {
       title: 'ELAN Anticoagulation Pathway — Post-Stroke DOAC Timing | NeuroWiki',
       description: 'DOAC anticoagulation timing after acute ischemic stroke with atrial fibrillation. Based on ELAN trial (NEJM 2023) and AHA/ASA 2026 guidelines. Covers stroke size, hemorrhagic transformation, and timing.',
@@ -234,6 +281,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'EVT pathway',
+    zone: 'reading',
+    bottomNavTab: 'pathways',
+    railItem: 'pathways',
     meta: {
       title: 'EVT Eligibility Tool — Thrombectomy Decision Support | NeuroWiki',
       description: 'Interactive EVT eligibility pathway for mechanical thrombectomy in acute ischemic stroke. Based on DAWN, DEFUSE-3, SELECT-2, ANGEL-ASPECT, and AHA/ASA 2026 guidelines. Covers LVO, ASPECTS, time windows.',
@@ -248,6 +298,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Late Window IVT',
+    zone: 'reading',
+    bottomNavTab: 'pathways',
+    railItem: 'pathways',
     meta: {
       title: 'Late Window IVT — Wake-Up Stroke & Thrombolysis Eligibility | NeuroWiki',
       description: 'Interactive late window IVT eligibility pathway for wake-up stroke, perfusion-selected 4.5–9h thrombolysis, and selected late-window LVO cases up to 24h from last known well. Based on WAKE-UP, EXTEND, TIMELESS, TRACE-3, and 2026 AHA/ASA guidelines.',
@@ -262,6 +315,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Status epilepticus pathway',
+    zone: 'reading',
+    bottomNavTab: 'pathways',
+    railItem: 'pathways',
     meta: {
       title: 'Status Epilepticus Protocol — Interactive Management Pathway | NeuroWiki',
       description: 'Step-by-step interactive status epilepticus management pathway. Covers early SE, established SE, refractory SE, and super-refractory SE. Based on ESETT trial and neurocritical care guidelines.',
@@ -275,6 +331,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     publishGate: true,
     published: true,
     comingSoonMessage: 'Migraine pathway',
+    zone: 'reading',
+    bottomNavTab: 'pathways',
+    railItem: 'pathways',
     meta: {
       title: 'Acute Migraine Pathway — ED & Inpatient Management | NeuroWiki',
       description: 'Acute migraine and headache management pathway for emergency department and inpatient settings. Migraine cocktail, abortive therapy, and refractory headache protocols.',
@@ -287,6 +346,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     publishGate: true,
     published: true,
     includeInSitemap: true,
+    zone: 'reading',
+    bottomNavTab: 'pathways',
+    railItem: 'pathways',
     meta: {
       title: 'Stroke Code Protocol — Acute Stroke Workflow for Residents | NeuroWiki',
       description: 'Interactive stroke code workflow covering last known well, thrombolysis eligibility, CTA decision-making, thrombectomy escalation, and resident-ready admit orders.',
@@ -300,6 +362,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     publishGate: true,
     published: true,
     comingSoonMessage: 'E/M Billing calculator',
+    zone: 'reading',
+    bottomNavTab: 'calculators',
+    railItem: 'calculators',
     meta: {
       title: 'E/M Billing Calculator — CPT Code 99202–99215 | MDM & Time-Based | NeuroWiki',
       description: 'Free E/M billing calculator for physicians. Select the correct CPT code (99202–99215, 99221–99233) using 2021 AMA MDM or time-based criteria. Neurology, hospitalist, IM, and emergency medicine. NPI lookup included.',
@@ -311,6 +376,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     path: '/guide',
     published: true,
     includeInSitemap: true,
+    zone: 'reference',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'Neurology Toolkit — Clinical Guides, Protocols & Calculators | NeuroWiki',
       description: 'Neurology protocols and clinical guides for residents, attendings, and medical students. Stroke code, EVT, status epilepticus, ASPECTS, NIHSS, and more.',
@@ -325,6 +393,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: '2026 AHA/ASA Stroke Guideline mindmap coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: '2026 AHA/ASA Stroke Guideline Mindmap | NeuroWiki',
       description: 'Interactive mindmap summary of the 2026 AHA/ASA acute ischemic stroke guideline with class-of-recommendation and level-of-evidence context for bedside review.',
@@ -339,6 +410,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Stroke basics guide',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'Stroke Code Protocol — Acute Stroke Workflow for Residents | NeuroWiki',
       description: 'Complete acute stroke code protocol: last known well, tPA eligibility, NIHSS, CT/CTA imaging, thrombectomy criteria, GWTG metrics, and admit orders. AHA/ASA 2026 aligned. For neurology residents.',
@@ -353,6 +427,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'IV tPA eligibility and protocol coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'IV tPA Protocol — Alteplase & Tenecteplase Eligibility | NeuroWiki',
       description: 'Complete IV thrombolysis protocol for acute ischemic stroke. Alteplase 0.9 mg/kg and tenecteplase 0.25 mg/kg eligibility, dosing, inclusions/exclusions, and monitoring. AHA/ASA 2026 COR 1 for both agents.',
@@ -366,6 +443,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     publishGate: true,
     published: true,
     comingSoonMessage: 'tPA eligibility criteria coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'IV tPA Protocol — Alteplase & Tenecteplase Eligibility | NeuroWiki',
       description: 'Complete IV thrombolysis protocol for acute ischemic stroke. Alteplase 0.9 mg/kg and tenecteplase 0.25 mg/kg eligibility, dosing, inclusions/exclusions, and monitoring. AHA/ASA 2026 COR 1 for both agents.',
@@ -380,6 +460,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Thrombectomy guide coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'Mechanical Thrombectomy Guide — EVT Criteria & Technique | NeuroWiki',
       description: 'Mechanical thrombectomy guide for LVO stroke. EVT eligibility criteria, imaging selection (ASPECTS, perfusion), procedure overview, and post-procedure management. DAWN, DEFUSE-3, AHA/ASA 2026.',
@@ -393,6 +476,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Acute stroke management guide coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'Acute Stroke Management — Inpatient Protocol | NeuroWiki',
       description: 'Acute ischemic stroke management protocol: BP targets, glucose control, dysphagia screening, antiplatelet initiation, DVT prophylaxis, and secondary prevention. AHA/ASA 2026 guidelines.',
@@ -406,6 +492,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Status epilepticus guide coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'Status Epilepticus Management Guide — First Line to Refractory | NeuroWiki',
       description: 'Status epilepticus management: lorazepam first-line, levetiracetam/valproate/fosphenytoin second-line, propofol/midazolam/ketamine for refractory SE. Based on ESETT trial. For neurology residents.',
@@ -419,6 +508,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'ICH management guide coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'ICH Management — Intracerebral Hemorrhage Protocol | NeuroWiki',
       description: 'Acute ICH management per 2022 AHA/ASA guidelines: rapid BP reduction to <140 mmHg, 4-factor PCC reversal, cerebellar hemorrhage surgery criteria, ICP management, and hematoma expansion prevention.',
@@ -432,6 +524,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Meningitis guide coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'Bacterial Meningitis — Workup & Treatment Protocol | NeuroWiki',
       description: 'Bacterial meningitis workup and treatment: empiric antibiotics, dexamethasone timing, LP interpretation, CSF analysis, and antibiotic tailoring. For emergency and inpatient neurology.',
@@ -445,6 +540,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'GBS guide coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'Guillain-Barré Syndrome (GBS) — Diagnosis & Treatment | NeuroWiki',
       description: 'GBS clinical guide: Brighton criteria, NCS findings, CSF albumino-cytologic dissociation, IVIG vs. plasmapheresis, respiratory monitoring (NIF, FVC), and prognosis. For neurology residents.',
@@ -458,6 +556,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Myasthenia gravis guide coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'Myasthenia Gravis — Diagnosis, Crisis, & Treatment | NeuroWiki',
       description: 'Myasthenia gravis clinical guide: acetylcholinesterase inhibitor dosing, myasthenic crisis management, IVIG/plasmapheresis, thymectomy indications, and long-term immunosuppression. For neurology residents.',
@@ -471,6 +572,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Multiple sclerosis guide coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'Multiple Sclerosis — Diagnosis, Relapse & DMT | NeuroWiki',
       description: 'MS clinical guide: McDonald criteria, relapse management with high-dose methylprednisolone, disease-modifying therapy overview, and monitoring. For neurology residents and students.',
@@ -484,6 +588,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Seizure workup guide coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'Seizure Workup — First Seizure Evaluation & Diagnostic Approach | NeuroWiki',
       description: 'First seizure workup: EEG, MRI brain, LP indications, seizure mimics, AED initiation criteria, and recurrence risk. For emergency and neurology residents.',
@@ -497,6 +604,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Altered mental status guide coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'Altered Mental Status Workup — Diagnostic Approach | NeuroWiki',
       description: 'Systematic approach to altered mental status (AMS): differential diagnosis, initial workup, delirium vs. encephalopathy, reversible causes, and empiric treatment. Neurology and emergency medicine.',
@@ -510,6 +620,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Headache workup guide coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'Headache Workup — Differential Diagnosis & Red Flags | NeuroWiki',
       description: 'Systematic headache workup: primary vs. secondary headache differentiation, thunderclap headache evaluation, SNOOP4 red flags, LP for SAH, and imaging criteria. For neurology residents.',
@@ -523,6 +636,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Vertigo guide coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'Vertigo — BPPV, Central vs Peripheral, & HINTS Exam | NeuroWiki',
       description: 'Vertigo clinical guide: BPPV Epley maneuver, HINTS exam for stroke vs. peripheral cause, Dix-Hallpike, vestibular neuritis vs. cerebellar stroke. For neurology and emergency medicine.',
@@ -536,6 +652,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: true,
     comingSoonMessage: 'Weakness workup guide coming soon',
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
     meta: {
       title: 'Weakness Workup — Upper vs Lower Motor Neuron Approach | NeuroWiki',
       description: 'Systematic weakness evaluation: UMN vs. LMN localization, neuromuscular junction, myopathy workup, MRC grading, and diagnostic algorithm. For neurology residents.',
@@ -547,6 +666,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     path: '/trials',
     published: true,
     includeInSitemap: true,
+    zone: 'reference',
+    bottomNavTab: 'trials',
+    railItem: 'trials',
     meta: {
       title: 'Stroke Clinical Trials — Evidence Summaries for Neurologists | NeuroWiki',
       description: 'Summaries of 79 landmark stroke clinical trials: DAWN, DEFUSE-3, NINDS, ORIGINAL, MR CLEAN, INSPIRES, ENRICH, TRACE-III, ELAN, CHANCE, POINT, and more. NNT, mRS outcomes, AHA/ASA 2026 guideline recommendations. For neurologists and residents.',
