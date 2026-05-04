@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hub Reference Mockup — NeuroWiki — v1.1</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --color-neuro-50:  #EEF2FF;
+    --color-neuro-100: #C7D7FA;
+    --color-neuro-400: #4A7FE5;
+    --color-neuro-500: #1746A2;
+    --color-neuro-600: #123988;
+    --color-neuro-700: #0E2D6B;
+    --color-neuro-900: #06143D;
+  }
+  .bg-neuro-50  { background-color: var(--color-neuro-50); }
+  .bg-neuro-500 { background-color: var(--color-neuro-500); }
+  .bg-neuro-600 { background-color: var(--color-neuro-600); }
+  .text-neuro-500 { color: var(--color-neuro-500); }
+  .text-neuro-600 { color: var(--color-neuro-600); }
+  .text-neuro-700 { color: var(--color-neuro-700); }
+  .border-neuro-500 { border-color: var(--color-neuro-500); }
+
+  .divider-hair { border-top: 1px solid #e2e8f0; }
+
+  /* dot-* utilities — for the pill-internal .dot element and standalone section dots ONLY. NEVER applied to row cards directly. */
+  .dot-ivt        { background-color: #10b981; }
+  .dot-evt        { background-color: var(--color-neuro-500); }
+  .dot-prevention { background-color: #0891b2; }
+  .dot-surgical   { background-color: #7c3aed; }
+  .dot-status     { background-color: #f59e0b; }
+  .dot-general    { background-color: #94a3b8; }
+  .dot-cobalt     { background-color: var(--color-neuro-500); }
+
+  .text-cat-ivt        { color: #10b981; }
+  .text-cat-prevention { color: #0891b2; }
+  .text-cat-surgical   { color: #7c3aed; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .pill-active {
+    background-color: #f8fafc;
+    color: #0f172a;
+    font-weight: 600;
+  }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  .toggle {
+    display: flex;
+    background: #f1f5f9;
+    border-radius: 12px;
+    padding: 4px;
+  }
+  .tog-seg {
+    flex: 1;
+    padding: 9px 14px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    border-radius: 9px;
+    cursor: pointer;
+  }
+  .tog-seg-active {
+    background: white;
+    color: #0f172a;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(15,23,42,0.06), 0 0 0 1px rgba(15,23,42,0.04);
+  }
+
+  /* row card — colored dot is rendered as ::before on the row, NEVER as a background fill on the row itself */
+  .rowcard {
+    padding: 14px 0;
+    padding-left: 18px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    position: relative;
+    width: 100%;
+    text-align: left;
+    background-color: transparent;
+  }
+  .rowcard:hover { background-color: rgba(248, 250, 252, 0.6); }
+  .rowcard::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 21px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background-color: #94a3b8;
+  }
+  .rowcard.row-ivt::before        { background-color: #10b981; }
+  .rowcard.row-evt::before        { background-color: var(--color-neuro-500); }
+  .rowcard.row-prevention::before { background-color: #0891b2; }
+  .rowcard.row-surgical::before   { background-color: #7c3aed; }
+  .rowcard.row-status::before     { background-color: #f59e0b; }
+  .rowcard.row-cobalt::before     { background-color: var(--color-neuro-500); }
+  .rowcard.row-vascular::before   { background-color: var(--color-neuro-500); }
+  .rowcard.row-epilepsy::before   { background-color: #f59e0b; }
+  .rowcard.row-critical::before   { background-color: #7c3aed; }
+  .rowcard.row-general::before    { background-color: #94a3b8; }
+  .rowcard.row-acute::before      { background-color: var(--color-neuro-500); }
+  .rowcard.row-severity::before   { background-color: var(--color-neuro-500); }
+  .rowcard.row-risk::before       { background-color: #0891b2; }
+  .rowcard.row-classification::before { background-color: #7c3aed; }
+
+  .sec-h {
+    margin-top: 26px;
+    margin-bottom: 4px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .sec-h:first-of-type { margin-top: 0; }
+
+  body { background: #f1f5f9; }
+  .mockup-frame {
+    max-width: 440px;
+    margin: 0 auto;
+    background: white;
+    min-height: 100vh;
+    position: relative;
+  }
+  .state-divider {
+    background: #f8fafc;
+    border-top: 1px dashed #cbd5e1;
+    border-bottom: 1px dashed #cbd5e1;
+  }
+  .archetype-banner { background: #0f172a; color: white; }
+</style>
+</head>
+<body>
+
+<!-- =============================================================== -->
+<!-- ARCHETYPE 1 — TRIALS HUB (canary)                               -->
+<!-- =============================================================== -->
+<div class="archetype-banner">
+  <div class="max-w-5xl mx-auto px-6 py-4">
+    <div class="text-xs font-bold uppercase tracking-widest text-slate-300 mb-1">Archetype 1 · canary</div>
+    <h2 class="text-lg font-semibold">Trials hub — locked pattern</h2>
+    <p class="text-sm text-slate-300 mt-1"><strong>v5g changes:</strong> remove three decorative chips (Recent / New 2024–25 / Guidelines), drop --cat-acute and --cat-prehospital tokens. Anatomy itself unchanged.</p>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">Trials hub · Catalog tab · IVT section · star inactive</div>
+
+<!-- ANCHOR: §1 trials-hub -->
+<div class="mockup-frame">
+
+  <header class="h-[60px] bg-white border-b border-slate-100 flex items-center justify-between px-5">
+    <div class="flex items-center gap-2.5">
+      <div class="w-7 h-7 rounded-lg bg-neuro-500 flex items-center justify-center text-white font-semibold text-sm" style="font-family: serif; letter-spacing: -0.04em;">N</div>
+      <div class="text-base font-semibold tracking-tight">Neuro<span class="text-neuro-500">Wiki</span></div>
+    </div>
+    <div class="flex items-center gap-1">
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-700"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></button>
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-400"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg></button>
+    </div>
+  </header>
+
+  <main class="px-5 pt-7 pb-24">
+
+    <!-- ANCHOR: §1.1 hub-hero -->
+    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Trials reference</div>
+    <h1 class="text-[24px] font-medium text-slate-900 leading-tight tracking-tight mb-2">79 trials.</h1>
+    <p class="text-[14.5px] text-slate-500 leading-snug mb-5">Evidence summaries by clinical question or category.</p>
+
+    <!-- §1.2 mobile search box: REMOVED in HUB_SPEC v1.2 — search lives only in chrome -->
+
+    <!-- ANCHOR: §1.3 hub-toggle (TRIALS ONLY) -->
+    <div class="toggle mb-6">
+      <button class="tog-seg">Questions</button>
+      <button class="tog-seg tog-seg-active">Catalog</button>
+    </div>
+
+    <!-- ANCHOR: §1.4 hub-pill-row -->
+    <div class="flex gap-2.5 overflow-x-auto mb-6" style="scrollbar-width: none;">
+      <button class="pill pill-active">All</button>
+      <button class="pill"><span class="dot dot-ivt"></span>IVT</button>
+      <button class="pill"><span class="dot dot-evt"></span>EVT</button>
+      <button class="pill"><span class="dot dot-prevention"></span>Prevention</button>
+      <button class="pill"><span class="dot dot-surgical"></span>Surgical</button>
+      <div class="self-center w-px h-5 bg-slate-200 flex-shrink-0"></div>
+      <button class="pill">
+        <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="19 12 12 19 5 12"/></svg>
+        Year
+      </button>
+    </div>
+
+    <!-- ANCHOR: §1.5 hub-section-header -->
+    <div class="sec-h">
+      <div class="flex items-center gap-2.5 mb-1">
+        <div class="w-2 h-2 rounded-full dot-ivt"></div>
+        <div class="text-[15px] font-semibold flex-1 text-cat-ivt">IVT</div>
+        <div class="text-[12px] text-slate-400 font-medium">21</div>
+      </div>
+      <div class="text-[12.5px] text-slate-500 pl-[18px] leading-snug">Intravenous thrombolysis across standard, extended, and imaging-selected windows.</div>
+    </div>
+
+    <!-- ANCHOR: §1.6 hub-row-card -->
+    <button class="rowcard row-ivt">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <div>
+          <span class="text-[14.5px] font-semibold text-slate-900">ORIGINAL</span>
+          <span class="text-[11.5px] text-slate-400 font-medium ml-2">2024 · JAMA</span>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span class="text-[11px] font-semibold bg-neuro-50 text-neuro-600 px-2 py-0.5 rounded">Non-inferior</span>
+          <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+        </div>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">Tenecteplase non-inferior to alteplase in low–middle income settings.</div>
+    </button>
+
+    <button class="rowcard row-ivt">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <div>
+          <span class="text-[14.5px] font-semibold text-slate-900">EXTEND</span>
+          <span class="text-[11.5px] text-slate-400 font-medium ml-2">2019 · NEJM</span>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span class="text-[11px] font-semibold bg-neuro-50 text-neuro-600 px-2 py-0.5 rounded">+6 / 100</span>
+          <span class="text-[11.5px] text-slate-500 font-medium">NNT <span class="text-slate-900 font-semibold">17</span></span>
+          <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+        </div>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">Alteplase 4.5–9 h with perfusion-selected imaging improves recovery.</div>
+    </button>
+
+    <button class="rowcard row-ivt">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <div>
+          <span class="text-[14.5px] font-semibold text-slate-900">WAKE-UP</span>
+          <span class="text-[11.5px] text-slate-400 font-medium ml-2">2018 · NEJM</span>
+        </div>
+        <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">DWI/FLAIR mismatch trial supporting alteplase for wake-up stroke.</div>
+    </button>
+
+  </main>
+
+  <nav class="h-[60px] bg-white border-t border-slate-100 flex" style="position: absolute; bottom: 0; left: 0; right: 0;">
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/></svg><span class="text-[10px] font-medium">Home</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-neuro-500" aria-current="page"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/><path d="M10 3v6L5 19a2 2 0 002 3h10a2 2 0 002-3l-5-10V3"/></svg><span class="text-[10px] font-medium">Trials</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="7" r="1.4"/><circle cx="12" cy="7" r="1.4"/><circle cx="18" cy="7" r="1.4"/><circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/><circle cx="6" cy="17" r="1.4"/><circle cx="12" cy="17" r="1.4"/><circle cx="18" cy="17" r="1.4"/></svg><span class="text-[10px] font-medium">Calcs</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="19" cy="18" r="1.8"/><path d="M6.5 7.2L10.5 11"/><path d="M13.5 11L17.5 7.2"/><path d="M13.5 13L17.5 16.8"/></svg><span class="text-[10px] font-medium">Pathways</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg><span class="text-[10px] font-medium">Guide</span></a>
+  </nav>
+
+</div>
+
+
+<!-- =============================================================== -->
+<!-- ARCHETYPE 2 — CALCULATORS HUB                                   -->
+<!-- =============================================================== -->
+<div class="archetype-banner mt-12">
+  <div class="max-w-5xl mx-auto px-6 py-4">
+    <div class="text-xs font-bold uppercase tracking-widest text-slate-300 mb-1">Archetype 2</div>
+    <h2 class="text-lg font-semibold">Calculators hub</h2>
+    <p class="text-sm text-slate-300 mt-1"><strong>Differences:</strong> no Toggle · pills group by function (Severity / Risk / Classification) · trail slot shows score range · star far right.</p>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">Calculators hub · Severity section · GCS favourited</div>
+
+<!-- ANCHOR: §2 calculators-hub -->
+<div class="mockup-frame">
+
+  <header class="h-[60px] bg-white border-b border-slate-100 flex items-center justify-between px-5">
+    <div class="flex items-center gap-2.5">
+      <div class="w-7 h-7 rounded-lg bg-neuro-500 flex items-center justify-center text-white font-semibold text-sm" style="font-family: serif; letter-spacing: -0.04em;">N</div>
+      <div class="text-base font-semibold tracking-tight">Neuro<span class="text-neuro-500">Wiki</span></div>
+    </div>
+    <div class="flex items-center gap-1">
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-700"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></button>
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-400"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg></button>
+    </div>
+  </header>
+
+  <main class="px-5 pt-7 pb-24">
+
+    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Calculators</div>
+    <h1 class="text-[24px] font-medium text-slate-900 leading-tight tracking-tight mb-2">10 calculators.</h1>
+    <p class="text-[14.5px] text-slate-500 leading-snug mb-5">Validated clinical scoring and prediction tools.</p>
+
+    <!-- §1.2 search: REMOVED in HUB_SPEC v1.2 -->
+
+    <div class="flex gap-2.5 overflow-x-auto mb-6" style="scrollbar-width: none;">
+      <button class="pill pill-active">All</button>
+      <button class="pill"><span class="dot dot-cobalt"></span>Severity</button>
+      <button class="pill"><span class="dot dot-prevention"></span>Risk</button>
+      <button class="pill"><span class="dot dot-surgical"></span>Classification</button>
+    </div>
+
+    <div class="sec-h">
+      <div class="flex items-center gap-2.5 mb-1">
+        <div class="w-2 h-2 rounded-full dot-cobalt"></div>
+        <div class="text-[15px] font-semibold flex-1 text-slate-900">Severity</div>
+        <div class="text-[12px] text-slate-400 font-medium">3</div>
+      </div>
+      <div class="text-[12.5px] text-slate-500 pl-[18px] leading-snug">Stroke and consciousness scoring tools.</div>
+    </div>
+
+    <!-- ANCHOR: §2.1 calc-row-card -->
+    <button class="rowcard row-severity">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <span class="text-[14.5px] font-semibold text-slate-900">NIHSS</span>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span class="text-[11.5px] text-slate-500 font-medium">0–<span class="text-slate-900 font-semibold">42</span></span>
+          <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+        </div>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">15-item stroke severity exam validated for IVT/EVT decisions.</div>
+    </button>
+
+    <!-- ANCHOR: §2.2 calc-row-card-favourited -->
+    <button class="rowcard row-severity">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <span class="text-[14.5px] font-semibold text-slate-900">Glasgow Coma Scale</span>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span class="text-[11.5px] text-slate-500 font-medium">3–<span class="text-slate-900 font-semibold">15</span></span>
+          <svg class="w-4 h-4 text-amber-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+        </div>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">3-item conscious-level score: eye, verbal, motor response.</div>
+    </button>
+
+    <button class="rowcard row-severity">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <span class="text-[14.5px] font-semibold text-slate-900">ASPECTS</span>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span class="text-[11.5px] text-slate-500 font-medium">0–<span class="text-slate-900 font-semibold">10</span></span>
+          <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+        </div>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">CT-based ischemic burden in MCA territory.</div>
+    </button>
+
+  </main>
+
+  <nav class="h-[60px] bg-white border-t border-slate-100 flex" style="position: absolute; bottom: 0; left: 0; right: 0;">
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/></svg><span class="text-[10px] font-medium">Home</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/></svg><span class="text-[10px] font-medium">Trials</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-neuro-500" aria-current="page"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="7" r="1.4"/><circle cx="12" cy="7" r="1.4"/><circle cx="18" cy="7" r="1.4"/><circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/><circle cx="6" cy="17" r="1.4"/><circle cx="12" cy="17" r="1.4"/><circle cx="18" cy="17" r="1.4"/></svg><span class="text-[10px] font-medium">Calcs</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="19" cy="18" r="1.8"/><path d="M6.5 7.2L10.5 11"/><path d="M13.5 11L17.5 7.2"/><path d="M13.5 13L17.5 16.8"/></svg><span class="text-[10px] font-medium">Pathways</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg><span class="text-[10px] font-medium">Guide</span></a>
+  </nav>
+
+</div>
+
+
+<!-- =============================================================== -->
+<!-- ARCHETYPE 3 — PATHWAYS HUB                                      -->
+<!-- =============================================================== -->
+<div class="archetype-banner mt-12">
+  <div class="max-w-5xl mx-auto px-6 py-4">
+    <div class="text-xs font-bold uppercase tracking-widest text-slate-300 mb-1">Archetype 3 · NEW</div>
+    <h2 class="text-lg font-semibold">Pathways hub</h2>
+    <p class="text-sm text-slate-300 mt-1">New top-level destination at <code class="bg-slate-800 px-1.5 rounded text-xs">/pathways</code>. <strong>Differences:</strong> no Toggle · pills by scenario · trail slot shows step count.</p>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">Pathways hub · Acute stroke section · 2 favourited</div>
+
+<!-- ANCHOR: §3 pathways-hub -->
+<div class="mockup-frame">
+
+  <header class="h-[60px] bg-white border-b border-slate-100 flex items-center justify-between px-5">
+    <div class="flex items-center gap-2.5">
+      <div class="w-7 h-7 rounded-lg bg-neuro-500 flex items-center justify-center text-white font-semibold text-sm" style="font-family: serif; letter-spacing: -0.04em;">N</div>
+      <div class="text-base font-semibold tracking-tight">Neuro<span class="text-neuro-500">Wiki</span></div>
+    </div>
+    <div class="flex items-center gap-1">
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-700"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></button>
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-400"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg></button>
+    </div>
+  </header>
+
+  <main class="px-5 pt-7 pb-24">
+
+    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Pathways</div>
+    <h1 class="text-[24px] font-medium text-slate-900 leading-tight tracking-tight mb-2">7 decision pathways.</h1>
+    <p class="text-[14.5px] text-slate-500 leading-snug mb-5">Step-through workflows for time-critical decisions.</p>
+
+    <!-- §1.2 search: REMOVED in HUB_SPEC v1.2 -->
+
+    <div class="flex gap-2.5 overflow-x-auto mb-6" style="scrollbar-width: none;">
+      <button class="pill pill-active">All</button>
+      <button class="pill"><span class="dot dot-cobalt"></span>Acute stroke</button>
+      <button class="pill"><span class="dot dot-status"></span>Status</button>
+      <button class="pill"><span class="dot dot-prevention"></span>Headache</button>
+    </div>
+
+    <div class="sec-h">
+      <div class="flex items-center gap-2.5 mb-1">
+        <div class="w-2 h-2 rounded-full dot-cobalt"></div>
+        <div class="text-[15px] font-semibold flex-1 text-slate-900">Acute stroke</div>
+        <div class="text-[12px] text-slate-400 font-medium">3</div>
+      </div>
+      <div class="text-[12.5px] text-slate-500 pl-[18px] leading-snug">Triage, imaging, and treatment decision trees.</div>
+    </div>
+
+    <!-- ANCHOR: §3.1 pathway-row-card -->
+    <button class="rowcard row-acute">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <span class="text-[14.5px] font-semibold text-slate-900">Stroke Code</span>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span class="text-[11.5px] text-slate-500 font-medium"><span class="text-slate-900 font-semibold">4</span> steps</span>
+          <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+        </div>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">First 60 minutes — triage, imaging, treatment decision tree.</div>
+    </button>
+
+    <button class="rowcard row-acute">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <span class="text-[14.5px] font-semibold text-slate-900">Late-Window IVT</span>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span class="text-[11.5px] text-slate-500 font-medium"><span class="text-slate-900 font-semibold">3</span> steps</span>
+          <svg class="w-4 h-4 text-amber-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+        </div>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">tPA in 4.5–9 h or wake-up window with imaging selection.</div>
+    </button>
+
+    <button class="rowcard row-acute">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <span class="text-[14.5px] font-semibold text-slate-900">EVT Pathway</span>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span class="text-[11.5px] text-slate-500 font-medium"><span class="text-slate-900 font-semibold">4</span> steps</span>
+          <svg class="w-4 h-4 text-amber-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+        </div>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">LVO triage: occlusion type, time, NIHSS, ASPECTS → decision.</div>
+    </button>
+
+  </main>
+
+  <nav class="h-[60px] bg-white border-t border-slate-100 flex" style="position: absolute; bottom: 0; left: 0; right: 0;">
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/></svg><span class="text-[10px] font-medium">Home</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/></svg><span class="text-[10px] font-medium">Trials</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="7" r="1.4"/><circle cx="12" cy="7" r="1.4"/><circle cx="18" cy="7" r="1.4"/><circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/><circle cx="6" cy="17" r="1.4"/><circle cx="12" cy="17" r="1.4"/><circle cx="18" cy="17" r="1.4"/></svg><span class="text-[10px] font-medium">Calcs</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-neuro-500" aria-current="page"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="19" cy="18" r="1.8"/><path d="M6.5 7.2L10.5 11"/><path d="M13.5 11L17.5 7.2"/><path d="M13.5 13L17.5 16.8"/></svg><span class="text-[10px] font-medium">Pathways</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg><span class="text-[10px] font-medium">Guide</span></a>
+  </nav>
+
+</div>
+
+
+<!-- =============================================================== -->
+<!-- ARCHETYPE 4 — GUIDE HUB                                         -->
+<!-- =============================================================== -->
+<div class="archetype-banner mt-12">
+  <div class="max-w-5xl mx-auto px-6 py-4">
+    <div class="text-xs font-bold uppercase tracking-widest text-slate-300 mb-1">Archetype 4</div>
+    <h2 class="text-lg font-semibold">Guide hub</h2>
+    <p class="text-sm text-slate-300 mt-1"><strong>Differences:</strong> no Toggle · pills group by clinical area · meta slot shows read time · trail slot empty.</p>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">Guide hub · Vascular section · meta = read time</div>
+
+<!-- ANCHOR: §4 guide-hub -->
+<div class="mockup-frame">
+
+  <header class="h-[60px] bg-white border-b border-slate-100 flex items-center justify-between px-5">
+    <div class="flex items-center gap-2.5">
+      <div class="w-7 h-7 rounded-lg bg-neuro-500 flex items-center justify-center text-white font-semibold text-sm" style="font-family: serif; letter-spacing: -0.04em;">N</div>
+      <div class="text-base font-semibold tracking-tight">Neuro<span class="text-neuro-500">Wiki</span></div>
+    </div>
+    <div class="flex items-center gap-1">
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-700"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></button>
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-400"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg></button>
+    </div>
+  </header>
+
+  <main class="px-5 pt-7 pb-24">
+
+    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Resident guide</div>
+    <h1 class="text-[24px] font-medium text-slate-900 leading-tight tracking-tight mb-2">Deep reading.</h1>
+    <p class="text-[14.5px] text-slate-500 leading-snug mb-5">In-depth chapters on neurology topics. Updated for the 2026 AHA cycle.</p>
+
+    <!-- §1.2 search: REMOVED in HUB_SPEC v1.2 -->
+
+    <div class="flex gap-2.5 overflow-x-auto mb-6" style="scrollbar-width: none;">
+      <button class="pill pill-active">All</button>
+      <button class="pill"><span class="dot dot-cobalt"></span>Vascular</button>
+      <button class="pill"><span class="dot dot-status"></span>Epilepsy</button>
+      <button class="pill"><span class="dot dot-surgical"></span>Critical care</button>
+      <button class="pill"><span class="dot dot-general"></span>General</button>
+    </div>
+
+    <div class="sec-h">
+      <div class="flex items-center gap-2.5 mb-1">
+        <div class="w-2 h-2 rounded-full dot-cobalt"></div>
+        <div class="text-[15px] font-semibold flex-1 text-slate-900">Vascular neurology</div>
+        <div class="text-[12px] text-slate-400 font-medium">5</div>
+      </div>
+      <div class="text-[12.5px] text-slate-500 pl-[18px] leading-snug">Acute stroke, ICH, secondary prevention.</div>
+    </div>
+
+    <!-- ANCHOR: §4.1 guide-row-card -->
+    <button class="rowcard row-vascular">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <div>
+          <span class="text-[14.5px] font-semibold text-slate-900">Acute Stroke Management</span>
+          <span class="text-[11.5px] text-slate-400 font-medium ml-2">12 min</span>
+        </div>
+        <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">ED workflow, imaging, and treatment decisions in the first hour.</div>
+    </button>
+
+    <button class="rowcard row-vascular">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <div>
+          <span class="text-[14.5px] font-semibold text-slate-900">IV tPA</span>
+          <span class="text-[11.5px] text-slate-400 font-medium ml-2">9 min</span>
+        </div>
+        <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">Eligibility, contraindications, dosing, and post-treatment monitoring.</div>
+    </button>
+
+    <button class="rowcard row-vascular">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <div>
+          <span class="text-[14.5px] font-semibold text-slate-900">Thrombectomy</span>
+          <span class="text-[11.5px] text-slate-400 font-medium ml-2">10 min</span>
+        </div>
+        <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">LVO criteria, time windows, and post-procedural management.</div>
+    </button>
+
+  </main>
+
+  <nav class="h-[60px] bg-white border-t border-slate-100 flex" style="position: absolute; bottom: 0; left: 0; right: 0;">
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/></svg><span class="text-[10px] font-medium">Home</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/></svg><span class="text-[10px] font-medium">Trials</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="7" r="1.4"/><circle cx="12" cy="7" r="1.4"/><circle cx="18" cy="7" r="1.4"/><circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/><circle cx="6" cy="17" r="1.4"/><circle cx="12" cy="17" r="1.4"/><circle cx="18" cy="17" r="1.4"/></svg><span class="text-[10px] font-medium">Calcs</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="19" cy="18" r="1.8"/><path d="M6.5 7.2L10.5 11"/><path d="M13.5 11L17.5 7.2"/><path d="M13.5 13L17.5 16.8"/></svg><span class="text-[10px] font-medium">Pathways</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-neuro-500" aria-current="page"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg><span class="text-[10px] font-medium">Guide</span></a>
+  </nav>
+
+</div>
+
+<div style="height: 60px;"></div>
+
+</body>
+</html>

@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Home Reference Mockup — NeuroWiki — v1.2</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --color-neuro-50:  #EEF2FF;
+    --color-neuro-100: #C7D7FA;
+    --color-neuro-400: #4A7FE5;
+    --color-neuro-500: #1746A2;
+    --color-neuro-600: #123988;
+    --color-neuro-700: #0E2D6B;
+    --color-neuro-900: #06143D;
+  }
+  .bg-neuro-50  { background-color: var(--color-neuro-50); }
+  .bg-neuro-500 { background-color: var(--color-neuro-500); }
+  .bg-neuro-600 { background-color: var(--color-neuro-600); }
+  .text-neuro-500 { color: var(--color-neuro-500); }
+  .text-neuro-600 { color: var(--color-neuro-600); }
+  .text-neuro-700 { color: var(--color-neuro-700); }
+  .border-neuro-500 { border-color: var(--color-neuro-500); }
+
+  /* dot utilities — used ONLY on the .dot element inside pills. NEVER applied to row cards or section headers. */
+  .dot-ivt        { background-color: #10b981; }
+  .dot-evt        { background-color: var(--color-neuro-500); }
+  .dot-prevention { background-color: #0891b2; }
+  .dot-surgical   { background-color: #7c3aed; }
+  .dot-status     { background-color: #f59e0b; }
+  .dot-general    { background-color: #94a3b8; }
+
+  /* pill row */
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .pill-active {
+    background-color: #f8fafc;
+    color: #0f172a;
+    font-weight: 600;
+  }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  /* row card — colored dot is rendered as ::before on the row, NOT as a row background (HUB_SPEC §1.6) */
+  .rowcard {
+    padding: 14px 0;
+    padding-left: 18px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    position: relative;
+    width: 100%;
+    text-align: left;
+    background-color: transparent;
+    border-top: none; border-left: none; border-right: none;
+  }
+  .rowcard:last-child { border-bottom: none; }
+  .rowcard:hover { background-color: rgba(248, 250, 252, 0.6); }
+  .rowcard::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 21px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background-color: #94a3b8;
+  }
+  .rowcard.row-ivt::before        { background-color: #10b981; }
+  .rowcard.row-evt::before        { background-color: var(--color-neuro-500); }
+  .rowcard.row-prevention::before { background-color: #0891b2; }
+  .rowcard.row-surgical::before   { background-color: #7c3aed; }
+  .rowcard.row-status::before     { background-color: #f59e0b; }
+  .rowcard.row-cobalt::before     { background-color: var(--color-neuro-500); }
+
+  /* SCENARIO HEADER — v1.2 tinted, no dot, no left edge, two-line content */
+  .scenario-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 14px 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    margin-top: 10px;
+    transition: background-color 160ms ease;
+  }
+  .scenario-header:first-of-type { margin-top: 0; }
+
+  /* COLLAPSED — 8% tint of category color */
+  .scenario-header.collapsed.cat-ivt        { background-color: rgba(16, 185, 129, 0.08); }
+  .scenario-header.collapsed.cat-surgical   { background-color: rgba(124, 58, 237, 0.08); }
+  .scenario-header.collapsed.cat-status     { background-color: rgba(245, 158, 11, 0.08); }
+  .scenario-header.collapsed.cat-prevention { background-color: rgba(8, 145, 178, 0.08); }
+  .scenario-header.collapsed.cat-general    { background-color: rgba(148, 163, 184, 0.12); }
+
+  /* EXPANDED — 12% tint of category color */
+  .scenario-header.expanded.cat-ivt        { background-color: rgba(16, 185, 129, 0.12); }
+  .scenario-header.expanded.cat-surgical   { background-color: rgba(124, 58, 237, 0.12); }
+  .scenario-header.expanded.cat-status     { background-color: rgba(245, 158, 11, 0.12); }
+  .scenario-header.expanded.cat-prevention { background-color: rgba(8, 145, 178, 0.12); }
+  .scenario-header.expanded.cat-general    { background-color: rgba(148, 163, 184, 0.18); }
+
+  /* HOVER — small bump on both states */
+  .scenario-header.collapsed.cat-ivt:hover        { background-color: rgba(16, 185, 129, 0.10); }
+  .scenario-header.expanded.cat-ivt:hover         { background-color: rgba(16, 185, 129, 0.14); }
+  .scenario-header.collapsed.cat-surgical:hover   { background-color: rgba(124, 58, 237, 0.10); }
+  .scenario-header.expanded.cat-surgical:hover    { background-color: rgba(124, 58, 237, 0.14); }
+  .scenario-header.collapsed.cat-status:hover     { background-color: rgba(245, 158, 11, 0.10); }
+  .scenario-header.expanded.cat-status:hover      { background-color: rgba(245, 158, 11, 0.14); }
+  .scenario-header.collapsed.cat-prevention:hover { background-color: rgba(8, 145, 178, 0.10); }
+  .scenario-header.expanded.cat-prevention:hover  { background-color: rgba(8, 145, 178, 0.14); }
+  .scenario-header.collapsed.cat-general:hover    { background-color: rgba(148, 163, 184, 0.16); }
+  .scenario-header.expanded.cat-general:hover     { background-color: rgba(148, 163, 184, 0.22); }
+
+  .scenario-header .title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #0f172a;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+  .scenario-header .subtitle {
+    font-size: 12.5px;
+    color: #64748b;
+    line-height: 1.4;
+    margin-top: 2px;
+  }
+  .scenario-header .chevron {
+    width: 18px;
+    height: 18px;
+    color: #94a3b8;
+    flex-shrink: 0;
+    margin-left: 12px;
+    transition: transform 160ms ease;
+  }
+  .scenario-header.expanded .chevron {
+    transform: rotate(180deg);
+  }
+
+  .scenario-body {
+    padding: 4px 4px 0;
+  }
+
+  /* Show more button — visually distinct from a section header (white, no tint) */
+  .show-more-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 13px 0;
+    margin-top: 24px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+    cursor: pointer;
+    transition: border-color 120ms ease, color 120ms ease;
+  }
+  .show-more-btn:hover {
+    border-color: var(--color-neuro-500);
+    color: var(--color-neuro-500);
+  }
+
+  /* FEATURED RAIL — v1.3 (above pill row) */
+  .featured-rail {
+    margin-bottom: 20px;
+  }
+  .featured-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .featured-track {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .featured-track::-webkit-scrollbar { display: none; }
+  .featured-tile {
+    flex-shrink: 0;
+    width: 200px;
+    padding: 14px 14px 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 160ms ease;
+  }
+  /* Featured tile category tints — 8% default, 10% hover */
+  .featured-tile.cat-cobalt        { background-color: rgba(23, 70, 162, 0.08); }
+  .featured-tile.cat-cobalt:hover  { background-color: rgba(23, 70, 162, 0.10); }
+  .featured-tile.cat-ivt           { background-color: rgba(16, 185, 129, 0.08); }
+  .featured-tile.cat-ivt:hover     { background-color: rgba(16, 185, 129, 0.10); }
+  .featured-tile.cat-status        { background-color: rgba(245, 158, 11, 0.08); }
+  .featured-tile.cat-status:hover  { background-color: rgba(245, 158, 11, 0.10); }
+  .featured-tile .type-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .featured-tile .name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f172a;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  .featured-tile .description {
+    font-size: 12.5px;
+    color: #475569;
+    line-height: 1.4;
+  }
+
+  body { background: #f1f5f9; }
+  .mockup-frame {
+    max-width: 440px;
+    margin: 0 auto;
+    background: white;
+    min-height: 100vh;
+    position: relative;
+  }
+  .state-divider {
+    background: #f8fafc;
+    border-top: 1px dashed #cbd5e1;
+    border-bottom: 1px dashed #cbd5e1;
+  }
+  .archetype-banner { background: #0f172a; color: white; }
+</style>
+</head>
+<body>
+
+<!-- =============================================================== -->
+<!-- ARCHETYPE 1 — DEFAULT (All pill, first visit, scenario 1 auto-expanded) -->
+<!-- =============================================================== -->
+<div class="archetype-banner">
+  <div class="max-w-5xl mx-auto px-6 py-4">
+    <div class="text-xs font-bold uppercase tracking-widest text-slate-300 mb-1">Archetype 1 · default · first visit · v1.3</div>
+    <h2 class="text-lg font-semibold">Home — Featured rail above pills, scenario 1 auto-expanded, Show more not yet tapped</h2>
+    <p class="text-sm text-slate-300 mt-1">Single-state hub: Featured rail (3 V-curated tiles, calc/pathway only) sits at the top of the page on All view; below it, scenarios are pills (matches every other hub). Each scenario is a collapsible section with a tinted header (8% category color when closed, 12% when open). On a user's first ever visit, scenario 1 (Acute stroke) is auto-expanded as a discoverability hint; this is detected via <code class="bg-slate-800 px-1.5 rounded text-xs">localStorage:neurowiki:home:hasVisited</code>. All subsequent visits start with all sections collapsed. Show more is collapsed by default and persists via <code class="bg-slate-800 px-1.5 rounded text-xs">localStorage:neurowiki:home:showMoreExpanded</code>. Below: Recently viewed (when populated), then daily-seeded Trending trials. URL = <code class="bg-slate-800 px-1.5 rounded text-xs">/</code></p>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">Home · All pill active · first visit · scenario 1 expanded · Show more collapsed</div>
+
+<!-- ANCHOR: §1 home-default-first-visit -->
+<div class="mockup-frame">
+
+  <header class="h-[60px] bg-white border-b border-slate-100 flex items-center justify-between px-5">
+    <div class="flex items-center gap-2.5">
+      <div class="w-7 h-7 rounded-lg bg-neuro-500 flex items-center justify-center text-white font-semibold text-sm" style="font-family: serif; letter-spacing: -0.04em;">N</div>
+      <div class="text-base font-semibold tracking-tight">Neuro<span class="text-neuro-500">Wiki</span></div>
+    </div>
+    <div class="flex items-center gap-1">
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-700"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></button>
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-400"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg></button>
+    </div>
+  </header>
+
+  <main class="px-5 pt-7 pb-24">
+
+    <!-- ANCHOR: §1.1 home-hero -->
+    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">By case</div>
+    <h1 class="text-[24px] font-medium text-slate-900 leading-tight tracking-tight mb-2">What's the case?</h1>
+    <p class="text-[14.5px] text-slate-500 leading-snug mb-5">Pick a scenario or browse all the tools.</p>
+
+    <!-- §1.2 mobile search box: REMOVED in v1.4 — search lives only in the chrome (mobile header button, desktop top bar). See LAYOUT_SPEC §1.3.1 / §6.2.2 -->
+
+    <!-- ANCHOR: §1.25 featured-rail (All view only, 3 V-curated tiles, calc/pathway only) -->
+    <div class="featured-rail">
+      <div class="featured-eyebrow">Featured</div>
+      <div class="featured-track">
+        <button class="featured-tile cat-cobalt">
+          <div class="type-label">Pathway</div>
+          <div class="name">EVT Pathway</div>
+          <div class="description">LVO triage from imaging to decision in under 60 seconds.</div>
+        </button>
+        <button class="featured-tile cat-ivt">
+          <div class="type-label">Pathway</div>
+          <div class="name">Late-Window IVT</div>
+          <div class="description">tPA in 4.5–9 h or wake-up window with imaging.</div>
+        </button>
+        <button class="featured-tile cat-cobalt">
+          <div class="type-label">Calculator</div>
+          <div class="name">NIHSS</div>
+          <div class="description">15-item stroke severity exam. Range 0–42.</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ANCHOR: §1.3 home-pill-row (scenarios as pills) -->
+    <div class="flex gap-2.5 overflow-x-auto mb-6" style="scrollbar-width: none;">
+      <button class="pill pill-active">All</button>
+      <button class="pill"><span class="dot dot-ivt"></span>Acute stroke</button>
+      <button class="pill"><span class="dot dot-surgical"></span>ICH</button>
+      <button class="pill"><span class="dot dot-status"></span>Status</button>
+      <button class="pill"><span class="dot dot-prevention"></span>Headache</button>
+      <button class="pill"><span class="dot dot-general"></span>AMS</button>
+    </div>
+
+    <!-- ANCHOR: §1.4 scenario-section-1 (Acute stroke, expanded — 12% IVT tint) -->
+    <button class="scenario-header expanded cat-ivt" aria-expanded="true" aria-controls="scenario-acute-stroke-body">
+      <div>
+        <div class="title">Acute ischemic stroke</div>
+        <div class="subtitle">Within 24 h of onset · 5 tools</div>
+      </div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <div id="scenario-acute-stroke-body" class="scenario-body" role="region">
+      <button class="rowcard row-evt">
+        <div class="text-[14.5px] font-semibold text-slate-900 mb-1">Stroke Code</div>
+        <div class="text-sm text-slate-600 leading-snug">First 60 minutes — triage, imaging, treatment decision tree.</div>
+      </button>
+
+      <button class="rowcard row-ivt">
+        <div class="text-[14.5px] font-semibold text-slate-900 mb-1">Late-Window IVT</div>
+        <div class="text-sm text-slate-600 leading-snug">tPA in 4.5–9 h or wake-up window with imaging selection.</div>
+      </button>
+
+      <button class="rowcard row-evt">
+        <div class="text-[14.5px] font-semibold text-slate-900 mb-1">EVT Pathway</div>
+        <div class="text-sm text-slate-600 leading-snug">LVO triage: occlusion, time, NIHSS, ASPECTS → decision.</div>
+      </button>
+
+      <button class="rowcard row-cobalt">
+        <div class="flex items-baseline justify-between gap-3 mb-1">
+          <span class="text-[14.5px] font-semibold text-slate-900">NIHSS</span>
+          <span class="text-[11.5px] text-slate-500 font-medium">0–<span class="text-slate-900 font-semibold">42</span></span>
+        </div>
+        <div class="text-sm text-slate-600 leading-snug">15-item stroke severity exam.</div>
+      </button>
+
+      <button class="rowcard row-cobalt">
+        <div class="flex items-baseline justify-between gap-3 mb-1">
+          <span class="text-[14.5px] font-semibold text-slate-900">ASPECTS</span>
+          <span class="text-[11.5px] text-slate-500 font-medium">0–<span class="text-slate-900 font-semibold">10</span></span>
+        </div>
+        <div class="text-sm text-slate-600 leading-snug">CT-based ischemic burden in MCA territory.</div>
+      </button>
+    </div>
+
+    <!-- scenario-section-2 (ICH, collapsed — 8% surgical tint, no body rendered) -->
+    <button class="scenario-header collapsed cat-surgical" aria-expanded="false" aria-controls="scenario-ich-body">
+      <div>
+        <div class="title">ICH</div>
+        <div class="subtitle">Intracerebral hemorrhage · 4 tools</div>
+      </div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <!-- scenario-section-3 (Status, collapsed — 8% status tint, no body rendered) -->
+    <button class="scenario-header collapsed cat-status" aria-expanded="false" aria-controls="scenario-status-epilepticus-body">
+      <div>
+        <div class="title">Status epilepticus</div>
+        <div class="subtitle">Refractory algorithm · 3 tools</div>
+      </div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <!-- ANCHOR: §1.5 show-more-button (collapsed) -->
+    <button class="show-more-btn">
+      <span>Show more scenarios</span>
+      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <!-- ANCHOR: §1.6 recently-viewed (All view only, only when populated) -->
+    <div class="mt-9">
+      <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Recently viewed</h2>
+
+      <button class="rowcard row-evt">
+        <div class="text-[14.5px] font-semibold text-slate-900 mb-1">EVT Pathway</div>
+        <div class="text-sm text-slate-600 leading-snug">LVO triage decision tree.</div>
+      </button>
+
+      <button class="rowcard row-cobalt">
+        <div class="flex items-baseline justify-between gap-3 mb-1">
+          <span class="text-[14.5px] font-semibold text-slate-900">NIHSS</span>
+          <span class="text-[11.5px] text-slate-500 font-medium">0–<span class="text-slate-900 font-semibold">42</span></span>
+        </div>
+        <div class="text-sm text-slate-600 leading-snug">15-item stroke severity exam.</div>
+      </button>
+
+      <button class="rowcard row-ivt">
+        <div class="flex items-baseline justify-between gap-3 mb-1">
+          <div>
+            <span class="text-[14.5px] font-semibold text-slate-900">EXTEND</span>
+            <span class="text-[11.5px] text-slate-400 font-medium ml-2">2019 · NEJM</span>
+          </div>
+          <span class="text-[11px] font-semibold bg-neuro-50 text-neuro-600 px-2 py-0.5 rounded">+6 / 100</span>
+        </div>
+        <div class="text-sm text-slate-600 leading-snug">Alteplase 4.5–9 h with perfusion-selected imaging.</div>
+      </button>
+    </div>
+
+    <!-- ANCHOR: §1.7 trending-trials (All view only, daily-seeded, 5 trials) -->
+    <div class="mt-9">
+      <div class="flex items-baseline justify-between mb-1">
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Trending trials</h2>
+        <span class="text-[10px] text-slate-400 font-medium">Refreshes daily</span>
+      </div>
+
+      <button class="rowcard row-ivt">
+        <div class="flex items-baseline justify-between gap-3 mb-1">
+          <div><span class="text-[14.5px] font-semibold text-slate-900">NINDS-tPA</span><span class="text-[11.5px] text-slate-400 font-medium ml-2">1995 · NEJM</span></div>
+          <span class="text-[11px] font-semibold bg-neuro-50 text-neuro-600 px-2 py-0.5 rounded">+11 / 100</span>
+        </div>
+        <div class="text-sm text-slate-600 leading-snug">Original IV alteplase trial within 3 hours.</div>
+      </button>
+
+      <button class="rowcard row-evt">
+        <div class="flex items-baseline justify-between gap-3 mb-1">
+          <div><span class="text-[14.5px] font-semibold text-slate-900">DAWN</span><span class="text-[11.5px] text-slate-400 font-medium ml-2">2018 · NEJM</span></div>
+          <span class="text-[11px] font-semibold bg-neuro-50 text-neuro-600 px-2 py-0.5 rounded">+35 / 100</span>
+        </div>
+        <div class="text-sm text-slate-600 leading-snug">EVT 6–24 h with clinical-imaging mismatch.</div>
+      </button>
+
+      <button class="rowcard row-prevention">
+        <div class="flex items-baseline justify-between gap-3 mb-1">
+          <div><span class="text-[14.5px] font-semibold text-slate-900">CHANCE</span><span class="text-[11.5px] text-slate-400 font-medium ml-2">2013 · NEJM</span></div>
+          <span class="text-[11px] font-semibold bg-neuro-50 text-neuro-600 px-2 py-0.5 rounded">−3.5 / 100</span>
+        </div>
+        <div class="text-sm text-slate-600 leading-snug">DAPT for high-risk TIA / minor stroke (21 days).</div>
+      </button>
+
+      <button class="rowcard row-surgical">
+        <div class="flex items-baseline justify-between gap-3 mb-1">
+          <div><span class="text-[14.5px] font-semibold text-slate-900">INTERACT-2</span><span class="text-[11.5px] text-slate-400 font-medium ml-2">2013 · NEJM</span></div>
+          <span class="text-[11px] font-semibold bg-neuro-50 text-neuro-600 px-2 py-0.5 rounded">NS</span>
+        </div>
+        <div class="text-sm text-slate-600 leading-snug">Intensive BP lowering in acute ICH.</div>
+      </button>
+
+      <button class="rowcard row-status">
+        <div class="flex items-baseline justify-between gap-3 mb-1">
+          <div><span class="text-[14.5px] font-semibold text-slate-900">ESETT</span><span class="text-[11.5px] text-slate-400 font-medium ml-2">2019 · NEJM</span></div>
+          <span class="text-[11px] font-semibold bg-neuro-50 text-neuro-600 px-2 py-0.5 rounded">NS</span>
+        </div>
+        <div class="text-sm text-slate-600 leading-snug">Three second-line agents for benzo-refractory SE.</div>
+      </button>
+
+      <a href="/trials" class="block text-center mt-3 text-[13px] font-medium text-neuro-500 hover:text-neuro-600">View all 79 trials →</a>
+    </div>
+
+  </main>
+
+  <nav class="h-[60px] bg-white border-t border-slate-100 flex" style="position: absolute; bottom: 0; left: 0; right: 0;">
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-neuro-500" aria-current="page"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg><span class="text-[10px] font-medium">Home</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6L4 18a2 2 0 0 0 1.8 2.9h12.4A2 2 0 0 0 20 18L15 8V2"/><line x1="9" y1="2" x2="15" y2="2"/><line x1="7" y1="14" x2="17" y2="14"/></svg><span class="text-[10px] font-medium">Trials</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="7" r="1.4"/><circle cx="12" cy="7" r="1.4"/><circle cx="18" cy="7" r="1.4"/><circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/><circle cx="6" cy="17" r="1.4"/><circle cx="12" cy="17" r="1.4"/><circle cx="18" cy="17" r="1.4"/></svg><span class="text-[10px] font-medium">Calcs</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="19" cy="18" r="1.8"/><path d="M6.5 7.2L10.5 11"/><path d="M13.5 11L17.5 7.2"/><path d="M13.5 13L17.5 16.8"/></svg><span class="text-[10px] font-medium">Pathways</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg><span class="text-[10px] font-medium">Guide</span></a>
+  </nav>
+
+</div>
+
+
+<!-- =============================================================== -->
+<!-- ARCHETYPE 2 — SCENARIO PILL ACTIVE (Acute stroke selected)      -->
+<!-- =============================================================== -->
+<div class="archetype-banner mt-12">
+  <div class="max-w-5xl mx-auto px-6 py-4">
+    <div class="text-xs font-bold uppercase tracking-widest text-slate-300 mb-1">Archetype 2 · scenario pill active</div>
+    <h2 class="text-lg font-semibold">Home — Acute stroke pill active, only that scenario shown</h2>
+    <p class="text-sm text-slate-300 mt-1">Pill filter is active. The matching scenario renders always-expanded (overrides per-section state). Show more is not rendered. Recently viewed and Trending are not rendered. URL = <code class="bg-slate-800 px-1.5 rounded text-xs">/?scenario=acute-stroke</code></p>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">Home · Acute stroke pill active</div>
+
+<!-- ANCHOR: §2 home-scenario-active -->
+<div class="mockup-frame">
+
+  <header class="h-[60px] bg-white border-b border-slate-100 flex items-center justify-between px-5">
+    <div class="flex items-center gap-2.5">
+      <div class="w-7 h-7 rounded-lg bg-neuro-500 flex items-center justify-center text-white font-semibold text-sm" style="font-family: serif; letter-spacing: -0.04em;">N</div>
+      <div class="text-base font-semibold tracking-tight">Neuro<span class="text-neuro-500">Wiki</span></div>
+    </div>
+    <div class="flex items-center gap-1">
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-700"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></button>
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-400"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg></button>
+    </div>
+  </header>
+
+  <main class="px-5 pt-7 pb-24">
+
+    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">By case</div>
+    <h1 class="text-[24px] font-medium text-slate-900 leading-tight tracking-tight mb-2">What's the case?</h1>
+    <p class="text-[14.5px] text-slate-500 leading-snug mb-5">Pick a scenario or browse all the tools.</p>
+
+    <!-- §1.2 mobile search box: REMOVED in v1.4 — see LAYOUT_SPEC -->
+
+    <!-- NO Featured rail (hidden when scenario pill active — see HOME_SPEC §1.25.1) -->
+
+    <div class="flex gap-2.5 overflow-x-auto mb-6" style="scrollbar-width: none;">
+      <button class="pill">All</button>
+      <button class="pill pill-active"><span class="dot dot-ivt"></span>Acute stroke</button>
+      <button class="pill"><span class="dot dot-surgical"></span>ICH</button>
+      <button class="pill"><span class="dot dot-status"></span>Status</button>
+      <button class="pill"><span class="dot dot-prevention"></span>Headache</button>
+      <button class="pill"><span class="dot dot-general"></span>AMS</button>
+    </div>
+
+    <!-- Only one scenario rendered, always-expanded -->
+    <button class="scenario-header expanded cat-ivt" aria-expanded="true" aria-controls="scenario-acute-stroke-body-2">
+      <div>
+        <div class="title">Acute ischemic stroke</div>
+        <div class="subtitle">Within 24 h of onset · 5 tools</div>
+      </div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <div id="scenario-acute-stroke-body-2" class="scenario-body" role="region">
+      <button class="rowcard row-evt">
+        <div class="text-[14.5px] font-semibold text-slate-900 mb-1">Stroke Code</div>
+        <div class="text-sm text-slate-600 leading-snug">First 60 minutes — triage, imaging, treatment decision tree.</div>
+      </button>
+
+      <button class="rowcard row-ivt">
+        <div class="text-[14.5px] font-semibold text-slate-900 mb-1">Late-Window IVT</div>
+        <div class="text-sm text-slate-600 leading-snug">tPA in 4.5–9 h or wake-up window with imaging selection.</div>
+      </button>
+
+      <button class="rowcard row-evt">
+        <div class="text-[14.5px] font-semibold text-slate-900 mb-1">EVT Pathway</div>
+        <div class="text-sm text-slate-600 leading-snug">LVO triage: occlusion, time, NIHSS, ASPECTS → decision.</div>
+      </button>
+
+      <button class="rowcard row-cobalt">
+        <div class="flex items-baseline justify-between gap-3 mb-1">
+          <span class="text-[14.5px] font-semibold text-slate-900">NIHSS</span>
+          <span class="text-[11.5px] text-slate-500 font-medium">0–<span class="text-slate-900 font-semibold">42</span></span>
+        </div>
+        <div class="text-sm text-slate-600 leading-snug">15-item stroke severity exam.</div>
+      </button>
+
+      <button class="rowcard row-cobalt">
+        <div class="flex items-baseline justify-between gap-3 mb-1">
+          <span class="text-[14.5px] font-semibold text-slate-900">ASPECTS</span>
+          <span class="text-[11.5px] text-slate-500 font-medium">0–<span class="text-slate-900 font-semibold">10</span></span>
+        </div>
+        <div class="text-sm text-slate-600 leading-snug">CT-based ischemic burden in MCA territory.</div>
+      </button>
+    </div>
+
+    <!-- NO Show more button (only one scenario in view) -->
+    <!-- NO Recently viewed (hidden when scenario pill active) -->
+    <!-- NO Trending trials (hidden when scenario pill active) -->
+
+  </main>
+
+  <nav class="h-[60px] bg-white border-t border-slate-100 flex" style="position: absolute; bottom: 0; left: 0; right: 0;">
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-neuro-500" aria-current="page"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg><span class="text-[10px] font-medium">Home</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6L4 18a2 2 0 0 0 1.8 2.9h12.4A2 2 0 0 0 20 18L15 8V2"/><line x1="9" y1="2" x2="15" y2="2"/><line x1="7" y1="14" x2="17" y2="14"/></svg><span class="text-[10px] font-medium">Trials</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="7" r="1.4"/><circle cx="12" cy="7" r="1.4"/><circle cx="18" cy="7" r="1.4"/><circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/><circle cx="6" cy="17" r="1.4"/><circle cx="12" cy="17" r="1.4"/><circle cx="18" cy="17" r="1.4"/></svg><span class="text-[10px] font-medium">Calcs</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="19" cy="18" r="1.8"/><path d="M6.5 7.2L10.5 11"/><path d="M13.5 11L17.5 7.2"/><path d="M13.5 13L17.5 16.8"/></svg><span class="text-[10px] font-medium">Pathways</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg><span class="text-[10px] font-medium">Guide</span></a>
+  </nav>
+
+</div>
+
+
+<!-- =============================================================== -->
+<!-- ARCHETYPE 3 — ALL VIEW · SHOW MORE EXPANDED (return visit)      -->
+<!-- =============================================================== -->
+<div class="archetype-banner mt-12">
+  <div class="max-w-5xl mx-auto px-6 py-4">
+    <div class="text-xs font-bold uppercase tracking-widest text-slate-300 mb-1">Archetype 3 · All view · Show more tapped · return visit</div>
+    <h2 class="text-lg font-semibold">Home — All 5 scenarios visible, all collapsed (return visit)</h2>
+    <p class="text-sm text-slate-300 mt-1">User has tapped Show more (persisted in localStorage). On a return visit, all 5 scenarios are visible but all collapsed (the first-visit auto-expansion only happens on the very first session). Showing only the changed region for brevity.</p>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">Home · All pill active · return visit · Show more expanded · all collapsed</div>
+
+<!-- ANCHOR: §3 home-show-more-expanded-return-visit -->
+<div class="mockup-frame">
+
+  <main class="px-5 pt-7 pb-24">
+
+    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">By case</div>
+    <h1 class="text-[24px] font-medium text-slate-900 leading-tight tracking-tight mb-2">What's the case?</h1>
+    <p class="text-[14.5px] text-slate-500 leading-snug mb-5">Pick a scenario or browse all the tools.</p>
+
+    <!-- Featured rail (always rendered on All view, regardless of first-visit/return-visit) -->
+    <div class="featured-rail">
+      <div class="featured-eyebrow">Featured</div>
+      <div class="featured-track">
+        <button class="featured-tile cat-cobalt">
+          <div class="type-label">Pathway</div>
+          <div class="name">EVT Pathway</div>
+          <div class="description">LVO triage from imaging to decision in under 60 seconds.</div>
+        </button>
+        <button class="featured-tile cat-ivt">
+          <div class="type-label">Pathway</div>
+          <div class="name">Late-Window IVT</div>
+          <div class="description">tPA in 4.5–9 h or wake-up window with imaging.</div>
+        </button>
+        <button class="featured-tile cat-cobalt">
+          <div class="type-label">Calculator</div>
+          <div class="name">NIHSS</div>
+          <div class="description">15-item stroke severity exam. Range 0–42.</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="flex gap-2.5 overflow-x-auto mb-6" style="scrollbar-width: none;">
+      <button class="pill pill-active">All</button>
+      <button class="pill"><span class="dot dot-ivt"></span>Acute stroke</button>
+      <button class="pill"><span class="dot dot-surgical"></span>ICH</button>
+      <button class="pill"><span class="dot dot-status"></span>Status</button>
+      <button class="pill"><span class="dot dot-prevention"></span>Headache</button>
+      <button class="pill"><span class="dot dot-general"></span>AMS</button>
+    </div>
+
+    <!-- All 5 scenarios rendered, all collapsed -->
+    <button class="scenario-header collapsed cat-ivt" aria-expanded="false" aria-controls="scenario-acute-stroke-body-3">
+      <div>
+        <div class="title">Acute ischemic stroke</div>
+        <div class="subtitle">Within 24 h of onset · 5 tools</div>
+      </div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <button class="scenario-header collapsed cat-surgical" aria-expanded="false" aria-controls="scenario-ich-body-3">
+      <div>
+        <div class="title">ICH</div>
+        <div class="subtitle">Intracerebral hemorrhage · 4 tools</div>
+      </div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <button class="scenario-header collapsed cat-status" aria-expanded="false" aria-controls="scenario-status-body-3">
+      <div>
+        <div class="title">Status epilepticus</div>
+        <div class="subtitle">Refractory algorithm · 3 tools</div>
+      </div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <!-- Scenarios 4 and 5 — visible because Show more is expanded -->
+    <button class="scenario-header collapsed cat-prevention" aria-expanded="false" aria-controls="scenario-headache-body-3">
+      <div>
+        <div class="title">Severe headache</div>
+        <div class="subtitle">Migraine, GCA, secondary causes · 4 tools</div>
+      </div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <button class="scenario-header collapsed cat-general" aria-expanded="false" aria-controls="scenario-ams-body-3">
+      <div>
+        <div class="title">Altered mental status</div>
+        <div class="subtitle">Encephalopathy workup · 3 tools</div>
+      </div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <!-- Show LESS button (Show more was tapped) -->
+    <button class="show-more-btn">
+      <span>Show less</span>
+      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(180deg);"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <p class="text-[12px] text-slate-400 italic text-center mt-4">Recently viewed and Trending trials follow below as in Archetype 1 — omitted here for brevity.</p>
+
+  </main>
+
+</div>
+
+</body>
+</html>

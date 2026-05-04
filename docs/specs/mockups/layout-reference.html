@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Layout Reference Mockup — NeuroWiki — v1.2</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --color-neuro-50:  #EEF2FF;
+    --color-neuro-100: #C7D7FA;
+    --color-neuro-400: #4A7FE5;
+    --color-neuro-500: #1746A2;
+    --color-neuro-600: #123988;
+    --color-neuro-700: #0E2D6B;
+    --color-neuro-900: #06143D;
+  }
+  .bg-neuro-50  { background-color: var(--color-neuro-50); }
+  .bg-neuro-500 { background-color: var(--color-neuro-500); }
+  .bg-neuro-600 { background-color: var(--color-neuro-600); }
+  .text-neuro-500 { color: var(--color-neuro-500); }
+  .text-neuro-600 { color: var(--color-neuro-600); }
+  .text-neuro-700 { color: var(--color-neuro-700); }
+  .border-neuro-500 { border-color: var(--color-neuro-500); }
+
+  .divider-hair { border-top: 1px solid #e2e8f0; }
+
+  /* desktop rail active state — cobalt-50 fill, 2px cobalt left edge accent */
+  .rail-item-active {
+    background-color: var(--color-neuro-50);
+    color: var(--color-neuro-500);
+    position: relative;
+    font-weight: 600;
+  }
+  .rail-item-active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background-color: var(--color-neuro-500);
+    border-radius: 1px;
+  }
+
+  /* dot utilities used in the demo body */
+  .dot-ivt        { background-color: #10b981; }
+  .dot-evt        { background-color: var(--color-neuro-500); }
+  .dot-cobalt     { background-color: var(--color-neuro-500); }
+  .dot-surgical   { background-color: #7c3aed; }
+  .dot-status     { background-color: #f59e0b; }
+
+  /* row card — colored dot rendered as ::before, NEVER as background */
+  .rowcard {
+    padding: 14px 0;
+    padding-left: 18px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    position: relative;
+    width: 100%;
+    text-align: left;
+    background-color: transparent;
+  }
+  .rowcard:hover { background-color: rgba(248, 250, 252, 0.6); }
+  .rowcard::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 21px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background-color: #94a3b8;
+  }
+  .rowcard.row-ivt::before    { background-color: #10b981; }
+  .rowcard.row-evt::before    { background-color: var(--color-neuro-500); }
+  .rowcard.row-cobalt::before { background-color: var(--color-neuro-500); }
+  .rowcard.row-surgical::before { background-color: #7c3aed; }
+
+  body { background: #f1f5f9; }
+  .mockup-frame-mobile {
+    max-width: 440px;
+    margin: 0 auto;
+    background: white;
+    min-height: 100vh;
+    position: relative;
+  }
+  .mockup-frame-desktop {
+    max-width: 1280px;
+    margin: 0 auto;
+    background: white;
+    min-height: 720px;
+    position: relative;
+    border-left: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+  }
+  .state-divider {
+    background: #f8fafc;
+    border-top: 1px dashed #cbd5e1;
+    border-bottom: 1px dashed #cbd5e1;
+  }
+  .archetype-banner { background: #0f172a; color: white; }
+  .placeholder-note {
+    background: #fef9c3;
+    border: 1px dashed #ca8a04;
+    color: #854d0e;
+    font-size: 11px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+
+<!-- =============================================================== -->
+<!-- ARCHETYPE 1 — MOBILE CHROME                                     -->
+<!-- =============================================================== -->
+<div class="archetype-banner">
+  <div class="max-w-5xl mx-auto px-6 py-4">
+    <div class="text-xs font-bold uppercase tracking-widest text-slate-300 mb-1">Archetype 1</div>
+    <h2 class="text-lg font-semibold">Mobile chrome — header + bottom nav</h2>
+    <p class="text-sm text-slate-300 mt-1">Two persistent surfaces: 60px top header (brand + search + favourites star), 5-tab bottom nav. <strong>Page bodies are documented in HOME_SPEC and HUB_SPEC.</strong> Mockup body shows a representative hub state for visual grounding only — <strong>not</strong> part of LAYOUT_SPEC.</p>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">Mobile · Default · Star inactive (slate-400) · Trials tab active (representative body)</div>
+
+<!-- ANCHOR: §1 mobile-header-default -->
+<div class="mockup-frame-mobile">
+
+  <!-- mobile header (60px) -->
+  <header class="h-[60px] bg-white border-b border-slate-100 flex items-center justify-between px-5">
+    <div class="flex items-center gap-2.5">
+      <div class="w-7 h-7 rounded-lg bg-neuro-500 flex items-center justify-center text-white font-semibold text-sm" style="font-family: serif; letter-spacing: -0.04em;">N</div>
+      <div class="text-base font-semibold tracking-tight">Neuro<span class="text-neuro-500">Wiki</span></div>
+    </div>
+    <div class="flex items-center gap-1">
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-50 transition-colors" aria-label="Search">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+      </button>
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-50 transition-colors" aria-label="Favourites">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- representative page body (NOT part of this spec — see HUB_SPEC) -->
+  <main class="px-5 pt-7 pb-24" style="min-height: 600px;">
+    <div class="placeholder-note">
+      ⓘ Body content shown here is illustrative only. Hub anatomy is governed by HUB_SPEC.md.
+    </div>
+
+    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Trials reference</div>
+    <h1 class="text-[24px] font-medium text-slate-900 leading-tight tracking-tight mb-2">79 trials.</h1>
+    <p class="text-[14.5px] text-slate-500 leading-snug mb-4">Evidence summaries by clinical question or category.</p>
+
+    <button class="rowcard row-ivt">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <span class="text-[14.5px] font-semibold text-slate-900">EXTEND</span>
+        <span class="text-[11px] font-semibold bg-neuro-50 text-neuro-600 px-2 py-0.5 rounded">+6 / 100</span>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">Alteplase 4.5–9 h with perfusion-selected imaging.</div>
+    </button>
+
+    <button class="rowcard row-evt">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <span class="text-[14.5px] font-semibold text-slate-900">DAWN</span>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">Late-window thrombectomy with imaging mismatch.</div>
+    </button>
+  </main>
+
+  <!-- mobile bottom nav (5 tabs) -->
+  <!-- ANCHOR: §2 mobile-bottom-nav -->
+  <nav class="h-[60px] bg-white border-t border-slate-100 flex" style="position: absolute; bottom: 0; left: 0; right: 0;">
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400">
+      <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+      <span class="text-[10px] font-medium">Home</span>
+    </a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-neuro-500" aria-current="page">
+      <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/><path d="M10 3v6L5 19a2 2 0 002 3h10a2 2 0 002-3l-5-10V3"/></svg>
+      <span class="text-[10px] font-medium">Trials</span>
+    </a>
+    <!-- ANCHOR: §3 calc-icon-numpad -->
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400">
+      <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="6" cy="7" r="1.4"/><circle cx="12" cy="7" r="1.4"/><circle cx="18" cy="7" r="1.4"/>
+        <circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/>
+        <circle cx="6" cy="17" r="1.4"/><circle cx="12" cy="17" r="1.4"/><circle cx="18" cy="17" r="1.4"/>
+      </svg>
+      <span class="text-[10px] font-medium">Calcs</span>
+    </a>
+    <!-- ANCHOR: §4 pathways-icon-branching -->
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400">
+      <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="5" cy="6" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="19" cy="18" r="1.8"/>
+        <path d="M6.5 7.2L10.5 11"/><path d="M13.5 11L17.5 7.2"/><path d="M13.5 13L17.5 16.8"/>
+      </svg>
+      <span class="text-[10px] font-medium">Pathways</span>
+    </a>
+    <!-- ANCHOR: §5 guide-icon-document -->
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400">
+      <svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="4" y="3" width="16" height="18" rx="2"/>
+        <line x1="8" y1="8" x2="16" y2="8"/>
+        <line x1="8" y1="12" x2="16" y2="12"/>
+        <line x1="8" y1="16" x2="13" y2="16"/>
+      </svg>
+      <span class="text-[10px] font-medium">Guide</span>
+    </a>
+  </nav>
+</div>
+
+
+<div class="state-divider px-6 py-3 mt-8 text-xs font-bold uppercase tracking-widest text-slate-500">Mobile · Star active (amber-400) · Page filtered to favourites</div>
+
+<!-- ANCHOR: §1.2 mobile-header-favs-active -->
+<div class="mockup-frame-mobile">
+
+  <header class="h-[60px] bg-white border-b border-slate-100 flex items-center justify-between px-5">
+    <div class="flex items-center gap-2.5">
+      <div class="w-7 h-7 rounded-lg bg-neuro-500 flex items-center justify-center text-white font-semibold text-sm" style="font-family: serif; letter-spacing: -0.04em;">N</div>
+      <div class="text-base font-semibold tracking-tight">Neuro<span class="text-neuro-500">Wiki</span></div>
+    </div>
+    <div class="flex items-center gap-1">
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-50 transition-colors">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+      </button>
+      <button class="w-9 h-9 rounded-full flex items-center justify-center text-amber-400 hover:bg-slate-50 transition-colors" aria-pressed="true">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="px-5 pt-7 pb-24" style="min-height: 600px;">
+    <div class="placeholder-note">
+      ⓘ When star is amber, the URL is <code>?favs=true</code>. Each hub renders its filtered list per HUB_SPEC §6.
+    </div>
+
+    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Favourites · Trials</div>
+    <h1 class="text-[24px] font-medium text-slate-900 leading-tight tracking-tight mb-2">2 trials.</h1>
+
+    <button class="rowcard row-ivt">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <span class="text-[14.5px] font-semibold text-slate-900">EXTEND</span>
+        <svg class="w-4 h-4 text-amber-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">Alteplase 4.5–9 h with perfusion-selected imaging.</div>
+    </button>
+
+    <button class="rowcard row-surgical">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <span class="text-[14.5px] font-semibold text-slate-900">ENRICH</span>
+        <svg class="w-4 h-4 text-amber-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">Minimally invasive surgery for lobar ICH.</div>
+    </button>
+  </main>
+
+  <nav class="h-[60px] bg-white border-t border-slate-100 flex" style="position: absolute; bottom: 0; left: 0; right: 0;">
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/></svg><span class="text-[10px] font-medium">Home</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-neuro-500" aria-current="page"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/><path d="M10 3v6L5 19a2 2 0 002 3h10a2 2 0 002-3l-5-10V3"/></svg><span class="text-[10px] font-medium">Trials</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="7" r="1.4"/><circle cx="12" cy="7" r="1.4"/><circle cx="18" cy="7" r="1.4"/><circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/><circle cx="6" cy="17" r="1.4"/><circle cx="12" cy="17" r="1.4"/><circle cx="18" cy="17" r="1.4"/></svg><span class="text-[10px] font-medium">Calcs</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="19" cy="18" r="1.8"/><path d="M6.5 7.2L10.5 11"/><path d="M13.5 11L17.5 7.2"/><path d="M13.5 13L17.5 16.8"/></svg><span class="text-[10px] font-medium">Pathways</span></a>
+    <a href="#" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-slate-400"><svg class="w-[22px] h-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg><span class="text-[10px] font-medium">Guide</span></a>
+  </nav>
+</div>
+
+
+<!-- =============================================================== -->
+<!-- ARCHETYPE 2 — DESKTOP CHROME                                    -->
+<!-- =============================================================== -->
+<div class="archetype-banner mt-12">
+  <div class="max-w-5xl mx-auto px-6 py-4">
+    <div class="text-xs font-bold uppercase tracking-widest text-slate-300 mb-1">Archetype 2</div>
+    <h2 class="text-lg font-semibold">Desktop chrome — left rail + top bar</h2>
+    <p class="text-sm text-slate-300 mt-1">224px fixed left rail with 5 destinations. 60px top bar with centered search and favourites star (no logo — lives in rail).</p>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">Desktop · Default · Trials rail item active</div>
+
+<!-- ANCHOR: §6 desktop-chrome-default -->
+<div class="mockup-frame-desktop flex">
+
+  <!-- desktop left rail (224px) -->
+  <!-- ANCHOR: §6.1 desktop-rail -->
+  <aside class="w-[224px] flex-shrink-0 bg-white border-r border-slate-100 flex flex-col py-[18px] px-[14px]">
+
+    <div class="flex items-center gap-2.5 px-2 pb-5 mb-3 border-b border-slate-100">
+      <div class="w-[30px] h-[30px] rounded-lg bg-neuro-500 flex items-center justify-center text-white font-semibold text-[15px]" style="font-family: serif; letter-spacing: -0.04em;">N</div>
+      <div class="text-base font-semibold tracking-tight">Neuro<span class="text-neuro-500">Wiki</span></div>
+    </div>
+
+    <nav class="flex flex-col gap-0.5">
+      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
+        <svg class="w-[18px] h-[18px] flex-shrink-0 opacity-85" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+        <span>Home</span>
+      </a>
+      <a href="#" class="rail-item-active flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13.5px] hover:bg-slate-50 transition-colors" aria-current="page">
+        <svg class="w-[18px] h-[18px] flex-shrink-0 opacity-85" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/><path d="M10 3v6L5 19a2 2 0 002 3h10a2 2 0 002-3l-5-10V3"/></svg>
+        <span>Trials</span>
+      </a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
+        <svg class="w-[18px] h-[18px] flex-shrink-0 opacity-85" viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="6" cy="7" r="1.4"/><circle cx="12" cy="7" r="1.4"/><circle cx="18" cy="7" r="1.4"/>
+          <circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/>
+          <circle cx="6" cy="17" r="1.4"/><circle cx="12" cy="17" r="1.4"/><circle cx="18" cy="17" r="1.4"/>
+        </svg>
+        <span>Calculators</span>
+      </a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
+        <svg class="w-[18px] h-[18px] flex-shrink-0 opacity-85" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="5" cy="6" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="19" cy="18" r="1.8"/>
+          <path d="M6.5 7.2L10.5 11"/><path d="M13.5 11L17.5 7.2"/><path d="M13.5 13L17.5 16.8"/>
+        </svg>
+        <span>Pathways</span>
+      </a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13.5px] text-slate-700 font-medium hover:bg-slate-50 transition-colors">
+        <svg class="w-[18px] h-[18px] flex-shrink-0 opacity-85" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="4" y="3" width="16" height="18" rx="2"/>
+          <line x1="8" y1="8" x2="16" y2="8"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+          <line x1="8" y1="16" x2="13" y2="16"/>
+        </svg>
+        <span>Guide</span>
+      </a>
+    </nav>
+
+    <div class="flex-1"></div>
+    <div class="border-t border-slate-100 pt-3.5 px-3">
+      <a href="#" class="text-[11px] text-slate-500 hover:text-slate-700 transition-colors">About · Feedback</a>
+    </div>
+  </aside>
+
+  <!-- desktop main column -->
+  <div class="flex-1 flex flex-col min-w-0">
+
+    <!-- ANCHOR: §6.2 desktop-top-bar -->
+    <header class="h-[60px] bg-white border-b border-slate-100 flex items-center px-8 gap-4">
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-2.5 bg-slate-50 border border-slate-100 rounded-full px-4 py-2 w-full max-w-[520px]">
+        <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+        <span class="flex-1 text-[13px] text-slate-400">Search trials, calculators, pathways, guides…</span>
+        <kbd class="text-[11px] font-mono text-slate-400 px-1.5 py-0.5 border border-slate-200 rounded bg-white">⌘K</kbd>
+      </div>
+      <div class="flex-1 flex justify-end">
+        <button class="w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-50 transition-colors">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto">
+      <div class="px-8 py-8 max-w-5xl" style="min-height: 580px;">
+        <div class="placeholder-note">
+          ⓘ Page body shown here is illustrative only. Hub anatomy is governed by HUB_SPEC.md.
+        </div>
+
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Trials reference</div>
+        <h1 class="text-[28px] font-medium text-slate-900 leading-tight tracking-tight mb-2">79 trials.</h1>
+        <p class="text-[14.5px] text-slate-500 leading-snug mb-6">Evidence summaries by clinical question or category.</p>
+
+        <button class="rowcard row-ivt">
+          <div class="flex items-baseline justify-between gap-3 mb-1">
+            <div>
+              <span class="text-[14.5px] font-semibold text-slate-900">EXTEND</span>
+              <span class="text-[11.5px] text-slate-400 font-medium ml-2">2019 · NEJM</span>
+            </div>
+            <span class="text-[11px] font-semibold bg-neuro-50 text-neuro-600 px-2 py-0.5 rounded">+6 / 100</span>
+          </div>
+          <div class="text-sm text-slate-600 leading-snug">Alteplase 4.5–9 h with perfusion-selected imaging.</div>
+        </button>
+
+        <button class="rowcard row-evt">
+          <div class="flex items-baseline justify-between gap-3 mb-1">
+            <span class="text-[14.5px] font-semibold text-slate-900">DAWN</span>
+          </div>
+          <div class="text-sm text-slate-600 leading-snug">Late-window thrombectomy with imaging mismatch.</div>
+        </button>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+
+<!-- =============================================================== -->
+<!-- ARCHETYPE 3 — WIDTH ZONES                                       -->
+<!-- =============================================================== -->
+<div class="archetype-banner mt-12">
+  <div class="max-w-5xl mx-auto px-6 py-4">
+    <div class="text-xs font-bold uppercase tracking-widest text-slate-300 mb-1">Archetype 3</div>
+    <h2 class="text-lg font-semibold">Width zones — opt-in utilities</h2>
+    <p class="text-sm text-slate-300 mt-1">Layout does NOT enforce a max-width. Pages opt into a zone via <code class="bg-slate-800 px-1.5 rounded text-xs">.zone-reading</code> (768px) for long-form or <code class="bg-slate-800 px-1.5 rounded text-xs">.zone-reference</code> (1024px) for hubs/Home.</p>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">.zone-reading — max-w-3xl (768px) · trial detail / calc detail / guide article</div>
+
+<!-- ANCHOR: §7.1 zone-reading -->
+<div style="background: white; padding: 32px 24px;">
+  <div class="max-w-3xl mx-auto" style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 32px;">
+    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Reading zone</div>
+    <div class="text-sm text-slate-600">Long-form content. Trial detail, calculator detail, guide article, question detail. 768px max width keeps the eye on a comfortable line length.</div>
+  </div>
+</div>
+
+<div class="state-divider px-6 py-3 mt-4 text-xs font-bold uppercase tracking-widest text-slate-500">.zone-reference — max-w-5xl (1024px) · all 4 hub pages, Home</div>
+
+<!-- ANCHOR: §7.2 zone-reference -->
+<div style="background: white; padding: 32px 24px;">
+  <div class="max-w-5xl mx-auto" style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 32px;">
+    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Reference zone</div>
+    <div class="text-sm text-slate-600">Scanning content with parallel rows. Trials hub, Calc hub, Pathway hub, Guide hub, Home. 1024px allows wider grids without pushing rows past comfortable scan width.</div>
+  </div>
+</div>
+
+<div style="height: 60px;"></div>
+
+</body>
+</html>
