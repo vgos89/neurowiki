@@ -25,7 +25,7 @@ export default function AcuteStrokeMgmt() {
       relatedLinks={[
         { title: 'Stroke Basics', href: '/guide/stroke-basics' },
         { title: 'Thrombectomy', href: '/guide/thrombectomy' },
-        { title: 'EVT Pathway', href: '/pathways/evt-pathway' },
+        { title: 'EVT Pathway', href: '/pathways/evt' },
       ]}
     >
       {(viewMode) => (

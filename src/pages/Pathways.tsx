@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const PATHWAY_ITEMS = [
   { name: 'Stroke Code', path: '/pathways/stroke-code', desc: 'Door-to-needle protocol' },
-  { name: 'EVT Pathway', path: '/pathways/evt-pathway', desc: 'Thrombectomy eligibility' },
+  { name: 'EVT Pathway', path: '/pathways/evt', desc: 'Thrombectomy eligibility' },
   { name: 'Long Window IVT', path: '/pathways/late-window-ivt', desc: 'Extended IVT eligibility' },
   { name: 'ELAN Pathway', path: '/pathways/elan-pathway', desc: 'Anticoagulation timing' },
   { name: 'Status Epilepticus', path: '/pathways/se-pathway', desc: 'Stage 1–3 SE management' },

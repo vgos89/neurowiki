@@ -39,7 +39,7 @@ const FEATURED_TOOLS = [
     id: 'evt-pathway',
     name: 'EVT Pathway',
     subtitle: 'Thrombectomy eligibility',
-    path: '/pathways/evt-pathway',
+    path: '/pathways/evt',
     icon: Activity,
     accentColor: 'bg-neuro-500',
     ringColor: 'ring-neuro-200 dark:ring-neuro-900',

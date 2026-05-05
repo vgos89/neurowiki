@@ -368,7 +368,7 @@ const AspectScoreCalculator: React.FC = () => {
         {/* ── EVT Pathway CTA ── */}
         <div className="mt-4">
           <Link
-            to="/pathways/evt-pathway"
+            to="/pathways/evt"
             className="flex items-center justify-between w-full p-4 rounded-xl bg-neuro-50 dark:bg-neuro-900/20 border border-neuro-200 dark:border-neuro-800 hover:bg-neuro-100 dark:hover:bg-neuro-900/30 transition-colors group"
           >
             <div>

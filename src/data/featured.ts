@@ -18,7 +18,7 @@ export const FEATURED: FeaturedItem[] = [
     name: 'EVT Pathway',
     description: 'LVO triage from imaging to decision in under 60 seconds.',
     categoryColor: '#1746A2',
-    href: '/pathways/evt-pathway',
+    href: '/pathways/evt',
   },
   {
     id: 'late-window-ivt',

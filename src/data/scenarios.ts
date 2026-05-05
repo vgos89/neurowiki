@@ -66,7 +66,7 @@ const NON_TRIAL_TOOLS: Record<
   'evt-pathway': {
     title: 'EVT Pathway',
     description: 'LVO triage from imaging to groin puncture.',
-    href: '/pathways/evt-pathway',
+    href: '/pathways/evt',
     category: 'evt',
   },
   'se-pathway': {

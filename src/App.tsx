@@ -149,8 +149,9 @@ const App: React.FC = () => {
           ))}
           {/* Client-side fallback redirects for pathway routes moved to /pathways/* — Part 3 */}
           <Route path="/calculators/stroke-code" element={<Navigate to="/pathways/stroke-code" replace />} />
-          <Route path="/calculators/evt-pathway" element={<Navigate to="/pathways/evt-pathway" replace />} />
-          <Route path="/calculators/evt" element={<Navigate to="/pathways/evt-pathway" replace />} />
+          <Route path="/calculators/evt-pathway" element={<Navigate to="/pathways/evt" replace />} />
+          <Route path="/calculators/evt" element={<Navigate to="/pathways/evt" replace />} />
+          <Route path="/pathways/evt-pathway" element={<Navigate to="/pathways/evt" replace />} />
           <Route path="/calculators/late-window-ivt" element={<Navigate to="/pathways/late-window-ivt" replace />} />
           <Route path="/calculators/elan-pathway" element={<Navigate to="/pathways/elan-pathway" replace />} />
           <Route path="/calculators/se-pathway" element={<Navigate to="/pathways/se-pathway" replace />} />

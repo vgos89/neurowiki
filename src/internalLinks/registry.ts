@@ -79,7 +79,7 @@ const TOOLS: LinkItem[] = [
     id: 'evt-pathway',
     title: 'Thrombectomy Pathway',
     type: 'tool',
-    url: '/pathways/evt-pathway',
+    url: '/pathways/evt',
     aliases: ['Thrombectomy Pathway', 'EVT Calculator', 'Thrombectomy Tool']
   },
   {

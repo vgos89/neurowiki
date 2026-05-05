@@ -27,7 +27,7 @@ export default function IvTpa() {
       }
       relatedLinks={[
         { title: 'Stroke Basics', href: '/guide/stroke-basics' },
-        { title: 'Thrombectomy Pathway', href: '/pathways/evt-pathway' },
+        { title: 'Thrombectomy Pathway', href: '/pathways/evt' },
         { title: 'NIHSS', href: '/calculators/nihss' },
       ]}
     >

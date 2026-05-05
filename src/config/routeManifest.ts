@@ -291,7 +291,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
   },
   {
     key: 'pathways-evt',
-    path: '/pathways/evt-pathway',
+    path: '/pathways/evt',
     publishGate: true,
     published: true,
     includeInSitemap: true,

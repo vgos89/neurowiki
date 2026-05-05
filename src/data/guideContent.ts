@@ -358,7 +358,7 @@ Conducted in parallel with DISTAL, the ESCAPE-MeVO trial investigated the effica
     category: 'Neuro Trials',
     content: `
 ## Clinical Context
-Historically, mechanical thrombectomy was limited to 6 hours from symptom onset. The DEFUSE 3 trial aimed to determine if patients with salvageable tissue on perfusion imaging (penumbra) would benefit from treatment in the extended 6–16 hour window. Use the **[Thrombectomy Pathway](/pathways/evt-pathway)** to assess eligibility.
+Historically, mechanical thrombectomy was limited to 6 hours from symptom onset. The DEFUSE 3 trial aimed to determine if patients with salvageable tissue on perfusion imaging (penumbra) would benefit from treatment in the extended 6–16 hour window. Use the **[Thrombectomy Pathway](/pathways/evt)** to assess eligibility.
 
 ## Trial Summary
 *   **Design:** Multicenter, randomized, open-label, blinded-endpoint trial.
@@ -388,7 +388,7 @@ Historically, mechanical thrombectomy was limited to 6 hours from symptom onset.
     category: 'Neuro Trials',
     content: `
 ## Clinical Context
-The DAWN trial investigated whether thrombectomy is effective in patients with a "Wake-Up" stroke or late presentation (6 to 24 hours) who demonstrate a clinical-core mismatch (severe deficit but small infarct core). Use the **[Thrombectomy Pathway](/pathways/evt-pathway)** to assess eligibility.
+The DAWN trial investigated whether thrombectomy is effective in patients with a "Wake-Up" stroke or late presentation (6 to 24 hours) who demonstrate a clinical-core mismatch (severe deficit but small infarct core). Use the **[Thrombectomy Pathway](/pathways/evt)** to assess eligibility.
 
 ## Trial Summary
 *   **Design:** Multicenter, prospective, randomized, open-label, adaptive trial.
@@ -416,7 +416,7 @@ The DAWN trial investigated whether thrombectomy is effective in patients with a
     category: 'Neuro Trials',
     content: `
 ## Clinical Context
-Patients with large ischemic cores (ASPECTS < 6 or Core Volume > 50ml) were historically excluded from thrombectomy trials due to fears of futile reperfusion and hemorrhagic transformation. SELECT2 challenged this dogma. Use the **[Thrombectomy Pathway](/pathways/evt-pathway)** to check large core eligibility.
+Patients with large ischemic cores (ASPECTS < 6 or Core Volume > 50ml) were historically excluded from thrombectomy trials due to fears of futile reperfusion and hemorrhagic transformation. SELECT2 challenged this dogma. Use the **[Thrombectomy Pathway](/pathways/evt)** to check large core eligibility.
 
 ## Trial Summary
 *   **Design:** Randomized, open-label, international trial.
@@ -444,7 +444,7 @@ Patients with large ischemic cores (ASPECTS < 6 or Core Volume > 50ml) were hist
     category: 'Neuro Trials',
     content: `
 ## Clinical Context
-Conducted in China, ANGEL-ASPECT complemented SELECT2 by investigating thrombectomy in patients with large infarct cores, including those with cores up to 100ml. Use the **[Thrombectomy Pathway](/pathways/evt-pathway)** to check large core eligibility.
+Conducted in China, ANGEL-ASPECT complemented SELECT2 by investigating thrombectomy in patients with large infarct cores, including those with cores up to 100ml. Use the **[Thrombectomy Pathway](/pathways/evt)** to check large core eligibility.
 
 ## Trial Summary
 *   **Design:** Multicenter, randomized, open-label trial in China.
@@ -859,7 +859,7 @@ For patients with ischemic stroke and Atrial Fibrillation, the optimal timing to
     category: 'Vascular Neurology',
     content: `
 ## Indications
-Use the **[Thrombectomy Calculator](/pathways/evt-pathway)** to stratify patients by trial criteria.
+Use the **[Thrombectomy Calculator](/pathways/evt)** to stratify patients by trial criteria.
 
 *   **Occlusion:** Proximal Large Vessel Occlusion (LVO) in Anterior Circulation (ICA, M1).
 *   **Pre-stroke Function:** mRS 0-1 (Independent).

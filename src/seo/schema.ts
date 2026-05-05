@@ -61,7 +61,7 @@ const CALCULATORS_HUB_SCHEMA = {
         { '@type': 'ListItem', position: 4, name: 'Glasgow Coma Scale', url: `${BASE_URL}/calculators/glasgow-coma-scale` },
         { '@type': 'ListItem', position: 5, name: 'HAS-BLED Score', url: `${BASE_URL}/calculators/has-bled-score` },
         { '@type': 'ListItem', position: 6, name: 'RoPE Score', url: `${BASE_URL}/calculators/rope-score` },
-        { '@type': 'ListItem', position: 7, name: 'EVT Eligibility Pathway', url: `${BASE_URL}/pathways/evt-pathway` },
+        { '@type': 'ListItem', position: 7, name: 'EVT Eligibility Pathway', url: `${BASE_URL}/pathways/evt` },
         { '@type': 'ListItem', position: 8, name: 'ELAN Anticoagulation Pathway', url: `${BASE_URL}/pathways/elan-pathway` },
         { '@type': 'ListItem', position: 9, name: 'Status Epilepticus Pathway', url: `${BASE_URL}/pathways/se-pathway` },
       ],
@@ -155,7 +155,7 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
       answer: 'NIHSS should be performed at baseline (prior to treatment), at 24 hours post-treatment, at discharge, and at 90-day follow-up per AHA/ASA guidelines. During active intervention, hourly assessments may be warranted.',
     },
   ],
-  '/pathways/evt-pathway': [
+  '/pathways/evt': [
     {
       question: 'Who is eligible for EVT (mechanical thrombectomy)?',
       answer: 'Per AHA/ASA 2026 guidelines, EVT is indicated for acute ischemic stroke from a large vessel occlusion (LVO) involving the internal carotid artery, M1 or M2 segment of the middle cerebral artery, or basilar artery, in patients with pre-stroke mRS 0–2. Within the first 6 hours, EVT is indicated regardless of ASPECTS score. In the extended 6–24 hour window, EVT requires clinical-imaging mismatch (DAWN criteria) or perfusion mismatch (DEFUSE-3 criteria). A major 2026 update: large core infarct (ASPECTS 3–5) is now a COR 1 indication based on SELECT-2 and ANGEL-ASPECT trials, demonstrating benefit even with large established infarcts. NIHSS ≥6 is a common practical threshold, though lower scores with disabling deficits may also qualify. Patient age alone is not an exclusion criterion.',
@@ -488,7 +488,7 @@ const CALC_NAMES: Record<string, { app: string; breadcrumb: string }> = {
 /** Pathway display names for schema mainEntity + breadcrumb */
 const PATHWAY_NAMES: Record<string, { app: string; breadcrumb: string }> = {
   '/pathways/stroke-code':    { app: 'Stroke Code Pathway', breadcrumb: 'Stroke Code' },
-  '/pathways/evt-pathway':    { app: 'EVT Thrombectomy Pathway', breadcrumb: 'EVT Pathway' },
+  '/pathways/evt':            { app: 'EVT Thrombectomy Pathway', breadcrumb: 'EVT Pathway' },
   '/pathways/elan-pathway':   { app: 'ELAN Anticoagulation Pathway', breadcrumb: 'ELAN Pathway' },
   '/pathways/late-window-ivt': { app: 'Late Window IVT Pathway', breadcrumb: 'Late Window IVT' },
   '/pathways/se-pathway':     { app: 'Status Epilepticus Pathway', breadcrumb: 'SE Pathway' },
