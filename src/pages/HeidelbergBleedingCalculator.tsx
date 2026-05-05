@@ -29,6 +29,7 @@ import { Link } from 'react-router-dom';
 import { Star, RefreshCw } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
 import {
@@ -151,7 +152,20 @@ const HeidelbergBleedingCalculator: React.FC = () => {
   // ── Hooks ──────────────────────────────────────────────────────────────────
   const { getBackPath }                = useNavigationSource();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { recordView }                 = useRecents();
   const { trackResult, resetTracking } = useCalculatorAnalytics('heidelberg_bleeding');
+
+  useEffect(() => {
+    recordView({
+      type: 'calculator',
+      id: 'heidelberg-bleeding',
+      title: 'Heidelberg Bleeding',
+      subtitle: 'Hemorrhagic transformation after reperfusion',
+      category: 'classification',
+      trail: 'Class',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ── Derived values ─────────────────────────────────────────────────────────
   // Only bleedingClass gates completion. SICH is optional and does not count.

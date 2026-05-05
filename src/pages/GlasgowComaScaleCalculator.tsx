@@ -27,6 +27,7 @@ import { Link } from 'react-router-dom';
 import { Star, RefreshCw } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
 import {
@@ -151,7 +152,20 @@ const GlasgowComaScaleCalculator: React.FC = () => {
   // ── Hooks ──────────────────────────────────────────────────────────────────
   const { getBackPath }                = useNavigationSource();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { recordView }                 = useRecents();
   const { trackResult, resetTracking } = useCalculatorAnalytics('gcs');
+
+  useEffect(() => {
+    recordView({
+      type: 'calculator',
+      id: 'gcs',
+      title: 'Glasgow Coma Scale',
+      subtitle: 'Conscious-level assessment',
+      category: 'severity',
+      trail: '3–15',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ── Derived values ─────────────────────────────────────────────────────────
   // Slot filling: not-testable checkbox counts the slot as filled even without

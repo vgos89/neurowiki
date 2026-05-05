@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, RefreshCw, Copy, Star } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
 import {
@@ -27,7 +28,20 @@ export default function RopeScoreCalculator() {
   const [toast, setToast] = useState<string | null>(null);
   const { getBackPath } = useNavigationSource();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { recordView } = useRecents();
   const { trackResult, resetTracking } = useCalculatorAnalytics('rope_score');
+
+  useEffect(() => {
+    recordView({
+      type: 'calculator',
+      id: 'rope',
+      title: 'RoPE Score',
+      subtitle: 'PFO-attributable fraction',
+      category: 'risk',
+      trail: '0–10',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const result = calculateROPEScore(inputs);
 

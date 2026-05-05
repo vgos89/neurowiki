@@ -19,6 +19,7 @@ import { Link } from 'react-router-dom';
 import { Star, RefreshCw } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
 import {
@@ -141,7 +142,20 @@ const IchScoreCalculator: React.FC = () => {
   // ── Hooks ──────────────────────────────────────────────────────────────────
   const { getBackPath } = useNavigationSource();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { recordView } = useRecents();
   const { trackResult, resetTracking } = useCalculatorAnalytics('ich_score');
+
+  useEffect(() => {
+    recordView({
+      type: 'calculator',
+      id: 'ich',
+      title: 'ICH Score',
+      subtitle: '30-day mortality for ICH',
+      category: 'severity',
+      trail: '0–6',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ── Derived values ─────────────────────────────────────────────────────────
   const selectedCount = (Object.values(inputs) as (unknown)[]).filter(v => v !== null).length;

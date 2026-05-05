@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -1083,7 +1084,20 @@ const EmBillingCalculator: React.FC = () => {
 
   const { getBackPath } = useNavigationSource();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { recordView } = useRecents();
   const { trackResult } = useCalculatorAnalytics('em_billing');
+
+  useEffect(() => {
+    recordView({
+      type: 'calculator',
+      id: 'em-billing',
+      title: 'E/M Billing',
+      subtitle: 'CPT code via MDM or time',
+      category: 'classification',
+      trail: 'Code',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const npiDebounce = useRef<ReturnType<typeof setTimeout> | null>(null);
   const icd10Debounce = useRef<ReturnType<typeof setTimeout> | null>(null);

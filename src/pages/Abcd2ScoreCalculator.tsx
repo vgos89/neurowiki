@@ -26,6 +26,7 @@ import { Link } from 'react-router-dom';
 import { Star, RefreshCw } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
 import {
@@ -148,7 +149,20 @@ const Abcd2ScoreCalculator: React.FC = () => {
   // ── Hooks ──────────────────────────────────────────────────────────────────
   const { getBackPath }                = useNavigationSource();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { recordView }                 = useRecents();
   const { trackResult, resetTracking } = useCalculatorAnalytics('abcd2_score');
+
+  useEffect(() => {
+    recordView({
+      type: 'calculator',
+      id: 'abcd2',
+      title: 'ABCD² Score',
+      subtitle: 'TIA stroke risk',
+      category: 'risk',
+      trail: '0–7',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ── Derived values ─────────────────────────────────────────────────────────
   const selectedCount =

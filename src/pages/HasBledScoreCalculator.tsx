@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, RefreshCw, Copy, Star } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
 import {
@@ -50,7 +51,20 @@ export default function HasBledScoreCalculator() {
   const [toast, setToast] = useState<string | null>(null);
   const { getBackPath } = useNavigationSource();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { recordView } = useRecents();
   const { trackResult, resetTracking } = useCalculatorAnalytics('has_bled_score');
+
+  useEffect(() => {
+    recordView({
+      type: 'calculator',
+      id: 'has-bled',
+      title: 'HAS-BLED',
+      subtitle: 'Bleeding risk on anticoagulation',
+      category: 'risk',
+      trail: '0–9',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const result = calculateHASBLEDScore(inputs);
   const riskColor = riskColors[result.risk];

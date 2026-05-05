@@ -112,7 +112,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] [L4] Home.tsx visual rebuild
 - [ ] [L4] TrialsPage + TrialPageNew visual rebuild
 - [ ] [L4] EmBillingCalculator UX rebuild — guided decision flow
-- [ ] [L4] Calculators.tsx rebuild
+- [x] [L4] Calculators.tsx rebuild — Prompt 5d (see CONFIRMED CLEAN 2026-05-04)
 - [ ] [L4] ResidentToolkit.tsx rebuild
 - [ ] [L4] StatusEpilepticusPathway visual rebuild
 - [ ] [L4] MigrainePathway visual rebuild
@@ -406,6 +406,13 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] CLAUDE.md §13.3 references data-architect agent that does not exist in .claude/agents/. Decide when Wave 5 citation scanner work begins: create data-architect agent file, or reassign scanner ownership to system-architect or calculator-engineer. Update §13.3 accordingly.
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-04 — Prompt 5d (Class C): Calculators hub rebuild per HUB_SPEC v1.2
+  - New data file: src/data/calculators.ts (10 calculator entries with fnCategory severity/risk/classification + scoreRange/scoreLabel; FN_CATEGORIES metadata for section headers + pill row)
+  - New components: src/components/calculators/{CalculatorsHero,CategoryPillRow,CategorySection}.tsx — reuse ToolRowCard from src/components/hub (no fork); section headers carry colored dot + count + lede; trail slot bolds the numeric max for severity/risk and shows scoreLabel for classification
+  - src/pages/Calculators.tsx fully rewritten — drops legacy lucide hub, vascular/general categoryStyles map, ?favorites=true / ?id=… / ?open=… legacy redirects; uses ?category= URL param (deviates from HUB_SPEC §4 ?fn= to avoid collision with Home's ?scenario=) and ?favs=true; dynamic document.title per active category
+  - 10 calculator detail pages now wire useRecents.recordView on mount: NihssCalculator, IchScoreCalculator, Abcd2ScoreCalculator, HasBledScoreCalculator, RopeScoreCalculator, GlasgowComaScaleCalculator, HeidelbergBleedingCalculator, BostonCriteriaCaaCalculator, EmBillingCalculator, AspectScoreCalculator
+  - No CSS changes (.row-{severity|risk|classification}, .dot-{...} already present); no route manifest changes (zone/bottomNavTab/railItem already correct); no ToolRowCard fork
+  - Gate: tsc clean · build green (2.17s)
 - [x] 2026-05-04 — Prompt 5c (Class C): Home page rebuild per HOME_SPEC v1.4
   - New data files: src/data/scenarios.ts (5 scenarios + resolveTool helper + non-trial tool lookup map), src/data/featured.ts (3 V-curated tiles, build-time length check)
   - New hooks: src/hooks/useRecents.ts (neurowiki:recents:v1, hydrate-in-effect, storage-event subscription, cap 20/display 5), src/hooks/useTrending.ts (mulberry32+djb2 daily seed, no Math.random), src/hooks/useScenarioExpansion.ts (first-visit auto-expand of scenario 1 via neurowiki:home:hasVisited), src/hooks/useShowMore.ts (neurowiki:home:showMoreExpanded persisted)

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { ArrowLeft, RefreshCw, Copy, Star, Info } from 'lucide-react';
 import { useFavorites } from '../hooks/useFavorites';
+import { useRecents } from '../hooks/useRecents';
 import { NIHSS_ITEMS, calculateTotal, getItemWarning, calculateLvoProbability } from '../utils/nihssShortcuts';
 import { getMainScrollElement, scrollWithinMainOrWindow } from '../utils/mainScroll';
 import NihssItemCard from '../components/NihssItemCard';
@@ -17,7 +18,20 @@ const NihssCalculator: React.FC = () => {
   const lvoTooltipRef = useRef<HTMLDivElement>(null);
   const nihssHeaderRef = useRef<HTMLDivElement>(null);
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { recordView } = useRecents();
   const { getBackPath } = useNavigationSource();
+
+  useEffect(() => {
+    recordView({
+      type: 'calculator',
+      id: 'nihss',
+      title: 'NIHSS',
+      subtitle: 'NIH Stroke Scale',
+      category: 'severity',
+      trail: '0–42',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Memoize LVO calculation to ensure it updates properly when nihssValues change
   const lvoData = useMemo(() => calculateLvoProbability(nihssValues), [nihssValues]);

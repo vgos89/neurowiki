@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, RefreshCw, Copy, Star, ChevronRight } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
 
@@ -90,7 +91,20 @@ const AspectScoreCalculator: React.FC = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const { getBackPath } = useNavigationSource();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { recordView } = useRecents();
   const { trackResult, resetTracking } = useCalculatorAnalytics('aspects_score');
+
+  useEffect(() => {
+    recordView({
+      type: 'calculator',
+      id: 'aspects',
+      title: 'ASPECTS',
+      subtitle: 'Ischemic burden in MCA territory',
+      category: 'severity',
+      trail: '0–10',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const score = 10 - involved.size;
   const scoreInfo = getScoreInfo(score);
