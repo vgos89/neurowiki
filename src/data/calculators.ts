@@ -60,6 +60,14 @@ export const CALCULATORS: CalculatorEntry[] = [
     scoreRange: { min: '0', max: '7' },
   },
   {
+    id: 'chads-vasc',
+    name: 'CHA₂DS₂-VASc',
+    description: 'Annual stroke risk in non-valvular AFib; guides anticoagulation decision.',
+    fnCategory: 'risk',
+    path: '/calculators/chads-vasc',
+    scoreRange: { min: '0', max: '9' },
+  },
+  {
     id: 'has-bled',
     name: 'HAS-BLED',
     description: 'Major bleeding risk on anticoagulation.',

@@ -22,6 +22,7 @@ const IchScoreCalculator = lazy(() => import('./pages/IchScoreCalculator'));
 const Abcd2ScoreCalculator = lazy(() => import('./pages/Abcd2ScoreCalculator'));
 const HasBledScoreCalculator = lazy(() => import('./pages/HasBledScoreCalculator'));
 const RopeScoreCalculator = lazy(() => import('./pages/RopeScoreCalculator'));
+const Cha2ds2VascCalculator = lazy(() => import('./pages/Cha2ds2VascCalculator'));
 const GlasgowComaScaleCalculator = lazy(() => import('./pages/GlasgowComaScaleCalculator'));
 const HeidelbergBleedingCalculator = lazy(() => import('./pages/HeidelbergBleedingCalculator'));
 const BostonCriteriaCaaCalculator = lazy(() => import('./pages/BostonCriteriaCaaCalculator'));
@@ -72,6 +73,7 @@ const ROUTE_COMPONENTS: Record<StaticRouteKey, React.ReactNode> = {
   'abcd2-score': <Abcd2ScoreCalculator />,
   'has-bled-score': <HasBledScoreCalculator />,
   'rope-score': <RopeScoreCalculator />,
+  'chads-vasc': <Cha2ds2VascCalculator />,
   'glasgow-coma-scale': <GlasgowComaScaleCalculator />,
   'heidelberg-bleeding-classification': <HeidelbergBleedingCalculator />,
   'boston-criteria-caa': <BostonCriteriaCaaCalculator />,

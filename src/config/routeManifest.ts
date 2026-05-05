@@ -19,6 +19,7 @@ export type StaticRouteKey =
   | 'abcd2-score'
   | 'has-bled-score'
   | 'rope-score'
+  | 'chads-vasc'
   | 'glasgow-coma-scale'
   | 'heidelberg-bleeding-classification'
   | 'boston-criteria-caa'
@@ -194,6 +195,22 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
       title: 'RoPE Score — PFO-Attributable Stroke Risk | NeuroWiki',
       description: 'Calculate PFO-attributable fraction in cryptogenic stroke using the RoPE Score. Supports shared decision-making for PFO closure. Based on Kent et al.',
       keywords: 'RoPE score calculator, PFO stroke calculator, patent foramen ovale stroke risk, cryptogenic stroke PFO, PFO closure decision',
+    },
+  },
+  {
+    key: 'chads-vasc',
+    path: '/calculators/chads-vasc',
+    publishGate: true,
+    published: true,
+    includeInSitemap: true,
+    comingSoonMessage: 'CHA₂DS₂-VASc Score calculator',
+    zone: 'reading',
+    bottomNavTab: 'calculators',
+    railItem: 'calculators',
+    meta: {
+      title: 'CHA₂DS₂-VASc Score — AF Stroke Risk Calculator | NeuroWiki',
+      description: 'Calculate stroke risk in non-valvular atrial fibrillation using the CHA₂DS₂-VASc score. Anticoagulation thresholds per 2023 ACC/AHA/ACCP/HRS guidelines. CHF, hypertension, age, diabetes, stroke/TIA, vascular disease, sex.',
+      keywords: 'CHA2DS2-VASc calculator, CHA2DS2-VASc score, atrial fibrillation stroke risk, AF anticoagulation decision, AF stroke calculator, warfarin DOAC AF risk',
     },
   },
   {
