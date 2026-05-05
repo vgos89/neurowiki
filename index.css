@@ -52,6 +52,14 @@
   margin-right: auto;
 }
 
+/* Featured tile responsive width — HOME_SPEC §1.25.3 */
+@media (min-width: 1024px) {
+  .featured-tile {
+    width: auto;
+    flex: 1;
+  }
+}
+
 /* ── Desktop rail active state — LAYOUT_SPEC §6.1.3 ────────────────────── */
 .rail-item-active {
   background-color: var(--color-neuro-50, #EEF2FF);
