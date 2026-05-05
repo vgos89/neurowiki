@@ -61,9 +61,9 @@ const CALCULATORS_HUB_SCHEMA = {
         { '@type': 'ListItem', position: 4, name: 'Glasgow Coma Scale', url: `${BASE_URL}/calculators/glasgow-coma-scale` },
         { '@type': 'ListItem', position: 5, name: 'HAS-BLED Score', url: `${BASE_URL}/calculators/has-bled-score` },
         { '@type': 'ListItem', position: 6, name: 'RoPE Score', url: `${BASE_URL}/calculators/rope-score` },
-        { '@type': 'ListItem', position: 7, name: 'EVT Eligibility Pathway', url: `${BASE_URL}/calculators/evt-pathway` },
-        { '@type': 'ListItem', position: 8, name: 'ELAN Anticoagulation Pathway', url: `${BASE_URL}/calculators/elan-pathway` },
-        { '@type': 'ListItem', position: 9, name: 'Status Epilepticus Pathway', url: `${BASE_URL}/calculators/se-pathway` },
+        { '@type': 'ListItem', position: 7, name: 'EVT Eligibility Pathway', url: `${BASE_URL}/pathways/evt-pathway` },
+        { '@type': 'ListItem', position: 8, name: 'ELAN Anticoagulation Pathway', url: `${BASE_URL}/pathways/elan-pathway` },
+        { '@type': 'ListItem', position: 9, name: 'Status Epilepticus Pathway', url: `${BASE_URL}/pathways/se-pathway` },
       ],
     },
   ],
@@ -155,7 +155,7 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
       answer: 'NIHSS should be performed at baseline (prior to treatment), at 24 hours post-treatment, at discharge, and at 90-day follow-up per AHA/ASA guidelines. During active intervention, hourly assessments may be warranted.',
     },
   ],
-  '/calculators/evt-pathway': [
+  '/pathways/evt-pathway': [
     {
       question: 'Who is eligible for EVT (mechanical thrombectomy)?',
       answer: 'Per AHA/ASA 2026 guidelines, EVT is indicated for acute ischemic stroke from a large vessel occlusion (LVO) involving the internal carotid artery, M1 or M2 segment of the middle cerebral artery, or basilar artery, in patients with pre-stroke mRS 0–2. Within the first 6 hours, EVT is indicated regardless of ASPECTS score. In the extended 6–24 hour window, EVT requires clinical-imaging mismatch (DAWN criteria) or perfusion mismatch (DEFUSE-3 criteria). A major 2026 update: large core infarct (ASPECTS 3–5) is now a COR 1 indication based on SELECT-2 and ANGEL-ASPECT trials, demonstrating benefit even with large established infarcts. NIHSS ≥6 is a common practical threshold, though lower scores with disabling deficits may also qualify. Patient age alone is not an exclusion criterion.',
@@ -177,7 +177,7 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
       answer: 'Mechanical thrombectomy is a minimally invasive endovascular procedure performed by a neurointerventionalist under fluoroscopic guidance. A microcatheter is advanced through the femoral or radial artery into the occluded intracranial vessel. A stent retriever or aspiration catheter captures and extracts the clot, restoring cerebral blood flow. The procedure takes 30–90 minutes from groin puncture to reperfusion. Success is measured by modified TICI score: TICI 2b–3 (successful reperfusion) is achieved in approximately 80–85% of modern cases. Conscious sedation is generally preferred over general anesthesia to avoid delays and allow neurological monitoring. Post-procedure care in a stroke or neurological ICU for 24–48 hours monitors for hemorrhagic transformation, manages blood pressure, and assesses neurological recovery with serial NIHSS assessments.',
     },
   ],
-  '/calculators/late-window-ivt': [
+  '/pathways/late-window-ivt': [
     {
       question: 'What is late window IVT and who is eligible?',
       answer: 'Late window IVT refers to IV thrombolysis beyond the standard 4.5-hour window. Eligibility depends on imaging and timing: DWI-FLAIR mismatch on MRI for unknown-onset stroke within 4.5 hours of symptom recognition (COR 2a, WAKE-UP), perfusion mismatch in the 4.5–9 hour window (COR 2a, EXTEND), or selected patients with LVO, salvageable penumbra, no feasible rapid EVT pathway, and expert thrombolytic stroke oversight in the late window up to 24 hours from last known well (COR 2b, TRACE-3/TIMELESS).',
@@ -191,7 +191,7 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
       answer: 'COR 2a applies when imaging selection strongly favors treatment, such as DWI-FLAIR mismatch for wake-up stroke or perfusion mismatch in the 4.5–9 hour window. COR 2b applies to a narrower late-window group: patients with AIS due to LVO, salvageable penumbra, no feasible rapid EVT option, and treatment directed by clinicians with expertise in thrombolytic stroke care.',
     },
   ],
-  '/calculators/elan-pathway': [
+  '/pathways/elan-pathway': [
     {
       question: 'When should anticoagulation be started after stroke with atrial fibrillation?',
       answer: 'The 2026 AHA/ASA guideline gives a broad Class 2a recommendation that earlier DOAC initiation is reasonable in carefully selected patients with AF-related stroke. NeuroWiki operationalizes that recommendation using the ELAN trial framework: TIA/minor/moderate events within 48 hours, and major stroke on day 6–7, with a later comparator of day 3–4 for TIA/minor, day 6–7 for moderate, and day 12–14 for major stroke.',
@@ -231,7 +231,7 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
       answer: 'The -GC modifier (Teaching Physician performed or supervised service) is added to an E/M code when a resident is present and the attending physician personally performs the key or critical portion of the service and is present during the resident\'s key portions. The attestation must document the attending\'s personal participation and evaluation, not merely supervisory presence. In the primary care exception (PCTE), supervision rules are relaxed for certain low-complexity office visits.',
     },
   ],
-  '/calculators/se-pathway': [
+  '/pathways/se-pathway': [
     {
       question: 'What is the first-line treatment for status epilepticus?',
       answer: 'Benzodiazepines are first-line for all types of status epilepticus. Lorazepam 0.1 mg/kg IV (max 4 mg) is preferred; diazepam 0.15–0.2 mg/kg IV or IM midazolam 10 mg (>40 kg) are alternatives. Repeat once if seizure continues after 5 minutes.',
@@ -337,6 +337,64 @@ function calculatorSchema(
   return { '@context': 'https://schema.org', '@graph': graph };
 }
 
+// ── Pathway schema ────────────────────────────────────────────────────────────
+
+function pathwaySchema(
+  pathname: string,
+  title: string,
+  description: string,
+  pathwayName: string,
+  breadcrumbLabel: string
+): object {
+  const url = `${BASE_URL}${pathname}`;
+  const faqs = PAGE_FAQS[pathname];
+
+  const graph: object[] = [
+    {
+      '@type': 'MedicalWebPage',
+      name: title,
+      description,
+      url,
+      audience: {
+        '@type': 'MedicalAudience',
+        audienceType: 'Physician, Neurologist, Emergency Medicine, Resident',
+      },
+      mainEntity: {
+        '@type': 'SoftwareApplication',
+        name: pathwayName,
+        applicationCategory: 'HealthApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      },
+      publisher: PUBLISHER,
+      lastReviewed: LAST_REVIEWED,
+      datePublished: DATE_PUBLISHED,
+      dateModified: DATE_MODIFIED,
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+        { '@type': 'ListItem', position: 2, name: 'Pathways', item: `${BASE_URL}/pathways` },
+        { '@type': 'ListItem', position: 3, name: breadcrumbLabel, item: url },
+      ],
+    },
+  ];
+
+  if (faqs) {
+    graph.push({
+      '@type': 'FAQPage',
+      mainEntity: faqs.map(({ question, answer }) => ({
+        '@type': 'Question',
+        name: question,
+        acceptedAnswer: { '@type': 'Answer', text: answer },
+      })),
+    });
+  }
+
+  return { '@context': 'https://schema.org', '@graph': graph };
+}
+
 // ── Guide schema ──────────────────────────────────────────────────────────────
 
 function guideSchema(pathname: string, title: string, description: string, guideLabel: string): object {
@@ -415,22 +473,27 @@ function trialSchema(pathname: string, title: string, description: string, trial
 
 /** Calculator display names for schema mainEntity + breadcrumb */
 const CALC_NAMES: Record<string, { app: string; breadcrumb: string }> = {
-  '/calculators/aspects-score':                   { app: 'ASPECTS Score Calculator', breadcrumb: 'ASPECTS Score' },
-  '/calculators/nihss':                           { app: 'NIHSS Calculator', breadcrumb: 'NIHSS Calculator' },
-  '/calculators/ich-score':                       { app: 'ICH Score Calculator', breadcrumb: 'ICH Score' },
-  '/calculators/abcd2-score':                     { app: 'ABCD² Score Calculator', breadcrumb: 'ABCD² Score' },
-  '/calculators/has-bled-score':                  { app: 'HAS-BLED Score Calculator', breadcrumb: 'HAS-BLED Score' },
-  '/calculators/rope-score':                      { app: 'RoPE Score Calculator', breadcrumb: 'RoPE Score' },
-  '/calculators/glasgow-coma-scale':              { app: 'Glasgow Coma Scale Calculator', breadcrumb: 'Glasgow Coma Scale' },
+  '/calculators/aspects-score':                      { app: 'ASPECTS Score Calculator', breadcrumb: 'ASPECTS Score' },
+  '/calculators/nihss':                              { app: 'NIHSS Calculator', breadcrumb: 'NIHSS Calculator' },
+  '/calculators/ich-score':                          { app: 'ICH Score Calculator', breadcrumb: 'ICH Score' },
+  '/calculators/abcd2-score':                        { app: 'ABCD² Score Calculator', breadcrumb: 'ABCD² Score' },
+  '/calculators/has-bled-score':                     { app: 'HAS-BLED Score Calculator', breadcrumb: 'HAS-BLED Score' },
+  '/calculators/rope-score':                         { app: 'RoPE Score Calculator', breadcrumb: 'RoPE Score' },
+  '/calculators/glasgow-coma-scale':                 { app: 'Glasgow Coma Scale Calculator', breadcrumb: 'Glasgow Coma Scale' },
   '/calculators/heidelberg-bleeding-classification': { app: 'Heidelberg Bleeding Classification', breadcrumb: 'Heidelberg Classification' },
-  '/calculators/boston-criteria-caa':             { app: 'Boston Criteria 2.0 for CAA', breadcrumb: 'Boston Criteria 2.0' },
-  '/calculators/evt-pathway':                     { app: 'EVT Thrombectomy Pathway', breadcrumb: 'EVT Pathway' },
-  '/calculators/elan-pathway':                    { app: 'ELAN Anticoagulation Pathway', breadcrumb: 'ELAN Pathway' },
-  '/calculators/late-window-ivt':                 { app: 'Late Window IVT Pathway', breadcrumb: 'Late Window IVT' },
-  '/calculators/se-pathway':                      { app: 'Status Epilepticus Pathway', breadcrumb: 'SE Pathway' },
-  '/calculators/migraine-pathway':                { app: 'Migraine Pathway', breadcrumb: 'Migraine Pathway' },
-  '/calculators/gca-pathway':                     { app: 'GCA Pathway', breadcrumb: 'GCA Pathway' },
-  '/calculators/em-billing':                      { app: 'E/M Billing Calculator', breadcrumb: 'E/M Billing' },
+  '/calculators/boston-criteria-caa':                { app: 'Boston Criteria 2.0 for CAA', breadcrumb: 'Boston Criteria 2.0' },
+  '/calculators/em-billing':                         { app: 'E/M Billing Calculator', breadcrumb: 'E/M Billing' },
+};
+
+/** Pathway display names for schema mainEntity + breadcrumb */
+const PATHWAY_NAMES: Record<string, { app: string; breadcrumb: string }> = {
+  '/pathways/stroke-code':    { app: 'Stroke Code Pathway', breadcrumb: 'Stroke Code' },
+  '/pathways/evt-pathway':    { app: 'EVT Thrombectomy Pathway', breadcrumb: 'EVT Pathway' },
+  '/pathways/elan-pathway':   { app: 'ELAN Anticoagulation Pathway', breadcrumb: 'ELAN Pathway' },
+  '/pathways/late-window-ivt': { app: 'Late Window IVT Pathway', breadcrumb: 'Late Window IVT' },
+  '/pathways/se-pathway':     { app: 'Status Epilepticus Pathway', breadcrumb: 'SE Pathway' },
+  '/pathways/migraine-pathway': { app: 'Migraine Pathway', breadcrumb: 'Migraine Pathway' },
+  '/pathways/gca-pathway':    { app: 'GCA Pathway', breadcrumb: 'GCA Pathway' },
 };
 
 const GUIDE_LABELS: Record<string, string> = {
@@ -554,12 +617,21 @@ export function getSchemaForRoute(
   if (pathname === '/calculators') return CALCULATORS_HUB_SCHEMA;
   if (pathname === '/guide') return GUIDE_HUB_SCHEMA;
   if (pathname === '/trials') return TRIALS_HUB_SCHEMA;
+  // /pathways hub — placeholder schema until Prompt 5e builds the full hub
+  if (pathname === '/pathways') return null;
 
   if (pathname.startsWith('/calculators/')) {
     const entry = CALC_NAMES[pathname];
     const appName = entry?.app ?? pathname.split('/').pop()?.replace(/-/g, ' ') ?? 'Calculator';
     const breadcrumb = entry?.breadcrumb ?? appName;
     return calculatorSchema(pathname, meta.title, meta.description, appName, breadcrumb);
+  }
+
+  if (pathname.startsWith('/pathways/')) {
+    const entry = PATHWAY_NAMES[pathname];
+    const appName = entry?.app ?? pathname.split('/').pop()?.replace(/-/g, ' ') ?? 'Pathway';
+    const breadcrumb = entry?.breadcrumb ?? appName;
+    return pathwaySchema(pathname, meta.title, meta.description, appName, breadcrumb);
   }
 
   if (pathname.startsWith('/guide/')) {

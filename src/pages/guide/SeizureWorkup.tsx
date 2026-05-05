@@ -23,7 +23,7 @@ export default function SeizureWorkup() {
       }
       relatedLinks={[
         { title: 'Status Epilepticus', href: '/guide/status-epilepticus' },
-        { title: 'Status Pathway', href: '/calculators/se-pathway' },
+        { title: 'Status Pathway', href: '/pathways/se-pathway' },
       ]}
     >
       {(viewMode) => (

@@ -24,7 +24,7 @@ export default function StatusEpilepticus() {
         </>
       }
       relatedLinks={[
-        { title: 'Status Epilepticus Pathway', href: '/calculators/se-pathway' },
+        { title: 'Status Epilepticus Pathway', href: '/pathways/se-pathway' },
         { title: 'Seizure Workup', href: '/guide/seizure-workup' },
       ]}
     >

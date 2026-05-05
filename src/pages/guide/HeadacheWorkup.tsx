@@ -23,7 +23,7 @@ export default function HeadacheWorkup() {
         </>
       }
       relatedLinks={[
-        { title: 'Migraine Pathway', href: '/calculators/migraine-pathway' },
+        { title: 'Migraine Pathway', href: '/pathways/migraine-pathway' },
         { title: 'Meningitis', href: '/guide/meningitis' },
       ]}
     >

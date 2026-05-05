@@ -21,13 +21,13 @@ export default function Thrombectomy() {
       leadText={
         <>
           <Term detail="endovascular thrombectomy — mechanical clot retrieval">EVT</Term> for{' '}
-          <Term detail="ICA, M1, M2 dominant, basilar">large vessel occlusion (LVO)</Term> improves outcomes when core is limited and deficit is severe. Use the <Link to="/calculators/evt-pathway" className="text-indigo-600 hover:underline font-medium">Thrombectomy Pathway</Link> to stratify.
+          <Term detail="ICA, M1, M2 dominant, basilar">large vessel occlusion (LVO)</Term> improves outcomes when core is limited and deficit is severe. Use the <Link to="/pathways/evt-pathway" className="text-indigo-600 hover:underline font-medium">Thrombectomy Pathway</Link> to stratify.
         </>
       }
       relatedLinks={[
         { title: 'Stroke Basics', href: '/guide/stroke-basics' },
         { title: 'IV tPA', href: '/guide/iv-tpa' },
-        { title: 'EVT Pathway', href: '/calculators/evt-pathway' },
+        { title: 'EVT Pathway', href: '/pathways/evt-pathway' },
       ]}
     >
       {(viewMode) => (

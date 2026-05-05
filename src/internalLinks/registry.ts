@@ -79,35 +79,35 @@ const TOOLS: LinkItem[] = [
     id: 'evt-pathway',
     title: 'Thrombectomy Pathway',
     type: 'tool',
-    url: '/calculators/evt-pathway',
+    url: '/pathways/evt-pathway',
     aliases: ['Thrombectomy Pathway', 'EVT Calculator', 'Thrombectomy Tool']
   },
   {
     id: 'elan-pathway',
     title: 'Post-Stroke Anticoagulation Timing',
     type: 'tool',
-    url: '/calculators/elan-pathway',
+    url: '/pathways/elan-pathway',
     aliases: ['ELAN Protocol', 'ELAN Pathway', 'ELAN Calculator', 'Post-Stroke Anticoagulation Timing', 'Anticoagulation Timing']
   },
   {
     id: 'se-pathway',
     title: 'Status Epilepticus Pathway',
     type: 'tool',
-    url: '/calculators/se-pathway',
+    url: '/pathways/se-pathway',
     aliases: ['Status Epilepticus Pathway', 'SE Pathway', 'SE Protocol']
   },
   {
     id: 'migraine-pathway',
     title: 'Migraine Pathway',
     type: 'tool',
-    url: '/calculators/migraine-pathway',
+    url: '/pathways/migraine-pathway',
     aliases: ['Migraine Pathway', 'Headache Pathway']
   },
   {
     id: 'gca-pathway',
     title: 'GCA Pathway',
     type: 'tool',
-    url: '/calculators/gca-pathway',
+    url: '/pathways/gca-pathway',
     aliases: ['GCA Pathway', 'Giant Cell Arteritis Pathway']
   },
   {
