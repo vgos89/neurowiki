@@ -28,7 +28,6 @@ const HeidelbergBleedingCalculator = lazy(() => import('./pages/HeidelbergBleedi
 const BostonCriteriaCaaCalculator = lazy(() => import('./pages/BostonCriteriaCaaCalculator'));
 const AspectScoreCalculator = lazy(() => import('./pages/AspectScoreCalculator'));
 const ResidentGuide = lazy(() => import('./pages/ResidentGuide'));
-const ResidentToolkit = lazy(() => import('./pages/ResidentToolkit'));
 const Guide = lazy(() => import('./pages/Guide'));
 const TrialsPage = lazy(() => import('./pages/TrialsPage'));
 const TrialPageNew = lazy(() => import('./pages/trials/TrialPageNew'));
