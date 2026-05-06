@@ -11,6 +11,7 @@ import { useFavorites } from '../hooks/useFavorites';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { CollapsibleSection } from '../components/CollapsibleSection';
 import { AspectsModal } from '../components/AspectsModal';
+import { useRecents } from '../hooks/useRecents';
 
 type Tri = "yes" | "no" | "unknown";
 type MrsGroup = "yes" | "mrs2" | "mrs34" | "no" | "unknown"; // yes = mRS 0-1, mrs2 = mRS 2, mrs34 = mRS 3-4, no = mRS >4
@@ -637,6 +638,18 @@ interface EvtPathwayProps {
 }
 
 const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = false, isInModal = false, customActionButton }) => {
+  const { recordView } = useRecents();
+  useEffect(() => {
+    recordView({
+      type: 'pathway',
+      id: 'evt-pathway',
+      title: 'EVT Pathway',
+      subtitle: 'LVO triage from imaging to groin puncture',
+      category: 'acute-stroke',
+      trail: '4 steps',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [activeSection, setActiveSection] = useState<number>(0);
   const step = activeSection + 1;
   const { getBackPath, getBackLabel } = useNavigationSource();

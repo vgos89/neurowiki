@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, Check, RotateCcw, Copy, AlertTriangle, ChevronRight, Skull, ShieldAlert, AlertCircle, ClipboardCheck, Star } from 'lucide-react';
 import { useFavorites } from '../hooks/useFavorites';
 import { useNavigationSource } from '../hooks/useNavigationSource';
+import { useRecents } from '../hooks/useRecents';
 
 // --- Types ---
 interface RedFlags {
@@ -60,6 +61,18 @@ const STEPS = [
 ];
 
 const MigrainePathway: React.FC = () => {
+  const { recordView } = useRecents();
+  useEffect(() => {
+    recordView({
+      type: 'pathway',
+      id: 'migraine-pathway',
+      title: 'Migraine Pathway',
+      subtitle: 'ED and inpatient acute headache management',
+      category: 'severe-headache',
+      trail: '5 steps',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [step, setStep] = useState(1);
   const { getBackPath, getBackLabel } = useNavigationSource();
   const topRef = useRef<HTMLDivElement>(null);

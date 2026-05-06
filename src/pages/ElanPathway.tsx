@@ -9,6 +9,7 @@ import { useFavorites } from '../hooks/useFavorites';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { scrollMainToTop } from '../utils/mainScroll';
+import { useRecents } from '../hooks/useRecents';
 
 // ... (KEEP ALL TYPES, INTERFACES, STEPS, LOGIC, COMPONENTS SAME UNTIL RENDER) ...
 type Tri = "yes" | "no" | "unknown";
@@ -125,6 +126,18 @@ const SelectionCard = React.memo(({ title, description, selected, onClick, varia
 
 const ElanPathway: React.FC = () => {
   // ... (HOOKS AND HANDLERS SAME) ...
+  const { recordView } = useRecents();
+  useEffect(() => {
+    recordView({
+      type: 'pathway',
+      id: 'elan-pathway',
+      title: 'ELAN Pathway',
+      subtitle: 'DOAC timing after ischemic stroke with atrial fibrillation',
+      category: 'acute-stroke',
+      trail: '4 steps',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [step, setStep] = useState(1);
   const { getBackPath, getBackLabel } = useNavigationSource();
   const [inputs, setInputs] = useState<Inputs>({ isIschemicAfib: 'unknown', hasBleed: 'unknown', hasMechanicalValve: 'unknown', hasPetechialHt: 'unknown', recentReperfusion: 'unknown', size: 'unknown', onset: '' });

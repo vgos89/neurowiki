@@ -10,6 +10,7 @@ import LearningPearl from '../components/LearningPearl';
 import { useFavorites } from '../hooks/useFavorites';
 import { LKWTimePicker } from '../components/article/stroke/LKWTimePicker';
 import { copyToClipboard } from '../utils/clipboard';
+import { useRecents } from '../hooks/useRecents';
 
 /* ─── Types ─────────────────────────────────────────────────────── */
 
@@ -220,6 +221,18 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   isInModal = false,
   onResultChange,
 }) => {
+  const { recordView } = useRecents();
+  useEffect(() => {
+    recordView({
+      type: 'pathway',
+      id: 'late-window-ivt',
+      title: 'Late-Window IVT',
+      subtitle: 'tPA eligibility in 4.5–9 h window or wake-up stroke',
+      category: 'acute-stroke',
+      trail: '3 steps',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [activeSection, setActiveSection] = useState(0);
   const { getBackPath } = useNavigationSource();
   const { isFavorite, toggleFavorite } = useFavorites();

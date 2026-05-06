@@ -7,6 +7,7 @@ import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { CollapsibleSection } from '../components/CollapsibleSection';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { scrollMainToTop } from '../utils/mainScroll';
+import { useRecents } from '../hooks/useRecents';
 
 // --- Types ---
 type Tri = "no" | "yes" | "unknown";
@@ -192,6 +193,18 @@ const TriButton = React.memo(({ field, label, value, onChange, registerRef }: Tr
 ));
 
 const GCAPathway: React.FC = () => {
+  const { recordView } = useRecents();
+  useEffect(() => {
+    recordView({
+      type: 'pathway',
+      id: 'gca-pathway',
+      title: 'GCA Pathway',
+      subtitle: 'Suspected giant cell arteritis workup and treatment',
+      category: 'severe-headache',
+      trail: '4 steps',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [activeSection, setActiveSection] = useState<number>(0);
   const { getBackPath, getBackLabel } = useNavigationSource();
   const [inputs, setInputs] = useState<Inputs>({
