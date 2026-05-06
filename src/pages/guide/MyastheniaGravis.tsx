@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ArticleLayout,
   Section,
@@ -9,8 +9,21 @@ import {
   Value,
   Warning,
 } from '../../components/article';
+import { useRecents } from '../../hooks/useRecents';
 
 export default function MyastheniaGravis() {
+  const { recordView } = useRecents();
+  useEffect(() => {
+    recordView({
+      id: 'guide-myasthenia-gravis',
+      type: 'guide',
+      title: 'Myasthenia Gravis',
+      subtitle: 'Neuromuscular & Neuroimmunology',
+      category: 'neuromuscular',
+      trail: '6 min read',
+    });
+  }, [recordView]);
+
   return (
     <ArticleLayout
       category="Neuromuscular"

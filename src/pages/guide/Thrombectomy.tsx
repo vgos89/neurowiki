@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArticleLayout,
@@ -10,8 +10,21 @@ import {
   Critical,
   Value,
 } from '../../components/article';
+import { useRecents } from '../../hooks/useRecents';
 
 export default function Thrombectomy() {
+  const { recordView } = useRecents();
+  useEffect(() => {
+    recordView({
+      id: 'guide-thrombectomy',
+      type: 'guide',
+      title: 'Mechanical Thrombectomy',
+      subtitle: 'Vascular Neurology',
+      category: 'vascular',
+      trail: '6 min read',
+    });
+  }, [recordView]);
+
   return (
     <ArticleLayout
       category="Vascular Neurology"

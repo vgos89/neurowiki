@@ -36,7 +36,6 @@ export type StaticRouteKey =
   | 'aha-2026-guideline'
   | 'stroke-basics'
   | 'iv-tpa'
-  | 'tpa-eligibility'
   | 'thrombectomy'
   | 'acute-stroke-mgmt'
   | 'status-epilepticus'
@@ -462,22 +461,6 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
       title: 'IV tPA Protocol — Alteplase & Tenecteplase Eligibility | NeuroWiki',
       description: 'Complete IV thrombolysis protocol for acute ischemic stroke. Alteplase 0.9 mg/kg and tenecteplase 0.25 mg/kg eligibility, dosing, inclusions/exclusions, and monitoring. AHA/ASA 2026 COR 1 for both agents.',
       keywords: 'IV tPA protocol stroke, alteplase stroke dosing, tenecteplase stroke eligibility, tenecteplase vs alteplase stroke, tPA eligibility criteria, thrombolysis stroke protocol, IV thrombolysis inclusion exclusion, tPA 0.9 mg kg, tenecteplase 0.25 mg kg, tenecteplase alteplase equivalent',
-      image: DEFAULT_IMAGE,
-    },
-  },
-  {
-    key: 'tpa-eligibility',
-    path: '/guide/tpa-eligibility',
-    publishGate: true,
-    published: true,
-    comingSoonMessage: 'tPA eligibility criteria coming soon',
-    zone: 'reading',
-    bottomNavTab: 'guide',
-    railItem: 'guide',
-    meta: {
-      title: 'IV tPA Protocol — Alteplase & Tenecteplase Eligibility | NeuroWiki',
-      description: 'Complete IV thrombolysis protocol for acute ischemic stroke. Alteplase 0.9 mg/kg and tenecteplase 0.25 mg/kg eligibility, dosing, inclusions/exclusions, and monitoring. AHA/ASA 2026 COR 1 for both agents.',
-      keywords: 'tPA eligibility criteria, IV tPA stroke, alteplase eligibility, tenecteplase stroke, thrombolysis eligibility calculator',
       image: DEFAULT_IMAGE,
     },
   },

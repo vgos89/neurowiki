@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ArticleLayout,
   Section,
@@ -9,8 +9,21 @@ import {
   Value,
   Warning,
 } from '../../components/article';
+import { useRecents } from '../../hooks/useRecents';
 
 export default function Gbs() {
+  const { recordView } = useRecents();
+  useEffect(() => {
+    recordView({
+      id: 'guide-gbs',
+      type: 'guide',
+      title: 'Guillain-Barré Syndrome',
+      subtitle: 'Neuromuscular & Neuroimmunology',
+      category: 'neuromuscular',
+      trail: '4 min read',
+    });
+  }, [recordView]);
+
   return (
     <ArticleLayout
       category="Neuromuscular"
