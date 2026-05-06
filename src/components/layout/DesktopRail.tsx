@@ -1,6 +1,7 @@
 // LAYOUT_SPEC §6.1
 // 224px fixed left rail. Brand lockup top, 5 nav items, footer bottom.
 // Active state: .rail-item-active (CSS class in index.css — cobalt-50 bg + 2px cobalt left edge).
+// navHref preserves ?scenario= for scenario-aware routes and ?favs= for all hubs.
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home } from 'lucide-react';
@@ -18,8 +19,36 @@ const RAIL_ITEMS = [
   { label: 'Guide',       path: '/guide',       Icon: GuideIcon,    isActive: (p: string) => p.startsWith('/guide') },
 ] as const;
 
+// Routes that share the ?scenario= vocabulary (HUB_SPEC §1.4.2)
+const SCENARIO_ROUTES = new Set(['/', '/pathways']);
+
+/**
+ * Compute the href for a rail link, forwarding relevant URL params from
+ * the current location so the user doesn't lose their active filter when
+ * switching between top-level hubs.
+ *
+ * Forwarding rules:
+ *  - ?scenario=  preserved only for SCENARIO_ROUTES (Home + Pathways)
+ *  - ?favs=true  preserved for all hubs
+ *  - All other params are dropped (they're page-local)
+ */
+function navHref(targetPath: string, currentSearch: string): string {
+  const params = new URLSearchParams(currentSearch);
+  const out = new URLSearchParams();
+
+  if (SCENARIO_ROUTES.has(targetPath) && params.has('scenario')) {
+    out.set('scenario', params.get('scenario')!);
+  }
+  if (params.get('favs') === 'true') {
+    out.set('favs', 'true');
+  }
+
+  const qs = out.toString();
+  return qs ? `${targetPath}?${qs}` : targetPath;
+}
+
 export const DesktopRail: React.FC = () => {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
 
   return (
     <aside
@@ -45,7 +74,7 @@ export const DesktopRail: React.FC = () => {
           return (
             <Link
               key={path}
-              to={path}
+              to={navHref(path, search)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13.5px] font-medium hover:bg-slate-50 transition-colors ${active ? 'rail-item-active' : 'text-slate-700'}`}
               aria-current={active ? 'page' : undefined}
             >

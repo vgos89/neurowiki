@@ -8,6 +8,7 @@ import { useFavorites } from '../hooks/useFavorites';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { CollapsibleSection } from '../components/CollapsibleSection';
 import { useNavigationSource } from '../hooks/useNavigationSource';
+import { useRecents } from '../hooks/useRecents';
 
 // --- Types & Logic ---
 type Agent = "levetiracetam" | "fosphenytoin" | "valproate" | "lacosamide" | "phenobarbital";
@@ -36,6 +37,18 @@ const calculateDose = (agent: string, weight: number): string => {
 };
 
 const StatusEpilepticusPathway: React.FC = () => {
+  const { recordView } = useRecents();
+  useEffect(() => {
+    recordView({
+      type: 'pathway',
+      id: 'se-pathway',
+      title: 'SE Pathway',
+      subtitle: 'Stage 1–3 status epilepticus management',
+      category: 'status-epilepticus',
+      trail: '4 steps',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [activeSection, setActiveSection] = useState<number>(0);
   const step = activeSection + 1;
   const { getBackPath, getBackLabel } = useNavigationSource();
