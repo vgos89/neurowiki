@@ -1,4 +1,4 @@
-// HUB_SPEC v1.3 — Guide hub quick-access strip
+// HUB_SPEC v1.4 §1.7 — Guide hub quick-access strip
 // 6 tool cards linking to pathways and calculators most relevant at the bedside.
 // Stroke Code links to /pathways/stroke-code (not /guide/stroke-basics, which is
 // removed from the Guide hub nav per Prompt 5f).

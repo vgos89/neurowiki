@@ -26,7 +26,7 @@ export default function Meningitis() {
 
   return (
     <ArticleLayout
-      category="Infectious Disease"
+      category="Neurocritical Care"
       categoryPath="/guide"
       title="Meningitis"
       subtitle="Empiric therapy, LP, and when to image first"
