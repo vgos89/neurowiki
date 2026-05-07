@@ -387,6 +387,71 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 ---
 
+### WAVE 8 — Trial Quality, Navigation & Language Cleanup
+
+> Produced from the 2026-05-06 design + language audit sweep. Sources: docs/audits/2026-trial-design-audit.md · docs/audits/2026-language-audit.md.
+
+#### W8.1 — Fix back-button navigation sitewide — Class B
+- **Status:** done
+- **User-visible goal:** Tapping "Back" anywhere in the app returns the user to wherever they navigated from, not always to a hardcoded destination.
+- **What shipped:** Created `src/hooks/useBackNavigation.ts` (shared hook: navigate(-1) with configurable fallback). Updated `src/hooks/useNavigationSource.ts` (goBack/handleBack now use navigate(-1) with path-aware fallback). Replaced all back-button Links with buttons in: TrialPageNew.tsx (69 instances), ArticleLayout.tsx, NihssCalculator, Abcd2Score, BostonCriteriaCaa, Cha2ds2Vasc, RopeScore, GlasgowComa, AspectScore, IchScore, HasBled, HeidelbergBleeding, EmBilling (calculators), ElanPathway, EvtPathway, MigrainePathway, GCAPathway, StatusEpilepticusPathway, ExtendedIVTPathway (pathways), ResidentGuide, StrokeBasicsWorkflowV2. Total: 22 files patched, 3 distinct back-button patterns eliminated.
+- **Acceptance checks:** tsc clean · build green · navigate(-1) with /trials fallback on direct URL load
+- **Clinical impact:** none
+- **Rollback plan:** n/a
+
+#### W8.2 — Legacy trial redesign program — Class E-clinical (per trial)
+- **Status:** planned — awaiting priority confirmation from V
+- **Source:** docs/audits/2026-trial-design-audit.md §3 and §5
+- **User-visible goal:** 14 legacy trials rendered in old stats-cards + progress-bar layout receive full modern design (archetypeId, howToInterpret, bedsidePearl, bottomLineSummary, inclusionCriteria, exclusionCriteria, howToReadChart, explicit JSX branch).
+- **Priority order from audit:** ENRICH → DEFUSE-3 + DAWN (pair) → NINDS → SELECT2 + ANGEL-ASPECT (pair) → ATTENTION + BAOCHE (pair) → INSPIRES + CHANCE-2 → ECASS III → ORIGINAL → SAMMPRIS → B_PROUD
+- **Sub-tasks (one per trial or pair):**
+  - [ ] W8.2.1 — ENRICH rebuild (Class E-clinical): Archetype B, mrsDistribution from NEJM 2024 Fig. UW-mRS primary, MIPS approach, first-positive framing. Must contrast with STICH I/II/MISTIE III stubs. Highest urgency.
+  - [ ] W8.2.2 — DEFUSE-3 + DAWN pair (Class E-clinical): Both Archetype A. DEFUSE-3: binary mRS 0-2 (45% vs 17%), stopped-early amber. DAWN: utility-weighted mRS primary needs explanation (novel teaching challenge). uwmRS not used in any existing page — may require new teaching component or extended howToReadChart Q&A.
+  - [ ] W8.2.3 — NINDS rebuild (Class E-clinical): Archetype A. Two-part trial design (Part 1: neurological improvement; Part 2: functional outcome). NNT 6.5. The `legend` field is already populated. Highest foundational teaching value.
+  - [ ] W8.2.4 — SELECT2 + ANGEL-ASPECT pair (Class E-clinical): Both Archetype B. mrsDistribution from NEJM Fig 2 (each). Generalized OR available (1.51 / 1.37). Companion cross-links required. Shared doesNotProve template: "Results limited to ASPECTS 3–5; above this threshold EVT is already established."
+  - [ ] W8.2.5 — ATTENTION + BAOCHE pair (Class E-clinical): Both Archetype A. mRS 0-3 threshold (not 0-2) requires explicit howToInterpret explanation. Companion to BEST and BASICS stubs (basilar EVT chain context).
+  - [ ] W8.2.6 — INSPIRES + CHANCE-2 pair (Class E-clinical): Both Archetype A. INSPIRES: partially modernized trialDesign data already present; needs archetypeId, howToInterpret, bedsidePearl, inclusionCriteria. CHANCE-2: CYP2C19 LOF framing — most complex antiplatelet trial. Completes CHANCE → POINT → INSPIRES → CHANCE-2 chain.
+  - [ ] W8.2.7 — ECASS III rebuild (Class E-clinical): Archetype A. Simple 4.5h extension. Low complexity. Legend field populated.
+  - [ ] W8.2.8 — ORIGINAL trial rebuild (Class E-clinical): Archetype A with NI framing. TNK vs alteplase, JAMA 2024. Pairs with AcT.
+  - [ ] W8.2.9 — SAMMPRIS rebuild (Class E-clinical): Archetype A with harm framing. ICAD stenting vs AMM. Atypical endpoint (event rate, not mRS). Chain context: WEAVE (Archetype G stub) and intracranial stenosis management.
+  - [ ] W8.2.10 — B_PROUD rebuild (Class E-clinical): Archetype B or A (pending mrsDistribution data availability). Non-randomized design — doesNotProve must lead with design limitation. Companion to MR ASAP and TRIAGE-STROKE.
+- **Non-goals:** no changes to existing modern-design pages
+- **Clinical impact:** high (each sub-task is Class E-clinical)
+- **Rollback plan:** per-trial revert; existing legacy layout is the fallback
+
+#### W8.3 — Language cleanup: em-dash and prose standardization — Class C-clinical
+- **Status:** planned — batch approach recommended
+- **Source:** docs/audits/2026-language-audit.md
+- **User-visible goal:** Clinical prose in trialData.ts is free of em dashes and double hyphens in user-facing fields (bedsidePearl, howToInterpret, howToReadChart, bottomLineSummary).
+- **Sub-tasks (pattern-level, not per-trial):**
+  - [ ] W8.3.1 — Batch 5C/5D `--` cleanup (decimal, destiny, hamlet, destiny-ii, timing, optimas): Fix ~15 double-hyphen instances in doesNotProve, cautions, bedsidePearl, howToReadChart. Structural pattern: "The primary endpoint -- mRS [X] -- was not statistically significant." Restructure or replace with colon/period. Class C-clinical (prose only, no threshold/logic changes).
+  - [ ] W8.3.2 — Antiplatelet section `--` cleanup (eagle, escape-na1, socrates, sps3, sparcl): Fix ~9 double-hyphen instances in bedsidePearl and doesNotProve. Class C-clinical.
+  - [ ] W8.3.3 — TRACE-III / THAWS `—` cleanup: Fix 6 true em-dash instances across bedsidePearl, doesNotProve, cautions in these two trials. Highest schema severity (explicit "No em dashes" rule in TrialMetadata comments). Class C-clinical.
+  - [ ] W8.3.4 — pearls[] and listDescription `—` sweep: Lower severity. Fix em dashes in pearls[] arrays and listDescription fields across all trials. Class B (display strings, no clinical meaning change).
+- **Non-goals:** "essentially" phrasing is borderline; defer to PM; no structural rewriting
+- **Acceptance checks:** grep for `—` and `--` in bedsidePearl, doesNotProve, cautions, howToReadChart, bottomLineSummary returns zero results
+- **Clinical impact:** low (prose only, no threshold or interpretation changes)
+- **Rollback plan:** n/a (prose changes; revert if any meaning change is detected post-review)
+
+#### W8.4 — Add years to trial navigation surfaces — Class C
+- **Status:** planned
+- **User-visible goal:** Trial cards, listing rows, and navigation chips show the trial year so residents can orient to the evidence timeline without opening each page.
+- **Investigation needed:** Audit which surfaces are missing the year field: TrialLegendCard, TrialsPage listing rows, question-detail trialId chips, trials-referenced-in pathway pages. The `catalogTrial?.year` field is already used in the legacy fallback header (TrialPageNew.tsx line 6722) — check if it propagates to listing and nav surfaces.
+- **Files likely touched:** src/components/trials/TrialLegendCard.tsx · src/pages/TrialsPage.tsx (or equivalent listing page) · src/data/trialListData.ts (check if year is present for all 89 trials)
+- **Non-goals:** no clinical content changes
+- **Clinical impact:** none
+- **Rollback plan:** n/a
+
+#### W8.5 — New questions for question-driven navigation — Class A (PM task)
+- **Status:** planned — requires V's clinical input
+- **User-visible goal:** The /trials question-navigation surface expands from 6 starter questions to ~20-24 clinically relevant questions, each linked to the trials that answer them.
+- **Action:** V to provide the clinical question list. Once questions are agreed, a code task (Class C-clinical) will wire them into src/data/trial-questions.ts with trialIds[] arrays.
+- **Non-goals:** not a code task yet — no implementation until V approves the question taxonomy
+- **Clinical impact:** n/a until content is defined
+- **Rollback plan:** n/a
+
+---
+
 ### OTHER P2 (lower priority)
 - [x] [P2] tPA Reversal, Orolingual Edema, ICH Protocol modals — Stripe/Apple redesign — commits baecb1c, 10b6063
 - [x] [P2] Stroke modals remaining — Thrombectomy, Eligibility, NIHSS — apply same Stripe/Apple pattern — commits fdec23f, 341d9a4
