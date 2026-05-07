@@ -512,6 +512,7 @@ const GUIDE_LABELS: Record<string, string> = {
   '/guide/headache-workup':     'Headache Workup',
   '/guide/vertigo':             'Vertigo',
   '/guide/weakness-workup':     'Weakness Workup',
+  '/guide/aha-2026-guideline':  '2026 AHA/ASA Stroke Guideline Mindmap',
 };
 
 const TRIAL_LABELS: Record<string, string> = {
