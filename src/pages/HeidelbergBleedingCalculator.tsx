@@ -150,7 +150,7 @@ const HeidelbergBleedingCalculator: React.FC = () => {
   const sichGroupRef    = useRef<HTMLDivElement>(null);
 
   // ── Hooks ──────────────────────────────────────────────────────────────────
-  const { getBackPath }                = useNavigationSource();
+  const { handleBack }                 = useNavigationSource();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { recordView }                 = useRecents();
   const { trackResult, resetTracking } = useCalculatorAnalytics('heidelberg_bleeding');
@@ -429,13 +429,14 @@ const HeidelbergBleedingCalculator: React.FC = () => {
 
             {/* Left cluster: back arrow + score block */}
             <div className="flex items-center gap-3 min-w-0">
-              <Link
-                to={getBackPath()}
-                className="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors flex-shrink-0"
+              <button
+                type="button"
+                onClick={handleBack}
+                className="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0"
                 aria-label="Back to calculators"
               >
                 <BackArrow />
-              </Link>
+              </button>
 
               <div className="min-w-0">
                 <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">

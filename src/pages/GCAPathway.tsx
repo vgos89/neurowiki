@@ -206,7 +206,7 @@ const GCAPathway: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [activeSection, setActiveSection] = useState<number>(0);
-  const { getBackPath, getBackLabel } = useNavigationSource();
+  const { goBack, getBackLabel } = useNavigationSource();
   const [inputs, setInputs] = useState<Inputs>({
     age50: 'unknown',
     visual: 'unknown',
@@ -354,12 +354,12 @@ ${result.notes.join('\n')}
       {/* Header */}
       <div className="mb-6 flex items-start justify-between">
         <div>
-<Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-500 mb-6 group">
+<button type="button" onClick={goBack} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-500 mb-6 group cursor-pointer bg-transparent border-0 p-0">
             <div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-colors duration-150">
                     <ArrowLeft size={16} />
                 </div>
                 {getBackLabel()}
-            </Link>
+            </button>
             <div className="flex items-center space-x-3 mb-2">
                 <div className="p-2 bg-neuro-100 text-teal-500 rounded-lg">
                     <Activity size={24} />

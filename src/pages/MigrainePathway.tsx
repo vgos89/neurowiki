@@ -74,7 +74,7 @@ const MigrainePathway: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [step, setStep] = useState(1);
-  const { getBackPath, getBackLabel } = useNavigationSource();
+  const { handleBack, getBackLabel } = useNavigationSource();
   const topRef = useRef<HTMLDivElement>(null);
   
   // Section refs for auto-scroll
@@ -294,12 +294,12 @@ const MigrainePathway: React.FC = () => {
       {/* Header */}
       <div className="mb-8 flex items-start justify-between">
         <div>
-            <Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-500 mb-6 group">
+            <button type="button" onClick={handleBack} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-500 mb-6 group cursor-pointer bg-transparent border-0 p-0">
                 <div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-all">
                     <ArrowLeft size={16} />
                 </div>
                 {getBackLabel()}
-            </Link>
+            </button>
             <div className="flex items-center space-x-3 mb-2">
                 <div className="p-2 bg-indigo-100 text-indigo-700 rounded-lg">
                     <Skull size={24} />

@@ -234,7 +234,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [activeSection, setActiveSection] = useState(0);
-  const { getBackPath } = useNavigationSource();
+  const { handleBack } = useNavigationSource();
   const { isFavorite, toggleFavorite } = useFavorites();
   const [showFavToast, setShowFavToast] = useState(false);
   const [showCopyToast, setShowCopyToast] = useState(false);
@@ -646,9 +646,9 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
         <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-100 shadow-sm -mx-4 px-4 md:-mx-6 md:px-6">
           <div className="max-w-3xl mx-auto flex items-center justify-between h-14 gap-3">
             <div className="flex items-center gap-2 min-w-0">
-              <Link to={getBackPath()} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors shrink-0 text-slate-500">
+              <button type="button" onClick={handleBack} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors shrink-0 text-slate-500 cursor-pointer bg-transparent border-0">
                 <ArrowLeft size={16} />
-              </Link>
+              </button>
               <div className="flex items-center gap-2 min-w-0">
                 <div className="p-1.5 bg-neuro-100 text-neuro-700 rounded-md shrink-0">
                   <Zap size={16} />

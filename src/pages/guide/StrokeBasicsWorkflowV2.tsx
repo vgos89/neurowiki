@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
+import { useBackNavigation } from '../../hooks/useBackNavigation';
 import {
   ArrowLeft, ExternalLink, Copy, Brain, Info, AlertTriangle, AlertCircle,
   InfoIcon, FlaskConical, Eye, FileText as FileTextIcon,
@@ -153,6 +154,7 @@ const StudyPearlsButton: React.FC<{ count: number; onClick: () => void }> = ({ c
 // ── MainContent — self-contained (HIGH-03 fix: no 35-prop drilling) ──────────
 
 const MainContent: React.FC = () => {
+  const handleBack = useBackNavigation('/guide');
   const session = useRef(loadSession()).current;
 
   const [workflowMode, setWorkflowMode] = useState<'code' | 'study'>(session.workflowMode ?? 'code');
@@ -280,13 +282,14 @@ const MainContent: React.FC = () => {
           <div className="border-b border-slate-100">
             <div className="flex items-center justify-between px-4 py-3">
               <div className="flex items-center gap-3">
-                <Link
-                  to="/guide"
-                  className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-slate-100 transition-colors"
+                <button
+                  type="button"
+                  onClick={handleBack}
+                  className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer bg-transparent border-0"
                   aria-label="Back"
                 >
                   <ArrowLeft className="w-4 h-4 text-slate-500" />
-                </Link>
+                </button>
                 <h1 className="text-lg font-semibold text-slate-900 tracking-tight">Stroke Code</h1>
               </div>
               <div className="flex items-center gap-1 bg-slate-100 rounded-lg p-1">

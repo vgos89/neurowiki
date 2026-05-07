@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { useNavigationSource } from '../hooks/useNavigationSource';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { ChevronRight, ArrowLeft, ArrowUp, List, ChevronDown, ExternalLink, Stethoscope, FlaskConical, AlertCircle, Zap, Activity, Link as LinkIcon, Calculator, Search } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
@@ -103,7 +102,14 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
       return links;
   }, [currentTopic]);
 
-  const { getBackPath, getBackLabel, source } = useNavigationSource();
+  const navigate = useNavigate();
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate(isTrialMode ? '/trials' : '/guide');
+    }
+  };
 
   // Scroll to top when topic changes
   useEffect(() => {
@@ -270,13 +276,14 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
       {/* Back Button - Show when article is open */}
       {currentTopic && (
         <div className="w-full mb-4">
-          <Link
-            to={isTrialMode ? '/trials' : '/guide'}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+          <button
+            type="button"
+            onClick={handleBack}
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer bg-transparent border-0"
           >
             <ArrowLeft size={18} />
             <span>Back to {isTrialMode ? 'Neuro Trials' : 'Resident Guide'}</span>
-          </Link>
+          </button>
         </div>
       )}
       
@@ -377,13 +384,14 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
           <div className="w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
              {/* Back Button - Always visible */}
              <div className="w-full mb-6 px-4 pt-4 md:px-8 md:pt-8">
-               <Link 
-                 to={isTrialMode ? '/trials' : '/guide'} 
-                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors border border-slate-200 dark:border-slate-700"
+               <button
+                 type="button"
+                 onClick={handleBack}
+                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer bg-transparent"
                >
                   <ArrowLeft size={18} />
                   <span>Back to {isTrialMode ? 'Neuro Trials' : 'Resident Guide'}</span>
-             </Link>
+             </button>
              </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start lg:max-w-6xl lg:mx-auto lg:px-8">

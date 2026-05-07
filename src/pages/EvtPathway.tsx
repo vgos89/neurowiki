@@ -652,7 +652,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
   }, []);
   const [activeSection, setActiveSection] = useState<number>(0);
   const step = activeSection + 1;
-  const { getBackPath, getBackLabel } = useNavigationSource();
+  const { goBack, getBackLabel } = useNavigationSource();
   const [inputs, setInputs] = useState<Inputs>({ 
       occlusionType: 'unknown',
       lvoLocation: 'unknown',
@@ -908,9 +908,9 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           <div className="max-w-3xl mx-auto flex items-center justify-between h-14 gap-3">
             {/* Left: Back + Title */}
             <div className="flex items-center gap-2 min-w-0">
-              <Link to={getBackPath()} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors shrink-0 text-slate-500">
+              <button type="button" onClick={goBack} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors shrink-0 text-slate-500 cursor-pointer bg-transparent border-0">
                 <ArrowLeft size={16} />
-              </Link>
+              </button>
               <div className="flex items-center gap-2 min-w-0">
                 <div className="p-1.5 bg-neuro-100 text-neuro-700 rounded-md shrink-0">
                   <Zap size={16} />
