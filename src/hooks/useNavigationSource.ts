@@ -1,5 +1,19 @@
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 
+/**
+ * Two-hook navigation boundary.
+ *
+ * useBackNavigation (src/hooks/useBackNavigation.ts)
+ *   → SPA-safe back-nav behavior only. Use when you need to go back and don't
+ *     care about source context or label. Takes a fallback path for direct-entry.
+ *
+ * useNavigationSource (this hook)
+ *   → Source context (?from=, ?category= query params) + label resolution +
+ *     goBack / handleBack aliases. Use when you need to render source-aware
+ *     labels ("Back to Guide" vs "Back to Trials") or read navigation source.
+ *
+ * Do NOT inline `window.history.length > 1` in components — use one of these hooks.
+ */
 interface NavigationSource {
   from: 'guide' | 'calculators' | 'pathways' | 'trials' | 'home' | null;
   category: string | null;

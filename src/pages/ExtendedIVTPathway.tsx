@@ -646,8 +646,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
         <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-100 shadow-sm -mx-4 px-4 md:-mx-6 md:px-6">
           <div className="max-w-3xl mx-auto flex items-center justify-between h-14 gap-3">
             <div className="flex items-center gap-2 min-w-0">
-              <button type="button" onClick={handleBack} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors shrink-0 text-slate-500 cursor-pointer bg-transparent border-0">
-                <ArrowLeft size={16} />
+              <button type="button" onClick={handleBack} aria-label="Back to Stroke Pathways" className="p-2 rounded-lg hover:bg-slate-100 transition-colors shrink-0 text-slate-500 cursor-pointer bg-transparent border-0">
+                <ArrowLeft size={16} aria-hidden="true" />
               </button>
               <div className="flex items-center gap-2 min-w-0">
                 <div className="p-1.5 bg-neuro-100 text-neuro-700 rounded-md shrink-0">
