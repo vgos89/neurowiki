@@ -499,7 +499,6 @@ const PATHWAY_NAMES: Record<string, { app: string; breadcrumb: string }> = {
 const GUIDE_LABELS: Record<string, string> = {
   '/guide/stroke-basics':       'Stroke Basics',
   '/guide/iv-tpa':              'IV tPA Protocol',
-  '/guide/tpa-eligibility':     'tPA Eligibility',
   '/guide/thrombectomy':        'Mechanical Thrombectomy',
   '/guide/acute-stroke-mgmt':  'Acute Stroke Management',
   '/guide/ich-management':      'ICH Management',

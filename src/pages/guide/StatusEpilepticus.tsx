@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ArticleLayout,
   Section,
@@ -10,8 +10,21 @@ import {
   Value,
   Warning,
 } from '../../components/article';
+import { useRecents } from '../../hooks/useRecents';
 
 export default function StatusEpilepticus() {
+  const { recordView } = useRecents();
+  useEffect(() => {
+    recordView({
+      id: 'guide-status-epilepticus',
+      type: 'guide',
+      title: 'Status Epilepticus',
+      subtitle: 'Epilepsy & Seizures',
+      category: 'epilepsy',
+      trail: '6 min read',
+    });
+  }, [recordView]);
+
   return (
     <ArticleLayout
       category="Epilepsy"

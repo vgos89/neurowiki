@@ -28,7 +28,7 @@ const HeidelbergBleedingCalculator = lazy(() => import('./pages/HeidelbergBleedi
 const BostonCriteriaCaaCalculator = lazy(() => import('./pages/BostonCriteriaCaaCalculator'));
 const AspectScoreCalculator = lazy(() => import('./pages/AspectScoreCalculator'));
 const ResidentGuide = lazy(() => import('./pages/ResidentGuide'));
-const ResidentToolkit = lazy(() => import('./pages/ResidentToolkit'));
+const Guide = lazy(() => import('./pages/Guide'));
 const TrialsPage = lazy(() => import('./pages/TrialsPage'));
 const TrialPageNew = lazy(() => import('./pages/trials/TrialPageNew'));
 const ComingSoon = lazy(() => import('./components/ComingSoon').then((m) => ({ default: m.ComingSoon })));
@@ -86,11 +86,10 @@ const ROUTE_COMPONENTS: Record<StaticRouteKey, React.ReactNode> = {
   'pathways-se': <StatusEpilepticusPathway />,
   'pathways-migraine': <MigrainePathway />,
   'pathways-stroke-code': <StrokeBasics />,
-  'guide-hub': <ResidentToolkit />,
+  'guide-hub': <Guide />,
   'aha-2026-guideline': <StrokeGuidelineMindmap />,
   'stroke-basics': <StrokeBasics />,
   'iv-tpa': <IvTpa />,
-  'tpa-eligibility': <IvTpa />,
   thrombectomy: <Thrombectomy />,
   'acute-stroke-mgmt': <AcuteStrokeMgmt />,
   'status-epilepticus': <StatusEpilepticus />,

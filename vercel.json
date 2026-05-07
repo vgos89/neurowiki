@@ -39,7 +39,8 @@
     { "source": "/calculators/elan-pathway", "destination": "/pathways/elan-pathway", "permanent": true },
     { "source": "/calculators/se-pathway", "destination": "/pathways/se-pathway", "permanent": true },
     { "source": "/calculators/migraine-pathway", "destination": "/pathways/migraine-pathway", "permanent": true },
-    { "source": "/calculators/gca-pathway", "destination": "/pathways/gca-pathway", "permanent": true }
+    { "source": "/calculators/gca-pathway", "destination": "/pathways/gca-pathway", "permanent": true },
+    { "source": "/guide/tpa-eligibility", "destination": "/guide/iv-tpa", "permanent": true }
   ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },

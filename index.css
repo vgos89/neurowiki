@@ -124,6 +124,7 @@
 .rowcard.row-severity::before   { background-color: var(--color-neuro-500); }
 .rowcard.row-risk::before       { background-color: #0891b2; }
 .rowcard.row-classification::before { background-color: #7c3aed; }
+.rowcard.row-neuromuscular::before  { background-color: #10b981; }
 
 /* Dot utilities — HUB_SPEC §1.6 — use ONLY on dot elements, never on row cards */
 /* HUB_SPEC Appendix A naming rule: .dot-{slug} sets background-color on the element itself */

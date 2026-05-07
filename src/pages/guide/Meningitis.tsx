@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ArticleLayout,
   Section,
@@ -9,8 +9,21 @@ import {
   Value,
   Warning,
 } from '../../components/article';
+import { useRecents } from '../../hooks/useRecents';
 
 export default function Meningitis() {
+  const { recordView } = useRecents();
+  useEffect(() => {
+    recordView({
+      id: 'guide-meningitis',
+      type: 'guide',
+      title: 'Bacterial Meningitis',
+      subtitle: 'Neurocritical Care',
+      category: 'neurocritical',
+      trail: '6 min read',
+    });
+  }, [recordView]);
+
   return (
     <ArticleLayout
       category="Infectious Disease"

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ArticleLayout,
   Section,
@@ -10,8 +10,21 @@ import {
   Value,
   Warning,
 } from '../../components/article';
+import { useRecents } from '../../hooks/useRecents';
 
 export default function IvTpa() {
+  const { recordView } = useRecents();
+  useEffect(() => {
+    recordView({
+      id: 'guide-iv-tpa',
+      type: 'guide',
+      title: 'IV Thrombolytic Protocol',
+      subtitle: 'Vascular Neurology',
+      category: 'vascular',
+      trail: '8 min read',
+    });
+  }, [recordView]);
+
   return (
     <ArticleLayout
       category="Vascular Neurology"

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ArticleLayout,
   Section,
@@ -9,8 +9,21 @@ import {
   Critical,
   Value,
 } from '../../components/article';
+import { useRecents } from '../../hooks/useRecents';
 
 export default function AcuteStrokeMgmt() {
+  const { recordView } = useRecents();
+  useEffect(() => {
+    recordView({
+      id: 'guide-acute-stroke-mgmt',
+      type: 'guide',
+      title: 'Acute Stroke Management',
+      subtitle: 'Vascular Neurology',
+      category: 'vascular',
+      trail: '6 min read',
+    });
+  }, [recordView]);
+
   return (
     <ArticleLayout
       category="Vascular Neurology"

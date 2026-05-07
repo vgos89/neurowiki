@@ -1,7 +1,168 @@
 {
   "version": 1,
-  "generated": "2026-04-17",
+  "generated": "2026-05-06",
   "nodes": {
+    "hub/guide": {
+      "type": "hub",
+      "title": "Neurology Guide Hub",
+      "route": "/guide",
+      "references": [
+        "article/iv-tpa",
+        "article/thrombectomy",
+        "article/acute-stroke-mgmt",
+        "article/ich-management",
+        "article/aha-2026-guideline",
+        "article/status-epilepticus",
+        "article/seizure-workup",
+        "article/altered-mental-status",
+        "article/meningitis",
+        "article/headache-workup",
+        "article/vertigo",
+        "article/weakness-workup",
+        "article/gbs",
+        "article/myasthenia-gravis",
+        "article/multiple-sclerosis"
+      ],
+      "referencedBy": []
+    },
+    "article/iv-tpa": {
+      "type": "article",
+      "title": "IV Thrombolytic Protocol",
+      "route": "/guide/iv-tpa",
+      "references": [
+        "article/stroke-basics",
+        "calc/nihss"
+      ],
+      "referencedBy": [
+        "hub/guide"
+      ]
+    },
+    "article/stroke-basics": {
+      "type": "article",
+      "title": "Stroke Basics",
+      "route": "/guide/stroke-basics",
+      "references": [],
+      "referencedBy": [
+        "article/iv-tpa"
+      ]
+    },
+    "article/thrombectomy": {
+      "type": "article",
+      "title": "Mechanical Thrombectomy",
+      "route": "/guide/thrombectomy",
+      "references": [],
+      "referencedBy": [
+        "hub/guide"
+      ]
+    },
+    "article/acute-stroke-mgmt": {
+      "type": "article",
+      "title": "Acute Stroke Management",
+      "route": "/guide/acute-stroke-mgmt",
+      "references": [],
+      "referencedBy": [
+        "hub/guide"
+      ]
+    },
+    "article/aha-2026-guideline": {
+      "type": "article",
+      "title": "2026 AHA/ASA Stroke Guideline Mindmap",
+      "route": "/guide/aha-2026-guideline",
+      "references": [],
+      "referencedBy": [
+        "hub/guide"
+      ]
+    },
+    "article/status-epilepticus": {
+      "type": "article",
+      "title": "Status Epilepticus",
+      "route": "/guide/status-epilepticus",
+      "references": [],
+      "referencedBy": [
+        "hub/guide"
+      ]
+    },
+    "article/seizure-workup": {
+      "type": "article",
+      "title": "Seizure Workup",
+      "route": "/guide/seizure-workup",
+      "references": [],
+      "referencedBy": [
+        "hub/guide"
+      ]
+    },
+    "article/altered-mental-status": {
+      "type": "article",
+      "title": "Altered Mental Status",
+      "route": "/guide/altered-mental-status",
+      "references": [],
+      "referencedBy": [
+        "hub/guide"
+      ]
+    },
+    "article/meningitis": {
+      "type": "article",
+      "title": "Bacterial Meningitis",
+      "route": "/guide/meningitis",
+      "references": [],
+      "referencedBy": [
+        "hub/guide"
+      ]
+    },
+    "article/headache-workup": {
+      "type": "article",
+      "title": "Headache Workup",
+      "route": "/guide/headache-workup",
+      "references": [],
+      "referencedBy": [
+        "hub/guide"
+      ]
+    },
+    "article/vertigo": {
+      "type": "article",
+      "title": "Vertigo",
+      "route": "/guide/vertigo",
+      "references": [],
+      "referencedBy": [
+        "hub/guide"
+      ]
+    },
+    "article/weakness-workup": {
+      "type": "article",
+      "title": "Weakness Workup",
+      "route": "/guide/weakness-workup",
+      "references": [],
+      "referencedBy": [
+        "hub/guide"
+      ]
+    },
+    "article/gbs": {
+      "type": "article",
+      "title": "Guillain-Barre Syndrome",
+      "route": "/guide/gbs",
+      "references": [],
+      "referencedBy": [
+        "hub/guide"
+      ]
+    },
+    "article/myasthenia-gravis": {
+      "type": "article",
+      "title": "Myasthenia Gravis",
+      "route": "/guide/myasthenia-gravis",
+      "references": [],
+      "referencedBy": [
+        "hub/guide"
+      ]
+    },
+    "article/multiple-sclerosis": {
+      "type": "article",
+      "title": "Multiple Sclerosis",
+      "route": "/guide/multiple-sclerosis",
+      "references": [],
+      "referencedBy": [
+        "hub/guide"
+      ]
+    },
     "calc/ich-score": {
       "type": "calculator",
       "title": "ICH Score Calculator",
@@ -38,7 +199,8 @@
       "references": [],
       "referencedBy": [
         "calc/gcs",
-        "calc/heidelberg"
+        "calc/heidelberg",
+        "article/iv-tpa"
       ]
     },
     "calc/heidelberg": {
@@ -67,7 +229,9 @@
         "calc/ich-score",
         "calc/gcs"
       ],
-      "referencedBy": []
+      "referencedBy": [
+        "hub/guide"
+      ]
     },
     "trial/right-2-trial": {
       "type": "trial",

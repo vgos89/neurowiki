@@ -1,4 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
+import { useRecents } from '../../hooks/useRecents';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -640,6 +641,18 @@ const COR_FILTERS = [
 const INITIAL_EXPANDED = new Set(['root', 'systems', 'evaluation', 'management', 'special', 'quality']);
 
 export default function StrokeGuidelineMindmap() {
+  const { recordView } = useRecents();
+  useEffect(() => {
+    recordView({
+      id: 'guide-aha-2026-guideline',
+      type: 'guide',
+      title: '2026 AHA/ASA Guideline',
+      subtitle: 'Vascular Neurology',
+      category: 'vascular',
+      trail: 'Interactive ref',
+    });
+  }, [recordView]);
+
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set(INITIAL_EXPANDED));
   const [selectedNode, setSelectedNode] = useState<MindmapNode | null>(null);
   const [corFilter, setCorFilter] = useState<string | null>(null);

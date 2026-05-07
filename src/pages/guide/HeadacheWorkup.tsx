@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ArticleLayout,
   Section,
@@ -9,8 +9,21 @@ import {
   Value,
   Warning,
 } from '../../components/article';
+import { useRecents } from '../../hooks/useRecents';
 
 export default function HeadacheWorkup() {
+  const { recordView } = useRecents();
+  useEffect(() => {
+    recordView({
+      id: 'guide-headache-workup',
+      type: 'guide',
+      title: 'Headache Workup',
+      subtitle: 'General Neurology',
+      category: 'general',
+      trail: '4 min read',
+    });
+  }, [recordView]);
+
   return (
     <ArticleLayout
       category="General Neurology"
