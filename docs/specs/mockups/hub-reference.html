@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Hub Reference Mockup — NeuroWiki — v1.1</title>
+<title>Hub Reference Mockup — NeuroWiki — v1.4</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   :root {
@@ -33,6 +33,10 @@
   .dot-status     { background-color: #f59e0b; }
   .dot-general    { background-color: #94a3b8; }
   .dot-cobalt     { background-color: var(--color-neuro-500); }
+  .dot-vascular   { background-color: var(--color-neuro-500); }
+  .dot-epilepsy   { background-color: #f59e0b; }
+  .dot-critical   { background-color: #7c3aed; }
+  .dot-neuromuscular { background-color: #10b981; }
 
   .text-cat-ivt        { color: #10b981; }
   .text-cat-prevention { color: #0891b2; }
@@ -114,6 +118,7 @@
   .rowcard.row-severity::before   { background-color: var(--color-neuro-500); }
   .rowcard.row-risk::before       { background-color: #0891b2; }
   .rowcard.row-classification::before { background-color: #7c3aed; }
+  .rowcard.row-neuromuscular::before  { background-color: #10b981; }
 
   .sec-h {
     margin-top: 26px;
@@ -465,11 +470,11 @@
   <div class="max-w-5xl mx-auto px-6 py-4">
     <div class="text-xs font-bold uppercase tracking-widest text-slate-300 mb-1">Archetype 4</div>
     <h2 class="text-lg font-semibold">Guide hub</h2>
-    <p class="text-sm text-slate-300 mt-1"><strong>Differences:</strong> no Toggle · pills group by clinical area · meta slot shows read time · trail slot empty.</p>
+    <p class="text-sm text-slate-300 mt-1"><strong>Differences:</strong> no Toggle · Featured Tools strip below hero (§1.7 — 5 cross-app tiles) · pills group by clinical area (6 pills incl. Neuromuscular) · meta slot shows read time · row-neuromuscular emerald added (v1.4).</p>
   </div>
 </div>
 
-<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">Guide hub · Vascular section · meta = read time</div>
+<div class="state-divider px-6 py-3 text-xs font-bold uppercase tracking-widest text-slate-500">Guide hub · All sections · Featured Tools strip visible · HUB_SPEC v1.4 §1.7</div>
 
 <!-- ANCHOR: §4 guide-hub -->
 <div class="mockup-frame">
@@ -487,27 +492,81 @@
 
   <main class="px-5 pt-7 pb-24">
 
+    <!-- Hero (§1.1) -->
     <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Resident guide</div>
     <h1 class="text-[24px] font-medium text-slate-900 leading-tight tracking-tight mb-2">Deep reading.</h1>
     <p class="text-[14.5px] text-slate-500 leading-snug mb-5">In-depth chapters on neurology topics. Updated for the 2026 AHA cycle.</p>
 
     <!-- §1.2 search: REMOVED in HUB_SPEC v1.2 -->
 
+    <!-- §1.7 Featured Tools strip — OPTIONAL hub extension (Guide hub only) -->
+    <!-- "Quick Access" eyebrow anchors the strip below the hero lede. No section header. No favourite stars. -->
+    <div class="mb-6">
+      <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Quick Access</div>
+      <div class="flex gap-2.5 overflow-x-auto pb-0.5" style="scrollbar-width: none;">
+
+        <!-- Tile 1 — Stroke Code (Pathway, cobalt tint) -->
+        <div class="flex-shrink-0 w-[136px] rounded-xl p-3" style="background: rgba(23,70,162,0.07);">
+          <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Pathway</div>
+          <div class="text-[12.5px] font-semibold text-slate-900 leading-tight mb-1">Stroke Code</div>
+          <div class="text-[11px] text-slate-500 leading-snug mb-2">Door-to-needle protocol</div>
+          <span class="inline-block text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full" style="background:#fee2e2;color:#dc2626;">Emergency</span>
+        </div>
+
+        <!-- Tile 2 — EVT Pathway (Pathway, cobalt tint) -->
+        <div class="flex-shrink-0 w-[136px] rounded-xl p-3" style="background: rgba(23,70,162,0.07);">
+          <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Pathway</div>
+          <div class="text-[12.5px] font-semibold text-slate-900 leading-tight mb-1">EVT Pathway</div>
+          <div class="text-[11px] text-slate-500 leading-snug mb-2">Thrombectomy eligibility</div>
+          <span class="inline-block text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full" style="background:#fee2e2;color:#dc2626;">Emergency</span>
+        </div>
+
+        <!-- Tile 3 — NIHSS (Calculator, teal tint) -->
+        <div class="flex-shrink-0 w-[136px] rounded-xl p-3" style="background: rgba(8,145,178,0.07);">
+          <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Calculator</div>
+          <div class="text-[12.5px] font-semibold text-slate-900 leading-tight mb-1">NIHSS</div>
+          <div class="text-[11px] text-slate-500 leading-snug mb-2">Stroke severity 0–42</div>
+          <span class="inline-block text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full" style="background:#dbeafe;color:#1d4ed8;">Calculator</span>
+        </div>
+
+        <!-- Tile 4 — ASPECTS (Calculator, teal tint) -->
+        <div class="flex-shrink-0 w-[136px] rounded-xl p-3" style="background: rgba(8,145,178,0.07);">
+          <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Calculator</div>
+          <div class="text-[12.5px] font-semibold text-slate-900 leading-tight mb-1">ASPECTS</div>
+          <div class="text-[11px] text-slate-500 leading-snug mb-2">Early ischemia 0–10</div>
+          <span class="inline-block text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full" style="background:#dbeafe;color:#1d4ed8;">Calculator</span>
+        </div>
+
+        <!-- Tile 5 — Status Epilepticus Pathway (Pathway, amber tint) -->
+        <div class="flex-shrink-0 w-[136px] rounded-xl p-3" style="background: rgba(245,158,11,0.07);">
+          <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Pathway</div>
+          <div class="text-[12.5px] font-semibold text-slate-900 leading-tight mb-1">Status Epilepticus</div>
+          <div class="text-[11px] text-slate-500 leading-snug mb-2">Benzo → AED sequence</div>
+          <span class="inline-block text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full" style="background:#fee2e2;color:#dc2626;">Emergency</span>
+        </div>
+
+      </div>
+    </div>
+    <!-- END §1.7 Featured Tools strip -->
+
+    <!-- §1.4 Pill row — 6 pills (All + 5 clinical areas incl. Neuromuscular added v1.4) -->
     <div class="flex gap-2.5 overflow-x-auto mb-6" style="scrollbar-width: none;">
       <button class="pill pill-active">All</button>
-      <button class="pill"><span class="dot dot-cobalt"></span>Vascular</button>
-      <button class="pill"><span class="dot dot-status"></span>Epilepsy</button>
-      <button class="pill"><span class="dot dot-surgical"></span>Critical care</button>
+      <button class="pill"><span class="dot dot-vascular"></span>Vascular</button>
+      <button class="pill"><span class="dot dot-epilepsy"></span>Epilepsy</button>
+      <button class="pill"><span class="dot dot-critical"></span>Neurocritical</button>
       <button class="pill"><span class="dot dot-general"></span>General</button>
+      <button class="pill"><span class="dot dot-neuromuscular"></span>Neuromuscular</button>
     </div>
 
+    <!-- §1.5 Section header + §1.6 Row cards — Vascular (cobalt) -->
     <div class="sec-h">
       <div class="flex items-center gap-2.5 mb-1">
-        <div class="w-2 h-2 rounded-full dot-cobalt"></div>
+        <div class="w-2 h-2 rounded-full dot-vascular"></div>
         <div class="text-[15px] font-semibold flex-1 text-slate-900">Vascular neurology</div>
         <div class="text-[12px] text-slate-400 font-medium">5</div>
       </div>
-      <div class="text-[12.5px] text-slate-500 pl-[18px] leading-snug">Acute stroke, ICH, secondary prevention.</div>
+      <div class="text-[12.5px] text-slate-500 pl-[18px] leading-snug">Stroke, TIA, hemorrhage, thrombectomy.</div>
     </div>
 
     <!-- ANCHOR: §4.1 guide-row-card -->
@@ -525,12 +584,12 @@
     <button class="rowcard row-vascular">
       <div class="flex items-baseline justify-between gap-3 mb-1">
         <div>
-          <span class="text-[14.5px] font-semibold text-slate-900">IV tPA</span>
-          <span class="text-[11.5px] text-slate-400 font-medium ml-2">9 min</span>
+          <span class="text-[14.5px] font-semibold text-slate-900">IV Thrombolytics</span>
+          <span class="text-[11.5px] text-slate-400 font-medium ml-2">8 min</span>
         </div>
         <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
       </div>
-      <div class="text-sm text-slate-600 leading-snug">Eligibility, contraindications, dosing, and post-treatment monitoring.</div>
+      <div class="text-sm text-slate-600 leading-snug">Alteplase and tenecteplase eligibility, dosing, post-treatment monitoring.</div>
     </button>
 
     <button class="rowcard row-vascular">
@@ -542,6 +601,114 @@
         <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
       </div>
       <div class="text-sm text-slate-600 leading-snug">LVO criteria, time windows, and post-procedural management.</div>
+    </button>
+
+    <!-- §1.5 Section header + §1.6 Row cards — Epilepsy (amber) -->
+    <div class="sec-h">
+      <div class="flex items-center gap-2.5 mb-1">
+        <div class="w-2 h-2 rounded-full dot-epilepsy"></div>
+        <div class="text-[15px] font-semibold flex-1 text-slate-900">Epilepsy</div>
+        <div class="text-[12px] text-slate-400 font-medium">2</div>
+      </div>
+      <div class="text-[12.5px] text-slate-500 pl-[18px] leading-snug">Status epilepticus, first-seizure workup.</div>
+    </div>
+
+    <button class="rowcard row-epilepsy">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <div>
+          <span class="text-[14.5px] font-semibold text-slate-900">Status Epilepticus</span>
+          <span class="text-[11.5px] text-slate-400 font-medium ml-2">8 min</span>
+        </div>
+        <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">Lorazepam → LEV/fosphenytoin/VPA → refractory SE. ESETT-aligned.</div>
+    </button>
+
+    <button class="rowcard row-epilepsy">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <div>
+          <span class="text-[14.5px] font-semibold text-slate-900">Seizure Workup</span>
+          <span class="text-[11.5px] text-slate-400 font-medium ml-2">4 min</span>
+        </div>
+        <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">First seizure evaluation: imaging, LP, AED initiation decision.</div>
+    </button>
+
+    <!-- §1.5 Section header + §1.6 Row cards — Neurocritical (violet) -->
+    <div class="sec-h">
+      <div class="flex items-center gap-2.5 mb-1">
+        <div class="w-2 h-2 rounded-full dot-critical"></div>
+        <div class="text-[15px] font-semibold flex-1 text-slate-900">Neurocritical care</div>
+        <div class="text-[12px] text-slate-400 font-medium">2</div>
+      </div>
+      <div class="text-[12.5px] text-slate-500 pl-[18px] leading-snug">AMS, meningitis, ICP, emergencies.</div>
+    </div>
+
+    <button class="rowcard row-critical">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <div>
+          <span class="text-[14.5px] font-semibold text-slate-900">Altered Mental Status</span>
+          <span class="text-[11.5px] text-slate-400 font-medium ml-2">6 min</span>
+        </div>
+        <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">Structured AMS approach: toxic, metabolic, structural, psychiatric.</div>
+    </button>
+
+    <button class="rowcard row-critical">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <div>
+          <span class="text-[14.5px] font-semibold text-slate-900">Bacterial Meningitis</span>
+          <span class="text-[11.5px] text-slate-400 font-medium ml-2">6 min</span>
+        </div>
+        <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">Empiric antibiotics, LP timing, dexamethasone, HSV coverage.</div>
+    </button>
+
+    <!-- §1.5 Section header + §1.6 Row cards — Neuromuscular (emerald) — ADDED v1.4 -->
+    <!-- ANCHOR: §4.2 neuromuscular-section — row-neuromuscular new in v1.4 -->
+    <div class="sec-h">
+      <div class="flex items-center gap-2.5 mb-1">
+        <div class="w-2 h-2 rounded-full dot-neuromuscular"></div>
+        <div class="text-[15px] font-semibold flex-1 text-slate-900">Neuromuscular &amp; neuroimmunology</div>
+        <div class="text-[12px] text-slate-400 font-medium">3</div>
+      </div>
+      <div class="text-[12.5px] text-slate-500 pl-[18px] leading-snug">GBS, MG, MS — diagnosis and management.</div>
+    </div>
+
+    <button class="rowcard row-neuromuscular">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <div>
+          <span class="text-[14.5px] font-semibold text-slate-900">Guillain-Barré Syndrome</span>
+          <span class="text-[11.5px] text-slate-400 font-medium ml-2">6 min</span>
+        </div>
+        <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">Ascending areflexic weakness, IVIG vs PLEX, respiratory monitoring.</div>
+    </button>
+
+    <button class="rowcard row-neuromuscular">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <div>
+          <span class="text-[14.5px] font-semibold text-slate-900">Myasthenia Gravis</span>
+          <span class="text-[11.5px] text-slate-400 font-medium ml-2">6 min</span>
+        </div>
+        <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">AChR/MuSK, pyridostigmine dosing, crisis recognition, IVIG/PLEX.</div>
+    </button>
+
+    <button class="rowcard row-neuromuscular">
+      <div class="flex items-baseline justify-between gap-3 mb-1">
+        <div>
+          <span class="text-[14.5px] font-semibold text-slate-900">Multiple Sclerosis</span>
+          <span class="text-[11.5px] text-slate-400 font-medium ml-2">8 min</span>
+        </div>
+        <svg class="w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+      </div>
+      <div class="text-sm text-slate-600 leading-snug">McDonald criteria, relapse management, DMT selection principles.</div>
     </button>
 
   </main>

@@ -1,6 +1,6 @@
-# HUB_SPEC v1.2
+# HUB_SPEC v1.4
 
-**Version:** 1.2
+**Version:** 1.4
 **Companion mockup:** `docs/specs/mockups/hub-reference.html`
 **Status:** Locked
 **Owner:** PM (V) · Engineering (Build Engineer / Class C)
@@ -44,11 +44,12 @@ Reference mockup archetype: hub-reference.html line 157 (Archetype 1 — Trials 
 Top to bottom:
 
 1. **Hero** (§1.1) — eyebrow + title + lede
-2. **Toggle** (§1.3) — Trials hub ONLY (Questions / Catalog)
-3. **Pill row** (§1.4) — `All · {category-pills…} · | · Year` (Trials only)
-4. **Section header** (§1.5) — colored dot + title + count + lede
-5. **Row cards** (§1.6) — universal ToolRowCard
-6. **Favourites filter** (§6) — star toggle in page header → URL `?favs=true`
+2. **Featured Tools strip** (§1.7) — OPTIONAL hub-specific extension, currently used by Guide hub only
+3. **Toggle** (§1.3) — Trials hub ONLY (Questions / Catalog)
+4. **Pill row** (§1.4) — `All · {category-pills…} · | · Year` (Trials only)
+5. **Section header** (§1.5) — colored dot + title + count + lede
+6. **Row cards** (§1.6) — universal ToolRowCard
+7. **Favourites filter** (§6) — star toggle in page header → URL `?favs=true`
 
 Search is NOT part of the hub anatomy. Search lives only in the application chrome (mobile header search button per LAYOUT_SPEC §1.3.1, desktop top bar centered search per LAYOUT_SPEC §6.2.2). Hubs do not render an in-page search box. This is a universal rule applied across Home and all hubs as of v1.2.
 
@@ -121,7 +122,7 @@ All · Vascular · Epilepsy · Critical care · General
 
 ### 1.4.2 Pill state and URL
 
-The active pill writes to `?cat={slug}` (or `?fn={slug}` for Calculators, etc — see per-hub spec for the exact param name). Default state = `All` = no query param. Pills cleared by re-tapping the active pill. Browser back/forward must restore.
+The active pill writes to `?cat={slug}` (or `?category={slug}` for Calculators, etc — see per-hub spec for the exact param name). Default state = `All` = no query param. Pills cleared by re-tapping the active pill. Browser back/forward must restore.
 
 ## 1.5 Section header
 
@@ -229,6 +230,59 @@ The entire row card is the navigation click target (it is rendered as `<button>`
 
 ---
 
+## 1.7 Featured Tools strip — OPTIONAL hub extension
+
+Reference implementation: `src/components/guide/GuideFeaturedStrip.tsx` (Guide hub).
+
+Featured Tools is an OPTIONAL hub addition that surfaces 5 V-curated cross-app tools (calculators, pathways, or any other tool type) as a horizontally-scrollable strip directly below the hero. It is intentionally separate from row cards in the hub's category sections — Featured Tools is for cross-cutting tools the user reaches from this hub regardless of clinical area, not for items belonging to one of the hub's own sections.
+
+### 1.7.1 When to use
+
+Featured Tools is appropriate when a hub's primary content (the row cards in its sections) belongs to one taxonomy, BUT users would benefit from quick access to tools in other taxonomies that are routinely accessed from this hub's surface. The Guide hub uses it to surface clinically-adjacent calculators and pathways alongside guide articles.
+
+Featured Tools is NOT used by Calculators, Pathways, or Trials hubs — those hubs' content is self-contained per HUB_SPEC. Adding Featured Tools to those hubs would duplicate Home's Featured rail role and is out of spec.
+
+### 1.7.2 Visual contract
+
+- Reuses Home's `FeaturedRail` and `FeaturedTile` primitives (see HOME_SPEC §1.25). Implementation imports those components rather than duplicating the visual primitive.
+- Mobile (≤ 768px): horizontal scroll, all 5 tiles visible by scroll, no scrollbar visible (`scrollbar-width: none`)
+- Desktop (≥ 1024px): 5 tiles in a row, equally spaced, full `.zone-reference` width
+- Each tile: type label eyebrow (e.g. `PATHWAY`, `CALCULATOR`), name, 1-line description, type-color tint (8% of category color)
+- No favourites star on Featured tiles (Featured is curator-driven, not user-driven)
+- No section header above the strip (it's anchored visually by its position immediately below the hero)
+
+### 1.7.3 Data shape
+
+Hub-specific. The Guide hub uses `src/data/guideFeatured.ts` parallel to Home's `src/data/featured.ts`. Build-time check enforces `length === 5`.
+
+```ts
+type GuideFeaturedTile = {
+  id: string;
+  type: 'pathway' | 'calculator';
+  name: string;
+  description: string;
+  href: string;
+  categoryColor: string; // hex; tile renders 8% rgba tint
+};
+```
+
+### 1.7.4 Distinction from Home's Featured rail
+
+Home's Featured rail (HOME_SPEC §1.25) and a hub's Featured Tools strip are independent surfaces. They MAY overlap in content but each is curated independently. Home's rail surfaces 3 tiles for general exploration; a hub's strip surfaces 5 tiles for clinically-adjacent tools relevant to that hub's domain.
+
+If a tool appears in both Home's Featured rail and the Guide hub's Featured Tools strip, that's expected — different surfaces serve different user contexts.
+
+### 1.7.5 Hubs that may add Featured Tools in the future
+
+- **Trials**: NOT recommended. Trials hub's content is self-contained per archetype taxonomy.
+- **Calculators**: NOT recommended. Calculators hub uses fnCategory taxonomy and is self-contained.
+- **Pathways**: NOT recommended for the same reason.
+- **Guide**: USES it (5 tiles surfacing key calculators and pathways).
+
+Future hubs may use Featured Tools if their content is reference-style (like Guide articles) and users would benefit from cross-app quick access. Adding Featured Tools to a hub requires PM approval and a HUB_SPEC changelog entry.
+
+---
+
 ## 2. Per-hub variations summary
 
 | Aspect | Trials | Calculators | Pathways | Guide |
@@ -237,6 +291,7 @@ The entire row card is the navigation click target (it is rendered as `<button>`
 | Pill grouping | Category | Function | Scenario | Clinical area |
 | Section header text color | `text-cat-{slug}` | `text-slate-900` | `text-slate-900` | `text-slate-900` |
 | Trail slot | Effect chip / NNT | Score range | Step count | Read time |
+| Featured strip (§1.7) | NO | NO | NO | YES (5 tiles) |
 | Bottom nav active tab | Trials | Calcs | Pathways | Guide |
 
 Reference: hub-reference.html lines 281 (Calculators), 383 (Pathways), 484 (Guide).
@@ -277,7 +332,7 @@ The same `ToolRowCard` renders inside scenario sections on Home (HOME_SPEC §1.4
 | Hub | Route | Default pill | Filtered URL |
 |---|---|---|---|
 | Trials | `/trials` | All | `/trials?cat=ivt&year=2024` |
-| Calculators | `/calculators` | All | `/calculators?fn=severity` |
+| Calculators | `/calculators` | All | `/calculators?category=severity` |
 | Pathways | `/pathways` | All | `/pathways?scenario=acute-stroke` |
 | Guide | `/guide` | All | `/guide?area=vascular` |
 
@@ -382,6 +437,7 @@ This is the source of truth for category colors. Cross-referenced from HOME_SPEC
 | `.dot-severity` | `.row-severity` | var(--color-neuro-500) cobalt | Severity calcs |
 | `.dot-risk` | `.row-risk` | #0891b2 teal | Risk calcs |
 | `.dot-classification` | `.row-classification` | #7c3aed violet | Classification calcs |
+| `.dot-neuromuscular` | `.row-neuromuscular` | #10b981 emerald | Neuromuscular & Neuroimmunology guide articles |
 
 **Naming rule (locked):**
 - `.dot-{slug}` = sets `background-color` directly on the element. Use ONLY on the small dot element inside pills and on the small dot element inside section headers.
@@ -395,4 +451,6 @@ Dropped in v5g (per Phase 2 plan): `.dot-prehospital` was unused; `.row-acute` s
 
 - **v1.0** (superseded) — used `.cat-{slug}` for both standalone color utilities AND row-card category indicator, causing background-color bleed when both class systems matched the same element.
 - **v1.1** (superseded) — split into `.dot-{slug}` (utility) and `.row-{slug}` (row-card scoped to ::before). All other anatomy unchanged.
-- **v1.2** (current) — removed in-page mobile search box from hub anatomy. Search now lives only in the application chrome (mobile header button, desktop top bar). §1.2 is preserved as a tombstone so subsequent section numbering (§1.3 Toggle, §1.4 Pill row, etc.) remains stable across cross-references in HOME_SPEC and TRIALS_SPEC.
+- **v1.2** (superseded) — removed in-page mobile search box from hub anatomy. Search now lives only in the application chrome (mobile header button, desktop top bar). §1.2 is preserved as a tombstone so subsequent section numbering (§1.3 Toggle, §1.4 Pill row, etc.) remains stable across cross-references in HOME_SPEC and TRIALS_SPEC.
+- **v1.3** (superseded) — corrected §4 routing table to match the Calculators implementation: `?fn=` is no longer used; the Calculators hub uses `?category={slug}` (matches the prompt-level decision in 5d to avoid colliding with Home's `?scenario=`). One-line patch to §4's URL example and a parallel update to the §1.4.2 reference at line 124. No anatomy or behaviour changes; this only corrects a specification that was inconsistent with the merged implementation.
+- **v1.4** (current) — documents the Guide hub rebuild (Phase B Prompt 5f). Two structural additions: §1.7 introduces an OPTIONAL "Featured Tools strip" hub extension (currently used by Guide hub only — surfaces 5 V-curated cross-app tools below the hero, reuses Home's FeaturedRail/FeaturedTile primitives). The §1 anatomy ordering and the §2 per-hub variations table both updated to reference §1.7. Appendix A adds `.dot-neuromuscular` / `.row-neuromuscular` (#10b981 emerald) for the Guide hub's Neuromuscular & Neuroimmunology section. No changes to Trials, Calculators, or Pathways hubs.
