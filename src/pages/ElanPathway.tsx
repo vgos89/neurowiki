@@ -139,7 +139,7 @@ const ElanPathway: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [step, setStep] = useState(1);
-  const { getBackPath, getBackLabel } = useNavigationSource();
+  const { goBack, getBackLabel } = useNavigationSource();
   const [inputs, setInputs] = useState<Inputs>({ isIschemicAfib: 'unknown', hasBleed: 'unknown', hasMechanicalValve: 'unknown', hasPetechialHt: 'unknown', recentReperfusion: 'unknown', size: 'unknown', onset: '' });
   const [result, setResult] = useState<Result | null>(null);
   const stepContainerRef = useRef<HTMLDivElement>(null);
@@ -206,7 +206,7 @@ const ElanPathway: React.FC = () => {
       {/* Header same */}
       <div className="mb-6 flex items-start justify-between">
         <div>
-            <Link to={getBackPath()} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-500 mb-6 group"><div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-colors duration-150"><ArrowLeft size={16} /></div> {getBackLabel()}</Link>
+            <button type="button" onClick={goBack} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-500 mb-6 group cursor-pointer bg-transparent border-0 p-0"><div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-colors duration-150"><ArrowLeft size={16} /></div> {getBackLabel()}</button>
             <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-purple-100 text-purple-700 rounded-lg"><Brain size={24} /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">Post-Stroke Anticoagulation Timing</h1></div>
             <p className="text-slate-500 font-medium">Operationalizes the ELAN trial timing framework within the broader AHA/ASA 2026 Class 2a recommendation for earlier DOAC initiation in carefully selected AF-related stroke or TIA.</p>
         </div>

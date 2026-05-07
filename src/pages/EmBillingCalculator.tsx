@@ -1082,7 +1082,7 @@ const EmBillingCalculator: React.FC = () => {
     return INITIAL_STATE;
   });
 
-  const { getBackPath } = useNavigationSource();
+  const { handleBack } = useNavigationSource();
   const { isFavorite, toggleFavorite } = useFavorites();
   const { recordView } = useRecents();
   const { trackResult } = useCalculatorAnalytics('em_billing');
@@ -1294,9 +1294,9 @@ const EmBillingCalculator: React.FC = () => {
       {/* ── Sticky Header ── */}
       <div className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200">
         <div className="flex items-center gap-3 px-4 py-3">
-          <Link to={getBackPath()} aria-label="Back" className="p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors flex-shrink-0">
+          <button type="button" onClick={handleBack} aria-label="Back" className="p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0">
             <ArrowLeft size={18} />
-          </Link>
+          </button>
           <div className="flex-1 min-w-0">
             <h1 className="text-base font-bold text-slate-900 leading-none">E/M Billing Calculator</h1>
             <p className="text-xs text-slate-500 mt-0.5">2021/2023 AMA MDM Guidelines</p>

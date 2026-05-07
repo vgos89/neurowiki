@@ -65,13 +65,20 @@ export const useNavigationSource = () => {
   };
 
   const goBack = () => {
-    navigate(getBackPath());
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate(getBackPath());
+    }
   };
+
+  const handleBack = goBack;
 
   return {
     source,
     getBackLabel,
     getBackPath,
     goBack,
+    handleBack,
   };
 };
