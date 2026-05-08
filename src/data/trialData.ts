@@ -142,6 +142,7 @@ export interface TrialMetadata {
   clinicalTrialsId?: string;
   calculations?: TrialCalculations; // Trial-specific calculations (NNT, etc.)
   additionalResults?: AdditionalResults; // Additional outcome data (e.g., ELAN)
+  /** @deprecated Use primaryDesign + primaryResult instead. Retained for backward compatibility with existing trial entries that have not yet been migrated. Do not add new values. */
   specialDesign?: string; // Special trial design (e.g., 'estimation-trial', 'non-inferiority', 'negative-trial')
   keyMessage?: string; // Key clinical takeaway message
   trialResult?: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL' | 'HARM' | 'SAFETY_MET' | 'SAFETY_FAILED' | 'INCONCLUSIVE'; // Overall trial result
@@ -259,6 +260,47 @@ export interface TrialMetadata {
   //   ICH surgery chain → "minimally invasive evacuation of selected lobar hematomas"
   chainContext?: string;
   /**
+   * Statistical framework used for the primary analysis.
+   * Drives display logic: ordinal-shift → stacked mRS bar + cOR; noninferiority → NI margin plot;
+   * binary-superiority → risk-difference bars; bayesian-noninferiority → posterior probability display;
+   * dose-finding-safety → dose arm comparison.
+   * Option Y rule: renderer suppresses NNT for ordinal-shift, noninferiority, and
+   * bayesian-noninferiority designs — do not add showNNT.
+   * Pair with primaryResult to give the full picture. Never render design without result.
+   */
+  primaryDesign?: 'binary-superiority' | 'ordinal-shift' | 'noninferiority'
+    | 'bayesian-noninferiority' | 'dose-finding-safety';
+  /**
+   * Outcome of the primary analysis.
+   * met → primary endpoint achieved; not-met → endpoint missed (adequately powered);
+   * noninferiority-established → NI margin met; noninferiority-not-established → NI margin not met;
+   * futility-stopped → pre-specified futility boundary crossed or data clearly futile;
+   * harm-stopped → trial arm stopped for safety signal at dose tested;
+   * terminated-administrative → early stop for enrollment, funding, or operational reasons (underpowered).
+   * Never render without the paired primaryDesign.
+   */
+  primaryResult?: 'met' | 'not-met' | 'noninferiority-established' | 'noninferiority-not-established'
+    | 'futility-stopped' | 'harm-stopped' | 'terminated-administrative';
+  /** Secondary analysis design for trials using two methods (e.g. ATTEST-2: ordinal-shift primary + NI secondary). */
+  secondaryDesign?: 'binary-superiority' | 'ordinal-shift' | 'noninferiority'
+    | 'bayesian-noninferiority' | 'dose-finding-safety';
+  /** Outcome of the secondary analysis. Pair with secondaryDesign; never render alone. */
+  secondaryResult?: 'met' | 'not-met' | 'noninferiority-established' | 'noninferiority-not-established'
+    | 'futility-stopped' | 'harm-stopped' | 'terminated-administrative';
+  /** Applicability context. Surfaces patient-selection and generalizability constraints for bedside use. */
+  applicability?: {
+    /** Populations or scenarios this trial explicitly does NOT apply to. One string per exclusion. */
+    populationExclusions?: string[];
+    /** EVT access context at time of thrombolysis decision. Critical for late-window and bridging trials. */
+    evtContext?: 'evt-eligible' | 'evt-ineligible' | 'evt-co-treated' | 'evt-unavailable';
+    /** Required imaging selection method. e.g. 'MRI DWI-FLAIR mismatch' or 'CT perfusion mismatch'. */
+    imagingSelection?: string;
+    /** Dose-specific caveat when the trial dose differs from standard practice. */
+    doseSpecific?: string;
+    /** Geographic or regulatory context limiting generalizability. */
+    geography?: string;
+  };
+  /**
    * Legend-card presentation slice. The headline values shown on the /trials list page.
    * Authored per trial; do not derive at render time.
    */
@@ -311,6 +353,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'IV tPA for Acute Ischemic Stroke (0-3 Hours)',
     category: 'Neuro Trials',
     doi: '10.1056/NEJM199512143332401',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
     stats: {
       sampleSize: {
         value: '624',
@@ -382,6 +426,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Tenecteplase vs Alteplase for Acute Ischemic Stroke (0–4.5 Hours)',
     category: 'Neuro Trials',
     doi: '10.1001/jama.2024.14721',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-established',
+    applicability: {
+      geography: 'China (domestic rhTNK-tPA formulation — not equivalent to international tenecteplase brands)',
+      populationExclusions: ['Direct comparison to international tenecteplase products (different formulation)'],
+    },
     trialResult: 'POSITIVE',
     stats: {
       sampleSize: {
@@ -453,6 +503,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'IV tPA for Acute Ischemic Stroke (3-4.5 Hours)',
     category: 'Neuro Trials',
     doi: '10.1056/NEJMoa0804656',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
     stats: {
       sampleSize: {
         value: '821',
@@ -523,6 +575,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'EXTEND Trial',
     subtitle: 'tPA for Acute Ischemic Stroke (4.5-9 Hours)',
     category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    applicability: {
+      imagingSelection: 'CT perfusion or MRI perfusion mismatch required — not a general 4.5–9h licence',
+      evtContext: 'evt-ineligible',
+    },
     stats: {
       sampleSize: {
         value: '225',
@@ -655,6 +713,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Intra-Arterial tPA for Central Retinal Artery Occlusion',
     category: 'Neuro Trials',
     doi: '10.1016/j.ophtha.2010.03.061',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'futility-stopped',
+    applicability: {
+      populationExclusions: [
+        'IV alteplase for CRAO — EAGLE studied intra-arterial route only',
+        'Does not address ultra-early IV thrombolysis for CRAO (see THEIA trial)',
+        'Arteritic CRAO (non-arteritic population only)',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '84',
@@ -4526,6 +4593,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'THAWS Trial',
     subtitle: 'Low-Dose Alteplase for Unknown-Onset Ischemic Stroke',
     category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'terminated-administrative',
+    applicability: {
+      doseSpecific: '0.6 mg/kg alteplase (Japan standard) — not the international standard 0.9 mg/kg',
+      imagingSelection: 'MRI DWI-FLAIR mismatch required',
+      populationExclusions: ['Does not disprove WAKE-UP — underpowered and stopped early after WAKE-UP results'],
+    },
     trialResult: 'NEGATIVE',
     stats: {
       sampleSize: {
@@ -4623,6 +4697,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'TRACE-III Trial',
     subtitle: 'Tenecteplase for Ischemic Stroke 4.5-24 Hours Without Thrombectomy',
     category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    applicability: {
+      evtContext: 'evt-unavailable',
+      populationExclusions: ['EVT-capable systems — TRACE-III enrolled patients without access to or planned EVT'],
+    },
     stats: {
       sampleSize: {
         value: '516',
@@ -4733,6 +4813,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'WAKE-UP Trial',
     subtitle: 'MRI-Guided Thrombolysis for Stroke with Unknown Time of Onset',
     category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    applicability: {
+      imagingSelection: 'MRI DWI-FLAIR mismatch required — not CT-based selection',
+      populationExclusions: ['CT-only centres without MRI availability', 'Known-onset stroke'],
+    },
     stats: {
       sampleSize: {
         value: '503',
@@ -7174,6 +7260,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'AcT Trial',
     subtitle: 'Tenecteplase vs Alteplase in Canada',
     category: 'Neuro Trials',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-established',
+    applicability: {
+      geography: 'Canada (pragmatic, broad population)',
+    },
     stats: {
       sampleSize: {
         value: '1577',
@@ -7280,6 +7371,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ARAMIS Trial',
     subtitle: 'Dual Antiplatelet Therapy vs Alteplase for Minor Nondisabling Stroke',
     category: 'Neuro Trials',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-established',
+    applicability: {
+      geography: 'China',
+      populationExclusions: [
+        'Disabling deficits (NIHSS ≥6) — minor nondisabling stroke only',
+        'Patients who are EVT candidates',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '760',
@@ -7384,6 +7484,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ATTEST-2 Trial',
     subtitle: 'Tenecteplase vs Alteplase Within 4.5 Hours',
     category: 'Neuro Trials',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'not-met',
+    secondaryDesign: 'noninferiority',
+    secondaryResult: 'noninferiority-established',
     stats: {
       sampleSize: {
         value: '1777',
@@ -7464,6 +7568,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'NOR-TEST Trial',
     subtitle: 'Tenecteplase 0.4 mg/kg vs Alteplase',
     category: 'Neuro Trials',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-not-established',
+    applicability: {
+      doseSpecific: '0.4 mg/kg tenecteplase — not the standard 0.25 mg/kg stroke dose',
+      populationExclusions: [
+        'Evidence for 0.25 mg/kg tenecteplase — different dose, different evidence base',
+        'Severe stroke patients — mild cohort (median NIHSS 4, ~17% mimics)',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '1100',
@@ -7558,6 +7671,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'NOR-TEST 2 (Part A)',
     subtitle: 'Tenecteplase 0.4 mg/kg vs Alteplase in Moderate-Severe Stroke',
     category: 'Neuro Trials',
+    primaryDesign: 'dose-finding-safety',
+    primaryResult: 'harm-stopped',
+    applicability: {
+      doseSpecific: '0.4 mg/kg tenecteplase — HARM SIGNAL at this dose in moderate-severe stroke',
+      populationExclusions: [
+        '0.25 mg/kg tenecteplase — this harm does NOT apply to the standard dose',
+        'Do not use to justify any dose of tenecteplase in moderate-severe stroke without further evidence',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '204',
@@ -7668,6 +7790,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'PRISMS Trial',
     subtitle: 'Alteplase vs Aspirin in Minor Nondisabling Stroke',
     category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'futility-stopped',
+    applicability: {
+      populationExclusions: [
+        'Disabling minor stroke — PRISMS enrolled nondisabling deficits only (mRS ≤1 at baseline)',
+        'Results stopped early at 33% of planned enrollment — certainty limited',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '313',
@@ -7772,6 +7902,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'PROST Trial',
     subtitle: 'Recombinant Human Prourokinase vs Alteplase',
     category: 'Neuro Trials',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-established',
+    applicability: {
+      geography: 'China',
+      populationExclusions: [
+        'rhPro-UK is not approved in US or EU — requires regulatory clearance before clinical use',
+        'Broad NI margin — requires independent external validation',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '663',
@@ -7874,6 +8013,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'PROST-2 Trial',
     subtitle: 'Large Phase 3 Prourokinase vs Alteplase Trial',
     category: 'Neuro Trials',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-established',
+    applicability: {
+      geography: 'China',
+      populationExclusions: [
+        'rhPro-UK is not approved in US or EU — regulatory availability required',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '1552',
@@ -7984,6 +8131,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'RAISE Trial',
     subtitle: 'Reteplase vs Alteplase for Acute Ischemic Stroke',
     category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    applicability: {
+      geography: 'China',
+      populationExclusions: [
+        'Reteplase is not approved in the US or EU — regulatory availability required',
+        'Higher sICH rate than alteplase (3.1% vs 2.0%) warrants caution outside trial context',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '1412',
@@ -8093,6 +8249,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'TASTE Trial',
     subtitle: 'Tenecteplase vs Alteplase with Perfusion-Imaging Selection',
     category: 'Neuro Trials',
+    primaryDesign: 'bayesian-noninferiority',
+    primaryResult: 'noninferiority-established',
+    applicability: {
+      imagingSelection: 'CT perfusion mismatch required — results apply to imaging-selected early-window stroke only',
+      populationExclusions: [
+        'Stopped early at 680/832 patients — full ITT result was borderline; NI formally met only in per-protocol analysis',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '680',
@@ -8195,6 +8359,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'TIMELESS Trial',
     subtitle: 'Tenecteplase 4.5-24 Hours with Perfusion-Imaging Selection',
     category: 'Neuro Trials',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'not-met',
+    applicability: {
+      evtContext: 'evt-co-treated',
+      imagingSelection: 'CT or MRI perfusion mismatch required (ICA/MCA occlusion with salvageable tissue 4.5-24h)',
+      populationExclusions: [
+        '77% of patients underwent EVT — result applies to bridge IVT context, not IVT-alone at late window',
+        'No benefit demonstrated; late-window IVT benefit only in EVT-unavailable settings (TRACE-III)',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '458',
@@ -8274,6 +8448,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'TRACE-2 Trial',
     subtitle: 'Tenecteplase vs Alteplase in EVT-Ineligible Stroke',
     category: 'Neuro Trials',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-established',
+    applicability: {
+      evtContext: 'evt-ineligible',
+      geography: 'China',
+    },
     stats: {
       sampleSize: {
         value: '1430',
@@ -8379,6 +8559,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'TWIST Trial',
     subtitle: 'Wake-Up Stroke Treated with Tenecteplase Selected by Non-Contrast CT',
     category: 'Neuro Trials',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'not-met',
+    applicability: {
+      imagingSelection: 'Non-contrast CT only — no MRI or CT perfusion; results do not apply to advanced-imaging-selected wake-up stroke (cf. WAKE-UP trial)',
+      populationExclusions: [
+        'No significant benefit on mRS shift (OR 1.18, p=0.27) — trial does not support IVT in this population with NCCT selection alone',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '578',
