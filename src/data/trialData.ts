@@ -310,6 +310,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'NINDS Trial',
     subtitle: 'IV tPA for Acute Ischemic Stroke (0-3 Hours)',
     category: 'Neuro Trials',
+    doi: '10.1056/NEJM199512143332401',
     stats: {
       sampleSize: {
         value: '624',
@@ -380,6 +381,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ORIGINAL Trial',
     subtitle: 'Tenecteplase vs Alteplase for Acute Ischemic Stroke (0–4.5 Hours)',
     category: 'Neuro Trials',
+    doi: '10.1001/jama.2024.14721',
     trialResult: 'POSITIVE',
     stats: {
       sampleSize: {
@@ -450,6 +452,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ECASS III Trial',
     subtitle: 'IV tPA for Acute Ischemic Stroke (3-4.5 Hours)',
     category: 'Neuro Trials',
+    doi: '10.1056/NEJMoa0804656',
     stats: {
       sampleSize: {
         value: '821',
@@ -651,6 +654,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'EAGLE Trial',
     subtitle: 'Intra-Arterial tPA for Central Retinal Artery Occlusion',
     category: 'Neuro Trials',
+    doi: '10.1016/j.ophtha.2010.03.061',
     stats: {
       sampleSize: {
         value: '84',
