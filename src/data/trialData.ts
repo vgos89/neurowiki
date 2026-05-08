@@ -4318,6 +4318,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'DEFUSE 3 Trial',
     subtitle: 'Thrombectomy for Ischemic Stroke (6-16 Hours)',
     category: 'Neuro Trials',
+    doi: '10.1056/NEJMoa1706442',
     stats: {
       sampleSize: {
         value: '182',
@@ -4390,6 +4391,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'DAWN Trial',
     subtitle: 'Thrombectomy for Ischemic Stroke (6-24 Hours)',
     category: 'Neuro Trials',
+    doi: '10.1056/NEJMoa1713973',
     stats: {
       sampleSize: {
         value: '206',
@@ -4942,6 +4944,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ATTENTION Trial',
     subtitle: 'Basilar Artery EVT',
     category: 'Neuro Trials',
+    doi: '10.1056/NEJMoa2206317',
     stats: {
       sampleSize: {
         value: '340',
@@ -5007,6 +5010,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'BAOCHE Trial',
     subtitle: 'Basilar EVT 6-24 Hours',
     category: 'Neuro Trials',
+    doi: '10.1056/NEJMoa2207576',
     stats: {
       sampleSize: {
         value: '217',
