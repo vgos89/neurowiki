@@ -467,6 +467,14 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] CLAUDE.md §13.3 references data-architect agent that does not exist in .claude/agents/. Decide when Wave 5 citation scanner work begins: create data-architect agent file, or reassign scanner ownership to system-architect or calculator-engineer. Update §13.3 accordingly.
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-07 — DOI integrity audit pass (Class C-clinical) — no commit (source-only fix; no new features)
+  - Files: src/data/trialCatalogMeta.ts (P0: ATTENTION/BAOCHE DOI swap fixed) · src/data/trialData.ts (P1: 11 wrong doi: fields corrected via PubMed verification) · docs/trials-audit/verification-findings.md (created)
+  - Corpus confirmed: 79 visible trials (55 manual + 24 legacy, no overlap) · 89 TRIAL_DATA records · 10 data-only records (product decision pending)
+  - Critical find: SKIP trial doi was pointing to an unrelated nephrology paper (lanthanum carbonate dialysis trial); corrected to the actual JAMA 2021 thrombectomy paper
+  - All DOIs verified via live PubMed API (DOI→PMID conversion + title confirmation)
+  - Browser verification: /trials/skip-trial shows doi:10.1001/jama.2020.23522 · tsc clean
+  - 15 clinical/statistical interpretation issues flagged for physician review — no content changes made pending that review (see docs/trials-audit/verification-findings.md §5)
+  - Unresolved: 10 data-only records need product decision · validation script not yet created · primaryAnalysisType classification pending
 - [x] 2026-05-07 — W8.1 back-button navigation polish (Class B) — commit 6ffcc21
   - Commit: trials-polish-and-cleanup-5g2 branch merged
   - Files: src/hooks/useNavigationSource.ts (boundary comment added) · src/pages/{EvtPathway, ExtendedIVTPathway, NihssCalculator, ResidentGuide, TrialsPage}.tsx (back button aria-label + padding) · src/pages/trials/TrialPageNew.tsx (recordView + back button touch target + HUB_SPEC trail slot comment) · docs/reviews/clinical-PR-pending-trials-recents-trail.md (§17.2 artifact NEW)

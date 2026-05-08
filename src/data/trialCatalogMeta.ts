@@ -80,14 +80,14 @@ export const LEGACY_TRIAL_CATALOG_META: Record<string, LegacyTrialCatalogMeta> =
   'attention-trial': {
     name: 'ATTENTION',
     year: 2022,
-    doi: '10.1056/NEJMoa2207576',
+    doi: '10.1056/NEJMoa2206317',
     description: 'Basilar artery occlusion thrombectomy trial showing clear functional benefit within 12 hours.',
     clinicalContext: 'Basilar artery occlusion thrombectomy trial showing clear functional benefit within 12 hours.',
   },
   'baoche-trial': {
     name: 'BAOCHE',
     year: 2022,
-    doi: '10.1056/NEJMoa2206317',
+    doi: '10.1056/NEJMoa2207576',
     description: 'Late-window basilar thrombectomy trial extending posterior-circulation EVT evidence to 24 hours.',
     clinicalContext: 'Late-window basilar thrombectomy trial extending posterior-circulation EVT evidence to 24 hours.',
   },
