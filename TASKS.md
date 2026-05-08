@@ -87,6 +87,15 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 
 ## PENDING
 
+### AGENT GOVERNANCE
+
+- [ ] [P2] Implement full task-class-aware clinical edit gate for guard-clinical-edit.mjs
+  Currently advisory (exits 0 with warning to stderr). Needs TASKS.md ACTIVE section
+  parsing to detect the current task class. Allow Class E/-clinical edits; emit a
+  stronger warning (but still exit 0) for unclassified clinical surface edits.
+  File: scripts/claude-hooks/guard-clinical-edit.mjs
+  See: agent-governance-modernization-2026 follow-up
+
 ### LAYER 2 — Stroke Pathway (do in order)
 - [x] [L2] Fix stroke pathway page header — commit c379146
 - [x] [L2] Fix stroke pathway layout — white context bar, correct tab sticky offset — commit b41e644
