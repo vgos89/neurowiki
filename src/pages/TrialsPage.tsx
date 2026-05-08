@@ -21,6 +21,8 @@ const TOGGLE_OPTIONS: [ToggleOption, ToggleOption] = [
   { value: 'catalog', label: 'Catalog' },
 ];
 
+// HUB_SPEC v1.4 §1.6.4 — trail slot: effect chip (legend.bottomLineTag) + NNT (legend.keyStat)
+// Rendered by TrialLegendCard: Line 1 right-aligned on desktop, Line 3 on mobile.
 // HUB_SPEC Appendix A — category colors replacing --cat-* tokens (removed in 5b commit 2)
 const CAT_COLOR: Record<TrialCategoryKey, string> = {
   ivt:                    '#10b981',

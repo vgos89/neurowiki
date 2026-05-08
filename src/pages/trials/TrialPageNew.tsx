@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { useBackNavigation } from '../../hooks/useBackNavigation';
+import { useRecents } from '../../hooks/useRecents';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { loadTrialPayload, normalizeTrialSlug, type TrialPayload } from '../../data/trialPayload';
 import type { TrialMetadata } from '../../data/trialData';
@@ -81,6 +82,7 @@ function buildTrialSummaryItems(trialMetadata: TrialMetadata) {
 
 const TrialPageNew: React.FC = () => {
   const handleBack = useBackNavigation('/trials');
+  const { recordView } = useRecents();
   const { topicId } = useParams<{ topicId: string }>();
   const location = useLocation();
 
@@ -137,6 +139,21 @@ const TrialPageNew: React.FC = () => {
   const safeCategory = (catalogTrial?.category && categoryStyles[catalogTrial.category])
     ? catalogTrial.category
     : 'ivt';
+
+  // HOME_SPEC §1.6.4 — trail slot: keyStat (NNT / effect size) per HUB_SPEC v1.4 §1.6.4
+  useEffect(() => {
+    if (!trialId) return;
+    recordView({
+      type: 'trial',
+      id: `trial-${trialId}`,
+      title: catalogTrial?.name ?? trialId,
+      subtitle: categoryNames[safeCategory],
+      category: safeCategory,
+      trail: catalogTrial?.legend?.keyStat,
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trialId]);
+
   const sanitizedTrialContent = useMemo(
     () =>
       sanitizeLegacyTrialContent(trial?.content ?? '', {
@@ -294,9 +311,10 @@ const TrialPageNew: React.FC = () => {
             <button
               type="button"
               onClick={handleBack}
-              className="inline-flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-neuro-600 dark:hover:text-neuro-400 mb-4 transition-colors text-sm font-medium cursor-pointer bg-transparent border-0 p-0"
+              className="inline-flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-neuro-600 dark:hover:text-neuro-400 mb-2 transition-colors text-sm font-medium cursor-pointer bg-transparent border-0 p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"
+              aria-label="Back to Neuro Trials"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span>Back to Neuro Trials</span>
             </button>
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-1">

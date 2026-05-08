@@ -1,20 +1,7 @@
 # TASKS.md — NeuroWiki Task Ledger
 
 ## ACTIVE
-
-### W6.6.3 — Clinical content for remaining trial stubs — Class E-clinical [DONE]
-- **Status:** done — Batches 5A/5B/5C/5D all merged
-- **User-visible goal:** 13 trial stubs gain full clinical content (howToInterpret, bedsidePearl, bottomLineSummary, howToReadChart, inclusionCriteria, exclusionCriteria, archetypeId, doi, listCategory)
-- **Batch 5A** (done — commit 8dcec26): BP-TARGET (negative, aOR 0.96), BEST-II (futility amber banner), OPTIMAL-BP (HARM, DSMB-stopped, trialResult NEGATIVE→HARM). Clinical review: docs/reviews/clinical-batch5a-w663.md (approve).
-- **Batch 5B** (done — commit 898ec2d + 379c5b1): ENCHANTED (specialDesign neutral-trial, ordinalStats archetypeB, secondary ICH discipline), ESCAPE-NA1 (alteplase-free subgroup guarded in cautions), CHARM (COVID early-stop amber banner, core-volume subgroup guarded), ELAN (metadata fix only). Clinical review: docs/reviews/clinical-batch5b-w663.md (approve).
-- **Batch 5C** (done — commit 379c5b1 trialData + 3ed5d2e JSX): DECIMAL (trialResult NEUTRAL, mortality 75%/22%, primary functional null P=0.18), DESTINY (NEUTRAL, 88%/47%, primary null P=0.23), HAMLET (NEUTRAL, 78%/41%, primary neutral overall, 48h window key teaching). Modification 3 pooled-analysis sentence identical across all three cautions. Clinical review: docs/reviews/clinical-batch5c-w663.md (approve).
-- **Batch 5D** (done — commit 0a8f4a8): DESTINY II (POSITIVE per Modification 1 — proves co-locates primary endpoint + 0% mRS 0-2, doesNotProve disclaims functional independence/QoL in ≥60, family-counseling-grade bedsidePearl, amber QoL caveat banner above chart), TIMING (NEUTRAL NI-met, proves uses "non-inferior to", doesNotProve disclaims superiority), OPTIMAS (NEUTRAL NI-met, identical NI framing). Clinical review: docs/reviews/clinical-batch5d-w663.md (approve).
-- **Non-goals:** CLAIM_REGISTRY wiring, last_reviewed dates (all deferred to W5.2)
-- **Files touched:** src/data/trialData.ts · src/pages/trials/TrialPageNew.tsx · docs/reviews/clinical-batch5[a-d]-w663.md
-- **Clinical impact:** high
-- **Rollback plan:** git revert per-batch merge commit
-
-- [x] [L4] Calculator visual redesign — GCS rebuilt via parallel swarm (375d9cf); CALCULATOR_SPEC.md locked. Remaining per-calculator audits (ICH, ROPE, HAS-BLED, ABCD2, Boston, Heidelberg) scheduled as Wave 5 Tier 1 audits after W5.4 ships. Entry retired 2026-04-19.
+(none)
 
 ### W5.1 — Citation schema foundation — Class D
 - **Status:** done — commit 8bf8cc8 (2026-04-17)
@@ -392,10 +379,10 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 > Produced from the 2026-05-06 design + language audit sweep. Sources: docs/audits/2026-trial-design-audit.md · docs/audits/2026-language-audit.md.
 
 #### W8.1 — Fix back-button navigation sitewide — Class B
-- **Status:** done
+- **Status:** done — commit 6ffcc21
 - **User-visible goal:** Tapping "Back" anywhere in the app returns the user to wherever they navigated from, not always to a hardcoded destination.
-- **What shipped:** Created `src/hooks/useBackNavigation.ts` (shared hook: navigate(-1) with configurable fallback). Updated `src/hooks/useNavigationSource.ts` (goBack/handleBack now use navigate(-1) with path-aware fallback). Replaced all back-button Links with buttons in: TrialPageNew.tsx (69 instances), ArticleLayout.tsx, NihssCalculator, Abcd2Score, BostonCriteriaCaa, Cha2ds2Vasc, RopeScore, GlasgowComa, AspectScore, IchScore, HasBled, HeidelbergBleeding, EmBilling (calculators), ElanPathway, EvtPathway, MigrainePathway, GCAPathway, StatusEpilepticusPathway, ExtendedIVTPathway (pathways), ResidentGuide, StrokeBasicsWorkflowV2. Total: 22 files patched, 3 distinct back-button patterns eliminated.
-- **Acceptance checks:** tsc clean · build green · navigate(-1) with /trials fallback on direct URL load
+- **What shipped:** Created `src/hooks/useBackNavigation.ts` (shared hook: navigate(-1) with configurable fallback). Updated `src/hooks/useNavigationSource.ts` (goBack/handleBack now use navigate(-1) with path-aware fallback + boundary comment added). Replaced all back-button Links with buttons in: TrialPageNew.tsx (69 instances + recordView wiring + canary back button touch target), ArticleLayout.tsx, NihssCalculator, Abcd2Score, BostonCriteriaCaa, Cha2ds2Vasc, RopeScore, GlasgowComa, AspectScore, IchScore, HasBled, HeidelbergBleeding, EmBilling (calculators), ElanPathway, EvtPathway, MigrainePathway, GCAPathway, StatusEpilepticusPathway, ExtendedIVTPathway, ResidentGuide, StrokeBasicsWorkflowV2. Total: 22 files patched, 3 distinct back-button patterns eliminated. ResidentGuide useBackNavigation hook refactor resolved pre-existing three-pattern arch problem (documented in arch-PR-pending-back-button-refactor.md as a condition).
+- **Acceptance checks:** tsc clean · build green · navigate(-1) with /trials fallback on direct URL load · ResidentGuide three-pattern resolution verified ✓
 - **Clinical impact:** none
 - **Rollback plan:** n/a
 
@@ -418,6 +405,15 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Non-goals:** no changes to existing modern-design pages
 - **Clinical impact:** high (each sub-task is Class E-clinical)
 - **Rollback plan:** per-trial revert; existing legacy layout is the fallback
+
+#### W8.2.0 — WCAG 2.5.3 back-button canary fix — Class B
+- **Status:** planned — P2, L5
+- **User-visible goal:** TrialPageNew canary back buttons (60+ trial page branches) resolve WCAG 2.5.3 "Target Size (Enhanced)" issue: visible trial name label conflicts with aria-label mismatch on small viewports.
+- **Context:** Back button back-navigation swarm (W8.1) fixed the hook and integrated pattern; canary TrialPageNew branches now have touch targets in both label (trial name) and aria-label. On 375px viewport, the visible text may be truncated or wrapped while aria-label remains unchanged. Audit detects mismatch (visible vs announced text). Fix: align label rendering or aria-label content, test at 375px.
+- **Non-goals:** no clinical content changes; no hook changes; presentation only
+- **Acceptance checks:** 375px mobile QA pass; aria-label matches visible text or omit aria-label if visible text is self-describing; no WCAG 2.5.3 violations
+- **Clinical impact:** none
+- **Rollback plan:** n/a
 
 #### W8.3 — Language cleanup: em-dash and prose standardization — Class C-clinical
 - **Status:** planned — batch approach recommended
@@ -471,6 +467,12 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] CLAUDE.md §13.3 references data-architect agent that does not exist in .claude/agents/. Decide when Wave 5 citation scanner work begins: create data-architect agent file, or reassign scanner ownership to system-architect or calculator-engineer. Update §13.3 accordingly.
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-07 — W8.1 back-button navigation polish (Class B) — commit 6ffcc21
+  - Commit: trials-polish-and-cleanup-5g2 branch merged
+  - Files: src/hooks/useNavigationSource.ts (boundary comment added) · src/pages/{EvtPathway, ExtendedIVTPathway, NihssCalculator, ResidentGuide, TrialsPage}.tsx (back button aria-label + padding) · src/pages/trials/TrialPageNew.tsx (recordView + back button touch target + HUB_SPEC trail slot comment) · docs/reviews/clinical-PR-pending-trials-recents-trail.md (§17.2 artifact NEW)
+  - ResidentGuide three-pattern problem RESOLVED (pre-condition from arch-PR-pending-back-button-refactor.md now satisfied by useBackNavigation hook refactor)
+  - Clinical review: docs/reviews/clinical-PR-pending-trials-recents-trail.md (approve) — no new claims, no citation changes, existing surface re-routed
+  - QA: tsc clean · build green · navigate(-1) fallback verified
 - [x] 2026-05-04 — Prompt 5d (Class C): Calculators hub rebuild per HUB_SPEC v1.2
   - New data file: src/data/calculators.ts (10 calculator entries with fnCategory severity/risk/classification + scoreRange/scoreLabel; FN_CATEGORIES metadata for section headers + pill row)
   - New components: src/components/calculators/{CalculatorsHero,CategoryPillRow,CategorySection}.tsx — reuse ToolRowCard from src/components/hub (no fork); section headers carry colored dot + count + lede; trail slot bolds the numeric max for severity/risk and shows scoreLabel for classification

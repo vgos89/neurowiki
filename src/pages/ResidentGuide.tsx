@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useBackNavigation } from '../hooks/useBackNavigation';
 import ReactMarkdown from 'react-markdown';
 import { ChevronRight, ArrowLeft, ArrowUp, List, ChevronDown, ExternalLink, Stethoscope, FlaskConical, AlertCircle, Zap, Activity, Link as LinkIcon, Calculator, Search } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
@@ -102,14 +103,9 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
       return links;
   }, [currentTopic]);
 
-  const navigate = useNavigate();
-  const handleBack = () => {
-    if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      navigate(isTrialMode ? '/trials' : '/guide');
-    }
-  };
+  // useBackNavigation handles window.history depth check internally; fallback path
+  // is mode-aware (trials view → /trials, guide view → /guide).
+  const handleBack = useBackNavigation(isTrialMode ? '/trials' : '/guide');
 
   // Scroll to top when topic changes
   useEffect(() => {

@@ -113,8 +113,8 @@ const NihssCalculator: React.FC = () => {
           <div className="flex items-center justify-between gap-1 md:gap-4">
             {/* Left Section: Back Button + NIHSS Total */}
             <div className="flex items-center gap-1 md:gap-4">
-              <button type="button" onClick={handleBack} className="p-1 md:p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0">
-                <ArrowLeft size={16} className="md:w-[18px] md:h-[18px]" />
+              <button type="button" onClick={handleBack} aria-label="Back to Calculators" className="p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0">
+                <ArrowLeft size={16} className="md:w-[18px] md:h-[18px]" aria-hidden="true" />
               </button>
               <div>
                 <div className="text-[8px] md:text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-0 md:mb-0.5">NIHSS TOTAL</div>
