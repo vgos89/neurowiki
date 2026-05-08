@@ -1,4 +1,4 @@
-# NeuroWiki — CLAUDE.md (v3.1)
+# NeuroWiki — CLAUDE.md (v3.2)
 
 > Operating manual for this repo. Every Claude Code session reads this on startup. This file is the **contract** — changes are deliberate and committed. Task-specific notes live in `TASKS.md`. Architectural decisions live in `PRD.md` and `docs/adrs/`.
 
@@ -42,7 +42,7 @@ Files in this repo can drift. When sources conflict, apply this order — higher
 1. **Most recent ADR** (`docs/adrs/`, dated) — architecture truth
 2. **PRD.md** — product intent. Beats task-level notes for product questions.
 3. **Most recent `TASKS.md` entry** — execution state. Does *not* override an ADR or PRD without an explicit update to that higher source first.
-4. **CLAUDE.md** (this file) — governs process, not product or architecture truth
+4. **CLAUDE.md** (this file) and **`.claude/rules/` files** — governs process, not product or architecture truth. Rule files extracted from CLAUDE.md (`.claude/rules/clinical-surfaces.md`, `.claude/rules/clinical-review-templates.md`) are at the same tier as CLAUDE.md. @-references in CLAUDE.md point to them — they are not a lower tier.
 5. **In-session conversation / chat context** — transient. Never overrides any committed file.
 
 **Same-level conflict — when two sources at the same tier disagree:**
@@ -227,7 +227,7 @@ For multi-file changes, group by file. For plans, lead with numbered English ste
 
 ## 11. Agent roster
 
-All in `.claude/agents/`. Each has frontmatter-enforced scope: `name`, `description`, `tools:`, `model:`. Main session acts as **orchestrator** — plans, classifies, delegates.
+True subagents live in `.claude/agents/`. Each has frontmatter-enforced scope: `name`, `description`, `tools:`, `model:`. Main session acts as **orchestrator** — plans, classifies, delegates. Meta role docs (pm-agent, orchestrator, build-engineer) live in `.claude/meta/` and are NOT in `.claude/agents/` — they are not auto-invokable subagents.
 
 **Role split — orchestrator vs architect.** Orchestrator = foreman: takes goal, picks crews, makes schedule. Architect = blueprint designer: *does this fit the existing structure, or are we building the third different way to do the same thing?* Orchestrator plans the work; architect reviews the shape of the plan on Class D/E before the work starts.
 
@@ -239,49 +239,55 @@ All in `.claude/agents/`. Each has frontmatter-enforced scope: `name`, `descript
 |---|---|---|---|
 | 1 | `ui-architect` | Design system, layouts, component patterns, responsive behavior, shadcn/ui usage | Read, Write, Edit, Glob, Grep |
 | 2 | `mobile-first-developer` | Mobile UX, 375px viewport QA, touch targets, safe-area. Signs off every UI PR. | Read, Write, Edit, Glob, Grep |
-| 3 | `medical-scientist` | Clinical accuracy, guideline alignment, evidence grading, trial references. Owns semantic validity of claims. | Read, Write, Edit, WebFetch, WebSearch |
+| 3 | `medical-scientist` | Clinical accuracy, guideline alignment, evidence grading, trial references. Owns semantic validity of claims. Requires evidence-verifier packet for trial data changes. | Read, Write, Edit, WebFetch, WebSearch |
 | 4 | `clinical-reviewer` | **Tripwire.** Final gate on Class E and any `-clinical`-flagged PR. Reviews semantic validity per standard defined in `.claude/agents/clinical-reviewer.md`. Can block merge. | Read, Grep, Glob (read-only) |
 | 5 | `content-writer` | Educational prose, pearls, study-mode content, plain-language explanations | Read, Write, Edit |
-| 6 | `quality-assurance` | Tests, validation, performance budgets, deployment checks | Read, Write, Edit, Bash |
+| 6 | `quality-assurance` | Tests, validation, performance budgets, deployment checks. Write/Edit restricted to docs/reviews/qa-* and test files. | Read, Write, Edit, Bash |
 
-### Contextual 8 — task-activated per brief
+### Contextual 10 — task-activated per brief
 
 | # | Agent | Activates when | Tool bounds |
 |---|---|---|---|
 | 1 | `calculator-engineer` | Scoring logic, interpretation thresholds, clinical algorithm correctness | Read, Write, Edit, Bash |
-| 2 | `design-prototyper` | New mockup needed at `docs/specs/mockups/` | Read, Write, Edit |
-| 3 | `design-guardian` | `docs/specs/*.md` creation or change | Read, Write, Edit, Grep, Glob |
-| 4 | `librarian` | Post-flight after every swarm | Read, Write, Edit, Grep, Glob |
-| 5 | `accessibility-specialist` | Interactive UI, ARIA, keyboard nav, focus management | Read, Write, Edit, Glob, Grep |
-| 6 | `seo-specialist` | New routes, `src/seo/`, structured data, metadata, pre-publish | Read, Write, Edit, Glob, Grep |
-| 7 | `compliance-legal` | Auth flows, privacy/ToS, PHI paths, disclaimers, GDPR/CCPA | Read, Write, Edit, Glob, Grep |
-| 8 | `system-architect` | Class D/E plan review; structural decisions, composability, duplication prevention | Read, Grep, Glob (read-only) |
+| 2 | `evidence-verifier` | Any Class E or -clinical task involving trials, guidelines, statistics, or DOI/PMID metadata. Before medical-scientist authors. | Read, Grep, Glob, WebFetch, WebSearch |
+| 3 | `trial-statistician` | Trial pages, p-values, NNTs, mRS shift, NI/Bayesian/ordinal/registry trial changes | Read, Grep, Glob, WebFetch, WebSearch |
+| 4 | `design-prototyper` | New mockup needed at `docs/specs/mockups/` | Read, Write, Edit |
+| 5 | `design-guardian` | `docs/specs/*.md` creation or change | Read, Write, Edit, Grep, Glob |
+| 6 | `librarian` | Post-flight after every swarm. File scope: TASKS.md, ROADMAP.md, docs/reviews/, docs/NEUROWIKI.md, docs/link-graph.json only. | Read, Write, Edit, Grep, Glob |
+| 7 | `accessibility-specialist` | Interactive UI, ARIA, keyboard nav, focus management | Read, Write, Edit, Glob, Grep |
+| 8 | `seo-specialist` | New routes, `src/seo/`, structured data, metadata, pre-publish | Read, Write, Edit, Glob, Grep |
+| 9 | `compliance-legal` | Auth flows, privacy/ToS, PHI paths, disclaimers, GDPR/CCPA. Reviewer-first — produces findings, delegates drafting. | Read, Grep, Glob |
+| 10 | `system-architect` | Class D/E plan review; structural decisions, composability, duplication prevention | Read, Grep, Glob (read-only) |
 
-### Meta 3 — not invoked as subagents
+### Meta 3 — not invoked as subagents (live in `.claude/meta/`, not `.claude/agents/`)
 
-| # | Agent | Role |
+| # | Role doc | Purpose |
 |---|---|---|
-| 1 | `pm-agent` | Chat-side PM in Claude.ai; human↔Claude Code translator |
-| 2 | `orchestrator` | Swarm composition model; main Claude Code session absorbs this function |
-| 3 | `build-engineer` | Claude Code IS the build engineer when running |
+| 1 | `.claude/meta/pm-agent.md` | Chat-side PM in Claude.ai; human↔Claude Code translator |
+| 2 | `.claude/meta/orchestrator.md` | Swarm composition model; main Claude Code session absorbs this function |
+| 3 | `.claude/meta/build-engineer.md` | Claude Code IS the build engineer when running |
 
 ---
 
 ## 12. Skills library — on-demand knowledge
 
-In `.claude/skills/`. Agents load via `skills:` frontmatter when the task touches the domain.
+In `.claude/skills/`. Agents load via `skills:` frontmatter when the task touches the domain. Skills use folder format: `.claude/skills/<name>/SKILL.md`. This is the canonical format — flat `.md` files are legacy.
 
 ### Shipped
 
 | Skill | Domain | Loaded by |
 |---|---|---|
-| `stroke-guidelines` | AHA/ASA 2026 + 2022 ICH guidelines, evidence classification, key trials | `medical-scientist` |
+| `stroke-guidelines` | AHA/ASA 2026 + 2022 ICH guidelines, evidence classification, key trials | `medical-scientist`, `clinical-reviewer` |
 | `performance` | Core Web Vitals, bundle budgets, Lighthouse targets, network resilience | `quality-assurance`, `ui-architect` |
+| `clinical-trial-audit` | DOI/PMID verification, display archetypes, NNT validity, editorial caveats | `evidence-verifier` |
+| `trial-statistics` | Statistical design taxonomy, NI/Bayesian/ordinal interpretation rules | `trial-statistician`, `medical-scientist` |
+| `humanizer` | AI-fingerprint removal, clinical voice, signal phrases, 7-step sign-off | `content-writer` |
+| `accessibility-audit` | WCAG 2.1 AA checklist, ARIA patterns, pre-merge gate | `accessibility-specialist` |
 
-### Pending (not yet written)
+### Pending
 
-- `humanizer` — prose style guide for `content-writer`
-- Domain skills — calculator-specific guidelines, disease-area knowledge (ICH, seizure, headache)
+- `compliance-public-medical` — HIPAA/GDPR/CCPA/ADA review templates for `compliance-legal`
+- Disease-area skills — calculator-specific guidelines (ICH, seizure, headache)
 
 ---
 
@@ -329,42 +335,17 @@ export const CLAIM_REGISTRY: Record<string, string[]> = {
 
 ### 13.3 Claim surfaces — where claims can live
 
-Clinical claims appear in many places, not just static JSX. **Any user-facing medical statement is a claim surface.** If a clinician reads it and could act on it, it needs tagging. Known surfaces in this codebase:
+**Any user-facing medical statement is a claim surface.** If a clinician reads it and could act on it, it needs tagging.
 
-- Static JSX text (`<p>IV tPA is indicated...</p>`)
-- String literals inside components (`const recommendation = "..."`)
-- Structured data in `src/data/*.ts` and `src/data/trials/*.ts`
-- Calculator interpretation output (strings returned from scoring functions)
-- Template strings and interpolated copy
-- Markdown content (if `.md` files render clinical content)
-- Tooltip, modal, dialog text
-- JSON content blobs
-- Derived language assembled from multiple pieces (e.g., `${severity} stroke requires ${action}`)
-- Chart labels, table cells, badge text
+Full surface enumeration and tagging rules: **→ `.claude/rules/clinical-surfaces.md`** (CLAUDE.md tier).
 
-**When a new claim surface appears that is not covered by existing scanner handlers:**
-
-1. The task is **blocked** until a tagging strategy is added for that surface.
-2. `data-architect` owns extending the scanner (§13.5) with the new handler.
-3. Content on an unrecognized claim surface **cannot merge**. This is a hard rule.
-4. The task's status becomes `blocked:awaiting-scanner-support` until §13.4 is updated *and* the hook is updated *and* tested on the new surface.
-
-This prevents false-sense-of-coverage — the biggest failure mode of automated claim checking.
+When a new claim surface appears not covered by the scanner: task is **blocked** until a tagging strategy is added. Content on an unrecognized surface **cannot merge**. Status: `blocked:awaiting-scanner-support`.
 
 ### 13.4 Claim tagging by surface
 
-Different surfaces, different tagging mechanisms. All converge on the same registry. The scanner ships in phases — some surfaces are Phase 1 (shipped), others are roadmap.
+Different surfaces use different tagging mechanisms. All converge on the same registry. Full tagging table by phase: **→ `.claude/rules/clinical-surfaces.md`**.
 
-| Surface | Tagging method | Phase |
-|---|---|---|
-| Static JSX | `data-claim="claim-id"` attribute on the element | 1 |
-| Structured data in `src/data/` | Adjacent `claimId: string` field on the object | 1 |
-| Computed strings from functions | Wrap return with helper: `claim(text, "claim-id")` from `src/lib/citations/claim.ts` | 2 |
-| Markdown | HTML comment preceding the clinical paragraph: `<!-- @claim: claim-id -->` | 2 |
-| JSON content blobs | `claim_id` field alongside the text field | 2 |
-| Template strings / derived language | Tag at the composition site, not the fragments | 3 |
-
-The pre-commit hook scans all shipped phases. A new surface type requires a new tagging strategy added to the hook before claims can ship on that surface (§13.3).
+The pre-commit hook scans all shipped phases. A new surface type requires a new tagging strategy before claims can ship on that surface.
 
 ### 13.5 Pre-commit hook — enforced
 
@@ -479,57 +460,11 @@ If an artifact is missing, `/pr-ready` fails and reports what's missing.
 
 Every Class D architect review and every Class E / `-clinical` clinical-reviewer review produces a standardized artifact in `docs/reviews/`. This makes reviews auditable and prevents pseudo-review.
 
-### 17.1 Architect review — `docs/reviews/arch-PR<#>-<slug>.md`
+Exact templates (§17.1 architect, §17.2 clinical): **→ `.claude/rules/clinical-review-templates.md`** (CLAUDE.md tier).
 
-```markdown
-# Architect review — PR #<number>
+Naming: `arch-PR<#>-<slug>.md` and `clinical-PR<#>-<slug>.md`. Location: always `docs/reviews/`.
 
-**Decision:** approve | approve-with-conditions | block
-**Reviewed:** plan only | plan + touched files | plan + implementation
-**Reviewer:** system-architect (model: <model-name>)
-**Date:** <YYYY-MM-DD>
-
-## Rationale
-[One paragraph — what's right, what's risky, what's the call.]
-
-## Required follow-ups
-- [list; can be empty]
-
-## Blocking issues
-[Only if decision is `block`. Each issue stated concretely with a resolution path.]
-```
-
-### 17.2 Clinical review — `docs/reviews/clinical-PR<#>-<slug>.md`
-
-```markdown
-# Clinical review — PR #<number>
-
-**Decision:** approve | approve-with-conditions | block
-**Reviewer:** clinical-reviewer (model: <model-name>)
-**Date:** <YYYY-MM-DD>
-
-## Scope
-- Claims touched: [list of claim IDs]
-- Citations affected: [list of citation IDs]
-- Surfaces changed: [§13.3 categories]
-
-## Semantic validity
-[Confirmed / flagged items. This is the §13.1 work — does the claim text actually match the evidence? Review standard lives in .claude/agents/clinical-reviewer.md.]
-
-## Citation accuracy
-[Each citation checked for current version, correct section, accurate quote]
-
-## Freshness
-[For each citation: `last_reviewed` still within window (§13.7) → pass, or refresh required via §13.6]
-
-## Rationale
-[One paragraph.]
-
-## Required follow-ups
-- [list; can be empty]
-```
-
-**Missing review artifact → `/pr-ready` fails.** "Reviewed" in a comment is not enough; the artifact must exist in `docs/reviews/`.
+**Missing review artifact → `/pr-ready` fails.** "Reviewed" in a comment is not enough; the artifact must exist as a committed file in `docs/reviews/`.
 
 ---
 

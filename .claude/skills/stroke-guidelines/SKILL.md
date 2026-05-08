@@ -66,15 +66,13 @@ AHA/ASA 2022 Spontaneous ICH Management Guidelines (PRIMARY SOURCE)
 
 ## Evidence Classification
 
-**Evidence Classification:**
-
-Class of Recommendation:
+**Class of Recommendation:**
 - Class I (Green): Strong recommendation, benefit >>> risk
 - Class IIa (Blue): Moderate recommendation, benefit >> risk
 - Class IIb (Yellow): Weak recommendation, benefit ≥ risk
 - Class III (Red): No benefit or harmful
 
-Level of Evidence:
+**Level of Evidence:**
 - Level A: Multiple RCTs or meta-analyses
 - Level B-R: Single RCT
 - Level B-NR: Observational studies
@@ -125,31 +123,16 @@ Level of Evidence:
 - Thrombectomy criteria
 
 **Critical: When guidelines conflict:**
-- If 2026 guidelines differ from older content in Neurowiki: Flag the discrepancy; update to 2026 recommendations; note what changed in changelog; verify with multiple sources if major change
+- If 2026 guidelines differ from older content in NeuroWiki: Flag the discrepancy; update to 2026 recommendations; note what changed in changelog; verify with multiple sources if major change
 
 ---
 
 ## Accessing the 2022 ICH Guidelines
 
-**When to consult the 2022 ICH guidelines:**
-- Hemorrhagic stroke protocols
-- ICH management pathways
-- Anticoagulation reversal protocols
-- Surgical decision support
-
 **How to access:**
 - WebFetch the URL directly: https://www.ahajournals.org/doi/10.1161/STR.0000000000000407
 - Full text available at AHA Journals
 - Always cite: "AHA/ASA 2022 ICH Guidelines, Section X.X"
-
-**What to extract:**
-- Acute BP targets (SBP <140 mmHg)
-- Anticoagulation reversal protocols (warfarin, DOACs)
-- Surgical indications (cerebellar, hydrocephalus, supratentorial)
-- ICP management strategies
-- Hematoma expansion prevention
-- Prognostication tools (ICH score)
-- Goals of care discussions
 
 **Critical ICH Management Principles:**
 
@@ -185,8 +168,7 @@ Level of Evidence:
 
 **IV Thrombolysis Dosing:**
 - Alteplase (tPA): 0.9 mg/kg, maximum 90 mg — 10% bolus, 90% infusion over 60 minutes
-- Tenecteplase (TNK): 0.25 mg/kg, maximum 25 mg — single bolus (if using TNK instead of tPA)
-- Citation: AHA/ASA 2026, Section [verify section number when accessed]
+- Tenecteplase (TNK): 0.25 mg/kg, maximum 25 mg — single bolus
 
 **Time Windows (per AHA/ASA 2026):**
 - Standard window: 0-4.5 hours from LKW
@@ -197,25 +179,11 @@ Level of Evidence:
 **Blood Pressure Thresholds:**
 - Pre-tPA: Must be <185/110 mmHg
 - Post-tPA: Maintain <180/105 mmHg for 24 hours
-- Citation: AHA/ASA 2026, Section [verify]
 
 **Contraindications:**
 - Absolute: ICH, active bleeding, BP >185/110 (untreated), recent surgery
 - Relative: Recent stroke, platelets <100k, glucose <50 or >400
 - DOAC timing: <48 hours (with normal labs may be relative)
-- Citation: AHA/ASA 2026, Section [verify]
-
-**Evidence classification correct?**
-
-### Per AHA/ASA 2022 (ICH Management)
-
-**ICH Management (per AHA/ASA 2022):**
-- BP target: SBP <140 mmHg (INTERACT-2, ATACH-2)
-- Avoid aggressive lowering: SBP ≥110 mmHg
-- Warfarin reversal: 4-factor PCC + Vitamin K 10mg IV
-- DOAC reversal: Specific reversal agents if available, or 4-factor PCC
-- Surgical criteria: Cerebellar >3cm, hydrocephalus with ↓LOC
-- NO routine TXA (TICH-2 showed no benefit)
 
 ---
 
@@ -226,3 +194,5 @@ Stop if you see:
 - Missing contraindications
 - Unsupported claims
 - Wrong evidence classification
+- NNT shown for ordinal-shift primary outcome
+- Noninferiority trial presented as superiority result

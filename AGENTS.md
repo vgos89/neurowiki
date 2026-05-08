@@ -76,7 +76,7 @@ understand are:
   UI/structural work specialists. Calculators conform to
   `docs/specs/CALCULATOR_SPEC.md` v1.1 (Archetype 1).
 
-- **qa-engineer** — verification, build and typecheck gates, preview
+- **quality-assurance** — verification, build and typecheck gates, preview
   smoke testing.
 
 Full roster with role responsibilities is in CLAUDE.md §11 / §12.
