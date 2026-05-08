@@ -110,6 +110,7 @@ Block merge — do not approve-with-conditions — under any of the following:
 4. Any claim's `quoted_text` in the citation record does not support the claim as written
 5. Any `-clinical` PR submitted without a clinical review artifact in `docs/reviews/` per §17.2
 6. Any `last_reviewed` refresh not accompanied by documented completion of all six steps in §13.6
+7. A trial-data or statistics-display PR is submitted without an `evidence-verifier` packet at `docs/evidence-packets/` — or the `trial-statistician` report disagrees with the display archetype chosen for the trial in question
 
 Approve-with-conditions is appropriate when: the drift is editorial, not clinical (wrong section number cited, minor wording gap not in a never-drift category), and the required fix is unambiguous and low-risk. State the condition precisely.
 

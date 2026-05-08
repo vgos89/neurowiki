@@ -1,8 +1,8 @@
 ---
 name: audit-citations
-description: List citations stale past their review window per §13.7.
-  Create re-review tasks in TASKS.md. Dependency on citation registry
-  (Wave 5); returns graceful stub until registry ships.
+description: List citations stale past their review window per §13.7. Create re-review tasks in TASKS.md. Dependency on citation registry (Wave 5); returns graceful stub until registry ships.
+argument-hint: "[optional: citation-id to audit a specific citation]"
+allowed-tools: Read, Edit, Grep, Glob
 ---
 
 Skip this command for: repos where src/lib/citations/ has not yet been implemented (Wave 5).

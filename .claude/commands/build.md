@@ -1,8 +1,8 @@
 ---
 name: build
-description: Unified entrypoint for all code work. Classify → plan →
-  specialist review routing → approval gate → execute → quality gates
-  → commit → push → PR. The single verb for starting any new task.
+description: Unified entrypoint for all code work. Classify → plan → specialist review routing → approval gate → execute → quality gates → commit → push → PR. The single verb for starting any new task.
+argument-hint: "<task description>"
+allowed-tools: Read, Write, Edit, Grep, Glob, Bash(npm run build:*), Bash(npm run dev:*), Bash(npx tsc --noEmit:*), Bash(npm run check:claims:*), Bash(npm run check:routes:*), Bash(git add:*), Bash(git commit:*), Bash(git push:*), Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(gh pr create:*)
 ---
 
 ## When to use /build

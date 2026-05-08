@@ -1,8 +1,8 @@
 ---
 name: rollback
-description: Revert a commit, disable feature flag if applicable,
-  create post-mortem task. Requires clinical-reviewer + system-architect
-  sign-off before re-enable per §14.
+description: Revert a commit, disable feature flag if applicable, create post-mortem task. Requires clinical-reviewer + system-architect sign-off before re-enable per §14.
+argument-hint: "<commit-sha>"
+allowed-tools: Read, Grep, Glob, Edit, Bash(git rev-parse:*), Bash(git show:*), Bash(git revert:*), Bash(git log:*), Bash(git status:*), Bash(git push:*)
 ---
 
 Skip this command for: undoing local-only changes (use git restore or git reset instead). /rollback is for reverting commits that have been pushed and may be in users' hands.

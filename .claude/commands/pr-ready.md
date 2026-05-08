@@ -1,8 +1,8 @@
 ---
 name: pr-ready
-description: Run all quality gates, verify required artifacts per
-  task class, prepare bilingual PR description. Refuses to open PR if
-  any gate fails.
+description: Run all quality gates, verify required artifacts per task class, prepare bilingual PR description. Refuses to open PR if any gate fails.
+argument-hint: "[optional: task slug to verify]"
+allowed-tools: Read, Grep, Glob, Bash(npm run build:*), Bash(npx tsc:*), Bash(npx tsc --noEmit:*), Bash(npm run check:claims:*), Bash(npm run check:routes:*), Bash(git status:*), Bash(git diff:*), Bash(git log:*), Bash(gh pr create:*)
 ---
 
 Skip this command for: Class A tasks (no PR required) and Class B tasks (one-line title only — gates do not apply).

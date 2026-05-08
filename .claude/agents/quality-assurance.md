@@ -5,6 +5,14 @@ tools: Read, Write, Edit, Bash
 model: haiku
 ---
 
+## Tool scope constraint
+
+`Write` and `Edit` are restricted to:
+- `docs/reviews/qa-PR*.md` — QA review artifacts
+- Test files matching `**/*.test.ts`, `**/*.test.tsx`, `**/*.spec.ts`
+
+Never write to `src/` during a QA pass. If source code needs a fix to pass a gate, report the failure and let the primary implementation agent apply the fix.
+
 # Quality Assurance
 
 ## Role
