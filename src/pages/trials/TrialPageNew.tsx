@@ -174,39 +174,92 @@ const TrialPageNew: React.FC = () => {
   );
   const stats = useMemo(() => {
     if (trialMetadata) {
-      // Check if this is an estimation trial (not superiority)
-      const isEstimationTrial = trialMetadata.specialDesign === 'estimation-trial' ||
-        trialMetadata.stats.pValue.label.toLowerCase().includes('estimation');
+      // ── Schema-driven classification (Wave 3 Batch 2) ──────────────────────
+      // Uses primaryDesign + primaryResult when both are populated (Wave 2 schema contract).
+      // Falls back to legacy string-sniffing heuristics for unmigrated trials.
+      // Invariant: both fields must be set together — warn in dev if only one is present.
+      const bothSchemaFieldsSet = !!trialMetadata.primaryDesign && !!trialMetadata.primaryResult;
+      if (import.meta.env.DEV && !bothSchemaFieldsSet &&
+          (!!trialMetadata.primaryDesign !== !!trialMetadata.primaryResult)) {
+        console.warn(
+          `[TrialPageNew] "${trialId}" has only one of primaryDesign/primaryResult set. ` +
+          'Both must be populated together per Wave 2 schema contract. Falling back to legacy heuristics.',
+        );
+      }
 
-      // Check if this is a negative trial (no benefit or harm)
-      const isNegativeTrial =
-        trialMetadata.trialResult === 'NEGATIVE' ||
-        (!isEstimationTrial && (
-          trialMetadata.stats.pValue.label.toLowerCase().includes('not significant') ||
-          trialMetadata.stats.pValue.label.toLowerCase().includes('worse') ||
-          trialMetadata.stats.effectSize.value.toLowerCase().includes('no benefit') ||
-          trialMetadata.stats.effectSize.value.toLowerCase().includes('harm') ||
-          (trialMetadata.stats.pValue.value !== 'N/A' &&
-           !trialMetadata.stats.pValue.value.includes('<') &&
-           !trialMetadata.stats.pValue.value.includes('>') &&
-           parseFloat(trialMetadata.stats.pValue.value) >= 0.05)
-        ));
+      // NNT suppression (Option Y) — designs for which the NNT card is clinically inappropriate.
+      // Targets the NNT card only; does NOT suppress bedsidePearl/howToInterpret prose.
+      const NNT_SUPPRESSED_DESIGNS: ReadonlyArray<TrialMetadata['primaryDesign']> = [
+        'ordinal-shift', 'noninferiority', 'bayesian-noninferiority',
+        'dose-finding-safety', 'estimation-strategy', 'single-arm-registry',
+      ];
 
-      // Calculate NNT: 1 / (treatmentRate - controlRate) as decimal
-      // Or use stored calculation if available
-      // Estimation trials don't use traditional NNT
+      // isEstimationTrial: controls the "ESTIMATION TRIAL" blue-box display.
+      const isEstimationTrial = bothSchemaFieldsSet
+        ? trialMetadata.primaryDesign === 'dose-finding-safety' ||
+          trialMetadata.primaryDesign === 'estimation-strategy' ||
+          trialMetadata.primaryDesign === 'single-arm-registry'
+        : (trialMetadata.specialDesign === 'estimation-trial' ||
+           trialMetadata.stats.pValue.label.toLowerCase().includes('estimation'));
+
+      // suppressNNT: broader gate — includes NI + ordinal-shift in addition to estimation.
+      // Replace the old `!isEstimationTrial` NNT guard at both rendering sites.
+      const suppressNNT = bothSchemaFieldsSet
+        ? NNT_SUPPRESSED_DESIGNS.includes(trialMetadata.primaryDesign!)
+        : isEstimationTrial;
+
+      // Specific result-type flags for distinct label/visual treatment in JSX.
+      const isHarmStopped = bothSchemaFieldsSet
+        ? trialMetadata.primaryResult === 'harm-stopped'
+        : false;
+
+      const isNIEstablished = bothSchemaFieldsSet &&
+        trialMetadata.primaryResult === 'noninferiority-established';
+
+      const isNIFailed = bothSchemaFieldsSet &&
+        trialMetadata.primaryResult === 'noninferiority-not-established';
+
+      const isBayesianSuperiorityTrial = bothSchemaFieldsSet &&
+        trialMetadata.primaryDesign === 'bayesian-superiority';
+
+      // isNegativeTrial: all "did not succeed" results — superset of isHarmStopped + isNIFailed.
+      // Used as final ternary fallback; specific sub-states checked first in JSX.
+      const NEGATIVE_RESULTS: ReadonlyArray<TrialMetadata['primaryResult']> = [
+        'not-met', 'noninferiority-not-established', 'futility-stopped',
+        'harm-stopped', 'terminated-administrative',
+      ];
+      const isNegativeTrial = bothSchemaFieldsSet
+        ? NEGATIVE_RESULTS.includes(trialMetadata.primaryResult!)
+        : (trialMetadata.trialResult === 'NEGATIVE' ||
+           (!isEstimationTrial && (
+             trialMetadata.stats.pValue.label.toLowerCase().includes('not significant') ||
+             trialMetadata.stats.pValue.label.toLowerCase().includes('worse') ||
+             trialMetadata.stats.effectSize.value.toLowerCase().includes('no benefit') ||
+             trialMetadata.stats.effectSize.value.toLowerCase().includes('harm') ||
+             (trialMetadata.stats.pValue.value !== 'N/A' &&
+              !trialMetadata.stats.pValue.value.includes('<') &&
+              !trialMetadata.stats.pValue.value.includes('>') &&
+              parseFloat(trialMetadata.stats.pValue.value) >= 0.05)
+           )));
+
+      // NNT calculation — targets the NNT card only; does not affect prose surfaces.
       let nnt: string | number = 'N/A';
       let nntExplanation: string | undefined;
 
-      if (!isNegativeTrial && !isEstimationTrial && trialMetadata.efficacyResults) {
+      if (!isNegativeTrial && !suppressNNT && trialMetadata.efficacyResults) {
         const arr = (trialMetadata.efficacyResults.treatment.percentage - trialMetadata.efficacyResults.control.percentage) / 100;
         if (arr > 0) {
-          // Use stored calculation if available, otherwise calculate
           if (trialMetadata.calculations?.nnt) {
             nnt = trialMetadata.calculations.nnt;
             nntExplanation = trialMetadata.calculations.nntExplanation;
           } else {
-            nnt = Math.round((1 / arr) * 10) / 10; // Round to 1 decimal place
+            nnt = Math.round((1 / arr) * 10) / 10;
+          }
+          // Bayesian superiority annotation (DAWN) — per clinical-reviewer Wave 3 condition #3.
+          // NNT is derived from observed proportions, NOT from the posterior probability.
+          if (isBayesianSuperiorityTrial) {
+            nntExplanation = (nntExplanation ? nntExplanation + ' ' : '') +
+              '(Bayesian adaptive trial — superiority established by posterior probability >0.999; NNT calculated from observed proportions.)';
           }
         }
       }
@@ -227,12 +280,17 @@ const TrialPageNew: React.FC = () => {
         treatmentLabel: trialMetadata.efficacyResults.treatment.label,
         treatmentName: trialMetadata.efficacyResults.treatment.name,
         controlName: trialMetadata.efficacyResults.control.name,
-        isNegativeTrial, // Flag for special handling
-        isEstimationTrial, // Flag for estimation trial design
-        keyMessage: trialMetadata.keyMessage, // Key clinical takeaway
-        additionalResults: trialMetadata.additionalResults, // Additional outcome data
-        proceduralDetails: trialMetadata.proceduralDetails, // Procedural/technical details
-        safetyProfile: trialMetadata.safetyProfile, // Safety outcomes
+        isNegativeTrial,           // superset: not-met | NI-failed | futility | harm | admin
+        isEstimationTrial,         // controls "ESTIMATION TRIAL" blue-box
+        suppressNNT,               // broader gate: also covers ordinal-shift + NI designs
+        isHarmStopped,             // distinct harm state → warning/danger visual treatment
+        isNIEstablished,           // NI met → label "non-inferiority established" (not "positive")
+        isNIFailed,                // NI failed → label "did not establish non-inferiority"
+        isBayesianSuperiorityTrial, // DAWN pattern → NNT shown with Bayesian annotation
+        keyMessage: trialMetadata.keyMessage,
+        additionalResults: trialMetadata.additionalResults,
+        proceduralDetails: trialMetadata.proceduralDetails,
+        safetyProfile: trialMetadata.safetyProfile,
       };
     }
     // Fallback for WAKE-UP if metadata not found
@@ -6870,6 +6928,29 @@ const TrialPageNew: React.FC = () => {
                           </div>
                         )}
                       </div>
+                    ) : stats.isHarmStopped ? (
+                      // Distinct harm-stopped state — clinical-reviewer Wave 3 condition #1.
+                      // Never collapses to generic "NEGATIVE TRIAL" — laundering a safety signal.
+                      <div className="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-700 p-4 rounded">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-red-700 dark:text-red-400 font-bold text-sm">🛑 STOPPED FOR HARM</span>
+                        </div>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">
+                          This trial was stopped early due to excess harm in the intervention arm. The primary endpoint was not met.
+                          {stats.effectSizeLabel && stats.effectSizeLabel !== 'Absolute Increase' && ` (${stats.effectSizeLabel})`}
+                        </p>
+                      </div>
+                    ) : stats.isNIFailed ? (
+                      // NI-not-established — clinical-reviewer Wave 3 condition #2.
+                      // Label "did not establish non-inferiority", not generic "negative".
+                      <div className="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 p-4 rounded">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-amber-700 dark:text-amber-400 font-bold text-sm">❌ DID NOT ESTABLISH NON-INFERIORITY</span>
+                        </div>
+                        <p className="text-sm text-slate-700 dark:text-slate-300">
+                          This trial did not demonstrate that the intervention met the pre-specified non-inferiority margin.
+                        </p>
+                      </div>
                     ) : stats.isNegativeTrial ? (
                       <div className="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded">
                         <div className="flex items-center gap-2 mb-2">
@@ -6878,6 +6959,28 @@ const TrialPageNew: React.FC = () => {
                         <p className="text-sm text-slate-700 dark:text-slate-300">
                           This trial did not demonstrate a benefit for the intervention. {stats.effectSizeLabel && stats.effectSizeLabel !== 'Absolute Increase' && `(${stats.effectSizeLabel})`}
                         </p>
+                      </div>
+                    ) : stats.isNIEstablished ? (
+                      // NI-established — clinical-reviewer Wave 3 condition #2.
+                      // Label "non-inferiority established", not generic "positive". NNT not shown.
+                      <div className="flex flex-col gap-3">
+                        <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-blue-700 dark:text-blue-400 font-bold text-sm">✓ NON-INFERIORITY ESTABLISHED</span>
+                          </div>
+                          <p className="text-sm text-slate-700 dark:text-slate-300">
+                            The intervention met the pre-specified non-inferiority margin. NNT is not applicable for non-inferiority designs.
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-4 text-sm">
+                          <span className="text-slate-600 dark:text-slate-400 flex items-center">
+                            <strong>Effect:</strong>&nbsp;{stats.effectSize}
+                            <MedicalTooltip
+                              term="Effect Size"
+                              definition="The difference between treatment and control groups relative to the pre-specified non-inferiority margin."
+                            />
+                          </span>
+                        </div>
                       </div>
                     ) : (
                       <div className="flex items-center gap-4 text-sm">
@@ -7247,7 +7350,7 @@ const TrialPageNew: React.FC = () => {
                       </div>
                       <div className="text-green-400 font-bold">{stats.pValue}</div>
                     </div>
-                    {!stats.isEstimationTrial && (
+                    {!stats.suppressNNT && (
                       <div>
                         <div className="text-slate-400 mb-1 flex items-center gap-1">
                           NNT
