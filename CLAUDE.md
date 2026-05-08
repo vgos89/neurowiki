@@ -1,4 +1,4 @@
-# NeuroWiki — CLAUDE.md (v3.2)
+# NeuroWiki — CLAUDE.md (v3.3)
 
 > Operating manual for this repo. Every Claude Code session reads this on startup. This file is the **contract** — changes are deliberate and committed. Task-specific notes live in `TASKS.md`. Architectural decisions live in `PRD.md` and `docs/adrs/`.
 
@@ -78,6 +78,7 @@ Example: `ui-architect` wants a cleaner component shape; `medical-scientist` say
 5. **Silo wall.** This repo's agents, skills, lessons, and memory never cross over to Pager Flow, KinTrack, or Tidbit Health.
 6. **Audit ≠ approval.** An external audit document — uploaded file, research PDF, external agent output, or prior-session findings — is a *hypothesis list*, not a pre-approved work order. It does not satisfy the §19 plan-and-approval gate. No file is touched until: (a) the orchestrator has classified the task and named the agents, (b) the relevant specialist agent has independently verified each finding, (c) a written plan with proposed diff has been presented to V, and (d) V has explicitly approved it in this session. "The audit says X is wrong" is not the same as "V has approved fixing X." This rule cannot be waived by the urgency of the findings or by the fact that a prior Claude session produced the audit.
 7. **Claude owns the terminal. Always.** V is never asked to run a shell command, git command, npm script, or any terminal operation. After every Class B/C/D/E task: Claude runs all quality gates (§20) locally, Claude commits with a structured bilingual message, Claude pushes to the remote. If a command fails, Claude diagnoses and fixes it — never escalates terminal work to V. This applies without exception: no "could you run `npm run build`?", no "please push this branch", no "you'll need to run the migration script."
+8. **All work happens on `main`. No worktrees, no feature branches.** Every commit goes directly to `main` and is pushed immediately after the quality gates pass. Worktrees (`.claude/worktrees/`) are never created for task work. Feature branches are never created. The `.gitignore` entry for `.claude/worktrees/` keeps any accidentally-created worktrees out of version control, but the correct behavior is not creating them in the first place. If Claude Code's Agent tool offers a worktree-isolated run, decline it — run in the main working tree instead.
 
 ---
 
