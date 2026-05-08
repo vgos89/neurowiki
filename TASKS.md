@@ -76,6 +76,12 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - [2026-05-01] Author clinical synthesis paragraph for each of six question-detail pages — Class D-clinical, gated by clinical-reviewer. Page shell shipped in [SHA — see commit below]; content remains. The curated answer paragraph will replace the "Curated answer in progress" copy in the cobalt-soft status banner (src/pages/QuestionDetailPage.tsx). Requires medical-scientist authoring + clinical-reviewer approval + citation trace per TRIALS_SPEC §L5.3. trialIds schema added to trial-questions.ts (src/data/trial-questions.ts:trialIds[]). Anticoagulation question TODO: trialCount raised from 9→3 to match resolved IDs; 6 further AF/ESUS/PFO trials needed when added to data layer. (parked during: W7.1 question-detail shell)
 - [2026-05-01] Question taxonomy expansion: 6 → ~24 clinical questions — Class C-clinical-editorial. Current 6 stubs are a starter set. Full taxonomy requires editorial classification of which trials address which questions, reviewed by clinical-reviewer (classification is a clinical assertion). (parked during: W7.1 spec amendment)
 - [2026-05-01] ⌘K command palette for /trials — Class C. Keyboard shortcut focuses the search box and opens a recent/suggested list. Mockup precedent in trials-legend-reference.html (⌘K badge in search bar, line 155). (parked during: W7.1 spec amendment)
+- [2026-05-08] Vocabulary-consolidation ADR: `trialResult` / `specialDesign` / `primaryDesign+primaryResult` / `archetypeId` — Class D. Codebase carries four parallel vocabularies (legacy, deprecated, Wave 2, Wave 3) with no consumer pruning. Batch 3 Wave 1 did not solve this; tracked as post-flight follow-up from arch-batch3-wave1-schema-extensions.md. (parked during: Batch 3 Wave 1 schema extensions)
+- [2026-05-08] `classifyTrial.ts` extraction to `src/lib/trials/` — Class D. Classifier currently embedded in TrialPageNew.tsx stats useMemo; should be pure function before Wave 4 visualization components. Arch follow-up from arch-wave3-batch2-renderer.md. (parked during: Wave 3 Batch 2 renderer wiring)
+- [2026-05-08] EXTEND canary migration decision — Class D. Decide whether EXTEND page (TrialPageNew.tsx lines 358+) migrates onto Wave 3 schema-driven path or is formally retired as one-off. Must be settled before Wave 4 component work. Arch follow-up from arch-wave3-batch2-renderer.md. (parked during: Wave 3 Batch 2 renderer wiring)
+- [2026-05-08] NOR-TEST data inconsistency: tagged `noninferiority`+`noninferiority-not-established` but `doesNotProve` says superiority trial — Class C-clinical data fix. Clinical follow-up from clinical-wave3-batch2-renderer.md. (parked during: Wave 3 Batch 2 renderer wiring)
+- [2026-05-08] `harmSignal` claim tagging (6 entries): POINT, SAMMPRIS, SPS3, SPARCL, THALES, INSPIRES — each needs adjacent `claimId` + registry record with `quoted_text` per §13.4 Phase 1. Status: blocked:awaiting-registry-population until W5.2 lands. (parked during: Batch 3 Wave 2 data population)
+- [2026-05-08] OPTIMAS 2pp NI margin + INSPIRES bleeding HR (2.08, 1.07–4.04) citation trail: when W5.2 lands, add full citation records (Werring Lancet 2024 PMID 39491870; Gao NEJM 2023 PMID 38157499) with `quoted_text` to registry. (parked during: Batch 3 Wave 2 data population)
 - [2026-05-01] Timeline view (/trials/timeline) — Class D. Chronological display of all 79 trials by year. New route, new view toggle state. No clinical content change. (parked during: W7.1 spec amendment)
 - [2026-05-01] Long-press to favourite on mobile — Class C. 500ms long-press on a TrialLegendCard triggers the favourite toggle without navigating to the detail page. Requires pointer event handling in TrialLegendCard. (parked during: W7.1 spec amendment)
 
@@ -199,6 +205,28 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Status:** parked — 2026-04-22
 - **Blocking:** Archetype B (Grotta Bar mRS shift component) and Archetype G (single-arm registry display) not yet implemented. Cannot build pages without components.
 - **Rollback:** n/a (not started)
+
+### WAVE 8 BATCH 3 — Trial Data Population & Architecture Consolidation
+
+#### Batch 3 Wave 1 — schema extensions (SHIPPED 657f004)
+- **Status:** [x] merged — 2026-05-08
+- **Shipped:** primaryDesign/primaryResult unions, harmSignal field, JSDoc/pairing table
+
+#### Batch 3 Wave 2 — data population (13 secondary-prevention trials) — Class D-clinical
+- **Status:** [x] merged — commit 6bed2d6 (2026-05-08)
+- **User-visible goal:** 13 secondary-prevention trials populated with primaryDesign/primaryResult/harmSignal/applicability schema fields
+- **Files touched:** src/data/trialData.ts (108 lines inserted)
+- **Acceptance checks:** tsc clean ✓ · build green ✓ · clinical-reviewer approve-with-conditions (all 4 mandatory conditions applied in implementation) ✓
+  - C1 SPARCL harmSignal: 1.9% (not 2.2%) ✓
+  - C2 THALES harmSignal: P<0.001 (not p=0.001) ✓
+  - C3 SPS3 inline comment: not-met vs harm-stopped rationale documented ✓
+  - C4 INSPIRES + CHANCE-2 applicability: "21-day DAPT then monotherapy" explicit ✓
+- **Clinical impact:** high (13 trial entries received clinical content classification + data migration)
+- **Advisory follow-ups (tracked in PARKING LOT):**
+  - `harmSignal` claim tagging: 6 strings ship untagged (blocked:awaiting-registry-population when W5.2 lands)
+  - OPTIMAS 2pp + INSPIRES HR citation trail: when W5.2 lands, add quoted_text to PMID 39491870 + 38157499
+
+### WAVE 6.5 (continued)
 
 #### W6.5.1 — GrottaBarChart component implementation — Class C
 - **Status:** planned — 2026-04-24
@@ -467,6 +495,25 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] CLAUDE.md §13.3 references data-architect agent that does not exist in .claude/agents/. Decide when Wave 5 citation scanner work begins: create data-architect agent file, or reassign scanner ownership to system-architect or calculator-engineer. Update §13.3 accordingly.
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-08 — Batch 3 Wave 2 — data population: 13 secondary-prevention trials (Class D-clinical) — commit 6bed2d6
+  - Files: src/data/trialData.ts (108 lines inserted)
+  - Populated: `primaryDesign` + `primaryResult` on 12 trials (ELAN null per schema contract); `harmSignal` on 6 trials (POINT, SAMMPRIS, SPS3, SPARCL, THALES, INSPIRES); `applicability` on all 13
+  - Clinical-reviewer conditions all applied: SPARCL 1.9% (not 2.2%), THALES P<0.001 (not p=0.001), SPS3 not-met comment, INSPIRES+CHANCE-2 21-day DAPT explicit
+  - Advisory follow-ups tracked in PARKING LOT: harmSignal claim tagging (blocked:awaiting-registry-population), OPTIMAS+INSPIRES cited HR/margin trail (blocked:awaiting-registry-population)
+  - QA: tsc clean · build green ✓
+- [x] 2026-05-08 — Batch 3 Wave 1 — schema extensions (Class D-clinical) — commit 657f004
+  - Files: src/data/trialData.ts · docs/reviews/arch-batch3-wave1-schema-extensions.md
+  - Shipped: `primaryDesign` union (+`'estimation-strategy'`, `'single-arm-registry'`), `primaryResult` union (+`'safety-threshold-met'`), `secondaryDesign`/`secondaryResult` parity, new `harmSignal?: string` field
+  - JSDoc: legal `(primaryDesign, primaryResult)` pairing table, Option Y suppression list, safety-prose-field distinction
+  - Arch review: approve-with-conditions (vocabulary-consolidation ADR deferred as non-blocking task)
+  - QA: tsc clean · build green
+  - Wave 2 follow-up: data population for 13 secondary-prevention trials (harmSignal for POINT, SPS3, SPARCL, THALES, INSPIRES; SAMMPRIS → harm-stopped; ELAN → estimation-strategy; WEAVE → single-arm-registry + safety-threshold-met)
+- [x] 2026-05-08 — Wave 3 Batch 2 — renderer schema wiring (Class E-clinical) — commit 3d571ac
+  - Files: src/pages/trials/TrialPageNew.tsx · docs/reviews/arch-wave3-batch2-renderer.md · docs/reviews/clinical-wave3-batch2-renderer.md
+  - Shipped: schema-driven primary/secondary classification (replaced p-value heuristics), Option Y NNT suppression (ordinal-shift, NI, bayesian-NI, dose-finding-safety, estimation-strategy, single-arm-registry), new display branches (isHarmStopped, isNIFailed, isNIEstablished, isBayesianSuperiorityTrial), sidebar NNT card gating on suppressNNT flag, dev-mode invariant warning for partial schema migrations
+  - Arch review: approve-with-conditions (classifier extraction to src/lib/trials/classifyTrial.ts deferred to Wave 4, type-safe cast replacement, EXTEND canary migration decision pending)
+  - Clinical review: approve-with-conditions (5 mandatory conditions resolved pre-merge: harm-stopped distinct rendering, NI qualifier labels, Bayesian annotation wording, prose suppression targets card only, NOR-TEST data consistency fix) · 1 non-blocking follow-up (composition-site claim tagging for Bayesian annotation when locked)
+  - QA: tsc clean · build green
 - [x] 2026-05-07 — DOI integrity audit pass (Class C-clinical) — no commit (source-only fix; no new features)
   - Files: src/data/trialCatalogMeta.ts (P0: ATTENTION/BAOCHE DOI swap fixed) · src/data/trialData.ts (P1: 11 wrong doi: fields corrected via PubMed verification) · docs/trials-audit/verification-findings.md (created)
   - Corpus confirmed: 79 visible trials (55 manual + 24 legacy, no overlap) · 89 TRIAL_DATA records · 10 data-only records (product decision pending)
