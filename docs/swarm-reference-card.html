@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroWiki — Swarm Reference Card</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #f8fafc;
+    --bg3: #f1f5f9;
+    --border: #e2e8f0;
+    --border2: #cbd5e1;
+    --text: #0f172a;
+    --text2: #475569;
+    --text3: #94a3b8;
+    --mono: 'Menlo', 'Monaco', 'Consolas', monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --radius: 8px;
+    --radius-sm: 5px;
+    --cobalt: #1d4ed8;
+    --cobalt-light: #eff6ff;
+    --green: #166534;
+    --green-light: #f0fdf4;
+    --amber: #92400e;
+    --amber-light: #fffbeb;
+    --red: #991b1b;
+    --red-light: #fef2f2;
+    --purple: #6b21a8;
+    --purple-light: #faf5ff;
+    --slate: #334155;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f172a;
+      --bg2: #1e293b;
+      --bg3: #334155;
+      --border: #334155;
+      --border2: #475569;
+      --text: #f8fafc;
+      --text2: #94a3b8;
+      --text3: #64748b;
+      --cobalt: #60a5fa;
+      --cobalt-light: #1e3a5f;
+      --green: #86efac;
+      --green-light: #14532d;
+      --amber: #fcd34d;
+      --amber-light: #451a03;
+      --red: #fca5a5;
+      --red-light: #450a0a;
+      --purple: #d8b4fe;
+      --purple-light: #3b0764;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px 20px 48px;
+    max-width: 680px;
+    margin: 0 auto;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  h1 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 28px;
+  }
+  .section { margin-bottom: 28px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .card {
+    background: var(--bg2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  /* Invocation row */
+  .invoke-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .invoke-row:last-child { border-bottom: none; }
+  .invoke-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text3);
+    min-width: 80px;
+    flex-shrink: 0;
+  }
+  .invoke-cmd {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg3);
+    border-radius: var(--radius-sm);
+    padding: 7px 10px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text);
+  }
+  .invoke-cmd code { flex: 1; }
+  .copy-btn {
+    background: transparent;
+    border: 0.5px solid var(--border2);
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 11px;
+    color: var(--text2);
+    cursor: pointer;
+    font-family: var(--sans);
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover { background: var(--bg); color: var(--text); }
+  .copy-btn.ok { color: var(--green); border-color: var(--green); }
+  .invoke-note {
+    font-size: 12px;
+    color: var(--text2);
+    min-width: 160px;
+    flex-shrink: 0;
+  }
+  /* Class rows */
+  .class-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 11px 14px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .class-row:last-child { border-bottom: none; }
+  .pill {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: var(--mono);
+  }
+  .pA { background: #dcfce7; color: #14532d; }
+  .pB { background: #dbeafe; color: #1e3a8a; }
+  .pC { background: #fef9c3; color: #713f12; }
+  .pD { background: #ffedd5; color: #7c2d12; }
+  .pE { background: #fee2e2; color: #7f1d1d; }
+  @media (prefers-color-scheme: dark) {
+    .pA { background: #14532d; color: #86efac; }
+    .pB { background: #1e3a8a; color: #93c5fd; }
+    .pC { background: #713f12; color: #fde68a; }
+    .pD { background: #7c2d12; color: #fdba74; }
+    .pE { background: #7f1d1d; color: #fca5a5; }
+  }
+  .class-body { flex: 1; min-width: 0; }
+  .class-title { font-size: 14px; font-weight: 600; margin-bottom: 1px; }
+  .class-sub { font-size: 12.5px; color: var(--text2); line-height: 1.45; }
+  .class-gate {
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 500;
+    margin-top: 4px;
+    display: inline-block;
+  }
+  .gate-green { background: var(--green-light); color: var(--green); }
+  .gate-amber { background: var(--amber-light); color: var(--amber); }
+  .gate-red { background: var(--red-light); color: var(--red); }
+  .gate-purple { background: var(--purple-light); color: var(--purple); }
+  /* Flow steps */
+  .step {
+    display: flex;
+    gap: 12px;
+    padding: 10px 14px;
+    border-bottom: 0.5px solid var(--border);
+    align-items: flex-start;
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--bg3);
+    color: var(--text2);
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-body { flex: 1; }
+  .step-title { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+  .step-sub { font-size: 12.5px; color: var(--text2); line-height: 1.45; }
+  .step-sub code {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    background: var(--bg3);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  /* Agent roster */
+  .agent-row {
+    display: flex;
+    gap: 10px;
+    padding: 9px 14px;
+    border-bottom: 0.5px solid var(--border);
+    align-items: flex-start;
+  }
+  .agent-row:last-child { border-bottom: none; }
+  .agent-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--bg3);
+    color: var(--text2);
+    flex-shrink: 0;
+    min-width: 140px;
+    border: 0.5px solid var(--border);
+    white-space: nowrap;
+  }
+  .agent-body { flex: 1; font-size: 12.5px; color: var(--text2); line-height: 1.4; }
+  .agent-core { border-color: var(--cobalt); color: var(--cobalt); }
+  /* Rules */
+  .rule-row {
+    display: flex;
+    gap: 10px;
+    padding: 9px 14px;
+    border-bottom: 0.5px solid var(--border);
+    align-items: flex-start;
+  }
+  .rule-row:last-child { border-bottom: none; }
+  .rule-icon { font-size: 14px; flex-shrink: 0; width: 20px; text-align: center; margin-top: 1px; }
+  .rule-body { flex: 1; }
+  .rule-title { font-size: 13.5px; font-weight: 600; margin-bottom: 1px; }
+  .rule-sub { font-size: 12.5px; color: var(--text2); line-height: 1.45; }
+  /* Don't-use rows */
+  .avoid-row {
+    display: flex;
+    gap: 10px;
+    padding: 9px 14px;
+    border-bottom: 0.5px solid var(--border);
+    align-items: flex-start;
+  }
+  .avoid-row:last-child { border-bottom: none; }
+  .avoid-body { flex: 1; }
+  .avoid-title { font-size: 13.5px; font-weight: 500; color: var(--text); margin-bottom: 1px; }
+  .avoid-sub { font-size: 12.5px; color: var(--text2); line-height: 1.4; }
+  /* Warn box */
+  .warn-box {
+    background: var(--amber-light);
+    border: 0.5px solid var(--amber);
+    border-radius: var(--radius-sm);
+    padding: 9px 12px;
+    font-size: 12.5px;
+    color: var(--amber);
+    margin-top: 8px;
+    line-height: 1.45;
+  }
+  /* Info box */
+  .info-box {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 7px;
+    font-style: italic;
+    padding: 0 2px;
+  }
+  /* Tab row for invocation section */
+  .tab-row {
+    display: flex;
+    gap: 4px;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--bg2);
+    border-radius: var(--radius) var(--radius) 0 0;
+    overflow: hidden;
+  }
+  .tab {
+    padding: 9px 14px;
+    font-size: 13px;
+    color: var(--text2);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    font-family: var(--sans);
+    transition: all 0.12s;
+  }
+  .tab.active { color: var(--text); border-bottom-color: var(--cobalt); font-weight: 500; }
+  .tab:hover { color: var(--text); }
+  .pane { display: none; padding: 14px; }
+  .pane.active { display: block; }
+  .pane-label { font-size: 12.5px; color: var(--text2); margin-bottom: 8px; }
+  .cmd-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg3);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text);
+  }
+  .cmd-row code { flex: 1; }
+</style>
+</head>
+<body>
+
+<h1>NeuroWiki — Swarm Reference Card</h1>
+<p class="subtitle">Agent governance, task classes, and workflow for Claude Code + NeuroWiki.</p>
+
+<!-- INVOCATION -->
+<div class="section">
+<div class="section-label">How to start any task</div>
+<div class="card">
+  <div class="tab-row" role="tablist">
+    <button class="tab active" data-tab="t1">Recommended</button>
+    <button class="tab" data-tab="t2">Plan only</button>
+    <button class="tab" data-tab="t3">Natural language</button>
+  </div>
+  <div class="pane active" id="t1">
+    <div class="pane-label">Full pipeline: classify → plan → review routing → approval gate → execute → gates → commit → push → PR.</div>
+    <div class="cmd-row"><code>/build &lt;what you want&gt;</code><button class="copy-btn" data-copy="/build ">Copy</button></div>
+    <div class="info-box">Handles everything through push. Always enforces approval gate before code. Never asks you to run a terminal command.</div>
+  </div>
+  <div class="pane" id="t2">
+    <div class="pane-label">Produces classification + plan only. Execution is manual — use /build for the full pipeline.</div>
+    <div class="cmd-row"><code>/plan-feature &lt;goal&gt;</code><button class="copy-btn" data-copy="/plan-feature ">Copy</button></div>
+    <div class="info-box">Stops after plan + approval request. Useful when you want to review the plan before committing to anything.</div>
+  </div>
+  <div class="pane" id="t3">
+    <div class="pane-label">Describe the task in plain English. Orchestrator classifies and routes.</div>
+    <div class="cmd-row"><code>Let's add &lt;feature&gt;</code><button class="copy-btn" data-copy="Let's add ">Copy</button></div>
+    <div class="warn-box">Probabilistic. If Claude starts implementing without showing a plan, stop and use <code>/build</code>.</div>
+  </div>
+</div>
+</div>
+
+<!-- CLASS DECISION TREE -->
+<div class="section">
+<div class="section-label">What class is this task?</div>
+<div class="card">
+  <div class="class-row">
+    <div class="pill pA">A</div>
+    <div class="class-body">
+      <div class="class-title">Question / read-only</div>
+      <div class="class-sub">Explanation, code reading, no file change. Answer directly. No plan, no commit.</div>
+      <span class="class-gate gate-green">No gates</span>
+    </div>
+  </div>
+  <div class="class-row">
+    <div class="pill pB">B</div>
+    <div class="class-body">
+      <div class="class-title">Tiny edit</div>
+      <div class="class-sub">≤5 lines, single file, obvious fix — typo, import, format. No behavior change.</div>
+      <span class="class-gate gate-green">Commit + push only</span>
+    </div>
+  </div>
+  <div class="class-row">
+    <div class="pill pC">C</div>
+    <div class="class-body">
+      <div class="class-title">Scoped feature</div>
+      <div class="class-sub">Normal feature work, single area of code. Plan required. Approval gate required.</div>
+      <span class="class-gate gate-amber">tsc · build · claims hook · bilingual PR</span>
+    </div>
+  </div>
+  <div class="class-row">
+    <div class="pill pC">C‑clin</div>
+    <div class="class-body">
+      <div class="class-title">Scoped + touches clinical content</div>
+      <div class="class-sub">Any C task that incidentally modifies copy, pearls, or interpretation text — even one word.</div>
+      <span class="class-gate gate-amber">C gates + citation trace + clinical-reviewer §17.2</span>
+    </div>
+  </div>
+  <div class="class-row">
+    <div class="pill pD">D</div>
+    <div class="class-body">
+      <div class="class-title">High-risk change</div>
+      <div class="class-sub">Crosses boundaries, refactor, new dependency, schema change. Architect review required before approval.</div>
+      <span class="class-gate gate-red">C gates + ADR + architect review §17.1 + rollback plan</span>
+    </div>
+  </div>
+  <div class="class-row">
+    <div class="pill pD">D‑clin</div>
+    <div class="class-body">
+      <div class="class-title">High-risk + clinical-adjacent</div>
+      <div class="class-sub">Structural change whose blast radius includes clinical data files (trialData.ts, citations/, etc.).</div>
+      <span class="class-gate gate-red">D gates + citation trace + both §17.1 and §17.2 artifacts</span>
+    </div>
+  </div>
+  <div class="class-row">
+    <div class="pill pE">E</div>
+    <div class="class-body">
+      <div class="class-title">Clinical logic change</div>
+      <div class="class-sub">Algorithm thresholds, interpretation text, guideline updates, citation changes. Pre-execution clinical gate runs <em>after</em> approval, before code.</div>
+      <span class="class-gate gate-purple">D gates + last_reviewed refresh + clinical-reviewer §17.2 pre-execution</span>
+    </div>
+  </div>
+</div>
+<div class="info-box">/build classifies automatically. This tree is for anticipating before you type.</div>
+</div>
+
+<!-- FULL FLOW -->
+<div class="section">
+<div class="section-label">The full /build flow</div>
+<div class="card">
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <div class="step-title">Type <code>/build &lt;task&gt;</code></div>
+      <div class="step-sub">Or natural language. Orchestrator takes over from here.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <div class="step-title">Classify + plan</div>
+      <div class="step-sub">Orchestrator classifies (A–E, ±clinical), writes bilingual plan with files, acceptance checks, agents.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <div class="step-title">Specialist reviews route automatically</div>
+      <div class="step-sub">Class D/E → <code>system-architect</code> reviews plan cold, writes §17.1 artifact. Blocks if structural issues exist.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <div class="step-title">You approve (or push back)</div>
+      <div class="step-sub">Reply <strong>approve</strong> to proceed. Iterate on the plan freely before approving. No code until approval on C/D/E.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <div class="step-title">Pre-execution clinical gate (E and -clinical only)</div>
+      <div class="step-sub"><code>clinical-reviewer</code> reads the plan + evidence trace cold, writes §17.2 artifact. Blocks if semantics are wrong. Runs post-approval, pre-code.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">6</div>
+    <div class="step-body">
+      <div class="step-title">Specialists implement</div>
+      <div class="step-sub">Primary agent executes per plan. Librarian runs post-flight. No new scope absorbed silently.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">7</div>
+    <div class="step-body">
+      <div class="step-title">Quality gates</div>
+      <div class="step-sub"><code>tsc --noEmit</code> · <code>npm run build</code> · <code>check:claims</code>. All must pass. Claude diagnoses failures — never escalates to you.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">8</div>
+    <div class="step-body">
+      <div class="step-title"><code>git commit &amp;&amp; git push &amp;&amp; gh pr create</code></div>
+      <div class="step-sub">Claude owns the terminal. PR URL is the final deliverable. You are never asked to run a command.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- AGENT ROSTER -->
+<div class="section">
+<div class="section-label">Agent roster — who does what</div>
+<div class="card">
+  <div class="agent-row">
+    <div class="section-label" style="padding: 6px 14px 4px; margin:0; border-bottom: 0.5px solid var(--border); width:100%; display:block;">Core 6 — every UI-touching swarm</div>
+  </div>
+  <div class="agent-row">
+    <span class="agent-tag agent-core">ui-architect</span>
+    <span class="agent-body">Design system, layouts, responsive behavior, component patterns. Signs off every UI PR.</span>
+  </div>
+  <div class="agent-row">
+    <span class="agent-tag agent-core">mobile-first-developer</span>
+    <span class="agent-body">Mobile UX, 375px viewport QA, touch targets. Signs off every UI PR.</span>
+  </div>
+  <div class="agent-row">
+    <span class="agent-tag agent-core">medical-scientist</span>
+    <span class="agent-body">Clinical accuracy, guideline alignment, evidence grading. Authors claims + evidence trace for E/-clinical.</span>
+  </div>
+  <div class="agent-row">
+    <span class="agent-tag agent-core">clinical-reviewer</span>
+    <span class="agent-body">⚑ Tripwire. Final merge gate on E and -clinical PRs. Reads claim semantics cold. Can block.</span>
+  </div>
+  <div class="agent-row">
+    <span class="agent-tag agent-core">content-writer</span>
+    <span class="agent-body">Pearls, study-mode content, plain-language explanations, onboarding.</span>
+  </div>
+  <div class="agent-row">
+    <span class="agent-tag agent-core">quality-assurance</span>
+    <span class="agent-body">Tests, tsc, build, performance budgets, deployment checks. Owns quality gates.</span>
+  </div>
+  <div class="agent-row">
+    <div class="section-label" style="padding: 6px 14px 4px; margin:0; border-bottom: 0.5px solid var(--border); width:100%; display:block;">Contextual — activated by task type</div>
+  </div>
+  <div class="agent-row">
+    <span class="agent-tag">system-architect</span>
+    <span class="agent-body">Reviews D/E plans for structure, duplication, boundary integrity. Read-only. Blocks structurally unsafe plans.</span>
+  </div>
+  <div class="agent-row">
+    <span class="agent-tag">calculator-engineer</span>
+    <span class="agent-body">Scoring logic, clinical algorithm thresholds, calculator UI patterns.</span>
+  </div>
+  <div class="agent-row">
+    <span class="agent-tag">librarian</span>
+    <span class="agent-body">Post-flight on every swarm: TASKS.md, NEUROWIKI.md, ROADMAP.md, link-graph.json.</span>
+  </div>
+  <div class="agent-row">
+    <span class="agent-tag">design-guardian</span>
+    <span class="agent-body">Enforces spec files at docs/specs/. Activates on spec creation or change.</span>
+  </div>
+  <div class="agent-row">
+    <span class="agent-tag">accessibility-specialist</span>
+    <span class="agent-body">WCAG 2.1 AA, ARIA, keyboard nav, focus management. Activates on interactive UI.</span>
+  </div>
+  <div class="agent-row">
+    <span class="agent-tag">compliance-legal</span>
+    <span class="agent-body">HIPAA/GDPR, medical disclaimers, auth flows. Activates on privacy/legal-facing content.</span>
+  </div>
+  <div class="agent-row">
+    <span class="agent-tag">seo-specialist</span>
+    <span class="agent-body">Metadata, structured data, link graph. Activates on new public routes, pre-publish.</span>
+  </div>
+</div>
+</div>
+
+<!-- STRICT RULES -->
+<div class="section">
+<div class="section-label">8 rules that are always enforced</div>
+<div class="card">
+  <div class="rule-row">
+    <div class="rule-icon">①</div>
+    <div class="rule-body">
+      <div class="rule-title">No code before approval on C/D/E</div>
+      <div class="rule-sub">The plan gate cannot be abbreviated or skipped. Reply "approve" to unlock execution.</div>
+    </div>
+  </div>
+  <div class="rule-row">
+    <div class="rule-icon">②</div>
+    <div class="rule-body">
+      <div class="rule-title">No architect-review skip on D/E</div>
+      <div class="rule-sub">§17.1 artifact must exist in docs/reviews/ before the approval gate opens.</div>
+    </div>
+  </div>
+  <div class="rule-row">
+    <div class="rule-icon">③</div>
+    <div class="rule-body">
+      <div class="rule-title">No code before clinical-reviewer on E/-clinical</div>
+      <div class="rule-sub">§17.2 artifact written post-approval, pre-implementation. A block stops everything.</div>
+    </div>
+  </div>
+  <div class="rule-row">
+    <div class="rule-icon">④</div>
+    <div class="rule-body">
+      <div class="rule-title">No quality gate bypass</div>
+      <div class="rule-sub">tsc, build, claims hook — all must pass. Claude diagnoses failures, never you.</div>
+    </div>
+  </div>
+  <div class="rule-row">
+    <div class="rule-icon">⑤</div>
+    <div class="rule-body">
+      <div class="rule-title">No silent scope expansion</div>
+      <div class="rule-sub">If implementation reveals a larger task, stop, re-classify, re-plan, re-seek approval.</div>
+    </div>
+  </div>
+  <div class="rule-row">
+    <div class="rule-icon">⑥</div>
+    <div class="rule-body">
+      <div class="rule-title">External audit ≠ approval (§5 Rule 6)</div>
+      <div class="rule-sub">Uploaded docs, prior-session findings, external audits are briefings, not work orders. /build runs the full approval cycle regardless.</div>
+    </div>
+  </div>
+  <div class="rule-row">
+    <div class="rule-icon">⑦</div>
+    <div class="rule-body">
+      <div class="rule-title">Claude owns the terminal — always</div>
+      <div class="rule-sub">No "could you run npm run build?" ever. Claude runs every command, diagnoses every failure.</div>
+    </div>
+  </div>
+  <div class="rule-row">
+    <div class="rule-icon">⑧</div>
+    <div class="rule-body">
+      <div class="rule-title">No fabricated clinical claims</div>
+      <div class="rule-sub">Any patient-facing medical statement needs a claim ID in src/lib/citations/claims.ts before commit. If registry is stub (W5.2 not landed): document as blocked:awaiting-registry-population in TASKS.md.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- WHEN NOT TO USE /build -->
+<div class="section">
+<div class="section-label">When NOT to use /build</div>
+<div class="card">
+  <div class="avoid-row">
+    <div class="avoid-body">
+      <div class="avoid-title">Pure question, no code</div>
+      <div class="avoid-sub">Just ask. /build will classify it as A and answer directly, but there's no need for the overhead.</div>
+    </div>
+  </div>
+  <div class="avoid-row">
+    <div class="avoid-body">
+      <div class="avoid-title">Reverting a broken commit</div>
+      <div class="avoid-sub">Use <code>/rollback &lt;sha&gt;</code>. It handles revert, feature-flag disable, post-mortem template, and re-enable gates.</div>
+    </div>
+  </div>
+  <div class="avoid-row">
+    <div class="avoid-body">
+      <div class="avoid-title">TASKS.md or doc updates that aren't governance</div>
+      <div class="avoid-sub">Just edit them. Don't run /build to add a parking-lot entry.</div>
+    </div>
+  </div>
+  <div class="avoid-row">
+    <div class="avoid-body">
+      <div class="avoid-title">Strategy conversation, no code yet</div>
+      <div class="avoid-sub">Talk it out. /build is the execution trigger, not the thinking trigger.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- WHEN SOMETHING GOES WRONG -->
+<div class="section">
+<div class="section-label">When something goes wrong</div>
+<div class="card">
+  <div class="avoid-row">
+    <div class="avoid-body">
+      <div class="avoid-title">Claude starts coding without showing a plan</div>
+      <div class="avoid-sub">Stop immediately. Type <code>/build &lt;task as stated&gt;</code> from scratch. Do not let scope-less implementation continue.</div>
+    </div>
+  </div>
+  <div class="avoid-row">
+    <div class="avoid-body">
+      <div class="avoid-title">Architect review returns BLOCK</div>
+      <div class="avoid-sub">Read the blocking issue in docs/reviews/arch-*.md. Resolve it, re-run /build with the updated approach.</div>
+    </div>
+  </div>
+  <div class="avoid-row">
+    <div class="avoid-body">
+      <div class="avoid-title">Clinical-reviewer returns BLOCK</div>
+      <div class="avoid-sub">No code is written. Read the §17.2 artifact. Fix the semantic issue via medical-scientist, re-run the clinical gate.</div>
+    </div>
+  </div>
+  <div class="avoid-row">
+    <div class="avoid-body">
+      <div class="avoid-title">Quality gate fails after 3 attempts</div>
+      <div class="avoid-sub">Claude escalates root cause to you with specific error output. You decide: fix approach, reduce scope, or park.</div>
+    </div>
+  </div>
+  <div class="avoid-row">
+    <div class="avoid-body">
+      <div class="avoid-title">Task grows mid-implementation</div>
+      <div class="avoid-sub">Stop. Re-classify. New scope needs a new plan + new approval. Silent creep is a protocol violation.</div>
+    </div>
+  </div>
+  <div class="avoid-row">
+    <div class="avoid-body">
+      <div class="avoid-title">You see a clinical claim with no citation</div>
+      <div class="avoid-sub">The claims hook should catch it pre-commit. If it slips through: open an issue, do not merge. Rule 8.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
+  });
+});
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(btn.dataset.copy);
+      btn.textContent = 'Copied';
+      btn.classList.add('ok');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('ok'); }, 1400);
+    } catch { btn.textContent = 'Failed'; }
+  });
+});
+</script>
+</body>
+</html>
