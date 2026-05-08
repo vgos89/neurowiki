@@ -262,14 +262,17 @@ export interface TrialMetadata {
   /**
    * Statistical framework used for the primary analysis.
    * Drives display logic: ordinal-shift → stacked mRS bar + cOR; noninferiority → NI margin plot;
-   * binary-superiority → risk-difference bars; bayesian-noninferiority → posterior probability display;
+   * binary-superiority → risk-difference bars; bayesian-noninferiority → posterior probability (NI);
+   * bayesian-superiority → posterior probability of superiority + risk-difference bars + NNT (DAWN pattern);
    * dose-finding-safety → dose arm comparison.
    * Option Y rule: renderer suppresses NNT for ordinal-shift, noninferiority, and
-   * bayesian-noninferiority designs — do not add showNNT.
+   * bayesian-noninferiority designs. bayesian-SUPERIORITY is NOT suppressed — treat like binary-superiority
+   * (DAWN: absolute risk difference 36pp, NNT ~3 is clinically meaningful).
+   * Note: ordinal-shift + not-met trials = DISTAL, ESCAPE-MeVO, RESCUE BT, TIMELESS, TWIST (and ATTEST-2 primary).
    * Pair with primaryResult to give the full picture. Never render design without result.
    */
   primaryDesign?: 'binary-superiority' | 'ordinal-shift' | 'noninferiority'
-    | 'bayesian-noninferiority' | 'dose-finding-safety';
+    | 'bayesian-noninferiority' | 'bayesian-superiority' | 'dose-finding-safety';
   /**
    * Outcome of the primary analysis.
    * met → primary endpoint achieved; not-met → endpoint missed (adequately powered);
@@ -283,7 +286,7 @@ export interface TrialMetadata {
     | 'futility-stopped' | 'harm-stopped' | 'terminated-administrative';
   /** Secondary analysis design for trials using two methods (e.g. ATTEST-2: ordinal-shift primary + NI secondary). */
   secondaryDesign?: 'binary-superiority' | 'ordinal-shift' | 'noninferiority'
-    | 'bayesian-noninferiority' | 'dose-finding-safety';
+    | 'bayesian-noninferiority' | 'bayesian-superiority' | 'dose-finding-safety';
   /** Outcome of the secondary analysis. Pair with secondaryDesign; never render alone. */
   secondaryResult?: 'met' | 'not-met' | 'noninferiority-established' | 'noninferiority-not-established'
     | 'futility-stopped' | 'harm-stopped' | 'terminated-administrative';
@@ -830,6 +833,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'MR CLEAN Trial',
     subtitle: 'Intra-arterial Treatment for Anterior Circulation LVO',
     category: 'Neuro Trials',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'met',
+    applicability: {
+      populationExclusions: [
+        'Heterogeneous older-generation devices used — not representative of current stent-retriever or aspiration technique',
+        'Landmark historical trial (2015); imaging selection was minimal vs modern perfusion-guided protocols',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '500',
@@ -945,6 +956,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ESCAPE Trial',
     subtitle: 'Rapid EVT for Small-Core LVO With Good Collaterals',
     category: 'Neuro Trials',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'met',
+    applicability: {
+      imagingSelection: 'Small core (ASPECTS ≥6) + good collaterals on multiphase CTA required',
+      populationExclusions: [
+        'Stopped early for efficacy — effect size may be inflated',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '316',
@@ -1069,6 +1088,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'REVASCAT Trial',
     subtitle: 'Solitaire Thrombectomy Within 8 Hours',
     category: 'Neuro Trials',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'met',
+    applicability: {
+      imagingSelection: 'ASPECTS ≥7 (CT) or ≥6 (MR); Solitaire device only',
+      geography: 'Spain (single-country)',
+      populationExclusions: [
+        'Solitaire-only — results may not generalize to all retrieval devices',
+        '0–8h time window; later-window applicability requires DAWN/DEFUSE-3 evidence',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '206',
@@ -1179,6 +1208,17 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'EXTEND-IA Trial',
     subtitle: 'Perfusion-Selected EVT After Alteplase',
     category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    secondaryDesign: 'ordinal-shift',
+    secondaryResult: 'met',
+    applicability: {
+      imagingSelection: 'CT or MR perfusion mismatch required (RAPID: core <70 mL, mismatch ratio ≥1.8)',
+      populationExclusions: [
+        'Stopped early at N=70 — very small trial, effect size likely inflated',
+        'All patients received IV tPA (bridging context only)',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '70',
@@ -1282,6 +1322,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'SWIFT PRIME Trial',
     subtitle: 'Stent-Retriever EVT Plus IV tPA vs IV tPA Alone',
     category: 'Neuro Trials',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'met',
+    applicability: {
+      imagingSelection: 'RAPID perfusion imaging required (core <50 mL, mismatch ratio ≥1.8)',
+      populationExclusions: [
+        'Solitaire device only — results may not generalize to all retrieval devices',
+        'All patients received IV tPA (bridging context only)',
+        'Stopped early for efficacy — effect size may be inflated',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '196',
@@ -1393,6 +1443,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'THRACE Trial',
     subtitle: 'Bridging Thrombectomy After Alteplase',
     category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    applicability: {
+      populationExclusions: [
+        'Bridging EVT+IVT vs IV alteplase alone — NOT a direct-EVT vs bridging-EVT comparison',
+        'Heterogeneous devices and workflow; use as confirmatory landmark not current technical standard',
+        'LVO ≤4h from stroke onset',
+      ],
+      geography: 'France',
+    },
     stats: {
       sampleSize: {
         value: '414',
@@ -1493,6 +1553,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'DIRECT-MT Trial',
     subtitle: 'Thrombectomy Alone vs Bridging Alteplase',
     category: 'Neuro Trials',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-established',
+    applicability: {
+      geography: 'China',
+      populationExclusions: [
+        'Noninferiority margin was relatively permissive (lower bound mRS shift OR ≥0.80)',
+        'Reperfusion before EVT favored bridging arm — do not use to justify routine IVT omission in Western practice',
+        'Not adopted in US/European guidelines as basis for skipping IV thrombolysis',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '656',
@@ -1599,6 +1669,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'DEVT Trial',
     subtitle: 'Direct EVT vs Alteplase Plus EVT',
     category: 'Neuro Trials',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-established',
+    applicability: {
+      geography: 'China',
+      populationExclusions: [
+        'Stopped early for efficacy — effect may be inflated',
+        'NI margin −10% absolute on mRS 0-2; relatively permissive',
+        'Not adopted in US/European guidelines as basis for skipping IV thrombolysis',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '234',
@@ -1702,6 +1782,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Mechanical Thrombectomy Without vs With IV Thrombolysis',
     category: 'Neuro Trials',
     trialResult: 'NEGATIVE',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-not-established',
+    applicability: {
+      doseSpecific: 'Japan-standard alteplase 0.6 mg/kg used (not the Western 0.9 mg/kg dose) — results not directly comparable to Western bridging trials',
+      geography: 'Japan',
+      populationExclusions: [
+        'Wide confidence interval crosses the noninferiority boundary — inconclusive, not positive',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '204',
@@ -1804,6 +1893,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Direct EVT in European Alteplase-Eligible Patients',
     category: 'Neuro Trials',
     trialResult: 'NEGATIVE',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-not-established',
+    applicability: {
+      populationExclusions: [
+        'Neither superiority nor non-inferiority of direct EVT was demonstrated',
+        'Should be interpreted as a caution against routine omission of IV alteplase prior to EVT',
+      ],
+      geography: 'Europe (Netherlands)',
+    },
     stats: {
       sampleSize: {
         value: '539',
@@ -1907,6 +2005,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Direct EVT vs Bridging Therapy Within 4.5 Hours',
     category: 'Neuro Trials',
     trialResult: 'NEGATIVE',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-not-established',
+    applicability: {
+      populationExclusions: [
+        'Included basilar artery occlusions (mixed population)',
+        'International multi-country cohort (AU/NZ/China/Vietnam) — heterogeneous systems of care',
+        'Non-inferiority not established — do not use to justify skipping IVT',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '295',
@@ -2008,6 +2115,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Thrombectomy Alone vs Alteplase Plus Thrombectomy',
     category: 'Neuro Trials',
     trialResult: 'NEGATIVE',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-not-established',
+    applicability: {
+      populationExclusions: [
+        'Solitaire device only',
+        'Non-inferiority not established; lower reperfusion without alteplase was a safety concern',
+        'Do not combine with DIRECT-MT/DEVT as evidence that direct EVT is acceptable in Western practice',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '423',
@@ -2111,6 +2227,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'LASTE Trial',
     subtitle: 'Thrombectomy for Large Infarct of Unrestricted Size',
     category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    applicability: {
+      imagingSelection: 'No upper core size limit — unrestricted large-core selection (cf. SELECT2/ANGEL-ASPECT which used ASPECTS/perfusion gates)',
+      populationExclusions: [
+        'Stopped early after external large-core evidence (SELECT2/ANGEL-ASPECT)',
+        'Benefit represents disability shift and mortality reduction, not functional independence — many patients still severely disabled',
+        'Higher sICH and procedural complications must be disclosed alongside efficacy',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '333',
@@ -2218,6 +2344,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'TENSION Trial',
     subtitle: 'EVT for Large-Core Stroke Selected Mainly by Non-Contrast CT',
     category: 'Neuro Trials',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'met',
+    applicability: {
+      imagingSelection: 'NCCT ASPECTS 3–5 — no mandatory perfusion imaging; simpler selection than SELECT2/DEFUSE-3',
+      populationExclusions: [
+        'Stopped early for efficacy',
+        'Large-core context — benefit is disability/mortality shift; independence rates remain low',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '253',
@@ -2326,6 +2461,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'COMPASS Trial',
     subtitle: 'Aspiration First Pass vs Stent Retriever First Line',
     category: 'Neuro Trials',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-established',
+    applicability: {
+      populationExclusions: [
+        'Device/technique strategy trial — not evidence that EVT itself helps vs no treatment',
+        'Aspiration-first was noninferior to stent-retriever-first; supports either as first-line approach',
+      ],
+      geography: 'United States',
+    },
     stats: {
       sampleSize: {
         value: '270',
@@ -2431,6 +2575,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Contact Aspiration vs Stent Retriever Revascularization',
     category: 'Neuro Trials',
     trialResult: 'NEUTRAL',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'not-met',
+    applicability: {
+      populationExclusions: [
+        'Contact aspiration was not superior to stent retriever for first-line revascularization',
+        'Device/technique comparison — supports either approach depending on anatomy and operator expertise',
+        'France only (single-country)',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '381',
@@ -2533,6 +2686,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Combined Aspiration + Stent Retriever vs Stent Retriever Alone',
     category: 'Neuro Trials',
     trialResult: 'NEUTRAL',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'not-met',
+    applicability: {
+      populationExclusions: [
+        'Combined aspiration + stent retriever first-line was not superior to stent retriever alone',
+        'Device/technique strategy trial — no standard-of-care change implied',
+      ],
+      geography: 'France',
+    },
     stats: {
       sampleSize: {
         value: '408',
@@ -2634,6 +2796,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'CHOICE Trial',
     subtitle: 'Adjunct Intra-arterial Alteplase After Successful Thrombectomy',
     category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    applicability: {
+      populationExclusions: [
+        'Small trial (N=121); stopped early due to alteplase supply shortage — underpowered, effect size likely inflated',
+        'Requires confirmation; CHOICE-2 replication trial in progress',
+        'Adjunct IA alteplase after successful EVT only (eTICI ≥2b) — not a pre-EVT or bridging intervention',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '121',
@@ -2735,6 +2906,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Intravenous Tirofiban Before Endovascular Thrombectomy',
     category: 'Neuro Trials',
     trialResult: 'NEGATIVE',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'not-met',
+    applicability: {
+      geography: 'China',
+      populationExclusions: [
+        'IV tirofiban before EVT did not improve functional outcome vs placebo',
+        'Does not support routine GP IIb/IIIa pretreatment before EVT',
+        'May remain relevant for rescue stenting/ICAS subgroups — not proven broadly',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '948',
@@ -4052,6 +4233,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'EVT for Medium/Distal Vessel Occlusion Stroke',
     category: 'Neuro Trials',
     trialResult: 'NEGATIVE',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'not-met',
+    applicability: {
+      populationExclusions: [
+        'Does NOT support routine EVT for distal medium vessel occlusions',
+        'Numerically higher sICH in EVT arm (5.9% vs 2.6%) — safety signal',
+        'Isolated medium/distal vessel occlusions; pairs with ESCAPE-MeVO as convergent negative evidence',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '543',
@@ -4195,6 +4385,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ESCAPE-MeVO Trial',
     subtitle: 'EVT for Medium Vessel Occlusions',
     category: 'Neuro Trials',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'not-met',
+    applicability: {
+      populationExclusions: [
+        'Does NOT support routine EVT for broad medium/distal vessel occlusion populations',
+        'Signal for higher mortality and sICH in EVT arm — requires cautious safety framing',
+        'M2/M3/A2+/P2+ occlusions — not an anterior LVO trial',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '530',
@@ -4319,6 +4518,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Thrombectomy for Ischemic Stroke (6-16 Hours)',
     category: 'Neuro Trials',
     doi: '10.1056/NEJMoa1706442',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'met',
+    applicability: {
+      imagingSelection: 'CT or MR perfusion mismatch required (RAPID: core <70 mL, mismatch ratio ≥1.8, mismatch volume ≥15 mL)',
+      populationExclusions: [
+        '6–16h time window only — does not apply to early window (0-6h) or ultra-late window (>16h)',
+        'Stopped early for efficacy — effect size may be inflated',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '182',
@@ -4392,6 +4600,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Thrombectomy for Ischemic Stroke (6-24 Hours)',
     category: 'Neuro Trials',
     doi: '10.1056/NEJMoa1713973',
+    primaryDesign: 'bayesian-superiority',
+    primaryResult: 'met',
+    applicability: {
+      imagingSelection: 'Clinical-imaging mismatch required by age strata (≥80y: NIHSS≥10 + core<21mL; <80y: NIHSS≥10 + core<31mL, or NIHSS≥20 + core<51mL)',
+      populationExclusions: [
+        'Trevo device only — results may not generalize to all retrieval systems',
+        '6–24h last-known-well window — not applicable to patients with known onset <6h (use early-window evidence)',
+        'Stopped early for efficacy; Bayesian posterior probability of superiority >0.999 — not a frequentist p-value',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '206',
@@ -4463,6 +4681,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'SELECT2 Trial',
     subtitle: 'Large Core Thrombectomy',
     category: 'Neuro Trials',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'met',
+    applicability: {
+      imagingSelection: 'ASPECTS 3–5 OR perfusion-based core ≥50 mL required; ≤24h anterior LVO',
+      populationExclusions: [
+        'Stopped early for efficacy',
+        'Large-core context — benefit is disability shift; functional independence (mRS 0-2) rate was only 20% vs 7% — do not overstate as "independence restored"',
+        'Vascular complications and mortality must be presented alongside efficacy',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '352',
@@ -4528,6 +4756,17 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ANGEL-ASPECT Trial',
     subtitle: 'Large Core Thrombectomy (China)',
     category: 'Neuro Trials',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'met',
+    applicability: {
+      imagingSelection: 'ASPECTS 3–5 OR core 70–100 mL; ≤24h anterior LVO',
+      geography: 'China',
+      populationExclusions: [
+        'China-only — imaging criteria and any-ICH/sICH distinction differ from SELECT2',
+        'Stopped early for efficacy',
+        'Large-core context — disability shift benefit, not independence; compare selection criteria with SELECT2/LASTE/TENSION',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '456',
@@ -4945,6 +5184,17 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Basilar Artery EVT',
     category: 'Neuro Trials',
     doi: '10.1056/NEJMoa2206317',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    applicability: {
+      geography: 'China',
+      populationExclusions: [
+        'Basilar artery occlusion only — results do not apply to anterior circulation LVO',
+        'NIHSS ≥10 required; mRS 0-3 endpoint used (not mRS 0-2) because mRS 0-2 is unrealistically strict for BAO',
+        '0–12h window; for 6–24h BAO see BAOCHE',
+        'Stopped early for efficacy',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '340',
@@ -5011,6 +5261,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Basilar EVT 6-24 Hours',
     category: 'Neuro Trials',
     doi: '10.1056/NEJMoa2207576',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    applicability: {
+      geography: 'China',
+      populationExclusions: [
+        'Basilar artery occlusion 6–24h only — for early-window (0–12h) BAO see ATTENTION',
+        'mRS 0-3 endpoint (appropriate for BAO severity)',
+        'Stopped early for efficacy; China-only',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '217',
