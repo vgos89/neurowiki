@@ -264,32 +264,68 @@ export interface TrialMetadata {
    * Drives display logic: ordinal-shift → stacked mRS bar + cOR; noninferiority → NI margin plot;
    * binary-superiority → risk-difference bars; bayesian-noninferiority → posterior probability (NI);
    * bayesian-superiority → posterior probability of superiority + risk-difference bars + NNT (DAWN pattern);
-   * dose-finding-safety → dose arm comparison.
-   * Option Y rule: renderer suppresses NNT for ordinal-shift, noninferiority, and
-   * bayesian-noninferiority designs. bayesian-SUPERIORITY is NOT suppressed — treat like binary-superiority
+   * dose-finding-safety → dose arm comparison only;
+   * estimation-strategy → exploratory estimation design not formally powered for NI or superiority (ELAN
+   *   pattern); produces point estimates + CI to inform practice; no formal hypothesis test; NNT suppressed.
+   * single-arm-registry → post-market registry with no comparator arm (WEAVE pattern); event rate compared
+   *   to a regulatory threshold; NNT suppressed.
+   *
+   * Option Y rule (NNT suppression): ordinal-shift, noninferiority, bayesian-noninferiority,
+   * dose-finding-safety, estimation-strategy, and single-arm-registry all suppress the NNT card.
+   * bayesian-SUPERIORITY is NOT suppressed — treat like binary-superiority
    * (DAWN: absolute risk difference 36pp, NNT ~3 is clinically meaningful).
-   * Note: ordinal-shift + not-met trials = DISTAL, ESCAPE-MeVO, RESCUE BT, TIMELESS, TWIST (and ATTEST-2 primary).
+   *
+   * Legal (primaryDesign, primaryResult) pairings:
+   *   binary-superiority      → met | not-met | futility-stopped | harm-stopped | terminated-administrative
+   *   ordinal-shift           → met | not-met | futility-stopped | terminated-administrative
+   *   noninferiority          → noninferiority-established | noninferiority-not-established | terminated-administrative
+   *   bayesian-noninferiority → noninferiority-established | noninferiority-not-established
+   *   bayesian-superiority    → met | not-met
+   *   dose-finding-safety     → met | not-met | harm-stopped
+   *   estimation-strategy     → leave both null; document in applicability prose instead
+   *   single-arm-registry     → safety-threshold-met | harm-stopped
+   *
+   * Note: ordinal-shift + not-met trials = DISTAL, ESCAPE-MeVO, RESCUE BT, TIMELESS, TWIST (ATTEST-2 primary).
    * Pair with primaryResult to give the full picture. Never render design without result.
    */
   primaryDesign?: 'binary-superiority' | 'ordinal-shift' | 'noninferiority'
-    | 'bayesian-noninferiority' | 'bayesian-superiority' | 'dose-finding-safety';
+    | 'bayesian-noninferiority' | 'bayesian-superiority' | 'dose-finding-safety'
+    | 'estimation-strategy' | 'single-arm-registry';
   /**
    * Outcome of the primary analysis.
    * met → primary endpoint achieved; not-met → endpoint missed (adequately powered);
    * noninferiority-established → NI margin met; noninferiority-not-established → NI margin not met;
    * futility-stopped → pre-specified futility boundary crossed or data clearly futile;
-   * harm-stopped → trial arm stopped for safety signal at dose tested;
-   * terminated-administrative → early stop for enrollment, funding, or operational reasons (underpowered).
+   * harm-stopped → trial stopped for safety signal in the intervention arm;
+   * terminated-administrative → early stop for enrollment, funding, or operational reasons (underpowered);
+   * safety-threshold-met → single-arm registry primary met: periprocedural event rate below regulatory
+   *   ceiling (paired ONLY with single-arm-registry; this is a one-sample threshold outcome, NOT a
+   *   frequentist comparator result — the renderer drives Archetype G from benchmark/observedEventRate,
+   *   not from this value).
    * Never render without the paired primaryDesign.
    */
   primaryResult?: 'met' | 'not-met' | 'noninferiority-established' | 'noninferiority-not-established'
-    | 'futility-stopped' | 'harm-stopped' | 'terminated-administrative';
+    | 'futility-stopped' | 'harm-stopped' | 'terminated-administrative' | 'safety-threshold-met';
   /** Secondary analysis design for trials using two methods (e.g. ATTEST-2: ordinal-shift primary + NI secondary). */
   secondaryDesign?: 'binary-superiority' | 'ordinal-shift' | 'noninferiority'
-    | 'bayesian-noninferiority' | 'bayesian-superiority' | 'dose-finding-safety';
+    | 'bayesian-noninferiority' | 'bayesian-superiority' | 'dose-finding-safety'
+    | 'estimation-strategy' | 'single-arm-registry';
   /** Outcome of the secondary analysis. Pair with secondaryDesign; never render alone. */
   secondaryResult?: 'met' | 'not-met' | 'noninferiority-established' | 'noninferiority-not-established'
-    | 'futility-stopped' | 'harm-stopped' | 'terminated-administrative';
+    | 'futility-stopped' | 'harm-stopped' | 'terminated-administrative' | 'safety-threshold-met';
+  /**
+   * Brief annotation of a significant safety tradeoff or harm signal. One sentence, ≤120 chars.
+   * Rendered as an inline safety annotation strip alongside the primary result.
+   * Populate when primaryResult === 'harm-stopped' OR when a substantial safety tradeoff exists despite
+   * efficacy (e.g. POINT benefit-harm crossover at ~21 days, SPS3 mortality excess, SPARCL hemorrhagic
+   * stroke increase, THALES severe bleeding 0.5% vs 0.1%, INSPIRES mod-severe bleeding 0.9% vs 0.4%).
+   *
+   * Field distinction vs other safety fields:
+   *   safetyBrief  → stub-layout primary safety section heading (structural, existing field)
+   *   safetyData   → legacy long-form detailed safety prose (existing field)
+   *   harmSignal   → one-line inline annotation rendered with the result card (this field, Batch 3+)
+   */
+  harmSignal?: string;
   /** Applicability context. Surfaces patient-selection and generalizability constraints for bedside use. */
   applicability?: {
     /** Populations or scenarios this trial explicitly does NOT apply to. One string per exclusion. */
