@@ -87,6 +87,30 @@ Color rules for all pages:
 - Lazy-load any chunk over 50 kB
 - Every new page must be registered in src/config/routeManifest.ts and src/seo/routeMeta.ts
 
+## Trial Data Schema (src/data/trialData.ts)
+**Wave 3 schema (as of 2026-05-08):**
+- **`primaryDesign`** (union): 'binary-superiority' | 'binary-noninferiority' | 'ordinal-shift' | 'bayesian-adaptive' | 'dose-finding-safety' | 'estimation-strategy' | 'single-arm-registry' — statistical framework for primary analysis
+- **`primaryResult`** (union): 'met' | 'not-met' | 'inconclusive' | 'futility-stopped' | 'harm-stopped' | 'terminated-administrative' | 'noninferiority-established' | 'noninferiority-not-established' | 'safety-threshold-met' — outcome classification
+- **`harmSignal?: string`** (optional): one-line safety-tradeoff annotation (e.g., "excess mortality in high-risk subgroup"); distinct from `safetyBrief` (summary) and `safetyData` (detail)
+- **`archetypeId`** (string): 'A' | 'B' | 'G' — layout selector (Archetype A: binary outcome with DeltaBand; B: ordinal mRS shift with Grotta Bar; G: single-arm registry with benchmark threshold)
+- **`trialResult`** (legacy, deprecated): 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL' | 'HARM' — legacy classification being phased out in favor of primaryDesign + primaryResult
+- **`specialDesign`** (legacy, deprecated): estimation-trial flag; use primaryDesign='estimation-strategy' instead
+
+**Legal pairings:**
+- `primaryDesign='noninferiority'` pairs with `primaryResult='noninferiority-established' | 'noninferiority-not-established'` only
+- `primaryDesign='single-arm-registry'` pairs with `primaryResult='safety-threshold-met'` only (plus safety metadata: `benchmark`, `observedEventRate`, `historicalContext`)
+- `primaryDesign='bayesian-adaptive'` pairs with `primaryResult='met'` only (Bayesian superiority trials use posterior probability decision rules, not frequentist p-values)
+
+**Wave 3 renderer logic (TrialPageNew.tsx):**
+- NNT card suppression (`suppressNNT` flag) targets: ordinal-shift, noninferiority, bayesian-adaptive, dose-finding-safety, estimation-strategy, single-arm-registry — card omitted, prose surfaces unaffected
+- Display labels: harm-stopped → "stopped for harm" (distinct visual state); noninferiority-established/not-established → explicit NI qualifier (not generic positive/negative)
+- Composition surfaces: Bayesian annotation on NNT must attribute correctly to posterior probability decision rule, not NNT derivation source
+
+**Wave 3 follow-ups (non-blocking):**
+- Vocabulary consolidation: four parallel classifiers (trialResult, specialDesign, primaryDesign+primaryResult, archetypeId) need consolidation ADR; no schema changes required, but renderer must pick one canonical path
+- `classifyTrial.ts` extraction: classifier logic to move from TrialPageNew.tsx stats useMemo to `src/lib/trials/classifyTrial.ts` before Wave 4 component work
+- EXTEND canary migration: decide whether legacy page route to schema-driven path or formal retirement
+
 ## Copy-to-EMR Rule
 Copy-to-EMR output templates are locked once approved. No agent may modify EMR output format during unrelated work.
 
@@ -109,6 +133,19 @@ All clinical content must be traceable to a named guideline with year. No conten
 - Inline SVG logo mark used in Layout.tsx (desktop sidebar + mobile header) — brain+circuit mark, cobalt background `#1746A2`, white paths
 
 ## Fix History (never regress these)
+- [2026-05-08] Wave 3 Batch 2 — schema-driven NNT suppression + result-type labeling — commit 3d571ac
+  - Files: src/pages/trials/TrialPageNew.tsx, docs/reviews/arch-wave3-batch2-renderer.md, docs/reviews/clinical-wave3-batch2-renderer.md
+  - Replaced p-value string-sniffing heuristics with `primaryDesign`/`primaryResult` schema-driven classification
+  - NNT card suppression via suppressNNT flag (ordinal-shift, NI, bayesian-NI, dose-finding-safety, estimation-strategy, single-arm-registry)
+  - New display branches: isHarmStopped (🛑 STOPPED FOR HARM), isNIFailed (❌ DID NOT ESTABLISH NON-INFERIORITY), isNIEstablished (✓ NON-INFERIORITY ESTABLISHED), isBayesianSuperiorityTrial (Bayesian annotation)
+  - Clinical review: approve-with-conditions (5 mandatory conditions resolved pre-merge: harm-stopped distinct state, NI qualifier labels, Bayesian annotation wording, prose suppression targets card only, NOR-TEST data consistency fix)
+- [2026-05-08] Batch 3 Wave 1 — schema extensions for estimation-strategy + single-arm-registry — commit 657f004
+  - Files: src/data/trialData.ts, docs/reviews/arch-batch3-wave1-schema-extensions.md
+  - `primaryDesign` union: +`'estimation-strategy'` (ELAN pattern), +`'single-arm-registry'` (WEAVE pattern)
+  - `primaryResult` union: +`'safety-threshold-met'`; secondaryDesign/secondaryResult parity additions
+  - New field: `harmSignal?: string` — one-line safety-tradeoff annotation; distinct from safetyBrief/safetyData
+  - JSDoc: legal pairing table, Option Y suppression list, safety-prose-field distinction documented
+  - Arch review: approve-with-conditions (vocabulary-consolidation ADR deferred as post-merge task)
 - [2026-04-16] Calculator design system — cobalt tokens across 7 calculators — commit cff25ed
   - Files: Abcd2ScoreCalculator, GlasgowComaScaleCalculator, HasBledScoreCalculator, HeidelbergBleedingCalculator, RopeScoreCalculator, IchScoreCalculator, AspectScoreCalculator
   - Selected button: border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-800 → border-neuro-500 bg-neuro-50 text-neuro-700
@@ -147,19 +184,29 @@ All clinical content must be traceable to a named guideline with year. No conten
 - ELAN pathway fix — commit 92e0a84
 - Duplicate fix — commit 35325c8
 
-## Current State (as of 2026-04-16)
+## Current State (as of 2026-05-08)
 
 **Layer 1 — Foundation:** COMPLETE
 **Layer 2 — Stroke Pathway:** COMPLETE (all steps, modals, header, tabs shipped)
 **Layer 3 — Component Library:** SKIPPED BY AGREEMENT (commit history shows this was deferred in favor of section specs)
-**Layer 4 — Pages:** IN PROGRESS — Calculator redesign is the active workstream
-**Layer 5 — Polish:** PENDING
+**Layer 4 — Pages:** IN PROGRESS — Trials redesign (Waves 6–8) is the active workstream
+**Layer 5 — Polish:** PENDING (W8.0+ language/navigation cleanup)
+
+**Wave 6–8 Trial Redesign Status:**
+- W6.1–W6.6.1: Spec, archetype design, and EXTEND/WEAVE canary implementations COMPLETE
+- W6.4b–W6.4c: 23 trial pages rebuilt (Archetype A) COMPLETE
+- W7.0: 10 predecessor stubs created (EVT 2015, basilar EVT, ICH surgery, antiplatelet chains) COMPLETE
+- W8.1: Back-button navigation refactor COMPLETE (commit 6ffcc21)
+- W8.2–W8.5: Legacy trial redesign program (14 trials), WCAG fixes, language cleanup PENDING
+- **Wave 3 Batch 2 (renderer schema wiring):** SHIPPED 2026-05-08 (commit 3d571ac)
+- **Batch 3 Wave 1 (data schema extensions):** SHIPPED 2026-05-08 (commit 657f004)
+- **Batch 3 Wave 2 (13 secondary-prevention data population):** PLANNED
 
 ## Active Workstream
-Calculator visual redesign — full rebuild against a locked master spec, not patches. Plan:
-1. Calculator spec written to docs/specs/CALCULATOR_SPEC.md with HTML mockup in docs/specs/mockups/
-2. ICH Score rebuilt as the reference implementation
-3. All other calculators rebuilt to match: NIHSS, GCS, ASPECTS, HAS-BLED, ABCD2, ROPE, Heidelberg, Boston Criteria
+Trial data schema consolidation and secondary-prevention trial population:
+1. Batch 3 Wave 2: data population for 13 secondary-prevention trials using Batch 3 Wave 1 schema fields (estimation-strategy, single-arm-registry, harmSignal)
+2. Wave 4: Architecture extraction (classifyTrial.ts, vocabulary consolidation ADR)
+3. Wave 8.2+: Legacy trial visual redesign (ENRICH, DEFUSE-3/DAWN, NINDS, SELECT2/ANGEL-ASPECT, ATTENTION/BAOCHE, INSPIRES/CHANCE-2, ECASS III, ORIGINAL, SAMMPRIS, B_PROUD)
 
 ## Swarm System (installed 2026-04-16, commits b502fea + db9c6af)
 The project now uses a multi-agent swarm architecture. See ORCHESTRATION.md for the protocol. Agent roster in agents/active/ and agents/dormant/. Every swarm must cite the relevant spec file, pass all 5 gates, and update the link graph before commit.
