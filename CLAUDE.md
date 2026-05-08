@@ -76,6 +76,8 @@ Example: `ui-architect` wants a cleaner component shape; `medical-scientist` say
 3. **Every output is bilingual.** Technical panel + English panel. See §10.
 4. **Safety over speed.** Clinical tool. No fabricated claims. See §13.
 5. **Silo wall.** This repo's agents, skills, lessons, and memory never cross over to Pager Flow, KinTrack, or Tidbit Health.
+6. **Audit ≠ approval.** An external audit document — uploaded file, research PDF, external agent output, or prior-session findings — is a *hypothesis list*, not a pre-approved work order. It does not satisfy the §19 plan-and-approval gate. No file is touched until: (a) the orchestrator has classified the task and named the agents, (b) the relevant specialist agent has independently verified each finding, (c) a written plan with proposed diff has been presented to V, and (d) V has explicitly approved it in this session. "The audit says X is wrong" is not the same as "V has approved fixing X." This rule cannot be waived by the urgency of the findings or by the fact that a prior Claude session produced the audit.
+7. **Claude owns the terminal. Always.** V is never asked to run a shell command, git command, npm script, or any terminal operation. After every Class B/C/D/E task: Claude runs all quality gates (§20) locally, Claude commits with a structured bilingual message, Claude pushes to the remote. If a command fails, Claude diagnoses and fixes it — never escalates terminal work to V. This applies without exception: no "could you run `npm run build`?", no "please push this branch", no "you'll need to run the migration script."
 
 ---
 
@@ -132,6 +134,7 @@ Use these as calibration. When a task feels between two classes, map to the clos
 - *"Update stroke guide wording from 'thrombolysis' to 'thrombolytic therapy' throughout."* — if no meaning change → **B**. If this wording change reflects a clinical nuance (e.g., specifying mechanism) → **C-clinical**. Ask before assuming.
 - *"Fix the NIHSS scoring bug where item 9 returns wrong value."* — if the bug is a typo in a number → **C-clinical** (scoring is clinical logic). If the bug is structural (wrong variable reference) → **C** with `-clinical` flag only if the fix touches user-visible text.
 - *"Swap a helper used by three calculators for a new shared one."* — **D** by default (composability). If any calculator's output text changes, **D-clinical**. If any scoring logic changes, **E**.
+- *"Here is an external audit / research doc / prior-session findings. Execute the fixes."* — Never **Class B** regardless of how small each individual fix looks. Minimum **Class C** if source files are touched; **Class C-clinical** if any clinical data file is in scope (trialData.ts, trialCatalogMeta.ts, trialListData.ts, `src/lib/citations/`, etc.). The audit is *input to a plan*, not the plan itself. Apply §19 in full: classify → agent identification → plan + diff presented to V → V approval → delegate → execute. An external audit document does not satisfy the approval gate — V's explicit approval in this session does.
 
 When a classification is genuinely ambiguous, orchestrator presents the two candidate classes with trade-offs and asks V to decide. Do not silently pick the lower class.
 
@@ -449,10 +452,24 @@ What must exist after work is done, beyond the code itself:
 | Class | Artifacts |
 |---|---|
 | A | None |
-| B | One-line PR title |
-| C | Bilingual PR description · test for new logic · `TASKS.md` status update |
+| B | One-line commit message · committed and pushed to remote |
+| C | Bilingual PR description · test for new logic · `TASKS.md` status update · committed and pushed · PR opened |
 | D | C artifacts + ADR in `docs/adrs/` + rollback note + migration plan (if schema) + **architect review artifact (§17)** |
 | E | D artifacts + citation record update + `last_reviewed` refresh via §13.6 + **clinical review artifact (§17)** + rollback plan |
+
+**Commit message format (all classes):**
+```
+<type>(<scope>): <imperative summary under 72 chars>
+
+- <what changed, file-level>
+- <what changed, file-level>
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+```
+`type`: feat · fix · docs · refactor · test · chore · clinical  
+`scope`: trials · calculator · pathway · guide · ui · data · ci
+
+Claude writes and executes the commit and push. V is never asked to do this (§5 Rule 7).
 
 If an artifact is missing, `/pr-ready` fails and reports what's missing.
 
@@ -531,6 +548,7 @@ Every Class D architect review and every Class E / `-clinical` clinical-reviewer
 
 When V describes a task, orchestrator:
 
+0. **If the task originates from an external document** (uploaded audit, research file, prior-session findings, external agent output, or any source other than V's direct instruction in this session): treat every finding as a hypothesis, not a confirmed fix. Do not execute any finding without completing steps 1–6 below. The document is a briefing, not an approval. Violating this step is a protocol breach regardless of how obvious the fixes appear.
 1. Classifies (A/B/C/D/E, with `-clinical` flag if applicable) and states it, referencing §6.1 examples if the call is non-obvious.
 2. For A/B: proceeds or answers directly. Skip to step 7.
 3. For C/D/E: identifies primary agent + secondaries, lists skills to load.
@@ -544,6 +562,8 @@ When V describes a task, orchestrator:
 
 ## 20. Quality gates — before `/pr-ready` succeeds
 
+Claude runs every gate. V is never asked to run any of these.
+
 - All relevant tests pass (unit + e2e where they exist).
 - `tsc --noEmit` passes with no new errors.
 - `npm run build` succeeds (Vite production build).
@@ -553,7 +573,14 @@ When V describes a task, orchestrator:
 - Durable artifacts checklist complete (§16).
 - Bilingual PR description prepared — Technical summary + English summary.
 
-If any gate fails, the PR does not open. Orchestrator reports what failed with links to the failing artifact or check.
+If any gate fails, the PR does not open. Orchestrator **diagnoses and fixes the failure**, then re-runs the gate. Never asks V to investigate or fix a terminal failure.
+
+**Post-gate execution (Claude-owned, no V involvement):**
+1. `git add <specific files>` — stage only the changed files; never `git add -A` blindly
+2. `git commit -m "..."` — bilingual message per §16 format
+3. `git push` — push the branch to remote
+4. For Class C+: open a PR with `gh pr create` using the bilingual description
+5. Report the PR URL to V as the final deliverable
 
 ---
 
