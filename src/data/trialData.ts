@@ -4162,6 +4162,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Oldgren et al. (Circulation 2022)',
     clinicalTrialsId: 'NCT02961348',
     specialDesign: 'non-inferiority',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-established',
+    applicability: {
+      populationExclusions: [
+        'AF-related ischemic stroke only — does not apply to non-AF acute stroke',
+        'Noninferiority margin: 3 percentage points absolute; NI established (P=0.004)',
+        'Early window 1–4 days — does not address same-day initiation within 24 hours',
+      ],
+    },
     keyMessage: 'TIMING supports early NOAC initiation within 4 days after AF-related ischemic stroke. Noninferiority met; superiority not established.',
   },
   'optimas-trial': {
@@ -4261,6 +4270,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Werring et al. (Lancet 2024)',
     clinicalTrialsId: 'NCT03759938',
     specialDesign: 'non-inferiority',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-established',
+    applicability: {
+      populationExclusions: [
+        'AF-related ischemic stroke with confirmed indication for long-term anticoagulation only',
+        'Noninferiority margin: 2 percentage points absolute (Werring Lancet 2024); NI established (P=0.0003)',
+        'Delayed window 7–14 days; does not address day 5–6 initiation timing',
+      ],
+    },
     keyMessage: 'OPTIMAS provides the most definitive evidence for early DOAC initiation after AF-related stroke. Noninferiority met; superiority not established.',
   },
   'distal-trial': {
@@ -5375,6 +5393,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Clopidogrel with Aspirin in Acute Minor Stroke or Transient Ischemic Attack',
     category: 'Neuro Trials',
     trialResult: 'POSITIVE',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    applicability: {
+      populationExclusions: [
+        'Minor ischemic stroke (NIHSS ≤3) or high-risk TIA (ABCD2 ≥4) within 24 hours only',
+        '21-day DAPT then clopidogrel monotherapy to 90 days (not 90-day DAPT)',
+        'Does not apply to cardioembolic source, severe stroke (NIHSS ≥4), or lacunar disease (see SPS3)',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '5,170',
@@ -5625,6 +5652,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1056/NEJMoa1800410',
     clinicalTrialsId: 'NCT00991029',
     trialResult: 'POSITIVE',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    harmSignal: 'Benefit-harm crossover at ~21d: major hemorrhage 0.9% vs 0.4% (HR 2.32, p=0.02); informs current 21-day DAPT practice guideline',
+    applicability: {
+      populationExclusions: [
+        'Minor ischemic stroke (NIHSS ≤3) or high-risk TIA (ABCD2 ≥4) within 12 hours only',
+        '90-day DAPT duration tested — guideline caps at 21 days (CHANCE) due to this hemorrhage signal',
+        'Does not apply to cardioembolic source, severe stroke (NIHSS ≥4), or atrial fibrillation',
+      ],
+    },
     safetyProfile: {
       sICH: {
         /* claimId: point.hemorrhage | source: Johnston SC et al. NEJM 2018;379:222 Table 2 */
@@ -5739,6 +5776,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT00576693',
     listCategory: 'carotid',
     listDescription: 'Intracranial stenting vs medical therapy for stenosis — medical management wins.',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'harm-stopped',
+    harmSignal: 'Stenting arm: 14.7% vs 5.8% 30-day stroke/death; stopped at 451 patients (p=0.002); procedural stroke drove excess',
+    applicability: {
+      populationExclusions: [
+        'ICAD 70–99% stenosis with recent TIA or stroke within 30 days only',
+        'Stenting inferior to aggressive medical management (AMM) — AMM is standard first-line therapy',
+        'Off-label Wingspan use studied; WEAVE established safety threshold only for strict on-label criteria',
+      ],
+    },
   },
   'weave-trial': {
     id: 'weave-trial',
@@ -5748,6 +5795,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     // ── Archetype G canary (W6.6.1) — BenchmarkThresholdChart ───────────────
     archetypeId: 'G',
     trialResult: 'SAFETY_MET',
+    primaryDesign: 'single-arm-registry',
+    primaryResult: 'safety-threshold-met',
     doi: '10.1161/STROKEAHA.118.023996',
     clinicalTrialsId: 'NCT02034058',
     source: 'Alexander et al. (Stroke 2019;50:889-894)',
@@ -5964,6 +6013,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     listCategory: 'antiplatelets',
     listDescription: 'Ticagrelor vs aspirin monotherapy in acute ischemic stroke — not superior.',
     trialResult: 'NEGATIVE',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'not-met',
+    applicability: {
+      populationExclusions: [
+        'Acute non-cardioembolic ischemic stroke (NIHSS ≤5) or high-risk TIA (ABCD2 ≥4) within 24 hours',
+        'Ticagrelor monotherapy vs aspirin monotherapy — does not address DAPT composition question',
+        'Does not apply to patients with cardioembolic source or atrial fibrillation',
+      ],
+    },
     safetyProfile: {
       majorBleeding: {
         evt: 0.5,
@@ -6072,6 +6130,17 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     listCategory: 'antiplatelets',
     listDescription: 'DAPT not beneficial in lacunar stroke — increased bleeding without stroke reduction.',
     trialResult: 'NEGATIVE',
+    primaryDesign: 'binary-superiority',
+    // harm-stopped considered; not-met chosen: trial completed enrollment; mortality+bleeding excess were results, not a stopping reason; harm context carried by harmSignal
+    primaryResult: 'not-met',
+    harmSignal: 'Long-term DAPT (mean 3.4y): mortality HR 1.52 (95% CI 1.14–2.04, p=0.004), major hemorrhage HR 1.97 (95% CI 1.41–2.71, p<0.001)',
+    applicability: {
+      populationExclusions: [
+        'MRI-confirmed symptomatic lacunar infarction only — does not apply to acute TIA or minor stroke',
+        'Long-term DAPT (mean 3.4y) context — short-term DAPT (21 days, CHANCE/POINT) is a separate evidence base',
+        'Aspirin monotherapy remains standard for long-term secondary prevention in lacunar disease',
+      ],
+    },
     safetyProfile: {
       mortality: {
         evt: 2.1,
@@ -6186,6 +6255,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     listCategory: 'antiplatelets',
     listDescription: 'High-intensity statin (atorvastatin 80mg) for secondary stroke prevention; NNT=53.',
     trialResult: 'POSITIVE',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    harmSignal: 'Hemorrhagic stroke: 55 vs 33 events (atorvastatin vs placebo) despite 1.9% absolute overall stroke reduction',
     safetyProfile: {
       hemorrhagicStroke: {
         evt: 2.3,
@@ -6352,6 +6424,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     listCategory: 'antiplatelets',
     listDescription: 'Early vs delayed DOAC in AF stroke: estimation trial supporting early initiation when imaging allows it.',
     archetypeId: 'A' as const,
+    applicability: {
+      populationExclusions: [
+        'Estimation trial (not superiority) — primaryDesign/primaryResult intentionally left null per schema contract',
+        'AF-related acute ischemic stroke only; imaging-based severity classification (not NIHSS-alone)',
+        'Does not establish superiority of early over delayed DOAC; supports safe early initiation when imaging permits',
+      ],
+    },
     doi: '10.1056/NEJMoa2303048',
   },
 
@@ -6362,6 +6441,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Ticagrelor + Aspirin vs Aspirin Alone After Minor Stroke or TIA',
     category: 'Neuro Trials',
     trialResult: 'POSITIVE',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    harmSignal: 'Severe bleeding 0.5% vs 0.1% (P<0.001); noncardioembolic stroke only',
+    applicability: {
+      populationExclusions: [
+        'Noncardioembolic minor stroke (NIHSS ≤5) or high-risk TIA (ABCD2 ≥6) within 24 hours only',
+        'AHA/ASA 2026 COR 3 (No Benefit) for general population — NNT=91, severe bleeding 5× higher vs clopidogrel DAPT (NNT=28)',
+        'Reserve for confirmed CYP2C19 LOF carriers when clopidogrel pharmacologically inadequate (see CHANCE-2, COR 2b)',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '11,016',
@@ -6527,6 +6616,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'DAPT for Atherosclerotic Minor Stroke or TIA Within 72 Hours',
     category: 'Neuro Trials',
     trialResult: 'POSITIVE',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    harmSignal: 'Moderate-severe bleeding (GUSTO) 0.9% vs 0.4% (HR 2.08, 95% CI 1.07–4.04)',
+    applicability: {
+      populationExclusions: [
+        'Atherosclerotic etiology only (≥50% intracranial or extracranial stenosis confirmed on vascular imaging)',
+        'Minor stroke (NIHSS ≤5) or TIA (ABCD2 ≥4) within 72 hours — 21-day DAPT then clopidogrel monotherapy to 90 days',
+        'Does NOT apply to non-atherosclerotic, cardioembolic, or lacunar etiology',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '6,100',
@@ -6651,6 +6750,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Ticagrelor vs Clopidogrel DAPT in CYP2C19 Loss-of-Function Carriers',
     category: 'Neuro Trials',
     trialResult: 'POSITIVE',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    applicability: {
+      populationExclusions: [
+        'Confirmed CYP2C19 *2 or *3 loss-of-function allele required — normal metabolizers excluded',
+        'Minor stroke (NIHSS ≤3) or high-risk TIA (ABCD2 ≥4) within 24 hours only',
+        '21-day DAPT then ticagrelor monotherapy to 90 days — do not delay treatment for genotyping if unavailable',
+      ],
+    },
     stats: {
       sampleSize: {
         value: '6,412',
