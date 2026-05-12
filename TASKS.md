@@ -581,7 +581,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 1D — Fix EXTEND trial description (desmoteplase → alteplase) — Class E
 - **Priority:** P1
-- **Status:** planned
+- **Status:** [x] merged — commit `35ff0e5` · 2026-05-11
 - **User-visible goal:** EXTEND guide content correctly names alteplase as the tested thrombolytic (not desmoteplase)
 - **Non-goals:** no other guideContent edits
 - **Owner agents:** evidence-verifier → medical-scientist → clinical-reviewer
