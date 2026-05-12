@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import path from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -46,6 +47,15 @@ export default defineConfig(({ mode }) => {
       },
       esbuild: {
         drop: mode === 'production' ? ['console', 'debugger'] : [],
+      },
+      test: {
+        environment: 'node',
+        setupFiles: ['./src/__tests__/setup.ts'],
+        include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+        coverage: {
+          provider: 'v8',
+          reporter: ['text', 'html'],
+        },
       },
     };
 });
