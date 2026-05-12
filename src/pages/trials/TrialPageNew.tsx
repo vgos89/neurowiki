@@ -537,7 +537,7 @@ const TrialPageNew: React.FC = () => {
                 winnerArm={isPositive ? 'treatment' : 'none'}
               />
               {/* NNT row — reads calculations.nnt, displayed as integer with ~ prefix */}
-              {trialMetadata.calculations?.nnt != null && (
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">
@@ -936,7 +936,7 @@ const TrialPageNew: React.FC = () => {
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm={isPositive ? 'treatment' : 'none'}
               />
-              {trialMetadata.calculations?.nnt != null && (
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
@@ -1172,7 +1172,7 @@ const TrialPageNew: React.FC = () => {
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm={isPositive ? 'treatment' : 'none'}
               />
-              {trialMetadata.calculations?.nnt != null && (
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
@@ -1256,7 +1256,7 @@ const TrialPageNew: React.FC = () => {
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm={isPositive ? 'treatment' : 'none'}
               />
-              {trialMetadata.calculations?.nnt != null && (
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
@@ -1493,7 +1493,7 @@ const TrialPageNew: React.FC = () => {
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm={isPositive ? 'treatment' : 'none'}
               />
-              {trialMetadata.calculations?.nnt != null && (
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
@@ -1576,7 +1576,7 @@ const TrialPageNew: React.FC = () => {
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm={isPositive ? 'treatment' : 'none'}
               />
-              {trialMetadata.calculations?.nnt != null && (
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
@@ -1745,7 +1745,7 @@ const TrialPageNew: React.FC = () => {
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="treatment"
               />
-              {trialMetadata.calculations?.nnt != null && (
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
@@ -2663,7 +2663,7 @@ const TrialPageNew: React.FC = () => {
                 pValue={trialMetadata.stats.pValue.value}
                 winnerArm="treatment"
               />
-              {trialMetadata.calculations?.nnt != null && (
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
