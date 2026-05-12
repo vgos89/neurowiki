@@ -80,3 +80,23 @@ export const trackQuickToolClick = (toolName: string) => {
     });
   }
 };
+
+export const CONSENT_STORAGE_KEY = 'neurowiki-analytics-consent';
+
+export const loadGA = (): void => {
+  if (typeof window === 'undefined') return;
+  const w = window as any;
+  if (w.__gaLoaded) return;
+  w.__gaLoaded = true;
+
+  w.dataLayer = w.dataLayer || [];
+  // GA4 gtag API requires the arguments object, not a rest-param array
+  w.gtag = function() { w.dataLayer.push(arguments); }; // eslint-disable-line prefer-rest-params
+  w.gtag('js', new Date());
+  w.gtag('config', GA_MEASUREMENT_ID, { anonymize_ip: true });
+
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+  document.head.appendChild(script);
+};

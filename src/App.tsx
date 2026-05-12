@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -6,8 +6,11 @@ import { PublishGate } from './components/PublishGate';
 import { TrialModalProvider, useTrialModal } from './contexts/TrialModalContext';
 import Seo from './components/Seo';
 import { STATIC_ROUTE_DEFINITIONS, type StaticRouteKey } from './config/routeManifest';
+import { CONSENT_STORAGE_KEY, loadGA } from './utils/analytics';
+import { getStorageItem } from './utils/storage';
 
 const DisclaimerModal = lazy(() => import('./components/DisclaimerModal'));
+const CookieConsentBanner = lazy(() => import('./components/CookieConsentBanner'));
 const GlobalTrialModal = lazy(() =>
   import('./components/GlobalTrialModal').then((m) => ({ default: m.GlobalTrialModal }))
 );
@@ -123,6 +126,18 @@ const TrialModalWrapper: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const [showConsentBanner, setShowConsentBanner] = useState(false);
+
+  useEffect(() => {
+    const consent = getStorageItem(CONSENT_STORAGE_KEY);
+    if (consent === 'accepted') {
+      loadGA();
+    } else if (consent === null) {
+      setShowConsentBanner(true);
+    }
+    // 'declined' → no banner, no GA
+  }, []);
+
   return (
     <Router>
       <TrialModalProvider>
@@ -170,6 +185,11 @@ const App: React.FC = () => {
             </Suspense>
           </Layout>
           <TrialModalWrapper />
+          {showConsentBanner && (
+            <Suspense fallback={null}>
+              <CookieConsentBanner onConsent={() => setShowConsentBanner(false)} />
+            </Suspense>
+          )}
         </ErrorBoundary>
       </TrialModalProvider>
     </Router>
