@@ -544,7 +544,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 1A — Fix DOAC pearl Class III mislabel — Class E
 - **Priority:** P0
-- **Status:** planned
+- **Status:** [x] merged — commit `64970a6` · 2026-05-11
 - **User-visible goal:** DOAC pearl displays an evidence classification consistent with its permissive recommendation text
 - **Non-goals:** no scoring changes; no other pearl edits
 - **Owner agents:** evidence-verifier → medical-scientist → clinical-reviewer
@@ -556,7 +556,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 1B — Fix tenecteplase "preferred for LVO" wording — Class E
 - **Priority:** P0
-- **Status:** planned
+- **Status:** [x] merged — commit `64970a6` · 2026-05-11
 - **User-visible goal:** Tenecteplase text accurately reflects AHA/ASA 2026 framing (equivalent first-line, not preferred over alteplase)
 - **Non-goals:** no dosing threshold changes; no other IvTpa content edits in this task
 - **Owner agents:** evidence-verifier → medical-scientist → clinical-reviewer
