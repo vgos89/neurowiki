@@ -503,6 +503,421 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] Archive /agents/active/ and /agents/dormant/ to /agents/legacy/ once all 17 agent briefs are confirmed stable in .claude/agents/
 - [ ] CLAUDE.md §13.3 references data-architect agent that does not exist in .claude/agents/. Decide when Wave 5 citation scanner work begins: create data-architect agent file, or reassign scanner ownership to system-architect or calculator-engineer. Update §13.3 accordingly.
 
+---
+
+## AUDIT REMEDIATION ROADMAP — FULL REPO AGENT AUDIT 2026
+
+> **Source audit:** docs/reviews/full-repo-agent-audit/master-audit-report.md (2026-05-08, commit 2e36ab8)  
+> **Agent swarm:** 15 agents — all Core 6 + all Contextual per CLAUDE.md §11  
+> **All tasks below are `planned`** — no production code was modified during the audit.  
+> **Every task requires V's explicit approval before any code changes (CLAUDE.md §19).**  
+> Classification key: E = clinical logic change · D = high-risk / cross-boundary · C = scoped feature · B = tiny edit  
+> `-clinical` flag = touches clinical data; adds: evidence-verifier + medical-scientist + clinical-reviewer gate
+
+---
+
+### P0 SECURITY — SSH Private Key in Git History [BLOCKED/DEFERRED]
+
+#### SEC-1 — Remove committed SSH private key
+- **Priority:** P0 — SECURITY EMERGENCY
+- **Class:** Security — not a standard class task
+- **Status:** blocked:V-must-revoke-key-first
+- **User-visible goal:** none (key removal and git history scrub)
+- **Why blocked:** Key revocation must happen on GitHub Settings before git history can be scrubbed. History rewrite requires `--force-with-lease`. V (key owner `nurvepc@gmail.com`) must act first. Orchestrator will execute steps 2–4 immediately after V confirms revocation.
+- **Owner:** V (revoke key) → orchestrator (execute removal)
+- **Files to remove:** `eval "$(ssh-agent -s)"` · `eval "$(ssh-agent -s)".pub`
+- **Forbidden:** Do not attempt git history rewrite before V confirms key is revoked on GitHub.
+- **Required steps:**
+  1. V: Revoke the ed25519 key at GitHub Settings → SSH Keys → delete key for `nurvepc@gmail.com`
+  2. Orchestrator: `git rm 'eval "$(ssh-agent -s)"'` + `git rm 'eval "$(ssh-agent -s)".pub'`
+  3. Orchestrator: `git filter-repo --path 'eval "$(ssh-agent -s)"' --invert-paths --force`
+  4. Orchestrator: `git push --force-with-lease`
+- **Acceptance checks:** `git log --all -- 'eval*'` returns no commits · GitHub confirms key revoked · repo access confirmed after push
+- **Audit source:** [master-audit-report.md §P0: SEC-1](docs/reviews/full-repo-agent-audit/master-audit-report.md) · [system-architect.md](docs/reviews/full-repo-agent-audit/agents/system-architect.md)
+
+---
+
+### Phase 1 — Clinical Safety Quick Fixes
+
+> All Phase 1 tasks are Class E. Each requires: evidence-verifier packet → medical-scientist authoring → clinical-reviewer gate → clinical-PR artifact (§17.2) → full quality gates.  
+> Recommended execution order: 1A → 1B → 1C → 1D (1A and 1B can be batched into one PR).
+
+#### Phase 1A — Fix DOAC pearl Class III mislabel — Class E
+- **Priority:** P0
+- **Status:** planned
+- **User-visible goal:** DOAC pearl displays an evidence classification consistent with its permissive recommendation text
+- **Non-goals:** no scoring changes; no other pearl edits
+- **Owner agents:** evidence-verifier → medical-scientist → clinical-reviewer
+- **Files likely touched:** `src/data/strokeClinicalPearls.ts:166–176`
+- **Files forbidden:** `src/pages/` · `src/components/` · `src/lib/citations/` (unless W5.2 registry is landed)
+- **Required artifacts:** evidence-verifier packet confirming AHA/ASA 2026 §4.6 classification for DOACs · clinical-PR artifact `docs/reviews/clinical-PR<#>-doac-pearl-class.md` (§17.2 template)
+- **Acceptance checks:** `evidenceClass` field changed from `'III'` to `'IIb'` (or correct class per AHA/ASA 2026) · pearl content text is consistent with new class · tsc clean · build green · check:claims passes · check:routes passes · clinical-reviewer decision: approve
+- **Audit source:** [clinical-reviewer.md F: CLIN-1](docs/reviews/full-repo-agent-audit/agents/clinical-reviewer.md) · [master-audit-report.md §P0](docs/reviews/full-repo-agent-audit/master-audit-report.md)
+
+#### Phase 1B — Fix tenecteplase "preferred for LVO" wording — Class E
+- **Priority:** P0
+- **Status:** planned
+- **User-visible goal:** Tenecteplase text accurately reflects AHA/ASA 2026 framing (equivalent first-line, not preferred over alteplase)
+- **Non-goals:** no dosing threshold changes; no other IvTpa content edits in this task
+- **Owner agents:** evidence-verifier → medical-scientist → clinical-reviewer
+- **Files likely touched:** `src/pages/guide/IvTpa.tsx:62`
+- **Files forbidden:** `src/data/trialData.ts` · `src/lib/citations/`
+- **Required artifacts:** evidence-verifier packet citing AHA/ASA 2026 section on TNK · clinical-PR artifact `docs/reviews/clinical-PR<#>-tnk-preferred-wording.md`
+- **Acceptance checks:** line 62 updated to AHA/ASA-aligned wording (equivalent, not preferred) · tsc clean · build green · check:claims passes · clinical-reviewer decision: approve
+- **Audit source:** [clinical-reviewer.md F: CLIN-2](docs/reviews/full-repo-agent-audit/agents/clinical-reviewer.md) · [master-audit-report.md §P0](docs/reviews/full-repo-agent-audit/master-audit-report.md)
+
+#### Phase 1C — Fix NINDS pearl Part 2 qualifier + mimics pearl directive language — Class E
+- **Priority:** P1
+- **Status:** planned
+- **User-visible goal:** NINDS pearl correctly qualifies outcome percentages as Part 2 data; mimics pearl replaces "when in doubt, treat" with AHA/ASA-aligned hedging
+- **Non-goals:** no scoring changes; no structural rewrites of pearl objects
+- **Owner agents:** evidence-verifier → medical-scientist → clinical-reviewer
+- **Files likely touched:** `src/data/strokeClinicalPearls.ts:96–110` (NINDS pearl) · `src/data/strokeClinicalPearls.ts:189–198` (mimics pearl)
+- **Files forbidden:** `src/pages/` · `src/components/`
+- **Required artifacts:** evidence-verifier packet (NINDS Part 2 source) · clinical-PR artifact `docs/reviews/clinical-PR<#>-ninds-mimics-pearls.md`
+- **Acceptance checks:** "Part 2" qualifier present in NINDS percentages · "when in doubt, treat" removed or replaced with hedged equivalent · tsc clean · build green · clinical-reviewer decision: approve
+- **Audit source:** [clinical-reviewer.md F: CLIN-3, CLIN-4](docs/reviews/full-repo-agent-audit/agents/clinical-reviewer.md)
+
+#### Phase 1D — Fix EXTEND trial description (desmoteplase → alteplase) — Class E
+- **Priority:** P1
+- **Status:** planned
+- **User-visible goal:** EXTEND guide content correctly names alteplase as the tested thrombolytic (not desmoteplase)
+- **Non-goals:** no other guideContent edits
+- **Owner agents:** evidence-verifier → medical-scientist → clinical-reviewer
+- **Files likely touched:** `src/data/guideContent.ts:69–70`
+- **Files forbidden:** `src/data/trialData.ts` · `src/pages/`
+- **Required artifacts:** evidence-verifier packet (EXTEND NEJM 2019 DOI 10.1056/NEJMoa1813046 — confirm alteplase) · clinical-PR artifact `docs/reviews/clinical-PR<#>-extend-description-fix.md`
+- **Acceptance checks:** guideContent EXTEND description names alteplase correctly · tsc clean · build green · clinical-reviewer decision: approve
+- **Audit source:** [medical-scientist.md](docs/reviews/full-repo-agent-audit/agents/medical-scientist.md) (EXTEND desmoteplase finding)
+
+---
+
+### Phase 2 — Trial Statistics Display Integrity
+
+> Phase 2A is P0 (clinical). 2B–2C are P2. Each requires trial-statistician review and clinical-reviewer gate in addition to standard Class E workflow.
+
+#### Phase 2A — Gate NNT at 8 TrialPageNew render sites behind suppressNNT — Class E
+- **Priority:** P0
+- **Status:** planned
+- **User-visible goal:** DEFUSE-3, SELECT-2, ANGEL-ASPECT (ordinal-shift designs) no longer display NNT chips — statistically invalid for ordinal common OR outcomes
+- **Non-goals:** no changes to `suppressNNT` useMemo logic (already correct per Wave 3 Batch 2); no new trial data added
+- **Owner agents:** trial-statistician (audit + sign-off) → medical-scientist → clinical-reviewer
+- **Files likely touched:** `src/pages/trials/TrialPageNew.tsx` (gate 8 render sites: all `calculations?.nnt != null` checks must also check `&& !stats.suppressNNT`)
+- **Files forbidden:** `src/data/trialData.ts` unless stripping `calculations.nnt` from ordinal-shift entries as defense-in-depth (requires same evidence-verifier packet)
+- **Required artifacts:** trial-statistician sign-off (can be inline in PR description or separate note) · clinical-PR artifact `docs/reviews/clinical-PR<#>-nnt-gate-fix.md`
+- **Acceptance checks:** grep `calculations?.nnt != null` in TrialPageNew.tsx shows all occurrences also check `!stats.suppressNNT` · DEFUSE-3 / SELECT-2 / ANGEL-ASPECT trial pages show no NNT chip in build preview · tsc clean · build green · check:claims passes · clinical-reviewer decision: approve
+- **Audit source:** [trial-statistician.md F1: NNT-1](docs/reviews/full-repo-agent-audit/agents/trial-statistician.md) · [master-audit-report.md §P0](docs/reviews/full-repo-agent-audit/master-audit-report.md)
+
+#### Phase 2B — Add CI to ARD primary stat tiles (NINDS/DAWN/DEFUSE-3/CHOICE) — Class E
+- **Priority:** P2
+- **Status:** planned
+- **User-visible goal:** ARD figures on primary stat tiles include 95% CI, matching ELAN pattern
+- **Non-goals:** no archetype changes; no new components
+- **Owner agents:** evidence-verifier (source CI values) → medical-scientist → trial-statistician (verify CI values) → clinical-reviewer
+- **Files likely touched:** `src/data/trialData.ts` (add CI to `effectSize.label` or new `ardCI` field for NINDS, DAWN, DEFUSE-3, CHOICE entries)
+- **Required artifacts:** evidence-verifier packet (CI values sourced from original publications) · trial-statistician confirmation · clinical-PR artifact `docs/reviews/clinical-PR<#>-ard-ci-tiles.md`
+- **Acceptance checks:** 4 affected trial stat tiles display ARD with 95% CI · CI values traceable to source publications · tsc clean · build green · clinical-reviewer decision: approve
+- **Audit source:** [trial-statistician.md F6: STAT-2](docs/reviews/full-repo-agent-audit/agents/trial-statistician.md)
+
+#### Phase 2C — Fix DEFUSE-3 primaryEndpoint label (mRS 0-2 → mRS shift) — Class E
+- **Priority:** P2
+- **Status:** planned
+- **User-visible goal:** DEFUSE-3 trial page correctly labels ordinal mRS shift as the published primary endpoint
+- **Non-goals:** no NNT changes (handled in 2A)
+- **Owner agents:** evidence-verifier → medical-scientist → clinical-reviewer
+- **Files likely touched:** `src/data/trialData.ts` (DEFUSE-3 entry: `stats.primaryEndpoint.value`)
+- **Required artifacts:** evidence-verifier packet (NEJM 2018 DEFUSE-3 primary endpoint) · clinical-PR artifact `docs/reviews/clinical-PR<#>-defuse3-primary-endpoint.md`
+- **Acceptance checks:** DEFUSE-3 `primaryEndpoint.value` shows `'mRS shift'` or `'ordinal mRS distribution'` · mRS 0-2 rate moved to secondary outcome surface · tsc clean · build green · clinical-reviewer decision: approve
+- **Audit source:** [trial-statistician.md F5: STAT-3](docs/reviews/full-repo-agent-audit/agents/trial-statistician.md)
+
+---
+
+### Phase 3 — Citation Registry / Claim Governance
+
+> Phase 3A resumes the pre-existing W5.2 work item. Phase 3B is gated behind 3A landing. Phase 3C is non-clinical and can run independently.
+
+#### Phase 3A — W5.2: Create registry.ts + seed CLAIM_REGISTRY — Class D-clinical
+- **Priority:** P1
+- **Status:** planned (resumes W5.2 in_progress — blocked by V decisions on T&J 1974 source)
+- **User-visible goal:** none (citation governance infrastructure)
+- **Non-goals:** do not add `data-claim` tags to JSX in this task (that is Phase 3B); do not change clinical text
+- **Owner agents:** medical-scientist → clinical-reviewer
+- **Files likely touched:** `src/lib/citations/registry.ts` (new) · `src/lib/citations/claims.ts` (populate from stub)
+- **Files forbidden:** `src/pages/` · `src/components/` · `src/data/trialData.ts` (unless PMID backfill explicitly included in plan)
+- **V decisions required (carried from W5.2 in_progress):**
+  1. T&J 1974 source for GCS mild/severe/moderate thresholds (Lancet paywall — V has institutional access)
+  2. gcs-moderate-threshold attribution (ACRM 1993 is wrong — decide: T&J / BTF-implicit / remove)
+  3. gcs-mild-ct-caveat source (NICE head injury guidelines candidate)
+  4. gcs-airway-reflex-caveat: Rotheray 2012 covers GCS 9–14 not 9–12 — accept with reword / soften / drop
+  5. gcs-sedation-caveat: verb drift from BTF 2023 — reword to match / split claim
+- **Required artifacts:** arch review (§17.1) if schema changes · clinical-PR artifact `docs/reviews/clinical-PR<#>-registry-w52.md`
+- **Acceptance checks:** `registry.ts` exports at minimum AHA/ASA 2026 + Hemphill 2001 entries · `claims.ts` has ≥1 registered claim per calculator surface · `npm run check:claims` passes without registry.ts warning · tsc clean · build green · clinical-reviewer decision: approve
+- **Audit source:** [evidence-verifier.md: CIT-1](docs/reviews/full-repo-agent-audit/agents/evidence-verifier.md) · [master-audit-report.md §P0: CIT-1](docs/reviews/full-repo-agent-audit/master-audit-report.md)
+
+#### Phase 3B — Add data-claim tags to JSX calculator surfaces — Class D-clinical
+- **Priority:** P1
+- **Status:** planned — blocked:awaiting-Phase-3A-registry
+- **User-visible goal:** none (clinical governance — automated checks now cover calculator claim surfaces)
+- **Non-goals:** no clinical text changes; no UI changes
+- **Owner agents:** medical-scientist → clinical-reviewer
+- **Files likely touched:** `src/pages/NihssCalculator.tsx` · `src/pages/AspectScoreCalculator.tsx` · `src/pages/IchScoreCalculator.tsx` · `src/pages/Abcd2ScoreCalculator.tsx` · `src/pages/GlasgowComaScaleCalculator.tsx`
+- **Files forbidden:** `src/lib/citations/registry.ts` (W5.2 must be merged first) · do not add new clinical text, only `data-claim` attributes on existing elements
+- **Required artifacts:** clinical-PR artifact `docs/reviews/clinical-PR<#>-data-claim-tags.md`
+- **Acceptance checks:** check:claims passes with zero unregistered claims · all tagged claim IDs exist in registry.ts · tsc clean · build green · clinical-reviewer decision: approve
+- **Audit source:** [evidence-verifier.md](docs/reviews/full-repo-agent-audit/agents/evidence-verifier.md) · [master-audit-report.md §CIT-1](docs/reviews/full-repo-agent-audit/master-audit-report.md)
+
+#### Phase 3C — Add tsc --noEmit to pre-commit hook — Class C
+- **Priority:** P1
+- **Status:** planned
+- **User-visible goal:** none (type regressions blocked at commit time)
+- **Non-goals:** no clinical files; no test runner setup (Phase 5A)
+- **Owner agents:** quality-assurance
+- **Files likely touched:** `.husky/pre-commit`
+- **Files forbidden:** all `src/` · all `src/data/`
+- **Required artifacts:** none (Class C, non-clinical)
+- **Acceptance checks:** committing a file with a deliberate type error is rejected by the hook · existing pre-commit checks (check:claims, check:routes) still pass · tsc clean · build green
+- **Audit source:** [quality-assurance.md F: QA-2](docs/reviews/full-repo-agent-audit/agents/quality-assurance.md) · [master-audit-report.md §P1: QA-2](docs/reviews/full-repo-agent-audit/master-audit-report.md)
+
+---
+
+### Phase 4 — Compliance and Public Trust
+
+> Phase 4A–4D are P0. Phase 4E is P2. 4B and 4C can be batched into one PR. 4D should be its own PR. All are non-clinical (no algorithm or threshold changes).
+
+#### Phase 4A — Cookie consent gate before Google Analytics — Class D
+- **Priority:** P0
+- **Status:** planned
+- **User-visible goal:** EU users see a cookie consent banner before any analytics data is sent to Google
+- **Non-goals:** no full CMP (Consent Management Platform); no clinical content changes; anonymize_ip already set (keep it)
+- **Owner agents:** compliance-legal (spec + sign-off) → ui-architect (conditional GA loading) → content-writer (consent banner copy)
+- **Files likely touched:** `index.html:117–123` (conditional GA loading) · new consent banner component in `src/components/` · `src/App.tsx` (consent callback integration)
+- **Files forbidden:** all `src/data/` · all `src/pages/guide/` · all clinical surfaces
+- **Required artifacts:** arch review (§17.1) for conditional loading approach · compliance-legal sign-off on consent banner copy
+- **Acceptance checks:** GA script does not fire until consent button clicked · first visit shows consent banner · consent persisted in localStorage (cleared on explicit withdraw) · tsc clean · build green
+- **Audit source:** [compliance-legal.md F1: GDPR-1](docs/reviews/full-repo-agent-audit/agents/compliance-legal.md) · [master-audit-report.md §P0: GDPR-1](docs/reviews/full-repo-agent-audit/master-audit-report.md)
+
+#### Phase 4B — Add NIHSS in-page disclaimer footer — Class C
+- **Priority:** P0
+- **Status:** planned
+- **User-visible goal:** NIHSS calculator has a footer disclaimer matching the pattern already present on ASPECTS, ICH Score, GCS, ABCD2 calculators
+- **Non-goals:** no scoring logic changes; no other calculator edits in this task
+- **Owner agents:** content-writer (copy, matching ASPECTS pattern at `AspectScoreCalculator.tsx:416`) → ui-architect (component placement)
+- **Files likely touched:** `src/pages/NihssCalculator.tsx`
+- **Files forbidden:** `src/data/` (no clinical data changes)
+- **Required artifacts:** none (Class C non-clinical)
+- **Acceptance checks:** NIHSS page has a disclaimer footer visible at page bottom · copy matches or is consistent with ASPECTS disclaimer pattern · tsc clean · build green
+- **Audit source:** [compliance-legal.md F3: COMP-3](docs/reviews/full-repo-agent-audit/agents/compliance-legal.md) · [master-audit-report.md §P0: COMP-3](docs/reviews/full-repo-agent-audit/master-audit-report.md)
+
+#### Phase 4C — Adjacent dosing disclaimer in stroke code workflow — Class C
+- **Priority:** P0
+- **Status:** planned
+- **User-visible goal:** tPA/TNK computed dose displays in stroke code steps carry adjacent text clarifying these are reference values to verify against institutional protocol — not medication orders
+- **Non-goals:** no dosing logic changes; no threshold changes; no changes to `src/utils/strokeDosing.ts`
+- **Owner agents:** content-writer (copy: "Reference only — verify against institutional protocol before administration") → ui-architect (placement adjacent to dose display)
+- **Files likely touched:** `src/components/article/stroke/CodeModeStep1.tsx:352–361` · `src/components/article/stroke/CodeModeStep2.tsx:229–236`
+- **Files forbidden:** `src/utils/strokeDosing.ts` (no dosing logic) · `src/data/`
+- **Required artifacts:** none (Class C non-clinical)
+- **Acceptance checks:** disclaimer text visible adjacent to tPA total dose, bolus, infusion, and TNK dose displays in Step1 and Step2 · tsc clean · build green
+- **Audit source:** [compliance-legal.md F2: COMP-2](docs/reviews/full-repo-agent-audit/agents/compliance-legal.md) · [master-audit-report.md §P0: COMP-2](docs/reviews/full-repo-agent-audit/master-audit-report.md)
+
+#### Phase 4D — Create Privacy Policy + Terms of Use + Accessibility Statement routes — Class C
+- **Priority:** P0
+- **Status:** planned
+- **User-visible goal:** `/privacy`, `/terms`, `/accessibility` routes exist and render correct legal copy
+- **Non-goals:** no CMP integration in this task (handled in Phase 4A); no clinical content
+- **Owner agents:** content-writer (all copy — Privacy Policy must disclose: GA with anonymize_ip, feedback email via Resend, NPI proxy not stored, localStorage for recents/favorites/disclaimer, data deletion contact) → ui-architect (page shells + routing) → compliance-legal (copy sign-off)
+- **Files likely touched:** `src/config/routeManifest.ts` (3 new route entries) · `src/App.tsx` (3 new lazy route wires) · 3 new page components under `src/pages/`
+- **Files forbidden:** all `src/data/` · all clinical surfaces
+- **Required artifacts:** compliance-legal sign-off on Privacy Policy copy · route manifest validates (39 → 42 routes)
+- **Acceptance checks:** `/privacy`, `/terms`, `/accessibility` routes render · Privacy Policy discloses all data uses listed above · routeManifest validates with updated route count · tsc clean · build green · check:routes passes
+- **Audit source:** [compliance-legal.md F4: COMP-1](docs/reviews/full-repo-agent-audit/agents/compliance-legal.md) · [master-audit-report.md §P0: COMP-1](docs/reviews/full-repo-agent-audit/master-audit-report.md)
+
+#### Phase 4E — Standardize `<CalcDisclaimer />` across remaining calculator pages — Class C
+- **Priority:** P2
+- **Status:** planned
+- **User-visible goal:** ROPE Score, Heidelberg Bleeding, Boston Criteria CAA calculators all have footer disclaimers (NIHSS covered in Phase 4B)
+- **Non-goals:** no clinical content changes; no scoring changes
+- **Owner agents:** content-writer (copy) → ui-architect (shared `<CalcDisclaimer />` component if not created in 4B)
+- **Files likely touched:** `src/pages/RopeScoreCalculator.tsx` · `src/pages/HeidelbergBleedingCalculator.tsx` · `src/pages/BostonCriteriaCaaCalculator.tsx` · `src/components/calculators/CalcDisclaimer.tsx` (new shared component)
+- **Required artifacts:** none (Class C non-clinical)
+- **Acceptance checks:** all 3 calculators have footer disclaimer · `<CalcDisclaimer />` is shared, not duplicated · tsc clean · build green
+- **Audit source:** [compliance-legal.md F10](docs/reviews/full-repo-agent-audit/agents/compliance-legal.md)
+
+---
+
+### Phase 5 — Test Foundation
+
+#### Phase 5A — Vitest setup + Phase 1 calculator scoring tests — Class D
+- **Priority:** P1
+- **Status:** planned
+- **User-visible goal:** none (developer tooling; no UI change)
+- **Non-goals:** no Playwright / E2E in this task; no clinical content changes; no UI test changes
+- **Owner agents:** quality-assurance
+- **Files likely touched:** `package.json` (vitest dep + `"test"` script) · `vite.config.ts` (test config block) · `src/__tests__/` (new directory) · test files for: NIHSS scoring, ASPECTS scoring, ICH Score, ABCD2 scoring, stroke dosing utility (`src/utils/strokeDosing.ts`), useRecents hook, useFavorites hook
+- **Files forbidden:** all `src/data/trialData.ts` · all `src/pages/guide/` · all clinical claim surfaces
+- **Required artifacts:** arch review (§17.1) for test infrastructure approach (Vitest config, file co-location vs `__tests__/` dir)
+- **Acceptance checks:** `npm test` runs and exits 0 · ≥50 tests passing · NIHSS, ASPECTS, ICH Score, ABCD2 scoring logic 70%+ covered · stroke dosing edge cases (0-weight, boundary doses) covered · tsc clean · build green · pre-commit hook unchanged (tests not added to pre-commit in this task)
+- **Audit source:** [quality-assurance.md F1: QA-1](docs/reviews/full-repo-agent-audit/agents/quality-assurance.md) · [master-audit-report.md §P1: QA-1](docs/reviews/full-repo-agent-audit/master-audit-report.md)
+
+---
+
+### Phase 6 — Performance and Architecture Refactor
+
+> All Phase 6 tasks are Class D and require system-architect review (§17.1) before any code changes. Phase 6A and 6B can run in parallel after their respective arch reviews.
+
+#### Phase 6A — Lazy-load chart archetypes inside TrialPageNew — Class D
+- **Priority:** P1
+- **Status:** planned
+- **User-visible goal:** Trial detail pages first-paint is faster; 837 kB chunk reduced to <500 kB raw
+- **Non-goals:** no trial content changes; no new archetypes; no API changes
+- **Owner agents:** system-architect (plan review) → ui-architect (implementation) → quality-assurance (bundle verification)
+- **Files likely touched:** `src/pages/trials/TrialPageNew.tsx` (replace static imports with internal `React.lazy()` for DeltaBandChart, GrottaBarChart, BenchmarkThresholdChart, react-markdown, remark-gfm)
+- **Files forbidden:** `src/data/trialData.ts` · all clinical data files
+- **Required artifacts:** arch review artifact `docs/reviews/arch-PR<#>-lazy-chart-archetypes.md` (§17.1)
+- **Acceptance checks:** TrialPageNew chunk <500 kB raw (<100 kB gzip target) · chart archetype modules appear as separate async chunks in build output · EXTEND / WEAVE / INTERACT4 / RIGHT-2 pages render identically · tsc clean · build green
+- **Audit source:** [performance.md F: PERF-1](docs/reviews/full-repo-agent-audit/agents/performance.md) · [master-audit-report.md §P1: PERF-1](docs/reviews/full-repo-agent-audit/master-audit-report.md)
+
+#### Phase 6B — Break trialData home-route coupling — Class D
+- **Priority:** P1
+- **Status:** planned
+- **User-visible goal:** Home page loads faster on first visit (index chunk reduces from 589 kB)
+- **Non-goals:** no clinical content changes; no Home page visual changes in this task
+- **Owner agents:** system-architect (plan review — identify safe coupling break point) → ui-architect (implementation) → quality-assurance
+- **Files likely touched:** `src/data/trialListData.ts` (dynamic import boundary) · `src/data/scenarios.ts` · `src/pages/Home.tsx`
+- **Files forbidden:** `src/data/trialData.ts` (do not modify trial data — only the import path)
+- **Required artifacts:** arch review artifact `docs/reviews/arch-PR<#>-home-trialdata-coupling.md` (§17.1)
+- **Acceptance checks:** index chunk <200 kB raw · Home page renders correctly · scenario resolution works · trials visible on Home still load · tsc clean · build green
+- **Audit source:** [performance.md P1](docs/reviews/full-repo-agent-audit/agents/performance.md) · [system-architect.md F: DATA-1](docs/reviews/full-repo-agent-audit/agents/system-architect.md)
+
+#### Phase 6C — Extract TrialPageNew utility functions — Class D
+- **Priority:** P2
+- **Status:** planned — blocked:awaiting-Phase-6A (lazy loading must land first to stabilize chunk boundaries)
+- **User-visible goal:** none (structural refactor; trial pages render identically)
+- **Non-goals:** no clinical content changes; no new features; no archetype changes in this task
+- **Owner agents:** system-architect (plan review + composability sign-off) → ui-architect (implementation) → quality-assurance
+- **Files likely touched:** `src/pages/trials/TrialPageNew.tsx` (extract `sanitizeLegacyTrialContent`, `formatTrialArm`, `buildTrialSummaryItems` to `src/utils/trialContent.ts`)
+- **Required artifacts:** arch review artifact `docs/reviews/arch-PR<#>-trialpageneqw-decompose.md` (§17.1)
+- **Acceptance checks:** extracted utilities live in `src/utils/trialContent.ts` · all existing trial branches compile and render identically · TrialPageNew.tsx line count meaningfully reduced · tsc clean · build green · all 39 routes validate
+- **Audit source:** [system-architect.md F: D2](docs/reviews/full-repo-agent-audit/agents/system-architect.md) · [ui-architect.md](docs/reviews/full-repo-agent-audit/agents/ui-architect.md)
+
+---
+
+### Phase 7 — Accessibility and Mobile Polish
+
+> All Phase 7 tasks are Class C. They are non-clinical. Phase 7A and 7B can run in parallel.
+
+#### Phase 7A — NIHSS radiogroup semantics (WCAG Level A failure) — Class C
+- **Priority:** P1
+- **Status:** planned
+- **User-visible goal:** NIHSS item scoring is correctly announced by screen readers; keyboard users can navigate options
+- **Non-goals:** no scoring logic changes; no visual changes to NIHSS UI
+- **Owner agents:** accessibility-specialist → ui-architect
+- **Files likely touched:** `src/components/NihssItemCard.tsx`
+- **Files forbidden:** all `src/data/` · scoring logic in `src/pages/NihssCalculator.tsx` (UI-only change)
+- **Required artifacts:** accessibility-specialist sign-off (axe-core or equivalent test result)
+- **Acceptance checks:** `role="radiogroup"` on item container · `role="radio"` + `aria-checked` on each option button · `aria-live="polite"` on score total · axe-core reports zero Level A violations on NIHSS calculator page · tsc clean · build green
+- **Audit source:** [accessibility-specialist.md F: ACC-1](docs/reviews/full-repo-agent-audit/agents/accessibility-specialist.md) · [master-audit-report.md §P1: ACC-1](docs/reviews/full-repo-agent-audit/master-audit-report.md)
+
+#### Phase 7B — Modal focus management (DisclaimerModal + GlobalTrialModal) — Class C
+- **Priority:** P1
+- **Status:** planned
+- **User-visible goal:** Keyboard and screen reader users can navigate modals correctly (focus trapped inside; focus returns to trigger on close)
+- **Non-goals:** no visual changes to modal design; no clinical text changes
+- **Owner agents:** accessibility-specialist → ui-architect
+- **Files likely touched:** `src/components/DisclaimerModal.tsx` · `src/components/GlobalTrialModal.tsx`
+- **Files forbidden:** all `src/data/`
+- **Required artifacts:** accessibility-specialist sign-off
+- **Acceptance checks:** `role="dialog"` + `aria-modal="true"` on both modals · focus trapped when modal open · focus returns to trigger element on close · Escape key closes modal · tsc clean · build green
+- **Audit source:** [accessibility-specialist.md F: ACC-2](docs/reviews/full-repo-agent-audit/agents/accessibility-specialist.md)
+
+#### Phase 7C — GrottaBarChart ARIA labels — Class C
+- **Priority:** P2
+- **Status:** planned
+- **User-visible goal:** GrottaBar mRS chart segments are announced by screen readers with category label and percentage
+- **Non-goals:** no visual changes; no clinical content changes
+- **Owner agents:** accessibility-specialist
+- **Files likely touched:** `src/components/trials/GrottaBarChart.tsx`
+- **Required artifacts:** accessibility-specialist sign-off
+- **Acceptance checks:** each bar segment has `role="img"` + `aria-label` (mRS category + % value) · chart container has accessible name · tsc clean · build green
+- **Audit source:** [accessibility-specialist.md](docs/reviews/full-repo-agent-audit/agents/accessibility-specialist.md)
+
+#### Phase 7D — Mobile touch targets and safe-area fix — Class C
+- **Priority:** P2
+- **Status:** planned
+- **User-visible goal:** All interactive touch targets across the app meet the 44px minimum; iOS home indicator gap correctly applied in stroke workflow
+- **Non-goals:** no clinical content changes; no scoring changes
+- **Owner agents:** mobile-first-developer
+- **Files likely touched:** `src/components/trials/TrialLegendCard.tsx` (star favorite button ~18px → min 44px) · `src/pages/NihssCalculator.tsx` (LVO button ~12px → min 44px) · modal close buttons (32px → min 44px) · `src/pages/guide/StrokeBasicsWorkflowV2.tsx:772` (replace invalid `safe-area-inset-bottom` CSS class with valid `pb-safe` or equivalent)
+- **Required artifacts:** mobile-first-developer 375px viewport QA pass
+- **Acceptance checks:** all touch targets ≥44px on 375px viewport · `safe-area-inset-bottom` class removed · iOS home indicator gap visible in simulator · tsc clean · build green
+- **Audit source:** [mobile-first-developer.md F: MOB-1, MOB-2](docs/reviews/full-repo-agent-audit/agents/mobile-first-developer.md)
+
+---
+
+### Phase 8 — Documentation and Repo Cleanup
+
+> All Phase 8 tasks are non-clinical and non-urgency. Safe to batch or defer. Phase 8C (orphaned worktrees) is a Class B and can be done any time.
+
+#### Phase 8A — Remove legacy agents/ root directory — Class D
+- **Priority:** P2
+- **Status:** planned
+- **User-visible goal:** none (governance clarity; `.claude/agents/` is the only canonical agent registry)
+- **Non-goals:** do not touch `.claude/agents/` (canonical location stays unchanged)
+- **Owner agents:** system-architect (confirms no active references in prod code) → librarian (executes removal)
+- **Files to remove:** `agents/` root directory (entire tree)
+- **Files forbidden:** `.claude/agents/` · any source file in `src/`
+- **Required artifacts:** arch review artifact `docs/reviews/arch-PR<#>-remove-legacy-agents-dir.md` (§17.1)
+- **Acceptance checks:** `ls agents/` returns "No such file or directory" · grep for production `require`/`import` of `agents/` returns nothing · tsc clean · build green
+- **Audit source:** [system-architect.md F: ARCH-1](docs/reviews/full-repo-agent-audit/agents/system-architect.md) · [cleanup-log.md](docs/reviews/full-repo-agent-audit/cleanup-log.md)
+
+#### Phase 8B — Root MD file cleanup — Class C
+- **Priority:** P2
+- **Status:** planned — blocked:awaiting-canonical-confirmation for AHA-guideline duplicate
+- **User-visible goal:** none (docs/ organization)
+- **Non-goals:** do not remove CLAUDE.md, PRD.md, TASKS.md, README.md, or any file that may still be referenced
+- **Owner agents:** librarian
+- **Files to move or remove:**
+  - `GEO-ANALYSIS.md` → `docs/audits/GEO-ANALYSIS.md`
+  - `SEO-AUDIT-REPORT.md` → `docs/audits/SEO-AUDIT-REPORT.md`
+  - `UI_UX_NEUROWIKI_AUDIT.md` → `docs/audits/UI_UX_NEUROWIKI_AUDIT.md`
+  - `ORCHESTRATION.md` → confirm superseded by `.claude/meta/`, then `git rm`
+  - `AGENTS.md` → confirm superseded by `.claude/agents/`, then `git rm`
+  - `2026-AHA-Stroke-guideline.md` (root) → confirm `docs/2026-AHA-Stroke-guideline.md` is canonical, then `git rm` root copy
+  - `project_tree.txt` → `git rm` (stale snapshot, safe to remove)
+- **Required artifacts:** none (Class C, non-clinical)
+- **Acceptance checks:** git status shows only intended moves/removals · no clinical data files touched · no broken imports · tsc clean · build green
+- **Audit source:** [librarian.md F: DOC-1, DOC-2, DOC-3](docs/reviews/full-repo-agent-audit/agents/librarian.md) · [cleanup-log.md](docs/reviews/full-repo-agent-audit/cleanup-log.md)
+
+#### Phase 8C — Remove orphaned worktrees from disk — Class B
+- **Priority:** P2
+- **Status:** planned
+- **User-visible goal:** none
+- **Non-goals:** do not touch `.claude/agents/` · do not touch any production source files
+- **Owner agents:** orchestrator (direct shell execution)
+- **Command:** `rm -rf .claude/worktrees/agent-ab9d815fae22ee79d .claude/worktrees/vibrant-dewdney-4f0ed7`
+- **Required artifacts:** none (Class B)
+- **Acceptance checks:** `.claude/worktrees/` directory is empty or absent · no other worktrees affected
+- **Audit source:** [cleanup-log.md](docs/reviews/full-repo-agent-audit/cleanup-log.md) · [system-architect.md F: ARCH-2](docs/reviews/full-repo-agent-audit/agents/system-architect.md)
+
+#### Phase 8D — SEO metadata: fix titles, descriptions, sitemap — Class C
+- **Priority:** P2
+- **Status:** planned
+- **User-visible goal:** Trial/calculator pages display correctly-lengthed SEO titles and descriptions in search results; sitemap URLs resolve (no 404s for crawlers)
+- **Non-goals:** no structured data authoring in this task; no clinical content changes
+- **Owner agents:** seo-specialist
+- **Files likely touched:** `src/config/routeManifest.ts` (trim 7 titles to ≤60 chars; trim 14+ descriptions to ≤160 chars; fix duplicate title on `/guide/stroke-basics` vs `/pathways/stroke-code`) · `public/sitemap.xml` (remove 6 /calculators/… redirect target URLs; add correct /pathways/… URLs)
+- **Files forbidden:** all `src/data/` · all `src/pages/guide/`
+- **Required artifacts:** seo-specialist sign-off
+- **Acceptance checks:** all routeManifest titles ≤60 chars · all descriptions ≤160 chars · no two routes share identical title · sitemap URLs all resolve to live routes (no 404s) · check:routes validates (route count unchanged) · tsc clean · build green
+- **Audit source:** [seo-specialist.md F: SEO-1, SEO-2, SEO-3](docs/reviews/full-repo-agent-audit/agents/seo-specialist.md)
+
+---
+
+> **Next recommended task after planning: Phase 1A — DOAC pearl Class III mislabel (Class E clinical safety fix).**  
+> Rationale: Phase 1A and 1B are the only block-level clinical findings that affect currently-displayed content. They must be resolved before clinical trust can be established. SEC-1 (SSH key) requires V action first — after key revocation, SEC-1 takes top priority over all others.
+
+---
+
 ## CONFIRMED CLEAN
 - [x] 2026-05-08 — Batch 3 Wave 2 — data population: 13 secondary-prevention trials (Class D-clinical) — commit 6bed2d6
   - Files: src/data/trialData.ts (108 lines inserted)
