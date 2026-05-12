@@ -94,7 +94,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'ninds-trial',
         title: 'NINDS Trial (0-3h)',
-        content: 'Landmark trial establishing IV tPA. 42.6% vs 27.2% favorable outcome (mRS 0-1). 6.4% sICH risk. Established the 3-hour window. Treatment <90min showed greatest benefit (50% vs 38%).',
+        content: 'Landmark trial establishing IV tPA. Part 2 (n=333) 3-month outcomes: mRS 0-1 39% vs 26%; Barthel ≥95 50% vs 38%; global OR 1.7 (95% CI 1.2-2.6, P=0.008). 6.4% sICH risk (Parts 1+2 combined). Established the 3-hour window.',
         type: 'trial',
         section: 'step-1',
         link: '/trials/ninds',
@@ -188,13 +188,13 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'stroke-mimics-safety',
         title: 'Stroke Mimics & tPA Safety',
-        content: 'Stroke mimics (seizure, migraine, conversion disorder, hypoglycemia) receive tPA in 1-2% of cases. Zinkstok meta-analysis (5,581 patients): sICH rate 1.0-2.0% in mimics vs 5.5-7.9% in true strokes. No fatal ICH in mimics. Bottom line: Don\'t delay tPA for extensive workup if stroke is likely.',
+        content: 'Stroke mimics (seizure, migraine, conversion disorder, hypoglycemia) receive tPA in 1-2% of cases. Zinkstok multicenter cohort 2013 (n=5,581): sICH 1.0% (95% CI 0.0-5.0) in mimics vs 7.9% (95% CI 7.2-8.7) in ischemic strokes. No fatal ICH in mimics. Bottom line: Don\'t delay tPA for extensive workup if stroke is likely.',
         type: 'pearl',
         section: 'step-1',
         evidenceClass: 'IIa',
         evidenceLevel: 'B',
-        plainEnglish: 'Giving tPA to a stroke mimic is safer than withholding tPA from a real stroke. When in doubt, treat.',
-        evidence: 'Zinkstok et al, Stroke 2021',
+        plainEnglish: 'When clinical suspicion for stroke is high, don\'t delay tPA for extended workup — the low sICH risk in mimics is outweighed by the cost of withholding tPA from a real stroke.',
+        evidence: 'Zinkstok et al, Stroke 2013; AHA/ASA 2019 (Class IIa)',
       },
       {
         id: 'pregnancy-tpa',
