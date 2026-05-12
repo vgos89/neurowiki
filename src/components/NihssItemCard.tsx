@@ -50,8 +50,8 @@ const NihssItemCard: React.FC<NihssItemCardProps> = ({
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-baseline gap-3">
           <span className="text-sm text-slate-400 dark:text-slate-500 font-medium">{item.id}</span>
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-            {item.name.replace(/^\d+[a-z]?\.\s*/i, '')} {/* Remove number prefix from name */}
+          <h2 id={`nihss-label-${item.id}`} className="text-lg font-semibold text-slate-900 dark:text-white">
+            {item.name.replace(/^\d+[a-z]?\.\s*/i, '')}
           </h2>
         </div>
         {isRequired && (
@@ -129,12 +129,14 @@ const NihssItemCard: React.FC<NihssItemCardProps> = ({
       )}
 
       {/* Buttons */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2" role="radiogroup" aria-labelledby={`nihss-label-${item.id}`}>
         {item.rapidOptions.map((opt) => {
           const isActive = isSelected(opt.value);
           return (
             <button
               key={opt.value}
+              role="radio"
+              aria-checked={isActive}
               onClick={() => onChange(opt.value)}
               className={`flex-1 min-w-0 px-3 py-2 md:px-5 md:py-3 rounded-full text-xs md:text-sm font-medium transition-all duration-200 ${
                 isActive

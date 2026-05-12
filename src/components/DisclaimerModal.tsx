@@ -16,6 +16,7 @@ export const DisclaimerModal: React.FC = () => {
   const [checkboxChecked, setCheckboxChecked] = useState(false);
   const [canAccept, setCanAccept] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   // Check if already accepted
   useEffect(() => {
@@ -52,6 +53,33 @@ export const DisclaimerModal: React.FC = () => {
     }
   }, [hasScrolledToBottom]);
 
+  // Focus trap — mandatory modal, no Escape dismiss
+  useEffect(() => {
+    if (!isOpen || !modalRef.current) return;
+    const modal = modalRef.current;
+    const focusableSelector = 'button:not([disabled]), [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])';
+    const getFocusable = () => Array.from(modal.querySelectorAll<HTMLElement>(focusableSelector));
+
+    // Focus scroll container so keyboard users can scroll immediately
+    scrollContainerRef.current?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+      const els = getFocusable();
+      if (!els.length) return;
+      const first = els[0];
+      const last = els[els.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
+
   // Handle accept
   const handleAccept = () => {
     if (!canAccept) return;
@@ -70,7 +98,13 @@ export const DisclaimerModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden">
+      <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="disclaimer-modal-title"
+        className="w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden"
+      >
         {/* Header */}
         <div className="px-6 py-4 bg-slate-50 border-b border-slate-200">
           <div className="flex items-center gap-3">
@@ -80,7 +114,7 @@ export const DisclaimerModal: React.FC = () => {
               </svg>
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-slate-900">Medical Disclaimer</h2>
+              <h2 id="disclaimer-modal-title" className="text-lg font-semibold text-slate-900">Medical Disclaimer</h2>
               <p className="text-sm text-slate-500">Please read before continuing</p>
             </div>
           </div>
@@ -90,7 +124,9 @@ export const DisclaimerModal: React.FC = () => {
         <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
-          className="px-6 py-4 max-h-64 overflow-y-auto text-sm text-slate-600 leading-relaxed"
+          tabIndex={0}
+          aria-label="Disclaimer content — scroll to read"
+          className="px-6 py-4 max-h-64 overflow-y-auto text-sm text-slate-600 leading-relaxed focus:outline-none"
         >
           <h3 className="font-semibold text-slate-900 mb-2">Important Notice</h3>
           <p className="mb-4">

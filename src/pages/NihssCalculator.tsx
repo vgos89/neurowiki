@@ -118,7 +118,7 @@ const NihssCalculator: React.FC = () => {
               </button>
               <div>
                 <div className="text-[8px] md:text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-0 md:mb-0.5">NIHSS TOTAL</div>
-                <div className="flex items-baseline gap-1 md:gap-1.5">
+                <div className="flex items-baseline gap-1 md:gap-1.5" aria-live="polite" aria-atomic="true">
                   <span className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white leading-none">{calculateTotal(nihssValues).toString().padStart(2, '0')}</span>
                   <span className="text-sm md:text-lg text-slate-400 dark:text-slate-500">/ 42</span>
                 </div>
