@@ -166,12 +166,12 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'doac-management-2026',
         title: 'DOAC Management (2026 Update)',
-        content: 'For patients on DOACs: If last dose >48h with normal renal function, may consider tPA. Check drug-specific assays: anti-Xa level for apixaban/rivaroxaban/edoxaban (must be normal), ECT or dilute thrombin time for dabigatran (must be normal). If levels elevated OR last dose <48h, do NOT give tPA.',
+        content: 'Do NOT give tPA if last DOAC dose <48h or if drug-specific assay is elevated. If last dose >48h with normal renal function AND a normal drug-specific assay, tPA may be considered: anti-Xa level for apixaban/rivaroxaban/edoxaban, or ECT or dilute thrombin time for dabigatran.',
         type: 'pearl',
         section: 'step-1',
-        evidenceClass: 'III',
+        evidenceClass: 'IIb',
         evidenceLevel: 'C',
-        plainEnglish: 'DOACs taken <48h ago = no tPA. If >48h, check drug-specific labs (anti-Xa or ECT). Elevated levels = no tPA.',
+        plainEnglish: 'DOAC <48h ago = no tPA. If >48h AND drug-specific lab is normal, tPA may be considered.',
         evidence: 'AHA/ASA 2026 Guidelines',
       },
       {

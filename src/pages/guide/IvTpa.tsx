@@ -59,7 +59,7 @@ export default function IvTpa() {
             viewMode={viewMode}
             detail="Single bolus. Better for drip-and-ship: one push before transfer, no pump on the ambulance. Avoid in extended window — less data."
           >
-            <strong>Tenecteplase (TNK):</strong> <Value>0.25 mg/kg</Value> (max <Value>25 mg</Value>) single IV bolus. Non-inferior to alteplase; preferred for LVO when transferring for thrombectomy.
+            <strong>Tenecteplase (TNK):</strong> <Value>0.25 mg/kg</Value> (max <Value>25 mg</Value>) single IV bolus. Equivalent first-line alternative to alteplase (AHA/ASA 2026, Class I); single-bolus delivery simplifies transfer for thrombectomy.
           </Paragraph>
 
           <Section number={2} title="Blood Pressure Management" />
