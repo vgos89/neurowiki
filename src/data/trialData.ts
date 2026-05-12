@@ -663,7 +663,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'IV Alteplase (0.9 mg/kg)',
       control: 'Placebo + Best Medical Treatment'
     },
-    clinicalContext: 'Can we thrombolyse patients beyond 4.5 hours if they have salvageable tissue? The EXTEND trial tested desmoteplase (and pooled data with ECASS-4/EPITHET using Alteplase) using perfusion imaging selection.',
+    clinicalContext: 'Can we thrombolyse patients beyond 4.5 hours if they have salvageable tissue? The EXTEND trial tested IV alteplase between 4.5 and 9 hours after stroke onset (or wake-up stroke within 9 hours of sleep midpoint), selecting patients by automated CT or MR perfusion imaging (small core, salvageable penumbra).',
     calculations: {
       nnt: 16.9, // 1 / (0.354 - 0.295) = 16.9
       nntExplanation: 'For every 16.9 patients treated with tPA in the 4.5-9 hour window with favorable perfusion, one additional patient achieves excellent outcome (mRS 0-1) compared to placebo'

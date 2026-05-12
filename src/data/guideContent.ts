@@ -67,7 +67,7 @@ ECASS III investigated whether the window for IV tPA could be safely extended fr
     category: 'Neuro Trials',
     content: `
 ## Clinical Context
-Can we thrombolyse patients beyond 4.5 hours if they have salvageable tissue? The EXTEND trial tested desmoteplase (and pooled data with ECASS-4/EPITHET using Alteplase) using perfusion imaging selection.
+Can we thrombolyse patients beyond 4.5 hours if they have salvageable tissue? The EXTEND trial tested IV alteplase between 4.5 and 9 hours after stroke onset (or wake-up stroke within 9 hours of sleep midpoint), selecting patients by automated CT or MR perfusion imaging (small core, salvageable penumbra).
 
 ## Trial Summary
 *   **Design:** Multicenter, randomized, placebo-controlled trial.
@@ -86,7 +86,7 @@ Can we thrombolyse patients beyond 4.5 hours if they have salvageable tissue? Th
 *   **Wake-Up Stroke:** Provided evidence for treating wake-up strokes guided by CTP (alternative to the MRI DWI-FLAIR mismatch strategy from WAKE-UP trial).
 *   **Clinical Implementation:** Many centers now utilize this protocol for patients < 9 hours who are not thrombectomy candidates (e.g., distal occlusions) but have favorable perfusion profiles.
 
-*Source: [Ma et al. (NEJM 2019)](https://www.nejm.org/doi/full/10.1056/NEJMoa1910355)*
+*Source: [Ma et al. (NEJM 2019)](https://www.nejm.org/doi/full/10.1056/NEJMoa1813046)*
 `
   },
   'thaws-trial': {
