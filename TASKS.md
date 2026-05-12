@@ -83,6 +83,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - [2026-05-08] `harmSignal` claim tagging (6 entries): POINT, SAMMPRIS, SPS3, SPARCL, THALES, INSPIRES — each needs adjacent `claimId` + registry record with `quoted_text` per §13.4 Phase 1. Status: blocked:awaiting-registry-population until W5.2 lands. (parked during: Batch 3 Wave 2 data population)
 - [2026-05-08] OPTIMAS 2pp NI margin + INSPIRES bleeding HR (2.08, 1.07–4.04) citation trail: when W5.2 lands, add full citation records (Werring Lancet 2024 PMID 39491870; Gao NEJM 2023 PMID 38157499) with `quoted_text` to registry. (parked during: Batch 3 Wave 2 data population)
 - [2026-05-11] `time-is-brain-deep` pearl (strokeClinicalPearls.ts line 86) still contains "NINDS trial: Treatment <90min had 50% vs 38% good outcome at 3 months" — same misattribution corrected in Phase 1C (ninds-trial pearl). The 50%/38% is the Part 2 overall Barthel ≥95 result; the <90min time-stratified benefit analysis is from Marler et al. 2000 (Neurology 2000;55:1649-1655, PMID 11113218). Fix: either re-source to Marler 2000 with adjusted OR data, or replace with Emberson 2014 pooled time-benefit framing. Class E follow-up. (parked during: Phase 1C audit remediation)
+- [2026-05-11] Data-layer NNT prose cleanup for ordinal-shift trials — Class E follow-up from Phase 2A. DEFUSE-3 (trialData.ts lines 4628–4633, 4648), SELECT2 (lines 4791–4793), ANGEL-ASPECT (lines 4868–4870) contain nntExplanation/pearl/legend.keyStat NNT statements that are statistically invalid for ordinal common-OR designs. Fix: replace with ordinal-appropriate cOR framing OR gate every consumer behind stats.suppressNNT. Trial-statistician sign-off required. (parked during: Phase 2A audit remediation)
 - [2026-05-01] Timeline view (/trials/timeline) — Class D. Chronological display of all 79 trials by year. New route, new view toggle state. No clinical content change. (parked during: W7.1 spec amendment)
 - [2026-05-01] Long-press to favourite on mobile — Class C. 500ms long-press on a TrialLegendCard triggers the favourite toggle without navigating to the detail page. Requires pointer event handling in TrialLegendCard. (parked during: W7.1 spec amendment)
 
@@ -599,7 +600,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 2A — Gate NNT at 8 TrialPageNew render sites behind suppressNNT — Class E
 - **Priority:** P0
-- **Status:** planned
+- **Status:** [x] merged — commit `fccf4f5` · 2026-05-11
 - **User-visible goal:** DEFUSE-3, SELECT-2, ANGEL-ASPECT (ordinal-shift designs) no longer display NNT chips — statistically invalid for ordinal common OR outcomes
 - **Non-goals:** no changes to `suppressNNT` useMemo logic (already correct per Wave 3 Batch 2); no new trial data added
 - **Owner agents:** trial-statistician (audit + sign-off) → medical-scientist → clinical-reviewer
