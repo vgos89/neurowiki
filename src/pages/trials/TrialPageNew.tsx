@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState, Suspense } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { useBackNavigation } from '../../hooks/useBackNavigation';
 import { useRecents } from '../../hooks/useRecents';
@@ -11,16 +11,42 @@ import { MEDICAL_GLOSSARY } from '../../data/medicalGlossary';
 import { addTooltips } from '../../utils/addTooltips';
 import { buildHouseConclusion } from '../../utils/trialNarrative';
 import { categoryNames, categoryStyles, findTrialById } from '../../data/trialListData';
-import { TrialVisualizationSection } from '../../components/trials/TrialVisualizations';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { DeltaBandChart } from '../../components/trials/archetypes/DeltaBandChart';
-import { GrottaBarChart } from '../../components/trials/archetypes/GrottaBarChart';
-import { BenchmarkThresholdChart } from '../../components/trials/archetypes/BenchmarkThresholdChart';
+const TrialVisualizationSectionLazy = React.lazy(() =>
+  import('../../components/trials/TrialVisualizations')
+    .then(m => ({ default: m.TrialVisualizationSection }))
+);
+const DeltaBandChartLazy = React.lazy(() =>
+  import('../../components/trials/archetypes/DeltaBandChart')
+    .then(m => ({ default: m.DeltaBandChart }))
+);
+const GrottaBarChartLazy = React.lazy(() =>
+  import('../../components/trials/archetypes/GrottaBarChart')
+    .then(m => ({ default: m.GrottaBarChart }))
+);
+const BenchmarkThresholdChartLazy = React.lazy(() =>
+  import('../../components/trials/archetypes/BenchmarkThresholdChart')
+    .then(m => ({ default: m.BenchmarkThresholdChart }))
+);
+const MarkdownSectionLazy = React.lazy(() => import('../../components/trials/MarkdownSection'));
 import { SubgroupWell } from '../../components/trials/SubgroupWell';
 import { TeachingWell } from '../../components/trials/TeachingWell';
 import { BottomLineDrawer } from '../../components/trials/BottomLineDrawer';
 import { HistoricalContextSection } from '../../components/trials/HistoricalContextSection';
+
+function ChartFallback() {
+  return <div className="h-32 bg-slate-100 dark:bg-slate-700 rounded-xl animate-pulse" aria-hidden="true" />;
+}
+
+// Suspense-wrapped local aliases — same API as the originals; no usage-site changes needed.
+function DeltaBandChart(props: React.ComponentProps<typeof DeltaBandChartLazy>) {
+  return <Suspense fallback={<ChartFallback />}><DeltaBandChartLazy {...props} /></Suspense>;
+}
+function GrottaBarChart(props: React.ComponentProps<typeof GrottaBarChartLazy>) {
+  return <Suspense fallback={<ChartFallback />}><GrottaBarChartLazy {...props} /></Suspense>;
+}
+function BenchmarkThresholdChart(props: React.ComponentProps<typeof BenchmarkThresholdChartLazy>) {
+  return <Suspense fallback={<ChartFallback />}><BenchmarkThresholdChartLazy {...props} /></Suspense>;
+}
 
 function sanitizeLegacyTrialContent(
   content: string,
@@ -7008,7 +7034,9 @@ const TrialPageNew: React.FC = () => {
               </div>
             )}
 
-            <TrialVisualizationSection visualizations={visualizations} />
+            <Suspense fallback={<ChartFallback />}>
+              <TrialVisualizationSectionLazy visualizations={visualizations} />
+            </Suspense>
 
             {/* Clinical Context Section */}
             {trialMetadata?.clinicalContext && (
@@ -7234,48 +7262,9 @@ const TrialPageNew: React.FC = () => {
             {/* Trial Content */}
             {sanitizedTrialContent && (
               <div className="prose prose-lg dark:prose-invert max-w-none">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-slate-900 dark:text-white mt-8 mb-4" {...props} />,
-                    h3: ({node, ...props}) => <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-6 mb-3" {...props} />,
-                    p: ({node, ...props}) => <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4" {...props} />,
-                    ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-2 mb-4 text-slate-700 dark:text-slate-300" {...props} />,
-                    strong: ({node, ...props}) => <strong className="font-bold text-slate-900 dark:text-white" {...props} />,
-                    a: ({node, href, children, ...props}) => {
-                      if (href?.startsWith('/')) {
-                        return (
-                          <Link
-                            to={href}
-                            className="text-neuro-600 dark:text-neuro-400 font-medium underline underline-offset-2 hover:opacity-80"
-                            {...props}
-                          >
-                            {children}
-                          </Link>
-                        );
-                      }
-
-                      return (
-                        <a
-                          href={href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-neuro-600 dark:text-neuro-400 font-medium underline underline-offset-2 hover:opacity-80"
-                          {...props}
-                        >
-                          {children}
-                        </a>
-                      );
-                    },
-                    table: ({node, ...props}) => <div className="overflow-x-auto mb-6"><table className="w-full text-sm border-collapse border border-slate-200 dark:border-slate-700" {...props} /></div>,
-                    thead: ({node, ...props}) => <thead className="bg-slate-50 dark:bg-slate-800" {...props} />,
-                    th: ({node, ...props}) => <th className="border border-slate-200 dark:border-slate-700 px-3 py-2 text-left font-semibold text-slate-900 dark:text-white" {...props} />,
-                    td: ({node, ...props}) => <td className="border border-slate-200 dark:border-slate-700 px-3 py-2 text-slate-700 dark:text-slate-300" {...props} />,
-                    tr: ({node, ...props}) => <tr className="even:bg-slate-50 even:dark:bg-slate-800/50" {...props} />,
-                  }}
-                >
-                  {sanitizedTrialContent}
-                </ReactMarkdown>
+                <Suspense fallback={<ChartFallback />}>
+                  <MarkdownSectionLazy content={sanitizedTrialContent} />
+                </Suspense>
               </div>
             )}
 
