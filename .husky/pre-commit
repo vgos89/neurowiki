@@ -1,3 +1,4 @@
 set -e
+npm run typecheck
 npm run check:claims
 npm run check:routes
