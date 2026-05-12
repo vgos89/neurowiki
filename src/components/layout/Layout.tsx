@@ -43,7 +43,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </a>
 
       {/* LAYOUT_SPEC §6.3 — shell composition */}
-      <div className="md:flex h-screen overflow-hidden bg-white dark:bg-slate-900">
+      <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-white dark:bg-slate-900">
         {/* Desktop left rail — LAYOUT_SPEC §6.1 (hidden below md:) */}
         <DesktopRail />
 
