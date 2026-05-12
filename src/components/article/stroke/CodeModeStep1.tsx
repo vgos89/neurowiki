@@ -347,18 +347,21 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
         </div>
 
         {weightKg > 0 && (
-          <div className="grid grid-cols-2 gap-2">
-            <div className="p-3 rounded-lg bg-neuro-50 border border-neuro-100">
-              <p className="text-[9px] font-bold uppercase tracking-widest text-neuro-500 mb-1">tPA</p>
-              <p className="text-base font-semibold text-neuro-700">{tpaDose} mg</p>
-              <p className="text-[10px] text-neuro-500">{tpaBolus} bolus + {tpaInfusion} inf</p>
+          <>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="p-3 rounded-lg bg-neuro-50 border border-neuro-100">
+                <p className="text-[9px] font-bold uppercase tracking-widest text-neuro-500 mb-1">tPA</p>
+                <p className="text-base font-semibold text-neuro-700">{tpaDose} mg</p>
+                <p className="text-[10px] text-neuro-500">{tpaBolus} bolus + {tpaInfusion} inf</p>
+              </div>
+              <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-100">
+                <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-600 mb-1">TNK</p>
+                <p className="text-base font-semibold text-emerald-700">{tnkDose} mg</p>
+                <p className="text-[10px] text-emerald-500">Single bolus</p>
+              </div>
             </div>
-            <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-100">
-              <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-600 mb-1">TNK</p>
-              <p className="text-base font-semibold text-emerald-700">{tnkDose} mg</p>
-              <p className="text-[10px] text-emerald-500">Single bolus</p>
-            </div>
-          </div>
+            <p className="text-[10px] text-slate-400 italic mt-1">Reference only — verify against institutional protocol before administration.</p>
+          </>
         )}
       </div>
 

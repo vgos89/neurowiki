@@ -292,6 +292,11 @@ const NihssCalculator: React.FC = () => {
         </div>
       </div>
 
+      {/* Disclaimer */}
+      <footer className="mt-4 px-1 pb-6 pt-4 border-t border-slate-100 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+        <strong>Educational use only.</strong> This tool is for clinical decision support and education. It is not a substitute for professional medical judgment. Do not enter patient-identifying information. Verify independently when used in patient care.
+      </footer>
+
       {/* Toast */}
       {toastMessage && (
         <div className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-xl text-sm font-bold animate-in fade-in zoom-in-95 duration-200 z-[60] whitespace-nowrap">

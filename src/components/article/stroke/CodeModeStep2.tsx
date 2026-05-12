@@ -266,6 +266,9 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
               </button>
             ))}
           </div>
+          {weightKg > 0 && (
+            <p className="mt-2 text-[10px] text-slate-400 italic">Reference only — verify against institutional protocol before administration.</p>
+          )}
         </div>
       )}
 
