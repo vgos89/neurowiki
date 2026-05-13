@@ -52,12 +52,9 @@ V decides remaining blockers. Most likely path: ship Hemphill-only registry entr
 
 *Swarm architecture:* medical-scientist used Tier 1/2 workflow correctly (a276442), produced properly-formatted Tier 2 request, stopped at checkpoint per protocol.
 
-### L5.5 — Calculator compliance check swarm — Class B read-only
-- **Status:** planned
-- **Goal:** read 7 non-GCS/non-ICH calculators against CALCULATOR_SPEC.md v1.1. Produce prioritized rebuild list.
-- **Files:** src/pages/Abcd2ScoreCalculator.tsx, AspectScoreCalculator.tsx, BostonCriteriaCaaCalculator.tsx, HasBledScoreCalculator.tsx, HeidelbergBleedingCalculator.tsx, NihssCalculator.tsx, RopeScoreCalculator.tsx
-- **Not in scope:** clinical content audit, rebuilds themselves
-- **Rollback:** no writes to source
+### L5.5 — Calculator compliance check swarm — Class C — DONE commit 1985940
+- **Status:** merged
+- **What shipped:** Full audit of ABCD2, GCS, Heidelberg, NIHSS, IchScore, ASPECTS, HAS-BLED, RoPE, Boston Criteria against CALCULATOR_SPEC.md v1.1. Drawer content-order bug fixed in ABCD2 (d430936), NIHSS (d430936), IchScore (d83695b), GCS, ABCD2, Heidelberg (1985940). Chevron direction regression (introduced in d430936) reverted in NIHSS + IchScore (1985940). --nav-rail-width CSS variable defined (72bb1ba) fixing desktop sidebar overlap across all 5 portal-drawer calculators. ASPECTS, HAS-BLED, RoPE, Boston Criteria have no portal drawer — tracked as L5.5b below.
 
 ## BLOCKED
 (none)
@@ -68,7 +65,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - [2026-04-17] Evaluate Claude Design (Anthropic Labs research preview, launched 2026-04-17) for potential integration with design-prototyper workflow. Currently research preview with ~50% reliability on complex tasks; revisit when maturity improves (~3-6 months). Could replace or augment HTML mockup authoring at docs/specs/mockups/. (parked during: W5.1 / end-of-session cleanup)
 - [2026-04-22] W6.5 — Archetype B/Grotta Bar + DISTAL trial rebuild. DISTAL is a non-inferiority/negative MeVO trial; requires Grotta Bar component (mRS distribution shift) before page can be built. Park until Archetype B component is implemented. (parked during: W6 10-trial Archetype A rebuild)
 - [2026-04-22] W6.6 — Archetype G + WEAVE trial rebuild. WEAVE is a single-arm safety registry; requires Archetype G (single-arm registry display) before page can be built. Park until Archetype G component is implemented. (parked during: W6 10-trial Archetype A rebuild)
-- [2026-04-21] Patch C desktop drawer fix (--nav-rail-width) still needed for HeidelbergBleedingCalculator and ABCD2 calculator inline createPortal drawers — same left-0 bug. Out of scope this patch (only GCS + ICH were explicitly included). Tracked for next calculator audit wave. (parked during: Patches A/B/C)
+- [2026-04-21] [DONE — commit 72bb1ba] Patch C desktop drawer fix (--nav-rail-width) — defined CSS variable in index.css; NIHSS hardcoded left:0 also fixed. All 5 portal-drawer calculators now clear the desktop rail. (parked during: Patches A/B/C)
 - [2026-04-21] Consider adding `clinicalQuestion?: string` field to TrialMetadata schema (trialData.ts) so the §1.3 question lede can be data-driven rather than hardcoded per trial page. Not urgent — only EXTEND page exists today. (parked during: Patches A/B/C)
 - [2026-04-28] [DONE — commit 142815e] Four conflicting legend values resolved: NINDS (+15/100, NNT 6.5), ESCAPE (+24/100, NNT 4.2), DEFUSE-3 (+28/100, NNT 3.6), DAWN (+36/100, NNT 2.8). All sourced from efficacyResults and calculations.nnt in trialData.ts. No conflicts with existing data.
 - [2026-04-28] [DONE — spec commit TBD] TRIALS_SPEC.md v1.4 — Part II (legend listing page) added. Covers Toggle, Chip, TrialLegendCard components; 6 tokens; effectiveView pattern; NNT-as-stat backfill recipe; dynamic-route validator fix. (parked during: W7.1 legend slice + page rebuild)
@@ -939,21 +936,29 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 ---
 
-### Phase 7E — NIHSS normal exam shortcut — Class C
+### Phase 7E — NIHSS normal exam shortcut + live State B drawer — Class C — DONE commit 9c52fe9
+- **Status:** merged
+- **What shipped:** "Normal exam" shortcut button (sets all 15 items to 0, opens drawer). Live State B drawer — interpretation updates as user scores items before completing all 15. Drawer now shows severity label + running NIHSS total in real time.
+
+### L5.5b — Add portal drawer to ASPECTS, HAS-BLED, RoPE, Boston Criteria — Class C
 - **Priority:** P1
-- **Status:** planned — awaiting V approval
-- **User-visible goal:** Clinicians with a normal exam can complete the NIHSS in one tap instead of clicking 15 "0" options; drawer triggers completion immediately
-- **Non-goals:** no scoring logic changes; no clinical content changes; no new interpretation text
-- **Owner agents:** ui-architect · mobile-first-developer
-- **Files likely touched:** `src/pages/NihssCalculator.tsx` (add "Mark as Normal Exam" button that sets all items answered at 0; hook into existing `answeredItems` state)
-- **Files forbidden:** `src/components/NihssItemCard.tsx` scoring logic · `src/data/`
-- **Required artifacts:** none (Class C non-clinical)
-- **Acceptance checks:** button sets all 15 items to answered state · drawer transitions to state C (complete) · severity shows "none" · individual items still editable after shortcut · 44px touch target · tsc clean · build green
-- **Context:** Drawer shell from Phase 7D.1 is ready; this UX gap was identified 2026-05-13. Precedent: existing "Normal all motor" shortcut in the old NIHSS (spec §3.5). See docs/CONTENT_AUDIT.md §1.1.
+- **Status:** planned
+- **User-visible goal:** Four calculators (ASPECTS, HAS-BLED, RoPE, Boston Criteria) show interpretation in a persistent bottom drawer matching CALCULATOR_SPEC.md §1.3 + §5 state machine, consistent with the other 5 calculators.
+- **Non-goals:** no clinical interpretation text changes (Class E); drawer shell only — severity label + stat from existing result objects
+- **Files likely touched:** `src/pages/AspectScoreCalculator.tsx`, `src/pages/HasBledScoreCalculator.tsx`, `src/pages/RopeScoreCalculator.tsx`, `src/pages/BostonCriteriaCaaCalculator.tsx`
+- **Acceptance checks:** each calculator shows State A muted drawer → State C tappable drawer on completion · content-before-button DOM order · left: var(--nav-rail-width, 0px) · tsc clean · build green
+- **Clinical impact:** none (no interpretation copy changes)
+- **Rollback:** n/a
 
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-13 — L5.5 + Phase 7E session — commits 9c52fe9, d430936, 72bb1ba, d83695b, 1985940
+  - Phase 7E (9c52fe9): NIHSS normal-exam shortcut + live State B drawer
+  - NIHSS design audit (d430936): emerald severity tokens, drawer content-order, State A text, py-3 header, flush-left shortcut, chevron regression introduced
+  - Desktop drawer fix (72bb1ba): --nav-rail-width: 224px defined in index.css; NIHSS left:0 → var(); all 5 portal-drawer calculators clear desktop rail
+  - IchScore drawer order (d83695b): content-before-button; chevron regression introduced
+  - L5.5 (1985940): ABCD2 + GCS + Heidelberg content-before-button; NIHSS + IchScore chevron regressions reverted; QA: tsc clean · build green · claims pass · routes 42/42
 - [x] 2026-05-13 — Phase 4D — Privacy/Terms/Accessibility pages (Class C) — commit 6090937
   - 3 new page components: src/pages/PrivacyPage.tsx, src/pages/TermsPage.tsx, src/pages/AccessibilityPage.tsx
   - src/App.tsx: 3 new lazy route imports + ROUTE_COMPONENTS entries for /privacy, /terms, /accessibility
