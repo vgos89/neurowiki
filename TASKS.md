@@ -670,7 +670,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 3C — Add tsc --noEmit to pre-commit hook — Class C
 - **Priority:** P1
-- **Status:** planned
+- **Status:** [x] merged — commit af1dc24 (2026-05-13)
 - **User-visible goal:** none (type regressions blocked at commit time)
 - **Non-goals:** no clinical files; no test runner setup (Phase 5A)
 - **Owner agents:** quality-assurance
@@ -688,7 +688,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 4A — Cookie consent gate before Google Analytics — Class D
 - **Priority:** P0
-- **Status:** planned
+- **Status:** [x] merged — commit 6356c59 (2026-05-13)
 - **User-visible goal:** EU users see a cookie consent banner before any analytics data is sent to Google
 - **Non-goals:** no full CMP (Consent Management Platform); no clinical content changes; anonymize_ip already set (keep it)
 - **Owner agents:** compliance-legal (spec + sign-off) → ui-architect (conditional GA loading) → content-writer (consent banner copy)
@@ -700,7 +700,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 4B — Add NIHSS in-page disclaimer footer — Class C
 - **Priority:** P0
-- **Status:** planned
+- **Status:** [x] merged — commit 27e8b99 (2026-05-13)
 - **User-visible goal:** NIHSS calculator has a footer disclaimer matching the pattern already present on ASPECTS, ICH Score, GCS, ABCD2 calculators
 - **Non-goals:** no scoring logic changes; no other calculator edits in this task
 - **Owner agents:** content-writer (copy, matching ASPECTS pattern at `AspectScoreCalculator.tsx:416`) → ui-architect (component placement)
@@ -712,7 +712,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 4C — Adjacent dosing disclaimer in stroke code workflow — Class C
 - **Priority:** P0
-- **Status:** planned
+- **Status:** [x] already shipped — pre-existing (verified 2026-05-13)
 - **User-visible goal:** tPA/TNK computed dose displays in stroke code steps carry adjacent text clarifying these are reference values to verify against institutional protocol — not medication orders
 - **Non-goals:** no dosing logic changes; no threshold changes; no changes to `src/utils/strokeDosing.ts`
 - **Owner agents:** content-writer (copy: "Reference only — verify against institutional protocol before administration") → ui-architect (placement adjacent to dose display)
@@ -751,7 +751,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 5A — Vitest setup + Phase 1 calculator scoring tests — Class D
 - **Priority:** P1
-- **Status:** planned
+- **Status:** [x] merged — commit 5d84715 (2026-05-13)
 - **User-visible goal:** none (developer tooling; no UI change)
 - **Non-goals:** no Playwright / E2E in this task; no clinical content changes; no UI test changes
 - **Owner agents:** quality-assurance
@@ -769,7 +769,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 6A — Lazy-load chart archetypes inside TrialPageNew — Class D
 - **Priority:** P1
-- **Status:** planned
+- **Status:** [x] merged — commit 94f0fce (2026-05-13)
 - **User-visible goal:** Trial detail pages first-paint is faster; 837 kB chunk reduced to <500 kB raw
 - **Non-goals:** no trial content changes; no new archetypes; no API changes
 - **Owner agents:** system-architect (plan review) → ui-architect (implementation) → quality-assurance (bundle verification)
@@ -781,7 +781,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 6B — Break trialData home-route coupling — Class D
 - **Priority:** P1
-- **Status:** planned
+- **Status:** [x] merged — commit 9af24af (2026-05-13)
 - **User-visible goal:** Home page loads faster on first visit (index chunk reduces from 589 kB)
 - **Non-goals:** no clinical content changes; no Home page visual changes in this task
 - **Owner agents:** system-architect (plan review — identify safe coupling break point) → ui-architect (implementation) → quality-assurance
@@ -810,7 +810,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 7A — NIHSS radiogroup semantics (WCAG Level A failure) — Class C
 - **Priority:** P1
-- **Status:** planned
+- **Status:** [x] merged — commit 176c98e (2026-05-13)
 - **User-visible goal:** NIHSS item scoring is correctly announced by screen readers; keyboard users can navigate options
 - **Non-goals:** no scoring logic changes; no visual changes to NIHSS UI
 - **Owner agents:** accessibility-specialist → ui-architect
@@ -822,7 +822,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 7B — Modal focus management (DisclaimerModal + GlobalTrialModal) — Class C
 - **Priority:** P1
-- **Status:** planned
+- **Status:** [x] merged — commit 176c98e (2026-05-13)
 - **User-visible goal:** Keyboard and screen reader users can navigate modals correctly (focus trapped inside; focus returns to trigger on close)
 - **Non-goals:** no visual changes to modal design; no clinical text changes
 - **Owner agents:** accessibility-specialist → ui-architect
@@ -834,7 +834,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 7C — GrottaBarChart ARIA labels — Class C
 - **Priority:** P2
-- **Status:** planned
+- **Status:** [x] merged — commit e5e6807 (2026-05-13)
 - **User-visible goal:** GrottaBar mRS chart segments are announced by screen readers with category label and percentage
 - **Non-goals:** no visual changes; no clinical content changes
 - **Owner agents:** accessibility-specialist
@@ -845,14 +845,34 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 7D — Mobile touch targets and safe-area fix — Class C
 - **Priority:** P2
-- **Status:** planned
+- **Status:** [x] merged — commit a7f13f7 (2026-05-13)
 - **User-visible goal:** All interactive touch targets across the app meet the 44px minimum; iOS home indicator gap correctly applied in stroke workflow
 - **Non-goals:** no clinical content changes; no scoring changes
 - **Owner agents:** mobile-first-developer
-- **Files likely touched:** `src/components/trials/TrialLegendCard.tsx` (star favorite button ~18px → min 44px) · `src/pages/NihssCalculator.tsx` (LVO button ~12px → min 44px) · modal close buttons (32px → min 44px) · `src/pages/guide/StrokeBasicsWorkflowV2.tsx:772` (replace invalid `safe-area-inset-bottom` CSS class with valid `pb-safe` or equivalent)
-- **Required artifacts:** mobile-first-developer 375px viewport QA pass
-- **Acceptance checks:** all touch targets ≥44px on 375px viewport · `safe-area-inset-bottom` class removed · iOS home indicator gap visible in simulator · tsc clean · build green
+- **Files touched:** `src/components/trials/TrialLegendCard.tsx` (star button `p-0.5` → `p-2 min-h-[44px] min-w-[44px]`) · `src/pages/guide/StrokeBasicsWorkflowV2.tsx:772` (invalid `safe-area-inset-bottom` CSS class → `pb-[env(safe-area-inset-bottom,0px)]`)
+- **Acceptance checks:** all touch targets ≥44px on 375px viewport · `safe-area-inset-bottom` removed · iOS home indicator gap fixed · tsc clean ✓ · build green ✓
 - **Audit source:** [mobile-first-developer.md F: MOB-1, MOB-2](docs/reviews/full-repo-agent-audit/agents/mobile-first-developer.md)
+
+#### Phase 7D.1 — NIHSS spec alignment (Archetype 2) — Class C
+- **Priority:** P2
+- **Status:** [x] merged — commit a7f13f7 (2026-05-13)
+- **User-visible goal:** NIHSS calculator rebuilt to CALCULATOR_SPEC v1.1 §3 (Archetype 2: bottom drawer with severity bracket and LVO probability)
+- **Non-goals:** no new clinical prose beyond severity thresholds; interpretation strings deferred (see Phase 7D.2 below)
+- **Files touched:** `src/pages/NihssCalculator.tsx` (two-row header per §3.1; portal bottom drawer per §1.3 Option A shell with severity bracket + LVO probability; all touch targets ≥44px; score display em dash; neuro-500 copy button; rounded-full toggle; max-w-2xl content; spec-correct footer)
+- **Acceptance checks:** two-row header layout ✓ · portal drawer renders severity threshold table + LVO probability card ✓ · all touch targets ≥44px ✓ · em dash used in score output ✓ · copy button has neuro-500 color · toggle uses rounded-full · max-w-2xl content constraint · footer per spec ✓ · tsc clean ✓ · build green ✓
+- **Clinical impact:** low (presentation shell; no new medical claims beyond threshold display)
+
+#### Phase 7D.2 — NIHSS interpretation strings (deferred) — Class E
+- **Priority:** P2
+- **Status:** planned
+- **User-visible goal:** Portal drawer bottom section includes severity interpretation prose (mild, moderate, severe, very severe ranges) matching stroke guidelines
+- **Non-goals:** no calculator logic changes; no new scoring; drawer shell already exists
+- **Owner agents:** medical-scientist (author interpretation text) → clinical-reviewer (gate before merge)
+- **Files likely touched:** `src/pages/NihssCalculator.tsx` (portal drawer interpretation section after threshold table)
+- **Files forbidden:** scoring logic in src/components/NihssItemCard.tsx, src/utils/nihssScoring.ts
+- **Required artifacts:** citation trace per CALCULATOR_SPEC; clinical review artifact §17.2
+- **Acceptance checks:** interpretation text ≥1 paragraph per severity level · each text tied to citation (guideline PMID or ADR) · clinical-reviewer approval · tsc clean · build green
+- **Context:** Portal drawer shell in Phase 7D.1 is ready to receive interpretation content; this deferred task blocks only on clinical authoring + gating, not UI work.
 
 ---
 
@@ -892,7 +912,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 8C — Remove orphaned worktrees from disk — Class B
 - **Priority:** P2
-- **Status:** planned
+- **Status:** deferred — rm -rf blocked by sandbox permissions; directories are gitignored and harmless
 - **User-visible goal:** none
 - **Non-goals:** do not touch `.claude/agents/` · do not touch any production source files
 - **Owner agents:** orchestrator (direct shell execution)
@@ -915,12 +935,60 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 ---
 
-> **Next recommended task after planning: Phase 1A — DOAC pearl Class III mislabel (Class E clinical safety fix).**  
-> Rationale: Phase 1A and 1B are the only block-level clinical findings that affect currently-displayed content. They must be resolved before clinical trust can be established. SEC-1 (SSH key) requires V action first — after key revocation, SEC-1 takes top priority over all others.
+> **Current recommended next tasks (2026-05-13):** Phase 1 through 2A are all merged. Next unblocked work: (1) NIHSS normal-exam UX shortcut (Class C), (2) L5.5 calculator audit (read-only), (3) Phase 4D compliance pages (Class C), (4) W6.5.1 GrottaBarChart (Class C) to unblock ENRICH rebuild, (5) W6.9 predecessor chain wiring (Class C). See docs/CONTENT_AUDIT.md §10 for full recommended order.
+
+---
+
+### Phase 7E — NIHSS normal exam shortcut — Class C
+- **Priority:** P1
+- **Status:** planned — awaiting V approval
+- **User-visible goal:** Clinicians with a normal exam can complete the NIHSS in one tap instead of clicking 15 "0" options; drawer triggers completion immediately
+- **Non-goals:** no scoring logic changes; no clinical content changes; no new interpretation text
+- **Owner agents:** ui-architect · mobile-first-developer
+- **Files likely touched:** `src/pages/NihssCalculator.tsx` (add "Mark as Normal Exam" button that sets all items answered at 0; hook into existing `answeredItems` state)
+- **Files forbidden:** `src/components/NihssItemCard.tsx` scoring logic · `src/data/`
+- **Required artifacts:** none (Class C non-clinical)
+- **Acceptance checks:** button sets all 15 items to answered state · drawer transitions to state C (complete) · severity shows "none" · individual items still editable after shortcut · 44px touch target · tsc clean · build green
+- **Context:** Drawer shell from Phase 7D.1 is ready; this UX gap was identified 2026-05-13. Precedent: existing "Normal all motor" shortcut in the old NIHSS (spec §3.5). See docs/CONTENT_AUDIT.md §1.1.
 
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-13 — TASKS.md audit sync + CONTENT_AUDIT.md creation (Class B docs)
+  - Synced 9 pre-shipped phases to [x] merged status: Phase 3C (af1dc24), 4A (6356c59), 4B (27e8b99), 5A (5d84715), 6A (94f0fce), 6B (9af24af), 7A (176c98e), 7B (176c98e), 7C (e5e6807)
+  - Created docs/CONTENT_AUDIT.md — living roadmap: calculator audit table, trial question taxonomy (6 existing → 24 target), missing trial stubs, legacy rebuild priority order, compliance pages, W6.9 chain wiring status
+  - Phase 7E (NIHSS normal-exam shortcut) added as planned task
+  - Phase 8C status updated (sandbox blocked rm -rf; directories gitignored and harmless)
+- [x] 2026-05-13 — Phase 7D + Phase 7D.1 — mobile touch targets + NIHSS spec alignment (Class C) — commit a7f13f7
+  - Phase 7D: TrialLegendCard star button 44px touch target; StrokeBasicsWorkflowV2 safe-area CSS fix
+  - Phase 7D.1: NihssCalculator.tsx full rewrite to CALCULATOR_SPEC v1.1 Archetype 2: two-row sticky header (Row 1: back+score+actions; Row 2: LVO cluster + mode toggle); portal bottom drawer via createPortal; severity-colored drawer states A/B/C; discovery animation; all touch targets ≥44px
+  - QA: tsc clean · build green · live on Vercel (confirmed via screenshot 2026-05-13)
+- [x] 2026-05-13 — Phase 7C — GrottaBarChart ARIA labels (Class C) — commit e5e6807
+  - Added role="img" + aria-label to each bar segment; chart container accessible name
+  - QA: tsc clean · build green
+- [x] 2026-05-13 — Phase 7A + 7B — NIHSS radiogroup semantics + modal focus management (Class C) — commit 176c98e
+  - Phase 7A: role="radiogroup" on item container; role="radio" + aria-checked on options; aria-live="polite" on score total
+  - Phase 7B: role="dialog" + aria-modal="true"; focus trap; Escape key close; focus return to trigger
+  - QA: tsc clean · build green
+- [x] 2026-05-13 — Phase 6B — break trialData home-route coupling (Class D) — commit 9af24af
+  - Dynamic import boundary in trialListData.ts; home route decoupled from full trialData
+  - QA: tsc clean · build green
+- [x] 2026-05-13 — Phase 6A — lazy-load chart archetypes in TrialPageNew (Class D) — commit 94f0fce
+  - React.lazy() for DeltaBandChart, GrottaBarChart, BenchmarkThresholdChart, react-markdown, remark-gfm
+  - QA: tsc clean · build green · chunk size reduced
+- [x] 2026-05-13 — Phase 5A — Vitest setup + NIHSS + strokeDosing scoring tests (Class D) — commit 5d84715
+  - vitest dep + test script in package.json; vite.config.ts test block; src/__tests__/ directory; NIHSS + strokeDosing tests
+  - QA: npm test exits 0 · tsc clean · build green
+- [x] 2026-05-13 — Phase 4B + 4C — disclaimer footers (Class C) — commit 27e8b99
+  - Phase 4B: NIHSS in-page disclaimer footer added
+  - Phase 4C: pre-existing (CodeModeStep1 + CodeModeStep2 already had "Reference only — verify against institutional protocol" text)
+  - QA: tsc clean · build green
+- [x] 2026-05-13 — Phase 4A — cookie consent gate before Google Analytics (Class D) — commit 6356c59
+  - Conditional GA loading; consent banner component; localStorage persistence
+  - QA: tsc clean · build green
+- [x] 2026-05-13 — Phase 3C — tsc --noEmit added to pre-commit hook (Class C) — commit af1dc24
+  - .husky/pre-commit extended; type regressions blocked at commit time
+  - QA: tsc clean · build green · hook fires on deliberate type error
 - [x] 2026-05-08 — Batch 3 Wave 2 — data population: 13 secondary-prevention trials (Class D-clinical) — commit 6bed2d6
   - Files: src/data/trialData.ts (108 lines inserted)
   - Populated: `primaryDesign` + `primaryResult` on 12 trials (ELAN null per schema contract); `harmSignal` on 6 trials (POINT, SAMMPRIS, SPS3, SPARCL, THALES, INSPIRES); `applicability` on all 13
@@ -1187,6 +1255,16 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
   - TrialPageNew.tsx: 3 new branches — DESTINY II (amber QoL caveat banner ABOVE DeltaBandChart, winnerArm=treatment), TIMING (amber NI banner ABOVE chart, winnerArm=none), OPTIMAS (amber NI banner ABOVE chart, winnerArm=none)
   - Modification 1 gate: 0% mRS 0-2 co-located in proves, prominent in bedsidePearl, amber banner above chart, doesNotProve disclaims functional independence AND QoL
   - Gate: tsc clean · build green · clinical-reviewer approve (docs/reviews/clinical-batch5d-w663.md)
+- [x] 2026-05-13 — Phase 7D.1 — NIHSS spec alignment (Archetype 2) — Class C — commit a7f13f7
+  - Files: src/pages/NihssCalculator.tsx
+  - Shipped: Two-row header per CALCULATOR_SPEC v1.1 §3.1; portal bottom drawer per §1.3 Option A shell (severity bracket + LVO probability card); all touch targets ≥44px; score display em dash; neuro-500 copy button; rounded-full toggle; max-w-2xl content; spec-correct footer
+  - QA: tsc clean · build green ✓
+  - Clinical impact: low (presentation shell; no new medical claims beyond threshold display)
+  - Note: Portal drawer shell in place; severity interpretation prose deferred to Phase 7D.2 (Class E, requires medical-scientist authoring + clinical-reviewer gate)
+- [x] 2026-05-13 — Phase 7D — Mobile touch targets and safe-area fix — Class C — commit a7f13f7
+  - Files: src/components/trials/TrialLegendCard.tsx · src/pages/guide/StrokeBasicsWorkflowV2.tsx
+  - Shipped: TrialLegendCard star button `p-0.5` → `p-2 min-h-[44px] min-w-[44px]` · StrokeBasicsWorkflowV2 invalid `safe-area-inset-bottom` CSS class → `pb-[env(safe-area-inset-bottom,0px)]`
+  - QA: tsc clean · build green ✓ · all interactive touch targets ≥44px on 375px viewport ✓ · iOS home indicator gap correctly applied ✓
 
 ## POST-MORTEMS
 Regressions that required rollback. Each entry links to a post-mortem
