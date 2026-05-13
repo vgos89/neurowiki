@@ -354,6 +354,8 @@ const Abcd2ScoreCalculator: React.FC = () => {
           boxShadow: isExpanded ? drawerExpandedShadow : drawerCollapsedShadow,
         }}
       >
+        {/* Content renders ABOVE the button so the handle stays at viewport bottom (§1.3) */}
+        {isExpanded && <DrawerContent />}
         <button
           type="button"
           onClick={() => setDrawerOpen(open => !open)}
@@ -390,8 +392,6 @@ const Abcd2ScoreCalculator: React.FC = () => {
             }
           />
         </button>
-
-        {isExpanded && <DrawerContent />}
       </div>
     );
   };

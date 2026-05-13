@@ -396,6 +396,8 @@ const GlasgowComaScaleCalculator: React.FC = () => {
           boxShadow: isExpanded ? drawerExpandedShadow : drawerCollapsedShadow,
         }}
       >
+        {/* Content renders ABOVE the button so the handle stays at viewport bottom (§1.3) */}
+        {isExpanded && <DrawerContent />}
         {/* Header row — collapses / expands on click */}
         <button
           type="button"
@@ -434,9 +436,6 @@ const GlasgowComaScaleCalculator: React.FC = () => {
             }
           />
         </button>
-
-        {/* Expanded content */}
-        {isExpanded && <DrawerContent />}
       </div>
     );
   };

@@ -398,7 +398,7 @@ const NihssCalculator: React.FC = () => {
             </div>
           </div>
           <Chevron
-            direction={isExpanded ? 'up' : 'down'}
+            direction={isExpanded ? 'down' : 'up'}
             className={
               isExpanded
                 ? SEVERITY_COLOR[severity]

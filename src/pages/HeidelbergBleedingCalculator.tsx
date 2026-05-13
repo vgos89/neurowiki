@@ -368,6 +368,8 @@ const HeidelbergBleedingCalculator: React.FC = () => {
           boxShadow: isExpanded ? drawerExpandedShadow : drawerCollapsedShadow,
         }}
       >
+        {/* Content renders ABOVE the button so the handle stays at viewport bottom (§1.3) */}
+        {isExpanded && <DrawerContent />}
         <button
           type="button"
           onClick={() => setDrawerOpen(open => !open)}
@@ -408,8 +410,6 @@ const HeidelbergBleedingCalculator: React.FC = () => {
             }
           />
         </button>
-
-        {isExpanded && <DrawerContent />}
       </div>
     );
   };

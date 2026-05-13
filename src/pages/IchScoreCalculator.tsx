@@ -409,9 +409,9 @@ const IchScoreCalculator: React.FC = () => {
               {result.label} · {result.stat}
             </div>
           </div>
-          {/* Chevron: up=expanded (content above, tap to close); down=collapsed (tap to open) */}
+          {/* Chevron: collapsed=up ^ (tap to open); expanded=down v (tap to close) — §5 spec */}
           <Chevron
-            direction={isExpanded ? 'up' : 'down'}
+            direction={isExpanded ? 'down' : 'up'}
             className={
               isExpanded
                 ? tokens.chevronClass
