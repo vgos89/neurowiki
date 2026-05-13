@@ -1,5 +1,7 @@
 import { LEGACY_TRIAL_CATALOG_META } from './trialCatalogMeta';
-import { TRIAL_DATA } from './trialData';
+// trialData.ts is intentionally NOT imported here (Phase 6B).
+// legend is populated lazily by each lazy route that needs it
+// (TrialsPage, QuestionDetailPage) — keeping it out of the home-page bundle.
 
 export type TrialCategoryKey =
   | 'prehospital-triage'
@@ -383,7 +385,7 @@ function enrichTrial(item: Omit<TrialItem, 'year'>): TrialItem {
   return {
     ...item,
     year: 0,
-    legend: TRIAL_DATA[item.id]?.legend,
+    // legend omitted — populated by lazy routes that need it (TrialsPage, QuestionDetailPage)
   };
 }
 
@@ -405,7 +407,7 @@ const restoredLegacyTrials: TrialItem[] = Object.entries(LEGACY_TRIAL_CATALOG_ME
       isPlaceholder: false,
       description: metadata.description,
       clinicalContext: metadata.clinicalContext,
-      legend: TRIAL_DATA[id]?.legend,
+      // legend: omitted — see Phase 6B comment at top of file
     };
   });
 

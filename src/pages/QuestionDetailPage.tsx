@@ -20,6 +20,7 @@ import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { TRIAL_QUESTIONS } from '../data/trial-questions';
 import { findTrialById, type TrialItem } from '../data/trialListData';
+import { TRIAL_DATA } from '../data/trialData'; // Phase 6B: legend deferred; lazy route imports directly
 import { TrialLegendCard } from '../components/trials/TrialLegendCard';
 import { useFavorites } from '../hooks/useFavorites';
 
@@ -105,9 +106,11 @@ export default function QuestionDetailPage() {
   }
 
   // Resolve trial IDs against the catalog. Unresolvable IDs are silently dropped.
+  // Enrich with legend data (Phase 6B: legend no longer in trialListData.ts).
   const resolvedTrials = question.trialIds
     .map((id) => findTrialById(id))
-    .filter((t): t is TrialItem => t !== undefined);
+    .filter((t): t is TrialItem => t !== undefined)
+    .map(t => ({ ...t, legend: TRIAL_DATA[t.id]?.legend }));
 
   const handleFavToggle = (id: string, _e: React.MouseEvent) => {
     toggleFavorite(id);

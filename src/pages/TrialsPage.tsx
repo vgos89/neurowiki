@@ -10,6 +10,11 @@ import {
   type TrialItem,
   type TrialCategoryKey,
 } from '../data/trialListData';
+// Phase 6B: trialData.ts no longer in home bundle — lazy routes import it directly.
+import { TRIAL_DATA } from '../data/trialData';
+// Enrich the catalog with legend data for card display and search.
+// Runs once when this lazy chunk loads, not on every render.
+const trialsWithLegend: TrialItem[] = trials.map(t => ({ ...t, legend: TRIAL_DATA[t.id]?.legend }));
 import { Toggle, type ToggleOption } from '../components/ui/Toggle';
 import { Chip } from '../components/ui/Chip';
 import { TrialLegendCard } from '../components/trials/TrialLegendCard';
@@ -126,7 +131,7 @@ export default function TrialsPage() {
   const effectiveView = searchQuery ? 'catalog' : view;
 
   // ── Filtering ─────────────────────────────────────────────────────────────
-  let filteredTrials = trials;
+  let filteredTrials = trialsWithLegend;
   if (showFavoritesOnly) {
     filteredTrials = filteredTrials.filter((t) => isFavorite(t.id));
   }
@@ -175,7 +180,7 @@ export default function TrialsPage() {
 
       {/* H1 */}
       <h1 className="text-[22px] md:text-[32px] font-medium text-slate-900 dark:text-white tracking-[-0.01em] leading-[1.25] md:leading-[1.2] mb-2 md:mb-2.5">
-        {trials.length} trials.
+        {trialsWithLegend.length} trials.
         <br className="md:hidden" />{' '}
         One search box.
       </h1>
@@ -322,7 +327,7 @@ export default function TrialsPage() {
 
           {/* Category pills */}
           {TRIAL_CATEGORY_IDS.map((cat) => {
-            const count = trials.filter((t) => t.category === cat).length;
+            const count = trialsWithLegend.filter((t) => t.category === cat).length;
             if (count === 0) return null;
             const isActive = activeCategory === cat;
             const color = CAT_COLOR[cat];
