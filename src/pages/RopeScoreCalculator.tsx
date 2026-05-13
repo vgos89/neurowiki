@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { createPortal } from 'react-dom';
 import { ArrowLeft, RefreshCw, Copy, Star } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
@@ -23,9 +23,50 @@ const defaultInputs: RoPEInputs = {
   corticalInfarct: false,
 };
 
+// ── Severity tokens ──────────────────────────────────────────────────────────
+
+type RoPESeverity = 'high' | 'moderate' | 'low';
+
+function getRoPESeverity(pct: number): RoPESeverity {
+  if (pct >= 60) return 'high';
+  if (pct >= 40) return 'moderate';
+  return 'low';
+}
+
+const ROPE_SEVERITY_TOKENS: Record<RoPESeverity, {
+  borderColor: string; headerBg: string; headerHover: string;
+  labelClass: string; statClass: string; chevronClass: string;
+}> = {
+  high: {
+    borderColor: '#6ee7b7', headerBg: 'bg-emerald-50', headerHover: 'hover:bg-emerald-100',
+    labelClass: 'text-[10px] font-bold text-emerald-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-emerald-700', chevronClass: 'text-emerald-600',
+  },
+  moderate: {
+    borderColor: '#fed7aa', headerBg: 'bg-amber-50', headerHover: 'hover:bg-amber-100',
+    labelClass: 'text-[10px] font-bold text-amber-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-amber-700', chevronClass: 'text-amber-600',
+  },
+  low: {
+    borderColor: '#e2e8f0', headerBg: 'bg-white', headerHover: 'hover:bg-slate-50',
+    labelClass: 'text-[10px] font-bold text-slate-500 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-slate-700', chevronClass: 'text-slate-400',
+  },
+};
+
+// ── Chevron sub-component ────────────────────────────────────────────────────
+
+const Chevron: React.FC<{ direction: 'up' | 'down'; className?: string }> = ({ direction, className = '' }) => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={className}>
+    {direction === 'up' ? <polyline points="18 15 12 9 6 15" /> : <polyline points="6 9 12 15 18 9" />}
+  </svg>
+);
+
 export default function RopeScoreCalculator() {
   const [inputs, setInputs] = useState<RoPEInputs>(defaultInputs);
   const [toast, setToast] = useState<string | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const { handleBack } = useNavigationSource();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { recordView } = useRecents();
@@ -44,6 +85,14 @@ export default function RopeScoreCalculator() {
   }, []);
 
   const result = calculateROPEScore(inputs);
+
+  // ── Drawer derived values ──────────────────────────────────────────────────
+  const drawerState: 'A' | 'C' = hasInteracted ? 'C' : 'A';
+  const ropeSeverity = getRoPESeverity(result.pfoAttributablePercent);
+  const tokens = ROPE_SEVERITY_TOKENS[ropeSeverity];
+  const isExpanded = drawerOpen;
+  const drawerCollapsedShadow = '0 -2px 12px rgba(15,23,42,0.08)';
+  const drawerExpandedShadow = '0 -4px 24px rgba(15,23,42,0.12)';
 
   const handleCopy = () => {
     const lines = [
@@ -65,6 +114,8 @@ export default function RopeScoreCalculator() {
 
   const handleReset = () => {
     setInputs(defaultInputs);
+    setDrawerOpen(false);
+    setHasInteracted(false);
     resetTracking();
     setToast('Reset');
     setTimeout(() => setToast(null), 1500);
@@ -80,12 +131,106 @@ export default function RopeScoreCalculator() {
 
   const isFav = isFavorite('rope');
 
-  const setAge = useCallback((v: RoPEAgeBand) => setInputs((p) => ({ ...p, ageBand: v })), []);
-  const setNoHypertension = useCallback((v: boolean) => setInputs((p) => ({ ...p, noHypertension: v })), []);
-  const setNoDiabetes = useCallback((v: boolean) => setInputs((p) => ({ ...p, noDiabetes: v })), []);
-  const setNoPriorStrokeTIA = useCallback((v: boolean) => setInputs((p) => ({ ...p, noPriorStrokeTIA: v })), []);
-  const setNonsmoker = useCallback((v: boolean) => setInputs((p) => ({ ...p, nonsmoker: v })), []);
-  const setCorticalInfarct = useCallback((v: boolean) => setInputs((p) => ({ ...p, corticalInfarct: v })), []);
+  const setAge = useCallback((v: RoPEAgeBand) => {
+    setHasInteracted(true);
+    setInputs((p) => ({ ...p, ageBand: v }));
+  }, []);
+  const setNoHypertension = useCallback((v: boolean) => {
+    setHasInteracted(true);
+    setInputs((p) => ({ ...p, noHypertension: v }));
+  }, []);
+  const setNoDiabetes = useCallback((v: boolean) => {
+    setHasInteracted(true);
+    setInputs((p) => ({ ...p, noDiabetes: v }));
+  }, []);
+  const setNoPriorStrokeTIA = useCallback((v: boolean) => {
+    setHasInteracted(true);
+    setInputs((p) => ({ ...p, noPriorStrokeTIA: v }));
+  }, []);
+  const setNonsmoker = useCallback((v: boolean) => {
+    setHasInteracted(true);
+    setInputs((p) => ({ ...p, nonsmoker: v }));
+  }, []);
+  const setCorticalInfarct = useCallback((v: boolean) => {
+    setHasInteracted(true);
+    setInputs((p) => ({ ...p, corticalInfarct: v }));
+  }, []);
+
+  // ── Drawer sub-components ──────────────────────────────────────────────────
+
+  const DrawerContent = () => (
+    <div
+      id="rope-drawer-content"
+      role="region"
+      aria-label="RoPE Score Interpretation"
+      className="max-h-[60vh] overflow-y-auto"
+    >
+      <div className="px-5 pt-4 pb-6">
+        <p className="text-xl font-semibold text-slate-900 leading-tight">
+          PFO-attributable fraction: {result.pfoAttributablePercent}%
+        </p>
+        <p className="text-slate-600 leading-relaxed mt-3">
+          Percentage of the cryptogenic stroke likely attributable to the PFO.
+          Higher RoPE = more likely PFO is causative; useful when considering PFO closure (RESPECT, CLOSE, REDUCE).
+          Use with imaging and cardiology input.
+        </p>
+        <div className="mt-5 pt-4 border-t border-slate-100">
+          <p className="text-xs text-slate-400 leading-relaxed">
+            <cite>{ROPE_CITATION.authors}. {ROPE_CITATION.title}. {ROPE_CITATION.journal}. {ROPE_CITATION.year};{ROPE_CITATION.volume}({ROPE_CITATION.issue}):{ROPE_CITATION.pages}.</cite>{' '}
+            <a href={`https://doi.org/${ROPE_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-neuro-600 hover:underline">DOI</a>
+          </p>
+          <p className="mt-2 text-xs text-slate-400 leading-relaxed">
+            Educational use only. Does not replace multidisciplinary decision-making for PFO closure.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const Drawer = () => {
+    if (drawerState === 'A') {
+      return (
+        <div className="bg-slate-100" style={{ boxShadow: drawerCollapsedShadow }} aria-hidden="true">
+          <div className="px-5 py-3.5 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Interpretation</div>
+              <div className="text-sm text-slate-500">0 of 6 selected</div>
+            </div>
+            <div className="text-xs text-slate-400">Appears when complete</div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div style={{ borderTop: `1px solid ${tokens.borderColor}`, boxShadow: isExpanded ? drawerExpandedShadow : drawerCollapsedShadow }}>
+        {/* Content before button — handle stays at viewport bottom */}
+        {isExpanded && <DrawerContent />}
+        <button
+          type="button"
+          onClick={() => setDrawerOpen(open => !open)}
+          aria-expanded={isExpanded}
+          aria-controls="rope-drawer-content"
+          className={`w-full flex items-center justify-between px-5 py-3.5 transition-colors ${
+            isExpanded ? `${tokens.headerBg} ${tokens.headerHover}` : 'bg-white hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className={isExpanded ? tokens.labelClass : 'text-[10px] font-bold text-slate-400 uppercase tracking-widest'}>
+              Interpretation
+            </div>
+            <div className={isExpanded ? tokens.statClass : 'text-sm font-medium text-slate-900'}>
+              PFO-attributable: {result.pfoAttributablePercent}%
+            </div>
+          </div>
+          <Chevron
+            direction={isExpanded ? 'down' : 'up'}
+            className={isExpanded ? tokens.chevronClass : 'text-slate-400 drawer-chevron-hint'}
+          />
+        </button>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -121,18 +266,8 @@ export default function RopeScoreCalculator() {
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 md:px-6 py-6 pb-12">
+      <main className="max-w-2xl mx-auto px-4 md:px-6 py-6 pb-4">
         <h1 className="sr-only">RoPE Score Calculator</h1>
-
-        <section className="mb-6 p-4 rounded-xl border border-slate-100 bg-white" aria-live="polite">
-          <h2 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Interpretation</h2>
-          <p className="text-slate-800 dark:text-slate-200 font-medium">
-            PFO-attributable fraction: <strong>{result.pfoAttributablePercent}%</strong>
-          </p>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-            Percentage of the cryptogenic stroke likely attributable to the PFO. Higher RoPE = more likely PFO is causative; useful when considering PFO closure (RESPECT, CLOSE, REDUCE). Use with imaging and cardiology input.
-          </p>
-        </section>
 
         <div className="space-y-6">
           <section aria-labelledby="rope-age-label">
@@ -175,12 +310,28 @@ export default function RopeScoreCalculator() {
             <strong>Educational use only.</strong> For cryptogenic stroke when PFO is detected or suspected. Does not replace multidisciplinary decision-making for PFO closure.
           </p>
         </footer>
+
+        {/* Drawer spacer */}
+        <div className={drawerOpen ? 'drawer-spacer-expanded' : 'drawer-spacer-collapsed'} />
       </main>
 
-      {toast && (
-        <div role="status" aria-live="polite" className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-5 py-2.5 rounded-full shadow-lg text-sm font-medium z-50">
+      {/* ── Drawer portal — fixed above mobile bottom nav ────────────────── */}
+      {createPortal(
+        <div
+          className="fixed right-0 z-[55] bg-white"
+          style={{ bottom: 'calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))', left: 'var(--nav-rail-width, 0px)' }}
+        >
+          <Drawer />
+        </div>,
+        document.body,
+      )}
+
+      {/* ── Toast notification — z-[60] above drawer ─────────────────────── */}
+      {toast && createPortal(
+        <div role="status" aria-live="polite" className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-5 py-2.5 rounded-full text-sm font-medium z-[60]">
           {toast}
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );

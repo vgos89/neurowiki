@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { createPortal } from 'react-dom';
 import { ArrowLeft, RefreshCw, Copy, Star } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
@@ -9,7 +9,6 @@ import { copyToClipboard } from '../utils/clipboard';
 import {
   HASBLED_CITATION,
   HASBLED_RISK_LABELS,
-  HASBLED_BLEEDS_PER_100,
   calculateHASBLEDScore,
   type HASBLEDInputs,
   type HASBLEDRisk,
@@ -46,9 +45,51 @@ const CHECKBOX_ITEMS: { key: keyof HASBLEDInputs; label: string; sublabel?: stri
   { key: 'alcohol', label: 'Alcohol (≥8 drinks/week)', sublabel: '1 pt' },
 ];
 
+// ── Severity tokens ──────────────────────────────────────────────────────────
+
+const HASBLED_SEVERITY_TOKENS: Record<HASBLEDRisk, {
+  borderColor: string; headerBg: string; headerHover: string;
+  labelClass: string; statClass: string; chevronClass: string;
+}> = {
+  low: {
+    borderColor: '#a7f3d0',
+    headerBg: 'bg-emerald-50', headerHover: 'hover:bg-emerald-100',
+    labelClass: 'text-[10px] font-bold text-emerald-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-emerald-700', chevronClass: 'text-emerald-600',
+  },
+  moderate: {
+    borderColor: '#fed7aa',
+    headerBg: 'bg-amber-50', headerHover: 'hover:bg-amber-100',
+    labelClass: 'text-[10px] font-bold text-amber-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-amber-700', chevronClass: 'text-amber-600',
+  },
+  high: {
+    borderColor: '#fca5a5',
+    headerBg: 'bg-red-50', headerHover: 'hover:bg-red-100',
+    labelClass: 'text-[10px] font-bold text-red-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-red-700', chevronClass: 'text-red-600',
+  },
+  very_high: {
+    borderColor: '#f87171',
+    headerBg: 'bg-red-100', headerHover: 'hover:bg-red-200',
+    labelClass: 'text-[10px] font-bold text-red-800 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-red-800', chevronClass: 'text-red-700',
+  },
+};
+
+// ── Chevron sub-component ────────────────────────────────────────────────────
+
+const Chevron: React.FC<{ direction: 'up' | 'down'; className?: string }> = ({ direction, className = '' }) => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={className}>
+    {direction === 'up' ? <polyline points="18 15 12 9 6 15" /> : <polyline points="6 9 12 15 18 9" />}
+  </svg>
+);
+
 export default function HasBledScoreCalculator() {
   const [inputs, setInputs] = useState<HASBLEDInputs>(defaultInputs);
   const [toast, setToast] = useState<string | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const { handleBack } = useNavigationSource();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { recordView } = useRecents();
@@ -68,6 +109,13 @@ export default function HasBledScoreCalculator() {
 
   const result = calculateHASBLEDScore(inputs);
   const riskColor = riskColors[result.risk];
+
+  // ── Drawer derived values ──────────────────────────────────────────────────
+  const drawerState: 'A' | 'C' = hasInteracted ? 'C' : 'A';
+  const tokens = HASBLED_SEVERITY_TOKENS[result.risk];
+  const isExpanded = drawerOpen;
+  const drawerCollapsedShadow = '0 -2px 12px rgba(15,23,42,0.08)';
+  const drawerExpandedShadow = '0 -4px 24px rgba(15,23,42,0.12)';
 
   const handleCopy = () => {
     const lines = [
@@ -93,6 +141,8 @@ export default function HasBledScoreCalculator() {
 
   const handleReset = () => {
     setInputs(defaultInputs);
+    setDrawerOpen(false);
+    setHasInteracted(false);
     resetTracking();
     setToast('Reset');
     setTimeout(() => setToast(null), 1500);
@@ -109,8 +159,98 @@ export default function HasBledScoreCalculator() {
   const isFav = isFavorite('has-bled');
 
   const setCheck = useCallback((key: keyof HASBLEDInputs, value: boolean) => {
+    setHasInteracted(true);
     setInputs((p) => ({ ...p, [key]: value }));
   }, []);
+
+  // ── Drawer sub-components ──────────────────────────────────────────────────
+
+  const DrawerContent = () => (
+    <div
+      id="hasbled-drawer-content"
+      role="region"
+      aria-label="HAS-BLED Interpretation"
+      className="max-h-[60vh] overflow-y-auto"
+    >
+      <div className="px-5 pt-4 pb-6">
+        {/* Interpretation */}
+        <p className="text-xl font-semibold text-slate-900 leading-tight">
+          {HASBLED_RISK_LABELS[result.risk]}
+        </p>
+        <p className="text-slate-600 leading-relaxed mt-2">
+          <strong>{result.bleedsPer100PatientYears}</strong> major bleeds per 100 patient-years.{' '}
+          {result.risk === 'low' && 'Low bleeding risk. Continue to address modifiable factors.'}
+          {result.risk === 'moderate' && 'Moderate risk. Address modifiable factors and monitor.'}
+          {(result.risk === 'high' || result.risk === 'very_high') && 'High risk. Fix modifiable risks (BP, alcohol, NSAIDs, INR control); do not withhold anticoagulation for stroke prevention alone.'}
+        </p>
+
+        {/* Important callout */}
+        <div className="mt-4 pl-3 border-l-2 border-amber-400">
+          <div className="text-[10px] font-bold text-amber-700 uppercase tracking-widest mb-1">Important</div>
+          <p className="text-sm text-slate-700 leading-relaxed">
+            HAS-BLED estimates bleeding risk; it does <strong>not</strong> mean &quot;do not anticoagulate.&quot;
+            Address modifiable risks (BP, alcohol, NSAIDs, labile INR) and use for monitoring—not to withhold anticoagulation.
+            Stroke risk (CHA₂DS₂-VASc) and shared decision-making drive anticoagulation.
+          </p>
+        </div>
+
+        <div className="mt-5 pt-4 border-t border-slate-100">
+          <p className="text-xs text-slate-400 leading-relaxed">
+            <cite>{HASBLED_CITATION.authors}. {HASBLED_CITATION.title}. {HASBLED_CITATION.journal}. {HASBLED_CITATION.year};{HASBLED_CITATION.volume}({HASBLED_CITATION.issue}):{HASBLED_CITATION.pages}.</cite>{' '}
+            <a href={`https://doi.org/${HASBLED_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-neuro-600 hover:underline">DOI</a>
+          </p>
+          <p className="mt-2 text-xs text-slate-400 leading-relaxed">
+            Educational use only. High HAS-BLED does not contraindicate anticoagulation.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const Drawer = () => {
+    if (drawerState === 'A') {
+      return (
+        <div className="bg-slate-100" style={{ boxShadow: drawerCollapsedShadow }} aria-hidden="true">
+          <div className="px-5 py-3.5 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Interpretation</div>
+              <div className="text-sm text-slate-500">0 of 9 selected</div>
+            </div>
+            <div className="text-xs text-slate-400">Appears when complete</div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div style={{ borderTop: `1px solid ${tokens.borderColor}`, boxShadow: isExpanded ? drawerExpandedShadow : drawerCollapsedShadow }}>
+        {/* Content before button — handle stays at viewport bottom */}
+        {isExpanded && <DrawerContent />}
+        <button
+          type="button"
+          onClick={() => setDrawerOpen(open => !open)}
+          aria-expanded={isExpanded}
+          aria-controls="hasbled-drawer-content"
+          className={`w-full flex items-center justify-between px-5 py-3.5 transition-colors ${
+            isExpanded ? `${tokens.headerBg} ${tokens.headerHover}` : 'bg-white hover:bg-slate-50'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div className={isExpanded ? tokens.labelClass : 'text-[10px] font-bold text-slate-400 uppercase tracking-widest'}>
+              Interpretation
+            </div>
+            <div className={isExpanded ? tokens.statClass : 'text-sm font-medium text-slate-900'}>
+              {HASBLED_RISK_LABELS[result.risk]} · {result.bleedsPer100PatientYears} bleeds/100 pt-yr
+            </div>
+          </div>
+          <Chevron
+            direction={isExpanded ? 'down' : 'up'}
+            className={isExpanded ? tokens.chevronClass : 'text-slate-400 drawer-chevron-hint'}
+          />
+        </button>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -146,27 +286,8 @@ export default function HasBledScoreCalculator() {
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 md:px-6 py-6 pb-12">
+      <main className="max-w-2xl mx-auto px-4 md:px-6 py-6 pb-4">
         <h1 className="sr-only">HAS-BLED Score Calculator</h1>
-
-        <section className="mb-6 p-4 rounded-xl border-2 border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-900/20" aria-live="polite">
-          <h2 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Important</h2>
-          <p className="text-sm text-slate-800 dark:text-slate-200 font-medium">
-            HAS-BLED estimates bleeding risk; it does <strong>not</strong> mean &quot;do not anticoagulate.&quot; Address modifiable risks (BP, alcohol, NSAIDs, labile INR) and use for monitoring—not to withhold anticoagulation. Stroke risk (e.g. CHA2DS2-VASc) and shared decision-making drive anticoagulation.
-          </p>
-        </section>
-
-        <section className="mb-6 p-4 rounded-xl border border-slate-100 bg-white" aria-live="polite">
-          <h2 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Interpretation</h2>
-          <p className="text-slate-800 dark:text-slate-200 font-medium">
-            {HASBLED_RISK_LABELS[result.risk]} · <strong>{result.bleedsPer100PatientYears}</strong> major bleeds per 100 patient-years
-          </p>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-            {result.risk === 'low' && 'Low bleeding risk. Continue to address modifiable factors.'}
-            {result.risk === 'moderate' && 'Moderate risk. Address modifiable factors and monitor.'}
-            {(result.risk === 'high' || result.risk === 'very_high') && 'High risk. Fix modifiable risks (BP, alcohol, NSAIDs, INR control); do not withhold anticoagulation for stroke prevention alone.'}
-          </p>
-        </section>
 
         <div className="space-y-4">
           {CHECKBOX_ITEMS.map(({ key, label, sublabel }) => (
@@ -193,15 +314,15 @@ export default function HasBledScoreCalculator() {
             <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">Add 1 point only when the patient is on warfarin and has labile INR (e.g. TTR &lt;60%). Not applicable for DOAC-only.</p>
             <div className="flex flex-wrap gap-2">
               <label className="inline-flex items-center gap-2 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer border-slate-200 dark:border-slate-600 hover:border-slate-300 has-[:checked]:border-neuro-500 has-[:checked]:bg-neuro-50">
-                <input type="radio" name="warfarin" checked={!inputs.onWarfarin} onChange={() => setInputs((p) => ({ ...p, onWarfarin: false, labileINR: false }))} className="w-4 h-4 text-neuro-600" />
+                <input type="radio" name="warfarin" checked={!inputs.onWarfarin} onChange={() => { setHasInteracted(true); setInputs((p) => ({ ...p, onWarfarin: false, labileINR: false })); }} className="w-4 h-4 text-neuro-600" />
                 <span className="font-medium text-slate-900 dark:text-white">Not on warfarin (0 pt)</span>
               </label>
               <label className="inline-flex items-center gap-2 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer border-slate-200 dark:border-slate-600 hover:border-slate-300 has-[:checked]:border-neuro-500 has-[:checked]:bg-neuro-50">
-                <input type="radio" name="warfarin" checked={inputs.onWarfarin && !inputs.labileINR} onChange={() => setInputs((p) => ({ ...p, onWarfarin: true, labileINR: false }))} className="w-4 h-4 text-neuro-600" />
+                <input type="radio" name="warfarin" checked={inputs.onWarfarin && !inputs.labileINR} onChange={() => { setHasInteracted(true); setInputs((p) => ({ ...p, onWarfarin: true, labileINR: false })); }} className="w-4 h-4 text-neuro-600" />
                 <span className="font-medium text-slate-900 dark:text-white">On warfarin, stable INR (0 pt)</span>
               </label>
               <label className="inline-flex items-center gap-2 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer border-slate-200 dark:border-slate-600 hover:border-slate-300 has-[:checked]:border-neuro-500 has-[:checked]:bg-neuro-50">
-                <input type="radio" name="warfarin" checked={inputs.onWarfarin && inputs.labileINR} onChange={() => setInputs((p) => ({ ...p, onWarfarin: true, labileINR: true }))} className="w-4 h-4 text-neuro-600" />
+                <input type="radio" name="warfarin" checked={inputs.onWarfarin && inputs.labileINR} onChange={() => { setHasInteracted(true); setInputs((p) => ({ ...p, onWarfarin: true, labileINR: true })); }} className="w-4 h-4 text-neuro-600" />
                 <span className="font-medium text-slate-900 dark:text-white">On warfarin, labile INR (1 pt)</span>
               </label>
             </div>
@@ -217,12 +338,28 @@ export default function HasBledScoreCalculator() {
             <strong>Educational use only.</strong> High HAS-BLED does not contraindicate anticoagulation. Use to address modifiable risks and guide monitoring.
           </p>
         </footer>
+
+        {/* Drawer spacer */}
+        <div className={drawerOpen ? 'drawer-spacer-expanded' : 'drawer-spacer-collapsed'} />
       </main>
 
-      {toast && (
-        <div role="status" aria-live="polite" className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-5 py-2.5 rounded-full shadow-lg text-sm font-medium z-50">
+      {/* ── Drawer portal — fixed above mobile bottom nav ────────────────── */}
+      {createPortal(
+        <div
+          className="fixed right-0 z-[55] bg-white"
+          style={{ bottom: 'calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))', left: 'var(--nav-rail-width, 0px)' }}
+        >
+          <Drawer />
+        </div>,
+        document.body,
+      )}
+
+      {/* ── Toast notification — z-[60] above drawer ─────────────────────── */}
+      {toast && createPortal(
+        <div role="status" aria-live="polite" className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-5 py-2.5 rounded-full text-sm font-medium z-[60]">
           {toast}
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );
