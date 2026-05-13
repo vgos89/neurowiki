@@ -88,10 +88,10 @@ export function TrialLegendCard({ trial, isFav, onFavToggle }: TrialLegendCardPr
               {stat}
             </span>
           )}
-          {/* Favourite star — always visible */}
+          {/* Favourite star — always visible; min 44×44px touch target */}
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); onFavToggle(trial.id, e); }}
-            className={`p-0.5 flex-shrink-0 transition-colors ${
+            className={`p-2 -m-1.5 flex-shrink-0 flex items-center justify-center min-h-[44px] min-w-[44px] transition-colors ${
               isFav ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600 hover:text-slate-400 dark:hover:text-slate-400'
             }`}
             aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}

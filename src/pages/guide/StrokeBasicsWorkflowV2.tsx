@@ -769,7 +769,7 @@ const MainContent: React.FC = () => {
           </Suspense>
         )}
 
-        <div className="h-24 safe-area-inset-bottom" />
+        <div className="h-24 pb-[env(safe-area-inset-bottom,0px)]" />
 
         {toastMessage && (
           <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] px-4 py-3 rounded-lg bg-slate-800 text-white text-sm font-medium shadow-lg animate-in fade-in duration-200" role="status" aria-live="polite">
