@@ -25,22 +25,21 @@ export default function PrivacyPage() {
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-3">Privacy Policy</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">Last updated: May 13, 2026</p>
         <p className="mt-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-          NeuroWiki is a free clinical reference tool for neurology clinicians. We collect minimal
-          data and store nothing on our servers about individual users. This policy explains exactly
-          what we do collect and how.
+          NeuroWiki is a free clinical reference tool. It collects almost nothing. This page
+          describes exactly what is collected, where it goes, and how to remove it.
         </p>
       </div>
 
       <Section title="Who we are">
         <p>
-          NeuroWiki is operated by Tidbit Health (info@tidbithealth.in). We are not a covered entity
-          under HIPAA — we do not collect, store, or transmit protected health information (PHI).
-          No patient data should be entered into this tool.
+          NeuroWiki is operated by Tidbit Health (info@tidbithealth.in). NeuroWiki is not a
+          covered entity under HIPAA. It does not collect, store, or transmit protected health
+          information. Do not enter patient data into this tool.
         </p>
       </Section>
 
       <Section title="What data we collect">
-        <p>The table below lists every category of data collected or stored by NeuroWiki.</p>
+        <p>Every category of data collected or stored by NeuroWiki is listed below. Nothing is omitted.</p>
 
         <div className="overflow-x-auto mt-4">
           <table className="w-full text-xs border-collapse">
@@ -54,13 +53,13 @@ export default function PrivacyPage() {
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
               {[
-                ['Google Analytics events', 'Google servers', 'Usage analytics (page views, feature use)', 'Google default — 26 months'],
-                ['Cookie consent decision', 'Your browser (neurowiki:consent)', 'Gates GA loading — we only fire analytics after consent', 'Until you clear browser storage'],
-                ['Favourite trials', 'Your browser (neurowiki:favs)', 'Remembers trials you starred', 'Until you clear browser storage'],
+                ['Google Analytics events', 'Google servers', 'Usage analytics — page views, feature use', 'Google default: 26 months'],
+                ['Cookie consent decision', 'Your browser (neurowiki:consent)', 'Controls whether GA loads', 'Until you clear browser storage'],
+                ['Favourite trials', 'Your browser (neurowiki:favs)', 'Saves starred trials between sessions', 'Until you clear browser storage'],
                 ['Recently viewed', 'Your browser (neurowiki:recents:v1)', 'Powers the recents list', 'Until you clear browser storage'],
-                ['Disclaimer acknowledged', 'Your browser (neurowiki:disclaimer:v1)', 'Prevents the first-visit disclaimer from re-showing', 'Until you clear browser storage'],
-                ['Feedback submissions', 'Resend (email relay) → operator inbox', 'Routes your feedback to the NeuroWiki team', 'Email provider retention policy'],
-                ['NPI proxy results', 'Not stored — session only', 'Displays a doctor name from NPI registry lookup', 'Never persisted anywhere'],
+                ['Disclaimer acknowledged', 'Your browser (neurowiki:disclaimer:v1)', 'Suppresses the first-visit disclaimer', 'Until you clear browser storage'],
+                ['Feedback submissions', 'Resend (email relay) → operator inbox', 'Delivers your feedback to the team', 'Email provider retention policy'],
+                ['NPI proxy results', 'Not stored — session only', 'Displays a doctor name from NPI lookup', 'Never written to storage'],
               ].map(([data, where, purpose, retention]) => (
                 <tr key={data} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                   <td className="p-2.5 border border-slate-200 dark:border-slate-600 font-medium text-slate-700 dark:text-slate-200">{data}</td>
@@ -74,18 +73,14 @@ export default function PrivacyPage() {
         </div>
 
         <p className="mt-3 font-medium text-slate-700 dark:text-slate-200">
-          No server-side user accounts. No passwords. No patient data.
+          No user accounts. No passwords. No patient data stored anywhere.
         </p>
       </Section>
 
       <Section title="Google Analytics">
         <p>
-          When you give consent, we load Google Analytics 4. We have enabled IP anonymisation
-          (<code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">anonymize_ip: true</code>),
-          so your full IP address is never sent to Google.
-        </p>
-        <p>
-          You can opt out of Google Analytics at any time using the{' '}
+          When you consent, Google Analytics 4 loads. IP anonymisation is on — your full IP
+          address is never sent to Google. To block GA entirely, use the{' '}
           <a
             href="https://tools.google.com/dlpage/gaoptout"
             target="_blank"
@@ -100,62 +95,46 @@ export default function PrivacyPage() {
 
       <Section title="Cookie consent and how to revoke it">
         <p>
-          On your first visit, a consent banner asks whether you accept analytics. If you decline,
-          Google Analytics is never loaded.
-        </p>
-        <p>
-          To revoke consent later, clear your browser's local storage for neurowiki.ai. In Chrome:
-          DevTools → Application → Local Storage → neurowiki.ai → delete the{' '}
-          <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">neurowiki:consent</code> key.
-          The consent banner will re-appear on your next visit.
+          A consent banner appears on your first visit. Declining it blocks Google Analytics from
+          loading. To revoke consent later, delete the{' '}
+          <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">neurowiki:consent</code>{' '}
+          key from your browser's local storage for neurowiki.ai. In Chrome: DevTools → Application
+          → Local Storage → neurowiki.ai. The consent banner re-appears on your next visit.
         </p>
       </Section>
 
       <Section title="Feedback submissions">
         <p>
-          When you submit feedback via the in-app form, your message is relayed through Resend
-          (an email delivery service) to the NeuroWiki operator inbox. We do not store feedback
-          on our own servers. The content you type in the feedback form is the only data sent.
+          The in-app feedback form sends your message through Resend, an email relay service, to
+          the NeuroWiki operator inbox. The message text is the only data transmitted. Nothing is
+          stored on NeuroWiki's servers.
         </p>
       </Section>
 
       <Section title="No sale of data">
         <p>
-          We do not sell, rent, or share personal information with third parties for advertising or
-          commercial purposes. Google Analytics data is governed by Google's own privacy policy and
-          is used solely for understanding how the tool is used, not for targeting.
+          NeuroWiki does not sell, rent, or share personal data with third parties for advertising.
+          Google Analytics data sits on Google's servers under Google's privacy policy. It is used
+          only to understand how the tool is used, not for targeting.
         </p>
       </Section>
 
-      <Section title="GDPR — rights for EU residents">
+      <Section title="GDPR — EU residents">
         <p>
-          If you are in the European Economic Area, you have the right to access, correct, or
-          request deletion of any data we hold about you. Because we store nothing on our own
-          servers, the only actionable data is in your browser's local storage — which you can
-          clear yourself at any time.
+          EU residents have the right to access, correct, or delete any data held about them.
+          Because NeuroWiki stores nothing server-side about individual users, the only actionable
+          data is in your browser's local storage, which you can clear at any time.
         </p>
         <p>
-          For GA data held by Google, use the{' '}
-          <a
-            href="https://tools.google.com/dlpage/gaoptout"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-neuro-500 hover:underline"
-          >
-            GA opt-out tool
-          </a>
-          . To contact us directly, email{' '}
-          <a href="mailto:info@tidbithealth.in" className="text-neuro-500 hover:underline">
-            info@tidbithealth.in
-          </a>
-          .
+          For GA data held by Google, use the GA opt-out tool above. To contact us directly:
+          {' '}<a href="mailto:info@tidbithealth.in" className="text-neuro-500 hover:underline">info@tidbithealth.in</a>.
         </p>
       </Section>
 
-      <Section title="CCPA — rights for California residents">
+      <Section title="CCPA — California residents">
         <p>
-          We do not sell personal information as defined under the California Consumer Privacy Act.
-          You may request deletion of any data associated with you by contacting{' '}
+          NeuroWiki does not sell personal information as defined by the California Consumer Privacy
+          Act. To request deletion of any data associated with you, email{' '}
           <a href="mailto:info@tidbithealth.in" className="text-neuro-500 hover:underline">
             info@tidbithealth.in
           </a>
@@ -165,18 +144,18 @@ export default function PrivacyPage() {
 
       <Section title="Data deletion">
         <p>
-          To request deletion of any data we may hold about you, email{' '}
+          Email{' '}
           <a href="mailto:info@tidbithealth.in" className="text-neuro-500 hover:underline">
             info@tidbithealth.in
           </a>{' '}
-          with the subject line "Data deletion request". We will respond within 30 days.
+          with the subject line "Data deletion request". We respond within 30 days.
         </p>
       </Section>
 
       <Section title="Changes to this policy">
         <p>
-          If we make material changes, we will update the "Last updated" date at the top of this
-          page. Continued use of NeuroWiki after changes constitutes acceptance of the updated policy.
+          Material changes update the "Last updated" date at the top of this page. Continued use
+          of NeuroWiki after changes constitutes acceptance of the revised policy.
         </p>
       </Section>
 

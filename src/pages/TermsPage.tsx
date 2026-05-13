@@ -25,103 +25,94 @@ export default function TermsPage() {
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-3">Terms of Use</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">Last updated: May 13, 2026</p>
         <p className="mt-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-          By using NeuroWiki, you agree to these terms. Please read them carefully — they are short.
+          Using NeuroWiki means you accept these terms. They are short.
         </p>
       </div>
 
       {/* Clinical safety notice — prominent */}
       <div className="mb-10 p-4 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700">
-        <p className="text-sm font-semibold text-amber-800 dark:text-amber-200 mb-1">
-          Clinical reference only — not a substitute for clinical judgment
+        <p className="text-sm font-semibold text-amber-800 dark:text-amber-200 mb-2">
+          Clinical reference only
         </p>
         <p className="text-sm text-amber-700 dark:text-amber-300 leading-relaxed">
-          NeuroWiki is designed to support, not replace, the clinical judgment of qualified healthcare
-          professionals. All scores, pathways, and recommendations must be verified against current
-          institutional protocols and the individual patient's clinical context before use. No
-          clinical decision should be made based solely on information from this tool.
+          NeuroWiki supports clinical judgment — it does not replace it. Verify all scores,
+          pathways, and dosing against your institutional protocol and the patient in front of
+          you. Do not base any clinical decision solely on this tool.
         </p>
       </div>
 
       <Section title="What NeuroWiki is">
         <p>
-          NeuroWiki is a free clinical decision-support reference tool for neurology clinicians —
-          including residents, fellows, and attending physicians. It provides scoring calculators,
-          clinical pathways, and landmark trial summaries based on published guidelines and evidence.
+          NeuroWiki is a clinical decision-support reference for neurology clinicians — residents,
+          fellows, and attendings. It provides scoring calculators, clinical pathways, and trial
+          summaries based on published guidelines.
         </p>
         <p>
-          NeuroWiki is operated by Tidbit Health (info@tidbithealth.in), based in India.
-        </p>
-      </Section>
-
-      <Section title="No warranty of accuracy or completeness">
-        <p>
-          Medical knowledge evolves rapidly. While we make every effort to keep content current and
-          evidence-based, we make no warranty — express or implied — that the information on NeuroWiki
-          is accurate, complete, up to date, or free from error at any given time.
-        </p>
-        <p>
-          Guidelines, thresholds, and drug dosing information may have changed since the last review.
-          Always verify against the most current published guidelines and your institution's protocols
-          before acting on any information from this tool.
+          Tidbit Health (info@tidbithealth.in), based in India, operates NeuroWiki.
         </p>
       </Section>
 
-      <Section title="Not for emergency use without clinical verification">
+      <Section title="No warranty">
         <p>
-          NeuroWiki is intended as a reference aid, not an emergency decision support system. In
-          time-critical situations, do not rely on this tool as your sole or primary source of
-          information. Verify all clinical decisions through direct patient assessment and with
-          qualified colleagues.
+          Medical guidelines change. Content on NeuroWiki may not reflect the most recent
+          publications. Check current guidelines before acting on any information here.
+        </p>
+        <p>
+          NeuroWiki is provided as-is. No warranty of accuracy, completeness, or fitness for any
+          purpose — express or implied.
+        </p>
+      </Section>
+
+      <Section title="Not for emergency use without verification">
+        <p>
+          NeuroWiki is a reference aid. In time-critical situations, do not use it as your primary
+          source. Assess the patient directly and verify with colleagues.
         </p>
       </Section>
 
       <Section title="No patient data">
         <p>
-          Do not enter identifiable patient information into NeuroWiki. This tool is not a covered
-          entity under HIPAA and is not designed or approved for handling protected health information.
-          All calculator inputs are processed locally in your browser and are never transmitted.
+          Do not enter identifiable patient data into NeuroWiki. This tool is not designed or
+          approved for handling protected health information. Calculator inputs run locally in
+          your browser and are never transmitted.
         </p>
       </Section>
 
       <Section title="Limitation of liability">
         <p>
-          To the maximum extent permitted by applicable law, Tidbit Health and the NeuroWiki team
-          shall not be liable for any direct, indirect, incidental, or consequential damages arising
-          from use of or reliance on this tool, including but not limited to clinical decisions made
-          on the basis of information presented here.
+          To the extent permitted by applicable law, Tidbit Health is not liable for any damages
+          — direct, indirect, or consequential — arising from use of or reliance on this tool,
+          including clinical decisions made on the basis of information presented here.
         </p>
       </Section>
 
       <Section title="Intellectual property">
         <p>
-          The clinical content, design, and code of NeuroWiki are owned by Tidbit Health. You may
-          use the tool for your personal clinical practice and education. You may not reproduce,
-          redistribute, or commercially exploit the content without written permission.
+          The clinical content, design, and code of NeuroWiki are owned by Tidbit Health. Use
+          the tool for your clinical practice and education. Do not reproduce or redistribute
+          content commercially without written permission.
         </p>
       </Section>
 
-      <Section title="Governing law and jurisdiction">
+      <Section title="Governing law">
         <p>
-          These terms are governed by the laws of India. Any disputes arising from use of NeuroWiki
-          shall be subject to the exclusive jurisdiction of the courts of India.
+          These terms are governed by Indian law. Disputes are subject to the exclusive
+          jurisdiction of courts in India.
         </p>
       </Section>
 
-      <Section title="Changes to these terms">
+      <Section title="Changes">
         <p>
-          We may update these terms from time to time. The "Last updated" date at the top of this
-          page will reflect any changes. Continued use of NeuroWiki after changes constitutes
-          acceptance of the updated terms.
+          The "Last updated" date at the top reflects any revisions. Continued use after changes
+          constitutes acceptance.
         </p>
       </Section>
 
       <Section title="Contact">
         <p>
-          For questions about these terms, contact us at{' '}
           <a href="mailto:info@tidbithealth.in" className="text-neuro-500 hover:underline">
             info@tidbithealth.in
           </a>
-          .
         </p>
       </Section>
 

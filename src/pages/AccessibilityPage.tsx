@@ -36,17 +36,14 @@ export default function AccessibilityPage() {
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-3">Accessibility Statement</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">Last updated: May 13, 2026</p>
         <p className="mt-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-          NeuroWiki is built for clinicians in high-pressure environments. Accessibility is not an
-          afterthought — a tool that fails clinicians with disabilities or in difficult conditions
-          fails everyone. Our target is WCAG 2.1 Level AA compliance across all surfaces.
+          NeuroWiki is used at the bedside, often under pressure. Clinicians who rely on assistive
+          technology need a tool that works reliably. Our target is WCAG 2.1 Level AA compliance.
         </p>
       </div>
 
-      <Section title="Our commitment">
+      <Section title="What we target">
         <p>
-          We are committed to making NeuroWiki accessible to all users, including those using
-          assistive technology such as screen readers, keyboard-only navigation, or voice control.
-          Our target standard is the{' '}
+          We target the{' '}
           <a
             href="https://www.w3.org/TR/WCAG21/"
             target="_blank"
@@ -55,95 +52,86 @@ export default function AccessibilityPage() {
           >
             Web Content Accessibility Guidelines (WCAG) 2.1 Level AA
           </a>
-          .
+          {' '}across all pages. This covers screen reader compatibility, keyboard navigation,
+          color contrast, touch target sizing, and focus management.
         </p>
       </Section>
 
-      <Section title="What we have implemented">
+      <Section title="What is implemented">
         <ul className="space-y-2.5 mt-1">
           <CheckItem>
-            <strong>Skip link</strong> — A "Skip to main content" link is the first focusable element
-            on every page, allowing keyboard users to bypass navigation.
+            <strong>Skip link</strong> — the first focusable element on every page. Keyboard users
+            can skip directly to main content.
           </CheckItem>
           <CheckItem>
-            <strong>ARIA roles on calculators</strong> — All scoring item groups use{' '}
-            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">role="radiogroup"</code> with
-            individual options as <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">role="radio"</code>{' '}
-            and <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">aria-checked</code>. Score
-            totals use <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">aria-live="polite"</code>{' '}
-            so screen readers announce changes.
+            <strong>ARIA roles on calculators</strong> — scoring item groups use{' '}
+            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">role="radiogroup"</code>.
+            Each option carries{' '}
+            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">role="radio"</code>{' '}
+            and{' '}
+            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">aria-checked</code>.
+            Score totals use{' '}
+            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">aria-live="polite"</code>{' '}
+            so screen readers announce updates.
           </CheckItem>
           <CheckItem>
-            <strong>Modal focus management</strong> — All modals and drawers trap focus within the
-            dialog, return focus to the trigger element on close, and are closed with the Escape key.
-            They carry <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">role="dialog"</code>{' '}
-            and <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">aria-modal="true"</code>.
+            <strong>Modal focus management</strong> — modals and drawers trap focus, return focus to
+            the trigger on close, and respond to Escape. They carry{' '}
+            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">role="dialog"</code>{' '}
+            and{' '}
+            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">aria-modal="true"</code>.
           </CheckItem>
           <CheckItem>
-            <strong>Touch targets</strong> — All interactive elements meet a minimum 44×44px touch
-            target size, following WCAG 2.5.5 (AAA) and Apple/Google HIG recommendations.
+            <strong>Touch targets</strong> — all interactive elements are at least 44×44px, meeting
+            WCAG 2.5.5.
           </CheckItem>
           <CheckItem>
-            <strong>Color contrast</strong> — Text meets a minimum 4.5:1 contrast ratio against its
-            background. Large text (≥18pt or 14pt bold) meets 3:1.
+            <strong>Color contrast</strong> — body text meets 4.5:1 contrast. Large text (≥18pt or
+            14pt bold) meets 3:1. Both light and dark themes pass.
           </CheckItem>
           <CheckItem>
-            <strong>Keyboard navigation</strong> — All interactive controls are reachable and
-            operable via keyboard. Focus indicators are visible on all elements.
+            <strong>Keyboard navigation</strong> — all controls are reachable and operable by
+            keyboard. Focus indicators are visible.
           </CheckItem>
           <CheckItem>
-            <strong>Semantic HTML</strong> — Page regions use landmark roles ({' '}
+            <strong>Semantic HTML</strong> — landmark roles (
             <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">&lt;main&gt;</code>,{' '}
             <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">&lt;nav&gt;</code>,{' '}
-            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">&lt;aside&gt;</code>).
-            Heading levels are used hierarchically.
+            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">&lt;aside&gt;</code>)
+            on all pages. Heading levels are sequential.
           </CheckItem>
           <CheckItem>
-            <strong>Dark mode</strong> — Full dark-mode support with contrast ratios maintained in
-            both light and dark themes.
+            <strong>Dark mode</strong> — contrast ratios pass in both light and dark themes.
           </CheckItem>
         </ul>
       </Section>
 
-      <Section title="Known limitations">
-        <p>
-          NeuroWiki is actively developed. Some areas are still being brought to full WCAG 2.1 AA
-          compliance:
-        </p>
+      <Section title="Known gaps">
+        <p>Two areas are still in progress:</p>
         <ul className="list-disc list-inside space-y-1.5 mt-2 text-slate-500 dark:text-slate-400">
-          <li>Chart components (trial result visualisations) — text alternatives in progress</li>
-          <li>Complex data tables on trial pages — full header association markup planned</li>
+          <li>Chart components (trial result visualisations) — text alternatives pending</li>
+          <li>Complex data tables on trial pages — full header association markup pending</li>
         </ul>
         <p className="mt-3">
-          If you encounter a specific barrier not listed here, please report it (see below) and we
-          will prioritise a fix.
+          Report any barrier not listed here and we will prioritise a fix.
         </p>
       </Section>
 
-      <Section title="Reporting accessibility issues">
+      <Section title="Reporting a problem">
         <p>
-          If you experience an accessibility barrier on NeuroWiki, we want to know. Please email{' '}
+          Email{' '}
           <a href="mailto:info@tidbithealth.in" className="text-neuro-500 hover:underline">
             info@tidbithealth.in
           </a>{' '}
-          with:
-        </p>
-        <ul className="list-disc list-inside space-y-1 mt-2">
-          <li>The page or feature where the issue occurs</li>
-          <li>A description of the barrier</li>
-          <li>Your assistive technology (if applicable)</li>
-        </ul>
-        <p className="mt-3">
-          We aim to respond to accessibility complaints within 5 business days and to resolve
-          substantive issues within 30 days.
+          with the page or feature, a description of the barrier, and your assistive technology if
+          relevant. We respond within 5 business days and aim to resolve substantive issues within 30.
         </p>
       </Section>
 
       <Section title="Technical approach">
         <p>
-          NeuroWiki is built with React 18, TypeScript, and Tailwind CSS. We use shadcn/ui
-          components, which are built on Radix UI — a headless, fully accessible primitive library.
-          ARIA patterns follow the{' '}
+          NeuroWiki is built with React 18, TypeScript, and Tailwind CSS. shadcn/ui components are
+          built on Radix UI, a headless accessible primitive library. ARIA patterns follow the{' '}
           <a
             href="https://www.w3.org/WAI/ARIA/apg/"
             target="_blank"

@@ -27,7 +27,54 @@ dive deep                  at the end of the day      it goes without saying
 needless to say            in terms of                when it comes to
 the fact that              due to the fact that       a number of
 a variety of               moving forward             going forward
+marks a pivotal moment     represents a significant shift   broader trends
+we are committed to        every effort               it goes without saying
+not an afterthought        more than just             we want to know
 ```
+
+---
+
+## AI Vocabulary Cluster — High-Frequency LLM Words
+
+These words are statistically overrepresented in LLM output post-2022 (source: Wikipedia:Signs_of_AI_writing). A single instance may be coincidental. A cluster of three or more is diagnostic. Replace with plainer alternatives where possible.
+
+```
+additionally   align with    boasts        bolstered     crucial
+delve          emphasizing   enduring      enhance       fostering
+garner         highlight     interplay     intricate     key (as adjective)
+landscape      meticulous    pivotal       robust        showcase
+tapestry       testament     underscore    valuable      vibrant
+groundbreaking diverse array nestled       rich (as adj) marks as
+```
+
+**Replacement principle:** use the plainest word that carries the meaning. "Crucial" → "required" or cut the hedge entirely. "Enhance" → say what it actually does. "Vibrant" → name the specific quality. "Highlight" → "show" or "the data show."
+
+---
+
+## Copulative Substitutions — "Is/Are" Avoidance
+
+AI systems are trained to avoid repeating "is/are" and replace them with elaborate constructions. These substitutions are a reliable fingerprint:
+
+```
+serves as      stands as      marks          represents
+boasts         features       maintains      offers
+acts as        functions as   operates as    exists as
+```
+
+**Fix:** restore the plain verb. "NeuroWiki serves as a reference tool" → "NeuroWiki is a reference tool."
+
+Exception: when the substitution carries genuine meaning distinct from "is." "This trial represents a departure from prior design" — if "represents" is doing real work (implying significance), keep it. If it is a synonym for "is," replace it.
+
+---
+
+## Elegant Variation — Synonym Overuse
+
+AI systems use repetition penalties that cause them to use synonyms more than a human writer would. Signs:
+
+- The same concept is named differently across paragraphs for no semantic reason ("clinicians," then "practitioners," then "healthcare professionals," then "physicians" — all in the same section)
+- Pronoun or noun choices shift mid-paragraph in ways that create ambiguity
+
+**Fix:** pick one name for each concept and use it consistently. Readers do not find consistent repetition jarring; they find shifting terminology confusing.
 
 ---
 
@@ -63,17 +110,27 @@ a variety of               moving forward             going forward
 
 ## Pre-Sign-Off Procedure
 
-Before marking any content task complete, run this 7-step mental pass:
+Before marking any content task complete, run this 9-step mental pass:
 
-1. **Signal phrase scan** — read the draft and flag any phrase from the list above. Zero tolerance.
-2. **Em-dash count** — count em-dashes. More than one per paragraph → rewrite.
-3. **List audit** — every list of exactly three items gets checked. Does it need to be two? Four? Or is three genuinely right?
-4. **Attribution check** — every medical claim has a named trial or named guideline with year. No unnamed "studies."
-5. **Voice check** — read aloud. If it sounds like a press release or a journal abstract, simplify.
-6. **Number check** — every threshold, dose, and time window is stated as a number, not as a descriptor.
-7. **Tone match** — does this sound like a senior resident explaining something to an intern? That is the target voice.
+1. **Signal phrase scan** — flag any phrase from the signal-phrase list above. Zero tolerance.
+2. **AI vocabulary scan** — count AI vocabulary cluster words. Three or more in one section → rewrite.
+3. **Copulative check** — every "serves as / stands as / marks / represents" gets reviewed. If it means "is," make it "is."
+4. **Em-dash count** — more than one per paragraph → rewrite.
+5. **List audit** — every list of exactly three items gets checked. Does it need to be two? Four? Or is three genuinely right?
+6. **Elegant variation check** — is the same concept named consistently throughout? Pick one term per concept.
+7. **Attribution check** — every medical claim has a named trial or named guideline with year. No unnamed "studies."
+8. **Voice check** — read aloud. If it sounds like a press release or a journal abstract, simplify.
+9. **Number check** — every threshold, dose, and time window is stated as a number, not as a descriptor.
 
-If the draft fails any step, fix it before handoff. Do not flag it as "pending review" and send it forward. The humanizer checklist is a pre-condition of sign-off, not a post-condition.
+**Tone target:** a senior resident explaining something to an intern. Clear, direct, no hedging, no inflation.
+
+If the draft fails any step, fix it before handoff. The humanizer checklist is a pre-condition of sign-off, not a post-condition.
+
+---
+
+## Reference
+
+Pattern taxonomy sourced from: Wikipedia:Signs_of_AI_writing (https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing). The clusters, copulative substitutions, and vocabulary list in this skill are derived from that reference. Update when new model-era patterns emerge.
 
 ---
 
