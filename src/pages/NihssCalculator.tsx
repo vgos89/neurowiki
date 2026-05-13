@@ -707,7 +707,7 @@ const NihssCalculator: React.FC = () => {
           style={{
             position: 'fixed',
             bottom: 'calc(var(--tab-bar-height, 0px) + env(safe-area-inset-bottom, 0px))',
-            left: 0,
+            left: 'var(--nav-rail-width, 0px)',
             right: 0,
             zIndex: 55,
           }}

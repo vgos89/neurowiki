@@ -349,10 +349,13 @@ details > summary::-webkit-details-marker {
 /* ─── Desktop drawer fixes ───────────────────────────────────────────────── */
 
 /* Fix 1: On desktop (≥768px) there is no mobile tab bar, so resolve
-   --tab-bar-height to 0 so the drawer calc() produces flush bottom. */
+   --tab-bar-height to 0 so the drawer calc() produces flush bottom.
+   Also set --nav-rail-width to match DesktopRail (w-[224px]) so portal
+   drawers start at the rail edge rather than the viewport left edge. */
 @media (min-width: 768px) {
   :root {
     --tab-bar-height: 0rem;
+    --nav-rail-width: 224px;
   }
 }
 
