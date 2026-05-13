@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated": "2026-05-06",
+  "generated": "2026-05-13",
   "nodes": {
     "hub/guide": {
       "type": "hub",
@@ -418,6 +418,27 @@
       "type": "trial",
       "title": "WEAVE Trial",
       "route": "/trials/weave-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "page/privacy": {
+      "type": "page",
+      "title": "Privacy Policy",
+      "route": "/privacy",
+      "references": [],
+      "referencedBy": []
+    },
+    "page/terms": {
+      "type": "page",
+      "title": "Terms of Use",
+      "route": "/terms",
+      "references": [],
+      "referencedBy": []
+    },
+    "page/accessibility": {
+      "type": "page",
+      "title": "Accessibility Statement",
+      "route": "/accessibility",
       "references": [],
       "referencedBy": []
     }

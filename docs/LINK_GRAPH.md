@@ -2,7 +2,7 @@
 
 This file is auto-generated from docs/link-graph.json by every swarm. Do not edit directly.
 
-Last regenerated: 2026-05-06 (guide-hub-5f swarm)
+Last regenerated: 2026-05-13 (Phase 4D compliance pages)
 
 ---
 
@@ -13,8 +13,9 @@ Last regenerated: 2026-05-06 (guide-hub-5f swarm)
 | Hubs | 1 |
 | Articles | 16 |
 | Calculators | 5 |
+| Pages | 3 |
 | Trials | 26 |
-| **Total nodes** | **48** |
+| **Total nodes** | **51** |
 | Stubs (not yet routable) | 4 |
 
 ---
@@ -59,6 +60,16 @@ Last regenerated: 2026-05-06 (guide-hub-5f swarm)
 | `calc/ich-score` | ICH Score Calculator | `/calculators/ich-score` | trial/hemphill-2001, calc/gcs, calc/heidelberg, guideline/aha-ich-2022 | pathway/stroke/step-2, article/ich-management |
 | `calc/heidelberg` | Heidelberg Bleeding Classification | `/calculators/heidelberg-bleeding-classification` | calc/nihss | calc/ich-score |
 | `calc/abcd2` | ABCD² Score Calculator | `/calculators/abcd2-score` | — | — (pre-existing orphan) |
+
+---
+
+## Pages
+
+| Node ID | Title | Route |
+|---|---|---|
+| `page/privacy` | Privacy Policy | `/privacy` |
+| `page/terms` | Terms of Use | `/terms` |
+| `page/accessibility` | Accessibility Statement | `/accessibility` |
 
 ---
 

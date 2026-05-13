@@ -724,7 +724,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 4D — Create Privacy Policy + Terms of Use + Accessibility Statement routes — Class C
 - **Priority:** P0
-- **Status:** planned
+- **Status:** [x] merged — commit 6090937
 - **User-visible goal:** `/privacy`, `/terms`, `/accessibility` routes exist and render correct legal copy
 - **Non-goals:** no CMP integration in this task (handled in Phase 4A); no clinical content
 - **Owner agents:** content-writer (all copy — Privacy Policy must disclose: GA with anonymize_ip, feedback email via Resend, NPI proxy not stored, localStorage for recents/favorites/disclaimer, data deletion contact) → ui-architect (page shells + routing) → compliance-legal (copy sign-off)
@@ -954,6 +954,12 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-13 — Phase 4D — Privacy/Terms/Accessibility pages (Class C) — commit 6090937
+  - 3 new page components: src/pages/PrivacyPage.tsx, src/pages/TermsPage.tsx, src/pages/AccessibilityPage.tsx
+  - src/App.tsx: 3 new lazy route imports + ROUTE_COMPONENTS entries for /privacy, /terms, /accessibility
+  - src/config/routeManifest.ts: StaticRouteKey extended with 3 new routes; route count 39 → 42
+  - src/components/layout/DesktopRail.tsx: footer links updated with Privacy · Terms · Accessibility + © 2026 Tidbit Health
+  - QA: tsc clean · build 1.96s · claims pass · routes 42/42
 - [x] 2026-05-13 — Governance modernization: CLAUDE.md v4.0 + 5 new skills + agent wiring + path corrections (Class D) — commit dbf1e48
   - CLAUDE.md v4.0: §19.0 Language Trigger Map (22 patterns); §10.1 swarm observability header; §12 expanded plugin skills (design:*, engineering:*); §21 stale paths fixed (router.tsx → App.tsx, trials/ subfolder removed)
   - New skills: design-tokens, testing-patterns, deploy, routing, compliance-public-medical
