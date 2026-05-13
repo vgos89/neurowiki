@@ -97,7 +97,10 @@ export const GrottaBarChart: React.FC<GrottaBarChartProps> = ({
   const badge = getDirectionBadge(ordinalStats.commonOR, ordinalStats.ciLow, ordinalStats.ciHigh, ordinalStats.direction);
 
   return (
-    <div>
+    <div
+      role="figure"
+      aria-label={`mRS distribution chart: ${arms[0].arm} vs ${arms[1].arm}`}
+    >
       <style>{INLINE_STYLES}</style>
 
       {arms.map((arm, armIdx) => {
@@ -118,7 +121,7 @@ export const GrottaBarChart: React.FC<GrottaBarChartProps> = ({
         const armNameColor = isWinner ? '#0E2D6B' : '#64748b';
 
         return (
-          <div key={armIdx} style={wrapStyle}>
+          <div key={armIdx} style={wrapStyle} role="group" aria-label={arm.arm}>
             {/* Arm label row */}
             <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 4, marginBottom: 6 }}>
               <span style={{ fontSize: 11, fontWeight: 500, color: armNameColor }}>
@@ -142,6 +145,8 @@ export const GrottaBarChart: React.FC<GrottaBarChartProps> = ({
             {/* Stacked bar */}
             <div
               className="gb-bar"
+              role="group"
+              aria-label={`${arm.arm} mRS distribution`}
               style={{
                 display: 'flex',
                 height: 28,
@@ -159,9 +164,14 @@ export const GrottaBarChart: React.FC<GrottaBarChartProps> = ({
                 const isActive =
                   tappedSeg?.arm === armIdx && tappedSeg?.mrs === mrsIdx;
 
+                const isInteractive = !showLabel || isNarrow;
+
                 return (
                   <div
                     key={mrsIdx}
+                    role={isInteractive ? 'button' : 'img'}
+                    aria-label={`mRS ${mrsIdx}: ${pct}%`}
+                    tabIndex={isInteractive ? 0 : undefined}
                     style={{
                       width: `${pct}%`,
                       background: color.fill,
@@ -171,14 +181,20 @@ export const GrottaBarChart: React.FC<GrottaBarChartProps> = ({
                       position: 'relative',
                       flexShrink: 0,
                       overflow: 'hidden',
-                      cursor: (!showLabel || isNarrow) ? 'pointer' : 'default',
+                      cursor: isInteractive ? 'pointer' : 'default',
                     }}
                     title={`mRS ${mrsIdx}: ${pct}%`}
                     onClick={() => {
-                      if (!showLabel || isNarrow) {
+                      if (isInteractive) {
                         setTappedSeg(isActive ? null : { arm: armIdx, mrs: mrsIdx });
                       }
                     }}
+                    onKeyDown={isInteractive ? (e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setTappedSeg(isActive ? null : { arm: armIdx, mrs: mrsIdx });
+                      }
+                    } : undefined}
                   >
                     {showLabel && (
                       <span
@@ -226,7 +242,7 @@ export const GrottaBarChart: React.FC<GrottaBarChartProps> = ({
       })}
 
       {/* mRS legend — flex-wrap, same layout mobile and desktop */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 10, marginBottom: 14 }}>
+      <div aria-hidden="true" style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 10, marginBottom: 14 }}>
         {MRS_COLORS.map((color, idx) => (
           <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
             <div style={{
