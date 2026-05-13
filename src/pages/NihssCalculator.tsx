@@ -52,7 +52,7 @@ const SEVERITY_LABEL: Record<NIHSSSeverity, string> = {
 /** Text color class per severity — matches CALCULATOR_SPEC.md §6 */
 const SEVERITY_COLOR: Record<NIHSSSeverity, string> = {
   'none':             'text-slate-500',
-  'minor':            'text-green-600 dark:text-green-400',
+  'minor':            'text-emerald-600 dark:text-emerald-400',
   'moderate':         'text-amber-700 dark:text-amber-400',
   'moderate-severe':  'text-red-600 dark:text-red-400',
   'severe':           'text-red-700 dark:text-red-400',
@@ -61,7 +61,7 @@ const SEVERITY_COLOR: Record<NIHSSSeverity, string> = {
 /** Border color for drawer header (State C) per severity */
 const SEVERITY_BORDER: Record<NIHSSSeverity, string> = {
   'none':             '#e2e8f0',
-  'minor':            '#bbf7d0',
+  'minor':            '#a7f3d0',
   'moderate':         '#fed7aa',
   'moderate-severe':  '#fecaca',
   'severe':           '#fecaca',
@@ -70,7 +70,7 @@ const SEVERITY_BORDER: Record<NIHSSSeverity, string> = {
 /** Header background (State C expanded) per severity */
 const SEVERITY_HEADER_BG: Record<NIHSSSeverity, string> = {
   'none':             'bg-white',
-  'minor':            'bg-green-50',
+  'minor':            'bg-emerald-50',
   'moderate':         'bg-amber-50',
   'moderate-severe':  'bg-red-50',
   'severe':           'bg-red-50',
@@ -360,7 +360,7 @@ const NihssCalculator: React.FC = () => {
               <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 Interpretation
               </div>
-              <div className="text-sm text-slate-500">Select items to score</div>
+              <div className="text-sm text-slate-500">0 of {totalItems} selected</div>
             </div>
             <div className="text-xs text-slate-400">Appears when complete</div>
           </div>
@@ -380,6 +380,8 @@ const NihssCalculator: React.FC = () => {
           boxShadow: isExpanded ? drawerExpandedShadow : drawerCollapsedShadow,
         }}
       >
+        {/* Content renders ABOVE the button so the handle stays at viewport bottom (§1.3) */}
+        {isExpanded && <DrawerContent />}
         <button
           type="button"
           onClick={() => setDrawerOpen(open => !open)}
@@ -396,7 +398,7 @@ const NihssCalculator: React.FC = () => {
             </div>
           </div>
           <Chevron
-            direction={isExpanded ? 'down' : 'up'}
+            direction={isExpanded ? 'up' : 'down'}
             className={
               isExpanded
                 ? SEVERITY_COLOR[severity]
@@ -406,7 +408,6 @@ const NihssCalculator: React.FC = () => {
             }
           />
         </button>
-        {isExpanded && <DrawerContent />}
       </div>
     );
   };
@@ -425,7 +426,7 @@ const NihssCalculator: React.FC = () => {
         className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-100 dark:border-slate-700"
         role="banner"
       >
-        <div className="max-w-2xl mx-auto px-5 py-4">
+        <div className="max-w-2xl mx-auto px-5 py-3">
 
           {/* Row 1: back + score + actions (§1.1) */}
           <div className="flex items-center justify-between gap-2">
@@ -625,7 +626,7 @@ const NihssCalculator: React.FC = () => {
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}
       <main className="max-w-2xl mx-auto px-5 pt-6 pb-4">
         {/* Normal exam shortcut — Phase 7E §3.5 */}
-        <div className="flex justify-end mb-2">
+        <div className="flex justify-start mb-2">
           <button
             type="button"
             onClick={handleNormalExam}
