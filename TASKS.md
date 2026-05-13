@@ -954,6 +954,14 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-13 — Governance modernization: CLAUDE.md v4.0 + 5 new skills + agent wiring + path corrections (Class D) — commit dbf1e48
+  - CLAUDE.md v4.0: §19.0 Language Trigger Map (22 patterns); §10.1 swarm observability header; §12 expanded plugin skills (design:*, engineering:*); §21 stale paths fixed (router.tsx → App.tsx, trials/ subfolder removed)
+  - New skills: design-tokens, testing-patterns, deploy, routing, compliance-public-medical
+  - Agent frontmatter wired: ui-architect, quality-assurance, accessibility-specialist, system-architect
+  - New agent: data-architect (resolves broken handoff referenced in clinical-reviewer, medical-scientist, CLAUDE.md §13.3)
+  - Meta docs: Core 7 → Core 6, agents/active/ references removed from build-engineer + orchestrator
+  - clinical-surfaces.md: removed non-existent src/data/trials/ and src/pages/calculators/ paths; added trialListData.ts, trial-questions.ts, TrialPageNew.tsx
+  - QA: tsc clean · build green · claims hook pass · route check pass (39 routes)
 - [x] 2026-05-13 — TASKS.md audit sync + CONTENT_AUDIT.md creation (Class B docs)
   - Synced 9 pre-shipped phases to [x] merged status: Phase 3C (af1dc24), 4A (6356c59), 4B (27e8b99), 5A (5d84715), 6A (94f0fce), 6B (9af24af), 7A (176c98e), 7B (176c98e), 7C (e5e6807)
   - Created docs/CONTENT_AUDIT.md — living roadmap: calculator audit table, trial question taxonomy (6 existing → 24 target), missing trial stubs, legacy rebuild priority order, compliance pages, W6.9 chain wiring status
