@@ -253,6 +253,13 @@ const NihssCalculator: React.FC = () => {
     setTimeout(() => setToastMessage(null), 1500);
   };
 
+  /** Normal exam shortcut — Phase 7E §3.5: set all 15 items to 0, open drawer */
+  const handleNormalExam = () => {
+    const allZero = Object.fromEntries(NIHSS_ITEMS.map(item => [item.id, 0]));
+    setNihssValues(allZero);
+    setDrawerOpen(true);
+  };
+
   // ── Portal drawer ──────────────────────────────────────────────────────────
 
   const drawerCollapsedShadow = '0 -2px 12px rgba(15,23,42,0.08)';
@@ -267,6 +274,13 @@ const NihssCalculator: React.FC = () => {
       className="max-h-[60vh] overflow-y-auto"
     >
       <div className="px-5 pt-4 pb-6">
+        {/* Partial score note — State B only */}
+        {drawerState === 'B' && (
+          <div className="mb-3 flex items-center gap-2 px-2.5 py-1.5 bg-slate-50 dark:bg-slate-800 rounded-lg">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">In progress</span>
+            <span className="text-xs text-slate-400">{answeredCount} of {totalItems} items scored</span>
+          </div>
+        )}
         {/* Severity row */}
         <div className="flex items-baseline gap-3 mb-3">
           <span className={`text-xl font-semibold ${SEVERITY_COLOR[severity]}`}>
@@ -333,8 +347,8 @@ const NihssCalculator: React.FC = () => {
 
   /** Bottom drawer portal — CALCULATOR_SPEC.md §1.3, §5 */
   const Drawer: React.FC = () => {
-    // States A + B — muted, non-interactive
-    if (drawerState === 'A' || drawerState === 'B') {
+    // State A — no items answered, muted non-interactive
+    if (drawerState === 'A') {
       return (
         <div
           className="bg-slate-100 dark:bg-slate-800"
@@ -346,23 +360,15 @@ const NihssCalculator: React.FC = () => {
               <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 Interpretation
               </div>
-              <div className="text-sm text-slate-500">
-                {drawerState === 'A'
-                  ? '0 items selected'
-                  : `${answeredCount} of ${totalItems} items`}
-              </div>
+              <div className="text-sm text-slate-500">Select items to score</div>
             </div>
-            <div className="text-xs text-slate-400">
-              {drawerState === 'A'
-                ? 'Appears when complete'
-                : `${totalItems - answeredCount} more to complete`}
-            </div>
+            <div className="text-xs text-slate-400">Appears when complete</div>
           </div>
         </div>
       );
     }
 
-    // State C — complete, tappable
+    // States B + C — live, tappable (B shows partial note inside DrawerContent)
     const isExpanded = drawerOpen;
     const borderColor = SEVERITY_BORDER[severity];
     const headerBg = isExpanded ? SEVERITY_HEADER_BG[severity] : 'bg-white dark:bg-slate-900';
@@ -618,6 +624,16 @@ const NihssCalculator: React.FC = () => {
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}
       <main className="max-w-2xl mx-auto px-5 pt-6 pb-4">
+        {/* Normal exam shortcut — Phase 7E §3.5 */}
+        <div className="flex justify-end mb-2">
+          <button
+            type="button"
+            onClick={handleNormalExam}
+            className="text-[10px] font-semibold text-neuro-600 underline-offset-2 hover:underline"
+          >
+            Normal exam
+          </button>
+        </div>
         <div className="grid grid-cols-1 gap-6">
           {NIHSS_ITEMS.map((item) => {
             const warning = userMode === 'resident' ? getItemWarning(item.id, nihssValues[item.id] ?? 0, nihssValues) : null;
