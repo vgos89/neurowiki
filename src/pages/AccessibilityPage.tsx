@@ -60,11 +60,11 @@ export default function AccessibilityPage() {
       <Section title="What is implemented">
         <ul className="space-y-2.5 mt-1">
           <CheckItem>
-            <strong>Skip link</strong> — the first focusable element on every page. Keyboard users
+            <strong>Skip link:</strong> the first focusable element on every page. Keyboard users
             can skip directly to main content.
           </CheckItem>
           <CheckItem>
-            <strong>ARIA roles on calculators</strong> — scoring item groups use{' '}
+            <strong>ARIA roles on calculators:</strong> scoring item groups use{' '}
             <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">role="radiogroup"</code>.
             Each option carries{' '}
             <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">role="radio"</code>{' '}
@@ -75,33 +75,33 @@ export default function AccessibilityPage() {
             so screen readers announce updates.
           </CheckItem>
           <CheckItem>
-            <strong>Modal focus management</strong> — modals and drawers trap focus, return focus to
+            <strong>Modal focus management:</strong> modals and drawers trap focus, return focus to
             the trigger on close, and respond to Escape. They carry{' '}
             <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">role="dialog"</code>{' '}
             and{' '}
             <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">aria-modal="true"</code>.
           </CheckItem>
           <CheckItem>
-            <strong>Touch targets</strong> — all interactive elements are at least 44×44px, meeting
+            <strong>Touch targets:</strong> all interactive elements are at least 44×44px, meeting
             WCAG 2.5.5.
           </CheckItem>
           <CheckItem>
-            <strong>Color contrast</strong> — body text meets 4.5:1 contrast. Large text (≥18pt or
+            <strong>Color contrast:</strong> body text meets 4.5:1. Large text (≥18pt or
             14pt bold) meets 3:1. Both light and dark themes pass.
           </CheckItem>
           <CheckItem>
-            <strong>Keyboard navigation</strong> — all controls are reachable and operable by
+            <strong>Keyboard navigation:</strong> all controls are reachable and operable by
             keyboard. Focus indicators are visible.
           </CheckItem>
           <CheckItem>
-            <strong>Semantic HTML</strong> — landmark roles (
+            <strong>Semantic HTML:</strong> landmark roles (
             <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">&lt;main&gt;</code>,{' '}
             <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">&lt;nav&gt;</code>,{' '}
             <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">&lt;aside&gt;</code>)
             on all pages. Heading levels are sequential.
           </CheckItem>
           <CheckItem>
-            <strong>Dark mode</strong> — contrast ratios pass in both light and dark themes.
+            <strong>Dark mode:</strong> contrast ratios pass in both light and dark themes.
           </CheckItem>
         </ul>
       </Section>
@@ -109,8 +109,8 @@ export default function AccessibilityPage() {
       <Section title="Known gaps">
         <p>Two areas are still in progress:</p>
         <ul className="list-disc list-inside space-y-1.5 mt-2 text-slate-500 dark:text-slate-400">
-          <li>Chart components (trial result visualisations) — text alternatives pending</li>
-          <li>Complex data tables on trial pages — full header association markup pending</li>
+          <li>Chart components (trial result visualisations): text alternatives pending</li>
+          <li>Complex data tables on trial pages: full header association markup pending</li>
         </ul>
         <p className="mt-3">
           Report any barrier not listed here and we will prioritise a fix.

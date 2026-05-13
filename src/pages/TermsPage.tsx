@@ -35,7 +35,7 @@ export default function TermsPage() {
           Clinical reference only
         </p>
         <p className="text-sm text-amber-700 dark:text-amber-300 leading-relaxed">
-          NeuroWiki supports clinical judgment — it does not replace it. Verify all scores,
+          NeuroWiki supports clinical judgment. It does not replace it. Verify all scores,
           pathways, and dosing against your institutional protocol and the patient in front of
           you. Do not base any clinical decision solely on this tool.
         </p>
@@ -43,9 +43,9 @@ export default function TermsPage() {
 
       <Section title="What NeuroWiki is">
         <p>
-          NeuroWiki is a clinical decision-support reference for neurology clinicians — residents,
-          fellows, and attendings. It provides scoring calculators, clinical pathways, and trial
-          summaries based on published guidelines.
+          NeuroWiki is a clinical decision-support reference for neurology residents, fellows,
+          and attendings. It provides scoring calculators, clinical pathways, and trial summaries
+          based on published guidelines.
         </p>
         <p>
           Tidbit Health (info@tidbithealth.in), based in India, operates NeuroWiki.
@@ -59,7 +59,7 @@ export default function TermsPage() {
         </p>
         <p>
           NeuroWiki is provided as-is. No warranty of accuracy, completeness, or fitness for any
-          purpose — express or implied.
+          purpose, express or implied.
         </p>
       </Section>
 
@@ -80,8 +80,8 @@ export default function TermsPage() {
 
       <Section title="Limitation of liability">
         <p>
-          To the extent permitted by applicable law, Tidbit Health is not liable for any damages
-          — direct, indirect, or consequential — arising from use of or reliance on this tool,
+          To the extent permitted by applicable law, Tidbit Health is not liable for direct,
+          indirect, or consequential damages arising from use of or reliance on this tool,
           including clinical decisions made on the basis of information presented here.
         </p>
       </Section>

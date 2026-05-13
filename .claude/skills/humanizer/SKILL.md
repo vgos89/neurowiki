@@ -80,7 +80,15 @@ AI systems use repetition penalties that cause them to use synonyms more than a 
 
 ## Structural Patterns — Break These Up
 
-**Em-dash overuse.** One em-dash per paragraph is the maximum. Two or more in the same block reads as AI. Replace with a period, comma, or recast the sentence.
+**Em-dash overuse.** One em-dash per paragraph is the maximum. Two or more in the same block reads as AI. Replace with a period, comma, colon, or recast the sentence.
+
+The term — definition list pattern (`**Term** — description`) is not exempt. Use a colon: `**Term:** description`.
+
+**Before submitting any file, run a literal grep — do not rely on a mental count:**
+```
+grep -n " — " <file>
+```
+Every match that is not inside a code comment (`//`, `/* */`, `{/* */}`) requires a fix. Mental pass is insufficient — this check must be mechanical.
 
 **Rule of three.** AI defaults to three-item lists. "Fast, accurate, and evidence-based." If a list has exactly three items, ask whether it actually has two — or four.
 

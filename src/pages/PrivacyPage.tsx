@@ -53,13 +53,13 @@ export default function PrivacyPage() {
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
               {[
-                ['Google Analytics events', 'Google servers', 'Usage analytics — page views, feature use', 'Google default: 26 months'],
+                ['Google Analytics events', 'Google servers', 'Usage analytics: page views, feature use', 'Google default: 26 months'],
                 ['Cookie consent decision', 'Your browser (neurowiki:consent)', 'Controls whether GA loads', 'Until you clear browser storage'],
                 ['Favourite trials', 'Your browser (neurowiki:favs)', 'Saves starred trials between sessions', 'Until you clear browser storage'],
                 ['Recently viewed', 'Your browser (neurowiki:recents:v1)', 'Powers the recents list', 'Until you clear browser storage'],
                 ['Disclaimer acknowledged', 'Your browser (neurowiki:disclaimer:v1)', 'Suppresses the first-visit disclaimer', 'Until you clear browser storage'],
                 ['Feedback submissions', 'Resend (email relay) → operator inbox', 'Delivers your feedback to the team', 'Email provider retention policy'],
-                ['NPI proxy results', 'Not stored — session only', 'Displays a doctor name from NPI lookup', 'Never written to storage'],
+                ['NPI proxy results', 'Not stored (session only)', 'Displays a doctor name from NPI lookup', 'Never written to storage'],
               ].map(([data, where, purpose, retention]) => (
                 <tr key={data} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                   <td className="p-2.5 border border-slate-200 dark:border-slate-600 font-medium text-slate-700 dark:text-slate-200">{data}</td>
@@ -79,7 +79,7 @@ export default function PrivacyPage() {
 
       <Section title="Google Analytics">
         <p>
-          When you consent, Google Analytics 4 loads. IP anonymisation is on — your full IP
+          When you consent, Google Analytics 4 loads. IP anonymisation is on. Your full IP
           address is never sent to Google. To block GA entirely, use the{' '}
           <a
             href="https://tools.google.com/dlpage/gaoptout"
@@ -119,7 +119,7 @@ export default function PrivacyPage() {
         </p>
       </Section>
 
-      <Section title="GDPR — EU residents">
+      <Section title="GDPR: EU residents">
         <p>
           EU residents have the right to access, correct, or delete any data held about them.
           Because NeuroWiki stores nothing server-side about individual users, the only actionable
@@ -131,7 +131,7 @@ export default function PrivacyPage() {
         </p>
       </Section>
 
-      <Section title="CCPA — California residents">
+      <Section title="CCPA: California residents">
         <p>
           NeuroWiki does not sell personal information as defined by the California Consumer Privacy
           Act. To request deletion of any data associated with you, email{' '}
