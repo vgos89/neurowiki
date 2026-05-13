@@ -3,6 +3,7 @@ name: accessibility-specialist
 description: Contextual agent. Owns WCAG 2.1 AA compliance, ARIA patterns, keyboard navigation, focus management, and screen-reader experience. Activates on interactive UI work only.
 tools: Read, Write, Edit, Glob, Grep
 model: sonnet
+skills: accessibility-audit, design:accessibility-review
 ---
 
 ## Activation triggers

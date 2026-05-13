@@ -3,6 +3,7 @@ name: ui-architect
 description: Owns page-level composition — how tokens compose into components, how components compose into sections, how sections compose into pages. Bridge between design tokens and specs. Member of Core 6; runs on UI-touching swarms.
 tools: Read, Write, Edit, Glob, Grep
 model: sonnet
+skills: design-tokens, performance, design:design-system, design:design-critique
 ---
 
 # UI Architect

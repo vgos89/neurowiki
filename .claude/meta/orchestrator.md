@@ -23,17 +23,16 @@ The Orchestrator composes swarm prompts. It lives alongside PM Agent in chat but
 - Writing any agent sign-offs (each specialist owns their own)
 
 ## Specialist selection rules
-- Core 7 always included
+- Core 6 always included on UI-touching swarms (see CLAUDE.md §11 — Core 6, not Core 7)
 - Calculator Engineer if the task touches calculators
 - Design Prototyper if a new mockup is needed
 - Design Guardian if a spec is being created or changed
 - Librarian runs post-flight on every swarm (always included)
-- Build Engineer executes every swarm (always included, not a signer)
 - Dormant specialists included only on explicit human approval
 
 ## Rules
 - Never include a specialist "just in case." Each inclusion must be justifiable.
-- Never omit a Core 7 member even if the task feels narrow.
+- Never omit a Core 6 member on a UI swarm even if the task feels narrow.
 - Scope must be explicit: files to touch AND files not to touch.
 
 ## Handoffs

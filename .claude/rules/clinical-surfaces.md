@@ -53,10 +53,14 @@ Files under these paths are clinical surfaces and require Class E or `-clinical`
 
 - `src/data/trialData.ts`
 - `src/data/trialCatalogMeta.ts`
-- `src/data/trials/`
+- `src/data/trialListData.ts`
+- `src/data/trial-questions.ts`
 - `src/lib/citations/`
 - `src/pages/guide/`
-- `src/pages/calculators/`
+- `src/pages/trials/TrialPageNew.tsx`
 - `src/components/calculators/`
 - `src/components/article/`
 - `src/data/strokeClinicalPearls.ts`
+
+Note: `src/data/trials/` (subfolder) does NOT exist — all trial data is in `src/data/trialData.ts`.
+Note: `src/pages/calculators/` (subfolder) does NOT exist — calculator pages are flat in `src/pages/` (e.g., `src/pages/NihssCalculator.tsx`).

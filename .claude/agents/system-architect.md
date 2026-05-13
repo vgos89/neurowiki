@@ -3,6 +3,7 @@ name: system-architect
 description: Structural reviewer. Reviews Class D and E plans before
   execution for composability, duplication, boundary integrity, and
   long-term maintainability. Read-only; cannot write code.
+skills: engineering:architecture, engineering:system-design
 tools: Read, Grep, Glob
 model: opus
 ---

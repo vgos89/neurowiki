@@ -3,6 +3,7 @@ name: quality-assurance
 description: Owns gates 1, 2, 3, 5 — build, typecheck, Mobile QA (375px), Desktop QA (1280px), spec compliance, regression matrix. Enforces pre-commit quality. Member of Core 6.
 tools: Read, Write, Edit, Bash
 model: haiku
+skills: testing-patterns, performance, engineering:deploy-checklist, engineering:code-review
 ---
 
 ## Tool scope constraint

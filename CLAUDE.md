@@ -1,4 +1,4 @@
-# NeuroWiki — CLAUDE.md (v3.3)
+# NeuroWiki — CLAUDE.md (v4.0)
 
 > Operating manual for this repo. Every Claude Code session reads this on startup. This file is the **contract** — changes are deliberate and committed. Task-specific notes live in `TASKS.md`. Architectural decisions live in `PRD.md` and `docs/adrs/`.
 
@@ -14,7 +14,7 @@
 
 **Stack:** Vite · React 18 + TypeScript · React Router 7 (library mode, SPA) · Tailwind + shadcn/ui · Material Icons · Vercel hosting (static build). External APIs: PubMed MCP, ClinicalTrials.gov.
 
-**Routing:** Client-side, SPA. No file-based routing. Routes defined centrally in `src/router.tsx` (or the project's canonical route config — check there first before adding routes).
+**Routing:** Client-side, SPA. No file-based routing. Routes defined centrally in `src/App.tsx` (lazy imports + `<Routes>`) and documented in `src/config/routeManifest.ts`. See `.claude/skills/routing/SKILL.md`.
 
 ---
 
@@ -224,6 +224,25 @@ Every meaningful technical output follows this structure.
 
 For multi-file changes, group by file. For plans, lead with numbered English steps, then the technical scaffold. For Class A/B, a light bilingual gloss is fine — but never skip the English side.
 
+### 10.1 Swarm observability header
+
+**When you invoke any Agent tool or load a skill, open your response with a single dispatch line before any other text:**
+
+```
+→ [agent: <name(s)> · skills: <name(s) or none> · tools: <tools granted>]
+```
+
+Examples:
+```
+→ [agent: ui-architect · skills: design-tokens, design:design-system · tools: Read, Write, Edit, Glob, Grep]
+→ [agent: evidence-verifier, medical-scientist · skills: clinical-trial-audit, stroke-guidelines · tools: WebFetch, WebSearch, Read]
+→ [agent: quality-assurance · skills: engineering:deploy-checklist, testing-patterns · tools: Read, Write, Edit, Bash]
+```
+
+**Omit** the header for Class A answers and direct Class B edits where no Agent tool is called.
+
+This is not an audit log — it's a live signal to V about what's running. Token cost: ~30 per response. Required from this version forward.
+
 ---
 
 ## 11. Agent roster
@@ -274,7 +293,7 @@ True subagents live in `.claude/agents/`. Each has frontmatter-enforced scope: `
 
 In `.claude/skills/`. Agents load via `skills:` frontmatter when the task touches the domain. Skills use folder format: `.claude/skills/<name>/SKILL.md`. This is the canonical format — flat `.md` files are legacy.
 
-### Shipped
+### Shipped — NeuroWiki custom skills (`.claude/skills/<name>/SKILL.md`)
 
 | Skill | Domain | Loaded by |
 |---|---|---|
@@ -284,11 +303,36 @@ In `.claude/skills/`. Agents load via `skills:` frontmatter when the task touche
 | `trial-statistics` | Statistical design taxonomy, NI/Bayesian/ordinal interpretation rules | `trial-statistician`, `medical-scientist` |
 | `humanizer` | AI-fingerprint removal, clinical voice, signal phrases, 7-step sign-off | `content-writer` |
 | `accessibility-audit` | WCAG 2.1 AA checklist, ARIA patterns, pre-merge gate | `accessibility-specialist` |
+| `design-tokens` | neuro-* palette, Tailwind conventions, CALCULATOR_SPEC.md v1.1 tokens, shadcn/ui rules | `ui-architect`, `mobile-first-developer` |
+| `testing-patterns` | Vitest setup, calculator scoring test templates, hook test patterns, coverage targets | `quality-assurance` |
+| `deploy` | Vercel auto-deploy, env vars, rollback procedure, post-deploy smoke test checklist | `quality-assurance`, orchestrator |
+| `routing` | `src/App.tsx` route conventions, routeManifest.ts, lazy-import pattern, check:routes | `ui-architect`, `seo-specialist` |
+| `compliance-public-medical` | HIPAA/GDPR/CCPA/ADA review guide, data disclosure checklist, disclaimer patterns | `compliance-legal` |
+
+### Shipped — Platform plugin skills (available as `namespace:skill`)
+
+These ship with the Claude Code environment. Reference them in agent frontmatter as `namespace:skill-name`.
+
+| Skill | Domain | Loaded by |
+|---|---|---|
+| `design:design-system` | Design system audit, token naming, component consistency | `ui-architect` |
+| `design:design-critique` | Usability, hierarchy, consistency feedback | `ui-architect` |
+| `design:accessibility-review` | WCAG 2.1 AA audit on designs and pages | `accessibility-specialist` |
+| `design:ux-copy` | Microcopy, error messages, empty states, CTAs | `content-writer` |
+| `design:design-handoff` | Developer handoff specs from designs | `design-prototyper`, `ui-architect` |
+| `engineering:code-review` | Security, performance, correctness review | `system-architect`, `quality-assurance` |
+| `engineering:architecture` | ADR creation and evaluation | `system-architect` |
+| `engineering:system-design` | Systems, services, and architecture design | `system-architect` |
+| `engineering:deploy-checklist` | Pre-deployment verification | `quality-assurance` |
+| `engineering:incident-response` | Incident triage, communication, postmortem | orchestrator, `quality-assurance` |
+| `engineering:testing-strategy` | Test strategy and test plan design | `quality-assurance` |
+| `engineering:documentation` | Technical documentation writing | `librarian`, `content-writer` |
+| `engineering:debug` | Structured debugging: reproduce, isolate, diagnose | orchestrator, `quality-assurance` |
+| `engineering:tech-debt` | Tech debt identification and prioritization | `system-architect` |
 
 ### Pending
 
-- `compliance-public-medical` — HIPAA/GDPR/CCPA/ADA review templates for `compliance-legal`
-- Disease-area skills — calculator-specific guidelines (ICH, seizure, headache)
+- Disease-area skills — calculator-specific guidelines (ICH, seizure, headache, MS, MG, GBS)
 
 ---
 
@@ -482,6 +526,38 @@ Naming: `arch-PR<#>-<slug>.md` and `clinical-PR<#>-<slug>.md`. Location: always 
 
 ## 19. Delegation protocol (class-aware)
 
+### 19.0 Language trigger map
+
+When V speaks in plain English, pattern-match against this table **before** classifying. The right column shows which agents to invoke and which skills to load. This fires automatically — V does not need to use `/build` for the orchestrator to know who to route to.
+
+| When V says... | → Invoke these agents · Load these skills |
+|---|---|
+| "the design / UI / layout / component [is wrong / doesn't match / looks off]" | `ui-architect` + `mobile-first-developer` · `design-tokens`, `design:design-system`, `design:design-critique` |
+| "this calculator doesn't match the spec / GCS / other calculators" | `calculator-engineer` + `ui-architect` · `design-tokens`, `design:design-system` |
+| "this looks broken on mobile / phone / 375px / small screen" | `mobile-first-developer` · `design-tokens` |
+| "audit this design / page / component" | `ui-architect` + `design-guardian` + `accessibility-specialist` · `design-tokens`, `design:design-system`, `design:design-critique`, `design:accessibility-review` |
+| "update / fix / correct the clinical content / guidelines / thresholds / interpretation" | `evidence-verifier` → `medical-scientist` → `clinical-reviewer` · `stroke-guidelines` |
+| "add / rebuild / update a trial page" or "here is the PDF for [trial]" | `evidence-verifier` → `trial-statistician` → `medical-scientist` → `clinical-reviewer` · `clinical-trial-audit`, `trial-statistics` |
+| "the NNT / statistic / p-value / CI is wrong or invalid" | `trial-statistician` → `medical-scientist` → `clinical-reviewer` · `trial-statistics` |
+| "write / update / add a pearl / study mode content / clinical question" | `medical-scientist` + `content-writer` + `clinical-reviewer` · `stroke-guidelines`, `humanizer` |
+| "rewrite / improve / fix this copy / text / prose / wording" | `content-writer` · `humanizer`, `design:ux-copy` |
+| "add a new route / page / screen / calculator" | `ui-architect` + `seo-specialist` · `routing`, `design-tokens` |
+| "refactor / restructure / reorganize / decompose [X]" | `system-architect` (plan review required first) · `engineering:architecture` |
+| "tests are failing / run the tests / write tests for [X]" | `quality-assurance` · `testing-patterns`, `engineering:testing-strategy` |
+| "this is slow / performs badly / bundle is too big / Lighthouse score" | `quality-assurance` + `system-architect` · `performance`, `engineering:tech-debt` |
+| "deploy / ship / release / push to prod / push it live" | `quality-assurance` (all gates) → then `/pr-ready` · `engineering:deploy-checklist`, `deploy` |
+| "something is broken in prod / on Vercel / the site is down" | `/rollback` command first; then `quality-assurance` + `system-architect` · `engineering:incident-response`, `deploy` |
+| "review this code / PR / diff" | `system-architect` · `engineering:code-review` |
+| "update the docs / README / TASKS / ROADMAP / NEUROWIKI" | `librarian` · `engineering:documentation` |
+| "is this GDPR / HIPAA / compliant / do we need a disclaimer" | `compliance-legal` · `compliance-public-medical` |
+| "add / update the privacy / terms / accessibility page" | `compliance-legal` + `content-writer` + `ui-architect` · `compliance-public-medical` |
+| "the citation is stale / wrong / needs updating" | `evidence-verifier` → `medical-scientist` → `clinical-reviewer` · `clinical-trial-audit` |
+| "is this accessible / check accessibility / WCAG" | `accessibility-specialist` · `accessibility-audit`, `design:accessibility-review` |
+
+**After pattern-matching:** still classify (A/B/C/D/E), still get V approval for Class C+. The trigger map tells you *who*, classification tells you *how much process*.
+
+---
+
 When V describes a task, orchestrator:
 
 0. **If the task originates from an external document** (uploaded audit, research file, prior-session findings, external agent output, or any source other than V's direct instruction in this session): treat every finding as a hypothesis, not a confirmed fix. Do not execute any finding without completing steps 1–6 below. The document is a briefing, not an approval. Violating this step is a protocol breach regardless of how obvious the fixes appear.
@@ -525,19 +601,25 @@ If any gate fails, the PR does not open. Orchestrator **diagnoses and fixes the 
 ```
 src/
 ├── pages/                      # Page-level React components (see note below)
-│   ├── guide/                  # Clinical workflow pages
-│   └── calculators/            # Calculator pages
+│   ├── guide/                  # Clinical workflow pages (18 pages)
+│   ├── trials/                 # Trial detail pages (TrialPageNew.tsx)
+│   └── [flat]                  # Calculators are flat in src/pages/ — no calculators/ subfolder
 ├── components/
 │   ├── article/                # Article components (stroke/, etc.)
 │   ├── calculators/            # Reusable calculator components
+│   ├── trials/                 # Trial-specific components (TrialLegendCard, RCTChainSection, etc.)
 │   └── ui/                     # shadcn/ui primitives
 ├── data/
-│   ├── trials/                 # Trial database
+│   ├── trialData.ts            # All trial data (89 TRIAL_DATA records) — no trials/ subfolder
+│   ├── trialListData.ts        # Catalog + findTrialById — import boundary for home route
+│   ├── trialCatalogMeta.ts     # Supplementary catalog metadata
 │   └── strokeClinicalPearls.ts
+├── config/
+│   └── routeManifest.ts        # Route metadata manifest (title, description, zone, navTab, railItem)
 ├── lib/
 │   ├── citations/              # Citation schema + registry + claims + claim() helper
 │   └── utils/
-├── router.tsx                  # Central React Router 7 config
+├── App.tsx                     # Central React Router 7 config (NOT router.tsx — that file does not exist)
 └── main.tsx                    # Vite entry point
 
 docs/
