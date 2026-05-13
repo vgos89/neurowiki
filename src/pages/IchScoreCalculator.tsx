@@ -380,6 +380,9 @@ const IchScoreCalculator: React.FC = () => {
           boxShadow: isExpanded ? drawerExpandedShadow : drawerCollapsedShadow,
         }}
       >
+        {/* Content renders ABOVE the button so the handle stays at viewport bottom (§1.3) */}
+        {isExpanded && <DrawerContent />}
+
         {/* Header row — collapses / expands on click */}
         <button
           type="button"
@@ -406,9 +409,9 @@ const IchScoreCalculator: React.FC = () => {
               {result.label} · {result.stat}
             </div>
           </div>
-          {/* Chevron: discovery bounce fires once on completion; hint bounce after (§5.4) */}
+          {/* Chevron: up=expanded (content above, tap to close); down=collapsed (tap to open) */}
           <Chevron
-            direction={isExpanded ? 'down' : 'up'}
+            direction={isExpanded ? 'up' : 'down'}
             className={
               isExpanded
                 ? tokens.chevronClass
@@ -418,9 +421,6 @@ const IchScoreCalculator: React.FC = () => {
             }
           />
         </button>
-
-        {/* Expanded content */}
-        {isExpanded && <DrawerContent />}
       </div>
     );
   };
