@@ -49,7 +49,10 @@ export type StaticRouteKey =
   | 'headache-workup'
   | 'vertigo'
   | 'weakness-workup'
-  | 'trials-hub';
+  | 'trials-hub'
+  | 'privacy'
+  | 'terms'
+  | 'accessibility';
 
 export interface RouteDefinition {
   key: StaticRouteKey;
@@ -684,6 +687,46 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
       title: 'Stroke Clinical Trials — Evidence Summaries for Neurologists | NeuroWiki',
       description: 'Summaries of 79 landmark stroke clinical trials: DAWN, DEFUSE-3, NINDS, ORIGINAL, MR CLEAN, INSPIRES, ENRICH, TRACE-III, ELAN, CHANCE, POINT, and more. NNT, mRS outcomes, AHA/ASA 2026 guideline recommendations. For neurologists and residents.',
       keywords: 'landmark stroke clinical trials, stroke trial results, thrombectomy trials, IV thrombolysis trials, DAWN trial, DEFUSE-3 trial, NINDS tPA trial, ORIGINAL tenecteplase trial, MR CLEAN trial, INSPIRES DAPT stroke, ENRICH ICH surgery, secondary prevention stroke trials, NNT stroke, NEJM stroke trials, vascular neurology clinical trials',
+      image: DEFAULT_IMAGE,
+    },
+  },
+  // Legal / compliance pages — Phase 4D. Excluded from sitemap.
+  {
+    key: 'privacy',
+    path: '/privacy',
+    published: true,
+    zone: 'reading',
+    bottomNavTab: 'home',
+    railItem: 'home',
+    meta: {
+      title: 'Privacy Policy · NeuroWiki',
+      description: 'How NeuroWiki handles your data — Google Analytics, local storage, feedback submissions, and your GDPR/CCPA rights.',
+      image: DEFAULT_IMAGE,
+    },
+  },
+  {
+    key: 'terms',
+    path: '/terms',
+    published: true,
+    zone: 'reading',
+    bottomNavTab: 'home',
+    railItem: 'home',
+    meta: {
+      title: 'Terms of Use · NeuroWiki',
+      description: 'Terms of use for NeuroWiki — clinical reference only, no warranty, governing law.',
+      image: DEFAULT_IMAGE,
+    },
+  },
+  {
+    key: 'accessibility',
+    path: '/accessibility',
+    published: true,
+    zone: 'reading',
+    bottomNavTab: 'home',
+    railItem: 'home',
+    meta: {
+      title: 'Accessibility Statement · NeuroWiki',
+      description: 'NeuroWiki targets WCAG 2.1 AA compliance. Learn what we have implemented and how to report accessibility issues.',
       image: DEFAULT_IMAGE,
     },
   },

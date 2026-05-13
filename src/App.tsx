@@ -44,6 +44,9 @@ const MigrainePathway = lazy(() => import('./pages/MigrainePathway'));
 const ExtendedIVTPathway = lazy(() => import('./pages/ExtendedIVTPathway'));
 const EmBillingCalculator = lazy(() => import('./pages/EmBillingCalculator'));
 const StrokeGuidelineMindmap = lazy(() => import('./pages/guide/StrokeGuidelineMindmap'));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
+const TermsPage = lazy(() => import('./pages/TermsPage'));
+const AccessibilityPage = lazy(() => import('./pages/AccessibilityPage'));
 
 // Dev-only pages — not included in production bundle
 const RCTChainTest = import.meta.env.DEV
@@ -107,6 +110,10 @@ const ROUTE_COMPONENTS: Record<StaticRouteKey, React.ReactNode> = {
   vertigo: <Vertigo />,
   'weakness-workup': <WeaknessWorkup />,
   'trials-hub': <TrialsPage />,
+  // Legal / compliance pages — Phase 4D
+  privacy: <PrivacyPage />,
+  terms: <TermsPage />,
+  accessibility: <AccessibilityPage />,
 };
 
 const TrialModalWrapper: React.FC = () => {

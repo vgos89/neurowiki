@@ -88,11 +88,16 @@ export const DesktopRail: React.FC = () => {
       {/* Spacer */}
       <div className="flex-1" />
 
-      {/* Footer — LAYOUT_SPEC §6.1.4 */}
-      <div className="border-t border-slate-100 pt-3.5 px-3">
-        <a href="#" className="text-[11px] text-slate-500 hover:text-slate-700 transition-colors">
-          About · Feedback
-        </a>
+      {/* Footer — LAYOUT_SPEC §6.1.4 — Phase 4D legal links */}
+      <div className="border-t border-slate-100 pt-3.5 px-3 flex flex-col gap-1">
+        <div className="flex gap-2.5 flex-wrap">
+          <Link to="/privacy" className="text-[11px] text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">Privacy</Link>
+          <span className="text-[11px] text-slate-300 dark:text-slate-600" aria-hidden="true">·</span>
+          <Link to="/terms" className="text-[11px] text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">Terms</Link>
+          <span className="text-[11px] text-slate-300 dark:text-slate-600" aria-hidden="true">·</span>
+          <Link to="/accessibility" className="text-[11px] text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">Accessibility</Link>
+        </div>
+        <p className="text-[10px] text-slate-400 dark:text-slate-500">© 2026 Tidbit Health</p>
       </div>
     </aside>
   );
