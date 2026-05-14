@@ -24,6 +24,8 @@ import React, {
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { Star, RefreshCw } from 'lucide-react';
+import { Chevron } from '../components/calculators/Chevron';
+import { BackArrow } from '../components/calculators/BackArrow';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
 import { useRecents } from '../hooks/useRecents';
@@ -87,48 +89,6 @@ const DIABETES_OPTIONS = [
   { value: false, label: 'No diabetes', points: 0 },
   { value: true,  label: 'Diabetes',    points: 1 },
 ];
-
-// ─── Sub-components ───────────────────────────────────────────────────────────
-
-/** Inline SVG back arrow — §1.1 */
-const BackArrow: React.FC = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M19 12H5M12 19l-7-7 7-7" />
-  </svg>
-);
-
-/** Chevron SVG — direction prop controls up vs down */
-const Chevron: React.FC<{ direction: 'up' | 'down'; className?: string }> = ({
-  direction,
-  className = '',
-}) => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-    className={className}
-  >
-    {direction === 'up'
-      ? <polyline points="18 15 12 9 6 15" />
-      : <polyline points="6 9 12 15 18 9" />}
-  </svg>
-);
 
 // ─── Main component ───────────────────────────────────────────────────────────
 

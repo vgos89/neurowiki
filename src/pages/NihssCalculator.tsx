@@ -23,6 +23,8 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { Star, RefreshCw } from 'lucide-react';
+import { Chevron } from '../components/calculators/Chevron';
+import { BackArrow } from '../components/calculators/BackArrow';
 import { useFavorites } from '../hooks/useFavorites';
 import { useRecents } from '../hooks/useRecents';
 import { NIHSS_ITEMS, calculateTotal, getItemWarning, calculateLvoProbability } from '../utils/nihssShortcuts';
@@ -75,47 +77,6 @@ const SEVERITY_HEADER_BG: Record<NIHSSSeverity, string> = {
   'moderate-severe':  'bg-red-50',
   'severe':           'bg-red-50',
 };
-
-// ─── Back arrow SVG (spec §1.1) ───────────────────────────────────────────────
-
-const BackArrow: React.FC = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M19 12H5M12 19l-7-7 7-7" />
-  </svg>
-);
-
-/** Chevron — direction prop controls up vs down */
-const Chevron: React.FC<{ direction: 'up' | 'down'; className?: string }> = ({
-  direction,
-  className = '',
-}) => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-    className={className}
-  >
-    {direction === 'up'
-      ? <polyline points="18 15 12 9 6 15" />
-      : <polyline points="6 9 12 15 18 9" />}
-  </svg>
-);
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
