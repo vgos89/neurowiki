@@ -1,6 +1,25 @@
+/**
+ * RoPE Score Calculator — rebuilt against CALCULATOR_SPEC.md v1.1
+ * Archetype 1 (radio rows) + embedded A3 checkboxes for other criteria.
+ *
+ * Spec citations:
+ *   §1.1 Sticky header tokens · §1.2 Main content · §1.3 Drawer anatomy (Portal)
+ *   §2.2–2.3 Option row anatomy (radio rows, A1) · §4.1 Checkbox row anatomy (A3) · §5 Drawer state machine
+ *
+ * Architect conditions (arch-l55c-aspects-boston-rebuild.md, inherited):
+ *   - Drawer infrastructure from L5.5b stays byte-identical
+ *   - Light-only theme — no dark:* in layout
+ *   - Bespoke-per-file pattern under L5.6 cap
+ *   - No new clinical claim surfaces introduced
+ *
+ * Clinical prose preservation: calculateROPEScore() result objects are byte-for-byte from data module.
+ *
+ * Medical source: Kent DM, Thaler DE. Stroke. 2013;44(5):1449-1452.
+ */
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { ArrowLeft, RefreshCw, Copy, Star } from 'lucide-react';
+import { Star, RefreshCw } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
 import { useRecents } from '../hooks/useRecents';
@@ -14,6 +33,8 @@ import {
   type RoPEAgeBand,
 } from '../data/ropeScoreData';
 
+// ── Constants ─────────────────────────────────────────────────────────────────
+
 const defaultInputs: RoPEInputs = {
   ageBand: '50_59',
   noHypertension: false,
@@ -23,7 +44,7 @@ const defaultInputs: RoPEInputs = {
   corticalInfarct: false,
 };
 
-// ── Severity tokens ──────────────────────────────────────────────────────────
+// ── Severity tokens — CALCULATOR_SPEC.md §6 ──────────────────────────────────
 
 type RoPESeverity = 'high' | 'moderate' | 'low';
 
@@ -34,39 +55,89 @@ function getRoPESeverity(pct: number): RoPESeverity {
 }
 
 const ROPE_SEVERITY_TOKENS: Record<RoPESeverity, {
-  borderColor: string; headerBg: string; headerHover: string;
-  labelClass: string; statClass: string; chevronClass: string;
+  borderColor: string;
+  headerBg: string;
+  headerHover: string;
+  labelClass: string;
+  statClass: string;
+  chevronClass: string;
 }> = {
   high: {
-    borderColor: '#6ee7b7', headerBg: 'bg-emerald-50', headerHover: 'hover:bg-emerald-100',
+    borderColor: '#6ee7b7',
+    headerBg: 'bg-emerald-50',
+    headerHover: 'hover:bg-emerald-100',
     labelClass: 'text-[10px] font-bold text-emerald-700 uppercase tracking-widest',
-    statClass: 'text-sm font-medium text-emerald-700', chevronClass: 'text-emerald-600',
+    statClass: 'text-sm font-medium text-emerald-700',
+    chevronClass: 'text-emerald-600',
   },
   moderate: {
-    borderColor: '#fed7aa', headerBg: 'bg-amber-50', headerHover: 'hover:bg-amber-100',
+    borderColor: '#fed7aa',
+    headerBg: 'bg-amber-50',
+    headerHover: 'hover:bg-amber-100',
     labelClass: 'text-[10px] font-bold text-amber-700 uppercase tracking-widest',
-    statClass: 'text-sm font-medium text-amber-700', chevronClass: 'text-amber-600',
+    statClass: 'text-sm font-medium text-amber-700',
+    chevronClass: 'text-amber-600',
   },
   low: {
-    borderColor: '#e2e8f0', headerBg: 'bg-white', headerHover: 'hover:bg-slate-50',
+    borderColor: '#e2e8f0',
+    headerBg: 'bg-white',
+    headerHover: 'hover:bg-slate-50',
     labelClass: 'text-[10px] font-bold text-slate-500 uppercase tracking-widest',
-    statClass: 'text-sm font-medium text-slate-700', chevronClass: 'text-slate-400',
+    statClass: 'text-sm font-medium text-slate-700',
+    chevronClass: 'text-slate-400',
   },
 };
 
-// ── Chevron sub-component ────────────────────────────────────────────────────
+// ── Sub-components ────────────────────────────────────────────────────────────
 
-const Chevron: React.FC<{ direction: 'up' | 'down'; className?: string }> = ({ direction, className = '' }) => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={className}>
-    {direction === 'up' ? <polyline points="18 15 12 9 6 15" /> : <polyline points="6 9 12 15 18 9" />}
+/** Inline SVG back arrow — §1.1 */
+const BackArrow: React.FC = () => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M19 12H5M12 19l-7-7 7-7" />
   </svg>
 );
+
+/** Chevron SVG — direction prop controls up vs down */
+const Chevron: React.FC<{ direction: 'up' | 'down'; className?: string }> = ({
+  direction,
+  className = '',
+}) => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className={className}
+  >
+    {direction === 'up'
+      ? <polyline points="18 15 12 9 6 15" />
+      : <polyline points="6 9 12 15 18 9" />}
+  </svg>
+);
+
+// ── Component ─────────────────────────────────────────────────────────────────
 
 export default function RopeScoreCalculator() {
   const [inputs, setInputs] = useState<RoPEInputs>(defaultInputs);
   const [toast, setToast] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+
   const { handleBack } = useNavigationSource();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { recordView } = useRecents();
@@ -94,6 +165,40 @@ export default function RopeScoreCalculator() {
   const drawerCollapsedShadow = '0 -2px 12px rgba(15,23,42,0.08)';
   const drawerExpandedShadow = '0 -4px 24px rgba(15,23,42,0.12)';
 
+  const isFav = isFavorite('rope');
+
+  // ── Setters ────────────────────────────────────────────────────────────────
+  const setAge = useCallback((v: RoPEAgeBand) => {
+    setHasInteracted(true);
+    setInputs((p) => ({ ...p, ageBand: v }));
+  }, []);
+
+  const setNoHypertension = useCallback((v: boolean) => {
+    setHasInteracted(true);
+    setInputs((p) => ({ ...p, noHypertension: v }));
+  }, []);
+
+  const setNoDiabetes = useCallback((v: boolean) => {
+    setHasInteracted(true);
+    setInputs((p) => ({ ...p, noDiabetes: v }));
+  }, []);
+
+  const setNoPriorStrokeTIA = useCallback((v: boolean) => {
+    setHasInteracted(true);
+    setInputs((p) => ({ ...p, noPriorStrokeTIA: v }));
+  }, []);
+
+  const setNonsmoker = useCallback((v: boolean) => {
+    setHasInteracted(true);
+    setInputs((p) => ({ ...p, nonsmoker: v }));
+  }, []);
+
+  const setCorticalInfarct = useCallback((v: boolean) => {
+    setHasInteracted(true);
+    setInputs((p) => ({ ...p, corticalInfarct: v }));
+  }, []);
+
+  // ── Handlers ───────────────────────────────────────────────────────────────
   const handleCopy = () => {
     const lines = [
       `RoPE Score: ${result.score}/10`,
@@ -129,34 +234,8 @@ export default function RopeScoreCalculator() {
     setTimeout(() => setToast(null), 2000);
   };
 
-  const isFav = isFavorite('rope');
-
-  const setAge = useCallback((v: RoPEAgeBand) => {
-    setHasInteracted(true);
-    setInputs((p) => ({ ...p, ageBand: v }));
-  }, []);
-  const setNoHypertension = useCallback((v: boolean) => {
-    setHasInteracted(true);
-    setInputs((p) => ({ ...p, noHypertension: v }));
-  }, []);
-  const setNoDiabetes = useCallback((v: boolean) => {
-    setHasInteracted(true);
-    setInputs((p) => ({ ...p, noDiabetes: v }));
-  }, []);
-  const setNoPriorStrokeTIA = useCallback((v: boolean) => {
-    setHasInteracted(true);
-    setInputs((p) => ({ ...p, noPriorStrokeTIA: v }));
-  }, []);
-  const setNonsmoker = useCallback((v: boolean) => {
-    setHasInteracted(true);
-    setInputs((p) => ({ ...p, nonsmoker: v }));
-  }, []);
-  const setCorticalInfarct = useCallback((v: boolean) => {
-    setHasInteracted(true);
-    setInputs((p) => ({ ...p, corticalInfarct: v }));
-  }, []);
-
   // ── Drawer sub-components ──────────────────────────────────────────────────
+  // DO NOT TOUCH — drawer code from L5.5b is correct.
 
   const DrawerContent = () => (
     <div
@@ -232,90 +311,193 @@ export default function RopeScoreCalculator() {
     );
   };
 
+  // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <>
-      <header className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-700" role="banner">
-        <div className="max-w-2xl mx-auto px-4 md:px-6 py-3">
+      <h1 className="sr-only">RoPE Score Calculator</h1>
+
+      {/* ── Sticky header — §1.1 ──────────────────────────────────────────── */}
+      <header
+        className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-100"
+        role="banner"
+      >
+        <div className="max-w-2xl mx-auto px-5 py-4">
           <div className="flex items-center justify-between gap-2">
+
+            {/* Left cluster */}
             <div className="flex items-center gap-3 min-w-0">
-              <button type="button" onClick={handleBack} className="p-2 -m-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0" aria-label="Back to calculators">
-                <ArrowLeft size={20} aria-hidden="true" />
+              <button
+                type="button"
+                onClick={handleBack}
+                className="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0"
+                aria-label="Back to calculators"
+              >
+                <BackArrow />
               </button>
+
               <div className="min-w-0">
-                <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">RoPE Score</div>
-                <div className="flex items-baseline gap-1.5" aria-live="polite" aria-atomic="true">
-                  <span className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tabular-nums">{result.score}</span>
-                  <span className="text-slate-400 dark:text-slate-500 text-sm">/ 10</span>
-                  <span className="text-sm text-slate-600 dark:text-slate-400">· PFO-attributable {result.pfoAttributablePercent}%</span>
+                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                  RoPE Score
+                </div>
+
+                <div
+                  className="flex items-baseline gap-1.5 mt-0.5"
+                  aria-live="polite"
+                  aria-atomic="true"
+                >
+                  <span className="text-2xl font-semibold text-slate-900 tabular-nums leading-none">
+                    {hasInteracted ? result.score : '—'}
+                  </span>
+                  <span className="text-slate-400 text-sm leading-none">/ 10</span>
+
+                  {hasInteracted && (
+                    <span className={`text-xs font-medium ml-1.5 ${
+                      result.pfoAttributablePercent >= 60 ? 'text-emerald-700' :
+                      result.pfoAttributablePercent >= 40 ? 'text-amber-700' :
+                      'text-slate-500'
+                    }`}>
+                      PFO-attributable {result.pfoAttributablePercent}%
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-1 flex-shrink-0">
-              <button onClick={handleFavToggle} className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}>
-                <Star size={20} className={isFav ? 'text-amber-500 fill-amber-500' : 'text-slate-400 dark:text-slate-500'} aria-hidden="true" />
+
+            {/* Right cluster */}
+            <div className="flex items-center gap-0.5 flex-shrink-0">
+              <button
+                type="button"
+                onClick={handleFavToggle}
+                className="p-2 rounded-full hover:bg-slate-50 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
+              >
+                <Star
+                  size={18}
+                  className={isFav ? 'text-amber-400 fill-amber-400' : 'text-slate-400'}
+                  aria-hidden="true"
+                />
               </button>
-              <button onClick={handleReset} className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label="Reset calculator">
-                <RefreshCw size={18} className="text-slate-500 dark:text-slate-400" aria-hidden="true" />
+
+              <button
+                type="button"
+                onClick={handleReset}
+                className="p-2 rounded-full hover:bg-slate-50 transition-colors text-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                aria-label="Reset calculator"
+              >
+                <RefreshCw size={17} aria-hidden="true" />
               </button>
-              <button onClick={handleCopy} className="bg-neuro-500 hover:bg-neuro-600 text-white px-3 md:px-4 py-2 rounded-xl text-sm font-semibold transition-colors">
-                <span className="hidden sm:inline">Copy</span>
-                <Copy size={18} className="sm:hidden inline" aria-hidden="true" />
+
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px] flex items-center"
+              >
+                Copy
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 md:px-6 py-6 pb-4">
-        <h1 className="sr-only">RoPE Score Calculator</h1>
+      {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}
+      <main className="max-w-2xl mx-auto px-5 pt-6 pb-4">
+        <div className="space-y-10">
 
-        <div className="space-y-6">
+          {/* Age — A1 radio rows, vertical (§2.2–2.3) */}
           <section aria-labelledby="rope-age-label">
-            <h2 id="rope-age-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Age</h2>
-            <div role="radiogroup" aria-labelledby="rope-age-label" className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {ROPE_AGE_OPTIONS.map((opt) => (
-                <button key={opt.value} type="button" role="radio" aria-checked={inputs.ageBand === opt.value} onClick={() => setAge(opt.value)} className={`p-3 rounded-xl border-2 text-left min-h-[44px] transition-all ${inputs.ageBand === opt.value ? 'border-neuro-500 bg-neuro-50 text-neuro-700' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 bg-white dark:bg-slate-800'}`}>
-                  <span className="font-semibold text-slate-900 dark:text-white">{opt.label}</span>
-                  <span className="text-[10px] font-bold text-slate-400 mt-1 block">{opt.points} pt</span>
-                </button>
-              ))}
+            <h2
+              id="rope-age-label"
+              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3"
+            >
+              Age
+            </h2>
+            <div role="radiogroup" aria-labelledby="rope-age-label">
+              {ROPE_AGE_OPTIONS.map((opt, idx) => {
+                const isSelected = inputs.ageBand === opt.value;
+                return (
+                  <React.Fragment key={opt.value}>
+                    {idx > 0 && <div className="divider-hair" />}
+                    <button
+                      type="button"
+                      role="radio"
+                      aria-checked={isSelected}
+                      onClick={() => setAge(opt.value)}
+                      className={isSelected
+                        ? 'selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg'
+                        : 'w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors'
+                      }
+                    >
+                      <span className={isSelected ? 'font-semibold' : 'font-medium text-slate-900'}>
+                        {opt.label}
+                      </span>
+                      <span className={isSelected ? 'text-sm opacity-75' : 'text-sm text-slate-400'}>
+                        {opt.points} pt
+                      </span>
+                    </button>
+                  </React.Fragment>
+                );
+              })}
             </div>
           </section>
 
+          {/* Other criteria — 5 checkboxes as A3 row pattern (§4.1) */}
           <section aria-labelledby="rope-checkboxes-label">
-            <h2 id="rope-checkboxes-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Other criteria (1 point each)</h2>
-            <div className="space-y-2">
+            <h2
+              id="rope-checkboxes-label"
+              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3"
+            >
+              Other criteria
+            </h2>
+            <div>
               {[
                 { key: 'noHypertension' as const, label: 'No hypertension', set: setNoHypertension, val: inputs.noHypertension },
                 { key: 'noDiabetes' as const, label: 'No diabetes', set: setNoDiabetes, val: inputs.noDiabetes },
                 { key: 'noPriorStrokeTIA' as const, label: 'No stroke/TIA before index event', set: setNoPriorStrokeTIA, val: inputs.noPriorStrokeTIA },
                 { key: 'nonsmoker' as const, label: 'Nonsmoker', set: setNonsmoker, val: inputs.nonsmoker },
                 { key: 'corticalInfarct' as const, label: 'Cortical infarct on imaging', set: setCorticalInfarct, val: inputs.corticalInfarct },
-              ].map(({ key, label, set, val }) => (
-                <label key={key} className="flex items-center gap-3 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer border-slate-200 dark:border-slate-600 hover:border-slate-300 has-[:checked]:border-neuro-500 has-[:checked]:bg-neuro-50">
-                  <input type="checkbox" checked={val} onChange={(e) => set(e.target.checked)} className="w-5 h-5 rounded border-slate-300 text-neuro-600 focus:ring-neuro-500" />
-                  <span className="font-medium text-slate-900 dark:text-white">{label}</span>
-                </label>
+              ].map(({ key, label, set, val }, idx) => (
+                <React.Fragment key={key}>
+                  {idx > 0 && <div className="divider-hair" />}
+                  <label
+                    className={`flex items-baseline gap-3 py-3.5 px-3 rounded-lg hover:bg-slate-50/60 cursor-pointer transition-colors ${val ? 'bg-neuro-50' : ''}`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={val}
+                      onChange={(e) => set(e.target.checked)}
+                      className="w-5 h-5 rounded border-slate-300 accent-neuro-500 flex-shrink-0 self-center"
+                    />
+                    <span className={val ? 'flex-1 min-w-0 font-semibold text-neuro-700' : 'flex-1 min-w-0 font-medium text-slate-900'}>
+                      {label}
+                    </span>
+                    <span className={val ? 'text-sm opacity-75 flex-shrink-0' : 'text-sm text-slate-400 flex-shrink-0'}>
+                      1 pt
+                    </span>
+                  </label>
+                </React.Fragment>
               ))}
             </div>
           </section>
-        </div>
 
-        <footer className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            <strong>Source:</strong> <cite>{ROPE_CITATION.authors}. {ROPE_CITATION.title}. {ROPE_CITATION.journal}. {ROPE_CITATION.year};{ROPE_CITATION.volume}({ROPE_CITATION.issue}):{ROPE_CITATION.pages}.</cite>{' '}
-            <a href={`https://doi.org/${ROPE_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-neuro-600 hover:underline">DOI</a>
+        </div>{/* end space-y-10 */}
+
+        {/* Page footer — §1.2 */}
+        <footer className="mt-14 pt-6 border-t border-slate-100">
+          <p className="text-xs text-slate-400 leading-relaxed">
+            <cite>{ROPE_CITATION.authors}. {ROPE_CITATION.title}. {ROPE_CITATION.journal}. {ROPE_CITATION.year};{ROPE_CITATION.volume}({ROPE_CITATION.issue}):{ROPE_CITATION.pages}.</cite>{' '}
+            <a href={`https://doi.org/${ROPE_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-neuro-600 hover:underline ml-0.5">DOI</a>
           </p>
-          <p className="mt-4 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            <strong>Educational use only.</strong> For cryptogenic stroke when PFO is detected or suspected. Does not replace multidisciplinary decision-making for PFO closure.
+          <p className="mt-3 text-xs text-slate-400 leading-relaxed">
+            Educational use only. For cryptogenic stroke when PFO is detected or suspected. Does not replace multidisciplinary decision-making for PFO closure.
           </p>
         </footer>
 
-        {/* Drawer spacer */}
+        {/* Drawer spacer — §1.3 */}
         <div className={drawerOpen ? 'drawer-spacer-expanded' : 'drawer-spacer-collapsed'} />
+
       </main>
 
-      {/* ── Drawer portal — fixed above mobile bottom nav ────────────────── */}
+      {/* ── Drawer portal — fixed above mobile bottom nav §1.3 ───────────── */}
       {createPortal(
         <div
           className="fixed right-0 z-[55] bg-white"
@@ -328,7 +510,11 @@ export default function RopeScoreCalculator() {
 
       {/* ── Toast notification — z-[60] above drawer ─────────────────────── */}
       {toast && createPortal(
-        <div role="status" aria-live="polite" className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-5 py-2.5 rounded-full text-sm font-medium z-[60]">
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-5 py-2.5 rounded-full text-sm font-medium z-[60]"
+        >
           {toast}
         </div>,
         document.body,

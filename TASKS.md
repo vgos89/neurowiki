@@ -960,6 +960,15 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-13 — L5.5e HAS-BLED + RoPE input UI rebuild (pending commit SHA)
+  - HasBledScoreCalculator rebuilt to CALCULATOR_SPEC v1.1 Archetype 3: 8 risk-factor checkboxes consolidated into single "Risk factors" section with A3 row pattern (`bg-neuro-50` checked, `accent-neuro-500`, `divider-hair`); 3-option Warfarin/INR subgroup as A1 radio rows with dividers; bordered risk-badge replaced with inline severity text; removed riskColors dead const; all dark:* removed from layout
+  - RopeScoreCalculator rebuilt to CALCULATOR_SPEC v1.1 Archetype 1: 6 age bands as vertical A1 radio rows (no grid); 5 "Other criteria" checkboxes as A3 rows with `divider-hair`; inline 3-band severity text for PFO-attributable percentage (emerald ≥60%, amber 40–59%, slate <40%); all dark:* removed from layout
+  - Both: drawer infrastructure from L5.5b preserved byte-identical; hasInteracted state machine and portal positioning unchanged
+  - No clinical interpretation prose changes — every word from hasBledScoreData.ts and ropeScoreData.ts preserved
+  - Architect review reused from L5.5c (docs/reviews/arch-l55c-aspects-boston-rebuild.md) — same pattern, same conditions
+  - QA gates: tsc clean · build clean · check:claims clean · check:routes 42 routes validated
+  - Mobile QA at 375px: ready (mobile-first-developer sign-off, same 9-item gate as L5.5c)
+  - Completes visual-system parity: all 9 existing calculators now on spec v1.1
 - [x] 2026-05-13 — L5.5c ASPECTS + Boston Criteria input UI rebuild (pending commit SHA)
   - AspectScoreCalculator rebuilt to CALCULATOR_SPEC v1.1 Archetype 2: option-row pattern, tokenized section headers (`text-[10px] font-bold text-slate-400 uppercase tracking-widest`), divider-hair separators, rounded-full action buttons, removed "How to use" box + desktop 2-col grid + inline score summary
   - BostonCriteriaCaaCalculator rebuilt to CALCULATOR_SPEC v1.1 Archetype 3: A1 radio rows for Yes/No + lobar groups, A3 checkbox rows for pathology/WM/deep/other-cause, inputMode="numeric" on age input, rounded-full action buttons, all dark:* layout classes removed (light-only)
