@@ -10,6 +10,8 @@ node_modules/
 **/.DS_Store
 .claude/worktrees/
 .claude/settings.local.json
+.claude/scheduled_tasks.lock
+.claude/scheduled_tasks*.lock
 
 # Google Search Console / Cloud credentials — defensive root-level guard.
 # Canonical location is docs/seo-data/ (with its own .gitignore); these
