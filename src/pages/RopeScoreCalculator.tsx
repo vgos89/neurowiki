@@ -18,15 +18,17 @@
  */
 
 import React, { useState, useCallback, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import { Star, RefreshCw } from 'lucide-react';
-import { Chevron } from '../components/calculators/Chevron';
 import { BackArrow } from '../components/calculators/BackArrow';
+import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
+import { CalculatorToast } from '../components/calculators/CalculatorToast';
+import { useDrawerState } from '../hooks/useDrawerState';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
+import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import {
   ROPE_CITATION,
   ROPE_AGE_OPTIONS,
@@ -56,14 +58,7 @@ function getRoPESeverity(pct: number): RoPESeverity {
   return 'low';
 }
 
-const ROPE_SEVERITY_TOKENS: Record<RoPESeverity, {
-  borderColor: string;
-  headerBg: string;
-  headerHover: string;
-  labelClass: string;
-  statClass: string;
-  chevronClass: string;
-}> = {
+const ROPE_SEVERITY_TOKENS: Record<RoPESeverity, SeverityTokens> = {
   high: {
     borderColor: '#6ee7b7',
     headerBg: 'bg-emerald-50',
@@ -94,8 +89,6 @@ const ROPE_SEVERITY_TOKENS: Record<RoPESeverity, {
 
 export default function RopeScoreCalculator() {
   const [inputs, setInputs] = useState<RoPEInputs>(defaultInputs);
-  const [toast, setToast] = useState<string | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const { handleBack } = useNavigationSource();
@@ -118,12 +111,10 @@ export default function RopeScoreCalculator() {
   const result = calculateROPEScore(inputs);
 
   // ── Drawer derived values ──────────────────────────────────────────────────
-  const drawerState: 'A' | 'C' = hasInteracted ? 'C' : 'A';
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, showToast } =
+    useDrawerState({ mode: 'binary', hasInteracted });
   const ropeSeverity = getRoPESeverity(result.pfoAttributablePercent);
   const tokens = ROPE_SEVERITY_TOKENS[ropeSeverity];
-  const isExpanded = drawerOpen;
-  const drawerCollapsedShadow = '0 -2px 12px rgba(15,23,42,0.08)';
-  const drawerExpandedShadow = '0 -4px 24px rgba(15,23,42,0.12)';
 
   const isFav = isFavorite('rope');
 
@@ -172,26 +163,23 @@ export default function RopeScoreCalculator() {
     ];
     trackResult(result.score);
     copyToClipboard(lines.join('\n'), () => {
-      setToast('Copied to clipboard');
-      setTimeout(() => setToast(null), 2000);
+      showToast('Copied to clipboard');
     });
   };
 
   const handleReset = () => {
     setInputs(defaultInputs);
-    setDrawerOpen(false);
     setHasInteracted(false);
+    resetDrawer();
     resetTracking();
-    setToast('Reset');
-    setTimeout(() => setToast(null), 1500);
+    showToast('Reset', 1500);
   };
 
   const handleFavToggle = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     const now = toggleFavorite('rope');
-    setToast(now ? 'Saved to favorites' : 'Removed from favorites');
-    setTimeout(() => setToast(null), 2000);
+    showToast(now ? 'Saved to favorites' : 'Removed from favorites');
   };
 
   // ── Drawer sub-components ──────────────────────────────────────────────────
@@ -226,50 +214,6 @@ export default function RopeScoreCalculator() {
     </div>
   );
 
-  const Drawer = () => {
-    if (drawerState === 'A') {
-      return (
-        <div className="bg-slate-100" style={{ boxShadow: drawerCollapsedShadow }} aria-hidden="true">
-          <div className="px-5 py-3.5 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Interpretation</div>
-              <div className="text-sm text-slate-500">0 of 6 selected</div>
-            </div>
-            <div className="text-xs text-slate-400">Appears when complete</div>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div style={{ borderTop: `1px solid ${tokens.borderColor}`, boxShadow: isExpanded ? drawerExpandedShadow : drawerCollapsedShadow }}>
-        {/* Content before button — handle stays at viewport bottom */}
-        {isExpanded && <DrawerContent />}
-        <button
-          type="button"
-          onClick={() => setDrawerOpen(open => !open)}
-          aria-expanded={isExpanded}
-          aria-controls="rope-drawer-content"
-          className={`w-full flex items-center justify-between px-5 py-3.5 transition-colors ${
-            isExpanded ? `${tokens.headerBg} ${tokens.headerHover}` : 'bg-white hover:bg-slate-50'
-          }`}
-        >
-          <div className="flex items-center gap-3">
-            <div className={isExpanded ? tokens.labelClass : 'text-[10px] font-bold text-slate-400 uppercase tracking-widest'}>
-              Interpretation
-            </div>
-            <div className={isExpanded ? tokens.statClass : 'text-sm font-medium text-slate-900'}>
-              PFO-attributable: {result.pfoAttributablePercent}%
-            </div>
-          </div>
-          <Chevron
-            direction={isExpanded ? 'down' : 'up'}
-            className={isExpanded ? tokens.chevronClass : 'text-slate-400 drawer-chevron-hint'}
-          />
-        </button>
-      </div>
-    );
-  };
 
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
@@ -458,27 +402,20 @@ export default function RopeScoreCalculator() {
       </main>
 
       {/* ── Drawer portal — fixed above mobile bottom nav §1.3 ───────────── */}
-      {createPortal(
-        <div
-          className="fixed right-0 z-[55] bg-white"
-          style={{ bottom: 'calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))', left: 'var(--nav-rail-width, 0px)' }}
-        >
-          <Drawer />
-        </div>,
-        document.body,
-      )}
+      <CalculatorDrawer
+        state={drawerState}
+        tokens={tokens}
+        isExpanded={drawerOpen}
+        onToggle={() => setDrawerOpen(open => !open)}
+        ariaContentId="rope-drawer-content"
+        stateAText={{ label: '0 of 6 selected', hint: 'Appears when complete' }}
+        collapsedStat={`PFO-attributable: ${result.pfoAttributablePercent}%`}
+      >
+        <DrawerContent />
+      </CalculatorDrawer>
 
       {/* ── Toast notification — z-[60] above drawer ─────────────────────── */}
-      {toast && createPortal(
-        <div
-          role="status"
-          aria-live="polite"
-          className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-5 py-2.5 rounded-full text-sm font-medium z-[60]"
-        >
-          {toast}
-        </div>,
-        document.body,
-      )}
+      <CalculatorToast message={toast} />
     </>
   );
 }

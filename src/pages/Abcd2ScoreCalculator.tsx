@@ -21,16 +21,18 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
-import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { Star, RefreshCw } from 'lucide-react';
-import { Chevron } from '../components/calculators/Chevron';
 import { BackArrow } from '../components/calculators/BackArrow';
+import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
+import { CalculatorToast } from '../components/calculators/CalculatorToast';
+import { useDrawerState } from '../hooks/useDrawerState';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
+import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import {
   ABCD2_CITATION,
   ABCD2_AGE_OPTIONS,
@@ -50,14 +52,7 @@ type ABCD2State = Partial<ABCD2Inputs>;
 const DEFAULT_INPUTS: ABCD2State = {};
 
 /** Severity → drawer visual tokens — CALCULATOR_SPEC.md §6 table */
-const SEVERITY_TOKENS: Record<ABCD2Severity, {
-  borderColor: string;
-  headerBg: string;
-  headerHover: string;
-  labelClass: string;
-  statClass: string;
-  chevronClass: string;
-}> = {
+const SEVERITY_TOKENS: Record<ABCD2Severity, SeverityTokens> = {
   low: {
     borderColor: '#e2e8f0',
     headerBg: 'bg-white',
@@ -94,10 +89,8 @@ const DIABETES_OPTIONS = [
 
 const Abcd2ScoreCalculator: React.FC = () => {
   // ── State ──────────────────────────────────────────────────────────────────
-  const [inputs, setInputs]           = useState<ABCD2State>(DEFAULT_INPUTS);
-  const [drawerOpen, setDrawerOpen]   = useState(false);
+  const [inputs, setInputs]               = useState<ABCD2State>(DEFAULT_INPUTS);
   const [justCompleted, setJustCompleted] = useState(false);
-  const [toastMessage, setToastMessage]   = useState<string | null>(null);
 
   const wasCompleteRef = useRef<boolean>(false);
   const ageGroupRef      = useRef<HTMLDivElement>(null);
@@ -136,10 +129,8 @@ const Abcd2ScoreCalculator: React.FC = () => {
     ? calculateABCD2(inputs as ABCD2Inputs)
     : null;
 
-  /** Drawer state machine — §5. A = empty, B = partial, C = complete. */
-  const drawerState: 'A' | 'B' | 'C' =
-    selectedCount === 0 ? 'A' :
-    !isComplete         ? 'B' : 'C';
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, showToast } =
+    useDrawerState({ mode: 'partial-complete', selectedCount, totalRequired: 5 });
 
   const isFav = isFavorite('abcd2');
 
@@ -198,32 +189,26 @@ const Abcd2ScoreCalculator: React.FC = () => {
 
     if (isComplete && result) trackResult(result.score);
     copyToClipboard(parts.join('\n'), () => {
-      setToastMessage('Copied to clipboard');
-      setTimeout(() => setToastMessage(null), 2000);
+      showToast('Copied to clipboard');
     });
-  }, [inputs, isComplete, result, trackResult]);
+  }, [inputs, isComplete, result, trackResult, showToast]);
 
   const handleReset = useCallback(() => {
     setInputs(DEFAULT_INPUTS);
-    setDrawerOpen(false);
+    resetDrawer();
     resetTracking();
-    setToastMessage('Reset');
-    setTimeout(() => setToastMessage(null), 1500);
-  }, [resetTracking]);
+    showToast('Reset', 1500);
+  }, [resetTracking, resetDrawer, showToast]);
 
   const handleFavToggle = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     const isNowFav = toggleFavorite('abcd2');
-    setToastMessage(isNowFav ? 'Saved to favorites' : 'Removed from favorites');
-    setTimeout(() => setToastMessage(null), 2000);
-  }, [toggleFavorite]);
+    showToast(isNowFav ? 'Saved to favorites' : 'Removed from favorites');
+  }, [toggleFavorite, showToast]);
 
   // ── Drawer helpers ─────────────────────────────────────────────────────────
   const tokens = result ? SEVERITY_TOKENS[result.severity] : null;
-
-  const drawerCollapsedShadow = '0 -2px 12px rgba(15,23,42,0.08)';
-  const drawerExpandedShadow  = '0 -4px 24px rgba(15,23,42,0.12)';
 
   /** Expanded drawer content panel */
   const DrawerContent: React.FC = () => (
@@ -270,91 +255,6 @@ const Abcd2ScoreCalculator: React.FC = () => {
     </div>
   );
 
-  /** Bottom drawer — rendered as portal, fixed above mobile nav §1.3 */
-  const Drawer: React.FC = () => {
-    // State A / B — muted, non-interactive
-    if (drawerState === 'A' || drawerState === 'B') {
-      return (
-        <div
-          className="bg-slate-100"
-          style={{ boxShadow: drawerCollapsedShadow }}
-          aria-hidden="true"
-        >
-          <div className="px-5 py-3.5 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                Interpretation
-              </div>
-              {drawerState === 'A' ? (
-                <div className="text-sm text-slate-500">0 of 5 selected</div>
-              ) : (
-                <div className="text-sm text-slate-600 font-medium">
-                  {selectedCount} of 5 selected
-                </div>
-              )}
-            </div>
-            <div className="text-xs text-slate-400">
-              {drawerState === 'A'
-                ? 'Appears when complete'
-                : `${5 - selectedCount} more to complete`}
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    // State C — complete, tappable header
-    if (!tokens || !result) return null;
-    const isExpanded = drawerOpen;
-
-    return (
-      <div
-        style={{
-          borderTop: `1px solid ${tokens.borderColor}`,
-          boxShadow: isExpanded ? drawerExpandedShadow : drawerCollapsedShadow,
-        }}
-      >
-        {/* Content renders ABOVE the button so the handle stays at viewport bottom (§1.3) */}
-        {isExpanded && <DrawerContent />}
-        <button
-          type="button"
-          onClick={() => setDrawerOpen(open => !open)}
-          aria-expanded={isExpanded}
-          aria-controls="abcd2-drawer-content"
-          className={`w-full flex items-center justify-between px-5 py-3.5 transition-colors ${
-            isExpanded
-              ? `${tokens.headerBg} ${tokens.headerHover}`
-              : 'bg-white hover:bg-slate-50'
-          }`}
-        >
-          <div className="flex items-center gap-3">
-            <div className={
-              isExpanded
-                ? tokens.labelClass
-                : 'text-[10px] font-bold text-slate-400 uppercase tracking-widest'
-            }>
-              Interpretation
-            </div>
-            <div className={
-              isExpanded ? tokens.statClass : 'text-sm font-medium text-slate-900'
-            }>
-              {result.label} · {result.stat}
-            </div>
-          </div>
-          <Chevron
-            direction={isExpanded ? 'down' : 'up'}
-            className={
-              isExpanded
-                ? tokens.chevronClass
-                : justCompleted
-                  ? `${tokens.chevronClass} drawer-discovery-chevron`
-                  : 'text-slate-400 drawer-chevron-hint'
-            }
-          />
-        </button>
-      </div>
-    );
-  };
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
@@ -720,27 +620,22 @@ const Abcd2ScoreCalculator: React.FC = () => {
       </main>
 
       {/* ── Drawer portal — fixed above mobile bottom nav §1.3 ───────────── */}
-      {createPortal(
-        <div
-          className="fixed right-0 z-[55] bg-white"
-          style={{ bottom: 'calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))', left: 'var(--nav-rail-width, 0px)' }}
-        >
-          <Drawer />
-        </div>,
-        document.body,
-      )}
+      <CalculatorDrawer
+        state={drawerState}
+        tokens={tokens}
+        isExpanded={drawerOpen}
+        onToggle={() => setDrawerOpen(open => !open)}
+        ariaContentId="abcd2-drawer-content"
+        stateAText={{ label: '0 of 5 selected', hint: 'Appears when complete' }}
+        stateBText={{ label: `${selectedCount} of 5 selected`, hint: `${5 - selectedCount} more to complete` }}
+        collapsedStat={result ? `${result.label} · ${result.stat}` : ''}
+        justCompleted={justCompleted}
+      >
+        <DrawerContent />
+      </CalculatorDrawer>
 
       {/* ── Toast notification — z-[60] above drawer ─────────────────────── */}
-      {toastMessage && createPortal(
-        <div
-          role="status"
-          aria-live="polite"
-          className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-5 py-2.5 rounded-full text-sm font-medium z-[60]"
-        >
-          {toastMessage}
-        </div>,
-        document.body,
-      )}
+      <CalculatorToast message={toast} />
     </>
   );
 };

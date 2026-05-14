@@ -19,16 +19,18 @@
  */
 
 import React, { useState, useCallback, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { Star, RefreshCw } from 'lucide-react';
-import { Chevron } from '../components/calculators/Chevron';
 import { BackArrow } from '../components/calculators/BackArrow';
+import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
+import { CalculatorToast } from '../components/calculators/CalculatorToast';
+import { useDrawerState } from '../hooks/useDrawerState';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
+import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import {
   BOSTON_CAA_CITATION,
   assessBostonCriteria,
@@ -58,14 +60,7 @@ const LOBAR_OPTIONS: { value: 0 | 1 | 2; label: string }[] = [
 
 type BostonRisk = 'very-high' | 'high' | 'moderate' | 'low' | 'n/a';
 
-const BOSTON_SEVERITY_TOKENS: Record<BostonRisk, {
-  borderColor: string;
-  headerBg: string;
-  headerHover: string;
-  labelClass: string;
-  statClass: string;
-  chevronClass: string;
-}> = {
+const BOSTON_SEVERITY_TOKENS: Record<BostonRisk, SeverityTokens> = {
   'very-high': {
     borderColor: '#f87171',
     headerBg: 'bg-red-100',
@@ -112,8 +107,6 @@ const BOSTON_SEVERITY_TOKENS: Record<BostonRisk, {
 
 export default function BostonCriteriaCaaCalculator() {
   const [inputs, setInputs] = useState<BostonCaaInputs>(defaultInputs);
-  const [toast, setToast] = useState<string | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const { handleBack } = useNavigationSource();
@@ -136,11 +129,9 @@ export default function BostonCriteriaCaaCalculator() {
   const result = assessBostonCriteria(inputs);
 
   // ── Drawer derived values ──────────────────────────────────────────────────
-  const drawerState: 'A' | 'C' = hasInteracted ? 'C' : 'A';
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, showToast } =
+    useDrawerState({ mode: 'binary', hasInteracted });
   const tokens = BOSTON_SEVERITY_TOKENS[result.anticoagulationRisk as BostonRisk];
-  const isExpanded = drawerOpen;
-  const drawerCollapsedShadow = '0 -2px 12px rgba(15,23,42,0.08)';
-  const drawerExpandedShadow = '0 -4px 24px rgba(15,23,42,0.12)';
 
   const isFav = isFavorite('boston-caa');
 
@@ -168,26 +159,23 @@ export default function BostonCriteriaCaaCalculator() {
     ];
     trackResult(result.diagnosis);
     copyToClipboard(lines.join('\n'), () => {
-      setToast('Copied to clipboard');
-      setTimeout(() => setToast(null), 2000);
+      showToast('Copied to clipboard');
     });
   };
 
   const handleReset = () => {
     setInputs(defaultInputs);
-    setDrawerOpen(false);
     setHasInteracted(false);
+    resetDrawer();
     resetTracking();
-    setToast('Reset');
-    setTimeout(() => setToast(null), 1500);
+    showToast('Reset', 1500);
   };
 
   const handleFavToggle = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     const now = toggleFavorite('boston-caa');
-    setToast(now ? 'Saved to favorites' : 'Removed from favorites');
-    setTimeout(() => setToast(null), 2000);
+    showToast(now ? 'Saved to favorites' : 'Removed from favorites');
   };
 
   // ── Drawer sub-components ──────────────────────────────────────────────────
@@ -241,50 +229,6 @@ export default function BostonCriteriaCaaCalculator() {
     </div>
   );
 
-  const Drawer = () => {
-    if (drawerState === 'A') {
-      return (
-        <div className="bg-slate-100" style={{ boxShadow: drawerCollapsedShadow }} aria-hidden="true">
-          <div className="px-5 py-3.5 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Interpretation</div>
-              <div className="text-sm text-slate-500">No inputs selected</div>
-            </div>
-            <div className="text-xs text-slate-400">Appears when complete</div>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div style={{ borderTop: `1px solid ${tokens.borderColor}`, boxShadow: isExpanded ? drawerExpandedShadow : drawerCollapsedShadow }}>
-        {/* Content before button — handle stays at viewport bottom */}
-        {isExpanded && <DrawerContent />}
-        <button
-          type="button"
-          onClick={() => setDrawerOpen(open => !open)}
-          aria-expanded={isExpanded}
-          aria-controls="boston-drawer-content"
-          className={`w-full flex items-center justify-between px-5 py-3.5 transition-colors ${
-            isExpanded ? `${tokens.headerBg} ${tokens.headerHover}` : 'bg-white hover:bg-slate-50'
-          }`}
-        >
-          <div className="flex items-center gap-3">
-            <div className={isExpanded ? tokens.labelClass : 'text-[10px] font-bold text-slate-400 uppercase tracking-widest'}>
-              Interpretation
-            </div>
-            <div className={isExpanded ? tokens.statClass : 'text-sm font-medium text-slate-900'}>
-              {result.label}
-            </div>
-          </div>
-          <Chevron
-            direction={isExpanded ? 'down' : 'up'}
-            className={isExpanded ? tokens.chevronClass : 'text-slate-400 drawer-chevron-hint'}
-          />
-        </button>
-      </div>
-    );
-  };
 
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
@@ -651,27 +595,20 @@ export default function BostonCriteriaCaaCalculator() {
       </main>
 
       {/* ── Drawer portal — fixed above mobile bottom nav §1.3 ───────────── */}
-      {createPortal(
-        <div
-          className="fixed right-0 z-[55] bg-white"
-          style={{ bottom: 'calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px))', left: 'var(--nav-rail-width, 0px)' }}
-        >
-          <Drawer />
-        </div>,
-        document.body,
-      )}
+      <CalculatorDrawer
+        state={drawerState}
+        tokens={tokens}
+        isExpanded={drawerOpen}
+        onToggle={() => setDrawerOpen(open => !open)}
+        ariaContentId="boston-drawer-content"
+        stateAText={{ label: 'No inputs selected', hint: 'Appears when complete' }}
+        collapsedStat={result.label}
+      >
+        <DrawerContent />
+      </CalculatorDrawer>
 
       {/* ── Toast notification — z-[60] above drawer ─────────────────────── */}
-      {toast && createPortal(
-        <div
-          role="status"
-          aria-live="polite"
-          className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-5 py-2.5 rounded-full text-sm font-medium z-[60]"
-        >
-          {toast}
-        </div>,
-        document.body,
-      )}
+      <CalculatorToast message={toast} />
     </>
   );
 }

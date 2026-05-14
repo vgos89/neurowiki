@@ -20,13 +20,15 @@
  */
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { createPortal } from 'react-dom';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { Star, RefreshCw } from 'lucide-react';
-import { Chevron } from '../components/calculators/Chevron';
 import { BackArrow } from '../components/calculators/BackArrow';
+import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
+import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useFavorites } from '../hooks/useFavorites';
 import { useRecents } from '../hooks/useRecents';
+import { useDrawerState } from '../hooks/useDrawerState';
+import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import { NIHSS_ITEMS, calculateTotal, getItemWarning, calculateLvoProbability } from '../utils/nihssShortcuts';
 import { getMainScrollElement, scrollWithinMainOrWindow } from '../utils/mainScroll';
 import NihssItemCard from '../components/NihssItemCard';
@@ -85,9 +87,7 @@ const NihssCalculator: React.FC = () => {
   const [nihssMode, setNihssMode] = useState<'rapid' | 'detailed'>('rapid');
   const [userMode] = useState<'resident' | 'attending'>('resident');
   const [activePearl, setActivePearl] = useState<string | null>(null);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showLvoTooltip, setShowLvoTooltip] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const [justCompleted, setJustCompleted] = useState(false);
 
   const lvoTooltipRef = useRef<HTMLDivElement>(null);
@@ -142,10 +142,20 @@ const NihssCalculator: React.FC = () => {
   const isComplete = answeredCount === totalItems;
   const severity = getNihssSeverity(total);
 
-  /** Drawer state machine — CALCULATOR_SPEC.md §5 */
-  const drawerState: 'A' | 'B' | 'C' =
-    answeredCount === 0 ? 'A' :
-    !isComplete         ? 'B' : 'C';
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset, toast, showToast } = useDrawerState({
+    mode: 'partial-complete',
+    selectedCount: answeredCount,
+    totalRequired: totalItems,
+  });
+
+  const nihssTokens: SeverityTokens = {
+    borderColor: SEVERITY_BORDER[severity],
+    headerBg: SEVERITY_HEADER_BG[severity],
+    headerHover: 'hover:brightness-95',
+    labelClass: 'text-[10px] font-bold text-slate-400 uppercase tracking-widest',
+    statClass: `text-sm font-medium ${SEVERITY_COLOR[severity]}`,
+    chevronClass: SEVERITY_COLOR[severity],
+  };
 
   const isFav = isFavorite('nihss');
 
@@ -195,23 +205,20 @@ const NihssCalculator: React.FC = () => {
   const copyNihss = () => {
     const breakdown = NIHSS_ITEMS.map((i) => `${i.shortName}: ${nihssValues[i.id] ?? 0}`).join('\n');
     navigator.clipboard.writeText(`NIHSS Total: ${total}\n\n${breakdown}`);
-    setToastMessage('Copied to clipboard');
-    setTimeout(() => setToastMessage(null), 2000);
+    showToast('Copied to clipboard', 2000);
   };
 
   const handleFavToggle = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     const isNowFav = toggleFavorite('nihss');
-    setToastMessage(isNowFav ? 'Saved to favorites' : 'Removed from favorites');
-    setTimeout(() => setToastMessage(null), 2000);
+    showToast(isNowFav ? 'Saved to favorites' : 'Removed from favorites', 2000);
   };
 
   const handleReset = () => {
     setNihssValues({});
-    setDrawerOpen(false);
-    setToastMessage('Reset');
-    setTimeout(() => setToastMessage(null), 1500);
+    reset();
+    showToast('Reset', 1500);
   };
 
   /** Normal exam shortcut — Phase 7E §3.5: set all 15 items to 0, open drawer */
@@ -221,10 +228,7 @@ const NihssCalculator: React.FC = () => {
     setDrawerOpen(true);
   };
 
-  // ── Portal drawer ──────────────────────────────────────────────────────────
-
-  const drawerCollapsedShadow = '0 -2px 12px rgba(15,23,42,0.08)';
-  const drawerExpandedShadow  = '0 -4px 24px rgba(15,23,42,0.12)';
+  // ── Drawer content ─────────────────────────────────────────────────────────
 
   /** Expanded drawer content — severity bracket + LVO label (Option A shell) */
   const DrawerContent: React.FC = () => (
@@ -292,7 +296,7 @@ const NihssCalculator: React.FC = () => {
         {/* Copy shortcut */}
         <button
           type="button"
-          onClick={() => { copyNihss(); setDrawerOpen(false); }}
+          onClick={() => { copyNihss(); setDrawerOpen(false); /* collapses drawer after copy */ }}
           className="w-full mt-1 bg-neuro-500 hover:bg-neuro-600 text-white py-2.5 rounded-full text-sm font-medium transition-colors"
         >
           Copy to clipboard
@@ -305,75 +309,6 @@ const NihssCalculator: React.FC = () => {
       </div>
     </div>
   );
-
-  /** Bottom drawer portal — CALCULATOR_SPEC.md §1.3, §5 */
-  const Drawer: React.FC = () => {
-    // State A — no items answered, muted non-interactive
-    if (drawerState === 'A') {
-      return (
-        <div
-          className="bg-slate-100"
-          style={{ boxShadow: drawerCollapsedShadow }}
-          aria-hidden="true"
-        >
-          <div className="px-5 py-3.5 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                Interpretation
-              </div>
-              <div className="text-sm text-slate-500">0 of {totalItems} selected</div>
-            </div>
-            <div className="text-xs text-slate-400">Appears when complete</div>
-          </div>
-        </div>
-      );
-    }
-
-    // States B + C — live, tappable (B shows partial note inside DrawerContent)
-    const isExpanded = drawerOpen;
-    const borderColor = SEVERITY_BORDER[severity];
-    const headerBg = isExpanded ? SEVERITY_HEADER_BG[severity] : 'bg-white';
-
-    return (
-      <div
-        style={{
-          borderTop: `1px solid ${borderColor}`,
-          boxShadow: isExpanded ? drawerExpandedShadow : drawerCollapsedShadow,
-        }}
-      >
-        {/* Content renders ABOVE the button so the handle stays at viewport bottom (§1.3) */}
-        {isExpanded && <DrawerContent />}
-        <button
-          type="button"
-          onClick={() => setDrawerOpen(open => !open)}
-          aria-expanded={isExpanded}
-          aria-controls="nihss-drawer-content"
-          className={`w-full flex items-center justify-between px-5 py-3.5 transition-colors ${headerBg} hover:brightness-95`}
-        >
-          <div className="flex items-center gap-3">
-            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-              Interpretation
-            </div>
-            <div className={`text-sm font-medium ${SEVERITY_COLOR[severity]}`}>
-              {SEVERITY_LABEL[severity]} · NIHSS {total}
-            </div>
-          </div>
-          <Chevron
-            direction={isExpanded ? 'down' : 'up'}
-            className={
-              isExpanded
-                ? SEVERITY_COLOR[severity]
-                : justCompleted
-                  ? `${SEVERITY_COLOR[severity]} drawer-discovery-chevron`
-                  : 'text-slate-400 drawer-chevron-hint'
-            }
-          />
-        </button>
-      </div>
-    );
-  };
-
-  const drawerPortalTarget = typeof document !== 'undefined' ? document.body : null;
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
@@ -662,28 +597,25 @@ const NihssCalculator: React.FC = () => {
         <div style={{ height: drawerOpen ? '380px' : '80px' }} aria-hidden="true" />
       </main>
 
-      {/* ── Portal bottom drawer — §1.3 ──────────────────────────────────── */}
-      {drawerPortalTarget && createPortal(
-        <div
-          style={{
-            position: 'fixed',
-            bottom: 'calc(var(--tab-bar-height, 0px) + env(safe-area-inset-bottom, 0px))',
-            left: 'var(--nav-rail-width, 0px)',
-            right: 0,
-            zIndex: 55,
-          }}
-        >
-          <Drawer />
-        </div>,
-        drawerPortalTarget,
-      )}
+      {/* ── Bottom drawer — §1.3 ─────────────────────────────────────────── */}
+      <CalculatorDrawer
+        state={drawerState}
+        tokens={nihssTokens}
+        isExpanded={drawerOpen}
+        onToggle={() => setDrawerOpen(open => !open)}
+        ariaContentId="nihss-drawer-content"
+        ariaLabel="Toggle NIHSS interpretation"
+        stateBTappable={true}
+        stateAText={{ label: `0 of ${totalItems} selected`, hint: 'Appears when complete' }}
+        stateBText={{ label: `${answeredCount} of ${totalItems} selected`, hint: `${totalItems - answeredCount} more to complete` }}
+        collapsedStat={`${SEVERITY_LABEL[severity]} · NIHSS ${total}`}
+        justCompleted={justCompleted}
+      >
+        <DrawerContent />
+      </CalculatorDrawer>
 
       {/* ── Toast ─────────────────────────────────────────────────────────── */}
-      {toastMessage && (
-        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-xl text-sm font-bold animate-in fade-in zoom-in-95 duration-200 z-[60] whitespace-nowrap">
-          {toastMessage}
-        </div>
-      )}
+      <CalculatorToast message={toast} />
     </>
   );
 };
