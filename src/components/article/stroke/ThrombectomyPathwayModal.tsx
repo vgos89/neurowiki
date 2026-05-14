@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { X, ArrowLeft } from 'lucide-react';
 import EvtPathway from '../../../pages/EvtPathway';
 

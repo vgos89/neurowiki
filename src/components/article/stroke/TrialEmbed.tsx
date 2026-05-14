@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ExternalLink, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { GUIDE_CONTENT } from '../../../data/guideContent';
 import ReactMarkdown from 'react-markdown';
 

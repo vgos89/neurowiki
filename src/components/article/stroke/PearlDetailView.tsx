@@ -1,6 +1,5 @@
 import React from 'react';
-import { X, ArrowLeft, ExternalLink } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { X, ArrowLeft } from 'lucide-react';
 import type { ClinicalPearl } from '../../../data/strokeClinicalPearls';
 import { TrialEmbed } from './TrialEmbed';
 

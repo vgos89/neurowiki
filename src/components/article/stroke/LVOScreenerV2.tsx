@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, Info, ChevronDown, ChevronUp, AlertTriangle, BookOpen } from 'lucide-react';
+import { Eye, ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react';
 
 interface CorticalSign {
   id: string;

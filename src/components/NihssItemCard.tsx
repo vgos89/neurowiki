@@ -1,6 +1,6 @@
 import React from 'react';
 import { NihssItemDef } from '../utils/nihssShortcuts';
-import { AlertTriangle, Info } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 
 interface NihssItemCardProps {
   item: NihssItemDef;

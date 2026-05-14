@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Activity, AlertCircle, ChevronDown, ChevronUp, BookOpen, Info } from 'lucide-react';
+import { Activity, AlertCircle, ChevronDown, ChevronUp, Info } from 'lucide-react';
 
 interface BPProtocol {
   name: string;
