@@ -203,9 +203,9 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Blocking:** Archetype for single-arm/observational display not yet implemented.
 - **Rollback:** n/a (not started)
 
-#### W6.7 — Design-quality disclaimer pattern in TRIALS_SPEC — Class C
-- **Status:** parked — 2026-04-22
-- **Context:** BEST-MSU quasi-experimental design requires a standardized amber disclaimer block. Pattern should be formalized in TRIALS_SPEC before next quasi-experimental trial rebuild.
+#### W6.7 — Design-quality disclaimer pattern in TRIALS_SPEC — Class C — DONE commit aa54b84
+- **Status:** merged 2026-05-13
+- **What shipped:** §1.6 Design-Quality Disclaimers section added to TRIALS_SPEC.md. Codifies the standardized amber callout for trials with weakened design (quasi-experimental, single-arm vs historical, high crossover, stopped early/futility). BEST-MSU is the reference. Includes wording table, tokens, ownership matrix, data shape (designDisclaimer field).
 - **Rollback:** n/a (docs only)
 
 #### W6.8 — Surgical decompression category + DESTINY rebuild — Class C
@@ -258,13 +258,10 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Clinical impact:** low — presentation; no algorithm changes
 - **Rollback plan:** git revert; WEAVE falls back to prior page; BottomLineDrawer badge extension is additive (existing POSITIVE/NEGATIVE/NEUTRAL/HARM cases unaffected)
 
-#### W6.5.4 — Codify Archetype B prose-narrative variant in TRIALS_SPEC — Class C
-- **Status:** planned — 2026-04-24
-- **User-visible goal:** n/a (spec update only; no user-visible change)
-- **Non-goals:** no code change; no new component; no trial page rebuild
-- **Context:** RIGHT-2 used a prose-narrative fallback for the primary outcome because Figure 2 is a raster image and per-segment percentages cannot be extracted without fabrication. This pattern (prose + stat row in place of Grotta Bar) is undocumented in TRIALS_SPEC v1.1. A future session should add a §3.5 "Prose-narrative variant" subsection specifying: when to apply (figure not text-extractable, mrsDistribution absent), required elements (prose paragraph, stat row, chart-absent note), and accessibility requirements. The RIGHT-2 branch in TrialPageNew.tsx is the reference implementation.
-- **Files likely touched:** docs/specs/TRIALS_SPEC.md (§3.5 new subsection)
-- **Acceptance checks:** spec section added · design-guardian co-sign issued
+#### W6.5.4 — Codify Archetype B prose-narrative variant in TRIALS_SPEC — Class C — DONE commit aa54b84
+- **Status:** merged 2026-05-13
+- **What shipped:** §3.7 Prose-Narrative Variant (Archetype B fallback) added to TRIALS_SPEC.md. Documents the substitution rule when per-segment mRS percentages are not text-extractable from the publication figure (raster image, no supplementary table). RIGHT-2 is the reference. Specifies trigger conditions, visual anatomy, required elements (prose paragraph, stat row, chart-absent note), accessibility, and ownership matrix.
+- **Acceptance checks:** spec section added · build green
 - **Clinical impact:** none
 - **Rollback plan:** n/a
 
@@ -314,10 +311,10 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Rollback plan:** git revert
 - **Blocking note:** None — L5.6 has landed; this is the validation task that confirms the shell is general enough.
 
-- [ ] [L5] Typography audit
-- [ ] [L5] Spacing consistency audit
+- [x] [L5] Typography audit — commit 88750a1 (2026-05-13), docs/L5-typography-audit.md (5H / 6M / 7L)
+- [x] [L5] Spacing consistency audit — commit 67dca9c (2026-05-13), docs/L5-spacing-audit.md
 - [ ] [L5] Full mobile + desktop QA pass all pages
-- [ ] [L5] Performance audit
+- [ ] [L5] Performance audit — bundle slice in progress as docs/L5-bundle-audit.md (dispatched 2026-05-13)
 
 ### OTHER P1 (not layer-blocked)
 - [ ] [P1] Split TrialPageNew chunk (485kb) — lazy-load trial data
