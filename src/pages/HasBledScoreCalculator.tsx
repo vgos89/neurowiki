@@ -8,7 +8,7 @@
  *
  * Architect conditions (arch-l55c-aspects-boston-rebuild.md, inherited):
  *   - Drawer infrastructure from L5.5b stays byte-identical
- *   - Light-only theme — no in layout
+ *   - Light-only theme — no dark-mode handling in layout
  *   - Bespoke-per-file pattern under L5.6 cap
  *   - No new clinical claim surfaces introduced
  *

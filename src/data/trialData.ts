@@ -521,10 +521,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       nntExplanation: 'Noninferiority trial — NNT is not the primary framing. Tenecteplase was noninferior to alteplase (RR 1.03, 95% CI 0.97–1.09; noninferiority threshold of RR ≥0.937 met).'
     },
     pearls: [
-      'Noninferiority confirmed: RR 1.03 (95% CI 0.97–1.09) — noninferiority margin of 0.937 met',
-      'Symptomatic ICH (ECASS III definition): 1.2% in both groups (RR 1.01, 95% CI 0.37–2.70) — identical safety profiles',
-      '90-day mortality: 4.6% (TNK) vs 5.8% (alteplase) — numerically lower with TNK but not statistically significant (RR 0.80, 95% CI 0.51–1.23)',
-      'Single-bolus advantage: Tenecteplase eliminates the 60-minute IV infusion pump requirement — practical for drip-and-ship and inter-hospital transfer',
+      'Noninferiority confirmed: RR 1.03 (95% CI 0.97–1.09); noninferiority margin of 0.937 met',
+      'Symptomatic ICH (ECASS III definition): 1.2% in both groups (RR 1.01, 95% CI 0.37–2.70), identical safety profiles',
+      '90-day mortality: 4.6% (TNK) vs 5.8% (alteplase), numerically lower with TNK but not statistically significant (RR 0.80, 95% CI 0.51–1.23)',
+      'Single-bolus advantage: Tenecteplase eliminates the 60-minute IV infusion pump requirement, a practical benefit for drip-and-ship and inter-hospital transfer',
       'Population: Chinese patients with AIS, NIHSS 1–25, treated within 4.5h; 30.4% female; mean age ~65',
       'Alongside AcT (Canada 2022) and NOR-TEST 2 (Norway), this trial provides the multi-ethnic evidence base for AHA/ASA 2026 COR 1 equivalence',
       'Published: JAMA 2024; 332(17):1437–1445. DOI: 10.1001/jama.2024.14721'
@@ -844,7 +844,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     howToReadChart: [
       {
-        question: 'What endpoint does this chart display -- and why not the primary?',
+        question: 'What endpoint does this chart display, and why not the primary?',
         answer: 'The chart displays the secondary dichotomized endpoint: proportion of patients with clinically meaningful visual improvement (gain of 15 or more ETDRS letters) at 1 month. The primary endpoint was continuous change in logMAR BCVA, which showed P=0.69 (no significant difference). The dichotomized secondary is shown here for visual clarity because the continuous primary cannot be meaningfully represented in a dot proportion chart. /* claimId: eagle-primary-negative | source: Schumacher Ophthalmology 2010 */',
       },
       {
@@ -861,7 +861,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'It does not prove that any thrombolytic approach is ineffective in CRAO within the first few hours. IV tPA within 4.5 hours of CRAO onset was outside the EAGLE protocol window and is still considered by some centers based on stroke-mechanism analogy. EAGLE was conducted with a 20-hour window; early window trials are a separate question.',
       cautions: 'The trial enrolled only 84 of 200 planned patients before early stopping, reducing statistical power and widening confidence intervals. Open-label design prevents blinding of treatment allocation. The heterogeneous conservative treatment (hemodilution, ocular massage, timolol, acetazolamide) may not reflect current standard of care.',
     },
-    bedsidePearl: 'EAGLE definitively showed that IA tPA for CRAO causes significant harm (37% adverse events including intracranial hemorrhage) with no visual benefit -- the procedure is not indicated for CRAO. The current clinical debate is about IV tPA in the very early window (within 4.5 hours), which was not tested in EAGLE. If a CRAO patient presents within hours, the stroke team conversation is about IV tPA eligibility, not IA fibrinolysis.',
+    bedsidePearl: 'EAGLE definitively showed that IA tPA for CRAO causes significant harm (37% adverse events including intracranial hemorrhage) with no visual benefit. The procedure is not indicated for CRAO. The current clinical debate is about IV tPA in the very early window (within 4.5 hours), which was not tested in EAGLE. If a CRAO patient presents within hours, the stroke team conversation is about IV tPA eligibility, not IA fibrinolysis.',
     bottomLineSummary: 'Local intra-arterial fibrinolysis for CRAO presenting within 20 hours showed no improvement in visual acuity compared with conservative treatment (primary P=0.69; secondary dichotomized endpoint 57.1% vs 60.0% with clinically meaningful improvement) and caused significantly more adverse events (37.1% vs 4.3%), including procedure-related intracranial hemorrhage. The DSMB stopped the trial at 84 patients for futility and safety. IA tPA is not recommended for CRAO.',
   },
   'mr-clean-trial': {
@@ -3117,7 +3117,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does OR 1.01 represent?',
-        answer: 'OR 1.01 is the adjusted odds ratio for the PRIMARY outcome: mRS ordinal shift at 90 days in 2196 patients. OR 1.01 (95% CI 0.87-1.17, P=0.87) is clinically and statistically indistinguishable from no difference. A pre-specified secondary outcome -- any ICH at 24 hours -- was reduced (14.8% vs 18.7%, OR 0.75, P=0.014), labeled separately because it is secondary.',
+        answer: 'OR 1.01 is the adjusted odds ratio for the PRIMARY outcome: mRS ordinal shift at 90 days in 2196 patients. OR 1.01 (95% CI 0.87-1.17, P=0.87) is clinically and statistically indistinguishable from no difference. A pre-specified secondary outcome (any ICH at 24 hours) was reduced (14.8% vs 18.7%, OR 0.75, P=0.014), labeled separately because it is secondary.',
       },
       {
         question: 'Why is the secondary ICH finding shown separately and not as the main result?',
@@ -3125,7 +3125,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'Why did reducing ICH not improve functional outcomes?',
-        answer: 'ENCHANTED reduced all-grade any-ICH, including small asymptomatic hemorrhagic transformation -- not specifically symptomatic or large ICH. Asymptomatic radiographic hemorrhage may not be a primary driver of 90-day disability. The disconnect between bleeding reduction and functional improvement is the defining finding of this trial.',
+        answer: 'ENCHANTED reduced all-grade any-ICH, including small asymptomatic hemorrhagic transformation, not specifically symptomatic or large ICH. Asymptomatic radiographic hemorrhage may not be a primary driver of 90-day disability. The disconnect between bleeding reduction and functional improvement is the defining finding of this trial.',
       },
     ],
     /* claimId: enchanted-interpret | source: Anderson et al. Lancet 2019 */
@@ -3227,7 +3227,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What does futility P=0.93 mean?',
-        answer: 'A high futility p-value means neither lower target formally crossed the futility boundary -- definitive harm cannot be declared. But the predicted probability of success in a future large superiority trial was only 14-25% for the lower targets, casting significant doubt on their promise. OPTIMAL-BP subsequently demonstrated functional harm from SBP <140 mm Hg.',
+        answer: 'A high futility p-value means neither lower target formally crossed the futility boundary; definitive harm cannot be declared. But the predicted probability of success in a future large superiority trial was only 14-25% for the lower targets, casting significant doubt on their promise. OPTIMAL-BP subsequently demonstrated functional harm from SBP <140 mm Hg.',
       },
     ],
     /* claimId: best-ii-interpret | source: Mistry et al. JAMA 2023 */
@@ -3322,7 +3322,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the primary outcome measure?',
-        answer: 'The primary endpoint was any radiographic intraparenchymal hemorrhage (iPH) on 24-36 hour imaging -- not symptomatic ICH or functional outcome. Both arms showed essentially identical iPH rates: 42% intensive versus 43% standard.',
+        answer: 'The primary endpoint was any radiographic intraparenchymal hemorrhage (iPH) on 24-36 hour imaging, not symptomatic ICH or functional outcome. Both arms showed essentially identical iPH rates: 42% intensive versus 43% standard.',
       },
       {
         question: 'What does aOR 0.96 mean here?',
@@ -3425,7 +3425,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the primary outcome measure?',
-        answer: 'The primary endpoint was functional independence (mRS 0-2) at 3 months -- the most clinically meaningful stroke outcome. The intensive BP arm (SBP <140 mm Hg) achieved only 39.4% functional independence versus 54.4% in the conventional arm (SBP 140-180 mm Hg), a 15.1 percentage-point difference favoring conventional management.',
+        answer: 'The primary endpoint was functional independence (mRS 0-2) at 3 months, the most clinically meaningful stroke outcome. The intensive BP arm (SBP <140 mm Hg) achieved only 39.4% functional independence versus 54.4% in the conventional arm (SBP 140-180 mm Hg), a 15.1 percentage-point difference favoring conventional management.',
       },
       {
         question: 'Why does the control arm appear as the winner?',
@@ -3528,11 +3528,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does cOR 1.17 represent?',
-        answer: 'The common odds ratio of 1.17 (95% CI 0.80-1.71, P=0.42) is the primary result of ordinal logistic regression on mRS at 90 days in patients aged 18-70. An OR above 1.0 nominally favors glibenclamide, but the confidence interval spans both benefit and harm -- and P=0.42 confirms this is not statistically significant.',
+        answer: 'The common odds ratio of 1.17 (95% CI 0.80-1.71, P=0.42) is the primary result of ordinal logistic regression on mRS at 90 days in patients aged 18-70. An OR above 1.0 nominally favors glibenclamide, but the confidence interval spans both benefit and harm, and P=0.42 confirms this is not statistically significant.',
       },
       {
         question: 'Why is the confidence interval so wide?',
-        answer: 'CHARM was stopped early due to COVID-19 operational disruptions before completing planned enrollment. At 535 patients (approximately 71% of target), the trial was substantially underpowered. Wide confidence intervals reflect this loss of precision -- any effect estimate from this trial is highly uncertain.',
+        answer: 'CHARM was stopped early due to COVID-19 operational disruptions before completing planned enrollment. At 535 patients (approximately 71% of target), the trial was substantially underpowered. Wide confidence intervals reflect this loss of precision; any effect estimate from this trial is highly uncertain.',
       },
       {
         question: 'Does an OR above 1.0 suggest a trend toward benefit?',
@@ -3638,7 +3638,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What about the alteplase-free subgroup?',
-        answer: 'A prespecified interaction analysis showed a numerically larger effect in patients not receiving alteplase (nerinetide 59.3% vs placebo 49.8%), raising a hypothesis about alteplase degrading nerinetide. This is hypothesis-generating only -- it cannot be used to recommend nerinetide (an unapproved drug) or to alter alteplase decisions.',
+        answer: 'A prespecified interaction analysis showed a numerically larger effect in patients not receiving alteplase (nerinetide 59.3% vs placebo 49.8%), raising a hypothesis about alteplase degrading nerinetide. This is hypothesis-generating only; it cannot be used to recommend nerinetide (an unapproved drug) or to alter alteplase decisions.',
       },
     ],
     /* claimId: escape-na1-interpret | source: Hill et al. Lancet 2020 */
@@ -3648,7 +3648,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       cautions: 'The alteplase-free subgroup (approximately 30% of enrolled patients) showed a numerically large difference (59.3% vs 49.8%), and the interaction was prespecified. However, this requires independent replication before clinical translation. Nerinetide is not approved; the ESCAPE-NEXT trial was designed to address this interaction in the alteplase-free population. Any inference of clinical actionability from this subgroup is premature.',
     },
     /* claimId: escape-na1-pearl | source: Hill et al. Lancet 2020 */
-    bedsidePearl: 'ESCAPE-NA1 was negative overall for nerinetide in EVT patients. The alteplase-free subgroup signal is hypothesis-generating only -- do not alter thrombolysis decisions or advocate for nerinetide use based on this finding. Neuroprotection after EVT remains unproven.',
+    bedsidePearl: 'ESCAPE-NA1 was negative overall for nerinetide in EVT patients. The alteplase-free subgroup signal is hypothesis-generating only; do not alter thrombolysis decisions or advocate for nerinetide use based on this finding. Neuroprotection after EVT remains unproven.',
     bottomLineSummary: 'Double-blind RCT of nerinetide in 1105 LVO stroke patients undergoing EVT within 12 hours. Primary endpoint (mRS 0-2 at 90 days) was null: 61.4% vs 59.2%, adjusted RR 1.04, P=0.35. A prespecified interaction showed numerically larger effect in alteplase-free patients (59.3% vs 49.8%), raising a hypothesis about alteplase-nerinetide interaction that requires dedicated confirmation.',
     inclusionCriteria: [
       'Age 18 or older',
@@ -3745,7 +3745,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'Why is mortality shown instead of the primary endpoint?',
-        answer: "DECIMAL's primary endpoint was mRS less than or equal to 3 at 6 months. That endpoint was not statistically significant (P=0.18) because the trial enrolled only 38 patients -- far too few for functional outcome detection. Mortality, though a secondary endpoint, reached significance and is the clinically meaningful finding.",
+        answer: "DECIMAL's primary endpoint was mRS less than or equal to 3 at 6 months. That endpoint was not statistically significant (P=0.18) because the trial enrolled only 38 patients, far too few for functional outcome detection. Mortality, though a secondary endpoint, reached significance and is the clinically meaningful finding.",
       },
       {
         question: 'Does surviving mean recovering?',
@@ -3755,7 +3755,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: decimal-interpret | source: Vahedi et al. Stroke 2007 */
     howToInterpret: {
       proves: 'In 38 patients (20 surgery, 18 medical therapy), early decompressive hemicraniectomy reduced 6-month mortality from 78% to 25%, an absolute reduction of 52.8 percentage points (P=0.001). This mortality benefit is the primary established finding from DECIMAL. The trial was stopped early at 38 of a planned 70 patients because pooled European analysis data became available.',
-      doesNotProve: 'The primary endpoint -- mRS less than or equal to 3 at 6 months -- was not statistically significant in this sample (25% surgery vs 5.6% medical, P=0.18). DECIMAL does not prove that surgery restores functional independence. Survivors in the surgical arm were predominantly mRS 4 or mRS 5. The trial cannot establish quality of life or long-term functional benefit.',
+      doesNotProve: 'The primary endpoint (mRS less than or equal to 3 at 6 months) was not statistically significant in this sample (25% surgery vs 5.6% medical, P=0.18). DECIMAL does not prove that surgery restores functional independence. Survivors in the surgical arm were predominantly mRS 4 or mRS 5. The trial cannot establish quality of life or long-term functional benefit.',
       cautions: 'DECIMAL enrolled only 38 of a planned 70 patients; small sample inflates observed effect sizes. All patients were aged 18-55 years, limiting generalizability to older patients. Surgery was performed within approximately 30-35 hours of symptom onset; results may not apply to delayed intervention. Pooled analysis of DECIMAL, DESTINY, and HAMLET within 48 hours of stroke onset (HAMLET 2009, Figure 3) showed mortality ARR 49.9 percentage points (95% CI 33.9-65.9) and mRS greater than 4 ARR 41.9 percentage points (95% CI 25.2-58.6) favoring surgery.',
     },
     /* claimId: decimal-pearl | source: Vahedi et al. Stroke 2007 */
@@ -3854,7 +3854,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: destiny-interpret | source: Juttler et al. Stroke 2007 */
     howToInterpret: {
       proves: 'In 32 patients (17 surgery, 15 conservative therapy), early hemicraniectomy reduced 30-day mortality from 53% to 12%, an absolute reduction of 41 percentage points (P=0.02). Six-month survival rates were consistent: 88% vs 47%. This survival benefit is the primary established finding from DESTINY.',
-      doesNotProve: 'The primary endpoint -- mRS 0-3 at 6 months -- was not statistically significant in this 32-patient sample (47% surgery vs 27% conservative, P=0.23). DESTINY does not prove that surgery restores functional independence. The mRS distribution shift observed was numerical only. The trial cannot establish quality of life benefit.',
+      doesNotProve: 'The primary endpoint (mRS 0-3 at 6 months) was not statistically significant in this 32-patient sample (47% surgery vs 27% conservative, P=0.23). DESTINY does not prove that surgery restores functional independence. The mRS distribution shift observed was numerical only. The trial cannot establish quality of life benefit.',
       cautions: 'DESTINY enrolled only 32 patients; effect sizes should be interpreted with caution due to wide confidence intervals expected from small samples. All patients were aged 18-60 years, limiting generalizability to patients over 60. The trial was stopped early when pooled European analysis data became available. Pooled analysis of DECIMAL, DESTINY, and HAMLET within 48 hours of stroke onset (HAMLET 2009, Figure 3) showed mortality ARR 49.9 percentage points (95% CI 33.9-65.9) and mRS greater than 4 ARR 41.9 percentage points (95% CI 25.2-58.6) favoring surgery.',
     },
     /* claimId: destiny-pearl | source: Juttler et al. Stroke 2007 */
@@ -3934,7 +3934,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     pearls: [
       'Primary outcome mRS 0-3 at 1 year was neutral overall; patients randomized after 48 hours diluted the treatment effect',
       'Case fatality was reduced by an absolute 38 percentage points (P=0.002)',
-      'Functional benefit -- and strongest mortality benefit -- was concentrated in patients operated within 48 hours',
+      'Functional benefit (and strongest mortality benefit) was concentrated in patients operated within 48 hours',
       'The trial showed that delayed surgery (48-96 hours) may save lives without clearly improving functional independence',
     ],
     howToReadChart: [
@@ -3954,11 +3954,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: hamlet-interpret | source: Hofmeijer et al. Lancet Neurol 2009 */
     howToInterpret: {
       proves: 'In 64 patients (32 surgical, 32 medical), decompressive surgery reduced 1-year case fatality from 59% to 22%, an absolute reduction of 38 percentage points (P=0.002). This mortality benefit was consistent across the enrollment window up to 96 hours. HAMLET established that surgery saves lives even beyond the 30-48 hour window studied by DECIMAL and DESTINY.',
-      doesNotProve: 'The primary endpoint -- mRS 0-3 at 1 year -- was not statistically significant overall, due to inclusion of patients randomized up to 96 hours after onset, in whom functional benefit was not demonstrated. HAMLET does not prove that surgery improves functional independence when performed beyond 48 hours. The overall neutral primary endpoint means this trial alone cannot support a broad functional benefit claim.',
+      doesNotProve: 'The primary endpoint (mRS 0-3 at 1 year) was not statistically significant overall, due to inclusion of patients randomized up to 96 hours after onset, in whom functional benefit was not demonstrated. HAMLET does not prove that surgery improves functional independence when performed beyond 48 hours. The overall neutral primary endpoint means this trial alone cannot support a broad functional benefit claim.',
       cautions: 'HAMLET enrolled patients up to 96 hours after onset; functional benefit was concentrated in patients treated within 48 hours and was not demonstrated for patients treated between 48 and 96 hours. Patients were aged 18-60 years. The 64-patient sample is small. Pooled analysis of DECIMAL, DESTINY, and HAMLET within 48 hours of stroke onset (HAMLET 2009, Figure 3) showed mortality ARR 49.9 percentage points (95% CI 33.9-65.9) and mRS greater than 4 ARR 41.9 percentage points (95% CI 25.2-58.6) favoring surgery.',
     },
     /* claimId: hamlet-pearl | source: Hofmeijer et al. Lancet Neurol 2009 */
-    bedsidePearl: "HAMLET's most important teaching is the 48-hour window. Mortality benefit from hemicraniectomy is seen across the enrollment window (up to 96 hours), but functional benefit -- and the strongest mortality benefit -- is concentrated in patients operated within 48 hours of onset. For patients presenting after 48 hours and before 96 hours, surgery may still reduce death but does not reliably improve functional independence. Tell families explicitly: operating after 48 hours means accepting a higher chance the patient survives with severe disability. The pooled analysis (DECIMAL, DESTINY, HAMLET within 48 hours) is the definitive evidence base for counseling when operating within the 48-hour window.",
+    bedsidePearl: "HAMLET's most important teaching is the 48-hour window. Mortality benefit from hemicraniectomy is seen across the enrollment window (up to 96 hours), but functional benefit (and the strongest mortality benefit) is concentrated in patients operated within 48 hours of onset. For patients presenting after 48 hours and before 96 hours, surgery may still reduce death but does not reliably improve functional independence. Tell families explicitly: operating after 48 hours means accepting a higher chance the patient survives with severe disability. The pooled analysis (DECIMAL, DESTINY, HAMLET within 48 hours) is the definitive evidence base for counseling when operating within the 48-hour window.",
     bottomLineSummary: 'HAMLET demonstrates mortality benefit from decompressive surgery up to 96 hours after malignant MCA infarction onset (38 percentage point case fatality reduction, P=0.002). The primary functional endpoint was neutral overall. Functional benefit is restricted to the within-48-hour window per pooled analysis.',
     conclusion: '',
     source: 'Hofmeijer et al. (Lancet Neurol 2009)',
@@ -4033,14 +4033,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     pearls: [
       'Primary endpoint (mRS 0-4) was met: 38% vs 18%, OR 2.91, P=0.04',
-      'Mortality was dramatically reduced: 33% vs 70% -- a real, large survival benefit',
+      'Mortality was dramatically reduced: 33% vs 70%, a real, large survival benefit',
       '0% of patients in either group achieved mRS 0-2 (good functional outcome)',
       'Virtually all surgical survivors who met the primary endpoint had mRS 4 (severe disability, dependent for most bodily needs)',
     ],
     howToReadChart: [
       {
         question: 'What does the bar chart show?',
-        answer: "The bars show the primary endpoint: survival without being bedbound or dead (mRS 0-4) at 6 months. Treatment arm: 38%. Control arm: 18%. The 20 percentage point difference is the trial's positive result. Critically: 0% of patients in either group achieved mRS 0-2 (good outcome -- able to perform daily activities independently).",
+        answer: "The bars show the primary endpoint: survival without being bedbound or dead (mRS 0-4) at 6 months. Treatment arm: 38%. Control arm: 18%. The 20 percentage point difference is the trial's positive result. Critically: 0% of patients in either group achieved mRS 0-2 (good outcome, able to perform daily activities independently).",
       },
       {
         question: 'What does mRS 0-4 actually mean clinically?',
@@ -4138,14 +4138,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the chart show?',
-        answer: 'Rates of the composite primary endpoint (recurrent stroke, symptomatic ICH, or death at 90 days). Early arm: 6.89%. Delayed arm: 8.68%. Absolute risk difference: -1.79 percentage points. This is a noninferiority result -- early NOAC was not worse than delayed, and events trended numerically lower with early initiation.',
+        answer: 'Rates of the composite primary endpoint (recurrent stroke, symptomatic ICH, or death at 90 days). Early arm: 6.89%. Delayed arm: 8.68%. Absolute risk difference: -1.79 percentage points. This is a noninferiority result: early NOAC was not worse than delayed, and events trended numerically lower with early initiation.',
       },
       {
-        question: 'Why is P=0.004 for NI -- how does that differ from P=0.05 for superiority?',
+        question: 'Why is P=0.004 for NI, and how does that differ from P=0.05 for superiority?',
         answer: 'In a noninferiority trial, the P-value tests whether the risk difference exceeds the prespecified NI margin (here: 3 percentage points absolute). P=0.004 means strong evidence that early NOAC does not cause an unacceptable increase in adverse events relative to delayed. It does not mean early is superior to delayed.',
       },
       {
-        question: 'Zero symptomatic ICH in either arm -- what does that mean?',
+        question: 'Zero symptomatic ICH in either arm: what does that mean?',
         answer: 'No symptomatic intracranial hemorrhages occurred in either arm, a reassuring finding suggesting that early NOAC initiation within 4 days did not produce detectable bleeding harm in this registry-based trial. This supports moving away from the traditional practice of waiting 2 weeks.',
       },
     ],
@@ -4156,7 +4156,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       cautions: 'Registry-based randomization via the Swedish Stroke Register is pragmatic but less controlled than a hospital-based double-blind RCT. The sample size (888 patients) was designed for a 3 percentage point NI margin; smaller absolute differences would require larger trials. Event rates were low overall (6.89% and 8.68%), meaning conclusions apply primarily to patients at modest-to-moderate risk. OPTIMAS (3621 patients, 100 UK hospitals) provides a larger, more definitive NI result with a wider delayed-initiation window (7-14 days).',
     },
     /* claimId: timing-pearl | source: Oldgren et al. Circulation 2022 */
-    bedsidePearl: 'TIMING met its non-inferiority margin and supports early NOAC initiation within 4 days after AF-related ischemic stroke as safe. This does not mandate same-day initiation -- the early window was days 1-4. Individualize timing based on infarct size, hemorrhagic transformation risk, and NIHSS. OPTIMAS (N=3621) provides larger, more definitive evidence and reached the same NI conclusion with a delayed window of 7-14 days.',
+    bedsidePearl: 'TIMING met its non-inferiority margin and supports early NOAC initiation within 4 days after AF-related ischemic stroke as safe. This does not mandate same-day initiation; the early window was days 1-4. Individualize timing based on infarct size, hemorrhagic transformation risk, and NIHSS. OPTIMAS (N=3621) provides larger, more definitive evidence and reached the same NI conclusion with a delayed window of 7-14 days.',
     bottomLineSummary: 'Registry-based randomized noninferiority trial of 888 patients with AF-related stroke. Early NOAC within 4 days was non-inferior to delayed (5-10 days) for the 90-day composite of recurrent stroke, sICH, or death (6.89% vs 8.68%, risk difference -1.79 pp, P for NI = 0.004). Zero sICH in either arm. Noninferiority met; superiority not tested. Published Circulation 2022.',
     conclusion: '',
     source: 'Oldgren et al. (Circulation 2022)',
@@ -4246,11 +4246,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What do the identical bars mean?',
-        answer: 'Both bars show 3.3% event rates for the 90-day composite endpoint (recurrent stroke, symptomatic ICH, systemic embolism). The risk difference is 0.000 -- identical rates. In a noninferiority context, this is the most favorable possible result: early DOAC was not worse than delayed, with exactly equal event rates.',
+        answer: 'Both bars show 3.3% event rates for the 90-day composite endpoint (recurrent stroke, symptomatic ICH, systemic embolism). The risk difference is 0.000: identical rates. In a noninferiority context, this is the most favorable possible result: early DOAC was not worse than delayed, with exactly equal event rates.',
       },
       {
         question: 'With identical rates, why was superiority not declared?',
-        answer: 'OPTIMAS used a gatekeeper design -- noninferiority was tested first, then superiority. Superiority requires demonstrating that early initiation is significantly better than delayed. With identical event rates (3.3% vs 3.3%), there is no numerical advantage to test. The trial met its primary NI objective; it cannot support superiority claims.',
+        answer: 'OPTIMAS used a gatekeeper design: noninferiority was tested first, then superiority. Superiority requires demonstrating that early initiation is significantly better than delayed. With identical event rates (3.3% vs 3.3%), there is no numerical advantage to test. The trial met its primary NI objective; it cannot support superiority claims.',
       },
       {
         question: 'How does OPTIMAS compare to TIMING?',
@@ -4264,7 +4264,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       cautions: 'The delayed window in OPTIMAS (7-14 days) differs from TIMING (5-10 days), making direct numerical comparison between trials difficult. Event rates were very low (3.3%), limiting power to detect rare outcomes like sICH. The 100 UK hospitals reflect organized stroke services; generalizability to less-resourced settings requires consideration. The trial included only patients with clear indication for long-term anticoagulation.',
     },
     /* claimId: optimas-pearl | source: Werring et al. Lancet 2024 */
-    bedsidePearl: 'OPTIMAS is the largest and most definitive trial supporting early DOAC initiation after AF-related stroke. Early within 4 days was non-inferior to waiting 7-14 days, with identical 3.3% event rates. This does not mandate same-day initiation -- individualize based on infarct size and hemorrhagic transformation risk. For most patients with small-to-moderate AF-related stroke without hemorrhagic transformation, starting within 4 days is well-supported by the evidence.',
+    bedsidePearl: 'OPTIMAS is the largest and most definitive trial supporting early DOAC initiation after AF-related stroke. Early within 4 days was non-inferior to waiting 7-14 days, with identical 3.3% event rates. This does not mandate same-day initiation; individualize based on infarct size and hemorrhagic transformation risk. For most patients with small-to-moderate AF-related stroke without hemorrhagic transformation, starting within 4 days is well-supported by the evidence.',
     bottomLineSummary: 'Largest trial of DOAC timing after AF-related stroke: 3621 patients at 100 UK hospitals. Early DOAC within 4 days was non-inferior to delayed (7-14 days) for the 90-day composite of recurrent stroke, sICH, or systemic embolism. Event rates were identical (3.3% vs 3.3%, risk difference 0.000, P for NI = 0.0003). Superiority not demonstrated. Provides the most robust evidence for early DOAC initiation in AF-related ischemic stroke. Published Lancet 2024.',
     conclusion: '',
     source: 'Werring et al. (Lancet 2024)',
@@ -4631,7 +4631,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     pearls: [
       'NNT: Number Needed to Treat (NNT) for one additional patient to be functionally independent was 3.6',
-      'Late window: Along with DAWN, DEFUSE-3 shifted selection from time-based to tissue-based — perfusion mismatch over clock',
+      'Late window: Along with DAWN, DEFUSE-3 shifted selection from time-based to tissue-based; perfusion mismatch over clock',
       'Selection Criteria: Infarct Core < 70 ml, Mismatch Ratio ≥ 1.8, Mismatch Volume ≥ 15 ml',
       'Mortality Reduction: 14% in EVT group vs 26% in Control group (P=0.05)',
       'Safety: No significant difference in symptomatic intracranial hemorrhage (sICH) or serious adverse events',
@@ -4952,7 +4952,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1161/STROKEAHA.119.028127',
     clinicalTrialsId: 'NCT02002325',
     listCategory: 'thrombolysis',
-    listDescription: 'Low-dose alteplase 0.6 mg/kg for MRI-selected unknown-onset stroke; stopped early after WAKE-UP — inconclusive.',
+    listDescription: 'Low-dose alteplase 0.6 mg/kg for MRI-selected unknown-onset stroke; stopped early after WAKE-UP, inconclusive.',
     inclusionCriteria: [
       'Acute ischemic stroke with unknown time of onset (including wake-up stroke)',
       'DWI-positive and FLAIR-negative on MRI (DWI-FLAIR mismatch)',
@@ -5058,7 +5058,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1056/NEJMoa2402980',
     clinicalTrialsId: 'NCT05141305',
     listCategory: 'thrombolysis',
-    listDescription: 'Late-window tenecteplase 4.5-24h for ICA/MCA occlusion without EVT access; POSITIVE — NNT 11.',
+    listDescription: 'Late-window tenecteplase 4.5-24h for ICA/MCA occlusion without EVT access; POSITIVE, NNT 11.',
     trialResult: 'POSITIVE',
     safetyProfile: {
       sICH: {
@@ -5775,7 +5775,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Chimowitz et al. (NEJM 2011)',
     clinicalTrialsId: 'NCT00576693',
     listCategory: 'carotid',
-    listDescription: 'Intracranial stenting vs medical therapy for stenosis — medical management wins.',
+    listDescription: 'Intracranial stenting vs medical therapy for stenosis; medical management wins.',
     primaryDesign: 'binary-superiority',
     primaryResult: 'harm-stopped',
     harmSignal: 'Stenting arm: 14.7% vs 5.8% 30-day stroke/death; stopped at 451 patients (p=0.002); procedural stroke drove excess',
@@ -5853,7 +5853,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Patient selection: 2.6% event rate vs 14.7% in SAMMPRIS demonstrates that strict on-label criteria and operator experience are critical determinants of safety',
       'Role of stenting: WEAVE restored Wingspan as a viable salvage option for patients with refractory intracranial atherosclerotic disease who fail optimal medical therapy',
       'On-label criteria: symptomatic ICAD 70-99%, at least 2 strokes in territory despite medical therapy, age 22-80, mRS 3 or less, more than 8 days from last stroke',
-      'Study design: single-arm benchmark study -- does not establish superiority or non-inferiority to medical therapy',
+      'Study design: single-arm benchmark study; does not establish superiority or non-inferiority to medical therapy',
     ],
     conclusion: '',
     // ── Archetype G specific fields ───────────────────────────────────────────
@@ -5935,7 +5935,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What is the shaded CI band?',
-        answer: 'The shaded region spans the 95% confidence interval from 0.7% to 6.6% (Clopper-Pearson exact method). With only 4 events, the CI is wide. The point estimate (2.6%) falls well below the benchmark, and the upper CI bound (6.6%) exceeds it -- meaning the benchmark-met result has meaningful uncertainty at the boundary.',
+        answer: 'The shaded region spans the 95% confidence interval from 0.7% to 6.6% (Clopper-Pearson exact method). With only 4 events, the CI is wide. The point estimate (2.6%) falls well below the benchmark, and the upper CI bound (6.6%) exceeds it, meaning the benchmark-met result has meaningful uncertainty at the boundary.',
       },
       {
         question: 'What does the dashed vertical line represent?',
@@ -6011,7 +6011,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'Johnston et al. (NEJM 2016)',
     clinicalTrialsId: 'NCT01994720',
     listCategory: 'antiplatelets',
-    listDescription: 'Ticagrelor vs aspirin monotherapy in acute ischemic stroke — not superior.',
+    listDescription: 'Ticagrelor vs aspirin monotherapy in acute ischemic stroke; not superior.',
     trialResult: 'NEGATIVE',
     primaryDesign: 'binary-superiority',
     primaryResult: 'not-met',
@@ -6047,7 +6047,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the chart show?',
-        answer: 'Each arm shows the percentage of patients free from composite events (stroke, MI, or death) at 90 days. Ticagrelor 93.3% vs Aspirin 92.5% -- a 0.8 percentage-point difference that did not reach significance.',
+        answer: 'Each arm shows the percentage of patients free from composite events (stroke, MI, or death) at 90 days. Ticagrelor 93.3% vs Aspirin 92.5%, a 0.8 percentage-point difference that did not reach significance.',
       },
       {
         question: 'Why is there no cobalt band?',
@@ -6063,7 +6063,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'It does not prove that ticagrelor monotherapy is equivalent to aspirin; the confidence interval is wide and includes a modest benefit. An exploratory subgroup suggested possible benefit in patients with ipsilateral atherosclerotic stenosis, but this finding requires prospective confirmation.',
       cautions: 'The trial tested monotherapy head-to-head, not dual antiplatelet therapy. Subsequent trials (THALES) tested ticagrelor plus aspirin versus aspirin alone and found superiority with increased bleeding. SOCRATES does not speak to the DAPT question. Generalizability to patients with CYP2C19 loss-of-function variants is untested in this dataset.',
     },
-    bedsidePearl: 'SOCRATES showed ticagrelor monotherapy did not beat aspirin alone (P=0.07). The relevant question at the bedside is now DAPT composition -- CHANCE/POINT established clopidogrel plus aspirin reduces early recurrence by roughly 30%; THALES showed ticagrelor plus aspirin works similarly but bleeds more. In patients with known or suspected CYP2C19 loss-of-function, ticagrelor-based DAPT may be considered, though direct head-to-head DAPT comparison data are limited.',
+    bedsidePearl: 'SOCRATES showed ticagrelor monotherapy did not beat aspirin alone (P=0.07). The relevant question at the bedside is now DAPT composition: CHANCE/POINT established clopidogrel plus aspirin reduces early recurrence by roughly 30%; THALES showed ticagrelor plus aspirin works similarly but bleeds more. In patients with known or suspected CYP2C19 loss-of-function, ticagrelor-based DAPT may be considered, though direct head-to-head DAPT comparison data are limited.',
     bottomLineSummary: 'In acute non-cardioembolic minor ischemic stroke or high-risk TIA, ticagrelor monotherapy was not superior to aspirin monotherapy for the 90-day composite of stroke, MI, or death (HR 0.89, 95% CI 0.78 to 1.01, P=0.07). Major bleeding was similar between arms. The result supports aspirin as the appropriate monotherapy comparator and does not justify substituting ticagrelor for aspirin outside of a DAPT regimen.',
   },
   'sps3-trial': {
@@ -6128,7 +6128,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     source: 'SPS3 Investigators (NEJM 2012)',
     clinicalTrialsId: 'NCT00059306',
     listCategory: 'antiplatelets',
-    listDescription: 'DAPT not beneficial in lacunar stroke — increased bleeding without stroke reduction.',
+    listDescription: 'DAPT not beneficial in lacunar stroke; increased bleeding without stroke reduction.',
     trialResult: 'NEGATIVE',
     primaryDesign: 'binary-superiority',
     // harm-stopped considered; not-met chosen: trial completed enrollment; mortality+bleeding excess were results, not a stopping reason; harm context carried by harmSignal
@@ -6172,7 +6172,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the chart show?',
-        answer: 'Annual recurrent stroke rate: DAPT 2.5% vs aspirin 2.7% per year -- a 0.2 percentage-point difference that was not significant (P=0.48). The chart uses annual event rates because the trial ran for a median of 3.4 years, not a fixed short window.',
+        answer: 'Annual recurrent stroke rate: DAPT 2.5% vs aspirin 2.7% per year, a 0.2 percentage-point difference that was not significant (P=0.48). The chart uses annual event rates because the trial ran for a median of 3.4 years, not a fixed short window.',
       },
       {
         question: 'Why is this labeled NEGATIVE with a harm signal?',
@@ -6185,7 +6185,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     howToInterpret: {
       proves: 'In patients with MRI-confirmed symptomatic lacunar infarction, long-term DAPT (aspirin plus clopidogrel) did not reduce recurrent stroke compared with aspirin alone (2.5% vs 2.7% per year, HR 0.92, 95% CI 0.72 to 1.16, P=0.48) and significantly increased mortality (HR 1.52, P=0.004) and major bleeding (2.1% vs 1.1%). /* claimId: sps3-primary-result | source: SPS3 Investigators NEJM 2012 */',
-      doesNotProve: 'It does not prove that any antiplatelet is ineffective in lacunar stroke -- aspirin monotherapy remains standard. It also does not generalize to short-duration DAPT (21 days or less) in acute presentations, which is the CHANCE/POINT evidence base.',
+      doesNotProve: 'It does not prove that any antiplatelet is ineffective in lacunar stroke; aspirin monotherapy remains standard. It also does not generalize to short-duration DAPT (21 days or less) in acute presentations, which is the CHANCE/POINT evidence base.',
       cautions: 'The trial was stopped early (3,020 of planned 3,600 enrolled), which may reduce statistical precision for secondary endpoints. The dose of aspirin (325 mg) is higher than commonly used in Europe. The BP-lowering arm of SPS3 ran in parallel; interpretation of the antiplatelet arm is independent but conducted in the same population.',
     },
     bedsidePearl: 'SPS3 is a HARM signal trial: long-term DAPT in lacunar stroke increases mortality and bleeding with no stroke reduction. This is the opposite of CHANCE/POINT, which show short-term DAPT benefit in acute presentations. The practical rule: DAPT is for the first 21 days after TIA or minor stroke, not for chronic secondary prevention in lacunar disease. Aspirin monotherapy remains the long-term standard in this population.',
@@ -6298,7 +6298,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       doesNotProve: 'It does not prove that all statins at all doses are equivalent. The trial used atorvastatin 80 mg. Patients with known coronary heart disease were excluded, so SPARCL evidence is specific to the secondary stroke prevention population without established CAD.',
       cautions: 'Hemorrhagic stroke was significantly increased (HR 1.66, P=0.02). In patients with prior hemorrhagic stroke, this risk-benefit calculation shifts materially; most guideline bodies consider prior ICH a relative contraindication to high-intensity statin therapy. Liver enzyme elevations were more common in the atorvastatin group.',
     },
-    bedsidePearl: 'SPARCL established atorvastatin 80 mg as a standard in secondary stroke prevention -- but the hemorrhagic stroke signal (HR 1.66) is real and matters. The net benefit is favorable in ischemic stroke patients, but in a patient with prior hemorrhagic stroke, you are adding a drug that independently increases hemorrhagic stroke by 66% without clear ischemic benefit in that subgroup. In hemorrhagic stroke, statin use post-discharge is a shared decision, not a reflex.',
+    bedsidePearl: 'SPARCL established atorvastatin 80 mg as a standard in secondary stroke prevention, but the hemorrhagic stroke signal (HR 1.66) is real and matters. The net benefit is favorable in ischemic stroke patients, but in a patient with prior hemorrhagic stroke, you are adding a drug that independently increases hemorrhagic stroke by 66% without clear ischemic benefit in that subgroup. In hemorrhagic stroke, statin use post-discharge is a shared decision, not a reflex.',
     bottomLineSummary: 'In patients with recent ischemic stroke or TIA and LDL 100 to 190 mg/dL without known coronary heart disease, atorvastatin 80 mg reduced recurrent stroke by 16% relative (NNT=53 over 4.9 years) but significantly increased hemorrhagic stroke risk (HR 1.66, 2.3% vs 1.4%). High-intensity statin therapy is now standard secondary prevention for ischemic stroke; caution is warranted in patients with prior hemorrhagic stroke.',
   },
   'elan-study': {
@@ -6366,10 +6366,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       // Risk difference: -1.18% (95% CI: -2.84 to 0.47)
     },
     pearls: [
-      'Estimation trial (not superiority) — establishes safe range for practice',
+      'Estimation trial (not superiority): establishes safe range for practice',
       'Risk difference: -1.18% (95% CI: -2.84 to 0.47) - early treatment ranges from 2.8% better to 0.5% worse',
       'Recurrent ischemic stroke: 1.4% (early) vs 2.5% (later) - trend favoring early treatment',
-      'Symptomatic ICH: 0.2% in both groups — bleeding risk not increased with early treatment',
+      'Symptomatic ICH: 0.2% in both groups, bleeding risk not increased with early treatment',
       'Imaging-based classification (not NIHSS-based) used to determine timing',
       'Stroke severity: 37% minor, 40% moderate, 23% major',
       'Used any approved DOAC at appropriate dose (not drug-specific)',
@@ -6538,13 +6538,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       nntExplanation: 'NNT=91 at 30 days — 91 patients must be treated to prevent one stroke/death, while each patient faces severe bleeding risk 5× higher than aspirin alone.'
     },
     pearls: [
-      'AHA/ASA 2026: COR 3: No Benefit — ticagrelor NOT recommended over aspirin alone for minor stroke/TIA',
+      'AHA/ASA 2026: COR 3: No Benefit; ticagrelor NOT recommended over aspirin alone for minor stroke/TIA',
       'Statistically significant (p=0.02) but clinically inadequate: NNT=91, severe bleeding 5× higher',
       'Severe hemorrhage: 0.5% (ticagrelor+ASA) vs 0.1% (ASA alone), p<0.001',
       'Net clinical benefit unfavorable vs clopidogrel DAPT: CHANCE NNT=28 with comparable safety',
       'Broader eligibility (NIHSS ≤5, ABCD2 ≥6) vs CHANCE (NIHSS ≤3, ABCD2 ≥4)',
-      'Ticagrelor dyspnea in ~12% — pharmacologic, not cardiac, but common discontinuation reason',
-      'NOT equivalent to clopidogrel DAPT — do not substitute ticagrelor for clopidogrel routinely',
+      'Ticagrelor dyspnea in ~12%, pharmacologic, not cardiac, but common discontinuation reason',
+      'NOT equivalent to clopidogrel DAPT; do not substitute ticagrelor for clopidogrel routinely',
       'Exception: CYP2C19 poor metabolizers may benefit from ticagrelor DAPT (CHANCE-2, COR 2b)',
       'Benefit consistent across atherosclerotic and non-atherosclerotic causes',
       'Published: Johnston SC et al. N Engl J Med. 2020;383(3):207–217. DOI: 10.1056/NEJMoa1916870'
@@ -6563,7 +6563,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       '57% Asian patients — higher CYP2C19 LOF prevalence may have partially confounded results'
     ],
     listCategory: 'antiplatelets',
-    listDescription: 'Ticagrelor + aspirin vs aspirin alone — AHA 2026 COR 3: No Benefit. NNT=91, bleeding 5× higher.',
+    listDescription: 'Ticagrelor + aspirin vs aspirin alone; AHA 2026 COR 3: No Benefit. NNT=91, bleeding 5× higher.',
     safetyProfile: {
       severeHemorrhage: {
         evt: 0.5,
@@ -6719,8 +6719,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'AHA/ASA 2026: COR 2a — DAPT reasonable for atherosclerotic minor stroke/TIA within 24–72 hours',
       'Key eligibility: ≥50% intracranial OR extracranial stenosis on vascular imaging (must confirm etiology)',
       'Extends CHANCE/POINT paradigm: DAPT benefit persists even with 24–72h initiation',
-      'NNT≈53 at 90 days — clinically meaningful even with delayed initiation',
-      'Bleeding: moderate-to-severe 0.9% (DAPT) vs 0.4% (aspirin) — small but statistically significant',
+      'NNT≈53 at 90 days, clinically meaningful even with delayed initiation',
+      'Bleeding: moderate-to-severe 0.9% (DAPT) vs 0.4% (aspirin), small but statistically significant',
       'Same 21-day DAPT → monotherapy protocol as CHANCE — consistent guideline regimen',
       'NOT applicable to cardioembolic, lacunar (without stenosis), or non-atherosclerotic etiology',
       '2×2 factorial: statin intensification arm showed neutral effect (separate analysis)',
@@ -6855,9 +6855,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'CYP2C19 *2/*3 LOF alleles present in ~15–30% Europeans, ~50–60% East Asians',
       'Rapid point-of-care genotyping (30–60 min) available at many comprehensive stroke centers',
       'Ticagrelor direct-acting P2Y12 inhibitor — genotype-independent, no CYP2C19 conversion needed',
-      'Severe/moderate bleeding: 0.28% (ticagrelor) vs 0.39% (clopidogrel) — no significant difference',
-      'Dyspnea: ~15% with ticagrelor vs ~5% clopidogrel — pharmacologic not cardiac, manageable',
-      '1-year benefit confirmed: HR 0.80 (95% CI 0.68–0.95), p=0.007 — durable effect',
+      'Severe/moderate bleeding: 0.28% (ticagrelor) vs 0.39% (clopidogrel), no significant difference',
+      'Dyspnea: ~15% with ticagrelor vs ~5% clopidogrel, pharmacologic not cardiac, manageable',
+      '1-year benefit confirmed: HR 0.80 (95% CI 0.68–0.95), p=0.007; durable effect',
       'Only CYP2C19 LOF carriers benefit — normal metabolizers should use standard clopidogrel DAPT',
       'If testing unavailable within 24h: use clopidogrel DAPT NOW — do NOT delay treatment for genotyping',
       'Published: Wang Y, et al. N Engl J Med. 2021;385(27):2497–2505. DOI: 10.1056/NEJMoa2111749'
@@ -6979,9 +6979,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     pearls: [
       'FIRST positive randomized surgical ICH trial — overturns STICH I (2005), STICH II (2013), MISTIE III (2019)',
-      '30-day mortality: 9.3% (surgery) vs 18.0% (medical) — NNT≈12, near-halving of early mortality',
+      '30-day mortality: 9.3% (surgery) vs 18.0% (medical); NNT≈12, near-halving of early mortality',
       'Primary benefit driven by LOBAR ICH — anterior basal ganglia subgroup showed less robust benefit',
-      'UW-mRS at 180d: 0.458 (surgery) vs 0.374 (medical) — meaningful quality-adjusted improvement',
+      'UW-mRS at 180d: 0.458 (surgery) vs 0.374 (medical), a meaningful quality-adjusted improvement',
       'MIPS trans-sulcal approach avoids cortical transgression — key advantage vs open craniotomy',
       'Requires BrainPath + Myriad devices (NICO Corporation) — not universally available; needs training',
       'Eligibility: LOBAR or ANTERIOR BASAL GANGLIA ICH only, volume 30–80 mL, within 24 hours',
@@ -7175,7 +7175,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does this chart show?',
-        answer: 'mRS 0-1 (excellent functional outcome) at 90 days in patients adjudicated as tPA-eligible. MSU care reached 53.5 per 100; standard EMS reached 45.5 per 100 — an 8 percentage point absolute difference driven by a 36-minute reduction in onset-to-treatment time.',
+        answer: 'mRS 0-1 (excellent functional outcome) at 90 days in patients adjudicated as tPA-eligible. MSU care reached 53.5 per 100; standard EMS reached 45.5 per 100, an 8 percentage point absolute difference driven by a 36-minute reduction in onset-to-treatment time.',
       },
       {
         question: 'Why is AOR used instead of a standard risk ratio?',
@@ -7492,7 +7492,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       { arm: 'Local Stroke Center First', n: 482, pct: [9.0, 12.0, 11.8, 19.5, 12.0, 12.2, 23.5] },
     ],
     ordinalStats: { commonOR: 1.03, ciLow: 0.82, ciHigh: 1.29, direction: 'positive' as const },
-    bedsidePearl: 'RACECAT shows that in a real nonurban stroke network, bypassing the nearest center to speed thrombectomy did not improve population-level outcomes -- the thrombectomy gains were offset by IVT delays and overtriage of non-LVO patients. This is a strong argument against a universal mothership (CSC-direct) protocol in nonurban systems. Triage algorithms should account for LVO prevalence, transfer times, and IVT eligibility window for your specific system.',
+    bedsidePearl: 'RACECAT shows that in a real nonurban stroke network, bypassing the nearest center to speed thrombectomy did not improve population-level outcomes. The thrombectomy gains were offset by IVT delays and overtriage of non-LVO patients. This is a strong argument against a universal mothership (CSC-direct) protocol in nonurban systems. Triage algorithms should account for LVO prevalence, transfer times, and IVT eligibility window for your specific system.',
     bottomLineSummary: 'In a cluster-randomized nonurban Catalan stroke network, direct transport to a thrombectomy-capable CSC did not improve 90-day mRS distribution in ischemic stroke or TIA compared with nearest local stroke center first (adjusted cOR 1.03, 95% CI 0.82-1.29). More patients in the CSC-direct group underwent thrombectomy (48.8% vs 39.4%) but fewer received IVT (47.5% vs 60.4%). Mortality at 90 days was identical at approximately 27%. The trial was stopped early for futility.',
   },
   'right-2-trial': {
@@ -7574,7 +7574,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToInterpret: {
       proves: 'RIGHT-2 showed that transdermal GTN started in the ambulance within 4 hours of presumed stroke did not improve 90-day functional outcome in patients with confirmed stroke or TIA. The trial also demonstrated that ambulance-based paramedic-delivered stroke intervention trials are feasible in the UK.',
       doesNotProve: 'This trial does not support transdermal GTN as an ultra-acute prehospital treatment for undifferentiated stroke. It does not establish whether later in-hospital administration has different effects.',
-      cautions: 'Safety signals were concentrated in patients with intracerebral hemorrhage: larger hematoma, more mass effect, and a non-significant trend toward worse functional outcome (OR 1.87, 95% CI 0.98 to 3.57, p=0.057). The ICH subgroup was small and these analyses are hypothesis-generating. GTN may be particularly hazardous in very early ICH due to disruption of early vasoconstrictive hemostasis. Adherence was low -- only 36% of cohort 2 received all 4 days of treatment -- which may have reduced exposure and attenuated any potential effect. RIGHT-2 completed planned enrollment, unlike the related prehospital nitrate trial MR ASAP which was stopped early for an ICH harm signal.',
+      cautions: 'Safety signals were concentrated in patients with intracerebral hemorrhage: larger hematoma, more mass effect, and a non-significant trend toward worse functional outcome (OR 1.87, 95% CI 0.98 to 3.57, p=0.057). The ICH subgroup was small and these analyses are hypothesis-generating. GTN may be particularly hazardous in very early ICH due to disruption of early vasoconstrictive hemostasis. Adherence was low; only 36% of cohort 2 received all 4 days of treatment, which may have reduced exposure and attenuated any potential effect. RIGHT-2 completed planned enrollment, unlike the related prehospital nitrate trial MR ASAP which was stopped early for an ICH harm signal.',
     },
     /* claimId: right-2.bedside-pearl | source: RIGHT-2 Investigators, Lancet 2019 */
     bedsidePearl: 'In ultra-acute presumed stroke, transdermal GTN shows no functional benefit and a safety signal in intracerebral hemorrhage patients treated before imaging. The trial\'s main contribution is feasibility: UK paramedics can randomize and treat stroke patients in the ambulance. For blood pressure management in suspected stroke before imaging, RIGHT-2 argues against routine prehospital intervention.',
@@ -8174,7 +8174,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does this chart show?',
-        answer: 'mRS 0-1 at 3 months. Alteplase (control) reached 51 per 100; tenecteplase 0.4 mg/kg (treatment) reached only 32 per 100. This 19 percentage point gap — with OR 0.45, P=0.006 — was the efficacy signal that reinforced the DSMB safety findings and led to trial termination.',
+        answer: 'mRS 0-1 at 3 months. Alteplase (control) reached 51 per 100; tenecteplase 0.4 mg/kg (treatment) reached only 32 per 100. This 19 percentage point gap (OR 0.45, P=0.006) was the efficacy signal that reinforced the DSMB safety findings and led to trial termination.',
       },
       {
         question: 'Why does the control arm have the winning accent?',
@@ -8182,7 +8182,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'How does this harm square with the 0.25 mg/kg NI results?',
-        answer: 'Dose matters. The 0.25 mg/kg dose (used in AcT, TRACE-2, ATTEST-2) consistently showed safety similar to alteplase. The 0.4 mg/kg dose in NOR-TEST 2 caused clear harm in moderate-severe stroke. NOR-TEST 2 Part A effectively closes the question on 0.4 mg/kg — it is too high.',
+        answer: 'Dose matters. The 0.25 mg/kg dose (used in AcT, TRACE-2, ATTEST-2) consistently showed safety similar to alteplase. The 0.4 mg/kg dose in NOR-TEST 2 caused clear harm in moderate-severe stroke. NOR-TEST 2 Part A effectively closes the question on 0.4 mg/kg: it is too high.',
       },
     ],
     howToInterpret: {
@@ -8848,7 +8848,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       { arm: 'Placebo', n: 229, pct: [13.5, 13.1, 15.7, 14.8, 17.9, 5.7, 19.2] },
     ],
     ordinalStats: { commonOR: 1.13, ciLow: 0.82, ciHigh: 1.57, direction: 'positive' as const, pValue: 0.45 },
-    bedsidePearl: 'TIMELESS is not evidence against late-window IVT in all settings -- it is specifically negative for bridging tenecteplase before thrombectomy in the 4.5-24 hour window (77% of patients underwent EVT). The contrast is TRACE-III: in perfusion-selected LVO patients without EVT access, late-window tenecteplase improved mRS 0-1 from 24.2% to 33.0% (NNT 11). The rule is: late-window IVT may help when EVT is unavailable; it adds nothing as a bridge when EVT is being performed.',
+    bedsidePearl: 'TIMELESS is not evidence against late-window IVT in all settings. It is specifically negative for bridging tenecteplase before thrombectomy in the 4.5-24 hour window (77% of patients underwent EVT). The contrast is TRACE-III: in perfusion-selected LVO patients without EVT access, late-window tenecteplase improved mRS 0-1 from 24.2% to 33.0% (NNT 11). The rule is: late-window IVT may help when EVT is unavailable; it adds nothing as a bridge when EVT is being performed.',
     bottomLineSummary: 'In perfusion-selected LVO patients treated 4.5-24 hours after stroke onset, tenecteplase 0.25 mg/kg before planned thrombectomy (77% of patients) did not improve 90-day mRS distribution (adjusted cOR 1.13, 95% CI 0.82-1.57, p=0.45). Functional independence occurred in 46.0% vs 42.4%. Symptomatic ICH was 2.0% vs 2.2%. TIMELESS and TRACE-III together define the role of late-window IVT: benefit only when EVT is unavailable.',
   },
   'trace-2-trial': {
@@ -9063,7 +9063,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1056/NEJMoa1214300',
     source: 'Broderick et al. (NEJM 2013)',
     listCategory: 'thrombectomy',
-    listDescription: 'First-generation endovascular therapy added to IV tPA: no benefit (mRS 0-2 40.8% vs 38.7%, RR 1.05, 95% CI 0.85-1.30). Stopped early for futility. Historical predecessor -- ESCAPE (2015) established modern EVT.',
+    listDescription: 'First-generation endovascular therapy added to IV tPA: no benefit (mRS 0-2 40.8% vs 38.7%, RR 1.05, 95% CI 0.85-1.30). Stopped early for futility. Historical predecessor; ESCAPE (2015) established modern EVT.',
     stats: {
       sampleSize: { value: '656', label: 'Randomized Patients' },
       primaryEndpoint: { value: 'mRS 0-2', label: 'at 90 Days' },
@@ -9134,7 +9134,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1056/NEJMoa1213701',
     source: 'Ciccone et al. (NEJM 2013)',
     listCategory: 'thrombectomy',
-    listDescription: 'Endovascular therapy alone (no IV tPA first) vs IV alteplase: no superiority (mRS 0-1 30.4% vs 34.8%, OR 0.71, 95% CI 0.44-1.14, p=0.16). Historical predecessor -- ESCAPE (2015) established modern EVT.',
+    listDescription: 'Endovascular therapy alone (no IV tPA first) vs IV alteplase: no superiority (mRS 0-1 30.4% vs 34.8%, OR 0.71, 95% CI 0.44-1.14, p=0.16). Historical predecessor; ESCAPE (2015) established modern EVT.',
     stats: {
       sampleSize: { value: '362', label: 'Randomized Patients' },
       primaryEndpoint: { value: 'mRS 0-1', label: 'Disability-Free Survival at 90 Days' },
