@@ -115,3 +115,5 @@ For sub-components that are large (chart archetypes, etc.), use `React.lazy()` i
 ## What the seo-specialist owns here
 
 seo-specialist reviews that every new route has: correct title/description lengths, JSON-LD structured data (for trial/calculator pages), sitemap.xml inclusion, no duplicate titles. Invoke seo-specialist on every new public route.
+
+**Related:** `.claude/skills/seo-audit-execution/` — audit methodology, keyword research, structured-data templates, GA4/GSC patterns, side-by-side content+SEO workflow.
