@@ -248,7 +248,7 @@ const NihssCalculator: React.FC = () => {
         )}
         {/* Severity row */}
         <div className="flex items-baseline gap-3 mb-3">
-          <span className={`text-xl font-semibold ${SEVERITY_COLOR[severity]}`}>
+          <span className={`text-xl font-semibold leading-tight ${SEVERITY_COLOR[severity]}`}>
             {SEVERITY_LABEL[severity]}
           </span>
           <span className="text-sm text-slate-400">NIHSS {total}</span>
