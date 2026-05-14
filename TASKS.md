@@ -316,7 +316,8 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [x] [L5] Typography audit — commit 88750a1 (2026-05-13), docs/L5-typography-audit.md (5H / 6M / 7L)
 - [x] [L5] Spacing consistency audit — commit 67dca9c (2026-05-13), docs/L5-spacing-audit.md
 - [ ] [L5] Full mobile + desktop QA pass all pages
-- [ ] [L5] Performance audit — bundle slice in progress as docs/L5-bundle-audit.md (dispatched 2026-05-13)
+- [x] [L5] Performance audit — bundle slice shipped commit 138d278 (2026-05-13) at docs/L5-bundle-audit.md. 3.0 MB total / ~550 KB gzip; ~50 KB over the 500 KB target. Specific splits proposed for trialData, TrialVisualizations, TrialPageNew chunks.
+- [x] [L5] Accessibility audit — commit f8b8ac8 (2026-05-13) at docs/L5-accessibility-audit.md. WCAG 2.1 AA findings: 7H/2M/3L. Strengths: L5.6 shell solid (aria-live, aria-atomic, scoreAriaLabel, focus management). Findings parked for V triage (modal focus traps, LKWTimePicker keyboard access, pathway aria-live regions).
 
 ### OTHER P1 (not layer-blocked)
 - [ ] [P1] Split TrialPageNew chunk (485kb) — lazy-load trial data

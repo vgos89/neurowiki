@@ -249,3 +249,46 @@ Pending after they land:
 
 ### Session close
 Final commit head expected: this audit-trail commit. All deliverables on main.
+
+---
+
+## 2026-05-14 morning continuation
+
+V stepped away briefly. Continued autonomously on simple Class B pending tasks.
+
+### Entry 12 — GSC MCP scaffolding (Class C, infrastructure)
+- Commit: `d7a0e3b`
+- Files: docs/seo-data/.gitignore (new), docs/seo-data/README.md (new), docs/seo-data/GSC-MCP-SETUP.md (new, 7-step walkthrough), .gitignore (defensive credential patterns), .claude/skills/seo-audit-execution/SKILL.md (§5.1 + §5.3 updated to reference suganthan-gsc-mcp concretely; removed "placeholder" language)
+- Change: scaffolded the GSC MCP integration agreed in Phase 2b. V picked suganthan-gsc-mcp (Node) + OAuth. Repo-side bits ready; V completes the ~15 min one-time Google Cloud Console + OAuth setup on their machine using the walkthrough.
+- Gates: all clean
+- Live verify: PASS
+
+### Entry 13 — NIHSS drawer spacer CSS class (Class B, spacing audit H3)
+- Commit: `a9e18f2`
+- Files: src/pages/NihssCalculator.tsx (1 line)
+- Change: NIHSS was using inline `style={{ height: ... }}` for drawer spacer instead of the shared `drawer-spacer-collapsed` / `drawer-spacer-expanded` CSS classes used by the other 9 calculators on the L5.6 shell. Heights match exactly so zero visual change. Aligns NIHSS with shared pattern.
+- Gates: all clean
+- Live verify: PASS
+
+### Entry 14 — Unused imports cleanup, safe subset (Class C mechanical)
+- Commit: `504886e`
+- Files: 6 files in src/components/article/stroke/ + src/components/NihssItemCard.tsx (-7 / +6 lines)
+- Change: Removed truly-unused lucide-react named imports and react-router-dom imports verified by tsc --noUnusedLocals AND by JSX grep. One over-removal caught at gate (VitalsInputV2 Info is still used at line 135) — reverted before commit.
+- Gates: all clean
+- Live verify: PASS
+
+### Entry 15 — Untrack ephemeral lock file (Class B, gitignore hygiene)
+- Commit: `04cc16a`
+- Files: .claude/scheduled_tasks.lock (untracked), .gitignore (2 patterns)
+- Change: `git add -A` in the prior commit accidentally tracked an ephemeral session lock file. Untracked and gitignored so future sessions don't re-commit.
+- Gates: all clean
+- Live verify: PASS
+
+### Entry 16 — TASKS.md hygiene
+- Commit: pending this entry
+- Files: TASKS.md (mark L5 Performance + L5 Accessibility audits as merged)
+- Change: housekeeping. Both audits shipped 2026-05-13 overnight; updating the L5 polish checklist to reflect.
+- Gates: all clean (docs only)
+
+### Morning total
+4 additional commits beyond the 19 overnight commits. All Class B/C mechanical. Zero rollbacks.
