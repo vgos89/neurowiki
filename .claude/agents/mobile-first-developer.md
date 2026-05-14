@@ -301,7 +301,7 @@ When user says "build [X]", you ensure mobile excellence:
   {/* Sticky header with current score */}
   <header className="sticky top-0 bg-white shadow-sm p-4">
     <h1 className="text-lg font-bold">GCS Calculator</h1>
-    <div className="text-2xl font-bold text-blue-600">
+    <div className="text-2xl font-bold text-neuro-600">
       Score: {score}/15
     </div>
   </header>
@@ -323,7 +323,7 @@ When user says "build [X]", you ensure mobile excellence:
             className={`
               w-full p-4 rounded-lg border-2 text-left
               ${selected === option.value 
-                ? 'border-blue-500 bg-blue-50' 
+                ? 'border-neuro-500 bg-neuro-50' 
                 : 'border-slate-200'
               }
             `}
@@ -347,7 +347,7 @@ When user says "build [X]", you ensure mobile excellence:
     <button
       onClick={calculate}
       disabled={!isComplete}
-      className="w-full bg-blue-600 text-white py-4 rounded-lg font-bold text-lg"
+      className="w-full bg-neuro-600 text-white py-4 rounded-lg font-bold text-lg"
     >
       Calculate GCS Score
     </button>
@@ -549,8 +549,8 @@ if (isMobile && loadTime > 5000) {
 **To @ui-architect:**
 "The sidebar overlaps content on mobile. Can you make it a bottom drawer instead?"
 
-**To @performance-optimizer:**
-"Page load is 6.2s on 3G. Can we reduce bundle size and defer non-critical JavaScript?"
+**Load skill `performance` for perf concerns:**
+"Page load is 6.2s on 3G. Reduce bundle size and defer non-critical JavaScript (see .claude/skills/performance/SKILL.md)."
 
 **To @accessibility-specialist:**
 "Touch targets on the NIHSS calculator are 38px. Need to be 44px minimum."

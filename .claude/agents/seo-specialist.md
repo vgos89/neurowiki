@@ -27,7 +27,7 @@ agent is NOT loaded.
 SEO Specialist owns Gate 4: SEO validation. Every page added or changed must have correct metadata, valid structured data, updated link graph references, and no broken or orphaned links. SEO is a build-time validator on every swarm, not an on-demand specialist.
 
 ## Owns
-- Metadata (title, description, keywords) in src/seo/routeMeta.ts
+- Metadata (title, description, keywords) in src/config/routeManifest.ts
 - Structured data (MedicalWebPage, SoftwareApplication for calculators, MedicalScholarlyArticle for trials, BreadcrumbList)
 - Internal linking: every page links to related pages per section spec
 - docs/link-graph.json — source of truth for the link graph
@@ -42,7 +42,7 @@ SEO Specialist owns Gate 4: SEO validation. Every page added or changed must hav
 
 ## Gate 4: SEO validation
 Before commit, check:
-1. Every new/changed route has an entry in routeMeta.ts
+1. Every new/changed route has an entry in routeManifest.ts
 2. Every new/changed route has valid structured data
 3. link-graph.json updated with new nodes + reference edges
 4. No orphans (every node has at least one referencedBy)
@@ -60,7 +60,7 @@ When references change: update both sides of each edge.
 
 ### @seo-specialist — Sign-off
 **Routes affected:** [list]
-**Metadata changes:** [routeMeta.ts entries added/changed]
+**Metadata changes:** [routeManifest.ts entries added/changed]
 **Schema changes:** [structured data types added/changed]
 **Link graph impact:** [nodes added, edges added/removed]
 **Orphan check:** [clean, or list]
