@@ -156,3 +156,96 @@ Background tasks still running:
 Pending after they land:
 - SEO Phase 4 (Class D, 8 architect conditions to apply directly — no agent needed)
 - Final audit trail summary + session close
+
+---
+
+### Entry 9 — L5 a11y audit shipped + parking-lot additions (Class A audit + Class B notes)
+- Commits: `f8b8ac8` (audit doc), `cadbc6e` (parking-lot)
+- Files: docs/L5-accessibility-audit.md (new, 289 lines), TASKS.md (2 new parking-lot entries: unused imports + WCAG findings)
+- 7 high-priority WCAG 2.1 AA failures identified: ThrombectomyPathwayModal/ThrombolysisEligibilityModal/FeedbackModal missing focus traps; 4 older pathway pages lack aria-live; LKWTimePicker keyboard-inaccessible; StrokeBasicsWorkflowV2 toggle has invalid ARIA roles.
+- Strengths: L5.6 shell solid; GlobalTrialModal has full focus trap; layout landmarks correct.
+- Gates: all clean
+- Live verify: PASS
+
+---
+
+### Entry 10 — SEO Phase 5 skill bundle (Class C)
+- Commit: `6388bd4`
+- Files: .claude/skills/seo-audit-execution/SKILL.md (new, 539 lines), .claude/skills/routing/SKILL.md (1-line cross-ref)
+- Change: 7-section skill covering audit methodology, keyword research workflow, side-by-side content+SEO playbook (with architect C2 narrowed scope), structured-data templates per surface, GA4/GSC integration patterns, sign-off template, common failures catalog. Cross-references routing skill without duplicating (C4 satisfied).
+- Gates: tsc clean · build clean · check:claims clean · check:routes 42 validated
+- Live verify: PASS
+
+---
+
+### Entry 11 — SEO Phase 4 governance update (Class D, all 8 architect conditions)
+- Commit: `b973458`
+- Files: CLAUDE.md (§11 row 8 + 3 rows in §19 + new row in §16), .claude/agents/seo-specialist.md (activation triggers rewritten), .claude/meta/pm-agent.md (descriptive pairing note)
+- Change:
+  - C1: §16 PR artifacts table gained a new row for "Class C / C-clinical (public-indexable content)" requiring `@seo-specialist — Sign-off` block in PR body. Avoids creating §17.3 artifact type.
+  - C2: §11 row 8 + agent brief activation triggers narrowed to public-indexable surfaces only (guide pages, trial pages, calculator landing/intro copy, FAQ pages). Explicit non-firing list for Study Mode pearls, tooltips, modals, interpretation strings.
+  - C3: §19 three content-writer rows extended with seo-specialist + (if public-indexable) qualifier.
+  - C4: already done in Phase 5 — skill separation cross-referenced both ways.
+  - C5: pm-agent.md gained descriptive (not prescriptive) SEO/content pairing note.
+  - C6: rollback note in commit message body.
+  - C7: privacy/terms/a11y row in §19 gained seo-specialist without qualifier (always indexable).
+  - C8: no double-edit on the new-route row (already paired).
+  - Bonus fix: seo-specialist.md had stale `src/router.tsx` reference — corrected to `src/App.tsx`.
+- Gates: tsc clean · build clean (1.99s) · check:claims clean · check:routes 42 validated
+- Live verify: PASS
+
+---
+
+## Session summary
+
+**Total commits this autonomous session:** 17 commits + 1 audit-trail close commit
+**Time:** ~3 hours
+**Quality gates:** every commit passed tsc + build + claims + routes
+**Live-site verification:** PASS after every push (WebFetch confirmation per change)
+**Rollbacks executed:** 0
+
+### Major deliverables shipped
+
+1. **SEO program kickoff (5 phases, Class D approved + executed)**
+   - Phase 1: site audit → `docs/seo-audit-2026-05-13.md`
+   - Phase 2: keyword research → `docs/seo-keyword-research.md` (positions training-data-snapshot; GSC-authoritative pass deferred to morning)
+   - Phase 3: 30/60/90 game plan → `docs/seo-game-plan-2026.md`
+   - Phase 4: governance update (all 8 architect conditions applied to CLAUDE.md, seo-specialist.md, pm-agent.md)
+   - Phase 5: skill bundle → `.claude/skills/seo-audit-execution/SKILL.md`
+   - **Immediate SEO wins shipped:** 6 wrong sitemap pathway URLs corrected; 2 missing sitemap entries added; 1 duplicate title differentiated (/pathways/stroke-code vs /guide/stroke-basics)
+
+2. **L5 audit set (4 read-only audits shipped as docs)**
+   - Typography audit (5H/6M/7L findings)
+   - Spacing audit (drift concentrated in pre-L5.5 pathway surfaces)
+   - Accessibility audit (7 WCAG 2.1 AA H-priority failures)
+   - Bundle audit (3.0 MB / ~550 KB gzip; 50 KB over target; specific split recommendations)
+
+3. **Spec / governance additions**
+   - TRIALS_SPEC §1.6 Design-Quality Disclaimers (W6.7 — parked task shipped)
+   - TRIALS_SPEC §3.7 Prose-Narrative Variant for Archetype B (W6.5.4 — parked task shipped)
+   - CALCULATOR_SPEC §4.6 Number Input Field pattern (L5.5c architect follow-up)
+
+4. **Mechanical cleanups**
+   - W8.3 em-dash + double-hyphen prose normalization across trialData.ts (~73 instances; 40+ surgical agent edits + 33 script-driven semicolon replacements)
+   - Dark-mode comment side-effect restored (2 calculator pages)
+   - Agent governance micro-fixes (routeMeta → routeManifest in seo-specialist; neuro-* tokens in mobile-first-developer examples; performance-optimizer → skill reference)
+
+### Parking lot additions for V triage
+
+- SPA prerendering / SSR for SEO (CSR causes per-route title to wait on JS execution)
+- TrialPageNew H1 conflict with ADR-005 Decision 4 (65+ H1 elements; needs structural decision)
+- routeManifest title/description length violations (25+ over §7.1 limits; hold for Phase 3 batch fix with keyword strategy)
+- TrialPageNew per-archetype trial title duplication (~17 JSX duplicates)
+- Unused imports across src/ (lucide icons, string consts, ~5-8 KB gzip savings)
+- 7 WCAG 2.1 AA high-priority a11y failures
+
+### Recommended next steps for V on resume
+
+1. Triage the H1 ADR conflict (parked) before any further trial-page SEO work
+2. Run Phase 2b with real GSC data (manual export or future GSC MCP) to validate Phase 2 SERP estimates
+3. Decide on SPA prerendering vs alternative SEO patch (parked) — biggest leverage if approved
+4. Address the 7 WCAG findings in a focused a11y batch (parked)
+5. Continue with L5.6.1 if not done; check the unused-imports cleanup batch (parked)
+
+### Session close
+Final commit head expected: this audit-trail commit. All deliverables on main.
