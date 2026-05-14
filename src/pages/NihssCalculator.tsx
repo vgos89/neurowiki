@@ -527,7 +527,7 @@ const NihssCalculator: React.FC = () => {
         />
 
         {/* Drawer spacer — prevents content hiding behind fixed drawer (§1.3) */}
-        <div style={{ height: drawerOpen ? '380px' : '80px' }} aria-hidden="true" />
+        <div className={drawerOpen ? 'drawer-spacer-expanded' : 'drawer-spacer-collapsed'} aria-hidden="true" />
       </main>
 
       {/* ── Bottom drawer — §1.3 ─────────────────────────────────────────── */}
