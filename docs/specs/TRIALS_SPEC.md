@@ -182,6 +182,53 @@ letter-spacing: 0.1em; color: #94a3b8; margin-bottom: 10px
 
 Exception: Clinical Pearls section label uses `color: #7c3aed` (purple). See §14.1.
 
+### 1.6 Design-Quality Disclaimers
+
+**Status: SPECIFIED** (added 2026-05-13 from W6.7)
+**Applies to:** Trials whose study design weakens the strength of any conclusion drawn from the primary endpoint — quasi-experimental designs, single-arm cohorts compared to historical controls (Archetype G), substantial post-randomization crossover, early termination for futility or perceived efficacy, open-label adjudication of subjective endpoints.
+
+A standardized amber callout sits **above** the primary visualization (above the dot grid, Grotta bar, or benchmark track) and **below** the title block. It does not move into the Bottom-Line Drawer or the Teaching Well — it must be visible at the same moment the reader sees the primary chart.
+
+**Visual anatomy:**
+```html
+<aside class="border-l-2 border-amber-400 pl-3 mt-3 mb-6">
+  <div class="text-[10px] font-bold text-amber-700 uppercase tracking-widest mb-1">
+    Design quality
+  </div>
+  <p class="text-sm text-slate-700 leading-relaxed">
+    [Disclaimer text — 1–2 sentences, ≤220 chars.]
+  </p>
+</aside>
+```
+
+Tokens are identical to the §4.5 Important callout in CALCULATOR_SPEC.md — preserves visual recognition across the app.
+
+**Required examples — disclaimer wording per design category:**
+
+| Design category | Canonical disclaimer |
+|---|---|
+| Quasi-experimental, dispatch-arm cluster | "Cluster-randomized by ambulance dispatch week. Patients and clinicians could not be blinded; outcome adjudicators were. Treatment effect may include unmeasured site-level confounding." (BEST-MSU pattern) |
+| Single-arm vs historical | "Single-arm registry compared to a historical performance goal. No concurrent control. Confidence in the effect estimate is lower than for randomized comparisons." (Archetype G default, see §7a.4) |
+| ITT with high crossover | "Crossover of [N]% from control to treatment dilutes the ITT estimate. Per-protocol and as-treated analyses appear in §13.3 with the standard caveat about post-randomization conditioning." |
+| Stopped early for efficacy | "Stopped early at the [Nth] pre-specified interim for efficacy. Truncated trials systematically overestimate the effect size; the reported point estimate is likely an upper bound." |
+| Stopped early for futility | "Stopped early for futility. The point estimate may still favor treatment, but the trial was halted before the planned sample could resolve the question. Interpret as inconclusive rather than negative." |
+
+**Ownership and authoring:**
+- `medical-scientist` owns the disclaimer text per trial. The text must be sourced from the trial publication (Methods or Limitations) or from an explicit editor's note in the data file.
+- `clinical-reviewer` gates the wording on Class E trial rebuilds — wording cannot drift from what the publication itself says without an explicit `notes:` annotation in the citation entry.
+- `ui-architect` owns the visual treatment (tokens above).
+
+**Data shape:**
+```typescript
+designDisclaimer?: {
+  category: 'quasi-experimental' | 'single-arm-vs-historical' | 'high-crossover' | 'stopped-early-efficacy' | 'stopped-early-futility' | 'other';
+  text:     string;  // 1–2 sentences, ≤220 chars
+  source?:  string;  // citation pointer if the wording is paraphrased; required if category === 'other'
+};
+```
+
+**When NOT to render:** trials whose design is standard (parallel-group, two-arm, intent-to-treat, completed per plan, blinded adjudication of objective endpoints) do not get this callout. The callout is a *flag*; its absence is the default.
+
 ---
 
 ## §2 Archetype A — Two-Group Comparison (Delta Band)
@@ -504,6 +551,63 @@ subgroupAnalyses?: {
 ```
 
 No additional data fields are required for bar rendering beyond `mrsDistribution[].pct`.
+
+### 3.7 Prose-Narrative Variant (Archetype B fallback)
+
+**Status: SPECIFIED** (added 2026-05-13 from W6.5.4)
+**Applies to:** Trials whose primary outcome figure is published only as a raster image, or where the per-segment mRS percentages are not text-extractable from the publication (no supplementary table, no machine-readable appendix, no author confirmation).
+**Reference implementation:** RIGHT-2 branch in `src/pages/trials/TrialPageNew.tsx`.
+
+When `mrsDistribution[].pct` cannot be filled without fabrication, the Grotta bar must not be rendered. Instead, the trial page substitutes a **prose paragraph + stat row + chart-absent note**.
+
+**Trigger conditions (all must hold):**
+- Trial is conceptually Archetype B (ordinal mRS shift outcome).
+- Primary outcome figure in the publication is a raster image with no machine-readable companion.
+- Author-provided supplementary data does not contain the per-segment percentages.
+- `medical-scientist` has explicitly attempted source extraction and recorded the negative finding in the citation entry's `notes:` field.
+
+**Visual anatomy — replaces the chart block, retains the stat row:**
+
+```html
+<section aria-labelledby="primary-outcome-label">
+  <h2 id="primary-outcome-label" class="section-label">Primary outcome</h2>
+
+  <!-- Prose paragraph: 2–4 sentences describing the ordinal shift in plain language. -->
+  <p class="text-base text-slate-900 leading-relaxed">
+    [Narrative of the ordinal shift — direction, magnitude, what was reported in
+    the publication, with no fabricated per-segment numbers.]
+  </p>
+
+  <!-- Stat row: identical anatomy to §3.3, even though no chart precedes it. -->
+  <div class="stat-row mt-4"><!-- common OR + CI + direction --></div>
+
+  <!-- Chart-absent annotation: explains why the visual is omitted. -->
+  <p class="mt-3 text-xs text-slate-500">
+    Chart omitted because per-segment mRS percentages are not text-extractable from the
+    primary publication figure. See <code>notes</code> field in the citation entry for source-extraction record.
+  </p>
+</section>
+```
+
+**Required elements:**
+- Prose paragraph **must** state direction (treatment favored / control favored / null), magnitude (qualitative), and any author-stated interpretation. It **must not** invent per-segment percentages.
+- Stat row is mandatory and follows §3.3 anatomy exactly. The common OR + CI does not require the chart to display.
+- Chart-absent note must reference the citation `notes` field and must not be hidden behind a tooltip or accordion — it sits inline below the stat row.
+
+**Accessibility:**
+- Section label uses the standard `text-[10px] font-bold text-slate-400 uppercase tracking-widest` per §1.5.
+- The prose paragraph carries the visual weight that the chart would have; do not reduce its prominence.
+- Stat row retains the same `aria-label` shape as §3.3 (commonOR + CI + direction).
+
+**When NOT to use the prose-narrative variant:**
+- The figure is rasterized but the publication includes a supplementary table with the segment percentages — extract those instead.
+- The author provides the dataset on request — `medical-scientist` may request it as part of Tier 2 source-hunting.
+- The trial reports a binary primary endpoint (mRS 0-1 or mRS 0-2 only) — that is Archetype A, not B.
+
+**Ownership:**
+- `medical-scientist` authors the prose paragraph and records the source-extraction attempt in the citation entry.
+- `clinical-reviewer` gates the prose wording for Class E trial rebuilds — wording must mirror the publication's own characterization of the ordinal shift.
+- `ui-architect` owns the visual layout (the substitution rule above).
 
 ---
 
