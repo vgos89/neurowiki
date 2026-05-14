@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<!--
+  STATUS: PROPOSAL — NOT LOCKED. Awaiting V approval.
+  Produced: 2026-05-14, Phase 3 of design audit
+  Source friction: Page1-G (ToolRowCard star button 16px → 44px touch target),
+    Page1-D (pill active state: border-only vs cobalt-fill — inconsistent with TrialsPage)
+  Improvements proposed:
+    - ToolRowCard star button: min-h-[44px] min-w-[44px] with p-2 -m-1.5 negative margin offset
+    - Pill active state: cobalt-fill pattern (bg-[rgba(23,70,162,0.08)] border-[rgba(23,70,162,0.2)] text-[#1746A2])
+      aligning Home/Calcs to the TrialsPage chip pattern
+    - All other anatomy kept identical to home-reference.html — no new sections invented
+  Optional: [OPTIONAL: cmd-K search] stretch goal shown as labeled section
+  Tokens used: neuro-*, slate-*, emerald-*, amber-*
+  Tokens explicitly NOT used: blue-*, teal-*, indigo-*, violet-*, font-extrabold, shadow-lg,
+    shadow-xl, shadow-md, border-2, rounded-2xl, gray-*
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Home — Polish Proposal 2026-05-14 — NeuroWiki</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --color-neuro-50:  #EEF2FF;
+    --color-neuro-100: #C7D7FA;
+    --color-neuro-400: #4A7FE5;
+    --color-neuro-500: #1746A2;
+    --color-neuro-600: #123988;
+    --color-neuro-700: #0E2D6B;
+    --color-neuro-900: #06143D;
+    --cobalt-soft:     rgba(23, 70, 162, 0.08);
+    --hair:            #f1f5f9;
+    --border:          #e2e8f0;
+  }
+  .bg-neuro-50  { background-color: var(--color-neuro-50); }
+  .bg-neuro-500 { background-color: var(--color-neuro-500); }
+  .bg-neuro-600 { background-color: var(--color-neuro-600); }
+  .text-neuro-500 { color: var(--color-neuro-500); }
+  .text-neuro-600 { color: var(--color-neuro-600); }
+  .text-neuro-700 { color: var(--color-neuro-700); }
+  .border-neuro-500 { border-color: var(--color-neuro-500); }
+
+  body {
+    background: #f1f5f9;
+    font-family: Inter, -apple-system, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Frame scaffolding */
+  .state-divider {
+    background: #f8fafc;
+    border-top: 2px dashed #cbd5e1; border-bottom: 2px dashed #cbd5e1;
+    padding: 12px 24px; font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: #64748b;
+  }
+  .viewport-label {
+    background: #0f172a; color: #94a3b8; padding: 8px 24px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
+  }
+  .arch-banner { background: #0f172a; color: white; padding: 20px 24px; }
+  .stage-row { display: flex; gap: 32px; align-items: flex-start; overflow-x: auto; padding: 24px 24px 48px; }
+  .mock-frame { background: white; position: relative; flex-shrink: 0; overflow: hidden; border: 1px solid #e2e8f0; }
+  .f-mobile  { width: 375px; }
+  .f-desktop { width: 1240px; }
+
+  .annot { background: #0f172a; padding: 16px 20px; }
+  .annot-h { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #94a3b8; margin-bottom: 8px; }
+  .annot-li { font-size: 12px; color: #cbd5e1; line-height: 1.75; display: block; }
+  .annot-li::before { content: "→ "; color: #475569; }
+
+  /* ── Pill row (from home-reference.html) ── */
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 9999px; border: 1px solid #e2e8f0;
+    background: white; font-size: 13px; font-weight: 500; color: #475569;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  /* PROPOSAL: cobalt-fill active state — aligns Home to TrialsPage pattern */
+  .pill-active-current {
+    /* Current pattern: border-only (for comparison) */
+    background-color: #f8fafc; color: #0f172a; font-weight: 600;
+  }
+  .pill-active-proposal {
+    /* PROPOSAL: cobalt-fill — spec-correct per design-tokens skill */
+    background: var(--cobalt-soft);
+    border-color: rgba(23, 70, 162, 0.2);
+    color: var(--color-neuro-500);
+    font-weight: 600;
+  }
+
+  /* Dot utilities */
+  .dot-ivt        { background-color: #10b981; }
+  .dot-evt        { background-color: var(--color-neuro-500); }
+  .dot-prevention { background-color: #0891b2; }
+  .dot-surgical   { background-color: #7c3aed; }
+  .dot-status     { background-color: #f59e0b; }
+  .dot-general    { background-color: #94a3b8; }
+
+  /* Scenario header (from home-reference.html) */
+  .scenario-header {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; padding: 14px 16px; border: none; border-radius: 10px;
+    cursor: pointer; text-align: left; margin-top: 10px;
+    transition: background-color 160ms ease;
+  }
+  .scenario-header:first-of-type { margin-top: 0; }
+  .scenario-header.collapsed.cat-ivt { background-color: rgba(16, 185, 129, 0.08); }
+  .scenario-header.collapsed.cat-surgical { background-color: rgba(124, 58, 237, 0.08); }
+  .scenario-header.collapsed.cat-status { background-color: rgba(245, 158, 11, 0.08); }
+  .scenario-header.collapsed.cat-prevention { background-color: rgba(8, 145, 178, 0.08); }
+  .scenario-header.expanded.cat-ivt { background-color: rgba(16, 185, 129, 0.12); }
+  .scenario-header.expanded.cat-surgical { background-color: rgba(124, 58, 237, 0.12); }
+  .scenario-header .title { font-size: 18px; font-weight: 600; color: #0f172a; letter-spacing: -0.01em; line-height: 1.25; }
+  .scenario-header .subtitle { font-size: 12.5px; color: #64748b; line-height: 1.4; margin-top: 2px; }
+  .scenario-header .chevron { width: 18px; height: 18px; color: #94a3b8; flex-shrink: 0; margin-left: 12px; transition: transform 160ms ease; }
+  .scenario-header.expanded .chevron { transform: rotate(180deg); }
+  .scenario-body { padding: 4px 4px 0; }
+
+  /* Row card (from home-reference.html) */
+  .rowcard {
+    padding: 14px 0; padding-left: 18px; border-bottom: 1px solid #f1f5f9;
+    cursor: pointer; position: relative; width: 100%; text-align: left;
+    background-color: transparent; border-top: none; border-left: none; border-right: none;
+  }
+  .rowcard:last-child { border-bottom: none; }
+  .rowcard:hover { background-color: rgba(248, 250, 252, 0.6); }
+  .rowcard::before {
+    content: ''; position: absolute; left: 0; top: 21px;
+    width: 6px; height: 6px; border-radius: 50%; background-color: #94a3b8;
+  }
+  .rowcard.row-ivt::before        { background-color: #10b981; }
+  .rowcard.row-evt::before        { background-color: var(--color-neuro-500); }
+  .rowcard.row-prevention::before { background-color: #0891b2; }
+  .rowcard.row-surgical::before   { background-color: #7c3aed; }
+  .rowcard.row-status::before     { background-color: #f59e0b; }
+
+  /* Featured rail (from home-reference.html) */
+  .featured-rail { margin-bottom: 20px; }
+  .featured-eyebrow {
+    font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase;
+    letter-spacing: 0.1em; margin-bottom: 8px;
+  }
+  .featured-track { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+  .featured-track::-webkit-scrollbar { display: none; }
+  .featured-tile {
+    flex-shrink: 0; width: 200px; padding: 14px 14px 16px;
+    border: none; border-radius: 12px; cursor: pointer; text-align: left;
+    transition: background-color 160ms ease;
+  }
+  .featured-tile.cat-cobalt { background-color: rgba(23, 70, 162, 0.08); }
+  .featured-tile.cat-cobalt:hover { background-color: rgba(23, 70, 162, 0.10); }
+  .featured-tile.cat-ivt { background-color: rgba(16, 185, 129, 0.08); }
+  .featured-tile.cat-ivt:hover { background-color: rgba(16, 185, 129, 0.10); }
+  .featured-tile.cat-status { background-color: rgba(245, 158, 11, 0.08); }
+  .featured-tile .type-label { font-size: 10.5px; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .featured-tile .name { font-size: 16px; font-weight: 600; color: #0f172a; line-height: 1.2; letter-spacing: -0.01em; margin-bottom: 4px; }
+  .featured-tile .description { font-size: 12.5px; color: #475569; line-height: 1.4; }
+
+  /* Tab bar */
+  .tab-bar { display: flex; border-top: 1px solid var(--border); background: white; }
+  .tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 8px 4px 10px; font-size: 10px; color: #94a3b8; gap: 3px; }
+  .tab-item.active { color: var(--color-neuro-500); }
+
+  /* Optional: cmd-K search */
+  .cmdK-bar {
+    display: flex; align-items: center; gap: 10px; background: white;
+    border: 1px solid var(--border); border-radius: 12px; padding: 0 16px; height: 48px;
+    cursor: pointer; margin-bottom: 20px;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .cmdK-bar:hover { border-color: #94a3b8; }
+  .cmdK-placeholder { font-size: 14px; color: #94a3b8; flex: 1; }
+  .cmdK-hint {
+    font-size: 11px; color: #cbd5e1; font-weight: 500; background: #f8fafc;
+    border: 1px solid var(--border); padding: 2px 7px; border-radius: 4px;
+    flex-shrink: 0; letter-spacing: 0.04em;
+  }
+
+  /* Trending trials section */
+  .trending-eyebrow {
+    font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.12em;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     BANNER
+══════════════════════════════════════════════════════════════════════ -->
+<div class="arch-banner">
+  <div style="max-width:1300px;margin:0 auto;">
+    <div style="font-weight:700;font-size:15px;margin-bottom:6px;">Home — Polish Proposal 2026-05-14 — NeuroWiki</div>
+    <div style="font-size:12px;color:#94a3b8;line-height:1.65;max-width:900px;">
+      Phase 3 proposal — polish only. Home page conforms closely to home-reference.html.
+      Two targeted fixes: (1) ToolRowCard star button 16px → 44px touch target with p-2 -m-1.5 pattern,
+      (2) Pill active state: cobalt-fill pattern aligning Home to TrialsPage catalog chip pattern.
+      All other anatomy kept identical to home-reference.html. Optional: cmd-K search shown as labeled stretch goal.
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION A: ToolRowCard star button — before/after comparison
+══════════════════════════════════════════════════════════════════════ -->
+<div class="state-divider">FIX A — ToolRowCard star button: 16px → 44px touch target</div>
+
+<div class="stage-row">
+
+  <!-- Before: 16px star -->
+  <div>
+    <div class="viewport-label">BEFORE — ToolRowCard star: w-4 h-4 (16px) — below 44px minimum</div>
+    <div class="mock-frame" style="width:375px;">
+      <div style="padding:16px 20px 4px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;margin-bottom:12px;">Current pattern (broken)</div>
+      </div>
+      <!-- Current broken pattern: star is 16×16, no touch target -->
+      <div style="position:relative;padding:14px 0;padding-left:18px;border-bottom:1px solid #f1f5f9;border-top:none;border-left:none;border-right:none;width:100%;">
+        <div style="position:absolute;left:0;top:21px;width:6px;height:6px;border-radius:50%;background:#1746A2;"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;">
+          <div>
+            <span style="font-size:14.5px;font-weight:600;color:#0f172a;">Stroke Code</span>
+            <span style="font-size:11px;color:#94a3b8;font-weight:400;margin-left:8px;">Pathway</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+            <span style="font-size:11.5px;color:#64748b;font-weight:500;"><span style="color:#0f172a;font-weight:600;">4</span> steps</span>
+            <!-- BEFORE: w-4 h-4 = 16px — fails 44px minimum -->
+            <svg style="width:16px;height:16px;color:#94a3b8;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+          </div>
+        </div>
+        <div style="font-size:13px;color:#64748b;line-height:1.45;">First 60 minutes — triage, imaging, treatment decision tree.</div>
+        <!-- Red annotation overlay -->
+        <div style="position:absolute;right:0;top:14px;display:flex;align-items:center;gap:4px;">
+          <div style="width:30px;height:30px;border:2px dashed #ef4444;border-radius:50%;display:flex;align-items:center;justify-content:center;"></div>
+          <div style="font-size:10px;font-weight:700;color:#ef4444;white-space:nowrap;padding-right:12px;">16px ✗</div>
+        </div>
+      </div>
+      <div style="padding:8px 20px;background:#fef2f2;border-top:1px solid #fecaca;">
+        <div style="font-size:11px;font-weight:600;color:#dc2626;">Fail: 16×16px star button — does not meet 44px touch target minimum</div>
+        <div style="font-size:11px;color:#ef4444;margin-top:2px;">src/components/hub/ToolRowCard.tsx line 53 — w-4 h-4</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- After: 44px star -->
+  <div>
+    <div class="viewport-label">AFTER — ToolRowCard star: min-h-[44px] min-w-[44px] — PROPOSAL</div>
+    <div class="mock-frame" style="width:375px;">
+      <div style="padding:16px 20px 4px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;margin-bottom:12px;">Proposed fix (correct)</div>
+      </div>
+      <!-- PROPOSAL: star button with min-h-[44px] min-w-[44px], p-2 -m-1.5 pattern -->
+      <div style="position:relative;padding:14px 0;padding-left:18px;border-bottom:1px solid #f1f5f9;width:100%;">
+        <div style="position:absolute;left:0;top:21px;width:6px;height:6px;border-radius:50%;background:#1746A2;"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;">
+          <div>
+            <span style="font-size:14.5px;font-weight:600;color:#0f172a;">Stroke Code</span>
+            <span style="font-size:11px;color:#94a3b8;font-weight:400;margin-left:8px;">Pathway</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0;flex-shrink:0;">
+            <span style="font-size:11.5px;color:#64748b;font-weight:500;margin-right:4px;"><span style="color:#0f172a;font-weight:600;">4</span> steps</span>
+            <!-- PROPOSAL: min-h-[44px] min-w-[44px] with p-2 -m-1.5 negative margin offset -->
+            <button style="min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:50%;cursor:pointer;margin:-10px -10px -10px 0;padding:10px;">
+              <svg style="width:16px;height:16px;color:#94a3b8;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+            </button>
+          </div>
+        </div>
+        <div style="font-size:13px;color:#64748b;line-height:1.45;">First 60 minutes — triage, imaging, treatment decision tree.</div>
+        <!-- Green annotation overlay -->
+        <div style="position:absolute;right:0;top:0;display:flex;align-items:flex-start;gap:4px;">
+          <div style="width:44px;height:44px;border:2px dashed #059669;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0.5;"></div>
+          <div style="font-size:10px;font-weight:700;color:#059669;white-space:nowrap;padding-right:4px;margin-top:14px;">44px ✓</div>
+        </div>
+      </div>
+      <!-- Favourited state -->
+      <div style="position:relative;padding:14px 0;padding-left:18px;border-bottom:1px solid #f1f5f9;width:100%;">
+        <div style="position:absolute;left:0;top:21px;width:6px;height:6px;border-radius:50%;background:#10b981;"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;">
+          <div><span style="font-size:14.5px;font-weight:600;color:#0f172a;">NIHSS Calculator</span></div>
+          <div style="display:flex;align-items:center;gap:0;flex-shrink:0;">
+            <span style="font-size:11.5px;color:#64748b;font-weight:500;margin-right:4px;">0–<span style="color:#0f172a;font-weight:600;">42</span></span>
+            <!-- Favourited star -->
+            <button style="min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:50%;cursor:pointer;margin:-10px -10px -10px 0;padding:10px;">
+              <svg style="width:16px;height:16px;color:#fbbf24;" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+            </button>
+          </div>
+        </div>
+        <div style="font-size:13px;color:#64748b;line-height:1.45;">15-item stroke severity exam. Guides IVT/EVT eligibility.</div>
+      </div>
+      <div style="padding:8px 20px;background:#f0fdf4;border-top:1px solid #bbf7d0;">
+        <div style="font-size:11px;font-weight:600;color:#059669;">Pass: min-h-[44px] min-w-[44px] — meets touch target minimum</div>
+        <div style="font-size:11px;color:#16a34a;margin-top:2px;">Fix: button { min-height:44px; min-width:44px; padding:10px; margin:-10px; }</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="viewport-label">Touch target — pattern reference</div>
+    <div class="mock-frame" style="width:300px;padding:20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;margin-bottom:12px;">ToolRowCard star fix pattern</div>
+      <div style="background:#f8fafc;border-radius:10px;padding:16px;border:1px solid #f1f5f9;font-family:monospace;font-size:12px;color:#334155;line-height:2;">
+        <div style="color:#94a3b8;">/* Current — BROKEN */</div>
+        <div><span style="color:#1746A2;">className=</span>"w-4 h-4"</div>
+        <div style="color:#ef4444;">→ 16×16px — fails 44px min</div>
+        <br/>
+        <div style="color:#94a3b8;">/* Proposal — CORRECT */</div>
+        <div><span style="color:#059669;">className=</span>"min-h-[44px]</div>
+        <div>&nbsp;&nbsp;min-w-[44px]</div>
+        <div>&nbsp;&nbsp;flex items-center</div>
+        <div>&nbsp;&nbsp;justify-center</div>
+        <div>&nbsp;&nbsp;p-2 -m-1.5"</div>
+        <div style="color:#059669;">→ 44×44px — passes</div>
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:#64748b;line-height:1.6;">
+        Negative margin offset (-m-1.5 = -6px) prevents the expanded touch area from displacing adjacent content.<br/><br/>
+        Same pattern used correctly in TrialLegendCard.tsx line 94.
+      </div>
+    </div>
+  </div>
+
+</div><!-- /stage-row fix A -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION B: Pill active state — 3 states comparison
+══════════════════════════════════════════════════════════════════════ -->
+<div class="state-divider">FIX B — Pill active state: cobalt-fill (proposal) vs border-only (current)</div>
+
+<div class="stage-row">
+
+  <!-- Current: border-only -->
+  <div>
+    <div class="viewport-label">CURRENT — border-only active state (Home &amp; Calcs pages)</div>
+    <div class="mock-frame" style="width:375px;padding:20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;margin-bottom:12px;">Current: border-only</div>
+
+      <!-- Unselected -->
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:8px;">Unselected</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;">
+        <button class="pill">All</button>
+        <button class="pill"><span class="dot dot-ivt" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>Acute stroke</button>
+        <button class="pill"><span class="dot dot-surgical" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>ICH</button>
+      </div>
+
+      <!-- Hover -->
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:8px;">Hover</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;">
+        <button class="pill" style="background:#f8fafc;border-color:#cbd5e1;">All</button>
+        <button class="pill"><span class="dot dot-ivt" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>Acute stroke</button>
+      </div>
+
+      <!-- Active — current border-only -->
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:8px;">Active (current — border-only)</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;overflow-x:auto;padding-bottom:4px;">
+        <button class="pill pill-active-current">All</button>
+        <button class="pill"><span class="dot dot-ivt" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>Acute stroke</button>
+        <button class="pill"><span class="dot dot-surgical" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>ICH</button>
+      </div>
+      <div style="background:#fef9f0;border:1px solid #fde68a;border-radius:8px;padding:10px 12px;font-size:11px;color:#92400e;margin-top:8px;">
+        bg-slate-50 + font-weight-600 — weak visual distinction from unselected on small screens. Inconsistent with TrialsPage.
+      </div>
+    </div>
+  </div>
+
+  <!-- Proposal: cobalt-fill -->
+  <div>
+    <div class="viewport-label">PROPOSAL — cobalt-fill active state (aligns all pages to TrialsPage pattern)</div>
+    <div class="mock-frame" style="width:375px;padding:20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;margin-bottom:12px;">Proposal: cobalt-fill</div>
+
+      <!-- Unselected -->
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:8px;">Unselected</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;">
+        <button class="pill">All</button>
+        <button class="pill"><span class="dot dot-ivt" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>Acute stroke</button>
+        <button class="pill"><span class="dot dot-surgical" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>ICH</button>
+      </div>
+
+      <!-- Hover -->
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:8px;">Hover</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;">
+        <button class="pill" style="background:rgba(23,70,162,0.03);border-color:rgba(23,70,162,0.08);">All</button>
+        <button class="pill"><span class="dot dot-ivt" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>Acute stroke</button>
+      </div>
+
+      <!-- Active — cobalt-fill -->
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:8px;">Active — PROPOSAL (cobalt-fill)</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;overflow-x:auto;padding-bottom:4px;">
+        <button class="pill pill-active-proposal">All</button>
+        <button class="pill"><span class="dot dot-ivt" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>Acute stroke</button>
+        <button class="pill"><span class="dot dot-surgical" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>ICH</button>
+      </div>
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 12px;font-size:11px;color:#065f46;margin-top:8px;">
+        bg: rgba(23,70,162,0.08) · border: rgba(23,70,162,0.2) · text: #1746A2 · font-weight:600.<br/>
+        Strong visual contrast. Consistent with TrialsPage catalog chips (already correct).
+      </div>
+    </div>
+  </div>
+
+  <!-- TrialsPage: reference (already correct) -->
+  <div>
+    <div class="viewport-label">REFERENCE — TrialsPage catalog chips: already uses cobalt-fill</div>
+    <div class="mock-frame" style="width:375px;padding:20px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;margin-bottom:12px;">TrialsPage chips (currently correct)</div>
+
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:8px;">Default chip rail</div>
+      <div style="display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;">
+        <button class="pill pill-active-proposal" style="font-size:12px;padding:5px 12px;">All</button>
+        <button class="pill" style="font-size:12px;padding:5px 12px;"><span class="dot dot-ivt" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>IVT</button>
+        <button class="pill" style="font-size:12px;padding:5px 12px;"><span class="dot dot-evt" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>EVT</button>
+        <button class="pill" style="font-size:12px;padding:5px 12px;"><span class="dot dot-prevention" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>Prevention</button>
+      </div>
+
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:8px;">IVT chip selected</div>
+      <div style="display:flex;gap:6px;margin-bottom:8px;overflow-x:auto;padding-bottom:4px;">
+        <button class="pill" style="font-size:12px;padding:5px 12px;">All</button>
+        <button class="pill pill-active-proposal" style="font-size:12px;padding:5px 12px;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#10b981;"></span>IVT</button>
+        <button class="pill" style="font-size:12px;padding:5px 12px;"><span class="dot dot-evt" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>EVT</button>
+      </div>
+      <div style="background:rgba(23,70,162,0.04);border:1px solid rgba(23,70,162,0.1);border-radius:8px;padding:10px 12px;font-size:11px;color:#1746A2;margin-top:8px;">
+        Source: TrialsPage.tsx lines 322–323.<br/>bg-[rgba(23,70,162,0.08)] border-[rgba(23,70,162,0.2)] text-[#1746A2]<br/>This is the correct pattern — extend to Home and Calcs.
+      </div>
+    </div>
+  </div>
+
+</div><!-- /stage-row fix B -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SECTION C: MOBILE 375px — Full page with both fixes applied
+══════════════════════════════════════════════════════════════════════ -->
+<div class="state-divider">MOBILE 375px · Home page · Both fixes applied · First-visit state</div>
+
+<div class="stage-row">
+  <div>
+    <div class="viewport-label">MOBILE 375px — Home · All pill active · Featured rail · Scenario 1 expanded</div>
+    <div class="mock-frame f-mobile">
+
+      <!-- App header -->
+      <header style="height:60px;background:white;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:40;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:#1746A2;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;font-family:serif;letter-spacing:-0.04em;">N</div>
+          <div style="font-size:15px;font-weight:600;letter-spacing:-0.02em;">Neuro<span style="color:#1746A2;">Wiki</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:2px;">
+          <button style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:none;border:none;color:#334155;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button>
+          <button style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:none;border:none;color:#94a3b8;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg></button>
+        </div>
+      </header>
+
+      <main style="padding:28px 20px 96px;">
+
+        <!-- Hero -->
+        <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">By case</div>
+        <h1 style="font-size:24px;font-weight:500;color:#0f172a;letter-spacing:-0.01em;line-height:1.25;margin-bottom:8px;">What's the case?</h1>
+        <p style="font-size:14.5px;color:#475569;line-height:1.55;margin-bottom:20px;">Pick a scenario or browse all the tools.</p>
+
+        <!-- Featured rail -->
+        <div class="featured-rail">
+          <div class="featured-eyebrow">Featured</div>
+          <div class="featured-track">
+            <button class="featured-tile cat-cobalt">
+              <div class="type-label">Pathway</div>
+              <div class="name">EVT Pathway</div>
+              <div class="description">LVO triage from imaging to decision in under 60 seconds.</div>
+            </button>
+            <button class="featured-tile cat-ivt">
+              <div class="type-label">Calculator</div>
+              <div class="name">NIHSS</div>
+              <div class="description">15-item stroke severity at the bedside.</div>
+            </button>
+            <button class="featured-tile cat-status">
+              <div class="type-label">Guide</div>
+              <div class="name">Status Epilepticus</div>
+              <div class="description">Benzo-first protocol with escalation ladder.</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- PROPOSAL FIX B: cobalt-fill active pill -->
+        <div style="display:flex;gap:10px;overflow-x:auto;margin-bottom:24px;padding-bottom:2px;" class="scrollbar-hide">
+          <!-- PROPOSAL: active pill uses cobalt-fill -->
+          <button class="pill pill-active-proposal">All</button>
+          <button class="pill"><span class="dot dot-ivt" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>Acute stroke</button>
+          <button class="pill"><span class="dot dot-surgical" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>ICH</button>
+          <button class="pill"><span class="dot dot-status" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>Status</button>
+          <button class="pill"><span class="dot dot-prevention" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>Headache</button>
+          <button class="pill"><span class="dot dot-general" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>AMS</button>
+        </div>
+
+        <!-- Scenario: Acute stroke (expanded) -->
+        <button class="scenario-header expanded cat-ivt" aria-expanded="true">
+          <div>
+            <div class="title">Acute ischemic stroke</div>
+            <div class="subtitle">Within 24 h of onset · 5 tools</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <div class="scenario-body">
+          <!-- PROPOSAL FIX A: ToolRowCard star with 44px touch target -->
+          <button class="rowcard row-evt">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:3px;">
+              <span style="font-size:14.5px;font-weight:600;color:#0f172a;">Stroke Code</span>
+              <div style="display:flex;align-items:center;gap:0;flex-shrink:0;">
+                <span style="font-size:11.5px;color:#64748b;font-weight:500;"><span style="color:#0f172a;font-weight:600;">4</span> steps</span>
+                <!-- PROPOSAL: 44px touch target for star -->
+                <button onclick="event.stopPropagation()" style="min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:50%;cursor:pointer;margin:-10px -10px -10px 0;padding:10px;">
+                  <svg width="16" height="16" style="color:#94a3b8;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+                </button>
+              </div>
+            </div>
+            <div style="font-size:13px;color:#64748b;line-height:1.45;">First 60 minutes — triage, imaging, treatment decision tree.</div>
+          </button>
+
+          <button class="rowcard row-ivt">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:3px;">
+              <span style="font-size:14.5px;font-weight:600;color:#0f172a;">Late-Window IVT</span>
+              <div style="display:flex;align-items:center;gap:0;flex-shrink:0;">
+                <span style="font-size:11.5px;color:#64748b;font-weight:500;"><span style="color:#0f172a;font-weight:600;">3</span> steps</span>
+                <button onclick="event.stopPropagation()" style="min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:50%;cursor:pointer;margin:-10px -10px -10px 0;padding:10px;">
+                  <svg width="16" height="16" style="color:#fbbf24;" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+                </button>
+              </div>
+            </div>
+            <div style="font-size:13px;color:#64748b;line-height:1.45;">tPA in 4.5–9 h or wake-up window with imaging selection.</div>
+          </button>
+
+          <button class="rowcard row-evt" style="border-bottom:none;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:3px;">
+              <span style="font-size:14.5px;font-weight:600;color:#0f172a;">EVT Pathway</span>
+              <div style="display:flex;align-items:center;gap:0;flex-shrink:0;">
+                <span style="font-size:11.5px;color:#64748b;font-weight:500;"><span style="color:#0f172a;font-weight:600;">4</span> steps</span>
+                <button onclick="event.stopPropagation()" style="min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:50%;cursor:pointer;margin:-10px -10px -10px 0;padding:10px;">
+                  <svg width="16" height="16" style="color:#94a3b8;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+                </button>
+              </div>
+            </div>
+            <div style="font-size:13px;color:#64748b;line-height:1.45;">LVO triage: occlusion, time, NIHSS, ASPECTS → decision.</div>
+          </button>
+        </div>
+
+        <!-- ICH scenario (collapsed) -->
+        <button class="scenario-header collapsed cat-surgical">
+          <div>
+            <div class="title">Intracerebral haemorrhage</div>
+            <div class="subtitle">ICH management pathway</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Trending trials -->
+        <div style="margin-top:36px;">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;">
+            <h2 class="trending-eyebrow">Trending trials</h2>
+            <span style="font-size:10px;color:#94a3b8;font-weight:500;">Refreshes daily</span>
+          </div>
+
+          <button class="rowcard row-ivt">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:3px;">
+              <div><span style="font-size:14.5px;font-weight:600;color:#0f172a;">NINDS-tPA</span><span style="font-size:11px;color:#94a3b8;font-weight:400;margin-left:8px;">1995 · NEJM</span></div>
+              <span style="font-size:11px;font-weight:600;background:rgba(23,70,162,0.08);color:#1746A2;padding:2px 8px;border-radius:4px;">+11 / 100</span>
+            </div>
+            <div style="font-size:13px;color:#64748b;line-height:1.45;">Original IV alteplase trial within 3 hours.</div>
+          </button>
+
+          <button class="rowcard row-evt" style="border-bottom:none;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:3px;">
+              <div><span style="font-size:14.5px;font-weight:600;color:#0f172a;">DAWN</span><span style="font-size:11px;color:#94a3b8;font-weight:400;margin-left:8px;">2018 · NEJM</span></div>
+              <span style="font-size:11px;font-weight:600;background:rgba(23,70,162,0.08);color:#1746A2;padding:2px 8px;border-radius:4px;">+35 / 100</span>
+            </div>
+            <div style="font-size:13px;color:#64748b;line-height:1.45;">EVT 6–24 h with clinical-imaging mismatch.</div>
+          </button>
+
+          <a href="/trials" style="display:block;text-align:center;margin-top:12px;font-size:13px;font-weight:500;color:#1746A2;">View all 89 trials →</a>
+        </div>
+
+        <!-- [OPTIONAL: cmd-K search] — stretch goal section -->
+        <div style="margin-top:40px;padding-top:24px;border-top:2px dashed #e2e8f0;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#f59e0b;margin-bottom:8px;">[OPTIONAL: cmd-K search] — stretch goal</div>
+          <div style="font-size:12px;color:#94a3b8;margin-bottom:12px;line-height:1.55;">Phase 1 Pattern 2 recommendation: persistent search affordance. If added to Home, propose a command-palette-style input that opens a full-screen search overlay on tap.</div>
+          <!-- cmd-K style search bar (visual sketch) -->
+          <div class="cmdK-bar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" style="flex-shrink:0;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <span class="cmdK-placeholder">Search tools, trials, guides…</span>
+            <span class="cmdK-hint">⌘K</span>
+          </div>
+          <div style="font-size:11px;color:#94a3b8;line-height:1.5;">Not a new section — would replace the existing header search icon. Opens a sheet overlay with trending searches. Decision: V to approve before implementing.</div>
+        </div>
+
+      </main>
+
+      <div class="tab-bar">
+        <div class="tab-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</div>
+        <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Trials</div>
+        <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="7" r="1.4"/><circle cx="12" cy="7" r="1.4"/><circle cx="18" cy="7" r="1.4"/><circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/><circle cx="6" cy="17" r="1.4"/><circle cx="12" cy="17" r="1.4"/><circle cx="18" cy="17" r="1.4"/></svg>Calcs</div>
+        <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="6" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="19" cy="18" r="1.8"/><path d="M6.5 7.2L10.5 11"/><path d="M13.5 11L17.5 7.2"/><path d="M13.5 13L17.5 16.8"/></svg>Pathways</div>
+        <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>Guide</div>
+      </div>
+
+    </div><!-- /mock-frame mobile -->
+
+    <div class="annot" style="width:375px;">
+      <div class="annot-h">Home polish — both fixes applied</div>
+      <span class="annot-li">Fix A applied: ToolRowCard star button uses min-h-[44px] min-w-[44px] + negative margin</span>
+      <span class="annot-li">Fix B applied: "All" pill uses cobalt-fill active (not border-only)</span>
+      <span class="annot-li">All other anatomy identical to home-reference.html — no new sections</span>
+      <span class="annot-li">[OPTIONAL: cmd-K] shown at bottom as explicitly labeled stretch goal</span>
+      <span class="annot-li">Trending trial count updated: 89 (was hardcoded 79 — data hygiene fix)</span>
+    </div>
+  </div>
+
+</div><!-- /stage-row mobile full page -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     DESKTOP 1240px — Home with both fixes
+══════════════════════════════════════════════════════════════════════ -->
+<div class="state-divider">DESKTOP 1240px · Home · Both fixes applied</div>
+
+<div class="stage-row">
+  <div>
+    <div class="viewport-label">DESKTOP 1240px — Home · cobalt-fill pill active · 44px star buttons</div>
+    <div class="mock-frame f-desktop">
+
+      <!-- Desktop header -->
+      <header style="height:60px;background:white;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;padding:0 40px;position:sticky;top:0;z-index:40;">
+        <div style="display:flex;align-items:center;gap:32px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:28px;height:28px;border-radius:8px;background:#1746A2;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;font-family:serif;letter-spacing:-0.04em;">N</div>
+            <div style="font-size:15px;font-weight:600;letter-spacing:-0.02em;">Neuro<span style="color:#1746A2;">Wiki</span></div>
+          </div>
+          <nav style="display:flex;gap:24px;">
+            <div style="font-size:13px;font-weight:600;color:#0f172a;border-bottom:2px solid #1746A2;padding:4px 0;cursor:pointer;">Home</div>
+            <div style="font-size:13px;font-weight:500;color:#64748b;padding:4px 0;cursor:pointer;">Trials</div>
+            <div style="font-size:13px;font-weight:500;color:#64748b;padding:4px 0;cursor:pointer;">Calculators</div>
+            <div style="font-size:13px;font-weight:500;color:#64748b;padding:4px 0;cursor:pointer;">Pathways</div>
+            <div style="font-size:13px;font-weight:500;color:#64748b;padding:4px 0;cursor:pointer;">Guide</div>
+          </nav>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button style="min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;color:#334155;cursor:pointer;border-radius:50%;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          </button>
+          <button style="min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;color:#94a3b8;cursor:pointer;border-radius:50%;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Desktop hero -->
+      <div style="max-width:800px;margin:0 auto;padding:48px 40px 32px;">
+        <div style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px;">By case</div>
+        <h1 style="font-size:32px;font-weight:500;color:#0f172a;letter-spacing:-0.01em;line-height:1.2;margin-bottom:10px;">What's the case?</h1>
+        <p style="font-size:15px;color:#475569;line-height:1.55;margin-bottom:24px;">Pick a scenario or browse all the tools.</p>
+
+        <!-- Featured rail (desktop) -->
+        <div class="featured-rail">
+          <div class="featured-eyebrow">Featured</div>
+          <div class="featured-track" style="gap:12px;">
+            <button class="featured-tile cat-cobalt" style="width:220px;">
+              <div class="type-label">Pathway</div>
+              <div class="name">EVT Pathway</div>
+              <div class="description">LVO triage from imaging to decision in under 60 seconds.</div>
+            </button>
+            <button class="featured-tile cat-ivt" style="width:220px;">
+              <div class="type-label">Calculator</div>
+              <div class="name">NIHSS</div>
+              <div class="description">15-item stroke severity at the bedside.</div>
+            </button>
+            <button class="featured-tile cat-status" style="width:220px;">
+              <div class="type-label">Guide</div>
+              <div class="name">Status Epilepticus</div>
+              <div class="description">Benzo-first protocol with escalation ladder.</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- PROPOSAL FIX B: cobalt-fill active pill on desktop -->
+        <div style="display:flex;gap:10px;overflow-x:auto;margin-bottom:28px;">
+          <button class="pill pill-active-proposal">All</button>
+          <button class="pill"><span class="dot dot-ivt" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>Acute stroke</button>
+          <button class="pill"><span class="dot dot-surgical" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>ICH</button>
+          <button class="pill"><span class="dot dot-status" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>Status</button>
+          <button class="pill"><span class="dot dot-prevention" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>Headache</button>
+          <button class="pill"><span class="dot dot-general" style="display:inline-block;width:6px;height:6px;border-radius:50%;"></span>AMS</button>
+        </div>
+
+        <!-- Scenario: Acute stroke (expanded) with PROPOSAL FIX A star buttons -->
+        <button class="scenario-header expanded cat-ivt">
+          <div>
+            <div class="title">Acute ischemic stroke</div>
+            <div class="subtitle">Within 24 h of onset · 5 tools</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <div class="scenario-body">
+          <button class="rowcard row-evt">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px;">
+              <span style="font-size:14.5px;font-weight:600;color:#0f172a;">Stroke Code</span>
+              <div style="display:flex;align-items:center;gap:0;">
+                <span style="font-size:11.5px;color:#64748b;font-weight:500;"><span style="color:#0f172a;font-weight:600;">4</span> steps</span>
+                <!-- PROPOSAL: 44px star -->
+                <button onclick="event.stopPropagation()" style="min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:50%;cursor:pointer;margin:-10px -10px -10px 4px;padding:10px;">
+                  <svg width="16" height="16" style="color:#94a3b8;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+                </button>
+              </div>
+            </div>
+            <div style="font-size:13px;color:#64748b;line-height:1.45;">First 60 minutes — triage, imaging, treatment decision tree.</div>
+          </button>
+          <button class="rowcard row-ivt" style="border-bottom:none;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px;">
+              <span style="font-size:14.5px;font-weight:600;color:#0f172a;">Late-Window IVT</span>
+              <div style="display:flex;align-items:center;gap:0;">
+                <span style="font-size:11.5px;color:#64748b;font-weight:500;"><span style="color:#0f172a;font-weight:600;">3</span> steps</span>
+                <button onclick="event.stopPropagation()" style="min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:50%;cursor:pointer;margin:-10px -10px -10px 4px;padding:10px;">
+                  <svg width="16" height="16" style="color:#fbbf24;" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+                </button>
+              </div>
+            </div>
+            <div style="font-size:13px;color:#64748b;line-height:1.45;">tPA in 4.5–9 h or wake-up window with imaging selection.</div>
+          </button>
+        </div>
+
+        <!-- ICH collapsed -->
+        <button class="scenario-header collapsed cat-surgical" style="margin-top:10px;">
+          <div>
+            <div class="title">Intracerebral haemorrhage</div>
+            <div class="subtitle">ICH management pathway</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+      </div><!-- /max-width wrapper -->
+    </div><!-- /desktop mock-frame -->
+  </div>
+</div><!-- /stage-row desktop -->
+
+</body>
+</html>

@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<!--
+  STATUS: PROPOSAL — NOT LOCKED. Awaiting V approval.
+  Produced: 2026-05-14, Phase 3 of design audit
+  Source friction: Page5-A (no H1 in landing state), Page5-B (blue-* active state, teal-* hover,
+    text-3xl md:text-5xl font-extrabold article H1), Page5-C (text-base leading-8 article body),
+    Page5-E (duplicate back button when article open, FAB overlaps tab bar on mobile),
+    Page5-G (max-h-[50vh] may cut content on short devices)
+  Improvements proposed:
+    - Landing state: proper H1 "Clinical Guides" with "Reference" eyebrow above it
+    - blue-* → neuro-* (active state: bg-neuro-50 text-neuro-700 border-neuro-500)
+    - teal-* → neuro-* for links/CTAs, emerald-* for positive clinical signals
+    - Article H1: text-3xl font-semibold (replacing text-3xl md:text-5xl font-extrabold)
+    - Article body: text-sm leading-[1.55] (replacing text-base leading-8)
+    - FAB: bottom: calc(var(--tab-bar-height,0px) + env(safe-area-inset-bottom,0px) + 1rem)
+    - Single back button: header-bar back arrow only (no duplicate inside article)
+  Tokens used: neuro-*, slate-*, emerald-*
+  Tokens explicitly NOT used: blue-*, teal-*, indigo-*, violet-*, font-extrabold, font-black,
+    font-bold (on headings), shadow-lg, shadow-xl, shadow-md, border-2, rounded-2xl, gray-*
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Resident Guide — Proposal 2026-05-14 — NeuroWiki</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --cobalt:         #1746A2;
+    --cobalt-50:      #EEF2FF;
+    --cobalt-100:     #C7D7FA;
+    --cobalt-soft:    rgba(23, 70, 162, 0.08);
+    --hair:           #f1f5f9;
+    --border:         #e2e8f0;
+    --tab-bar-height: 60px;
+  }
+
+  body {
+    background: #f1f5f9;
+    font-family: Inter, -apple-system, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Frame scaffolding */
+  .state-divider {
+    background: #f8fafc;
+    border-top: 2px dashed #cbd5e1; border-bottom: 2px dashed #cbd5e1;
+    padding: 12px 24px; font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: #64748b;
+  }
+  .viewport-label {
+    background: #0f172a; color: #94a3b8; padding: 8px 24px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
+  }
+  .arch-banner { background: #0f172a; color: white; padding: 20px 24px; }
+  .stage-row { display: flex; gap: 32px; align-items: flex-start; overflow-x: auto; padding: 24px 24px 48px; }
+  .mock-frame { background: white; position: relative; flex-shrink: 0; overflow: hidden; border: 1px solid #e2e8f0; }
+  .f-mobile  { width: 375px; }
+  .f-desktop { width: 1240px; }
+
+  .annot { background: #0f172a; padding: 16px 20px; }
+  .annot-h { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #94a3b8; margin-bottom: 8px; }
+  .annot-li { font-size: 12px; color: #cbd5e1; line-height: 1.75; display: block; }
+  .annot-li::before { content: "→ "; color: #475569; }
+
+  /* Design tokens */
+  .eyebrow { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
+
+  /* Tab bar */
+  .tab-bar { display: flex; border-top: 1px solid var(--border); background: white; }
+  .tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 8px 4px 10px; font-size: 10px; color: #94a3b8; gap: 3px; }
+  .tab-item.active { color: var(--cobalt); }
+
+  /* Sidebar accordion (landing state) */
+  .sidebar-search {
+    display: flex; align-items: center; gap: 10px; background: #f8fafc;
+    border: 1px solid var(--border); border-radius: 10px; padding: 0 12px; height: 40px;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .sidebar-search.focused { border-color: var(--cobalt); box-shadow: 0 0 0 3px var(--cobalt-soft); }
+
+  /* Category label — PROPOSAL: text-[10px] tracking-widest (was text-xs tracking-wider) */
+  .cat-label {
+    font-size: 10px; font-weight: 700; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    padding: 10px 16px 6px; display: block;
+  }
+
+  /* PROPOSAL: neuro-* active state (replacing blue-*) */
+  .guide-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 9px 16px; border-radius: 8px; cursor: pointer;
+    font-size: 14px; color: #475569; margin: 1px 8px;
+  }
+  .guide-item:hover { background: rgba(248, 250, 252, 0.9); color: #334155; }
+  .guide-item.active {
+    /* PROPOSAL: neuro-* colors — replacing blue-50 text-blue-700 border-blue-500 */
+    background: rgba(23, 70, 162, 0.07);
+    color: #1746A2; font-weight: 600;
+    border-left: 2px solid #1746A2;
+    padding-left: 14px; /* compensate for border */
+  }
+
+  /* Article H1 — PROPOSAL: text-3xl font-semibold (replacing text-3xl md:text-5xl font-extrabold) */
+  .article-h1 {
+    font-size: 28px; font-weight: 600; color: #0f172a;
+    letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 10px;
+  }
+  .article-h1-desktop { font-size: 34px; font-weight: 600; color: #0f172a; letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 12px; }
+
+  /* Article section headers — PROPOSAL: font-semibold (replacing font-bold) */
+  .article-section-h { font-size: 17px; font-weight: 600; color: #0f172a; margin-top: 28px; margin-bottom: 10px; }
+  .article-section-h-desktop { font-size: 18px; font-weight: 600; color: #0f172a; margin-top: 32px; margin-bottom: 12px; }
+
+  /* Article body — PROPOSAL: text-sm leading-[1.55] (replacing text-base leading-8) */
+  .article-body { font-size: 14px; color: #475569; line-height: 1.55; margin-bottom: 16px; }
+
+  /* Article CTAs — PROPOSAL: neuro-* (replacing teal-*) */
+  .article-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 16px; background: rgba(23, 70, 162, 0.06);
+    border: 1px solid rgba(23, 70, 162, 0.15); border-radius: 10px;
+    font-size: 13px; font-weight: 600; color: #1746A2; cursor: pointer;
+    text-decoration: none; margin-right: 8px; margin-bottom: 8px;
+  }
+  .article-cta:hover { background: rgba(23, 70, 162, 0.10); }
+  /* PROPOSAL: emerald for positive clinical signal CTAs */
+  .article-cta.emerald {
+    background: rgba(16, 185, 129, 0.06);
+    border-color: rgba(16, 185, 129, 0.15);
+    color: #059669;
+  }
+  .article-cta.emerald:hover { background: rgba(16, 185, 129, 0.10); }
+
+  /* FAB — PROPOSAL: bottom compensates for tab bar */
+  .fab {
+    position: absolute; /* absolute within mock-frame for mockup purposes */
+    right: 16px; bottom: 76px; /* 60px tab-bar + 16px gap */
+    width: 44px; height: 44px;
+    background: white; border: 1px solid var(--border); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #64748b; cursor: pointer;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.10);
+  }
+  /* PROPOSAL: CSS comment showing the production value */
+  /* Production: bottom: calc(var(--tab-bar-height,0px) + env(safe-area-inset-bottom,0px) + 1rem) */
+
+  /* ToC sidebar */
+  .toc-item { padding: 6px 12px; font-size: 13px; color: #64748b; border-radius: 6px; cursor: pointer; display: block; margin: 2px 0; }
+  .toc-item:hover { background: #f8fafc; color: #334155; }
+  .toc-item.active { background: rgba(23, 70, 162, 0.06); color: #1746A2; font-weight: 500; }
+
+  /* Desk nav */
+  .desk-nav { display: flex; gap: 24px; }
+  .desk-nav-item { font-size: 13px; font-weight: 500; color: #64748b; cursor: pointer; padding: 4px 0; }
+  .desk-nav-item.active { color: #0f172a; font-weight: 600; border-bottom: 2px solid #1746A2; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     BANNER
+══════════════════════════════════════════════════════════════════════ -->
+<div class="arch-banner">
+  <div style="max-width:1300px;margin:0 auto;">
+    <div style="font-weight:700;font-size:15px;margin-bottom:6px;">Resident Guide — Proposal 2026-05-14 — NeuroWiki</div>
+    <div style="font-size:12px;color:#94a3b8;line-height:1.65;max-width:900px;">
+      Phase 3 proposal. Most diverged page — two states shown: (1) Landing state at /guide with proper H1,
+      (2) Article view "Stroke Basics" with corrected typography. Key fixes: blue-* → neuro-*, teal-* → neuro-*/emerald-*,
+      article H1 text-3xl font-semibold, body text-sm leading-[1.55], FAB clears tab bar,
+      single back button (header only), landing state has H1 "Clinical Guides".
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     STATE 1: LANDING STATE — MOBILE 375px
+══════════════════════════════════════════════════════════════════════ -->
+<div class="state-divider">STATE 1 — Landing state at /guide · MOBILE 375px + DESKTOP 1240px</div>
+
+<div class="stage-row">
+
+  <!-- Mobile landing -->
+  <div>
+    <div class="viewport-label">MOBILE 375px — Landing state at /guide — PROPOSAL: has H1 "Clinical Guides"</div>
+    <div class="mock-frame f-mobile">
+
+      <!-- App header -->
+      <header style="height:60px;background:white;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:40;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:28px;height:28px;border-radius:8px;background:#1746A2;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;font-family:serif;letter-spacing:-0.04em;">N</div>
+          <div style="font-size:15px;font-weight:600;letter-spacing:-0.02em;">Neuro<span style="color:#1746A2;">Wiki</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <button style="min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;color:#334155;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button>
+        </div>
+      </header>
+
+      <main style="padding:28px 20px 96px;">
+
+        <!-- PROPOSAL: Landing state H1 — was missing, causing heading hierarchy failure -->
+        <div class="eyebrow" style="margin-bottom:6px;">Reference</div>
+        <h1 style="font-size:24px;font-weight:500;color:#0f172a;letter-spacing:-0.01em;line-height:1.25;margin-bottom:6px;">Clinical Guides</h1>
+        <p style="font-size:14.5px;color:#475569;line-height:1.55;margin-bottom:20px;">Evidence-based protocols and references for neurology residents and fellows.</p>
+
+        <!-- Sidebar search -->
+        <div class="sidebar-search focused" style="margin-bottom:16px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" style="flex-shrink:0;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <span style="font-size:14px;color:#94a3b8;flex:1;">Search guides…</span>
+        </div>
+
+        <!-- Category: Stroke -->
+        <div>
+          <!-- PROPOSAL: cat-label — text-[10px] tracking-widest (was text-xs tracking-wider) -->
+          <div class="cat-label">Stroke</div>
+          <div class="guide-item active">
+            Stroke Basics
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="guide-item">
+            Acute Ischemic Stroke
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="guide-item">
+            Hemorrhagic Stroke
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="guide-item">
+            Stroke Prevention
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <!-- Category: Seizure -->
+        <div style="margin-top:8px;">
+          <div class="cat-label">Seizure</div>
+          <div class="guide-item">
+            Status Epilepticus
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="guide-item">
+            Seizure First Aid
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="guide-item">
+            Anti-epileptic Dosing
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <!-- Category: Headache -->
+        <div style="margin-top:8px;">
+          <div class="cat-label">Headache</div>
+          <div class="guide-item">
+            Thunderclap Headache
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="guide-item">
+            Migraine Management
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <!-- Category: Critical Care -->
+        <div style="margin-top:8px;">
+          <div class="cat-label">Neuro Critical Care</div>
+          <div class="guide-item">
+            ICP Management
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="guide-item">
+            Coma Assessment
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+      </main>
+
+      <div class="tab-bar">
+        <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</div>
+        <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Trials</div>
+        <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="7" r="1.4"/><circle cx="12" cy="7" r="1.4"/><circle cx="18" cy="7" r="1.4"/><circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/><circle cx="6" cy="17" r="1.4"/><circle cx="12" cy="17" r="1.4"/><circle cx="18" cy="17" r="1.4"/></svg>Calcs</div>
+        <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="6" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="19" cy="18" r="1.8"/><path d="M6.5 7.2L10.5 11"/><path d="M13.5 11L17.5 7.2"/><path d="M13.5 13L17.5 16.8"/></svg>Pathways</div>
+        <div class="tab-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>Guide</div>
+      </div>
+
+    </div><!-- /mobile landing -->
+
+    <div class="annot" style="width:375px;">
+      <div class="annot-h">Landing state — proposals</div>
+      <span class="annot-li">H1 "Clinical Guides" present — fixes heading hierarchy failure</span>
+      <span class="annot-li">"Reference" eyebrow above H1 — matches hub spec eyebrow pattern</span>
+      <span class="annot-li">Active guide item: bg-neuro-50 + border-neuro (NOT blue-50 text-blue-700)</span>
+      <span class="annot-li">Cat labels: text-[10px] tracking-widest (NOT text-xs tracking-wider)</span>
+      <span class="annot-li">Search focus: var(--cobalt-soft) ring (consistent with all other pages)</span>
+    </div>
+  </div>
+
+  <!-- Desktop landing -->
+  <div>
+    <div class="viewport-label">DESKTOP 1240px — Landing state at /guide</div>
+    <div class="mock-frame f-desktop">
+
+      <!-- Desktop header -->
+      <header style="height:60px;background:white;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;padding:0 40px;position:sticky;top:0;z-index:40;">
+        <div style="display:flex;align-items:center;gap:32px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:28px;height:28px;border-radius:8px;background:#1746A2;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;font-family:serif;letter-spacing:-0.04em;">N</div>
+            <div style="font-size:15px;font-weight:600;letter-spacing:-0.02em;">Neuro<span style="color:#1746A2;">Wiki</span></div>
+          </div>
+          <div class="desk-nav">
+            <div class="desk-nav-item">Home</div>
+            <div class="desk-nav-item">Trials</div>
+            <div class="desk-nav-item">Calculators</div>
+            <div class="desk-nav-item">Pathways</div>
+            <div class="desk-nav-item active">Guide</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="sidebar-search" style="width:240px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" style="flex-shrink:0;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <span style="font-size:14px;color:#94a3b8;flex:1;">Search guides…</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Desktop 3-col: sidebar nav + main content + (empty on landing) -->
+      <div style="display:flex;max-width:100%;min-height:600px;">
+
+        <!-- Sidebar nav (desktop) -->
+        <div style="width:260px;flex-shrink:0;border-right:1px solid #f1f5f9;padding:24px 0;">
+          <div style="padding:0 16px 16px;">
+            <div class="eyebrow" style="margin-bottom:6px;">Reference</div>
+            <div style="font-size:18px;font-weight:600;color:#0f172a;margin-bottom:4px;">Clinical Guides</div>
+          </div>
+          <div class="cat-label" style="padding-top:0;">Stroke</div>
+          <div class="guide-item active">
+            Stroke Basics
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="guide-item">Acute Ischemic Stroke</div>
+          <div class="guide-item">Hemorrhagic Stroke</div>
+          <div class="guide-item">Stroke Prevention</div>
+          <div class="cat-label" style="margin-top:8px;">Seizure</div>
+          <div class="guide-item">Status Epilepticus</div>
+          <div class="guide-item">Seizure First Aid</div>
+          <div class="guide-item">Anti-epileptic Dosing</div>
+          <div class="cat-label" style="margin-top:8px;">Headache</div>
+          <div class="guide-item">Thunderclap Headache</div>
+          <div class="guide-item">Migraine Management</div>
+          <div class="cat-label" style="margin-top:8px;">Neuro Critical Care</div>
+          <div class="guide-item">ICP Management</div>
+          <div class="guide-item">Coma Assessment</div>
+        </div>
+
+        <!-- Main: landing state prompt on desktop (usually invisible; user lands here from nav or direct link) -->
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:80px 40px;">
+          <div style="text-align:center;max-width:420px;">
+            <div class="eyebrow" style="margin-bottom:12px;text-align:center;">Reference</div>
+            <h1 style="font-size:28px;font-weight:500;color:#0f172a;letter-spacing:-0.01em;margin-bottom:12px;">Clinical Guides</h1>
+            <p style="font-size:14px;color:#64748b;line-height:1.6;margin-bottom:24px;">Select a guide from the sidebar, or search for a specific topic. Evidence-based protocols for neurology residents and fellows.</p>
+            <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+              <button style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:#1746A2;color:white;border-radius:9999px;font-size:13px;font-weight:600;border:none;cursor:pointer;min-height:44px;">
+                Stroke Basics
+              </button>
+              <button style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:rgba(23,70,162,0.07);color:#1746A2;border:1px solid rgba(23,70,162,0.15);border-radius:9999px;font-size:13px;font-weight:600;cursor:pointer;min-height:44px;">
+                Status Epilepticus
+              </button>
+              <button style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:rgba(23,70,162,0.07);color:#1746A2;border:1px solid rgba(23,70,162,0.15);border-radius:9999px;font-size:13px;font-weight:600;cursor:pointer;min-height:44px;">
+                ICP Management
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /desktop 2-col -->
+
+    </div><!-- /desktop mock-frame landing -->
+  </div>
+</div><!-- /stage-row landing -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     STATE 2: ARTICLE VIEW — MOBILE 375px
+══════════════════════════════════════════════════════════════════════ -->
+<div class="state-divider">STATE 2 — Article view "Stroke Basics" · MOBILE 375px + DESKTOP 1240px</div>
+
+<div class="stage-row">
+
+  <!-- Mobile article view -->
+  <div>
+    <div class="viewport-label">MOBILE 375px — Article view "Stroke Basics"</div>
+    <div class="mock-frame f-mobile" style="position:relative;">
+
+      <!-- PROPOSAL: Single back button in header — NO duplicate inside article -->
+      <header style="height:56px;background:white;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;padding:0 16px;gap:12px;position:sticky;top:0;z-index:40;">
+        <!-- PROPOSAL: Header-bar back arrow ONLY — single back button pattern -->
+        <button style="min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;color:#334155;cursor:pointer;margin-left:-8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div style="flex:1;font-size:14px;font-weight:600;color:#0f172a;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Stroke Basics</div>
+        <!-- Star fav button — PROPOSAL: min-h-[44px] min-w-[44px] -->
+        <button style="min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;color:#94a3b8;cursor:pointer;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/></svg>
+        </button>
+      </header>
+
+      <!-- Article content -->
+      <main style="padding:24px 20px 100px;">
+
+        <!-- PROPOSAL: Article H1 — text-3xl font-semibold (was text-3xl md:text-5xl font-extrabold) -->
+        <div class="eyebrow" style="margin-bottom:8px;">Stroke · Fundamentals</div>
+        <h1 class="article-h1">Stroke Basics</h1>
+        <p style="font-size:12px;color:#94a3b8;margin-bottom:24px;">Last reviewed 2026-02-14 · Reviewed by medical-scientist</p>
+
+        <!-- PROPOSAL: article body — text-sm leading-[1.55] (was text-base leading-8) -->
+        <div>
+          <!-- Section 1 -->
+          <h2 class="article-section-h">What is stroke?</h2>
+          <p class="article-body">Stroke is defined as a sudden neurological deficit caused by focal brain ischemia or hemorrhage, lasting more than 24 hours or leading to death. Ischemic stroke accounts for approximately 87% of all strokes and results from occlusion of a cerebral artery by thrombus or embolism.</p>
+          <p class="article-body">Transient ischemic attacks (TIAs) present identically but resolve within 24 hours with no permanent tissue injury on imaging. However, the risk of stroke within 48–72 hours of TIA is 3–10%, with the ABCD2 score helping to stratify urgency.</p>
+
+          <!-- Section 2 -->
+          <h2 class="article-section-h">Initial assessment</h2>
+          <p class="article-body">The National Institutes of Health Stroke Scale (NIHSS) provides a standardized measure of stroke severity on a 0–42 scale. Scores are used to guide thrombolysis and EVT eligibility decisions. A score of ≥6 typically indicates moderate-to-severe stroke warranting urgent imaging.</p>
+          <p class="article-body">Time is brain: approximately 1.9 million neurons are lost every minute during a large vessel occlusion without treatment. The phrase "time is brain" underpins the current emphasis on door-to-needle times under 45 minutes for eligible patients.</p>
+
+          <!-- Section 3 — CTAs -->
+          <h2 class="article-section-h">Related tools</h2>
+          <!-- PROPOSAL: neuro-* CTAs (replacing teal-*) -->
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+            <a class="article-cta" href="#">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              NIHSS Calculator
+            </a>
+            <a class="article-cta" href="#">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              ASPECTS Score
+            </a>
+            <!-- PROPOSAL: emerald for "go" clinical signal -->
+            <a class="article-cta emerald" href="#">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              Stroke Code Pathway
+            </a>
+          </div>
+
+          <!-- Section 4 -->
+          <h2 class="article-section-h">Key evidence</h2>
+          <p class="article-body">The NINDS tPA trial (1995, NEJM) established IV alteplase within 3 hours as the standard of care. Subsequent trials extended this window to 4.5 hours (ECASS-III, 2008) and further with imaging-guided selection (EXTEND, 2019; WAKE-UP, 2018). For large vessel occlusions, five landmark RCTs in 2015 established EVT as the standard of care.</p>
+
+          <!-- Related trials -->
+          <div style="border:1px solid #f1f5f9;border-radius:12px;overflow:hidden;margin-top:8px;">
+            <div style="padding:10px 16px;border-bottom:1px solid #f1f5f9;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;">Related Trials</div>
+            <div style="padding:10px 16px;border-bottom:1px solid #f1f5f9;font-size:13px;">
+              <span style="font-weight:600;color:#0f172a;">NINDS-tPA</span>
+              <span style="font-size:11px;color:#94a3b8;margin-left:8px;">1995 · NEJM</span>
+              <div style="font-size:12px;color:#64748b;margin-top:2px;">Original IV alteplase within 3 h. NNT 9.</div>
+            </div>
+            <div style="padding:10px 16px;border-bottom:1px solid #f1f5f9;font-size:13px;">
+              <span style="font-weight:600;color:#0f172a;">EXTEND</span>
+              <span style="font-size:11px;color:#94a3b8;margin-left:8px;">2019 · NEJM</span>
+              <div style="font-size:12px;color:#64748b;margin-top:2px;">Perfusion-guided alteplase 4.5–9 h. NNT 17.</div>
+            </div>
+            <div style="padding:10px 16px;font-size:13px;">
+              <span style="font-weight:600;color:#0f172a;">MR CLEAN</span>
+              <span style="font-size:11px;color:#94a3b8;margin-left:8px;">2015 · NEJM</span>
+              <div style="font-size:12px;color:#64748b;margin-top:2px;">Landmark EVT trial within 6 h. NNT 8.</div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- PROPOSAL: FAB positioned above tab bar -->
+      <!-- Production value: bottom: calc(var(--tab-bar-height,0px) + env(safe-area-inset-bottom,0px) + 1rem) -->
+      <div class="fab">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+      </div>
+
+      <div class="tab-bar">
+        <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</div>
+        <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Trials</div>
+        <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="7" r="1.4"/><circle cx="12" cy="7" r="1.4"/><circle cx="18" cy="7" r="1.4"/><circle cx="6" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="18" cy="12" r="1.4"/><circle cx="6" cy="17" r="1.4"/><circle cx="12" cy="17" r="1.4"/><circle cx="18" cy="17" r="1.4"/></svg>Calcs</div>
+        <div class="tab-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="6" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="19" cy="18" r="1.8"/><path d="M6.5 7.2L10.5 11"/><path d="M13.5 11L17.5 7.2"/><path d="M13.5 13L17.5 16.8"/></svg>Pathways</div>
+        <div class="tab-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>Guide</div>
+      </div>
+
+    </div><!-- /mobile article view -->
+
+    <div class="annot" style="width:375px;">
+      <div class="annot-h">Article view — proposals</div>
+      <span class="annot-li">H1: text-[28px] font-semibold (was text-3xl md:text-5xl font-extrabold)</span>
+      <span class="annot-li">Section headers: font-semibold (was font-bold)</span>
+      <span class="annot-li">Body: text-sm (14px) leading-[1.55] (was text-base leading-8)</span>
+      <span class="annot-li">Single back button in header only — duplicate removed</span>
+      <span class="annot-li">FAB at bottom:76px = 60px tab bar + 16px gap (template shown for production CSS)</span>
+      <span class="annot-li">CTAs: neuro-* (replacing teal-*); emerald-* for positive clinical signals</span>
+      <span class="annot-li">No shadow-lg/shadow-xl on CTAs or sidebar — hairline borders only</span>
+    </div>
+  </div>
+
+  <!-- Desktop article view -->
+  <div>
+    <div class="viewport-label">DESKTOP 1240px — Article view "Stroke Basics"</div>
+    <div class="mock-frame f-desktop" style="position:relative;">
+
+      <!-- Desktop header with back -->
+      <header style="height:60px;background:white;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;padding:0 40px;gap:24px;position:sticky;top:0;z-index:40;">
+        <div style="display:flex;align-items:center;gap:32px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:28px;height:28px;border-radius:8px;background:#1746A2;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;font-family:serif;letter-spacing:-0.04em;">N</div>
+            <div style="font-size:15px;font-weight:600;letter-spacing:-0.02em;">Neuro<span style="color:#1746A2;">Wiki</span></div>
+          </div>
+          <div class="desk-nav">
+            <div class="desk-nav-item">Home</div>
+            <div class="desk-nav-item">Trials</div>
+            <div class="desk-nav-item">Calculators</div>
+            <div class="desk-nav-item">Pathways</div>
+            <div class="desk-nav-item active">Guide</div>
+          </div>
+        </div>
+        <div style="flex:1;"></div>
+        <!-- Breadcrumb back on desktop -->
+        <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:#94a3b8;">
+          <a style="color:#94a3b8;cursor:pointer;">Clinical Guides</a>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          <span style="color:#334155;font-weight:500;">Stroke Basics</span>
+        </div>
+      </header>
+
+      <!-- Desktop 3-col: sidebar + content + ToC -->
+      <div style="display:flex;max-width:100%;">
+
+        <!-- Sidebar nav -->
+        <div style="width:240px;flex-shrink:0;border-right:1px solid #f1f5f9;padding:24px 0;position:sticky;top:60px;max-height:calc(100vh - 60px);overflow-y:auto;">
+          <div style="padding:0 16px 16px;">
+            <div class="eyebrow" style="margin-bottom:4px;">Reference</div>
+            <div style="font-size:16px;font-weight:600;color:#0f172a;">Clinical Guides</div>
+          </div>
+          <div class="cat-label" style="padding-top:0;">Stroke</div>
+          <div class="guide-item active">Stroke Basics</div>
+          <div class="guide-item">Acute Ischemic Stroke</div>
+          <div class="guide-item">Hemorrhagic Stroke</div>
+          <div class="guide-item">Stroke Prevention</div>
+          <div class="cat-label" style="margin-top:8px;">Seizure</div>
+          <div class="guide-item">Status Epilepticus</div>
+          <div class="guide-item">Seizure First Aid</div>
+          <div class="cat-label" style="margin-top:8px;">Headache</div>
+          <div class="guide-item">Thunderclap Headache</div>
+          <div class="guide-item">Migraine Management</div>
+          <div class="cat-label" style="margin-top:8px;">Neuro Critical Care</div>
+          <div class="guide-item">ICP Management</div>
+          <div class="guide-item">Coma Assessment</div>
+        </div>
+
+        <!-- Main article content -->
+        <div style="flex:1;min-width:0;padding:40px 48px;max-width:760px;">
+
+          <div class="eyebrow" style="margin-bottom:8px;">Stroke · Fundamentals</div>
+          <!-- PROPOSAL: Article H1 — text-[34px] font-semibold (not extrabold) -->
+          <h1 class="article-h1-desktop">Stroke Basics</h1>
+          <p style="font-size:12px;color:#94a3b8;margin-bottom:32px;">Last reviewed 2026-02-14 · Reviewed by medical-scientist</p>
+
+          <!-- PROPOSAL: Body — text-sm leading-[1.55] -->
+          <h2 class="article-section-h-desktop">What is stroke?</h2>
+          <p class="article-body">Stroke is defined as a sudden neurological deficit caused by focal brain ischemia or hemorrhage, lasting more than 24 hours or leading to death. Ischemic stroke accounts for approximately 87% of all strokes and results from occlusion of a cerebral artery by thrombus or embolism.</p>
+          <p class="article-body">Transient ischemic attacks (TIAs) present identically but resolve within 24 hours with no permanent tissue injury on imaging. However, the risk of stroke within 48–72 hours of TIA is 3–10%, with the ABCD2 score helping to stratify urgency.</p>
+
+          <h2 class="article-section-h-desktop">Initial assessment</h2>
+          <p class="article-body">The National Institutes of Health Stroke Scale (NIHSS) provides a standardized measure of stroke severity on a 0–42 scale. Scores are used to guide thrombolysis and EVT eligibility decisions. A score of ≥6 typically indicates moderate-to-severe stroke warranting urgent imaging.</p>
+          <p class="article-body">Time is brain: approximately 1.9 million neurons are lost every minute during a large vessel occlusion without treatment. The phrase "time is brain" underpins the current emphasis on door-to-needle times under 45 minutes for eligible patients.</p>
+
+          <h2 class="article-section-h-desktop">Related tools</h2>
+          <!-- PROPOSAL: neuro-* CTAs replacing teal-* -->
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;">
+            <a class="article-cta" href="#">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              NIHSS Calculator
+            </a>
+            <a class="article-cta" href="#">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              ASPECTS Score
+            </a>
+            <a class="article-cta emerald" href="#">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              Stroke Code Pathway
+            </a>
+            <a class="article-cta" href="#">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6"/><path d="M10 3v6L5 19a2 2 0 002 3h10a2 2 0 002-3l-5-10V3"/></svg>
+              Related Trials (12)
+            </a>
+          </div>
+
+          <h2 class="article-section-h-desktop">Key evidence</h2>
+          <p class="article-body">The NINDS tPA trial (1995, NEJM) established IV alteplase within 3 hours as the standard of care. Subsequent trials extended this window to 4.5 hours (ECASS-III, 2008) and further with imaging-guided selection (EXTEND, 2019; WAKE-UP, 2018). For large vessel occlusions, five landmark RCTs in 2015 established EVT as the standard of care.</p>
+        </div>
+
+        <!-- ToC sidebar (desktop) — PROPOSAL: hairline border, no shadow-xl -->
+        <div style="width:220px;flex-shrink:0;padding:40px 24px;border-left:1px solid #f1f5f9;position:sticky;top:60px;max-height:calc(100vh - 60px);overflow-y:auto;">
+          <div class="eyebrow" style="margin-bottom:12px;">On this page</div>
+          <div>
+            <a class="toc-item">What is stroke?</a>
+            <a class="toc-item active">Initial assessment</a>
+            <a class="toc-item">Related tools</a>
+            <a class="toc-item">Key evidence</a>
+          </div>
+          <!-- PROPOSAL: no shadow-xl on ToC — hairline left border only -->
+          <div style="margin-top:24px;padding-top:20px;border-top:1px solid #f1f5f9;">
+            <div style="font-size:11px;color:#94a3b8;margin-bottom:8px;">Last reviewed</div>
+            <div style="font-size:13px;color:#475569;font-weight:500;">2026-02-14</div>
+          </div>
+          <!-- FAB scroll-to-top (desktop) — shown as sticky button in sidebar area, no tab bar needed -->
+          <div style="margin-top:20px;">
+            <button style="display:flex;align-items:center;gap:6px;font-size:12px;color:#94a3b8;background:none;border:none;cursor:pointer;padding:0;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+              Back to top
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /desktop 3-col -->
+
+    </div><!-- /desktop article view -->
+
+    <div class="annot" style="width:1240px;">
+      <div class="annot-h">Desktop article view — proposals</div>
+      <span class="annot-li">Article H1: 34px font-semibold — no text-5xl, no font-extrabold; within spec typography scale</span>
+      <span class="annot-li">Body text: 14px leading-1.55 — compact enough to scan at the bedside (not 16px leading-8)</span>
+      <span class="annot-li">Breadcrumb navigation replaces duplicate back button on desktop</span>
+      <span class="annot-li">ToC sidebar: 1px hairline left border — no shadow-xl</span>
+      <span class="annot-li">CTAs: neuro-* (cobalt) for navigation; emerald-* for positive-signal pathway CTA</span>
+      <span class="annot-li">Section headers: font-semibold 18px (not font-bold)</span>
+    </div>
+  </div>
+
+</div><!-- /stage-row article -->
+
+</body>
+</html>
