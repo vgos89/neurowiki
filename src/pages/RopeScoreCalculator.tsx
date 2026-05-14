@@ -18,8 +18,8 @@
  */
 
 import React, { useState, useCallback, useEffect } from 'react';
-import { Star, RefreshCw } from 'lucide-react';
-import { BackArrow } from '../components/calculators/BackArrow';
+import { CalculatorHeader } from '../components/calculators/CalculatorHeader';
+import { CalculatorFooter } from '../components/calculators/CalculatorFooter';
 import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
 import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useDrawerState } from '../hooks/useDrawerState';
@@ -221,87 +221,36 @@ export default function RopeScoreCalculator() {
       <h1 className="sr-only">RoPE Score Calculator</h1>
 
       {/* ── Sticky header — §1.1 ──────────────────────────────────────────── */}
-      <header
-        className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-100"
-        role="banner"
-      >
-        <div className="max-w-2xl mx-auto px-5 py-4">
-          <div className="flex items-center justify-between gap-2">
-
-            {/* Left cluster */}
-            <div className="flex items-center gap-3 min-w-0">
-              <button
-                type="button"
-                onClick={handleBack}
-                className="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0"
-                aria-label="Back to calculators"
-              >
-                <BackArrow />
-              </button>
-
-              <div className="min-w-0">
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                  RoPE Score
-                </div>
-
-                <div
-                  className="flex items-baseline gap-1.5 mt-0.5"
-                  aria-live="polite"
-                  aria-atomic="true"
-                >
-                  <span className="text-2xl font-semibold text-slate-900 tabular-nums leading-none">
-                    {hasInteracted ? result.score : '—'}
-                  </span>
-                  <span className="text-slate-400 text-sm leading-none">/ 10</span>
-
-                  {hasInteracted && (
-                    <span className={`text-xs font-medium ml-1.5 ${
- result.pfoAttributablePercent >= 60 ? 'text-emerald-700' :
- result.pfoAttributablePercent >= 40 ? 'text-amber-700' :
- 'text-slate-500'
- }`}>
-                      PFO-attributable {result.pfoAttributablePercent}%
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Right cluster */}
-            <div className="flex items-center gap-0.5 flex-shrink-0">
-              <button
-                type="button"
-                onClick={handleFavToggle}
-                className="p-2 rounded-full hover:bg-slate-50 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
-                aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
-              >
-                <Star
-                  size={18}
-                  className={isFav ? 'text-amber-400 fill-amber-400' : 'text-slate-400'}
-                  aria-hidden="true"
-                />
-              </button>
-
-              <button
-                type="button"
-                onClick={handleReset}
-                className="p-2 rounded-full hover:bg-slate-50 transition-colors text-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center"
-                aria-label="Reset calculator"
-              >
-                <RefreshCw size={17} aria-hidden="true" />
-              </button>
-
-              <button
-                type="button"
-                onClick={handleCopy}
-                className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px] flex items-center"
-              >
-                Copy
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <CalculatorHeader
+        name="RoPE Score"
+        scoreDisplay={
+          <>
+            <span className="text-2xl font-semibold text-slate-900 tabular-nums leading-none">
+              {hasInteracted ? result.score : '—'}
+            </span>
+            <span className="text-slate-400 text-sm leading-none">/ 10</span>
+            {hasInteracted && (
+              <span className={`text-xs font-medium ml-1.5 ${
+                result.pfoAttributablePercent >= 60 ? 'text-emerald-700' :
+                result.pfoAttributablePercent >= 40 ? 'text-amber-700' :
+                'text-slate-500'
+              }`}>
+                PFO-attributable {result.pfoAttributablePercent}%
+              </span>
+            )}
+          </>
+        }
+        scoreAriaLabel={
+          hasInteracted
+            ? `RoPE Score ${result.score} of 10. PFO-attributable fraction ${result.pfoAttributablePercent}%.`
+            : 'RoPE Score — not yet calculated'
+        }
+        onBack={handleBack}
+        onReset={handleReset}
+        onCopy={handleCopy}
+        onFavToggle={handleFavToggle}
+        isFav={isFav}
+      />
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}
       <main className="max-w-2xl mx-auto px-5 pt-6 pb-4">
@@ -386,15 +335,15 @@ export default function RopeScoreCalculator() {
         </div>{/* end space-y-10 */}
 
         {/* Page footer — §1.2 */}
-        <footer className="mt-14 pt-6 border-t border-slate-100">
-          <p className="text-xs text-slate-400 leading-relaxed">
-            <cite>{ROPE_CITATION.authors}. {ROPE_CITATION.title}. {ROPE_CITATION.journal}. {ROPE_CITATION.year};{ROPE_CITATION.volume}({ROPE_CITATION.issue}):{ROPE_CITATION.pages}.</cite>{' '}
-            <a href={`https://doi.org/${ROPE_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-neuro-600 hover:underline ml-0.5">DOI</a>
-          </p>
-          <p className="mt-3 text-xs text-slate-400 leading-relaxed">
-            Educational use only. For cryptogenic stroke when PFO is detected or suspected. Does not replace multidisciplinary decision-making for PFO closure.
-          </p>
-        </footer>
+        <CalculatorFooter
+          citation={
+            <>
+              <cite>{ROPE_CITATION.authors}. {ROPE_CITATION.title}. {ROPE_CITATION.journal}. {ROPE_CITATION.year};{ROPE_CITATION.volume}({ROPE_CITATION.issue}):{ROPE_CITATION.pages}.</cite>{' '}
+              <a href={`https://doi.org/${ROPE_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-neuro-600 hover:underline ml-0.5">DOI</a>
+            </>
+          }
+          disclaimer="Educational use only. For cryptogenic stroke when PFO is detected or suspected. Does not replace multidisciplinary decision-making for PFO closure."
+        />
 
         {/* Drawer spacer — §1.3 */}
         <div className={drawerOpen ? 'drawer-spacer-expanded' : 'drawer-spacer-collapsed'} />

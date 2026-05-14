@@ -21,8 +21,8 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Star, RefreshCw } from 'lucide-react';
-import { BackArrow } from '../components/calculators/BackArrow';
+import { CalculatorHeader } from '../components/calculators/CalculatorHeader';
+import { CalculatorFooter } from '../components/calculators/CalculatorFooter';
 import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
 import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useDrawerState } from '../hooks/useDrawerState';
@@ -276,88 +276,32 @@ const AspectScoreCalculator: React.FC = () => {
       <h1 className="sr-only">ASPECTS Score Calculator — Alberta Stroke Program Early CT Score</h1>
 
       {/* ── Sticky header — §1.1 ──────────────────────────────────────────── */}
-      <header
-        className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-100"
-        role="banner"
-      >
-        <div className="max-w-2xl mx-auto px-5 py-4">
-          <div className="flex items-center justify-between gap-2">
-
-            {/* Left cluster */}
-            <div className="flex items-center gap-3 min-w-0">
-              <button
-                type="button"
-                onClick={handleBack}
-                className="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0"
-                aria-label="Back to calculators"
-              >
-                <BackArrow />
-              </button>
-
-              <div className="min-w-0">
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                  ASPECTS Score
-                </div>
-
-                <div
-                  className="flex items-baseline gap-1.5 mt-0.5"
-                  aria-live="polite"
-                  aria-atomic="true"
-                  aria-label={`ASPECTS Score ${score} out of 10. ${scoreInfo.label}.`}
-                >
-                  <span className="text-2xl font-semibold text-slate-900 tabular-nums leading-none">
-                    {score}
-                  </span>
-                  <span className="text-slate-400 text-sm leading-none">/ 10</span>
-
-                  {involved.size > 0 && (
-                    <span className={`text-xs font-medium ml-1.5 ${
- score >= 8 ? 'text-emerald-700' :
- score >= 6 ? 'text-yellow-700' :
- score >= 3 ? 'text-orange-700' : 'text-red-600'
- }`}>
-                      {scoreInfo.label}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Right cluster */}
-            <div className="flex items-center gap-0.5 flex-shrink-0">
-              <button
-                type="button"
-                onClick={handleFavToggle}
-                className="p-2 rounded-full hover:bg-slate-50 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
-                aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
-              >
-                <Star
-                  size={18}
-                  className={isFav ? 'text-amber-400 fill-amber-400' : 'text-slate-400'}
-                  aria-hidden="true"
-                />
-              </button>
-
-              <button
-                type="button"
-                onClick={handleReset}
-                className="p-2 rounded-full hover:bg-slate-50 transition-colors text-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center"
-                aria-label="Reset calculator"
-              >
-                <RefreshCw size={17} aria-hidden="true" />
-              </button>
-
-              <button
-                type="button"
-                onClick={handleCopy}
-                className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px] flex items-center"
-              >
-                Copy
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <CalculatorHeader
+        name="ASPECTS Score"
+        scoreDisplay={
+          <>
+            <span className="text-2xl font-semibold text-slate-900 tabular-nums leading-none">
+              {score}
+            </span>
+            <span className="text-slate-400 text-sm leading-none">/ 10</span>
+            {involved.size > 0 && (
+              <span className={`text-xs font-medium ml-1.5 ${
+                score >= 8 ? 'text-emerald-700' :
+                score >= 6 ? 'text-yellow-700' :
+                score >= 3 ? 'text-orange-700' : 'text-red-600'
+              }`}>
+                {scoreInfo.label}
+              </span>
+            )}
+          </>
+        }
+        scoreAriaLabel={`ASPECTS Score ${score} out of 10. ${scoreInfo.label}.`}
+        onBack={handleBack}
+        onReset={handleReset}
+        onCopy={handleCopy}
+        onFavToggle={handleFavToggle}
+        isFav={isFav}
+      />
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}
       <main className="max-w-2xl mx-auto px-5 pt-6 pb-4">
@@ -489,26 +433,26 @@ const AspectScoreCalculator: React.FC = () => {
         </div>{/* end space-y-10 */}
 
         {/* Page footer — §1.2 */}
-        <footer className="mt-14 pt-6 border-t border-slate-100">
-          <p className="text-xs text-slate-400 leading-relaxed">
-            <cite>
-              Barber PA, et al. Validity and reliability of a quantitative computed tomography score in predicting outcome of hyperacute stroke before thrombolytic therapy.{' '}
-              <em>Lancet.</em> 2000;355(9216):1670–1674.
-            </cite>{' '}
-            <a
-              href="https://doi.org/10.1016/s0140-6736(00)02237-6"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-neuro-600 hover:underline ml-0.5"
-            >
-              doi:10.1016/s0140-6736(00)02237-6
-            </a>
-            {' · Updated per 2026 AHA/ASA Stroke Guidelines (Prabhakaran et al. DOI: 10.1161/STR.0000000000000513).'}
-          </p>
-          <p className="mt-3 text-xs text-slate-400 leading-relaxed">
-            Educational use only. This tool is for clinical decision support and education. It is not a substitute for professional medical judgment or formal radiology interpretation. Do not enter patient-identifying information. Verify independently when used in patient care.
-          </p>
-        </footer>
+        <CalculatorFooter
+          citation={
+            <>
+              <cite>
+                Barber PA, et al. Validity and reliability of a quantitative computed tomography score in predicting outcome of hyperacute stroke before thrombolytic therapy.{' '}
+                <em>Lancet.</em> 2000;355(9216):1670–1674.
+              </cite>{' '}
+              <a
+                href="https://doi.org/10.1016/s0140-6736(00)02237-6"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-neuro-600 hover:underline ml-0.5"
+              >
+                doi:10.1016/s0140-6736(00)02237-6
+              </a>
+              {' · Updated per 2026 AHA/ASA Stroke Guidelines (Prabhakaran et al. DOI: 10.1161/STR.0000000000000513).'}
+            </>
+          }
+          disclaimer="Educational use only. This tool is for clinical decision support and education. It is not a substitute for professional medical judgment or formal radiology interpretation. Do not enter patient-identifying information. Verify independently when used in patient care."
+        />
 
         {/* Drawer spacer — §1.3 */}
         <div className={drawerOpen ? 'drawer-spacer-expanded' : 'drawer-spacer-collapsed'} />

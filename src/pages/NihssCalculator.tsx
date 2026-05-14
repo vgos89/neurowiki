@@ -21,8 +21,8 @@
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
-import { Star, RefreshCw } from 'lucide-react';
-import { BackArrow } from '../components/calculators/BackArrow';
+import { CalculatorHeader } from '../components/calculators/CalculatorHeader';
+import { CalculatorFooter } from '../components/calculators/CalculatorFooter';
 import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
 import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useFavorites } from '../hooks/useFavorites';
@@ -317,113 +317,46 @@ const NihssCalculator: React.FC = () => {
       <h1 className="sr-only">NIHSS Calculator — NIH Stroke Scale Online</h1>
 
       {/* ── Sticky header — CALCULATOR_SPEC.md §1.1 + §3.1 ──────────────── */}
-      <header
-        ref={nihssHeaderRef}
-        className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-100"
-        role="banner"
-      >
-        <div className="max-w-2xl mx-auto px-5 py-3">
-
-          {/* Row 1: back + score + actions (§1.1) */}
-          <div className="flex items-center justify-between gap-2">
-
-            {/* Left cluster: back arrow + score block */}
-            <div className="flex items-center gap-3 min-w-0">
-              <button
-                type="button"
-                onClick={handleBack}
-                className="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0"
-                aria-label="Back to calculators"
-              >
-                <BackArrow />
-              </button>
-
-              <div className="min-w-0">
-                {/* Calculator name label — §1.1 */}
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                  NIH Stroke Scale
-                </div>
-
-                {/* Score display row — §1.1 */}
-                <div
-                  className="flex items-baseline gap-1.5 mt-0.5"
-                  aria-live="polite"
-                  aria-atomic="true"
-                  aria-label={
-                    isComplete
-                      ? `NIHSS ${total} of 42. ${SEVERITY_LABEL[severity]}.`
-                      : 'NIH Stroke Scale — not yet calculated'
-                  }
-                >
-                  <span className="text-2xl font-semibold text-slate-900 tabular-nums leading-none">
-                    {isComplete ? total : '—'}
-                  </span>
-                  <span className="text-slate-400 text-sm leading-none">/ 42</span>
-
-                  {/* Severity text — only on moderate+ (§1.1) */}
-                  {isComplete && severity === 'moderate' && (
-                    <span className="text-xs font-medium text-amber-700 ml-1.5">
-                      Moderate
-                    </span>
-                  )}
-                  {isComplete && (severity === 'moderate-severe' || severity === 'severe') && (
-                    <span className="text-xs font-medium text-red-600 ml-1.5">
-                      {SEVERITY_LABEL[severity]}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Right cluster: fav, reset, copy — §1.1 */}
-            <div className="flex items-center gap-0.5 flex-shrink-0">
-              <button
-                type="button"
-                onClick={handleFavToggle}
-                className="p-2 rounded-full hover:bg-slate-50 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
-                aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
-              >
-                <Star
-                  size={18}
-                  className={isFav ? 'text-amber-400 fill-amber-400' : 'text-slate-400'}
-                  aria-hidden="true"
-                />
-              </button>
-
-              <button
-                type="button"
-                onClick={handleReset}
-                className="p-2 rounded-full hover:bg-slate-50 transition-colors text-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center"
-                aria-label="Reset calculator"
-              >
-                <RefreshCw size={17} aria-hidden="true" />
-              </button>
-
-              <button
-                type="button"
-                onClick={copyNihss}
-                className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px] flex items-center"
-              >
-                Copy
-              </button>
-            </div>
-          </div>
-
-          {/* Row 2: LVO cluster + mode toggle — §3.1 */}
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
-
+      <CalculatorHeader
+        name="NIH Stroke Scale"
+        headerRef={nihssHeaderRef}
+        scoreDisplay={
+          <>
+            <span className="text-2xl font-semibold text-slate-900 tabular-nums leading-none">
+              {isComplete ? total : '—'}
+            </span>
+            <span className="text-slate-400 text-sm leading-none">/ 42</span>
+            {isComplete && severity === 'moderate' && (
+              <span className="text-xs font-medium text-amber-700 ml-1.5">
+                Moderate
+              </span>
+            )}
+            {isComplete && (severity === 'moderate-severe' || severity === 'severe') && (
+              <span className="text-xs font-medium text-red-600 ml-1.5">
+                {SEVERITY_LABEL[severity]}
+              </span>
+            )}
+          </>
+        }
+        scoreAriaLabel={
+          isComplete
+            ? `NIHSS ${total} of 42. ${SEVERITY_LABEL[severity]}.`
+            : 'NIH Stroke Scale — not yet calculated'
+        }
+        secondaryRow={
+          <>
             {/* LVO cluster */}
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 LVO
               </span>
               <span className={`text-sm font-semibold leading-none ${
- lvoData.label === 'High'
- ? 'text-red-600'
- : lvoData.label === 'Moderate'
- ? 'text-amber-700'
- : 'text-green-600'
- }`}>
+                lvoData.label === 'High'
+                  ? 'text-red-600'
+                  : lvoData.label === 'Moderate'
+                  ? 'text-amber-700'
+                  : 'text-green-600'
+              }`}>
                 {lvoData.label} · {lvoData.probability}%
               </span>
               <div className="relative" ref={lvoTooltipRef}>
@@ -496,10 +429,10 @@ const NihssCalculator: React.FC = () => {
                 type="button"
                 onClick={() => setNihssMode('rapid')}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
- nihssMode === 'rapid'
- ? 'bg-white text-slate-900 shadow-sm'
- : 'text-slate-500 hover:text-slate-900'
- }`}
+                  nihssMode === 'rapid'
+                    ? 'bg-white text-slate-900 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
               >
                 Rapid
               </button>
@@ -507,17 +440,22 @@ const NihssCalculator: React.FC = () => {
                 type="button"
                 onClick={() => setNihssMode('detailed')}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
- nihssMode === 'detailed'
- ? 'bg-white text-slate-900 shadow-sm'
- : 'text-slate-500 hover:text-slate-900'
- }`}
+                  nihssMode === 'detailed'
+                    ? 'bg-white text-slate-900 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
               >
                 Detailed
               </button>
             </div>
-          </div>
-        </div>
-      </header>
+          </>
+        }
+        onBack={handleBack}
+        onReset={handleReset}
+        onCopy={copyNihss}
+        onFavToggle={handleFavToggle}
+        isFav={isFav}
+      />
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}
       <main className="max-w-2xl mx-auto px-5 pt-6 pb-4">
@@ -583,15 +521,10 @@ const NihssCalculator: React.FC = () => {
         </div>
 
         {/* Footer — §1.2 */}
-        <footer className="mt-14 pt-6 border-t border-slate-100">
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Brott T et al. Measurements of acute cerebral infarction: a clinical examination scale.
-            Stroke. 1989;20(7):864–870.
-          </p>
-          <p className="mt-3 text-xs text-slate-400 leading-relaxed">
-            Educational use only. Not a substitute for clinical judgment.
-          </p>
-        </footer>
+        <CalculatorFooter
+          citation="Brott T et al. Measurements of acute cerebral infarction: a clinical examination scale. Stroke. 1989;20(7):864–870."
+          disclaimer="Educational use only. Not a substitute for clinical judgment."
+        />
 
         {/* Drawer spacer — prevents content hiding behind fixed drawer (§1.3) */}
         <div style={{ height: drawerOpen ? '380px' : '80px' }} aria-hidden="true" />
