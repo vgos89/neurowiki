@@ -291,16 +291,24 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 ### LAYER 5 — Polish (blocked until Layer 4 complete)
 
-### L5.6 — CalculatorShell extraction — Class D
-- **Status:** planned — 2026-05-13
-- **User-visible goal:** none (refactor; no behavior change)
-- **Non-goals:** no clinical content changes, no new calculator pages, no scoring logic changes
-- **Files likely touched:** src/components/calculators/CalculatorShell.tsx (new), src/components/calculators/Chevron.tsx (new), src/components/calculators/BackArrow.tsx (new), src/lib/calculators/severityTokens.ts (new), all 8 existing calculator pages (NIHSS, ICH, ABCD2, GCS, Heidelberg, ASPECTS, HAS-BLED, RoPE, Boston) migrated to shell
-- **Acceptance checks:** tsc clean · build green · all 8 calculators render identically post-migration · diff against pre-migration screenshots (or DOM snapshot) shows zero visual change · drawer state machine + portal positioning shared, not duplicated
+### L5.6 — CalculatorShell extraction — Class D — DONE (Phase 1: 3f1bdc5 · Phase 2: 4b61105 · Phase 3: 5572551)
+- **Status:** merged 2026-05-13
+- **What shipped:** All 3 phases landed. Approximately 811 line net reduction across 9 page files; +593 lines shared shell. New: Chevron, BackArrow, CalculatorDrawer (with State A/B/C + portal + drawer-chevron-hint/drawer-discovery-chevron animation), CalculatorToast, CalculatorHeader (with C3 a11y + secondaryRow slot for NIHSS), CalculatorFooter, useDrawerState hook (discriminated-union input), severityTokens module. ADR-008 documents the 3 trade-offs. One known visual delta: NIHSS collapsed stat color now neutral (aligns with other 8 calcs).
+- **Migrated:** All 9 spec-v1.1 calculators: Abcd2, Aspect, Boston, GCS, HAS-BLED, Heidelberg, ICH, NIHSS, RoPE.
 - **Clinical impact:** none
-- **Rollback plan:** git revert; shell is additive — old inline code paths can be restored from history
-- **Blocking note:** No 9th calculator may ship on the inline-everything pattern. L5.6 must land before any new calculator (e.g., a future seizure scale, NIH-toolbox cognitive battery, or similar) is added.
 - **Origin:** filed as mandatory follow-up from arch-l55c-aspects-boston-rebuild.md (architect: claude-opus-4-7, 2026-05-13)
+
+### L5.6.1 — Migrate Cha2ds2VascCalculator onto CalculatorShell — Class C
+- **Status:** planned — 2026-05-13
+- **User-visible goal:** none (refactor)
+- **Origin:** L5.6 architect review condition C6. Cha2ds2VascCalculator currently uses the inline-everything pattern (own setToast, own Drawer, own header markup) but was excluded from L5.6 because it predates spec v1.1.
+- **Goal:** Migrate Cha2ds2VascCalculator to consume the L5.6 shell (CalculatorHeader + CalculatorDrawer + CalculatorToast + useDrawerState). This validates the shell is general enough for a 10th calculator and retires Cha2ds2Vasc's remaining inline copies.
+- **Files likely touched:** src/pages/Cha2ds2VascCalculator.tsx
+- **Acceptance checks:** tsc clean · build green · CHA2DS2-VASc renders identically to pre-migration · drawer state machine wired correctly (CHA2DS2-VASc likely uses partial-complete mode; verify by reading the file)
+- **Non-goals:** no clinical content changes; no scoring logic changes
+- **Clinical impact:** none
+- **Rollback plan:** git revert
+- **Blocking note:** None — L5.6 has landed; this is the validation task that confirms the shell is general enough.
 
 - [ ] [L5] Typography audit
 - [ ] [L5] Spacing consistency audit
@@ -960,6 +968,17 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-13 — L5.6 CalculatorShell extraction — Class D (Phase 1: 3f1bdc5 · Phase 2: 4b61105 · Phase 3: 5572551)
+  - All 9 spec-v1.1 calculators migrated onto shared shell: Abcd2, Aspect, Boston, GCS, HAS-BLED, Heidelberg, ICH, NIHSS, RoPE.
+  - New shared infrastructure (8 files, +593 lines): Chevron, BackArrow, CalculatorDrawer (owns portal + State A/B/C + animation classes + stateBTappable + justCompleted), CalculatorToast (z-[60] portal), CalculatorHeader (ReactNode scoreDisplay slot, secondaryRow slot, scoreAriaLabel per architect C3), CalculatorFooter (citation + disclaimer + optional related slot), useDrawerState (discriminated-union input: binary | partial-complete, returns state/drawerOpen/reset/toast/showToast), severityTokens (interface + shared shadow constants + getInlineSeverityColor utility).
+  - Architect review approve-with-conditions: docs/reviews/arch-l56-calculator-shell.md. All conditions C1-C6 applied or filed as follow-ups. ADR-008 documents the 3 trade-offs (interface-only severity-token consolidation, ReactNode-slot header, discriminated-union drawer hook).
+  - Net: ~-811 lines across page files; +593 lines shared shell. Total duplication retired: ~7 inline copies of Chevron/BackArrow/drawer/header/footer/toast/severity scaffolding.
+  - Phased commits (architect Q7): one commit per phase covering all 9 files. Reverts apply in reverse order (Phase 3 → 2 → 1).
+  - One known visual delta: NIHSS State C collapsed stat color now neutral text-slate-900 (aligns with other 8 calculators per spec; severity still communicated via score number color in sticky header).
+  - Accessibility improvements: Boston, HAS-BLED, RoPE gained proper scoreAriaLabel strings.
+  - QA gates each phase: tsc clean · build clean · check:claims clean · check:routes 42 validated.
+  - Mobile QA at 375px: ready (mobile-first-developer ran post-Phase-3, 16-item gate including L5.6-specific checks for drawer-chevron-hint animation, NIHSS two-row header, ReactNode scoreDisplay variants).
+
 - [x] 2026-05-13 — L-dm-cleanup — global dark-mode removal (Class C) — pending commit SHA
   - Removed all `dark:*` Tailwind utility classes across 44 source files (1,583 tokens stripped). Removed the `@custom-variant dark` block + `.dark .glass-card` + `.dark .active-pill` rules from index.css. Finalizes the previously-decided light-only theme that had been only partially cleaned up.
   - No theme toggle ever existed; no behavior change visible to users.
