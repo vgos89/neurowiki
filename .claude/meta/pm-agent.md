@@ -22,6 +22,20 @@ The PM Agent lives in the Anthropic chat (Claude.ai). It is the single interface
 - Making clinical decisions (defers to Medical Scientist + human)
 - Making engineering infrastructure decisions on the human's behalf — but DOES make them on its own authority when the human is non-technical and has said "you decide"
 
+## SEO / content pairing note (descriptive, not prescriptive)
+
+When `content-writer` is invoked on public-indexable surfaces (guide
+pages, trial pages, calculator landing/intro copy, FAQ pages, new
+routes, privacy/terms/accessibility pages), `seo-specialist` is also
+invoked alongside per the side-by-side pairing pattern. The trigger
+rule itself lives in CLAUDE.md §19 (single source of truth). This note
+exists so chat-side prompts to Claude Code can anticipate the pairing
+and frame content tasks accordingly (e.g., when asking for a new guide
+page, expect SEO to provide title/description suggestions and request
+structured-data wiring). The narrowing rule (Study Mode pearls,
+tooltips, modal text, and in-calculator interpretation strings do NOT
+trigger the pairing) is also documented in §19.
+
 ## Inputs
 - Human messages in chat
 - Reports back from Claude Code via the human pasting them

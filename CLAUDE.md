@@ -275,7 +275,7 @@ True subagents live in `.claude/agents/`. Each has frontmatter-enforced scope: `
 | 5 | `design-guardian` | `docs/specs/*.md` creation or change | Read, Write, Edit, Grep, Glob |
 | 6 | `librarian` | Post-flight after every swarm. File scope: TASKS.md, ROADMAP.md, docs/reviews/, docs/NEUROWIKI.md, docs/link-graph.json only. | Read, Write, Edit, Grep, Glob |
 | 7 | `accessibility-specialist` | Interactive UI, ARIA, keyboard nav, focus management | Read, Write, Edit, Glob, Grep |
-| 8 | `seo-specialist` | New routes, `src/seo/`, structured data, metadata, pre-publish | Read, Write, Edit, Glob, Grep |
+| 8 | `seo-specialist` | New routes, `src/seo/`, structured data, metadata, pre-publish · **co-fires with `content-writer` on public-indexable content** (guide pages, trial pages, calculator landing/intro copy, FAQ pages). Does NOT fire on Study Mode pearls, tooltips, modal text, or in-calculator interpretation strings. | Read, Write, Edit, Glob, Grep |
 | 9 | `compliance-legal` | Auth flows, privacy/ToS, PHI paths, disclaimers, GDPR/CCPA. Reviewer-first — produces findings, delegates drafting. | Read, Grep, Glob |
 | 10 | `system-architect` | Class D/E plan review; structural decisions, composability, duplication prevention | Read, Grep, Glob (read-only) |
 
@@ -480,6 +480,7 @@ What must exist after work is done, beyond the code itself:
 | A | None |
 | B | One-line commit message · committed and pushed to remote |
 | C | Bilingual PR description · test for new logic · `TASKS.md` status update · committed and pushed · PR opened |
+| **C / C-clinical (public-indexable content)** | C artifacts **+ `### @seo-specialist — Sign-off` block in PR body** when the change touches guide pages, trial pages, calculator landing/intro copy, FAQ pages, or new routes. Use the template in `.claude/agents/seo-specialist.md`. Skip for changes scoped only to Study Mode pearls, tooltips, modal text, or in-calculator interpretation strings (non-indexable). |
 | D | C artifacts + ADR in `docs/adrs/` + rollback note + migration plan (if schema) + **architect review artifact (§17)** |
 | E | D artifacts + citation record update + `last_reviewed` refresh via §13.6 + **clinical review artifact (§17)** + rollback plan |
 
@@ -539,8 +540,8 @@ When V speaks in plain English, pattern-match against this table **before** clas
 | "update / fix / correct the clinical content / guidelines / thresholds / interpretation" | `evidence-verifier` → `medical-scientist` → `clinical-reviewer` · `stroke-guidelines` |
 | "add / rebuild / update a trial page" or "here is the PDF for [trial]" | `evidence-verifier` → `trial-statistician` → `medical-scientist` → `clinical-reviewer` · `clinical-trial-audit`, `trial-statistics` |
 | "the NNT / statistic / p-value / CI is wrong or invalid" | `trial-statistician` → `medical-scientist` → `clinical-reviewer` · `trial-statistics` |
-| "write / update / add a pearl / study mode content / clinical question" | `medical-scientist` + `content-writer` + `clinical-reviewer` · `stroke-guidelines`, `humanizer` |
-| "rewrite / improve / fix this copy / text / prose / wording" | `content-writer` · `humanizer`, `design:ux-copy` |
+| "write / update / add a pearl / study mode content / clinical question" | `medical-scientist` + `content-writer` + `clinical-reviewer` (+ `seo-specialist` if public-indexable, e.g. /trials/q/* question pages) · `stroke-guidelines`, `humanizer`, `seo-audit-execution` (if SEO co-fires) |
+| "rewrite / improve / fix this copy / text / prose / wording" | `content-writer` (+ `seo-specialist` if public-indexable surface) · `humanizer`, `design:ux-copy`, `seo-audit-execution` (if SEO co-fires) |
 | "add a new route / page / screen / calculator" | `ui-architect` + `seo-specialist` · `routing`, `design-tokens` |
 | "refactor / restructure / reorganize / decompose [X]" | `system-architect` (plan review required first) · `engineering:architecture` |
 | "tests are failing / run the tests / write tests for [X]" | `quality-assurance` · `testing-patterns`, `engineering:testing-strategy` |
@@ -550,7 +551,7 @@ When V speaks in plain English, pattern-match against this table **before** clas
 | "review this code / PR / diff" | `system-architect` · `engineering:code-review` |
 | "update the docs / README / TASKS / ROADMAP / NEUROWIKI" | `librarian` · `engineering:documentation` |
 | "is this GDPR / HIPAA / compliant / do we need a disclaimer" | `compliance-legal` · `compliance-public-medical` |
-| "add / update the privacy / terms / accessibility page" | `compliance-legal` + `content-writer` + `ui-architect` · `compliance-public-medical` |
+| "add / update the privacy / terms / accessibility page" | `compliance-legal` + `content-writer` + `ui-architect` + `seo-specialist` · `compliance-public-medical`, `seo-audit-execution` |
 | "the citation is stale / wrong / needs updating" | `evidence-verifier` → `medical-scientist` → `clinical-reviewer` · `clinical-trial-audit` |
 | "is this accessible / check accessibility / WCAG" | `accessibility-specialist` · `accessibility-audit`, `design:accessibility-review` |
 

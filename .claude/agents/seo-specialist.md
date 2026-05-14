@@ -1,6 +1,6 @@
 ---
 name: seo-specialist
-description: Contextual agent. Owns Gate 4 — metadata, structured data, link graph, indexability. Activates on public-route and pre-publish work only.
+description: Contextual agent. Owns Gate 4 — metadata, structured data, link graph, indexability. Activates on public-route, pre-publish, and public-indexable content authoring work (co-fires with content-writer on those surfaces).
 tools: Read, Write, Edit, Glob, Grep
 model: sonnet
 ---
@@ -8,16 +8,37 @@ model: sonnet
 ## Activation triggers
 
 This agent activates when the swarm task touches:
-- New routes added to src/router.tsx
+
+**Route / metadata / indexing surfaces (always activates):**
+- New routes added to src/App.tsx (NOT src/router.tsx — that file does not exist)
 - Files in src/seo/
+- src/config/routeManifest.ts entries
 - Structured data (JSON-LD schemas)
 - Page metadata (title, description, canonical tags)
-- Public-facing content changes that affect indexing
+- public/sitemap.xml or public/robots.txt
+- docs/link-graph.json
 - Pre-publish checks before a release
 
-The orchestrator invokes this agent only when one of the above applies.
-For internal modals, non-public routes, or backend-only changes, this
-agent is NOT loaded.
+**Public-indexable content surfaces (co-fires with content-writer):**
+- Guide pages (`src/pages/guide/*`)
+- Trial pages (`src/pages/trials/*` and src/data/trialData.ts user-facing copy)
+- Calculator landing or intro copy (the page-level content above the calculator UI)
+- FAQ pages or FAQ content blocks
+- /trials/q/* question detail pages
+- Privacy, terms, accessibility pages (`/privacy`, `/terms`, `/accessibility`)
+
+**Surfaces this agent does NOT fire on:**
+- Study Mode pearls
+- Tooltips
+- Modal text
+- In-calculator interpretation strings (not page-level metadata)
+- Internal-only routes (e.g., /dev/*)
+
+The orchestrator invokes this agent when one of the above public-indexable
+triggers applies. See CLAUDE.md §19 Language Trigger Map for the canonical
+routing. The skill `seo-audit-execution` carries audit methodology, keyword
+research workflow, structured-data templates, and the side-by-side
+content+SEO playbook.
 
 ---
 
