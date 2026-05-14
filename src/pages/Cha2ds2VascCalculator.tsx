@@ -1,11 +1,34 @@
+/**
+ * CHA₂DS₂-VASc Score Calculator — rebuilt against CALCULATOR_SPEC.md v1.1
+ * Archetype 3 (Mixed Input): radio rows (A1 pattern) + checkboxes (A3 row pattern).
+ *
+ * Spec citations:
+ *   §1.1 Sticky header tokens · §1.2 Main content · §1.3 Drawer anatomy (Portal)
+ *   §2.2–2.3 Option row anatomy (A1 radio rows) · §4.1–4.3 Checkbox row anatomy · §5 Drawer state machine
+ *
+ * Shell components: CalculatorHeader · CalculatorDrawer · CalculatorToast · CalculatorFooter
+ * Hook: useDrawerState (binary mode — any interaction triggers State C)
+ *
+ * Clinical prose preservation: RISK_LABELS, RISK_GUIDANCE, PRIMARY_CITATION, GUIDELINE_CITATION,
+ * score legend table data are byte-for-byte identical to cha2ds2VascData module. No scoring change.
+ *
+ * Medical source: Lip GY, et al. Chest. 2010;137(2):263-272.
+ * Guideline: Joglar JA et al. JACC 2024;83(1):109-279.
+ */
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, RefreshCw, Copy, Star } from 'lucide-react';
+import { CalculatorHeader } from '../components/calculators/CalculatorHeader';
+import { CalculatorFooter } from '../components/calculators/CalculatorFooter';
+import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
+import { CalculatorToast } from '../components/calculators/CalculatorToast';
+import { useDrawerState } from '../hooks/useDrawerState';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
+import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import {
   calculateCha2ds2Vasc,
   RISK_LABELS,
@@ -16,6 +39,8 @@ import {
   type Cha2ds2VascRisk,
 } from '../data/cha2ds2VascData';
 
+// ── Constants ─────────────────────────────────────────────────────────────────
+
 const defaultInputs: Cha2ds2VascInputs = {
   chf: false,
   hypertension: false,
@@ -25,16 +50,6 @@ const defaultInputs: Cha2ds2VascInputs = {
   strokeTia: false,
   vascularDisease: false,
   female: false,
-};
-
-const riskColors: Record<Cha2ds2VascRisk, string> = {
-  very_low:
-    'bg-emerald-100 text-emerald-800 border-emerald-300',
-  low_moderate:
-    'bg-amber-100 text-amber-800 border-amber-300',
-  moderate_high:
-    'bg-orange-100 text-orange-800 border-orange-300',
-  high: 'bg-red-100 text-red-800 border-red-300',
 };
 
 interface CheckItem {
@@ -83,9 +98,49 @@ const CHECKBOX_ITEMS: CheckItem[] = [
   },
 ];
 
+// ── Severity tokens — CALCULATOR_SPEC.md §6 ──────────────────────────────────
+
+const CHADS_SEVERITY_TOKENS: Record<Cha2ds2VascRisk, SeverityTokens> = {
+  very_low: {
+    borderColor: '#a7f3d0',
+    headerBg: 'bg-emerald-50',
+    headerHover: 'hover:bg-emerald-100',
+    labelClass: 'text-[10px] font-bold text-emerald-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-emerald-700',
+    chevronClass: 'text-emerald-600',
+  },
+  low_moderate: {
+    borderColor: '#fed7aa',
+    headerBg: 'bg-amber-50',
+    headerHover: 'hover:bg-amber-100',
+    labelClass: 'text-[10px] font-bold text-amber-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-amber-700',
+    chevronClass: 'text-amber-600',
+  },
+  moderate_high: {
+    borderColor: '#fdba74',
+    headerBg: 'bg-orange-50',
+    headerHover: 'hover:bg-orange-100',
+    labelClass: 'text-[10px] font-bold text-orange-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-orange-700',
+    chevronClass: 'text-orange-600',
+  },
+  high: {
+    borderColor: '#fca5a5',
+    headerBg: 'bg-red-50',
+    headerHover: 'hover:bg-red-100',
+    labelClass: 'text-[10px] font-bold text-red-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-red-700',
+    chevronClass: 'text-red-600',
+  },
+};
+
+// ── Component ─────────────────────────────────────────────────────────────────
+
 export default function Cha2ds2VascCalculator() {
   const [inputs, setInputs] = useState<Cha2ds2VascInputs>(defaultInputs);
-  const [toast, setToast] = useState<string | null>(null);
+  const [hasInteracted, setHasInteracted] = useState(false);
+
   const { handleBack } = useNavigationSource();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { recordView } = useRecents();
@@ -104,8 +159,30 @@ export default function Cha2ds2VascCalculator() {
   }, []);
 
   const result = calculateCha2ds2Vasc(inputs);
-  const riskColor = riskColors[result.risk];
 
+  // ── Drawer derived values ──────────────────────────────────────────────────
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer, toast, showToast } =
+    useDrawerState({ mode: 'binary', hasInteracted });
+  const tokens = hasInteracted ? CHADS_SEVERITY_TOKENS[result.risk] : null;
+
+  const isFav = isFavorite('chads-vasc');
+
+  // ── Setters ────────────────────────────────────────────────────────────────
+  const setCheck = useCallback((key: keyof Cha2ds2VascInputs, value: boolean) => {
+    setHasInteracted(true);
+    setInputs((p) => ({ ...p, [key]: value }));
+  }, []);
+
+  const setAge = useCallback((age: 'under65' | '65to74' | '75plus') => {
+    setHasInteracted(true);
+    setInputs((p) => ({
+      ...p,
+      age75plus: age === '75plus',
+      age65to74: age === '65to74',
+    }));
+  }, []);
+
+  // ── Handlers ───────────────────────────────────────────────────────────────
   const handleCopy = () => {
     const ageLabel = inputs.age75plus
       ? 'Age ≥75 (2 pts)'
@@ -126,341 +203,302 @@ export default function Cha2ds2VascCalculator() {
     ];
     trackResult(result.score);
     copyToClipboard(lines.join('\n'), () => {
-      setToast('Copied to clipboard');
-      setTimeout(() => setToast(null), 2000);
+      showToast('Copied to clipboard');
     });
   };
 
   const handleReset = () => {
     setInputs(defaultInputs);
+    setHasInteracted(false);
+    resetDrawer();
     resetTracking();
-    setToast('Reset');
-    setTimeout(() => setToast(null), 1500);
+    showToast('Reset', 1500);
   };
 
   const handleFavToggle = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     const now = toggleFavorite('chads-vasc');
-    setToast(now ? 'Saved to favorites' : 'Removed from favorites');
-    setTimeout(() => setToast(null), 2000);
+    showToast(now ? 'Saved to favorites' : 'Removed from favorites');
   };
 
-  const isFav = isFavorite('chads-vasc');
+  // ── Drawer content ─────────────────────────────────────────────────────────
 
-  const setCheck = useCallback((key: keyof Cha2ds2VascInputs, value: boolean) => {
-    setInputs((p) => ({ ...p, [key]: value }));
-  }, []);
-
-  const setAge = useCallback((age: 'under65' | '65to74' | '75plus') => {
-    setInputs((p) => ({
-      ...p,
-      age75plus: age === '75plus',
-      age65to74: age === '65to74',
-    }));
-  }, []);
-
-  return (
-    <>
-      <header
-        className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200"
-        role="banner"
-      >
-        <div className="max-w-2xl mx-auto px-4 md:px-6 py-3">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-3 min-w-0">
-              <button
-                type="button"
-                onClick={handleBack}
-                className="p-2 -m-2 text-slate-500 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0"
-                aria-label="Back to calculators"
-              >
-                <ArrowLeft size={20} aria-hidden="true" />
-              </button>
-              <div className="min-w-0">
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                  CHA₂DS₂-VASc Score
-                </div>
-                <div
-                  className="flex items-baseline gap-1.5"
-                  aria-live="polite"
-                  aria-atomic="true"
-                >
-                  <span className="text-2xl md:text-3xl font-bold text-slate-900 tabular-nums">
-                    {result.score}
-                  </span>
-                  <span className="text-slate-400 text-sm">/ 9</span>
-                  <span
-                    className={`text-xs font-semibold px-2 py-0.5 rounded border ${riskColor}`}
-                  >
-                    {RISK_LABELS[result.risk]}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-1 flex-shrink-0">
-              <button
-                onClick={handleFavToggle}
-                className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
-                aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
-              >
-                <Star
-                  size={20}
-                  className={
-                    isFav ? 'text-amber-500 fill-amber-500' : 'text-slate-400'
-                  }
-                  aria-hidden="true"
-                />
-              </button>
-              <button
-                onClick={handleReset}
-                className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
-                aria-label="Reset calculator"
-              >
-                <RefreshCw size={18} className="text-slate-500" aria-hidden="true" />
-              </button>
-              <button
-                onClick={handleCopy}
-                className="bg-neuro-500 hover:bg-neuro-600 text-white px-3 md:px-4 py-2 rounded-xl text-sm font-semibold transition-colors"
-              >
-                <span className="hidden sm:inline">Copy</span>
-                <Copy size={18} className="sm:hidden inline" aria-hidden="true" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-2xl mx-auto px-4 md:px-6 py-6 pb-12">
-        <h1 className="sr-only">CHA₂DS₂-VASc Score Calculator</h1>
-
-        {/* Interpretation panel */}
-        <section
-          className="mb-6 p-4 rounded-xl border border-slate-100 bg-white"
-          aria-live="polite"
-        >
-          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-            Interpretation
-          </h2>
-          <div className="flex items-baseline gap-2 mb-1">
-            <span className="font-bold text-slate-900">
-              {RISK_LABELS[result.risk]}
-            </span>
-            {result.annualStrokeRate > 0 && (
-              <span className="text-sm text-slate-600">
-                ·{' '}
-                <strong className="text-slate-800">
-                  ~{result.annualStrokeRate}%
-                </strong>{' '}
-                annual stroke rate
-              </span>
-            )}
-          </div>
-          <p className="text-sm text-slate-700">
-            {RISK_GUIDANCE[result.risk]}
+  const DrawerContent = () => (
+    <div
+      id="chads-drawer-content"
+      role="region"
+      aria-label="CHA₂DS₂-VASc Interpretation"
+      className="max-h-[60vh] overflow-y-auto"
+    >
+      <div className="px-5 pt-4 pb-6">
+        <p className="text-xl font-semibold text-slate-900 leading-tight">
+          {RISK_LABELS[result.risk]}
+        </p>
+        {result.annualStrokeRate > 0 && (
+          <p className="text-slate-600 leading-relaxed mt-2">
+            Approximately <strong>{result.annualStrokeRate}%</strong> annual stroke rate.
           </p>
-          {(result.risk === 'moderate_high' || result.risk === 'high') && (
-            <p className="text-xs text-slate-500 mt-2">
+        )}
+        <p className="text-slate-700 leading-relaxed mt-3">
+          {RISK_GUIDANCE[result.risk]}
+        </p>
+        {(result.risk === 'moderate_high' || result.risk === 'high') && (
+          <div className="mt-4 pl-3 border-l-2 border-amber-400">
+            <div className="text-[10px] font-bold text-amber-700 uppercase tracking-widest mb-1">See also</div>
+            <p className="text-sm text-slate-700 leading-relaxed">
               Assess bleeding risk with{' '}
-              <Link
-                to="/calculators/has-bled-score"
-                className="text-neuro-600 hover:underline font-medium"
-              >
+              <Link to="/calculators/has-bled-score" className="text-neuro-600 hover:underline font-medium">
                 HAS-BLED Score
               </Link>
               . High HAS-BLED does not contraindicate anticoagulation — address modifiable risks.
             </p>
-          )}
-        </section>
-
-        {/* Age selector */}
-        <section className="mb-4" aria-labelledby="chads-age-label">
-          <h2
-            id="chads-age-label"
-            className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2"
-          >
-            Age
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {(
-              [
-                { value: 'under65', label: 'Under 65 (0 pts)' },
-                { value: '65to74', label: '65–74 (1 pt)' },
-                { value: '75plus', label: '≥75 (2 pts)' },
-              ] as const
-            ).map(({ value, label }) => {
-              const checked =
-                value === '75plus'
-                  ? inputs.age75plus
-                  : value === '65to74'
-                  ? inputs.age65to74
-                  : !inputs.age75plus && !inputs.age65to74;
-              return (
-                <label
-                  key={value}
-                  className="inline-flex items-center gap-2 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer transition-all border-slate-200 hover:border-slate-300 has-[:checked]:border-neuro-500 has-[:checked]:bg-neuro-50"
-                >
-                  <input
-                    type="radio"
-                    name="chads-age"
-                    checked={checked}
-                    onChange={() => setAge(value)}
-                    className="w-4 h-4 text-neuro-600 focus:ring-neuro-500"
-                  />
-                  <span className="font-medium text-slate-900 text-sm">
-                    {label}
-                  </span>
-                </label>
-              );
-            })}
           </div>
-        </section>
-
-        {/* Clinical risk factor checkboxes */}
-        <div className="space-y-3">
-          {CHECKBOX_ITEMS.map(({ key, label, points, sublabel }) => (
-            <section key={key} aria-labelledby={`chads-${key}`}>
-              <h2 id={`chads-${key}`} className="sr-only">
-                {label}
-              </h2>
-              <label className="flex items-start gap-3 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer transition-all border-slate-200 hover:border-slate-300 has-[:checked]:border-neuro-500 has-[:checked]:bg-neuro-50">
-                <input
-                  type="checkbox"
-                  checked={!!inputs[key]}
-                  onChange={(e) => setCheck(key, e.target.checked)}
-                  className="mt-1 w-5 h-5 rounded border-slate-300 text-neuro-600 focus:ring-neuro-500"
-                  aria-describedby={sublabel ? `chads-desc-${key}` : undefined}
-                />
-                <span className="flex-1">
-                  <span className="font-semibold text-slate-900">{label}</span>
-                  <span className="ml-1.5 text-xs font-medium text-slate-400">
-                    {points === 2 ? '2 pts' : '1 pt'}
-                  </span>
-                  {sublabel && (
-                    <span
-                      id={`chads-desc-${key}`}
-                      className="block text-xs text-slate-500 mt-0.5"
-                    >
-                      {sublabel}
-                    </span>
-                  )}
-                </span>
-              </label>
-            </section>
-          ))}
-        </div>
-
-        {/* Score legend */}
-        <section
-          className="mt-8 p-4 rounded-xl border border-slate-100 bg-slate-50"
-          aria-label="Score reference table"
-        >
-          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
-            Annual Stroke Risk by Score
-          </h2>
-          <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-xs text-slate-600">
-            {[
-              { score: 0, rate: '0%', note: 'Very low' },
-              { score: 1, rate: '~1.3%', note: 'Low-moderate' },
-              { score: 2, rate: '~2.2%', note: 'Moderate-high' },
-              { score: 3, rate: '~3.2%', note: '' },
-              { score: 4, rate: '~4.0%', note: '' },
-              { score: 5, rate: '~6.7%', note: 'High' },
-              { score: 6, rate: '~9.8%', note: '' },
-              { score: 7, rate: '~9.6%', note: '' },
-              { score: 8, rate: '~12.5%', note: '' },
-              { score: 9, rate: '~15.2%', note: '' },
-            ].map(({ score, rate, note }) => (
-              <div
-                key={score}
-                className={`flex justify-between py-0.5 ${
- result.score === score ? 'text-neuro-700 font-semibold' : ''
- }`}
-              >
-                <span>
-                  Score {score}
-                  {note ? <span className="text-slate-400 ml-1">({note})</span> : ''}
-                </span>
-                <span>{rate}</span>
-              </div>
-            ))}
-          </div>
-          <p className="mt-2 text-[10px] text-slate-400">
-            Unadjusted rates per 100 patient-years, Euro Heart Survey cohort (Lip GY et al. Chest 2010, Table 3). Rates in other AF registries vary.
+        )}
+        <div className="mt-5 pt-4 border-t border-slate-100">
+          <p className="text-xs text-slate-400 leading-relaxed">
+            <cite>{PRIMARY_CITATION.authors}. {PRIMARY_CITATION.title}. {PRIMARY_CITATION.journal}. {PRIMARY_CITATION.year};{PRIMARY_CITATION.volume}({PRIMARY_CITATION.issue}):{PRIMARY_CITATION.pages}.</cite>{' '}
+            <a href={`https://doi.org/${PRIMARY_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-neuro-600 hover:underline">DOI</a>
           </p>
-        </section>
+        </div>
+      </div>
+    </div>
+  );
 
-        {/* Footer citations */}
-        <footer className="mt-8 pt-6 border-t border-slate-200 space-y-3">
-          <div>
-            <p className="text-xs font-semibold text-slate-500 mb-1">
-              Score derivation
-            </p>
-            <p className="text-xs text-slate-500">
-              <cite>
-                {PRIMARY_CITATION.authors}. {PRIMARY_CITATION.title}.{' '}
-                <em>{PRIMARY_CITATION.journal}</em>. {PRIMARY_CITATION.year};
-                {PRIMARY_CITATION.volume}({PRIMARY_CITATION.issue}):{PRIMARY_CITATION.pages}.
-              </cite>{' '}
+  // ── Render ──────────────────────────────────────────────────────────────────
+  return (
+    <>
+      <h1 className="sr-only">CHA₂DS₂-VASc Score Calculator</h1>
+
+      {/* ── Sticky header — §1.1 ──────────────────────────────────────────── */}
+      <CalculatorHeader
+        name="CHA₂DS₂-VASc Score"
+        scoreDisplay={
+          <>
+            <span className="text-2xl font-semibold text-slate-900 tabular-nums leading-none">
+              {hasInteracted ? result.score : '—'}
+            </span>
+            <span className="text-slate-400 text-sm leading-none">/ 9</span>
+            {hasInteracted && (
+              <span className={`text-xs font-medium ml-1.5 ${
+                result.risk === 'very_low' ? 'text-emerald-700' :
+                result.risk === 'low_moderate' ? 'text-amber-700' :
+                result.risk === 'moderate_high' ? 'text-orange-700' :
+                'text-red-600'
+              }`}>
+                {RISK_LABELS[result.risk]}
+              </span>
+            )}
+          </>
+        }
+        scoreAriaLabel={
+          hasInteracted
+            ? `CHA₂DS₂-VASc Score ${result.score} of 9. ${RISK_LABELS[result.risk]}${result.annualStrokeRate > 0 ? `, ${result.annualStrokeRate}% annual stroke rate.` : '.'}`
+            : 'CHA₂DS₂-VASc Score — not yet calculated'
+        }
+        onBack={handleBack}
+        onReset={handleReset}
+        onCopy={handleCopy}
+        onFavToggle={handleFavToggle}
+        isFav={isFav}
+      />
+
+      {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}
+      <main className="max-w-2xl mx-auto px-5 pt-6 pb-4">
+        <div className="space-y-10">
+
+          {/* Age — A1 vertical radio rows */}
+          <section aria-labelledby="chads-age-label">
+            <h2
+              id="chads-age-label"
+              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3"
+            >
+              Age
+            </h2>
+            <div role="radiogroup" aria-labelledby="chads-age-label">
+              {(
+                [
+                  { value: 'under65', label: 'Under 65', points: '0 pts' },
+                  { value: '65to74', label: '65–74',    points: '1 pt'  },
+                  { value: '75plus', label: '≥75',      points: '2 pts' },
+                ] as const
+              ).map(({ value, label, points }, idx) => {
+                const isSelected =
+                  value === '75plus'
+                    ? inputs.age75plus
+                    : value === '65to74'
+                    ? inputs.age65to74
+                    : !inputs.age75plus && !inputs.age65to74;
+                return (
+                  <React.Fragment key={value}>
+                    {idx > 0 && <div className="divider-hair" />}
+                    <button
+                      type="button"
+                      role="radio"
+                      aria-checked={isSelected}
+                      onClick={() => setAge(value)}
+                      className={isSelected
+                        ? 'selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg'
+                        : 'w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors'
+                      }
+                    >
+                      <span className={isSelected ? 'font-semibold' : 'font-medium text-slate-900'}>
+                        {label}
+                      </span>
+                      <span className={isSelected ? 'text-sm opacity-75' : 'text-sm text-slate-400'}>
+                        {points}
+                      </span>
+                    </button>
+                  </React.Fragment>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* Risk factors — 6 checkboxes as A3 row pattern (§4.1–4.3) */}
+          <section aria-labelledby="chads-risk-factors-label">
+            <h2
+              id="chads-risk-factors-label"
+              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3"
+            >
+              Risk factors
+            </h2>
+            <div>
+              {CHECKBOX_ITEMS.map(({ key, label, points, sublabel }, idx) => {
+                const isChecked = !!inputs[key];
+                return (
+                  <React.Fragment key={key}>
+                    {idx > 0 && <div className="divider-hair" />}
+                    <label
+                      className={`flex items-start gap-3 py-3.5 px-3 rounded-lg hover:bg-slate-50/60 cursor-pointer transition-colors ${isChecked ? 'bg-neuro-50' : ''}`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={(e) => setCheck(key, e.target.checked)}
+                        className="mt-0.5 w-5 h-5 rounded border-slate-300 accent-neuro-500"
+                        aria-describedby={sublabel ? `chads-desc-${key}` : undefined}
+                      />
+                      <div className="flex-1 min-w-0 flex items-baseline justify-between gap-3">
+                        <div className="min-w-0">
+                          <span className={isChecked ? 'block font-semibold text-neuro-700' : 'block font-medium text-slate-900'}>
+                            {label}
+                          </span>
+                          {sublabel && (
+                            <span
+                              id={`chads-desc-${key}`}
+                              className="block text-xs text-slate-500 mt-0.5"
+                            >
+                              {sublabel}
+                            </span>
+                          )}
+                        </div>
+                        <span className={isChecked ? 'text-sm opacity-75 flex-shrink-0' : 'text-sm text-slate-400 flex-shrink-0'}>
+                          {points === 2 ? '2 pts' : '1 pt'}
+                        </span>
+                      </div>
+                    </label>
+                  </React.Fragment>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* Score legend — reference table, stays in <main> */}
+          <section aria-label="Score reference table">
+            <h2
+              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3"
+            >
+              Annual Stroke Risk by Score
+            </h2>
+            <div className="bg-slate-50 rounded-xl p-4">
+              <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-xs text-slate-600">
+                {[
+                  { score: 0, rate: '0%',    note: 'Very low' },
+                  { score: 1, rate: '~1.3%', note: 'Low-moderate' },
+                  { score: 2, rate: '~2.2%', note: 'Moderate-high' },
+                  { score: 3, rate: '~3.2%', note: '' },
+                  { score: 4, rate: '~4.0%', note: '' },
+                  { score: 5, rate: '~6.7%', note: 'High' },
+                  { score: 6, rate: '~9.8%', note: '' },
+                  { score: 7, rate: '~9.6%', note: '' },
+                  { score: 8, rate: '~12.5%', note: '' },
+                  { score: 9, rate: '~15.2%', note: '' },
+                ].map(({ score, rate, note }) => (
+                  <div
+                    key={score}
+                    className={`flex justify-between py-0.5 ${
+                      hasInteracted && result.score === score ? 'bg-neuro-50 text-neuro-700 font-semibold rounded px-1 -mx-1' : ''
+                    }`}
+                  >
+                    <span>
+                      Score {score}
+                      {note ? <span className="text-slate-400 ml-1">({note})</span> : ''}
+                    </span>
+                    <span>{rate}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-2 text-[10px] text-slate-400">
+                Unadjusted rates per 100 patient-years, Euro Heart Survey cohort (Lip GY et al. Chest 2010, Table 3). Rates in other AF registries vary.
+              </p>
+            </div>
+          </section>
+
+        </div>{/* end space-y-10 */}
+
+        {/* Page footer — §1.2 */}
+        <CalculatorFooter
+          citation={
+            <>
+              <cite>{PRIMARY_CITATION.authors}. {PRIMARY_CITATION.title}. {PRIMARY_CITATION.journal}. {PRIMARY_CITATION.year};{PRIMARY_CITATION.volume}({PRIMARY_CITATION.issue}):{PRIMARY_CITATION.pages}.</cite>{' '}
               <a
                 href={`https://doi.org/${PRIMARY_CITATION.doi}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-neuro-600 hover:underline"
+                className="text-neuro-600 hover:underline ml-0.5"
               >
                 DOI
               </a>
-            </p>
-          </div>
-          <div>
-            <p className="text-xs font-semibold text-slate-500 mb-1">
-              Guideline
-            </p>
-            <p className="text-xs text-slate-500">
-              <cite>
-                {GUIDELINE_CITATION.authors}. {GUIDELINE_CITATION.title}.{' '}
-                <em>{GUIDELINE_CITATION.journal}</em>. {GUIDELINE_CITATION.year};
-                {GUIDELINE_CITATION.volume}({GUIDELINE_CITATION.issue}):{GUIDELINE_CITATION.pages}.
-              </cite>{' '}
-              <a
-                href={`https://doi.org/${GUIDELINE_CITATION.doi}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neuro-600 hover:underline"
-              >
-                DOI
-              </a>
-            </p>
-          </div>
-          <div>
-            <p className="text-xs font-semibold text-slate-500 mb-1">
-              Supporting evidence
-            </p>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Stroke reduction with anticoagulation demonstrated in landmark AF trials: AFASAK
-              (warfarin vs aspirin), BAFTA (warfarin in elderly), RE-LY (dabigatran; Connolly 2009{' '}
-              <em>NEJM</em>), and ARISTOTLE (apixaban; Granger 2011 <em>NEJM</em>).
-            </p>
-          </div>
-          <p className="text-xs text-slate-500 leading-relaxed">
-            <strong>Educational use only.</strong> Validated for non-valvular AF. Recommendation
-            tier uses the sex-stratified guideline thresholds: COR 1 at total score ≥2 in men or
-            ≥3 in women (i.e., ≥2 non-sex clinical risk factors plus female sex). Female sex alone
-            does not warrant anticoagulation. Confirm with institutional guidelines and exercise
-            clinical judgment.
-          </p>
-        </footer>
+              {' · '}{GUIDELINE_CITATION.title} ({GUIDELINE_CITATION.year}).
+            </>
+          }
+          disclaimer="Educational use only. Anticoagulation decisions require shared decision-making accounting for individual bleeding risk, patient preferences, and comorbidities."
+          related={
+            <>
+              Related:{' '}
+              <Link to="/calculators/has-bled-score" className="text-neuro-600 hover:underline">
+                HAS-BLED
+              </Link>{' '}
+              (bleeding risk on anticoagulation)
+            </>
+          }
+        />
+
+        {/* Drawer spacer — §1.3 */}
+        <div className={drawerOpen ? 'drawer-spacer-expanded' : 'drawer-spacer-collapsed'} />
+
       </main>
 
-      {toast && (
-        <div
-          role="status"
-          aria-live="polite"
-          className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-5 py-2.5 rounded-full shadow-lg text-sm font-medium z-50"
-        >
-          {toast}
-        </div>
-      )}
+      {/* ── Drawer portal — fixed above mobile bottom nav §1.3 ───────────── */}
+      <CalculatorDrawer
+        state={drawerState}
+        tokens={tokens}
+        isExpanded={drawerOpen}
+        onToggle={() => setDrawerOpen((v) => !v)}
+        ariaContentId="chads-drawer-content"
+        stateAText={{ label: '0 of 7 selected', hint: 'Appears when complete' }}
+        collapsedStat={
+          hasInteracted
+            ? `${RISK_LABELS[result.risk]}${result.annualStrokeRate > 0 ? ` · ~${result.annualStrokeRate}%/yr` : ''}`
+            : ''
+        }
+      >
+        <DrawerContent />
+      </CalculatorDrawer>
+
+      {/* ── Toast notification — z-[60] above drawer ─────────────────────── */}
+      <CalculatorToast message={toast} />
     </>
   );
 }

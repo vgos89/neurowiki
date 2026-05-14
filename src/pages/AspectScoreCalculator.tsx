@@ -60,10 +60,6 @@ type RegionId = (typeof CORTICAL_REGIONS)[number]['id'] | (typeof SUBCORTICAL_RE
 interface ScoreInfo {
   label: string;
   evtText: string;
-  colorClass: string;
-  borderClass: string;
-  bgClass: string;
-  textClass: string;
   badgeBg: string;
 }
 
@@ -72,10 +68,6 @@ function getScoreInfo(score: number): ScoreInfo {
     return {
       label: 'Small or No Infarct',
       evtText: 'EVT strongly indicated — Class I recommendation (AHA/ASA 2026). Small or no established infarct core; excellent candidacy.',
-      colorClass: 'text-emerald-700',
-      borderClass: 'border-emerald-300',
-      bgClass: 'bg-emerald-50',
-      textClass: 'text-emerald-800',
       badgeBg: 'bg-emerald-500',
     };
   }
@@ -83,10 +75,6 @@ function getScoreInfo(score: number): ScoreInfo {
     return {
       label: 'Moderate Core',
       evtText: 'EVT generally indicated — Class I recommendation (AHA/ASA 2026). ASPECTS ≥6 is the primary threshold for EVT eligibility across early and late windows.',
-      colorClass: 'text-yellow-700',
-      borderClass: 'border-yellow-300',
-      bgClass: 'bg-yellow-50',
-      textClass: 'text-yellow-800',
       badgeBg: 'bg-yellow-500',
     };
   }
@@ -94,20 +82,12 @@ function getScoreInfo(score: number): ScoreInfo {
     return {
       label: 'Large Core',
       evtText: 'EVT may benefit — Class I for ASPECTS 3–5 per SELECT-2 / ANGEL-ASPECT trials (AHA/ASA 2026 update). Age <80, no significant mass effect, mRS 0–1 required.',
-      colorClass: 'text-orange-700',
-      borderClass: 'border-orange-300',
-      bgClass: 'bg-orange-50',
-      textClass: 'text-orange-800',
       badgeBg: 'bg-orange-500',
     };
   }
   return {
     label: 'Extensive Infarct',
     evtText: 'EVT typically not indicated — ASPECTS 0–2 indicates extensive established infarction. High futile reperfusion risk. Exceptional cases (age <80, no mass effect, Class IIa) require individualized Vascular Neurology / Neurointerventional consultation.',
-    colorClass: 'text-red-700',
-    borderClass: 'border-red-300',
-    bgClass: 'bg-red-50',
-    textClass: 'text-red-800',
     badgeBg: 'bg-red-500',
   };
 }
