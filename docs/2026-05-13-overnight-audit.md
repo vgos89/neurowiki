@@ -50,4 +50,34 @@ If WebFetch returns error or content drift: revert immediately, log to this file
 
 Pre-session commit head: `67dca9c` — `docs(audit): L5 spacing consistency findings`
 
-Live-site verification result: [populated by first WebFetch]
+Live-site verification result: PASS — https://neurowiki.ai returns title "NeuroWiki | Neurology Calculators, Pathways & Trials"; branding visible.
+
+---
+
+### Entry 1 — Dark-mode comment fixes (Class B)
+- Commit: `bd513a7`
+- Files: src/pages/RopeScoreCalculator.tsx (1 comment line), src/pages/HasBledScoreCalculator.tsx (1 comment line) — plus picked-up docs/2026-05-13-overnight-audit.md (this file) and docs/reviews/arch-seo-program-kickoff.md (architect artifact persisted earlier this session)
+- Change: restored awkward "no in layout" comment text stripped by L-dm-cleanup script back to "no dark-mode handling in layout"
+- Gates: tsc clean · build clean (2.08s) · check:claims clean · check:routes 42 validated
+- Live verify: PASS — title unchanged, branding intact
+- Background tasks running: W8.3 prose cleanup (content-writer); SEO Phase 1 audit (seo-specialist)
+- Note: .claude/agents/dormant/ does not exist — that parking-lot task is stale, can be removed in TASKS.md cleanup later.
+
+---
+
+### Entry 2 — TRIALS_SPEC W6.7 + W6.5.4 docs additions (Class C)
+- Commit: `aa54b84`
+- Files: docs/specs/TRIALS_SPEC.md (+104 lines)
+- Change: added §1.6 Design-Quality Disclaimers (W6.7) + §3.7 Prose-Narrative Variant for Archetype B fallback (W6.5.4). Both reference existing implementations (BEST-MSU + RIGHT-2). No code.
+- Gates: tsc clean · build clean (2.22s) · check:claims clean · check:routes 42 validated
+- Live verify: PASS — site title and branding unchanged
+
+---
+
+### Entry 3 — SEO Phase 1 audit + sitemap fix (Class A research + Class B fix)
+- Commit: `78d4588`
+- Files: public/sitemap.xml (6 wrong /calculators/ paths → /pathways/, added stroke-code, lastmod 2026-05-13); docs/seo-audit-2026-05-13.md (new audit report, 250+ lines)
+- Change: Fixed sitemap finding H1 from Phase 1 audit. Pathway URLs were 404'ing in Google's index because the SPA routes moved from /calculators/* to /pathways/* but the sitemap was never updated. All 6 pathway URLs corrected; stroke-code added; lastmod refreshed.
+- Gates: tsc clean · build clean (1.99s) · check:claims clean · check:routes 42 validated
+- Live verify: PARTIAL — sitemap.xml fetched at https://neurowiki.ai/sitemap.xml still shows old /calculators/ paths (Vercel CDN edge cache; 60-180s expected delay). EVT pathway page WebFetch returned only the SPA shell title — confirms a separate finding worth Phase 3 attention: this is a CSR SPA without static per-route HTML, so search engines rely on JS rendering for titles. Added to Phase 3 game plan inputs.
+- Note: parking lot entry pending — "Consider static prerendering or per-route static HTML generation for SEO (Vite-SSG or similar) so Googlebot doesn't need to wait on JS for titles."

@@ -444,9 +444,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Stroke Code Protocol — Acute Stroke Workflow for Residents | NeuroWiki',
-      description: 'Complete acute stroke code protocol: last known well, tPA eligibility, NIHSS, CT/CTA imaging, thrombectomy criteria, GWTG metrics, and admit orders. AHA/ASA 2026 aligned. For neurology residents.',
-      keywords: 'stroke code protocol, acute stroke management, stroke workflow residents, door to needle time, tPA eligibility criteria, stroke code steps, acute ischemic stroke protocol, LKW stroke',
+      title: 'Acute Stroke Basics — Resident Reference Guide | NeuroWiki',
+      description: 'Reference guide to acute ischemic stroke for residents: last known well, NIHSS, tPA eligibility, CT/CTA imaging, thrombectomy criteria, and admit orders. AHA/ASA 2026 aligned.',
+      keywords: 'acute stroke basics, stroke resident reference, ischemic stroke guide, NIHSS, tPA eligibility, thrombectomy criteria, LKW',
       image: DEFAULT_IMAGE,
     },
   },
