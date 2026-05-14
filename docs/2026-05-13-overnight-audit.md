@@ -81,3 +81,41 @@ Live-site verification result: PASS — https://neurowiki.ai returns title "Neur
 - Gates: tsc clean · build clean (1.99s) · check:claims clean · check:routes 42 validated
 - Live verify: PARTIAL — sitemap.xml fetched at https://neurowiki.ai/sitemap.xml still shows old /calculators/ paths (Vercel CDN edge cache; 60-180s expected delay). EVT pathway page WebFetch returned only the SPA shell title — confirms a separate finding worth Phase 3 attention: this is a CSR SPA without static per-route HTML, so search engines rely on JS rendering for titles. Added to Phase 3 game plan inputs.
 - Note: parking lot entry pending — "Consider static prerendering or per-route static HTML generation for SEO (Vite-SSG or similar) so Googlebot doesn't need to wait on JS for titles."
+
+---
+
+### Entry 4 — W8.3 prose cleanup (Class C-clinical)
+- Commit: `d9815b5`
+- Files: src/data/trialData.ts (-41 / +41 lines, 73 em-dash + double-hyphen replacements across 40+ trials)
+- Change: Two-pass cleanup. Pass 1 (content-writer agent): ~40 surgical context-aware edits across decimal/destiny/hamlet/destiny-ii/timing/optimas/eagle/escape-na1/socrates/sps3/sparcl/TRACE-III/THAWS plus partial pearls/listDescription. Pass 2 (mechanical script via /tmp/finish-em-dash-cleanup.mjs): 33 remaining ` — ` → `; ` in pearls and listDescription only. No clinical meaning changes.
+- Gates: tsc clean · build clean (2.17s) · check:claims clean · check:routes 42 validated
+- Live verify: PASS — site title and branding unchanged
+- Verification grep: pearls em-dashes 44 → 0; listDescription em-dashes 10+ → 0
+
+---
+
+### Entry 5 — Duplicate route title differentiation (Class C, SEO Phase 1 finding H3)
+- Commit: `d214b25`
+- Files: src/config/routeManifest.ts (1 entry retitled)
+- Change: `/guide/stroke-basics` title changed from "Stroke Code Protocol — Acute Stroke Workflow for Residents | NeuroWiki" to "Acute Stroke Basics — Resident Reference Guide | NeuroWiki" to differentiate from `/pathways/stroke-code`. Description and keywords also differentiated to match content split (workflow vs reference). Both routes now within spec §7.1 limits.
+- Gates: tsc clean · build clean (1.90s) · check:claims clean · check:routes 42 validated
+- Live verify: PASS — title unchanged
+- H1 audit finding parked (conflicts with ADR-005 Decision 4); needs V triage
+
+---
+
+### Parking lot entries added during session
+- SPA prerendering / SSR for SEO
+- TrialPageNew H1 conflict with ADR-005 Decision 4
+- routeManifest title/description length violations (25+ entries)
+- TrialPageNew per-archetype trial title duplication
+
+Background tasks still running:
+- SEO Phase 2 keyword research (agent a5cc4d825505ae548)
+
+Next planned:
+- L5 bundle audit (dispatch)
+- L5 a11y audit (dispatch)
+- SEO Phase 3 (after Phase 2 completes)
+- SEO Phase 4 (Class D, has 8 conditions; will need careful application)
+- SEO Phase 5 (skill bundle)
