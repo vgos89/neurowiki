@@ -1,0 +1,26 @@
+# Google Search Console / Google Cloud credentials — NEVER commit
+# OAuth client secrets file (downloaded from Google Cloud Console)
+client_secrets.json
+client_secret*.json
+oauth_client*.json
+
+# Service account JSON keys
+service-account*.json
+*-credentials.json
+*-service-account.json
+
+# Cached OAuth tokens (created by the GSC MCP on first auth)
+token.json
+token_*.json
+.gsc_token*
+.gsc_credentials*
+
+# GSC raw exports — keep them out of the repo (often contain query data
+# that is fine but not useful in version control; check in only curated
+# snapshots and only if you intend to)
+gsc-raw-*.csv
+gsc-export-*.csv
+*.gsc.csv
+
+# Anything starting with private- (defensive)
+private-*

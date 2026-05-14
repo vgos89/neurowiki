@@ -458,11 +458,12 @@ Note: FAQ answer text is clinical copy. Route it through `content-writer` + `med
 
 ## §5 GA4 / GSC integration patterns
 
-### 5.1 Current state (2026-05-13)
+### 5.1 Current state (2026-05-14)
 
 - GA4 is active with a consent gate. Events fire after consent.
-- No GSC MCP integration. All GSC access is manual export.
-- Phase 2 keyword positions are all marked "unknown" — GSC-authoritative data pending.
+- **GSC MCP integration: `suganthan-gsc-mcp` scaffolded** — setup walkthrough at `docs/seo-data/GSC-MCP-SETUP.md`. V completes the ~15 min one-time Google Cloud Console + OAuth dance on their machine, then the MCP is live for any session. Anthropic registry has no first-party GSC MCP as of this date.
+- Once V signals "GSC MCP is wired up": this section gets updated to mark **available**, and Phase 2 keyword research is re-run against authoritative positions (replacing the SERP-snapshot estimates).
+- Manual export remains the fallback when the MCP is not running (off-network, token expired, fresh machine).
 
 ### 5.2 GSC manual export protocol
 
@@ -478,14 +479,34 @@ Useful GSC filter paths:
 - Filter by query containing "ASPECTS" or "NIHSS" to see calculator query impression volume
 - Filter by page `/trials/*` to check which trial pages have impressions before link-graph wiring
 
-### 5.3 Future GSC MCP integration (placeholder)
+### 5.3 GSC MCP integration — `suganthan-gsc-mcp`
 
-When Anthropic or a third party publishes a GSC MCP, document the auth flow here. Expected structure:
-- Auth: OAuth2 service account, scope `webmasters.readonly`
-- Query endpoint: `POST https://searchconsole.googleapis.com/webmasters/v3/sites/{siteUrl}/searchAnalytics/query`
+**Status:** scaffolded 2026-05-14. Setup doc: `docs/seo-data/GSC-MCP-SETUP.md`. Pending V's first-run OAuth flow.
+
+**Package:** `suganthan-gsc-mcp` (npm, Node, v2.2.2+ as of April 2026). Runs locally on V's machine. Data does not leave V's environment.
+
+**Auth:** OAuth (user consent flow). Scope: `webmasters.readonly`. Token cached at `docs/seo-data/token.json` (gitignored). Client secrets at `docs/seo-data/client_secrets.json` (gitignored).
+
+**Configured via** `~/.claude/`-side MCP config (outside the repo). See setup doc §4 for the JSON entry shape.
+
+**Tool surface (20 tools, key subset used by seo-specialist):**
+- `get_search_analytics` — top queries + clicks + impressions + position + CTR for a date range
+- `compare_search_periods` — diff two date windows; the bedrock for "did our sitemap fix recover indexing?" questions
+- `inspect_url_enhanced` — per-URL index status, last crawl date, structured data validation
+- `quick_wins` — keywords ranked 4–15 with high impressions (low-hanging fruit for content/title tweaks)
+- `content_gaps` — queries with impressions but no matching page
+- `traffic_drops` — pages with declining clicks period-over-period
+- `cannibalization_check` — multiple pages competing for the same query
+
+**Recommended query rhythm:**
+- Weekly: pull top 100 queries (28d window) + top 50 pages
+- After any ranking-affecting change (sitemap fix, title change, new structured data): `compare_search_periods` with the change date as boundary
+- Pre-Phase-3-action: run `quick_wins` to validate which keywords actually have impression headroom before optimizing for them
+
+**Underlying REST API** (in case the MCP misbehaves and we need a direct call):
+- Endpoint: `POST https://searchconsole.googleapis.com/webmasters/v3/sites/{siteUrl}/searchAnalytics/query`
 - Body: `{ "startDate": "YYYY-MM-DD", "endDate": "YYYY-MM-DD", "dimensions": ["query", "page"], "rowLimit": 1000 }`
-
-Until then: manual export to `docs/seo-data/` is the authoritative workflow.
+- `siteUrl` for neurowiki.ai is typically `sc-domain:neurowiki.ai` if domain-verified, else `https://neurowiki.ai/`.
 
 ### 5.4 GA4 events relevant to SEO
 

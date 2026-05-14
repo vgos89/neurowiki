@@ -10,3 +10,15 @@ node_modules/
 **/.DS_Store
 .claude/worktrees/
 .claude/settings.local.json
+
+# Google Search Console / Cloud credentials — defensive root-level guard.
+# Canonical location is docs/seo-data/ (with its own .gitignore); these
+# patterns catch anything that accidentally lands at the repo root.
+client_secrets.json
+client_secret*.json
+oauth_client*.json
+service-account*.json
+*-credentials.json
+*-service-account.json
+token.json
+.gsc_*
