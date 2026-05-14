@@ -119,3 +119,40 @@ Next planned:
 - SEO Phase 3 (after Phase 2 completes)
 - SEO Phase 4 (Class D, has 8 conditions; will need careful application)
 - SEO Phase 5 (skill bundle)
+
+---
+
+### Entry 6 — Number-input spec addition (Class C)
+- Commit: `23fe522`
+- Files: docs/specs/CALCULATOR_SPEC.md (+49 lines, new §4.6)
+- Change: L5.5c architect follow-up — documented canonical styled-number-input pattern using Boston Criteria's age input as reference. Covers required attributes, tokens, helper-text rules, state-machine coupling.
+- Gates: tsc clean · build clean (1.90s) · check:claims clean · check:routes 42 validated
+- Live verify: PASS
+
+---
+
+### Entry 7 — TASKS.md status updates (audit-trail hygiene)
+- Commit: `205210a`
+- Files: TASKS.md (mark L5 Typography + Spacing audits as merged; mark W6.7 + W6.5.4 spec updates as merged)
+- Change: housekeeping. No code touched.
+- Gates: all clean
+
+---
+
+### Entry 8 — SEO Phase 3 + L5 Bundle audit + 2 sitemap entries (Class A + Class C)
+- Commit: `138d278`
+- Files: public/sitemap.xml (+2 entries: chads-vasc, aha-2026-guideline), docs/seo-game-plan-2026.md (new, 250+ lines), docs/L5-bundle-audit.md (new, ~300 lines)
+- Change: Phase 3 finding A1 — 2 missing sitemap entries added (CHADS-VASc calculator, AHA 2026 guideline page). Both had includeInSitemap=true in routeManifest but were absent from sitemap.xml. Sitemap now 117 URLs (was 115). Phase 3 game plan + L5 bundle audit shipped as reference docs.
+- Bundle audit headline: 3.0 MB total / ~550 KB gzip, ~50 KB over 500 KB target. Three giant chunks dominate (trialData, TrialVisualizations, TrialPageNew). Specific splits proposed.
+- Gates: tsc clean · build clean (1.95s) · check:claims clean · check:routes 42 validated
+- Live verify: PASS
+
+---
+
+Background tasks still running:
+- L5 a11y audit (agent a085546e8399160b1)
+- SEO Phase 5 skill bundle (agent afc5f5e2b0b574912)
+
+Pending after they land:
+- SEO Phase 4 (Class D, 8 architect conditions to apply directly — no agent needed)
+- Final audit trail summary + session close
