@@ -290,6 +290,18 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Technical debt:** EXTEND safetyProfile stub entries require W5.2 upgrade to full registry (ADR-005 Decision 1)
 
 ### LAYER 5 — Polish (blocked until Layer 4 complete)
+
+### L5.6 — CalculatorShell extraction — Class D
+- **Status:** planned — 2026-05-13
+- **User-visible goal:** none (refactor; no behavior change)
+- **Non-goals:** no clinical content changes, no new calculator pages, no scoring logic changes
+- **Files likely touched:** src/components/calculators/CalculatorShell.tsx (new), src/components/calculators/Chevron.tsx (new), src/components/calculators/BackArrow.tsx (new), src/lib/calculators/severityTokens.ts (new), all 8 existing calculator pages (NIHSS, ICH, ABCD2, GCS, Heidelberg, ASPECTS, HAS-BLED, RoPE, Boston) migrated to shell
+- **Acceptance checks:** tsc clean · build green · all 8 calculators render identically post-migration · diff against pre-migration screenshots (or DOM snapshot) shows zero visual change · drawer state machine + portal positioning shared, not duplicated
+- **Clinical impact:** none
+- **Rollback plan:** git revert; shell is additive — old inline code paths can be restored from history
+- **Blocking note:** No 9th calculator may ship on the inline-everything pattern. L5.6 must land before any new calculator (e.g., a future seizure scale, NIH-toolbox cognitive battery, or similar) is added.
+- **Origin:** filed as mandatory follow-up from arch-l55c-aspects-boston-rebuild.md (architect: claude-opus-4-7, 2026-05-13)
+
 - [ ] [L5] Typography audit
 - [ ] [L5] Spacing consistency audit
 - [ ] [L5] Full mobile + desktop QA pass all pages
@@ -940,19 +952,26 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Status:** merged
 - **What shipped:** "Normal exam" shortcut button (sets all 15 items to 0, opens drawer). Live State B drawer — interpretation updates as user scores items before completing all 15. Drawer now shows severity label + running NIHSS total in real time.
 
-### L5.5b — Add portal drawer to ASPECTS, HAS-BLED, RoPE, Boston Criteria — Class C
+### L5.5b — Add portal drawer to ASPECTS, HAS-BLED, RoPE, Boston Criteria — Class C — DONE commit fe650d8
 - **Priority:** P1
-- **Status:** planned
-- **User-visible goal:** Four calculators (ASPECTS, HAS-BLED, RoPE, Boston Criteria) show interpretation in a persistent bottom drawer matching CALCULATOR_SPEC.md §1.3 + §5 state machine, consistent with the other 5 calculators.
-- **Non-goals:** no clinical interpretation text changes (Class E); drawer shell only — severity label + stat from existing result objects
-- **Files likely touched:** `src/pages/AspectScoreCalculator.tsx`, `src/pages/HasBledScoreCalculator.tsx`, `src/pages/RopeScoreCalculator.tsx`, `src/pages/BostonCriteriaCaaCalculator.tsx`
-- **Acceptance checks:** each calculator shows State A muted drawer → State C tappable drawer on completion · content-before-button DOM order · left: var(--nav-rail-width, 0px) · tsc clean · build green
-- **Clinical impact:** none (no interpretation copy changes)
-- **Rollback:** n/a
+- **Status:** merged
+- **What shipped:** Portal drawer (State A→C state machine, content-before-button order, `left: var(--nav-rail-width, 0px)`) added to ASPECTS, HAS-BLED, RoPE, Boston Criteria. Inline interpretation blocks removed from main and relocated into drawer content. All 4: hasInteracted state tracking. No clinical copy changes. tsc clean · build green · claims clean.
 
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-13 — L5.5c ASPECTS + Boston Criteria input UI rebuild (pending commit SHA)
+  - AspectScoreCalculator rebuilt to CALCULATOR_SPEC v1.1 Archetype 2: option-row pattern, tokenized section headers (`text-[10px] font-bold text-slate-400 uppercase tracking-widest`), divider-hair separators, rounded-full action buttons, removed "How to use" box + desktop 2-col grid + inline score summary
+  - BostonCriteriaCaaCalculator rebuilt to CALCULATOR_SPEC v1.1 Archetype 3: A1 radio rows for Yes/No + lobar groups, A3 checkbox rows for pathology/WM/deep/other-cause, inputMode="numeric" on age input, rounded-full action buttons, all dark:* layout classes removed (light-only)
+  - Both: drawer infrastructure from L5.5b preserved byte-identical
+  - No clinical interpretation prose changes — every word from aspectScoreData.ts and bostonCriteriaCaaData.ts preserved
+  - Architect review approve-with-conditions: docs/reviews/arch-l55c-aspects-boston-rebuild.md
+  - QA gates: tsc clean · build clean · check:claims clean · check:routes 42 routes validated
+  - Mobile QA gate: ready (mobile-first-developer ran in parallel)
+- [x] 2026-05-13 — L5.5b portal drawer shell (fe650d8)
+  - Added State A→C portal drawer to ASPECTS, HAS-BLED, RoPE, Boston Criteria
+  - All 4: content-before-button, nav-rail-width positioning, hasInteracted state machine
+  - tsc: clean · build: clean · claims: clean
 - [x] 2026-05-13 — L5.5 + Phase 7E session — commits 9c52fe9, d430936, 72bb1ba, d83695b, 1985940
   - Phase 7E (9c52fe9): NIHSS normal-exam shortcut + live State B drawer
   - NIHSS design audit (d430936): emerald severity tokens, drawer content-order, State A text, py-3 header, flush-left shortcut, chevron regression introduced

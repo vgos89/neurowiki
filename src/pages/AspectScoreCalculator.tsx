@@ -1,7 +1,28 @@
+/**
+ * ASPECTS Score Calculator — rebuilt against CALCULATOR_SPEC.md v1.1
+ * Archetype 2 visual treatment (A2 option-row anatomy, hairline dividers, selected-option class)
+ * with role="checkbox" retained — each region is an independent binary toggle per arch review.
+ *
+ * Spec citations:
+ *   §1.1 Sticky header tokens · §1.2 Main content · §1.3 Drawer anatomy (Portal)
+ *   §2.2–2.3 Option row anatomy (shared with A2) · §3.2 Item labels · §5 Drawer state machine
+ *
+ * Architect conditions (arch-l55c-aspects-boston-rebuild.md):
+ *   - Keep role="checkbox" — ASPECTS regions are independent binary toggles, not radio-single-select
+ *   - Section headers: text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3
+ *   - Bespoke-per-file is the accepted L5.5 pattern; extraction deferred to L5.6
+ *   - No new clinical claim surfaces introduced
+ *
+ * Clinical prose preservation: getScoreInfo() return strings are byte-for-byte identical.
+ * Drawer code from L5.5b is untouched.
+ *
+ * Medical source: Barber PA, et al. Lancet. 2000;355(9216):1670–1674.
+ */
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, RefreshCw, Copy, Star, ChevronRight } from 'lucide-react';
+import { Star, RefreshCw } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
 import { useRecents } from '../hooks/useRecents';
@@ -29,6 +50,8 @@ const SUBCORTICAL_REGIONS = [
 type RegionId = (typeof CORTICAL_REGIONS)[number]['id'] | (typeof SUBCORTICAL_REGIONS)[number]['id'];
 
 // ── Score interpretation ─────────────────────────────────────────────────────
+// getScoreInfo() return strings are PRESERVED byte-for-byte from pre-rebuild.
+// DO NOT edit these strings — clinical prose is not owned by this file.
 
 interface ScoreInfo {
   label: string;
@@ -85,7 +108,7 @@ function getScoreInfo(score: number): ScoreInfo {
   };
 }
 
-// ── Severity tokens ──────────────────────────────────────────────────────────
+// ── Severity tokens — CALCULATOR_SPEC.md §6 ──────────────────────────────────
 
 type AspectsSeverity = 'small' | 'moderate' | 'large' | 'extensive';
 
@@ -138,21 +161,56 @@ const ASPECTS_SEVERITY_TOKENS: Record<AspectsSeverity, {
   },
 };
 
-// ── Chevron sub-component ────────────────────────────────────────────────────
+// ── Sub-components ────────────────────────────────────────────────────────────
 
-const Chevron: React.FC<{ direction: 'up' | 'down'; className?: string }> = ({ direction, className = '' }) => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={className}>
-    {direction === 'up' ? <polyline points="18 15 12 9 6 15" /> : <polyline points="6 9 12 15 18 9" />}
+/** Inline SVG back arrow — §1.1 */
+const BackArrow: React.FC = () => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M19 12H5M12 19l-7-7 7-7" />
   </svg>
 );
 
-// ── Component ────────────────────────────────────────────────────────────────
+/** Chevron SVG — direction prop controls up vs down */
+const Chevron: React.FC<{ direction: 'up' | 'down'; className?: string }> = ({
+  direction,
+  className = '',
+}) => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className={className}
+  >
+    {direction === 'up'
+      ? <polyline points="18 15 12 9 6 15" />
+      : <polyline points="6 9 12 15 18 9" />}
+  </svg>
+);
+
+// ── Component ─────────────────────────────────────────────────────────────────
 
 const AspectScoreCalculator: React.FC = () => {
   const [involved, setInvolved] = useState<Set<RegionId>>(new Set());
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+
   const { handleBack } = useNavigationSource();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { recordView } = useRecents();
@@ -180,6 +238,8 @@ const AspectScoreCalculator: React.FC = () => {
   const isExpanded = drawerOpen;
   const drawerCollapsedShadow = '0 -2px 12px rgba(15,23,42,0.08)';
   const drawerExpandedShadow = '0 -4px 24px rgba(15,23,42,0.12)';
+
+  const isFav = isFavorite('aspects');
 
   const toggleRegion = useCallback((id: RegionId) => {
     setHasInteracted(true);
@@ -226,9 +286,8 @@ const AspectScoreCalculator: React.FC = () => {
     setTimeout(() => setToastMessage(null), 2000);
   };
 
-  const isFav = isFavorite('aspects');
-
   // ── Drawer sub-components ──────────────────────────────────────────────────
+  // DO NOT TOUCH — drawer code from L5.5b is correct.
 
   const DrawerContent = () => (
     <div
@@ -306,211 +365,227 @@ const AspectScoreCalculator: React.FC = () => {
     );
   };
 
+  // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <>
       <h1 className="sr-only">ASPECTS Score Calculator — Alberta Stroke Program Early CT Score</h1>
-      {/* ── Sticky Header ─────────────────────────────────────────────────── */}
+
+      {/* ── Sticky header — §1.1 ──────────────────────────────────────────── */}
       <header
-        className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-700"
+        className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-100"
         role="banner"
       >
-        <div className="max-w-2xl mx-auto px-4 md:px-6 py-3">
+        <div className="max-w-2xl mx-auto px-5 py-4">
           <div className="flex items-center justify-between gap-2">
+
+            {/* Left cluster */}
             <div className="flex items-center gap-3 min-w-0">
               <button
                 type="button"
                 onClick={handleBack}
-                className="p-2 -m-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0"
+                className="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0"
                 aria-label="Back to calculators"
               >
-                <ArrowLeft size={20} aria-hidden="true" />
+                <BackArrow />
               </button>
+
               <div className="min-w-0">
-                <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                   ASPECTS Score
                 </div>
+
                 <div
-                  className="flex items-baseline gap-1.5"
+                  className="flex items-baseline gap-1.5 mt-0.5"
                   aria-live="polite"
                   aria-atomic="true"
                   aria-label={`ASPECTS Score ${score} out of 10. ${scoreInfo.label}.`}
                 >
-                  <span className={`text-2xl md:text-3xl font-bold tabular-nums ${scoreInfo.colorClass}`}>
+                  <span className="text-2xl font-semibold text-slate-900 tabular-nums leading-none">
                     {score}
                   </span>
-                  <span className="text-slate-400 dark:text-slate-500 text-sm">/ 10</span>
-                  <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                    · {scoreInfo.label}
-                  </span>
+                  <span className="text-slate-400 text-sm leading-none">/ 10</span>
+
+                  {involved.size > 0 && (
+                    <span className={`text-xs font-medium ml-1.5 ${
+                      score >= 8 ? 'text-emerald-700' :
+                      score >= 6 ? 'text-yellow-700' :
+                      score >= 3 ? 'text-orange-700' : 'text-red-600'
+                    }`}>
+                      {scoreInfo.label}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-1 flex-shrink-0">
+
+            {/* Right cluster */}
+            <div className="flex items-center gap-0.5 flex-shrink-0">
               <button
+                type="button"
                 onClick={handleFavToggle}
-                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                className="p-2 rounded-full hover:bg-slate-50 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
               >
                 <Star
-                  size={20}
-                  className={isFav ? 'text-amber-500 fill-amber-500' : 'text-slate-400 dark:text-slate-500'}
+                  size={18}
+                  className={isFav ? 'text-amber-400 fill-amber-400' : 'text-slate-400'}
                   aria-hidden="true"
                 />
               </button>
+
               <button
+                type="button"
                 onClick={handleReset}
-                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                className="p-2 rounded-full hover:bg-slate-50 transition-colors text-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="Reset calculator"
               >
-                <RefreshCw size={18} className="text-slate-500 dark:text-slate-400" aria-hidden="true" />
+                <RefreshCw size={17} aria-hidden="true" />
               </button>
+
               <button
+                type="button"
                 onClick={handleCopy}
-                className="bg-neuro-500 hover:bg-neuro-600 text-white px-3 md:px-4 py-2 rounded-xl text-sm font-semibold transition-colors"
+                className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px] flex items-center"
               >
-                <span className="hidden sm:inline">Copy</span>
-                <Copy size={18} className="sm:hidden inline" aria-hidden="true" />
+                Copy
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* ── Main ──────────────────────────────────────────────────────────── */}
-      <main className="max-w-2xl mx-auto px-4 md:px-6 py-6 pb-4" id="aspects-calculator-main">
-        <h1 className="sr-only">ASPECTS Score Calculator — Alberta Stroke Program Early CT Score</h1>
+      {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}
+      <main className="max-w-2xl mx-auto px-5 pt-6 pb-4">
+        <div className="space-y-10">
 
-        {/* How to use */}
-        <section className="mb-5 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
-          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-            Score 10 MCA territory regions on non-contrast CT. <strong className="text-slate-800 dark:text-slate-200">Mark each region with early ischemic change</strong> — each involved region subtracts 1 from baseline 10.
-          </p>
-        </section>
-
-        {/* ── Region Grid ─── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-
-          {/* Cortical — left */}
+          {/* Cortical regions section — A2 visual treatment, role="checkbox" per arch review */}
           <section aria-labelledby="aspects-cortical-label">
             <h2
               id="aspects-cortical-label"
-              className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3"
+              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3"
             >
-              Cortical Regions (M1–M6)
+              Cortical regions (M1–M6)
             </h2>
-            <div className="space-y-2">
-              {CORTICAL_REGIONS.map((region) => {
+            <div role="group" aria-labelledby="aspects-cortical-label">
+              {CORTICAL_REGIONS.map((region, idx) => {
                 const isInvolved = involved.has(region.id);
                 return (
-                  <button
-                    key={region.id}
-                    type="button"
-                    role="checkbox"
-                    aria-checked={isInvolved}
-                    onClick={() => toggleRegion(region.id)}
-                    className={`w-full p-3 rounded-xl border-2 text-left transition-all min-h-[52px] ${
-                      isInvolved
-                        ? 'border-red-400 bg-red-50 dark:bg-red-900/25 dark:border-red-600'
-                        : 'border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-500'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <span
-                        className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-sm font-bold flex-shrink-0 transition-colors ${
-                          isInvolved
-                            ? 'bg-red-500 text-white'
-                            : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
-                        }`}
-                      >
-                        {region.label}
-                      </span>
-                      <div className="min-w-0">
-                        <div className={`text-sm font-semibold leading-tight ${isInvolved ? 'text-red-800 dark:text-red-200' : 'text-slate-800 dark:text-slate-200'}`}>
+                  <React.Fragment key={region.id}>
+                    {idx > 0 && <div className="divider-hair" />}
+                    <button
+                      type="button"
+                      role="checkbox"
+                      aria-checked={isInvolved}
+                      onClick={() => toggleRegion(region.id)}
+                      className={isInvolved
+                        ? 'selected-option w-full flex items-baseline justify-between py-3 pl-4 pr-3 text-left rounded-lg'
+                        : 'w-full flex items-baseline justify-between py-3 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors'
+                      }
+                    >
+                      <div className="flex items-baseline gap-3 min-w-0">
+                        <span className={isInvolved
+                          ? 'text-xs font-bold uppercase tracking-wider opacity-75 flex-shrink-0 w-7'
+                          : 'text-xs font-bold text-slate-400 uppercase tracking-wider flex-shrink-0 w-7'
+                        }>
+                          {region.label}
+                        </span>
+                        <span className={isInvolved
+                          ? 'font-semibold truncate'
+                          : 'font-medium text-slate-900 truncate'
+                        }>
                           {region.fullName}
-                        </div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{region.detail}</div>
+                        </span>
                       </div>
-                    </div>
-                  </button>
+                      <span className={isInvolved ? 'text-sm opacity-75' : 'text-sm text-slate-400'}>
+                        −1
+                      </span>
+                    </button>
+                  </React.Fragment>
                 );
               })}
             </div>
           </section>
 
-          {/* Subcortical — right */}
+          {/* Subcortical regions section */}
           <section aria-labelledby="aspects-subcortical-label">
             <h2
               id="aspects-subcortical-label"
-              className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3"
+              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3"
             >
-              Subcortical Regions
+              Subcortical regions
             </h2>
-            <div className="space-y-2">
-              {SUBCORTICAL_REGIONS.map((region) => {
+            <div role="group" aria-labelledby="aspects-subcortical-label">
+              {SUBCORTICAL_REGIONS.map((region, idx) => {
                 const isInvolved = involved.has(region.id);
                 return (
-                  <button
-                    key={region.id}
-                    type="button"
-                    role="checkbox"
-                    aria-checked={isInvolved}
-                    onClick={() => toggleRegion(region.id)}
-                    className={`w-full p-3 rounded-xl border-2 text-left transition-all min-h-[52px] ${
-                      isInvolved
-                        ? 'border-orange-400 bg-orange-50 dark:bg-orange-900/25 dark:border-orange-600'
-                        : 'border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-500'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <span
-                        className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-sm font-bold flex-shrink-0 transition-colors ${
-                          isInvolved
-                            ? 'bg-orange-500 text-white'
-                            : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
-                        }`}
-                      >
-                        {region.label}
-                      </span>
-                      <div className="min-w-0">
-                        <div className={`text-sm font-semibold leading-tight ${isInvolved ? 'text-orange-800 dark:text-orange-200' : 'text-slate-800 dark:text-slate-200'}`}>
+                  <React.Fragment key={region.id}>
+                    {idx > 0 && <div className="divider-hair" />}
+                    <button
+                      type="button"
+                      role="checkbox"
+                      aria-checked={isInvolved}
+                      onClick={() => toggleRegion(region.id)}
+                      className={isInvolved
+                        ? 'selected-option w-full flex items-baseline justify-between py-3 pl-4 pr-3 text-left rounded-lg'
+                        : 'w-full flex items-baseline justify-between py-3 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors'
+                      }
+                    >
+                      <div className="flex items-baseline gap-3 min-w-0">
+                        <span className={isInvolved
+                          ? 'text-xs font-bold uppercase tracking-wider opacity-75 flex-shrink-0 w-7'
+                          : 'text-xs font-bold text-slate-400 uppercase tracking-wider flex-shrink-0 w-7'
+                        }>
+                          {region.label}
+                        </span>
+                        <span className={isInvolved
+                          ? 'font-semibold truncate'
+                          : 'font-medium text-slate-900 truncate'
+                        }>
                           {region.fullName}
-                        </div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{region.detail}</div>
+                        </span>
                       </div>
-                    </div>
-                  </button>
+                      <span className={isInvolved ? 'text-sm opacity-75' : 'text-sm text-slate-400'}>
+                        −1
+                      </span>
+                    </button>
+                  </React.Fragment>
                 );
               })}
             </div>
-
-            {/* Score summary inside subcortical column — visible on desktop */}
-            <div className={`hidden sm:block mt-4 p-3 rounded-xl border-2 ${scoreInfo.borderClass} ${scoreInfo.bgClass}`}>
-              <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Score</div>
-              <div className={`text-4xl font-black tabular-nums ${scoreInfo.colorClass}`}>{score}<span className="text-lg font-normal text-slate-400">/10</span></div>
-              <div className={`text-sm font-semibold mt-1 ${scoreInfo.textClass}`}>{scoreInfo.label}</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{involved.size} region{involved.size !== 1 ? 's' : ''} involved</div>
-            </div>
           </section>
-        </div>
 
-        {/* ── EVT Pathway CTA ── */}
-        <div className="mt-4">
-          <Link
-            to="/pathways/evt"
-            className="flex items-center justify-between w-full p-4 rounded-xl bg-neuro-50 dark:bg-neuro-900/20 border border-neuro-200 dark:border-neuro-800 hover:bg-neuro-100 dark:hover:bg-neuro-900/30 transition-colors group"
-          >
-            <div>
-              <div className="text-sm font-semibold text-neuro-700 dark:text-neuro-300">Assess full EVT eligibility</div>
-              <div className="text-xs text-neuro-600 dark:text-neuro-400 mt-0.5">EVT Eligibility Pathway — time window, NIHSS, occlusion type</div>
-            </div>
-            <ChevronRight size={18} className="text-neuro-500 group-hover:translate-x-0.5 transition-transform flex-shrink-0" aria-hidden="true" />
-          </Link>
-        </div>
+          {/* EVT Pathway CTA */}
+          <div>
+            <Link
+              to="/pathways/evt"
+              className="flex items-center justify-between w-full p-4 rounded-xl bg-neuro-50 border border-neuro-200 hover:bg-neuro-100 transition-colors group"
+            >
+              <div>
+                <div className="text-sm font-semibold text-neuro-700">Assess full EVT eligibility</div>
+                <div className="text-xs text-neuro-600 mt-0.5">EVT Eligibility Pathway — time window, NIHSS, occlusion type</div>
+              </div>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-neuro-500 group-hover:translate-x-0.5 transition-transform flex-shrink-0"
+                aria-hidden="true"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </Link>
+          </div>
 
-        {/* ── Citation ── */}
-        <footer className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            <strong>Source:</strong>{' '}
+        </div>{/* end space-y-10 */}
+
+        {/* Page footer — §1.2 */}
+        <footer className="mt-14 pt-6 border-t border-slate-100">
+          <p className="text-xs text-slate-400 leading-relaxed">
             <cite>
               Barber PA, et al. Validity and reliability of a quantitative computed tomography score in predicting outcome of hyperacute stroke before thrombolytic therapy.{' '}
               <em>Lancet.</em> 2000;355(9216):1670–1674.
@@ -519,22 +594,23 @@ const AspectScoreCalculator: React.FC = () => {
               href="https://doi.org/10.1016/s0140-6736(00)02237-6"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neuro-600 hover:underline"
+              className="text-neuro-600 hover:underline ml-0.5"
             >
-              DOI
+              doi:10.1016/s0140-6736(00)02237-6
             </a>
-            {' '}· Updated per 2026 AHA/ASA Stroke Guidelines (Prabhakaran et al. DOI: 10.1161/STR.0000000000000513).
+            {' · Updated per 2026 AHA/ASA Stroke Guidelines (Prabhakaran et al. DOI: 10.1161/STR.0000000000000513).'}
           </p>
-          <p className="mt-4 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            <strong>Educational use only.</strong> This tool is for clinical decision support and education. It is not a substitute for professional medical judgment or formal radiology interpretation. Do not enter patient-identifying information. Verify independently when used in patient care.
+          <p className="mt-3 text-xs text-slate-400 leading-relaxed">
+            Educational use only. This tool is for clinical decision support and education. It is not a substitute for professional medical judgment or formal radiology interpretation. Do not enter patient-identifying information. Verify independently when used in patient care.
           </p>
         </footer>
 
-        {/* Drawer spacer */}
+        {/* Drawer spacer — §1.3 */}
         <div className={drawerOpen ? 'drawer-spacer-expanded' : 'drawer-spacer-collapsed'} />
+
       </main>
 
-      {/* ── Drawer portal — fixed above mobile bottom nav ────────────────── */}
+      {/* ── Drawer portal — fixed above mobile bottom nav §1.3 ───────────── */}
       {createPortal(
         <div
           className="fixed right-0 z-[55] bg-white"

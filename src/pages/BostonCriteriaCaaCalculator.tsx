@@ -1,7 +1,27 @@
+/**
+ * Boston Criteria 2.0 CAA Calculator — rebuilt against CALCULATOR_SPEC.md v1.1
+ * Archetype 3 (Mixed Input): checkboxes (A3 row pattern) + radio rows (A1 pattern) + number input.
+ *
+ * Spec citations:
+ *   §1.1 Sticky header tokens · §1.2 Main content · §1.3 Drawer anatomy (Portal)
+ *   §2.2–2.3 Option row anatomy (radio rows) · §4.1–4.3 Checkbox row anatomy · §5 Drawer state machine
+ *
+ * Architect conditions (arch-l55c-aspects-boston-rebuild.md):
+ *   - Keep <input type="number"> with inputMode="numeric" added for mobile — no number-input archetype in spec
+ *   - Bespoke-per-file is the accepted L5.5 pattern; extraction deferred to L5.6
+ *   - No dark:* variants — light-only theme matching ABCD²
+ *   - No new clinical claim surfaces introduced
+ *
+ * Clinical prose preservation: assessBostonCriteria() result strings are byte-for-byte from data module.
+ * Drawer code from L5.5b is untouched.
+ *
+ * Medical source: Charidimou A, et al. Lancet Neurol. 2022;21(8):714–725.
+ */
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, RefreshCw, Copy, Star } from 'lucide-react';
+import { Star, RefreshCw } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
 import { useRecents } from '../hooks/useRecents';
@@ -12,6 +32,8 @@ import {
   assessBostonCriteria,
   type BostonCaaInputs,
 } from '../data/bostonCriteriaCaaData';
+
+// ── Constants ─────────────────────────────────────────────────────────────────
 
 const defaultInputs: BostonCaaInputs = {
   age: 50,
@@ -24,68 +46,116 @@ const defaultInputs: BostonCaaInputs = {
   otherCauseOfHemorrhage: false,
 };
 
-const riskColors: Record<string, string> = {
-  'very-high': 'bg-red-200 text-red-900 dark:bg-red-900/50 dark:text-red-100 border-red-400',
-  high: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200 border-red-300',
-  moderate: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200 border-amber-300',
-  low: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200 border-emerald-300',
-  'n/a': 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300 border-slate-300',
-};
-
 const LOBAR_OPTIONS: { value: 0 | 1 | 2; label: string }[] = [
   { value: 0, label: '0' },
   { value: 1, label: '1' },
   { value: 2, label: '≥2' },
 ];
 
-// ── Severity tokens ──────────────────────────────────────────────────────────
+// ── Severity tokens — CALCULATOR_SPEC.md §6 ──────────────────────────────────
 
 type BostonRisk = 'very-high' | 'high' | 'moderate' | 'low' | 'n/a';
 
 const BOSTON_SEVERITY_TOKENS: Record<BostonRisk, {
-  borderColor: string; headerBg: string; headerHover: string;
-  labelClass: string; statClass: string; chevronClass: string;
+  borderColor: string;
+  headerBg: string;
+  headerHover: string;
+  labelClass: string;
+  statClass: string;
+  chevronClass: string;
 }> = {
   'very-high': {
-    borderColor: '#f87171', headerBg: 'bg-red-100', headerHover: 'hover:bg-red-200',
+    borderColor: '#f87171',
+    headerBg: 'bg-red-100',
+    headerHover: 'hover:bg-red-200',
     labelClass: 'text-[10px] font-bold text-red-800 uppercase tracking-widest',
-    statClass: 'text-sm font-medium text-red-800', chevronClass: 'text-red-700',
+    statClass: 'text-sm font-medium text-red-800',
+    chevronClass: 'text-red-700',
   },
   high: {
-    borderColor: '#fca5a5', headerBg: 'bg-red-50', headerHover: 'hover:bg-red-100',
+    borderColor: '#fca5a5',
+    headerBg: 'bg-red-50',
+    headerHover: 'hover:bg-red-100',
     labelClass: 'text-[10px] font-bold text-red-700 uppercase tracking-widest',
-    statClass: 'text-sm font-medium text-red-700', chevronClass: 'text-red-600',
+    statClass: 'text-sm font-medium text-red-700',
+    chevronClass: 'text-red-600',
   },
   moderate: {
-    borderColor: '#fed7aa', headerBg: 'bg-amber-50', headerHover: 'hover:bg-amber-100',
+    borderColor: '#fed7aa',
+    headerBg: 'bg-amber-50',
+    headerHover: 'hover:bg-amber-100',
     labelClass: 'text-[10px] font-bold text-amber-700 uppercase tracking-widest',
-    statClass: 'text-sm font-medium text-amber-700', chevronClass: 'text-amber-600',
+    statClass: 'text-sm font-medium text-amber-700',
+    chevronClass: 'text-amber-600',
   },
   low: {
-    borderColor: '#a7f3d0', headerBg: 'bg-emerald-50', headerHover: 'hover:bg-emerald-100',
+    borderColor: '#a7f3d0',
+    headerBg: 'bg-emerald-50',
+    headerHover: 'hover:bg-emerald-100',
     labelClass: 'text-[10px] font-bold text-emerald-700 uppercase tracking-widest',
-    statClass: 'text-sm font-medium text-emerald-700', chevronClass: 'text-emerald-600',
+    statClass: 'text-sm font-medium text-emerald-700',
+    chevronClass: 'text-emerald-600',
   },
   'n/a': {
-    borderColor: '#e2e8f0', headerBg: 'bg-white', headerHover: 'hover:bg-slate-50',
+    borderColor: '#e2e8f0',
+    headerBg: 'bg-white',
+    headerHover: 'hover:bg-slate-50',
     labelClass: 'text-[10px] font-bold text-slate-400 uppercase tracking-widest',
-    statClass: 'text-sm font-medium text-slate-700', chevronClass: 'text-slate-400',
+    statClass: 'text-sm font-medium text-slate-700',
+    chevronClass: 'text-slate-400',
   },
 };
 
-// ── Chevron sub-component ────────────────────────────────────────────────────
+// ── Sub-components ────────────────────────────────────────────────────────────
 
-const Chevron: React.FC<{ direction: 'up' | 'down'; className?: string }> = ({ direction, className = '' }) => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={className}>
-    {direction === 'up' ? <polyline points="18 15 12 9 6 15" /> : <polyline points="6 9 12 15 18 9" />}
+/** Inline SVG back arrow — §1.1 */
+const BackArrow: React.FC = () => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M19 12H5M12 19l-7-7 7-7" />
   </svg>
 );
+
+/** Chevron SVG — direction prop controls up vs down */
+const Chevron: React.FC<{ direction: 'up' | 'down'; className?: string }> = ({
+  direction,
+  className = '',
+}) => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className={className}
+  >
+    {direction === 'up'
+      ? <polyline points="18 15 12 9 6 15" />
+      : <polyline points="6 9 12 15 18 9" />}
+  </svg>
+);
+
+// ── Component ─────────────────────────────────────────────────────────────────
 
 export default function BostonCriteriaCaaCalculator() {
   const [inputs, setInputs] = useState<BostonCaaInputs>(defaultInputs);
   const [toast, setToast] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+
   const { handleBack } = useNavigationSource();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { recordView } = useRecents();
@@ -104,7 +174,6 @@ export default function BostonCriteriaCaaCalculator() {
   }, []);
 
   const result = assessBostonCriteria(inputs);
-  const riskColor = riskColors[result.anticoagulationRisk];
 
   // ── Drawer derived values ──────────────────────────────────────────────────
   const drawerState: 'A' | 'C' = hasInteracted ? 'C' : 'A';
@@ -113,6 +182,20 @@ export default function BostonCriteriaCaaCalculator() {
   const drawerCollapsedShadow = '0 -2px 12px rgba(15,23,42,0.08)';
   const drawerExpandedShadow = '0 -4px 24px rgba(15,23,42,0.12)';
 
+  const isFav = isFavorite('boston-caa');
+
+  // ── Setters ────────────────────────────────────────────────────────────────
+  const setAge = useCallback((v: number) => {
+    setHasInteracted(true);
+    setInputs((p) => ({ ...p, age: v }));
+  }, []);
+
+  const setLobar = useCallback((v: 0 | 1 | 2) => {
+    setHasInteracted(true);
+    setInputs((p) => ({ ...p, lobarHemorrhagicLesions: v }));
+  }, []);
+
+  // ── Handlers ───────────────────────────────────────────────────────────────
   const handleCopy = () => {
     const lines = [
       `Boston Criteria 2.0 for CAA: ${result.label}`,
@@ -147,18 +230,8 @@ export default function BostonCriteriaCaaCalculator() {
     setTimeout(() => setToast(null), 2000);
   };
 
-  const isFav = isFavorite('boston-caa');
-
-  const setAge = useCallback((v: number) => {
-    setHasInteracted(true);
-    setInputs((p) => ({ ...p, age: v }));
-  }, []);
-  const setLobar = useCallback((v: 0 | 1 | 2) => {
-    setHasInteracted(true);
-    setInputs((p) => ({ ...p, lobarHemorrhagicLesions: v }));
-  }, []);
-
   // ── Drawer sub-components ──────────────────────────────────────────────────
+  // DO NOT TOUCH — drawer code from L5.5b is correct.
 
   const DrawerContent = () => (
     <div
@@ -198,7 +271,7 @@ export default function BostonCriteriaCaaCalculator() {
         <div className="mt-5 pt-4 border-t border-slate-100">
           <p className="text-xs text-slate-400 leading-relaxed">
             <cite>{BOSTON_CAA_CITATION.authors}. {BOSTON_CAA_CITATION.title}. {BOSTON_CAA_CITATION.journal}. {BOSTON_CAA_CITATION.year};{BOSTON_CAA_CITATION.volume}({BOSTON_CAA_CITATION.issue}):{BOSTON_CAA_CITATION.pages}.</cite>{' '}
-            <a href={`https://doi.org/${BOSTON_CAA_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">DOI</a>
+            <a href={`https://doi.org/${BOSTON_CAA_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-neuro-600 hover:underline">DOI</a>
           </p>
           <p className="mt-2 text-xs text-slate-400 leading-relaxed">
             Educational use only. Probable/definite CAA significantly increases ICH recurrence risk; anticoagulation decision remains shared decision-making.
@@ -253,138 +326,371 @@ export default function BostonCriteriaCaaCalculator() {
     );
   };
 
+  // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <>
-      <header className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-700" role="banner">
-        <div className="max-w-2xl mx-auto px-4 md:px-6 py-3">
+      <h1 className="sr-only">Boston Criteria 2.0 for Cerebral Amyloid Angiopathy Calculator</h1>
+
+      {/* ── Sticky header — §1.1 ──────────────────────────────────────────── */}
+      <header
+        className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-100"
+        role="banner"
+      >
+        <div className="max-w-2xl mx-auto px-5 py-4">
           <div className="flex items-center justify-between gap-2">
+
+            {/* Left cluster */}
             <div className="flex items-center gap-3 min-w-0">
-              <button type="button" onClick={handleBack} className="p-2 -m-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0" aria-label="Back to calculators">
-                <ArrowLeft size={20} aria-hidden="true" />
+              <button
+                type="button"
+                onClick={handleBack}
+                className="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0"
+                aria-label="Back to calculators"
+              >
+                <BackArrow />
               </button>
+
               <div className="min-w-0">
-                <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Boston Criteria 2.0 for CAA</div>
-                <div className="flex items-baseline gap-1.5 flex-wrap" aria-live="polite" aria-atomic="true">
-                  <span className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">{result.label}</span>
-                  <span className={`text-xs font-semibold px-2 py-0.5 rounded border ${riskColor}`}>Anticoagulation risk: {result.anticoagulationRisk.replace('-', ' ')}</span>
+                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                  Boston Criteria 2.0 for CAA
+                </div>
+
+                <div
+                  className="flex items-baseline gap-1.5 mt-0.5 flex-wrap"
+                  aria-live="polite"
+                  aria-atomic="true"
+                >
+                  <span className="text-xl font-semibold text-slate-900 leading-tight">
+                    {hasInteracted ? result.label : '—'}
+                  </span>
+
+                  {hasInteracted && result.anticoagulationRisk !== 'n/a' && (
+                    <span className={`text-xs font-medium ml-1.5 ${
+                      result.anticoagulationRisk === 'very-high' || result.anticoagulationRisk === 'high'
+                        ? 'text-red-600'
+                        : result.anticoagulationRisk === 'moderate'
+                        ? 'text-amber-700'
+                        : 'text-emerald-700'
+                    }`}>
+                      Anticoag risk: {result.anticoagulationRisk.replace('-', ' ')}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-1 flex-shrink-0">
-              <button onClick={handleFavToggle} className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}>
-                <Star size={20} className={isFav ? 'text-amber-500 fill-amber-500' : 'text-slate-400 dark:text-slate-500'} aria-hidden="true" />
+
+            {/* Right cluster */}
+            <div className="flex items-center gap-0.5 flex-shrink-0">
+              <button
+                type="button"
+                onClick={handleFavToggle}
+                className="p-2 rounded-full hover:bg-slate-50 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
+              >
+                <Star
+                  size={18}
+                  className={isFav ? 'text-amber-400 fill-amber-400' : 'text-slate-400'}
+                  aria-hidden="true"
+                />
               </button>
-              <button onClick={handleReset} className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label="Reset calculator">
-                <RefreshCw size={18} className="text-slate-500 dark:text-slate-400" aria-hidden="true" />
+
+              <button
+                type="button"
+                onClick={handleReset}
+                className="p-2 rounded-full hover:bg-slate-50 transition-colors text-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                aria-label="Reset calculator"
+              >
+                <RefreshCw size={17} aria-hidden="true" />
               </button>
-              <button onClick={handleCopy} className="bg-slate-900 dark:bg-slate-700 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors">
-                <span className="hidden sm:inline">Copy</span>
-                <Copy size={18} className="sm:hidden inline" aria-hidden="true" />
+
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px] flex items-center"
+              >
+                Copy
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 md:px-6 py-6 pb-4">
-        <h1 className="sr-only">Boston Criteria 2.0 for Cerebral Amyloid Angiopathy Calculator</h1>
+      {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}
+      <main className="max-w-2xl mx-auto px-5 pt-6 pb-4">
+        <div className="space-y-10">
 
-        <div className="space-y-6">
+          {/* Age — styled number input (no archetype in spec; keep as-is per arch review) */}
           <section aria-labelledby="boston-age-label">
-            <h2 id="boston-age-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Age (years)</h2>
+            <h2
+              id="boston-age-label"
+              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3"
+            >
+              Age
+            </h2>
             <input
               type="number"
+              inputMode="numeric"
               min={18}
               max={120}
               value={inputs.age}
               onChange={(e) => setAge(parseInt(e.target.value, 10) || 50)}
-              className="min-h-[44px] w-24 px-3 py-2 rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium"
+              className="min-h-[44px] w-28 px-4 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 font-medium focus:border-neuro-500 focus:outline-none focus:ring-2 focus:ring-neuro-500/20"
               aria-describedby="boston-age-desc"
             />
-            <p id="boston-age-desc" className="text-sm text-slate-500 dark:text-slate-400 mt-1">≥50 required for probable/possible CAA.</p>
+            <p id="boston-age-desc" className="text-xs text-slate-500 mt-2">
+              ≥50 required for probable/possible CAA.
+            </p>
           </section>
 
+          {/* Pathology — A3 checkbox rows (mutually exclusive) */}
           <section aria-labelledby="boston-pathology-label">
-            <h2 id="boston-pathology-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Pathology (if available)</h2>
-            <div className="space-y-2">
-              <label className="flex items-center gap-3 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer border-slate-200 dark:border-slate-600 hover:border-slate-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-blue-900/20">
-                <input type="checkbox" checked={inputs.pathologyDefiniteCAA} onChange={(e) => { setHasInteracted(true); setInputs((p) => ({ ...p, pathologyDefiniteCAA: e.target.checked, pathologySupportingCAA: e.target.checked ? false : p.pathologySupportingCAA })); }} className="w-5 h-5 rounded border-slate-300 text-blue-600" />
-                <span className="font-medium text-slate-900 dark:text-white">Definite CAA (full brain post-mortem: severe CAA, no other lesion)</span>
+            <h2
+              id="boston-pathology-label"
+              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3"
+            >
+              Pathology (if available)
+            </h2>
+            <div>
+              <label className={`flex items-start gap-3 py-3.5 px-3 rounded-lg hover:bg-slate-50/60 cursor-pointer transition-colors ${inputs.pathologyDefiniteCAA ? 'bg-neuro-50' : ''}`}>
+                <input
+                  type="checkbox"
+                  checked={inputs.pathologyDefiniteCAA}
+                  onChange={(e) => {
+                    setHasInteracted(true);
+                    setInputs((p) => ({
+                      ...p,
+                      pathologyDefiniteCAA: e.target.checked,
+                      pathologySupportingCAA: e.target.checked ? false : p.pathologySupportingCAA,
+                    }));
+                  }}
+                  className="mt-0.5 w-5 h-5 rounded border-slate-300 accent-neuro-500"
+                />
+                <span className="flex-1 min-w-0">
+                  <span className={inputs.pathologyDefiniteCAA ? 'block font-semibold text-neuro-700' : 'block font-medium text-slate-900'}>
+                    Definite CAA
+                  </span>
+                  <span className="block text-xs text-slate-500 mt-0.5">Full brain post-mortem: severe CAA, no other lesion</span>
+                </span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer border-slate-200 dark:border-slate-600 hover:border-slate-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-blue-900/20">
-                <input type="checkbox" checked={inputs.pathologySupportingCAA} onChange={(e) => { setHasInteracted(true); setInputs((p) => ({ ...p, pathologySupportingCAA: e.target.checked, pathologyDefiniteCAA: e.target.checked ? false : p.pathologyDefiniteCAA })); }} className="w-5 h-5 rounded border-slate-300 text-blue-600" />
-                <span className="font-medium text-slate-900 dark:text-white">Probable CAA with supporting pathology (evacuated hematoma or cortical biopsy showing CAA)</span>
+              <div className="divider-hair" />
+              <label className={`flex items-start gap-3 py-3.5 px-3 rounded-lg hover:bg-slate-50/60 cursor-pointer transition-colors ${inputs.pathologySupportingCAA ? 'bg-neuro-50' : ''}`}>
+                <input
+                  type="checkbox"
+                  checked={inputs.pathologySupportingCAA}
+                  onChange={(e) => {
+                    setHasInteracted(true);
+                    setInputs((p) => ({
+                      ...p,
+                      pathologySupportingCAA: e.target.checked,
+                      pathologyDefiniteCAA: e.target.checked ? false : p.pathologyDefiniteCAA,
+                    }));
+                  }}
+                  className="mt-0.5 w-5 h-5 rounded border-slate-300 accent-neuro-500"
+                />
+                <span className="flex-1 min-w-0">
+                  <span className={inputs.pathologySupportingCAA ? 'block font-semibold text-neuro-700' : 'block font-medium text-slate-900'}>
+                    Probable CAA with supporting pathology
+                  </span>
+                  <span className="block text-xs text-slate-500 mt-0.5">Evacuated hematoma or cortical biopsy showing CAA</span>
+                </span>
               </label>
             </div>
           </section>
 
+          {/* Qualifying presentation — A1 radio rows */}
           <section aria-labelledby="boston-presentation-label">
-            <h2 id="boston-presentation-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Qualifying presentation</h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">Spontaneous ICH, transient focal neurological episodes (TFNE), or cognitive impairment/dementia.</p>
-            <div role="radiogroup" aria-labelledby="boston-presentation-label" className="flex gap-2">
-              <button type="button" role="radio" aria-checked={!inputs.hasQualifyingPresentation} onClick={() => { setHasInteracted(true); setInputs((p) => ({ ...p, hasQualifyingPresentation: false })); }} className={`flex-1 py-3 px-4 rounded-xl border-2 min-h-[44px] font-medium ${!inputs.hasQualifyingPresentation ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 bg-white dark:bg-slate-800'}`}>No</button>
-              <button type="button" role="radio" aria-checked={inputs.hasQualifyingPresentation} onClick={() => { setHasInteracted(true); setInputs((p) => ({ ...p, hasQualifyingPresentation: true })); }} className={`flex-1 py-3 px-4 rounded-xl border-2 min-h-[44px] font-medium ${inputs.hasQualifyingPresentation ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 bg-white dark:bg-slate-800'}`}>Yes</button>
+            <h2
+              id="boston-presentation-label"
+              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3"
+            >
+              Qualifying presentation
+            </h2>
+            <p className="text-xs text-slate-500 mb-3">
+              Spontaneous ICH, transient focal neurological episodes (TFNE), or cognitive impairment/dementia.
+            </p>
+            <div role="radiogroup" aria-labelledby="boston-presentation-label">
+              <button
+                type="button"
+                role="radio"
+                aria-checked={!inputs.hasQualifyingPresentation}
+                onClick={() => {
+                  setHasInteracted(true);
+                  setInputs((p) => ({ ...p, hasQualifyingPresentation: false }));
+                }}
+                className={!inputs.hasQualifyingPresentation
+                  ? 'selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg'
+                  : 'w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors'
+                }
+              >
+                <span className={!inputs.hasQualifyingPresentation ? 'font-semibold' : 'font-medium text-slate-900'}>No</span>
+              </button>
+              <div className="divider-hair" />
+              <button
+                type="button"
+                role="radio"
+                aria-checked={inputs.hasQualifyingPresentation}
+                onClick={() => {
+                  setHasInteracted(true);
+                  setInputs((p) => ({ ...p, hasQualifyingPresentation: true }));
+                }}
+                className={inputs.hasQualifyingPresentation
+                  ? 'selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg'
+                  : 'w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors'
+                }
+              >
+                <span className={inputs.hasQualifyingPresentation ? 'font-semibold' : 'font-medium text-slate-900'}>Yes</span>
+              </button>
             </div>
           </section>
 
+          {/* Lobar hemorrhagic lesions — A1 radio rows (3 options) */}
           <section aria-labelledby="boston-lobar-label">
-            <h2 id="boston-lobar-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Strictly lobar hemorrhagic lesions (T2*)</h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">ICH, microbleeds, cortical superficial siderosis, or convexity SAH; multiple foci count as multiple. Cerebellar not counted as lobar or deep.</p>
-            <div role="radiogroup" aria-labelledby="boston-lobar-label" className="flex gap-2">
-              {LOBAR_OPTIONS.map((opt) => (
-                <button key={opt.value} type="button" role="radio" aria-checked={inputs.lobarHemorrhagicLesions === opt.value} onClick={() => setLobar(opt.value)} className={`flex-1 py-3 px-4 rounded-xl border-2 min-h-[44px] font-medium ${inputs.lobarHemorrhagicLesions === opt.value ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 bg-white dark:bg-slate-800'}`}>
-                  {opt.label}
-                </button>
-              ))}
+            <h2
+              id="boston-lobar-label"
+              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3"
+            >
+              Strictly lobar hemorrhagic lesions (T2*)
+            </h2>
+            <p className="text-xs text-slate-500 mb-3">
+              ICH, microbleeds, cortical superficial siderosis, or convexity SAH; multiple foci count as multiple. Cerebellar not counted as lobar or deep.
+            </p>
+            <div role="radiogroup" aria-labelledby="boston-lobar-label">
+              {LOBAR_OPTIONS.map((opt, idx) => {
+                const isSelected = inputs.lobarHemorrhagicLesions === opt.value;
+                return (
+                  <React.Fragment key={opt.value}>
+                    {idx > 0 && <div className="divider-hair" />}
+                    <button
+                      type="button"
+                      role="radio"
+                      aria-checked={isSelected}
+                      onClick={() => setLobar(opt.value)}
+                      className={isSelected
+                        ? 'selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg'
+                        : 'w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors'
+                      }
+                    >
+                      <span className={isSelected ? 'font-semibold' : 'font-medium text-slate-900'}>
+                        {opt.label}
+                      </span>
+                    </button>
+                  </React.Fragment>
+                );
+              })}
             </div>
           </section>
 
+          {/* White matter feature — A3 single checkbox */}
           <section aria-labelledby="boston-wm-label">
-            <h2 id="boston-wm-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">White matter feature</h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">Severe centrum semiovale perivascular spaces (&gt;20 in one hemisphere) OR multispot WMH (&gt;10 subcortical FLAIR dots bilaterally).</p>
-            <label className="flex items-center gap-3 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer border-slate-200 dark:border-slate-600 hover:border-slate-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-blue-900/20">
-              <input type="checkbox" checked={inputs.whiteMatterFeature} onChange={(e) => { setHasInteracted(true); setInputs((p) => ({ ...p, whiteMatterFeature: e.target.checked })); }} className="w-5 h-5 rounded border-slate-300 text-blue-600" />
-              <span className="font-medium text-slate-900 dark:text-white">Present</span>
+            <h2
+              id="boston-wm-label"
+              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3"
+            >
+              White matter feature
+            </h2>
+            <p className="text-xs text-slate-500 mb-3">
+              Severe centrum semiovale perivascular spaces (&gt;20 in one hemisphere) OR multispot WMH (&gt;10 subcortical FLAIR dots bilaterally).
+            </p>
+            <label className={`flex items-start gap-3 py-3.5 px-3 rounded-lg hover:bg-slate-50/60 cursor-pointer transition-colors ${inputs.whiteMatterFeature ? 'bg-neuro-50' : ''}`}>
+              <input
+                type="checkbox"
+                checked={inputs.whiteMatterFeature}
+                onChange={(e) => {
+                  setHasInteracted(true);
+                  setInputs((p) => ({ ...p, whiteMatterFeature: e.target.checked }));
+                }}
+                className="mt-0.5 w-5 h-5 rounded border-slate-300 accent-neuro-500"
+              />
+              <span className={inputs.whiteMatterFeature ? 'font-semibold text-neuro-700' : 'font-medium text-slate-900'}>
+                Present
+              </span>
             </label>
           </section>
 
+          {/* Deep hemorrhagic lesions — A3 single checkbox */}
           <section aria-labelledby="boston-deep-label">
-            <h2 id="boston-deep-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Deep hemorrhagic lesions on T2*</h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">Basal ganglia, thalamus, brainstem, deep white matter. Absence required for probable/possible CAA (improves specificity); ~15% of pathologically proven CAA can have deep microbleeds.</p>
-            <label className="flex items-center gap-3 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer border-slate-200 dark:border-slate-600 hover:border-slate-300 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-blue-900/20">
-              <input type="checkbox" checked={inputs.deepHemorrhagicLesions} onChange={(e) => { setHasInteracted(true); setInputs((p) => ({ ...p, deepHemorrhagicLesions: e.target.checked })); }} className="w-5 h-5 rounded border-slate-300 text-blue-600" />
-              <span className="font-medium text-slate-900 dark:text-white">Present (excludes probable/possible per strict criteria)</span>
+            <h2
+              id="boston-deep-label"
+              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3"
+            >
+              Deep hemorrhagic lesions on T2*
+            </h2>
+            <p className="text-xs text-slate-500 mb-3">
+              Basal ganglia, thalamus, brainstem, deep white matter. Absence required for probable/possible CAA (improves specificity); ~15% of pathologically proven CAA can have deep microbleeds.
+            </p>
+            <label className={`flex items-start gap-3 py-3.5 px-3 rounded-lg hover:bg-slate-50/60 cursor-pointer transition-colors ${inputs.deepHemorrhagicLesions ? 'bg-neuro-50' : ''}`}>
+              <input
+                type="checkbox"
+                checked={inputs.deepHemorrhagicLesions}
+                onChange={(e) => {
+                  setHasInteracted(true);
+                  setInputs((p) => ({ ...p, deepHemorrhagicLesions: e.target.checked }));
+                }}
+                className="mt-0.5 w-5 h-5 rounded border-slate-300 accent-neuro-500"
+              />
+              <span className={inputs.deepHemorrhagicLesions ? 'font-semibold text-neuro-700' : 'font-medium text-slate-900'}>
+                Present (excludes probable/possible per strict criteria)
+              </span>
             </label>
           </section>
 
+          {/* Other cause of hemorrhagic lesions — A3 single checkbox, red exclusion coloring */}
           <section aria-labelledby="boston-other-label">
-            <h2 id="boston-other-label" className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Other cause of hemorrhagic lesions</h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">Head trauma, hemorrhagic transformation of ischemic stroke, AVM, hemorrhagic tumor, warfarin INR &gt;3, vasculitis. If any present, CAA criteria are excluded.</p>
-            <label className="flex items-center gap-3 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-900/20 has-[:checked]:border-red-500">
-              <input type="checkbox" checked={inputs.otherCauseOfHemorrhage} onChange={(e) => { setHasInteracted(true); setInputs((p) => ({ ...p, otherCauseOfHemorrhage: e.target.checked })); }} className="w-5 h-5 rounded border-slate-300 text-red-600" />
-              <span className="font-medium text-slate-900 dark:text-white">Present (excludes CAA diagnosis by criteria)</span>
+            <h2
+              id="boston-other-label"
+              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3"
+            >
+              Other cause of hemorrhagic lesions
+            </h2>
+            <p className="text-xs text-slate-500 mb-3">
+              Head trauma, hemorrhagic transformation of ischemic stroke, AVM, hemorrhagic tumor, warfarin INR &gt;3, vasculitis. If any present, CAA criteria are excluded.
+            </p>
+            <label className={`flex items-start gap-3 py-3.5 px-3 rounded-lg hover:bg-red-50/40 cursor-pointer transition-colors border border-red-200 ${inputs.otherCauseOfHemorrhage ? 'bg-red-50' : 'bg-red-50/30'}`}>
+              <input
+                type="checkbox"
+                checked={inputs.otherCauseOfHemorrhage}
+                onChange={(e) => {
+                  setHasInteracted(true);
+                  setInputs((p) => ({ ...p, otherCauseOfHemorrhage: e.target.checked }));
+                }}
+                className="mt-0.5 w-5 h-5 rounded border-slate-300 accent-red-500"
+              />
+              <span className={inputs.otherCauseOfHemorrhage ? 'font-semibold text-red-700' : 'font-medium text-slate-900'}>
+                Present (excludes CAA diagnosis by criteria)
+              </span>
             </label>
           </section>
-        </div>
 
-        <footer className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            <strong>Source:</strong> <cite>{BOSTON_CAA_CITATION.authors}. {BOSTON_CAA_CITATION.title}. {BOSTON_CAA_CITATION.journal}. {BOSTON_CAA_CITATION.year};{BOSTON_CAA_CITATION.volume}({BOSTON_CAA_CITATION.issue}):{BOSTON_CAA_CITATION.pages}.</cite>{' '}
-            <a href={`https://doi.org/${BOSTON_CAA_CITATION.doi}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">DOI</a>
+        </div>{/* end space-y-10 */}
+
+        {/* Page footer — §1.2 */}
+        <footer className="mt-14 pt-6 border-t border-slate-100">
+          <p className="text-xs text-slate-400 leading-relaxed">
+            <cite>{BOSTON_CAA_CITATION.authors}. {BOSTON_CAA_CITATION.title}. {BOSTON_CAA_CITATION.journal}. {BOSTON_CAA_CITATION.year};{BOSTON_CAA_CITATION.volume}({BOSTON_CAA_CITATION.issue}):{BOSTON_CAA_CITATION.pages}.</cite>{' '}
+            <a
+              href={`https://doi.org/${BOSTON_CAA_CITATION.doi}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-neuro-600 hover:underline ml-0.5"
+            >
+              DOI
+            </a>
           </p>
-          <p className="mt-4 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            <strong>Educational use only.</strong> Boston Criteria 2.0 require T2*-weighted MRI. Probable/definite CAA significantly increases ICH recurrence risk; anticoagulation decision remains shared decision-making with stroke vs bleeding risk.
+          <p className="mt-3 text-xs text-slate-400 leading-relaxed">
+            Educational use only. Boston Criteria 2.0 require T2*-weighted MRI. Probable/definite CAA significantly increases ICH recurrence risk; anticoagulation decision remains shared decision-making.
           </p>
-          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-            Related: <Link to="/calculators/has-bled-score" className="text-blue-600 dark:text-blue-400 hover:underline">HAS-BLED</Link> (bleeding risk); <Link to="/calculators/ich-score" className="text-blue-600 dark:text-blue-400 hover:underline">ICH Score</Link> (mortality).
+          <p className="mt-3 text-xs text-slate-400">
+            Related: <Link to="/calculators/has-bled-score" className="text-neuro-600 hover:underline">HAS-BLED</Link> (bleeding risk);{' '}
+            <Link to="/calculators/ich-score" className="text-neuro-600 hover:underline">ICH Score</Link> (mortality).
           </p>
         </footer>
 
-        {/* Drawer spacer */}
+        {/* Drawer spacer — §1.3 */}
         <div className={drawerOpen ? 'drawer-spacer-expanded' : 'drawer-spacer-collapsed'} />
+
       </main>
 
-      {/* ── Drawer portal — fixed above mobile bottom nav ────────────────── */}
+      {/* ── Drawer portal — fixed above mobile bottom nav §1.3 ───────────── */}
       {createPortal(
         <div
           className="fixed right-0 z-[55] bg-white"
@@ -397,7 +703,11 @@ export default function BostonCriteriaCaaCalculator() {
 
       {/* ── Toast notification — z-[60] above drawer ─────────────────────── */}
       {toast && createPortal(
-        <div role="status" aria-live="polite" className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-5 py-2.5 rounded-full text-sm font-medium z-[60]">
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-5 py-2.5 rounded-full text-sm font-medium z-[60]"
+        >
           {toast}
         </div>,
         document.body,
