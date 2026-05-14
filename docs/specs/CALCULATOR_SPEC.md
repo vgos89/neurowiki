@@ -373,6 +373,55 @@ For calculators where the result is frequently misapplied (HAS-BLED, CHA₂DS₂
 
 Content Writer owns the callout text. Medical Scientist verifies it.
 
+### 4.6 Number Input Field
+
+**Reference implementation:** Boston Criteria 2.0 age input (`src/pages/BostonCriteriaCaaCalculator.tsx` lines 280-300 post-L5.6.1).
+**Added:** 2026-05-13 from L5.5c architect follow-up.
+
+When a calculator requires a continuous-integer field (age, weight, eGFR, NIHSS partial scores entered numerically, time-since-onset minutes, etc.), use a styled `<input type="number">` with the following canonical anatomy. **Do not invent a step/spinner pattern**, **do not use radio buckets** for continuous values, and **do not use the option-row pattern** for free-numeric inputs.
+
+```html
+<section aria-labelledby="my-number-input-label">
+  <h2 id="my-number-input-label" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">
+    [Label]
+  </h2>
+  <input
+    type="number"
+    inputMode="numeric"
+    min={[lower bound]}
+    max={[upper bound]}
+    value={[state value]}
+    onChange={(e) => [setter](parseInt(e.target.value, 10) || [default])}
+    class="min-h-[44px] w-28 px-4 py-2 rounded-lg border border-slate-200 bg-white text-slate-900 font-medium focus:border-neuro-500 focus:outline-none focus:ring-2 focus:ring-neuro-500/20"
+    aria-describedby="my-number-input-desc"
+  />
+  <p id="my-number-input-desc" class="text-xs text-slate-500 mt-2">
+    [Helper text, e.g. "≥50 required for probable/possible CAA."]
+  </p>
+</section>
+```
+
+**Required attributes and tokens:**
+- `type="number"` — native semantic
+- `inputMode="numeric"` — iOS numeric keypad on mobile
+- `min` / `max` — bound the field to clinically valid values
+- `min-h-[44px]` — meets WCAG 2.5.5 enhanced target size
+- `w-28` (112px) — standard width for 3-digit values (age, weight kg, NIHSS); widen to `w-32` (128px) for 4-digit values (volume mL, hr-minutes)
+- `rounded-lg border border-slate-200` — matches the calculator option-row visual register
+- Focus ring: `focus:border-neuro-500 focus:outline-none focus:ring-2 focus:ring-neuro-500/20` — cobalt focus, accessible per WCAG 2.4.7
+- `aria-describedby` pointing to a `<p>` with helper text — required when the field has a clinical constraint (age cutoff, dose threshold)
+
+**Helper text is mandatory** when:
+- The field has a clinical lower or upper bound that affects scoring (e.g., "≥50 required" for Boston, "must be in mg/dL not mmol/L" for glucose).
+- The unit is not obvious from the label (always specify `mg/dL`, `kg`, `mL`, `years`, `minutes`).
+
+**Helper text is optional** when:
+- The label is fully self-describing (e.g., "Age" with `min={18} max={120}`).
+
+**State coupling with `useDrawerState`:** every number-input `onChange` must call `setHasInteracted(true)` (binary-mode calculators) or contribute to `selectedCount` (partial-complete-mode calculators) so the drawer state machine fires correctly when the user types a value.
+
+**Out of scope:** sliders, dial steppers, dual-thumb range inputs. If a future calculator needs those, this section gets extended via the spec-amendment process — do not improvise.
+
 ---
 
 ## §5 Interaction Rules — Drawer State Machine
