@@ -170,12 +170,12 @@ function DistributionChart({
 
   return (
     <div className="relative">
-      <div className="rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700 p-3 sm:p-4 overflow-x-auto">
+      <div className="rounded-2xl bg-slate-50 border border-slate-200 p-3 sm:p-4 overflow-x-auto">
         <svg viewBox={`0 0 ${totalWidth} ${totalHeight}`} className="w-full min-w-[720px]">
-          <text x={0} y={topY + 23} fontSize="15" fontWeight="700" fill="#0f172a" className="dark:fill-white">
+          <text x={0} y={topY + 23} fontSize="15" fontWeight="700" fill="#0f172a" className="">
             {treatmentName}
           </text>
-          <text x={0} y={bottomY + 23} fontSize="15" fontWeight="700" fill="#0f172a" className="dark:fill-white">
+          <text x={0} y={bottomY + 23} fontSize="15" fontWeight="700" fill="#0f172a" className="">
             {controlName}
           </text>
 
@@ -191,28 +191,28 @@ function DistributionChart({
         {segments.map((segment) => (
           <div
             key={segment.key}
-            className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/70 px-3 py-2"
+            className="rounded-xl border border-slate-200 bg-white px-3 py-2"
           >
             <div className="flex items-center gap-2 mb-1">
-              <span className="h-3 w-3 rounded-full border border-slate-300 dark:border-slate-600" style={{ backgroundColor: segment.color }} />
-              <span className="text-xs font-semibold text-slate-900 dark:text-white">{segment.label}</span>
+              <span className="h-3 w-3 rounded-full border border-slate-300" style={{ backgroundColor: segment.color }} />
+              <span className="text-xs font-semibold text-slate-900">{segment.label}</span>
             </div>
-            <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-400">{segment.description}</p>
+            <p className="text-[11px] leading-relaxed text-slate-600">{segment.description}</p>
           </div>
         ))}
       </div>
 
       {tooltip ? (
         <div
-          className="pointer-events-none fixed z-50 max-w-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2"
+          className="pointer-events-none fixed z-50 max-w-xs rounded-xl border border-slate-200 bg-white px-3 py-2"
           style={{ left: tooltip.x, top: tooltip.y, boxShadow: tooltipShadow }}
         >
           <div className="flex items-center gap-2 mb-1">
             <span className="h-3 w-3 rounded-full" style={{ backgroundColor: tooltip.color }} />
-            <span className="text-xs font-semibold text-slate-900 dark:text-white">{tooltip.title}</span>
+            <span className="text-xs font-semibold text-slate-900">{tooltip.title}</span>
           </div>
-          <div className="text-xs font-medium text-slate-900 dark:text-white">{formatPercent(tooltip.value)}</div>
-          <div className="text-xs text-slate-600 dark:text-slate-400">{tooltip.description}</div>
+          <div className="text-xs font-medium text-slate-900">{formatPercent(tooltip.value)}</div>
+          <div className="text-xs text-slate-600">{tooltip.description}</div>
         </div>
       ) : null}
     </div>
@@ -245,7 +245,7 @@ export function TICIBarChart({ visualization }: { visualization: TICIBarVisualiz
 
   return (
     <div className="relative">
-      <div className="rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-700 p-3 sm:p-4 overflow-x-auto">
+      <div className="rounded-2xl bg-slate-50 border border-slate-200 p-3 sm:p-4 overflow-x-auto">
         <svg viewBox={`0 0 ${totalWidth} ${totalHeight}`} className="w-full min-w-[720px]">
           {visualization.rows.map((row, rowIndex) => {
             const normalized = (() => {
@@ -258,7 +258,7 @@ export function TICIBarChart({ visualization }: { visualization: TICIBarVisualiz
 
             return (
               <g key={row.label}>
-                <text x={0} y={y + 22} fontSize="15" fontWeight="700" fill="#0f172a" className="dark:fill-white">
+                <text x={0} y={y + 22} fontSize="15" fontWeight="700" fill="#0f172a" className="">
                   {row.label}
                 </text>
                 <rect x={leftPad} y={y} width={barWidth} height={barHeight} rx={8} fill="#e2e8f0" />
@@ -321,28 +321,28 @@ export function TICIBarChart({ visualization }: { visualization: TICIBarVisualiz
         {segments.map((segment) => (
           <div
             key={segment.key}
-            className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/70 px-3 py-2"
+            className="rounded-xl border border-slate-200 bg-white px-3 py-2"
           >
             <div className="flex items-center gap-2 mb-1">
-              <span className="h-3 w-3 rounded-full border border-slate-300 dark:border-slate-600" style={{ backgroundColor: segment.color }} />
-              <span className="text-xs font-semibold text-slate-900 dark:text-white">{segment.label}</span>
+              <span className="h-3 w-3 rounded-full border border-slate-300" style={{ backgroundColor: segment.color }} />
+              <span className="text-xs font-semibold text-slate-900">{segment.label}</span>
             </div>
-            <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-400">{segment.description}</p>
+            <p className="text-[11px] leading-relaxed text-slate-600">{segment.description}</p>
           </div>
         ))}
       </div>
 
       {tooltip ? (
         <div
-          className="pointer-events-none fixed z-50 max-w-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2"
+          className="pointer-events-none fixed z-50 max-w-xs rounded-xl border border-slate-200 bg-white px-3 py-2"
           style={{ left: tooltip.x, top: tooltip.y, boxShadow: tooltipShadow }}
         >
           <div className="flex items-center gap-2 mb-1">
             <span className="h-3 w-3 rounded-full" style={{ backgroundColor: tooltip.color }} />
-            <span className="text-xs font-semibold text-slate-900 dark:text-white">{tooltip.title}</span>
+            <span className="text-xs font-semibold text-slate-900">{tooltip.title}</span>
           </div>
-          <div className="text-xs font-medium text-slate-900 dark:text-white">{formatPercent(tooltip.value)}</div>
-          <div className="text-xs text-slate-600 dark:text-slate-400">{tooltip.description}</div>
+          <div className="text-xs font-medium text-slate-900">{formatPercent(tooltip.value)}</div>
+          <div className="text-xs text-slate-600">{tooltip.description}</div>
         </div>
       ) : null}
     </div>
@@ -378,9 +378,9 @@ function ForestRow({
       className="grid items-center gap-3"
       style={{ gridTemplateColumns: 'minmax(0, 2.1fr) 90px 90px minmax(260px, 1.7fr) 110px' }}
     >
-      <div className="text-sm font-medium text-slate-900 dark:text-white">{row.label}</div>
-      <div className="text-xs text-slate-600 dark:text-slate-400">{row.treatmentText ?? '—'}</div>
-      <div className="text-xs text-slate-600 dark:text-slate-400">{row.controlText ?? '—'}</div>
+      <div className="text-sm font-medium text-slate-900">{row.label}</div>
+      <div className="text-xs text-slate-600">{row.treatmentText ?? '—'}</div>
+      <div className="text-xs text-slate-600">{row.controlText ?? '—'}</div>
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-7">
         <line x1={nullX} y1={1} x2={nullX} y2={height - 1} stroke="#94a3b8" strokeDasharray="3 3" />
         <line x1={ciLeft} y1={height / 2} x2={ciRight} y2={height / 2} stroke="#1e293b" strokeWidth={2} />
@@ -398,7 +398,7 @@ function ForestRow({
           <title>{`${estimateType} ${row.pointEstimate.toFixed(2)} (${row.ciLower.toFixed(2)}-${row.ciUpper.toFixed(2)})`}</title>
         </rect>
       </svg>
-      <div className="text-xs font-semibold text-slate-900 dark:text-white">
+      <div className="text-xs font-semibold text-slate-900">
         {row.pointEstimate.toFixed(2)} ({row.ciLower.toFixed(2)}-{row.ciUpper.toFixed(2)})
       </div>
     </div>
@@ -412,7 +412,7 @@ export function SubgroupForestPlot({ visualization }: { visualization: SubgroupF
   return (
     <div className="space-y-4">
       <div
-        className="grid items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400"
+        className="grid items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500"
         style={{ gridTemplateColumns: 'minmax(0, 2.1fr) 90px 90px minmax(260px, 1.7fr) 110px' }}
       >
         <div>Subgroup</div>
@@ -434,7 +434,7 @@ export function SubgroupForestPlot({ visualization }: { visualization: SubgroupF
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-4 pt-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+      <div className="grid grid-cols-2 gap-4 pt-2 text-xs font-medium text-slate-500">
         <div>{visualization.favorsLeftLabel ?? `Favors ${visualization.controlName}`}</div>
         <div className="text-right">{visualization.favorsRightLabel ?? `Favors ${visualization.treatmentName}`}</div>
       </div>
@@ -491,7 +491,7 @@ export function KaplanMeierCurve({ visualization }: { visualization: KaplanMeier
 
   return (
     <div className="space-y-4">
-      <div className="h-80 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40 p-3 sm:p-4">
+      <div className="h-80 rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 12, right: 16, left: 0, bottom: 12 }}>
             <CartesianGrid strokeDasharray="4 4" stroke="#cbd5e1" />
@@ -513,7 +513,7 @@ export function KaplanMeierCurve({ visualization }: { visualization: KaplanMeier
       </div>
 
       {visualization.hazardRatioText || visualization.logRankPValueText ? (
-        <div className="rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900 px-4 py-3 text-sm text-slate-700 dark:text-slate-300">
+        <div className="rounded-xl bg-blue-50 border border-blue-100 px-4 py-3 text-sm text-slate-700">
           {visualization.hazardRatioText ? <div><strong>HR:</strong> {visualization.hazardRatioText}</div> : null}
           {visualization.logRankPValueText ? <div><strong>Log-rank p:</strong> {visualization.logRankPValueText}</div> : null}
         </div>
@@ -582,7 +582,7 @@ export function LongitudinalBoxPlot({ visualization }: { visualization: Longitud
   const ticks = 5;
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40 p-3 sm:p-4">
+    <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full min-w-[720px]">
         {Array.from({ length: ticks + 1 }).map((_, index) => {
           const value = min + ((max - min) / ticks) * index;
@@ -616,9 +616,9 @@ export function LongitudinalBoxPlot({ visualization }: { visualization: Longitud
         })}
       </svg>
 
-      <div className="mt-3 flex flex-wrap gap-4 text-xs text-slate-600 dark:text-slate-400">
+      <div className="mt-3 flex flex-wrap gap-4 text-xs text-slate-600">
         <span className="inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-blue-600" />{visualization.treatmentName}</span>
-        <span className="inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-slate-900 dark:bg-slate-300" />{visualization.controlName}</span>
+        <span className="inline-flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-slate-900" />{visualization.controlName}</span>
       </div>
     </div>
   );
@@ -637,22 +637,22 @@ function VisualizationCard({
   source: TrialVisualization['source'];
 }>) {
   return (
-    <section className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 sm:p-6">
+    <section className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6">
       <div className="mb-5">
-        <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">{title}</h3>
-        {subtitle ? <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">{subtitle}</p> : null}
+        <h3 className="text-lg sm:text-xl font-bold text-slate-900">{title}</h3>
+        {subtitle ? <p className="mt-1 text-sm text-slate-600">{subtitle}</p> : null}
       </div>
 
       {children}
 
       {interpretation ? (
-        <div className="mt-5 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900 px-4 py-3">
-          <div className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-700 dark:text-blue-300 mb-1">Clinical Read</div>
-          <p className="text-sm text-slate-700 dark:text-slate-300">{interpretation}</p>
+        <div className="mt-5 rounded-xl bg-blue-50 border border-blue-100 px-4 py-3">
+          <div className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-700 mb-1">Clinical Read</div>
+          <p className="text-sm text-slate-700">{interpretation}</p>
         </div>
       ) : null}
 
-      <div className="mt-4 text-xs text-slate-500 dark:text-slate-400">
+      <div className="mt-4 text-xs text-slate-500">
         <div><strong>Source:</strong> {source.reference}</div>
         {source.endpoint ? <div><strong>Endpoint:</strong> {source.endpoint}</div> : null}
         {source.note ? <div><strong>Note:</strong> {source.note}</div> : null}
@@ -669,8 +669,8 @@ export function TrialVisualizationSection({ visualizations }: { visualizations: 
   return (
     <div className="mb-8">
       <div className="mb-5">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Visual Data</h2>
-        <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Visual Data</h2>
+        <p className="mt-1 text-sm text-slate-600">
           Published outcome figures and subgroup structures rendered in a reusable chart system.
         </p>
       </div>

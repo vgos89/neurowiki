@@ -30,7 +30,7 @@ function BackLink() {
   return (
     <Link
       to="/trials"
-      className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors"
+      className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors"
     >
       <svg
         className="w-3.5 h-3.5"
@@ -51,12 +51,12 @@ function BackLink() {
 
 function QuestionNotFound() {
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col items-center justify-center gap-5 px-8 py-16">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-5 px-8 py-16">
       <div className="text-center max-w-sm">
         <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-400 mb-3">
           Question not found
         </p>
-        <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6">
+        <p className="text-slate-600 text-sm leading-relaxed mb-6">
           We couldn&apos;t find a clinical question matching this URL. It may
           have been removed or the link may be incorrect.
         </p>
@@ -117,7 +117,7 @@ export default function QuestionDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900">
+    <div className="min-h-screen bg-white">
 
       {/* ── Header strip ───────────────────────────────────────────────────── */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-5 pb-2">
@@ -130,17 +130,17 @@ export default function QuestionDetailPage() {
         </p>
 
         {/* ── Hero block ─────────────────────────────────────────────────── */}
-        <h1 className="text-[22px] md:text-[28px] font-medium tracking-[-0.01em] leading-snug text-slate-900 dark:text-white mb-2">
+        <h1 className="text-[22px] md:text-[28px] font-medium tracking-[-0.01em] leading-snug text-slate-900 mb-2">
           {question.text}
         </h1>
 
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-sm text-slate-500">
           {resolvedTrials.length > 0
             ? `Synthesises ${resolvedTrials.length} trial${resolvedTrials.length !== 1 ? 's' : ''}`
             : 'Trials being curated'}
           {question.meta && (
             <>
-              <span className="mx-1.5 text-slate-300 dark:text-slate-600" aria-hidden>·</span>
+              <span className="mx-1.5 text-slate-300" aria-hidden>·</span>
               {question.meta}
             </>
           )}
@@ -162,7 +162,7 @@ export default function QuestionDetailPage() {
           >
             Clinical Synthesis
           </p>
-          <p className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed">
+          <p className="text-sm text-slate-700 leading-relaxed">
             Curated answer in progress. The trials below are the evidence base
             — open any to read the full study.
           </p>
@@ -182,14 +182,14 @@ export default function QuestionDetailPage() {
 
         {/* ── Empty state ──────────────────────────────────────────────────── */}
         {resolvedTrials.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-slate-200 dark:border-slate-700 py-12 text-center">
-            <p className="text-sm text-slate-400 dark:text-slate-500">
+          <div className="rounded-xl border border-dashed border-slate-200 py-12 text-center">
+            <p className="text-sm text-slate-400">
               Trials being curated for this question.
             </p>
           </div>
         ) : (
           /* ── Card list ─────────────────────────────────────────────────── */
-          <div className="rounded-xl border border-slate-100 dark:border-slate-700/60 overflow-hidden">
+          <div className="rounded-xl border border-slate-100 overflow-hidden">
             {resolvedTrials.map((trial) => (
               <TrialLegendCard
                 key={trial.id}
@@ -202,8 +202,8 @@ export default function QuestionDetailPage() {
         )}
 
         {/* ── Footer ─────────────────────────────────────────────────────── */}
-        <div className="mt-10 pt-6 border-t border-slate-100 dark:border-slate-800 text-center">
-          <p className="text-sm text-slate-400 dark:text-slate-500">
+        <div className="mt-10 pt-6 border-t border-slate-100 text-center">
+          <p className="text-sm text-slate-400">
             Was this useful?{' '}
             <button
               type="button"
@@ -211,7 +211,7 @@ export default function QuestionDetailPage() {
                 const fb = document.querySelector<HTMLButtonElement>('[data-feedback-btn]');
                 if (fb) fb.click();
               }}
-              className="underline underline-offset-2 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+              className="underline underline-offset-2 hover:text-slate-600 transition-colors"
             >
               Share feedback →
             </button>

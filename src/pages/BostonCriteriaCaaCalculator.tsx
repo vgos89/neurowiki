@@ -9,7 +9,7 @@
  * Architect conditions (arch-l55c-aspects-boston-rebuild.md):
  *   - Keep <input type="number"> with inputMode="numeric" added for mobile — no number-input archetype in spec
  *   - Bespoke-per-file is the accepted L5.5 pattern; extraction deferred to L5.6
- *   - No dark:* variants — light-only theme matching ABCD²
+ *   - No variants — light-only theme matching ABCD²
  *   - No new clinical claim surfaces introduced
  *
  * Clinical prose preservation: assessBostonCriteria() result strings are byte-for-byte from data module.
@@ -366,12 +366,12 @@ export default function BostonCriteriaCaaCalculator() {
 
                   {hasInteracted && result.anticoagulationRisk !== 'n/a' && (
                     <span className={`text-xs font-medium ml-1.5 ${
-                      result.anticoagulationRisk === 'very-high' || result.anticoagulationRisk === 'high'
-                        ? 'text-red-600'
-                        : result.anticoagulationRisk === 'moderate'
-                        ? 'text-amber-700'
-                        : 'text-emerald-700'
-                    }`}>
+ result.anticoagulationRisk === 'very-high' || result.anticoagulationRisk === 'high'
+ ? 'text-red-600'
+ : result.anticoagulationRisk === 'moderate'
+ ? 'text-amber-700'
+ : 'text-emerald-700'
+ }`}>
                       Anticoag risk: {result.anticoagulationRisk.replace('-', ' ')}
                     </span>
                   )}

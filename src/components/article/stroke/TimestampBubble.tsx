@@ -29,7 +29,7 @@ interface TimestampBubbleProps {
 // Shared left-pointing thought bubble — arrow uses SVG, no inline styles (MED-03 fix)
 const ThoughtBubble: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="absolute right-[calc(100%+0.625rem)] top-1/2 -translate-y-1/2 pointer-events-none z-10">
-    <div className="relative bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2 shadow-lg whitespace-nowrap">
+    <div className="relative bg-white border border-slate-200 rounded-xl px-3 py-2 shadow-lg whitespace-nowrap">
       {children}
       {/* SVG right-pointing arrow toward FAB — replaces inline CSS border triangle */}
       <svg
@@ -38,8 +38,8 @@ const ThoughtBubble: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         viewBox="0 0 7 12"
         aria-hidden
       >
-        <polygon points="0,0 7,6 0,12" className="fill-slate-200 dark:fill-slate-600" />
-        <polygon points="0,1 6,6 0,11" className="fill-white dark:fill-slate-800" />
+        <polygon points="0,0 7,6 0,12" className="fill-slate-200" />
+        <polygon points="0,1 6,6 0,11" className="fill-white" />
       </svg>
     </div>
   </div>
@@ -125,10 +125,10 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
             {/* Emergency thought bubble */}
             {showEmergencyThought && !emergencyOpen && (
               <ThoughtBubble>
-                <p className="text-xs font-semibold text-red-600 dark:text-red-400 leading-snug">
+                <p className="text-xs font-semibold text-red-600 leading-snug">
                   Emergency protocols
                 </p>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
+                <p className="text-[10px] text-slate-500 leading-tight mt-0.5">
                   tPA reversal · orolingual edema
                 </p>
               </ThoughtBubble>
@@ -165,10 +165,10 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
               type="button"
               onClick={() => { setEmergencyOpen(prev => !prev); setShowEmergencyThought(false); }}
               className={`w-10 h-10 rounded-full shadow-lg transition-all border-2 flex items-center justify-center ${
-                emergencyOpen
-                  ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700'
-                  : 'bg-red-600 text-white border-red-700 hover:bg-red-700'
-              }`}
+ emergencyOpen
+ ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700'
+ : 'bg-red-600 text-white border-red-700 hover:bg-red-700'
+ }`}
               aria-label={emergencyOpen ? 'Close emergency protocols menu' : 'Open emergency protocols'}
               aria-expanded={emergencyOpen}
             >
@@ -187,7 +187,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
         {/* Clock thought bubble */}
         {showClockThought && !isExpanded && (
           <ThoughtBubble>
-            <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 leading-snug text-center">
+            <p className="text-xs font-semibold text-slate-700 leading-snug text-center">
               Record Stroke Time Stamps
             </p>
           </ThoughtBubble>
@@ -195,18 +195,18 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
 
         {/* Expanded timestamps panel — anchored above clock button */}
         {isExpanded && (
-          <div className="absolute bottom-full right-0 mb-3 w-72 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden animate-slide-up">
+          <div className="absolute bottom-full right-0 mb-3 w-72 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-slide-up">
             {/* Header */}
-            <div className="px-4 py-3 bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
+            <div className="px-4 py-3 bg-slate-50 border-b border-slate-200">
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-neuro-500" />
-                <span className="text-sm font-semibold text-slate-800 dark:text-white">Stroke Timestamps</span>
+                <span className="text-sm font-semibold text-slate-800">Stroke Timestamps</span>
               </div>
-              <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Tap to record time of each event</p>
+              <p className="text-xs text-slate-400 mt-0.5">Tap to record time of each event</p>
             </div>
 
             {/* Timestamp Rows */}
-            <div className="divide-y divide-slate-100 dark:divide-slate-700">
+            <div className="divide-y divide-slate-100">
               {EVENTS.map((event) => {
                 const stamped = timestamps[event];
                 const isFirst = event === 'Code Activation';
@@ -218,13 +218,13 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                   <div key={event} className="px-4 py-3">
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex-1 min-w-0">
-                        <div className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-0.5">
+                        <div className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-0.5">
                           {event}
                         </div>
                         {stamped ? (
                           <div className="flex items-center gap-2">
                             <CheckCircle className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
-                            <span className="text-sm font-semibold text-slate-800 dark:text-white tabular-nums">
+                            <span className="text-sm font-semibold text-slate-800 tabular-nums">
                               {formatTime(stamped)}
                             </span>
                             {elapsed && (
@@ -232,14 +232,14 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                             )}
                           </div>
                         ) : (
-                          <span className="text-xs text-slate-400 dark:text-slate-500 italic">Not yet recorded</span>
+                          <span className="text-xs text-slate-400 italic">Not yet recorded</span>
                         )}
                       </div>
 
                       {stamped ? (
                         <button
                           onClick={(e) => handleClear(event, e)}
-                          className="text-xs text-slate-400 hover:text-red-400 dark:text-slate-500 dark:hover:text-red-400 transition-colors px-2 py-1 rounded"
+                          className="text-xs text-slate-400 hover:text-red-400 transition-colors px-2 py-1 rounded"
                           title="Clear timestamp"
                         >
                           Clear
@@ -260,10 +260,10 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
 
             {/* Footer */}
             {stampedCount > 0 && (
-              <div className="px-4 py-2 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700">
+              <div className="px-4 py-2 bg-slate-50 border-t border-slate-200">
                 <button
                   onClick={() => setTimestamps({ 'Code Activation': null, 'Neurology Evaluation': null, 'CT Read Time': null })}
-                  className="text-xs text-slate-400 hover:text-red-400 dark:text-slate-500 dark:hover:text-red-400 transition-colors"
+                  className="text-xs text-slate-400 hover:text-red-400 transition-colors"
                 >
                   Clear all timestamps
                 </button>
@@ -278,8 +278,8 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
           aria-label="Open timestamp tracker"
           className={`w-10 h-10 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${
             isExpanded
-              ? 'bg-slate-700 dark:bg-slate-600 scale-90'
-              : `bg-neuro-600 hover:bg-neuro-700 dark:bg-neuro-500 dark:hover:bg-neuro-600 ${showClockThought ? 'bubble-wobble' : ''} ${needsAttention ? 'ring-4 ring-neuro-400 ring-offset-2 animate-pulse' : ''}`
+              ? 'bg-slate-700 scale-90'
+              : `bg-neuro-600 hover:bg-neuro-700 ${showClockThought ? 'bubble-wobble' : ''} ${needsAttention ? 'ring-4 ring-neuro-400 ring-offset-2 animate-pulse' : ''}`
           }`}
         >
           {isExpanded ? (

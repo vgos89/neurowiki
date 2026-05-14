@@ -239,16 +239,16 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
 
   const markdownComponents = {
     h3: ({children}: any) => (
-        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 mt-8 mb-4 flex items-center">
+        <h3 className="text-lg font-bold text-slate-800 mt-8 mb-4 flex items-center">
              <span className={`w-1.5 h-1.5 ${isTrialMode ? 'bg-emerald-300' : 'bg-neuro-200'} rounded-full mr-3`}></span>
              {children}
         </h3>
     ),
     // Apply Auto-Linking to Paragraphs and List Items
-    p: ({children}: any) => <p className="text-slate-600 dark:text-slate-300 leading-8 mb-6 font-normal text-base">{processNodesForLinking(children)}</p>,
+    p: ({children}: any) => <p className="text-slate-600 leading-8 mb-6 font-normal text-base">{processNodesForLinking(children)}</p>,
     ul: ({children}: any) => <ul className="space-y-4 mb-8">{children}</ul>,
     li: ({children}: any) => (
-        <li className="flex items-start text-slate-600 dark:text-slate-300 leading-7">
+        <li className="flex items-start text-slate-600 leading-7">
              <div className="mt-2.5 mr-3 flex-shrink-0">
                   <div className={`w-1.5 h-1.5 rounded-full ${isTrialMode ? 'bg-emerald-400' : 'bg-neuro-300'}`}></div>
              </div>
@@ -275,7 +275,7 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
           <button
             type="button"
             onClick={handleBack}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer bg-transparent border-0"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer bg-transparent border-0"
           >
             <ArrowLeft size={18} />
             <span>Back to {isTrialMode ? 'Neuro Trials' : 'Resident Guide'}</span>
@@ -288,19 +288,19 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
         {/* Mobile Sidebar Legend (matching desktop) - Only show on landing page, not when viewing article */}
         {!currentTopic && (
           <div className="lg:hidden">
-            <div className="bg-white dark:bg-slate-800 overflow-hidden">
+            <div className="bg-white overflow-hidden">
                 {/* Panel Header */}
-                <div className="px-4 pt-4 pb-4 border-b border-slate-100 dark:border-slate-700">
-                  <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                <div className="px-4 pt-4 pb-4 border-b border-slate-100">
+                  <h2 className="text-base font-semibold text-slate-900">
                     Resident Guide
             </h2>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                  <p className="text-sm text-slate-500">
                     Clinical Protocols
                   </p>
         </div>
 
                 {/* Search */}
-                <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <div className="px-4 py-3 border-b border-slate-100">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input
@@ -308,7 +308,7 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                       placeholder="Search guidelines..."
                       value={sidebarSearchQuery}
                       onChange={(e) => setSidebarSearchQuery(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-700 border-0 rounded-lg text-sm placeholder-slate-400 dark:placeholder-slate-500 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-neuro-500"
+                      className="w-full pl-9 pr-3 py-2 bg-slate-50 border-0 rounded-lg text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-neuro-500"
                     />
                   </div>
                 </div>
@@ -337,14 +337,14 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                       <div key={category.name} className="mb-1">
                 <button
                           onClick={() => toggleCategory(category.name)}
-                          className="w-full flex items-center justify-between px-3 py-2.5 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider hover:text-slate-700 dark:hover:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                          className="w-full flex items-center justify-between px-3 py-2.5 text-xs font-semibold text-slate-500 uppercase tracking-wider hover:text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
                 >
                           <span>{category.name}</span>
                    <ChevronDown
                             size={14}
                             className={`transition-transform duration-200 ${
-                              shouldShowExpanded ? 'rotate-180' : ''
-                            }`}
+ shouldShowExpanded ? 'rotate-180' : ''
+ }`}
                    />
                 </button>
                 
@@ -357,10 +357,10 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                                   key={item.path}
                                   to={item.path}
                                   className={`block px-3 py-2 ml-2 rounded-lg text-sm transition-colors border-l-2 ${
-                                    itemActive
-                                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium border-blue-500'
-                                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 border-transparent hover:border-slate-300'
-                                  }`}
+ itemActive
+ ? 'bg-blue-50 text-blue-700 font-medium border-blue-500'
+ : 'text-slate-600 hover:bg-slate-50 border-transparent hover:border-slate-300'
+ }`}
                                 >
                                   {item.name}
                         </Link>
@@ -383,7 +383,7 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                <button
                  type="button"
                  onClick={handleBack}
-                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer bg-transparent"
+                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors border border-slate-200 cursor-pointer bg-transparent"
                >
                   <ArrowLeft size={18} />
                   <span>Back to {isTrialMode ? 'Neuro Trials' : 'Resident Guide'}</span>
@@ -392,13 +392,13 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start lg:max-w-6xl lg:mx-auto lg:px-8">
                 <div className="col-span-1 lg:col-span-9">
-                  <div className="bg-white dark:bg-slate-800 lg:rounded-2xl lg:shadow-sm dark:lg:shadow-slate-900/50 lg:border lg:border-slate-100 dark:lg:border-slate-700 px-4 py-6 md:px-6 md:py-8 lg:p-12 min-h-[500px]">
+                  <div className="bg-white lg:rounded-2xl lg:shadow-sm lg:border lg:border-slate-100 px-4 py-6 md:px-6 md:py-8 lg:p-12 min-h-[500px]">
                       {/* Topic Header */}
-                      <div className="mb-8 md:mb-10 border-b border-slate-100 dark:border-slate-700 pb-8 md:pb-10">
-                         <span className={`px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase border mb-4 inline-block ${isTrialMode ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-800' : 'bg-neuro-50 dark:bg-neuro-900/30 text-teal-500 dark:text-neuro-400 border-neuro-100 dark:border-neuro-800'}`}>
+                      <div className="mb-8 md:mb-10 border-b border-slate-100 pb-8 md:pb-10">
+                         <span className={`px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase border mb-4 inline-block ${isTrialMode ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-neuro-50 text-teal-500 border-neuro-100'}`}>
                             {currentTopic.category}
                          </span>
-                         <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight mb-6">{currentTopic.title}</h1>
+                         <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">{currentTopic.title}</h1>
                          
                          <div className="flex flex-wrap gap-3 mt-6">
                             {/* Hardcoded Primary Tools */}
@@ -424,10 +424,10 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                                     key={link.id} 
                                     to={link.url}
                                     className={`inline-flex items-center px-6 py-3 font-bold rounded-xl shadow-lg transition-colors duration-150 active:scale-95 transform-gpu group ${
-                                        isTrialMode 
-                                        ? 'bg-emerald-600 text-white shadow-emerald-200 hover:bg-emerald-700' 
-                                        : 'bg-neuro-500 text-white shadow-neuro-200 hover:bg-teal-500'
-                                    }`}
+ isTrialMode 
+ ? 'bg-emerald-600 text-white shadow-emerald-200 hover:bg-emerald-700' 
+ : 'bg-neuro-500 text-white shadow-neuro-200 hover:bg-teal-500'
+ }`}
                                 >
                                     <Calculator size={18} className="mr-2 opacity-90" />
                                     Launch {link.title}
@@ -442,24 +442,24 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                           {sections.map((section) => {
                              const isOpen = expandedSections[section.id];
                              return (
-                               <div key={section.id} id={section.id} className="scroll-mt-20 md:scroll-mt-24 border-b border-slate-100 dark:border-slate-700 md:border-0 last:border-0 pb-2 md:pb-0">
+                               <div key={section.id} id={section.id} className="scroll-mt-20 md:scroll-mt-24 border-b border-slate-100 md:border-0 last:border-0 pb-2 md:pb-0">
                                    
                                    {/* Mobile Toggle Header */}
                                    <button 
                                       onClick={() => toggleSection(section.id)}
                                       className="w-full flex items-center justify-between py-4 md:hidden group text-left"
                                    >
-                                      <span className="text-lg font-bold text-slate-900 dark:text-white flex items-center pr-4">
+                                      <span className="text-lg font-bold text-slate-900 flex items-center pr-4">
                                           <span className={`w-1.5 h-1.5 rounded-full mr-3 flex-shrink-0 ${isTrialMode ? 'bg-emerald-400' : 'bg-neuro-400'}`}></span>
                                           {section.title}
                                       </span>
-                                      <div className={`p-1.5 rounded-full transition-colors flex-shrink-0 ${isOpen ? 'bg-slate-100 dark:bg-slate-700' : 'bg-transparent'}`}>
-                                          <ChevronDown size={20} className={`text-slate-400 dark:text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                                      <div className={`p-1.5 rounded-full transition-colors flex-shrink-0 ${isOpen ? 'bg-slate-100' : 'bg-transparent'}`}>
+                                          <ChevronDown size={20} className={`text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
                                       </div>
                                    </button>
 
                                    {/* Desktop Static Header */}
-                                   <h2 className="hidden md:flex items-center text-xl font-bold text-slate-900 dark:text-white mt-12 mb-6 pb-3 border-b border-slate-100 dark:border-slate-700">
+                                   <h2 className="hidden md:flex items-center text-xl font-bold text-slate-900 mt-12 mb-6 pb-3 border-b border-slate-100">
                                       <span className={`flex items-center justify-center w-8 h-8 rounded-lg ${isTrialMode ? 'bg-emerald-50 text-emerald-600 ring-emerald-100' : 'bg-neuro-50 text-neuro-500 ring-neuro-100'} mr-3 shadow-sm ring-1`}>
                                           <ChevronRight size={18} strokeWidth={3} />
                                       </span>
@@ -476,10 +476,10 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                       </div>
 
                       {/* Disclaimer Footer */}
-                      <div className="mt-12 pt-8 border-t border-slate-100 dark:border-slate-700 text-center">
-                        <div className="inline-flex items-center space-x-2 bg-slate-50 dark:bg-slate-700/50 px-4 py-2 rounded-full border border-slate-100/50 dark:border-slate-600/50">
-                           <AlertCircle size={12} className="text-slate-400 dark:text-slate-500" />
-                           <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Decision Support Only • Not Medical Advice</span>
+                      <div className="mt-12 pt-8 border-t border-slate-100 text-center">
+                        <div className="inline-flex items-center space-x-2 bg-slate-50 px-4 py-2 rounded-full border border-slate-100/50">
+                           <AlertCircle size={12} className="text-slate-400" />
+                           <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Decision Support Only • Not Medical Advice</span>
                         </div>
                       </div>
                   </div>
@@ -488,12 +488,12 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                 {/* Table of Contents (Desktop Only) */}
                 <div className="hidden lg:block col-span-3 sticky top-6 self-start">
                     {sections.length > 0 && (
-                        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg dark:shadow-slate-900/50 border border-slate-100 dark:border-slate-700 overflow-hidden">
-                            <div className="p-4 border-b border-slate-50 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-700/80"><h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider flex items-center"><List size={14} className={`mr-2 ${iconColor}`} />Contents</h3></div>
+                        <div className="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden">
+                            <div className="p-4 border-b border-slate-50 bg-slate-50/80"><h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center"><List size={14} className={`mr-2 ${iconColor}`} />Contents</h3></div>
                             <nav className="max-h-[70vh] overflow-y-auto p-2 custom-scrollbar">
                                 {sections.map((h, i) => (
-                                    <button key={i} onClick={() => scrollToSection(h.id)} className="text-left w-full text-sm text-slate-600 dark:text-slate-300 hover:text-teal-500 dark:hover:text-neuro-400 hover:bg-slate-50 dark:hover:bg-slate-700 px-3 py-2.5 rounded-lg transition-colors duration-150 group flex items-start">
-                                        <span className={`mt-1.5 mr-2 w-1.5 h-1.5 rounded-full ${isTrialMode ? 'bg-emerald-200 dark:bg-emerald-500 group-hover:bg-emerald-500' : 'bg-neuro-200 dark:bg-neuro-500 group-hover:bg-neuro-500'} flex-shrink-0`}></span>
+                                    <button key={i} onClick={() => scrollToSection(h.id)} className="text-left w-full text-sm text-slate-600 hover:text-teal-500 hover:bg-slate-50 px-3 py-2.5 rounded-lg transition-colors duration-150 group flex items-start">
+                                        <span className={`mt-1.5 mr-2 w-1.5 h-1.5 rounded-full ${isTrialMode ? 'bg-emerald-200 group-hover:bg-emerald-500' : 'bg-neuro-200 group-hover:bg-neuro-500'} flex-shrink-0`}></span>
                                         <span className="truncate leading-tight">{h.title}</span>
                                     </button>
                                 ))}

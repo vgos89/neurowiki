@@ -73,16 +73,16 @@ export const VitalsInputV2: React.FC = () => {
   }, [isBPElevated]);
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
+    <div className="bg-white rounded-lg border border-gray-200">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-800">
+      <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
-              <Activity className="w-5 h-5 text-green-600 dark:text-green-400" />
+            <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
+              <Activity className="w-5 h-5 text-green-600" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-gray-900 dark:text-white">Vital Signs</h3>
+              <h3 className="text-base font-bold text-gray-900">Vital Signs</h3>
               <p className="text-xs text-gray-500">Critical parameters monitoring</p>
             </div>
           </div>
@@ -93,7 +93,7 @@ export const VitalsInputV2: React.FC = () => {
       <div className="p-4 space-y-4">
         {/* Glucose */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
             Point-of-Care Glucose (mg/dL)
           </label>
           <input
@@ -101,23 +101,23 @@ export const VitalsInputV2: React.FC = () => {
             value={glucose}
             onChange={(e) => setGlucose(e.target.value)}
             placeholder="Enter glucose"
-            className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-base font-semibold focus:border-blue-600 focus:ring-1 focus:ring-blue-600 text-slate-900 dark:text-white"
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-base font-semibold focus:border-blue-600 focus:ring-1 focus:ring-blue-600 text-slate-900"
           />
           
           {isGlucoseLow && (
-            <div className="mt-2 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+            <div className="mt-2 p-3 bg-red-50 rounded-lg border border-red-200">
               <div className="flex items-start gap-2">
                 <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <div className="text-xs font-bold text-red-700 dark:text-red-300 mb-1">
+                  <div className="text-xs font-bold text-red-700 mb-1">
                     Hypoglycemia - Stroke Mimic!
                   </div>
-                  <div className="text-xs text-red-600 dark:text-red-400 leading-relaxed">
+                  <div className="text-xs text-red-600 leading-relaxed">
                     30% of code strokes are mimics. Give 25g D50 (50mL of 50% dextrose) IV push. 
                     Recheck glucose in 15 minutes. If improved with normoglycemia, NOT a stroke.
                   </div>
                   {isLearningMode && (
-                    <div className="mt-2 pt-2 border-t border-red-200 dark:border-red-700 text-xs text-gray-700 dark:text-gray-300">
+                    <div className="mt-2 pt-2 border-t border-red-200 text-xs text-gray-700">
                       <span className="font-semibold">Evidence: </span>
                       Hypoglycemia can perfectly mimic stroke with focal deficits. Always check glucose FIRST 
                       in code stroke - takes 10 seconds, prevents inappropriate tPA. Mechanism: neurons switch 
@@ -130,15 +130,15 @@ export const VitalsInputV2: React.FC = () => {
           )}
 
           {isGlucoseHigh && (
-            <div className="mt-2 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+            <div className="mt-2 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
               <div className="flex items-start gap-2">
                 <Info className="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <div className="text-xs font-semibold text-yellow-700 dark:text-yellow-300">
+                  <div className="text-xs font-semibold text-yellow-700">
                     Hyperglycemia - Target {'<'}180 mg/dL
                   </div>
                   {isLearningMode && (
-                    <div className="mt-1 text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
+                    <div className="mt-1 text-xs text-gray-700 leading-relaxed">
                       Hyperglycemia in acute stroke increases infarct size, hemorrhagic transformation (OR 3.0), 
                       and mortality (OR 3.28). GIST-UK trial: insulin to maintain 72-126 mg/dL didn't improve 
                       outcomes vs usual care, but consensus targets {'<'}180. Avoid hypoglycemia.
@@ -152,7 +152,7 @@ export const VitalsInputV2: React.FC = () => {
 
         {/* Blood Pressure */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
             Blood Pressure (mmHg)
           </label>
           <div className="flex gap-3">
@@ -161,7 +161,7 @@ export const VitalsInputV2: React.FC = () => {
               value={systolic}
               onChange={(e) => setSystolic(e.target.value)}
               placeholder="SBP"
-              className="flex-1 px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-base font-semibold focus:border-blue-600 focus:ring-1 focus:ring-blue-600 text-slate-900 dark:text-white"
+              className="flex-1 px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-base font-semibold focus:border-blue-600 focus:ring-1 focus:ring-blue-600 text-slate-900"
             />
             <span className="flex items-center text-2xl font-bold text-gray-400">/</span>
             <input
@@ -169,21 +169,21 @@ export const VitalsInputV2: React.FC = () => {
               value={diastolic}
               onChange={(e) => setDiastolic(e.target.value)}
               placeholder="DBP"
-              className="flex-1 px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-base font-semibold focus:border-blue-600 focus:ring-1 focus:ring-blue-600 text-slate-900 dark:text-white"
+              className="flex-1 px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-base font-semibold focus:border-blue-600 focus:ring-1 focus:ring-blue-600 text-slate-900"
             />
           </div>
 
           {isBPElevated && (
             <div className="mt-3 space-y-3">
               <div className={`p-3 rounded-lg border-2 ${
-                isBPCritical
-                  ? 'bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-700'
-                  : 'bg-orange-50 dark:bg-orange-900/20 border-orange-300 dark:border-orange-700'
-              }`}>
+ isBPCritical
+ ? 'bg-red-50 border-red-300'
+ : 'bg-orange-50 border-orange-300'
+ }`}>
                 <div className="flex items-start gap-2">
                   <AlertCircle className={`w-4 h-4 flex-shrink-0 mt-0.5 ${
-                    isBPCritical ? 'text-red-600' : 'text-orange-600'
-                  }`} />
+ isBPCritical ? 'text-red-600' : 'text-orange-600'
+ }`} />
                   <div className="flex-1">
                     <div className="text-xs font-bold mb-1">
                       {isBPCritical ? 'Critical Hypertension' : 'Elevated BP - Control Required'}
@@ -210,13 +210,13 @@ export const VitalsInputV2: React.FC = () => {
               {showBPProtocol && (
                 <div className="space-y-3">
                   {BP_PROTOCOLS.map(protocol => (
-                    <div key={protocol.name} className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div key={protocol.name} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <div className="text-sm font-bold text-gray-900 dark:text-white">
+                          <div className="text-sm font-bold text-gray-900">
                             {protocol.name}
                           </div>
-                          <div className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
+                          <div className="text-xs text-gray-600 mt-0.5">
                             {protocol.indication}
                           </div>
                         </div>
@@ -224,7 +224,7 @@ export const VitalsInputV2: React.FC = () => {
                       
                       <div className="space-y-1.5 mb-2">
                         {protocol.dosing.map((dose, idx) => (
-                          <div key={idx} className="text-xs text-gray-700 dark:text-gray-300 flex items-start gap-2">
+                          <div key={idx} className="text-xs text-gray-700 flex items-start gap-2">
                             <span className="text-blue-600 mt-0.5">•</span>
                             <span>{dose}</span>
                           </div>
@@ -232,9 +232,9 @@ export const VitalsInputV2: React.FC = () => {
                       </div>
 
                       {isLearningMode && (
-                        <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                          <div className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
-                            <span className="font-semibold text-purple-700 dark:text-purple-300">Evidence: </span>
+                        <div className="mt-2 pt-2 border-t border-gray-200">
+                          <div className="text-xs text-gray-700 leading-relaxed">
+                            <span className="font-semibold text-purple-700">Evidence: </span>
                             {protocol.evidence}
                           </div>
                         </div>
@@ -243,17 +243,17 @@ export const VitalsInputV2: React.FC = () => {
                   ))}
 
                   {isLearningMode && (
-                    <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
-                      <div className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed space-y-2">
+                    <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
+                      <div className="text-xs text-gray-700 leading-relaxed space-y-2">
                         <div>
-                          <span className="font-semibold text-purple-700 dark:text-purple-300">Why strict BP control? </span>
+                          <span className="font-semibold text-purple-700">Why strict BP control? </span>
                           ENCHANTED trial: intensive BP lowering (130-140) vs guideline ({"<"}180) showed trend toward 
                           less hemorrhage (1.0% vs 2.0%) but more early neurological deterioration. Current consensus: 
                           {"<"}185/110 pre-tPA, {"<"}180/105 × 24h post-tPA. Avoid excessive lowering - can worsen 
                           penumbral ischemia (J-curve relationship).
                         </div>
                         <div>
-                          <span className="font-semibold text-purple-700 dark:text-purple-300">Pearl: </span>
+                          <span className="font-semibold text-purple-700">Pearl: </span>
                           If BP remains {">"} 185/110 despite maximal medical therapy, patient is NOT a tPA candidate 
                           (absolute contraindication). Consider thrombectomy if LVO - less BP-dependent.
                         </div>
@@ -268,8 +268,8 @@ export const VitalsInputV2: React.FC = () => {
 
         {/* General Info */}
         {!isBPElevated && !isGlucoseLow && !isGlucoseHigh && (
-          <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-            <div className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
+          <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <div className="text-xs text-gray-700 leading-relaxed">
               <span className="font-semibold">Target vitals for stroke: </span>
               Glucose 70-180 mg/dL, BP {"<"}185/110 (pre-tPA) or {"<"}180/105 (post-tPA × 24h), 
               Temperature {"<"}37.5°C, O₂ sat {">"}94%.

@@ -7,10 +7,10 @@ import { Link } from 'react-router-dom';
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <section className="mb-10">
-    <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-3 pb-2 border-b border-slate-100 dark:border-slate-700">
+    <h2 className="text-lg font-semibold text-slate-800 mb-3 pb-2 border-b border-slate-100">
       {title}
     </h2>
-    <div className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed space-y-3">
+    <div className="text-slate-600 text-sm leading-relaxed space-y-3">
       {children}
     </div>
   </section>
@@ -22,19 +22,19 @@ export default function TermsPage() {
       {/* Header */}
       <div className="mb-10">
         <p className="text-xs font-medium text-neuro-500 uppercase tracking-widest mb-2">Legal</p>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-3">Terms of Use</h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400">Last updated: May 13, 2026</p>
-        <p className="mt-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+        <h1 className="text-2xl font-bold text-slate-900 mb-3">Terms of Use</h1>
+        <p className="text-sm text-slate-500">Last updated: May 13, 2026</p>
+        <p className="mt-4 text-sm text-slate-600 leading-relaxed">
           Using NeuroWiki means you accept these terms. They are short.
         </p>
       </div>
 
       {/* Clinical safety notice — prominent */}
-      <div className="mb-10 p-4 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700">
-        <p className="text-sm font-semibold text-amber-800 dark:text-amber-200 mb-2">
+      <div className="mb-10 p-4 rounded-lg bg-amber-50 border border-amber-200">
+        <p className="text-sm font-semibold text-amber-800 mb-2">
           Clinical reference only
         </p>
-        <p className="text-sm text-amber-700 dark:text-amber-300 leading-relaxed">
+        <p className="text-sm text-amber-700 leading-relaxed">
           NeuroWiki supports clinical judgment. It does not replace it. Verify all scores,
           pathways, and dosing against your institutional protocol and the patient in front of
           you. Do not base any clinical decision solely on this tool.
@@ -117,7 +117,7 @@ export default function TermsPage() {
       </Section>
 
       {/* Footer nav */}
-      <div className="mt-12 pt-6 border-t border-slate-100 dark:border-slate-700 flex flex-wrap gap-4 text-xs text-slate-400">
+      <div className="mt-12 pt-6 border-t border-slate-100 flex flex-wrap gap-4 text-xs text-slate-400">
         <Link to="/privacy" className="hover:text-neuro-500 transition-colors">Privacy Policy</Link>
         <Link to="/accessibility" className="hover:text-neuro-500 transition-colors">Accessibility</Link>
         <Link to="/" className="hover:text-neuro-500 transition-colors">Back to NeuroWiki</Link>

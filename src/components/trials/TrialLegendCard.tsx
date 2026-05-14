@@ -43,16 +43,16 @@ export function TrialLegendCard({ trial, isFav, onFavToggle }: TrialLegendCardPr
     <Link
       to={trial.path}
       className={`
-        group block relative
-        pl-[34px] pr-5 py-3.5
-        border-b border-slate-100 dark:border-slate-700/60
-        last:border-b-0
-        bg-white dark:bg-slate-800
-        hover:bg-slate-50 dark:hover:bg-slate-700/40
-        hover:shadow-[0_2px_8px_rgba(15,23,42,0.06)]
-        transition-[background,box-shadow] duration-[120ms] ease-out
-        touch-manipulation
-      `}
+ group block relative
+ pl-[34px] pr-5 py-3.5
+ border-b border-slate-100
+ last:border-b-0
+ bg-white
+ hover:bg-slate-50
+ hover:shadow-[0_2px_8px_rgba(15,23,42,0.06)]
+ transition-[background,box-shadow] duration-[120ms] ease-out
+ touch-manipulation
+ `}
     >
       {/* Category dot — position-absolute at left:20px top:20px */}
       <div
@@ -64,7 +64,7 @@ export function TrialLegendCard({ trial, isFav, onFavToggle }: TrialLegendCardPr
       <div className="flex items-center justify-between gap-2 mb-1">
         {/* Left: trial name + meta */}
         <div className="flex items-baseline gap-2 min-w-0 overflow-hidden">
-          <span className="text-sm font-semibold tracking-[0.01em] text-slate-900 dark:text-white whitespace-nowrap truncate">
+          <span className="text-sm font-semibold tracking-[0.01em] text-slate-900 whitespace-nowrap truncate">
             {trial.name}
           </span>
           {trial.year > 0 && (
@@ -92,8 +92,8 @@ export function TrialLegendCard({ trial, isFav, onFavToggle }: TrialLegendCardPr
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); onFavToggle(trial.id, e); }}
             className={`p-2 -m-1.5 flex-shrink-0 flex items-center justify-center min-h-[44px] min-w-[44px] transition-colors ${
-              isFav ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600 hover:text-slate-400 dark:hover:text-slate-400'
-            }`}
+ isFav ? 'text-amber-400' : 'text-slate-300 hover:text-slate-400'
+ }`}
             aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
           >
             <svg
@@ -113,9 +113,9 @@ export function TrialLegendCard({ trial, isFav, onFavToggle }: TrialLegendCardPr
 
       {/* Line 2: Finding */}
       <div
-        className={`text-sm text-slate-600 dark:text-slate-300 leading-[1.55] ${
-          hasLine3 ? 'mb-2 md:mb-0' : ''
-        }`}
+        className={`text-sm text-slate-600 leading-[1.55] ${
+ hasLine3 ? 'mb-2 md:mb-0' : ''
+ }`}
       >
         {finding}
       </div>

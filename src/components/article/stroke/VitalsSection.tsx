@@ -12,13 +12,13 @@ export const VitalsSection: React.FC<VitalsSectionProps> = ({ onComplete, isLear
   return (
     <div className="space-y-4">
       {isLearningMode && (
-        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500 mb-4">
-          <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+        <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500 mb-4">
+          <p className="text-base text-gray-700 leading-relaxed">
             Monitor and control blood pressure and glucose before and after thrombolysis. Elevated blood pressure 
             ({'>'}185/110) must be controlled before tPA administration. Hyperglycemia ({'>'}200 mg/dL) should be treated 
             as it worsens outcomes. Maintain BP {'<'}180/105 for 24 hours post-tPA.
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-3 leading-relaxed">
+          <p className="text-sm text-gray-600 mt-3 leading-relaxed">
             <strong>Clinical Context:</strong> Blood pressure management is a delicate balance. Too high increases hemorrhage risk, 
             but too low can worsen penumbral ischemia. The ENCHANTED trial showed intensive BP lowering had mixed results. Current 
             consensus: aggressive control pre-tPA ({'<'}185/110), then moderate control post-tPA ({'<'}180/105) to maintain perfusion 

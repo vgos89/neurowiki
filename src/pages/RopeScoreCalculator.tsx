@@ -8,7 +8,7 @@
  *
  * Architect conditions (arch-l55c-aspects-boston-rebuild.md, inherited):
  *   - Drawer infrastructure from L5.5b stays byte-identical
- *   - Light-only theme — no dark:* in layout
+ *   - Light-only theme — no in layout
  *   - Bespoke-per-file pattern under L5.6 cap
  *   - No new clinical claim surfaces introduced
  *
@@ -352,10 +352,10 @@ export default function RopeScoreCalculator() {
 
                   {hasInteracted && (
                     <span className={`text-xs font-medium ml-1.5 ${
-                      result.pfoAttributablePercent >= 60 ? 'text-emerald-700' :
-                      result.pfoAttributablePercent >= 40 ? 'text-amber-700' :
-                      'text-slate-500'
-                    }`}>
+ result.pfoAttributablePercent >= 60 ? 'text-emerald-700' :
+ result.pfoAttributablePercent >= 40 ? 'text-amber-700' :
+ 'text-slate-500'
+ }`}>
                       PFO-attributable {result.pfoAttributablePercent}%
                     </span>
                   )}

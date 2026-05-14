@@ -172,9 +172,9 @@ export const MedicalTooltip: React.FC<MedicalTooltipProps> = ({
   const tooltipContent = isOpen ? (
     <div
       ref={tooltipRef}
-      className={`fixed z-[9999] px-3 py-2 max-w-[calc(100vw-32px)] sm:max-w-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl text-sm ${
-        isPositioned ? 'opacity-100' : 'opacity-0 pointer-events-none'
-      }`}
+      className={`fixed z-[9999] px-3 py-2 max-w-[calc(100vw-32px)] sm:max-w-xs bg-white border border-slate-200 rounded-lg shadow-xl text-sm ${
+ isPositioned ? 'opacity-100' : 'opacity-0 pointer-events-none'
+ }`}
       style={{
         top: isPositioned ? `${position.top}px` : '-9999px',
         left: isPositioned ? `${position.left}px` : '-9999px',
@@ -182,19 +182,19 @@ export const MedicalTooltip: React.FC<MedicalTooltipProps> = ({
       role="tooltip"
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="font-semibold text-slate-900 dark:text-white mb-1 break-words">
+      <div className="font-semibold text-slate-900 mb-1 break-words">
         {term}
       </div>
-      <div className="text-slate-700 dark:text-slate-300 leading-relaxed break-words">
+      <div className="text-slate-700 leading-relaxed break-words">
         {definition}
       </div>
       {/* Arrow - positioned based on placement */}
       <div
-        className={`absolute w-2 h-2 bg-white dark:bg-slate-800 border-l border-t border-slate-200 dark:border-slate-700 transform rotate-45 ${
-          position.placement === 'top'
-            ? '-bottom-1 left-4'
-            : '-top-1 left-4'
-        }`}
+        className={`absolute w-2 h-2 bg-white border-l border-t border-slate-200 transform rotate-45 ${
+ position.placement === 'top'
+ ? '-bottom-1 left-4'
+ : '-top-1 left-4'
+ }`}
       />
     </div>
   ) : null;
@@ -208,7 +208,7 @@ export const MedicalTooltip: React.FC<MedicalTooltipProps> = ({
           onClick={() => setIsOpen(!isOpen)}
           onMouseEnter={() => setIsOpen(true)}
           onMouseLeave={() => setIsOpen(false)}
-          className="inline-flex items-center justify-center ml-1 text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded flex-shrink-0 z-10 relative"
+          className="inline-flex items-center justify-center ml-1 text-blue-500 hover:text-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded flex-shrink-0 z-10 relative"
           aria-label={`Definition of ${term}`}
           aria-expanded={isOpen}
         >

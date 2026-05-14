@@ -45,17 +45,17 @@ const NihssItemCard: React.FC<NihssItemCardProps> = ({
   const rubric = parseDetailedInfo(item.detailedInfo);
 
   return (
-    <div id={`nihss-row-${item.id}`} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 transition-all duration-200">
+    <div id={`nihss-row-${item.id}`} className="bg-white rounded-2xl border border-slate-200 p-6 transition-all duration-200">
       {/* Header - Item number + Name */}
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-baseline gap-3">
-          <span className="text-sm text-slate-400 dark:text-slate-500 font-medium">{item.id}</span>
-          <h2 id={`nihss-label-${item.id}`} className="text-lg font-semibold text-slate-900 dark:text-white">
+          <span className="text-sm text-slate-400 font-medium">{item.id}</span>
+          <h2 id={`nihss-label-${item.id}`} className="text-lg font-semibold text-slate-900">
             {item.name.replace(/^\d+[a-z]?\.\s*/i, '')}
           </h2>
         </div>
         {isRequired && (
-          <span className="text-xs font-medium px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-slate-500 dark:text-slate-400">
+          <span className="text-xs font-medium px-2 py-1 bg-slate-100 rounded text-slate-500">
             REQUIRED
           </span>
         )}
@@ -67,12 +67,12 @@ const NihssItemCard: React.FC<NihssItemCardProps> = ({
           {/* Left Column: Rubric */}
           {rubric.length > 0 && (
             <div>
-              <h3 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">
+              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
                 RUBRIC
               </h3>
               <div className="space-y-2">
                 {rubric.map((r, idx) => (
-                  <div key={idx} className="text-sm text-slate-700 dark:text-slate-300">
+                  <div key={idx} className="text-sm text-slate-700">
                     <span className="font-semibold">{r.value}:</span> {r.label}
                   </div>
                 ))}
@@ -83,10 +83,10 @@ const NihssItemCard: React.FC<NihssItemCardProps> = ({
           {/* Right Column: Plain English */}
           {item.plainEnglish && (
             <div>
-              <h3 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">
+              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
                 PLAIN ENGLISH
               </h3>
-              <div className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed space-y-2 prose-sm">
+              <div className="text-sm text-slate-600 leading-relaxed space-y-2 prose-sm">
                 {item.plainEnglish.split('\n').map((line, idx) => {
                   if (line.trim() === '') return null;
                   
@@ -106,7 +106,7 @@ const NihssItemCard: React.FC<NihssItemCardProps> = ({
                   if (line.trim().startsWith('•')) {
                     return (
                       <div key={idx} className="flex items-start gap-2 ml-2">
-                        <span className="text-slate-400 dark:text-slate-500 flex-shrink-0">•</span>
+                        <span className="text-slate-400 flex-shrink-0">•</span>
                         <span className="flex-1">{line.trim().substring(1).trim()}</span>
                       </div>
                     );
@@ -122,9 +122,9 @@ const NihssItemCard: React.FC<NihssItemCardProps> = ({
 
       {/* Warning */}
       {warning && (
-        <div className="mb-6 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800 flex items-start gap-2">
-          <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-          <p className="text-xs text-amber-800 dark:text-amber-200 font-medium">{warning}</p>
+        <div className="mb-6 p-3 bg-amber-50 rounded-lg border border-amber-200 flex items-start gap-2">
+          <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-amber-800 font-medium">{warning}</p>
         </div>
       )}
 
@@ -139,10 +139,10 @@ const NihssItemCard: React.FC<NihssItemCardProps> = ({
               aria-checked={isActive}
               onClick={() => onChange(opt.value)}
               className={`flex-1 min-w-0 px-3 py-2 md:px-5 md:py-3 rounded-full text-xs md:text-sm font-medium transition-all duration-200 ${
-                isActive
-                  ? 'bg-neuro-500 dark:bg-white text-white dark:text-slate-900 shadow-md'
-                  : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500'
-              }`}
+ isActive
+ ? 'bg-neuro-500 text-white shadow-md'
+ : 'bg-white text-slate-700 border border-slate-300 hover:border-slate-400'
+ }`}
             >
               {opt.label}
             </button>

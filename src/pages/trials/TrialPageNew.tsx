@@ -34,7 +34,7 @@ import { BottomLineDrawer } from '../../components/trials/BottomLineDrawer';
 import { HistoricalContextSection } from '../../components/trials/HistoricalContextSection';
 
 function ChartFallback() {
-  return <div className="h-32 bg-slate-100 dark:bg-slate-700 rounded-xl animate-pulse" aria-hidden="true" />;
+  return <div className="h-32 bg-slate-100 rounded-xl animate-pulse" aria-hidden="true" />;
 }
 
 // Suspense-wrapped local aliases — same API as the originals; no usage-site changes needed.
@@ -374,10 +374,10 @@ const TrialPageNew: React.FC = () => {
 
   if (isLoadingPayload) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="text-center">
           <div className="inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-neuro-500" />
-          <p className="mt-4 text-slate-600 dark:text-slate-300">Loading trial summary...</p>
+          <p className="mt-4 text-slate-600">Loading trial summary...</p>
         </div>
       </div>
     );
@@ -389,44 +389,44 @@ const TrialPageNew: React.FC = () => {
 
   if (isPlaceholderTrial && catalogTrial) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm">
+      <div className="min-h-screen bg-slate-50">
+        <div className="bg-white border-b border-slate-100 shadow-sm">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <button
               type="button"
               onClick={handleBack}
-              className="inline-flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-neuro-600 dark:hover:text-neuro-400 mb-2 transition-colors text-sm font-medium cursor-pointer bg-transparent border-0 p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"
+              className="inline-flex items-center gap-2 text-slate-500 hover:text-neuro-600 mb-2 transition-colors text-sm font-medium cursor-pointer bg-transparent border-0 p-2 -ml-2 rounded-lg hover:bg-slate-100"
               aria-label="Back to Neuro Trials"
             >
               <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span>Back to Neuro Trials</span>
             </button>
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-1">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
               {catalogTrial.name}
-              {catalogTrial.year > 0 ? <span className="ml-2 text-slate-400 dark:text-slate-500">({catalogTrial.year})</span> : null}
+              {catalogTrial.year > 0 ? <span className="ml-2 text-slate-400">({catalogTrial.year})</span> : null}
             </h1>
-            <p className="text-slate-500 dark:text-slate-400 text-base">
+            <p className="text-slate-500 text-base">
               {categoryNames[safeCategory]}
             </p>
           </div>
         </div>
 
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8">
-            <div className="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-700 px-3 py-1 text-xs font-medium text-slate-600 dark:text-slate-300 mb-4">
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8">
+            <div className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 mb-4">
               Blank page ready
             </div>
-            <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-3">Content coming soon</h2>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">Content coming soon</h2>
+            <p className="text-slate-600 leading-relaxed mb-6">
               This trial has been added to the new catalog structure, but the detailed summary has not been written yet.
             </p>
-            <div className="rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 p-4">
-              <div className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-2">Reference DOI</div>
+            <div className="rounded-xl bg-slate-50 border border-slate-200 p-4">
+              <div className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">Reference DOI</div>
               <a
                 href={`https://doi.org/${catalogTrial.doi}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:underline break-all"
+                className="inline-flex items-center gap-2 text-sm text-blue-600 hover:underline break-all"
               >
                 {catalogTrial.doi}
                 <ExternalLink className="w-4 h-4" />
@@ -446,10 +446,10 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
 
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+      <div className="min-h-screen bg-slate-50 pb-28">
 
         {/* Section 1: Sticky header — abbreviated name + category badge */}
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button
               type="button"
@@ -504,19 +504,19 @@ const TrialPageNew: React.FC = () => {
 
           {/* Section 3: Population snapshot — inclusion + exclusion criteria */}
           {(trialMetadata.inclusionCriteria?.length || trialMetadata.exclusionCriteria?.length) && (
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
                   Population
                 </p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 dark:divide-slate-700">
+              <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
                 {trialMetadata.inclusionCriteria && (
                   <div className="p-4">
                     <p className="text-xs font-semibold text-slate-500 mb-2">Included</p>
                     <ul className="space-y-1.5">
                       {trialMetadata.inclusionCriteria.map((c, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                        <li key={i} className="flex items-start gap-2 text-xs text-slate-700">
                           <span className="text-emerald-500 flex-shrink-0 mt-0.5" aria-hidden="true">✓</span>
                           {c}
                         </li>
@@ -529,7 +529,7 @@ const TrialPageNew: React.FC = () => {
                     <p className="text-xs font-semibold text-slate-500 mb-2">Excluded</p>
                     <ul className="space-y-1.5">
                       {trialMetadata.exclusionCriteria.map((c, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                        <li key={i} className="flex items-start gap-2 text-xs text-slate-700">
                           <span className="text-red-400 flex-shrink-0 mt-0.5" aria-hidden="true">✕</span>
                           {c}
                         </li>
@@ -542,8 +542,8 @@ const TrialPageNew: React.FC = () => {
           )}
 
           {/* Section 4: Primary outcome — Archetype A DeltaBandChart */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
                 Primary Outcome
               </p>
@@ -595,16 +595,16 @@ const TrialPageNew: React.FC = () => {
 
           {/* Section 7: Safety profile */}
           {trialMetadata.safetyProfile && (
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
                   Safety
                 </p>
               </div>
-              <div className="divide-y divide-slate-100 dark:divide-slate-700">
+              <div className="divide-y divide-slate-100">
                 {trialMetadata.safetyProfile.sICH && (
                   <div className="p-4">
-                    <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                    <p className="text-xs font-semibold text-slate-700 mb-2">
                       {trialMetadata.safetyProfile.sICH.label}
                     </p>
                     <div className="flex items-end gap-6">
@@ -626,7 +626,7 @@ const TrialPageNew: React.FC = () => {
                 )}
                 {trialMetadata.safetyProfile.mortality && (
                   <div className="p-4">
-                    <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                    <p className="text-xs font-semibold text-slate-700 mb-2">
                       {trialMetadata.safetyProfile.mortality.label}
                     </p>
                     <div className="flex items-end gap-6">
@@ -651,8 +651,8 @@ const TrialPageNew: React.FC = () => {
           )}
 
           {/* Section 8: Trial design */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
                 Trial Design
               </p>
@@ -662,7 +662,7 @@ const TrialPageNew: React.FC = () => {
                 <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Type</p>
                 <ul className="space-y-0.5">
                   {trialMetadata.trialDesign.type.map((t, i) => (
-                    <li key={i} className="flex items-start gap-1.5 text-sm text-slate-700 dark:text-slate-300">
+                    <li key={i} className="flex items-start gap-1.5 text-sm text-slate-700">
                       <span className="text-slate-300 flex-shrink-0" aria-hidden="true">·</span>
                       {t}
                     </li>
@@ -790,16 +790,16 @@ const TrialPageNew: React.FC = () => {
       .filter((m): m is NonNullable<typeof m> => m != null);
     if (items.length === 0) return null;
     return (
-      <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div className="px-4 py-3 border-b border-slate-100">
           <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Safety</p>
         </div>
-        <div className="divide-y divide-slate-100 dark:divide-slate-700">
+        <div className="divide-y divide-slate-100">
           {items.map((metric, idx) => {
             const evtColor = metric.color === 'danger' ? 'text-red-600' : metric.color === 'warning' ? 'text-amber-600' : metric.color === 'success' ? 'text-emerald-600' : 'text-slate-700';
             return (
               <div key={idx} className="p-4">
-                <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">{metric.label}</p>
+                <p className="text-xs font-semibold text-slate-700 mb-2">{metric.label}</p>
                 <div className="flex items-end gap-6">
                   <div>
                     <span className="text-[10px] uppercase tracking-widest text-slate-400">{tm.efficacyResults.treatment.name}</span>
@@ -823,17 +823,17 @@ const TrialPageNew: React.FC = () => {
   const renderPopulationSection = (tm: TrialMetadata) => {
     if (!tm.inclusionCriteria?.length && !tm.exclusionCriteria?.length) return null;
     return (
-      <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div className="px-4 py-3 border-b border-slate-100">
           <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Population</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 dark:divide-slate-700">
+        <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
           {tm.inclusionCriteria && (
             <div className="p-4">
               <p className="text-xs font-semibold text-slate-500 mb-2">Included</p>
               <ul className="space-y-1.5">
                 {tm.inclusionCriteria.map((c, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                  <li key={i} className="flex items-start gap-2 text-xs text-slate-700">
                     <span className="text-emerald-500 flex-shrink-0 mt-0.5" aria-hidden="true">✓</span>
                     {c}
                   </li>
@@ -846,7 +846,7 @@ const TrialPageNew: React.FC = () => {
               <p className="text-xs font-semibold text-slate-500 mb-2">Excluded</p>
               <ul className="space-y-1.5">
                 {tm.exclusionCriteria.map((c, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
+                  <li key={i} className="flex items-start gap-2 text-xs text-slate-700">
                     <span className="text-red-400 flex-shrink-0 mt-0.5" aria-hidden="true">✕</span>
                     {c}
                   </li>
@@ -861,8 +861,8 @@ const TrialPageNew: React.FC = () => {
 
   // ── Shared trial design section (Section 8) ───────────────────────────────
   const renderTrialDesign = (tm: TrialMetadata, enrollmentDetail?: string) => (
-    <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-      <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="px-4 py-3 border-b border-slate-100">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Trial Design</p>
       </div>
       <div className="p-4 space-y-3">
@@ -870,7 +870,7 @@ const TrialPageNew: React.FC = () => {
           <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Type</p>
           <ul className="space-y-0.5">
             {tm.trialDesign.type.map((t, i) => (
-              <li key={i} className="flex items-start gap-1.5 text-sm text-slate-700 dark:text-slate-300">
+              <li key={i} className="flex items-start gap-1.5 text-sm text-slate-700">
                 <span className="text-slate-300 flex-shrink-0" aria-hidden="true">·</span>
                 {t}
               </li>
@@ -922,8 +922,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -945,8 +945,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -1005,8 +1005,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1028,8 +1028,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -1081,8 +1081,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1104,8 +1104,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -1157,8 +1157,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1180,8 +1180,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -1241,8 +1241,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1264,8 +1264,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -1325,8 +1325,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1348,8 +1348,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -1402,8 +1402,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1425,8 +1425,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -1478,8 +1478,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1501,8 +1501,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -1561,8 +1561,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1584,8 +1584,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -1645,8 +1645,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1669,8 +1669,8 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(trialMetadata)}
           {/* Section 4: Secondary outcome chart — EAGLE primary was negative; chart shows secondary dichotomized endpoint */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Secondary outcome: ≥15-letter improvement (dichotomized)</p>
             </div>
             <div className="p-4">
@@ -1726,8 +1726,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1749,8 +1749,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -1813,8 +1813,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1836,8 +1836,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -1889,8 +1889,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1912,8 +1912,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -1964,8 +1964,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1987,8 +1987,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -2040,8 +2040,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2063,8 +2063,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -2121,8 +2121,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2144,8 +2144,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -2196,8 +2196,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2219,8 +2219,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -2271,8 +2271,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2294,8 +2294,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -2346,8 +2346,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2369,8 +2369,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -2421,8 +2421,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2444,8 +2444,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -2497,8 +2497,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2520,8 +2520,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -2573,8 +2573,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2596,8 +2596,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -2649,8 +2649,8 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2672,8 +2672,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
@@ -2732,10 +2732,10 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
 
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+      <div className="min-h-screen bg-slate-50 pb-28">
 
         {/* Section 1: Sticky header */}
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2767,8 +2767,8 @@ const TrialPageNew: React.FC = () => {
 
           {/* Section 4: Primary outcome — Archetype B GrottaBarChart */}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">Undifferentiated stroke (all patients)</p>
               </div>
@@ -2829,8 +2829,8 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2855,8 +2855,8 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">All randomized patients (medium/distal vessel occlusion)</p>
               </div>
@@ -2906,8 +2906,8 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2932,8 +2932,8 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">Total population (presumed stroke within 3 hours)</p>
               </div>
@@ -2981,8 +2981,8 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3007,8 +3007,8 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">Ischemic stroke or TIA population (primary endpoint, n=949)</p>
               </div>
@@ -3056,8 +3056,8 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3082,8 +3082,8 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">Acute ischemic stroke population (primary endpoint, n=104)</p>
               </div>
@@ -3131,8 +3131,8 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3157,8 +3157,8 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">All treated patients (1777 patients, 39 UK centres)</p>
               </div>
@@ -3208,8 +3208,8 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3234,8 +3234,8 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">All randomized patients (458 patients, 77% underwent EVT)</p>
               </div>
@@ -3283,8 +3283,8 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3309,8 +3309,8 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">All randomized patients (578 patients, non-contrast CT selection)</p>
               </div>
@@ -3360,10 +3360,10 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+      <div className="min-h-screen bg-slate-50 pb-28">
 
         {/* Sticky header */}
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3394,8 +3394,8 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
 
           {/* Primary outcome — prose-narrative variant (no Grotta Bar) */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome · mRS Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">Confirmed stroke or TIA (cohort 1, N=852); full ITT (cohort 2, N=1149)</p>
             </div>
@@ -3443,8 +3443,8 @@ const TrialPageNew: React.FC = () => {
           </div>
 
           {/* Safety — prose card (slate, not red: trial not stopped for harm) */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Safety Signals</p>
             </div>
             <div className="p-4">
@@ -3510,10 +3510,10 @@ const TrialPageNew: React.FC = () => {
       : false;
 
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+      <div className="min-h-screen bg-slate-50 pb-28">
 
         {/* Section 1: Sticky header */}
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button
               type="button"
@@ -3570,8 +3570,8 @@ const TrialPageNew: React.FC = () => {
 
           {/* Section 4: Primary Outcome — BenchmarkThresholdChart (Archetype G) */}
           {bm && oer && (
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
                   Primary Outcome
                 </p>
@@ -3687,8 +3687,8 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3710,8 +3710,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO)</p>
             </div>
@@ -3776,8 +3776,8 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3799,8 +3799,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (small core, good collaterals)</p>
             </div>
@@ -3865,8 +3865,8 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3888,8 +3888,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, within 8 hours)</p>
             </div>
@@ -3954,8 +3954,8 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3978,8 +3978,8 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {/* Secondary outcome chart — primary was co-primary reperfusion + neurological improvement */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Secondary outcome: mRS 0-2 at 90 days</p>
             </div>
             <div className="p-4">
@@ -4040,8 +4040,8 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4063,8 +4063,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, IV alteplase within 4.5 hours)</p>
             </div>
@@ -4129,8 +4129,8 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4152,8 +4152,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 3 Months</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (proximal anterior circulation LVO, NIHSS 10 to 25)</p>
             </div>
@@ -4219,8 +4219,8 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4242,8 +4242,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, ASPECTS 5 or lower)</p>
             </div>
@@ -4342,8 +4342,8 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4365,8 +4365,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, ASPECTS 3 to 5)</p>
             </div>
@@ -4465,8 +4465,8 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4488,8 +4488,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-1 at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (LVO, eTICI 2b50+ reperfusion after thrombectomy)</p>
             </div>
@@ -4553,8 +4553,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4576,8 +4576,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, eligible for IV alteplase)</p>
             </div>
@@ -4641,8 +4641,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4664,8 +4664,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (proximal anterior circulation LVO, alteplase-eligible)</p>
             </div>
@@ -4728,8 +4728,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4751,8 +4751,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, within 6 hours)</p>
             </div>
@@ -4815,8 +4815,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4838,8 +4838,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Successful Revascularization (mTICI 2b-3)</p>
               <p className="text-xs text-slate-500 mt-0.5">Procedural endpoint — not a clinical outcome measure</p>
             </div>
@@ -4903,8 +4903,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4926,8 +4926,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Near-Total Reperfusion (eTICI 2c-3)</p>
               <p className="text-xs text-slate-500 mt-0.5">Procedural endpoint — not a clinical outcome measure</p>
             </div>
@@ -4990,8 +4990,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5017,8 +5017,8 @@ const TrialPageNew: React.FC = () => {
             <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Non-inferiority design: margin not met</p>
             <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>SKIP tested whether direct EVT was acceptably close to low-dose alteplase (0.6 mg/kg) plus EVT (NI margin: OR lower CI greater than 0.75). Non-inferiority was not demonstrated: the lower CI bound (0.72) fell below the margin. Similar point estimates (59.4% vs 57.3%) do not establish equivalence.</p>
           </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">LVO stroke within 4.5 h; Japanese low-dose alteplase (0.6 mg/kg) comparator</p>
             </div>
@@ -5075,8 +5075,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5102,8 +5102,8 @@ const TrialPageNew: React.FC = () => {
             <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Superiority and non-inferiority: both not demonstrated</p>
             <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>MR CLEAN-NO IV tested both superiority and non-inferiority of direct EVT vs alteplase 0.9 mg/kg plus EVT. Neither was met (adjusted common OR 0.84, 95% CI 0.62-1.15, P = 0.28). The point estimate numerically favors bridging therapy; median mRS was 3 (direct EVT) vs 2 (bridging).</p>
           </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">Direct presenters at EVT-capable centers within 4.5 h</p>
             </div>
@@ -5183,8 +5183,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5210,8 +5210,8 @@ const TrialPageNew: React.FC = () => {
             <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Non-inferiority design: margin not met</p>
             <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>DIRECT-SAFE tested whether direct EVT was acceptably close to bridging thrombolysis (NI margin: -12 pp). Non-inferiority was not demonstrated: the lower CI bound (-15.4 pp) crossed the margin. The adjusted risk difference (-5.1%, CI -15.4% to 5.3%) does not establish equivalence.</p>
           </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 or Pre-stroke Baseline at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">LVO within 4.5 h; alteplase or tenecteplase in bridging arm</p>
             </div>
@@ -5268,8 +5268,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5295,8 +5295,8 @@ const TrialPageNew: React.FC = () => {
             <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Non-inferiority design: margin not met</p>
             <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>SWIFT DIRECT tested whether thrombectomy alone was acceptably close to alteplase plus thrombectomy (NI margin: -10 pp). Non-inferiority was not demonstrated: the adjusted RD was -7.3% (95% CI -14.0% to -0.6%). The entire confidence interval is negative; even the most optimistic estimate favors bridging therapy.</p>
           </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">Anterior circulation proximal LVO; direct presenters within 4.5 h</p>
             </div>
@@ -5353,8 +5353,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5376,8 +5376,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">948 patients; IV tirofiban vs placebo before and during EVT</p>
             </div>
@@ -5455,8 +5455,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5478,8 +5478,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Radiographic iPH at 24-36 hours</p>
               <p className="text-xs text-slate-500 mt-0.5">324 patients; SBP 100-129 mm Hg vs 130-185 mm Hg after successful EVT</p>
             </div>
@@ -5536,8 +5536,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5563,8 +5563,8 @@ const TrialPageNew: React.FC = () => {
             <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Futility design: low predicted success for lower BP targets</p>
             <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>BEST-II was a phase 2 futility trial. Neither lower target formally crossed the futility boundary (P=0.93), but predicted success in a future superiority trial was only 14-25% for lower targets. The highest-target arm (SBP &lt;=180 mm Hg) produced the best utility-weighted mRS (0.58 vs 0.51). OPTIMAL-BP subsequently confirmed functional harm from SBP &lt;140 mm Hg.</p>
           </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Utility-Weighted mRS at 90 days (x100)</p>
               <p className="text-xs text-slate-500 mt-0.5">120 patients; 3-arm futility trial: SBP &lt;140, &lt;160, or &lt;=180 mm Hg after successful EVT</p>
             </div>
@@ -5622,8 +5622,8 @@ const TrialPageNew: React.FC = () => {
     const isHarm = tm.trialResult === 'HARM';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5645,8 +5645,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Functional Independence (mRS 0-2) at 3 Months</p>
             </div>
             <div className="p-4">
@@ -5707,8 +5707,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5730,8 +5730,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">2196 patients; intensive SBP 130-140 mm Hg vs guideline below 180 mm Hg for 72 hours</p>
             </div>
@@ -5800,8 +5800,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5823,8 +5823,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Functional Independence (mRS 0-2) at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">1105 patients; nerinetide vs placebo before or during EVT within 12 hours</p>
             </div>
@@ -5879,8 +5879,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5906,8 +5906,8 @@ const TrialPageNew: React.FC = () => {
             <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Stopped early: findings are inconclusive</p>
             <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>CHARM was halted before planned enrollment (535 of approximately 750 patients) due to COVID-19 operational disruptions. The trial was neither futile nor stopped for safety -- it was underpowered. Results should be interpreted with this context: the confidence interval (0.80-1.71) excludes neither meaningful benefit nor meaningful harm.</p>
           </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days (age 18-70)</p>
               <p className="text-xs text-slate-500 mt-0.5">535 patients; IV glibenclamide vs placebo within 10 hours of onset</p>
             </div>
@@ -5969,8 +5969,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5992,8 +5992,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Mortality Outcome — 6-Month Survival</p>
               <p className="text-xs text-slate-500 mt-0.5">38 patients; decompressive hemicraniectomy vs medical therapy alone</p>
             </div>
@@ -6053,8 +6053,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6076,8 +6076,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Mortality Outcome — 30-Day and 6-Month Survival</p>
               <p className="text-xs text-slate-500 mt-0.5">32 patients; early hemicraniectomy vs conservative therapy</p>
             </div>
@@ -6137,8 +6137,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6160,8 +6160,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Mortality Outcome — 1-Year Survival</p>
               <p className="text-xs text-slate-500 mt-0.5">64 patients; surgical decompression vs best medical treatment (enrollment up to 96 hours)</p>
             </div>
@@ -6221,8 +6221,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6244,8 +6244,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Survival Without Severe Disability (mRS 0-4) at 6 Months</p>
               <p className="text-xs text-slate-500 mt-0.5">112 patients aged 61-82; early hemicraniectomy vs conservative intensive care</p>
             </div>
@@ -6309,8 +6309,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6332,8 +6332,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Composite at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">888 patients; early NOAC within 4 days vs delayed 5-10 days after AF-related stroke</p>
             </div>
@@ -6395,8 +6395,8 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6418,8 +6418,8 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Composite at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">3621 patients at 100 UK hospitals; early DOAC within 4 days vs delayed 7-14 days</p>
             </div>
@@ -6491,9 +6491,9 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-28">
+      <div className="min-h-screen bg-slate-50 pb-28">
         {/* Sticky header */}
-        <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6557,8 +6557,8 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
 
           {/* Primary outcome — prose-narrative variant (no archetype viz) */}
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-            <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">{outcomeSectionLabel}</p>
               <p className="text-xs text-slate-500 mt-0.5">{outcomeSectionMeta}</p>
             </div>
@@ -6591,8 +6591,8 @@ const TrialPageNew: React.FC = () => {
 
           {/* Trial design narrative */}
           {tm.trialDesignNarrative && (
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Trial Design</p>
               </div>
               <div className="p-4">
@@ -6603,8 +6603,8 @@ const TrialPageNew: React.FC = () => {
 
           {/* Safety brief */}
           {tm.safetyBrief && (
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-slate-100">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Safety</p>
               </div>
               <div className="p-4">
@@ -6792,18 +6792,18 @@ const TrialPageNew: React.FC = () => {
 
   if (!trial) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+          <h1 className="text-2xl font-bold text-slate-900 mb-4">
             Trial Not Found
           </h1>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-slate-600">
             Could not find trial with ID: {trialId}
           </p>
           <button
             type="button"
             onClick={handleBack}
-            className="mt-4 inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:underline cursor-pointer bg-transparent border-0 p-0"
+            className="mt-4 inline-flex items-center gap-2 text-blue-600 hover:underline cursor-pointer bg-transparent border-0 p-0"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Trials
@@ -6814,23 +6814,23 @@ const TrialPageNew: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 shadow-sm">
+      <div className="bg-white border-b border-slate-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <button
             type="button"
             onClick={handleBack}
-            className="inline-flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-neuro-600 dark:hover:text-neuro-400 mb-4 transition-colors text-sm font-medium cursor-pointer bg-transparent border-0 p-0"
+            className="inline-flex items-center gap-2 text-slate-500 hover:text-neuro-600 mb-4 transition-colors text-sm font-medium cursor-pointer bg-transparent border-0 p-0"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Neuro Trials</span>
           </button>
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
             {trialMetadata?.title || trial.title}
-            {catalogTrial?.year ? <span className="ml-2 text-slate-400 dark:text-slate-500">({catalogTrial.year})</span> : null}
+            {catalogTrial?.year ? <span className="ml-2 text-slate-400">({catalogTrial.year})</span> : null}
           </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-base">
+          <p className="text-slate-500 text-base">
             {trialMetadata?.subtitle || trial.category}
           </p>
         </div>
@@ -6856,11 +6856,11 @@ const TrialPageNew: React.FC = () => {
 
             {/* Efficacy Results with Progress Bars */}
             {stats && (
-              <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 mb-8">
-                <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-4 flex flex-wrap items-center gap-2">
+              <div className="bg-white rounded-lg border border-slate-200 p-6 mb-8">
+                <h2 className="text-lg sm:text-xl font-bold text-slate-900 mb-4 flex flex-wrap items-center gap-2">
                   <span className="break-words">Primary Outcome: {stats.primaryEndpoint}</span>
                   {stats.primaryEndpointLabel && (
-                    <span className="text-base font-normal text-slate-600 dark:text-slate-400 break-words">
+                    <span className="text-base font-normal text-slate-600 break-words">
                       {stats.primaryEndpointLabel}
                     </span>
                   )}
@@ -6872,53 +6872,53 @@ const TrialPageNew: React.FC = () => {
                 <div className="space-y-4">
                   <div>
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                      <span className="text-sm font-medium text-slate-700">
                         {stats.treatmentName || 'Alteplase'}
                       </span>
-                      <span className="text-sm font-bold text-slate-900 dark:text-white">
+                      <span className="text-sm font-bold text-slate-900">
                         {stats.treatmentRate}%
                       </span>
                     </div>
-                    <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-4">
+                    <div className="w-full bg-slate-200 rounded-full h-4">
                       <div
                         className="bg-blue-600 h-4 rounded-full transition-all"
                         style={{ width: `${stats.treatmentRate}%` }}
                       />
                     </div>
-                    <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    <div className="text-xs text-slate-500 mt-1">
                       {stats.treatmentLabel}
                     </div>
                   </div>
                   <div>
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                      <span className="text-sm font-medium text-slate-700">
                         {stats.controlName || 'Placebo'}
                       </span>
-                      <span className="text-sm font-bold text-slate-900 dark:text-white">
+                      <span className="text-sm font-bold text-slate-900">
                         {stats.controlRate}%
                       </span>
                     </div>
-                    <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-4">
+                    <div className="w-full bg-slate-200 rounded-full h-4">
                       <div
-                        className="bg-slate-400 dark:bg-slate-600 h-4 rounded-full transition-all"
+                        className="bg-slate-400 h-4 rounded-full transition-all"
                         style={{ width: `${stats.controlRate}%` }}
                       />
                     </div>
-                    <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    <div className="text-xs text-slate-500 mt-1">
                       {stats.treatmentLabel}
                     </div>
                   </div>
-                  <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
+                  <div className="pt-4 border-t border-slate-200">
                     {stats.isEstimationTrial ? (
                       <div className="space-y-4">
-                        <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded">
+                        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
                           <div className="flex items-center gap-2 mb-2">
-                            <span className="text-blue-600 dark:text-blue-400 font-bold text-sm">📊 ESTIMATION TRIAL</span>
+                            <span className="text-blue-600 font-bold text-sm">📊 ESTIMATION TRIAL</span>
                           </div>
-                          <p className="text-sm text-slate-700 dark:text-slate-300 mb-2 break-words">
+                          <p className="text-sm text-slate-700 mb-2 break-words">
                             This trial establishes a <strong>safe range</strong> for clinical practice, not superiority.
                           </p>
-                          <div className="text-sm text-slate-700 dark:text-slate-300 break-words">
+                          <div className="text-sm text-slate-700 break-words">
                             <strong>Risk Difference:</strong> {stats.effectSize}
                             <MedicalTooltip
                               term="Risk Difference"
@@ -6926,27 +6926,27 @@ const TrialPageNew: React.FC = () => {
                             />
                           </div>
                           {stats.keyMessage && (
-                            <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/20 rounded border border-green-200 dark:border-green-800">
-                              <p className="text-sm font-semibold text-green-800 dark:text-green-300 break-words">
+                            <div className="mt-3 p-3 bg-green-50 rounded border border-green-200">
+                              <p className="text-sm font-semibold text-green-800 break-words">
                                 ✓ {stats.keyMessage}
                               </p>
                             </div>
                           )}
                         </div>
                         {stats.additionalResults && (
-                          <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded space-y-2">
+                          <div className="bg-slate-50 p-4 rounded space-y-2">
                             {stats.additionalResults.recurrentStroke && (
                               <div className="text-sm break-words">
-                                <strong className="text-slate-700 dark:text-slate-300">Recurrent Ischemic Stroke:</strong>{' '}
-                                <span className="text-slate-600 dark:text-slate-400">
+                                <strong className="text-slate-700">Recurrent Ischemic Stroke:</strong>{' '}
+                                <span className="text-slate-600">
                                   {stats.additionalResults.recurrentStroke.early}% (Early) vs {stats.additionalResults.recurrentStroke.later}% (Later)
                                 </span>
                               </div>
                             )}
                             {stats.additionalResults.symptomaticICH && (
                               <div className="text-sm break-words">
-                                <strong className="text-slate-700 dark:text-slate-300">Symptomatic ICH:</strong>{' '}
-                                <span className="text-green-600 dark:text-green-400 font-semibold">
+                                <strong className="text-slate-700">Symptomatic ICH:</strong>{' '}
+                                <span className="text-green-600 font-semibold">
                                   {stats.additionalResults.symptomaticICH.early}% (Early) vs {stats.additionalResults.symptomaticICH.later}% (Later) - EQUAL
                                 </span>
                               </div>
@@ -6957,11 +6957,11 @@ const TrialPageNew: React.FC = () => {
                     ) : stats.isHarmStopped ? (
                       // Distinct harm-stopped state — clinical-reviewer Wave 3 condition #1.
                       // Never collapses to generic "NEGATIVE TRIAL" — laundering a safety signal.
-                      <div className="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-700 p-4 rounded">
+                      <div className="bg-red-50 border-l-4 border-red-700 p-4 rounded">
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="text-red-700 dark:text-red-400 font-bold text-sm">🛑 STOPPED FOR HARM</span>
+                          <span className="text-red-700 font-bold text-sm">🛑 STOPPED FOR HARM</span>
                         </div>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">
+                        <p className="text-sm text-slate-700">
                           This trial was stopped early due to excess harm in the intervention arm. The primary endpoint was not met.
                           {stats.effectSizeLabel && stats.effectSizeLabel !== 'Absolute Increase' && ` (${stats.effectSizeLabel})`}
                         </p>
@@ -6969,20 +6969,20 @@ const TrialPageNew: React.FC = () => {
                     ) : stats.isNIFailed ? (
                       // NI-not-established — clinical-reviewer Wave 3 condition #2.
                       // Label "did not establish non-inferiority", not generic "negative".
-                      <div className="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 p-4 rounded">
+                      <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded">
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="text-amber-700 dark:text-amber-400 font-bold text-sm">❌ DID NOT ESTABLISH NON-INFERIORITY</span>
+                          <span className="text-amber-700 font-bold text-sm">❌ DID NOT ESTABLISH NON-INFERIORITY</span>
                         </div>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">
+                        <p className="text-sm text-slate-700">
                           This trial did not demonstrate that the intervention met the pre-specified non-inferiority margin.
                         </p>
                       </div>
                     ) : stats.isNegativeTrial ? (
-                      <div className="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded">
+                      <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="text-red-600 dark:text-red-400 font-bold text-sm">⚠️ NEGATIVE TRIAL</span>
+                          <span className="text-red-600 font-bold text-sm">⚠️ NEGATIVE TRIAL</span>
                         </div>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">
+                        <p className="text-sm text-slate-700">
                           This trial did not demonstrate a benefit for the intervention. {stats.effectSizeLabel && stats.effectSizeLabel !== 'Absolute Increase' && `(${stats.effectSizeLabel})`}
                         </p>
                       </div>
@@ -6990,16 +6990,16 @@ const TrialPageNew: React.FC = () => {
                       // NI-established — clinical-reviewer Wave 3 condition #2.
                       // Label "non-inferiority established", not generic "positive". NNT not shown.
                       <div className="flex flex-col gap-3">
-                        <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded">
+                        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
                           <div className="flex items-center gap-2 mb-2">
-                            <span className="text-blue-700 dark:text-blue-400 font-bold text-sm">✓ NON-INFERIORITY ESTABLISHED</span>
+                            <span className="text-blue-700 font-bold text-sm">✓ NON-INFERIORITY ESTABLISHED</span>
                           </div>
-                          <p className="text-sm text-slate-700 dark:text-slate-300">
+                          <p className="text-sm text-slate-700">
                             The intervention met the pre-specified non-inferiority margin. NNT is not applicable for non-inferiority designs.
                           </p>
                         </div>
                         <div className="flex items-center gap-4 text-sm">
-                          <span className="text-slate-600 dark:text-slate-400 flex items-center">
+                          <span className="text-slate-600 flex items-center">
                             <strong>Effect:</strong>&nbsp;{stats.effectSize}
                             <MedicalTooltip
                               term="Effect Size"
@@ -7010,7 +7010,7 @@ const TrialPageNew: React.FC = () => {
                       </div>
                     ) : (
                       <div className="flex items-center gap-4 text-sm">
-                      <span className="text-slate-600 dark:text-slate-400 flex items-center">
+                      <span className="text-slate-600 flex items-center">
                         <strong>NNT:</strong> {stats.nnt}
                         <MedicalTooltip
                           term="NNT"
@@ -7020,7 +7020,7 @@ const TrialPageNew: React.FC = () => {
                           }
                         />
                       </span>
-                        <span className="text-slate-600 dark:text-slate-400 flex items-center">
+                        <span className="text-slate-600 flex items-center">
                           <strong>Absolute Benefit:</strong> {stats.effectSize}
                           <MedicalTooltip
                             term="Effect Size"
@@ -7040,24 +7040,24 @@ const TrialPageNew: React.FC = () => {
 
             {/* Clinical Context Section */}
             {trialMetadata?.clinicalContext && (
-              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500 p-6 mb-8">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">Clinical Context</h3>
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+              <div className="bg-blue-50 rounded-lg border-l-4 border-blue-500 p-6 mb-8">
+                <h3 className="text-lg font-bold text-slate-900 mb-3">Clinical Context</h3>
+                <p className="text-slate-700 leading-relaxed">
                   {trialMetadata.clinicalContext}
                 </p>
               </div>
             )}
 
             {trialSummaryItems.length > 0 && (
-              <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 mb-8">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Trial Summary</h3>
+              <div className="bg-white rounded-lg border border-slate-200 p-6 mb-8">
+                <h3 className="text-lg font-bold text-slate-900 mb-4">Trial Summary</h3>
                 <div className="space-y-4">
                   {trialSummaryItems.map((item) => (
                     <div key={item.label}>
-                      <div className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
+                      <div className="text-sm font-semibold text-slate-900 mb-1">
                         {item.label}
                       </div>
-                      <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+                      <p className="text-slate-700 leading-relaxed">
                         {addTooltips(item.value)}
                       </p>
                     </div>
@@ -7068,38 +7068,38 @@ const TrialPageNew: React.FC = () => {
 
             {/* Procedural Details Section (for negative trials) */}
             {trialMetadata?.proceduralDetails && (
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border-l-4 border-yellow-500 p-6 mb-8">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">🔍 Procedural Details</h3>
+              <div className="bg-yellow-50 rounded-lg border-l-4 border-yellow-500 p-6 mb-8">
+                <h3 className="text-lg font-bold text-slate-900 mb-4">🔍 Procedural Details</h3>
                 <div className="space-y-4">
                   {trialMetadata.proceduralDetails.reperfusionRate && (
-                    <div className="bg-white dark:bg-slate-800 rounded p-4">
+                    <div className="bg-white rounded p-4">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                        <span className="text-sm font-medium text-slate-700">
                           {trialMetadata.proceduralDetails.reperfusionRate.label}
                         </span>
-                        <span className="text-lg font-bold text-yellow-600 dark:text-yellow-400">
+                        <span className="text-lg font-bold text-yellow-600">
                           {trialMetadata.proceduralDetails.reperfusionRate.value}
                         </span>
                       </div>
                       {trialMetadata.proceduralDetails.reperfusionRate.tooltip && (
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">
+                        <p className="text-xs text-slate-600 mt-2">
                           {addTooltips(trialMetadata.proceduralDetails.reperfusionRate.tooltip)}
                         </p>
                       )}
                     </div>
                   )}
                   {trialMetadata.proceduralDetails.imagingToPuncture && (
-                    <div className="bg-white dark:bg-slate-800 rounded p-4">
+                    <div className="bg-white rounded p-4">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                        <span className="text-sm font-medium text-slate-700">
                           {trialMetadata.proceduralDetails.imagingToPuncture.label}
                         </span>
-                        <span className="text-lg font-bold text-yellow-600 dark:text-yellow-400">
+                        <span className="text-lg font-bold text-yellow-600">
                           {trialMetadata.proceduralDetails.imagingToPuncture.value}
                         </span>
                       </div>
                       {trialMetadata.proceduralDetails.imagingToPuncture.tooltip && (
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">
+                        <p className="text-xs text-slate-600 mt-2">
                           {addTooltips(trialMetadata.proceduralDetails.imagingToPuncture.tooltip)}
                         </p>
                       )}
@@ -7111,56 +7111,56 @@ const TrialPageNew: React.FC = () => {
 
             {/* Safety Profile Section (for negative trials) */}
             {trialMetadata?.safetyProfile && (
-              <div className="bg-orange-50 dark:bg-orange-900/20 rounded-lg border-l-4 border-orange-500 p-6 mb-8">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">⚠️ Safety Profile</h3>
+              <div className="bg-orange-50 rounded-lg border-l-4 border-orange-500 p-6 mb-8">
+                <h3 className="text-lg font-bold text-slate-900 mb-4">⚠️ Safety Profile</h3>
                 <div className="space-y-4">
                   {trialMetadata.safetyProfile.mortality && (
-                    <div className="bg-white dark:bg-slate-800 rounded p-4">
-                      <div className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    <div className="bg-white rounded p-4">
+                      <div className="text-sm font-medium text-slate-700 mb-2">
                         {trialMetadata.safetyProfile.mortality.label}
                       </div>
                       <div className="flex items-center gap-4">
                         <div>
-                          <span className="text-xs text-slate-500 dark:text-slate-400">EVT:</span>
-                          <span className="ml-2 text-lg font-bold text-slate-900 dark:text-white">
+                          <span className="text-xs text-slate-500">EVT:</span>
+                          <span className="ml-2 text-lg font-bold text-slate-900">
                             {trialMetadata.safetyProfile.mortality.evt}%
                           </span>
                         </div>
                         <div>
-                          <span className="text-xs text-slate-500 dark:text-slate-400">Control:</span>
-                          <span className="ml-2 text-lg font-bold text-slate-900 dark:text-white">
+                          <span className="text-xs text-slate-500">Control:</span>
+                          <span className="ml-2 text-lg font-bold text-slate-900">
                             {trialMetadata.safetyProfile.mortality.control}%
                           </span>
                         </div>
                       </div>
                       {trialMetadata.safetyProfile.mortality.tooltip && (
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">
+                        <p className="text-xs text-slate-600 mt-2">
                           {addTooltips(trialMetadata.safetyProfile.mortality.tooltip)}
                         </p>
                       )}
                     </div>
                   )}
                   {trialMetadata.safetyProfile.sICH && (
-                    <div className="bg-white dark:bg-slate-800 rounded p-4">
-                      <div className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    <div className="bg-white rounded p-4">
+                      <div className="text-sm font-medium text-slate-700 mb-2">
                         {trialMetadata.safetyProfile.sICH.label}
                       </div>
                       <div className="flex items-center gap-4">
                         <div>
-                          <span className="text-xs text-slate-500 dark:text-slate-400">EVT:</span>
-                          <span className="ml-2 text-lg font-bold text-red-600 dark:text-red-400">
+                          <span className="text-xs text-slate-500">EVT:</span>
+                          <span className="ml-2 text-lg font-bold text-red-600">
                             {trialMetadata.safetyProfile.sICH.evt}%
                           </span>
                         </div>
                         <div>
-                          <span className="text-xs text-slate-500 dark:text-slate-400">Control:</span>
-                          <span className="ml-2 text-lg font-bold text-slate-900 dark:text-white">
+                          <span className="text-xs text-slate-500">Control:</span>
+                          <span className="ml-2 text-lg font-bold text-slate-900">
                             {trialMetadata.safetyProfile.sICH.control}%
                           </span>
                         </div>
                       </div>
                       {trialMetadata.safetyProfile.sICH.tooltip && (
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">
+                        <p className="text-xs text-slate-600 mt-2">
                           {addTooltips(trialMetadata.safetyProfile.sICH.tooltip)}
                         </p>
                       )}
@@ -7172,21 +7172,21 @@ const TrialPageNew: React.FC = () => {
 
             {/* Comparison Section (for DISTAL specifically) */}
             {trialId === 'distal-trial' && (
-              <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 p-6 mb-8">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">📊 Large Vessel vs. Distal Vessel EVT</h3>
+              <div className="bg-slate-50 rounded-lg border border-slate-200 p-6 mb-8">
+                <h3 className="text-lg font-bold text-slate-900 mb-4">📊 Large Vessel vs. Distal Vessel EVT</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-green-50 dark:bg-green-900/20 rounded p-4 border border-green-200 dark:border-green-800">
-                    <h4 className="font-bold text-green-800 dark:text-green-300 mb-2">✅ LARGE VESSEL EVT (M1/ICA)</h4>
-                    <ul className="text-sm text-green-700 dark:text-green-200 space-y-1">
+                  <div className="bg-green-50 rounded p-4 border border-green-200">
+                    <h4 className="font-bold text-green-800 mb-2">✅ LARGE VESSEL EVT (M1/ICA)</h4>
+                    <ul className="text-sm text-green-700 space-y-1">
                       <li>• Reperfusion: 85-90%</li>
                       <li>• NNT: 2-7 (dramatic benefit)</li>
                       <li>• p &lt; 0.001</li>
                       <li>• Good collaterals compensate during delays</li>
                     </ul>
                   </div>
-                  <div className="bg-red-50 dark:bg-red-900/20 rounded p-4 border border-red-200 dark:border-red-800">
-                    <h4 className="font-bold text-red-800 dark:text-red-300 mb-2">❌ DISTAL VESSEL EVT (M2/M3/ACA/PCA)</h4>
-                    <ul className="text-sm text-red-700 dark:text-red-200 space-y-1">
+                  <div className="bg-red-50 rounded p-4 border border-red-200">
+                    <h4 className="font-bold text-red-800 mb-2">❌ DISTAL VESSEL EVT (M2/M3/ACA/PCA)</h4>
+                    <ul className="text-sm text-red-700 space-y-1">
                       <li>• Reperfusion: only 72%</li>
                       <li>• NNT: Cannot calculate (no benefit)</li>
                       <li>• p = 0.50 (not significant)</li>
@@ -7199,30 +7199,30 @@ const TrialPageNew: React.FC = () => {
 
             {/* Why Did It Fail Section (for DISTAL specifically) */}
             {trialId === 'distal-trial' && (
-              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500 p-6 mb-8">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">🔍 Why Did DISTAL Fail When Other EVT Trials Succeeded?</h3>
+              <div className="bg-blue-50 rounded-lg border-l-4 border-blue-500 p-6 mb-8">
+                <h3 className="text-lg font-bold text-slate-900 mb-4">🔍 Why Did DISTAL Fail When Other EVT Trials Succeeded?</h3>
                 <div className="space-y-4">
-                  <div className="bg-white dark:bg-slate-800 rounded p-4">
-                    <h4 className="font-semibold text-slate-900 dark:text-white mb-2">1. Lower Reperfusion Rates (71.7% vs 85-90%)</h4>
-                    <p className="text-sm text-slate-700 dark:text-slate-300">
+                  <div className="bg-white rounded p-4">
+                    <h4 className="font-semibold text-slate-900 mb-2">1. Lower Reperfusion Rates (71.7% vs 85-90%)</h4>
+                    <p className="text-sm text-slate-700">
                       Distal vessels are smaller and harder to navigate. Catheters/stents designed for large vessels may not work as well for medium/distal occlusions.
                     </p>
                   </div>
-                  <div className="bg-white dark:bg-slate-800 rounded p-4">
-                    <h4 className="font-semibold text-slate-900 dark:text-white mb-2">2. Treatment Delays (70-min imaging-to-puncture)</h4>
-                    <p className="text-sm text-slate-700 dark:text-slate-300">
+                  <div className="bg-white rounded p-4">
+                    <h4 className="font-semibold text-slate-900 mb-2">2. Treatment Delays (70-min imaging-to-puncture)</h4>
+                    <p className="text-sm text-slate-700">
                       Distal vessels have poor collateral flow. Less tolerance for delays than large vessels, which can compensate better during treatment delays.
                     </p>
                   </div>
-                  <div className="bg-white dark:bg-slate-800 rounded p-4">
-                    <h4 className="font-semibold text-slate-900 dark:text-white mb-2">3. "End Artery" Problem</h4>
-                    <p className="text-sm text-slate-700 dark:text-slate-300">
+                  <div className="bg-white rounded p-4">
+                    <h4 className="font-semibold text-slate-900 mb-2">3. "End Artery" Problem</h4>
+                    <p className="text-sm text-slate-700">
                       Distal vessels often have no backup blood supply. By the time treatment starts, tissue may already be dead, making reperfusion ineffective.
                     </p>
                   </div>
-                  <div className="bg-white dark:bg-slate-800 rounded p-4">
-                    <h4 className="font-semibold text-slate-900 dark:text-white mb-2">4. Patient Selection</h4>
-                    <p className="text-sm text-slate-700 dark:text-slate-300">
+                  <div className="bg-white rounded p-4">
+                    <h4 className="font-semibold text-slate-900 mb-2">4. Patient Selection</h4>
+                    <p className="text-sm text-slate-700">
                       Median NIHSS = 6 (relatively mild). May have self-selected milder cases that do well anyway, masking any potential benefit from EVT.
                     </p>
                   </div>
@@ -7232,15 +7232,15 @@ const TrialPageNew: React.FC = () => {
 
             {/* Clinical Pearls Section */}
             {trialMetadata?.pearls && trialMetadata.pearls.length > 0 && (
-              <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg border-l-4 border-purple-500 p-6 mb-8">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Clinical Pearls</h3>
+              <div className="bg-purple-50 rounded-lg border-l-4 border-purple-500 p-6 mb-8">
+                <h3 className="text-lg font-bold text-slate-900 mb-4">Clinical Pearls</h3>
                 <ul className="space-y-3">
                   {trialMetadata.pearls.map((pearl, idx) => (
                     <li key={idx} className="flex items-start gap-3">
                       <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs font-bold mt-0.5">
                         {idx + 1}
                       </span>
-                      <span className="text-slate-700 dark:text-slate-300 leading-relaxed">
+                      <span className="text-slate-700 leading-relaxed">
                         {addTooltips(pearl)}
                       </span>
                     </li>
@@ -7251,9 +7251,9 @@ const TrialPageNew: React.FC = () => {
 
             {/* Conclusion Section */}
             {renderedConclusion && (
-              <div className="bg-green-50 dark:bg-green-900/20 rounded-lg border-l-4 border-green-500 p-6 mb-8">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">Conclusion</h3>
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+              <div className="bg-green-50 rounded-lg border-l-4 border-green-500 p-6 mb-8">
+                <h3 className="text-lg font-bold text-slate-900 mb-3">Conclusion</h3>
+                <p className="text-slate-700 leading-relaxed">
                   {addTooltips(renderedConclusion)}
                 </p>
               </div>
@@ -7261,7 +7261,7 @@ const TrialPageNew: React.FC = () => {
 
             {/* Trial Content */}
             {sanitizedTrialContent && (
-              <div className="prose prose-lg dark:prose-invert max-w-none">
+              <div className="prose prose-lg max-w-none">
                 <Suspense fallback={<ChartFallback />}>
                   <MarkdownSectionLazy content={sanitizedTrialContent} />
                 </Suspense>
@@ -7270,8 +7270,8 @@ const TrialPageNew: React.FC = () => {
 
             {/* Source Citation */}
             {trialMetadata?.source && (
-              <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
-                <p className="text-sm text-slate-600 dark:text-slate-400 italic">
+              <div className="mt-8 pt-6 border-t border-slate-200">
+                <p className="text-sm text-slate-600 italic">
                   <strong>Source:</strong> {trialMetadata.source}
                 </p>
               </div>
@@ -7280,7 +7280,7 @@ const TrialPageNew: React.FC = () => {
 
           {/* Dark Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-slate-900 dark:bg-slate-950 rounded-lg p-6 sticky top-8">
+            <div className="bg-slate-900 rounded-lg p-6 sticky top-8">
               <h3 className="text-lg font-bold text-white mb-4">Trial Design</h3>
               <div className="space-y-4 text-sm">
                 {trialMetadata?.trialDesign ? (

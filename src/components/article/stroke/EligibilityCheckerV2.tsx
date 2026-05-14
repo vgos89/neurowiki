@@ -96,17 +96,17 @@ export const EligibilityCheckerV2: React.FC<EligibilityCheckerV2Props> = ({ onLk
   const status = getStatus();
 
   return (
-    <div className="bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm">
+    <div className="bg-white border border-slate-200 rounded-2xl shadow-sm">
       {/* Header */}
-      <div className="p-6 border-b border-slate-200 dark:border-slate-800">
+      <div className="p-6 border-b border-slate-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
-              <span className="material-icons-outlined text-blue-600 dark:text-blue-400">event</span>
+            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+              <span className="material-icons-outlined text-blue-600">event</span>
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">Eligibility Assessment</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Treatment window & contraindications</p>
+              <h3 className="text-base font-bold text-slate-900">Eligibility Assessment</h3>
+              <p className="text-xs text-slate-500">Treatment window & contraindications</p>
             </div>
           </div>
         </div>
@@ -128,7 +128,7 @@ export const EligibilityCheckerV2: React.FC<EligibilityCheckerV2Props> = ({ onLk
                 max="12"
                 value={hour}
                 onChange={(e) => setHour(e.target.value)}
-                className="w-14 h-12 text-center rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-red-500/20 text-slate-900 dark:text-white font-medium"
+                className="w-14 h-12 text-center rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-red-500/20 text-slate-900 font-medium"
               />
               <span className="text-slate-300 font-bold text-lg">:</span>
               <input
@@ -137,18 +137,18 @@ export const EligibilityCheckerV2: React.FC<EligibilityCheckerV2Props> = ({ onLk
                 max="59"
                 value={minute}
                 onChange={(e) => setMinute(e.target.value.padStart(2, '0'))}
-                className="w-14 h-12 text-center rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-red-500/20 text-slate-900 dark:text-white font-medium"
+                className="w-14 h-12 text-center rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-red-500/20 text-slate-900 font-medium"
               />
 
-              <div className="inline-flex rounded-2xl bg-slate-100 dark:bg-slate-800 p-1">
+              <div className="inline-flex rounded-2xl bg-slate-100 p-1">
                 <button
                   type="button"
                   onClick={() => setPeriod('AM')}
                   className={`px-3 py-2 text-xs font-bold rounded-lg transition-all ${
-                    period === 'AM'
-                      ? 'bg-white dark:bg-slate-700 shadow-sm text-slate-900 dark:text-white'
-                      : 'text-slate-500'
-                  }`}
+ period === 'AM'
+ ? 'bg-white shadow-sm text-slate-900'
+ : 'text-slate-500'
+ }`}
                 >
                   AM
                 </button>
@@ -156,10 +156,10 @@ export const EligibilityCheckerV2: React.FC<EligibilityCheckerV2Props> = ({ onLk
                   type="button"
                   onClick={() => setPeriod('PM')}
                   className={`px-3 py-2 text-xs font-bold rounded-lg transition-all ${
-                    period === 'PM'
-                      ? 'bg-white dark:bg-slate-700 shadow-sm text-slate-900 dark:text-white'
-                      : 'text-slate-500'
-                  }`}
+ period === 'PM'
+ ? 'bg-white shadow-sm text-slate-900'
+ : 'text-slate-500'
+ }`}
                 >
                   PM
                 </button>
@@ -168,7 +168,7 @@ export const EligibilityCheckerV2: React.FC<EligibilityCheckerV2Props> = ({ onLk
 
             <button
               onClick={setToCurrentTime}
-              className="flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 hover:underline font-medium"
+              className="flex items-center gap-1.5 text-xs text-blue-600 hover:underline font-medium"
             >
               <span className="material-icons-outlined text-sm">access_time</span>
               Set to current time
@@ -191,32 +191,32 @@ export const EligibilityCheckerV2: React.FC<EligibilityCheckerV2Props> = ({ onLk
         {/* Status Display */}
         {status && (
           <div className={`p-4 rounded-2xl border ${
-            status.color === 'green' ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' :
-            status.color === 'yellow' ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800' :
-            'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
-          }`}>
+ status.color === 'green' ? 'bg-green-50 border-green-200' :
+ status.color === 'yellow' ? 'bg-amber-50 border-amber-200' :
+ 'bg-red-50 border-red-200'
+ }`}>
             <div className="text-center mb-3">
               <div className={`text-4xl font-black mb-1 ${
-                status.color === 'green' ? 'text-green-600 dark:text-green-400' :
-                status.color === 'yellow' ? 'text-amber-600 dark:text-amber-400' :
-                'text-red-600 dark:text-red-400'
-              }`}>
+ status.color === 'green' ? 'text-green-600' :
+ status.color === 'yellow' ? 'text-amber-600' :
+ 'text-red-600'
+ }`}>
                 {hoursElapsed?.toFixed(1)}h
               </div>
-              <div className="text-xs font-medium text-slate-600 dark:text-slate-400">
+              <div className="text-xs font-medium text-slate-600">
                 since last known well
               </div>
             </div>
 
             <div className="text-center">
               <span className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full ${
-                status.color === 'green' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' :
-                status.color === 'yellow' ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300' :
-                'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
-              }`}>
+ status.color === 'green' ? 'bg-blue-50 text-blue-600' :
+ status.color === 'yellow' ? 'bg-amber-100 text-amber-700' :
+ 'bg-red-100 text-red-700'
+ }`}>
                 {status.icon} {status.title}
               </span>
-              <div className="text-xs leading-relaxed text-slate-700 dark:text-slate-300 mt-2">
+              <div className="text-xs leading-relaxed text-slate-700 mt-2">
                 {status.message}
               </div>
             </div>
@@ -224,10 +224,10 @@ export const EligibilityCheckerV2: React.FC<EligibilityCheckerV2Props> = ({ onLk
         )}
 
         {/* Guidelines */}
-        <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800">
+        <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200">
           <div className="flex items-start gap-3">
-            <span className="material-icons-outlined text-slate-500 dark:text-slate-400 mt-0.5 flex-shrink-0">info</span>
-            <div className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+            <span className="material-icons-outlined text-slate-500 mt-0.5 flex-shrink-0">info</span>
+            <div className="text-xs text-slate-700 leading-relaxed">
               <span className="font-semibold">LKW Definition: </span>
               If patient woke with symptoms, LKW is when last seen normal before sleep.
               Work backwards: when did they go to bed? Be precise - &quot;yesterday&quot; is not sufficient.
@@ -248,14 +248,14 @@ export const EligibilityCheckerV2: React.FC<EligibilityCheckerV2Props> = ({ onLk
 
         {/* Prompt for LVO Screen if outside 4.5 hour window */}
         {calculated && hoursElapsed !== null && hoursElapsed > 4.5 && hoursElapsed <= 24 && (
-          <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-2xl border border-blue-200 dark:border-blue-800">
+          <div className="mt-4 p-4 bg-blue-50 rounded-2xl border border-blue-200">
             <div className="flex items-start gap-3">
-              <span className="material-icons-outlined text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0">error_outline</span>
+              <span className="material-icons-outlined text-blue-600 mt-0.5 flex-shrink-0">error_outline</span>
               <div className="flex-1">
-                <h4 className="text-sm font-bold text-blue-900 dark:text-blue-200 mb-1">
+                <h4 className="text-sm font-bold text-blue-900 mb-1">
                   Outside IV tPA Window - Proceed to LVO Screening
                 </h4>
-                <p className="text-xs leading-relaxed text-blue-800 dark:text-blue-300 mb-3">
+                <p className="text-xs leading-relaxed text-blue-800 mb-3">
                   Patient is outside the 4.5-hour window for IV tPA. However, mechanical thrombectomy may still be an option if LVO is present (up to 24 hours with appropriate imaging). Proceed to LVO screening.
                 </p>
                 {onOutsideWindow && (
@@ -275,35 +275,35 @@ export const EligibilityCheckerV2: React.FC<EligibilityCheckerV2Props> = ({ onLk
         {/* Show saved eligibility summary */}
         {savedEligibilityData && (
           <div className={`mt-4 p-4 rounded-2xl border ${
-            savedEligibilityData.eligibilityStatus === 'eligible'
-              ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
-              : savedEligibilityData.eligibilityStatus === 'relative-contraindication'
-              ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800'
-              : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
-          }`}>
+ savedEligibilityData.eligibilityStatus === 'eligible'
+ ? 'bg-green-50 border-green-200'
+ : savedEligibilityData.eligibilityStatus === 'relative-contraindication'
+ ? 'bg-amber-50 border-amber-200'
+ : 'bg-red-50 border-red-200'
+ }`}>
             <div className="flex items-start gap-3">
               <div className={`text-2xl ${
-                savedEligibilityData.eligibilityStatus === 'eligible' ? 'text-green-600' :
-                savedEligibilityData.eligibilityStatus === 'relative-contraindication' ? 'text-yellow-600' :
-                'text-red-600'
-              }`}>
+ savedEligibilityData.eligibilityStatus === 'eligible' ? 'text-green-600' :
+ savedEligibilityData.eligibilityStatus === 'relative-contraindication' ? 'text-yellow-600' :
+ 'text-red-600'
+ }`}>
                 {savedEligibilityData.eligibilityStatus === 'eligible' ? '✓' :
                  savedEligibilityData.eligibilityStatus === 'relative-contraindication' ? '⚠' :
                  '✗'}
               </div>
               <div className="flex-1">
                 <h4 className={`text-sm font-bold mb-1 ${
-                  savedEligibilityData.eligibilityStatus === 'eligible' ? 'text-green-800 dark:text-green-200' :
-                  savedEligibilityData.eligibilityStatus === 'relative-contraindication' ? 'text-yellow-800 dark:text-yellow-200' :
-                  'text-red-800 dark:text-red-200'
-                }`}>
+ savedEligibilityData.eligibilityStatus === 'eligible' ? 'text-green-800' :
+ savedEligibilityData.eligibilityStatus === 'relative-contraindication' ? 'text-yellow-800' :
+ 'text-red-800'
+ }`}>
                   Eligibility Assessment Complete
                 </h4>
                 <p className={`text-xs leading-relaxed ${
-                  savedEligibilityData.eligibilityStatus === 'eligible' ? 'text-green-700 dark:text-green-300' :
-                  savedEligibilityData.eligibilityStatus === 'relative-contraindication' ? 'text-yellow-700 dark:text-yellow-300' :
-                  'text-red-700 dark:text-red-300'
-                }`}>
+ savedEligibilityData.eligibilityStatus === 'eligible' ? 'text-green-700' :
+ savedEligibilityData.eligibilityStatus === 'relative-contraindication' ? 'text-yellow-700' :
+ 'text-red-700'
+ }`}>
                   Status: {savedEligibilityData.eligibilityStatus === 'eligible' ? 'ELIGIBLE FOR IV tPA' :
                            savedEligibilityData.eligibilityStatus === 'relative-contraindication' ? 'RELATIVE CONTRAINDICATION' :
                            savedEligibilityData.eligibilityStatus === 'absolute-contraindication' ? 'IV tPA CONTRAINDICATED' :

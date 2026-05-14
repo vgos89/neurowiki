@@ -68,10 +68,10 @@ function getScoreInfo(score: number): ScoreInfo {
     return {
       label: 'Small or No Infarct',
       evtText: 'EVT strongly indicated — Class I recommendation (AHA/ASA 2026). Small or no established infarct core; excellent candidacy.',
-      colorClass: 'text-emerald-700 dark:text-emerald-400',
-      borderClass: 'border-emerald-300 dark:border-emerald-700',
-      bgClass: 'bg-emerald-50 dark:bg-emerald-900/20',
-      textClass: 'text-emerald-800 dark:text-emerald-200',
+      colorClass: 'text-emerald-700',
+      borderClass: 'border-emerald-300',
+      bgClass: 'bg-emerald-50',
+      textClass: 'text-emerald-800',
       badgeBg: 'bg-emerald-500',
     };
   }
@@ -79,10 +79,10 @@ function getScoreInfo(score: number): ScoreInfo {
     return {
       label: 'Moderate Core',
       evtText: 'EVT generally indicated — Class I recommendation (AHA/ASA 2026). ASPECTS ≥6 is the primary threshold for EVT eligibility across early and late windows.',
-      colorClass: 'text-yellow-700 dark:text-yellow-400',
-      borderClass: 'border-yellow-300 dark:border-yellow-700',
-      bgClass: 'bg-yellow-50 dark:bg-yellow-900/20',
-      textClass: 'text-yellow-800 dark:text-yellow-200',
+      colorClass: 'text-yellow-700',
+      borderClass: 'border-yellow-300',
+      bgClass: 'bg-yellow-50',
+      textClass: 'text-yellow-800',
       badgeBg: 'bg-yellow-500',
     };
   }
@@ -90,20 +90,20 @@ function getScoreInfo(score: number): ScoreInfo {
     return {
       label: 'Large Core',
       evtText: 'EVT may benefit — Class I for ASPECTS 3–5 per SELECT-2 / ANGEL-ASPECT trials (AHA/ASA 2026 update). Age <80, no significant mass effect, mRS 0–1 required.',
-      colorClass: 'text-orange-700 dark:text-orange-400',
-      borderClass: 'border-orange-300 dark:border-orange-700',
-      bgClass: 'bg-orange-50 dark:bg-orange-900/20',
-      textClass: 'text-orange-800 dark:text-orange-200',
+      colorClass: 'text-orange-700',
+      borderClass: 'border-orange-300',
+      bgClass: 'bg-orange-50',
+      textClass: 'text-orange-800',
       badgeBg: 'bg-orange-500',
     };
   }
   return {
     label: 'Extensive Infarct',
     evtText: 'EVT typically not indicated — ASPECTS 0–2 indicates extensive established infarction. High futile reperfusion risk. Exceptional cases (age <80, no mass effect, Class IIa) require individualized Vascular Neurology / Neurointerventional consultation.',
-    colorClass: 'text-red-700 dark:text-red-400',
-    borderClass: 'border-red-300 dark:border-red-700',
-    bgClass: 'bg-red-50 dark:bg-red-900/20',
-    textClass: 'text-red-800 dark:text-red-200',
+    colorClass: 'text-red-700',
+    borderClass: 'border-red-300',
+    bgClass: 'bg-red-50',
+    textClass: 'text-red-800',
     badgeBg: 'bg-red-500',
   };
 }
@@ -407,10 +407,10 @@ const AspectScoreCalculator: React.FC = () => {
 
                   {involved.size > 0 && (
                     <span className={`text-xs font-medium ml-1.5 ${
-                      score >= 8 ? 'text-emerald-700' :
-                      score >= 6 ? 'text-yellow-700' :
-                      score >= 3 ? 'text-orange-700' : 'text-red-600'
-                    }`}>
+ score >= 8 ? 'text-emerald-700' :
+ score >= 6 ? 'text-yellow-700' :
+ score >= 3 ? 'text-orange-700' : 'text-red-600'
+ }`}>
                       {scoreInfo.label}
                     </span>
                   )}

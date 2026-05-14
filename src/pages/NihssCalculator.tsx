@@ -52,10 +52,10 @@ const SEVERITY_LABEL: Record<NIHSSSeverity, string> = {
 /** Text color class per severity — matches CALCULATOR_SPEC.md §6 */
 const SEVERITY_COLOR: Record<NIHSSSeverity, string> = {
   'none':             'text-slate-500',
-  'minor':            'text-emerald-600 dark:text-emerald-400',
-  'moderate':         'text-amber-700 dark:text-amber-400',
-  'moderate-severe':  'text-red-600 dark:text-red-400',
-  'severe':           'text-red-700 dark:text-red-400',
+  'minor':            'text-emerald-600',
+  'moderate':         'text-amber-700',
+  'moderate-severe':  'text-red-600',
+  'severe':           'text-red-700',
 };
 
 /** Border color for drawer header (State C) per severity */
@@ -276,7 +276,7 @@ const NihssCalculator: React.FC = () => {
       <div className="px-5 pt-4 pb-6">
         {/* Partial score note — State B only */}
         {drawerState === 'B' && (
-          <div className="mb-3 flex items-center gap-2 px-2.5 py-1.5 bg-slate-50 dark:bg-slate-800 rounded-lg">
+          <div className="mb-3 flex items-center gap-2 px-2.5 py-1.5 bg-slate-50 rounded-lg">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">In progress</span>
             <span className="text-xs text-slate-400">{answeredCount} of {totalItems} items scored</span>
           </div>
@@ -290,7 +290,7 @@ const NihssCalculator: React.FC = () => {
         </div>
 
         {/* Severity scale */}
-        <div className="text-xs text-slate-500 dark:text-slate-400 space-y-1 mb-4">
+        <div className="text-xs text-slate-500 space-y-1 mb-4">
           {[
             { range: '0', label: 'No symptoms' },
             { range: '1–4', label: 'Minor' },
@@ -306,24 +306,24 @@ const NihssCalculator: React.FC = () => {
         </div>
 
         {/* LVO probability divider */}
-        <div className="pt-3 border-t border-slate-100 dark:border-slate-700 mb-3">
+        <div className="pt-3 border-t border-slate-100 mb-3">
           <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
             LVO Probability (RACE)
           </div>
           <div className="flex items-baseline gap-2">
             <span className={`text-sm font-semibold ${
-              lvoData.label === 'High'
-                ? 'text-red-600 dark:text-red-400'
-                : lvoData.label === 'Moderate'
-                ? 'text-amber-700 dark:text-amber-400'
-                : 'text-green-600 dark:text-green-400'
-            }`}>
+ lvoData.label === 'High'
+ ? 'text-red-600'
+ : lvoData.label === 'Moderate'
+ ? 'text-amber-700'
+ : 'text-green-600'
+ }`}>
               {lvoData.label}
             </span>
             <span className="text-sm text-slate-500">{lvoData.probability}%</span>
             <span className="text-xs text-slate-400">· RACE {lvoData.raceScore}/9</span>
           </div>
-          <p className="text-xs text-slate-400 dark:text-slate-500 mt-2 leading-relaxed">
+          <p className="text-xs text-slate-400 mt-2 leading-relaxed">
             RACE ≥5 has 85% sensitivity for LVO — consider urgent vascular imaging.
           </p>
         </div>
@@ -351,7 +351,7 @@ const NihssCalculator: React.FC = () => {
     if (drawerState === 'A') {
       return (
         <div
-          className="bg-slate-100 dark:bg-slate-800"
+          className="bg-slate-100"
           style={{ boxShadow: drawerCollapsedShadow }}
           aria-hidden="true"
         >
@@ -371,7 +371,7 @@ const NihssCalculator: React.FC = () => {
     // States B + C — live, tappable (B shows partial note inside DrawerContent)
     const isExpanded = drawerOpen;
     const borderColor = SEVERITY_BORDER[severity];
-    const headerBg = isExpanded ? SEVERITY_HEADER_BG[severity] : 'bg-white dark:bg-slate-900';
+    const headerBg = isExpanded ? SEVERITY_HEADER_BG[severity] : 'bg-white';
 
     return (
       <div
@@ -423,7 +423,7 @@ const NihssCalculator: React.FC = () => {
       {/* ── Sticky header — CALCULATOR_SPEC.md §1.1 + §3.1 ──────────────── */}
       <header
         ref={nihssHeaderRef}
-        className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-100 dark:border-slate-700"
+        className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-100"
         role="banner"
       >
         <div className="max-w-2xl mx-auto px-5 py-3">
@@ -436,7 +436,7 @@ const NihssCalculator: React.FC = () => {
               <button
                 type="button"
                 onClick={handleBack}
-                className="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0"
+                className="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0"
                 aria-label="Back to calculators"
               >
                 <BackArrow />
@@ -459,19 +459,19 @@ const NihssCalculator: React.FC = () => {
                       : 'NIH Stroke Scale — not yet calculated'
                   }
                 >
-                  <span className="text-2xl font-semibold text-slate-900 dark:text-white tabular-nums leading-none">
+                  <span className="text-2xl font-semibold text-slate-900 tabular-nums leading-none">
                     {isComplete ? total : '—'}
                   </span>
                   <span className="text-slate-400 text-sm leading-none">/ 42</span>
 
                   {/* Severity text — only on moderate+ (§1.1) */}
                   {isComplete && severity === 'moderate' && (
-                    <span className="text-xs font-medium text-amber-700 dark:text-amber-400 ml-1.5">
+                    <span className="text-xs font-medium text-amber-700 ml-1.5">
                       Moderate
                     </span>
                   )}
                   {isComplete && (severity === 'moderate-severe' || severity === 'severe') && (
-                    <span className="text-xs font-medium text-red-600 dark:text-red-400 ml-1.5">
+                    <span className="text-xs font-medium text-red-600 ml-1.5">
                       {SEVERITY_LABEL[severity]}
                     </span>
                   )}
@@ -484,7 +484,7 @@ const NihssCalculator: React.FC = () => {
               <button
                 type="button"
                 onClick={handleFavToggle}
-                className="p-2 rounded-full hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-2 rounded-full hover:bg-slate-50 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
               >
                 <Star
@@ -497,7 +497,7 @@ const NihssCalculator: React.FC = () => {
               <button
                 type="button"
                 onClick={handleReset}
-                className="p-2 rounded-full hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-2 rounded-full hover:bg-slate-50 transition-colors text-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="Reset calculator"
               >
                 <RefreshCw size={17} aria-hidden="true" />
@@ -514,31 +514,31 @@ const NihssCalculator: React.FC = () => {
           </div>
 
           {/* Row 2: LVO cluster + mode toggle — §3.1 */}
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100 dark:border-slate-700/60">
+          <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
 
             {/* LVO cluster */}
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 LVO
               </span>
               <span className={`text-sm font-semibold leading-none ${
-                lvoData.label === 'High'
-                  ? 'text-red-600 dark:text-red-400'
-                  : lvoData.label === 'Moderate'
-                  ? 'text-amber-700 dark:text-amber-400'
-                  : 'text-green-600 dark:text-green-400'
-              }`}>
+ lvoData.label === 'High'
+ ? 'text-red-600'
+ : lvoData.label === 'Moderate'
+ ? 'text-amber-700'
+ : 'text-green-600'
+ }`}>
                 {lvoData.label} · {lvoData.probability}%
               </span>
               <div className="relative" ref={lvoTooltipRef}>
                 <button
                   type="button"
                   onClick={() => setShowLvoTooltip(!showLvoTooltip)}
-                  className="p-2 -m-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="p-2 -m-2 rounded-full hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                   aria-label="LVO probability information"
                   aria-expanded={showLvoTooltip}
                 >
-                  <svg className="w-3.5 h-3.5 text-slate-300 dark:text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <svg className="w-3.5 h-3.5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <circle cx="12" cy="12" r="10" />
                     <line x1="12" y1="16" x2="12" y2="12" />
                     <line x1="12" y1="8" x2="12.01" y2="8" />
@@ -546,17 +546,17 @@ const NihssCalculator: React.FC = () => {
                 </button>
 
                 {showLvoTooltip && (
-                  <div className="fixed md:absolute inset-x-4 md:inset-x-auto top-32 md:top-full md:left-0 md:mt-2 w-auto md:w-80 max-w-md mx-auto md:mx-0 p-4 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 z-50">
-                    <div className="text-sm font-bold text-slate-900 dark:text-white mb-3">
+                  <div className="fixed md:absolute inset-x-4 md:inset-x-auto top-32 md:top-full md:left-0 md:mt-2 w-auto md:w-80 max-w-md mx-auto md:mx-0 p-4 bg-white rounded-lg shadow-xl border border-slate-200 z-50">
+                    <div className="text-sm font-bold text-slate-900 mb-3">
                       LVO Probability (RACE Scale)
                     </div>
 
                     {/* RACE score breakdown */}
-                    <div className="mb-3 p-2 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
-                      <div className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    <div className="mb-3 p-2 bg-slate-100 rounded-lg">
+                      <div className="text-xs font-bold text-slate-700 mb-1">
                         RACE Score: {lvoData.raceScore}/9
                       </div>
-                      <div className="text-[10px] text-slate-600 dark:text-slate-400 space-y-0.5">
+                      <div className="text-[10px] text-slate-600 space-y-0.5">
                         <div>Facial Palsy: {lvoData.breakdown.facial}/2</div>
                         <div>Arm Motor (worst): {lvoData.breakdown.arm}/2</div>
                         <div>Leg Motor (worst): {lvoData.breakdown.leg}/2</div>
@@ -567,8 +567,8 @@ const NihssCalculator: React.FC = () => {
                     </div>
 
                     {/* RACE interpretation */}
-                    <div className="text-xs text-slate-600 dark:text-slate-400 space-y-1 mb-3">
-                      <p className="font-semibold text-slate-700 dark:text-slate-300">RACE Interpretation:</p>
+                    <div className="text-xs text-slate-600 space-y-1 mb-3">
+                      <p className="font-semibold text-slate-700">RACE Interpretation:</p>
                       <ul className="list-disc list-inside space-y-0.5 ml-2">
                         <li><strong>0–4:</strong> Low — 20% LVO probability</li>
                         <li><strong>5–6:</strong> Moderate — 55% LVO probability</li>
@@ -577,14 +577,14 @@ const NihssCalculator: React.FC = () => {
                     </div>
 
                     {/* Source */}
-                    <div className="text-[10px] text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700 pt-2">
+                    <div className="text-[10px] text-slate-500 border-t border-slate-200 pt-2">
                       Pérez de la Ossa N et al. Stroke. 2014.
                     </div>
 
                     <button
                       type="button"
                       onClick={() => setShowLvoTooltip(false)}
-                      className="absolute top-2 right-2 p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                      className="absolute top-2 right-2 p-1.5 text-slate-400 hover:text-slate-600 min-h-[44px] min-w-[44px] flex items-center justify-center"
                       aria-label="Close"
                     >
                       ×
@@ -595,15 +595,15 @@ const NihssCalculator: React.FC = () => {
             </div>
 
             {/* Mode toggle — rounded-full per §3.1 */}
-            <div className="flex items-center gap-0.5 bg-slate-100 dark:bg-slate-700 rounded-full p-0.5">
+            <div className="flex items-center gap-0.5 bg-slate-100 rounded-full p-0.5">
               <button
                 type="button"
                 onClick={() => setNihssMode('rapid')}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                  nihssMode === 'rapid'
-                    ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
+ nihssMode === 'rapid'
+ ? 'bg-white text-slate-900 shadow-sm'
+ : 'text-slate-500 hover:text-slate-900'
+ }`}
               >
                 Rapid
               </button>
@@ -611,10 +611,10 @@ const NihssCalculator: React.FC = () => {
                 type="button"
                 onClick={() => setNihssMode('detailed')}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                  nihssMode === 'detailed'
-                    ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
+ nihssMode === 'detailed'
+ ? 'bg-white text-slate-900 shadow-sm'
+ : 'text-slate-500 hover:text-slate-900'
+ }`}
               >
                 Detailed
               </button>
@@ -645,7 +645,7 @@ const NihssCalculator: React.FC = () => {
               return (
                 <React.Fragment key="motor-header">
                   <div className="flex justify-between items-end mb-2">
-                    <h3 className="font-black text-sm text-slate-400 dark:text-slate-500 uppercase tracking-widest">Motor</h3>
+                    <h3 className="font-black text-sm text-slate-400 uppercase tracking-widest">Motor</h3>
                     {/* Shortcut button — §3.5 */}
                     <button
                       type="button"
@@ -687,7 +687,7 @@ const NihssCalculator: React.FC = () => {
         </div>
 
         {/* Footer — §1.2 */}
-        <footer className="mt-14 pt-6 border-t border-slate-100 dark:border-slate-800">
+        <footer className="mt-14 pt-6 border-t border-slate-100">
           <p className="text-xs text-slate-400 leading-relaxed">
             Brott T et al. Measurements of acute cerebral infarction: a clinical examination scale.
             Stroke. 1989;20(7):864–870.

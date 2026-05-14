@@ -11,10 +11,10 @@ export const LKWSection: React.FC<LKWSectionProps> = ({ onComplete, isLearningMo
   return (
     <div className="space-y-4">
       {isLearningMode && (
-        <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
+        <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
           <div className="flex items-center gap-2">
-            <span className="material-icons-outlined text-lg text-slate-600 dark:text-slate-400">schedule</span>
-            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+            <span className="material-icons-outlined text-lg text-slate-600">schedule</span>
+            <p className="text-sm text-slate-700 leading-relaxed">
               Establish last known well time—determines eligibility for IV thrombolysis (≤4.5h) and thrombectomy (up to 24h with imaging). Verify with family or records; use the most conservative estimate if unknown.
             </p>
           </div>

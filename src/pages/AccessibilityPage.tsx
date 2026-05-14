@@ -7,10 +7,10 @@ import { Link } from 'react-router-dom';
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <section className="mb-10">
-    <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-3 pb-2 border-b border-slate-100 dark:border-slate-700">
+    <h2 className="text-lg font-semibold text-slate-800 mb-3 pb-2 border-b border-slate-100">
       {title}
     </h2>
-    <div className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed space-y-3">
+    <div className="text-slate-600 text-sm leading-relaxed space-y-3">
       {children}
     </div>
   </section>
@@ -18,8 +18,8 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title
 
 const CheckItem: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <li className="flex items-start gap-2">
-    <span className="mt-0.5 flex-shrink-0 w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center">
-      <svg className="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden="true">
+    <span className="mt-0.5 flex-shrink-0 w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center">
+      <svg className="w-2.5 h-2.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
       </svg>
     </span>
@@ -33,9 +33,9 @@ export default function AccessibilityPage() {
       {/* Header */}
       <div className="mb-10">
         <p className="text-xs font-medium text-neuro-500 uppercase tracking-widest mb-2">Legal</p>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-3">Accessibility Statement</h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400">Last updated: May 13, 2026</p>
-        <p className="mt-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+        <h1 className="text-2xl font-bold text-slate-900 mb-3">Accessibility Statement</h1>
+        <p className="text-sm text-slate-500">Last updated: May 13, 2026</p>
+        <p className="mt-4 text-sm text-slate-600 leading-relaxed">
           NeuroWiki is used at the bedside, often under pressure. Clinicians who rely on assistive
           technology need a tool that works reliably. Our target is WCAG 2.1 Level AA compliance.
         </p>
@@ -65,21 +65,21 @@ export default function AccessibilityPage() {
           </CheckItem>
           <CheckItem>
             <strong>ARIA roles on calculators:</strong> scoring item groups use{' '}
-            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">role="radiogroup"</code>.
+            <code className="bg-slate-100 px-1 rounded text-xs">role="radiogroup"</code>.
             Each option carries{' '}
-            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">role="radio"</code>{' '}
+            <code className="bg-slate-100 px-1 rounded text-xs">role="radio"</code>{' '}
             and{' '}
-            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">aria-checked</code>.
+            <code className="bg-slate-100 px-1 rounded text-xs">aria-checked</code>.
             Score totals use{' '}
-            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">aria-live="polite"</code>{' '}
+            <code className="bg-slate-100 px-1 rounded text-xs">aria-live="polite"</code>{' '}
             so screen readers announce updates.
           </CheckItem>
           <CheckItem>
             <strong>Modal focus management:</strong> modals and drawers trap focus, return focus to
             the trigger on close, and respond to Escape. They carry{' '}
-            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">role="dialog"</code>{' '}
+            <code className="bg-slate-100 px-1 rounded text-xs">role="dialog"</code>{' '}
             and{' '}
-            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">aria-modal="true"</code>.
+            <code className="bg-slate-100 px-1 rounded text-xs">aria-modal="true"</code>.
           </CheckItem>
           <CheckItem>
             <strong>Touch targets:</strong> all interactive elements are at least 44×44px, meeting
@@ -95,9 +95,9 @@ export default function AccessibilityPage() {
           </CheckItem>
           <CheckItem>
             <strong>Semantic HTML:</strong> landmark roles (
-            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">&lt;main&gt;</code>,{' '}
-            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">&lt;nav&gt;</code>,{' '}
-            <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">&lt;aside&gt;</code>)
+            <code className="bg-slate-100 px-1 rounded text-xs">&lt;main&gt;</code>,{' '}
+            <code className="bg-slate-100 px-1 rounded text-xs">&lt;nav&gt;</code>,{' '}
+            <code className="bg-slate-100 px-1 rounded text-xs">&lt;aside&gt;</code>)
             on all pages. Heading levels are sequential.
           </CheckItem>
           <CheckItem>
@@ -108,7 +108,7 @@ export default function AccessibilityPage() {
 
       <Section title="Known gaps">
         <p>Two areas are still in progress:</p>
-        <ul className="list-disc list-inside space-y-1.5 mt-2 text-slate-500 dark:text-slate-400">
+        <ul className="list-disc list-inside space-y-1.5 mt-2 text-slate-500">
           <li>Chart components (trial result visualisations): text alternatives pending</li>
           <li>Complex data tables on trial pages: full header association markup pending</li>
         </ul>
@@ -145,7 +145,7 @@ export default function AccessibilityPage() {
       </Section>
 
       {/* Footer nav */}
-      <div className="mt-12 pt-6 border-t border-slate-100 dark:border-slate-700 flex flex-wrap gap-4 text-xs text-slate-400">
+      <div className="mt-12 pt-6 border-t border-slate-100 flex flex-wrap gap-4 text-xs text-slate-400">
         <Link to="/privacy" className="hover:text-neuro-500 transition-colors">Privacy Policy</Link>
         <Link to="/terms" className="hover:text-neuro-500 transition-colors">Terms of Use</Link>
         <Link to="/" className="hover:text-neuro-500 transition-colors">Back to NeuroWiki</Link>

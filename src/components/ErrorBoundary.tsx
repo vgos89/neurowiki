@@ -41,12 +41,12 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-slate-100 dark:bg-slate-900 p-6 sm:p-8">
-          <div className="max-w-2xl mx-auto rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 sm:p-8 shadow-sm">
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
+        <div className="min-h-screen bg-slate-100 p-6 sm:p-8">
+          <div className="max-w-2xl mx-auto rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+            <h1 className="text-2xl font-bold text-slate-900 mb-3">
               Something went wrong
             </h1>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-slate-600 leading-relaxed">
               The page hit an unexpected error. Reload the app to retry. If the problem keeps happening, navigate back to the main guides or calculators hub.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
@@ -58,7 +58,7 @@ export class ErrorBoundary extends Component<Props, State> {
               </button>
               <a
                 href="/"
-                className="px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                className="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition-colors"
               >
                 Go Home
               </a>

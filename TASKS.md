@@ -960,6 +960,14 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-13 — L-dm-cleanup — global dark-mode removal (Class C) — pending commit SHA
+  - Removed all `dark:*` Tailwind utility classes across 44 source files (1,583 tokens stripped). Removed the `@custom-variant dark` block + `.dark .glass-card` + `.dark .active-pill` rules from index.css. Finalizes the previously-decided light-only theme that had been only partially cleaned up.
+  - No theme toggle ever existed; no behavior change visible to users.
+  - New file: `scripts/strip-dark-mode.mjs` (one-shot cleanup tool, idempotent).
+  - QA gates: tsc clean · build clean (TrialPageNew chunk -12 kB) · check:claims clean · check:routes 42 validated.
+  - Class C — mechanical multi-file UI cleanup, single domain, no architect review needed per CLAUDE.md §18.
+  - Cosmetic side-effect: some file-level comments mentioning "no dark:* in layout" had the `dark:*` token stripped, yielding awkward comment text. Not blocking; can be cleaned in future pass.
+
 - [x] 2026-05-13 — L5.5e HAS-BLED + RoPE input UI rebuild (pending commit SHA)
   - HasBledScoreCalculator rebuilt to CALCULATOR_SPEC v1.1 Archetype 3: 8 risk-factor checkboxes consolidated into single "Risk factors" section with A3 row pattern (`bg-neuro-50` checked, `accent-neuro-500`, `divider-hair`); 3-option Warfarin/INR subgroup as A1 radio rows with dividers; bordered risk-badge replaced with inline severity text; removed riskColors dead const; all dark:* removed from layout
   - RopeScoreCalculator rebuilt to CALCULATOR_SPEC v1.1 Archetype 1: 6 age bands as vertical A1 radio rows (no grid); 5 "Other criteria" checkboxes as A3 rows with `divider-hair`; inline 3-band severity text for PFO-attributable percentage (emerald ≥60%, amber 40–59%, slate <40%); all dark:* removed from layout

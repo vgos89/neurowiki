@@ -29,12 +29,12 @@ const defaultInputs: Cha2ds2VascInputs = {
 
 const riskColors: Record<Cha2ds2VascRisk, string> = {
   very_low:
-    'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200 border-emerald-300',
+    'bg-emerald-100 text-emerald-800 border-emerald-300',
   low_moderate:
-    'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200 border-amber-300',
+    'bg-amber-100 text-amber-800 border-amber-300',
   moderate_high:
-    'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200 border-orange-300',
-  high: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200 border-red-300',
+    'bg-orange-100 text-orange-800 border-orange-300',
+  high: 'bg-red-100 text-red-800 border-red-300',
 };
 
 interface CheckItem {
@@ -163,7 +163,7 @@ export default function Cha2ds2VascCalculator() {
   return (
     <>
       <header
-        className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-700"
+        className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200"
         role="banner"
       >
         <div className="max-w-2xl mx-auto px-4 md:px-6 py-3">
@@ -172,13 +172,13 @@ export default function Cha2ds2VascCalculator() {
               <button
                 type="button"
                 onClick={handleBack}
-                className="p-2 -m-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0"
+                className="p-2 -m-2 text-slate-500 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors flex-shrink-0 cursor-pointer bg-transparent border-0"
                 aria-label="Back to calculators"
               >
                 <ArrowLeft size={20} aria-hidden="true" />
               </button>
               <div className="min-w-0">
-                <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                   CHA₂DS₂-VASc Score
                 </div>
                 <div
@@ -186,10 +186,10 @@ export default function Cha2ds2VascCalculator() {
                   aria-live="polite"
                   aria-atomic="true"
                 >
-                  <span className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tabular-nums">
+                  <span className="text-2xl md:text-3xl font-bold text-slate-900 tabular-nums">
                     {result.score}
                   </span>
-                  <span className="text-slate-400 dark:text-slate-500 text-sm">/ 9</span>
+                  <span className="text-slate-400 text-sm">/ 9</span>
                   <span
                     className={`text-xs font-semibold px-2 py-0.5 rounded border ${riskColor}`}
                   >
@@ -201,23 +201,23 @@ export default function Cha2ds2VascCalculator() {
             <div className="flex items-center gap-1 flex-shrink-0">
               <button
                 onClick={handleFavToggle}
-                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
                 aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
               >
                 <Star
                   size={20}
                   className={
-                    isFav ? 'text-amber-500 fill-amber-500' : 'text-slate-400 dark:text-slate-500'
+                    isFav ? 'text-amber-500 fill-amber-500' : 'text-slate-400'
                   }
                   aria-hidden="true"
                 />
               </button>
               <button
                 onClick={handleReset}
-                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
                 aria-label="Reset calculator"
               >
-                <RefreshCw size={18} className="text-slate-500 dark:text-slate-400" aria-hidden="true" />
+                <RefreshCw size={18} className="text-slate-500" aria-hidden="true" />
               </button>
               <button
                 onClick={handleCopy}
@@ -236,35 +236,35 @@ export default function Cha2ds2VascCalculator() {
 
         {/* Interpretation panel */}
         <section
-          className="mb-6 p-4 rounded-xl border border-slate-100 bg-white dark:bg-slate-800 dark:border-slate-700"
+          className="mb-6 p-4 rounded-xl border border-slate-100 bg-white"
           aria-live="polite"
         >
-          <h2 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">
+          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
             Interpretation
           </h2>
           <div className="flex items-baseline gap-2 mb-1">
-            <span className="font-bold text-slate-900 dark:text-white">
+            <span className="font-bold text-slate-900">
               {RISK_LABELS[result.risk]}
             </span>
             {result.annualStrokeRate > 0 && (
-              <span className="text-sm text-slate-600 dark:text-slate-400">
+              <span className="text-sm text-slate-600">
                 ·{' '}
-                <strong className="text-slate-800 dark:text-slate-200">
+                <strong className="text-slate-800">
                   ~{result.annualStrokeRate}%
                 </strong>{' '}
                 annual stroke rate
               </span>
             )}
           </div>
-          <p className="text-sm text-slate-700 dark:text-slate-300">
+          <p className="text-sm text-slate-700">
             {RISK_GUIDANCE[result.risk]}
           </p>
           {(result.risk === 'moderate_high' || result.risk === 'high') && (
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+            <p className="text-xs text-slate-500 mt-2">
               Assess bleeding risk with{' '}
               <Link
                 to="/calculators/has-bled-score"
-                className="text-neuro-600 dark:text-neuro-400 hover:underline font-medium"
+                className="text-neuro-600 hover:underline font-medium"
               >
                 HAS-BLED Score
               </Link>
@@ -277,7 +277,7 @@ export default function Cha2ds2VascCalculator() {
         <section className="mb-4" aria-labelledby="chads-age-label">
           <h2
             id="chads-age-label"
-            className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2"
+            className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2"
           >
             Age
           </h2>
@@ -298,7 +298,7 @@ export default function Cha2ds2VascCalculator() {
               return (
                 <label
                   key={value}
-                  className="inline-flex items-center gap-2 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer transition-all border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 has-[:checked]:border-neuro-500 has-[:checked]:bg-neuro-50 dark:has-[:checked]:bg-neuro-900/20"
+                  className="inline-flex items-center gap-2 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer transition-all border-slate-200 hover:border-slate-300 has-[:checked]:border-neuro-500 has-[:checked]:bg-neuro-50"
                 >
                   <input
                     type="radio"
@@ -307,7 +307,7 @@ export default function Cha2ds2VascCalculator() {
                     onChange={() => setAge(value)}
                     className="w-4 h-4 text-neuro-600 focus:ring-neuro-500"
                   />
-                  <span className="font-medium text-slate-900 dark:text-white text-sm">
+                  <span className="font-medium text-slate-900 text-sm">
                     {label}
                   </span>
                 </label>
@@ -323,7 +323,7 @@ export default function Cha2ds2VascCalculator() {
               <h2 id={`chads-${key}`} className="sr-only">
                 {label}
               </h2>
-              <label className="flex items-start gap-3 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer transition-all border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 has-[:checked]:border-neuro-500 has-[:checked]:bg-neuro-50 dark:has-[:checked]:bg-neuro-900/20">
+              <label className="flex items-start gap-3 p-3 rounded-xl border-2 min-h-[44px] cursor-pointer transition-all border-slate-200 hover:border-slate-300 has-[:checked]:border-neuro-500 has-[:checked]:bg-neuro-50">
                 <input
                   type="checkbox"
                   checked={!!inputs[key]}
@@ -332,14 +332,14 @@ export default function Cha2ds2VascCalculator() {
                   aria-describedby={sublabel ? `chads-desc-${key}` : undefined}
                 />
                 <span className="flex-1">
-                  <span className="font-semibold text-slate-900 dark:text-white">{label}</span>
+                  <span className="font-semibold text-slate-900">{label}</span>
                   <span className="ml-1.5 text-xs font-medium text-slate-400">
                     {points === 2 ? '2 pts' : '1 pt'}
                   </span>
                   {sublabel && (
                     <span
                       id={`chads-desc-${key}`}
-                      className="block text-xs text-slate-500 dark:text-slate-400 mt-0.5"
+                      className="block text-xs text-slate-500 mt-0.5"
                     >
                       {sublabel}
                     </span>
@@ -352,13 +352,13 @@ export default function Cha2ds2VascCalculator() {
 
         {/* Score legend */}
         <section
-          className="mt-8 p-4 rounded-xl border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50"
+          className="mt-8 p-4 rounded-xl border border-slate-100 bg-slate-50"
           aria-label="Score reference table"
         >
-          <h2 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">
+          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
             Annual Stroke Risk by Score
           </h2>
-          <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-xs text-slate-600 dark:text-slate-400">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-xs text-slate-600">
             {[
               { score: 0, rate: '0%', note: 'Very low' },
               { score: 1, rate: '~1.3%', note: 'Low-moderate' },
@@ -374,29 +374,29 @@ export default function Cha2ds2VascCalculator() {
               <div
                 key={score}
                 className={`flex justify-between py-0.5 ${
-                  result.score === score ? 'text-neuro-700 dark:text-neuro-300 font-semibold' : ''
-                }`}
+ result.score === score ? 'text-neuro-700 font-semibold' : ''
+ }`}
               >
                 <span>
                   Score {score}
-                  {note ? <span className="text-slate-400 dark:text-slate-500 ml-1">({note})</span> : ''}
+                  {note ? <span className="text-slate-400 ml-1">({note})</span> : ''}
                 </span>
                 <span>{rate}</span>
               </div>
             ))}
           </div>
-          <p className="mt-2 text-[10px] text-slate-400 dark:text-slate-500">
+          <p className="mt-2 text-[10px] text-slate-400">
             Unadjusted rates per 100 patient-years, Euro Heart Survey cohort (Lip GY et al. Chest 2010, Table 3). Rates in other AF registries vary.
           </p>
         </section>
 
         {/* Footer citations */}
-        <footer className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700 space-y-3">
+        <footer className="mt-8 pt-6 border-t border-slate-200 space-y-3">
           <div>
-            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">
+            <p className="text-xs font-semibold text-slate-500 mb-1">
               Score derivation
             </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-500">
               <cite>
                 {PRIMARY_CITATION.authors}. {PRIMARY_CITATION.title}.{' '}
                 <em>{PRIMARY_CITATION.journal}</em>. {PRIMARY_CITATION.year};
@@ -406,17 +406,17 @@ export default function Cha2ds2VascCalculator() {
                 href={`https://doi.org/${PRIMARY_CITATION.doi}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-neuro-600 dark:text-neuro-400 hover:underline"
+                className="text-neuro-600 hover:underline"
               >
                 DOI
               </a>
             </p>
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">
+            <p className="text-xs font-semibold text-slate-500 mb-1">
               Guideline
             </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-500">
               <cite>
                 {GUIDELINE_CITATION.authors}. {GUIDELINE_CITATION.title}.{' '}
                 <em>{GUIDELINE_CITATION.journal}</em>. {GUIDELINE_CITATION.year};
@@ -426,23 +426,23 @@ export default function Cha2ds2VascCalculator() {
                 href={`https://doi.org/${GUIDELINE_CITATION.doi}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-neuro-600 dark:text-neuro-400 hover:underline"
+                className="text-neuro-600 hover:underline"
               >
                 DOI
               </a>
             </p>
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">
+            <p className="text-xs font-semibold text-slate-500 mb-1">
               Supporting evidence
             </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            <p className="text-xs text-slate-500 leading-relaxed">
               Stroke reduction with anticoagulation demonstrated in landmark AF trials: AFASAK
               (warfarin vs aspirin), BAFTA (warfarin in elderly), RE-LY (dabigatran; Connolly 2009{' '}
               <em>NEJM</em>), and ARISTOTLE (apixaban; Granger 2011 <em>NEJM</em>).
             </p>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+          <p className="text-xs text-slate-500 leading-relaxed">
             <strong>Educational use only.</strong> Validated for non-valvular AF. Recommendation
             tier uses the sex-stratified guideline thresholds: COR 1 at total score ≥2 in men or
             ≥3 in women (i.e., ≥2 non-sex clinical risk factors plus female sex). Female sex alone

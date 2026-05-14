@@ -174,19 +174,19 @@ export default function TrialsPage() {
   const heroContent = (
     <>
       {/* Eyebrow */}
-      <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400 dark:text-slate-500 mb-2.5">
+      <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400 mb-2.5">
         NeuroWiki · Trials Reference
       </p>
 
       {/* H1 */}
-      <h1 className="text-[22px] md:text-[32px] font-medium text-slate-900 dark:text-white tracking-[-0.01em] leading-[1.25] md:leading-[1.2] mb-2 md:mb-2.5">
+      <h1 className="text-[22px] md:text-[32px] font-medium text-slate-900 tracking-[-0.01em] leading-[1.25] md:leading-[1.2] mb-2 md:mb-2.5">
         {trialsWithLegend.length} trials.
         <br className="md:hidden" />{' '}
         One search box.
       </h1>
 
       {/* Sub copy */}
-      <p className="text-sm text-slate-600 dark:text-slate-400 leading-[1.55] mb-4 md:max-w-[540px] md:mb-5">
+      <p className="text-sm text-slate-600 leading-[1.55] mb-4 md:max-w-[540px] md:mb-5">
         Evidence summaries, organized by clinical question or category.
         <span className="hidden md:inline"> Updated with each major guideline cycle.</span>
       </p>
@@ -205,12 +205,12 @@ export default function TrialsPage() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search trials, conditions, authors…"
-          className="w-full h-11 md:h-12 pl-9 pr-12 rounded-xl border border-slate-200 dark:border-slate-600 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 bg-white dark:bg-slate-700 focus:outline-none focus:border-[#1746A2] focus:shadow-[0_0_0_4px_rgba(23,70,162,0.08)] transition-[border-color,box-shadow] duration-150"
+          className="w-full h-11 md:h-12 pl-9 pr-12 rounded-xl border border-slate-200 text-sm text-slate-900 placeholder-slate-400 bg-white focus:outline-none focus:border-[#1746A2] focus:shadow-[0_0_0_4px_rgba(23,70,162,0.08)] transition-[border-color,box-shadow] duration-150"
           aria-label="Search trials"
         />
         {/* ⌘K hint — desktop only */}
         <div className="hidden md:flex absolute right-3.5 top-1/2 -translate-y-1/2 items-center pointer-events-none">
-          <span className="text-[11px] font-medium text-slate-300 dark:text-slate-500 bg-slate-50 dark:bg-slate-600 border border-slate-200 dark:border-slate-500 rounded px-[7px] py-0.5 tracking-[0.04em]">
+          <span className="text-[11px] font-medium text-slate-300 bg-slate-50 border border-slate-200 rounded px-[7px] py-0.5 tracking-[0.04em]">
             ⌘K
           </span>
         </div>
@@ -241,23 +241,23 @@ export default function TrialsPage() {
   const questionsView = (
     <>
       {/* Mobile: single-column list */}
-      <div className="md:hidden bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700">
+      <div className="md:hidden bg-white border-b border-slate-100">
         {TRIAL_QUESTIONS.map((q) => (
           <Link
             key={q.id}
             to={`/trials/q/${q.id}`}
-            className="flex items-center gap-3.5 px-5 py-3.5 border-b border-slate-100 dark:border-slate-700 last:border-b-0 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors touch-manipulation"
+            className="flex items-center gap-3.5 px-5 py-3.5 border-b border-slate-100 last:border-b-0 bg-white hover:bg-slate-50 transition-colors touch-manipulation"
           >
-            <div className="w-9 h-9 rounded-[10px] bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center flex-shrink-0 text-slate-500 dark:text-slate-400">
+            <div className="w-9 h-9 rounded-[10px] bg-slate-50 border border-slate-200 flex items-center justify-center flex-shrink-0 text-slate-500">
               <QuestionIcon type={q.icon} />
             </div>
-            <div className="flex-1 text-sm font-medium text-slate-900 dark:text-white leading-[1.4]">
+            <div className="flex-1 text-sm font-medium text-slate-900 leading-[1.4]">
               {q.text}
             </div>
             <span className="text-[11px] font-medium uppercase tracking-[0.04em] text-slate-400 whitespace-nowrap">
               {q.trialCount} trials
             </span>
-            <svg className="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-3.5 h-3.5 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 18l6-6-6-6" />
             </svg>
           </Link>
@@ -267,7 +267,7 @@ export default function TrialsPage() {
       {/* Desktop: 2-col grid inside a white card */}
       <div className="hidden md:block p-6">
         <div className="max-w-[800px] mx-auto">
-          <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-lg overflow-hidden">
+          <div className="bg-white border border-slate-100 rounded-lg overflow-hidden">
             <div className="grid grid-cols-2">
               {TRIAL_QUESTIONS.map((q, i) => {
                 const isRightCol = (i + 1) % 2 === 0;
@@ -277,24 +277,24 @@ export default function TrialsPage() {
                     key={q.id}
                     to={`/trials/q/${q.id}`}
                     className={`
-                      flex items-center gap-3.5 px-6 py-4
-                      hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors touch-manipulation
-                      ${!isRightCol ? 'border-r border-slate-100 dark:border-slate-700' : ''}
-                      ${!isLastRow ? 'border-b border-slate-100 dark:border-slate-700' : ''}
-                    `}
+ flex items-center gap-3.5 px-6 py-4
+ hover:bg-slate-50 transition-colors touch-manipulation
+ ${!isRightCol ? 'border-r border-slate-100' : ''}
+ ${!isLastRow ? 'border-b border-slate-100' : ''}
+ `}
                   >
-                    <div className="w-9 h-9 rounded-[10px] bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center flex-shrink-0 text-slate-500 dark:text-slate-400">
+                    <div className="w-9 h-9 rounded-[10px] bg-slate-50 border border-slate-200 flex items-center justify-center flex-shrink-0 text-slate-500">
                       <QuestionIcon type={q.icon} />
                     </div>
                     <div className="flex-1">
-                      <div className="text-sm font-medium text-slate-900 dark:text-white leading-[1.4]">
+                      <div className="text-sm font-medium text-slate-900 leading-[1.4]">
                         {q.text}
                       </div>
                     </div>
                     <span className="text-[11px] font-medium uppercase tracking-[0.04em] text-slate-400 whitespace-nowrap">
                       {q.trialCount} trials
                     </span>
-                    <svg className="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="w-3.5 h-3.5 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                       <path d="M9 18l6-6-6-6" />
                     </svg>
                   </Link>
@@ -311,16 +311,16 @@ export default function TrialsPage() {
   const catalogView = (
     <>
       {/* Filter bar */}
-      <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 px-5 py-3 md:px-6 flex items-center gap-2.5">
+      <div className="bg-white border-b border-slate-100 px-5 py-3 md:px-6 flex items-center gap-2.5">
         <div className="flex gap-1.5 overflow-x-auto scrollbar-hide flex-1">
           {/* All pill */}
           <button
             onClick={() => { setActiveCategory(null); setShowFavoritesOnly(false); }}
             className={`inline-flex items-center gap-[5px] px-3 py-[5px] rounded-full text-xs font-medium border whitespace-nowrap flex-shrink-0 transition-colors ${
-              !activeCategory && !showFavoritesOnly
-                ? 'bg-[rgba(23,70,162,0.08)] border-[rgba(23,70,162,0.2)] text-[#1746A2] font-semibold'
-                : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-600'
-            }`}
+ !activeCategory && !showFavoritesOnly
+ ? 'bg-[rgba(23,70,162,0.08)] border-[rgba(23,70,162,0.2)] text-[#1746A2] font-semibold'
+ : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'
+ }`}
           >
             All
           </button>
@@ -336,10 +336,10 @@ export default function TrialsPage() {
                 key={cat}
                 onClick={() => setActiveCategory((prev) => (prev === cat ? null : cat))}
                 className={`inline-flex items-center gap-[5px] px-3 py-[5px] rounded-full text-xs font-medium border whitespace-nowrap flex-shrink-0 transition-colors ${
-                  isActive
-                    ? 'bg-[rgba(23,70,162,0.08)] border-[rgba(23,70,162,0.2)] text-[#1746A2] font-semibold'
-                    : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-600'
-                }`}
+ isActive
+ ? 'bg-[rgba(23,70,162,0.08)] border-[rgba(23,70,162,0.2)] text-[#1746A2] font-semibold'
+ : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'
+ }`}
                 role="radio"
                 aria-checked={isActive}
               >
@@ -354,7 +354,7 @@ export default function TrialsPage() {
         </div>
 
         {/* Sort — display only */}
-        <button className="inline-flex items-center gap-[5px] px-3 py-[5px] rounded-full text-xs font-medium border border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-700 whitespace-nowrap flex-shrink-0">
+        <button className="inline-flex items-center gap-[5px] px-3 py-[5px] rounded-full text-xs font-medium border border-slate-200 text-slate-500 bg-white whitespace-nowrap flex-shrink-0">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <line x1="12" y1="5" x2="12" y2="19" />
             <polyline points="19 12 12 19 5 12" />
@@ -365,16 +365,16 @@ export default function TrialsPage() {
 
       {/* Favorites banner */}
       {showFavoritesOnly && (
-        <div className="mx-5 mt-4 mb-0 px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/50 rounded-xl flex items-center justify-between">
+        <div className="mx-5 mt-4 mb-0 px-4 py-3 bg-amber-50 border border-amber-100 rounded-xl flex items-center justify-between">
           <div className="flex items-center gap-2">
             <svg className="w-4 h-4 text-amber-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
             </svg>
-            <span className="text-sm text-amber-800 dark:text-amber-300 font-medium">Showing favorites only</span>
+            <span className="text-sm text-amber-800 font-medium">Showing favorites only</span>
           </div>
           <button
             onClick={() => setShowFavoritesOnly(false)}
-            className="text-sm text-amber-600 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 font-medium"
+            className="text-sm text-amber-600 hover:text-amber-800 font-medium"
           >
             Show all
           </button>
@@ -393,13 +393,13 @@ export default function TrialsPage() {
             return (
               <div
                 key={cat}
-                className="mb-0 md:mb-4 md:bg-white md:dark:bg-slate-800 md:border md:border-slate-100 md:dark:border-slate-700 md:rounded-lg md:overflow-hidden"
+                className="mb-0 md:mb-4 md:bg-white md: md:border md:border-slate-100 md: md:rounded-lg md:overflow-hidden"
               >
                 {/* Section header */}
                 {!activeCategory && !searchQuery && (
                   <button
                     onClick={() => toggleCategory(cat)}
-                    className="w-full flex items-start justify-between gap-3 px-5 py-4 border-b border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 md:px-6 text-left"
+                    className="w-full flex items-start justify-between gap-3 px-5 py-4 border-b border-slate-100 bg-white md:px-6 text-left"
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
@@ -413,12 +413,12 @@ export default function TrialsPage() {
                         >
                           {categoryNames[cat]}
                         </span>
-                        <span className="text-xs text-slate-500 dark:text-slate-400">
+                        <span className="text-xs text-slate-500">
                           {catTrials.length}
                         </span>
                       </div>
                       {!isCollapsed && (
-                        <p className="text-xs text-slate-400 dark:text-slate-500 pl-4">
+                        <p className="text-xs text-slate-400 pl-4">
                           {categoryDescriptions[cat]}
                         </p>
                       )}
@@ -440,7 +440,7 @@ export default function TrialsPage() {
 
                 {/* Trial cards */}
                 {!isCollapsed && (
-                  <div className="bg-white dark:bg-slate-800">
+                  <div className="bg-white">
                     {catTrials.map((trial: TrialItem) => (
                       <TrialLegendCard
                         key={trial.id}
@@ -458,12 +458,12 @@ export default function TrialsPage() {
           {/* Empty state */}
           {isEmpty && (
             <div className="text-center py-16 px-5">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center">
                 <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <p className="text-slate-600 dark:text-slate-300 font-medium mb-1">No trials found</p>
+              <p className="text-slate-600 font-medium mb-1">No trials found</p>
               <p className="text-sm text-slate-400">
                 {searchQuery ? `No results for "${searchQuery}"` : showFavoritesOnly ? 'No favorites yet' : 'Try a different filter'}
               </p>
@@ -482,17 +482,17 @@ export default function TrialsPage() {
 
   // ── Page render ───────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-slate-50">
 
       {/*
         HEADER BLOCK
         Desktop (md+): entire block is sticky (hero + toggle as one unit)
         Mobile:        hero scrolls; only the toggle-wrap sticks via its own sticky
       */}
-      <div className="md:sticky md:top-0 md:z-30 bg-white dark:bg-slate-800">
+      <div className="md:sticky md:top-0 md:z-30 bg-white">
 
         {/* Hero */}
-        <div className="border-b border-slate-100 dark:border-slate-700 md:border-b-0">
+        <div className="border-b border-slate-100 md:border-b-0">
           <div className="px-5 py-6 md:max-w-[800px] md:mx-auto md:px-6 md:pt-12 md:pb-6">
             {heroContent}
           </div>
@@ -503,7 +503,7 @@ export default function TrialsPage() {
           On mobile: sticky (hero is outside this, scrolls away)
           On desktop: relative (parent md:sticky handles the sticking)
         */}
-        <div className="sticky top-0 z-30 md:relative md:top-auto md:z-auto bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 px-5 py-5 md:px-0 md:py-0">
+        <div className="sticky top-0 z-30 md:relative md:top-auto md:z-auto bg-white border-b border-slate-100 px-5 py-5 md:px-0 md:py-0">
           <div className="md:max-w-[800px] md:mx-auto md:px-6 md:py-4">
             <Toggle
               options={TOGGLE_OPTIONS}

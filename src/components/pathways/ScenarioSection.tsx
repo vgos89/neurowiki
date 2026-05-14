@@ -28,7 +28,7 @@ export default function ScenarioSection({
       {/* Section header */}
       <div className="flex items-center gap-2 mb-1">
         <span className={`dot ${scenario.dotClass}`} />
-        <h2 className="text-[13px] font-bold uppercase tracking-[0.08em] text-slate-700 dark:text-slate-300">
+        <h2 className="text-[13px] font-bold uppercase tracking-[0.08em] text-slate-700">
           {scenario.pillLabel}
         </h2>
       </div>
@@ -40,7 +40,7 @@ export default function ScenarioSection({
           No favourited pathways in this category.
         </p>
       ) : (
-        <div className="rounded-xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+        <div className="rounded-xl border border-slate-100 overflow-hidden">
           {pathways.map((p) => (
             <ToolRowCard
               key={p.id}

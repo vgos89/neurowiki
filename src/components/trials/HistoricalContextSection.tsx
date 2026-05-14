@@ -73,12 +73,12 @@ export const HistoricalContextSection: React.FC<HistoricalContextSectionProps> =
 
   return (
     <div
-      className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden"
+      className="bg-white rounded-xl border border-slate-200 overflow-hidden"
       role="region"
       aria-label="Historical context comparators"
     >
       {/* Section header */}
-      <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+      <div className="px-4 py-3 border-b border-slate-100">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
           Historical Context
         </p>

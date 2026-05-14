@@ -599,12 +599,12 @@ const CompactSelectionCard = React.memo(({ title, description, selected, onClick
     <button
         onClick={onClick}
         className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-colors duration-150 active:scale-[0.99] transform-gpu touch-manipulation min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none
-        ${selected
-            ? variant === 'danger'
-                ? 'bg-red-50 border-red-500'
-                : 'bg-neuro-50 border-neuro-500'
-            : 'bg-white border-slate-100 hover:border-slate-200 hover:bg-slate-50'
-        }`}
+ ${selected
+ ? variant === 'danger'
+ ? 'bg-red-50 border-red-500'
+ : 'bg-neuro-50 border-neuro-500'
+ : 'bg-white border-slate-100 hover:border-slate-200 hover:bg-slate-50'
+ }`}
     >
         <div className="flex items-center justify-between gap-3">
             <div className="flex-1 min-w-0">
@@ -932,7 +932,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                     disabled={!isClickable}
                     aria-label={`Step ${i + 1}: ${STEPS[i].title}`}
                     className={`transition-all duration-200 rounded-full flex items-center justify-center touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none
-                      ${isComp ? 'w-7 h-7 bg-emerald-500 text-white' : isCurr ? 'w-7 h-7 bg-neuro-500 text-white ring-2 ring-neuro-200' : 'w-2 h-2 bg-slate-200'}`}
+ ${isComp ? 'w-7 h-7 bg-emerald-500 text-white' : isCurr ? 'w-7 h-7 bg-neuro-500 text-white ring-2 ring-neuro-200' : 'w-2 h-2 bg-slate-200'}`}
                   >
                     {isComp ? <Check size={12} /> : isCurr ? <span className="text-xs font-bold">{i + 1}</span> : null}
                   </button>
@@ -1140,10 +1140,10 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                 {/* Provisional result banner */}
                 {isSection0Complete && isSection1Complete && result && result.status !== 'Incomplete' && result.reason !== 'Pending Imaging' && (
                     <div className={`mb-4 flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 text-sm font-semibold animate-in fade-in duration-300
-                        ${result.variant === 'success' ? 'bg-emerald-50 border-emerald-500 text-emerald-800' :
-                          result.variant === 'warning' ? 'bg-amber-50 border-amber-400 text-amber-800' :
-                          result.variant === 'danger' ? 'bg-red-50 border-red-500 text-red-800' :
-                          'bg-slate-50 border-slate-400 text-slate-700'}`}>
+ ${result.variant === 'success' ? 'bg-emerald-50 border-emerald-500 text-emerald-800' :
+ result.variant === 'warning' ? 'bg-amber-50 border-amber-400 text-amber-800' :
+ result.variant === 'danger' ? 'bg-red-50 border-red-500 text-red-800' :
+ 'bg-slate-50 border-slate-400 text-slate-700'}`}>
                         <Activity size={14} className="shrink-0" />
                         <span>Provisional: <strong>{result.status}</strong> — complete imaging to confirm</span>
                     </div>
@@ -1163,7 +1163,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                 <button
                                     type="button"
                                     onClick={() => setShowAspectsModal(true)}
-                                    className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-neuro-200 bg-neuro-50 text-neuro-700 hover:bg-neuro-100 transition-colors text-sm font-medium dark:bg-neuro-900/20 dark:border-neuro-800 dark:text-neuro-300 dark:hover:bg-neuro-900/30"
+                                    className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-neuro-200 bg-neuro-50 text-neuro-700 hover:bg-neuro-100 transition-colors text-sm font-medium"
                                 >
                                     <span className="material-symbols-outlined text-[18px]">calculate</span>
                                     Calculate ASPECTS →
@@ -1251,7 +1251,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                                     <button
                                         type="button"
                                         onClick={() => setShowAspectsModal(true)}
-                                        className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-neuro-200 bg-neuro-50 text-neuro-700 hover:bg-neuro-100 transition-colors text-sm font-medium dark:bg-neuro-900/20 dark:border-neuro-800 dark:text-neuro-300 dark:hover:bg-neuro-900/30"
+                                        className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-neuro-200 bg-neuro-50 text-neuro-700 hover:bg-neuro-100 transition-colors text-sm font-medium"
                                     >
                                         <span className="material-symbols-outlined text-[18px]">calculate</span>
                                         Calculate ASPECTS →
@@ -1422,34 +1422,34 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
 
                 {/* 3. Result card — redesigned with left-border-stripe */}
                 <div className={`rounded-2xl border-l-[8px] shadow-md overflow-hidden p-5 md:p-8
-                    ${result.variant === 'success' ? 'border-l-emerald-500 bg-emerald-50' :
-                      result.variant === 'warning' ? 'border-l-amber-400 bg-amber-50' :
-                      result.variant === 'danger' ? 'border-l-red-500 bg-red-50' :
-                      'border-l-slate-400 bg-slate-50'
-                    }`}>
+ ${result.variant === 'success' ? 'border-l-emerald-500 bg-emerald-50' :
+ result.variant === 'warning' ? 'border-l-amber-400 bg-amber-50' :
+ result.variant === 'danger' ? 'border-l-red-500 bg-red-50' :
+ 'border-l-slate-400 bg-slate-50'
+ }`}>
                     <div>
                         <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4
-                            ${result.variant === 'success' ? 'bg-emerald-100 text-emerald-700' :
-                              result.variant === 'warning' ? 'bg-amber-100 text-amber-700' :
-                              result.variant === 'danger' ? 'bg-red-100 text-red-700' :
-                              'bg-slate-100 text-slate-600'}`}>
+ ${result.variant === 'success' ? 'bg-emerald-100 text-emerald-700' :
+ result.variant === 'warning' ? 'bg-amber-100 text-amber-700' :
+ result.variant === 'danger' ? 'bg-red-100 text-red-700' :
+ 'bg-slate-100 text-slate-600'}`}>
                             <Activity size={12} /><span>Recommendation</span>
                         </div>
                         <div className="mb-6">
                             <div className={`text-5xl font-black tracking-tight
-                                ${result.variant === 'success' ? 'text-emerald-900' :
-                                  result.variant === 'warning' ? 'text-amber-900' :
-                                  result.variant === 'danger' ? 'text-red-900' :
-                                  'text-slate-900'}`}>
+ ${result.variant === 'success' ? 'text-emerald-900' :
+ result.variant === 'warning' ? 'text-amber-900' :
+ result.variant === 'danger' ? 'text-red-900' :
+ 'text-slate-900'}`}>
                                 {result.status}
                             </div>
                             {result.criteriaName && <div className="text-lg font-medium text-slate-600 mt-1">{result.criteriaName}</div>}
                             {evidenceBadge && (
                                 <div className={`mt-3 inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide
-                                    ${result.variant === 'success' ? 'bg-emerald-100/80 text-emerald-800' :
-                                      result.variant === 'warning' ? 'bg-amber-100/80 text-amber-800' :
-                                      result.variant === 'danger' ? 'bg-red-100/80 text-red-800' :
-                                      'bg-slate-200/80 text-slate-700'}`}>
+ ${result.variant === 'success' ? 'bg-emerald-100/80 text-emerald-800' :
+ result.variant === 'warning' ? 'bg-amber-100/80 text-amber-800' :
+ result.variant === 'danger' ? 'bg-red-100/80 text-red-800' :
+ 'bg-slate-200/80 text-slate-700'}`}>
                                     {evidenceBadge}
                                 </div>
                             )}
@@ -1457,10 +1457,10 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         <div className="pt-6 border-t border-slate-200">
                              <div className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-2">Reasoning</div>
                              <div className={`text-lg font-bold
-                                 ${result.variant === 'success' ? 'text-emerald-900' :
-                                   result.variant === 'warning' ? 'text-amber-900' :
-                                   result.variant === 'danger' ? 'text-red-900' :
-                                   'text-slate-900'}`}>
+ ${result.variant === 'success' ? 'text-emerald-900' :
+ result.variant === 'warning' ? 'text-amber-900' :
+ result.variant === 'danger' ? 'text-red-900' :
+ 'text-slate-900'}`}>
                                  {result.reason}
                              </div>
                              <div className="text-sm text-slate-700 mt-1 leading-relaxed">{autoLinkReactNodes(result.details, openTrial)}</div>
@@ -1528,7 +1528,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                const flags = [isSection0Complete, isSection1Complete, isSection2Complete, isSection3Complete];
                return (
                  <div key={i} className={`flex-1 h-1 rounded-full transition-all duration-300
-                   ${flags[i] ? 'bg-emerald-500' : activeSection === i ? 'bg-neuro-500' : 'bg-slate-200'}`} />
+ ${flags[i] ? 'bg-emerald-500' : activeSection === i ? 'bg-neuro-500' : 'bg-slate-200'}`} />
                );
              })}
            </div>

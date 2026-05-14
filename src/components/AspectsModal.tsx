@@ -24,10 +24,10 @@ type RegionId = (typeof CORTICAL_REGIONS)[number]['id'] | (typeof SUBCORTICAL_RE
 // ── Score color helpers ───────────────────────────────────────────────────
 
 function scoreColor(score: number): string {
-  if (score >= 8) return 'text-emerald-600 dark:text-emerald-400';
-  if (score >= 6) return 'text-yellow-600 dark:text-yellow-400';
-  if (score >= 3) return 'text-orange-600 dark:text-orange-400';
-  return 'text-red-600 dark:text-red-400';
+  if (score >= 8) return 'text-emerald-600';
+  if (score >= 6) return 'text-yellow-600';
+  if (score >= 3) return 'text-orange-600';
+  return 'text-red-600';
 }
 
 function scoreLabel(score: number): string {
@@ -117,15 +117,15 @@ export const AspectsModal: React.FC<AspectsModalProps> = ({
       />
 
       {/* Panel */}
-      <div className="relative w-full sm:max-w-lg bg-white dark:bg-slate-900 sm:rounded-2xl rounded-t-2xl shadow-2xl border border-slate-200 dark:border-slate-700 max-h-[90vh] overflow-y-auto">
+      <div className="relative w-full sm:max-w-lg bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
 
         {/* Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
+        <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-4 bg-white border-b border-slate-200">
           <div>
-            <h2 id="aspects-modal-title" className="text-base font-bold text-slate-900 dark:text-white">
+            <h2 id="aspects-modal-title" className="text-base font-bold text-slate-900">
               ASPECTS Calculator
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Mark regions with early ischemic change</p>
+            <p className="text-xs text-slate-500 mt-0.5">Mark regions with early ischemic change</p>
           </div>
           <div className="flex items-center gap-3">
             {/* Live score */}
@@ -136,7 +136,7 @@ export const AspectsModal: React.FC<AspectsModalProps> = ({
             </div>
             <button
               onClick={onClose}
-              className="p-2 rounded-lg text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors"
               aria-label="Close ASPECTS calculator"
             >
               <X size={20} aria-hidden="true" />
@@ -150,7 +150,7 @@ export const AspectsModal: React.FC<AspectsModalProps> = ({
 
             {/* Cortical */}
             <div>
-              <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
                 Cortical (M1–M6)
               </p>
               <div className="space-y-1.5">
@@ -164,19 +164,19 @@ export const AspectsModal: React.FC<AspectsModalProps> = ({
                       aria-checked={isOn}
                       onClick={() => toggleRegion(r.id)}
                       className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 text-left transition-all min-h-[44px] ${
-                        isOn
-                          ? 'border-red-400 bg-red-50 dark:bg-red-900/25 dark:border-red-600'
-                          : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600'
-                      }`}
+ isOn
+ ? 'border-red-400 bg-red-50'
+ : 'border-slate-200 bg-white hover:border-slate-300'
+ }`}
                     >
                       <span
                         className={`inline-flex items-center justify-center w-6 h-6 rounded-md text-xs font-bold flex-shrink-0 ${
-                          isOn ? 'bg-red-500 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
-                        }`}
+ isOn ? 'bg-red-500 text-white' : 'bg-slate-100 text-slate-600'
+ }`}
                       >
                         {r.label}
                       </span>
-                      <span className={`text-xs font-medium leading-tight ${isOn ? 'text-red-800 dark:text-red-200' : 'text-slate-700 dark:text-slate-300'}`}>
+                      <span className={`text-xs font-medium leading-tight ${isOn ? 'text-red-800' : 'text-slate-700'}`}>
                         {r.fullName}
                       </span>
                     </button>
@@ -187,7 +187,7 @@ export const AspectsModal: React.FC<AspectsModalProps> = ({
 
             {/* Subcortical */}
             <div>
-              <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
                 Subcortical
               </p>
               <div className="space-y-1.5">
@@ -201,19 +201,19 @@ export const AspectsModal: React.FC<AspectsModalProps> = ({
                       aria-checked={isOn}
                       onClick={() => toggleRegion(r.id)}
                       className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl border-2 text-left transition-all min-h-[44px] ${
-                        isOn
-                          ? 'border-orange-400 bg-orange-50 dark:bg-orange-900/25 dark:border-orange-600'
-                          : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600'
-                      }`}
+ isOn
+ ? 'border-orange-400 bg-orange-50'
+ : 'border-slate-200 bg-white hover:border-slate-300'
+ }`}
                     >
                       <span
                         className={`inline-flex items-center justify-center w-6 h-6 rounded-md text-xs font-bold flex-shrink-0 ${
-                          isOn ? 'bg-orange-500 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
-                        }`}
+ isOn ? 'bg-orange-500 text-white' : 'bg-slate-100 text-slate-600'
+ }`}
                       >
                         {r.label}
                       </span>
-                      <span className={`text-xs font-medium leading-tight ${isOn ? 'text-orange-800 dark:text-orange-200' : 'text-slate-700 dark:text-slate-300'}`}>
+                      <span className={`text-xs font-medium leading-tight ${isOn ? 'text-orange-800' : 'text-slate-700'}`}>
                         {r.fullName}
                       </span>
                     </button>
@@ -222,18 +222,18 @@ export const AspectsModal: React.FC<AspectsModalProps> = ({
               </div>
 
               {/* Score summary */}
-              <div className="mt-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <div className="mt-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
                 <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Score</div>
                 <div className={`text-3xl font-black tabular-nums mt-0.5 ${scoreColor(score)}`}>
                   {score}<span className="text-sm font-normal text-slate-400">/10</span>
                 </div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">{involved.size} region{involved.size !== 1 ? 's' : ''} involved</div>
+                <div className="text-[10px] text-slate-500 mt-1">{involved.size} region{involved.size !== 1 ? 's' : ''} involved</div>
               </div>
             </div>
           </div>
 
           {/* Interpretation */}
-          <div className="mt-4 px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+          <div className="mt-4 px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200">
             <p className={`text-xs font-medium ${scoreColor(score)}`}>
               {scoreLabel(score)}
             </p>
@@ -241,11 +241,11 @@ export const AspectsModal: React.FC<AspectsModalProps> = ({
         </div>
 
         {/* Footer actions */}
-        <div className="sticky bottom-0 flex gap-3 px-5 py-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700">
+        <div className="sticky bottom-0 flex gap-3 px-5 py-4 bg-white border-t border-slate-200">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-3 px-4 rounded-xl border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+            className="flex-1 py-3 px-4 rounded-xl border-2 border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-colors"
           >
             Close
           </button>

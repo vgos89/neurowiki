@@ -72,32 +72,32 @@ export const TrialStats: React.FC<TrialStatsProps> = ({
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       {/* Sample Size */}
-      <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 overflow-hidden max-w-full">
-        <div className="text-xs text-slate-500 dark:text-slate-400 mb-1 flex items-start gap-1 min-h-[2.5rem]">
+      <div className="bg-white rounded-lg border border-slate-200 p-4 overflow-hidden max-w-full">
+        <div className="text-xs text-slate-500 mb-1 flex items-start gap-1 min-h-[2.5rem]">
           <span className="flex-1 break-words break-all leading-tight">{sampleSizeLabel}</span>
           <MedicalTooltip
             term="Sample Size"
             definition={sampleSizeInfo || MEDICAL_GLOSSARY['sample-size'] || 'Total number of patients enrolled and randomized in the study.'}
           />
         </div>
-        <div className="text-2xl font-bold text-slate-900 dark:text-white break-words">{sampleSize}</div>
+        <div className="text-2xl font-bold text-slate-900 break-words">{sampleSize}</div>
       </div>
 
       {/* Primary Endpoint */}
-      <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 overflow-hidden max-w-full">
-        <div className="text-xs text-slate-500 dark:text-slate-400 mb-1 flex items-start gap-1 min-h-[2.5rem]">
+      <div className="bg-white rounded-lg border border-slate-200 p-4 overflow-hidden max-w-full">
+        <div className="text-xs text-slate-500 mb-1 flex items-start gap-1 min-h-[2.5rem]">
           <span className="flex-1 break-words break-all leading-tight">{primaryEndpointLabel}</span>
           <MedicalTooltip
             term="Primary Endpoint"
             definition={primaryEndpointInfo || MEDICAL_GLOSSARY['primary-endpoint'] || 'The main outcome measure used to determine if the treatment works.'}
           />
         </div>
-        <div className="text-base sm:text-lg font-bold text-slate-900 dark:text-white break-words">{primaryEndpoint}</div>
+        <div className="text-base sm:text-lg font-bold text-slate-900 break-words">{primaryEndpoint}</div>
       </div>
 
       {/* P-Value */}
-      <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 overflow-hidden max-w-full">
-        <div className="text-xs text-slate-500 dark:text-slate-400 mb-1 flex items-start gap-1 min-h-[2.5rem]">
+      <div className="bg-white rounded-lg border border-slate-200 p-4 overflow-hidden max-w-full">
+        <div className="text-xs text-slate-500 mb-1 flex items-start gap-1 min-h-[2.5rem]">
           <span className="flex-1 break-words break-all leading-tight">{pValueLabel}</span>
           <MedicalTooltip
             term={pValueLabel?.toLowerCase().includes('estimation') ? 'Estimation Design' : 'p-Value'}
@@ -108,17 +108,17 @@ export const TrialStats: React.FC<TrialStatsProps> = ({
           <span className={
             pValueLabel?.toLowerCase().includes('not significant') ||
             (pValue !== 'N/A' && !isNaN(parseFloat(pValue)) && parseFloat(pValue) >= 0.05)
-              ? 'text-red-600 dark:text-red-400'
+              ? 'text-red-600'
               : pValue === 'N/A'
-              ? 'text-slate-600 dark:text-slate-400'
-              : 'text-green-600 dark:text-green-400'
+              ? 'text-slate-600'
+              : 'text-green-600'
           }>{pValue}</span>
         </div>
       </div>
 
       {/* Effect Size */}
-      <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 overflow-hidden max-w-full">
-        <div className="text-xs text-slate-500 dark:text-slate-400 mb-1 flex items-start gap-1 min-h-[2.5rem]">
+      <div className="bg-white rounded-lg border border-slate-200 p-4 overflow-hidden max-w-full">
+        <div className="text-xs text-slate-500 mb-1 flex items-start gap-1 min-h-[2.5rem]">
           <span className="flex-1 break-words break-all leading-tight">{effectSizeLabel}</span>
           <MedicalTooltip
             term={effectSizeLabel?.toLowerCase().includes('risk difference') ? 'Risk Difference' : 'Effect Size'}
@@ -130,8 +130,8 @@ export const TrialStats: React.FC<TrialStatsProps> = ({
             effectSize.toLowerCase().includes('no benefit') ||
             effectSize.toLowerCase().includes('harm') ||
             effectSize.toLowerCase().includes('possible harm')
-              ? 'text-red-600 dark:text-red-400'
-              : 'text-blue-600 dark:text-blue-400'
+              ? 'text-red-600'
+              : 'text-blue-600'
           }>{effectSize}</span>
         </div>
       </div>

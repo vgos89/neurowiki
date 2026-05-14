@@ -8,7 +8,7 @@
  *
  * Architect conditions (arch-l55c-aspects-boston-rebuild.md, inherited):
  *   - Drawer infrastructure from L5.5b stays byte-identical
- *   - Light-only theme — no dark:* in layout
+ *   - Light-only theme — no in layout
  *   - Bespoke-per-file pattern under L5.6 cap
  *   - No new clinical claim surfaces introduced
  *
@@ -359,10 +359,10 @@ export default function HasBledScoreCalculator() {
 
                   {hasInteracted && (
                     <span className={`text-xs font-medium ml-1.5 ${
-                      result.risk === 'low' ? 'text-emerald-700' :
-                      result.risk === 'moderate' ? 'text-amber-700' :
-                      'text-red-600'
-                    }`}>
+ result.risk === 'low' ? 'text-emerald-700' :
+ result.risk === 'moderate' ? 'text-amber-700' :
+ 'text-red-600'
+ }`}>
                       {HASBLED_RISK_LABELS[result.risk]}
                     </span>
                   )}

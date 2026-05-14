@@ -7,10 +7,10 @@ import { Link } from 'react-router-dom';
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <section className="mb-10">
-    <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-3 pb-2 border-b border-slate-100 dark:border-slate-700">
+    <h2 className="text-lg font-semibold text-slate-800 mb-3 pb-2 border-b border-slate-100">
       {title}
     </h2>
-    <div className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed space-y-3">
+    <div className="text-slate-600 text-sm leading-relaxed space-y-3">
       {children}
     </div>
   </section>
@@ -22,9 +22,9 @@ export default function PrivacyPage() {
       {/* Header */}
       <div className="mb-10">
         <p className="text-xs font-medium text-neuro-500 uppercase tracking-widest mb-2">Legal</p>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-3">Privacy Policy</h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400">Last updated: May 13, 2026</p>
-        <p className="mt-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+        <h1 className="text-2xl font-bold text-slate-900 mb-3">Privacy Policy</h1>
+        <p className="text-sm text-slate-500">Last updated: May 13, 2026</p>
+        <p className="mt-4 text-sm text-slate-600 leading-relaxed">
           NeuroWiki is a free clinical reference tool. It collects almost nothing. This page
           describes exactly what is collected, where it goes, and how to remove it.
         </p>
@@ -44,14 +44,14 @@ export default function PrivacyPage() {
         <div className="overflow-x-auto mt-4">
           <table className="w-full text-xs border-collapse">
             <thead>
-              <tr className="bg-slate-50 dark:bg-slate-800">
-                <th className="text-left p-2.5 font-semibold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600">Data</th>
-                <th className="text-left p-2.5 font-semibold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600">Where stored</th>
-                <th className="text-left p-2.5 font-semibold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600">Purpose</th>
-                <th className="text-left p-2.5 font-semibold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600">Retention</th>
+              <tr className="bg-slate-50">
+                <th className="text-left p-2.5 font-semibold text-slate-700 border border-slate-200">Data</th>
+                <th className="text-left p-2.5 font-semibold text-slate-700 border border-slate-200">Where stored</th>
+                <th className="text-left p-2.5 font-semibold text-slate-700 border border-slate-200">Purpose</th>
+                <th className="text-left p-2.5 font-semibold text-slate-700 border border-slate-200">Retention</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+            <tbody className="divide-y divide-slate-100">
               {[
                 ['Google Analytics events', 'Google servers', 'Usage analytics: page views, feature use', 'Google default: 26 months'],
                 ['Cookie consent decision', 'Your browser (neurowiki:consent)', 'Controls whether GA loads', 'Until you clear browser storage'],
@@ -61,18 +61,18 @@ export default function PrivacyPage() {
                 ['Feedback submissions', 'Resend (email relay) → operator inbox', 'Delivers your feedback to the team', 'Email provider retention policy'],
                 ['NPI proxy results', 'Not stored (session only)', 'Displays a doctor name from NPI lookup', 'Never written to storage'],
               ].map(([data, where, purpose, retention]) => (
-                <tr key={data} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                  <td className="p-2.5 border border-slate-200 dark:border-slate-600 font-medium text-slate-700 dark:text-slate-200">{data}</td>
-                  <td className="p-2.5 border border-slate-200 dark:border-slate-600">{where}</td>
-                  <td className="p-2.5 border border-slate-200 dark:border-slate-600">{purpose}</td>
-                  <td className="p-2.5 border border-slate-200 dark:border-slate-600">{retention}</td>
+                <tr key={data} className="hover:bg-slate-50">
+                  <td className="p-2.5 border border-slate-200 font-medium text-slate-700">{data}</td>
+                  <td className="p-2.5 border border-slate-200">{where}</td>
+                  <td className="p-2.5 border border-slate-200">{purpose}</td>
+                  <td className="p-2.5 border border-slate-200">{retention}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
 
-        <p className="mt-3 font-medium text-slate-700 dark:text-slate-200">
+        <p className="mt-3 font-medium text-slate-700">
           No user accounts. No passwords. No patient data stored anywhere.
         </p>
       </Section>
@@ -97,7 +97,7 @@ export default function PrivacyPage() {
         <p>
           A consent banner appears on your first visit. Declining it blocks Google Analytics from
           loading. To revoke consent later, delete the{' '}
-          <code className="bg-slate-100 dark:bg-slate-700 px-1 rounded text-xs">neurowiki:consent</code>{' '}
+          <code className="bg-slate-100 px-1 rounded text-xs">neurowiki:consent</code>{' '}
           key from your browser's local storage for neurowiki.ai. In Chrome: DevTools → Application
           → Local Storage → neurowiki.ai. The consent banner re-appears on your next visit.
         </p>
@@ -160,7 +160,7 @@ export default function PrivacyPage() {
       </Section>
 
       {/* Footer nav */}
-      <div className="mt-12 pt-6 border-t border-slate-100 dark:border-slate-700 flex flex-wrap gap-4 text-xs text-slate-400">
+      <div className="mt-12 pt-6 border-t border-slate-100 flex flex-wrap gap-4 text-xs text-slate-400">
         <Link to="/terms" className="hover:text-neuro-500 transition-colors">Terms of Use</Link>
         <Link to="/accessibility" className="hover:text-neuro-500 transition-colors">Accessibility</Link>
         <Link to="/" className="hover:text-neuro-500 transition-colors">Back to NeuroWiki</Link>
