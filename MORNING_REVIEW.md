@@ -1,6 +1,42 @@
-# Morning review — overnight session 2026-05-14 → 2026-05-15
+# Morning review — overnight session 2026-05-14 → 2026-05-15 (UPDATED 2026-05-15 early AM)
 
 **Read this first. Then `LIVE_VERIFY_GUIDE.md` for spot-checks against the live site.**
+
+## Second-pass overnight (after V's 2026-05-15 feedback round)
+
+V flagged that SAMMPRIS still showed the OLD design while WEAVE showed the NEW. Audit gap: 14 legacy trials were never migrated to the new Archetype A layout. ALL 14 NOW MIGRATED.
+
+**Trial design migration — COMPLETE (8 commits):**
+- d04ea6f — ECASS III (canary)
+- b4449cf — NINDS + INSPIRES + CHANCE-2
+- 1d37484 — ATTENTION + BAOCHE
+- 7766a48 — SAMMPRIS (V's specific example) with harm-stopped red banner
+- 3994583 — ORIGINAL with NI blue banner
+- 682845c — DEFUSE-3 + DAWN with ordinal-shift + Bayesian banners
+- 3ad7883 — SELECT2 + ANGEL-ASPECT + ENRICH + B_PROUD (final 4)
+- (Plus the W8.2 data commits from yesterday)
+
+Each migration includes: archetypeId set, inclusionCriteria, exclusionCriteria, safetyProfile, bedsidePearl, bottomLineSummary, and a dedicated render branch in TrialPageNew.tsx with appropriate design-specific caveat banners (red for harm-stopped, blue for ordinal-shift/Bayesian/NI, amber for protocol amendments and quasi-experimental designs).
+
+**Spot-check the live site:**
+- https://neurowiki.ai/trials/sammpris-trial — now uses the new layout with red harm banner (no longer the legacy old layout V screenshotted)
+- https://neurowiki.ai/trials/baoche-trial — amber protocol amendment banner above the DeltaBandChart
+- https://neurowiki.ai/trials/dawn-trial — blue Bayesian caveat banner
+- https://neurowiki.ai/trials/b-proud-trial — amber §1.6 design-quality disclaimer + amber NNT-suppressed callout
+- https://neurowiki.ai/trials/weave-trial — already used the new design (reference)
+
+**Other tonight (second pass):**
+- SEO B3 og:image fallback (d087b06)
+- Site hygiene audit (all 4 gates PASS, no broken buttons/links, 2 stub console.logs in search buttons — will be removed by smart-search build)
+
+**Still pending for V approval (no autoship without your call):**
+- Smart search bar (V approved direction; ~650 LOC, 1.5-2 day Class D build — see §1.2)
+- Pathways canary (V approved direction: extend CalculatorShell + generic BottomDrawer + canary GCA first — see §4.2)
+- Initial disclaimer modal redesign + humanizer (V approved — deferred to dedicated session)
+- Feedback button visual polish (V approved — minor tweak deferred)
+- SEO B2 FAQPage schema on guide pages (needs medical-scientist authoring)
+
+---
 
 ---
 
