@@ -5751,6 +5751,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'SAMMPRIS Trial',
     subtitle: 'ICAD Stenting vs Medical',
     category: 'Neuro Trials',
+    doi: '10.1056/NEJMoa1105335',
+    pmid: '21899409',
     stats: {
       sampleSize: {
         value: '451',
@@ -5790,33 +5792,38 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       }
     },
     intervention: {
-      treatment: 'Percutaneous Transluminal Angioplasty and Stenting (PTAS) with Wingspan stent + Aggressive Medical Management',
-      control: 'Aggressive Medical Management alone (DAPT for 90 days, Rosuvastatin 20mg, BP < 140/90)'
+      treatment: 'Percutaneous Transluminal Angioplasty and Stenting (PTAS) with Gateway PTA balloon + Wingspan self-expanding stent (Stryker Neurovascular) + Aggressive Medical Management',
+      control: 'Aggressive Medical Management alone (Aspirin 325mg/d + Clopidogrel 75mg/d for 90 days, Rosuvastatin to LDL <70 mg/dL, SBP <140 mmHg [<130 if diabetes], lifestyle program)'
     },
-    clinicalContext: 'Intracranial Atherosclerotic Disease (ICAD) carries a high risk of recurrent stroke. SAMMPRIS investigated whether percutaneous transluminal angioplasty and stenting (PTAS) was superior to aggressive medical management alone.',
+    clinicalContext: 'Intracranial Atherosclerotic Disease (ICAD) carries a high risk of recurrent stroke. SAMMPRIS investigated whether percutaneous transluminal angioplasty and stenting (PTAS) was superior to aggressive medical management alone in patients with symptomatic 70–99% intracranial stenosis within 30 days of qualifying TIA or stroke.',
     calculations: {
-      // Negative trial - stenting worse
+      // Negative trial - stenting carries periprocedural harm in this population
     },
     pearls: [
-      'Stenting is Dangerous: The trial was halted early because the stenting group had significantly higher rates of periprocedural stroke',
-      'Aggressive Medical Management (AMM): The "Control" group did surprisingly well compared to historical controls (WASID trial), proving that AMM (DAPT + High-intensity Statin + BP control) is a highly effective strategy',
-      '1-Year Results: 20.0% in Stenting group vs 12.2% in Medical group (continued harm signal)',
-      'Standard of Care: AMM is now the first-line treatment for symptomatic ICAD. Stenting is reserved for salvage cases failing AMM',
-      'Population: Patients with 70-99% stenosis of a major intracranial artery and a recent (last 30 days) TIA or stroke'
+      'Periprocedural harm signal: Stenting in this population (symptomatic ICAS 70–99% within 30 days of TIA/stroke, off-label Wingspan use as initial therapy) carries a high periprocedural stroke risk. The trial was halted early by the DSMB for safety + futility',
+      'Symptomatic ICH 4.5% vs 0% (P=0.04, Fisher exact) — the dominant procedural harm. Of 33 strokes in PTAS within 30 days, 25 occurred within 1 day of the procedure',
+      'Aggressive Medical Management (AMM): The "Control" group did markedly better than historical WASID controls, establishing AMM (DAPT 90d + High-intensity Statin to LDL <70 + SBP <140) as a highly effective strategy',
+      '1-Year Results: 20.0% (PTAS) vs 12.2% (Medical) cumulative stroke/death (P=0.009). Beyond 30 days, same-territory ischemic stroke was 13 in each arm — the entire between-arm difference is driven by periprocedural events',
+      'Boundary conditions: SAMMPRIS does NOT establish that all intracranial stenting is harmful. Specific to Wingspan, symptomatic 70–99%, within 30 days of qualifying event. Does NOT apply to asymptomatic ICAS, hemodynamic-failure selection, or post-AMM-failure salvage (see WEAVE for on-label registry context)',
+      'Standard of Care: AMM is first-line for symptomatic ICAD (AHA/ASA 2021 secondary-prevention COR 1). PTAS with Wingspan as initial treatment is COR 3 No Benefit/Harm, LOE B-R',
+      'Erratum (NEJM 2012;367(1):93): Procedural-bookkeeping correction only (16 PTAS patients unstented vs prior 15; 5 angioplasty-alone vs prior 4). No change to any primary or safety statistic',
+      'Population: Patients with 70-99% stenosis of a major intracranial artery (mean ~80%) and a recent (last 30 days) TIA or stroke; 62–65% were on antithrombotics at the time of the qualifying event (on-treatment failures)'
     ],
     conclusion: '',
-    source: 'Chimowitz et al. (NEJM 2011)',
+    source: 'Chimowitz et al. (NEJM 2011;365(11):993–1003)',
     clinicalTrialsId: 'NCT00576693',
     listCategory: 'carotid',
-    listDescription: 'Intracranial stenting vs medical therapy for stenosis; medical management wins.',
+    listDescription: 'Intracranial Wingspan stenting vs aggressive medical therapy for symptomatic 70–99% ICAS; medical management wins.',
     primaryDesign: 'binary-superiority',
     primaryResult: 'harm-stopped',
-    harmSignal: 'Stenting arm: 14.7% vs 5.8% 30-day stroke/death; stopped at 451 patients (p=0.002); procedural stroke drove excess',
+    harmSignal: '14.7% (PTAS) vs 5.8% (AMM) 30-day stroke/death; stopped at 451/764 planned (P=0.002); periprocedural stroke (25/33 within 24h of procedure) + sICH 4.5% vs 0% drove excess',
     applicability: {
       populationExclusions: [
-        'ICAD 70–99% stenosis with recent TIA or stroke within 30 days only',
-        'Stenting inferior to aggressive medical management (AMM) — AMM is standard first-line therapy',
-        'Off-label Wingspan use studied; WEAVE established safety threshold only for strict on-label criteria',
+        'ICAS 70–99% stenosis with recent TIA or stroke within 30 days only',
+        'Wingspan stent + Gateway balloon specifically; results may not generalize to other stent systems (but VISSIT 2015 confirmed harm direction with balloon-expandable Vitesse)',
+        'NOT for asymptomatic ICAD, hemodynamic-failure-selected populations, or salvage stenting after documented AMM failure',
+        'Trial population excludes M2/distal occlusions, posterior circulation only, and pre-stroke severe disability',
+        'PTAS in this initial-treatment role is AHA/ASA 2021 Class III No Benefit/Harm, LOE B-R; AMM is Class I',
       ],
     },
   },
