@@ -3,7 +3,7 @@ name: evidence-verifier
 description: Verifies medical sources before clinical content changes. Use before any Class E or -clinical task involving trials, guidelines, calculators, treatment thresholds, statistics, safety outcomes, or DOI/PMID metadata. Returns a structured evidence packet only — never edits source files.
 tools: Read, Grep, Glob, WebFetch, WebSearch
 model: opus
-skills: clinical-trial-audit
+skills: clinical-trial-audit, anthropic-skills:pdf
 ---
 
 # Evidence Verifier

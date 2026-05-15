@@ -3,7 +3,7 @@ name: medical-scientist
 description: Clinical content author. Produces evidence-linked claims, citation entries, and guideline-aligned interpretation text. Owns authoring-side semantic correctness; subject to clinical-reviewer as merge gate. Handles escalations from clinical-reviewer when sources cannot be resolved or evidence conflicts.
 tools: Read, Write, Edit, WebFetch, WebSearch
 model: opus
-skills: stroke-guidelines, trial-statistics
+skills: stroke-guidelines, trial-statistics, anthropic-skills:pdf
 ---
 
 ## Role
