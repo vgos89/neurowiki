@@ -16,7 +16,7 @@ const pillBase =
 const pillInactive =
   'bg-white border-slate-200 text-slate-600 font-medium hover:bg-slate-50';
 const pillActive =
-  'bg-slate-50 border-slate-200 text-slate-900 font-semibold';
+  'bg-neuro-500 border-neuro-500 text-white font-semibold';
 
 export default function ScenarioPillRow({ activeScenario, onSelect }: ScenarioPillRowProps) {
   return (

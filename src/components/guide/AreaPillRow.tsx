@@ -14,7 +14,7 @@ const AreaPillRow: React.FC<Props> = ({ activeArea, onSelect }) => {
   const pillBase =
     'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] border transition-colors flex-shrink-0';
   const inactive = 'bg-white border-slate-200 text-slate-600 font-medium hover:bg-slate-50';
-  const active = 'bg-slate-50 border-slate-200 text-slate-900 font-semibold';
+  const active = 'bg-neuro-500 border-neuro-500 text-white font-semibold';
 
   return (
     <div
