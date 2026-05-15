@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { getStorageItem, setStorageItem } from '../utils/storage';
 
 const DISCLAIMER_STORAGE_KEY = 'neurowiki-disclaimer-accepted';
-const DISCLAIMER_VERSION = '1.0'; // Increment to force re-acceptance
+const DISCLAIMER_VERSION = '2.0'; // Bumped from 1.0 to force re-acceptance with the modernized modal
 
 interface StoredDisclaimer {
   version: string;
@@ -35,23 +35,29 @@ export const DisclaimerModal: React.FC = () => {
     setIsOpen(true);
   }, []);
 
-  // Check if can accept
   useEffect(() => {
     setCanAccept(hasScrolledToBottom && checkboxChecked);
   }, [hasScrolledToBottom, checkboxChecked]);
 
-  // Handle scroll
   const handleScroll = useCallback(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
-
     const { scrollTop, scrollHeight, clientHeight } = container;
-    const scrolledToBottom = scrollTop + clientHeight >= scrollHeight - 20; // 20px threshold
-
+    const scrolledToBottom = scrollTop + clientHeight >= scrollHeight - 20;
     if (scrolledToBottom && !hasScrolledToBottom) {
       setHasScrolledToBottom(true);
     }
   }, [hasScrolledToBottom]);
+
+  // If content fits without scrolling, treat as already scrolled (no forced scroll on short viewport)
+  useEffect(() => {
+    if (!isOpen) return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    if (container.scrollHeight <= container.clientHeight + 4) {
+      setHasScrolledToBottom(true);
+    }
+  }, [isOpen]);
 
   // Focus trap — mandatory modal, no Escape dismiss
   useEffect(() => {
@@ -60,7 +66,6 @@ export const DisclaimerModal: React.FC = () => {
     const focusableSelector = 'button:not([disabled]), [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])';
     const getFocusable = () => Array.from(modal.querySelectorAll<HTMLElement>(focusableSelector));
 
-    // Focus scroll container so keyboard users can scroll immediately
     scrollContainerRef.current?.focus();
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -80,16 +85,13 @@ export const DisclaimerModal: React.FC = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
 
-  // Handle accept
   const handleAccept = () => {
     if (!canAccept) return;
-
     const data: StoredDisclaimer = {
       version: DISCLAIMER_VERSION,
       acceptedAt: new Date().toISOString(),
       userAgent: navigator.userAgent,
     };
-
     setStorageItem(DISCLAIMER_STORAGE_KEY, JSON.stringify(data));
     setIsOpen(false);
   };
@@ -97,142 +99,130 @@ export const DisclaimerModal: React.FC = () => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
       <div
         ref={modalRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="disclaimer-modal-title"
-        className="w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden"
+        aria-describedby="disclaimer-modal-body"
+        className="w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-100"
       >
-        {/* Header */}
-        <div className="px-6 py-4 bg-slate-50 border-b border-slate-200">
+        {/* Header — brand-lockup + title */}
+        <div className="px-6 py-5 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
-              <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-            </div>
+            <img
+              src="/icon-192.png"
+              alt=""
+              width={36}
+              height={36}
+              className="w-9 h-9 rounded-lg flex-shrink-0"
+            />
             <div>
-              <h2 id="disclaimer-modal-title" className="text-lg font-semibold text-slate-900">Medical Disclaimer</h2>
-              <p className="text-sm text-slate-500">Please read before continuing</p>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-0.5">For Clinicians</p>
+              <h2 id="disclaimer-modal-title" className="text-[17px] font-semibold text-slate-900 leading-tight">
+                Welcome to NeuroWiki
+              </h2>
             </div>
           </div>
         </div>
 
-        {/* Scrollable Content */}
+        {/* Scrollable content — plain-language version */}
         <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
           tabIndex={0}
-          aria-label="Disclaimer content — scroll to read"
-          className="px-6 py-4 max-h-64 overflow-y-auto text-sm text-slate-600 leading-relaxed focus:outline-none"
+          aria-label="Disclaimer content"
+          id="disclaimer-modal-body"
+          className="px-6 py-5 max-h-72 overflow-y-auto text-[14px] text-slate-700 leading-relaxed focus:outline-none focus:bg-slate-50/30"
         >
-          <h3 className="font-semibold text-slate-900 mb-2">Important Notice</h3>
-          <p className="mb-4">
-            The information on Neurowiki is for educational purposes only. It is not a substitute for clinical judgment by a qualified healthcare professional.
+          <p className="mb-4 text-slate-900 font-medium">
+            NeuroWiki is a bedside reference for neurology clinicians. It is not a substitute for your clinical training, the patient in front of you, or current guidelines.
           </p>
 
-          <h3 className="font-semibold text-slate-900 mb-2">Not a Substitute for Professional Judgment</h3>
-          <p className="mb-4">
-            This content is not intended to replace professional medical judgment, diagnosis, or treatment. All clinical decisions should be made by qualified healthcare providers based on individual patient circumstances.
-          </p>
+          <div className="space-y-4">
+            <div>
+              <p className="text-[13px] font-semibold text-slate-900 mb-1">What this tool is</p>
+              <p className="text-[13.5px]">
+                Calculators, pathways, and trial summaries based on published guidelines and primary literature. Every clinical claim is cited.
+              </p>
+            </div>
 
-          <h3 className="font-semibold text-slate-900 mb-2">No Patient-Physician Relationship</h3>
-          <p className="mb-4">
-            Use of this website does not create a physician-patient relationship. The information presented should not be used for self-diagnosis or self-treatment.
-          </p>
+            <div>
+              <p className="text-[13px] font-semibold text-slate-900 mb-1">What it is not</p>
+              <p className="text-[13.5px]">
+                Not a diagnostic tool. Not for patient self-use. Not a replacement for guideline review or institutional protocol. Verify thresholds and dosing against current sources before acting at the bedside.
+              </p>
+            </div>
 
-          <h3 className="font-semibold text-slate-900 mb-2">Accuracy and Currency</h3>
-          <p className="mb-4">
-            Medical knowledge changes over time. Always verify information against current guidelines and primary sources before clinical use.
-          </p>
+            <div>
+              <p className="text-[13px] font-semibold text-slate-900 mb-1">Currency</p>
+              <p className="text-[13.5px]">
+                Guidelines change. Content here reflects the cited publication date. Check AHA/ASA, AAN, and your institutional references for the most recent updates.
+              </p>
+            </div>
 
-          <h3 className="font-semibold text-slate-900 mb-2">Limitation of Liability</h3>
-          <p className="mb-4">
-            Neurowiki and its contributors shall not be liable for any direct, indirect, incidental, or consequential damages arising from the use of this information.
-          </p>
+            <div>
+              <p className="text-[13px] font-semibold text-slate-900 mb-1">Emergencies</p>
+              <p className="text-[13.5px]">
+                In a medical emergency, call your local emergency services. Do not use this site for time-critical decisions without verifying against current guidelines and your team.
+              </p>
+            </div>
 
-          <h3 className="font-semibold text-slate-900 mb-2">Emergency Situations</h3>
-          <p className="mb-4">
-            In case of a medical emergency, call your local emergency services immediately. Do not rely on this website for emergency medical guidance.
-          </p>
+            <div>
+              <p className="text-[13px] font-semibold text-slate-900 mb-1">Liability</p>
+              <p className="text-[13.5px]">
+                The NeuroWiki team is not liable for clinical decisions made using this content. Decisions remain the responsibility of the treating clinician.
+              </p>
+            </div>
 
-          <div className="mt-6 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-            <p className="text-amber-800 font-medium">
-              By continuing, you acknowledge that you have read, understood, and agree to these terms.
-            </p>
+            <div>
+              <p className="text-[13px] font-semibold text-slate-900 mb-1">No patient data</p>
+              <p className="text-[13.5px]">
+                Calculator inputs run locally in your browser. NeuroWiki does not collect identifiable patient data. See the privacy policy for the full data inventory.
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Scroll Indicator */}
+        {/* Scroll cue (only if content overflows + not yet scrolled) */}
         {!hasScrolledToBottom && (
-          <div className="px-6 py-2 bg-blue-50 border-t border-blue-100 flex items-center justify-center gap-2">
-            <svg className="w-4 h-4 text-blue-600 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          <div className="px-6 py-2.5 bg-neuro-50 border-t border-neuro-100 flex items-center justify-center gap-2">
+            <svg className="w-3.5 h-3.5 text-neuro-600 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>
-            <span className="text-sm text-blue-600 font-medium">Scroll down to continue</span>
+            <span className="text-xs text-neuro-700 font-medium">Scroll to continue</span>
           </div>
         )}
 
         {/* Footer */}
-        <div className="px-6 py-4 bg-slate-50 border-t border-slate-200">
-          {/* Checkbox */}
+        <div className="px-6 py-5 bg-slate-50 border-t border-slate-100">
           <label className={`flex items-start gap-3 mb-4 cursor-pointer ${!hasScrolledToBottom ? 'opacity-50 pointer-events-none' : ''}`}>
             <input
               type="checkbox"
               checked={checkboxChecked}
               onChange={(e) => setCheckboxChecked(e.target.checked)}
               disabled={!hasScrolledToBottom}
-              className="mt-0.5 w-5 h-5 rounded border-slate-300 text-neuro-500 focus:ring-neuro-500 cursor-pointer"
+              className="mt-0.5 w-4 h-4 rounded border-slate-300 text-neuro-500 focus:ring-neuro-500 focus:ring-offset-0 cursor-pointer"
             />
-            <span className="text-sm text-slate-700">
-              I am a healthcare professional and I have read and agree to the above disclaimer
+            <span className="text-[13.5px] text-slate-700 leading-relaxed">
+              I am a healthcare professional and I have read and agree to the terms above.
             </span>
           </label>
 
-          {/* Accept Button */}
           <button
             onClick={handleAccept}
             disabled={!canAccept}
-            className={`w-full py-3 rounded-xl text-sm font-semibold transition-all ${
+            className={`w-full py-2.5 rounded-lg text-sm font-semibold transition-all ${
               canAccept
-                ? 'bg-slate-900 text-white hover:bg-slate-800'
+                ? 'bg-neuro-500 text-white hover:bg-neuro-600 active:bg-neuro-700'
                 : 'bg-slate-200 text-slate-500 cursor-not-allowed'
             }`}
           >
-            {!hasScrolledToBottom ? (
-              'Please scroll to read the disclaimer'
-            ) : !checkboxChecked ? (
-              'Please check the box above'
-            ) : (
-              'I Accept and Agree'
-            )}
+            {!hasScrolledToBottom ? 'Scroll to read the terms'
+              : !checkboxChecked ? 'Check the box to continue'
+              : 'Accept and continue'}
           </button>
-
-          {/* Status Indicators */}
-          <div className="flex items-center justify-center gap-4 mt-3">
-            <div className={`flex items-center gap-1.5 text-xs ${hasScrolledToBottom ? 'text-green-600' : 'text-slate-400'}`}>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {hasScrolledToBottom ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                )}
-              </svg>
-              <span>Read</span>
-            </div>
-            <div className={`flex items-center gap-1.5 text-xs ${checkboxChecked ? 'text-green-600' : 'text-slate-400'}`}>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {checkboxChecked ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                )}
-              </svg>
-              <span>Agreed</span>
-            </div>
-          </div>
         </div>
       </div>
     </div>
