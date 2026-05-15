@@ -4736,14 +4736,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'SELECT2 Trial',
     subtitle: 'Large Core Thrombectomy',
     category: 'Neuro Trials',
+    doi: '10.1056/NEJMoa2214403',
     primaryDesign: 'ordinal-shift',
     primaryResult: 'met',
     applicability: {
-      imagingSelection: 'ASPECTS 3–5 OR perfusion-based core ≥50 mL required; ≤24h anterior LVO',
+      imagingSelection: 'ASPECTS 3–5 OR perfusion-based core ≥50 mL required; ≤24h anterior LVO; age ≤85; pre-stroke mRS 0–1',
       populationExclusions: [
-        'Stopped early for efficacy',
-        'Large-core context — benefit is disability shift; functional independence (mRS 0-2) rate was only 20% vs 7% — do not overstate as "independence restored"',
-        'Vascular complications and mortality must be presented alongside efficacy',
+        'Stopped early for efficacy (2nd interim)',
+        'Large-core context — primary endpoint is ordinal mRS shift (gOR 1.51, 95% CI 1.20–1.89); functional independence (mRS 0–2) is a secondary outcome at 20% vs 7%. Do not overstate as "independence restored"',
+        'Vascular complications and mortality must be presented alongside efficacy (sICH 0.6% vs 1.1% NS; 90-d mortality 38.4% vs 41.5% NS)',
+        'NNT 7.7 is derived from the SECONDARY mRS 0–2 outcome — display with explicit secondary-outcome label per clinical-trial-audit skill rules (ordinal-shift primaries do not yield valid NNT)',
       ],
     },
     stats: {
@@ -4794,14 +4796,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       nntExplanation: 'For every 7.7 patients with large core treated with thrombectomy, one additional patient achieves functional independence (mRS 0-2) compared to medical management alone'
     },
     pearls: [
-      'Large core: No longer an absolute contraindication; SELECT2 showed clear functional benefit even at ASPECTS 3–5',
-      'Selection Criteria: ASPECTS 3-5 on NCCT OR Core volume ≥ 50 ml on CTP',
-      'Generalized Odds Ratio: 1.51 (favoring EVT)',
-      'Risk/Benefit: While outcomes are generally poorer than small-core patients, EVT still provides significant shift towards lower disability (e.g., being able to walk vs bedbound)',
-      'Safety: Symptomatic intracranial hemorrhage (sICH) was low and not significantly different between groups, though any ICH was more frequent in EVT group'
+      'Large core: No longer an absolute contraindication; SELECT2 showed ordinal disability shift even at ASPECTS 3–5',
+      'Selection Criteria: ASPECTS 3-5 on NCCT OR Core volume ≥ 50 ml on CTP; age ≤85; pre-stroke mRS 0–1',
+      'Generalized Odds Ratio: 1.51 (95% CI 1.20–1.89) — this is the primary statistic, not the mRS 0–2 dichotomization',
+      'NNT framing: NNT 7.7 is for the secondary outcome mRS 0–2 (20% vs 7%). The ordinal-shift primary does not yield a valid NNT per clinical-trial-audit',
+      'Risk/Benefit: While outcomes are generally poorer than small-core patients, EVT shifts disability one step lower on average (e.g., walking-with-assistance vs bedbound)',
+      'Safety: sICH 0.6% EVT vs 1.1% medical (NS); 90-d mortality 38.4% vs 41.5% (NS) — no significant safety penalty',
+      'AHA/ASA 2026 §4.7.2 COR 1: EVT recommended for ASPECTS 3–5 LVO patients within 6h (and reasonable within 6–24h, COR 2a)'
     ],
     conclusion: '',
-    source: 'Sarraj et al. (NEJM 2023)',
+    source: 'Sarraj et al. (NEJM 2023;388(14):1259–1271)',
     clinicalTrialsId: 'NCT03876457',
     listCategory: 'thrombectomy',
     listDescription: 'Large core thrombectomy (ASPECTS 3–5, 0–6h and extended window).',
@@ -4811,15 +4815,18 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ANGEL-ASPECT Trial',
     subtitle: 'Large Core Thrombectomy (China)',
     category: 'Neuro Trials',
+    doi: '10.1056/NEJMoa2213379',
     primaryDesign: 'ordinal-shift',
     primaryResult: 'met',
     applicability: {
-      imagingSelection: 'ASPECTS 3–5 OR core 70–100 mL; ≤24h anterior LVO',
+      imagingSelection: 'ASPECTS 3–5 (no core limit) OR ASPECTS 0–2 with core 70–100 mL OR ASPECTS >5 with core 70–100 mL (6–24h window); ≤24h anterior LVO; age ≤80; NIHSS 6–30; pre-stroke mRS 0–1',
       geography: 'China',
       populationExclusions: [
         'China-only — imaging criteria and any-ICH/sICH distinction differ from SELECT2',
-        'Stopped early for efficacy',
-        'Large-core context — disability shift benefit, not independence; compare selection criteria with SELECT2/LASTE/TENSION',
+        'Stopped early for efficacy (2nd interim)',
+        'Large-core context — primary is ordinal mRS shift (gOR 1.37, 95% CI 1.11–1.69); functional independence (mRS 0–2) is a secondary outcome at 30% vs 11.6%',
+        'NNT 5.4 is derived from the SECONDARY mRS 0–2 outcome — display with explicit secondary-outcome label (ordinal-shift primaries do not yield valid NNT)',
+        'Higher any-ICH (49.1% vs 17.3%, P<0.001) and sICH trend (6.1% vs 2.7%) than SELECT2 — careful BP management and patient selection required',
       ],
     },
     stats: {
@@ -4832,32 +4839,33 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'at 90 Days'
       },
       pValue: {
-        value: '<0.001',
+        value: '0.004',
         label: 'Statistically Sig.'
       },
       effectSize: {
-        value: '18.4%',
-        label: 'Absolute Increase'
+        value: 'gOR 1.37',
+        label: 'Generalized OR (primary)'
       }
     },
     trialDesign: {
       type: [
         'Multicenter randomized open-label trial',
         'Conducted in China',
-        'Large core selection (ASPECTS 3-5 or Core 70-100ml)',
-        '1:1 allocation (Thrombectomy vs. Medical)'
+        'Large core selection (ASPECTS 3-5 or Core 70-100ml; also ASPECTS 0–2 with core 70–100mL)',
+        '1:1 allocation (Thrombectomy vs. Medical)',
+        'Stopped early for efficacy (2nd interim)'
       ],
       timeline: 'Enrolled 2020-2022'
     },
     efficacyResults: {
       treatment: {
         percentage: 30,
-        label: 'Functional independence (mRS 0-2) at 90 days',
+        label: 'Functional independence (mRS 0-2) at 90 days (secondary)',
         name: 'Thrombectomy'
       },
       control: {
         percentage: 11.6,
-        label: 'Functional independence (mRS 0-2) at 90 days',
+        label: 'Functional independence (mRS 0-2) at 90 days (secondary)',
         name: 'Medical Therapy'
       }
     },
@@ -4871,15 +4879,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       nntExplanation: 'For every 5.4 patients with large core (up to 100ml) treated with thrombectomy, one additional patient achieves functional independence (mRS 0-2) compared to medical therapy alone'
     },
     pearls: [
-      'Confirmation: Validated SELECT2 findings in an Asian population with slightly different volume criteria (pushing upper limit to 100ml)',
-      'Selection Criteria: ASPECTS 3-5 OR Core Volume 70-100 ml (on CTP/DWI)',
-      'Generalized Odds Ratio: 1.37 (favoring EVT)',
-      'Hemorrhage Risk: Statistically significant increase in symptomatic intracranial hemorrhage (sICH) in EVT group (6.1% vs 2.7%), emphasizing need for careful patient selection and BP management',
-      'Mortality: Despite higher hemorrhage risk, no difference in 90-day mortality, and functional outcomes were superior',
-      'Higher Core Limit: Unlike SELECT2 (50ml), this trial included cores up to 100ml'
+      'Confirmation: Validated SELECT2 findings in a Chinese population with broader volume criteria (cores up to 100ml; ASPECTS 0–2 with cores 70–100 mL also enrolled)',
+      'Selection Criteria: ASPECTS 3–5 (no core limit) OR ASPECTS 0–2 with core 70–100 mL OR ASPECTS >5 with core 70–100 mL (6–24h)',
+      'Generalized Odds Ratio: 1.37 (95% CI 1.11–1.69), P=0.004 — primary statistic for ordinal mRS shift',
+      'NNT framing: NNT 5.4 is for the SECONDARY mRS 0–2 outcome (30% vs 11.6%). The ordinal-shift primary does not yield a valid NNT',
+      'Hemorrhage Risk: sICH trend higher (6.1% vs 2.7%, NS); any ICH significantly higher (49.1% vs 17.3%, P<0.001). Careful BP management required',
+      '90-day mortality: 21.7% vs 20.0% (NS) — no mortality penalty despite higher ICH',
+      'AHA/ASA 2026 §4.7.2 COR 1: EVT recommended for ASPECTS 3–5 LVO patients within 6h; COR 2a for 6–24h window with significant mass effect exclusion'
     ],
     conclusion: '',
-    source: 'Huo et al. (NEJM 2023)',
+    source: 'Huo et al. (NEJM 2023;388(14):1272–1283)',
     clinicalTrialsId: 'NCT04551664',
     listCategory: 'thrombectomy',
     listDescription: 'Large core thrombectomy; China cohort (ASPECTS 3–5 or core ≥70 mL).',
