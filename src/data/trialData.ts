@@ -5239,15 +5239,17 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Basilar Artery EVT',
     category: 'Neuro Trials',
     doi: '10.1056/NEJMoa2206317',
+    pmid: '36239644',
     primaryDesign: 'binary-superiority',
     primaryResult: 'met',
     applicability: {
       geography: 'China',
       populationExclusions: [
         'Basilar artery occlusion only — results do not apply to anterior circulation LVO',
-        'NIHSS ≥10 required; mRS 0-3 endpoint used (not mRS 0-2) because mRS 0-2 is unrealistically strict for BAO',
+        'NIHSS ≥10 required; mRS 0–3 (not 0–2) was the primary outcome given the anticipated poor prognosis of basilar-artery occlusion — mRS 3 (ambulatory with assistance) is a patient-meaningful endpoint that anterior-circulation trials can afford to exclude but posterior-circulation cannot',
         '0–12h window; for 6–24h BAO see BAOCHE',
         'Stopped early for efficacy',
+        'China-only enrollment — high prevalence of intracranial atherosclerosis (~44% LAA); generalizability to Western embolic-predominant populations limited',
       ],
     },
     stats: {
@@ -5298,11 +5300,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       nntExplanation: 'For every 4.3 patients with basilar artery occlusion treated with thrombectomy within 12 hours, one additional patient achieves good functional status (mRS 0-3) compared to best medical therapy alone'
     },
     pearls: [
-      'Definitive Benefit: Unlike anterior circulation where mRS 0-2 is the goal, BAO trials often use mRS 0-3 because the natural history is so devastating. EVT doubled the rate of good outcomes',
-      'Mortality Reduction: One of the few stroke interventions shown to significantly reduce mortality (37% vs 55%, NNT ~5.5 to prevent death)',
-      'Bridging: ~30% of patients received IV thrombolysis',
+      'Why mRS 0–3 (not 0–2): BAO carries up to 80% mortality untreated. The paper explicitly uses mRS 0–3 as the patient-meaningful threshold "given the anticipated poor prognosis from basilar-artery occlusion" (consistent with BEST and BASICS)',
+      'Mortality Reduction: One of the few stroke interventions shown to significantly reduce mortality (37% vs 55%, adjusted RR 0.66, 95% CI 0.52–0.82). Derived NNT ~5.6 is from a secondary outcome (mortality) — display with explicit secondary-outcome label',
+      'Bridging: ~31% of EVT patients received IV thrombolysis (vs 34% in control; Chinese cohort, lower thrombolysis utilization than Western trials)',
       'Time Window: Within 12 hours of estimated onset',
-      'Symptomatic ICH: 5% in EVT vs 0% in BMT (acceptable risk given mortality benefit)'
+      'Symptomatic ICH: 5% in EVT vs 0% in BMT — periprocedural risk, but mortality reduction outweighs',
+      'Selection criteria: PC-ASPECTS ≥6 (<80y) or ≥8 (≥80y); pre-stroke mRS ≤2; bilateral thalamic/brainstem infarction excluded'
     ],
     conclusion: '',
     source: 'Tao et al. (NEJM 2022)',
@@ -5316,14 +5319,17 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Basilar EVT 6-24 Hours',
     category: 'Neuro Trials',
     doi: '10.1056/NEJMoa2207576',
+    pmid: '36239645',
     primaryDesign: 'binary-superiority',
     primaryResult: 'met',
     applicability: {
       geography: 'China',
       populationExclusions: [
         'Basilar artery occlusion 6–24h only — for early-window (0–12h) BAO see ATTENTION',
-        'mRS 0-3 endpoint (appropriate for BAO severity)',
-        'Stopped early for efficacy; China-only',
+        'Primary outcome was amended mid-trial (mRS 0–4 → mRS 0–3) on Feb 23, 2021 before unblinding; the original mRS 0–4 primary was NEGATIVE (RR 1.21, 95% CI 0.95–1.54). Display the revised positive mRS 0–3 result with this disclosure',
+        'Stopped early for efficacy at planned interim (Apr 2022) — early-stopping truncation bias likely overestimates effect size',
+        'Han Chinese population, predominantly atherothrombotic — limited generalizability to embolic-predominant Western populations',
+        'NIHSS ≥6 (amended after 61 patients from initial ≥10); pre-stroke mRS 0–1; age 18–80; Pons-Midbrain Index ≤2',
       ],
     },
     stats: {
@@ -5349,9 +5355,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         'Multicenter randomized open-label trial',
         'Conducted in China',
         'Late window (6-24 hours)',
-        '1:1 allocation (Thrombectomy vs. Medical)'
+        '1:1 allocation (Thrombectomy vs. Medical)',
+        'Stopped early at interim for efficacy (Apr 2022) after 212/318 planned patients'
       ],
-      timeline: 'Enrolled 2020-2021'
+      timeline: 'Enrolled Aug 2016 – Jun 2021 (stopped early Apr 2022 for efficacy)'
     },
     efficacyResults: {
       treatment: {
@@ -5377,9 +5384,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     pearls: [
       'Late Window Basilar: Confirms that the basilar artery also has a "late window" benefit, likely due to collateral flow from the posterior communicating arteries',
       'High Efficacy: The effect size was remarkably similar to the early window ATTENTION trial (46% good outcome in both)',
-      'Mortality: 31% in EVT group vs 42% in Control group',
-      'Selection: Used clinical exclusion (severe disability) but did not strictly require perfusion imaging mismatch, though pc-ASPECTS was assessed',
-      'Recommendation: EVT is now recommended for BAO up to 24 hours in eligible patients'
+      'Protocol amendment caveat: Primary outcome was changed from mRS 0–4 to mRS 0–3 mid-trial (Feb 2021, before unblinding). The original mRS 0–4 primary was NEGATIVE (RR 1.21, 95% CI 0.95–1.54) — display NNT with this disclosure',
+      'Mortality: 31% in EVT vs 42% in Control (adjusted RR 0.75, 95% CI 0.54–1.04) — direction favorable but NOT statistically significant; do not claim mortality benefit for BAOCHE alone',
+      'Imaging selection: PC-ASPECTS ≥6 (range 0–10) + Pons-Midbrain Index ≤2; perfusion mismatch not strictly required',
+      'Recommendation: EVT is reasonable for BAO 6–24h in eligible patients (AHA/ASA 2026 §4.7.3 COR 1: BAO, NIHSS ≥10, pre-stroke mRS 0–1, PC-ASPECTS ≥6, within 24h)'
     ],
     conclusion: '',
     source: 'Jovin et al. (NEJM 2022)',
