@@ -595,6 +595,27 @@ If any gate fails, the PR does not open. Orchestrator **diagnoses and fixes the 
 4. For Class C+: open a PR with `gh pr create` using the bilingual description
 5. Report the PR URL to V as the final deliverable
 
+### Gate 6 — Post-commit live route verify (added 2026-05-14)
+
+After `git push` succeeds and before reporting the work as done, run a live-route verification against production. The structural gates above (tsc, build, claims, routes) catch compilation and metadata issues but cannot detect runtime regressions in users' browsers — exactly the class of bug that triggered the 2026-05-14 "articles don't open" incident.
+
+**Required for every commit class B and above:**
+
+1. Wait ≥60 seconds after `git push` for Vercel deploy to land (Vercel auto-deploys main on push; typical deploy time 60-180s).
+2. WebFetch `https://neurowiki.ai/` to verify the homepage shell returns 200 with the canonical title `"NeuroWiki | Neurology Calculators, Pathways & Trials"`.
+3. If the commit touched ANY route-rendering code (anything in `src/pages/`, `src/App.tsx`, `src/components/layout/`, `src/components/article/`, `src/components/hub/`, `src/components/trials/`, `src/components/calculators/`), WebFetch ONE representative affected route and confirm 200 + sensible content. If the commit touched the shared shell (calculators or layout), pick a calculator + a non-calculator route.
+4. If the commit touched `src/data/trialData.ts` or `src/data/trialListData.ts`, WebFetch `https://neurowiki.ai/trials` and one trial detail page to confirm both render.
+5. Report the live-verify result inline: `Live verify: PASS — <url> returned 200, title intact` or `Live verify: FAIL — <symptom>`.
+
+**On live verify FAIL:** invoke `/incident <symptom>` immediately rather than swallowing the failure. The structural gates passed, the live site is broken — that's the exact scenario `/incident` exists for.
+
+**Exempt from Gate 6:**
+- Class A commits (questions, no code change)
+- Docs-only commits (`docs/`, `.claude/`, `TASKS.md`) — no production behavior change
+- Commits that only touch `scripts/`, `tests/`, or other non-rendered surfaces
+
+**Why this gate exists:** as of 2026-05-14, the structural gates have a documented blind spot for browser-runtime regressions: a commit can pass tsc + build + claims + routes and still ship a page that doesn't render, doesn't navigate, or breaks an interactive element. Gate 6 catches the "deployed but broken" class of bug before the user finds it. Closes the loop on the design-audit Phase 5 finding about reliance on server-side checks alone.
+
 ---
 
 ## 21. File conventions
@@ -662,6 +683,7 @@ Every command has defined happy path *and* failure behavior. Commands defined in
 | `/audit-citations` | List stale citations, create re-review tasks | Can't write `TASKS.md` → console report, ask V to commit manually |
 | `/pr-ready` | Run gates, prepare bilingual PR description | Partial artifacts → list exactly what's missing, refuse to open PR |
 | `/rollback <commit>` | Revert, flag-disable, post-mortem | Revert not clean → stop, escalate to V, no feature-flag action without explicit confirmation |
+| `/incident <symptom>` | Triage a post-merge production issue: reproduce → locate cause in recent commits → decide revert vs hotfix → ship fix → live-verify → post-mortem if SEV1/2 | Cannot reproduce server-side and V is dark → log attempt and defer; never blind-revert |
 
 ---
 
