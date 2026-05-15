@@ -2939,7 +2939,7 @@ const TrialPageNew: React.FC = () => {
               {trialMetadata.title}: {trialMetadata.subtitle}
             </h1>
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
-              In patients with acute stroke in the United States, does prehospital mobile stroke unit care — with on-board CT, vascular imaging, and thrombolysis capability — improve excellent 90-day functional outcome (mRS 0-1) in tPA-eligible patients compared with standard EMS transport?
+              In patients with acute stroke in the United States, does prehospital mobile stroke unit care (with on-board CT, vascular imaging, and thrombolysis capability) improve excellent 90-day functional outcome (mRS 0-1) in tPA-eligible patients compared with standard EMS transport?
             </p>
             <p className="text-sm text-slate-500 mt-1">
               {trialMetadata.source} · {trialMetadata.stats.sampleSize.value} patients
@@ -3862,7 +3862,7 @@ const TrialPageNew: React.FC = () => {
               {trialMetadata.title}: {trialMetadata.subtitle}
             </h1>
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
-              In patients with ICA or MCA occlusion presenting 4.5 to 24 hours from last known well — including wake-up and unwitnessed stroke — with salvageable tissue on perfusion imaging and no access to endovascular thrombectomy, does IV tenecteplase 0.25 mg/kg improve excellent functional outcome (mRS 0-1) at 90 days compared with standard medical treatment?
+              In patients with ICA or MCA occlusion presenting 4.5 to 24 hours from last known well (including wake-up and unwitnessed stroke) with salvageable tissue on perfusion imaging and no access to endovascular thrombectomy, does IV tenecteplase 0.25 mg/kg improve excellent functional outcome (mRS 0-1) at 90 days compared with standard medical treatment?
             </p>
             <p className="text-sm text-slate-500 mt-1">
               {trialMetadata.source} · {trialMetadata.stats.sampleSize.value} patients

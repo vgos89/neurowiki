@@ -1086,7 +1086,7 @@ If seizures persist despite 24 hours of anesthesia:
     category: 'Neuro Trials',
     content: `
 ## Clinical Context
-THALES tested whether ticagrelor — a more potent, direct-acting P2Y12 inhibitor — could outperform aspirin alone in preventing early recurrent stroke after minor stroke or TIA. It enrolled 11,016 patients across 414 sites in 28 countries with broader eligibility than CHANCE/POINT (NIHSS ≤5 vs ≤3; ABCD2 ≥6 vs ≥4).
+THALES tested whether ticagrelor (a more potent, direct-acting P2Y12 inhibitor) could outperform aspirin alone in preventing early recurrent stroke after minor stroke or TIA. It enrolled 11,016 patients across 414 sites in 28 countries with broader eligibility than CHANCE/POINT (NIHSS ≤5 vs ≤3; ABCD2 ≥6 vs ≥4).
 
 **AHA/ASA 2026 verdict: COR 3: No Benefit** — ticagrelor is NOT recommended over aspirin alone for this indication.
 
@@ -1173,7 +1173,7 @@ CHANCE established DAPT within 24 hours. INSPIRES extends the evidence to two im
 ## Clinical Context
 Clopidogrel is a prodrug requiring CYP2C19 enzymatic conversion to its active metabolite. The CYP2C19 *2 loss-of-function (LOF) allele reduces active metabolite levels by ~25–30%, potentially impairing clopidogrel efficacy. CYP2C19 LOF alleles are present in **15–30% of Europeans** and **50–60% of East Asians**.
 
-CHANCE-2 is the first large stroke trial using mandatory pharmacogenomic eligibility — only CYP2C19 LOF carriers enrolled — testing whether ticagrelor (a direct-acting, CYP2C19-independent P2Y12 inhibitor) outperforms clopidogrel-based DAPT in these patients.
+CHANCE-2 is the first large stroke trial using mandatory pharmacogenomic eligibility (only CYP2C19 LOF carriers enrolled), testing whether ticagrelor (a direct-acting, CYP2C19-independent P2Y12 inhibitor) outperforms clopidogrel-based DAPT in these patients.
 
 **AHA/ASA 2026: COR 2b** — ticagrelor-based DAPT may be reasonable over clopidogrel DAPT in confirmed CYP2C19 LOF carriers.
 
