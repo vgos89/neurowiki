@@ -7449,9 +7449,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         info: 'Primary outcome: new stroke (ischemic or hemorrhagic) within 90 days. CYP2C19 LOF carriers have reduced clopidogrel activation — CHANCE-2 tests whether ticagrelor overcomes this resistance.'
       },
       pValue: {
-        value: '0.009',
+        value: '0.008',
         label: 'Statistically Sig.',
-        info: 'p=0.009 for 90-day primary. AHA/ASA 2026: COR 2b — ticagrelor DAPT may be reasonable over clopidogrel DAPT for confirmed CYP2C19 LOF carriers within 24 hours.',
+        info: 'p=0.008 for 90-day primary. AHA/ASA 2026: COR 2b. Ticagrelor DAPT may be reasonable over clopidogrel DAPT for confirmed CYP2C19 LOF carriers within 24 hours.',
         highlight: true
       },
       effectSize: {
@@ -7479,7 +7479,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         info: 'Any stroke within 90 days. 1-year secondary endpoint also assessed.'
       },
       pValue: {
-        value: 'HR 0.77 (95% CI 0.64–0.94), p=0.009; 1-year HR 0.80, p=0.007',
+        value: 'HR 0.77 (95% CI 0.64–0.94), p=0.008; 1-year HR 0.80, p=0.007',
         info: '23% relative risk reduction at 90 days. Durable benefit confirmed at 1 year.'
       },
       nnt: {
