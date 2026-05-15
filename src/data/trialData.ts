@@ -539,9 +539,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
   'ecass3-trial': {
     id: 'ecass3-trial',
     title: 'ECASS III Trial',
-    subtitle: 'IV tPA for Acute Ischemic Stroke (3-4.5 Hours)',
+    subtitle: 'IV tPA for Acute Ischemic Stroke (3–4.5 Hours)',
     category: 'Neuro Trials',
     doi: '10.1056/NEJMoa0804656',
+    pmid: '18815396',
     primaryDesign: 'binary-superiority',
     primaryResult: 'met',
     stats: {
