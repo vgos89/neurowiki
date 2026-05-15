@@ -4692,10 +4692,42 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'DEFUSE 3 Trial',
     subtitle: 'Thrombectomy for Ischemic Stroke (6-16 Hours)',
     category: 'Neuro Trials',
+    archetypeId: 'A',
+    trialResult: 'POSITIVE',
     doi: '10.1056/NEJMoa1713973',
     pmid: '29364767',
     primaryDesign: 'ordinal-shift',
     primaryResult: 'met',
+    inclusionCriteria: [
+      'Anterior LVO (ICA or M1)',
+      '6–16 hours from last known well',
+      'Pre-stroke mRS 0–1',
+      'RAPID perfusion mismatch: core <70 mL, mismatch ratio ≥1.8, mismatch volume ≥15 mL',
+    ],
+    exclusionCriteria: [
+      'Onset <6 hours (use early-window evidence)',
+      'Onset >16 hours (use DAWN window)',
+      'Pre-stroke mRS ≥2',
+      'Posterior circulation occlusion (see ATTENTION/BAOCHE)',
+      'Core ≥70 mL or mismatch ratio <1.8',
+    ],
+    safetyProfile: {
+      sICH: {
+        evt: 7,
+        control: 4,
+        label: 'Symptomatic ICH',
+        tooltip: '7% EVT vs 4% control (P=0.75). No significant difference.',
+      },
+      mortality: {
+        evt: 14,
+        control: 26,
+        label: '90-day mortality',
+        tooltip: '14% EVT vs 26% control (P=0.05). Borderline significant secondary outcome — directional benefit.',
+        color: 'success',
+      },
+    },
+    bedsidePearl: 'In anterior LVO 6–16 hours from LKW with RAPID-defined penumbra (core <70 mL, mismatch ≥1.8 and ≥15 mL), EVT triples functional independence (45% vs 17%). Primary endpoint is the ordinal mRS shift (common OR 2.77, CI 1.63–4.70); NNT 3.6 derived from the mRS 0–2 secondary.',
+    bottomLineSummary: 'DEFUSE-3 extends EVT to 6–16h with RAPID perfusion selection. Primary ordinal mRS shift: common OR 2.77 (95% CI 1.63–4.70, P<0.001). Secondary mRS 0–2: 45% vs 17% (NNT 3.6). Stopped early at pre-specified interim. AHA/ASA 2026 §4.7.2 COR 1.',
     applicability: {
       imagingSelection: 'CT or MR perfusion mismatch required (RAPID: core <70 mL, mismatch ratio ≥1.8, mismatch volume ≥15 mL); pre-stroke mRS 0–1; anterior LVO (ICA or M1)',
       populationExclusions: [
@@ -4778,10 +4810,40 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'DAWN Trial',
     subtitle: 'Thrombectomy for Ischemic Stroke (6-24 Hours)',
     category: 'Neuro Trials',
+    archetypeId: 'A',
+    trialResult: 'POSITIVE',
     doi: '10.1056/NEJMoa1706442',
     pmid: '29129157',
     primaryDesign: 'bayesian-superiority',
     primaryResult: 'met',
+    inclusionCriteria: [
+      'Intracranial ICA or proximal MCA (M1) occlusion',
+      '6–24 hours from last known well',
+      'Pre-stroke mRS 0 or 1; NIHSS ≥10',
+      'Clinical-imaging mismatch (Group A/B/C by age + NIHSS + core volume)',
+    ],
+    exclusionCriteria: [
+      'Onset <6 hours (use early-window evidence)',
+      'Pre-stroke mRS ≥2',
+      '>1/3 MCA territory infarct on baseline imaging',
+      'Eligible for standard IV alteplase (had to be enrolled after the typical thrombolysis window or have persistent occlusion)',
+    ],
+    safetyProfile: {
+      sICH: {
+        evt: 6,
+        control: 3,
+        label: 'Symptomatic ICH',
+        tooltip: 'No significant difference. Safety profile comparable to DEFUSE-3 in the same window.',
+      },
+      mortality: {
+        evt: 19,
+        control: 18,
+        label: '90-day mortality',
+        tooltip: 'No significant difference in mortality despite massive disability benefit.',
+      },
+    },
+    bedsidePearl: 'For anterior LVO 6–24 hours after LKW with clinical-core mismatch (small core, severe deficit), EVT delivers one of the largest effects in stroke history (mRS 0–2 49% vs 13%; derived NNT 2.8 from secondary). Primary endpoint is utility-weighted mRS, analyzed by Bayesian posterior probability of superiority (>0.999).',
+    bottomLineSummary: 'DAWN extends EVT to 24h after LKW for clinical-imaging mismatch patients (Trevo device). Primary uw-mRS Bayesian posterior P(superiority) >0.999. Coprimary mRS 0–2 binary: 49% vs 13% (derived NNT 2.8 from secondary, displayed with Bayesian annotation). Stopped early at 31 months. AHA/ASA 2026 §4.7.2 COR 1.',
     applicability: {
       imagingSelection: 'Clinical-imaging mismatch required by age strata (≥80y: NIHSS≥10 + core<21mL; <80y: NIHSS≥10 + core<31mL, or NIHSS≥20 + core 31–<51mL)',
       populationExclusions: [
@@ -4865,9 +4927,40 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'SELECT2 Trial',
     subtitle: 'Large Core Thrombectomy',
     category: 'Neuro Trials',
+    archetypeId: 'A',
+    trialResult: 'POSITIVE',
     doi: '10.1056/NEJMoa2214403',
     primaryDesign: 'ordinal-shift',
     primaryResult: 'met',
+    inclusionCriteria: [
+      'Anterior LVO (ICA or M1)',
+      'Age ≤85',
+      'Pre-stroke mRS 0–1',
+      'Large ischemic core: ASPECTS 3–5 OR perfusion core ≥50 mL',
+      'Within 24 hours of last known well',
+    ],
+    exclusionCriteria: [
+      'ASPECTS ≥6 (use small-core EVT evidence)',
+      'Pre-stroke mRS ≥2',
+      'Age >85',
+      'Significant mass effect on baseline imaging',
+    ],
+    safetyProfile: {
+      sICH: {
+        evt: 0.6,
+        control: 1.1,
+        label: 'Symptomatic ICH',
+        tooltip: '0.6% EVT vs 1.1% medical (NS). Lower than ANGEL-ASPECT (6.1% vs 2.7%) — SELECT2 had a notably cleaner safety profile.',
+      },
+      mortality: {
+        evt: 38.4,
+        control: 41.5,
+        label: '90-day mortality',
+        tooltip: '38.4% vs 41.5% (NS). Mortality is high in large-core patients overall; EVT does not worsen it.',
+      },
+    },
+    bedsidePearl: 'For anterior LVO with large ischemic core (ASPECTS 3–5 or core ≥50 mL) within 24h, EVT shifts disability one step lower on average (gOR 1.51). Functional independence (mRS 0–2) is uncommon at 20% (vs 7% medical) — frame as "less disability" not "independence restored". NNT 7.7 is from the secondary mRS 0–2 outcome.',
+    bottomLineSummary: 'SELECT2 establishes EVT for large-core anterior LVO within 24h. Primary ordinal mRS shift: gOR 1.51 (95% CI 1.20–1.89, P<0.001). Secondary mRS 0–2: 20% vs 7% (NNT 7.7 from secondary). sICH 0.6% vs 1.1% (NS). Stopped early at 2nd interim. AHA/ASA 2026 §4.7.2 COR 1.',
     applicability: {
       imagingSelection: 'ASPECTS 3–5 OR perfusion-based core ≥50 mL required; ≤24h anterior LVO; age ≤85; pre-stroke mRS 0–1',
       populationExclusions: [
@@ -4944,9 +5037,48 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ANGEL-ASPECT Trial',
     subtitle: 'Large Core Thrombectomy (China)',
     category: 'Neuro Trials',
+    archetypeId: 'A',
+    trialResult: 'POSITIVE',
     doi: '10.1056/NEJMoa2213379',
     primaryDesign: 'ordinal-shift',
     primaryResult: 'met',
+    inclusionCriteria: [
+      'Anterior LVO',
+      'Age ≤80; NIHSS 6–30',
+      'Pre-stroke mRS 0–1',
+      'ASPECTS 3–5 (no core limit) OR ASPECTS 0–2 with core 70–100 mL OR ASPECTS >5 with core 70–100 mL (6–24h)',
+    ],
+    exclusionCriteria: [
+      'ASPECTS ≥6 with smaller cores (use small-core evidence)',
+      'Pre-stroke mRS ≥2',
+      'Age >80',
+      'NIHSS <6 or >30',
+      'Significant mass effect',
+    ],
+    safetyProfile: {
+      sICH: {
+        evt: 6.1,
+        control: 2.7,
+        label: 'Symptomatic ICH',
+        tooltip: '6.1% EVT vs 2.7% medical (P=0.12, NS but trending higher). Higher than SELECT2 — careful BP management warranted.',
+        color: 'warning',
+      },
+      adverseEvents: {
+        evt: 49.1,
+        control: 17.3,
+        label: 'Any ICH (radiographic + symptomatic)',
+        tooltip: '49.1% EVT vs 17.3% medical (P<0.001). Most are asymptomatic but warrants vigilant monitoring.',
+        color: 'warning',
+      },
+      mortality: {
+        evt: 21.7,
+        control: 20.0,
+        label: '90-day mortality',
+        tooltip: '21.7% vs 20.0% (NS). No mortality penalty despite higher ICH rates.',
+      },
+    },
+    bedsidePearl: 'In a broader large-core population (China, includes ASPECTS 0–2 with core 70–100 mL), EVT improves ordinal mRS shift (gOR 1.37, P=0.004). Functional independence 30% vs 11.6% (NNT 5.4 from secondary). Higher ICH rates than SELECT2 — BP management critical.',
+    bottomLineSummary: 'ANGEL-ASPECT validates SELECT2 in a Chinese population with broader volume criteria. Primary ordinal mRS shift: gOR 1.37 (95% CI 1.11–1.69, P=0.004). Secondary mRS 0–2: 30% vs 11.6% (NNT 5.4 from secondary). sICH 6.1% vs 2.7% (NS but trending). AHA/ASA 2026 §4.7.2 COR 1 (6–24h) / COR 2a (within 6h).',
     applicability: {
       imagingSelection: 'ASPECTS 3–5 (no core limit) OR ASPECTS 0–2 with core 70–100 mL OR ASPECTS >5 with core 70–100 mL (6–24h window); ≤24h anterior LVO; age ≤80; NIHSS 6–30; pre-stroke mRS 0–1',
       geography: 'China',
@@ -7203,9 +7335,34 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ENRICH Trial',
     subtitle: 'Minimally Invasive Surgical Evacuation of Intracerebral Hemorrhage',
     category: 'Neuro Trials',
+    archetypeId: 'A',
     trialResult: 'POSITIVE',
     primaryDesign: 'bayesian-superiority',
     primaryResult: 'met',
+    inclusionCriteria: [
+      'Lobar OR anterior basal ganglia ICH on baseline CT',
+      'Hematoma volume 30–80 mL',
+      'Within 24 hours of last known well',
+      'Age 18+, presenting after ictus',
+    ],
+    exclusionCriteria: [
+      'Deep ICH (thalamic/putaminal — anterior basal ganglia subgroup halted for futility)',
+      'Posterior fossa or brainstem ICH',
+      'Volume <30 mL or >80 mL',
+      'Pre-stroke severe disability',
+      'Surgery >24 hours from LKW',
+    ],
+    safetyProfile: {
+      mortality: {
+        evt: 9.3,
+        control: 18.0,
+        label: '30-day mortality',
+        tooltip: 'ARD -8.7 pp (95% Bayesian CrI -16.4 to -1.0, posterior P=0.987). Approximately halved early mortality. NNT ~12 is approximate, from primary SAFETY endpoint (not primary efficacy).',
+        color: 'success',
+      },
+    },
+    bedsidePearl: 'For LOBAR (or selected anterior basal ganglia) ICH 30–80 mL within 24 hours, minimally invasive parafascicular surgery (BrainPath + Myriad) reduces 30-day mortality (9.3% vs 18.0%) and improves 180-day UW-mRS (Bayesian posterior P>0.98). Anterior basal ganglia subgroup was halted for futility — benefit is in LOBAR ICH.',
+    bottomLineSummary: 'ENRICH is the first randomized supratentorial ICH evacuation trial to meet its prespecified primary endpoint. UW-mRS at 180d: difference +0.084 (95% CrI 0.005–0.163, posterior P(sup)=0.981). 30-day mortality 9.3% vs 18.0% (ARD -8.7 pp, posterior P=0.987). Bayesian RAR design — no frequentist p-value. AHA/ASA 2022 ICH Class IIb (pre-ENRICH); may prompt focused update.',
     stats: {
       sampleSize: {
         value: '300',
@@ -7338,10 +7495,39 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'B_PROUD Trial',
     subtitle: 'Mobile Stroke Unit Dispatch vs Conventional Ambulance in Berlin',
     category: 'Neuro Trials',
+    archetypeId: 'A',
     doi: '10.1001/jama.2020.26345',
     pmid: '33528537',
     clinicalTrialsId: 'NCT03027453',
     primaryDesign: 'estimation-strategy',
+    inclusionCriteria: [
+      'Suspected acute ischemic stroke, dispatched as emergency call',
+      'Within Berlin MSU catchment area (3 base stations)',
+      'MSU operating hours: 7am–11pm (daytime only)',
+      'Final diagnosis of acute ischemic stroke or TIA',
+    ],
+    exclusionCriteria: [
+      'Stroke onset outside catchment or operating hours',
+      'Stroke mimics (final diagnosis other than ischemic stroke/TIA)',
+      'ICH on imaging',
+      'No randomization — allocation by MSU availability (quasi-experimental)',
+    ],
+    safetyProfile: {
+      sICH: {
+        evt: 3.2,
+        control: 2.8,
+        label: 'Symptomatic secondary intracranial hemorrhage',
+        tooltip: 'Adjusted OR 1.20 (95% CI 0.66–2.19). No significant safety penalty despite more frequent prehospital thrombolysis.',
+      },
+      mortality: {
+        evt: 7.1,
+        control: 8.8,
+        label: 'Death at 90 days',
+        tooltip: 'Numerically lower with MSU dispatch in the coprimary tier; primary analysis is the ordinal mRS shift, not mortality.',
+      },
+    },
+    bedsidePearl: 'In Berlin\'s urban EMS system, MSU dispatch shifts the ordinal mRS distribution toward less disability (common OR 0.71 for worse mRS) compared with conventional ambulance. Thrombolysis use rose (60% vs 48%) and dispatch-to-tPA shortened by ~26 min. Quasi-experimental allocation by MSU availability — association, not causation.',
+    bottomLineSummary: 'B_PROUD evaluates MSU dispatch in Berlin (quasi-experimental, allocation by MSU availability). Primary ordinal mRS shift: common OR 0.71 (95% CI 0.58–0.86, P<0.001). Median 90-day mRS 1 (MSU) vs 2 (conventional). Workflow gains: dispatch-to-tPA shortened by 26 min; thrombolysis use up 12 pp. No safety penalty. AHA/ASA 2026 §2.5 COR 1 for MSU systems.',
     designDisclaimer: {
       category: 'quasi-experimental',
       text: 'Allocation was by mobile-stroke-unit availability, not patient-level randomization. Outcome adjudication was blinded but patients and clinicians were not. Treatment effect may include unmeasured site-level confounding.',
@@ -7423,20 +7609,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         'Workflow takeaways (dispatch-to-tPA reduction, increased thrombolysis use, treatment within 60 min of onset) are more transferable than absolute effect estimates.',
       ],
     },
-    safetyProfile: {
-      sICH: {
-        evt: 3.2,
-        control: 2.8,
-        label: 'Symptomatic secondary intracranial hemorrhage',
-        tooltip: 'Rates of symptomatic secondary intracranial hemorrhage were similar despite more frequent prehospital reperfusion treatment with MSU dispatch.'
-      },
-      mortality: {
-        evt: 7.1,
-        control: 8.8,
-        label: 'Death at 90 days',
-        tooltip: 'Death at 90 days was numerically lower with MSU dispatch in the coprimary disability categorization.'
-      }
-    }
+    // Note: canonical safetyProfile is at top of entry (same values, more precise tooltips)
   },
   'best-msu-trial': {
     id: 'best-msu-trial',
