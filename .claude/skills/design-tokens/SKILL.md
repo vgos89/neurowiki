@@ -76,8 +76,8 @@ Used in TrialLegendCard, TrialsPage filter chips.
 |---|---|
 | Page H1 | `text-[22px] md:text-[28px] font-medium tracking-[-0.01em]` |
 | Section header | `text-sm font-semibold tracking-[0.01em]` |
-| Eyebrow label | `text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-400` |
-| Body text | `text-sm text-slate-600 dark:text-slate-300 leading-[1.55]` |
+| Eyebrow label / section label | `text-[10px] font-bold uppercase tracking-widest text-slate-400` (per CALCULATOR_SPEC §1.5 + every reference HTML in `docs/specs/mockups/`; resolves SKILL.md vs reference drift flagged 2026-05-14 design audit Phase 5) |
+| Body text | `text-sm text-slate-600 leading-[1.55]` |
 | Muted meta | `text-[11px] font-medium uppercase tracking-[0.04em] text-slate-400` |
 | Key stat | `text-[12px] text-slate-500` |
 
