@@ -81,12 +81,6 @@ const NON_TRIAL_TOOLS: Record<
     href: '/pathways/migraine-pathway',
     category: 'prevention',
   },
-  'gca-pathway': {
-    title: 'GCA Pathway',
-    description: 'Suspected giant cell arteritis workup.',
-    href: '/pathways/gca-pathway',
-    category: 'prevention',
-  },
   // calculators
   nihss: {
     title: 'NIHSS',
@@ -251,7 +245,6 @@ export const SCENARIOS: Scenario[] = [
     pillDotClass: 'dot-prevention',
     tools: [
       { type: 'pathway', id: 'migraine-pathway' },
-      { type: 'pathway', id: 'gca-pathway' },
       { type: 'guide', id: 'headache-workup' },
       { type: 'calculator', id: 'boston-criteria-caa' },
     ],

@@ -25,7 +25,6 @@ export type StaticRouteKey =
   | 'boston-criteria-caa'
   | 'em-billing'
   | 'pathways-hub'
-  | 'pathways-gca'
   | 'pathways-elan'
   | 'pathways-evt'
   | 'pathways-late-ivt'
@@ -277,22 +276,9 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
       keywords: 'neurology clinical pathways, stroke pathway, EVT decision tool, status epilepticus protocol, migraine pathway, GCA pathway, neurology workflows',
     },
   },
-  {
-    key: 'pathways-gca',
-    path: '/pathways/gca-pathway',
-    publishGate: true,
-    published: true,
-    includeInSitemap: true,
-    zone: 'reading',
-    bottomNavTab: 'pathways',
-    railItem: 'pathways',
-    comingSoonMessage: 'GCA pathway',
-    meta: {
-      title: 'GCA Pathway — Giant Cell Arteritis Diagnostic | NeuroWiki',
-      description: 'Diagnostic pathway for giant cell arteritis (GCA) and polymyalgia rheumatica (PMR). ESR/CRP, temporal artery biopsy, and corticosteroid initiation.',
-      keywords: 'giant cell arteritis pathway, GCA diagnostic criteria, temporal arteritis workup, GCA ESR CRP, temporal artery biopsy, polymyalgia rheumatica GCA, GCA corticosteroid treatment',
-    },
-  },
+  // Removed 2026-05-15: pathways-gca. The scoring tool was not validated;
+  // see commit log + docs/audits/2026-05-15/missing-trials-catalog.md context.
+  // /pathways/gca-pathway now redirects to /pathways via App.tsx.
   {
     key: 'pathways-elan',
     path: '/pathways/elan-pathway',

@@ -36,7 +36,8 @@ const TrialsPage = lazy(() => import('./pages/TrialsPage'));
 const TrialPageNew = lazy(() => import('./pages/trials/TrialPageNew'));
 const ComingSoon = lazy(() => import('./components/ComingSoon').then((m) => ({ default: m.ComingSoon })));
 const QuestionDetailPage = lazy(() => import('./pages/QuestionDetailPage'));
-const GCAPathway = lazy(() => import('./pages/GCAPathway'));
+// GCA pathway retired 2026-05-15 (scoring tool was not validated; see
+// commit-log + docs/audits/2026-05-15/missing-trials-catalog.md context).
 const ElanPathway = lazy(() => import('./pages/ElanPathway'));
 const EvtPathway = lazy(() => import('./pages/EvtPathway'));
 const StatusEpilepticusPathway = lazy(() => import('./pages/StatusEpilepticusPathway'));
@@ -85,7 +86,6 @@ const ROUTE_COMPONENTS: Record<StaticRouteKey, React.ReactNode> = {
   'boston-criteria-caa': <BostonCriteriaCaaCalculator />,
   'em-billing': <EmBillingCalculator />,
   'pathways-hub': <Pathways />,
-  'pathways-gca': <GCAPathway />,
   'pathways-elan': <ElanPathway />,
   'pathways-evt': <EvtPathway />,
   'pathways-late-ivt': <ExtendedIVTPathway />,
@@ -179,7 +179,9 @@ const App: React.FC = () => {
           <Route path="/calculators/elan-pathway" element={<Navigate to="/pathways/elan-pathway" replace />} />
           <Route path="/calculators/se-pathway" element={<Navigate to="/pathways/se-pathway" replace />} />
           <Route path="/calculators/migraine-pathway" element={<Navigate to="/pathways/migraine-pathway" replace />} />
-          <Route path="/calculators/gca-pathway" element={<Navigate to="/pathways/gca-pathway" replace />} />
+          {/* GCA pathway retired 2026-05-15. Legacy URL redirects to pathways hub. */}
+          <Route path="/calculators/gca-pathway" element={<Navigate to="/pathways" replace />} />
+          <Route path="/pathways/gca-pathway" element={<Navigate to="/pathways" replace />} />
           <Route path="/wiki/:topic" element={<Wiki />} />
           <Route path="/guide/:topicId" element={<PublishGate><ResidentGuide context="guide" /></PublishGate>} />
           <Route path="/trials/q/:questionId" element={<QuestionDetailPage />} />

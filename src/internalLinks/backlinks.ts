@@ -1,14 +1,14 @@
 
 import { LINK_REGISTRY, LinkItem } from './registry';
-import { EVT_CONTENT, ELAN_CONTENT, SE_CONTENT, MIGRAINE_CONTENT, GCA_CONTENT } from '../data/toolContent';
+import { EVT_CONTENT, ELAN_CONTENT, SE_CONTENT, MIGRAINE_CONTENT } from '../data/toolContent';
 
-// Aggregate all tool text into search corpus
+// Aggregate all tool text into search corpus.
+// GCA pathway retired 2026-05-15 (tool was not validated).
 const TOOL_CORPUS: Record<string, string[]> = {
   'evt-pathway': Object.values(EVT_CONTENT),
   'elan-pathway': Object.values(ELAN_CONTENT),
   'se-pathway': Object.values(SE_CONTENT),
   'migraine-pathway': Object.values(MIGRAINE_CONTENT),
-  'gca-pathway': Object.values(GCA_CONTENT),
 };
 
 export const getBacklinks = (articleId: string): LinkItem[] => {

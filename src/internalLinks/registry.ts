@@ -104,13 +104,6 @@ const TOOLS: LinkItem[] = [
     aliases: ['Migraine Pathway', 'Headache Pathway']
   },
   {
-    id: 'gca-pathway',
-    title: 'GCA Pathway',
-    type: 'tool',
-    url: '/pathways/gca-pathway',
-    aliases: ['GCA Pathway', 'Giant Cell Arteritis Pathway']
-  },
-  {
     id: 'nihss-calc',
     title: 'NIHSS Calculator',
     type: 'tool',

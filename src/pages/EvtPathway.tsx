@@ -12,6 +12,36 @@ import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { CollapsibleSection } from '../components/CollapsibleSection';
 import { AspectsModal } from '../components/AspectsModal';
 import { useRecents } from '../hooks/useRecents';
+import { PathwayBottomDrawer, type PathwayTier } from '../components/pathways/PathwayBottomDrawer';
+
+/**
+ * Map the EVT Result.status to PathwayBottomDrawer's tier (color-coded badge).
+ * Tier vocabulary in PathwayBottomDrawer was originally Low/Intermediate/High
+ * for suspicion scoring; for EVT we override the visible label via
+ * `tierLabel` and use tier only for color semantics:
+ *   Low (cobalt)         = proceed / eligible
+ *   Intermediate (amber) = consult / case-by-case
+ *   High (red)           = stop / not eligible
+ *   Negative (slate)     = no recommendation
+ *   None (slate)         = pending data
+ */
+function evtStatusToTier(status: string): PathwayTier {
+  switch (status) {
+    case 'Eligible':
+    case 'EVT Reasonable':
+      return 'Low';
+    case 'Consult':
+    case 'Clinical Judgment':
+    case 'BMT Preferred':
+    case 'High Uncertainty':
+      return 'Intermediate';
+    case 'Not Eligible':
+    case 'Avoid EVT':
+      return 'High';
+    default:
+      return 'None';
+  }
+}
 
 type Tri = "yes" | "no" | "unknown";
 type MrsGroup = "yes" | "mrs2" | "mrs34" | "no" | "unknown"; // yes = mRS 0-1, mrs2 = mRS 2, mrs34 = mRS 3-4, no = mRS >4
@@ -1579,6 +1609,20 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           setShowAspectsModal(false);
         }}
       />
+      {/* Persistent interpretation drawer — canary deployment of
+          PathwayBottomDrawer. Reassigned from GCA (retired) on 2026-05-15.
+          Updates live as the user fills the form; tier color reflects the
+          decision class (proceed/consult/stop). */}
+      {result && (
+        <PathwayBottomDrawer
+          pathwayName="EVT"
+          tier={evtStatusToTier(result.status)}
+          tierLabel={result.status === 'Incomplete' ? 'Pending' : result.status}
+          action={result.reason}
+          notes={result.details ? [result.details] : undefined}
+          expandedSummary={result.criteriaName || result.evidenceBadge || undefined}
+        />
+      )}
     </div>
   );
 };

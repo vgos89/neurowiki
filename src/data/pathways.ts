@@ -99,15 +99,10 @@ export const PATHWAYS: PathwayEntry[] = [
     rowCategory: 'status',
   },
   // ── Headache ─────────────────────────────────────────────────────────────────
-  {
-    id: 'gca-pathway',
-    name: 'GCA Pathway',
-    description: 'Suspected giant cell arteritis workup and treatment.',
-    scenario: 'severe-headache',
-    path: '/pathways/gca-pathway',
-    stepCount: 4,        // Red Flags / Phenotype / Objective / Results
-    rowCategory: 'prevention',
-  },
+  // Removed 2026-05-15: GCA pathway. The scoring tool we shipped was not a
+  // scientifically validated instrument — it was a synthesis of research papers
+  // without a published reference rule. NeuroWiki only ships validated tools.
+  // If a validated GCA decision rule is published in the future, re-add here.
   {
     id: 'migraine-pathway',
     name: 'Migraine Pathway',

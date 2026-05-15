@@ -494,7 +494,6 @@ const PATHWAY_NAMES: Record<string, { app: string; breadcrumb: string }> = {
   '/pathways/late-window-ivt': { app: 'Late Window IVT Pathway', breadcrumb: 'Late Window IVT' },
   '/pathways/se-pathway':     { app: 'Status Epilepticus Pathway', breadcrumb: 'SE Pathway' },
   '/pathways/migraine-pathway': { app: 'Migraine Pathway', breadcrumb: 'Migraine Pathway' },
-  '/pathways/gca-pathway':    { app: 'GCA Pathway', breadcrumb: 'GCA Pathway' },
 };
 
 const GUIDE_LABELS: Record<string, string> = {

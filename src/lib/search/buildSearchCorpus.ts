@@ -43,7 +43,6 @@ const GLOBAL_KEYWORDS: Record<string, string[]> = {
   '/pathways/elan-pathway': ['anticoagulation timing', 'doac', 'atrial fibrillation stroke'],
   '/pathways/se-pathway': ['seizure', 'status epilepticus', 'benzodiazepine'],
   '/pathways/migraine-pathway': ['headache', 'acute migraine', 'migraine cocktail'],
-  '/pathways/gca-pathway': ['giant cell arteritis', 'temporal arteritis', 'polymyalgia'],
   '/guide/stroke-code': ['acute stroke', 'tpa', 'iv thrombolysis'],
   '/guide/iv-tpa': ['alteplase', 'tenecteplase', 'thrombolysis'],
   '/guide/mechanical-thrombectomy': ['evt', 'thrombectomy', 'lvo'],

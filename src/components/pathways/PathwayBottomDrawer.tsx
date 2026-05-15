@@ -4,9 +4,9 @@
  * adapted for live clinical-interpretation content (updates as the user fills
  * out the pathway form, rather than showing a static trial summary).
  *
- * Canary deployment: GCAPathway. Migration order per
- * docs/audits/2026-05-14/pathways-design-audit.md:
- *   GCA → ELAN → SE → Migraine → ExtendedIVT → EVT.
+ * Canary deployment: EvtPathway (V reassigned 2026-05-15 after the GCA
+ * pathway was retired as a non-validated tool). Migration order revised:
+ *   EVT → ExtendedIVT → ELAN → SE → Migraine.
  *
  * State machine (simplified vs BottomLineDrawer):
  *   collapsed — handle bar + tier badge + one-line action (default)
@@ -26,8 +26,15 @@ export type PathwayTier = 'Low' | 'Intermediate' | 'High' | 'Negative' | 'None';
 export interface PathwayBottomDrawerProps {
   /** Short pathway name shown in the collapsed handle. */
   pathwayName: string;
-  /** Current interpretation tier — drives badge color and prominence. */
+  /** Current interpretation tier. Drives badge color and (by default) label. */
   tier: PathwayTier;
+  /**
+   * Optional badge label override. Use when the pathway's verdict vocabulary
+   * does not map to Low/Intermediate/High (e.g. EVT uses Eligible / Consult /
+   * Avoid). The tier prop still drives color; this prop drives the rendered
+   * text only.
+   */
+  tierLabel?: string;
   /** One-line action sentence shown in collapsed state. */
   action: string;
   /** Optional list of contributing reasons, shown in expanded state. */
@@ -49,6 +56,7 @@ const TIER_BADGE: Record<PathwayTier, { bg: string; color: string; border: strin
 export const PathwayBottomDrawer: React.FC<PathwayBottomDrawerProps> = ({
   pathwayName,
   tier,
+  tierLabel,
   action,
   reasons,
   notes,
@@ -99,7 +107,7 @@ export const PathwayBottomDrawer: React.FC<PathwayBottomDrawerProps> = ({
             className="text-[11px] font-semibold uppercase tracking-widest rounded-full px-2 py-0.5"
             style={{ background: badge.bg, color: badge.color, border: `1px solid ${badge.border}` }}
           >
-            {tier === 'None' ? '—' : tier}
+            {tierLabel ?? (tier === 'None' ? '—' : tier)}
           </span>
           <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 hidden sm:inline">
             {pathwayName}
