@@ -515,9 +515,39 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ORIGINAL Trial',
     subtitle: 'Tenecteplase vs Alteplase for Acute Ischemic Stroke (0–4.5 Hours)',
     category: 'Neuro Trials',
+    archetypeId: 'A',
+    trialResult: 'NEUTRAL',
+    resultSubtype: 'non-inferiority',
     doi: '10.1001/jama.2024.14721',
     primaryDesign: 'noninferiority',
     primaryResult: 'noninferiority-established',
+    inclusionCriteria: [
+      'Age ≥18',
+      'Acute ischemic stroke eligible for IV thrombolysis within 4.5h',
+      'NIHSS 1–25 (with measurable motor deficit if NIHSS <4)',
+      'Noncontrast CT to exclude ICH',
+    ],
+    exclusionCriteria: [
+      'Standard IV thrombolysis contraindications',
+      'Treatment >4.5h from symptom onset',
+      'Pre-stroke significant disability',
+    ],
+    safetyProfile: {
+      sICH: {
+        evt: 1.2,
+        control: 1.2,
+        label: 'Symptomatic ICH (ECASS III definition)',
+        tooltip: 'Identical safety: 1.2% in both arms (RR 1.01, 95% CI 0.37–2.70). TNK 0.25 mg/kg does not increase ICH risk vs alteplase 0.9 mg/kg.',
+      },
+      mortality: {
+        evt: 4.6,
+        control: 5.8,
+        label: '90-day mortality',
+        tooltip: '4.6% TNK vs 5.8% alteplase (RR 0.80, 95% CI 0.51–1.23). Numerically lower with TNK but not statistically significant.',
+      },
+    },
+    bedsidePearl: 'For acute ischemic stroke within 4.5 hours, tenecteplase 0.25 mg/kg (single IV bolus) is noninferior to alteplase 0.9 mg/kg (1-hour infusion). AHA/ASA 2026 §4.6.2: either agent is recommended (COR 1). Single-bolus TNK simplifies drip-and-ship workflow.',
+    bottomLineSummary: 'ORIGINAL: TNK 0.25 mg/kg noninferior to alteplase 0.9 mg/kg in 1,465 Chinese patients with AIS within 4.5h. mRS 0–1 at 90 days 72.7% vs 70.3% (RR 1.03, 95% CI 0.97–1.09; NI margin 0.937 met). Identical sICH 1.2% in both arms. AHA/ASA 2026 §4.6.2 COR 1 equivalent alternatives.',
     applicability: {
       geography: 'China (domestic rhTNK-tPA formulation — not equivalent to international tenecteplase brands)',
       populationExclusions: [
@@ -527,7 +557,6 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         'Noninferiority design — NNT is not the primary framing; do not derive NNT from RR 1.03',
       ],
     },
-    trialResult: 'POSITIVE',
     stats: {
       sampleSize: {
         value: '1,465',
