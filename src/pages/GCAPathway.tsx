@@ -8,6 +8,7 @@ import { CollapsibleSection } from '../components/CollapsibleSection';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { scrollMainToTop } from '../utils/mainScroll';
 import { useRecents } from '../hooks/useRecents';
+import { PathwayBottomDrawer, type PathwayTier } from '../components/pathways/PathwayBottomDrawer';
 
 // --- Types ---
 type Tri = "no" | "yes" | "unknown";
@@ -603,6 +604,19 @@ ${result.notes.join('\n')}
         <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
           {isFav ? 'Saved to Favorites' : 'Removed from Favorites'}
         </div>
+      )}
+      {/* Persistent interpretation drawer — canary deployment of
+          PathwayBottomDrawer (TRIALS_SPEC-equivalent for pathways).
+          Updates live as the user fills the form. */}
+      {result && (
+        <PathwayBottomDrawer
+          pathwayName="GCA"
+          tier={result.tier as PathwayTier}
+          action={result.action}
+          reasons={result.reasons}
+          notes={result.notes}
+          expandedSummary={`Phenotype: ${result.phenotype}. Score: ${result.score}.`}
+        />
       )}
     </div>
   );
