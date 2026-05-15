@@ -132,15 +132,94 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     text: 'DAPT after stroke or TIA — yes or no?',
     icon: 'layers',
     meta: 'dual antiplatelet for TIA and minor ischaemic stroke',
-    trialCount: 4,
+    trialCount: 5,
     trialIds: [
       'chance-trial',    // CHANCE 2013 — clopidogrel + aspirin after TIA/minor stroke (China)
       'point-trial',     // POINT 2018 — clopidogrel + aspirin in TIA/minor stroke (US/Canada)
       'thales-trial',    // THALES 2020 — ticagrelor + aspirin after stroke/TIA
+      'chance-2-trial',  // CHANCE-2 2021 — ticagrelor vs clopidogrel DAPT in CYP2C19 LOF carriers
       'inspires-trial',  // INSPIRES 2024 — DAPT for atherosclerotic minor stroke/TIA ≤72 h
-      // NOTE: chance-2-trial (ticagrelor + aspirin for CYP2C19 LOF allele carriers) also
-      // in data. Excluded here (specific subgroup). TODO (V review): raise trialCount to 5
-      // and add chance-2-trial in a C-clinical-editorial pass.
+    ],
+  },
+  {
+    id: 'basilar-evt',
+    text: 'Does my basilar artery occlusion patient benefit from EVT?',
+    icon: 'target',
+    meta: 'evolution of basilar EVT evidence — BEST/BASICS (neutral) to ATTENTION/BAOCHE (positive)',
+    trialCount: 4,
+    trialIds: [
+      'best-trial',       // BEST 2020 — basilar EVT (negative ITT; substantial crossover)
+      'basics-trial',     // BASICS 2021 — basilar EVT (neutral; 80% control received IV alteplase)
+      'attention-trial',  // ATTENTION 2022 — basilar EVT 0–12h (positive, China)
+      'baoche-trial',     // BAOCHE 2022 — basilar EVT 6–24h (positive, stopped early; mid-trial primary amendment)
+    ],
+  },
+  {
+    id: 'ich-surgery',
+    text: 'Should this intracerebral hemorrhage be surgically evacuated?',
+    icon: 'brain',
+    meta: 'four decades of surgical ICH trials — STICH I/II, MISTIE III, ENRICH',
+    trialCount: 4,
+    trialIds: [
+      'stich-i-trial',    // STICH I 2005 — early surgery vs medical for supratentorial ICH (neutral)
+      'stich-ii-trial',   // STICH II 2013 — lobar ICH, no IVH (neutral; directional signal in lobar)
+      'mistie-iii-trial', // MISTIE III 2019 — minimally invasive catheter + tPA (neutral on functional outcome)
+      'enrich-trial',     // ENRICH 2024 — minimally invasive parafascicular surgery, lobar + anterior BG (positive; Bayesian)
+    ],
+  },
+  {
+    id: 'msu-dispatch',
+    text: 'Does mobile stroke unit dispatch improve outcomes?',
+    icon: 'clock',
+    meta: 'patient-level functional outcomes from prehospital MSU programs',
+    trialCount: 2,
+    trialIds: [
+      'b-proud-trial',   // B_PROUD 2021 — Berlin, quasi-experimental, ordinal mRS shift cOR 0.71
+      'best-msu-trial',  // BEST-MSU 2021 — US, alternating-week cluster, utility-weighted mRS
+    ],
+  },
+  {
+    id: 'icas-stenting',
+    text: 'Does symptomatic intracranial atherosclerosis benefit from stenting?',
+    icon: 'target',
+    meta: 'Wingspan stent — RCT harm, post-market on-label safety signal',
+    trialCount: 2,
+    trialIds: [
+      'sammpris-trial',  // SAMMPRIS 2011 — PTAS vs aggressive medical (stopped for harm + futility)
+      'weave-trial',     // WEAVE 2019 — FDA post-market on-label registry (Archetype G, 2.6% 72h)
+      // TODO (V review): add VISSIT (Zaidat 2015 JAMA — Vitesse balloon-expandable, confirmed harm direction)
+      // and CASSISS (Gao 2022 JAMA — Chinese RCT, no significant benefit at 1y) when those entries land.
+    ],
+  },
+  {
+    id: 'tnk-vs-alteplase',
+    text: 'Tenecteplase or alteplase?',
+    icon: 'pill',
+    meta: 'head-to-head IVT comparisons in the 0–4.5h window across geographies',
+    trialCount: 6,
+    trialIds: [
+      'nor-test-trial',          // NOR-TEST 2017 — 0.4 mg/kg TNK vs alteplase (mostly mild, positive)
+      'act-trial',               // AcT 2022 — TNK 0.25 vs alteplase non-inferiority (Canada)
+      'taste-trial',             // TASTE 2022 — TNK vs alteplase, perfusion-imaging selected
+      'attest-2-trial',          // ATTEST-2 2023 — TNK vs alteplase (UK, ordinal-shift primary, neutral)
+      'original-trial',          // ORIGINAL 2024 — TNK NI vs alteplase (China)
+      'trace-2-trial',           // TRACE-2 2023 — TNK NI vs alteplase (China, larger)
+      // NOTE: nor-test-2-part-a (high-dose 0.4 mg/kg, stopped for safety) and trace-iii-trial
+      // (unknown onset, low-dose alteplase) are TNK-related but address different questions.
+    ],
+  },
+  {
+    id: 'direct-vs-bridging',
+    text: 'Direct thrombectomy or bridging with IV thrombolysis first?',
+    icon: 'layers',
+    meta: 'EVT-eligible LVO — skip the IVT or bridge?',
+    trialCount: 4,
+    trialIds: [
+      'direct-mt-trial',       // DIRECT-MT 2020 — China, direct EVT NI vs bridging (NI met)
+      'mr-clean-no-iv-trial',  // MR CLEAN-NO IV 2021 — Europe, NI failed
+      'swift-direct-trial',    // SWIFT DIRECT 2022 — Europe, NI failed
+      'direct-safe-trial',     // DIRECT-SAFE 2022 — multinational, NI failed
+      // skip-trial (Japan) is also direct-MT-related; consider for inclusion in a future pass.
     ],
   },
 ];

@@ -483,6 +483,7 @@ const CALC_NAMES: Record<string, { app: string; breadcrumb: string }> = {
   '/calculators/heidelberg-bleeding-classification': { app: 'Heidelberg Bleeding Classification', breadcrumb: 'Heidelberg Classification' },
   '/calculators/boston-criteria-caa':                { app: 'Boston Criteria 2.0 for CAA', breadcrumb: 'Boston Criteria 2.0' },
   '/calculators/em-billing':                         { app: 'E/M Billing Calculator', breadcrumb: 'E/M Billing' },
+  '/calculators/chads-vasc':                         { app: 'CHA₂DS₂-VASc Score Calculator', breadcrumb: 'CHA₂DS₂-VASc Score' },
 };
 
 /** Pathway display names for schema mainEntity + breadcrumb */

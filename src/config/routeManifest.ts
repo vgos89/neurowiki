@@ -282,6 +282,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     path: '/pathways/gca-pathway',
     publishGate: true,
     published: true,
+    includeInSitemap: true,
     zone: 'reading',
     bottomNavTab: 'pathways',
     railItem: 'pathways',
@@ -351,7 +352,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'pathways',
     comingSoonMessage: 'Status epilepticus pathway',
     meta: {
-      title: 'Status Epilepticus Protocol — Management Pathway | NeuroWiki',
+      title: 'Status Epilepticus — Management Pathway | NeuroWiki',
       description: 'Status epilepticus management pathway. Covers early SE, established SE, refractory SE, and super-refractory SE. Based on ESETT trial and NCC guidelines.',
       keywords: 'status epilepticus protocol, status epilepticus treatment algorithm, refractory status epilepticus, status epilepticus first line treatment, benzodiazepine status epilepticus, SE management pathway',
     },
@@ -361,6 +362,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     path: '/pathways/migraine-pathway',
     publishGate: true,
     published: true,
+    includeInSitemap: true,
     zone: 'reading',
     bottomNavTab: 'pathways',
     railItem: 'pathways',
@@ -574,7 +576,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     bottomNavTab: 'guide',
     railItem: 'guide',
     meta: {
-      title: 'Myasthenia Gravis — Diagnosis, Crisis, Treatment | NeuroWiki',
+      title: 'Myasthenia Gravis — Crisis & Treatment | NeuroWiki',
       description: 'Myasthenia gravis guide: pyridostigmine dosing, myasthenic crisis management, IVIG/plasmapheresis, thymectomy indications, and long-term immunosuppression.',
       keywords: 'myasthenia gravis treatment, myasthenic crisis management, MG pyridostigmine dosing, IVIG myasthenia gravis, myasthenia gravis thymectomy, acetylcholine receptor antibody MG',
     },
