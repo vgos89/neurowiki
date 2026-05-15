@@ -94,6 +94,15 @@ Every match that is not inside a code comment (`//`, `/* */`, `{/* */}`) require
 
 **Negative parallelism.** "Not X, not Y, but Z." This pattern is an AI signature. Use it once per file at most; prefer a direct positive statement.
 
+**"Not just X, but also Y" / "Not X, but Y" / "It's not X, it's Y".** Same family as negative parallelism, sharper individual signature. Every instance of any of these constructions needs to be flagged and either rewritten as a direct positive or split into two sentences. Examples to delete:
+- "Not a tool, but a system."
+- "Not just a reference, but a decision-support platform."
+- "It's not about lookup speed, it's about clinical safety."
+
+**"Despite its X, Y faces challenges."** A rigid formula-ending pattern AI uses to wrap an article. Every clause that opens with "Despite" or "While" followed by a positive descriptor and pivots to "challenges/limitations/concerns" should be rewritten as two plain sentences or cut entirely.
+
+**Title-as-proper-noun openings.** "**ECASS III Trial** refers to a randomized..." or "**WEAVE** is a single-arm post-market surveillance study that..." The bold-title-as-anchor opening is a wikipedia/AI tell. State the fact directly: "ECASS III randomized 821 patients..."
+
 **Inflated symbolism.** "NeuroWiki is more than a tool — it's a lifeline." Medical software copy does not need metaphors. State what the feature does.
 
 **Promotional language.** "Powerful," "seamless," "cutting-edge," "world-class," "game-changing." These are marketing words. NeuroWiki copy is clinical and matter-of-fact.
@@ -101,6 +110,21 @@ Every match that is not inside a code comment (`//`, `/* */`, `{/* */}`) require
 **Vague attributions.** "Studies show," "research suggests," "evidence indicates." Name the trial, name the year. If you cannot name it, do not cite it.
 
 **Overqualification.** "May potentially," "could possibly," "might consider." Pick one hedge or none. "May consider" is enough. "Might potentially want to consider" is AI.
+
+**Inflated formatting.** AI-generated content uses formatting as a substitute for clear writing. Specific tells:
+- **Boldface in mid-paragraph** for unimportant phrases ("In **this trial**, alteplase...")
+- **Inline-header lists** with boldfaced anchors (`• **Bedside**: ...` patterns). For NeuroWiki: pearls use plain sentences, not inline bold headers. The exception is the legacy `**Term:** description` pattern in some clinical reference cards — use colon, not em-dash, and only when the term is a real heading not a synonym.
+- **Excessive section headings** breaking up what should be one paragraph
+- **All-caps subheaders** in body copy
+- **Horizontal rules** (`---`) before every heading
+
+Native-formatted text in TSX (using JSX elements) is fine. The tells above apply to Markdown content (pearls, prose strings in data files, content authored for guide pages).
+
+**Speculative "Future Outlook" / "Implications" / "Looking Ahead" sections.** AI loves to wrap any article with a forward-looking paragraph speculating on "what this means going forward." NeuroWiki content does not do this. State what the evidence says, name the next trial in the chain if one is known by name, stop.
+
+**Trivial citations.** AI adds citations to uncontroversial statements ("Stroke is a leading cause of disability worldwide.[1]"). For NeuroWiki: citations are for specific clinical claims (thresholds, dosing, primary trial results, guideline COR/LOE), not for background facts.
+
+**Vague broader-trend claims.** "This marks a pivotal moment in the evolution of acute stroke care." Cut. State the specific change: "ATTENTION extended the EVT evidence base to basilar artery occlusion within 12 hours."
 
 ---
 
