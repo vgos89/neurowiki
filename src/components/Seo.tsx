@@ -5,6 +5,14 @@ import { getSchemaForRoute } from '../seo/schema';
 
 const JSON_LD_SCRIPT_ID = 'neurowiki-json-ld';
 
+// SEO B3 (2026-05-15): fallback social-share image used when a route does
+// not declare its own meta.image. Pathway/calculator pages intentionally
+// don't ship custom og:image assets (per V — "we can't add images to the
+// pathways, that will not look good"); they fall back to the branded
+// site-shell og-image.png so link previews still render a brand card
+// instead of a missing-image placeholder.
+const DEFAULT_OG_IMAGE = 'https://neurowiki.ai/og-image.png';
+
 const Seo: React.FC = () => {
   const location = useLocation();
 
@@ -47,13 +55,13 @@ const Seo: React.FC = () => {
     setMeta('og:title', meta.title, 'property');
     setMeta('og:description', meta.description, 'property');
     setMeta('og:url', canonicalUrl, 'property');
-    if (meta.image) setMeta('og:image', meta.image, 'property');
+    setMeta('og:image', meta.image || DEFAULT_OG_IMAGE, 'property');
 
     // Twitter
     setMeta('twitter:card', 'summary_large_image');
     setMeta('twitter:title', meta.title);
     setMeta('twitter:description', meta.description);
-    if (meta.image) setMeta('twitter:image', meta.image);
+    setMeta('twitter:image', meta.image || DEFAULT_OG_IMAGE);
 
     // JSON-LD structured data (MedicalWebPage, SoftwareApplication, Organization)
     let scriptJsonLd = document.getElementById(JSON_LD_SCRIPT_ID) as HTMLScriptElement | null;
