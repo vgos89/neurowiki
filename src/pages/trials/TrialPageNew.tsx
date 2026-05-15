@@ -401,10 +401,10 @@ const TrialPageNew: React.FC = () => {
               <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span>Back to Neuro Trials</span>
             </button>
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
               {catalogTrial.name}
               {catalogTrial.year > 0 ? <span className="ml-2 text-slate-400">({catalogTrial.year})</span> : null}
-            </h1>
+            </h2>
             <p className="text-slate-500 text-base">
               {categoryNames[safeCategory]}
             </p>
