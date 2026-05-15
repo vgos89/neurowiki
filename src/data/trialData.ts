@@ -4572,14 +4572,17 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'DEFUSE 3 Trial',
     subtitle: 'Thrombectomy for Ischemic Stroke (6-16 Hours)',
     category: 'Neuro Trials',
-    doi: '10.1056/NEJMoa1706442',
+    doi: '10.1056/NEJMoa1713973',
+    pmid: '29364767',
     primaryDesign: 'ordinal-shift',
     primaryResult: 'met',
     applicability: {
-      imagingSelection: 'CT or MR perfusion mismatch required (RAPID: core <70 mL, mismatch ratio ≥1.8, mismatch volume ≥15 mL)',
+      imagingSelection: 'CT or MR perfusion mismatch required (RAPID: core <70 mL, mismatch ratio ≥1.8, mismatch volume ≥15 mL); pre-stroke mRS 0–1; anterior LVO (ICA or M1)',
       populationExclusions: [
         '6–16h time window only — does not apply to early window (0-6h) or ultra-late window (>16h)',
-        'Stopped early for efficacy — effect size may be inflated',
+        'Stopped early for efficacy at pre-specified interim (n=182 of planned 476) — truncation bias may inflate effect size',
+        'Primary endpoint is the ordinal mRS distribution (common OR 2.77, 95% CI 1.63–4.70); the mRS 0–2 dichotomization (45% vs 17%) is a SECONDARY outcome — NNT 3.6 derived from this secondary must carry explicit labeling per clinical-trial-audit',
+        'Posterior circulation excluded; M2 occlusions enrolled only one patient — generalizability limited',
       ],
     },
     stats: {
@@ -4631,15 +4634,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       nntExplanation: 'For every 3.6 patients treated with thrombectomy in the 6-16 hour window, one additional patient achieves functional independence (mRS 0-2) compared to medical therapy alone'
     },
     pearls: [
-      'NNT: Number Needed to Treat (NNT) for one additional patient to be functionally independent was 3.6',
+      'Primary endpoint is the ordinal mRS distribution (common OR 2.77, 95% CI 1.63–4.70). NNT 3.6 is derived from the SECONDARY mRS 0–2 outcome (45% vs 17%); ordinal-shift primaries do not yield valid NNT per clinical-trial-audit',
       'Late window: Along with DAWN, DEFUSE-3 shifted selection from time-based to tissue-based; perfusion mismatch over clock',
-      'Selection Criteria: Infarct Core < 70 ml, Mismatch Ratio ≥ 1.8, Mismatch Volume ≥ 15 ml',
-      'Mortality Reduction: 14% in EVT group vs 26% in Control group (P=0.05)',
-      'Safety: No significant difference in symptomatic intracranial hemorrhage (sICH) or serious adverse events',
-      'Implementation: Requires automated perfusion software (e.g., RAPID) for standardized core/penumbra calculation'
+      'Selection Criteria: Infarct Core < 70 ml, Mismatch Ratio ≥ 1.8, Mismatch Volume ≥ 15 ml; pre-stroke mRS 0–1; ICA or M1 occlusion',
+      'Mortality Reduction: 14% in EVT group vs 26% in Control group (P=0.05) — secondary outcome, borderline significant',
+      'Safety: sICH 7% vs 4% (P=0.75) — no significant difference',
+      'Implementation: Requires automated perfusion software (e.g., RAPID) for standardized core/penumbra calculation',
+      'AHA/ASA 2026 §4.7.2 COR 1: EVT recommended for anterior LVO 6–24h with imaging selection (NIHSS ≥6, ASPECTS ≥3, age <80, prestroke mRS 0–1)'
     ],
     conclusion: '',
-    source: 'Albers et al. (NEJM 2018)',
+    source: 'Albers et al. (NEJM 2018;378(8):708–718)',
     clinicalTrialsId: 'NCT02586415',
     listCategory: 'thrombectomy',
     listDescription: 'Thrombectomy 6–16 hours with perfusion imaging selection.',
@@ -4654,15 +4658,18 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'DAWN Trial',
     subtitle: 'Thrombectomy for Ischemic Stroke (6-24 Hours)',
     category: 'Neuro Trials',
-    doi: '10.1056/NEJMoa1713973',
+    doi: '10.1056/NEJMoa1706442',
+    pmid: '29129157',
     primaryDesign: 'bayesian-superiority',
     primaryResult: 'met',
     applicability: {
-      imagingSelection: 'Clinical-imaging mismatch required by age strata (≥80y: NIHSS≥10 + core<21mL; <80y: NIHSS≥10 + core<31mL, or NIHSS≥20 + core<51mL)',
+      imagingSelection: 'Clinical-imaging mismatch required by age strata (≥80y: NIHSS≥10 + core<21mL; <80y: NIHSS≥10 + core<31mL, or NIHSS≥20 + core 31–<51mL)',
       populationExclusions: [
         'Trevo device only — results may not generalize to all retrieval systems',
         '6–24h last-known-well window — not applicable to patients with known onset <6h (use early-window evidence)',
-        'Stopped early for efficacy; Bayesian posterior probability of superiority >0.999 — not a frequentist p-value',
+        'Stopped early at 31 months for predictive probability of success ≥95% on first coprimary endpoint (utility-weighted mRS) — truncation bias likely',
+        'Bayesian design — superiority established by posterior probability >0.999, not a frequentist p-value. The second coprimary (mRS 0–2 binary, 49% vs 13%) was upgraded from secondary at FDA request 30 months into the trial while still blinded; no multiplicity adjustment',
+        'NNT 2.8 is derived from the binary coprimary (mRS 0–2). NNT not formally valid for Bayesian primaries; displayed with explicit posterior-probability annotation per existing renderer',
       ],
     },
     stats: {
@@ -4714,14 +4721,16 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       nntExplanation: 'For every 2.8 patients treated with thrombectomy in the 6-24 hour window, one additional patient achieves functional independence (mRS 0-2) compared to medical therapy alone - one of the strongest treatment effects in stroke history'
     },
     pearls: [
-      'MASSIVE BENEFIT: Absolute difference in functional independence was 36%, yielding NNT of 2.8 - one of the most potent effect sizes in stroke history',
-      'Probability of Superiority: >99.9%',
-      'Patient Selection: Relies heavily on age and NIHSS relative to core volume (Group A: Age ≥80, NIHSS ≥10, Core <21ml; Group B: Age <80, NIHSS ≥10, Core <31ml; Group C: Age <80, NIHSS ≥20, Core 31-50ml)',
-      'Wake-Up Strokes: Provided the first randomized evidence for treating patients with unknown onset time if physiology was favorable',
-      'Clinical-Core Mismatch: Unlike DEFUSE-3 which uses flat core/penumbra cutoff, DAWN uses age/NIHSS-adjusted criteria'
+      'MASSIVE BENEFIT: Absolute difference in mRS 0–2 functional independence was 36%, yielding derived NNT 2.8 — one of the largest effects in stroke history. The trial primary is utility-weighted mRS (Bayesian); the mRS 0–2 binary is the second coprimary',
+      'Probability of Superiority: >99.9% (Bayesian posterior, not a frequentist p-value)',
+      'Patient Selection: Age/NIHSS-adjusted clinical-core mismatch (Group A: Age ≥80, NIHSS ≥10, Core <21ml; Group B: Age <80, NIHSS ≥10, Core <31ml; Group C: Age <80, NIHSS ≥20, Core 31–<51ml)',
+      'Wake-Up Strokes: First randomized evidence for treating patients with unknown onset time if clinical-imaging mismatch is favorable',
+      'Clinical-Core Mismatch: Unlike DEFUSE-3 which uses flat core/penumbra cutoff, DAWN uses age/NIHSS-adjusted criteria',
+      'Stopped early at interim (31 mo, n=206 of planned 500) for predictive probability of success ≥95%',
+      'AHA/ASA 2026 §4.7.2 COR 1: EVT recommended for anterior LVO 6–24h with imaging selection — DAWN and DEFUSE-3 are foundational'
     ],
     conclusion: '',
-    source: 'Nogueira et al. (NEJM 2018)',
+    source: 'Nogueira et al. (NEJM 2018;378(1):11–21)',
     clinicalTrialsId: 'NCT02142283',
     listCategory: 'thrombectomy',
     listDescription: 'Thrombectomy 6–24 hours with clinical–imaging mismatch.',
