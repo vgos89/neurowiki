@@ -6926,11 +6926,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Minimally Invasive Surgical Evacuation of Intracerebral Hemorrhage',
     category: 'Neuro Trials',
     trialResult: 'POSITIVE',
+    primaryDesign: 'bayesian-superiority',
+    primaryResult: 'met',
     stats: {
       sampleSize: {
         value: '300',
         label: 'Randomized Patients',
-        info: 'Patients with lobar or anterior basal ganglia ICH (30–80 mL) within 24 hours. 37 US hospitals. Bayesian response-adaptive randomized design. Median age 61, 45% female.'
+        info: 'Patients with lobar or anterior basal ganglia ICH (30–80 mL) within 24 hours. 37 US hospitals. Bayesian response-adaptive randomized design. Final allocation: 150 surgery / 150 medical. Median age 64 (surgery) / 62 (control); female 48% (surgery) / 52% (control).'
       },
       primaryEndpoint: {
         value: 'UW-mRS',
@@ -6938,42 +6940,43 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         info: 'Utility-weighted mRS (UW-mRS) at 180 days. Weights mRS by quality-of-life utility: mRS 0=1.0, 1=0.91, 2=0.76, 3=0.65, 4=0.33, 5–6=0.0. Captures functional outcome AND mortality in one continuous score.'
       },
       pValue: {
-        value: '0.04',
-        label: 'Statistically Sig.',
-        info: 'p=0.04 (Bayesian posterior probability >0.97). FIRST positive randomized surgical ICH trial — overturns decades of negative evidence: STICH I (2005), STICH II (2013), MISTIE III (2019).',
+        value: 'P(sup)=0.981',
+        label: 'Bayesian posterior',
+        info: 'Bayesian posterior probability of superiority = 0.981 (prespecified threshold 0.975). No frequentist p-value reported in the primary analysis. FIRST randomized trial of supratentorial ICH evacuation to meet its prespecified primary endpoint — STICH I (2005), STICH II (2013), MISTIE III (2019) all neutral on functional outcome.',
         highlight: true
       },
       effectSize: {
         value: '0.458 vs 0.374',
         label: 'UW-mRS (surgery vs medical)',
-        info: 'UW-mRS difference 0.084. Most striking finding: 30-day mortality 9.3% (surgery) vs 18.0% (medical) — near-halving. NNT≈12 for 30-day mortality benefit.',
+        info: 'UW-mRS between-group difference +0.084 (95% Bayesian credible interval 0.005 to 0.163). 30-day mortality 9.3% (surgery) vs 18.0% (medical), ARD −8.7 pp (95% CrI −16.4 to −1.0), posterior P=0.987.',
         highlight: true
       }
     },
     trialDesign: {
       type: [
         'Multicenter Bayesian response-adaptive randomized trial',
-        '37 US hospitals (2017–2023)',
+        '37 US hospitals (Dec 2016 – Aug 2022)',
         'MIPS — trans-sulcal parafascicular approach',
-        'BrainPath® + Myriad® (NICO Corporation)',
-        'Surgery within 24 hours of last known well'
+        'BrainPath® + Myriad® (NICO Corporation — industry-funded)',
+        'Surgery within 24 hours of last known well',
+        'Anterior basal ganglia subgroup halted for futility at interim 2'
       ],
-      timeline: 'Enrolled 2017–2023; published NEJM April 2024',
+      timeline: 'Enrolled Dec 1, 2016 – Aug 24, 2022; published NEJM April 2024',
       sampleSize: {
         value: '300 patients (adaptive design)',
-        info: 'Bayesian adaptive design: allocation ratio adjusted by interim results. Final: 152 surgery, 148 medical. Adaptive design maintains validity with smaller n than traditional RCTs.'
+        info: 'Bayesian adaptive design: allocation ratio adjusted by interim results. Final: 150 surgery, 150 medical. Adaptive design maintains validity with smaller n than traditional RCTs.'
       },
       primaryEndpoint: {
         value: 'UW-mRS at 180 days',
         info: 'Quality-adjusted functional survival at 180 days using utility weights from the general population.'
       },
       pValue: {
-        value: 'UW-mRS difference 0.084 (95% CI 0.005–0.163), p=0.04',
-        info: 'Bayesian posterior >0.97; frequentist p=0.04. Confirms statistical significance despite small n.'
+        value: 'UW-mRS difference +0.084 (95% Bayesian CrI 0.005–0.163); posterior P(superiority)=0.981',
+        info: 'Bayesian posterior probability of superiority exceeded the prespecified threshold of 0.975. No frequentist p-value reported.'
       },
       nnt: {
-        value: '~12',
-        info: 'NNT≈12 for 30-day mortality: 18.0% vs 9.3% = 8.7% absolute reduction. Every 12 patients treated with MIPS prevents one death at 30 days.'
+        value: '~12 (safety endpoint only)',
+        info: 'Derived from 30-day mortality 18.0% vs 9.3% (ARD 8.7 pp). NNT not formally valid for Bayesian designs and is here from the PRIMARY SAFETY endpoint, not the primary efficacy endpoint. Per clinical-trial-audit skill: display only with explicit "safety-endpoint approximate" label.'
       }
     },
     efficacyResults: {
@@ -7015,38 +7018,42 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalContext: 'ICH carries ~30–40% 30-day mortality and only ~20% functional independence at 1 year. Prior surgical trials consistently failed: STICH I (2005), STICH II (2013), and MISTIE III (2019) all showed no benefit, largely due to open craniotomy trauma and non-selective patient selection. ENRICH tested MIPS, which avoids crossing brain parenchyma via natural sulcal corridors, in a tightly selected population: lobar or anterior basal ganglia ICH (30–80 mL) only, avoiding the deep and posterior fossa regions where surgical risk is highest.',
     calculations: {
       nnt: 12,
-      nntExplanation: 'NNT≈12 for 30-day mortality: 18.0% vs 9.3% = 8.7% absolute reduction. For every 12 MIPS-eligible patients treated surgically, one death is prevented at 30 days.'
+      nntExplanation: 'NNT≈12 is approximate, derived from the primary SAFETY endpoint (30-day mortality 18.0% vs 9.3%, ARD 8.7 pp). Per clinical-trial-audit, NNT is not formally valid for Bayesian designs nor for safety endpoints used as efficacy framing. Displayed for audience reference only with this disclaimer.'
     },
     pearls: [
-      'FIRST positive randomized surgical ICH trial; overturns STICH I (2005), STICH II (2013), MISTIE III (2019)',
-      '30-day mortality: 9.3% (surgery) vs 18.0% (medical); NNT≈12, near-halving of early mortality',
-      'Primary benefit driven by LOBAR ICH; anterior basal ganglia subgroup showed less robust benefit',
-      'UW-mRS at 180d: 0.458 (surgery) vs 0.374 (medical), a meaningful quality-adjusted improvement',
-      'MIPS trans-sulcal approach avoids cortical transgression; key advantage vs open craniotomy',
-      'Requires BrainPath + Myriad devices (NICO Corporation); not universally available; needs training',
+      'First randomized trial of supratentorial ICH evacuation to meet its prespecified primary endpoint — STICH I (2005), STICH II (2013), and MISTIE III (2019) were all neutral on functional outcome. Avoid "halves mortality" overclaim',
+      '30-day mortality: 9.3% (surgery) vs 18.0% (medical); ARD −8.7 pp (95% Bayesian CrI −16.4 to −1.0), posterior P=0.987. Per audit skill, NNT 12 derived here is approximate and from a safety endpoint',
+      'Primary benefit was in LOBAR ICH (+0.127 UW-mRS, 95% CrI 0.035–0.219); anterior basal ganglia subgroup was halted for futility at interim 2 (point estimate −0.013, CrI crossing zero) — no benefit demonstrated in that location',
+      'UW-mRS at 180d: 0.458 (surgery) vs 0.374 (medical), between-group +0.084 (95% CrI 0.005–0.163), posterior P(superiority)=0.981',
+      'MIPS trans-sulcal parafascicular approach avoids cortical transgression; key advantage vs open craniotomy',
+      'Requires BrainPath® + Myriad® devices (NICO Corporation — industry funder); 59 trained neurosurgeons across 37 US centers; needs manufacturer training. Generalizability outside trained centers is unestablished',
       'Eligibility: LOBAR or ANTERIOR BASAL GANGLIA ICH only, volume 30–80 mL, within 24 hours',
       'NOT applicable to: deep (thalamic/putaminal) ICH, posterior fossa ICH, brainstem ICH',
       'NOT applicable to: volume <30 mL (less severe) or >80 mL (typically non-survivable)',
-      'Bayesian adaptive design; statistically valid but smaller n than traditional RCTs',
-      'Published: Hanley DF, et al. N Engl J Med. 2024;390(14):1277–1289. DOI: 10.1056/NEJMoa2308440'
+      'Bayesian adaptive design — superiority established by posterior probability, not a frequentist p-value. No frequentist p was reported in the primary analysis',
+      'Per AHA/ASA 2022 ICH Guideline: minimally invasive surgery may be considered (Class IIb) — ENRICH is the first positive RCT; guideline may update with future focused review',
+      'Published: Pradilla G, Ratcliff JJ, Hall AJ, et al. N Engl J Med. 2024;390(14):1277–1289. DOI: 10.1056/NEJMoa2308440'
     ],
     conclusion: '',
-    source: 'Hanley DF, et al. (NEJM 2024)',
+    source: 'Pradilla G, et al. (NEJM 2024)',
     doi: '10.1056/NEJMoa2308440',
     pmid: '38598795',
     clinicalTrialsId: 'NCT02880878',
-    keyMessage: 'Lobar/anterior basal ganglia ICH 30–80 mL within 24h: MIPS surgery halves 30-day mortality (NNT≈12) and improves 180-day outcomes. Requires BrainPath+Myriad and trained neurosurgical team.',
+    keyMessage: 'Lobar (or selected anterior basal ganglia) ICH 30–80 mL within 24h: MIPS reduces 30-day mortality (9.3% vs 18.0%) and improves 180-day UW-mRS (Bayesian P>0.98). Requires BrainPath+Myriad and trained neurosurgical team. Anterior basal ganglia subgroup was halted for futility — benefit is in lobar ICH.',
     limitations: [
-      'Small n=300 (adaptive) — subgroup analyses underpowered; lobar vs anterior BG results uncertain',
-      'BrainPath + Myriad system required — specialty equipment not universally available',
+      'Small n=300 (adaptive) — subgroup analyses underpowered',
+      'Anterior basal ganglia subgroup halted for futility at interim 2 — no benefit in that location; benefit concentrated in LOBAR ICH',
+      'BrainPath + Myriad system required — specialty equipment not universally available; 59 trained neurosurgeons across 37 US centers',
+      'Industry-funded by NICO Corporation (device manufacturer)',
       'US-only trial — generalizability to other healthcare systems uncertain',
-      'Open-label — impossible to blind surgical intervention',
+      'Open-label — mitigated by central blinded mRS adjudication via redacted audio recordings of structured interviews',
       'Adaptive randomization ratio changed over time — potential allocation bias',
       'Does not address deep ICH (thalamus/putamen), posterior fossa, or volumes outside 30–80 mL',
-      'Longer-term outcomes (>180 days) not reported'
+      'Longer-term outcomes (>180 days) not reported',
+      'UW-mRS endpoint not specifically validated for ICH (population utility weights)'
     ],
     listCategory: 'acute',
-    listDescription: 'First positive surgical ICH trial; MIPS halves 30-day mortality (9.3% vs 18.0%). NEJM 2024.',
+    listDescription: 'First positive randomized minimally-invasive surgical ICH trial; 30-day mortality 9.3% vs 18.0% (Bayesian P>0.98). NEJM 2024.',
   },
   'b-proud-trial': {
     id: 'b-proud-trial',
