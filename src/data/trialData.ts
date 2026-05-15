@@ -326,6 +326,23 @@ export interface TrialMetadata {
    *   harmSignal   → one-line inline annotation rendered with the result card (this field, Batch 3+)
    */
   harmSignal?: string;
+  /**
+   * Design-quality disclaimer per TRIALS_SPEC §1.6. Standardized amber callout surfaced
+   * above the primary visualization for trials whose design weakens the strength of any
+   * conclusion drawn from the primary endpoint — quasi-experimental, single-arm vs
+   * historical, high-crossover, stopped-early-for-efficacy/futility, or other open-label
+   * adjudication of subjective endpoints. Authored by medical-scientist; gated by
+   * clinical-reviewer on Class E rebuilds. Wording sourced from the trial publication's
+   * Methods or Limitations section.
+   *
+   * UI rendering of this callout is a separate ui-architect task; this field carries the
+   * data so the wording is registered now and ready when the visual treatment lands.
+   */
+  designDisclaimer?: {
+    category: 'quasi-experimental' | 'single-arm-vs-historical' | 'high-crossover' | 'stopped-early-efficacy' | 'stopped-early-futility' | 'other';
+    text: string;  // 1–2 sentences, ≤220 chars
+    source?: string;  // citation pointer if paraphrased; required if category === 'other'
+  };
   /** Applicability context. Surfaces patient-selection and generalizability constraints for bedside use. */
   applicability?: {
     /** Populations or scenarios this trial explicitly does NOT apply to. One string per exclusion. */
@@ -7060,6 +7077,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'B_PROUD Trial',
     subtitle: 'Mobile Stroke Unit Dispatch vs Conventional Ambulance in Berlin',
     category: 'Neuro Trials',
+    doi: '10.1001/jama.2020.26345',
+    pmid: '33528537',
+    clinicalTrialsId: 'NCT03027453',
+    primaryDesign: 'estimation-strategy',
+    designDisclaimer: {
+      category: 'quasi-experimental',
+      text: 'Allocation was by mobile-stroke-unit availability, not patient-level randomization. Outcome adjudication was blinded but patients and clinicians were not. Treatment effect may include unmeasured site-level confounding.',
+      source: 'Ebinger 2021 Methods + Limitations (JAMA 2021;325(5):454–466)'
+    },
     stats: {
       sampleSize: {
         value: '1543',
@@ -7080,11 +7106,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     trialDesign: {
       type: [
-        'Prospective, nonrandomized controlled intervention study',
+        'Prospective, nonrandomized controlled intervention study (quasi-experimental)',
+        'Allocation by MSU availability — not patient-level randomization',
         'MSU dispatch plus ambulance vs conventional ambulance alone',
-        'Pragmatic Berlin stroke system evaluation'
+        'Pragmatic Berlin stroke system evaluation (3 MSU base stations, 24/7 staffing, paramedic + radiology tech + emergency neurologist)'
       ],
-      timeline: 'Berlin, Germany; February 2017 to May 2019'
+      timeline: 'Berlin, Germany; February 1, 2017 to October 30, 2019 (final inclusion target reached May 8, 2019)'
     },
     efficacyResults: {
       treatment: {
@@ -7102,23 +7129,39 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Simultaneous dispatch of a mobile stroke unit with on-board CT, laboratory testing, and thrombolysis capability plus conventional ambulance',
       control: 'Conventional ambulance transport to hospital stroke unit'
     },
-    clinicalContext: 'Prehospital thrombolysis is highly time dependent, but prior MSU studies had focused mainly on process metrics. B_PROUD asked the more important clinical question: does dispatching an MSU actually improve 90-day disability outcomes for patients with acute ischemic stroke in a real urban stroke system?',
+    clinicalContext: 'Prehospital thrombolysis is highly time dependent, but prior MSU studies had focused mainly on process metrics. B_PROUD asked whether dispatching an MSU improves 90-day disability outcomes for patients with acute ischemic stroke in a real urban stroke system. Note: this is a prospective observational cohort with natural-experiment allocation (MSU availability), not a randomized trial — the strongest reading is association, not causation.',
     calculations: {
-      nnt: 43.5,
-      nntExplanation: 'Using the coprimary dichotomized disability outcome (80.3% vs 78.0%), about 44 patients would need MSU dispatch for one additional patient to be alive at home or with mRS 0-3 at 90 days. This underestimates the full benefit because the primary analysis used ordinal mRS shift.'
+      // NNT suppressed per clinical-trial-audit skill rules: observational/quasi-experimental
+      // designs do not yield valid NNT because confounding prevents causal ARD interpretation.
+      // Prior value (43.5) was derived from the coprimary dichotomized disability outcome;
+      // retaining it would imply a causal estimate the underlying study cannot support.
+      nntExplanation: 'NNT is not displayed for B_PROUD. The study uses a quasi-experimental design (allocation by MSU availability rather than patient-level randomization); per clinical-trial-audit skill, NNT is not allowed for non-randomized comparisons because residual confounding prevents causal absolute-risk-difference interpretation. The primary analysis used an ordinal mRS shift (common OR 0.71, 95% CI 0.58–0.86, P<0.001) which is the appropriate effect-size summary.'
     },
     pearls: [
-      'Primary analysis showed a favorable ordinal shift in disability with MSU dispatch: common OR 0.71 for worse mRS',
+      'Primary analysis was an ordinal shift in disability with MSU dispatch: common OR 0.71 (95% CI 0.58–0.86, P<0.001) for worse mRS',
       'Median 90-day mRS was 1 with MSU dispatch vs 2 with conventional ambulance',
-      'MSU dispatch increased thrombolysis use: 60.2% vs 48.1%',
-      'Dispatch-to-imaging time improved by about 15 minutes, reinforcing that workflow gains translate into patient-centered outcomes',
-      'Symptomatic secondary intracranial hemorrhage was similar between groups: 3.2% vs 2.8%',
-      'Because this was not randomized, system-level confounding cannot be completely excluded despite adjustment'
+      'MSU dispatch increased thrombolysis use: 60.2% vs 48.1% (adjusted OR 1.62, P<0.001); dispatch-to-tPA shortened by ~26 min',
+      'Dispatch-to-imaging time improved by about 15 minutes; tPA within 60 min of onset 12.8% vs 4.0% (adj OR 2.96)',
+      'Symptomatic secondary intracranial hemorrhage was similar: 3.2% vs 2.8% (adj OR 1.20, 95% CI 0.66–2.19) — no safety penalty',
+      'Quasi-experimental allocation (by MSU availability) — not randomized. Treatment effect may include unmeasured site-level confounding despite adjustment',
+      'Berlin-specific MSU infrastructure (3 base stations, daytime-only 7am–11pm, paramedic + radiology tech + neurologist on board) — generalizability to other systems uncertain',
+      'AHA/ASA 2026 §2.5 COR 1: "In patients with suspected AIS, the use of MSUs over conventional EMS where available is recommended for the transport and management of thrombolytic-eligible patients to ensure the fastest achievable onset-to-treatment time"',
+      'Companion trial: BEST-MSU (Grotta 2021, US, alternating-week cluster) — same direction of effect, different allocation mechanism'
     ],
     conclusion: '',
-    source: 'Ebinger M, et al. (JAMA 2020)',
-    doi: '10.1001/jama.2020.26345',
+    source: 'Ebinger M, et al. (JAMA 2021;325(5):454–466)',
     trialResult: 'POSITIVE',
+    applicability: {
+      geography: 'Berlin, Germany — daytime-only operating hours (7am–11pm); 3 MSU base stations across 3.8 million population. Berlin Fire Brigade EMS dispatch system.',
+      populationExclusions: [
+        'Allocation was by MSU availability, NOT patient-level randomization — association rather than causation. Treatment effect may include unmeasured site-level confounding despite multivariable adjustment.',
+        'Berlin-specific MSU infrastructure (paramedic + radiology tech + emergency neurologist on board, point-of-care CT + labs + thrombolysis capability). Generalizability to systems without this infrastructure is uncertain.',
+        'Daytime-only operating hours (7am–11pm) — overnight strokes not represented.',
+        'Stroke mimics excluded by design — analysis is in patients with final diagnosis of acute ischemic stroke or TIA.',
+        'Median NIHSS 4 — lower-severity cohort than typical US ED stroke; effect estimate may not transfer 1:1 to higher-severity populations.',
+        'Workflow takeaways (dispatch-to-tPA reduction, increased thrombolysis use, treatment within 60 min of onset) are more transferable than absolute effect estimates.',
+      ],
+    },
     safetyProfile: {
       sICH: {
         evt: 3.2,
