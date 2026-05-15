@@ -53,8 +53,11 @@ export const MobileBottomNav: React.FC = () => {
 
   return (
     <nav
-      className="md:hidden h-[60px] bg-white border-t border-slate-100 flex fixed bottom-0 left-0 right-0 z-40"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+      className="md:hidden bg-white border-t border-slate-100 flex fixed bottom-0 left-0 right-0 z-40"
+      style={{
+        height: 'calc(60px + env(safe-area-inset-bottom, 0px))',
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+      }}
       role="navigation"
       aria-label="Main"
     >
