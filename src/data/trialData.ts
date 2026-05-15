@@ -469,7 +469,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     primaryResult: 'noninferiority-established',
     applicability: {
       geography: 'China (domestic rhTNK-tPA formulation — not equivalent to international tenecteplase brands)',
-      populationExclusions: ['Direct comparison to international tenecteplase products (different formulation)'],
+      populationExclusions: [
+        'Direct comparison to international tenecteplase products (different formulation)',
+        'Chinese cohort only — lower baseline severity (median NIHSS 6) than AcT (Canada, median ~9–10); ~41% NIHSS <6 (mild predominance)',
+        'Open-label, blinded-endpoint (PROBE) design — not double-blind',
+        'Noninferiority design — NNT is not the primary framing; do not derive NNT from RR 1.03',
+      ],
     },
     trialResult: 'POSITIVE',
     stats: {
@@ -527,7 +532,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Single-bolus advantage: Tenecteplase eliminates the 60-minute IV infusion pump requirement, a practical benefit for drip-and-ship and inter-hospital transfer',
       'Population: Chinese patients with AIS, NIHSS 1–25, treated within 4.5h; 30.4% female; mean age ~65',
       'Alongside AcT (Canada 2022) and NOR-TEST 2 (Norway), this trial provides the multi-ethnic evidence base for AHA/ASA 2026 COR 1 equivalence',
-      'Published: JAMA 2024; 332(17):1437–1445. DOI: 10.1001/jama.2024.14721'
+      'AHA/ASA 2026 §4.6.2: COR 1 — "tenecteplase at a dose of 0.25 mg/kg (max 25 mg) OR alteplase at a dose of 0.9 mg/kg is recommended" (equivalent first-line alternatives within 4.5h)',
+      'Published: JAMA 2024;332(17):1437–1445. Online Sept 12, 2024; print Nov 5, 2024. DOI: 10.1001/jama.2024.14721'
     ],
     conclusion: '',
     source: 'Meng X et al. (JAMA 2024)',
