@@ -1503,6 +1503,87 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── SAMMPRIS: W8.2-followup Archetype A rebuild (HARM-stopped) ──────────
+  if (trialId === 'sammpris-trial' && trialMetadata) {
+    const isHarm = trialMetadata.trialResult === 'HARM';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>SAMMPRIS</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: isHarm ? '#7f1d1d' : '#1e293b' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with symptomatic 70–99% intracranial atherosclerotic stenosis within 30 days of qualifying TIA or stroke, does percutaneous transluminal angioplasty + Wingspan stenting plus aggressive medical management reduce 30-day stroke/death compared with aggressive medical management alone? (Stopped early by DSMB for harm + futility.)
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+            </div>
+            <div className="p-4">
+              <div className="mb-3 rounded-lg bg-red-50 border border-red-200 px-3 py-2">
+                <p className="text-xs text-red-800 leading-relaxed">
+                  <strong>STOPPED FOR HARM:</strong> DSMB halted SAMMPRIS at 451 of 764 planned patients due to excess 30-day stroke/death in the stenting arm (14.7% vs 5.8%, P=0.002). Periprocedural events drove the harm — 25 of 33 PTAS strokes occurred within 24 hours of the procedure. sICH 4.5% vs 0%. Result is specific to Wingspan as INITIAL therapy in this population; on-label salvage use (WEAVE registry) showed acceptable safety.
+                </p>
+              </div>
+              <DeltaBandChart
+                treatmentPct={14.7}
+                controlPct={5.8}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Stroke/death within 30 Days"
+                riskRatio="ARR +8.9pp"
+                ciLow="3.4"
+                ciHigh="14.4"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm="control"
+              />
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '451 patients at 50 US sites. Enrolled Nov 2008 – Apr 2011 (halted by DSMB). Gateway PTA balloon + Wingspan self-expanding stent (Stryker Neurovascular). Published NEJM 2011. Erratum 2012 (procedural bookkeeping only; no statistical change).')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#FEF2F2', borderLeft: '3px solid #b91c1c', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-red-700 mb-2">Bedside Pearl</p>
+              <p className="text-sm text-red-900 leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/weave-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">WEAVE (on-label registry)</Link>
+              <Link to="/calculators/has-bled-score" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">HAS-BLED</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="SAMMPRIS" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'WEAVE (on-label registry)', href: '/trials/weave-trial' }, { label: 'HAS-BLED', href: '/calculators/has-bled-score' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
   // ── ESCAPE-MeVO: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ─────────────
   if (trialId === 'escape-mevo-trial' && trialMetadata) {
     const isPositive = trialMetadata.trialResult === 'POSITIVE';

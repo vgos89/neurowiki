@@ -5903,8 +5903,40 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'SAMMPRIS Trial',
     subtitle: 'ICAD Stenting vs Medical',
     category: 'Neuro Trials',
+    archetypeId: 'A',
+    trialResult: 'HARM',
     doi: '10.1056/NEJMoa1105335',
     pmid: '21899409',
+    inclusionCriteria: [
+      'Recent (≤30 days) TIA or non-disabling ischemic stroke',
+      '70–99% angiographically verified stenosis of a major intracranial artery',
+      'Aggressive medical management eligibility',
+      'Symptomatic ICAS in the target territory',
+    ],
+    exclusionCriteria: [
+      'Asymptomatic intracranial stenosis',
+      'Disabling stroke (mRS >3)',
+      'Recent surgery or hemorrhagic disorder',
+      'Hemodynamic-failure selection (separate evidence base)',
+      'Post-AMM failure (salvage stenting — addressed by WEAVE on-label registry)',
+    ],
+    safetyProfile: {
+      sICH: {
+        evt: 4.5,
+        control: 0,
+        label: 'Symptomatic ICH ≤30 days (DOMINANT HARM)',
+        tooltip: '10/224 PTAS vs 0/227 AMM (P=0.04, Fisher exact). Of 33 strokes in PTAS within 30 days, 25 (76%) occurred within 1 day of the procedure.',
+        color: 'danger',
+      },
+      mortality: {
+        evt: 3.1,
+        control: 3.1,
+        label: 'Death (full follow-up)',
+        tooltip: '7/224 PTAS vs 7/227 AMM. Death rates similar overall; the harm signal is in stroke morbidity, not mortality.',
+      },
+    },
+    bedsidePearl: 'Wingspan stenting as INITIAL therapy for symptomatic ICAS 70–99% within 30 days of TIA/stroke is harmful (14.7% vs 5.8% 30-day stroke/death). AHA/ASA 2021 Class III. Aggressive medical management (DAPT 90d + high-intensity statin + SBP <140) is first-line. Reserve stenting for documented AMM failure (see WEAVE on-label registry context).',
+    bottomLineSummary: 'SAMMPRIS halted early for harm: 30-day stroke/death 14.7% (PTAS+AMM) vs 5.8% (AMM alone), P=0.002. 1-year: 20.0% vs 12.2% (P=0.009). Periprocedural events drove the harm — 25 of 33 PTAS strokes within 24h. sICH 4.5% vs 0%. AHA/ASA 2021 Class III for Wingspan as initial therapy; Class I for AMM. Does NOT apply to asymptomatic ICAS or post-AMM-failure salvage.',
     stats: {
       sampleSize: {
         value: '451',
