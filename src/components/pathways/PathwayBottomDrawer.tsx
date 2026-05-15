@@ -1,56 +1,89 @@
 /**
- * PathwayBottomDrawer — persistent interpretation drawer at the bottom of a
- * pathway page. Pattern forked from src/components/trials/BottomLineDrawer.tsx,
- * adapted for live clinical-interpretation content (updates as the user fills
- * out the pathway form, rather than showing a static trial summary).
+ * PathwayBottomDrawer — thin pathway wrapper around CalculatorDrawer.
  *
- * Canary deployment: EvtPathway (V reassigned 2026-05-15 after the GCA
- * pathway was retired as a non-validated tool). Migration order revised:
+ * Composes (does not fork) the calculator drawer pattern from
+ * src/components/calculators/CalculatorDrawer.tsx per CALCULATOR_SPEC v1.1 §5
+ * and the design-tokens skill. State A / B / C semantics, portal positioning,
+ * severity-colored chrome, shadow constants, and chevron component are all
+ * reused from the calculator system — the only thing this wrapper adds is the
+ * tier→severity-tokens map and the pathway-specific DrawerContent renderer.
+ *
+ * Canary deployment: EvtPathway (reassigned from GCA on 2026-05-15 after the
+ * GCA pathway was retired as non-validated). Migration order:
  *   EVT → ExtendedIVT → ELAN → SE → Migraine.
- *
- * State machine (simplified vs BottomLineDrawer):
- *   collapsed — handle bar + tier badge + one-line action (default)
- *   expanded  — full reasons + notes + action
- *
- * Position: fixed, bottom = calc(var(--tab-bar-height) + safe-area-inset-bottom).
- * z-index: 55 (matches BottomLineDrawer; lifts FeedbackButton via published
- * drawer floor height — see FeedbackButton.tsx fix 3).
  */
 
-import React, { useState, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import React from 'react';
+import { CalculatorDrawer } from '../calculators/CalculatorDrawer';
+import type { SeverityTokens } from '../../lib/calculators/severityTokens';
 
 export type PathwayTier = 'Low' | 'Intermediate' | 'High' | 'Negative' | 'None';
 
 export interface PathwayBottomDrawerProps {
-  /** Short pathway name shown in the collapsed handle. */
+  /** Short pathway name shown in the collapsed handle (e.g. "EVT"). */
   pathwayName: string;
-  /** Current interpretation tier. Drives badge color and (by default) label. */
+  /** Current interpretation tier. Drives severity-token selection (color). */
   tier: PathwayTier;
   /**
-   * Optional badge label override. Use when the pathway's verdict vocabulary
-   * does not map to Low/Intermediate/High (e.g. EVT uses Eligible / Consult /
-   * Avoid). The tier prop still drives color; this prop drives the rendered
-   * text only.
+   * Optional badge/stat label override. Used when the pathway's verdict
+   * vocabulary does not map cleanly to Low/Intermediate/High (e.g. EVT uses
+   * Eligible / Consult / Avoid). Rendered in the drawer header next to the
+   * eyebrow. Defaults to the tier name.
    */
   tierLabel?: string;
-  /** One-line action sentence shown in collapsed state. */
+  /** One-line action sentence shown after the tier label in the collapsed header. */
   action: string;
-  /** Optional list of contributing reasons, shown in expanded state. */
+  /** Optional list of contributing reasons, shown in the expanded body. */
   reasons?: { label: string; points?: number }[];
-  /** Optional notes/cautions, shown in expanded state. */
+  /** Optional notes/cautions, shown in the expanded body. */
   notes?: string[];
-  /** Optional brief shown above the action when expanded. */
+  /** Optional summary paragraph shown above reasons/notes when expanded. */
   expandedSummary?: string;
+  /**
+   * Optional eyebrow label override. Defaults to "Interpretation" to match
+   * the calculator drawer's default.
+   */
+  collapsedLabel?: string;
 }
 
-const TIER_BADGE: Record<PathwayTier, { bg: string; color: string; border: string }> = {
-  High: { bg: '#FEF2F2', color: '#991b1b', border: '#fca5a5' },
-  Intermediate: { bg: '#FFFBEB', color: '#92400e', border: '#fcd34d' },
-  Low: { bg: '#EEF2FF', color: '#1746A2', border: '#c7d2fe' },
-  Negative: { bg: '#F8FAFC', color: '#64748b', border: '#e2e8f0' },
-  None: { bg: '#F8FAFC', color: '#64748b', border: '#e2e8f0' },
+/**
+ * Map pathway tier to calculator SeverityTokens. Same shape as ABCD²/ICH/etc.
+ * so the visual chrome (border, header bg + hover, label + stat color, chevron)
+ * is identical to a tier-colored calculator drawer.
+ */
+const TIER_TOKENS: Record<Exclude<PathwayTier, 'None'>, SeverityTokens> = {
+  Low: {
+    borderColor: '#c7d2fe',         // neuro-200
+    headerBg: 'bg-neuro-50',
+    headerHover: 'hover:bg-neuro-100',
+    labelClass: 'text-[10px] font-bold text-neuro-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-neuro-700',
+    chevronClass: 'text-neuro-600',
+  },
+  Intermediate: {
+    borderColor: '#fcd34d',         // amber-300
+    headerBg: 'bg-amber-50',
+    headerHover: 'hover:bg-amber-100',
+    labelClass: 'text-[10px] font-bold text-amber-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-amber-700',
+    chevronClass: 'text-amber-700',
+  },
+  High: {
+    borderColor: '#fca5a5',         // red-300
+    headerBg: 'bg-red-50',
+    headerHover: 'hover:bg-red-100',
+    labelClass: 'text-[10px] font-bold text-red-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-red-700',
+    chevronClass: 'text-red-600',
+  },
+  Negative: {
+    borderColor: '#e2e8f0',         // slate-200
+    headerBg: 'bg-white',
+    headerHover: 'hover:bg-slate-50',
+    labelClass: 'text-[10px] font-bold text-slate-400 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-slate-900',
+    chevronClass: 'text-slate-400',
+  },
 };
 
 export const PathwayBottomDrawer: React.FC<PathwayBottomDrawerProps> = ({
@@ -61,113 +94,113 @@ export const PathwayBottomDrawer: React.FC<PathwayBottomDrawerProps> = ({
   reasons,
   notes,
   expandedSummary,
+  collapsedLabel = 'Interpretation',
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const drawerRef = useRef<HTMLDivElement>(null);
+  const [isExpanded, setIsExpanded] = React.useState(false);
 
-  // Publish drawer floor height so FeedbackButton lifts above it (same pattern
-  // as BottomLineDrawer.tsx fix 3 and CalculatorDrawer).
-  useEffect(() => {
-    const el = drawerRef.current;
-    if (!el) return;
-    const setHeight = () => {
-      const h = el.getBoundingClientRect().height;
-      document.documentElement.style.setProperty('--drawer-floor-height', `${h}px`);
-    };
-    setHeight();
-    const ro = new ResizeObserver(setHeight);
-    ro.observe(el);
-    return () => {
-      ro.disconnect();
-      document.documentElement.style.setProperty('--drawer-floor-height', '0px');
-    };
-  }, []);
+  // State A (no result) is handled by the parent passing tier='None' AND
+  // empty action. State C (tappable) requires tokens. Fall back to slate.
+  const tokens: SeverityTokens | null =
+    tier === 'None' ? null : TIER_TOKENS[tier];
 
-  const badge = TIER_BADGE[tier];
-  const isNeutralTier = tier === 'None' || tier === 'Negative';
+  // Collapsed stat string: "<tierLabel> · <action>"
+  const labelText = tierLabel ?? (tier === 'None' ? '—' : tier);
+  const collapsedStat = action
+    ? `${labelText} · ${action}`
+    : labelText;
 
-  const drawer = (
-    <div
-      ref={drawerRef}
-      role="region"
-      aria-label={`${pathwayName} live interpretation`}
-      className="fixed left-0 right-0 z-[55] bg-white border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]"
-      style={{ bottom: `calc(var(--tab-bar-height, 60px) + env(safe-area-inset-bottom, 0px))` }}
+  // CalculatorDrawer takes care of portal, positioning, shadows, chevron,
+  // and the State A / B / C anatomy. We hand it tokens + the collapsed
+  // stat + the expanded DrawerContent.
+  return (
+    <CalculatorDrawer
+      state={tier === 'None' ? 'A' : 'C'}
+      tokens={tokens}
+      isExpanded={isExpanded}
+      onToggle={() => setIsExpanded((open) => !open)}
+      ariaContentId={`${pathwayName.toLowerCase()}-pathway-drawer-content`}
+      ariaLabel={`${pathwayName} interpretation drawer`}
+      stateAText={{ label: 'Waiting for inputs', hint: pathwayName }}
+      collapsedLabel={collapsedLabel}
+      collapsedStat={collapsedStat}
     >
-      {/* Handle / collapsed row */}
-      <button
-        type="button"
-        onClick={() => setIsOpen((o) => !o)}
-        aria-expanded={isOpen}
-        aria-controls="pathway-drawer-body"
-        className="w-full px-4 py-3 flex items-center gap-3 text-left hover:bg-slate-50 transition-colors"
-      >
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <span
-            className="text-[11px] font-semibold uppercase tracking-widest rounded-full px-2 py-0.5"
-            style={{ background: badge.bg, color: badge.color, border: `1px solid ${badge.border}` }}
-          >
-            {tierLabel ?? (tier === 'None' ? '—' : tier)}
-          </span>
-          <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 hidden sm:inline">
-            {pathwayName}
-          </span>
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className={`text-[13.5px] leading-snug truncate ${isNeutralTier ? 'text-slate-500' : 'text-slate-700 font-medium'}`}>
-            {action}
-          </p>
-        </div>
-        <div className="flex-shrink-0 text-slate-400">
-          {isOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
-        </div>
-      </button>
+      <PathwayDrawerContent
+        pathwayName={pathwayName}
+        reasons={reasons}
+        notes={notes}
+        expandedSummary={expandedSummary}
+      />
+    </CalculatorDrawer>
+  );
+};
 
-      {/* Expanded body */}
-      {isOpen && (
-        <div
-          id="pathway-drawer-body"
-          className="px-4 pb-4 max-h-[40vh] overflow-y-auto border-t border-slate-100"
-        >
-          {expandedSummary && (
-            <p className="mt-3 text-[13px] text-slate-600 leading-relaxed">{expandedSummary}</p>
-          )}
-          {reasons && reasons.length > 0 && (
-            <div className="mt-3">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-1.5">Reasons</p>
-              <ul className="space-y-1">
-                {reasons.map((r, i) => (
-                  <li key={i} className="flex items-start gap-2 text-[13px] text-slate-700">
-                    <span className="text-slate-300 mt-0.5 flex-shrink-0" aria-hidden="true">·</span>
-                    <span className="flex-1">{r.label}</span>
-                    {typeof r.points === 'number' && (
-                      <span className="text-[11px] font-mono text-slate-400 flex-shrink-0">+{r.points}</span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {notes && notes.length > 0 && (
-            <div className="mt-3">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-1.5">Notes</p>
-              <ul className="space-y-1">
-                {notes.map((n, i) => (
-                  <li key={i} className="flex items-start gap-2 text-[13px] text-slate-600 leading-relaxed">
-                    <span className="text-slate-300 mt-0.5 flex-shrink-0" aria-hidden="true">·</span>
-                    <span className="flex-1">{n}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+// ─── Expanded body content ─────────────────────────────────────────────────
+
+interface DrawerContentProps {
+  pathwayName: string;
+  reasons?: { label: string; points?: number }[];
+  notes?: string[];
+  expandedSummary?: string;
+}
+
+const PathwayDrawerContent: React.FC<DrawerContentProps> = ({
+  pathwayName,
+  reasons,
+  notes,
+  expandedSummary,
+}) => {
+  const hasReasons = reasons && reasons.length > 0;
+  const hasNotes = notes && notes.length > 0;
+
+  return (
+    <div
+      id={`${pathwayName.toLowerCase()}-pathway-drawer-content`}
+      className="bg-white border-t border-slate-100 px-5 py-4 max-h-[40vh] overflow-y-auto"
+    >
+      {expandedSummary && (
+        <p className="text-sm text-slate-700 leading-relaxed mb-3">
+          {expandedSummary}
+        </p>
+      )}
+
+      {hasReasons && (
+        <div className={expandedSummary ? 'mt-3' : ''}>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
+            Reasons
+          </p>
+          <ul className="space-y-1">
+            {reasons!.map((r, i) => (
+              <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                <span className="text-slate-300 mt-0.5 flex-shrink-0" aria-hidden="true">·</span>
+                <span className="flex-1">{r.label}</span>
+                {typeof r.points === 'number' && (
+                  <span className="text-[11px] font-mono text-slate-400 flex-shrink-0">
+                    +{r.points}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {hasNotes && (
+        <div className={hasReasons || expandedSummary ? 'mt-3' : ''}>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
+            Notes
+          </p>
+          <ul className="space-y-1">
+            {notes!.map((n, i) => (
+              <li key={i} className="flex items-start gap-2 text-sm text-slate-600 leading-relaxed">
+                <span className="text-slate-300 mt-0.5 flex-shrink-0" aria-hidden="true">·</span>
+                <span className="flex-1">{n}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
   );
-
-  if (typeof document === 'undefined') return null;
-  return createPortal(drawer, document.body);
 };
 
 export default PathwayBottomDrawer;
