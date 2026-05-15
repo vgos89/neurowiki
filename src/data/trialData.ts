@@ -6726,10 +6726,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'NOT applicable to cardioembolic, lacunar (without stenosis), or non-atherosclerotic etiology',
       '2×2 factorial: statin intensification arm showed neutral effect (separate analysis)',
       'Critical use case: patient arriving 30–72h after onset with confirmed stenosis on CTA/MRA',
-      'Published: Zhao J, et al. N Engl J Med. 2024;390(3):203–213. DOI: 10.1056/NEJMoa2309137'
+      'Published: Gao Y, et al. N Engl J Med. 2023;389(26):2413–2424. DOI: 10.1056/NEJMoa2309137'
     ],
     conclusion: '',
-    source: 'Zhao J, et al. (NEJM 2024)',
+    source: 'Gao Y, et al. (NEJM 2023)',
     doi: '10.1056/NEJMoa2309137',
     pmid: '38157499',
     clinicalTrialsId: 'NCT03635749',
@@ -6861,13 +6861,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       '1-year benefit confirmed: HR 0.80 (95% CI 0.68–0.95), p=0.007; durable effect',
       'Only CYP2C19 LOF carriers benefit; normal metabolizers should use standard clopidogrel DAPT',
       'If testing unavailable within 24h: use clopidogrel DAPT NOW; do NOT delay treatment for genotyping',
-      'Published: Wang Y, et al. N Engl J Med. 2021;385(27):2497–2505. DOI: 10.1056/NEJMoa2111749'
+      'Published: Wang Y, et al. N Engl J Med. 2021;385(27):2520–2530. DOI: 10.1056/NEJMoa2111749'
     ],
     conclusion: '',
     source: 'Wang Y, et al. (NEJM 2021)',
     doi: '10.1056/NEJMoa2111749',
     pmid: '34708996',
-    clinicalTrialsId: 'NCT04078984',
+    clinicalTrialsId: 'NCT04078737',
     keyMessage: 'CYP2C19 LOF confirmed: use ticagrelor+aspirin × 21 days (COR 2b). Testing unavailable: use clopidogrel DAPT now — do NOT delay.',
     limitations: [
       'Conducted entirely in China — CYP2C19 *2 more prevalent in Asian populations',
