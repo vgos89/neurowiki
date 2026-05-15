@@ -55,13 +55,14 @@ export const DesktopRail: React.FC = () => {
       className="hidden md:flex w-[224px] flex-shrink-0 bg-white border-r border-slate-100 flex-col py-[18px] px-[14px] sticky top-0 h-screen"
     >
       {/* Brand lockup — LAYOUT_SPEC §6.1.1 */}
-      <Link to="/" className="flex items-center gap-2.5 px-2 pb-5 mb-3 border-b border-slate-100">
-        <div
-          className="w-[30px] h-[30px] rounded-lg bg-neuro-500 flex items-center justify-center text-white font-semibold text-[15px]"
-          style={{ fontFamily: 'serif', letterSpacing: '-0.04em' }}
-        >
-          N
-        </div>
+      <Link to="/" className="flex items-center gap-2.5 px-2 pb-5 mb-3 border-b border-slate-100" aria-label="NeuroWiki home">
+        <img
+          src="/icon-192.png"
+          alt=""
+          width={30}
+          height={30}
+          className="w-[30px] h-[30px] rounded-lg flex-shrink-0"
+        />
         <span className="text-base font-semibold tracking-tight text-slate-900">
           Neuro<span className="text-neuro-500">Wiki</span>
         </span>
@@ -97,7 +98,7 @@ export const DesktopRail: React.FC = () => {
           <span className="text-[11px] text-slate-300" aria-hidden="true">·</span>
           <Link to="/accessibility" className="text-[11px] text-slate-500 hover:text-slate-700 transition-colors">Accessibility</Link>
         </div>
-        <p className="text-[10px] text-slate-400">© 2026 Tidbit Health</p>
+        <p className="text-[10px] text-slate-400">© 2026 NeuroWiki</p>
       </div>
     </aside>
   );

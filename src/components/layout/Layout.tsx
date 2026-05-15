@@ -7,6 +7,7 @@ import { MobileHeader } from './MobileHeader';
 import { MobileBottomNav } from './MobileBottomNav';
 import { DesktopRail } from './DesktopRail';
 import { DesktopTopBar } from './DesktopTopBar';
+import FeedbackButton from '../FeedbackButton';
 import { STATIC_ROUTE_DEFINITIONS } from '../../config/routeManifest';
 
 interface LayoutProps {
@@ -69,6 +70,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <MobileBottomNav />
         </div>
       </div>
+
+      {/* Floating feedback button — global, bottom-right.
+          Lifts above MobileBottomNav (60px) and BottomLineDrawer (per FeedbackButton.tsx
+          and BottomLineDrawer.tsx — they publish drawer floor height for this button). */}
+      <FeedbackButton />
     </>
   );
 };

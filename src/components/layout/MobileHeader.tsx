@@ -10,13 +10,14 @@ export const MobileHeader: React.FC = () => (
     className="md:hidden h-[60px] bg-white border-b border-slate-100 flex items-center justify-between px-5 sticky top-0 z-40"
   >
     {/* Brand lockup — LAYOUT_SPEC §1.2 */}
-    <Link to="/" className="flex items-center gap-2.5">
-      <div
-        className="w-7 h-7 rounded-lg bg-neuro-500 flex items-center justify-center text-white font-semibold text-sm"
-        style={{ fontFamily: 'serif', letterSpacing: '-0.04em' }}
-      >
-        N
-      </div>
+    <Link to="/" className="flex items-center gap-2.5" aria-label="NeuroWiki home">
+      <img
+        src="/icon-192.png"
+        alt=""
+        width={28}
+        height={28}
+        className="w-7 h-7 rounded-lg flex-shrink-0"
+      />
       <span className="text-base font-semibold tracking-tight text-slate-900">
         Neuro<span className="text-neuro-500">Wiki</span>
       </span>

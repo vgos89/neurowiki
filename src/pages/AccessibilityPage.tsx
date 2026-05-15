@@ -119,12 +119,9 @@ export default function AccessibilityPage() {
 
       <Section title="Reporting a problem">
         <p>
-          Email{' '}
-          <a href="mailto:info@tidbithealth.in" className="text-neuro-500 hover:underline">
-            info@tidbithealth.in
-          </a>{' '}
-          with the page or feature, a description of the barrier, and your assistive technology if
-          relevant. We respond within 5 business days and aim to resolve substantive issues within 30.
+          Use the in-app feedback button (bottom-right of every page) with the page or feature,
+          a description of the barrier, and your assistive technology if relevant. The team
+          responds within 5 business days and aims to resolve substantive issues within 30.
         </p>
       </Section>
 

@@ -47,9 +47,6 @@ export default function TermsPage() {
           and attendings. It provides scoring calculators, clinical pathways, and trial summaries
           based on published guidelines.
         </p>
-        <p>
-          Tidbit Health (info@tidbithealth.in), based in India, operates NeuroWiki.
-        </p>
       </Section>
 
       <Section title="No warranty">
@@ -80,7 +77,7 @@ export default function TermsPage() {
 
       <Section title="Limitation of liability">
         <p>
-          To the extent permitted by applicable law, Tidbit Health is not liable for direct,
+          To the extent permitted by applicable law, the NeuroWiki team is not liable for direct,
           indirect, or consequential damages arising from use of or reliance on this tool,
           including clinical decisions made on the basis of information presented here.
         </p>
@@ -88,16 +85,9 @@ export default function TermsPage() {
 
       <Section title="Intellectual property">
         <p>
-          The clinical content, design, and code of NeuroWiki are owned by Tidbit Health. Use
-          the tool for your clinical practice and education. Do not reproduce or redistribute
-          content commercially without written permission.
-        </p>
-      </Section>
-
-      <Section title="Governing law">
-        <p>
-          These terms are governed by Indian law. Disputes are subject to the exclusive
-          jurisdiction of courts in India.
+          The clinical content, design, and code of NeuroWiki are the property of the NeuroWiki
+          team. Use the tool for your clinical practice and education. Do not reproduce or
+          redistribute content commercially without written permission.
         </p>
       </Section>
 
@@ -110,9 +100,7 @@ export default function TermsPage() {
 
       <Section title="Contact">
         <p>
-          <a href="mailto:info@tidbithealth.in" className="text-neuro-500 hover:underline">
-            info@tidbithealth.in
-          </a>
+          Use the in-app feedback button (bottom-right of every page) to reach the NeuroWiki team.
         </p>
       </Section>
 

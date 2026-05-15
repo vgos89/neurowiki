@@ -32,9 +32,9 @@ export default function PrivacyPage() {
 
       <Section title="Who we are">
         <p>
-          NeuroWiki is operated by Tidbit Health (info@tidbithealth.in). NeuroWiki is not a
-          covered entity under HIPAA. It does not collect, store, or transmit protected health
-          information. Do not enter patient data into this tool.
+          NeuroWiki is a free clinical reference tool maintained by the NeuroWiki team.
+          NeuroWiki is not a covered entity under HIPAA. It does not collect, store, or
+          transmit protected health information. Do not enter patient data into this tool.
         </p>
       </Section>
 
@@ -126,29 +126,23 @@ export default function PrivacyPage() {
           data is in your browser's local storage, which you can clear at any time.
         </p>
         <p>
-          For GA data held by Google, use the GA opt-out tool above. To contact us directly:
-          {' '}<a href="mailto:info@tidbithealth.in" className="text-neuro-500 hover:underline">info@tidbithealth.in</a>.
+          For GA data held by Google, use the GA opt-out tool above. To contact the NeuroWiki
+          team, use the in-app feedback button (bottom-right of every page).
         </p>
       </Section>
 
       <Section title="CCPA: California residents">
         <p>
           NeuroWiki does not sell personal information as defined by the California Consumer Privacy
-          Act. To request deletion of any data associated with you, email{' '}
-          <a href="mailto:info@tidbithealth.in" className="text-neuro-500 hover:underline">
-            info@tidbithealth.in
-          </a>
-          .
+          Act. To request deletion of any data associated with you, use the in-app feedback button
+          with the subject "Data deletion request".
         </p>
       </Section>
 
       <Section title="Data deletion">
         <p>
-          Email{' '}
-          <a href="mailto:info@tidbithealth.in" className="text-neuro-500 hover:underline">
-            info@tidbithealth.in
-          </a>{' '}
-          with the subject line "Data deletion request". We respond within 30 days.
+          Use the in-app feedback button (bottom-right of every page) with the subject "Data
+          deletion request". The team responds within 30 days.
         </p>
       </Section>
 
