@@ -1840,6 +1840,361 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── SELECT2: W8.2-followup Archetype A rebuild (Ordinal-shift) ──────────
+  if (trialId === 'select2-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>SELECT2</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In anterior LVO patients with a large ischemic core (ASPECTS 3–5 or core ≥50 mL) within 24 hours of last known well, does endovascular thrombectomy improve the mRS distribution at 90 days compared with medical management?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Ordinal mRS Shift</p>
+            </div>
+            <div className="p-4">
+              <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
+                <p className="text-xs text-blue-900 leading-relaxed">
+                  <strong>Ordinal-shift design:</strong> Primary is generalized OR for ordinal mRS shift (gOR 1.51, 95% CI 1.20–1.89). The mRS 0–2 binary shown below (functional independence) is a secondary outcome; frame as "less disability on average", not "independence restored" — only 20% achieve mRS 0–2.
+                </p>
+              </div>
+              <DeltaBandChart
+                treatmentPct={20}
+                controlPct={7}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="mRS 0–2 at 90 Days (secondary)"
+                riskRatio="gOR 1.51"
+                ciLow="1.20"
+                ciHigh="1.89"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
+                  <span className="text-xs text-slate-500">from mRS 0–2 secondary (ordinal-shift primary does not yield valid NNT)</span>
+                </div>
+              )}
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '352 patients (178 EVT / 174 medical) internationally; age ≤85. Stopped early at 2nd interim for efficacy. Published NEJM 2023;388(14):1259–1271.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/angel-aspect-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">ANGEL-ASPECT</Link>
+              <Link to="/pathways/evt" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">EVT Pathway</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="SELECT2" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'ANGEL-ASPECT', href: '/trials/angel-aspect-trial' }, { label: 'EVT Pathway', href: '/pathways/evt' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── ANGEL-ASPECT: W8.2-followup Archetype A rebuild ─────────────────────
+  if (trialId === 'angel-aspect-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ANGEL-ASPECT</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In Chinese patients with anterior LVO and large ischemic core (ASPECTS 3–5, OR ASPECTS 0–2 with core 70–100 mL), does endovascular thrombectomy improve the mRS distribution at 90 days compared with medical management?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Ordinal mRS Shift</p>
+            </div>
+            <div className="p-4">
+              <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
+                <p className="text-xs text-blue-900 leading-relaxed">
+                  <strong>Ordinal-shift design:</strong> Primary is generalized OR for ordinal mRS shift (gOR 1.37, 95% CI 1.11–1.69, P=0.004). The mRS 0–2 binary (functional independence) shown below is a secondary outcome. Higher any-ICH rate than SELECT2 (49.1% vs 17.3%); careful BP management required.
+                </p>
+              </div>
+              <DeltaBandChart
+                treatmentPct={30}
+                controlPct={11.6}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="mRS 0–2 at 90 Days (secondary)"
+                riskRatio="gOR 1.37"
+                ciLow="1.11"
+                ciHigh="1.69"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
+                  <span className="text-xs text-slate-500">from mRS 0–2 secondary (ordinal-shift primary does not yield valid NNT)</span>
+                </div>
+              )}
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '456 patients in China; age ≤80; NIHSS 6–30. Stopped early at 2nd interim. Published NEJM 2023;388(14):1272–1283.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/select2-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">SELECT2</Link>
+              <Link to="/pathways/evt" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">EVT Pathway</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="ANGEL-ASPECT" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'SELECT2', href: '/trials/select2-trial' }, { label: 'EVT Pathway', href: '/pathways/evt' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── ENRICH: W8.2-followup Archetype A rebuild (Bayesian, ICH) ───────────
+  if (trialId === 'enrich-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ENRICH</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with lobar (or anterior basal ganglia) intracerebral hemorrhage of 30–80 mL within 24 hours, does minimally invasive parafascicular surgery improve utility-weighted mRS at 180 days compared with standard medical management?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Bayesian Superiority</p>
+            </div>
+            <div className="p-4">
+              <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
+                <p className="text-xs text-blue-900 leading-relaxed">
+                  <strong>Bayesian response-adaptive design:</strong> Primary is utility-weighted mRS at 180 days; superiority by posterior P(sup) = 0.981 (threshold 0.975). No frequentist p-value. The 30-day mortality result shown below is the primary SAFETY endpoint, not the primary EFFICACY endpoint. Anterior basal ganglia subgroup was halted for futility — benefit is in LOBAR ICH.
+                </p>
+              </div>
+              <DeltaBandChart
+                treatmentPct={9.3}
+                controlPct={18.0}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="30-day mortality (primary safety)"
+                riskRatio="P(sup)"
+                ciLow="0.987"
+                ciHigh=""
+                pValue="P(sup)=0.981"
+                winnerArm="treatment"
+              />
+              <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Approx NNT</span>
+                <span className="text-sm font-semibold text-slate-700">~12</span>
+                <span className="text-xs text-slate-500">approximate, from primary safety endpoint (30-day mortality); Bayesian primaries do not yield valid NNT</span>
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '300 patients at 37 US hospitals (59 trained neurosurgeons; BrainPath + Myriad, NICO Corporation). Bayesian adaptive RAR design. Enrolled Dec 2016 – Aug 2022. Published NEJM 2024;390(14):1277–1289.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/mistie-iii-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">MISTIE III</Link>
+              <Link to="/calculators/ich-score" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ICH Score</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="ENRICH" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'MISTIE III', href: '/trials/mistie-iii-trial' }, { label: 'ICH Score', href: '/calculators/ich-score' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── B_PROUD: W8.2-followup Archetype A rebuild (Quasi-experimental) ─────
+  if (trialId === 'b-proud-trial' && trialMetadata) {
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>B_PROUD</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In suspected acute ischemic stroke dispatched in Berlin's EMS system, does mobile stroke unit dispatch improve 90-day disability outcomes compared with conventional ambulance alone? (Allocation by MSU availability — not patient-level randomization.)
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {trialMetadata.designDisclaimer && (
+            <aside className="border-l-2 border-amber-400 pl-3 mt-3 mb-6">
+              <div className="text-[10px] font-bold text-amber-700 uppercase tracking-widest mb-1">
+                Design quality
+              </div>
+              <p className="text-sm text-slate-700 leading-relaxed">
+                {trialMetadata.designDisclaimer.text}
+              </p>
+            </aside>
+          )}
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Ordinal mRS Shift</p>
+            </div>
+            <div className="p-4">
+              <div className="mb-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
+                <p className="text-xs text-amber-900 leading-relaxed">
+                  <strong>Quasi-experimental — interpret as association, not causation:</strong> Allocation was by MSU availability, not patient-level randomization. Per clinical-trial-audit, NNT is not displayed for observational/registry designs because residual confounding prevents causal absolute-risk-difference interpretation. Primary analysis used ordinal mRS shift (common OR 0.71 for worse mRS).
+                </p>
+              </div>
+              <DeltaBandChart
+                treatmentPct={80.3}
+                controlPct={78.0}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="mRS 0–3 or living at home (coprimary)"
+                riskRatio="cOR 0.71"
+                ciLow="0.58"
+                ciHigh="0.86"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm="treatment"
+              />
+              <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-500">
+                NNT suppressed (quasi-experimental design — see clinical-trial-audit rules)
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '1,543 patients in Berlin (3 MSU base stations, 7am–11pm operating hours). Enrolled Feb 2017 – Oct 2019. Published JAMA 2021;325(5):454–466.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/best-msu-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">BEST-MSU (US)</Link>
+              <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">Stroke Code pathway</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="B_PROUD" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'BEST-MSU (US)', href: '/trials/best-msu-trial' }, { label: 'Stroke Code pathway', href: '/guide/stroke-code' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
   // ── ESCAPE-MeVO: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ─────────────
   if (trialId === 'escape-mevo-trial' && trialMetadata) {
     const isPositive = trialMetadata.trialResult === 'POSITIVE';
