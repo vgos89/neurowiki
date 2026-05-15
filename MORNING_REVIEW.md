@@ -16,8 +16,9 @@
 
 **Plans waiting for your approval (Class D — I declined to autoship):**
 - Smart search bar architecture (1.5–2 days, MiniSearch + new overlay component)
-- Pathways unified shell + interpretation bottom bar (Class D refactor, scope TBC from audit)
+- Pathways unified shell + interpretation bottom bar (Class D refactor, ~540-590 LOC reduction across 6 pathways)
 - SEO Bucket B/C items (FAQ schema expansion, og:image defaults, Edge Middleware SSR titles, dynamic sitemap generation)
+- Pathways clinical audit: ZERO critical findings — all 3 AIS pathways in step with AHA 2026. Five minor C-clinical refinements documented (non-urgent).
 
 **Blocking / questions for you:** see Section 1 below.
 
@@ -151,9 +152,67 @@ Group by kind: **Trials → Calculators → Pathways → Guides → Questions �
 
 ---
 
-## Section 4 — Pathways audit (agent output pending — will be appended before final commit)
+## Section 4 — Pathways audit (complete)
 
-`docs/audits/2026-05-14/pathways-design-audit.md` and `pathways-clinical-audit.md` will exist when the audit agent completes. Section will summarize when ready.
+Two audit files written by the combined audit agent (read-only, no source edits):
+- `docs/audits/2026-05-14/pathways-design-audit.md`
+- `docs/audits/2026-05-14/pathways-clinical-audit.md`
+
+### 4.1 Clinical accuracy vs AHA 2026
+
+**Headline: ZERO critical discrepancies.** All three AIS-governed pathways (EVT, ExtendedIVT, ELAN) align with AHA 2026 §4.6 / §4.7 / §4.9. COR/LOE assertions, NIHSS/ASPECTS thresholds, time windows, basilar/posterior recommendations, and the ELAN COR 2a · LOE A assertion all verified against the published guideline tables.
+
+**Five minor Class C-clinical refinements** documented (non-urgent — repo is in step with the 2026 guideline):
+- Age-<80 gating clarification on two EVT branches
+- Scope-comment for ExtendedIVTPathway Path C (perfusion-selected branch)
+- IVT-pre-EVT clarification
+- Alteplase max-dose detail (90 mg cap surfacing)
+- ELAN HT-copy tightening
+
+**Out-of-scope (not governed by AIS 2026):**
+- StatusEpilepticusPathway → AES / Neurocritical Care Society guideline. Separate audit recommended.
+- MigrainePathway → American Headache Society / AAN. Separate audit recommended.
+- GCAPathway → ACR / EULAR. Separate audit recommended.
+
+The three non-AIS pathways are flagged in the audit doc; do NOT block on them — they need different governing references, which is a separate task (medical-scientist + content-writer co-fire on each, ~half-day per pathway).
+
+### 4.2 Design audit — pathway shell refactor
+
+**Headline:** All six pathways hand-roll their own chrome. None use `CalculatorHeader` / `CalculatorDrawer` / `CalculatorFooter` or anything analogous to `BottomLineDrawer`. The audit found:
+- **Two divergent header styles** (compact-sticky in EVT/ExtendedIVT vs inline-hero in the other four)
+- **Six different color palettes** (no unified pathway token system)
+- **Same fixed-bottom action-bar Tailwind string copy-pasted six times** (zero DRY)
+- **No persistent interpretation drawer anywhere** (the "interpretation bottom bar" you asked for doesn't exist on any pathway)
+
+**Proposed architecture (Class D, V approval required before build):**
+
+New components:
+- `PathwayShell.tsx` — sticky header + scrollable body + fixed action bar
+- `PathwayHeader.tsx` — unified header pattern (one of the two existing styles, picked deliberately)
+- `PathwayActionBar.tsx` — DRY the copy-pasted bottom action bar
+- `PathwayStepDots.tsx` — multi-step pathway progress indicator (extracted from existing inline code)
+- `PathwayBottomDrawer.tsx` — **fork of `BottomLineDrawer`** that renders generic clinical interpretation prose instead of trial-result-specific content
+- `PathwayFooter.tsx` — citation + disclaimer + related
+
+**Migration order (canary-first, recommended):** GCA → ELAN → SE → Migraine → ExtendedIVT → EVT
+- Reasoning: simplest pathway first (GCA), riskiest/most-used last (EVT). Per-pathway Class D PRs, each with its own architect review.
+- Net **~540-590 LOC reduction** estimated across the six pathways once unified.
+
+**Important note from the audit:** there is **no `CalculatorShell.tsx`** in the repo today. Calculator pages compose Header + Drawer + Footer directly; the "shell" pattern is implicit, not extracted. The audit flags this as a related but **out-of-scope refactor opportunity** — i.e., a future Class D task could extract `CalculatorShell` AND `PathwayShell` from a shared `BaseShell` if the patterns converge enough. Recommend: don't tackle that yet; build `PathwayShell` first, learn from it, then decide whether to back-propagate to calculators.
+
+### 4.3 Decisions for you (paste here for convenience)
+
+1. **Approve pathway shell refactor?** Yes / No / Revise.
+2. **Migration order?** Default (GCA → ELAN → SE → Migraine → ExtendedIVT → EVT canary-first) or your preferred order.
+3. **Per-pathway PRs (recommended), or one big PR?**
+4. **Pre-build architectural decision: BottomLineDrawer → PathwayBottomDrawer.** Fork (recommended, isolation) or generalize (one component, two modes)?
+5. **Five minor C-clinical refinements** (age-<80 gating, ExtendedIVT Path C scope, IVT-pre-EVT, alteplase max dose, ELAN HT copy) — approve to fix together in one `clinical(pathway): minor refinements per audit` commit?
+
+I have not started any of this work autonomously. All five are Class D or Class C-clinical and need your call.
+
+### 4.4 Blocking issues from the audit
+
+**None.** Both audits ran clean.
 
 ---
 
@@ -196,8 +255,8 @@ Ran a sweep for common AI-fingerprint phrases (leverage, seamless, robust, "in t
 | Phase A (1) | Tidbit Health scrub + logo + feedback button | shipped | 16c0d07 |
 | Wave 1 | 7 new trial questions + SEO Bucket A | shipped | b28211c |
 | Search bar | Plan complete; **needs V approval** | plan only | §1.2 |
-| Pathways design | Audit running; **plan output pending** | _running_ | §1.3 |
-| Pathways clinical | Audit running; **findings doc pending** | _running_ | §1.3 |
+| Pathways design | Audit complete; **plan in §4.2** | docs/audits/2026-05-14/pathways-design-audit.md | §4 |
+| Pathways clinical | Audit complete; **0 critical findings** | docs/audits/2026-05-14/pathways-clinical-audit.md | §4 |
 | Humanizer | Scan done; site clean | no commit needed | §6 |
 | SEO Bucket B/C | Findings filed; **need V approval** | plan only | §3 |
 
