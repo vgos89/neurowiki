@@ -1332,6 +1332,177 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── ATTENTION: W8.2-followup Archetype A rebuild ─────────────────────────
+  if (trialId === 'attention-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ATTENTION</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In acute basilar artery occlusion with NIHSS ≥10 within 12 hours of estimated onset, does endovascular thrombectomy improve mRS 0–3 at 90 days compared with best medical care alone?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={46}
+                controlPct={23}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="mRS 0–3 at 90 Days"
+                riskRatio="RR 2.06"
+                ciLow="1.46"
+                ciHigh="2.91"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
+                  <span className="text-xs text-slate-500">to achieve mRS 0–3 at 90 days</span>
+                </div>
+              )}
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '340 patients (226 EVT / 114 control, 2:1 ITT) at 36 centers in China. Enrolled Feb 2021 – Jan 2022. Published NEJM 2022.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/baoche-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">BAOCHE (6–24h)</Link>
+              <Link to="/pathways/evt" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">EVT Pathway</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="ATTENTION" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'BAOCHE (6–24h)', href: '/trials/baoche-trial' }, { label: 'EVT Pathway', href: '/pathways/evt' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── BAOCHE: W8.2-followup Archetype A rebuild ───────────────────────────
+  if (trialId === 'baoche-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-screen bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>BAOCHE</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In acute basilar artery occlusion 6–24 hours after last-known-well, does endovascular thrombectomy improve mRS 0–3 at 90 days compared with standard medical care? (Primary outcome was amended mid-trial from mRS 0–4 to mRS 0–3 before unblinding.)
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+            </div>
+            <div className="p-4">
+              <div className="mb-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
+                <p className="text-xs text-amber-900 leading-relaxed">
+                  <strong>Protocol amendment:</strong> Primary outcome changed from mRS 0–4 to mRS 0–3 mid-trial (before unblinding). The original mRS 0–4 result was NEGATIVE (RR 1.21, 95% CI 0.95–1.54). Trial stopped early for efficacy at planned interim — effect size may be overestimated.
+                </p>
+              </div>
+              <DeltaBandChart
+                treatmentPct={46}
+                controlPct={24}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="mRS 0–3 at 90 Days (revised primary)"
+                riskRatio="RR 1.81"
+                ciLow="1.26"
+                ciHigh="2.60"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
+                  <span className="text-xs text-slate-500">to achieve mRS 0–3 at 90 days (display with amendment caveat)</span>
+                </div>
+              )}
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '217 patients (110 EVT / 107 control, 1:1 ITT) in China. Enrolled Aug 2016 – Jun 2021. Stopped early Apr 2022 at planned interim for efficacy. Published NEJM 2022.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/attention-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">ATTENTION (0–12h)</Link>
+              <Link to="/pathways/evt" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">EVT Pathway</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="BAOCHE" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'ATTENTION (0–12h)', href: '/trials/attention-trial' }, { label: 'EVT Pathway', href: '/pathways/evt' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
   // ── ESCAPE-MeVO: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ─────────────
   if (trialId === 'escape-mevo-trial' && trialMetadata) {
     const isPositive = trialMetadata.trialResult === 'POSITIVE';
