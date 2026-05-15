@@ -83,13 +83,13 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'time-is-brain-deep',
         title: 'Time Is Brain - The Evidence',
-        content: '1.9 million neurons die per minute during untreated stroke. Every 15-minute delay reduces probability of good outcome by 4%. NINDS trial: Treatment <90min had 50% vs 38% good outcome at 3 months. Pooled analysis (Emberson 2014): Treatment benefit decreases linearly with time. Target door-to-needle <60 minutes (excellence: <30 minutes).',
+        content: '1.9 million neurons die per minute during untreated stroke (Saver, Stroke 2006). Every 15-minute delay reduces the probability of a good outcome by ~4% (Saver, JAMA 2013, GWTG-Stroke registry). NINDS time-stratified analysis (Marler, Neurology 2000): rt-PA vs placebo adjusted OR for favorable 3-month outcome was 2.11 (95% CI 1.33–3.35) at 0–90 min vs 1.69 (95% CI 1.09–2.62) at 91–180 min — earlier treatment, greater benefit. Pooled IPD meta-analysis (Emberson, Lancet 2014): OR for good outcome falls from ~2.0 at 60 min to ~1.0 at ~4.5 h. Target door-to-needle <60 minutes (excellence: <30 minutes).',
         type: 'pearl',
         section: 'step-1',
         evidenceClass: 'I',
         evidenceLevel: 'A',
         plainEnglish: 'Every minute counts. Target door-to-needle <60 min (ideal <30).',
-        evidence: 'Emberson et al, Lancet 2014; NINDS 1995',
+        evidence: 'Saver, Stroke 2006; Saver, JAMA 2013; Marler, Neurology 2000; Emberson, Lancet 2014',
       },
       {
         id: 'ninds-trial',
