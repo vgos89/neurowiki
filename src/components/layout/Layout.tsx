@@ -8,7 +8,11 @@ import { MobileBottomNav } from './MobileBottomNav';
 import { DesktopRail } from './DesktopRail';
 import { DesktopTopBar } from './DesktopTopBar';
 import FeedbackButton from '../FeedbackButton';
+import { SearchProvider } from '../search/SearchProvider';
 import { STATIC_ROUTE_DEFINITIONS } from '../../config/routeManifest';
+
+// Lazy-load the search overlay — heavy enough to keep out of the initial bundle.
+const SearchOverlay = React.lazy(() => import('../search/SearchOverlay'));
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -34,7 +38,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     zone === 'reference' ? 'zone-reference' : '';
 
   return (
-    <>
+    <SearchProvider>
       {/* Skip link — LAYOUT_SPEC §10 */}
       <a
         href="#main"
@@ -75,7 +79,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           Lifts above MobileBottomNav (60px) and BottomLineDrawer (per FeedbackButton.tsx
           and BottomLineDrawer.tsx — they publish drawer floor height for this button). */}
       <FeedbackButton />
-    </>
+
+      {/* Smart search overlay — lazy, opens via ⌘K / "/" / search button click. */}
+      <React.Suspense fallback={null}>
+        <SearchOverlay />
+      </React.Suspense>
+    </SearchProvider>
   );
 };
 
