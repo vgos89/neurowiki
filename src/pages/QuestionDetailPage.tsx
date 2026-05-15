@@ -105,12 +105,47 @@ export default function QuestionDetailPage() {
     return <QuestionNotFound />;
   }
 
-  // Resolve trial IDs against the catalog. Unresolvable IDs are silently dropped.
+  // Resolve trial IDs against the catalog. Stubs (BEST, BASICS, STICH I/II,
+  // MISTIE III, etc.) live in TRIAL_DATA but not in trialListData — synthesize
+  // a TrialItem for them so they appear in the question's evidence list.
   // Enrich with legend data (Phase 6B: legend no longer in trialListData.ts).
+  function yearFromTrial(metadata: typeof TRIAL_DATA[string]): number {
+    // Try source string ("Liu et al. (Lancet Neurol 2020)" → 2020); then
+    // trialDesign.timeline; then 0 as a safe default.
+    const src = metadata.source || '';
+    const matchSrc = src.match(/\b(19|20)\d{2}\b/);
+    if (matchSrc) return parseInt(matchSrc[0], 10);
+    const tl = metadata.trialDesign?.timeline || '';
+    const matchTl = tl.match(/\b(19|20)\d{2}\b/);
+    if (matchTl) return parseInt(matchTl[0], 10);
+    return 0;
+  }
+
   const resolvedTrials = question.trialIds
-    .map((id) => findTrialById(id))
-    .filter((t): t is TrialItem => t !== undefined)
-    .map(t => ({ ...t, legend: TRIAL_DATA[t.id]?.legend }));
+    .map((id) => {
+      const fromList = findTrialById(id);
+      if (fromList) {
+        return { ...fromList, legend: TRIAL_DATA[id]?.legend };
+      }
+      // Fallback for stub trials — synthesize a TrialItem from TRIAL_DATA.
+      const stub = TRIAL_DATA[id];
+      if (stub) {
+        const name = stub.title.replace(/\s*Trial\s*$/i, '').trim();
+        return {
+          id,
+          name,
+          year: yearFromTrial(stub),
+          category: (stub.listCategory ?? 'evt') as TrialItem['category'],
+          doi: stub.doi ?? '',
+          path: `/trials/${id}`,
+          isPlaceholder: false,
+          description: stub.listDescription || stub.bottomLineSummary || stub.subtitle,
+          legend: stub.legend,
+        } as TrialItem;
+      }
+      return undefined;
+    })
+    .filter((t): t is TrialItem => t !== undefined);
 
   const handleFavToggle = (id: string, _e: React.MouseEvent) => {
     toggleFavorite(id);
@@ -163,8 +198,8 @@ export default function QuestionDetailPage() {
             Clinical Synthesis
           </p>
           <p className="text-sm text-slate-700 leading-relaxed">
-            Curated answer in progress. The trials below are the evidence base
-            — open any to read the full study.
+            Curated answer in progress. The trials below are the evidence base.
+            Open any card to read the full study.
           </p>
         </div>
       </div>

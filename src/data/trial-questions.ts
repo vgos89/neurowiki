@@ -102,7 +102,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'hemicraniectomy',
     text: 'Is hemicraniectomy indicated?',
     icon: 'brain',
-    meta: 'space-occupying MCA infarction — HAMLET, DECIMAL, and DESTINY',
+    meta: 'space-occupying MCA infarction. HAMLET, DECIMAL, and DESTINY.',
     trialCount: 3,
     trialIds: [
       'decimal-trial',  // DECIMAL 2007 — decompressive craniectomy ≤55 yo
@@ -129,7 +129,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
   },
   {
     id: 'dapt',
-    text: 'DAPT after stroke or TIA — yes or no?',
+    text: 'DAPT after stroke or TIA. Yes or no?',
     icon: 'layers',
     meta: 'dual antiplatelet for TIA and minor ischaemic stroke',
     trialCount: 5,
@@ -145,7 +145,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'basilar-evt',
     text: 'Does my basilar artery occlusion patient benefit from EVT?',
     icon: 'target',
-    meta: 'evolution of basilar EVT evidence — BEST/BASICS (neutral) to ATTENTION/BAOCHE (positive)',
+    meta: 'evolution of basilar EVT evidence: BEST/BASICS (neutral) to ATTENTION/BAOCHE (positive)',
     trialCount: 4,
     trialIds: [
       'best-trial',       // BEST 2020 — basilar EVT (negative ITT; substantial crossover)
@@ -158,7 +158,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'ich-surgery',
     text: 'Should this intracerebral hemorrhage be surgically evacuated?',
     icon: 'brain',
-    meta: 'four decades of surgical ICH trials — STICH I/II, MISTIE III, ENRICH',
+    meta: 'four decades of surgical ICH trials: STICH I/II, MISTIE III, ENRICH',
     trialCount: 4,
     trialIds: [
       'stich-i-trial',    // STICH I 2005 — early surgery vs medical for supratentorial ICH (neutral)
@@ -182,7 +182,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'icas-stenting',
     text: 'Does symptomatic intracranial atherosclerosis benefit from stenting?',
     icon: 'target',
-    meta: 'Wingspan stent — RCT harm, post-market on-label safety signal',
+    meta: 'Wingspan stent: RCT harm, post-market on-label safety signal',
     trialCount: 2,
     trialIds: [
       'sammpris-trial',  // SAMMPRIS 2011 — PTAS vs aggressive medical (stopped for harm + futility)
@@ -212,7 +212,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'direct-vs-bridging',
     text: 'Direct thrombectomy or bridging with IV thrombolysis first?',
     icon: 'layers',
-    meta: 'EVT-eligible LVO — skip the IVT or bridge?',
+    meta: 'EVT-eligible LVO: skip the IVT or bridge?',
     trialCount: 4,
     trialIds: [
       'direct-mt-trial',       // DIRECT-MT 2020 — China, direct EVT NI vs bridging (NI met)

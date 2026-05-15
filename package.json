@@ -11,6 +11,8 @@
     "typecheck": "tsc --noEmit",
     "check:routes": "node scripts/validateRouteManifest.mjs",
     "check:claims": "tsx scripts/check-claims.ts",
+    "check:humanizer": "node scripts/check-humanizer.mjs",
+    "fix:em-dashes": "node scripts/fix-em-dashes.mjs --write",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

@@ -215,7 +215,7 @@ Central Retinal Artery Occlusion (CRAO) is an ophthalmologic emergency with poor
     category: 'Neuro Trials',
     content: `
 ## Clinical Context
-Tenecteplase (TNK) is a bioengineered variant of alteplase with greater fibrin specificity, longer half-life, and resistance to plasminogen activator inhibitor-1 — enabling single-bolus IV administration over 5–10 seconds rather than a 60-minute infusion. Prior trials (NOR-TEST, AcT) suggested noninferiority but had mixed results or regional limitations. The ORIGINAL trial was designed as a large multicenter noninferiority trial specifically in Chinese patients to directly compare the two agents head-to-head within the standard 4.5-hour thrombolysis window.
+Tenecteplase (TNK) is a bioengineered variant of alteplase with greater fibrin specificity, longer half-life, and resistance to plasminogen activator inhibitor-1. Enabling single-bolus IV administration over 5–10 seconds rather than a 60-minute infusion. Prior trials (NOR-TEST, AcT) suggested noninferiority but had mixed results or regional limitations. The ORIGINAL trial was designed as a large multicenter noninferiority trial specifically in Chinese patients to directly compare the two agents head-to-head within the standard 4.5-hour thrombolysis window.
 
 ## Trial Summary
 *   **Design:** Multicenter, active-controlled, open-label, blinded-endpoint (PROBE) noninferiority trial. 55 stroke centers in China.
@@ -1101,7 +1101,7 @@ THALES tested whether ticagrelor (a more potent, direct-acting P2Y12 inhibitor) 
     *   **Severe hemorrhage:** 0.5% vs 0.1% — **5× higher**, p<0.001
 
 ## Why AHA/ASA 2026 Rates This COR 3: No Benefit
-The trial is statistically significant — but net clinical benefit is unfavorable:
+The trial is statistically significant. But net clinical benefit is unfavorable:
 *   **NNT of 91** is far inferior to clopidogrel DAPT: CHANCE NNT=28, POINT NNT=67, INSPIRES NNT=53
 *   **Severe bleeding 5× higher** than aspirin alone (0.5% vs 0.1%)
 *   Ticagrelor offers no advantage over clopidogrel DAPT — and is less safe for this population
@@ -1149,7 +1149,7 @@ CHANCE established DAPT within 24 hours. INSPIRES extends the evidence to two im
 
 ## Who Qualifies (AHA/ASA 2026 COR 2a)
 1.  Mild ischemic stroke (NIHSS ≤5) OR high-risk TIA (ABCD2 ≥4)
-2.  **Confirmed atherosclerotic cause** — ≥50% stenosis of intracranial or extracranial artery on CTA/MRA
+2.  **Confirmed atherosclerotic cause**. ≥50% stenosis of intracranial or extracranial artery on CTA/MRA
 3.  Within **72 hours** of symptom onset
 4.  Did NOT receive IV thrombolysis
 5.  No indication for anticoagulation (e.g., AF)
@@ -1203,7 +1203,7 @@ CHANCE-2 is the first large stroke trial using mandatory pharmacogenomic eligibi
         ├── YES → Genotype
         │       ├── LOF allele (*2/*3) → Ticagrelor 180mg load + Aspirin (COR 2b)
         │       └── Normal (*1/*1) → Clopidogrel 300mg load + Aspirin (COR 1)
-        └── NO → Start clopidogrel + aspirin NOW (COR 1) — do not delay
+        └── NO → Start clopidogrel + aspirin NOW (COR 1). Do not delay
 
 ## Clinical PEARLS
 *   **Ticagrelor does NOT require CYP2C19** — direct-acting, bypasses the prodrug activation pathway
@@ -1229,7 +1229,7 @@ Intracerebral hemorrhage (ICH) carries ~30–40% 30-day mortality and only ~20% 
 *   **STICH II (2013):** Early surgery specifically for lobar ICH — no benefit
 *   **MISTIE III (2019):** Stereotactic catheter aspiration + alteplase — no benefit
 
-ENRICH tested a fundamentally different approach: **minimally invasive parafascicular surgery (MIPS)** — accessing the hematoma through natural sulcal corridors without transgressing brain parenchyma.
+ENRICH tested a fundamentally different approach: **minimally invasive parafascicular surgery (MIPS)**. Accessing the hematoma through natural sulcal corridors without transgressing brain parenchyma.
 
 **ENRICH is the FIRST positive randomized surgical ICH trial.**
 
@@ -1247,7 +1247,7 @@ ENRICH tested a fundamentally different approach: **minimally invasive parafasci
 | Factor | STICH I/II | MISTIE III | ENRICH |
 |--------|-----------|-----------|--------|
 | Surgical approach | Open craniotomy | Stereotactic catheter | **Trans-sulcal MIPS** |
-| Cortical transgression | Yes | Partial | **No — sulcal corridor** |
+| Cortical transgression | Yes | Partial | **No. Sulcal corridor** |
 | Patient selection | Broad (all ICH) | Broad | **Lobar/ant.BG, 30–80 mL** |
 | Result | Negative | Negative | **Positive** |
 

@@ -83,7 +83,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'time-is-brain-deep',
         title: 'Time Is Brain - The Evidence',
-        content: '1.9 million neurons die per minute during untreated stroke (Saver, Stroke 2006). Every 15-minute delay reduces the probability of a good outcome by ~4% (Saver, JAMA 2013, GWTG-Stroke registry). NINDS time-stratified analysis (Marler, Neurology 2000): rt-PA vs placebo adjusted OR for favorable 3-month outcome was 2.11 (95% CI 1.33–3.35) at 0–90 min vs 1.69 (95% CI 1.09–2.62) at 91–180 min — earlier treatment, greater benefit. Pooled IPD meta-analysis (Emberson, Lancet 2014): OR for good outcome falls from ~2.0 at 60 min to ~1.0 at ~4.5 h. Target door-to-needle <60 minutes (excellence: <30 minutes).',
+        content: '1.9 million neurons die per minute during untreated stroke (Saver, Stroke 2006). Every 15-minute delay reduces the probability of a good outcome by ~4% (Saver, JAMA 2013, GWTG-Stroke registry). NINDS time-stratified analysis (Marler, Neurology 2000): rt-PA vs placebo adjusted OR for favorable 3-month outcome was 2.11 (95% CI 1.33–3.35) at 0–90 min vs 1.69 (95% CI 1.09–2.62) at 91–180 min. Earlier treatment, greater benefit. Pooled IPD meta-analysis (Emberson, Lancet 2014): OR for good outcome falls from ~2.0 at 60 min to ~1.0 at ~4.5 h. Target door-to-needle <60 minutes (excellence: <30 minutes).',
         type: 'pearl',
         section: 'step-1',
         evidenceClass: 'I',
@@ -193,7 +193,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         section: 'step-1',
         evidenceClass: 'IIa',
         evidenceLevel: 'B',
-        plainEnglish: 'When clinical suspicion for stroke is high, don\'t delay tPA for extended workup — the low sICH risk in mimics is outweighed by the cost of withholding tPA from a real stroke.',
+        plainEnglish: 'When clinical suspicion for stroke is high, don\'t delay tPA for extended workup. The low sICH risk in mimics is outweighed by the cost of withholding tPA from a real stroke.',
         evidence: 'Zinkstok et al, Stroke 2013; AHA/ASA 2019 (Class IIa)',
       },
       {
