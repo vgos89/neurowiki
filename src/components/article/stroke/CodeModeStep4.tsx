@@ -117,7 +117,7 @@ const ORDERS: Order[] = [
     label: 'Strict BP control: maintain <180/105 mmHg × 24 hours',
     category: 'post-tpa',
     evidence: 'Class I, Level B',
-    rationale: 'Elevated BP post-thrombolysis increases hemorrhagic transformation risk 3-fold. Target <180/105 for first 24h. Use IV labetalol, nicardipine, or clevidipine for precise control. ENCHANTED trial showed aggressive BP lowering (<140 systolic) was safe.',
+    rationale: 'Elevated BP post-thrombolysis increases hemorrhagic transformation risk 3-fold. Target <180/105 mmHg for first 24h (AHA 2026 §4.3 #7, COR 1 LOE B-R). Use IV labetalol, nicardipine, or clevidipine for precise control. Intensive SBP <140 mmHg post-IVT is NOT recommended (COR 3: No Benefit, LOE B-R per §4.3 #8) — no functional benefit per ENCHANTED. For successfully recanalized anterior LVO post-EVT, intensive SBP <140 mmHg for 72h is HARMFUL (COR 3: Harm, LOE A per §4.3 #10).',
     defaultSelected: true,
     evidenceClass: 'I',
     evidenceLevel: 'B'
@@ -177,7 +177,7 @@ const ORDERS: Order[] = [
     label: 'STAT CT head for any acute neurological decline',
     category: 'post-tpa',
     evidence: 'Class I, Level A',
-    rationale: 'Symptomatic ICH presents with sudden worsening (≥4 NIHSS points), severe headache, vomiting, or decreased consciousness. Requires immediate CT, neurosurgery consult, and reversal: cryoprecipitate for tPA-related hemorrhage; reverse anticoagulation if on anticoagulants (4-factor PCC + vitamin K for warfarin; idarucizumab for dabigatran; andexanet or PCC for Xa inhibitors). Platelet transfusion and TXA not routinely recommended per 2022 guidelines.',
+    rationale: 'Symptomatic ICH presents with sudden worsening (≥4 NIHSS points), severe headache, vomiting, or decreased consciousness. Requires immediate CT, neurosurgery consult, and reversal per AHA 2026 Table 5: cryoprecipitate ≥10 U IV over 10–30 min (target fibrinogen ≥150 mg/dL); tranexamic acid (TXA) 1000 mg IV over 10 min OR ε-aminocaproic acid 4–5 g over 1 h as alternative. For non-tPA anticoagulation reversal: 4-factor PCC + vitamin K (warfarin), idarucizumab (dabigatran), andexanet or PCC (Xa inhibitors).',
     defaultSelected: true,
     evidenceClass: 'I',
     evidenceLevel: 'A'
@@ -252,7 +252,7 @@ const ORDERS: Order[] = [
     label: 'DVT prophylaxis: SCDs bilaterally (no pharmacologic × 24h)',
     category: 'general',
     evidence: 'Class I, Level A',
-    rationale: 'DVT occurs in 10% of immobilized stroke patients without prophylaxis. CLOTS-3 trial: SCDs reduce DVT by 50% and are safe immediately post-tPA. Start pharmacologic prophylaxis (heparin SQ) after 24h if no hemorrhage on CT.',
+    rationale: 'DVT occurs in 10% of immobilized stroke patients without prophylaxis. CLOTS-3 trial: intermittent pneumatic compression (IPC) reduced DVT from 12.1% to 8.5% (ARR 3.6 percentage points, ~30% relative reduction) — safe immediately post-tPA (AHA 2026 §5.4 #1, COR 1 LOE B-R). Start pharmacologic prophylaxis (heparin SQ) after 24h if no hemorrhage on CT (§5.4 #2, COR 2a LOE B-R).',
     defaultSelected: true,
     evidenceClass: 'I',
     evidenceLevel: 'A'
@@ -289,12 +289,12 @@ const ORDERS: Order[] = [
   },
   {
     id: 'glycemic-control',
-    label: 'Glycemic control: target 140-180 mg/dL',
+    label: 'Glycemic control: target 140–180 mg/dL',
     category: 'general',
-    evidence: 'Class I, Level C',
-    rationale: 'Hyperglycemia (>180 mg/dL) increases infarct size, hemorrhagic transformation, and mortality. Avoid hypoglycemia (<80 mg/dL) which also worsens outcomes. Use insulin drip for persistent hyperglycemia.',
+    evidence: 'COR 2a, LOE C-LD (AHA 2026 §4.5 #2)',
+    rationale: 'Per AHA 2026 §4.5: treat hyperglycemia by maintaining glucose 140–180 mg/dL (COR 2a, LOE C-LD). Treat hypoglycemia <60 mg/dL (§4.5 #1, COR 1 LOE C-LD). Do NOT target 80–130 mg/dL with IV insulin — COR 3: No Benefit, LOE A (SHINE trial). Top Take-Home #9: intensive glucose control to 80–130 mg/dL is not recommended and increases severe hypoglycemia risk.',
     defaultSelected: true,
-    evidenceClass: 'I',
+    evidenceClass: 'IIa',
     evidenceLevel: 'C'
   },
   {

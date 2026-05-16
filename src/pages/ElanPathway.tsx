@@ -288,7 +288,7 @@ const ElanPathway: React.FC = () => {
           <div className="space-y-5 animate-in slide-in-from-right-4 duration-300">
             {/* Imaging definitions — scannable mini-cards */}
             <div>
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center"><Info size={13} className="mr-1.5" /> Imaging-Based Size Definitions</h3>
+              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center"><Info size={13} className="mr-1.5" /> Imaging-Based Size Definitions <span className="ml-2 text-[9px] font-medium text-slate-400 normal-case tracking-normal">· per ELAN trial protocol (Fischer NEJM 2023)</span></h3>
               <div className="space-y-2">
                 <div className="bg-white border-l-4 border-emerald-400 rounded-r-xl px-4 py-3 shadow-sm">
                   <span className="text-xs font-black text-emerald-600 uppercase tracking-wider">TIA</span>
@@ -372,7 +372,7 @@ const ElanPathway: React.FC = () => {
                             </div>
                             <div className="text-right">
                                 <div className="text-xs font-black text-purple-300 uppercase tracking-wider">COR 2a · LOE A</div>
-                                <div className="text-[10px] text-white/40 font-medium mt-0.5">ELAN framework within AHA/ASA 2026</div>
+                                <div className="text-[10px] text-white/40 font-medium mt-0.5">{result.size === 'major' ? 'ELAN protocol; AHA 2026 COR 2a applies primarily to selected milder-severity patients' : 'ELAN framework within AHA/ASA 2026'}</div>
                             </div>
                         </div>
 
@@ -383,7 +383,7 @@ const ElanPathway: React.FC = () => {
                                 <div className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-2">Earlier Strategy</div>
                                 <div className="text-2xl font-black leading-snug">{result.earlyText}</div>
                                 <div className="text-slate-400 text-xs font-medium mt-1">{result.earlyDates}</div>
-                                <div className="text-[10px] text-slate-500 mt-2 leading-relaxed">Noninferior to delayed start (COR 2a)</div>
+                                <div className="text-[10px] text-slate-500 mt-2 leading-relaxed">Noninferior to delayed start in OPTIMAS / TIMING (COR 2a)</div>
                             </div>
                             {/* Later strategy */}
                             <div className="px-4 py-5">
@@ -440,7 +440,7 @@ const ElanPathway: React.FC = () => {
                                 <div className="bg-white/5 px-5 pb-5 space-y-3 animate-in slide-in-from-top-2 duration-200">
                                     {/* Trial summaries */}
                                     {[
-                                        { label: 'ELAN Trial', year: 'NEJM 2023', detail: 'Early DOAC used within 48 hours for TIA/minor/moderate events and day 6-7 for major stroke, versus a later comparator strategy. This tool operationalizes those ELAN timing bins.' },
+                                        { label: 'ELAN Trial', year: 'NEJM 2023', detail: 'Early DOAC used within 48 hours for TIA/minor/moderate events and day 6-7 for major stroke, versus a later comparator strategy. Composite primary outcome RD −1.18 (95% CI −2.84 to 0.47) — numerical reduction, not statistically significant. OPTIMAS and TIMING subsequently confirmed noninferiority cleanly. This tool operationalizes the ELAN timing bins.' },
                                         { label: 'OPTIMAS Trial', year: '2024', detail: 'Early DOAC (≤4 days) noninferior to delayed DOAC (7–14 days) in 3,648 patients with AIS + AF.' },
                                         { label: 'TIMING Trial', year: '2024', detail: 'Early (≤4 days) vs delayed (5–10 days): 6.9% vs 8.7% primary outcome rate. Noninferior.' },
                                     ].map(t => (

@@ -53,8 +53,8 @@ const TRIALS: Record<string, TrialInfo> = {
   'EXTEND':   { journal: 'NEJM',   year: 2019, cor: '2a'  },
   'EPITHET':  { journal: 'Lancet Neurol', year: 2008, cor: '—' },
   'ECASS-4':  { journal: 'Stroke', year: 2019, cor: '—'   },
-  'TIMELESS': { journal: 'NEJM',   year: 2024, cor: '2b'  },
-  'TRACE-III': { journal: 'NEJM',  year: 2023, cor: '2b'  },
+  'TIMELESS': { journal: 'NEJM',   year: 2024, cor: '—'   }, // limiting/negative trial — NOT positive evidence for late TNK
+  'TRACE-III': { journal: 'NEJM',  year: 2024, cor: '2b'  }, // NEJM 2024 (Xiong et al.)
 };
 
 /* ─── EVT barriers ───────────────────────────────────────────────── */
@@ -992,7 +992,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                             <CompactSelectionCard title="No — Mismatch not met" description="Insufficient penumbra" selected={bCtpMismatch === false} onClick={() => setBCtpMismatch(false)} variant="danger" />
                           </div>
                           {bCtpMismatch !== null && (
-                            <LearningPearl title="EXTEND Trial" content="Ma et al., NEJM 2019. Alteplase 4.5–9h with RAPID-selected mismatch (core < 70 mL; mismatch > 10 mL, ratio > 1.2). mRS 0–1 at 90 days: 36% vs 29%. NNT ~14." variant="indigo" />
+                            <LearningPearl title="EXTEND Trial" content="Ma et al., NEJM 2019. Alteplase 4.5–9h with RAPID-selected mismatch (core < 70 mL; mismatch > 10 mL, ratio > 1.2). mRS 0–1 at 90 days: 35.4% vs 29.5%; adjusted RR 1.44 (95% CI 1.01–2.06; P=0.04). NNT ≈ 17 from absolute risk reduction." variant="indigo" />
                           )}
                         </div>
                       )}
@@ -1061,7 +1061,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                       <CompactSelectionCard title="No — No penumbra" description="No target mismatch" selected={cPenumbra === false} onClick={() => setCPenumbra(false)} variant="danger" />
                     </div>
                     {cPenumbra !== null && (
-                      <LearningPearl title="Path C Trials" content="TRACE-III (NEJM 2023) supports the 2026 AHA/ASA late-window Class 2b recommendation for patients with ICA or MCA (M1/M2) occlusion, salvageable penumbra, no feasible rapid EVT pathway, and expert thrombolytic stroke oversight. TIMELESS informs the separate redirect away from extended-window IVT when rapid EVT is already available." variant="amber" />
+                      <LearningPearl title="Path C Trials" content="TRACE-III (NEJM 2024, Xiong et al.) supports the 2026 AHA/ASA §4.6.3 Rec 3 Class 2b recommendation: in AIS due to LVO with salvageable penumbra, 4.5–24h from onset, who cannot receive EVT, IVT directed by clinicians with thrombolytic expertise may be beneficial. TRACE-III's inclusion was restricted to ICA/M1/M2 — this pathway uses that trial population as its evidence base, though the guideline is broader (any LVO). TIMELESS (NEJM 2024) was negative when rapid EVT was available, supporting the redirect away from extended-window IVT in EVT-feasible patients." variant="amber" />
                     )}
                   </div>
 
@@ -1213,7 +1213,12 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                         <div className="flex items-center gap-1.5 mb-2">
                           <Zap size={14} className="text-neuro-600" />
                           <span className="text-xs font-bold text-neuro-800">Tenecteplase (TNK)</span>
-                          <span className="text-xs text-neuro-500 font-medium">Preferred</span>
+                          {result.path === 'A' && (
+                            <span className="text-xs text-neuro-500 font-medium" title="Within 4.5h of symptom recognition — §4.6.2 Rec 1 applies">Preferred</span>
+                          )}
+                          {result.path !== 'A' && (
+                            <span className="text-xs text-slate-500 font-medium" title="AHA 2026 §4.6.2 Rec 1 scopes TNK preference to <4.5h; §4.6.3 (4.5h+) is agent-neutral. Extended-window evidence (EXTEND, EPITHET, ECASS-4) is alteplase-based.">§4.6.3 agent-neutral</span>
+                          )}
                         </div>
                         <p className="text-base font-bold text-slate-800">0.25 mg/kg IV bolus</p>
                         <p className="text-xs text-slate-500 mt-0.5">Maximum: 25 mg · Single bolus over 5–10 sec</p>
