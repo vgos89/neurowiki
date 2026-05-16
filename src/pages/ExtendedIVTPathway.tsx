@@ -49,10 +49,10 @@ interface IVTResultFull {
 interface TrialInfo { journal: string; year: number; cor: string; }
 const TRIALS: Record<string, TrialInfo> = {
   'WAKE-UP':  { journal: 'NEJM',   year: 2018, cor: '2a'  },
-  'THAWS':    { journal: 'Stroke', year: 2018, cor: '2a'  },
+  'THAWS':    { journal: 'Stroke', year: 2020, cor: '2a'  }, // Koga et al., Stroke 2020;51:1530-8 (DOI 10.1161/STROKEAHA.119.028127)
   'EXTEND':   { journal: 'NEJM',   year: 2019, cor: '2a'  },
   'EPITHET':  { journal: 'Lancet Neurol', year: 2008, cor: '—' },
-  'ECASS-4':  { journal: 'Stroke', year: 2019, cor: '—'   },
+  'ECASS-4':  { journal: 'Int J Stroke', year: 2019, cor: '—' }, // Ringleb et al., Int J Stroke 2019;14:483-490 (PMID 30947642)
   'TIMELESS': { journal: 'NEJM',   year: 2024, cor: '—'   }, // limiting/negative trial — NOT positive evidence for late TNK
   'TRACE-III': { journal: 'NEJM',  year: 2024, cor: '2b'  }, // NEJM 2024 (Xiong et al.)
 };

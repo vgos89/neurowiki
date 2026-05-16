@@ -312,7 +312,7 @@ const ElanPathway: React.FC = () => {
             <div>
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Select event size</h3>
               <div className="grid gap-3" ref={el => { fieldRefs.current['size'] = el; }}>
-                <SelectionCard title="TIA" description="Transient event or no persistent infarct" selected={inputs.size === 'tia'} onClick={() => updateInput('size', 'tia')} />
+                <SelectionCard title="TIA" description="Transient event or no persistent infarct (extrapolation — ELAN trial enrolled AIS only; early DOAC is typically appropriate)" selected={inputs.size === 'tia'} onClick={() => updateInput('size', 'tia')} />
                 <SelectionCard title="Minor" description="≤ 1.5 cm" selected={inputs.size === 'minor'} onClick={() => updateInput('size', 'minor')} />
                 <SelectionCard title="Moderate" description="Cortical branch, deep MCA, or border-zone" selected={inputs.size === 'moderate'} onClick={() => updateInput('size', 'moderate')} />
                 <SelectionCard title="Major" description="Large territory, ≥2 MCA branches, or brainstem/cerebellum > 1.5 cm" selected={inputs.size === 'major'} onClick={() => updateInput('size', 'major')} />
