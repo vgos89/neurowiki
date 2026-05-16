@@ -12,25 +12,50 @@ import { useRecents } from '../hooks/useRecents';
 
 // --- Types & Logic ---
 type Agent = "levetiracetam" | "fosphenytoin" | "valproate" | "lacosamide" | "phenobarbital";
-interface PatientData { weight: number; convulsive: boolean; ivAccess: boolean; glucoseChecked: boolean; }
-interface Comorbidities { hypotension: boolean; respiratory: boolean; cardiac: boolean; liver: boolean; pancreatitis: boolean; pregnancy: boolean; renal: boolean; carbapenem: boolean; }
+// PatientData.convulsive removed per CLIN-2 / Architect NCSE-1 — this pathway covers
+// convulsive SE only; non-convulsive SE is routed out to the cEEG-guided NCSE workup.
+interface PatientData { weight: number; ivAccess: boolean; glucoseChecked: boolean; }
+// Cardiac flag split (CLIN-2): cardiacAvBlock → AVOID phenytoin/fosphenytoin/lacosamide;
+// cardiacElderly → slower infusion only (no absolute contraindication).
+interface Comorbidities { hypotension: boolean; respiratory: boolean; cardiacAvBlock: boolean; cardiacElderly: boolean; liver: boolean; pancreatitis: boolean; pregnancy: boolean; renal: boolean; carbapenem: boolean; }
 interface Step3Checklist { benzoAdequate: boolean; stage2Adequate: boolean; glucoseTreated: boolean; eegConsidered: boolean; }
 interface RenalState { crcl: string; dialysis: 'no' | 'yes' | 'unknown'; levForm: 'ir' | 'keppra_xr' | 'elepsia_xr'; lcmForm: 'vimpat' | 'motpoly_xr'; }
+
+// RAMPART fixed-dose IM midazolam (Silbergleit 2012, PMID 22335736).
+// "Intramuscular midazolam in a fixed dose of 10 mg (>40 kg) or 5 mg (13–40 kg)
+// was at least as effective as intravenous lorazepam" — RAMPART.
+const calculateBzdFixedDose = (agent: string, weight: number, route: 'IV' | 'IM' = 'IV'): string => {
+  if (weight <= 0) return "Enter weight";
+  if (agent === "midazolam") {
+    if (route === 'IM') {
+      if (weight < 13) return "Consult pediatrics (RAMPART fixed-dose IM not validated <13 kg)";
+      if (weight >= 13 && weight <= 40) return "5 mg IM fixed (RAMPART, 13–40 kg)";
+      return "10 mg IM fixed (RAMPART, >40 kg)";
+    }
+    // IV — weight-based per AES 2016
+    return `${Math.min(10, Math.round(0.2 * weight * 10) / 10)} mg IV (0.2 mg/kg, max 10 mg)`;
+  }
+  return "-";
+};
 
 const calculateDose = (agent: string, weight: number): string => {
   if (weight <= 0) return "Enter weight";
   switch(agent) {
     case "lorazepam": return `${Math.min(4, Math.round(0.1 * weight * 10) / 10)} mg IV (0.1 mg/kg, max 4mg)`;
-    case "midazolam": return `${Math.min(10, Math.round(0.2 * weight * 10) / 10)} mg IM/IV (0.2 mg/kg, max 10mg)`;
+    // Default midazolam display covers both routes — RAMPART fixed IM scheme via calculateBzdFixedDose
+    case "midazolam": return `${Math.min(10, Math.round(0.2 * weight * 10) / 10)} mg IV (0.2 mg/kg, max 10mg) — or IM fixed 10 mg (>40 kg) / 5 mg (13–40 kg) per RAMPART`;
     case "diazepam": return `${Math.min(10, Math.round(0.15 * weight * 10) / 10)} mg IV (0.15 mg/kg, max 10mg)`;
     case "levetiracetam": return `${Math.min(4500, Math.round(60 * weight))} mg IV (60 mg/kg, max 4500mg)`;
     case "fosphenytoin": return `${Math.min(1500, Math.round(20 * weight))} mg PE IV (20 mg PE/kg, max 1500mg PE)`;
     case "valproate": return `${Math.min(3000, Math.round(40 * weight))} mg IV (40 mg/kg, max 3000mg)`;
-    case "lacosamide": return `${Math.min(600, Math.round(8 * weight))} mg IV (8 mg/kg, max 600mg)`;
-    case "phenobarbital": return `${Math.round(20 * weight)} mg IV (20 mg/kg, rate <60mg/min)`;
+    // Lacosamide cap = 400 mg per FDA label (Vossler 2025). Use as Stage 3 add-on only, NOT Stage 2.
+    case "lacosamide": return `${Math.min(400, Math.round(8 * weight))} mg IV (8 mg/kg, max 400mg per FDA label)`;
+    // Phenobarbital 15 mg/kg per Vossler 2025 (was 20 mg/kg).
+    case "phenobarbital": return `${Math.round(15 * weight)} mg IV (15 mg/kg, rate <60mg/min)`;
     case "midazolam_inf": return `Load: ${Math.round(0.2 * weight * 10)/10} mg (0.2 mg/kg)`;
     case "propofol_inf": return `Load: ${Math.round(1 * weight)} - ${Math.round(2 * weight)} mg (1-2 mg/kg)`;
-    case "ketamine_inf": return `Load: ${Math.round(1.5 * weight)} - ${Math.round(4.5 * weight)} mg (1.5-4.5 mg/kg)`;
+    // Ketamine load 1–2.5 mg/kg per Vossler 2025 Table 5-3 (was 1.5–4.5 mg/kg).
+    case "ketamine_inf": return `Load: ${Math.round(1 * weight)} - ${Math.round(2.5 * weight)} mg (1-2.5 mg/kg)`;
     case "pentobarb_inf": return `Load: ${Math.round(5 * weight)} - ${Math.round(15 * weight)} mg (5-15 mg/kg)`;
     default: return "-";
   }
@@ -52,12 +77,12 @@ const StatusEpilepticusPathway: React.FC = () => {
   const [activeSection, setActiveSection] = useState<number>(0);
   const step = activeSection + 1;
   const { handleBack, getBackLabel } = useNavigationSource();
-  const [patient, setPatient] = useState<PatientData>({ weight: 0, convulsive: true, ivAccess: true, glucoseChecked: false });
+  const [patient, setPatient] = useState<PatientData>({ weight: 0, ivAccess: true, glucoseChecked: false });
   const [stage1Agent, setStage1Agent] = useState<"lorazepam" | "diazepam" | "midazolam" | null>(null);
   const [stage1FirstDoseGiven, setStage1FirstDoseGiven] = useState(false);
   const [stage1SecondDoseGiven, setStage1SecondDoseGiven] = useState(false);
   const [stage1Success, setStage1Success] = useState<boolean | null>(null); 
-  const [comorbidities, setComorbidities] = useState<Comorbidities>({ hypotension: false, respiratory: false, cardiac: false, liver: false, pancreatitis: false, pregnancy: false, renal: false, carbapenem: false });
+  const [comorbidities, setComorbidities] = useState<Comorbidities>({ hypotension: false, respiratory: false, cardiacAvBlock: false, cardiacElderly: false, liver: false, pancreatitis: false, pregnancy: false, renal: false, carbapenem: false });
   const [renalState, setRenalState] = useState<RenalState>({ crcl: '', dialysis: 'no', levForm: 'ir', lcmForm: 'vimpat' });
   const [stage2Agent, setStage2Agent] = useState<Agent | "auto">("auto");
   const [stage2Success, setStage2Success] = useState<boolean | null>(null);
@@ -94,40 +119,52 @@ const StatusEpilepticusPathway: React.FC = () => {
   useEffect(() => { window.scrollTo(0, 0); }, []);
   useEffect(() => { if (step > 1 && topRef.current) setTimeout(() => topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100); }, [step]);
 
-  const getRecommendedAgent = (excludeAgents: Agent[] = []): { agent: Agent; reason: string; warnings: string[] } => {
+  // ESETT (Kapur 2019, NEJM) showed levetiracetam, fosphenytoin, and valproate are equivalent
+  // for benzodiazepine-refractory status epilepticus. This function returns ALL THREE Tier-1
+  // agents with per-comorbidity status flags rather than a hierarchical pick. Lacosamide is
+  // NOT a Stage 2 agent — it belongs as a Stage 3 add-on per AES 2016 / Vossler 2025.
+  type AgentStatus = 'preferred' | 'caution' | 'avoid';
+  interface AgentOption { agent: Agent; status: AgentStatus; note?: string; }
+  const getEsettOptions = (): { options: AgentOption[]; defaultAgent: Agent; warnings: string[]; pearl: string } => {
     const warnings: string[] = [];
+    const pearl = "ESETT (Kapur 2019, NEJM): levetiracetam, fosphenytoin, and valproate are equivalent for benzodiazepine-refractory status epilepticus.";
     const avoidValproate = comorbidities.liver || comorbidities.pancreatitis || comorbidities.pregnancy || comorbidities.carbapenem;
-    const avoidLacosamide = comorbidities.cardiac;
-    const avoidPhenobarbital = comorbidities.hypotension || comorbidities.respiratory;
+    const avoidPhenytoin = comorbidities.cardiacAvBlock; // 2°/3° AV block — AVOID, not caution
+    const cautionPhenytoin = comorbidities.hypotension || comorbidities.cardiacElderly;
     const cautionLevetiracetam = comorbidities.renal;
-    const cautionPhenytoin = comorbidities.hypotension || comorbidities.cardiac;
-    if (comorbidities.pregnancy) warnings.push("Pregnancy: Valproate contraindicated (teratogenic).");
-    if (comorbidities.liver) warnings.push("Liver Dz: Valproate avoided.");
-    if (comorbidities.carbapenem) warnings.push("Carbapenem: Lowers valproate levels.");
-    if (comorbidities.cardiac) warnings.push("Cardiac (PR>200ms): Lacosamide avoided. Caution Phenytoin.");
-    if (comorbidities.hypotension) warnings.push("Hypotension: Avoid Phenobarb. Caution Phenytoin.");
-    if (comorbidities.renal) warnings.push("Renal: Levetiracetam maintenance adjustment needed.");
-    const canUse = (a: Agent) => !excludeAgents.includes(a);
-    if (canUse("levetiracetam") && !cautionLevetiracetam) return { agent: "levetiracetam", reason: "Standard first-line (ESETT)", warnings };
-    if (canUse("fosphenytoin") && !cautionPhenytoin) return { agent: "fosphenytoin", reason: "Preferred alternative (Renal sparing)", warnings };
-    if (canUse("valproate") && !avoidValproate) return { agent: "valproate", reason: "Safe hemodynamic profile", warnings };
-    if (canUse("lacosamide") && !avoidLacosamide) return { agent: "lacosamide", reason: "Alternative option", warnings };
-    if (canUse("phenobarbital") && !avoidPhenobarbital) return { agent: "phenobarbital", reason: "Last line prior to anesthesia", warnings };
-    if (canUse("levetiracetam")) return { agent: "levetiracetam", reason: "Best available (Adjust maint. dose)", warnings: [...warnings, "ADJUST MAINTENANCE DOSE FOR RENAL"] };
-    return { agent: "fosphenytoin", reason: "Clinical judgment required", warnings: [...warnings, "High risk profile"] };
+    if (comorbidities.pregnancy) warnings.push("Pregnancy: Valproate avoided (teratogenic — neural tube defects, cognitive risk).");
+    if (comorbidities.liver) warnings.push("Liver disease: Valproate avoided (hepatotoxicity, hyperammonemia).");
+    if (comorbidities.pancreatitis) warnings.push("Pancreatitis history: Valproate avoided.");
+    if (comorbidities.carbapenem) warnings.push("Carbapenem co-administration: Lowers valproate levels — avoid combination.");
+    if (comorbidities.cardiacAvBlock) warnings.push("2°/3° AV block without pacemaker: AVOID phenytoin, fosphenytoin, lacosamide (Vossler 2025: lacosamide is contraindicated in patients with second- or third-degree AV block without pacemaker).");
+    if (comorbidities.cardiacElderly) warnings.push("Elderly without conduction disease: Use slower fosphenytoin infusion rate (≤100 mg PE/min).");
+    if (comorbidities.hypotension) warnings.push("Hypotension: Caution with phenytoin/fosphenytoin (slower infusion); avoid phenobarbital.");
+    if (comorbidities.renal) warnings.push("Renal impairment: Levetiracetam maintenance dose reduction required.");
+
+    const lev: AgentOption = { agent: "levetiracetam", status: cautionLevetiracetam ? 'caution' : 'preferred', note: cautionLevetiracetam ? "Adjust maintenance for CrCl" : undefined };
+    const fos: AgentOption = { agent: "fosphenytoin", status: avoidPhenytoin ? 'avoid' : (cautionPhenytoin ? 'caution' : 'preferred'), note: avoidPhenytoin ? "AVOID: 2°/3° AV block" : (cautionPhenytoin ? "Slower infusion rate" : undefined) };
+    const vpa: AgentOption = { agent: "valproate", status: avoidValproate ? 'avoid' : 'preferred', note: avoidValproate ? "AVOID: liver/pregnancy/pancreatitis/carbapenem" : undefined };
+    const options: AgentOption[] = [lev, fos, vpa];
+
+    // Default = first 'preferred' agent; if none preferred, first 'caution'; else lev as fallback.
+    const preferred = options.find(o => o.status === 'preferred');
+    const cautionFallback = options.find(o => o.status === 'caution');
+    const defaultAgent: Agent = (preferred?.agent ?? cautionFallback?.agent ?? "levetiracetam");
+    return { options, defaultAgent, warnings, pearl };
   };
 
-  const stage2Recommendation = getRecommendedAgent();
+  const esett = getEsettOptions();
+  const stage2Recommendation = { agent: esett.defaultAgent, reason: "ESETT-equivalent (lev/fos/VPA)", warnings: esett.warnings };
   const finalStage2 = stage2Agent === "auto" ? stage2Recommendation.agent : stage2Agent;
   
   const handleReset = () => { 
       setActiveSection(0); 
-      setPatient({ weight: 0, convulsive: true, ivAccess: true, glucoseChecked: false }); 
+      setPatient({ weight: 0, ivAccess: true, glucoseChecked: false });
       setStage1Agent(null); 
       setStage1FirstDoseGiven(false); 
       setStage1SecondDoseGiven(false); 
       setStage1Success(null); 
-      setComorbidities({ hypotension: false, respiratory: false, cardiac: false, liver: false, pancreatitis: false, pregnancy: false, renal: false, carbapenem: false }); 
+      setComorbidities({ hypotension: false, respiratory: false, cardiacAvBlock: false, cardiacElderly: false, liver: false, pancreatitis: false, pregnancy: false, renal: false, carbapenem: false });
       setStage2Agent("auto"); 
       setStage2Success(null); 
       setStage2ActualAgent(null); 
@@ -229,15 +266,33 @@ const StatusEpilepticusPathway: React.FC = () => {
                     </div>
                 </div>
                 
+                {/* NCSE toggle removed (Architect NCSE-1 / CLIN-2). Pathway covers convulsive SE only;
+                    non-convulsive SE is routed out below to the cEEG-guided NCSE workup. */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <button onClick={() => setPatient({...patient, convulsive: !patient.convulsive})} className={`p-5 rounded-2xl border-2 text-left transition-colors duration-150 active:scale-[0.99] transform-gpu touch-manipulation min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${patient.convulsive ? 'border-red-500 bg-red-50 text-red-900' : 'border-slate-200 bg-white'}`}>
-                        <div className="font-bold flex items-center text-lg">{patient.convulsive ? <Activity size={20} className="mr-3"/> : <Brain size={20} className="mr-3"/>} {patient.convulsive ? 'Convulsive SE' : 'Non-Convulsive SE'}</div>
-                        <div className="text-sm mt-1 opacity-70 ml-8">{patient.convulsive ? 'Prominent motor symptoms' : 'Coma/Confusion/EEG only'}</div>
-                    </button>
+                    <div className="p-5 rounded-2xl border-2 border-red-500 bg-red-50 text-red-900 text-left">
+                        <div className="font-bold flex items-center text-lg"><Activity size={20} className="mr-3"/> Convulsive SE only</div>
+                        <div className="text-sm mt-1 opacity-80 ml-8">For non-convulsive SE, see cEEG-guided NCSE workup (route-out below).</div>
+                    </div>
                      <button onClick={() => setPatient({...patient, ivAccess: !patient.ivAccess})} className={`p-5 rounded-2xl border-2 text-left transition-colors duration-150 active:scale-[0.99] transform-gpu touch-manipulation min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${patient.ivAccess ? 'border-emerald-500 bg-emerald-50 text-emerald-900' : 'border-amber-500 bg-amber-50 text-amber-900'}`}>
                         <div className="font-bold flex items-center text-lg"><Syringe size={20} className="mr-3"/> {patient.ivAccess ? 'IV Access Established' : 'No IV Access'}</div>
-                        <div className="text-sm mt-1 opacity-70 ml-8">{patient.ivAccess ? 'Enables IV Meds' : 'Use IM Midazolam'}</div>
+                        <div className="text-sm mt-1 opacity-70 ml-8">{patient.ivAccess ? 'Enables IV Meds' : 'Use IM Midazolam (RAMPART fixed dose)'}</div>
                     </button>
+                </div>
+
+                {/* Stage 0 stabilization adjuncts — empiric considerations (CLIN-5 verbatim ranges) */}
+                <div className="bg-amber-50 border border-amber-200 p-5 rounded-2xl">
+                    <h3 className="font-bold text-amber-900 mb-2 flex items-center"><AlertTriangle size={18} className="mr-2"/> Empiric stabilization adjuncts</h3>
+                    <ul className="text-sm text-amber-900 space-y-2 ml-1">
+                        <li>• <strong>Thiamine 100 mg IV</strong> if alcohol use disorder or malnutrition suspected — give <em>before</em> glucose.</li>
+                        <li>• <strong>Pyridoxine 50–100 mg IV</strong> if isoniazid (INH) overdose or pediatric idiopathic SE suspected.</li>
+                        <li>• <strong>Pregnancy + active seizure → consider eclampsia → magnesium 4 g IV over 5–10 min, then 1 g/h</strong> (NOT benzo first). Benzodiazepine escalation is NOT first-line for eclamptic seizures (Mullhi 2025). <span className="text-xs italic">Magnesium protocol per Mullhi 2025; primary obstetric guideline (ACOG/RCOG) reference pending.</span></li>
+                    </ul>
+                </div>
+
+                {/* NCSE route-out card */}
+                <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl text-sm text-slate-700">
+                    <div className="font-bold text-slate-900 mb-1 flex items-center"><Brain size={16} className="mr-2"/> Suspect NCSE?</div>
+                    <p>NCSE without coma is an active condition but does not mandate ICU-level care or anesthetic infusion (Vossler 2025). Route to cEEG-guided NCSE workup rather than continuing this convulsive-SE pathway.</p>
                 </div>
 
                 <button onClick={() => setPatient({...patient, glucoseChecked: !patient.glucoseChecked})} className={`w-full p-5 rounded-2xl border-2 transition-colors duration-150 active:scale-[0.99] transform-gpu touch-manipulation text-left min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${patient.glucoseChecked ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-red-50 border-red-200 text-red-900'}`}>
@@ -268,9 +323,16 @@ const StatusEpilepticusPathway: React.FC = () => {
           summary={stage1Agent ? `Agent: ${stage1Agent}` : undefined}
         >
             <div className="space-y-6 animate-in slide-in-from-right-4">
-                 <div className="bg-red-50 border border-red-100 p-4 rounded-xl flex items-start space-x-3">
-                    <AlertTriangle className="text-red-600 shrink-0 mt-0.5" />
-                    <div><h3 className="font-bold text-red-900">Stage 1: Early Status (0-5 min)</h3><p className="text-sm text-red-700 mt-1">Goal: Stop seizure immediately. Underdosing is a common cause of failure.</p></div>
+                 <div className="bg-red-50 border border-red-100 p-4 rounded-xl">
+                    <div className="flex items-start space-x-3">
+                        <AlertTriangle className="text-red-600 shrink-0 mt-0.5" />
+                        <div>
+                            <h3 className="font-bold text-red-900">Stabilization (0–5 min)</h3>
+                            <p className="text-sm text-red-700 mt-1">ABCs, labs, fingerstick glucose, IV access. Empiric thiamine if alcohol/malnutrition suspected.</p>
+                            <h3 className="font-bold text-red-900 mt-3">Initial Therapy / BZD (5–20 min)</h3>
+                            <p className="text-sm text-red-700 mt-1">First-line benzodiazepine per Glauser 2016. Underdosing is the most common cause of failure.</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -285,7 +347,14 @@ const StatusEpilepticusPathway: React.FC = () => {
                 {stage1Agent && (
                     <div ref={stage1DoseRef} className="bg-white p-6 rounded-2xl border border-red-100 shadow-sm animate-in zoom-in-95 scroll-mt-24">
                         <div className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Recommended Dose</div>
-                        <div className="text-4xl font-black text-slate-900 mb-2">{calculateDose(stage1Agent, patient.weight)}</div>
+                        <div className="text-4xl font-black text-slate-900 mb-2">
+                            {stage1Agent === 'midazolam' && !patient.ivAccess
+                                ? calculateBzdFixedDose('midazolam', patient.weight, 'IM')
+                                : calculateDose(stage1Agent, patient.weight)}
+                        </div>
+                        {stage1Agent === 'midazolam' && !patient.ivAccess && (
+                            <div className="text-xs text-slate-600 italic mb-2">RAMPART (Silbergleit 2012, PMID 22335736): Intramuscular midazolam in a fixed dose of 10 mg (&gt;40 kg) or 5 mg (13–40 kg) was at least as effective as intravenous lorazepam.</div>
+                        )}
                         
                         {!stage1FirstDoseGiven ? (
                             <button onClick={() => setStage1FirstDoseGiven(true)} className="w-full mt-4 py-4 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-colors duration-150 shadow-lg active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">Mark First Dose Given</button>
@@ -338,44 +407,65 @@ const StatusEpilepticusPathway: React.FC = () => {
             <div className="space-y-6 animate-in slide-in-from-right-4">
                  <div className="bg-red-50 border border-red-100 p-4 rounded-xl flex items-start space-x-3">
                     <AlertTriangle className="text-red-600 shrink-0 mt-0.5" />
-                    <div><h3 className="font-bold text-red-900">Stage 2: Established SE (5-30 min)</h3><p className="text-sm text-red-700 mt-1">Seizure persisting despite adequate benzos. Risk of neuronal injury increases.</p></div>
+                    <div><h3 className="font-bold text-red-900">Established SE (20–40 min from onset)</h3><p className="text-sm text-red-700 mt-1">Seizure persisting despite adequate benzodiazepine therapy (Glauser 2016). Risk of neuronal injury rises with duration.</p></div>
+                </div>
+
+                {/* ESETT equivalence pearl (CLIN-2 verbatim — required string) */}
+                <div className="bg-indigo-50 border border-indigo-200 p-4 rounded-xl">
+                    <h3 className="font-bold text-indigo-900 mb-1 flex items-center"><Info size={16} className="mr-2"/> ESETT equivalence</h3>
+                    <p className="text-sm text-indigo-900">{esett.pearl}</p>
+                    <p className="text-xs text-indigo-700 mt-2 italic">Lacosamide is NOT a Stage 2 ESETT-equivalent option — reserve for Stage 3 add-on per AES 2016 / Vossler 2025.</p>
                 </div>
 
                 <div className="bg-white p-5 rounded-xl border border-slate-200">
                     <h3 className="font-bold text-slate-900 mb-3">Comorbidities (Affects Drug Choice)</h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                        {Object.keys(comorbidities).map(k => (
-                            <button key={k} onClick={() => setComorbidities({...comorbidities, [k]: !comorbidities[k as keyof Comorbidities]})} className={`px-3 py-3 text-sm font-bold rounded-lg border transition-colors duration-150 active:scale-[0.98] transform-gpu touch-manipulation min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${comorbidities[k as keyof Comorbidities] ? 'bg-slate-800 text-white border-slate-800' : 'bg-slate-50 text-slate-500 border-slate-200'}`}>
-                                {k.toUpperCase()}
+                        {([
+                            { key: 'hypotension', label: 'HYPOTENSION' },
+                            { key: 'respiratory', label: 'RESPIRATORY' },
+                            { key: 'cardiacAvBlock', label: 'AV BLOCK (2°/3°)' },
+                            { key: 'cardiacElderly', label: 'ELDERLY (no block)' },
+                            { key: 'liver', label: 'LIVER' },
+                            { key: 'pancreatitis', label: 'PANCREATITIS' },
+                            { key: 'pregnancy', label: 'PREGNANCY' },
+                            { key: 'renal', label: 'RENAL' },
+                            { key: 'carbapenem', label: 'CARBAPENEM' },
+                        ] as { key: keyof Comorbidities; label: string }[]).map(({ key, label }) => (
+                            <button key={key} onClick={() => setComorbidities({...comorbidities, [key]: !comorbidities[key]})} className={`px-3 py-3 text-xs font-bold rounded-lg border transition-colors duration-150 active:scale-[0.98] transform-gpu touch-manipulation min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${comorbidities[key] ? 'bg-slate-800 text-white border-slate-800' : 'bg-slate-50 text-slate-500 border-slate-200'}`}>
+                                {label}
                             </button>
                         ))}
                     </div>
                 </div>
 
                 <div ref={stage2DoseRef} className="bg-white p-6 rounded-2xl border border-indigo-100 shadow-sm scroll-mt-24">
-                    <div className="flex justify-between items-start mb-4">
-                        <div>
-                             <div className="text-sm font-bold text-indigo-500 uppercase tracking-widest">Recommended Agent</div>
-                             <div className="text-3xl font-black text-slate-900 capitalize">{stage2Recommendation.agent}</div>
+                    <div className="text-sm font-bold text-indigo-500 uppercase tracking-widest mb-3">ESETT-equivalent options (lev/fos/VPA)</div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                        {esett.options.map((opt) => {
+                            const isSelected = finalStage2 === opt.agent;
+                            const statusColor = opt.status === 'avoid' ? 'border-red-400 bg-red-50' : opt.status === 'caution' ? 'border-amber-400 bg-amber-50' : 'border-emerald-400 bg-emerald-50';
+                            const selectedRing = isSelected ? 'ring-2 ring-indigo-500' : '';
+                            return (
+                                <button key={opt.agent} onClick={() => setStage2Agent(opt.agent)} disabled={opt.status === 'avoid'} className={`p-3 rounded-xl border-2 text-left transition-colors duration-150 ${statusColor} ${selectedRing} ${opt.status === 'avoid' ? 'opacity-60 cursor-not-allowed' : 'hover:shadow-sm'} focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none`}>
+                                    <div className="font-bold capitalize text-slate-900">{opt.agent}</div>
+                                    <div className={`text-xs font-bold uppercase mt-1 ${opt.status === 'avoid' ? 'text-red-700' : opt.status === 'caution' ? 'text-amber-700' : 'text-emerald-700'}`}>{opt.status}</div>
+                                    {opt.note && <div className="text-xs text-slate-600 mt-1">{opt.note}</div>}
+                                    <div className="text-[10px] uppercase text-slate-400 font-bold mt-2">ESETT-equivalent (lev/fos/VPA)</div>
+                                </button>
+                            );
+                        })}
+                    </div>
+                    {stage2Recommendation.warnings.length > 0 && (
+                        <div className="flex items-start space-x-2 mb-3">
+                            <AlertTriangle className="text-amber-500 shrink-0 mt-0.5" size={16} />
+                            <div className="flex-1 space-y-1">
+                                {stage2Recommendation.warnings.map((w, i) => <div key={i} className="text-xs text-amber-800 bg-amber-50 px-2 py-1 rounded">{w}</div>)}
+                            </div>
                         </div>
-                        {stage2Recommendation.warnings.length > 0 && <AlertTriangle className="text-amber-500" />}
-                    </div>
-                    {stage2Recommendation.warnings.map((w, i) => <div key={i} className="text-xs text-amber-700 bg-amber-50 px-2 py-1 rounded mb-1">{w}</div>)}
-                    <div className="mt-4 p-4 bg-slate-50 rounded-xl">
-                        <div className="text-xs font-bold text-slate-400 uppercase">Dosing</div>
+                    )}
+                    <div className="mt-2 p-4 bg-slate-50 rounded-xl">
+                        <div className="text-xs font-bold text-slate-400 uppercase">Dosing — {finalStage2}</div>
                         <div className="text-xl font-bold text-slate-900">{calculateDose(finalStage2, patient.weight)}</div>
-                    </div>
-                    
-                    <div className="mt-4">
-                        <label className="text-xs font-bold text-slate-400 uppercase block mb-2">Override Selection</label>
-                        <select className="w-full p-4 bg-white border border-slate-300 rounded-xl text-base font-bold" value={stage2Agent} onChange={(e) => setStage2Agent(e.target.value as any)}>
-                            <option value="auto">Auto-Recommend ({stage2Recommendation.agent})</option>
-                            <option value="levetiracetam">Levetiracetam</option>
-                            <option value="fosphenytoin">Fosphenytoin</option>
-                            <option value="valproate">Valproate</option>
-                            <option value="lacosamide">Lacosamide</option>
-                            <option value="phenobarbital">Phenobarbital</option>
-                        </select>
                     </div>
                 </div>
 
@@ -401,9 +491,15 @@ const StatusEpilepticusPathway: React.FC = () => {
                  <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
                     <div className="relative z-10">
                         <h2 className="text-2xl font-black mb-1">Refractory SE</h2>
-                        <p className="opacity-90">Stage 3 (&gt;30 min). Intubation & Continuous EEG required.</p>
+                        <p className="opacity-90">Stage 3 (40+ min from onset OR after 1 BZD + 1 non-BZD ASM failure, per Glauser 2016). Intubation and continuous EEG required.</p>
                     </div>
                     <Activity className="absolute right-4 top-4 text-white opacity-20" size={64} />
+                 </div>
+
+                 {/* NORSE/FIRES advisory (B2) */}
+                 <div className="bg-purple-50 border border-purple-200 p-4 rounded-xl">
+                    <h3 className="font-bold text-purple-900 mb-1 flex items-center"><Brain size={16} className="mr-2"/> NORSE / FIRES consideration</h3>
+                    <p className="text-sm text-purple-900">If new-onset RSE without obvious cause, consider NORSE/FIRES. Expert consensus supports empiric immunotherapy within 72 hours and an autoimmune/paraneoplastic workup in parallel with anesthetic management.</p>
                  </div>
 
                  <div className="bg-white p-6 rounded-2xl border border-slate-200">
@@ -419,8 +515,20 @@ const StatusEpilepticusPathway: React.FC = () => {
                         </button>
                          <button onClick={() => setStage3Agent("ketamine_inf")} className={`w-full text-left p-5 rounded-2xl border-2 transition-colors duration-150 active:scale-[0.99] transform-gpu touch-manipulation min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${stage3Agent === 'ketamine_inf' ? 'border-red-500 bg-red-50' : 'border-slate-200 hover:border-red-200'}`}>
                             <div className="font-bold text-lg">Ketamine Infusion</div>
-                            <div className="text-sm opacity-70">Load: 1.5-4.5 mg/kg. Maint: 1-10 mg/kg/hr. Hemodynamically stable.</div>
+                            <div className="text-sm opacity-70">Load: 1-2.5 mg/kg (Vossler 2025). Maint: 1-10 mg/kg/hr. Hemodynamically stable.</div>
                         </button>
+                    </div>
+
+                    {/* Stage 3 ASM add-on — lacosamide moved here from Stage 2 (CLIN-2 / A1) */}
+                    <div className="mt-5 border-t border-slate-100 pt-5">
+                        <h4 className="font-bold text-slate-900 mb-3 text-sm">Stage 3 ASM add-on (alongside anesthetic infusion)</h4>
+                        <button onClick={() => setStage3Agent("lacosamide")} className={`w-full text-left p-5 rounded-2xl border-2 transition-colors duration-150 active:scale-[0.99] transform-gpu touch-manipulation min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${stage3Agent === 'lacosamide' ? 'border-red-500 bg-red-50' : 'border-slate-200 hover:border-red-200'}`}>
+                            <div className="font-bold text-lg">Lacosamide (add-on)</div>
+                            <div className="text-sm opacity-70">{calculateDose("lacosamide", patient.weight)}. Pre-load ECG required.</div>
+                        </button>
+                        <div className="mt-3 text-xs text-amber-800 bg-amber-50 border border-amber-200 p-3 rounded-lg">
+                            <strong>Pre-load ECG safety note:</strong> lacosamide is contraindicated in patients with second- or third-degree AV block without pacemaker (Vossler 2025). Obtain ECG before loading; verify PR interval and absence of high-degree AV block.
+                        </div>
                     </div>
                  </div>
 
@@ -430,6 +538,22 @@ const StatusEpilepticusPathway: React.FC = () => {
                          <div className="text-4xl font-black text-slate-900">{calculateDose(stage3Agent, patient.weight)}</div>
                      </div>
                  )}
+                 {/* Stage 4 — Super-Refractory SE (B1). Framed as workup/checklist, NOT Class I/IIa recommendations (CLIN-4).
+                     Verbs: "consider" / "may be considered" / "expert consensus" only.
+                     Must contain verbatim "insufficient evidence" caveat per AES 2020 / CLIN-7. */}
+                 <div className="bg-slate-50 border-2 border-slate-300 p-6 rounded-2xl">
+                    <h3 className="font-bold text-slate-900 mb-1 flex items-center"><Zap size={18} className="mr-2 text-amber-600"/> Super-Refractory SE (Stage 4 — 24h+ on anesthetic)</h3>
+                    <p className="text-xs text-slate-600 mb-3 italic">Framed as workup/checklist — expert consensus only. AES 2020 notes insufficient evidence to grade specific recommendations for super-refractory SE.</p>
+                    <ul className="text-sm text-slate-800 space-y-2">
+                        <li>• Re-image brain (MRI with contrast); rule out evolving lesion or cerebritis.</li>
+                        <li>• Repeat LP; consider autoimmune encephalitis panel (NMDA-R, LGI1, GABA-B, etc.) and paraneoplastic workup.</li>
+                        <li>• Consider empiric immunotherapy (steroids, IVIG, or PLEX) if NORSE/FIRES suspected.</li>
+                        <li>• Consider ketogenic diet within 7 days for cryptogenic super-refractory cases.</li>
+                        <li>• Consider alternative anesthetic (ketamine, thiopental/pentobarbital, isoflurane) if midazolam/propofol fail.</li>
+                        <li>• Transfer to tertiary neurocritical care center if not already.</li>
+                    </ul>
+                 </div>
+
                  {stage3Agent && (
                     <div className="fixed bottom-[4.5rem] md:static left-0 right-0 bg-white/95 backdrop-blur md:bg-transparent p-4 md:p-0 border-t md:border-0 z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none">
                         <div className="max-w-3xl mx-auto">
@@ -444,9 +568,17 @@ const StatusEpilepticusPathway: React.FC = () => {
             <div className="mt-12 border-t border-slate-100 pt-8 pb-8">
                  <h3 className="text-sm font-bold text-slate-900 mb-4">References</h3>
                  <ul className="space-y-3 text-xs text-slate-500">
-                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">1</span>{autoLinkReactNodes("Glauser T et al. Epilepsy Curr 2016 (AES Guidelines).")}</li>
-                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">2</span>{autoLinkReactNodes("Kapur J et al. N Engl J Med 2019 (ESETT Trial).")}</li>
-                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">3</span>{autoLinkReactNodes(SE_CONTENT.stage2Note)}</li>
+                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">1</span>{autoLinkReactNodes("Glauser T et al. Evidence-based guideline: treatment of convulsive status epilepticus in children and adults. Epilepsy Curr 2016 (AES Guidelines).")}</li>
+                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">2</span>{autoLinkReactNodes("Kapur J et al. Randomized trial of three anticonvulsant medications for status epilepticus. N Engl J Med 2019 (ESETT Trial).")}</li>
+                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">3</span>{autoLinkReactNodes("Silbergleit R et al. Intramuscular versus intravenous therapy for prehospital status epilepticus. N Engl J Med 2012 (RAMPART). PMID 22335736.")}</li>
+                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">4</span>{autoLinkReactNodes("Treiman DM et al. A comparison of four treatments for generalized convulsive status epilepticus. VA Cooperative SE Trial. N Engl J Med 1998. PMID 9738086.")}</li>
+                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">5</span>{autoLinkReactNodes("Alldredge BK et al. A comparison of lorazepam, diazepam, and placebo for the treatment of out-of-hospital status epilepticus (PHTSE). N Engl J Med 2001. PMID 11547716.")}</li>
+                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">6</span>{autoLinkReactNodes("Lyttle MD et al. Levetiracetam versus phenytoin for second-line treatment of paediatric convulsive status epilepticus (EcLiPSE). Lancet 2019. PMID 31005386.")}</li>
+                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">7</span>{autoLinkReactNodes("Dalziel SR et al. Levetiracetam versus phenytoin for second-line treatment of convulsive status epilepticus in children (ConSEPT). Lancet 2019. PMID 31005385.")}</li>
+                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">8</span>{autoLinkReactNodes("Vossler DG. Status epilepticus in adults. Continuum (Minneap Minn) 2025;31(1):95–124.")}</li>
+                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">9</span>{autoLinkReactNodes("Rubinos C et al. Acute symptomatic seizures and status epilepticus. Continuum (Minneap Minn) 2024;30(3):682–720.")}</li>
+                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">10</span>{autoLinkReactNodes("Mullhi RK et al. Management of eclampsia and status epilepticus in pregnancy. J Intensive Care Soc 2025. DOI 10.1177/17511437251321338.")}</li>
+                     <li className="flex items-start"><span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded mr-2 font-mono">11</span>{autoLinkReactNodes(SE_CONTENT.stage2Note)}</li>
                  </ul>
             </div>
         )}
@@ -461,3 +593,5 @@ const StatusEpilepticusPathway: React.FC = () => {
 };
 
 export default StatusEpilepticusPathway;
+
+// @medical-scientist 2026-05-16 — clinical fixes applied per docs/audits/2026-05-16/status-epilepticus-pathway-fix-manifest.md (Patches 1-6; ship-blockers A1/A2 addressed; CLIN-2 verbatim phrases preserved).
