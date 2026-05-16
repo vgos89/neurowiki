@@ -1194,15 +1194,11 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           accentClass="bg-purple-100 text-purple-600"
         >
             <div className="space-y-6">
-                {/* Provisional result banner */}
+                {/* Provisional result banner — intentionally neutral slate to avoid anchoring on a partial verdict before imaging confirms. Severity-tinted treatment is reserved for the terminal verdict drawer per post-exec clinical-reviewer flag (2026-05-16). */}
                 {isSection0Complete && isSection1Complete && result && result.status !== 'Incomplete' && result.reason !== 'Pending Imaging' && (
-                    <div className={`mb-4 flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 text-sm font-semibold animate-in fade-in duration-300
- ${result.variant === 'success' ? 'bg-emerald-50 border-emerald-500 text-emerald-800' :
- result.variant === 'warning' ? 'bg-amber-50 border-amber-400 text-amber-800' :
- result.variant === 'danger' ? 'bg-red-50 border-red-500 text-red-800' :
- 'bg-slate-50 border-slate-400 text-slate-700'}`}>
-                        <Activity size={14} className="shrink-0" />
-                        <span>Provisional: <strong>{result.status}</strong> — complete imaging to confirm</span>
+                    <div className="mb-4 flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-700 animate-in fade-in duration-300">
+                        <Activity size={14} className="shrink-0 text-slate-500" />
+                        <span>Provisional · <span className="font-medium text-slate-900">{result.status}</span> — complete imaging to confirm</span>
                     </div>
                 )}
 
