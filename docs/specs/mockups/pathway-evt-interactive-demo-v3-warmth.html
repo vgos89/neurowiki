@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<!--
+  EVT Pathway — Interactive Demo v3 (Warmth)
+  2026-05-15
+  Based on: pathway-evt-interactive-demo-v2-content-density.html
+  ADDITIONS vs v2:
+    1. Step icons inline with each step eyebrow (bare inline SVG, slate-500)
+    2. Inline LearningPearl blocks per step (collapsed by default, conditional)
+    4. Auto-scroll to next unanswered category row after setField()
+  SKIPPED: Proposal 3 (provisional verdict pill) — drawer stays muted until terminal.
+  All v2 elements preserved verbatim (rail, chips, cascade, drawer, clinical logic).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EVT Pathway — Interactive Demo v3 (Warmth)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          neuro: {
+            50:  '#EEF2FF',
+            100: '#C7D7FA',
+            200: '#A5B4FC',
+            300: '#818CF8',
+            500: '#1746A2',
+            600: '#123988',
+            700: '#0E2D6B',
+            900: '#06143D',
+          }
+        }
+      }
+    }
+  }
+</script>
+<style>
+  /* ─── Design tokens ─────────────────────────────────────────────────────── */
+  :root {
+    --color-neuro-50:  #EEF2FF;
+    --color-neuro-100: #C7D7FA;
+    --color-neuro-200: #A5B4FC;
+    --color-neuro-500: #1746A2;
+    --color-neuro-600: #123988;
+    --color-neuro-700: #0E2D6B;
+    --color-neuro-900: #06143D;
+    --tab-bar-height: 0px;
+    --nav-rail-width: 0px;
+  }
+
+  /* ─── Reduced motion guard (A11y) ──────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+
+  /* ─── Base ──────────────────────────────────────────────────────────────── */
+  body { background: #f1f5f9; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+  /* ─── Demo banner ───────────────────────────────────────────────────────── */
+  .demo-banner {
+    background: #0E2D6B; color: white;
+    padding: 8px 16px; font-size: 11px; font-weight: 600;
+    text-align: center; letter-spacing: 0.05em;
+    position: sticky; top: 0; z-index: 100;
+  }
+
+  /* ─── App frame (phone-like) ────────────────────────────────────────────── */
+  .app-frame {
+    max-width: 440px; margin: 0 auto;
+    background: white; min-height: 100vh;
+    position: relative; overflow: hidden;
+  }
+
+  /* ─── Sticky header ─────────────────────────────────────────────────────── */
+  .pathway-header {
+    position: sticky; top: 0; z-index: 40;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .pathway-header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px;
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .header-right { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+
+  .back-btn {
+    padding: 12px; margin: -12px;
+    color: #64748b; background: none; border: none; cursor: pointer;
+    border-radius: 50%; transition: color 0.12s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .back-btn:hover { color: #0f172a; }
+  .back-btn:focus-visible { outline: 2px solid var(--color-neuro-500); outline-offset: 2px; }
+  .back-btn:active { transform: scale(0.97); }
+
+  .header-eyebrow {
+    font-size: 10px; font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .header-title {
+    font-size: 15px; font-weight: 600;
+    color: #0f172a; line-height: 1.2; letter-spacing: -0.01em;
+    margin-top: 2px;
+  }
+  .header-step-counter {
+    font-size: 11px; font-weight: 500; color: #64748b;
+    margin-top: 1px;
+  }
+
+  .icon-btn {
+    padding: 8px; margin: -6px;
+    background: none; border: none; cursor: pointer;
+    border-radius: 50%; color: #94a3b8;
+    transition: background-color 0.12s, color 0.12s;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 36px; min-width: 36px;
+  }
+  .icon-btn:hover { background: #f8fafc; color: #64748b; }
+  .icon-btn:focus-visible { outline: 2px solid var(--color-neuro-500); outline-offset: 2px; }
+  .icon-btn:active { transform: scale(0.97); }
+
+  .copy-btn {
+    margin-left: 6px;
+    background: var(--color-neuro-500); color: white;
+    border: none; cursor: pointer;
+    padding: 8px 16px; border-radius: 9999px;
+    font-size: 14px; font-weight: 500;
+    min-height: 44px;
+    transition: background-color 0.12s;
+  }
+  .copy-btn:hover { background: var(--color-neuro-600); }
+  .copy-btn:focus-visible { outline: 2px solid var(--color-neuro-500); outline-offset: 2px; }
+  .copy-btn:active { transform: scale(0.97); }
+
+  /* ─── Rail system ───────────────────────────────────────────────────────── */
+  .content-col { padding: 0 20px 100px; }
+
+  .step-block { margin-bottom: 4px; }
+
+  .step-header {
+    display: flex; align-items: center; gap: 0; margin-bottom: 0;
+    position: relative;
+  }
+
+  .node-wrap {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    margin-left: -3px;
+  }
+  .node-btn {
+    background: none; border: none; cursor: pointer;
+    padding: 10px; margin: -10px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 44px; min-width: 44px;
+  }
+  .node-btn:focus-visible { outline: 2px solid var(--color-neuro-500); outline-offset: 2px; }
+  .node-btn:disabled { cursor: not-allowed; }
+  .node-btn:active:not(:disabled) { transform: scale(0.95); }
+
+  .node-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .node-completed .node-dot  { background: var(--color-neuro-500); }
+  .node-active .node-dot    { background: white; border: 2px solid var(--color-neuro-500); }
+  .node-locked .node-dot    { width: 10px; height: 10px; background: white; border: 1px solid #cbd5e1; }
+
+  /* ─── v3: Step eyebrow with icon ────────────────────────────────────────── */
+  .step-eyebrow {
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    padding-left: 10px; flex: 1;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .eyebrow-active   { color: #94a3b8; }
+  .eyebrow-completed { color: #94a3b8; opacity: 0.65; }
+  .eyebrow-locked   { color: #94a3b8; opacity: 0.5; }
+
+  /* Step icon: bare SVG, slate-500, no container */
+  .step-icon {
+    width: 14px; height: 14px;
+    color: #64748b;
+    flex-shrink: 0;
+    display: inline-flex; align-items: center;
+  }
+  /* Locked eyebrow icons inherit 50% opacity from parent */
+  .eyebrow-locked .step-icon { /* opacity cascades from parent */ }
+
+  /* Rail segment below the node row */
+  .rail-segment {
+    border-left: 2px solid #e2e8f0;
+    margin-left: 13px; padding-left: 22px;
+    transition: border-color 0.25s ease, border-width 0.25s ease;
+  }
+  .rail-cobalt {
+    border-left: 2px solid var(--color-neuro-500);
+  }
+  .rail-slate {
+    border-left: 1px solid #e2e8f0;
+    padding-left: 23px;
+  }
+
+  /* ─── Category rows ─────────────────────────────────────────────────────── */
+  .cat-rows { padding: 6px 0 10px; }
+
+  .cat-row-btn {
+    width: 100%; display: flex; align-items: center;
+    justify-content: space-between;
+    padding: 14px 12px; text-align: left;
+    background: none; border: none; cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.12s;
+    min-height: 44px;
+  }
+  .cat-row-btn:hover { background: rgba(248,250,252,0.8); }
+  .cat-row-btn:focus-visible { outline: 2px solid var(--color-neuro-500); outline-offset: 1px; }
+  .cat-row-btn:active { transform: scale(0.99); background: #f1f5f9; }
+
+  .cat-row-label {
+    font-weight: 500; color: #0f172a; font-size: 15px;
+    text-align: left;
+  }
+  .cat-row-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .cat-row-value { font-size: 14px; color: #64748b; }
+  .cat-row-value-unset { font-size: 14px; color: #64748b; font-style: italic; }
+  .cat-row-chevron {
+    width: 16px; height: 16px; color: #A5B4FC;
+    transition: transform 0.18s ease; flex-shrink: 0;
+  }
+  .cat-row-open .cat-row-chevron { transform: rotate(180deg); }
+
+  .divider-hair { border-top: 1px solid #e2e8f0; }
+
+  /* ─── v2 accordion option anatomy (two-line stacked) ────────────────────── */
+  .cat-accordion { padding: 4px 12px 10px; }
+
+  .cat-option-btn {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 12px 12px 16px;
+    text-align: left;
+    background: none; border: none;
+    cursor: pointer; border-radius: 8px;
+    transition: background-color 0.12s;
+    min-height: 44px;
+    position: relative;
+    margin-bottom: 4px;
+    gap: 2px;
+  }
+  .cat-option-btn:hover { background: rgba(248,250,252,0.8); }
+  .cat-option-btn:focus-visible { outline: 2px solid var(--color-neuro-500); outline-offset: 1px; }
+  .cat-option-btn:active { background: #f1f5f9; transform: scale(0.99); }
+
+  .cat-option-label {
+    font-size: 14px;
+    color: #334155;
+    font-weight: 500;
+    line-height: 1.35;
+    display: block;
+    width: 100%;
+  }
+
+  .cat-option-desc {
+    font-size: 11px;
+    color: #64748b;
+    line-height: 1.4;
+    display: block;
+    width: 100%;
+  }
+
+  .cat-option-selected {
+    border-left: 2px solid var(--color-neuro-500);
+    padding-left: 14px;
+  }
+  .cat-option-selected .cat-option-label {
+    color: var(--color-neuro-700);
+    font-weight: 600;
+  }
+  .cat-option-selected .cat-option-desc {
+    color: var(--color-neuro-700);
+    opacity: 0.65;
+  }
+
+  /* Completed row */
+  .cat-row-completed-btn {
+    width: 100%; display: flex; align-items: center;
+    justify-content: space-between;
+    padding: 14px 12px 14px 14px;
+    border-radius: 8px;
+    background: var(--color-neuro-50);
+    cursor: pointer; border: none;
+    border-left: 2px solid var(--color-neuro-500);
+    min-height: 44px;
+    transition: background-color 0.12s;
+  }
+  .cat-row-completed-btn:hover { background: var(--color-neuro-100); }
+  .cat-row-completed-btn:focus-visible { outline: 2px solid var(--color-neuro-500); outline-offset: 1px; }
+  .cat-row-completed-btn:active { transform: scale(0.99); }
+  .cat-row-completed-label { font-weight: 600; color: var(--color-neuro-700); font-size: 15px; }
+  .cat-row-completed-value { font-size: 14px; color: var(--color-neuro-700); opacity: 0.75; }
+
+  /* Numeric input */
+  .cat-input-row {
+    width: 100%; display: flex; align-items: center;
+    justify-content: space-between; padding: 10px 12px;
+    border-radius: 8px; min-height: 44px;
+  }
+  .cat-input-label { font-weight: 500; color: #0f172a; font-size: 15px; }
+  .cat-input-right { display: flex; align-items: center; gap: 8px; }
+  .cat-input-field {
+    width: 80px; min-height: 44px; padding: 8px 12px;
+    font-size: 14px; font-weight: 500;
+    background: #f8fafc; border: 1px solid #cbd5e1;
+    border-radius: 8px; color: #0f172a; text-align: center;
+    transition: border-color 0.12s;
+  }
+  .cat-input-field:focus {
+    border-color: var(--color-neuro-500); outline: none;
+    box-shadow: 0 0 0 3px rgba(23, 70, 162, 0.15);
+  }
+  .cat-input-unit { font-size: 12px; color: #64748b; }
+
+  /* ─── Branch chips ───────────────────────────────────────────────────────── */
+  .chip-wrap {
+    display: inline-block;
+    padding: 12px; margin: -12px 0;
+  }
+  .branch-chip {
+    font-size: 11px; color: #475569;
+    background: #f8fafc;
+    padding: 3px 10px; border-radius: 9999px;
+    border: 1px solid #e2e8f0;
+    cursor: pointer;
+    transition: background-color 0.12s, box-shadow 0.12s;
+    min-height: 44px;
+    display: inline-flex; align-items: center;
+  }
+  .branch-chip:hover {
+    background: #f1f5f9; color: #0f172a;
+    box-shadow: 0 0 0 1px var(--color-neuro-200);
+  }
+  .branch-chip:focus-visible {
+    outline: 2px solid var(--color-neuro-500);
+    outline-offset: 2px;
+  }
+  .branch-chip:active { transform: scale(0.97); }
+
+  /* ─── Locked step body ──────────────────────────────────────────────────── */
+  .locked-body {
+    padding: 6px 0 12px;
+    font-size: 14px; font-style: italic;
+    color: #64748b;
+  }
+
+  /* ─── Cascade notice ─────────────────────────────────────────────────────── */
+  #cascade-notice {
+    margin-top: 8px;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px;
+    background: #f8fafc; border: 1px solid #e2e8f0;
+    border-radius: 9999px;
+    font-size: 12px; color: #475569;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+  }
+  #cascade-notice.visible {
+    opacity: 1; transform: translateY(0);
+    pointer-events: auto;
+  }
+  .cascade-undo-btn {
+    background: white; border: 1px solid #cbd5e1;
+    border-radius: 9999px; cursor: pointer;
+    font-size: 12px; color: #334155;
+    padding: 10px 14px;
+    margin: -8px 0;
+    min-height: 44px; min-width: 44px;
+    transition: background-color 0.12s;
+    white-space: nowrap;
+    display: flex; align-items: center;
+  }
+  .cascade-undo-btn:hover { background: #f1f5f9; border-color: #94a3b8; }
+  .cascade-undo-btn:focus-visible { outline: 2px solid var(--color-neuro-500); outline-offset: 2px; }
+  .cascade-undo-btn:active { transform: scale(0.97); }
+
+  /* ─── v3: Pearl blocks ───────────────────────────────────────────────────── */
+  .pearl-block {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+  }
+  .pearl-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    min-height: 32px;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    list-style: none;
+  }
+  .pearl-toggle:hover { background: #f8fafc; }
+  .pearl-toggle:focus-visible {
+    outline: 2px solid var(--color-neuro-500);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  /* Remove default <summary> marker in all browsers */
+  .pearl-toggle::-webkit-details-marker { display: none; }
+  .pearl-toggle::marker { display: none; }
+
+  .pearl-icon {
+    width: 14px; height: 14px;
+    color: #f59e0b;
+    flex-shrink: 0;
+  }
+  .pearl-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    flex: 1;
+  }
+  .pearl-chevron {
+    width: 12px; height: 12px;
+    color: #94a3b8;
+    margin-left: auto;
+    transition: transform 200ms;
+    flex-shrink: 0;
+  }
+  details[open] .pearl-chevron { transform: rotate(180deg); }
+
+  .pearl-body {
+    margin-top: 0.5rem;
+    padding: 0 0.75rem;
+    font-size: 12px;
+    color: #475569;
+    line-height: 1.5;
+  }
+
+  /* ─── Drawer ─────────────────────────────────────────────────────────────── */
+  .drawer-portal {
+    position: fixed;
+    bottom: calc(var(--tab-bar-height, 0px) + env(safe-area-inset-bottom, 0px));
+    left: calc(var(--nav-rail-width, 0px));
+    right: 0;
+    z-index: 55;
+  }
+  .drawer-a {
+    background: #f1f5f9;
+    box-shadow: 0 -2px 12px rgba(15,23,42,0.08);
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .drawer-a-left { font-size: 12px; color: #64748b; font-weight: 500; }
+  .drawer-a-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; }
+
+  .drawer-c-btn {
+    width: 100%; display: flex; align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    min-height: 44px;
+    border: none; cursor: pointer; text-align: left;
+    transition: background-color 0.12s;
+  }
+  .drawer-c-btn:hover { filter: brightness(0.97); }
+  .drawer-c-btn:focus-visible { outline: 2px solid var(--color-neuro-500); outline-offset: -2px; }
+  .drawer-c-btn:active { transform: scale(0.99); }
+
+  .drawer-tier-eligible  { background: #EEF2FF; box-shadow: 0 -2px 12px rgba(15,23,42,0.08); }
+  .drawer-tier-reasonable { background: #fffbeb; box-shadow: 0 -2px 12px rgba(15,23,42,0.08); }
+  .drawer-tier-uncertain  { background: #fffbeb; box-shadow: 0 -2px 12px rgba(15,23,42,0.08); }
+  .drawer-tier-avoid      { background: #fef2f2; box-shadow: 0 -2px 12px rgba(15,23,42,0.08); }
+  .drawer-tier-idd        { background: #f1f5f9; box-shadow: 0 -2px 12px rgba(15,23,42,0.08); }
+
+  .text-tier-eligible  { color: var(--color-neuro-700); }
+  .text-tier-reasonable { color: #92400e; }
+  .text-tier-uncertain  { color: #92400e; }
+  .text-tier-avoid      { color: #991b1b; }
+  .text-tier-idd        { color: #475569; }
+
+  .drawer-eyebrow {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; opacity: 0.75; margin-bottom: 2px;
+  }
+  .drawer-stat {
+    font-size: 15px; font-weight: 600; line-height: 1.2;
+  }
+  .drawer-chevron {
+    width: 20px; height: 20px; flex-shrink: 0;
+    transition: transform 0.18s ease;
+  }
+  .drawer-chevron-open { transform: rotate(180deg); }
+
+  @keyframes chevron-bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30%           { transform: translateY(-3px); }
+  }
+  .drawer-chevron-hint { animation: chevron-bounce 2.4s ease-in-out infinite; }
+
+  .drawer-expanded-body {
+    background: white;
+    padding: 16px 20px 24px;
+    max-height: 55vh; overflow-y: auto;
+    box-shadow: 0 -4px 24px rgba(15,23,42,0.12);
+  }
+
+  .evidence-badge {
+    display: inline-flex; align-items: center;
+    padding: 3px 10px; border-radius: 9999px;
+    font-size: 11px; font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .badge-eligible  { background: var(--color-neuro-100); color: var(--color-neuro-700); }
+  .badge-reasonable { background: #fef3c7; color: #92400e; }
+  .badge-uncertain  { background: #fef3c7; color: #92400e; }
+  .badge-avoid      { background: #fee2e2; color: #991b1b; }
+  .badge-idd        { background: #f1f5f9; color: #475569; }
+
+  .assess-table { margin-top: 16px; border-top: 1px solid #f1f5f9; padding-top: 12px; }
+  .assess-eyebrow {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 8px;
+  }
+  .assess-row {
+    display: flex; justify-content: space-between;
+    font-size: 13px; padding: 3px 0;
+  }
+  .assess-key { color: #64748b; }
+  .assess-val { color: #0f172a; font-weight: 500; }
+
+  /* ─── Drawer spacer ──────────────────────────────────────────────────────── */
+  .drawer-spacer { height: 90px; }
+
+  /* ─── Confirm dialog ─────────────────────────────────────────────────────── */
+  .confirm-overlay {
+    position: fixed; inset: 0; background: rgba(15,23,42,0.5);
+    z-index: 200; display: flex; align-items: flex-end;
+    justify-content: center;
+  }
+  .confirm-sheet {
+    background: white; border-radius: 16px 16px 0 0;
+    padding: 24px 20px; width: 100%; max-width: 440px;
+  }
+  .confirm-title { font-size: 17px; font-weight: 600; color: #0f172a; margin-bottom: 8px; }
+  .confirm-body  { font-size: 14px; color: #64748b; margin-bottom: 20px; }
+  .confirm-btns  { display: flex; gap: 10px; }
+  .confirm-cancel {
+    flex: 1; min-height: 44px; border: 1px solid #e2e8f0;
+    background: white; border-radius: 9999px;
+    font-size: 14px; font-weight: 500; color: #334155; cursor: pointer;
+  }
+  .confirm-reset {
+    flex: 1; min-height: 44px; border: none;
+    background: #ef4444; border-radius: 9999px;
+    font-size: 14px; font-weight: 500; color: white; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<!-- Demo banner — v3 callout -->
+<div class="demo-banner" aria-hidden="true">
+  v3 WARMTH — Step icons + Learning pearls + Auto-scroll. Tap a step option to see pearls appear.
+</div>
+
+<!-- Documentation drawers -->
+<div style="max-width:440px;margin:0 auto;background:white;padding:12px 16px;border-bottom:1px solid #e2e8f0;">
+  <details open>
+    <summary style="font-size:12px;font-weight:600;color:#1746A2;cursor:pointer;padding:4px 0;">What's new in v3 (warmth additions)</summary>
+    <div style="font-size:12px;color:#475569;line-height:1.6;padding:8px 0;">
+      <strong style="color:#0f172a;">Three additions over v2:</strong>
+      <ul style="margin:8px 0 0;padding-left:16px;">
+        <li><strong>Step icons:</strong> Bare inline SVGs (UserCheck / Clock / ScanLine / ListChecks) in slate-500 appear inline with each step eyebrow label. No background, no border, no padding.</li>
+        <li><strong>Learning pearls:</strong> After selecting at least one option in a step, up to 2 collapsed <code>&lt;details&gt;</code> pearl blocks appear at the bottom of the step body. Content pulled verbatim from EvtPathway.tsx. Tap to expand.</li>
+        <li><strong>Auto-scroll:</strong> After each field selection, the next unanswered category row in the current step scrolls into view (upper third of viewport). Respects prefers-reduced-motion.</li>
+      </ul>
+      <div style="margin-top:8px;padding:8px 12px;background:#EEF2FF;border-radius:8px;">
+        <strong style="color:#0E2D6B;">Skipped:</strong> Proposal 3 (provisional verdict pill) — drawer stays muted until terminal result is computed, exactly as v2.
+      </div>
+    </div>
+  </details>
+  <details style="margin-top:4px;">
+    <summary style="font-size:12px;font-weight:600;color:#1746A2;cursor:pointer;padding:4px 0;">Try these scenarios</summary>
+    <div style="font-size:12px;color:#475569;line-height:1.6;padding:8px 0;">
+      <ol style="margin:0;padding-left:16px;">
+        <li><strong>Icons:</strong> All 4 eyebrow rows show a small icon immediately after the rail node.</li>
+        <li><strong>Pearls:</strong> Select "LVO" → two pearl blocks appear at bottom of Step 1 body. Tap to expand.</li>
+        <li><strong>Auto-scroll:</strong> Select Occlusion Type → page smoothly scrolls to LVO Location row.</li>
+        <li><strong>Reduced-motion:</strong> System prefers-reduced-motion → scroll is instant, not smooth.</li>
+      </ol>
+    </div>
+  </details>
+</div>
+
+<!-- Pathway root (phone frame) -->
+<main id="pathway-root" class="app-frame" role="main">
+  <h1 class="sr-only">EVT Pathway</h1>
+  <!-- Rendered by JS -->
+</main>
+
+<!-- Drawer portal -->
+<div id="drawer-portal" class="drawer-portal"></div>
+
+<!-- Cascade-notice live region — always in DOM (A-01 fix) -->
+<div
+  id="cascade-notice"
+  role="status"
+  aria-live="polite"
+  aria-atomic="true"
+  aria-label=""
+>
+  <!-- Populated by JS; visibility toggled via .visible class -->
+</div>
+
+<!-- Confirm-reset overlay (hidden by default) -->
+<div id="confirm-overlay" class="confirm-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+  <div class="confirm-sheet">
+    <div class="confirm-title" id="confirm-title">Reset pathway?</div>
+    <div class="confirm-body">All answers will be cleared and the pathway will return to the start.</div>
+    <div class="confirm-btns">
+      <button class="confirm-cancel" onclick="closeConfirm()" aria-label="Cancel reset">Cancel</button>
+      <button class="confirm-reset" onclick="doReset()" aria-label="Confirm reset, clear all answers">Reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// STATE MACHINE
+// ─────────────────────────────────────────────────────────────────────────────
+
+const state = {
+  occlusionType:  null,
+  lvoLocation:    null,
+  confirmLvo:     null,
+  prestrokeMrs:   null,
+  ageGroup:       null,
+  mevoLocation:   null,
+  mevoBaseline:   null,
+  time:           null,
+  nihssBucket:    null,
+  nihssBasilar:   null,
+  mevoDisabling:  null,
+  aspects:        null,
+  pcAspects:      null,
+  activeStep:     1,
+  openAccordion:  null,
+};
+
+let undoSnapshot = null;
+let cascadeTimer = null;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HELPERS — branch detection
+// ─────────────────────────────────────────────────────────────────────────────
+
+function isLvo()     { return state.occlusionType === 'lvo'; }
+function isMevo()    { return state.occlusionType === 'mevo'; }
+function isAnterior(){ return state.lvoLocation === 'anterior'; }
+function isBasilar() { return state.lvoLocation === 'basilar'; }
+function isMrs01()   { return state.prestrokeMrs === 'mrs01'; }
+function isMrs2()    { return state.prestrokeMrs === 'mrs2'; }
+function isMrs34()   { return state.prestrokeMrs === 'mrs34'; }
+function isMrsGt4()  { return state.prestrokeMrs === 'mrs>4'; }
+function isMrs2plus(){ return ['mrs2','mrs34','mrs>4'].includes(state.prestrokeMrs); }
+function isAge80plus(){ return state.ageGroup === '80plus'; }
+function isAgeUnder18(){ return state.ageGroup === 'under18'; }
+function isDominantM2(){ return state.mevoLocation === 'dominantM2'; }
+
+function nihssGe6Anterior() {
+  return ['6-9','10-19','20plus'].includes(state.nihssBucket);
+}
+function nihssGe10Basilar() {
+  return state.nihssBasilar === '10plus';
+}
+function nihss6to9Basilar() {
+  return state.nihssBasilar === '6-9';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STEP COMPLETION CHECKS (with v2 Dominant M2 branch fix)
+// ─────────────────────────────────────────────────────────────────────────────
+
+function step1Complete() {
+  if (!state.occlusionType) return false;
+  if (isLvo()) {
+    if (!state.lvoLocation) return false;
+    if (state.confirmLvo !== 'yes') return false;
+    if (!state.prestrokeMrs) return false;
+    if (!state.ageGroup) return false;
+    return true;
+  }
+  if (isMevo()) {
+    if (!state.mevoLocation) return false;
+    if (!state.mevoBaseline) return false;
+    return true;
+  }
+  return false;
+}
+
+function step2Complete() {
+  if (!step1Complete()) return false;
+  if (!state.time) return false;
+  if (state.time === '>24h') return true;
+  if (isLvo() && isAnterior()) return !!state.nihssBucket;
+  if (isLvo() && isBasilar()) return !!state.nihssBasilar;
+  if (isMevo()) {
+    if (isDominantM2()) return !!state.mevoDisabling;
+    return true;
+  }
+  return false;
+}
+
+function step3Complete() {
+  if (!step2Complete()) return false;
+  if (state.time === '>24h') return true;
+  if (isMevo() && !isDominantM2()) return true;
+  if (isMrsGt4()) return true;
+  if (isAgeUnder18()) return true;
+  if (isLvo() && isBasilar()) return state.pcAspects !== null && state.pcAspects !== '';
+  if (isLvo() && isAnterior()) return state.aspects !== null && state.aspects !== '';
+  if (isMevo() && isDominantM2()) return state.aspects !== null && state.aspects !== '';  // Dominant M2 branch fix
+  return false;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INTERPRETATION — AHA/ASA 2026 Figure 3
+// ─────────────────────────────────────────────────────────────────────────────
+
+function interpret() {
+  if (!step1Complete()) return null;
+
+  if (isMrsGt4()) {
+    return { tier: 'avoid', status: 'Avoid', criteriaName: 'Pre-stroke Disability (mRS >4)', reason: 'mRS >4 — not eligible per Figure 3', evidenceBadge: 'Figure 3: Avoid', details: 'EVT is not recommended. Both anterior and basilar EVT recommendations require prestroke mRS 0–1 for Class 1 eligibility. mRS >4 falls outside all positive recommendation strata. Discuss goals of care.' };
+  }
+  if (isAgeUnder18()) {
+    return { tier: 'idd', status: 'Consult', criteriaName: 'Pediatric — Age <18', reason: 'Pediatric pathway', evidenceBadge: 'Section 4.7.5', details: 'Pediatric EVT is addressed in Section 4.7.5 (not Figure 3 adult algorithm). COR 2a B-NR for age 6–17, LVO, within 6h; COR 2a B-NR for 6–24h with salvageable tissue. Consult neurointerventional with pediatric experience.' };
+  }
+  if (state.time === '>24h') {
+    return { tier: 'idd', status: 'Consult', criteriaName: 'Beyond 24-hour Window', reason: '>24h from onset', evidenceBadge: 'Figure 3: IDD', details: 'Insufficient Data — no AHA/ASA 2026 recommendation extends EVT beyond 24 hours. Individualized decision with Vascular Neurology and Neurointerventional.' };
+  }
+
+  if (isMevo()) {
+    if (['nondominantM2','codominantM2','distal','aca','pca'].includes(state.mevoLocation)) {
+      return { tier: 'avoid', status: 'Not Recommended', criteriaName: 'Distal / MeVO / DVO — Class 3: No Benefit', reason: 'Occlusion location not supported', evidenceBadge: 'COR 3: No Benefit · LOE A · ESCAPE-MeVO / DISTAL', details: 'EVT is not recommended for nondominant or codominant proximal M2, distal MCA (M3/DVO), ACA, or PCA occlusions (AHA/ASA 2026 Section 4.7.2 Rec 8). Based on ESCAPE-MeVO and DISTAL trials showing no benefit.' };
+    }
+    if (isDominantM2()) {
+      if (state.time === '0-6h') {
+        if (!isMrs01()) return { tier: 'idd', status: 'Consult', criteriaName: 'Dominant M2 — mRS ≥2 (IDD)', reason: 'Prestroke mRS ≥2', evidenceBadge: 'Figure 3: IDD', details: 'The dominant M2 Class 2a recommendation (Rec 7) requires prestroke mRS 0–1. For prestroke mRS ≥2, Figure 3 shows IDD. Individualized decision.' };
+        if (state.mevoDisabling !== 'yes') return { tier: 'idd', status: 'Consult', criteriaName: 'Dominant M2 — Non-disabling Deficit', reason: 'NIHSS <6 or non-disabling', evidenceBadge: 'Figure 3: IDD', details: 'Dominant M2 Class 2a requires NIHSS ≥6. Non-disabling deficits fall outside the recommendation stratum. Individualized decision.' };
+        return { tier: 'reasonable', status: 'Reasonable', criteriaName: 'Dominant M2 — Class 2a', reason: 'Dominant proximal M2, 0–6h', evidenceBadge: 'COR 2a · LOE B-NR', details: '"Dominant" = M2 segment supplying ≥50% of MCA territory (territory-based, NOT left/right hemispheric dominance). EVT is reasonable. Requires: mRS 0–1, NIHSS ≥6, ASPECTS ≥6, 0–6h. (AHA/ASA 2026 Section 4.7.2 Rec 7)' };
+      }
+      return { tier: 'idd', status: 'Consult', criteriaName: 'Dominant M2 — 6–24h (IDD)', reason: 'Dominant M2 beyond 6h window', evidenceBadge: 'Figure 3: IDD', details: 'Figure 3 shows Dominant M2 / >6h → IDD. The Class 2a recommendation (Rec 7) specifies 0–6h only.' };
+    }
+  }
+
+  if (!isLvo()) return null;
+
+  if (isBasilar()) {
+    if (!step3Complete()) return null;
+    const pc = parseFloat(state.pcAspects);
+    if (isMrs2plus()) return { tier: 'idd', status: 'Consult', criteriaName: 'Basilar — Prestroke mRS ≥2 (IDD)', reason: 'Insufficient evidence for basilar EVT with mRS ≥2', evidenceBadge: 'Figure 3: IDD · AHA/ASA 2026 §4.7.3', details: 'The 2026 AHA/ASA basilar recommendations specify prestroke mRS 0–1. Figure 3 maps basilar / PC-ASPECTS ≥6 / mRS ≥2 to IDD. Individualized decision with Vascular Neurology and Neurointerventional.' };
+    if (isNaN(pc) || pc < 6) return { tier: 'idd', status: 'Consult', criteriaName: 'Basilar — PC-ASPECTS <6 (IDD)', reason: `PC-ASPECTS ${pc} < 6`, evidenceBadge: 'Figure 3: IDD', details: 'The basilar EVT recommendations require PC-ASPECTS ≥6. PC-ASPECTS <6 falls outside supported strata. Individualized decision.' };
+    if (nihssGe10Basilar()) return { tier: 'eligible', status: 'Eligible', criteriaName: 'Basilar EVT — Class 1', reason: 'PC-ASPECTS ≥6, NIHSS ≥10, mRS 0–1, 0–24h', evidenceBadge: 'COR 1 · LOE A', details: 'EVT recommended for basilar artery occlusion with PC-ASPECTS ≥6, mRS 0–1, NIHSS ≥10, within 24h (AHA/ASA 2026 Section 4.7.3 Rec 1).' };
+    if (nihss6to9Basilar()) return { tier: 'uncertain', status: 'Uncertain', criteriaName: 'Basilar — NIHSS 6–9 (Class 2b)', reason: 'PC-ASPECTS ≥6, NIHSS 6–9, mRS 0–1', evidenceBadge: 'COR 2b · LOE B-R', details: 'Effectiveness within 24h not well established. (AHA/ASA 2026 Section 4.7.3 Rec 2)' };
+    return { tier: 'idd', status: 'Consult', criteriaName: 'Basilar — NIHSS <6 (IDD)', reason: 'NIHSS <6, no positive class assigned', evidenceBadge: 'Figure 3: IDD', details: 'The 2026 AHA/ASA basilar EVT recommendations cover NIHSS ≥6 only. For NIHSS <6, no positive class is assigned.' };
+  }
+
+  if (!isAnterior()) return null;
+  if (!step3Complete()) return null;
+  const a = parseFloat(state.aspects);
+  if (isNaN(a)) return null;
+  const nihssOk = nihssGe6Anterior();
+
+  if (state.time === '0-6h') {
+    if (a >= 6 && a <= 10) {
+      if (isMrs01()) {
+        if (!nihssOk) return { tier: 'idd', status: 'Consult', criteriaName: 'Anterior 0–6h — NIHSS 0–5 (IDD)', reason: 'NIHSS <6, ASPECTS 6–10', evidenceBadge: 'Figure 3: IDD', details: 'All Section 4.7.2 recommendations specify NIHSS ≥6.' };
+        return { tier: 'eligible', status: 'Eligible', criteriaName: 'Standard Early Window — Class 1', reason: 'Anterior LVO, 0–6h, ASPECTS 6–10, mRS 0–1, NIHSS ≥6', evidenceBadge: 'COR 1 · LOE A', details: 'EVT recommended for anterior circulation proximal LVO (ICA/M1), NIHSS ≥6, prestroke mRS 0–1, ASPECTS 6–10, within 6h (AHA/ASA 2026 Section 4.7.2 Rec 1).' };
+      }
+      if (isMrs2()) {
+        if (!nihssOk) return { tier:'idd', status:'Consult', criteriaName:'Anterior 0–6h — NIHSS 0–5 (IDD)', reason:'NIHSS <6', evidenceBadge:'Figure 3: IDD', details:'NIHSS ≥6 required.' };
+        return { tier: 'reasonable', status: 'Reasonable', criteriaName: 'Mild Pre-disability — Class 2a', reason: 'Anterior LVO, 0–6h, ASPECTS ≥6, mRS 2', evidenceBadge: 'COR 2a · LOE B-NR', details: 'EVT reasonable for prestroke mRS 2, NIHSS ≥6, ASPECTS ≥6, 0–6h (AHA/ASA 2026 Section 4.7.2 Rec 5).' };
+      }
+      if (isMrs34()) {
+        if (!nihssOk) return { tier:'idd', status:'Consult', criteriaName:'Anterior 0–6h — NIHSS 0–5 (IDD)', reason:'NIHSS <6', evidenceBadge:'Figure 3: IDD', details:'NIHSS ≥6 required.' };
+        return { tier: 'uncertain', status: 'Uncertain', criteriaName: 'Moderate Pre-disability — Class 2b', reason: 'Anterior LVO, 0–6h, ASPECTS ≥6, mRS 3–4', evidenceBadge: 'COR 2b · LOE B-NR', details: 'EVT might be reasonable for prestroke mRS 3–4, NIHSS ≥6, ASPECTS ≥6, 0–6h (AHA/ASA 2026 Section 4.7.2 Rec 6).' };
+      }
+    }
+    if (a >= 3 && a <= 5) {
+      if (isMrs01()) {
+        if (!nihssOk) return { tier:'idd', status:'Consult', criteriaName:'NIHSS <6 (IDD)', reason:'NIHSS <6', evidenceBadge:'Figure 3: IDD', details:'NIHSS ≥6 required.' };
+        return { tier: 'eligible', status: 'Eligible', criteriaName: 'Early Window Large Core — Class 1', reason: 'Anterior LVO, 0–6h, ASPECTS 3–5, mRS 0–1, NIHSS ≥6', evidenceBadge: 'COR 1 · LOE A', details: 'EVT recommended for ASPECTS 3–5 within 6h (AHA/ASA 2026 Section 4.7.2 Rec 1 expanded strata).' };
+      }
+      return { tier: 'idd', status: 'Consult', criteriaName: 'Anterior 0–6h — ASPECTS 3–5, mRS ≥2 (IDD)', reason: 'mRS ≥2 with ASPECTS 3–5', evidenceBadge: 'Figure 3: IDD', details: 'ASPECTS 3–5 / mRS ≥2 → IDD. Individualized decision.' };
+    }
+    if (a >= 0 && a <= 2) {
+      if (isMrs01() && !isAge80plus() && !isAgeUnder18()) {
+        if (!nihssOk) return { tier:'idd', status:'Consult', criteriaName:'NIHSS <6 (IDD)', reason:'NIHSS <6', evidenceBadge:'Figure 3: IDD', details:'NIHSS ≥6 required.' };
+        return { tier: 'reasonable', status: 'Reasonable', criteriaName: 'Very Large Core (ASPECTS 0–2) — Class 2a', reason: 'Anterior LVO, 0–6h, ASPECTS 0–2, mRS 0–1, age <80', evidenceBadge: 'COR 2a · LOE B-R', details: 'EVT reasonable for age <80, NIHSS ≥6, prestroke mRS 0–1, ASPECTS 0–2 (AHA/ASA 2026 Section 4.7.2 Rec 4).' };
+      }
+      return { tier: 'idd', status: 'Consult', criteriaName: 'Anterior 0–6h — ASPECTS 0–2 (IDD)', reason: 'Age ≥80 or mRS ≥2 with ASPECTS 0–2', evidenceBadge: 'Figure 3: IDD', details: 'ASPECTS 0–2 / (age ≥80 or mRS ≥2) → IDD. Individualized decision.' };
+    }
+  }
+
+  if (state.time === '6-24h') {
+    if (a >= 0 && a <= 2) return { tier: 'idd', status: 'Consult', criteriaName: 'Late Window — ASPECTS 0–2 (IDD)', reason: 'ASPECTS 0–2 in 6–24h window', evidenceBadge: 'Figure 3: IDD', details: 'The 2026 AHA/ASA guideline does not extend late-window recommendations to ASPECTS 0–2. Individualized decision.' };
+    if (a >= 6 && a <= 10) {
+      if (isMrs01()) {
+        if (!nihssOk) return { tier:'idd', status:'Consult', criteriaName:'NIHSS <6 (IDD)', reason:'NIHSS <6', evidenceBadge:'Figure 3: IDD', details:'NIHSS ≥6 required.' };
+        return { tier: 'eligible', status: 'Eligible', criteriaName: 'Late Window ASPECTS ≥6 — Class 1', reason: 'Anterior LVO, 6–24h, ASPECTS 6–10, mRS 0–1, NIHSS ≥6', evidenceBadge: 'COR 1 · LOE A · DAWN / DEFUSE-3', details: 'EVT recommended, anterior LVO (ICA/M1), NIHSS ≥6, mRS 0–1, ASPECTS ≥6, 6–24h (AHA/ASA 2026 Section 4.7.2 Rec 2).' };
+      }
+      return { tier: 'idd', status: 'Consult', criteriaName: 'Late Window — mRS ≥2 (IDD)', reason: 'mRS ≥2 in 6–24h window', evidenceBadge: 'Figure 3: IDD', details: '6–24h / ASPECTS ≥6 / mRS ≥2 → IDD. Individualized decision.' };
+    }
+    if (a >= 3 && a <= 5) {
+      if (isMrs01() && !isAge80plus() && !isAgeUnder18()) {
+        if (!nihssOk) return { tier:'idd', status:'Consult', criteriaName:'NIHSS <6 (IDD)', reason:'NIHSS <6', evidenceBadge:'Figure 3: IDD', details:'NIHSS ≥6 required.' };
+        return { tier: 'eligible', status: 'Eligible', criteriaName: 'Late Window Large Core — Class 1', reason: 'Anterior LVO, 6–24h, ASPECTS 3–5, mRS 0–1, age <80', evidenceBadge: 'COR 1 · LOE A · SELECT2 / ANGEL-ASPECT', details: 'In selected patients age <80, EVT recommended (AHA/ASA 2026 Section 4.7.2 Rec 3).' };
+      }
+      return { tier: 'idd', status: 'Consult', criteriaName: 'Late Window — ASPECTS 3–5 (IDD)', reason: 'Age ≥80 or mRS ≥2 with ASPECTS 3–5', evidenceBadge: 'Figure 3: IDD', details: '6–24h / ASPECTS 3–5 / (age ≥80 or mRS ≥2) → IDD. Individualized decision.' };
+    }
+  }
+
+  return null;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CASCADE CLEAR
+// ─────────────────────────────────────────────────────────────────────────────
+
+function cascadeClear(changedField, newValue) {
+  undoSnapshot = { ...state, [changedField]: state[changedField] };
+  const snapshot = { ...undoSnapshot };
+  const step1Fields = ['occlusionType','lvoLocation','confirmLvo','prestrokeMrs','ageGroup','mevoLocation','mevoBaseline'];
+  const step2Fields = ['time','nihssBucket','nihssBasilar','mevoDisabling'];
+  const step3Fields = ['aspects','pcAspects'];
+  let clearedSteps = [];
+  let fieldsToClear = [];
+  if (step1Fields.includes(changedField)) { fieldsToClear = [...step2Fields, ...step3Fields]; clearedSteps = ['Clinical', 'Imaging', 'and Result']; }
+  else if (step2Fields.includes(changedField)) { fieldsToClear = [...step3Fields]; clearedSteps = ['Imaging', 'and Result']; }
+  else if (step3Fields.includes(changedField)) { clearedSteps = ['Result']; fieldsToClear = []; }
+  state[changedField] = newValue;
+  fieldsToClear.forEach(f => { state[f] = null; });
+  state.openAccordion = null;
+  if (!step1Complete()) state.activeStep = 1;
+  else if (!step2Complete()) state.activeStep = 2;
+  else if (!step3Complete()) state.activeStep = 3;
+  else state.activeStep = 4;
+  const stepsText = clearedSteps.length > 0 ? clearedSteps.join(' ') + ' cleared' : 'Result cleared';
+  showCascadeNotice(stepsText, snapshot, changedField, newValue);
+}
+
+function showCascadeNotice(text, snapshot, changedField, newValue) {
+  if (cascadeTimer) clearTimeout(cascadeTimer);
+  const notice = document.getElementById('cascade-notice');
+  notice.innerHTML = `
+    <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:#94a3b8;">
+      <path d="M4 4v5h5"/><path d="M19.5 10A9.5 9.5 0 0 1 5 9"/>
+    </svg>
+    <span style="font-size:12px;color:#334155;"><strong style="font-weight:600;">${text}</strong> — re-enter when ready.</span>
+    <button class="cascade-undo-btn" onclick="doUndo()" aria-label="Undo cascade clear, restore all previous answers">Undo</button>
+  `;
+  notice.setAttribute('aria-label', text + ' — re-enter when ready. Undo button available.');
+  notice.classList.add('visible');
+  undoSnapshot = snapshot;
+  cascadeTimer = setTimeout(() => { dismissCascadeNotice(); undoSnapshot = null; }, 8000);
+}
+
+function dismissCascadeNotice() {
+  const notice = document.getElementById('cascade-notice');
+  notice.classList.remove('visible');
+  notice.innerHTML = '';
+  notice.setAttribute('aria-label', '');
+}
+
+function doUndo() {
+  if (!undoSnapshot) return;
+  Object.assign(state, undoSnapshot);
+  undoSnapshot = null;
+  if (cascadeTimer) { clearTimeout(cascadeTimer); cascadeTimer = null; }
+  dismissCascadeNotice();
+  render();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// v3 ADDITION 4: AUTO-SCROLL TO NEXT UNANSWERED FIELD
+// ─────────────────────────────────────────────────────────────────────────────
+
+function findNextUnansweredFieldId() {
+  // Map each active step to its ordered fields (only fields with category rows)
+  const step = state.activeStep;
+  if (step === 1) {
+    const fields = ['occlusionType'];
+    if (state.occlusionType === 'lvo') {
+      fields.push('lvoLocation');
+      if (state.lvoLocation) fields.push('confirmLvo');
+      if (state.confirmLvo === 'yes') { fields.push('prestrokeMrs'); fields.push('ageGroup'); }
+    }
+    if (state.occlusionType === 'mevo') {
+      fields.push('mevoLocation');
+      if (state.mevoLocation) fields.push('mevoBaseline');
+    }
+    for (const f of fields) {
+      if (state[f] === null || state[f] === undefined || state[f] === '') {
+        return 'field-' + f;
+      }
+    }
+  }
+  if (step === 2) {
+    const fields = ['time'];
+    if (state.time && state.time !== '>24h') {
+      if (isLvo() && isAnterior()) fields.push('nihssBucket');
+      if (isLvo() && isBasilar()) fields.push('nihssBasilar');
+      if (isMevo() && isDominantM2()) fields.push('mevoDisabling');
+    }
+    for (const f of fields) {
+      if (state[f] === null || state[f] === undefined || state[f] === '') {
+        return 'field-' + f;
+      }
+    }
+  }
+  if (step === 3) {
+    const fields = [];
+    if (isLvo() && isBasilar()) fields.push('pcAspects');
+    else if ((isLvo() && isAnterior()) || (isMevo() && isDominantM2())) fields.push('aspects');
+    for (const f of fields) {
+      if (state[f] === null || state[f] === undefined || state[f] === '') {
+        return 'field-' + f;
+      }
+    }
+  }
+  return null;
+}
+
+function scrollToNextField() {
+  const nextFieldId = findNextUnansweredFieldId();
+  if (!nextFieldId) return;
+  const el = document.getElementById(nextFieldId);
+  if (!el) return;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  setTimeout(() => {
+    const headerOffset = 80;
+    const elTop = el.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({
+      top: elTop - headerOffset,
+      behavior: reducedMotion ? 'auto' : 'smooth'
+    });
+  }, 120);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EVENT HANDLERS
+// ─────────────────────────────────────────────────────────────────────────────
+
+function setField(field, value) {
+  const alreadySet = state[field] !== null && state[field] !== '' && state[field] !== undefined;
+  const isChange = alreadySet && state[field] !== value;
+  const step1Fields = ['occlusionType','lvoLocation','confirmLvo','prestrokeMrs','ageGroup','mevoLocation','mevoBaseline'];
+  const step2Fields = ['time','nihssBucket','nihssBasilar','mevoDisabling'];
+  const step3Fields = ['aspects','pcAspects'];
+  const wouldCascade = isChange && (
+    (step1Fields.includes(field) && (step2Complete() || step3Complete())) ||
+    (step2Fields.includes(field) && step3Complete())
+  );
+  const didCascade = wouldCascade;
+  if (wouldCascade) { cascadeClear(field, value); } else { state[field] = value; }
+  state.openAccordion = null;
+  if (step1Complete() && state.activeStep === 1) state.activeStep = 2;
+  if (step2Complete() && state.activeStep === 2) state.activeStep = 3;
+  if (step3Complete() && state.activeStep === 3) state.activeStep = 4;
+  render();
+  // Auto-scroll only when no cascade fired and not a tap-to-edit scenario
+  if (!didCascade) {
+    scrollToNextField();
+  }
+}
+
+function toggleAccordion(key) {
+  state.openAccordion = state.openAccordion === key ? null : key;
+  render();
+  if (state.openAccordion === key) {
+    setTimeout(() => {
+      const firstOption = document.querySelector(`[data-accordion="${key}"] .cat-option-btn`);
+      if (firstOption) firstOption.focus();
+    }, 20);
+  }
+}
+
+function openStepAndRow(stepNum, fieldKey) {
+  state.openAccordion = `step${stepNum}:${fieldKey}`;
+  render();
+  setTimeout(() => {
+    const el = document.getElementById(`step-${stepNum}-node`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 30);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CHIP SUMMARY HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+
+const MRS_LABELS   = { 'mrs01':'mRS 0–1', 'mrs2':'mRS 2', 'mrs34':'mRS 3–4', 'mrs>4':'mRS >4' };
+const AGE_LABELS   = { 'under18':'Age <18', '18-79':'Age 18–79', '80plus':'Age ≥80' };
+const TIME_LABELS  = { '0-6h':'0–6h', '6-24h':'6–24h', '>24h':'>24h' };
+const NIHSS_LABELS = { '0-5':'NIHSS 0–5', '6-9':'NIHSS 6–9', '10-19':'NIHSS 10–19', '20plus':'NIHSS ≥20' };
+const NIHSS_BASILAR_LABELS = { '6-9':'NIHSS 6–9', '10plus':'NIHSS ≥10' };
+const MEVO_LABELS  = {
+  dominantM2: 'Dominant M2', nondominantM2: 'Non-dominant M2',
+  codominantM2: 'Codominant M2', distal: 'Distal MCA / DVO',
+  aca: 'ACA', pca: 'PCA'
+};
+
+function step1ChipText() {
+  if (isLvo()) {
+    const parts = ['LVO'];
+    if (state.lvoLocation) parts.push(isAnterior() ? 'Anterior' : 'Basilar');
+    if (state.prestrokeMrs) parts.push(MRS_LABELS[state.prestrokeMrs]);
+    if (state.ageGroup) parts.push(AGE_LABELS[state.ageGroup]);
+    return parts.join(' · ');
+  }
+  if (isMevo()) {
+    const parts = ['MeVO'];
+    if (state.mevoLocation) parts.push(MEVO_LABELS[state.mevoLocation] || state.mevoLocation);
+    return parts.join(' · ');
+  }
+  return '';
+}
+
+function step2ChipText() {
+  const parts = [];
+  if (state.time) parts.push(TIME_LABELS[state.time]);
+  if (state.nihssBucket) parts.push(NIHSS_LABELS[state.nihssBucket]);
+  if (state.nihssBasilar !== null && state.nihssBasilar !== undefined) parts.push(NIHSS_BASILAR_LABELS[state.nihssBasilar]);
+  return parts.join(' · ');
+}
+
+function step3ChipText() {
+  const parts = [];
+  if (state.aspects !== null && state.aspects !== '') parts.push(`ASPECTS ${state.aspects}`);
+  if (state.pcAspects !== null && state.pcAspects !== '') parts.push(`PC-ASPECTS ${state.pcAspects}`);
+  return parts.join(' · ');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDER HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+
+function svg(path, w=16, h=16) {
+  return `<svg width="${w}" height="${h}" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">${path}</svg>`;
+}
+const CHEVRON_DOWN = `<polyline points="6 8 10 12 14 8"></polyline>`;
+const CHEVRON_SVG_DOWN = svg(CHEVRON_DOWN);
+
+// v3: Step icons — bare inline SVGs, no container, slate-500 via text color
+const STEP_ICONS = {
+  1: `<svg class="step-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>`,
+  2: `<svg class="step-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+  3: `<svg class="step-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>`,
+  4: `<svg class="step-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 17 5 19 9 15"/><polyline points="3 7 5 9 9 5"/><line x1="13" y1="6" x2="21" y2="6"/><line x1="13" y1="12" x2="21" y2="12"/><line x1="13" y1="18" x2="21" y2="18"/></svg>`,
+};
+
+// v3: Pearl SVGs
+const LIGHTBULB_SVG = `<svg class="pearl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>`;
+const CHEVRON_PEARL = `<svg class="pearl-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>`;
+
+function renderPearl(title, content) {
+  return `
+    <details class="pearl-block">
+      <summary class="pearl-toggle">
+        ${LIGHTBULB_SVG}
+        <span class="pearl-label">${title}</span>
+        ${CHEVRON_PEARL}
+      </summary>
+      <div class="pearl-body">
+        <p style="margin:0;">${content}</p>
+      </div>
+    </details>
+  `;
+}
+
+// v3: Pearl content — verbatim from EvtPathway.tsx
+function renderStep1Pearls() {
+  if (state.occlusionType === null) return '';
+  return renderPearl('Evidence Landscape', 'LVO has Class I evidence for EVT. MeVO/DMVO is an evolving area; benefit depends on deficit severity, eloquence, and risk.')
+    + renderPearl('Exclusions', 'Hard exclusions: no LVO, pre-stroke dependence (mRS &gt;4), age &lt;18, terminal illness or limited goals of care. Prior disability is not an absolute exclusion in early anterior EVT, but late anterior and guideline-supported basilar approval branches are limited to baseline mRS 0–1.');
+}
+
+function renderStep2Pearls() {
+  if (state.time === null) return '';
+  let pearls = renderPearl('2026 Guideline Update', 'The 2026 AHA/ASA Guidelines (Section 4.7.2) — Early anterior window (0–6h): Class I for ASPECTS 3–10 with NIHSS ≥6 and mRS 0–1; Class IIa for ASPECTS 0–2 (age &lt;80, no mass effect) and for mRS 2 with ASPECTS ≥6; Class IIb for mRS 3–4 with ASPECTS ≥6. Late anterior window (6–24h): Class I for ASPECTS ≥6 with NIHSS ≥6 and mRS 0–1, and for selected ASPECTS 3–5 patients age &lt;80 without significant mass effect. Basilar EVT uses a separate unified 0–24h pathway anchored by baseline mRS 0–1, pc-ASPECTS ≥6, and NIHSS severity.');
+  if (isLvo()) {
+    pearls += renderPearl('NIHSS Limitations', 'NIHSS underestimates disability in eloquent territories (aphasia, hemianopia, dominant hand) and posterior circulation (Basilar). Disabling symptoms may justify intervention even with low numeric scores.');
+  }
+  return pearls;
+}
+
+function renderStep3Pearls() {
+  // Only render when imaging input has been touched (step 3 active and not a skip-branch)
+  if (!step2Complete()) return '';
+  if (isMrsGt4() || isAgeUnder18() || state.time === '>24h') return '';
+  if (isMevo() && !isDominantM2()) return '';
+  // Anterior 0-6h: ASPECTS pearl
+  if (isLvo() && isAnterior() && state.time === '0-6h') {
+    return renderPearl('Understanding ASPECTS', 'ASPECTS is a 10-point scoring system for MCA stroke. Start with 10 (normal) and subtract 1 point for early ischemic changes in each of 10 defined regions (Caudate, Lentiform, Internal Capsule, Insula, M1–M6). Scores &lt; 6 typically indicate a large established infarct core.');
+  }
+  // Basilar: pc-ASPECTS pearl
+  if (isLvo() && isBasilar()) {
+    return renderPearl('pc-ASPECTS & 2026 Guidelines', 'pc-ASPECTS scores the posterior circulation on a 10-point scale: Thalami (1 each), Occipital lobes (1 each), Midbrain (2), Pons (2), Cerebellar hemispheres (1 each). Per AHA/ASA 2026, basilar EVT is a unified 0–24h pathway requiring baseline mRS 0–1 and pc-ASPECTS ≥6, then stratified by NIHSS: ≥10 is the strongest recommendation, 6–9 is weaker, and &lt;6 has no guideline-supported approval branch.');
+  }
+  return '';
+}
+
+function renderStep4Pearls(result) {
+  if (result === null) return '';
+  return renderPearl('How to interpret this verdict', 'COR (Class of Recommendation) grades the strength of the recommendation: Class I = strong benefit, Class IIa = reasonable, Class IIb = may be considered, Class III = no benefit or harm. LOE (Level of Evidence) grades the quality of supporting data: A = multiple RCTs, B-R = one RCT, B-NR = non-randomized data. At the bedside, COR I / LOE A is the clearest mandate; IDD means individualize with your neurointerventional team.');
+}
+
+function renderChip(text, stepNum, fieldKey, ariaLabel) {
+  if (!text) return '';
+  return `
+    <div class="chip-wrap" style="display:inline-block;padding:12px;margin:-12px 0;">
+      <button
+        class="branch-chip"
+        onclick="openStepAndRow(${stepNum}, '${fieldKey}')"
+        aria-label="Edit: ${ariaLabel || text}"
+        type="button"
+      >${text}</button>
+    </div>
+  `;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CATEGORY ROW RENDERER — v2 stacked anatomy + v3 field IDs for auto-scroll
+// ─────────────────────────────────────────────────────────────────────────────
+
+function renderCategoryRow(stepNum, fieldKey, label, value, options) {
+  const accordionKey = `step${stepNum}:${fieldKey}`;
+  const isOpen = state.openAccordion === accordionKey;
+  const hasValue = value !== null && value !== undefined;
+  const displayValue = hasValue ? options.find(o => o.value === value)?.label || value : null;
+
+  return `
+    <div id="field-${fieldKey}">
+      <div class="divider-hair"></div>
+      <button
+        type="button"
+        class="cat-row-btn ${isOpen ? 'cat-row-open' : ''}"
+        onclick="toggleAccordion('${accordionKey}')"
+        aria-expanded="${isOpen}"
+        aria-controls="${accordionKey}-accordion"
+        aria-label="${label}: ${displayValue || 'Tap to select'}"
+      >
+        <span class="cat-row-label">${label}</span>
+        <span class="cat-row-right">
+          ${displayValue
+            ? `<span class="cat-row-value">${displayValue}</span>`
+            : `<span class="cat-row-value-unset">Tap to select</span>`
+          }
+          <span class="cat-row-chevron">${CHEVRON_SVG_DOWN}</span>
+        </span>
+      </button>
+      ${isOpen ? `
+        <div id="${accordionKey}-accordion"
+             class="cat-accordion"
+             data-accordion="${accordionKey}"
+             role="group"
+             aria-label="${label} options">
+          ${options.map(opt => `
+            <button
+              type="button"
+              class="cat-option-btn ${value === opt.value ? 'cat-option-selected' : ''}"
+              onclick="setField('${fieldKey}', '${opt.value}')"
+              aria-label="${label}: ${opt.label}${opt.sub ? ', ' + opt.sub : ''}"
+              aria-pressed="${value === opt.value}"
+            >
+              <span class="cat-option-label">${opt.label}</span>
+              ${opt.sub
+                ? `<span class="cat-option-desc">${opt.sub}</span>`
+                : ''
+              }
+            </button>
+          `).join('')}
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+function renderNumericInput(fieldKey, label, unit, min, max, placeholder) {
+  const val = state[fieldKey];
+  return `
+    <div id="field-${fieldKey}" class="cat-input-row divider-hair">
+      <label class="cat-input-label" for="input-${fieldKey}">${label}</label>
+      <div class="cat-input-right">
+        <input
+          type="number"
+          inputmode="numeric"
+          id="input-${fieldKey}"
+          class="cat-input-field"
+          min="${min}" max="${max}"
+          value="${val !== null && val !== '' ? val : ''}"
+          placeholder="${placeholder || '—'}"
+          aria-label="${label} score"
+          aria-describedby="${fieldKey}-unit"
+          onchange="setField('${fieldKey}', this.value === '' || isNaN(parseFloat(this.value)) ? null : parseFloat(this.value))"
+          oninput="setField('${fieldKey}', this.value === '' || isNaN(parseFloat(this.value)) ? null : parseFloat(this.value))"
+        />
+        <span class="cat-input-unit" id="${fieldKey}-unit">/ ${max}</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderCompletedRows() {
+  const rows = [];
+  if (isLvo()) {
+    if (state.lvoLocation) rows.push({ label: 'LVO Location', value: isAnterior() ? 'Anterior (ICA/M1)' : 'Basilar', field: 'lvoLocation' });
+    if (state.confirmLvo) rows.push({ label: 'LVO Confirmed', value: state.confirmLvo === 'yes' ? 'Yes — confirmed' : 'No', field: 'confirmLvo' });
+    if (state.prestrokeMrs) rows.push({ label: 'Prestroke mRS', value: MRS_LABELS[state.prestrokeMrs], field: 'prestrokeMrs' });
+    if (state.ageGroup) rows.push({ label: 'Age Group', value: AGE_LABELS[state.ageGroup], field: 'ageGroup' });
+  }
+  if (isMevo()) {
+    if (state.mevoLocation) rows.push({ label: 'MeVO Location', value: MEVO_LABELS[state.mevoLocation] || state.mevoLocation, field: 'mevoLocation' });
+    if (state.mevoBaseline) rows.push({ label: 'Baseline Function', value: state.mevoBaseline === 'independent' ? 'Independent (mRS 0–1)' : 'Dependent (mRS ≥2)', field: 'mevoBaseline' });
+  }
+  return rows.map(r => `
+    <button type="button" class="cat-row-completed-btn"
+      onclick="openStepAndRow(1, '${r.field}')"
+      aria-label="Edit: ${r.label} — currently ${r.value}">
+      <span class="cat-row-completed-label">${r.label}</span>
+      <span class="cat-row-completed-value">${r.value}</span>
+    </button>
+  `).join('');
+}
+
+function renderCompletedStep2Rows() {
+  const rows = [];
+  if (state.time) rows.push({ label: 'Time from onset', value: TIME_LABELS[state.time], field: 'time' });
+  if (state.nihssBucket) rows.push({ label: 'NIHSS', value: NIHSS_LABELS[state.nihssBucket], field: 'nihssBucket' });
+  if (state.nihssBasilar !== null && state.nihssBasilar !== undefined) rows.push({ label: 'NIHSS', value: NIHSS_BASILAR_LABELS[state.nihssBasilar], field: 'nihssBasilar' });
+  if (state.mevoDisabling !== null) rows.push({ label: 'Disabling deficit', value: state.mevoDisabling === 'yes' ? 'Yes' : 'No', field: 'mevoDisabling' });
+  return rows.map(r => `
+    <button type="button" class="cat-row-completed-btn"
+      onclick="openStepAndRow(2, '${r.field}')"
+      aria-label="Edit: ${r.label} — currently ${r.value}">
+      <span class="cat-row-completed-label">${r.label}</span>
+      <span class="cat-row-completed-value">${r.value}</span>
+    </button>
+  `).join('');
+}
+
+function renderCompletedStep3Rows() {
+  const rows = [];
+  if (state.aspects !== null && state.aspects !== '') rows.push({ label: 'ASPECTS', value: `${state.aspects} / 10`, field: 'aspects' });
+  if (state.pcAspects !== null && state.pcAspects !== '') rows.push({ label: 'PC-ASPECTS', value: `${state.pcAspects} / 10`, field: 'pcAspects' });
+  return rows.map(r => `
+    <button type="button" class="cat-row-completed-btn"
+      onclick="openStepAndRow(3, '${r.field}')"
+      aria-label="Edit: ${r.label} — currently ${r.value}">
+      <span class="cat-row-completed-label">${r.label}</span>
+      <span class="cat-row-completed-value">${r.value}</span>
+    </button>
+  `).join('');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STEP CONTENT BUILDERS
+// ─────────────────────────────────────────────────────────────────────────────
+
+function buildStep1Active() {
+  const occlusionOptions = [
+    { value: 'lvo',  label: 'Large Vessel Occlusion (LVO)', sub: 'ICA, M1, Basilar' },
+    { value: 'mevo', label: 'Medium Vessel Occlusion (MeVO)', sub: 'M2, M3, ACA, PCA / DVO' },
+  ];
+  const lvoLocOptions = [
+    { value: 'anterior', label: 'Anterior Circulation', sub: 'ICA / M1' },
+    { value: 'basilar',  label: 'Posterior Circulation', sub: 'Basilar' },
+  ];
+  const confirmOptions = [
+    { value: 'yes', label: 'Yes — confirmed LVO' },
+    { value: 'no',  label: 'No — not confirmed' },
+  ];
+  const mrsOptions = [
+    { value: 'mrs01',  label: '0–1 (Independent)', sub: 'No significant disability' },
+    { value: 'mrs2',   label: '2 (Mild disability)', sub: 'Requires assistance for some ADLs' },
+    { value: 'mrs34',  label: '3–4 (Moderate to severe disability)', sub: 'Requires help; may be confined to bed' },
+    { value: 'mrs>4',  label: '>4 (Severe disability or death)', sub: 'Bedridden, incontinent, requires constant care' },
+  ];
+  const ageOptions = [
+    { value: 'under18', label: '<18 years', sub: 'Pediatric pathway applies' },
+    { value: '18-79',   label: '18–79 years' },
+    { value: '80plus',  label: '≥80 years' },
+  ];
+  const mevoLocOptions = [
+    { value: 'dominantM2',    label: 'Dominant proximal M2',     sub: 'Supplies ≥50% of MCA territory (not left/right dominance)' },
+    { value: 'nondominantM2', label: 'Non-dominant proximal M2', sub: 'Supplies <50% of MCA territory' },
+    { value: 'codominantM2',  label: 'Codominant M2',            sub: 'Equal territory supply between both M2 branches' },
+    { value: 'distal',        label: 'Distal MCA / DVO',         sub: 'M3 or distally classified vessel occlusion' },
+    { value: 'aca',           label: 'Anterior Cerebral Artery (ACA)' },
+    { value: 'pca',           label: 'Posterior Cerebral Artery (PCA)' },
+  ];
+  const mevoBaselineOptions = [
+    { value: 'independent', label: 'Independent (mRS 0–1)', sub: 'No significant pre-stroke disability' },
+    { value: 'dependent',   label: 'Dependent (mRS ≥2)',    sub: 'Pre-stroke disability present' },
+  ];
+
+  let rows = '';
+  rows += renderCategoryRow(1, 'occlusionType', 'Occlusion Type', state.occlusionType, occlusionOptions);
+  if (state.occlusionType === 'lvo') {
+    rows += renderCategoryRow(1, 'lvoLocation', 'LVO Location', state.lvoLocation, lvoLocOptions);
+    if (state.lvoLocation) rows += renderCategoryRow(1, 'confirmLvo', 'Confirm LVO', state.confirmLvo, confirmOptions);
+    if (state.confirmLvo === 'yes') {
+      rows += renderCategoryRow(1, 'prestrokeMrs', 'Prestroke mRS', state.prestrokeMrs, mrsOptions);
+      rows += renderCategoryRow(1, 'ageGroup', 'Age Group', state.ageGroup, ageOptions);
+    }
+  }
+  if (state.occlusionType === 'mevo') {
+    rows += renderCategoryRow(1, 'mevoLocation', 'MeVO Location', state.mevoLocation, mevoLocOptions);
+    if (state.mevoLocation) rows += renderCategoryRow(1, 'mevoBaseline', 'Baseline Function', state.mevoBaseline, mevoBaselineOptions);
+  }
+
+  // v3: Pearls after at least one option selected
+  const pearls = renderStep1Pearls();
+
+  return `<div class="cat-rows" id="step-1-content">${rows}${pearls}</div>`;
+}
+
+function buildStep2Active() {
+  const timeOptions = [
+    { value: '0-6h',  label: '0–6 hours', sub: 'Within 6h from symptom onset' },
+    { value: '6-24h', label: '6–24 hours', sub: 'Late window (DAWN / DEFUSE-3 territory)' },
+    { value: '>24h',  label: '>24 hours',  sub: 'Beyond late window — IDD applies' },
+  ];
+  const nihssAntOptions = [
+    { value: '0-5',   label: 'NIHSS 0–5',   sub: 'Mild or minimal deficit' },
+    { value: '6-9',   label: 'NIHSS 6–9',   sub: 'Moderate deficit' },
+    { value: '10-19', label: 'NIHSS 10–19', sub: 'Moderate to severe deficit' },
+    { value: '20plus',label: 'NIHSS ≥20',   sub: 'Severe deficit' },
+  ];
+  const nihssBasilarOptions = [
+    { value: '6-9',    label: 'NIHSS 6–9',   sub: 'Moderate — Class 2b (LOE B-R)' },
+    { value: '10plus', label: 'NIHSS ≥10',   sub: 'Moderate-severe — Class 1 (LOE A)' },
+  ];
+  const disablingOptions = [
+    { value: 'yes', label: 'Yes — disabling (NIHSS ≥6)' },
+    { value: 'no',  label: 'No — non-disabling (NIHSS <6)' },
+  ];
+
+  let rows = '';
+  rows += renderCategoryRow(2, 'time', 'Time from onset', state.time, timeOptions);
+  if (state.time && state.time !== '>24h') {
+    if (isLvo() && isAnterior()) rows += renderCategoryRow(2, 'nihssBucket', 'NIHSS at presentation', state.nihssBucket, nihssAntOptions);
+    if (isLvo() && isBasilar()) rows += renderCategoryRow(2, 'nihssBasilar', 'NIHSS at presentation', state.nihssBasilar, nihssBasilarOptions);
+    if (isMevo() && isDominantM2()) rows += renderCategoryRow(2, 'mevoDisabling', 'Disabling deficit (NIHSS ≥6)?', state.mevoDisabling, disablingOptions);
+  }
+
+  // v3: Pearls after time is selected
+  const pearls = renderStep2Pearls();
+
+  return `<div class="cat-rows" id="step-2-content">${rows}${pearls}</div>`;
+}
+
+function buildStep3Active() {
+  if (isMrsGt4() || isAgeUnder18() || state.time === '>24h') {
+    return `<div class="locked-body">No imaging input required for this pathway branch.</div>`;
+  }
+  if (isMevo() && !isDominantM2()) {
+    return `<div class="locked-body">Imaging not required — MeVO location determines recommendation.</div>`;
+  }
+  let rows = '';
+  if (isLvo() && isBasilar()) {
+    rows += renderNumericInput('pcAspects', 'PC-ASPECTS', '10', 0, 10, '—');
+  } else {
+    rows += renderNumericInput('aspects', 'ASPECTS', '10', 0, 10, '—');
+  }
+
+  // v3: Imaging pearls
+  const pearls = renderStep3Pearls();
+
+  return `<div class="cat-rows" id="step-3-content">${rows}${pearls}</div>`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MAIN RENDER
+// ─────────────────────────────────────────────────────────────────────────────
+
+function render() {
+  const result = interpret();
+  const s1done = step1Complete();
+  const s2done = step2Complete();
+  const s3done = step3Complete();
+  const resultReady = result !== null;
+  const activeStep = state.activeStep;
+
+  const completedSteps = [s1done, s2done, s3done, resultReady].filter(Boolean).length;
+  const stepCounterText = completedSteps === 0 ? 'Answer 4 steps to unlock' :
+    completedSteps < 4 ? `Step ${Math.min(completedSteps + 1, 4)} of 4` : 'Complete';
+
+  const rail1 = s1done ? 'rail-cobalt' : 'rail-slate';
+  const rail2 = s2done ? 'rail-cobalt' : 'rail-slate';
+  const rail3 = s3done ? 'rail-cobalt' : 'rail-slate';
+
+  function nodeBtn(n, state_label, isCurrent) {
+    const nodeClass = state_label === 'completed' ? 'node-completed' :
+                      state_label === 'active'    ? 'node-active' : 'node-locked';
+    const disabled = state_label === 'locked' ? 'disabled' : '';
+    const ariaCurrent = isCurrent ? 'aria-current="step"' : '';
+    const ariaLabel = `Step ${n}: ${['','TRIAGE','CLINICAL','IMAGING','RESULT'][n]}${state_label === 'completed' ? ' (completed)' : state_label === 'locked' ? ' (locked, awaiting previous step)' : ' (active)'}`;
+    return `
+      <button class="node-btn ${nodeClass}" ${disabled} ${ariaCurrent}
+        aria-label="${ariaLabel}"
+        id="step-${n}-node"
+        onclick="${state_label !== 'locked' ? `openStepAndRow(${n}, '')` : ''}"
+      >
+        <div class="node-dot"></div>
+      </button>
+    `;
+  }
+
+  const n1state = s1done ? 'completed' : 'active';
+  const n2state = !s1done ? 'locked' : s2done ? 'completed' : 'active';
+  const n3state = !s2done ? 'locked' : s3done ? 'completed' : 'active';
+  const n4state = !s3done ? 'locked' : resultReady ? 'completed' : 'active';
+
+  // v3 Step 4 pearls
+  const step4Pearls = renderStep4Pearls(resultReady ? result : null);
+
+  const html = `
+    <h1 class="sr-only">EVT Pathway</h1>
+
+    <header class="pathway-header" role="banner">
+      <div class="pathway-header-inner">
+        <div class="header-left">
+          <button class="back-btn" onclick="window.history.back()" aria-label="Go back">
+            ${svg('<path d="M19 12H5M12 19l-7-7 7-7"/>', 20, 20)}
+          </button>
+          <div>
+            <div class="header-eyebrow">PATHWAY</div>
+            <div class="header-title">EVT Pathway</div>
+            <div class="header-step-counter">${stepCounterText}</div>
+          </div>
+        </div>
+        <div class="header-right">
+          <button class="icon-btn" aria-label="Favorite pathway" aria-pressed="false">
+            ${svg('<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>', 18, 18)}
+          </button>
+          <button class="icon-btn" onclick="openConfirm()" aria-label="Reset pathway, clear all answers">
+            ${svg('<path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 .49-4.55"/>', 17, 17)}
+          </button>
+          <button class="copy-btn" onclick="copyResult()" aria-label="Copy pathway result to clipboard">Copy</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="content-col" aria-label="EVT pathway steps">
+
+      <!-- STEP 1 · TRIAGE -->
+      <div class="step-block" id="step1-block">
+        <div class="step-header">
+          <div class="node-wrap">${nodeBtn(1, n1state, activeStep === 1)}</div>
+          <span class="step-eyebrow ${s1done ? 'eyebrow-completed' : 'eyebrow-active'}">${STEP_ICONS[1]} STEP 1 · TRIAGE</span>
+        </div>
+        <div class="rail-segment ${rail1} mb-2" aria-label="Step 1 progress rail">
+          ${s1done ? `
+            <div class="cat-rows">${renderCompletedRows()}</div>
+            <div style="padding:4px 0 8px;">
+              ${renderChip(step1ChipText(), 1, 'occlusionType', step1ChipText())}
+            </div>
+          ` : buildStep1Active()}
+          <div id="cascade-notice-slot"></div>
+        </div>
+      </div>
+
+      <!-- STEP 2 · CLINICAL -->
+      <div class="step-block" id="step2-block">
+        <div class="step-header">
+          <div class="node-wrap">${nodeBtn(2, n2state, activeStep === 2)}</div>
+          <span class="step-eyebrow ${s2done ? 'eyebrow-completed' : !s1done ? 'eyebrow-locked' : 'eyebrow-active'}">${STEP_ICONS[2]} STEP 2 · CLINICAL</span>
+        </div>
+        <div class="rail-segment ${rail2} mb-2" aria-label="Step 2 progress rail">
+          ${!s1done ? `
+            <div class="locked-body" aria-label="Step 2, Clinical, locked">Complete Step 1 to unlock ↑</div>
+          ` : s2done ? `
+            <div class="cat-rows">${renderCompletedStep2Rows()}</div>
+            <div style="padding:4px 0 8px;">
+              ${renderChip(step2ChipText(), 2, 'time', step2ChipText())}
+            </div>
+          ` : buildStep2Active()}
+        </div>
+      </div>
+
+      <!-- STEP 3 · IMAGING -->
+      <div class="step-block" id="step3-block">
+        <div class="step-header">
+          <div class="node-wrap">${nodeBtn(3, n3state, activeStep === 3)}</div>
+          <span class="step-eyebrow ${s3done ? 'eyebrow-completed' : !s2done ? 'eyebrow-locked' : 'eyebrow-active'}">${STEP_ICONS[3]} STEP 3 · IMAGING</span>
+        </div>
+        <div class="rail-segment ${rail3} mb-2" aria-label="Step 3 progress rail">
+          ${!s2done ? `
+            <div class="locked-body" aria-label="Step 3, Imaging, locked">Complete Step 2 to unlock ↑</div>
+          ` : s3done ? `
+            <div class="cat-rows">${renderCompletedStep3Rows()}</div>
+            ${step3ChipText() ? `
+              <div style="padding:4px 0 8px;">
+                ${renderChip(step3ChipText(), 3, 'aspects', step3ChipText())}
+              </div>
+            ` : ''}
+          ` : buildStep3Active()}
+        </div>
+      </div>
+
+      <!-- STEP 4 · RESULT -->
+      <div class="step-block" id="step4-block">
+        <div class="step-header">
+          <div class="node-wrap">${nodeBtn(4, n4state, activeStep === 4)}</div>
+          <span class="step-eyebrow ${resultReady ? 'eyebrow-completed' : !s3done ? 'eyebrow-locked' : 'eyebrow-active'}">${STEP_ICONS[4]} STEP 4 · RESULT</span>
+        </div>
+        <div style="padding-left:22px;padding-bottom:12px;">
+          ${!s3done ? `
+            <div class="locked-body" aria-label="Step 4, Result, locked">Complete Step 3 to unlock ↑</div>
+          ` : resultReady ? `
+            <div style="font-size:15px;font-weight:600;padding:6px 0 2px;" class="${
+              result.tier === 'eligible'   ? 'text-tier-eligible'   :
+              result.tier === 'reasonable' ? 'text-tier-reasonable' :
+              result.tier === 'uncertain'  ? 'text-tier-uncertain'  :
+              result.tier === 'avoid'      ? 'text-tier-avoid'      :
+              'text-tier-idd'}">${result.status} · ${result.criteriaName}</div>
+            <div style="font-size:12px;color:#64748b;margin-top:2px;">See interpretation drawer below</div>
+            ${step4Pearls}
+          ` : `
+            <div class="locked-body">Awaiting inputs ↑</div>
+          `}
+        </div>
+      </div>
+
+      <div class="drawer-spacer"></div>
+    </div>
+  `;
+
+  document.getElementById('pathway-root').innerHTML = html;
+
+  // Re-attach cascade notice to its DOM slot after render
+  const slot = document.getElementById('cascade-notice-slot');
+  const notice = document.getElementById('cascade-notice');
+  if (slot && notice) slot.appendChild(notice);
+
+  renderDrawer(result);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DRAWER
+// ─────────────────────────────────────────────────────────────────────────────
+
+let drawerOpen = false;
+
+function tierToClass(tier) {
+  return { eligible:'drawer-tier-eligible', reasonable:'drawer-tier-reasonable', uncertain:'drawer-tier-uncertain', avoid:'drawer-tier-avoid', idd:'drawer-tier-idd' }[tier] || 'drawer-tier-idd';
+}
+function tierToTextClass(tier) {
+  return { eligible:'text-tier-eligible', reasonable:'text-tier-reasonable', uncertain:'text-tier-uncertain', avoid:'text-tier-avoid', idd:'text-tier-idd' }[tier] || 'text-tier-idd';
+}
+function tierToBadgeClass(tier) {
+  return { eligible:'badge-eligible', reasonable:'badge-reasonable', uncertain:'badge-uncertain', avoid:'badge-avoid', idd:'badge-idd' }[tier] || 'badge-idd';
+}
+
+function buildAssessmentSummary() {
+  const rows = [];
+  if (state.occlusionType) rows.push(['Type', isLvo() ? 'LVO' : 'MeVO']);
+  if (state.lvoLocation)   rows.push(['Location', isAnterior() ? 'Anterior (ICA/M1)' : 'Basilar']);
+  if (state.mevoLocation)  rows.push(['MeVO location', MEVO_LABELS[state.mevoLocation] || state.mevoLocation]);
+  if (state.prestrokeMrs)  rows.push(['Prestroke mRS', MRS_LABELS[state.prestrokeMrs]]);
+  if (state.ageGroup)      rows.push(['Age', AGE_LABELS[state.ageGroup]]);
+  if (state.time)          rows.push(['Time window', TIME_LABELS[state.time]]);
+  if (state.nihssBucket)   rows.push(['NIHSS', NIHSS_LABELS[state.nihssBucket]]);
+  if (state.nihssBasilar)  rows.push(['NIHSS', NIHSS_BASILAR_LABELS[state.nihssBasilar]]);
+  if (state.aspects !== null && state.aspects !== '') rows.push(['ASPECTS', `${state.aspects} / 10`]);
+  if (state.pcAspects !== null && state.pcAspects !== '') rows.push(['PC-ASPECTS', `${state.pcAspects} / 10`]);
+  return rows.map(([k,v]) => `
+    <div class="assess-row">
+      <span class="assess-key">${k}</span>
+      <span class="assess-val">${v}</span>
+    </div>
+  `).join('');
+}
+
+function renderDrawer(result) {
+  const portal = document.getElementById('drawer-portal');
+  if (!result) {
+    portal.innerHTML = `
+      <div class="drawer-a" aria-label="Interpretation drawer, waiting for inputs">
+        <div>
+          <div class="drawer-a-label">INTERPRETATION</div>
+          <div class="drawer-a-left">${step1Complete() ? 'Continue completing steps' : 'Answer 4 steps to unlock'}</div>
+        </div>
+        <div style="font-size:11px;color:#94a3b8;">Appears when complete</div>
+      </div>
+    `;
+    drawerOpen = false;
+    return;
+  }
+  const tc = tierToClass(result.tier);
+  const ttc = tierToTextClass(result.tier);
+  const tbc = tierToBadgeClass(result.tier);
+  if (!drawerOpen) {
+    portal.innerHTML = `
+      <div class="${tc}" style="box-shadow:0 -2px 12px rgba(15,23,42,0.08);">
+        <button class="drawer-c-btn ${tc}" onclick="toggleDrawer()"
+          aria-expanded="false" aria-controls="drawer-content"
+          aria-label="Interpretation: ${result.status} — ${result.criteriaName}. Press to expand.">
+          <div>
+            <div class="drawer-eyebrow ${ttc}">INTERPRETATION</div>
+            <div class="drawer-stat ${ttc}">${result.status} · ${result.criteriaName}</div>
+          </div>
+          <svg class="drawer-chevron drawer-chevron-hint ${ttc}" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 8 10 12 14 8"></polyline>
+          </svg>
+        </button>
+      </div>
+    `;
+  } else {
+    portal.innerHTML = `
+      <div class="${tc}" style="box-shadow:0 -4px 24px rgba(15,23,42,0.12);">
+        <button class="drawer-c-btn ${tc}" onclick="toggleDrawer()"
+          aria-expanded="true" aria-controls="drawer-content"
+          aria-label="Interpretation: ${result.status} — ${result.criteriaName}. Press to collapse.">
+          <div>
+            <div class="drawer-eyebrow ${ttc}">INTERPRETATION</div>
+            <div class="drawer-stat ${ttc}">${result.status} · ${result.criteriaName}</div>
+          </div>
+          <svg class="drawer-chevron drawer-chevron-open ${ttc}" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 8 10 12 14 8"></polyline>
+          </svg>
+        </button>
+        <div id="drawer-content" class="drawer-expanded-body">
+          ${result.evidenceBadge ? `<div class="evidence-badge ${tbc}">${result.evidenceBadge}</div>` : ''}
+          <div style="font-size:18px;font-weight:600;color:#0f172a;line-height:1.3;margin-bottom:10px;">${result.criteriaName}</div>
+          <div style="font-size:13px;color:#475569;line-height:1.55;">${result.details || result.reason}</div>
+          <div class="assess-table">
+            <div class="assess-eyebrow">Assessment Summary</div>
+            ${buildAssessmentSummary()}
+          </div>
+          <div style="margin-top:16px;font-size:11px;color:#94a3b8;line-height:1.6;">
+            Source: AHA/ASA 2026 Figure 3 (page e61). For clinical decision support only — not a substitute for clinical judgment.
+          </div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function toggleDrawer() {
+  drawerOpen = !drawerOpen;
+  renderDrawer(interpret());
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// UTILITY ACTIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+function openConfirm() { document.getElementById('confirm-overlay').style.display = 'flex'; }
+function closeConfirm() { document.getElementById('confirm-overlay').style.display = 'none'; }
+function doReset() {
+  Object.assign(state, {
+    occlusionType: null, lvoLocation: null, confirmLvo: null,
+    prestrokeMrs: null, ageGroup: null, mevoLocation: null, mevoBaseline: null,
+    time: null, nihssBucket: null, nihssBasilar: null, mevoDisabling: null,
+    aspects: null, pcAspects: null, activeStep: 1, openAccordion: null,
+  });
+  undoSnapshot = null; drawerOpen = false;
+  dismissCascadeNotice(); closeConfirm(); render();
+}
+
+function copyResult() {
+  const result = interpret();
+  if (!result) { alert('Complete the pathway to copy the result.'); return; }
+  const lines = [
+    `EVT Pathway Result`, `Status: ${result.status}`,
+    `Criteria: ${result.criteriaName}`, `Evidence: ${result.evidenceBadge || ''}`,
+    '', `Details: ${result.details || result.reason}`, '', 'Assessment Summary:',
+  ];
+  if (state.occlusionType) lines.push(`  Type: ${isLvo() ? 'LVO' : 'MeVO'}`);
+  if (state.lvoLocation)   lines.push(`  Location: ${isAnterior() ? 'Anterior (ICA/M1)' : 'Basilar'}`);
+  if (state.prestrokeMrs)  lines.push(`  Prestroke mRS: ${MRS_LABELS[state.prestrokeMrs]}`);
+  if (state.ageGroup)      lines.push(`  Age: ${AGE_LABELS[state.ageGroup]}`);
+  if (state.time)          lines.push(`  Time window: ${TIME_LABELS[state.time]}`);
+  if (state.nihssBucket)   lines.push(`  NIHSS: ${NIHSS_LABELS[state.nihssBucket]}`);
+  if (state.aspects !== null) lines.push(`  ASPECTS: ${state.aspects}/10`);
+  lines.push('', 'Source: AHA/ASA 2026 Figure 3 — NeuroWiki EVT Pathway v3 Demo');
+  navigator.clipboard.writeText(lines.join('\n')).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    if (btn) { btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy'; }, 1500); }
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = lines.join('\n');
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BOOT
+// ─────────────────────────────────────────────────────────────────────────────
+
+render();
+
+</script>
+
+<!--
+  ════════════════════════════════════════════════════════════════════════════
+  @design-prototyper — Sign-off (v3 warmth)
+  ════════════════════════════════════════════════════════════════════════════
+
+  4 step icons inline + bare + slate-500: yes
+    - Step 1: UserCheck SVG (path + circle + polyline)
+    - Step 2: Clock SVG (circle + polyline)
+    - Step 3: ScanLine SVG (4 corner paths + horizontal line)
+    - Step 4: ListChecks SVG (2 polylines + 3 lines)
+    - Rendered inside .step-eyebrow span via STEP_ICONS[n] template literal
+    - No background div, no bg-*, no border, no padding container, no rounded corner
+    - Color: #64748b (slate-500) via CSS .step-icon { color: #64748b }
+    - Locked eyebrow inherits 50% opacity from .eyebrow-locked parent
+
+  Pearl blocks conditional per step: yes
+    - Step 1 (after occlusionType !== null):
+        "Evidence Landscape" — LVO has Class I evidence for EVT...
+        "Exclusions" — Hard exclusions: no LVO, pre-stroke dependence...
+    - Step 2 (after time !== null):
+        "2026 Guideline Update" — The 2026 AHA/ASA Guidelines (Section 4.7.2)...
+        "NIHSS Limitations" — (only when isLvo()) NIHSS underestimates disability...
+    - Step 3 (when step2Complete and not a skip branch):
+        Anterior 0-6h: "Understanding ASPECTS" — ASPECTS is a 10-point scoring system...
+        Basilar: "pc-ASPECTS & 2026 Guidelines" — pc-ASPECTS scores the posterior circulation...
+    - Step 4 (when result !== null):
+        "How to interpret this verdict" — synthesized 2-sentence pearl, ≤80 words
+
+  Pearl content verbatim from EvtPathway.tsx: yes
+    - Step 1 pearls: EvtPathway.tsx lines 1073-1080
+    - Step 2 pearls: EvtPathway.tsx lines 1141-1149
+    - Step 3 ASPECTS pearl: EvtPathway.tsx lines 1229-1231
+    - Step 3 pc-ASPECTS pearl: EvtPathway.tsx lines 1251-1253
+    - Step 4 pearl: synthesized (no verbatim source — per brief spec)
+
+  Auto-scroll function + reduced-motion-aware: yes
+    - scrollToNextField() called in setField() after render(), only when !didCascade
+    - Uses window.matchMedia('(prefers-reduced-motion: reduce)') — auto vs smooth
+    - headerOffset: 80px
+    - setTimeout 120ms to allow DOM to settle post-render
+    - id="field-{fieldKey}" on each category row container + numeric input row
+    - findNextUnansweredFieldId() walks ordered field list per active step
+
+  Proposal 3 NOT implemented: yes
+    - Drawer stays State A muted bar until terminal result computed
+    - No provisional verdict pill in step 3 body
+
+  step3Complete Dominant M2 branch: yes
+    - Line: if (isMevo() && isDominantM2()) return state.aspects !== null && state.aspects !== '';
+
+  isNaN numeric handler: yes
+    - onchange and oninput both use: this.value === '' || isNaN(parseFloat(this.value)) ? null : parseFloat(this.value)
+
+  All v2 elements preserved: yes
+    - Pattern A vertical rail (cobalt traversed, slate untraversed)
+    - Step nodes (filled cobalt / hollow ring / slate-300 hollow)
+    - Tap-targetable branch chips with aria-label, 44×44 hit target
+    - Cascade-clear inline notice with role="status" aria-live="polite", Undo button, 8s auto-dismiss
+    - Two-line stacked accordion options (column flex, 11px slate-500 description)
+    - Numeric inputs with min-h-[44px], inputmode="numeric", isNaN handler
+    - Completed-row "tap to edit" buttons (A-02 fix)
+    - Locked-step body: italic "Awaiting Step N" + 50% opacity eyebrow
+    - Drawer State A muted bar / State C tier-tinted (slate / amber / red)
+    - Header anatomy
+    - Calculator-restraint chrome (no card wrappers, no info boxes, no bright CTAs in body)
+    - All clinical interpretation logic (Figure-3 verified) — verdicts unchanged
+
+  JS syntax-checked: yes
+    - No unclosed braces, template literals, or hanging functions
+    - render(), setField(), scrollToNextField(), renderPearl() all self-contained
+
+  Status: ready
+  Mockup file: docs/specs/mockups/pathway-evt-interactive-demo-v3-warmth.html
+  States covered: default, active, completed, locked (all 4 steps)
+  Tokens verified: yes — neuro-500 #1746A2, neuro-700 #0E2D6B, slate-500 #64748b,
+                   amber-500 #f59e0b, all cross-referenced with tailwind.config in v2
+-->
+</html>

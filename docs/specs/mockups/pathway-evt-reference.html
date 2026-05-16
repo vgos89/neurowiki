@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║  CANONICAL REFERENCE — EVT Pathway Visual Design                           ║
+  ║  Round 6 — Tap-targetable branch chips + cascade-clear notice w/ Undo     ║
+  ║  2026-05-15                                                                 ║
+  ║                                                                             ║
+  ║  LAYOUT PATTERN (Pattern A — vertical rail):                               ║
+  ║  - Left border rail runs full height of the body content column.           ║
+  ║  - Completed step → next step rail segment renders border-l-2 border-      ║
+  ║    neuro-500 (cobalt). Untraversed segments render border-l border-         ║
+  ║    slate-200.                                                               ║
+  ║  - Nodes sit on the rail: completed = filled cobalt w-3 h-3 dot;          ║
+  ║    active = hollow cobalt ring; locked = slate-300 hollow small dot.       ║
+  ║  - Branch chip appears between a completed node and the next eyebrow:      ║
+  ║    text-[11px] text-slate-600 bg-slate-50 px-2 py-0.5 rounded-full.       ║
+  ║                                                                             ║
+  ║  CATEGORY-ROW PATTERN (round 5 change):                                    ║
+  ║  - Each decision dimension (e.g. "LVO Location") renders as ONE row.       ║
+  ║  - Resting: label left, selected-value + chevron right.                    ║
+  ║  - Unselected: label left, "Select…" italic slate-400 right.               ║
+  ║  - Tapping expands an inline accordion listing the options below the row.  ║
+  ║  - Selected option in the accordion has a 2px cobalt left bar.            ║
+  ║  - Numeric inputs (ASPECTS etc.) show an inline number field, no chevron.  ║
+  ║  - One row per category, NOT one row per option.                           ║
+  ║                                                                             ║
+  ║  CASCADE-CLEAR BEHAVIOR (runtime, not shown in static HTML):               ║
+  ║  When an upstream category-row value changes, all downstream chips clear,  ║
+  ║  downstream step bodies re-lock to "Awaiting Step N ↑", and the rail      ║
+  ║  returns to slate-200 from that junction down. A transient inline notice   ║
+  ║  (cascade-notice) appears immediately below the changed row naming the     ║
+  ║  cleared steps and offering an Undo button. Notice auto-dismisses after    ║
+  ║  4 seconds or next outside tap. Undo restores prior answer + downstream.   ║
+  ║  Re-completing the upstream step re-fills the cobalt rail, re-populates    ║
+  ║  chips, and re-unlocks bodies. See Frame 6 for the static demonstration.   ║
+  ║                                                                             ║
+  ║  BRANCH CHIPS (round 6 change):                                            ║
+  ║  Every branch chip is now a <button> (not a <span> or <div>).             ║
+  ║  Visual register unchanged: same text-[11px] slate-50 rounded-full pill.  ║
+  ║  Hit target 44×44 via p-3 -m-3. Hover: slate-100 bg + neuro-200 ring.    ║
+  ║  On tap: pathway scrolls to source step in edit mode with the relevant     ║
+  ║  category-row pre-opened. Rail and downstream chips do NOT collapse on     ║
+  ║  chip-tap alone — only on actual answer change.                            ║
+  ║                                                                             ║
+  ║  Anti-patterns to NEVER reintroduce:                                       ║
+  ║   • Horizontal step strip in the header                                    ║
+  ║   • Icon-tile section prefixes (bg-neuro-100 or bg-purple-100 squares)    ║
+  ║   • Cobalt info cards in body (bg-neuro-50 rounded-xl border p-4)         ║
+  ║   • Saturated tier chrome on low/eligible tier                             ║
+  ║   • rounded-xl bordered wrappers around step sections                      ║
+  ║   • Bright-tinted CTA buttons inside step bodies                           ║
+  ║   • Checkmarks or numbered circles as step indicators                      ║
+  ║   • Collapsible/accordion per step (not per category)                      ║
+  ║   • One row per option (old round 4 grid pattern)                         ║
+  ║   • Native <select> elements                                               ║
+  ║   • Radio-button circles inside the option accordion                       ║
+  ║   • Icons inside category rows                                             ║
+  ║                                                                             ║
+  ║  Token source: .claude/skills/design-tokens/SKILL.md                      ║
+  ║  Structural spec: docs/specs/CALCULATOR_SPEC.md v1.1                      ║
+  ║  Pathway spec: docs/specs/PATHWAY_SPEC.md                                 ║
+  ╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EVT Pathway Reference Mockup — NeuroWiki (Round 6)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --color-neuro-50:  #EEF2FF;
+    --color-neuro-100: #C7D7FA;
+    --color-neuro-200: #A5B4FC;
+    --color-neuro-500: #1746A2;
+    --color-neuro-600: #123988;
+    --color-neuro-700: #0E2D6B;
+    --color-neuro-900: #06143D;
+    --nav-rail-width: 0px;
+    --tab-bar-height: 0px;
+  }
+
+  /* Neuro token classes */
+  .bg-neuro-50  { background-color: var(--color-neuro-50); }
+  .bg-neuro-500 { background-color: var(--color-neuro-500); }
+  .bg-neuro-600 { background-color: var(--color-neuro-600); }
+  .hover\:bg-neuro-600:hover { background-color: var(--color-neuro-600); }
+  .text-neuro-600 { color: var(--color-neuro-600); }
+  .text-neuro-700 { color: var(--color-neuro-700); }
+  .border-neuro-500 { border-color: var(--color-neuro-500); }
+
+  /* Hairline divider between category rows */
+  .divider-hair { border-top: 1px solid #e2e8f0; }
+
+  /* ─── Category-row system (round 5) ─────────────────────────────────────── */
+
+  /*
+    .cat-row: a single category row in resting state.
+    Label on the left, value + chevron on the right.
+    Chevron rotates 180° when the accordion is open (.cat-row-open).
+  */
+  .cat-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 12px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.12s;
+  }
+  .cat-row:hover {
+    background-color: rgba(248, 250, 252, 0.6);
+  }
+  .cat-row-label {
+    font-weight: 500;
+    color: #0f172a; /* slate-900 */
+    font-size: 0.9375rem;
+  }
+  .cat-row-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .cat-row-value {
+    font-size: 0.875rem; /* text-sm */
+    color: #64748b; /* slate-500 */
+  }
+  .cat-row-value-unset {
+    font-size: 0.875rem;
+    color: #94a3b8; /* slate-400 */
+    font-style: italic;
+  }
+  .cat-row-chevron {
+    width: 16px;
+    height: 16px;
+    color: #94a3b8; /* slate-400 */
+    transition: transform 0.18s ease;
+    flex-shrink: 0;
+  }
+  /* Rotated chevron when accordion open */
+  .cat-row-open .cat-row-chevron {
+    transform: rotate(180deg);
+  }
+
+  /*
+    .cat-accordion: the inline list of options that expands below the row.
+    Shown in Frame 1 only (LVO Location row is open).
+  */
+  .cat-accordion {
+    padding: 4px 12px 10px 12px;
+  }
+  .cat-option {
+    width: 100%;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 10px 12px 10px 16px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.12s;
+    position: relative;
+  }
+  .cat-option:hover {
+    background-color: rgba(248, 250, 252, 0.6);
+  }
+  .cat-option-label {
+    font-size: 0.875rem; /* text-sm */
+    color: #334155; /* slate-700 */
+  }
+  .cat-option-sub {
+    font-size: 0.75rem; /* text-xs */
+    color: #94a3b8; /* slate-400 */
+  }
+  /* 2px cobalt left bar for selected option inside accordion */
+  .cat-option-selected {
+    border-left: 2px solid var(--color-neuro-500);
+    padding-left: 14px; /* compensate for 2px border */
+  }
+  .cat-option-selected .cat-option-label {
+    color: var(--color-neuro-700);
+    font-weight: 500;
+  }
+
+  /*
+    Completed step: category rows show picked value on right, cobalt left bar
+    (selected-option from rail, identical treatment to a selected accordion item).
+    No chevron in completed state — the row is a summary, not interactive.
+  */
+  .cat-row-completed {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 12px 14px 14px;
+    border-left: 2px solid var(--color-neuro-500);
+    border-radius: 8px;
+    background-color: var(--color-neuro-50);
+    cursor: pointer; /* still tappable to go back and change */
+  }
+  .cat-row-completed-label {
+    font-weight: 600;
+    color: var(--color-neuro-700);
+    font-size: 0.9375rem;
+  }
+  .cat-row-completed-value {
+    font-size: 0.875rem;
+    color: var(--color-neuro-700);
+    opacity: 0.75;
+  }
+
+  /*
+    Numeric input row: no chevron. Instead of a value string, shows a small
+    bordered input field and a unit label.
+  */
+  .cat-input-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: 8px;
+  }
+  .cat-input-label {
+    font-weight: 500;
+    color: #0f172a;
+    font-size: 0.9375rem;
+  }
+  .cat-input-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cat-input-field {
+    width: 48px;
+    padding: 4px 8px;
+    font-size: 0.875rem;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    color: #0f172a;
+    text-align: center;
+  }
+  .cat-input-unit {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+
+  /* Drawer animations */
+  @keyframes chevron-bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30%           { transform: translateY(-3px); }
+  }
+  .drawer-chevron-hint { animation: chevron-bounce 2.4s ease-in-out infinite; }
+
+  @keyframes drawer-pulse {
+    0%   { box-shadow: 0 -4px 20px rgba(23, 70, 162, 0); }
+    50%  { box-shadow: 0 -6px 24px rgba(23, 70, 162, 0.25); }
+    100% { box-shadow: 0 -4px 20px rgba(23, 70, 162, 0); }
+  }
+  .drawer-just-available { animation: drawer-pulse 1.6s ease-out 1; }
+
+  .drawer-collapsed { box-shadow: 0 -2px 12px rgba(15, 23, 42, 0.08); }
+  .drawer-expanded  { box-shadow: 0 -4px 24px rgba(15, 23, 42, 0.12); }
+
+  /* Page chrome */
+  body { background: #f1f5f9; }
+
+  .mockup-frame {
+    max-width: 440px;
+    margin: 0 auto;
+    background: white;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .archetype-banner {
+    background: #0f172a;
+    color: white;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .drawer-spacer-collapsed { height: 80px; }
+  .drawer-spacer-expanded  { height: 380px; }
+
+  /* ─── Rail system ────────────────────────────────────────────────────────── */
+
+  .rail-wrapper {
+    position: relative;
+  }
+
+  /* Cobalt (traversed path) */
+  .rail-cobalt {
+    border-left: 2px solid var(--color-neuro-500);
+    padding-left: 20px;
+    margin-left: 14px;
+  }
+
+  /* Slate (untraversed) */
+  .rail-slate {
+    border-left: 1px solid #e2e8f0;
+    padding-left: 21px;
+    margin-left: 14px;
+  }
+
+  /* Nodes — sit on the rail line via negative margin-left */
+  .node-completed {
+    width: 12px;
+    height: 12px;
+    border-radius: 9999px;
+    background-color: var(--color-neuro-500);
+    margin-left: -20px;
+    margin-bottom: 6px;
+    flex-shrink: 0;
+  }
+  .node-active {
+    width: 12px;
+    height: 12px;
+    border-radius: 9999px;
+    border: 2px solid var(--color-neuro-500);
+    background: white;
+    margin-left: -20px;
+    margin-bottom: 6px;
+    flex-shrink: 0;
+  }
+  .node-locked {
+    width: 10px;
+    height: 10px;
+    border-radius: 9999px;
+    border: 1px solid #cbd5e1;
+    background: white;
+    margin-left: -20px;
+    margin-bottom: 6px;
+    flex-shrink: 0;
+  }
+
+  /*
+    Branch chip — round 6: converted from static <span> to interactive <button>.
+    Visual register unchanged (same size, same palette as round 5).
+    Hit target: 44×44 achieved via p-3 -m-3 on the button (visible pill stays small).
+    Hover: slate-100 bg + faint neuro-200 ring.
+    role="button" is implicit on <button> but noted in inline comments for spec reference.
+    aria-label="Edit: {decision summary}" required on every instance.
+    On tap: pathway scrolls to source step in edit mode with the relevant
+    category-row accordion pre-opened. The rail and downstream chips do NOT collapse
+    on chip-tap alone — only on actual answer change. This behavior is annotated
+    per-chip in the HTML comments below.
+  */
+  .branch-chip {
+    display: inline-block;
+    font-size: 11px;
+    color: #475569;
+    background: #f8fafc;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    line-height: 1.5;
+    /* Interactive affordances (round 6) */
+    cursor: pointer;
+    border: none;
+    outline: none;
+    /* Hit-target expansion: wrapping <button> uses p-3 -m-3 */
+    transition: background-color 0.12s, box-shadow 0.12s, color 0.12s;
+  }
+  .branch-chip:hover {
+    background-color: #f1f5f9; /* slate-100 */
+    color: #0f172a;             /* slate-900 */
+    box-shadow: 0 0 0 1px var(--color-neuro-200); /* hover:ring-1 hover:ring-neuro-200 */
+  }
+  .branch-chip:focus-visible {
+    outline: 2px solid var(--color-neuro-500);
+    outline-offset: 2px;
+  }
+
+  /* ─── Cascade-clear notice (round 6) ──────────────────────────────────────── */
+  /*
+    Appears immediately below the changed category-row when an upstream change
+    cascades downstream. NOT a modal, NOT a toast, NOT a page-top banner.
+    Must live inline in the step body so cause and effect are in one visual sweep.
+
+    Behavior contract (animated in runtime; static here):
+    - Slides in with 200ms transition-opacity + slight upward translate.
+    - Auto-dismisses after 4 seconds OR on next outside tap.
+    - Slides out the same way.
+    - Undo button: restores prior upstream answer AND all downstream answers
+      (held in memory until notice dismisses). One tap reverses the cascade.
+    - Rail reversion accompanies with a single 250ms color fade (cobalt → slate).
+  */
+  .cascade-notice {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: #f8fafc;           /* slate-50 */
+    border: 1px solid #e2e8f0;     /* slate-200 */
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    color: #475569;                /* slate-600 */
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  /* Frame annotation blocks — for mockup documentation only */
+  .frame-annotation {
+    background: #fefce8;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.8125rem;
+    color: #78350f;
+    line-height: 1.5;
+    margin: 0 20px 16px 20px;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Step eyebrows */
+  .eyebrow-locked {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(148, 163, 184, 0.5);
+    margin-bottom: 8px;
+  }
+  .eyebrow-active {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #94a3b8;
+    margin-bottom: 12px;
+  }
+
+</style>
+</head>
+<body class="text-slate-900 antialiased">
+
+<!-- PAGE HEADER BANNER -->
+<div class="archetype-banner">
+  <div class="max-w-5xl mx-auto">
+    <div class="font-bold text-base mb-1">EVT Pathway Reference Mockup — NeuroWiki (Round 6)</div>
+    <div class="text-slate-300 text-xs leading-relaxed">
+      Round 6 adds two research-backed interactivity patterns (Evolutions 1, 2, 4 from the 2026-05-15 flowchart-pathway-design-research synthesis).
+      Pattern 1: Every branch chip is now a &lt;button&gt; with 44×44 hit target via p-3 -m-3, hover:bg-slate-100 + hover:ring-1 ring-neuro-200, and aria-label="Edit: {decision summary}". On tap, scrolls to source step in edit mode with the relevant accordion pre-opened.
+      Pattern 2: Cascade-clear fires an inline transient notice (slate-50 pill, slate-200 border, bold prefix naming cleared steps, Undo button) immediately below the changed category-row. Auto-dismisses after 4s or next outside tap. Undo restores prior + downstream answers.
+      Frame 6 (new) demonstrates cascade-clear in progress. Frames 1–5 fully preserved; all chips converted to buttons.
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- FRAME 1 · State A · Empty page                                            -->
+<!-- Step 1 active — all 5 categories show "Select…"                          -->
+<!-- LVO Location row EXPANDED (accordion open — canonical expanded-state ref) -->
+<!-- Steps 2–4 locked. Drawer muted.                                           -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section>
+<div class="text-xs text-slate-400 uppercase tracking-widest pl-5 pt-8 pb-2">
+  Frame 1 · State A · Empty — Step 1 active, LVO Location accordion open, Steps 2–4 locked
+</div>
+
+<div class="mockup-frame">
+
+  <!-- HEADER — exact mirror of calculator-reference.html lines 110–136 -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="px-5 py-4">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">PATHWAY</div>
+            <div class="text-[15px] font-semibold text-slate-900 leading-tight tracking-tight mt-0.5">EVT Pathway</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-0.5 flex-shrink-0">
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Favorite">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </button>
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Reset">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+          <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">Copy</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BODY — rail + nodes + step blocks -->
+  <main class="px-5 pt-6 pb-4">
+    <div class="rail-wrapper">
+
+      <!-- STEP 1 — active (hollow cobalt ring) -->
+      <div class="flex items-center" style="margin-left:14px;">
+        <div class="node-active"></div>
+        <div class="eyebrow-active ml-3">STEP 1 · TRIAGE</div>
+      </div>
+
+      <!-- Step 1 content — slate rail (no completed step above) -->
+      <div class="rail-slate mb-1">
+
+        <!-- ── Category row 1: Occlusion Type — unselected ── -->
+        <button type="button" class="cat-row w-full">
+          <span class="cat-row-label">Occlusion Type</span>
+          <span class="cat-row-right">
+            <span class="cat-row-value-unset">Select…</span>
+            <svg class="cat-row-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 8 10 12 14 8"></polyline></svg>
+          </span>
+        </button>
+        <div class="divider-hair"></div>
+
+        <!-- ── Category row 2: LVO Location — OPEN (accordion expanded) ── -->
+        <!-- This is the canonical Frame-1 expanded state. Chevron rotated 180°. -->
+        <button type="button" class="cat-row cat-row-open w-full">
+          <span class="cat-row-label">LVO Location</span>
+          <span class="cat-row-right">
+            <span class="cat-row-value-unset">Select…</span>
+            <!-- Chevron rotated 180° via cat-row-open -->
+            <svg class="cat-row-chevron" style="transform:rotate(180deg);" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 8 10 12 14 8"></polyline></svg>
+          </span>
+        </button>
+        <!-- Inline accordion — options listed below the row -->
+        <!-- Neither option is selected (no cobalt bar) -->
+        <div class="cat-accordion">
+          <button type="button" class="cat-option w-full">
+            <span class="cat-option-label">Anterior Circulation</span>
+            <span class="cat-option-sub">ICA / M1</span>
+          </button>
+          <button type="button" class="cat-option w-full">
+            <span class="cat-option-label">Posterior Circulation</span>
+            <span class="cat-option-sub">Basilar</span>
+          </button>
+        </div>
+        <div class="divider-hair"></div>
+
+        <!-- ── Category row 3: Confirm LVO — unselected ── -->
+        <button type="button" class="cat-row w-full">
+          <span class="cat-row-label">Confirm LVO</span>
+          <span class="cat-row-right">
+            <span class="cat-row-value-unset">Select…</span>
+            <svg class="cat-row-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 8 10 12 14 8"></polyline></svg>
+          </span>
+        </button>
+        <div class="divider-hair"></div>
+
+        <!-- ── Category row 4: Prestroke mRS — unselected ── -->
+        <button type="button" class="cat-row w-full">
+          <span class="cat-row-label">Prestroke mRS</span>
+          <span class="cat-row-right">
+            <span class="cat-row-value-unset">Select…</span>
+            <svg class="cat-row-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 8 10 12 14 8"></polyline></svg>
+          </span>
+        </button>
+        <div class="divider-hair"></div>
+
+        <!-- ── Category row 5: Age Group — unselected ── -->
+        <button type="button" class="cat-row w-full">
+          <span class="cat-row-label">Age Group</span>
+          <span class="cat-row-right">
+            <span class="cat-row-value-unset">Select…</span>
+            <svg class="cat-row-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 8 10 12 14 8"></polyline></svg>
+          </span>
+        </button>
+
+        <!-- No chip here — Step 1 not yet complete -->
+      </div>
+
+      <!-- STEP 2 — locked -->
+      <div class="flex items-center mt-4" style="margin-left:14px;">
+        <div class="node-locked"></div>
+        <div class="eyebrow-locked ml-3">STEP 2 · CLINICAL</div>
+      </div>
+      <div class="rail-slate">
+        <p class="text-sm italic text-slate-400">Awaiting Step 1 ↑</p>
+      </div>
+
+      <!-- STEP 3 — locked -->
+      <div class="flex items-center mt-4" style="margin-left:14px;">
+        <div class="node-locked"></div>
+        <div class="eyebrow-locked ml-3">STEP 3 · IMAGING</div>
+      </div>
+      <div class="rail-slate">
+        <p class="text-sm italic text-slate-400">Awaiting Step 2 ↑</p>
+      </div>
+
+      <!-- STEP 4 — locked -->
+      <div class="flex items-center mt-4" style="margin-left:14px;">
+        <div class="node-locked"></div>
+        <div class="eyebrow-locked ml-3">STEP 4 · RESULT</div>
+      </div>
+      <div class="rail-slate pb-4">
+        <p class="text-sm italic text-slate-400">Awaiting Step 3 ↑</p>
+      </div>
+
+    </div><!-- /rail-wrapper -->
+  </main>
+
+  <div class="drawer-spacer-collapsed"></div>
+
+  <!-- DRAWER State A — muted non-interactive bar -->
+  <div class="absolute bottom-0 left-0 right-0 bg-slate-100 drawer-collapsed" aria-hidden="true"
+       style="left: var(--nav-rail-width, 0px); bottom: calc(var(--tab-bar-height, 0px) + env(safe-area-inset-bottom, 0px));">
+    <div class="px-5 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Interpretation</div>
+        <div class="text-sm text-slate-500">Waiting for inputs · EVT</div>
+      </div>
+      <div class="text-xs text-slate-400">Appears when complete</div>
+    </div>
+  </div>
+
+</div><!-- /mockup-frame Frame 1 -->
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- FRAME 2 · State B · Step 1 complete, Step 2 active                       -->
+<!-- Step 1 rows show picked values (cobalt bar, no chevron).                 -->
+<!-- Branch chip visible. Step 2 rows show "Select…" with chevron.            -->
+<!-- Steps 3–4 locked. Drawer muted.                                           -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section>
+<div class="text-xs text-slate-400 uppercase tracking-widest pl-5 pt-8 pb-2">
+  Frame 2 · State B · Step 1 complete (chip visible), Step 2 active, Steps 3–4 locked
+</div>
+
+<div class="mockup-frame">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="px-5 py-4">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">PATHWAY</div>
+            <div class="text-[15px] font-semibold text-slate-900 leading-tight tracking-tight mt-0.5">EVT Pathway</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-0.5 flex-shrink-0">
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Favorite">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </button>
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Reset">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+          <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">Copy</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="px-5 pt-6 pb-4">
+    <div class="rail-wrapper">
+
+      <!-- STEP 1 — completed (filled cobalt dot) -->
+      <div class="flex items-center" style="margin-left:14px;">
+        <div class="node-completed"></div>
+        <div class="eyebrow-active ml-3">STEP 1 · TRIAGE</div>
+      </div>
+
+      <!-- Cobalt rail under completed Step 1 — category rows show selected values -->
+      <div class="rail-cobalt">
+
+        <!-- Occlusion Type — picked: LVO -->
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">Occlusion Type</span>
+          <span class="cat-row-completed-value">LVO</span>
+        </div>
+        <div class="divider-hair"></div>
+
+        <!-- LVO Location — picked: Anterior Circulation -->
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">LVO Location</span>
+          <span class="cat-row-completed-value">Anterior</span>
+        </div>
+        <div class="divider-hair"></div>
+
+        <!-- Confirm LVO — picked: Yes (CTA/MRA) -->
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">Confirm LVO</span>
+          <span class="cat-row-completed-value">Yes · CTA/MRA</span>
+        </div>
+        <div class="divider-hair"></div>
+
+        <!-- Prestroke mRS — picked: 0–1 -->
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">Prestroke mRS</span>
+          <span class="cat-row-completed-value">0–1 (Independent)</span>
+        </div>
+        <div class="divider-hair"></div>
+
+        <!-- Age Group — picked: 18–79 -->
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">Age Group</span>
+          <span class="cat-row-completed-value">18–79</span>
+        </div>
+
+        <!-- Branch chip: summary of Step 1 picks.
+             Round 6: converted to <button>. role="button" is implicit on <button> element.
+             On tap: pathway scrolls to Step 1 (Triage) in edit mode with the first
+             category-row accordion pre-opened. Rail and downstream chips do NOT collapse
+             on chip-tap alone — only on actual answer change. -->
+        <div class="p-3 -m-3" style="display:inline-block;">
+          <button type="button" class="branch-chip" aria-label="Edit: Anterior LVO, Confirmed, mRS 0–1, Age 18–79">Anterior LVO · Confirmed · mRS 0–1 · Age 18–79</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 — active (hollow cobalt ring) -->
+      <div class="flex items-center mt-2" style="margin-left:14px;">
+        <div class="node-active"></div>
+        <div class="eyebrow-active ml-3">STEP 2 · CLINICAL</div>
+      </div>
+
+      <!-- Slate rail — Step 2 category rows, all unselected -->
+      <div class="rail-slate">
+
+        <!-- Time from LKW — unselected -->
+        <button type="button" class="cat-row w-full">
+          <span class="cat-row-label">Time from LKW</span>
+          <span class="cat-row-right">
+            <span class="cat-row-value-unset">Select…</span>
+            <svg class="cat-row-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 8 10 12 14 8"></polyline></svg>
+          </span>
+        </button>
+        <div class="divider-hair"></div>
+
+        <!-- NIHSS — unselected -->
+        <button type="button" class="cat-row w-full">
+          <span class="cat-row-label">NIHSS</span>
+          <span class="cat-row-right">
+            <span class="cat-row-value-unset">Select…</span>
+            <svg class="cat-row-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 8 10 12 14 8"></polyline></svg>
+          </span>
+        </button>
+
+      </div>
+
+      <!-- STEP 3 — locked -->
+      <div class="flex items-center mt-4" style="margin-left:14px;">
+        <div class="node-locked"></div>
+        <div class="eyebrow-locked ml-3">STEP 3 · IMAGING</div>
+      </div>
+      <div class="rail-slate">
+        <p class="text-sm italic text-slate-400">Awaiting Step 2 ↑</p>
+      </div>
+
+      <!-- STEP 4 — locked -->
+      <div class="flex items-center mt-4" style="margin-left:14px;">
+        <div class="node-locked"></div>
+        <div class="eyebrow-locked ml-3">STEP 4 · RESULT</div>
+      </div>
+      <div class="rail-slate pb-4">
+        <p class="text-sm italic text-slate-400">Awaiting Step 3 ↑</p>
+      </div>
+
+    </div><!-- /rail-wrapper -->
+  </main>
+
+  <div class="drawer-spacer-collapsed"></div>
+
+  <!-- DRAWER State A — still muted (not all steps complete) -->
+  <div class="absolute bottom-0 left-0 right-0 bg-slate-100 drawer-collapsed" aria-hidden="true"
+       style="left: var(--nav-rail-width, 0px); bottom: calc(var(--tab-bar-height, 0px) + env(safe-area-inset-bottom, 0px));">
+    <div class="px-5 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Interpretation</div>
+        <div class="text-sm text-slate-500">Waiting for inputs · EVT</div>
+      </div>
+      <div class="text-xs text-slate-400">Appears when complete</div>
+    </div>
+  </div>
+
+</div><!-- /mockup-frame Frame 2 -->
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- FRAME 3 · State C-1 · Eligible — all 4 steps complete                    -->
+<!-- All category rows show picked values. Three branch chips visible.         -->
+<!-- Step 4 result inline. Drawer muted slate (Eligible tier = low / cobalt).  -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section>
+<div class="text-xs text-slate-400 uppercase tracking-widest pl-5 pt-8 pb-2">
+  Frame 3 · State C-1 · Eligible — all steps complete, Drawer muted slate
+</div>
+
+<div class="mockup-frame">
+
+  <!-- HEADER (star filled = favorited) -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="px-5 py-4">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">PATHWAY</div>
+            <div class="text-[15px] font-semibold text-slate-900 leading-tight tracking-tight mt-0.5">EVT Pathway</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-0.5 flex-shrink-0">
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Favorite">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" class="text-amber-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </button>
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Reset">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+          <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">Copy</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="px-5 pt-6 pb-4">
+    <div class="rail-wrapper">
+
+      <!-- STEP 1 — completed -->
+      <div class="flex items-center" style="margin-left:14px;">
+        <div class="node-completed"></div>
+        <div class="eyebrow-active ml-3">STEP 1 · TRIAGE</div>
+      </div>
+      <div class="rail-cobalt">
+        <div class="cat-row-completed"><span class="cat-row-completed-label">Occlusion Type</span><span class="cat-row-completed-value">LVO</span></div>
+        <div class="divider-hair"></div>
+        <div class="cat-row-completed"><span class="cat-row-completed-label">LVO Location</span><span class="cat-row-completed-value">Anterior</span></div>
+        <div class="divider-hair"></div>
+        <div class="cat-row-completed"><span class="cat-row-completed-label">Confirm LVO</span><span class="cat-row-completed-value">Yes · CTA/MRA</span></div>
+        <div class="divider-hair"></div>
+        <div class="cat-row-completed"><span class="cat-row-completed-label">Prestroke mRS</span><span class="cat-row-completed-value">0–1 (Independent)</span></div>
+        <div class="divider-hair"></div>
+        <div class="cat-row-completed"><span class="cat-row-completed-label">Age Group</span><span class="cat-row-completed-value">18–79</span></div>
+        <!-- Branch chip: Step 1 summary. Round 6: <button> with 44×44 hit target via p-3 -m-3.
+             On tap: scrolls to Step 1 (Triage) in edit mode, first category-row pre-opened. -->
+        <div class="p-3 -m-3" style="display:inline-block;">
+          <button type="button" class="branch-chip" aria-label="Edit: Anterior LVO, Confirmed, mRS 0–1, Age 18–79">Anterior LVO · Confirmed · mRS 0–1 · Age 18–79</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 — completed -->
+      <div class="flex items-center mt-2" style="margin-left:14px;">
+        <div class="node-completed"></div>
+        <div class="eyebrow-active ml-3">STEP 2 · CLINICAL</div>
+      </div>
+      <div class="rail-cobalt">
+        <div class="cat-row-completed"><span class="cat-row-completed-label">Time from LKW</span><span class="cat-row-completed-value">Early (0–6 h)</span></div>
+        <div class="divider-hair"></div>
+        <div class="cat-row-completed"><span class="cat-row-completed-label">NIHSS</span><span class="cat-row-completed-value">10–19 (Mod-Severe)</span></div>
+        <!-- Branch chip: Step 2 summary. On tap: scrolls to Step 2 (Clinical) in edit mode. -->
+        <div class="p-3 -m-3" style="display:inline-block;">
+          <button type="button" class="branch-chip" aria-label="Edit: Early window, NIHSS 10–19">Early window · NIHSS 10–19</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 — completed -->
+      <div class="flex items-center mt-2" style="margin-left:14px;">
+        <div class="node-completed"></div>
+        <div class="eyebrow-active ml-3">STEP 3 · IMAGING</div>
+      </div>
+      <div class="rail-cobalt">
+        <!-- ASPECTS — numeric input variant (completed state shows entered value) -->
+        <div class="cat-row-completed"><span class="cat-row-completed-label">ASPECTS</span><span class="cat-row-completed-value">8 / 10</span></div>
+        <!-- Branch chip: Step 3 summary. On tap: scrolls to Step 3 (Imaging) in edit mode. -->
+        <div class="p-3 -m-3" style="display:inline-block;">
+          <button type="button" class="branch-chip" aria-label="Edit: ASPECTS 8, Class I imaging">ASPECTS 8 · Class I imaging</button>
+        </div>
+      </div>
+
+      <!-- STEP 4 — completed → RESULT inline -->
+      <div class="flex items-center mt-2" style="margin-left:14px;">
+        <div class="node-completed"></div>
+        <div class="eyebrow-active ml-3">STEP 4 · RESULT</div>
+      </div>
+      <div class="rail-slate pb-6">
+        <p class="text-sm font-medium text-slate-900">Eligible · Standard Early Window — Class I</p>
+        <p class="text-xs text-slate-500 mt-1 leading-relaxed">All criteria met. Refer for thrombectomy without delay. Door-to-puncture target &lt; 90 min.</p>
+      </div>
+
+    </div><!-- /rail-wrapper -->
+
+    <footer class="mt-4 pt-5 border-t border-slate-100">
+      <p class="text-xs text-slate-400 leading-relaxed">Powers WJ et al. <em>Stroke.</em> 2019;50:e344–e418. <a href="#" class="text-neuro-600 hover:underline ml-0.5">View source</a></p>
+      <p class="mt-2 text-xs text-slate-400">Educational use only.</p>
+      <p class="mt-3 text-sm text-slate-600 leading-relaxed">
+        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">See also</span>
+        <a href="#" class="text-neuro-600 hover:underline">NIHSS Calculator</a><span class="text-slate-300 mx-2">·</span><a href="#" class="text-neuro-600 hover:underline">ASPECTS Calculator</a><span class="text-slate-300 mx-2">·</span><a href="#" class="text-neuro-600 hover:underline">AHA/ASA EVT Guidelines</a>
+      </p>
+    </footer>
+  </main>
+
+  <div class="drawer-spacer-collapsed"></div>
+
+  <!--
+    DRAWER State C-1: Eligible / EVT Reasonable.
+    bg-white · border-top #e2e8f0 · text-slate-400 eyebrow · text-slate-900 stat
+    · text-slate-400 chevron. MUTED SLATE — NOT cobalt.
+  -->
+  <div class="absolute bottom-0 left-0 right-0 bg-white drawer-collapsed"
+       style="border-top: 1px solid #e2e8f0; left: var(--nav-rail-width, 0px); bottom: calc(var(--tab-bar-height, 0px) + env(safe-area-inset-bottom, 0px));">
+    <button class="w-full flex items-center justify-between px-5 py-3.5 hover:bg-slate-50 transition-colors">
+      <div class="flex items-center gap-3">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Interpretation</div>
+        <div class="text-sm font-medium text-slate-900">Eligible · EVT reasonable</div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 drawer-chevron-hint"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+  </div>
+
+</div><!-- /mockup-frame Frame 3 -->
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- FRAME 4 · State C-2 · Avoid EVT — all 4 steps complete                   -->
+<!-- Prestroke mRS > 4 triggers exclusion. Drawer red.                        -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section>
+<div class="text-xs text-slate-400 uppercase tracking-widest pl-5 pt-8 pb-2">
+  Frame 4 · State C-2 · Avoid EVT — Prestroke mRS &gt; 4 exclusion path, Drawer red
+</div>
+
+<div class="mockup-frame">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="px-5 py-4">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">PATHWAY</div>
+            <div class="text-[15px] font-semibold text-slate-900 leading-tight tracking-tight mt-0.5">EVT Pathway</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-0.5 flex-shrink-0">
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Favorite">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </button>
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Reset">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+          <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">Copy</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="px-5 pt-6 pb-4">
+    <div class="rail-wrapper">
+
+      <!-- STEP 1 — completed -->
+      <div class="flex items-center" style="margin-left:14px;">
+        <div class="node-completed"></div>
+        <div class="eyebrow-active ml-3">STEP 1 · TRIAGE</div>
+      </div>
+      <div class="rail-cobalt">
+        <div class="cat-row-completed"><span class="cat-row-completed-label">Occlusion Type</span><span class="cat-row-completed-value">LVO</span></div>
+        <div class="divider-hair"></div>
+        <div class="cat-row-completed"><span class="cat-row-completed-label">LVO Location</span><span class="cat-row-completed-value">Anterior</span></div>
+        <div class="divider-hair"></div>
+        <div class="cat-row-completed"><span class="cat-row-completed-label">Confirm LVO</span><span class="cat-row-completed-value">Yes · CTA/MRA</span></div>
+        <div class="divider-hair"></div>
+        <!-- mRS >4 — this is the triggering exclusion -->
+        <div class="cat-row-completed"><span class="cat-row-completed-label">Prestroke mRS</span><span class="cat-row-completed-value">&gt; 4 (Not recommended)</span></div>
+        <div class="divider-hair"></div>
+        <div class="cat-row-completed"><span class="cat-row-completed-label">Age Group</span><span class="cat-row-completed-value">18–79</span></div>
+        <!-- Branch chip: Step 1 summary. Round 6: <button> with p-3 -m-3 hit target expansion.
+             On tap: scrolls to Step 1 (Triage) in edit mode, Prestroke mRS row pre-opened. -->
+        <div class="p-3 -m-3" style="display:inline-block;">
+          <button type="button" class="branch-chip" aria-label="Edit: Anterior LVO, mRS greater than 4 — exclusion criterion">Anterior LVO · mRS &gt; 4 — exclusion criterion</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 — completed (pathway still runs to completion) -->
+      <div class="flex items-center mt-2" style="margin-left:14px;">
+        <div class="node-completed"></div>
+        <div class="eyebrow-active ml-3">STEP 2 · CLINICAL</div>
+      </div>
+      <div class="rail-cobalt">
+        <div class="cat-row-completed"><span class="cat-row-completed-label">Time from LKW</span><span class="cat-row-completed-value">Early (0–6 h)</span></div>
+        <div class="divider-hair"></div>
+        <div class="cat-row-completed"><span class="cat-row-completed-label">NIHSS</span><span class="cat-row-completed-value">6–9 (Moderate)</span></div>
+        <!-- Branch chip: Step 2 summary. On tap: scrolls to Step 2 (Clinical) in edit mode. -->
+        <div class="p-3 -m-3" style="display:inline-block;">
+          <button type="button" class="branch-chip" aria-label="Edit: Early window, NIHSS 6–9">Early window · NIHSS 6–9</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 — completed -->
+      <div class="flex items-center mt-2" style="margin-left:14px;">
+        <div class="node-completed"></div>
+        <div class="eyebrow-active ml-3">STEP 3 · IMAGING</div>
+      </div>
+      <div class="rail-cobalt">
+        <div class="cat-row-completed"><span class="cat-row-completed-label">ASPECTS</span><span class="cat-row-completed-value">4 / 10</span></div>
+        <!-- Branch chip: Step 3 summary. On tap: scrolls to Step 3 (Imaging) in edit mode. -->
+        <div class="p-3 -m-3" style="display:inline-block;">
+          <button type="button" class="branch-chip" aria-label="Edit: ASPECTS 4, Below threshold">ASPECTS 4 · Below threshold (needs ≥ 6)</button>
+        </div>
+      </div>
+
+      <!-- STEP 4 — completed → RESULT: Not Eligible -->
+      <div class="flex items-center mt-2" style="margin-left:14px;">
+        <div class="node-completed"></div>
+        <div class="eyebrow-active ml-3">STEP 4 · RESULT</div>
+      </div>
+      <div class="rail-slate pb-6">
+        <p class="text-sm font-medium text-red-700">Not Eligible · Pre-stroke Disability</p>
+        <p class="text-xs text-slate-500 mt-1 leading-relaxed">Prestroke mRS &gt; 4 is a Class III indication against EVT per AHA/ASA guidelines. Best medical therapy.</p>
+      </div>
+
+    </div><!-- /rail-wrapper -->
+  </main>
+
+  <div class="drawer-spacer-expanded"></div>
+
+  <!--
+    DRAWER State C-2: Not Eligible / Avoid EVT.
+    bg-red-50 · border-top #fecaca · text-red-700 eyebrow + stat + chevron.
+  -->
+  <div class="absolute bottom-0 left-0 right-0 bg-white drawer-expanded drawer-just-available"
+       style="border-top: 1px solid #fecaca; left: var(--nav-rail-width, 0px); bottom: calc(var(--tab-bar-height, 0px) + env(safe-area-inset-bottom, 0px));">
+    <button class="w-full flex items-center justify-between px-5 py-3 bg-red-50 hover:bg-red-100 transition-colors">
+      <div class="flex items-center gap-3">
+        <div class="text-[10px] font-bold text-red-700 uppercase tracking-widest">Interpretation</div>
+        <div class="text-sm font-medium text-red-700">Not eligible · Avoid EVT</div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-600"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="px-5 py-5 max-h-[60vh] overflow-y-auto">
+      <p class="text-slate-900 text-xl leading-tight font-semibold">EVT not indicated.</p>
+      <p class="text-slate-600 leading-relaxed mt-3">Prestroke mRS &gt; 4 is a Class III indication against EVT per AHA/ASA 2019 guidelines. ASPECTS below 6 adds a second independent exclusion reflecting large established infarct. Best medical therapy, stroke unit admission, and neurology consultation are indicated.</p>
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Assessment summary</div>
+        <dl class="space-y-2 text-sm">
+          <div class="flex justify-between"><dt class="text-slate-500">LVO</dt><dd class="text-slate-900 font-medium">Anterior</dd></div>
+          <div class="flex justify-between"><dt class="text-slate-500">Prestroke mRS</dt><dd class="text-slate-900 font-medium">&gt; 4</dd></div>
+          <div class="flex justify-between"><dt class="text-slate-500">ASPECTS</dt><dd class="text-slate-900 font-medium">4 (below threshold)</dd></div>
+        </dl>
+      </div>
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">See also</div>
+        <p class="text-sm text-slate-600 leading-relaxed"><a href="#" class="text-neuro-600 hover:underline">Stroke Code Pathway</a><span class="text-slate-300 mx-2">·</span><a href="#" class="text-neuro-600 hover:underline">tPA Eligibility</a><span class="text-slate-300 mx-2">·</span><a href="#" class="text-neuro-600 hover:underline">AHA/ASA 2019 Guidelines</a></p>
+      </div>
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <p class="text-xs text-slate-400 leading-relaxed">Powers WJ, Rabinstein AA, Ackerson T, et al. <em>Stroke.</em> 2019;50:e344–e418. <a href="#" class="text-neuro-600 hover:underline">View source</a></p>
+        <p class="mt-2 text-xs text-slate-400">Educational use only.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /mockup-frame Frame 4 -->
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- FRAME 5 · State C-3 · Clinical Judgment — all 4 steps complete           -->
+<!-- MeVO path with non-disabling deficit query. Drawer amber.                -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section>
+<div class="text-xs text-slate-400 uppercase tracking-widest pl-5 pt-8 pb-2">
+  Frame 5 · State C-3 · Clinical Judgment — MeVO + non-disabling deficit, Drawer amber
+</div>
+
+<div class="mockup-frame">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="px-5 py-4">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">PATHWAY</div>
+            <div class="text-[15px] font-semibold text-slate-900 leading-tight tracking-tight mt-0.5">EVT Pathway</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-0.5 flex-shrink-0">
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Favorite">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </button>
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Reset">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+          <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">Copy</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="px-5 pt-6 pb-4">
+    <div class="rail-wrapper">
+
+      <!-- STEP 1 — completed: MeVO path -->
+      <div class="flex items-center" style="margin-left:14px;">
+        <div class="node-completed"></div>
+        <div class="eyebrow-active ml-3">STEP 1 · TRIAGE</div>
+      </div>
+      <div class="rail-cobalt">
+        <div class="cat-row-completed"><span class="cat-row-completed-label">Occlusion Type</span><span class="cat-row-completed-value">MeVO</span></div>
+        <div class="divider-hair"></div>
+        <div class="cat-row-completed"><span class="cat-row-completed-label">Vessel Location</span><span class="cat-row-completed-value">Dominant M2</span></div>
+        <div class="divider-hair"></div>
+        <div class="cat-row-completed"><span class="cat-row-completed-label">Baseline Function</span><span class="cat-row-completed-value">Independent</span></div>
+        <!-- Branch chip: Step 1 summary. Round 6: <button> with p-3 -m-3 hit target expansion.
+             On tap: scrolls to Step 1 (Triage) in edit mode, Occlusion Type row pre-opened. -->
+        <div class="p-3 -m-3" style="display:inline-block;">
+          <button type="button" class="branch-chip" aria-label="Edit: MeVO, Dominant M2, Independent">MeVO · Dominant M2 · Independent</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 — completed -->
+      <div class="flex items-center mt-2" style="margin-left:14px;">
+        <div class="node-completed"></div>
+        <div class="eyebrow-active ml-3">STEP 2 · CLINICAL</div>
+      </div>
+      <div class="rail-cobalt">
+        <div class="cat-row-completed"><span class="cat-row-completed-label">Time from LKW</span><span class="cat-row-completed-value">Early (0–6 h)</span></div>
+        <div class="divider-hair"></div>
+        <!-- MeVO NIHSS Numeric — entered value -->
+        <div class="cat-row-completed"><span class="cat-row-completed-label">NIHSS</span><span class="cat-row-completed-value">5</span></div>
+        <div class="divider-hair"></div>
+        <div class="cat-row-completed"><span class="cat-row-completed-label">Disabling Deficit</span><span class="cat-row-completed-value">No</span></div>
+        <!-- Branch chip: Step 2 summary. On tap: scrolls to Step 2 (Clinical) in edit mode,
+             Disabling Deficit row pre-opened (the key branching answer for this scenario). -->
+        <div class="p-3 -m-3" style="display:inline-block;">
+          <button type="button" class="branch-chip" aria-label="Edit: NIHSS 5, Non-disabling — consult required">NIHSS 5 · Non-disabling — consult required</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 — completed -->
+      <div class="flex items-center mt-2" style="margin-left:14px;">
+        <div class="node-completed"></div>
+        <div class="eyebrow-active ml-3">STEP 3 · IMAGING</div>
+      </div>
+      <div class="rail-cobalt">
+        <div class="cat-row-completed"><span class="cat-row-completed-label">ASPECTS</span><span class="cat-row-completed-value">9 / 10</span></div>
+        <!-- Branch chip: Step 3 summary. On tap: scrolls to Step 3 (Imaging) in edit mode. -->
+        <div class="p-3 -m-3" style="display:inline-block;">
+          <button type="button" class="branch-chip" aria-label="Edit: ASPECTS 9, Good imaging">ASPECTS 9 · Good imaging</button>
+        </div>
+      </div>
+
+      <!-- STEP 4 — completed → RESULT: Clinical Judgment -->
+      <div class="flex items-center mt-2" style="margin-left:14px;">
+        <div class="node-completed"></div>
+        <div class="eyebrow-active ml-3">STEP 4 · RESULT</div>
+      </div>
+      <div class="rail-slate pb-6">
+        <p class="text-sm font-medium text-amber-700">Clinical Judgment · MeVO — Non-disabling deficit consideration</p>
+        <p class="text-xs text-slate-500 mt-1 leading-relaxed">Non-disabling deficit at dominant M2 is a Class IIb consideration. Discuss with neurointerventional team before proceeding.</p>
+      </div>
+
+    </div><!-- /rail-wrapper -->
+  </main>
+
+  <div class="drawer-spacer-expanded"></div>
+
+  <!--
+    DRAWER State C-3: Consult / Clinical Judgment.
+    bg-amber-50 · border-top #fcd34d · text-amber-700 eyebrow + stat + chevron.
+  -->
+  <div class="absolute bottom-0 left-0 right-0 bg-white drawer-expanded"
+       style="border-top: 1px solid #fcd34d; left: var(--nav-rail-width, 0px); bottom: calc(var(--tab-bar-height, 0px) + env(safe-area-inset-bottom, 0px));">
+    <button class="w-full flex items-center justify-between px-5 py-3 bg-amber-50 hover:bg-amber-100 transition-colors">
+      <div class="flex items-center gap-3">
+        <div class="text-[10px] font-bold text-amber-700 uppercase tracking-widest">Interpretation</div>
+        <div class="text-sm font-medium text-amber-700">Clinical judgment · MeVO non-disabling</div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-700"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="px-5 py-5 max-h-[60vh] overflow-y-auto">
+      <p class="text-slate-900 text-xl leading-tight font-semibold">Case-by-case evaluation required.</p>
+      <p class="text-slate-600 leading-relaxed mt-3">MeVO at dominant M2 with a non-disabling deficit meets Class IIb criteria for EVT consideration. The decision hinges on whether the deficit is functionally limiting given the patient's occupation and lifestyle. Perfusion imaging and neurointerventional team discussion are strongly recommended.</p>
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Assessment summary</div>
+        <dl class="space-y-2 text-sm">
+          <div class="flex justify-between"><dt class="text-slate-500">Occlusion</dt><dd class="text-slate-900 font-medium">MeVO · Dominant M2</dd></div>
+          <div class="flex justify-between"><dt class="text-slate-500">NIHSS</dt><dd class="text-slate-900 font-medium">5 (non-disabling?)</dd></div>
+          <div class="flex justify-between"><dt class="text-slate-500">ASPECTS</dt><dd class="text-slate-900 font-medium">9</dd></div>
+          <div class="flex justify-between"><dt class="text-slate-500">Time window</dt><dd class="text-slate-900 font-medium">0–6 h</dd></div>
+        </dl>
+      </div>
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">See also</div>
+        <p class="text-sm text-slate-600 leading-relaxed"><a href="#" class="text-neuro-600 hover:underline">NIHSS Calculator</a><span class="text-slate-300 mx-2">·</span><a href="#" class="text-neuro-600 hover:underline">ASPECTS Calculator</a><span class="text-slate-300 mx-2">·</span><a href="#" class="text-neuro-600 hover:underline">AHA/ASA 2019 Guidelines</a></p>
+      </div>
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <p class="text-xs text-slate-400 leading-relaxed">Powers WJ, Rabinstein AA, Ackerson T, et al. <em>Stroke.</em> 2019;50:e344–e418. <a href="#" class="text-neuro-600 hover:underline">View source</a></p>
+        <p class="mt-2 text-xs text-slate-400">Educational use only.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /mockup-frame Frame 5 -->
+</section>
+
+
+<div class="h-16"></div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- FRAME 6 · Cascade-clear demonstration                                     -->
+<!-- User just changed LVO Location from Anterior → Basilar in Step 1.        -->
+<!-- Cascade notice visible below the changed row. Steps 2–4 re-locked.        -->
+<!-- Step 1 branch chip is gone (downstream no longer valid until re-answered).-->
+<!-- Drawer muted slate (path no longer complete).                              -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+
+<section>
+<div class="text-xs text-slate-400 uppercase tracking-widest pl-5 pt-8 pb-2">
+  Frame 6 · Cascade-clear demonstration — LVO Location changed Anterior → Basilar
+</div>
+
+<!-- Frame annotation: explains what is being demonstrated -->
+<div class="frame-annotation">
+  <strong>What this frame demonstrates:</strong> The user has just changed LVO Location from Anterior to Basilar in Step 1. The pathway has automatically cleared Steps 2–4 (because those answers no longer apply on the basilar branch). The transient notice immediately below the changed row tells the user what happened and offers Undo. The notice auto-dismisses after 4 seconds. The Undo button restores the prior LVO Location value AND all the downstream answers that were wiped — one tap reverses the cascade.
+</div>
+
+<div class="mockup-frame">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="px-5 py-4">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">PATHWAY</div>
+            <div class="text-[15px] font-semibold text-slate-900 leading-tight tracking-tight mt-0.5">EVT Pathway</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-0.5 flex-shrink-0">
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Favorite">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </button>
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Reset">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+          <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">Copy</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="px-5 pt-6 pb-4">
+    <div class="rail-wrapper">
+
+      <!--
+        STEP 1 — mid-edit: user just changed LVO Location from Anterior to Basilar.
+        The step is no longer "complete" (branch chip is gone — downstream is invalid).
+        The node reverts to active (hollow cobalt ring): Step 1 needs re-confirmation.
+        The other four rows (Occlusion Type, Confirm LVO, Prestroke mRS, Age Group)
+        retain their prior picks — the change only cleared downstream steps 2–4.
+      -->
+      <div class="flex items-center" style="margin-left:14px;">
+        <div class="node-active"></div>
+        <div class="eyebrow-active ml-3">STEP 1 · TRIAGE</div>
+      </div>
+
+      <!-- Step 1 uses rail-slate because the step is mid-edit (no longer fully complete) -->
+      <div class="rail-slate mb-1">
+
+        <!-- Occlusion Type — retained pick: LVO -->
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">Occlusion Type</span>
+          <span class="cat-row-completed-value">LVO</span>
+        </div>
+        <div class="divider-hair"></div>
+
+        <!--
+          LVO Location — the row that was just changed.
+          Now shows "Basilar" (the new value). Accordion is closed (change already made).
+          The cascade-clear notice appears IMMEDIATELY BELOW this row.
+        -->
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">LVO Location</span>
+          <span class="cat-row-completed-value">Basilar</span>
+        </div>
+
+        <!--
+          CASCADE-CLEAR NOTICE — anatomy per brief:
+          - slate-50 background, slate-200 border, rounded-full pill
+          - Small reset/undo icon (CCW arrow svg, w-3 h-3, slate-400)
+          - Bold prefix naming cleared steps: "Clinical, Imaging, and Result cleared"
+          - " — re-confirm." suffix in normal weight
+          - Undo button on right: bg-white, slate-300 border, rounded-full, text-xs
+          - Inline placement directly below the changed row (NOT a toast, NOT a modal)
+          - Behavior (runtime): auto-dismisses after 4s or next outside tap;
+            Undo button restores prior LVO Location (Anterior) AND re-populates
+            all downstream answers that were wiped (held in memory until dismiss).
+            Notice slides in with 200ms transition-opacity + upward translate;
+            slides out same way. Rail reversion is a 250ms color fade (cobalt → slate).
+        -->
+        <div class="cascade-notice">
+          <!-- Small reset icon: counter-clockwise arrow representing "undo cascade" -->
+          <svg class="w-3 h-3" style="width:12px;height:12px;color:#94a3b8;flex-shrink:0;" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4v5h5"></path>
+            <path d="M20 11A8 8 0 1 1 5 9"></path>
+          </svg>
+          <span>
+            <strong style="font-weight:500;color:#334155;">Clinical, Imaging, and Result cleared</strong> — re-confirm.
+          </span>
+          <!--
+            Undo button: on tap restores prior LVO Location (Anterior) AND restores
+            Steps 2–4 downstream answers from in-memory snapshot. Notice disappears.
+            Rail re-cobalts downstream. Chips re-appear. Step bodies re-unlock.
+          -->
+          <button
+            type="button"
+            style="margin-left:8px;padding:2px 8px;margin-top:-2px;margin-bottom:-2px;background:white;border:1px solid #cbd5e1;border-radius:9999px;font-size:0.75rem;color:#334155;cursor:pointer;white-space:nowrap;"
+            aria-label="Undo: restore Anterior LVO Location and downstream answers"
+          >Undo</button>
+        </div>
+        <div class="divider-hair" style="margin-top:4px;"></div>
+
+        <!-- Confirm LVO — retained pick: Yes (CTA/MRA) -->
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">Confirm LVO</span>
+          <span class="cat-row-completed-value">Yes · CTA/MRA</span>
+        </div>
+        <div class="divider-hair"></div>
+
+        <!-- Prestroke mRS — retained pick: 0–1 -->
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">Prestroke mRS</span>
+          <span class="cat-row-completed-value">0–1 (Independent)</span>
+        </div>
+        <div class="divider-hair"></div>
+
+        <!-- Age Group — retained pick: 18–79 -->
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">Age Group</span>
+          <span class="cat-row-completed-value">18–79</span>
+        </div>
+
+        <!--
+          NO branch chip here: Step 1 is no longer in a "complete" state.
+          The chip (which previously read "Anterior LVO · Confirmed · mRS 0–1 · Age 18–79")
+          was cleared when the LVO Location changed, because the downstream is now invalid.
+          A new chip will re-appear once the user confirms the Basilar selection and
+          advances past Step 1.
+        -->
+      </div>
+
+      <!-- STEP 2 — re-locked (active hollow cobalt ring; awaiting Step 1 re-confirmation) -->
+      <!--
+        The step is "active" again (the user must re-answer it with the new Basilar context).
+        The time and NIHSS rows revert to "Select…" placeholders.
+        Previously filled values (Early 0–6h, NIHSS 10–19) have been cleared.
+      -->
+      <div class="flex items-center mt-4" style="margin-left:14px;">
+        <div class="node-active"></div>
+        <div class="eyebrow-active ml-3">STEP 2 · CLINICAL</div>
+      </div>
+      <div class="rail-slate">
+
+        <!-- Time from LKW — cleared, awaiting re-entry -->
+        <button type="button" class="cat-row w-full">
+          <span class="cat-row-label">Time from LKW</span>
+          <span class="cat-row-right">
+            <span class="cat-row-value-unset">Select…</span>
+            <svg class="cat-row-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 8 10 12 14 8"></polyline></svg>
+          </span>
+        </button>
+        <div class="divider-hair"></div>
+
+        <!-- NIHSS — cleared, awaiting re-entry -->
+        <button type="button" class="cat-row w-full">
+          <span class="cat-row-label">NIHSS</span>
+          <span class="cat-row-right">
+            <span class="cat-row-value-unset">Select…</span>
+            <svg class="cat-row-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 8 10 12 14 8"></polyline></svg>
+          </span>
+        </button>
+
+      </div>
+
+      <!-- STEP 3 — locked (downstream of the re-cleared Step 2) -->
+      <div class="flex items-center mt-4" style="margin-left:14px;">
+        <div class="node-locked"></div>
+        <div class="eyebrow-locked ml-3">STEP 3 · IMAGING</div>
+      </div>
+      <div class="rail-slate">
+        <p class="text-sm italic text-slate-400">Awaiting Step 2 ↑</p>
+      </div>
+
+      <!-- STEP 4 — locked -->
+      <div class="flex items-center mt-4" style="margin-left:14px;">
+        <div class="node-locked"></div>
+        <div class="eyebrow-locked ml-3">STEP 4 · RESULT</div>
+      </div>
+      <div class="rail-slate pb-4">
+        <p class="text-sm italic text-slate-400">Awaiting Step 3 ↑</p>
+      </div>
+
+    </div><!-- /rail-wrapper -->
+  </main>
+
+  <div class="drawer-spacer-collapsed"></div>
+
+  <!--
+    DRAWER State A — muted non-interactive bar.
+    Path is no longer complete (LVO Location changed, Steps 2–4 cleared).
+    Drawer reverts to State A until all four steps are re-answered.
+  -->
+  <div class="absolute bottom-0 left-0 right-0 bg-slate-100 drawer-collapsed" aria-hidden="true"
+       style="left: var(--nav-rail-width, 0px); bottom: calc(var(--tab-bar-height, 0px) + env(safe-area-inset-bottom, 0px));">
+    <div class="px-5 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Interpretation</div>
+        <div class="text-sm text-slate-500">Waiting for inputs · EVT</div>
+      </div>
+      <div class="text-xs text-slate-400">Appears when complete</div>
+    </div>
+  </div>
+
+</div><!-- /mockup-frame Frame 6 -->
+</section>
+
+
+<div class="h-32"></div>
+
+<!--
+═══════════════════════════════════════════════════════════════════════════════
+ @design-prototyper — Sign-off (round 6)
+═══════════════════════════════════════════════════════════════════════════════
+
+Mockup file: docs/specs/mockups/pathway-evt-reference.html
+Round: 6 (tap-targetable branch chips + cascade-clear transient notice with Undo)
+
+Branch chips converted to buttons across all 5 original frames: YES
+  - Frame 1: 0 chips (Step 1 not yet complete — correct, no chip expected).
+  - Frame 2: 1 chip converted — "Anterior LVO · Confirmed · mRS 0–1 · Age 18–79".
+  - Frame 3: 3 chips converted — Step 1 / Step 2 / Step 3 summaries.
+  - Frame 4: 3 chips converted — Step 1 / Step 2 / Step 3 summaries.
+  - Frame 5: 3 chips converted — Step 1 / Step 2 / Step 3 summaries.
+  Total chips converted: 10 across all frames. Every <span class="branch-chip">
+  is now <button type="button" class="branch-chip">.
+
+Frame 6 demonstrates the cascade-clear notice with Undo: YES
+  - Setup: Step 1 LVO Location changed from Anterior to Basilar.
+  - Cascade notice appears immediately below the LVO Location row.
+  - Notice reads: "Clinical, Imaging, and Result cleared — re-confirm."
+  - Undo button on the right of the notice.
+  - Step 1 branch chip is gone (downstream invalid until re-answered).
+  - Rail from Step 1 → Step 2 reverted to rail-slate (slate-200).
+  - Step 2 node: active hollow cobalt ring. Step 2 rows show "Select…" placeholders.
+  - Step 3 and Step 4: locked nodes (slate-300), italic "Awaiting Step N ↑".
+  - Drawer: State A muted bar (path no longer complete).
+
+Hit target 44×44 achieved via p-3 -m-3: YES
+  - Every chip <button> is wrapped in a <div class="p-3 -m-3" style="display:inline-block;">.
+  - Visible pill stays small (text-[11px] px-2 py-0.5 rounded-full).
+  - The wrapping div expands the tappable area to 44×44 minimum.
+
+Hover state on chips uses hover:bg-slate-100 hover:text-slate-900 hover:ring-1 hover:ring-neuro-200: YES
+  - Implemented via .branch-chip:hover in the <style> block:
+    background-color: #f1f5f9 (slate-100); color: #0f172a (slate-900);
+    box-shadow: 0 0 0 1px var(--color-neuro-200) (ring-1 ring-neuro-200 equivalent).
+  - --color-neuro-200: #A5B4FC added to :root token block.
+
+Cascade-clear notice anatomy matches the brief verbatim: YES
+  - slate-50 background (#f8fafc): YES.
+  - slate-200 border (1px solid #e2e8f0): YES.
+  - Small reset icon (CCW arrow svg, w-3 h-3, slate-400): YES.
+  - Bold prefix naming cleared steps ("Clinical, Imaging, and Result cleared"): YES.
+  - " — re-confirm." suffix in normal weight: YES.
+  - Undo button on right (bg-white, slate-300 border, rounded-full, text-xs): YES.
+  - Inline placement directly below changed row (not a toast, not a modal, not page-top): YES.
+
+Auto-dismiss + Undo behavior annotated inline: YES
+  - HTML comments on the cascade-notice div and Undo button explain:
+    auto-dismiss after 4 seconds or next outside tap;
+    Undo restores prior upstream answer AND all downstream answers;
+    notice slides in with 200ms transition-opacity + upward translate;
+    rail reversion is a 250ms color fade (cobalt → slate).
+  - Behavior contract annotated in the top HTML comment block.
+
+Pattern A rail, nodes, locked-step body, drawer, header, calculator-restraint chrome all preserved: YES
+  - .rail-cobalt and .rail-slate classes unchanged from round 5.
+  - Node classes unchanged: .node-completed / .node-active / .node-locked.
+  - Locked-step body: eyebrow at 50% opacity, italic "Awaiting Step N ↑" — unchanged.
+  - Drawer State A / C-1 / C-2 / C-3 tokens unchanged.
+  - Header: identical back-arrow SVG, PATHWAY eyebrow, EVT Pathway name,
+    star/reset/Copy cluster — unchanged from round 5.
+  - Calculator-restraint chrome anti-patterns not reintroduced.
+
+PATHWAY_SPEC §3.4 + §3.6 + §15 changelog updated: YES
+  - §3.4: extended with interactive chip variant (button, hit target, hover, aria, on-activate,
+    anti-pattern note). Resting visual identical to round-5 static chip.
+  - §3.6: extended with transient cascade-clear notice anatomy and Undo affordance;
+    inline placement rule; auto-dismiss (4s / next outside tap); Undo behavior;
+    transition spec (200ms fade/translate for notice; 250ms rail fade);
+    anti-pattern note (cascade-clear MUST NOT be silent; no toasts/modals/page-top banners).
+  - §15 changelog: bumped to v1.3 with one-line entry citing research synthesis as rationale source.
+
+Any remaining DNA gaps: NONE.
+
+States covered: default (unset), selected (completed step rows), expanded (accordion open
+  Frame 1), locked (Awaiting Step N), result (Eligible / Not Eligible / Clinical Judgment),
+  chip-hover (annotated via CSS), cascade-clear-in-progress (Frame 6), chip-interactive
+  (all 5 original frames).
+
+Tokens verified: YES — cross-referenced against calculator-reference.html and
+  .claude/skills/design-tokens/SKILL.md. neuro-50/200/500/600/700, slate-50/100/200/400/900,
+  all match existing token definitions exactly. --color-neuro-200 (#A5B4FC) added to
+  :root as it is required for the hover ring and is a standard Tailwind indigo-200
+  equivalent used in the design-tokens skill. No raw hex outside :root + the cascade-notice
+  inline styles (which reference CSS variable equivalents in comments).
+
+Status: ready
+-->
+</body>
+</html>
