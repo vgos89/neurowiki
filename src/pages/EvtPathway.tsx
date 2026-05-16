@@ -13,6 +13,72 @@ import { CollapsibleSection } from '../components/CollapsibleSection';
 import { AspectsModal } from '../components/AspectsModal';
 import { useRecents } from '../hooks/useRecents';
 import { PathwayBottomDrawer, type PathwayTier } from '../components/pathways/PathwayBottomDrawer';
+import { PathwayCascadeNotice } from '../components/pathways/PathwayCascadeNotice';
+
+/**
+ * Cascade-clear infrastructure (PATHWAY_SPEC §3.6, Pattern A integration).
+ *
+ * When an upstream answer changes (e.g., user flips occlusionType from 'lvo'
+ * to 'mevo' or time from '0_6' to '6_24'), the downstream fields that were
+ * previously answered become orphan state. Pattern A surfaces this with an
+ * inline notice + Undo button so the clinician sees the cause of the state
+ * change. Without cascade-clear, orphan state is silently preserved — clinically
+ * safe (the interpretation function ignores it) but transparency-poor.
+ *
+ * CASCADE_MAP: keys = upstream fields that trigger cascades; values = downstream
+ * fields wiped when that upstream changes.
+ *
+ * FIELD_DEFAULTS: the "cleared" value for each Inputs field — string fields
+ * clear to '', enum fields clear to 'unknown'.
+ *
+ * FIELD_LABELS: friendly clinician-facing labels for the notice display.
+ */
+const CASCADE_MAP: Partial<Record<keyof Inputs, (keyof Inputs)[]>> = {
+  occlusionType: ['lvoLocation', 'lvo', 'mrs', 'age', 'time', 'nihss', 'aspects', 'pcAspects', 'massEffect', 'severeHypodensity26', 'core', 'mismatchVol', 'mismatchRatio', 'mevoLocation', 'mevoDependent', 'nihssNumeric', 'mevoDisabling', 'mevoSalvageable', 'mevoTechnical'],
+  lvoLocation: ['lvo', 'mrs', 'age', 'time', 'nihss', 'aspects', 'pcAspects', 'massEffect', 'severeHypodensity26', 'core', 'mismatchVol', 'mismatchRatio'],
+  lvo: ['mrs', 'age', 'time', 'nihss', 'aspects', 'pcAspects', 'massEffect', 'severeHypodensity26', 'core', 'mismatchVol', 'mismatchRatio'],
+  time: ['aspects', 'pcAspects', 'massEffect', 'severeHypodensity26', 'core', 'mismatchVol', 'mismatchRatio'],
+  mevoLocation: ['mevoDependent', 'nihssNumeric', 'mevoDisabling', 'mevoSalvageable', 'mevoTechnical'],
+};
+
+const FIELD_DEFAULTS: Record<keyof Inputs, string> = {
+  occlusionType: 'unknown',
+  lvoLocation: 'unknown',
+  lvo: 'unknown', mrs: 'unknown', age: 'unknown', time: 'unknown', nihss: 'unknown',
+  aspects: '', pcAspects: '', massEffect: 'unknown', severeHypodensity26: 'unknown',
+  core: '', mismatchVol: '', mismatchRatio: '',
+  mevoLocation: 'unknown', mevoDependent: 'unknown', nihssNumeric: '',
+  mevoDisabling: 'unknown', mevoSalvageable: 'unknown', mevoTechnical: 'unknown',
+};
+
+const FIELD_LABELS: Record<keyof Inputs, string> = {
+  occlusionType: 'Occlusion type',
+  lvoLocation: 'LVO location',
+  lvo: 'LVO confirmation',
+  mrs: 'Prestroke mRS',
+  age: 'Age group',
+  time: 'Time window',
+  nihss: 'NIHSS',
+  aspects: 'ASPECTS',
+  pcAspects: 'PC-ASPECTS',
+  massEffect: 'Mass effect',
+  severeHypodensity26: 'Severe hypodensity',
+  core: 'Core volume',
+  mismatchVol: 'Mismatch volume',
+  mismatchRatio: 'Mismatch ratio',
+  mevoLocation: 'MeVO vessel',
+  mevoDependent: 'MeVO baseline',
+  nihssNumeric: 'NIHSS (numeric)',
+  mevoDisabling: 'Disabling deficit',
+  mevoSalvageable: 'Salvageable tissue',
+  mevoTechnical: 'Technical feasibility',
+};
+
+type CascadeEvent = {
+  changedField: keyof Inputs;
+  clearedFields: (keyof Inputs)[];
+  snapshot: Inputs;
+};
 
 /**
  * Map the EVT Result.status to PathwayBottomDrawer's tier (color-coded badge).
@@ -714,6 +780,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
       mevoLocation: 'unknown', mevoDependent: 'unknown', nihssNumeric: '', mevoDisabling: 'unknown', mevoSalvageable: 'unknown', mevoTechnical: 'unknown'
   });
   const [result, setResult] = useState<Result | null>(null);
+  const [cascadeEvent, setCascadeEvent] = useState<CascadeEvent | null>(null);
   const stepContainerRef = useRef<HTMLDivElement>(null);
   const fieldRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const prevCompleteRef = useRef({ s0: false, s1: false, s2: false });
@@ -772,7 +839,37 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
 
   const updateInput = useCallback((field: keyof Inputs, value: string | boolean | number) => {
     setInputs(prev => {
-        const next = { ...prev, [field]: value };
+        // Cascade-clear detection (PATHWAY_SPEC §3.6, Pattern A integration):
+        // If this upstream field has a non-default prior value AND any downstream
+        // dependents are also non-default, wipe the downstream + surface the notice.
+        const downstream = CASCADE_MAP[field];
+        const prevValue = String(prev[field]);
+        const prevDefault = FIELD_DEFAULTS[field];
+        const wasSet = prevValue !== prevDefault && prevValue !== '';
+        const isChanging = prevValue !== String(value);
+
+        let next = { ...prev, [field]: value };
+
+        if (downstream && wasSet && isChanging) {
+            const dirtyDownstream = downstream.filter(d => {
+                const v = String(prev[d]);
+                return v !== FIELD_DEFAULTS[d] && v !== '';
+            });
+            if (dirtyDownstream.length > 0) {
+                // Snapshot prev BEFORE wiping (Undo restores to this).
+                const snapshot = prev;
+                // Wipe downstream to defaults.
+                dirtyDownstream.forEach(d => {
+                    (next as Record<keyof Inputs, string>)[d] = FIELD_DEFAULTS[d];
+                });
+                setCascadeEvent({
+                    changedField: field,
+                    clearedFields: dirtyDownstream,
+                    snapshot,
+                });
+            }
+        }
+
         if (field === 'core' || field === 'mismatchVol') {
             const coreVal = parseFloat(field === 'core' ? String(value) : prev.core);
             const mmVal = parseFloat(field === 'mismatchVol' ? String(value) : prev.mismatchVol);
@@ -803,6 +900,17 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
     setActiveSection((prev) => Math.min(3, prev + 1));
   };
   const handleBack = () => { setActiveSection((prev) => Math.max(0, prev - 1)); };
+
+  // Cascade-clear handlers (PATHWAY_SPEC §3.6).
+  const handleCascadeUndo = useCallback(() => {
+    if (cascadeEvent) {
+      setInputs(cascadeEvent.snapshot);
+      setCascadeEvent(null);
+    }
+  }, [cascadeEvent]);
+  const handleCascadeDismiss = useCallback(() => {
+    setCascadeEvent(null);
+  }, []);
 
   // Collapse = go to adjacent section (never leave activeSection at -1)
   const handleSectionToggle = (sectionIndex: number) => {
@@ -1006,6 +1114,16 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
       )}
 
       <div ref={stepContainerRef} className="space-y-6 min-h-[300px]">
+        {/* Cascade-clear notice (PATHWAY_SPEC §3.6, Pattern A integration). */}
+        {cascadeEvent && (
+          <PathwayCascadeNotice
+            visible={true}
+            changedFieldLabel={FIELD_LABELS[cascadeEvent.changedField]}
+            clearedFields={cascadeEvent.clearedFields.map(f => FIELD_LABELS[f])}
+            onUndo={handleCascadeUndo}
+            onDismiss={handleCascadeDismiss}
+          />
+        )}
         <div ref={el => { sectionRefs.current[0] = el; }} className="scroll-mt-4">
         <CollapsibleSection
           title="Triage"
