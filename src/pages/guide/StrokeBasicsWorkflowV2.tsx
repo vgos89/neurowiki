@@ -19,6 +19,7 @@ import type { Step2Data } from '../../components/article/stroke/CodeModeStep2';
 /** Lazy-load modals for smaller initial bundle (mobile performance) */
 const DeepLearningModal = lazy(() => import('../../components/article/stroke/DeepLearningModal').then(m => ({ default: m.DeepLearningModal })));
 const ThrombectomyPathwayModal = lazy(() => import('../../components/article/stroke/ThrombectomyPathwayModal').then(m => ({ default: m.ThrombectomyPathwayModal })));
+const ExtendedIVTPathwayModal = lazy(() => import('../../components/article/stroke/ExtendedIVTPathwayModal').then(m => ({ default: m.ExtendedIVTPathwayModal })));
 const ThrombolysisEligibilityModal = lazy(() => import('../../components/article/stroke/ThrombolysisEligibilityModal').then(m => ({ default: m.ThrombolysisEligibilityModal })));
 import type { ThrombolysisEligibilityData } from '../../components/article/stroke/ThrombolysisEligibilityModal';
 const TpaReversalProtocolModal = lazy(() => import('../../components/article/stroke/TpaReversalProtocolModal').then(m => ({ default: m.TpaReversalProtocolModal })));
@@ -198,6 +199,7 @@ const MainContent: React.FC = () => {
   useModalFocusTrap(nihssModalOpen, () => setNihssModalOpen(false), nihssModalDialogRef, nihssModalCloseRef);
   const [eligibilityModalOpen, setEligibilityModalOpen] = useState(false);
   const [thrombectomyModalOpen, setThrombectomyModalOpen] = useState(false);
+  const [extendedIvtModalOpen, setExtendedIvtModalOpen] = useState(false);
   const [thrombectomyRecommendation, setThrombectomyRecommendation] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [tpaReversalModalOpen, setTpaReversalModalOpen] = useState(false);
@@ -402,6 +404,7 @@ const MainContent: React.FC = () => {
                 }}
                 onOpenNIHSS={() => setNihssModalOpen(true)}
                 onOpenEligibility={() => setEligibilityModalOpen(true)}
+                onOpenExtendedIVT={() => setExtendedIvtModalOpen(true)}
                 nihssScoreFromModal={nihssFromModal}
               />
               {workflowMode === 'study' && (
@@ -806,6 +809,12 @@ const MainContent: React.FC = () => {
         {hemorrhageProtocolModalOpen && (
           <Suspense fallback={null}>
             <HemorrhageProtocolModal isOpen={hemorrhageProtocolModalOpen} onClose={() => setHemorrhageProtocolModalOpen(false)} onCopySuccess={() => { setToastMessage('Copied to EMR'); setTimeout(() => setToastMessage(null), 2500); }} />
+          </Suspense>
+        )}
+
+        {extendedIvtModalOpen && (
+          <Suspense fallback={null}>
+            <ExtendedIVTPathwayModal isOpen={extendedIvtModalOpen} onClose={() => setExtendedIvtModalOpen(false)} />
           </Suspense>
         )}
 

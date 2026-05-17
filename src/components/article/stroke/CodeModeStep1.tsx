@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { LKWTimePicker } from './LKWTimePicker';
 import { getTNKDose, getTpaDoses, toKg } from '../../../utils/strokeDosing';
@@ -8,6 +7,11 @@ export interface CodeModeStep1Props {
   onComplete: (data: Step1Data) => void;
   onOpenNIHSS: () => void;
   onOpenEligibility?: () => void;
+  /** Opens the Extended IVT pathway as a modal — used when LKW > 4.5h
+   *  ago or unknown (potential wake-up stroke). Wired by the parent
+   *  StrokeBasicsWorkflowV2; CodeModeStep1 only triggers, doesn't own
+   *  the modal state. */
+  onOpenExtendedIVT?: () => void;
   nihssScoreFromModal?: number | null;
 }
 
@@ -31,6 +35,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   onComplete,
   onOpenNIHSS,
   onOpenEligibility,
+  onOpenExtendedIVT,
   nihssScoreFromModal,
 }) => {
   const [lkwHours, setLkwHours] = useState<number>(0);
@@ -431,13 +436,15 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
               ? `LKW is ${lkwHours.toFixed(1)}h ago — past the standard 4.5h window. Patient may qualify for extended-window thrombolysis (4.5h–9h) or late-window options (9h–24h).`
               : `LKW is ${lkwHours.toFixed(1)}h ago — beyond standard thrombolysis windows. Confirm late-window options against current AHA/ASA guidance.`}
           </p>
-          <Link
-            to="/pathways/extended-ivt"
-            className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 bg-neuro-500 hover:bg-neuro-600 text-white text-sm font-medium rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+          <button
+            type="button"
+            onClick={() => onOpenExtendedIVT?.()}
+            disabled={!onOpenExtendedIVT}
+            className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 bg-neuro-500 hover:bg-neuro-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
           >
             Open Extended IVT Pathway
             <ArrowRight size={16} aria-hidden="true" />
-          </Link>
+          </button>
         </div>
       )}
 
