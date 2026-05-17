@@ -90,6 +90,10 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   const tnkDose = useMemo(() => getTNKDose(weightKg), [weightKg]);
 
   const withinTPAWindow = lkwEntered && !lkwUnknown && lkwHours <= 4.5;
+  // Outside the thrombolytic window (LKW > 9h). Beyond this point, neither
+  // standard nor extended IVT is supported — weight is no longer required
+  // because no thrombolytic dose will be computed (per V direction 2026-05-17).
+  const outsideThromboWindow = lkwEntered && !lkwUnknown && lkwHours > 9;
   const showDisablingSymptomsChecklist = withinTPAWindow && nihssScore >= 1 && nihssScore <= 5 && !lkwUnknown;
   const hasDisablingSymptom = Object.values(disablingSymptoms).some(Boolean);
 
@@ -105,7 +109,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
     systolicBP > 0 &&
     diastolicBP > 0 &&
     glucose > 0 &&
-    weightValue > 0 &&
+    (outsideThromboWindow || weightValue > 0) &&
     (!bpTooHigh || bpControlled || lkwUnknown);
 
   const missingFields: string[] = [];
@@ -113,7 +117,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   if (nihssScore <= 0) missingFields.push('NIHSS');
   if (systolicBP <= 0 || diastolicBP <= 0) missingFields.push('BP');
   if (glucose <= 0) missingFields.push('Glucose');
-  if (weightValue <= 0) missingFields.push('Weight');
+  if (weightValue <= 0 && !outsideThromboWindow) missingFields.push('Weight');
 
   const handleComplete = () => {
     if (!isComplete) return;

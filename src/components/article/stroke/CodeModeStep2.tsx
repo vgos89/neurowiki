@@ -56,6 +56,15 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
 
   const tnkDose = useMemo(() => (weightKg > 0 ? getTNKDose(weightKg) : 0), [weightKg]);
 
+  // Outside thrombolytic window (LKW > 9h, not unknown). Neither standard
+  // nor extended IVT is supported beyond this point — surface "Not indicated"
+  // in the treatment-decision card instead of dosing (per V direction
+  // 2026-05-17). The buttons stay visible for UX consistency; the dose text
+  // changes to a contraindication callout. Clinician can still mark
+  // "None / Contraindicated" to proceed.
+  const outsideThromboWindow =
+    !!step1Data && !step1Data.lkwUnknown && (step1Data.lkwHours ?? 0) > 9;
+
   const isICH = ctResult === 'ich';
   const isNoBleed = ctResult === 'no-bleed';
 
@@ -227,12 +236,20 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
               {
                 value: 'tpa',
                 label: 'tPA',
-                sub: weightKg > 0 ? `${tpaDose} mg — bolus ${tpaBolus} + inf ${tpaInfusion}` : 'Enter weight for dose',
+                sub: outsideThromboWindow
+                  ? 'Not indicated (LKW > 9h, outside thrombolytic window)'
+                  : weightKg > 0
+                  ? `${tpaDose} mg — bolus ${tpaBolus} + inf ${tpaInfusion}`
+                  : 'Enter weight for dose',
               },
               {
                 value: 'tnk',
                 label: 'TNK',
-                sub: weightKg > 0 ? `${tnkDose} mg single bolus` : 'Enter weight for dose',
+                sub: outsideThromboWindow
+                  ? 'Not indicated (LKW > 9h, outside thrombolytic window)'
+                  : weightKg > 0
+                  ? `${tnkDose} mg single bolus`
+                  : 'Enter weight for dose',
               },
               {
                 value: 'contraindicated',
@@ -266,7 +283,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
               </button>
             ))}
           </div>
-          {weightKg > 0 && (
+          {weightKg > 0 && !outsideThromboWindow && (
             <p className="mt-2 text-[10px] text-slate-400 italic">Reference only — verify against institutional protocol before administration.</p>
           )}
         </div>
