@@ -28,6 +28,10 @@ interface CodeModeStep3Props {
   milestones?: MilestonesInput;
   timerStartTime?: Date;
   thrombectomyRecommendation?: string;
+  /** Extended IVT verdict captured from the in-page modal, when launched
+   *  from inside Stroke Code. Added 2026-05-17 per V direction so the
+   *  late-window outcome is part of the summary + EMR copy. */
+  extendedIvtRecommendation?: string;
   /** Called after code summary is successfully copied to clipboard (for toast) */
   onCopySuccess?: () => void;
 }
@@ -49,6 +53,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
   milestones = {},
   timerStartTime,
   thrombectomyRecommendation,
+  extendedIvtRecommendation,
   onCopySuccess
 }) => {
   const [copied, setCopied] = useState(false);
@@ -169,7 +174,12 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
 
     if (thrombectomyRecommendation) {
       note += 'THROMBECTOMY / NEXT STEPS:\n';
-      note += `${thrombectomyRecommendation}\n`;
+      note += `${thrombectomyRecommendation}\n\n`;
+    }
+
+    if (extendedIvtRecommendation) {
+      note += 'EXTENDED IVT ASSESSMENT:\n';
+      note += `${extendedIvtRecommendation}\n`;
     }
 
     if (totalDurationMin != null) {
@@ -339,6 +349,15 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
         <div className="bg-white border border-neuro-100 rounded-xl p-4">
           <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Thrombectomy / Next Steps</p>
           <p className="text-sm text-neuro-800 whitespace-pre-wrap">{thrombectomyRecommendation}</p>
+        </div>
+      )}
+
+      {/* Extended IVT recommendation — captured when clinician completed
+          the Extended IVT modal from inside Stroke Code (added 2026-05-17). */}
+      {extendedIvtRecommendation && (
+        <div className="bg-white border border-amber-200 rounded-xl p-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700 mb-2">Extended IVT / Late Window</p>
+          <p className="text-sm text-amber-900 whitespace-pre-wrap">{extendedIvtRecommendation}</p>
         </div>
       )}
 

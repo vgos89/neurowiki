@@ -200,6 +200,10 @@ const MainContent: React.FC = () => {
   const [eligibilityModalOpen, setEligibilityModalOpen] = useState(false);
   const [thrombectomyModalOpen, setThrombectomyModalOpen] = useState(false);
   const [extendedIvtModalOpen, setExtendedIvtModalOpen] = useState(false);
+  // Extended IVT verdict captured from the modal when launched from
+  // Stroke Code. Flows into the Step 3 summary card + EMR copy. Mirrors
+  // the thrombectomyRecommendation state pattern for the EVT modal.
+  const [extendedIvtRecommendation, setExtendedIvtRecommendation] = useState<string | null>(null);
   const [thrombectomyRecommendation, setThrombectomyRecommendation] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [tpaReversalModalOpen, setTpaReversalModalOpen] = useState(false);
@@ -604,6 +608,7 @@ const MainContent: React.FC = () => {
                       milestones={milestones}
                       timerStartTime={milestones.doorTime ?? new Date()}
                       thrombectomyRecommendation={thrombectomyRecommendation ?? undefined}
+                      extendedIvtRecommendation={extendedIvtRecommendation ?? undefined}
                       onCopySuccess={() => {
                         setToastMessage('Code summary copied to clipboard');
                         setTimeout(() => setToastMessage(null), 2500);
@@ -692,6 +697,48 @@ const MainContent: React.FC = () => {
             <div className="mt-4 pt-4 border-t border-neuro-200">
               <p className="text-xs text-neuro-600 flex items-center gap-2">
                 <Info size={14} />Based on EVT Pathway criteria (DAWN, DEFUSE-3, SELECT2, ATTENTION/BAOCHE protocols)
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Extended IVT Recommendation Card — mirrors the Thrombectomy card
+            above. Fires when clinician completed the Extended IVT modal from
+            inside Stroke Code (added 2026-05-17). Standalone /pathways/
+            extended-ivt usage doesn't trigger this. */}
+        {extendedIvtRecommendation && (
+          <div className="mt-4 mx-3 sm:mx-6 p-5 bg-amber-50 border border-amber-200 rounded-2xl shadow-lg animate-in slide-in-from-bottom-4 duration-500">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 p-3 bg-amber-500 rounded-xl shadow-md">
+                <AlertTriangle size={24} className="text-white" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <h4 className="text-lg font-bold text-amber-900">Extended IVT Assessment</h4>
+                  <span className="px-2 py-0.5 bg-amber-500 text-white text-xs font-bold rounded-full uppercase tracking-wide">Late Window</span>
+                </div>
+                <p className="text-base text-amber-900 font-medium mb-3 leading-relaxed">{extendedIvtRecommendation}</p>
+                <div className="flex flex-wrap gap-3">
+                  <button onClick={() => setExtendedIvtModalOpen(true)} className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm">
+                    <ExternalLink size={16} />View Full Assessment
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(`EXTENDED IVT ASSESSMENT:\n${extendedIvtRecommendation}\n\nAssessed at: ${new Date().toLocaleString()}`).then(() => {
+                        setToastMessage('Extended IVT recommendation copied to clipboard');
+                        setTimeout(() => setToastMessage(null), 2500);
+                      });
+                    }}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-amber-50 text-amber-700 text-sm font-medium rounded-lg transition-colors border border-amber-200 shadow-sm"
+                  >
+                    <Copy size={16} />Copy to Clipboard
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 pt-4 border-t border-amber-200">
+              <p className="text-xs text-amber-700 flex items-center gap-2">
+                <Info size={14} />Based on Extended IVT Pathway (WAKE-UP, EXTEND, ECASS-4, TRACE-III, TIMELESS, AHA/ASA 2026 §4.6.2-3)
               </p>
             </div>
           </div>
@@ -814,7 +861,30 @@ const MainContent: React.FC = () => {
 
         {extendedIvtModalOpen && (
           <Suspense fallback={null}>
-            <ExtendedIVTPathwayModal isOpen={extendedIvtModalOpen} onClose={() => setExtendedIvtModalOpen(false)} />
+            <ExtendedIVTPathwayModal
+              isOpen={extendedIvtModalOpen}
+              onClose={() => setExtendedIvtModalOpen(false)}
+              onResultChange={(r) => {
+                if (!r) {
+                  setExtendedIvtRecommendation(null);
+                  return;
+                }
+                // Convert IVTResult → readable recommendation string for
+                // the Step 3 summary card + EMR copy. Format mirrors the
+                // thrombectomy recommendation style.
+                const pathLabel =
+                  r.path === 'A' ? 'Path A (WAKE-UP / DWI-FLAIR mismatch)'
+                  : r.path === 'B' ? 'Path B (EXTEND-style 4.5–9h perfusion mismatch)'
+                  : 'Path C (TRACE-III-style 9–24h LVO with IVT)';
+                const verdict = r.eligible
+                  ? `Eligible — ${pathLabel}, Class ${r.cor}`
+                  : `Not eligible — ${pathLabel}`;
+                const trials = r.trialsBasis && r.trialsBasis.length
+                  ? ` · Basis: ${r.trialsBasis.join(', ')}`
+                  : '';
+                setExtendedIvtRecommendation(`${verdict}${trials}`);
+              }}
+            />
           </Suspense>
         )}
 

@@ -16,17 +16,24 @@
  */
 import React, { useEffect, useRef } from 'react';
 import { X, ArrowLeft } from 'lucide-react';
-import ExtendedIVTPathway from '../../../pages/ExtendedIVTPathway';
+import ExtendedIVTPathway, { type IVTResult } from '../../../pages/ExtendedIVTPathway';
 import { useModalFocusTrap } from '../../../hooks/useModalFocusTrap';
 
 interface ExtendedIVTPathwayModalProps {
   isOpen: boolean;
   onClose: () => void;
+  /** Called with the current Extended IVT verdict whenever it changes
+   *  inside the modal. Parent (StrokeBasicsWorkflowV2) maps the verdict
+   *  to a readable recommendation string and feeds it into the Step 3
+   *  summary + EMR copy text. Optional — standalone /pathways/extended-ivt
+   *  usage doesn't need this. Added 2026-05-17 per V direction. */
+  onResultChange?: (result: IVTResult | null) => void;
 }
 
 export const ExtendedIVTPathwayModal: React.FC<ExtendedIVTPathwayModalProps> = ({
   isOpen,
   onClose,
+  onResultChange,
 }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -87,6 +94,7 @@ export const ExtendedIVTPathwayModal: React.FC<ExtendedIVTPathwayModalProps> = (
             <ExtendedIVTPathway
               hideHeader={true}
               isInModal={true}
+              onResultChange={onResultChange}
             />
           </div>
         </div>
