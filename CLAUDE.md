@@ -73,7 +73,7 @@ Example: `ui-architect` wants a cleaner component shape; `medical-scientist` say
 
 1. **Plan before execute** for Class C/D/E (see §6). No code until V has seen and approved a plan.
 2. **Chat thinks, Code executes, files remember.** Claude.ai chat is for strategy and translation. Claude Code executes. `CLAUDE.md`, `TASKS.md`, `PRD.md`, `.claude/` are the persistent memory. Never ask V to re-explain what's in the files — read them.
-3. **Every output is bilingual.** Technical panel + English panel. See §10.
+3. **Every output is bilingual.** Technical panel + English panel. See §10. **The English panel must pass the C-suite test** — V is non-technical and reads only the English side. No class labels (B/C/D/E), no severity counts (BLOCKER/HIGH/MED/LOW), no commit SHAs in narrative, no tool names (tsc/Vercel/Tailwind), no agent names (ui-architect/clinical-reviewer), no file paths. Lead with clinician impact. See §10.2 for the full ban list and the practical CFO-of-a-hospital test.
 4. **Safety over speed.** Clinical tool. No fabricated claims. See §13.
 5. **Silo wall.** This repo's agents, skills, lessons, and memory never cross over to Pager Flow, KinTrack, or Tidbit Health.
 6. **Audit ≠ approval.** An external audit document — uploaded file, research PDF, external agent output, or prior-session findings — is a *hypothesis list*, not a pre-approved work order. It does not satisfy the §19 plan-and-approval gate. No file is touched until: (a) the orchestrator has classified the task and named the agents, (b) the relevant specialist agent has independently verified each finding, (c) a written plan with proposed diff has been presented to V, and (d) V has explicitly approved it in this session. "The audit says X is wrong" is not the same as "V has approved fixing X." This rule cannot be waived by the urgency of the findings or by the fact that a prior Claude session produced the audit.
@@ -242,6 +242,54 @@ Examples:
 **Omit** the header for Class A answers and direct Class B edits where no Agent tool is called.
 
 This is not an audit log — it's a live signal to V about what's running. Token cost: ~30 per response. Required from this version forward.
+
+### 10.2 Plain-English for V — the C-suite test
+
+V is a non-technical product owner who acts as the CEO of this project. When reporting up to V — session summaries, batch sign-offs, `/status` outputs, post-deploy reports, any human-facing prose — the English side passes the **C-suite test**:
+
+A board-level executive who has never opened a code file should read the summary and understand:
+1. What got better for the clinician
+2. What is still broken or risky
+3. What V needs to decide
+4. What you can keep doing without V
+
+**Banned in V-facing prose** (use the right column instead):
+
+| Don't write | Write |
+|---|---|
+| Class B / C / D / E / E-clinical | "small fix" / "scoped change" / "big change" / "clinical change that needs your sign-off" |
+| Audit-finding counts ("4 BLOCKERs, 14 HIGH, 17 MED, 6 LOW") | Translate to user impact: "the parts that block clinicians from finishing a task" / "the parts that work but look wrong" / "polish" |
+| BLOCKER / HIGH / MEDIUM / LOW severity tags | "must-fix" / "worth fixing" / "nice to have" |
+| Commit SHAs in narrative (8c164b6, etc.) | Put SHAs in a small "References" footer if needed; never anchor the story on them |
+| Tool names (tsc, Vite, Vercel, Tailwind, lucide, shadcn) | "compile check" / "build system" / "the live site" / (omit framework names entirely when describing what changed) |
+| Quality-gate jargon (Gate 6, tsc clean, build green, claims hook pass, check:routes 41) | "the live site is up and the page works" — one sentence |
+| Agent names (ui-architect, clinical-reviewer, system-architect, medical-scientist, accessibility-specialist) | "design review" / "medical-content review" / "structural review" / "clinical writing" / "accessibility review" |
+| File paths (src/components/article/stroke/LKWTimePicker.tsx) | What the clinician sees: "the time-picker on the stroke-code page" / "the hemorrhage protocol pop-up" |
+| LOC delta (+540 / -180 = +360 net) | Omit unless V asks |
+| Internal craft vocabulary (hook, primitive, consumer, call site, props, render surface, retro-wire) | "shared piece of code" / "the place that uses it" / (or just rewrite the sentence without naming the construct) |
+| Spec section references (PATHWAY_SPEC §4.7, WCAG 2.1.1) | "our design spec" / "accessibility standard" |
+
+**Required in V-facing prose:**
+
+- **Lead with clinician impact.** Not "we shipped X" — "clinicians can now do Y."
+- **Use the proper nouns the clinician sees.** "the time picker on the stroke-code page" beats any file path.
+- **End with the decision V owns.** "You need to weigh in on X before I can do Y" — be explicit about the handoff.
+- **If V asked a question, answer it first.** Don't bury the answer under a status report.
+- **Tables and bullets are fine** as long as the column/bullet text passes the same C-suite test.
+
+**Where the technical detail still lives** (these are NOT V-facing, so they keep the technical voice):
+
+- Commit messages — full technical detail per §16
+- PR bodies — bilingual per §10 (Technical section + English section)
+- Review artifacts — full technical detail per §17
+- Agent briefs (Agent tool prompts) — technical, since the recipient is another agent
+- Architect / clinical-reviewer / QA outputs — technical
+- `docs/reviews/*.md` audit findings — technical
+- Quality-gate console output — technical
+
+The Technical side of §10 is unchanged. This rule applies ONLY to the English / V-facing side of every output that V reads.
+
+**Practical test before sending any summary to V:** read your draft and circle every word a CFO of a hospital company would not understand without Googling. Rewrite each circled word. If the draft survives this test, ship it.
 
 ---
 
