@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Check, RotateCcw, Activity, AlertTriangle, Syringe, ChevronRight, Star } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Check, RotateCcw, Activity, AlertTriangle, Syringe, Star } from 'lucide-react';
 import { SE_CONTENT } from '../data/toolContent';
 import { autoLinkReactNodes } from '../internalLinks/autoLink';
 import { useFavorites } from '../hooks/useFavorites';
@@ -16,7 +16,8 @@ import { useRecents } from '../hooks/useRecents';
 type Agent = "levetiracetam" | "fosphenytoin" | "valproate" | "lacosamide" | "phenobarbital";
 // PatientData.convulsive removed per CLIN-2 / Architect NCSE-1 — this pathway covers
 // convulsive SE only; non-convulsive SE is routed out to the cEEG-guided NCSE workup.
-interface PatientData { weight: number; ivAccess: boolean; glucoseChecked: boolean; }
+type GlucoseStatus = 'unchecked' | 'checked' | 'hypoTreated';
+interface PatientData { weight: number; ivAccess: boolean; glucoseStatus: GlucoseStatus; }
 // Cardiac flag split (CLIN-2): cardiacAvBlock → AVOID phenytoin/fosphenytoin/lacosamide;
 // cardiacElderly → slower infusion only (no absolute contraindication).
 interface Comorbidities { hypotension: boolean; respiratory: boolean; cardiacAvBlock: boolean; cardiacElderly: boolean; liver: boolean; pancreatitis: boolean; pregnancy: boolean; renal: boolean; carbapenem: boolean; }
@@ -79,7 +80,7 @@ const StatusEpilepticusPathway: React.FC = () => {
   const [activeSection, setActiveSection] = useState<number>(0);
   const step = activeSection + 1;
   const { handleBack, getBackLabel } = useNavigationSource();
-  const [patient, setPatient] = useState<PatientData>({ weight: 0, ivAccess: true, glucoseChecked: false });
+  const [patient, setPatient] = useState<PatientData>({ weight: 0, ivAccess: true, glucoseStatus: 'unchecked' });
   const [stage1Agent, setStage1Agent] = useState<"lorazepam" | "diazepam" | "midazolam" | null>(null);
   const [stage1FirstDoseGiven, setStage1FirstDoseGiven] = useState(false);
   const [stage1SecondDoseGiven, setStage1SecondDoseGiven] = useState(false);
@@ -103,6 +104,7 @@ const StatusEpilepticusPathway: React.FC = () => {
   // Favorites
   const { isFavorite, toggleFavorite } = useFavorites();
   const [showFavToast, setShowFavToast] = useState(false);
+  const [copyConfirm, setCopyConfirm] = useState(false);
   const isFav = isFavorite('se-pathway');
 
   const handleFavToggle = () => {
@@ -161,7 +163,7 @@ const StatusEpilepticusPathway: React.FC = () => {
   
   const handleReset = () => { 
       setActiveSection(0); 
-      setPatient({ weight: 0, ivAccess: true, glucoseChecked: false });
+      setPatient({ weight: 0, ivAccess: true, glucoseStatus: 'unchecked' });
       setStage1Agent(null); 
       setStage1FirstDoseGiven(false); 
       setStage1SecondDoseGiven(false); 
@@ -196,7 +198,11 @@ const StatusEpilepticusPathway: React.FC = () => {
     return `Status Epilepticus Pathway Note:\nWeight: ${patient.weight}kg\n\n${parts.join('\n\n')}`;
   };
 
-  const copySummary = () => { navigator.clipboard.writeText(generateEMRText()); alert("Note copied to clipboard."); };
+  const copySummary = useCallback(() => {
+    navigator.clipboard.writeText(generateEMRText());
+    setCopyConfirm(true);
+    setTimeout(() => setCopyConfirm(false), 2000);
+  }, [generateEMRText]);
 
   const STEPS = [{id:1, title:"Patient"}, {id:2, title:"BZD"}, {id:3, title:"Urgent"}, {id:4, title:"Refractory"}];
 
@@ -272,7 +278,7 @@ const StatusEpilepticusPathway: React.FC = () => {
               <RotateCcw size={16} />
             </button>
             <button onClick={copySummary} className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px]" aria-label="Copy summary">
-              Copy
+              {copyConfirm ? 'Copied ✓' : 'Copy'}
             </button>
           </div>
         </div>
@@ -329,19 +335,34 @@ const StatusEpilepticusPathway: React.FC = () => {
                 stepCompleted={isSection0Complete && activeSection !== 0}
               />
 
-              {/* Glucose checkbox */}
+              {/* Glucose check — §4.2 tri-button group */}
               <div className="pt-1">
-                <button
-                  type="button"
-                  onClick={() => setPatient({...patient, glucoseChecked: !patient.glucoseChecked})}
-                  className={`w-full text-left px-3 py-3 min-h-[44px] rounded-lg border flex items-center gap-3 transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.99] transform-gpu touch-manipulation ${patient.glucoseChecked ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-red-50 border-red-200 text-red-900'}`}
-                >
-                  <div className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 ${patient.glucoseChecked ? 'bg-emerald-500 border-emerald-500' : 'bg-white border-red-300'}`}>
-                    {patient.glucoseChecked && <Check size={13} className="text-white" />}
-                  </div>
-                  <span className="text-sm font-medium">Fingerstick glucose checked</span>
-                  {!patient.glucoseChecked && <span className="text-xs ml-auto text-red-600">Hypoglycemia is a common mimic</span>}
-                </button>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Fingerstick Glucose</label>
+                <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Glucose check status">
+                  {([
+                    { v: 'unchecked', label: 'Not Checked' },
+                    { v: 'checked', label: 'Checked' },
+                    { v: 'hypoTreated', label: 'Hypoglycemia Treated' },
+                  ] as { v: GlucoseStatus; label: string }[]).map(opt => {
+                    const selected = patient.glucoseStatus === opt.v;
+                    return (
+                      <button
+                        key={opt.v}
+                        type="button"
+                        role="radio"
+                        aria-checked={selected}
+                        onClick={() => setPatient({...patient, glucoseStatus: opt.v})}
+                        className={`min-h-[44px] px-3 py-2 rounded-full text-sm font-medium border transition-colors touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu ${
+                          selected
+                            ? 'bg-neuro-50 border-neuro-500 text-neuro-700 font-semibold'
+                            : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Stabilization pearls */}
@@ -366,9 +387,9 @@ const StatusEpilepticusPathway: React.FC = () => {
                 <div className="pt-3 flex justify-end">
                   <button
                     onClick={() => setActiveSection(1)}
-                    className="px-6 py-2.5 bg-red-600 text-white font-bold rounded-xl shadow-sm hover:bg-red-700 transition-colors duration-150 flex items-center gap-2 min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-95 transform-gpu text-sm"
+                    className="px-4 py-2 bg-neuro-500 hover:bg-neuro-600 text-white rounded-full text-sm font-medium transition-colors min-h-[44px] inline-flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation"
                   >
-                    Proceed to BZD Stage <ChevronRight size={16} />
+                    Proceed to BZD Stage
                   </button>
                 </div>
               )}
@@ -418,15 +439,19 @@ const StatusEpilepticusPathway: React.FC = () => {
               </div>
 
               {stage1Agent && (
-                <div ref={stage1DoseRef} className="bg-slate-50 border border-slate-100 rounded-xl p-4 mt-1">
-                  <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Calculated Dose</div>
-                  <div className="text-2xl font-black text-slate-900 mb-1">
-                    {stage1Agent === 'midazolam' && !patient.ivAccess
-                      ? calculateBzdFixedDose('midazolam', patient.weight, 'IM')
-                      : calculateDose(stage1Agent, patient.weight)}
+                <div ref={stage1DoseRef} className="border-t border-b border-slate-200 px-5 py-3 -mx-5 my-2">{/* Dose Result Row — PATHWAY_SPEC §4.8 */}
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Calculated Dose</div>
+                  <div className="flex items-center justify-between gap-3 mt-1">
+                    <span className="text-sm text-slate-600">{stage1Agent.charAt(0).toUpperCase()}{stage1Agent.slice(1)}</span>
+                    <span className="text-base font-mono font-semibold text-slate-900">
+                      {stage1Agent === 'midazolam' && !patient.ivAccess
+                        ? calculateBzdFixedDose('midazolam', patient.weight, 'IM')
+                        : calculateDose(stage1Agent, patient.weight)}
+                    </span>
                   </div>
+                  <div className="text-[10px] text-slate-400 mt-1">Computed from {patient.weight} kg patient</div>
                   {stage1Agent === 'midazolam' && !patient.ivAccess && (
-                    <p className="text-xs text-slate-600 italic">
+                    <p className="text-xs text-slate-600 italic mt-1">
                       RAMPART (Silbergleit 2012, PMID 22335736): Intramuscular midazolam in a fixed dose of 10 mg (&gt;40 kg) or 5 mg (13–40 kg) was at least as effective as intravenous lorazepam.
                     </p>
                   )}
@@ -439,7 +464,7 @@ const StatusEpilepticusPathway: React.FC = () => {
                   {!stage1FirstDoseGiven ? (
                     <button
                       onClick={() => setStage1FirstDoseGiven(true)}
-                      className="w-full mt-1 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-colors duration-150 shadow-sm active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none text-sm"
+                      className="px-4 py-2 bg-neuro-500 hover:bg-neuro-600 text-white rounded-full text-sm font-medium transition-colors min-h-[44px] inline-flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation"
                     >
                       Mark First Dose Given
                     </button>
@@ -450,22 +475,48 @@ const StatusEpilepticusPathway: React.FC = () => {
                       </div>
                       {!stage1SecondDoseGiven && stage1Success === null && (
                         <div className="bg-slate-50 border border-slate-100 rounded-xl p-3">
-                          <div className="text-sm font-semibold text-slate-900 mb-2">Seizure status after first dose?</div>
-                          <div className="grid grid-cols-2 gap-2">
-                            <button onClick={() => setStage1Success(true)} className="py-3 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 shadow-sm active:scale-95 transform-gpu min-h-[44px] touch-manipulation text-sm focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">Stopped</button>
-                            <button onClick={() => setStage1SecondDoseGiven(true)} className="py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 shadow-sm active:scale-95 transform-gpu min-h-[44px] touch-manipulation text-sm focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">Persists — Repeat Dose</button>
+                          <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Seizure status after first dose?</div>
+                          {/* Outcome Row — PATHWAY_SPEC §4.7 */}
+                          <div className="grid grid-cols-2 gap-3 mt-2">
+                            <button
+                              type="button"
+                              onClick={() => setStage1Success(true)}
+                              className="min-h-[60px] rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold text-sm hover:bg-emerald-100 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors"
+                            >
+                              Stopped
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setStage1SecondDoseGiven(true)}
+                              className="min-h-[60px] rounded-2xl bg-amber-50 border border-amber-200 text-amber-700 font-semibold text-sm hover:bg-amber-100 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors"
+                            >
+                              Persists — Repeat Dose
+                            </button>
                           </div>
                         </div>
                       )}
                       {stage1SecondDoseGiven && stage1Success === null && (
                         <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 animate-in fade-in">
-                          <div className="flex items-center gap-2 text-sm text-red-700 font-semibold mb-2">
+                          <div className="flex items-center gap-2 text-sm text-slate-700 font-semibold mb-2">
                             <Syringe size={15} /> Second dose administered
                           </div>
-                          <div className="text-sm font-semibold text-slate-900 mb-2">Seizure status after second dose?</div>
-                          <div className="grid grid-cols-2 gap-2">
-                            <button onClick={() => setStage1Success(true)} className="py-3 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 shadow-sm active:scale-95 transform-gpu min-h-[44px] touch-manipulation text-sm focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">Stopped</button>
-                            <button onClick={() => { setStage1Success(false); setActiveSection(2); }} className="py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 shadow-sm active:scale-95 transform-gpu min-h-[44px] touch-manipulation text-sm focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">Persists — Refractory</button>
+                          <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Seizure status after second dose?</div>
+                          {/* Outcome Row — PATHWAY_SPEC §4.7 */}
+                          <div className="grid grid-cols-2 gap-3 mt-2">
+                            <button
+                              type="button"
+                              onClick={() => setStage1Success(true)}
+                              className="min-h-[60px] rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold text-sm hover:bg-emerald-100 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors"
+                            >
+                              Stopped
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => { setStage1Success(false); setActiveSection(2); }}
+                              className="min-h-[60px] rounded-2xl bg-amber-50 border border-amber-200 text-amber-700 font-semibold text-sm hover:bg-amber-100 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors"
+                            >
+                              Persists — Refractory
+                            </button>
                           </div>
                         </div>
                       )}
@@ -557,7 +608,7 @@ const StatusEpilepticusPathway: React.FC = () => {
                     <button
                       key={key}
                       onClick={() => setComorbidities({...comorbidities, [key]: !comorbidities[key]})}
-                      className={`px-3 py-1.5 text-xs font-bold rounded-full border transition-colors duration-150 active:scale-[0.98] transform-gpu touch-manipulation min-h-[36px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${comorbidities[key] ? 'bg-slate-800 text-white border-slate-800' : 'bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-300'}`}
+                      className={`px-3 py-1.5 text-xs font-bold rounded-full border transition-colors duration-150 active:scale-[0.98] transform-gpu touch-manipulation min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${comorbidities[key] ? 'bg-slate-800 text-white border-slate-800' : 'bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-300'}`}
                     >
                       {label}
                     </button>
@@ -575,10 +626,19 @@ const StatusEpilepticusPathway: React.FC = () => {
                 </div>
               )}
 
-              {/* ESETT agent selection */}
+              {/* ESETT agent selection — label shortened per D-7; "(ESETT-equivalent)" qualifier lives in option descriptions */}
               <div id="field-stage2-agent" ref={stage2DoseRef}>
+                {/* Dose Result Row — PATHWAY_SPEC §4.8 — placed above agent row (D-6 fix) */}
+                <div className="border-t border-b border-slate-200 px-5 py-3 -mx-5 my-2">
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Calculated Dose</div>
+                  <div className="flex items-center justify-between gap-3 mt-1">
+                    <span className="text-sm text-slate-600">{finalStage2.charAt(0).toUpperCase()}{finalStage2.slice(1)}</span>
+                    <span className="text-base font-mono font-semibold text-slate-900">{calculateDose(finalStage2, patient.weight)}</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400 mt-1">Computed from {patient.weight} kg patient</div>
+                </div>
                 <PathwayCategoryRow
-                  label="Stage 2 ASM (ESETT-equivalent)"
+                  label="Stage 2 Agent"
                   options={esett.options.map(opt => ({
                     value: opt.agent,
                     label: `${opt.agent.charAt(0).toUpperCase()}${opt.agent.slice(1)}${opt.status === 'avoid' ? ' — AVOID' : opt.status === 'caution' ? ' — Caution' : ''}`,
@@ -590,16 +650,22 @@ const StatusEpilepticusPathway: React.FC = () => {
                 />
               </div>
 
-              {/* Dose display */}
-              <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 mt-1">
-                <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Dosing — {finalStage2}</div>
-                <div className="text-xl font-black text-slate-900">{calculateDose(finalStage2, patient.weight)}</div>
-              </div>
-
-              {/* Outcome buttons */}
-              <div className="pt-2 flex gap-3">
-                <button onClick={() => setStage1Success(true)} className="px-4 py-2.5 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 flex-1 shadow-sm active:scale-95 transform-gpu min-h-[44px] touch-manipulation text-sm focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">Seizure Stopped</button>
-                <button onClick={() => { setStage2Success(false); setStage2ActualAgent(finalStage2); setActiveSection(3); }} className="px-4 py-2.5 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 flex-1 shadow-sm active:scale-95 transform-gpu min-h-[44px] touch-manipulation text-sm focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">Persists — Refractory</button>
+              {/* Outcome Row — PATHWAY_SPEC §4.7 */}
+              <div className="grid grid-cols-2 gap-3 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setStage1Success(true)}
+                  className="min-h-[60px] rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold text-sm hover:bg-emerald-100 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors"
+                >
+                  Seizure Stopped
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setStage2Success(false); setStage2ActualAgent(finalStage2); setActiveSection(3); }}
+                  className="min-h-[60px] rounded-2xl bg-amber-50 border border-amber-200 text-amber-700 font-semibold text-sm hover:bg-amber-100 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors"
+                >
+                  Persists — Refractory
+                </button>
               </div>
 
               {/* Lacosamide safety pearl */}
@@ -679,11 +745,15 @@ const StatusEpilepticusPathway: React.FC = () => {
                 />
               </div>
 
-              {/* Calculated dose */}
+              {/* Dose Result Row — PATHWAY_SPEC §4.8 */}
               {stage3Agent && (
-                <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 animate-in zoom-in-95">
-                  <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Calculated Load</div>
-                  <div className="text-2xl font-black text-slate-900">{calculateDose(stage3Agent, patient.weight)}</div>
+                <div className="border-t border-b border-slate-200 px-5 py-3 -mx-5 my-2 animate-in zoom-in-95">
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Calculated Load</div>
+                  <div className="flex items-center justify-between gap-3 mt-1">
+                    <span className="text-sm text-slate-600">{stage3Agent.charAt(0).toUpperCase()}{stage3Agent.slice(1).replace('_inf', ' Infusion').replace('_', ' ')}</span>
+                    <span className="text-base font-mono font-semibold text-slate-900">{calculateDose(stage3Agent, patient.weight)}</span>
+                  </div>
+                  <div className="text-[10px] text-slate-400 mt-1">Computed from {patient.weight} kg patient</div>
                 </div>
               )}
 
