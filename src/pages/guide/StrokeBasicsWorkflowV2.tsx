@@ -477,7 +477,13 @@ const MainContent: React.FC = () => {
                   step1Data={step1DataLive || DEFAULT_STEP1_DATA}
                   eligibilityResult={eligibilityResult}
                   onIchSelected={() => setHemorrhageProtocolModalOpen(true)}
-                  onComplete={(data) => setStep2Data(data)}
+                  onComplete={(data) => {
+                    setStep2Data(data);
+                    // Auto-advance to Step 3 (Summary & Orders) — matches the
+                    // Step 1 → Step 2 auto-advance pattern. Fixes user-reported
+                    // 2026-05-17 bug: completing imaging stayed on Step 2.
+                    setActiveCard(3);
+                  }}
                   onOpenEVTPathway={() => setThrombectomyModalOpen(true)}
                   onOpenEligibility={() => setEligibilityModalOpen(true)}
                   onCtReadStamped={() => {
