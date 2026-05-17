@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { useBackNavigation } from '../../hooks/useBackNavigation';
 import { useModalFocusTrap } from '../../hooks/useModalFocusTrap';
+import { PathwayRailStep } from '../../components/pathways/PathwayRail';
 import {
   ArrowLeft, ExternalLink, Copy, Brain, Info, AlertTriangle, AlertCircle,
   InfoIcon, FlaskConical, Eye, FileText as FileTextIcon,
@@ -320,37 +321,9 @@ const MainContent: React.FC = () => {
             </div>
           </div>
           {workflowMode === 'study' && <QuickReferenceCard />}
-          {/* Tab stepper — Vitals / Imaging / Summary.
-              a11y: closes audit-stroke-code-a11y-2026-05-17.md A-3+A-4
-              (missing role="tablist"/"tab", missing aria-selected,
-              focus:outline-none suppresses keyboard rings on safety-
-              critical nav). Visual: also fixes the border-b-2 token
-              violation that Batch 2's sed missed (border-2 substring
-              isn't in border-b-2). */}
-          <div className="flex border-b border-slate-100" role="tablist" aria-label="Stroke code workflow steps">
-            {[
-              { id: 1, label: 'Vitals' },
-              { id: 2, label: 'Imaging' },
-              { id: 3, label: 'Summary' },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                role="tab"
-                aria-selected={activeCard === tab.id}
-                aria-controls={`tabpanel-${tab.id}`}
-                id={`tab-${tab.id}`}
-                tabIndex={activeCard === tab.id ? 0 : -1}
-                onClick={() => setActiveCard(tab.id)}
-                className={`flex-1 py-2.5 text-xs font-medium transition-colors border-b -mb-px focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none focus-visible:rounded-sm ${
-                  activeCard === tab.id
-                    ? 'border-neuro-500 text-neuro-500'
-                    : 'border-transparent text-slate-400 hover:text-slate-600'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
+          {/* Stepper migrated 2026-05-17 from horizontal tab bar to vertical
+              PathwayRailStep rail — see the rail-step wrappers in the
+              content panel below. Step navigation now uses rail-node click. */}
         </div>
 
         {/* Clinical Context Bar — outside sticky, scrolls away */}
@@ -392,8 +365,26 @@ const MainContent: React.FC = () => {
 
         <div id="card-content-panel" className="px-3 sm:px-6 mt-16 pb-2" style={{ scrollMarginTop: '163px' }}>
 
-          {/* Card 1: LKW & Vitals */}
-          {activeCard === 1 && (
+          {/* Step 1: LKW & Vitals — rail-step wrapped 2026-05-17 */}
+          <PathwayRailStep
+            stepNumber={1}
+            title="VITALS"
+            iconKey="triage"
+            nodeState={activeCard === 1 ? 'active' : (step1Data ? 'completed' : 'active')}
+            segmentAboveTraversed={false}
+            lockedAriaLabel="Step 1 Vitals"
+          >
+            {activeCard !== 1 && step1Data ? (
+              <button
+                type="button"
+                onClick={() => setActiveCard(1)}
+                className="w-full text-left px-4 py-3 border-l-2 border-neuro-500 bg-neuro-50 rounded-r-lg min-h-[44px] flex items-center justify-between gap-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors hover:bg-neuro-100"
+                aria-label="Edit Vitals step"
+              >
+                <span className="text-sm font-semibold text-neuro-700">Vitals saved</span>
+                <span className="text-xs text-neuro-700 opacity-75">NIHSS {step1Data.nihssScore} · BP {step1Data.systolicBP}/{step1Data.diastolicBP} · Glucose {step1Data.glucose} · LKW {step1Data.lkwUnknown ? 'Unknown' : `${liveLkwHours.toFixed(1)}h ago`}</span>
+              </button>
+            ) : (
             <div>
               {workflowMode === 'study' && (
                 <StudyPearlsButton count={pearls['step-1']?.deep?.length || 0} onClick={() => setStep1ModalOpen(true)} />
@@ -454,10 +445,29 @@ const MainContent: React.FC = () => {
                 </Suspense>
               )}
             </div>
-          )}
+            )}
+          </PathwayRailStep>
 
-          {/* Card 2: CT & Treatment */}
-          {activeCard === 2 && (
+          {/* Step 2: CT & Treatment — rail-step wrapped 2026-05-17 */}
+          <PathwayRailStep
+            stepNumber={2}
+            title="IMAGING"
+            iconKey="imaging"
+            nodeState={activeCard === 2 ? 'active' : (step2Data ? 'completed' : (step1Data ? 'active' : 'locked'))}
+            segmentAboveTraversed={!!step1Data}
+            lockedAriaLabel="Step 2 Imaging, complete vitals first"
+          >
+            {activeCard !== 2 && step2Data ? (
+              <button
+                type="button"
+                onClick={() => setActiveCard(2)}
+                className="w-full text-left px-4 py-3 border-l-2 border-neuro-500 bg-neuro-50 rounded-r-lg min-h-[44px] flex items-center justify-between gap-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors hover:bg-neuro-100"
+                aria-label="Edit Imaging step"
+              >
+                <span className="text-sm font-semibold text-neuro-700">Imaging recorded</span>
+                <span className="text-xs text-neuro-700 opacity-75">CT: {step2Data.ctResult === 'bleed' ? 'Bleed' : 'No bleed'} · Tx: {step2Data.treatmentGiven}</span>
+              </button>
+            ) : activeCard === 2 ? (
             <div>
               {workflowMode === 'study' && (
                 <StudyPearlsButton count={pearls['step-2']?.deep?.length || 0} onClick={() => setStep2ModalOpen(true)} />
@@ -524,10 +534,29 @@ const MainContent: React.FC = () => {
                 </Suspense>
               )}
             </div>
-          )}
+            ) : null}
+          </PathwayRailStep>
 
-          {/* Card 3: Summary & Orders */}
-          {activeCard === 3 && (
+          {/* Step 3: Summary & Orders — rail-step wrapped 2026-05-17 */}
+          <PathwayRailStep
+            stepNumber={3}
+            title="SUMMARY"
+            iconKey="decision"
+            nodeState={activeCard === 3 ? 'active' : (step4Orders.length > 0 ? 'completed' : (step2Data ? 'active' : 'locked'))}
+            segmentAboveTraversed={!!step2Data}
+            lockedAriaLabel="Step 3 Summary, complete imaging first"
+          >
+            {activeCard !== 3 && step4Orders.length > 0 ? (
+              <button
+                type="button"
+                onClick={() => setActiveCard(3)}
+                className="w-full text-left px-4 py-3 border-l-2 border-neuro-500 bg-neuro-50 rounded-r-lg min-h-[44px] flex items-center justify-between gap-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors hover:bg-neuro-100"
+                aria-label="Edit Summary step"
+              >
+                <span className="text-sm font-semibold text-neuro-700">Summary complete</span>
+                <span className="text-xs text-neuro-700 opacity-75">{step4Orders.length} orders selected</span>
+              </button>
+            ) : activeCard === 3 ? (
             <div>
               {workflowMode === 'study' && (
                 <StudyPearlsButton
@@ -616,7 +645,8 @@ const MainContent: React.FC = () => {
                 </Suspense>
               )}
             </div>
-          )}
+            ) : null}
+          </PathwayRailStep>
         </div>
 
         {/* Thrombectomy Recommendation Card */}
