@@ -19,7 +19,6 @@ const DeepLearningModal = lazy(() => import('../../components/article/stroke/Dee
 const ThrombectomyPathwayModal = lazy(() => import('../../components/article/stroke/ThrombectomyPathwayModal').then(m => ({ default: m.ThrombectomyPathwayModal })));
 const ThrombolysisEligibilityModal = lazy(() => import('../../components/article/stroke/ThrombolysisEligibilityModal').then(m => ({ default: m.ThrombolysisEligibilityModal })));
 import type { ThrombolysisEligibilityData } from '../../components/article/stroke/ThrombolysisEligibilityModal';
-const AnalogClockPicker = lazy(() => import('../../components/article/stroke/AnalogClockPicker').then(m => ({ default: m.AnalogClockPicker })));
 const TpaReversalProtocolModal = lazy(() => import('../../components/article/stroke/TpaReversalProtocolModal').then(m => ({ default: m.TpaReversalProtocolModal })));
 const OrolingualEdemaProtocolModal = lazy(() => import('../../components/article/stroke/OrolingualEdemaProtocolModal').then(m => ({ default: m.OrolingualEdemaProtocolModal })));
 const HemorrhageProtocolModal = lazy(() => import('../../components/article/stroke/HemorrhageProtocolModal').then(m => ({ default: m.HemorrhageProtocolModal })));
@@ -191,7 +190,6 @@ const MainContent: React.FC = () => {
   const [eligibilityModalOpen, setEligibilityModalOpen] = useState(false);
   const [thrombectomyModalOpen, setThrombectomyModalOpen] = useState(false);
   const [thrombectomyRecommendation, setThrombectomyRecommendation] = useState<string | null>(null);
-  const [doorTimePickerOpen, setDoorTimePickerOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [tpaReversalModalOpen, setTpaReversalModalOpen] = useState(false);
   const [orolingualEdemaModalOpen, setOrolingualEdemaModalOpen] = useState(false);
@@ -242,24 +240,12 @@ const MainContent: React.FC = () => {
   // ── Derived values ────────────────────────────────────────────────────────
 
   const step1DataLive: Step1Data | null = step1Data ? { ...step1Data, lkwHours: liveLkwHours } : null;
-  const doorTimeForPicker = milestones.doorTime ?? new Date();
   const pearls = pearlsData ?? {};
 
-  const doorTimeTo12h = (d: Date) => {
-    let h = d.getHours();
-    const period: 'AM' | 'PM' = h >= 12 ? 'PM' : 'AM';
-    h = h % 12 || 12;
-    return { hour: h, minute: d.getMinutes(), period };
-  };
-  const doorTimeFrom12h = (hour: number, minute: number, period: 'AM' | 'PM'): Date => {
-    let h24 = hour;
-    if (period === 'PM' && hour !== 12) h24 += 12;
-    if (period === 'AM' && hour === 12) h24 = 0;
-    const d = new Date();
-    d.setHours(h24, minute, 0, 0);
-    if (d > new Date()) d.setDate(d.getDate() - 1);
-    return d;
-  };
+  // Note: doorTime picker helpers (doorTimeForPicker / doorTimeTo12h / doorTimeFrom12h)
+  // were removed 2026-05-17 alongside AnalogClockPicker deletion. The picker was
+  // unreachable (no setDoorTimePickerOpen(true) call site) AND mouse-drag only
+  // (a11y BLOCKER per audit-stroke-code-a11y-2026-05-17.md finding A-2).
 
   return (
     <Suspense fallback={null}>
@@ -753,19 +739,6 @@ const MainContent: React.FC = () => {
         {hemorrhageProtocolModalOpen && (
           <Suspense fallback={null}>
             <HemorrhageProtocolModal isOpen={hemorrhageProtocolModalOpen} onClose={() => setHemorrhageProtocolModalOpen(false)} onCopySuccess={() => { setToastMessage('Copied to EMR'); setTimeout(() => setToastMessage(null), 2500); }} />
-          </Suspense>
-        )}
-
-        {doorTimePickerOpen && (
-          <Suspense fallback={<div className="fixed inset-0 z-[90] bg-black/10 flex items-center justify-center" aria-label="Loading clock" />}>
-            <AnalogClockPicker
-              isOpen={doorTimePickerOpen}
-              onClose={() => setDoorTimePickerOpen(false)}
-              onTimeSelect={(h, m, p) => { setMilestones(prev => ({ ...prev, doorTime: doorTimeFrom12h(h, m, p) })); setDoorTimePickerOpen(false); }}
-              initialHours={doorTimeTo12h(doorTimeForPicker).hour}
-              initialMinutes={doorTimeTo12h(doorTimeForPicker).minute}
-              initialPeriod={doorTimeTo12h(doorTimeForPicker).period}
-            />
           </Suspense>
         )}
 

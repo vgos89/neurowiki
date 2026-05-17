@@ -45,6 +45,12 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   const [lkwDate, setLkwDate] = useState<Date>(() => new Date());
   const [clockPickerOpen, setClockPickerOpen] = useState(false);
 
+  // lkwEntered disambiguates "not yet entered" (lkwHours=0 by initial useState/useEffect)
+  // from "LKW = right now" (lkwHours≈0, witnessed-now stroke). Without this flag,
+  // `lkwHours > 0` falsely treats a valid same-minute LKW as unentered.
+  // Fixed 2026-05-17 per audit-stroke-code-connectivity-2026-05-17.md HIGH finding.
+  const [lkwEntered, setLkwEntered] = useState(false);
+
   const [disablingSymptoms, setDisablingSymptoms] = useState<Record<string, boolean>>({
     aphasia: false,
     hemianopia: false,
@@ -76,7 +82,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
 
   const tnkDose = useMemo(() => getTNKDose(weightKg), [weightKg]);
 
-  const withinTPAWindow = lkwHours > 0 && lkwHours <= 4.5;
+  const withinTPAWindow = lkwEntered && !lkwUnknown && lkwHours <= 4.5;
   const showDisablingSymptomsChecklist = withinTPAWindow && nihssScore >= 1 && nihssScore <= 5 && !lkwUnknown;
   const hasDisablingSymptom = Object.values(disablingSymptoms).some(Boolean);
 
@@ -87,7 +93,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   const glucoseHigh = glucose > 400;
 
   const isComplete =
-    (lkwUnknown || lkwHours > 0) &&
+    lkwEntered &&
     nihssScore > 0 &&
     systolicBP > 0 &&
     diastolicBP > 0 &&
@@ -96,7 +102,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
     (!bpTooHigh || bpControlled || lkwUnknown);
 
   const missingFields: string[] = [];
-  if (!lkwUnknown && lkwHours <= 0) missingFields.push('LKW time');
+  if (!lkwEntered) missingFields.push('LKW time');
   if (nihssScore <= 0) missingFields.push('NIHSS');
   if (systolicBP <= 0 || diastolicBP <= 0) missingFields.push('BP');
   if (glucose <= 0) missingFields.push('Glucose');
@@ -129,7 +135,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   const lkwTimeDisplay = `${_h12}:${String(lkwDate.getMinutes()).padStart(2, '0')} ${_period}`;
 
   const WindowBadge: React.FC = () => {
-    if (lkwUnknown || lkwHours <= 0) return null;
+    if (!lkwEntered || lkwUnknown) return null;
     if (lkwHours <= 4.5)
       return <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-2.5 py-0.5">● Within 4.5h</span>;
     if (lkwHours <= 9)
@@ -165,14 +171,22 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
               </div>
             </div>
           )}
-          {!lkwUnknown && lkwHours > 0 && (
+          {lkwEntered && !lkwUnknown && (
             <p className="text-xs text-slate-400 mb-2">~{lkwHours.toFixed(1)}h ago</p>
           )}
           <label className="flex items-center gap-2 cursor-pointer min-h-[36px] mb-3">
             <input
               type="checkbox"
               checked={lkwUnknown}
-              onChange={(e) => { setLkwUnknown(e.target.checked); if (e.target.checked) setLkwHours(0); }}
+              onChange={(e) => {
+                setLkwUnknown(e.target.checked);
+                if (e.target.checked) {
+                  setLkwHours(0);
+                  setLkwEntered(true);  // "Unknown" is a definitive entry
+                } else {
+                  setLkwEntered(false);  // unchecking returns to "not entered" until picker confirms
+                }
+              }}
               className="w-4 h-4 rounded border-slate-300 text-red-600 focus:ring-red-500 flex-shrink-0"
             />
             <span className="text-sm text-slate-500">LKW Unknown</span>
@@ -423,8 +437,8 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
       <LKWTimePicker
         isOpen={clockPickerOpen}
         onClose={() => setClockPickerOpen(false)}
-        onConfirm={(date) => setLkwDate(date)}
-        onUnknown={() => { setLkwUnknown(true); setClockPickerOpen(false); }}
+        onConfirm={(date) => { setLkwDate(date); setLkwEntered(true); }}
+        onUnknown={() => { setLkwUnknown(true); setLkwEntered(true); setClockPickerOpen(false); }}
         initialDate={lkwDate}
       />
     </div>
