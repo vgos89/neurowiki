@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Moon, AlarmClock } from 'lucide-react';
+import { useModalFocusTrap } from '../../../hooks/useModalFocusTrap';
 
 export interface LKWTimePickerProps {
   isOpen: boolean;
@@ -30,11 +31,14 @@ interface ScrollColProps {
   onSelect: (idx: number) => void;
   itemH?: number;
   colW?: number;
+  /** aria-label for the column (e.g. "Hour", "Minute", "AM/PM"). */
+  ariaLabel: string;
 }
 
 const ScrollCol: React.FC<ScrollColProps> = ({
   items, selectedIdx, onSelect,
   itemH = 48, colW = 56,
+  ariaLabel,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const snapTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -85,18 +89,55 @@ const ScrollCol: React.FC<ScrollColProps> = ({
       />
       <div
         ref={ref}
-        className="relative overflow-y-scroll"
+        className="relative overflow-y-scroll focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:rounded-xl focus-visible:outline-none"
         style={{
           height: itemH * 3,
           scrollbarWidth: 'none',
           WebkitOverflowScrolling: 'touch',
         } as React.CSSProperties}
         onScroll={handleScroll}
+        // a11y: keyboard-navigable listbox per WCAG 2.1.1 — previously
+        // the drum was scroll-only (mouse/touch) per
+        // audit-stroke-code-a11y-2026-05-17.md BLOCKER A-1.
+        tabIndex={0}
+        role="listbox"
+        aria-label={ariaLabel}
+        aria-activedescendant={`${ariaLabel.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-opt-${selectedIdx}`}
+        onKeyDown={(e) => {
+          let nextIdx = selectedIdx;
+          switch (e.key) {
+            case 'ArrowDown':
+              nextIdx = Math.min(items.length - 1, selectedIdx + 1);
+              break;
+            case 'ArrowUp':
+              nextIdx = Math.max(0, selectedIdx - 1);
+              break;
+            case 'PageDown':
+              nextIdx = Math.min(items.length - 1, selectedIdx + 5);
+              break;
+            case 'PageUp':
+              nextIdx = Math.max(0, selectedIdx - 5);
+              break;
+            case 'Home':
+              nextIdx = 0;
+              break;
+            case 'End':
+              nextIdx = items.length - 1;
+              break;
+            default:
+              return;
+          }
+          e.preventDefault();
+          if (nextIdx !== selectedIdx) onSelect(nextIdx);
+        }}
       >
         <div style={{ height: itemH }} />
         {items.map((item, i) => (
           <div
             key={i}
+            id={`${ariaLabel.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-opt-${i}`}
+            role="option"
+            aria-selected={i === selectedIdx}
             style={{ height: itemH }}
             className={`flex items-center justify-center cursor-pointer tabular-nums font-bold transition-colors relative z-30
               ${i === selectedIdx ? 'text-white text-xl' : 'text-slate-400 text-lg hover:text-slate-600'}
@@ -268,11 +309,11 @@ const SleepTimeRow: React.FC<SleepTimeRowProps> = ({
 
       {/* Drum rollers */}
       <div className="flex items-center justify-center gap-3">
-        <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={onHourIdx} itemH={44} colW={56} />
+        <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={onHourIdx} itemH={44} colW={56} ariaLabel={`${label} hour`} />
         <span className="text-2xl font-light text-slate-300 -mt-1">:</span>
-        <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={onMinuteIdx} itemH={44} colW={56} />
+        <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={onMinuteIdx} itemH={44} colW={56} ariaLabel={`${label} minute`} />
         <div className="w-px h-12 bg-slate-150 mx-1" />
-        <ScrollCol items={periodItems} selectedIdx={periodIdx} onSelect={onPeriodIdx} itemH={44} colW={56} />
+        <ScrollCol items={periodItems} selectedIdx={periodIdx} onSelect={onPeriodIdx} itemH={44} colW={56} ariaLabel={`${label} AM or PM`} />
       </div>
     </div>
   );
@@ -320,6 +361,14 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
 
   /* ── Mode state ── */
   const [mode, setMode] = useState<'specific' | 'sleep'>(defaultMode);
+
+  /* ── a11y: focus trap + dialog ARIA ── */
+  // Closes BLOCKER A-1 from audit-stroke-code-a11y-2026-05-17.md (WCAG
+  // 2.4.3 + 4.1.2). The drum columns themselves are made keyboard-
+  // navigable in the ScrollCol fix above; this hook adds the modal-level
+  // focus management (focus-on-open, return-on-close, Escape, Tab cycle).
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useModalFocusTrap(isOpen, onClose, dialogRef);
 
   /* ── Sleep onset state ── */
   // Bedtime: defaults to yesterday 11 PM
@@ -548,8 +597,12 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
       onClick={onClose}
     >
       <div
+        ref={dialogRef}
         className="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-3xl flex flex-col overflow-hidden max-h-[92vh] sm:max-h-[600px]"
         onClick={e => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="lkw-picker-title"
       >
         {/* ── Header ── */}
         <div className="flex items-center justify-between h-14 px-4 border-b border-slate-100 flex-shrink-0">
@@ -557,7 +610,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
             <div className="w-7 h-7 rounded-lg bg-neuro-500 flex items-center justify-center shrink-0">
               <span className="text-white text-sm leading-none">🕐</span>
             </div>
-            <span className="text-sm font-bold text-slate-900 truncate">Last Known Well</span>
+            <span id="lkw-picker-title" className="text-sm font-bold text-slate-900 truncate">Last Known Well</span>
           </div>
           <button
             onClick={onClose}
@@ -631,11 +684,11 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
               {/* Time drums — large, centered */}
               <div className="flex-1 flex items-center justify-center px-6 py-4">
                 <div className="flex items-center gap-4">
-                  <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={setHourIdx} itemH={60} colW={72} />
+                  <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={setHourIdx} itemH={60} colW={72} ariaLabel="Hour" />
                   <span className="text-3xl font-thin text-slate-300 -mt-1">:</span>
-                  <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={setMinuteIdx} itemH={60} colW={72} />
+                  <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={setMinuteIdx} itemH={60} colW={72} ariaLabel="Minute" />
                   <div className="w-px h-16 bg-slate-150 mx-1" />
-                  <ScrollCol items={periodItems} selectedIdx={periodIdx} onSelect={setPeriodIdx} itemH={60} colW={72} />
+                  <ScrollCol items={periodItems} selectedIdx={periodIdx} onSelect={setPeriodIdx} itemH={60} colW={72} ariaLabel="AM or PM" />
                 </div>
               </div>
 
@@ -702,10 +755,10 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
               {/* Right: Time drums */}
               <div className="w-[210px] flex-shrink-0 border-l border-slate-100 flex items-center justify-center px-3 py-6">
                 <div className="flex items-center gap-2">
-                  <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={setHourIdx} />
+                  <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={setHourIdx} ariaLabel="Hour" />
                   <span className="text-2xl font-light text-slate-300">:</span>
-                  <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={setMinuteIdx} />
-                  <ScrollCol items={periodItems} selectedIdx={periodIdx} onSelect={setPeriodIdx} />
+                  <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={setMinuteIdx} ariaLabel="Minute" />
+                  <ScrollCol items={periodItems} selectedIdx={periodIdx} onSelect={setPeriodIdx} ariaLabel="AM or PM" />
                 </div>
               </div>
 
@@ -716,7 +769,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
               <button
                 type="button"
                 onClick={handleConfirm}
-                className="px-8 py-2 rounded-lg text-base font-semibold text-slate-500 hover:text-neuro-600 transition-colors"
+                className="min-h-[44px] px-8 py-2 rounded-full text-sm font-medium bg-neuro-500 hover:bg-neuro-600 text-white transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
               >
                 OK
               </button>
