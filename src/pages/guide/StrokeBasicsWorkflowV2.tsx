@@ -286,12 +286,16 @@ const MainContent: React.FC = () => {
                 </button>
                 <h1 className="text-lg font-semibold text-slate-900 tracking-tight">Stroke Code</h1>
               </div>
-              <div className="flex items-center gap-1 bg-slate-100 rounded-lg p-1">
+              {/* Code/Study toggle — closes audit-stroke-code-a11y-2026-05-17.md
+                  H5 (aria-checked on plain type="button" with no role). Now uses
+                  radiogroup pattern with role="radio" + proper keyboard semantics. */}
+              <div className="flex items-center gap-1 bg-slate-100 rounded-lg p-1" role="radiogroup" aria-label="Workflow mode">
                 <button
                   type="button"
-                  onClick={() => setWorkflowMode('code')}
+                  role="radio"
                   aria-checked={workflowMode === 'code'}
-                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
+                  onClick={() => setWorkflowMode('code')}
+                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
                     workflowMode === 'code'
                       ? 'bg-white shadow-sm text-neuro-500'
                       : 'text-slate-400 hover:text-slate-600'
@@ -301,9 +305,10 @@ const MainContent: React.FC = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setWorkflowMode('study')}
+                  role="radio"
                   aria-checked={workflowMode === 'study'}
-                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
+                  onClick={() => setWorkflowMode('study')}
+                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
                     workflowMode === 'study'
                       ? 'bg-white shadow-sm text-slate-900'
                       : 'text-slate-400 hover:text-slate-600'
@@ -315,7 +320,14 @@ const MainContent: React.FC = () => {
             </div>
           </div>
           {workflowMode === 'study' && <QuickReferenceCard />}
-          <div className="flex border-b border-slate-100">
+          {/* Tab stepper — Vitals / Imaging / Summary.
+              a11y: closes audit-stroke-code-a11y-2026-05-17.md A-3+A-4
+              (missing role="tablist"/"tab", missing aria-selected,
+              focus:outline-none suppresses keyboard rings on safety-
+              critical nav). Visual: also fixes the border-b-2 token
+              violation that Batch 2's sed missed (border-2 substring
+              isn't in border-b-2). */}
+          <div className="flex border-b border-slate-100" role="tablist" aria-label="Stroke code workflow steps">
             {[
               { id: 1, label: 'Vitals' },
               { id: 2, label: 'Imaging' },
@@ -323,8 +335,13 @@ const MainContent: React.FC = () => {
             ].map((tab) => (
               <button
                 key={tab.id}
+                role="tab"
+                aria-selected={activeCard === tab.id}
+                aria-controls={`tabpanel-${tab.id}`}
+                id={`tab-${tab.id}`}
+                tabIndex={activeCard === tab.id ? 0 : -1}
                 onClick={() => setActiveCard(tab.id)}
-                className={`flex-1 py-2.5 text-xs font-medium transition-colors border-b-2 -mb-px focus:outline-none ${
+                className={`flex-1 py-2.5 text-xs font-medium transition-colors border-b -mb-px focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none focus-visible:rounded-sm ${
                   activeCard === tab.id
                     ? 'border-neuro-500 text-neuro-500'
                     : 'border-transparent text-slate-400 hover:text-slate-600'
