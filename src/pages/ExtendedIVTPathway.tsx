@@ -1,16 +1,21 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import {
-  ArrowLeft, Check, RotateCcw, Copy, Activity, Zap,
-  AlertTriangle, Clock, ScanLine, Star,
+  Check,
+  RotateCcw, Copy, Activity, Zap,
+  AlertTriangle, Clock, Star,
 } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
-import { CollapsibleSection } from '../components/CollapsibleSection';
-import LearningPearl from '../components/LearningPearl';
+import { PathwayRailStep } from '../components/pathways/PathwayRail';
+import { PathwayCategoryRow } from '../components/pathways/PathwayCategoryRow';
+import { PathwayLearningPearl } from '../components/pathways/PathwayLearningPearl';
+import { PathwayBranchChip } from '../components/pathways/PathwayBranchChip';
+import { PathwayHeader } from '../components/pathways/PathwayHeader';
+import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
 import { useFavorites } from '../hooks/useFavorites';
 import { LKWTimePicker } from '../components/article/stroke/LKWTimePicker';
 import { copyToClipboard } from '../utils/clipboard';
 import { useRecents } from '../hooks/useRecents';
+import type { SeverityTokens } from '../lib/calculators/severityTokens';
 
 /* ─── Types ─────────────────────────────────────────────────────── */
 
@@ -150,63 +155,44 @@ function trialList(names: string[]): string {
   }).join(', ');
 }
 
-/* ─── CompactSelectionCard (mirrors EVT) ─────────────────────────── */
+/* ─── TIER_TOKENS — inlined (4th copy; extraction deferred until PathwayBottomDrawer retires) ─── */
 
-interface CompactSelectionCardProps {
-  title: string;
-  description?: string;
-  selected: boolean;
-  onClick: () => void;
-  variant?: 'default' | 'danger' | 'warning';
-}
-const CompactSelectionCard = React.memo(({
-  title, description, selected, onClick, variant = 'default',
-}: CompactSelectionCardProps) => (
-  <button
-    onClick={onClick}
-    className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-colors duration-150
-      active:scale-[0.99] transform-gpu touch-manipulation min-h-[44px]
-      focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none
-      ${selected
-        ? variant === 'danger'
-            ? 'bg-red-50 border-red-500'
-            : variant === 'warning'
-              ? 'bg-amber-50 border-amber-400'
-              : 'bg-neuro-50 border-neuro-500'
-        : 'bg-white border-slate-100 hover:border-slate-200 hover:bg-slate-50'
-      }`}
-  >
-    <div className="flex items-center justify-between gap-3">
-      <div className="flex-1 min-w-0">
-        <span className={`block text-sm font-bold leading-tight ${
-          selected
-            ? variant === 'danger'   ? 'text-red-900'
-              : variant === 'warning' ? 'text-amber-900'
-              : 'text-neuro-700'
-            : 'text-slate-900'
-        }`}>{title}</span>
-        {description && (
-          <span className={`text-xs leading-tight block mt-0.5 ${
-            selected
-              ? variant === 'danger'   ? 'text-red-700'
-                : variant === 'warning' ? 'text-amber-700'
-                : 'text-neuro-600'
-              : 'text-slate-500'
-          }`}>{description}</span>
-        )}
-      </div>
-      {selected && (
-        <div className={`p-1 rounded-full shrink-0 ${
-          variant === 'danger'   ? 'bg-red-500 text-white'
-          : variant === 'warning' ? 'bg-amber-400 text-white'
-          : 'bg-neuro-500 text-white'
-        }`}>
-          <Check size={12} />
-        </div>
-      )}
-    </div>
-  </button>
-));
+type ExtendedIVTTier = 'Low' | 'Intermediate' | 'High' | 'Negative' | 'None';
+
+const TIER_TOKENS: Record<Exclude<ExtendedIVTTier, 'None'>, SeverityTokens> = {
+  Low: {
+    borderColor: '#c7d2fe',         // neuro-200
+    headerBg: 'bg-neuro-50',
+    headerHover: 'hover:bg-neuro-100',
+    labelClass: 'text-[10px] font-bold text-neuro-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-neuro-700',
+    chevronClass: 'text-neuro-600',
+  },
+  Intermediate: {
+    borderColor: '#fcd34d',         // amber-300
+    headerBg: 'bg-amber-50',
+    headerHover: 'hover:bg-amber-100',
+    labelClass: 'text-[10px] font-bold text-amber-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-amber-700',
+    chevronClass: 'text-amber-700',
+  },
+  High: {
+    borderColor: '#fca5a5',         // red-300
+    headerBg: 'bg-red-50',
+    headerHover: 'hover:bg-red-100',
+    labelClass: 'text-[10px] font-bold text-red-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-red-700',
+    chevronClass: 'text-red-600',
+  },
+  Negative: {
+    borderColor: '#e2e8f0',         // slate-200
+    headerBg: 'bg-white',
+    headerHover: 'hover:bg-slate-50',
+    labelClass: 'text-[10px] font-bold text-slate-400 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-slate-900',
+    chevronClass: 'text-slate-400',
+  },
+};
 
 /* ─── Main Component ─────────────────────────────────────────────── */
 
@@ -238,8 +224,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   const { isFavorite, toggleFavorite } = useFavorites();
   const [showFavToast, setShowFavToast] = useState(false);
   const [showCopyToast, setShowCopyToast] = useState(false);
+  const [drawerExpanded, setDrawerExpanded] = useState(false);
   const isFav = isFavorite('ivt-extended-pathway');
-  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const prevSetupRef = useRef(false);
   const prevCriteriaRef = useRef(false);
 
@@ -486,14 +472,6 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     }
   }, [result, onResultChange]);
 
-  /* ── Section scroll ── */
-  useEffect(() => {
-    if (activeSection >= 0 && activeSection <= 2) {
-      const el = sectionRefs.current[activeSection];
-      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
-    }
-  }, [activeSection]);
-
   /* ── Auto-advance: Setup → Criteria (or skip to Decision) ── */
   useEffect(() => {
     if (activeSection === 0 && isSetupComplete && !prevSetupRef.current) {
@@ -504,34 +482,29 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     if (!isSetupComplete) prevSetupRef.current = false;
   }, [activeSection, isSetupComplete, pathStage]);
 
-  /* ── Auto-advance: Criteria complete nudge (no auto — user clicks Next) ── */
+  /* ── Section summaries (used for BranchChip labels) ── */
+  const getSetupSummary = useCallback((): string => {
+    if (!isSetupComplete) return 'Setup';
+    const lkwStr = onsetMode === 'wake-up'
+      ? 'Wake-up stroke'
+      : onsetMode === 'unknown-lkw'
+        ? 'Unknown onset · LKW known'
+        : onsetMode === 'unknown-no-lkw'
+          ? 'Unknown onset · no usable LKW'
+          : elapsedHours !== null
+            ? `${formatElapsed(elapsedHours)} elapsed`
+            : '';
+    const imgStr = imagingModality === 'mri' ? 'MRI' : 'CT Perfusion';
+    return `${lkwStr} · ${imgStr}`;
+  }, [isSetupComplete, onsetMode, elapsedHours, imagingModality]);
 
-  /* ── Section summaries ── */
-  const getSummary = useCallback((idx: number): string | undefined => {
-    if (idx === 0) {
-      if (!isSetupComplete) return undefined;
-      const lkwStr = onsetMode === 'wake-up'
-        ? 'Wake-up stroke'
-        : onsetMode === 'unknown-lkw'
-          ? 'Unknown onset · LKW known'
-          : onsetMode === 'unknown-no-lkw'
-            ? 'Unknown onset · no usable LKW'
-            : elapsedHours !== null
-              ? `${formatElapsed(elapsedHours)} elapsed`
-              : '';
-      const imgStr = imagingModality === 'mri' ? 'MRI' : 'CT Perfusion';
-      return `${lkwStr} · ${imgStr}`;
-    }
-    if (idx === 1) {
-      if (!isCriteriaComplete) return undefined;
-      if (pathStage === 'A') return 'Path A · DWI-FLAIR';
-      if (pathStage === 'B') return `Path B · ${imagingModality === 'ctp' ? 'CTP' : 'MRI PWI'}`;
-      if (pathStage === 'C') return 'Path C · Late LVO';
-      return pathStage ?? undefined;
-    }
-    if (idx === 2 && result) return `${result.status} · ${result.reason.split('(')[0].trim()}`;
-    return undefined;
-  }, [isSetupComplete, onsetMode, elapsedHours, imagingModality, isCriteriaComplete, pathStage, result]);
+  const getCriteriaSummary = useCallback((): string => {
+    if (!isCriteriaComplete) return 'Criteria';
+    if (pathStage === 'A') return 'Path A · DWI-FLAIR';
+    if (pathStage === 'B') return `Path B · ${imagingModality === 'ctp' ? 'CTP' : 'MRI PWI'}`;
+    if (pathStage === 'C') return 'Path C · Late LVO';
+    return pathStage ?? 'Criteria';
+  }, [isCriteriaComplete, pathStage, imagingModality]);
 
   /* ── Handlers ── */
   const clearCriteriaAnswers = () => {
@@ -545,19 +518,9 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     setWakeTimestamp(null); setMinutesSinceWaking(null); setHoursSinceMidpoint(null);
     clearCriteriaAnswers();
     setActiveSection(0);
+    setDrawerExpanded(false);
     prevSetupRef.current = false;
     prevCriteriaRef.current = false;
-  };
-
-  const handleSectionToggle = (idx: number) => {
-    setActiveSection(prev => {
-      if (prev === idx) {
-        if (idx === 0) return 1;
-        if (idx === 2) return 1;
-        return idx - 1;
-      }
-      return idx;
-    });
   };
 
   const copySummary = () => {
@@ -635,642 +598,680 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     return { label: `${formatElapsed(elapsedHours)} elapsed · Outside window`, cls: 'bg-red-100 text-red-800 border-red-200' };
   })();
 
+  /* ── Drawer tokens ── */
+  const drawerState: 'A' | 'C' = result !== null ? 'C' : 'A';
+  const drawerTokens: SeverityTokens | null = drawerState === 'C'
+    ? (result?.variant === 'success'
+        ? TIER_TOKENS.Low
+        : result?.variant === 'warning'
+          ? TIER_TOKENS.Intermediate
+          : result?.variant === 'danger'
+            ? TIER_TOKENS.High
+            : TIER_TOKENS.Negative)
+    : null;
+
+  /* ── Node states ── */
+  const step1Node = isSetupComplete ? 'completed' : 'active';
+  const step2Node = isSetupComplete
+    ? (isCriteriaComplete ? 'completed' : 'active')
+    : 'locked';
+  const step3Node = isCriteriaComplete ? (isDecisionComplete ? 'completed' : 'active') : 'locked';
+
   /* ── Render ─────────────────────────────────────────────────── */
   return (
-    <div className={`max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 ${isInModal ? 'pb-8' : 'pb-32'} md:pb-20`}>
+    <div className={`max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 ${isInModal ? 'pb-8' : 'pb-32'} md:pb-20`}>
 
       <h1 className="sr-only">Late Window IVT — Wake-Up Stroke &amp; Thrombolysis Eligibility</h1>
 
       {/* ── Sticky header ── */}
-      {!hideHeader && (
-        <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-100 shadow-sm -mx-4 px-4 md:-mx-6 md:px-6">
-          <div className="max-w-3xl mx-auto flex items-center justify-between h-14 gap-3">
-            <div className="flex items-center gap-2 min-w-0">
-              <button type="button" onClick={handleBack} aria-label="Back to Stroke Pathways" className="p-2 rounded-lg hover:bg-slate-100 transition-colors shrink-0 text-slate-500 cursor-pointer bg-transparent border-0">
-                <ArrowLeft size={16} aria-hidden="true" />
-              </button>
-              <div className="flex items-center gap-2 min-w-0">
-                <div className="p-1.5 bg-neuro-100 text-neuro-700 rounded-md shrink-0">
-                  <Zap size={16} />
-                </div>
-                <span className="text-sm font-black text-slate-900 truncate">Late Window IVT</span>
-              </div>
-            </div>
-            {/* Step dots */}
-            <div className="flex items-center gap-1.5 shrink-0">
-              {([0, 1, 2] as const).map(i => {
-                const completedFlags = [isSetupComplete, isCriteriaComplete, isDecisionComplete];
-                const isComp = completedFlags[i];
-                const isCurr = activeSection === i;
-                const isClickable = isComp || isCurr || (i > 0 && completedFlags[i - 1]);
-                return (
-                  <button
-                    key={i}
-                    onClick={() => { if (isClickable) setActiveSection(i); }}
-                    disabled={!isClickable}
-                    aria-label={`Step ${i + 1}: ${STEPS[i].title}`}
-                    className={`transition-all duration-200 rounded-full flex items-center justify-center touch-manipulation
-                      focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none
-                      ${isComp ? 'w-7 h-7 bg-emerald-500 text-white' : isCurr ? 'w-7 h-7 bg-neuro-500 text-white ring-2 ring-neuro-200' : 'w-2 h-2 bg-slate-200'}`}
-                  >
-                    {isComp ? <Check size={12} /> : isCurr ? <span className="text-xs font-bold">{i + 1}</span> : null}
-                  </button>
-                );
-              })}
-            </div>
-            <div className="flex items-center gap-1 shrink-0">
-              <button onClick={handleFavToggle} className="p-2 rounded-lg hover:bg-slate-100 transition-colors" aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}>
-                <Star size={16} className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'} />
-              </button>
-              <button onClick={handleReset} className="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400" aria-label="Reset">
-                <RotateCcw size={16} />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <PathwayHeader
+        pathwayLabel="Extended IVT Pathway"
+        onBack={handleBack}
+        backAriaLabel="Back to Stroke Pathways"
+        isFav={isFav}
+        onFavToggle={handleFavToggle}
+        onReset={handleReset}
+        onCopy={copySummary}
+        copyConfirm={showCopyToast}
+        hideHeader={hideHeader}
+      />
 
-      <div className="space-y-6 min-h-[300px]">
+      <div className="space-y-0 min-h-[300px] mt-6 px-4 md:px-0">
 
-        {/* ════ SECTION 0: SETUP ════ */}
-        <div ref={el => { sectionRefs.current[0] = el; }} className="scroll-mt-4">
-          <CollapsibleSection
-            title="Setup"
-            stepNumber={1}
-            totalSteps={3}
-            isCompleted={isSetupComplete}
-            isActive={activeSection === 0}
-            onToggle={() => handleSectionToggle(0)}
-            summary={getSummary(0)}
-            icon={<Clock size={14} />}
-            accentClass="bg-neuro-100 text-neuro-600"
-          >
-            <div className="space-y-6">
-              {/* LKW time */}
-              <div>
-                <h3 className="text-sm font-semibold text-slate-700 mb-2">Last Known Well (LKW) Time</h3>
-                {!setupComplete ? (
-                  <div className="space-y-2">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <CompactSelectionCard
-                        title="Known Onset / LKW"
-                        description="Symptoms began at known time"
-                        selected={false}
-                        onClick={() => {
-                          clearCriteriaAnswers();
-                          setPendingOnsetMode('known');
-                          setLkwPickerMode('specific');
-                          setLkwPickerOpen(true);
-                        }}
-                      />
-                      <CompactSelectionCard
-                        title="Unknown Onset + Known LKW"
-                        description="Unwitnessed stroke but last known well is known"
-                        selected={false}
-                        onClick={() => {
-                          clearCriteriaAnswers();
-                          setPendingOnsetMode('unknown-lkw');
-                          setLkwPickerMode('specific');
-                          setLkwPickerOpen(true);
-                        }}
-                        variant="warning"
-                      />
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <CompactSelectionCard
-                        title="Unknown Onset / No Usable LKW"
-                        description="Late-window routing will be blocked without LKW"
-                        selected={false}
-                        onClick={() => {
-                          clearCriteriaAnswers();
+        {/* ════ STEP 1: SETUP ════ */}
+        <PathwayRailStep
+          stepNumber={1}
+          title={STEPS[0].title.toUpperCase()}
+          iconKey="clinical"
+          nodeState={step1Node}
+          segmentAboveTraversed={false}
+        >
+          <div className="space-y-6">
+            {/* LKW time */}
+            <div>
+              <h3 className="text-sm font-semibold text-slate-700 mb-2">Last Known Well (LKW) Time</h3>
+              {!setupComplete ? (
+                <div className="space-y-2">
+                  <div className="bg-white border border-slate-100 rounded-xl p-4">
+                    <PathwayCategoryRow
+                      label="Known Onset / LKW"
+                      options={[
+                        { value: 'known', label: 'Known Onset', description: 'Symptoms began at known time' },
+                        { value: 'unknown-lkw', label: 'Unknown Onset + Known LKW', description: 'Unwitnessed stroke but last known well is known' },
+                        { value: 'unknown-no-lkw', label: 'Unknown Onset / No Usable LKW', description: 'Late-window routing will be blocked without LKW' },
+                        { value: 'wake-up', label: 'Sleep Onset (Wake-up Stroke)', description: 'Enter bedtime + wake-up time' },
+                      ]}
+                      value={onsetMode}
+                      onChange={(val) => {
+                        clearCriteriaAnswers();
+                        if (val === 'unknown-no-lkw') {
                           setOnsetMode('unknown-no-lkw');
                           setLkwTimestamp(null);
                           setWakeTimestamp(null);
                           setMinutesSinceWaking(null);
                           setHoursSinceMidpoint(null);
-                        }}
-                        variant="warning"
-                      />
-                      <CompactSelectionCard
-                        title="Sleep Onset (Wake-up Stroke)"
-                        description="Enter bedtime + wake-up time"
-                        selected={false}
-                        onClick={() => {
-                          clearCriteriaAnswers();
-                          setPendingOnsetMode('wake-up');
-                          setLkwPickerMode('sleep');
+                        } else {
+                          setPendingOnsetMode(val as Exclude<OnsetMode, 'unknown-no-lkw' | null>);
+                          setLkwPickerMode(val === 'wake-up' ? 'sleep' : 'specific');
                           setLkwPickerOpen(true);
-                        }}
-                        variant="warning"
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div className={`flex items-center justify-between px-4 py-3 rounded-xl border-2 ${
-                    onsetMode === 'known' ? 'bg-neuro-50 border-neuro-500' : 'bg-amber-50 border-amber-400'
-                  }`}>
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <Clock size={16} className={onsetMode === 'known' ? 'text-neuro-600' : 'text-amber-600'} />
-                      <span className={`text-sm font-bold truncate ${onsetMode === 'known' ? 'text-neuro-800' : 'text-amber-800'}`}>
-                        {elapsedBadge?.label}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => {
-                        clearCriteriaAnswers();
-                        setOnsetMode(null); setLkwTimestamp(null); setElapsedHours(null);
-                        setWakeTimestamp(null); setMinutesSinceWaking(null); setHoursSinceMidpoint(null); setARecognition(null);
+                        }
                       }}
-                      className="text-xs text-slate-500 hover:text-slate-700 underline transition-colors flex-shrink-0 ml-2"
-                    >
-                      Change
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Imaging modality */}
-              {setupComplete && (
-                <div className="animate-in slide-in-from-top-2">
-                  <h3 className="text-sm font-semibold text-slate-700 mb-2">Facility Imaging Available</h3>
-                  <div className="grid grid-cols-2 gap-2">
-                    <CompactSelectionCard
-                      title="MRI"
-                      description="DWI + FLAIR / PWI"
-                      selected={imagingModality === 'mri'}
-                      onClick={() => { clearCriteriaAnswers(); setImagingModality('mri'); }}
-                    />
-                    <CompactSelectionCard
-                      title="CT Perfusion"
-                      description="RAPID or equivalent"
-                      selected={imagingModality === 'ctp'}
-                      onClick={() => { clearCriteriaAnswers(); setImagingModality('ctp'); }}
                     />
                   </div>
                 </div>
+              ) : (
+                <div className={`flex items-center justify-between px-4 py-3 rounded-xl border-2 ${
+                  onsetMode === 'known' ? 'bg-neuro-50 border-neuro-500' : 'bg-amber-50 border-amber-400'
+                }`}>
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <Clock size={16} className={onsetMode === 'known' ? 'text-neuro-600' : 'text-amber-600'} />
+                    <span className={`text-sm font-bold truncate ${onsetMode === 'known' ? 'text-neuro-800' : 'text-amber-800'}`}>
+                      {elapsedBadge?.label}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      clearCriteriaAnswers();
+                      setOnsetMode(null); setLkwTimestamp(null); setElapsedHours(null);
+                      setWakeTimestamp(null); setMinutesSinceWaking(null); setHoursSinceMidpoint(null); setARecognition(null);
+                    }}
+                    className="text-xs text-slate-500 hover:text-slate-700 underline transition-colors flex-shrink-0 ml-2"
+                  >
+                    Change
+                  </button>
+                </div>
               )}
+            </div>
 
-              {isSetupComplete && (
-                <div className="pt-2 border-t border-slate-100">
-                  <LearningPearl
-                    title="Pathway Selection Logic"
-                    content={
-                      <span>
-                        <strong>Unknown onset + MRI → Path A</strong> (DWI-FLAIR, COR 2a) ·{' '}
-                        <strong>4.5–9h → Path B</strong> (perfusion mismatch, COR 2a) ·{' '}
-                        <strong>9–24h or unknown onset within 24h from LKW → Path C</strong> (LVO only, COR 2b). Late Path C requires LVO, no feasible rapid EVT, and expert thrombolytic stroke care.
-                      </span>
-                    }
-                    variant="neuro"
+            {/* Imaging modality */}
+            {setupComplete && (
+              <div className="animate-in slide-in-from-top-2">
+                <h3 className="text-sm font-semibold text-slate-700 mb-2">Facility Imaging Available</h3>
+                <div className="bg-white border border-slate-100 rounded-xl p-4">
+                  <PathwayCategoryRow
+                    label="Imaging Modality"
+                    options={[
+                      { value: 'mri', label: 'MRI', description: 'DWI + FLAIR / PWI' },
+                      { value: 'ctp', label: 'CT Perfusion', description: 'RAPID or equivalent' },
+                    ]}
+                    value={imagingModality}
+                    onChange={(val) => { clearCriteriaAnswers(); setImagingModality(val as ImagingModality); }}
                   />
                 </div>
-              )}
-            </div>
-          </CollapsibleSection>
-        </div>
-
-        {/* ════ SECTION 1: CRITERIA ════ */}
-        <div ref={el => { sectionRefs.current[1] = el; }} className="scroll-mt-4">
-          <CollapsibleSection
-            title="Criteria"
-            stepNumber={2}
-            totalSteps={3}
-            isCompleted={isCriteriaComplete}
-            isActive={activeSection === 1}
-            onToggle={() => handleSectionToggle(1)}
-            summary={getSummary(1)}
-            icon={<ScanLine size={14} />}
-            accentClass="bg-teal-100 text-teal-600"
-          >
-            <div className="space-y-6">
-
-              {/* Redirect states */}
-              {pathStage === 'standard' && (
-                <div className="flex items-start gap-3 px-4 py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm">
-                  <Check size={16} className="shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-bold">Patient within standard 4.5h window</p>
-                    <p className="text-xs mt-0.5 text-emerald-700">Apply standard IVT eligibility criteria. Extended-window protocols do not apply.</p>
-                  </div>
-                </div>
-              )}
-              {pathStage === 'outside' && (
-                <div className="flex items-start gap-3 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm">
-                  <AlertTriangle size={16} className="shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-bold">Outside all extended windows (&gt; 24h)</p>
-                    <p className="text-xs mt-0.5 text-red-700">No guideline-supported IVT indication beyond 24 hours from last known well.</p>
-                  </div>
-                </div>
-              )}
-              {pathStage === 'lkw-required' && (
-                <div className="flex items-start gap-3 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm">
-                  <AlertTriangle size={16} className="shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-bold">Usable LKW required for late-window routing</p>
-                    <p className="text-xs mt-0.5 text-amber-700">Without a reliable LKW, CT perfusion cannot support the 9–24h late-LVO pathway. Obtain LKW timing or use MRI DWI-FLAIR criteria if available for unknown-onset evaluation.</p>
-                  </div>
-                </div>
-              )}
-
-              {/* ── PATH A ── */}
-              {pathStage === 'A' && (
-                <div className="space-y-6 animate-in slide-in-from-top-2">
-                  <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-                    <span className="text-xs font-bold uppercase tracking-wider text-neuro-600 bg-neuro-50 px-2 py-0.5 rounded">Path A — DWI-FLAIR Mismatch</span>
-                    <span className="text-xs text-slate-400">COR 2a · LOE B-R</span>
-                  </div>
-
-                  <div>
-                    <h3 className="text-sm font-semibold text-slate-700 mb-1">Within 4.5h of symptom recognition?</h3>
-                    <p className="text-xs text-slate-500 mb-2">Time of awakening with symptoms, or time witness first noticed deficit</p>
-
-                    {/* Auto-computed badge when sleep onset mode was used */}
-                    {onsetMode === 'wake-up' && wakeTimestamp && minutesSinceWaking !== null ? (
-                      <div className={`flex items-start gap-3 px-4 py-3 rounded-xl border-2 mb-2 ${
-                        minutesSinceWaking <= 270
-                          ? 'bg-emerald-50 border-emerald-400'
-                          : 'bg-red-50 border-red-400'
-                      }`}>
-                        <span className="text-lg mt-0.5">{minutesSinceWaking <= 270 ? '✅' : '❌'}</span>
-                        <div className="min-w-0">
-                          <p className={`text-sm font-bold ${minutesSinceWaking <= 270 ? 'text-emerald-800' : 'text-red-800'}`}>
-                            {minutesSinceWaking <= 270
-                              ? `Within 4.5h — ${Math.round(minutesSinceWaking)} min since waking`
-                              : `Outside window — ${Math.round(minutesSinceWaking)} min since waking`}
-                          </p>
-                          <p className="text-xs text-slate-500 mt-0.5">Auto-calculated from entered wake-up time</p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="grid grid-cols-2 gap-2">
-                        <CompactSelectionCard title="Yes" description="Within 4.5h of recognition" selected={aRecognition === true} onClick={() => setARecognition(true)} />
-                        <CompactSelectionCard title="No" description="More than 4.5h since recognition" selected={aRecognition === false} onClick={() => setARecognition(false)} variant="danger" />
-                      </div>
-                    )}
-
-                    {aRecognition !== null && (
-                      <LearningPearl title="WAKE-UP Trial" content="Thomalla et al., NEJM 2018. Alteplase vs placebo for unknown-onset stroke; required DWI-FLAIR mismatch AND treatment within 4.5h of awakening. mRS 0–1 at 90 days: 53.3% vs 41.8%." variant="indigo" />
-                    )}
-                  </div>
-
-                  {aRecognition === true && (
-                    <div className="animate-in slide-in-from-top-2">
-                      <h3 className="text-sm font-semibold text-slate-700 mb-1">DWI lesion smaller than 1/3 of the MCA territory?</h3>
-                      <p className="text-xs text-slate-500 mb-2">Visually estimate on axial DWI sequence</p>
-                      <div className="grid grid-cols-2 gap-2">
-                        <CompactSelectionCard title="Yes" description="Small lesion — criteria met" selected={aDwiSmall === true} onClick={() => setADwiSmall(true)} />
-                        <CompactSelectionCard title="No" description="Large lesion ≥ 1/3 MCA" selected={aDwiSmall === false} onClick={() => setADwiSmall(false)} variant="danger" />
-                      </div>
-                    </div>
-                  )}
-
-                  {aRecognition === true && aDwiSmall === true && (
-                    <div className="animate-in slide-in-from-top-2">
-                      <h3 className="text-sm font-semibold text-slate-700 mb-1">DWI-FLAIR mismatch present?</h3>
-                      <p className="text-xs text-slate-500 mb-2">DWI positive (acute stroke) + no marked FLAIR signal change in same territory</p>
-                      <div className="grid grid-cols-2 gap-2">
-                        <CompactSelectionCard title="Yes — Mismatch" description="DWI+ and FLAIR negative / subtle" selected={aFlair === true} onClick={() => setAFlair(true)} />
-                        <CompactSelectionCard title="No — FLAIR positive" description="FLAIR shows established infarct" selected={aFlair === false} onClick={() => setAFlair(false)} variant="danger" />
-                      </div>
-                      {aFlair !== null && (
-                        <LearningPearl title="DWI-FLAIR Mismatch Principle" content="DWI becomes positive within minutes of stroke onset. FLAIR signal changes emerge after ~4.5h. A DWI+/FLAIR− pattern suggests onset < 4.5h — the tissue is still viable." variant="indigo" />
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* ── PATH B ── */}
-              {pathStage === 'B' && (
-                <div className="space-y-6 animate-in slide-in-from-top-2">
-                  <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-                    <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2 py-0.5 rounded">
-                      Path B — {imagingModality === 'ctp' ? 'CT Perfusion' : 'MRI PWI'}
-                    </span>
-                    <span className="text-xs text-slate-400">COR 2a · LOE B-R</span>
-                  </div>
-
-                  {/* Auto-computed time badge — sleep onset + CTP (EXTEND criterion) */}
-                  {onsetMode === 'wake-up' && wakeTimestamp && hoursSinceMidpoint !== null && imagingModality === 'ctp' && (
-                    <div className={`flex items-start gap-3 px-4 py-3 rounded-xl border-2 ${
-                      hoursSinceMidpoint <= 9
-                        ? 'bg-emerald-50 border-emerald-400'
-                        : 'bg-red-50 border-red-400'
-                    }`}>
-                      <span className="text-lg mt-0.5">{hoursSinceMidpoint <= 9 ? '✅' : '❌'}</span>
-                      <div className="min-w-0">
-                        <p className={`text-sm font-bold ${hoursSinceMidpoint <= 9 ? 'text-emerald-800' : 'text-red-800'}`}>
-                          {hoursSinceMidpoint <= 9
-                            ? `Within 9h of sleep midpoint — ${hoursSinceMidpoint.toFixed(1)}h elapsed`
-                            : `Outside EXTEND window — ${hoursSinceMidpoint.toFixed(1)}h since sleep midpoint`}
-                        </p>
-                        <p className="text-xs text-slate-500 mt-0.5">
-                          Auto-calculated · EXTEND criterion: ≤9h from midpoint of sleep
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* CTP branch */}
-                  {imagingModality === 'ctp' && (
-                    <>
-                      <div>
-                        <h3 className="text-sm font-semibold text-slate-700 mb-1">Ischemic core (CBF &lt;30%) &lt; 70 mL?</h3>
-                        <p className="text-xs text-slate-500 mb-2">Measured on RAPID or equivalent automated software</p>
-                        <div className="grid grid-cols-2 gap-2">
-                          <CompactSelectionCard title="Yes — Core < 70 mL" description="Small core — criteria met" selected={bCtpCore === true} onClick={() => setBCtpCore(true)} />
-                          <CompactSelectionCard title="No — Core ≥ 70 mL" description="Large established infarct" selected={bCtpCore === false} onClick={() => setBCtpCore(false)} variant="danger" />
-                        </div>
-                      </div>
-                      {bCtpCore === true && (
-                        <div className="animate-in slide-in-from-top-2">
-                          <h3 className="text-sm font-semibold text-slate-700 mb-1">Mismatch volume &gt; 10 mL AND ratio &gt; 1.2?</h3>
-                          <p className="text-xs text-slate-500 mb-2">Penumbra criteria from EXTEND trial (RAPID output)</p>
-                          <div className="grid grid-cols-2 gap-2">
-                            <CompactSelectionCard title="Yes — Mismatch met" description="Significant salvageable penumbra" selected={bCtpMismatch === true} onClick={() => setBCtpMismatch(true)} />
-                            <CompactSelectionCard title="No — Mismatch not met" description="Insufficient penumbra" selected={bCtpMismatch === false} onClick={() => setBCtpMismatch(false)} variant="danger" />
-                          </div>
-                          {bCtpMismatch !== null && (
-                            <LearningPearl title="EXTEND Trial" content="Ma et al., NEJM 2019. Alteplase 4.5–9h with RAPID-selected mismatch (core < 70 mL; mismatch > 10 mL, ratio > 1.2). mRS 0–1 at 90 days: 35.4% vs 29.5%; adjusted RR 1.44 (95% CI 1.01–2.06; P=0.04). NNT ≈ 17 from absolute risk reduction." variant="indigo" />
-                          )}
-                        </div>
-                      )}
-                    </>
-                  )}
-
-                  {/* MRI branch */}
-                  {imagingModality === 'mri' && (
-                    <>
-                      <div>
-                        <h3 className="text-sm font-semibold text-slate-700 mb-1">PWI shows perfusion deficit beyond DWI lesion?</h3>
-                        <p className="text-xs text-slate-500 mb-2">Tmax &gt; 6s or equivalent perfusion delay extending beyond DWI abnormality</p>
-                        <div className="grid grid-cols-2 gap-2">
-                          <CompactSelectionCard title="Yes — PWI deficit present" description="Perfusion delay beyond DWI" selected={bMriPwi === true} onClick={() => setBMriPwi(true)} />
-                          <CompactSelectionCard title="No — No PWI deficit" description="No perfusion abnormality" selected={bMriPwi === false} onClick={() => setBMriPwi(false)} variant="danger" />
-                        </div>
-                      </div>
-                      {bMriPwi === true && (
-                        <div className="animate-in slide-in-from-top-2">
-                          <h3 className="text-sm font-semibold text-slate-700 mb-1">Diffusion-perfusion mismatch confirmed?</h3>
-                          <p className="text-xs text-slate-500 mb-2">Penumbra volume (PWI − DWI) &gt; 10 mL with ratio &gt; 1.2</p>
-                          <div className="grid grid-cols-2 gap-2">
-                            <CompactSelectionCard title="Yes — Mismatch confirmed" description="Viable ischemic penumbra present" selected={bMriMismatch === true} onClick={() => setBMriMismatch(true)} />
-                            <CompactSelectionCard title="No — No mismatch" description="No salvageable tissue" selected={bMriMismatch === false} onClick={() => setBMriMismatch(false)} variant="danger" />
-                          </div>
-                        </div>
-                      )}
-                    </>
-                  )}
-
-                  {/* EVT question — shared for both CTP and MRI Path B */}
-                  {((imagingModality === 'ctp' && bCtpCore === true && bCtpMismatch === true) ||
-                    (imagingModality === 'mri' && bMriPwi === true && bMriMismatch === true)) && (
-                    <div className="animate-in slide-in-from-top-2">
-                      <h3 className="text-sm font-semibold text-slate-700 mb-1">EVT (thrombectomy) also indicated?</h3>
-                      <p className="text-xs text-slate-500 mb-2">LVO confirmed and EVT-capable center accessible</p>
-                      <div className="grid grid-cols-2 gap-2">
-                        <CompactSelectionCard title="Yes — Rapid EVT planned" description="Do not endorse extended IVT" selected={bEvt === true} onClick={() => setBEvt(true)} variant="warning" />
-                        <CompactSelectionCard title="No — IVT only" description="No LVO or EVT not available" selected={bEvt === false} onClick={() => setBEvt(false)} />
-                      </div>
-                      {bEvt !== null && (
-                        <LearningPearl title="Late IVT vs Rapid EVT" content="In the extended window, IVT should not be endorsed when rapid thrombectomy is already planned. This pathway applies only when prompt EVT is unavailable." variant="amber" />
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* ── PATH C ── */}
-              {pathStage === 'C' && (
-                <div className="space-y-6 animate-in slide-in-from-top-2">
-                  <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-                    <span className="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded">Path C — Late-Window LVO Only</span>
-                    <span className="text-xs text-slate-400">COR 2b · LOE B-R</span>
-                  </div>
-                  <div className="flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs">
-                    <AlertTriangle size={14} className="shrink-0 mt-0.5" />
-                    <span><strong>COR 2b — Weaker Evidence.</strong> Path C is limited to LVO with salvageable penumbra when EVT cannot be performed promptly and treatment is directed by clinicians with expertise in thrombolytic stroke care.</span>
-                  </div>
-
-                  <div>
-                    <h3 className="text-sm font-semibold text-slate-700 mb-1">Salvageable penumbra / target mismatch on perfusion imaging?</h3>
-                    <p className="text-xs text-slate-500 mb-2">CT-P or MRI-PWI showing ischemic core with surrounding hypoperfused but viable tissue</p>
-                    <div className="grid grid-cols-2 gap-2">
-                      <CompactSelectionCard title="Yes — Penumbra confirmed" description="Target mismatch present" selected={cPenumbra === true} onClick={() => setCPenumbra(true)} />
-                      <CompactSelectionCard title="No — No penumbra" description="No target mismatch" selected={cPenumbra === false} onClick={() => setCPenumbra(false)} variant="danger" />
-                    </div>
-                    {cPenumbra !== null && (
-                      <LearningPearl title="Path C Trials" content="TRACE-III (NEJM 2024, Xiong et al.) supports the 2026 AHA/ASA §4.6.3 Rec 3 Class 2b recommendation: in AIS due to LVO with salvageable penumbra, 4.5–24h from onset, who cannot receive EVT, IVT directed by clinicians with thrombolytic expertise may be beneficial. TRACE-III's inclusion was restricted to ICA/M1/M2 — this pathway uses that trial population as its evidence base, though the guideline is broader (any LVO). TIMELESS (NEJM 2024) was negative when rapid EVT was available, supporting the redirect away from extended-window IVT in EVT-feasible patients." variant="amber" />
-                    )}
-                  </div>
-
-                  {cPenumbra === true && (
-                    <div className="animate-in slide-in-from-top-2">
-                      <h3 className="text-sm font-semibold text-slate-700 mb-1">LVO (large vessel occlusion) confirmed on CTA / MRA?</h3>
-                      <p className="text-xs text-slate-500 mb-2">Qualifying Path C occlusion: internal carotid or MCA M1/M2</p>
-                      <div className="grid grid-cols-2 gap-2">
-                        <CompactSelectionCard title="Yes — LVO confirmed" description="ICA or MCA (M1/M2) occlusion" selected={cLvo === true} onClick={() => setCLvo(true)} />
-                        <CompactSelectionCard title="No — Non-LVO" description="Late Path C does not apply" selected={cLvo === false} onClick={() => setCLvo(false)} variant="danger" />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* C-LVO branch */}
-                  {cPenumbra === true && cLvo === true && (
-                    <div className="space-y-4 pl-4 border-l-2 border-slate-200 animate-in slide-in-from-top-2">
-                      <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">PATH C-LVO · TRACE-III late-window pathway</p>
-                      <div>
-                        <h3 className="text-sm font-semibold text-slate-700 mb-1">Is EVT (thrombectomy) feasible?</h3>
-                        <p className="text-xs text-slate-500 mb-2">Transfer to EVT-capable center possible within reasonable time window</p>
-                        <div className="grid grid-cols-2 gap-2">
-                          <CompactSelectionCard title="Yes — EVT feasible" description="Refer to EVT pathway" selected={cLvoEvt === true} onClick={() => setCLvoEvt(true)} variant="warning" />
-                          <CompactSelectionCard title="No — EVT not possible" description="Proceed with extended IVT" selected={cLvoEvt === false} onClick={() => setCLvoEvt(false)} />
-                        </div>
-                      </div>
-                      {cLvoEvt === false && (
-                        <div className="animate-in slide-in-from-top-2">
-                          <h3 className="text-sm font-semibold text-slate-700 mb-2">Reason EVT is not possible: <span className="text-xs font-normal text-slate-500">(select one)</span></h3>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            {EVT_BARRIERS.map(b => (
-                              <CompactSelectionCard key={b.id} title={b.label} selected={cLvoBarrier === b.id} onClick={() => setCLvoBarrier(b.id)} />
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      {cLvoEvt === false && cLvoBarrier !== null && (
-                        <div>
-                          <h3 className="text-sm font-semibold text-slate-700 mb-1">Expertise in thrombolytic stroke care available?</h3>
-                          <p className="text-xs text-slate-500 mb-2">Stroke expertise available on site or through tele-stroke support</p>
-                          <div className="grid grid-cols-2 gap-2">
-                            <CompactSelectionCard title="Yes — Expert available" description="Late IVT can be directed safely" selected={cExpertise === true} onClick={() => setCExpertise(true)} />
-                            <CompactSelectionCard title="No — Expertise unavailable" description="Do not endorse late IVT at current site" selected={cExpertise === false} onClick={() => setCExpertise(false)} variant="warning" />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Criteria complete — Next nudge */}
-              {isCriteriaComplete && (
-                <button
-                  onClick={() => setActiveSection(2)}
-                  className="w-full mt-4 py-3.5 bg-neuro-500 text-white rounded-2xl font-bold hover:bg-neuro-600 shadow-lg transition-colors duration-150 flex items-center justify-center gap-2 active:scale-[0.99] transform-gpu min-h-[44px] touch-manipulation"
-                >
-                  <Check size={16} />
-                  {result?.eligible ? 'See Dosing & Result' : 'See Assessment'}
-                </button>
-              )}
-            </div>
-          </CollapsibleSection>
-        </div>
-
-        {/* ════ SECTION 2: DECISION ════ */}
-        <div ref={el => { sectionRefs.current[2] = el; }} className="scroll-mt-4">
-          <CollapsibleSection
-            title="Decision"
-            stepNumber={3}
-            totalSteps={3}
-            isCompleted={isDecisionComplete}
-            isActive={activeSection === 2}
-            onToggle={() => handleSectionToggle(2)}
-            summary={getSummary(2)}
-            icon={<Activity size={14} />}
-            accentClass={
-              result?.variant === 'success' ? 'bg-emerald-100 text-emerald-600'
-              : result?.variant === 'danger'  ? 'bg-red-100 text-red-600'
-              : result?.variant === 'warning' ? 'bg-amber-100 text-amber-600'
-              : 'bg-slate-200 text-slate-500'
-            }
-          >
-            {result ? (
-              <div className="space-y-6 animate-in zoom-in-95 duration-300">
-
-                {/* Copy to EMR */}
-                <button
-                  onClick={copySummary}
-                  className="w-full py-3.5 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 shadow-lg transition-colors duration-150 flex items-center justify-center gap-2 active:scale-[0.99] transform-gpu min-h-[44px] touch-manipulation"
-                >
-                  <Copy size={16} />
-                  Copy to EMR
-                </button>
-
-                {/* Result card — EVT-style border-l-[8px] */}
-                <div className={`rounded-2xl border-l-[8px] shadow-md overflow-hidden p-5 md:p-8
-                  ${result.variant === 'success' ? 'border-l-emerald-500 bg-emerald-50'
-                  : result.variant === 'warning' ? 'border-l-amber-400 bg-amber-50'
-                  : result.variant === 'danger'  ? 'border-l-red-500 bg-red-50'
-                  : 'border-l-slate-400 bg-slate-50'}`}
-                >
-                  <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4
-                    ${result.variant === 'success' ? 'bg-emerald-100 text-emerald-700'
-                    : result.variant === 'warning' ? 'bg-amber-100 text-amber-700'
-                    : result.variant === 'danger'  ? 'bg-red-100 text-red-700'
-                    : 'bg-slate-100 text-slate-600'}`}
-                  >
-                    <Activity size={12} /><span>Recommendation</span>
-                  </div>
-
-                  <div className="mb-6">
-                    <div className={`text-5xl font-black tracking-tight
-                      ${result.variant === 'success' ? 'text-emerald-900'
-                      : result.variant === 'warning' ? 'text-amber-900'
-                      : result.variant === 'danger'  ? 'text-red-900'
-                      : 'text-slate-900'}`}
-                    >
-                      {result.status}
-                    </div>
-                    {result.cor && (
-                      <div className="text-lg font-medium text-slate-600 mt-1">
-                        COR {result.cor} · LOE B-R · 2026 AHA/ASA
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="pt-6 border-t border-slate-200">
-                    <div className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-2">Reasoning</div>
-                    <div className={`text-lg font-bold
-                      ${result.variant === 'success' ? 'text-emerald-900'
-                      : result.variant === 'warning' ? 'text-amber-900'
-                      : result.variant === 'danger'  ? 'text-red-900'
-                      : 'text-slate-900'}`}
-                    >
-                      {result.reason}
-                    </div>
-                    <div className="text-sm text-slate-700 mt-1 leading-relaxed">{result.details}</div>
-                  </div>
-                </div>
-
-                {/* Dosing — only when eligible */}
-                {result.eligible && result.cor && (
-                  <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Dosing</h4>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div className="p-4 rounded-xl bg-neuro-50 border border-neuro-200">
-                        <div className="flex items-center gap-1.5 mb-2">
-                          <Zap size={14} className="text-neuro-600" />
-                          <span className="text-xs font-bold text-neuro-800">Tenecteplase (TNK)</span>
-                          {result.path === 'A' && (
-                            <span className="text-xs text-neuro-500 font-medium" title="Within 4.5h of symptom recognition — §4.6.2 Rec 1 applies">Preferred</span>
-                          )}
-                          {result.path !== 'A' && (
-                            <span className="text-xs text-slate-500 font-medium" title="AHA 2026 §4.6.2 Rec 1 scopes TNK preference to <4.5h; §4.6.3 (4.5h+) is agent-neutral. Extended-window evidence (EXTEND, EPITHET, ECASS-4) is alteplase-based.">§4.6.3 agent-neutral</span>
-                          )}
-                        </div>
-                        <p className="text-base font-bold text-slate-800">0.25 mg/kg IV bolus</p>
-                        <p className="text-xs text-slate-500 mt-0.5">Maximum: 25 mg · Single bolus over 5–10 sec</p>
-                      </div>
-                      {result.showBothAgents && (
-                        <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                          <div className="flex items-center gap-1.5 mb-2">
-                            <Activity size={14} className="text-slate-500" />
-                            <span className="text-xs font-bold text-slate-700">Alteplase (tPA)</span>
-                          </div>
-                          <p className="text-base font-bold text-slate-800">0.9 mg/kg IV infusion</p>
-                          <p className="text-xs text-slate-500 mt-0.5">Maximum: 90 mg · 10% bolus + 90% over 60 min</p>
-                        </div>
-                      )}
-                    </div>
-
-                    {result.trialsBasis && result.trialsBasis.length > 0 && (
-                      <div>
-                        <p className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">Evidence Basis</p>
-                        <p className="text-xs text-slate-600">{trialList(result.trialsBasis)}</p>
-                      </div>
-                    )}
-
-                    {result.cor === '2b' && (
-                      <div className="flex items-start gap-2 pt-3 border-t border-slate-100 text-amber-700">
-                        <AlertTriangle size={14} className="shrink-0 mt-0.5" />
-                        <p className="text-xs font-medium">COR 2b — document shared decision-making with patient/surrogate before administration</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Standard-window redirect pearls */}
-                {pathStage === 'standard' && (
-                  <LearningPearl title="Standard IVT Protocol" content="For patients within 4.5h, use the standard IVT eligibility checklist. Tenecteplase 0.25 mg/kg (max 25 mg) is COR 1 per 2026 AHA/ASA for the standard window." variant="neuro" />
-                )}
-
-                <button
-                  onClick={handleReset}
-                  className="w-full py-3 border border-slate-200 text-slate-600 rounded-2xl font-semibold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 text-sm"
-                >
-                  <RotateCcw size={14} />
-                  New Patient
-                </button>
-              </div>
-            ) : (
-              <div className="py-8 text-center text-sm text-slate-400">
-                Complete Setup and Criteria to see the assessment.
               </div>
             )}
-          </CollapsibleSection>
-        </div>
+
+            {isSetupComplete && (
+              <div className="pt-2 border-t border-slate-100">
+                <PathwayLearningPearl
+                  title="Pathway Selection Logic"
+                  content={
+                    <span>
+                      <strong>Unknown onset + MRI → Path A</strong> (DWI-FLAIR, COR 2a) ·{' '}
+                      <strong>4.5–9h → Path B</strong> (perfusion mismatch, COR 2a) ·{' '}
+                      <strong>9–24h or unknown onset within 24h from LKW → Path C</strong> (LVO only, COR 2b). Late Path C requires LVO, no feasible rapid EVT, and expert thrombolytic stroke care.
+                    </span>
+                  }
+                />
+              </div>
+            )}
+          </div>
+        </PathwayRailStep>
+
+        {/* Branch chip: Setup → Criteria */}
+        {isSetupComplete && (
+          <div className="ml-8 my-2">
+            <PathwayBranchChip
+              targetFieldId="extivt-setup-summary"
+              label={getSetupSummary()}
+              onClick={() => setActiveSection(0)}
+            />
+          </div>
+        )}
+
+        {/* ════ STEP 2: CRITERIA ════ */}
+        <PathwayRailStep
+          stepNumber={2}
+          title={STEPS[1].title.toUpperCase()}
+          iconKey="imaging"
+          nodeState={step2Node}
+          segmentAboveTraversed={isSetupComplete}
+          lockedAriaLabel="Step 2, locked, awaiting completion of Step 1"
+        >
+          <div className="space-y-6">
+
+            {/* Redirect states */}
+            {pathStage === 'standard' && (
+              <div className="flex items-start gap-3 px-4 py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm">
+                <Check size={16} className="shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-bold">Patient within standard 4.5h window</p>
+                  <p className="text-xs mt-0.5 text-emerald-700">Apply standard IVT eligibility criteria. Extended-window protocols do not apply.</p>
+                </div>
+              </div>
+            )}
+            {pathStage === 'outside' && (
+              <div className="flex items-start gap-3 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm">
+                <AlertTriangle size={16} className="shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-bold">Outside all extended windows (&gt; 24h)</p>
+                  <p className="text-xs mt-0.5 text-red-700">No guideline-supported IVT indication beyond 24 hours from last known well.</p>
+                </div>
+              </div>
+            )}
+            {pathStage === 'lkw-required' && (
+              <div className="flex items-start gap-3 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm">
+                <AlertTriangle size={16} className="shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-bold">Usable LKW required for late-window routing</p>
+                  <p className="text-xs mt-0.5 text-amber-700">Without a reliable LKW, CT perfusion cannot support the 9–24h late-LVO pathway. Obtain LKW timing or use MRI DWI-FLAIR criteria if available for unknown-onset evaluation.</p>
+                </div>
+              </div>
+            )}
+
+            {/* ── PATH A ── */}
+            {pathStage === 'A' && (
+              <div className="space-y-6 animate-in slide-in-from-top-2">
+                <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                  <span className="text-xs font-bold uppercase tracking-wider text-neuro-600 bg-neuro-50 px-2 py-0.5 rounded">Path A — DWI-FLAIR Mismatch</span>
+                  <span className="text-xs text-slate-400">COR 2a · LOE B-R</span>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-700 mb-1">Within 4.5h of symptom recognition?</h3>
+                  <p className="text-xs text-slate-500 mb-2">Time of awakening with symptoms, or time witness first noticed deficit</p>
+
+                  {/* Auto-computed badge when sleep onset mode was used — §4.7 Outcome Row */}
+                  {onsetMode === 'wake-up' && wakeTimestamp && minutesSinceWaking !== null ? (
+                    <div className={`grid grid-cols-[auto_1fr] gap-3 items-center px-4 py-3 rounded-2xl border mb-2 ${
+                      minutesSinceWaking <= 270
+                        ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                        : 'bg-red-50 border-red-200 text-red-700'
+                    }`}>
+                      {minutesSinceWaking <= 270
+                        ? <Check size={20} className="text-emerald-500" aria-hidden="true" />
+                        : <AlertTriangle size={20} className="text-red-500" aria-hidden="true" />
+                      }
+                      <span className="text-sm font-medium">
+                        {minutesSinceWaking <= 270
+                          ? `Within 4.5h — ${Math.round(minutesSinceWaking)} min since waking`
+                          : `Outside window — ${Math.round(minutesSinceWaking)} min since waking`}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="bg-white border border-slate-100 rounded-xl p-4">
+                      <PathwayCategoryRow
+                        label="Within 4.5h of recognition"
+                        options={[
+                          { value: 'yes', label: 'Yes', description: 'Within 4.5h of recognition' },
+                          { value: 'no', label: 'No', description: 'More than 4.5h since recognition' },
+                        ]}
+                        value={aRecognition === null ? null : aRecognition ? 'yes' : 'no'}
+                        onChange={(val) => setARecognition(val === 'yes')}
+                      />
+                    </div>
+                  )}
+
+                  {aRecognition !== null && (
+                    <PathwayLearningPearl title="WAKE-UP Trial" content="Thomalla et al., NEJM 2018. Alteplase vs placebo for unknown-onset stroke; required DWI-FLAIR mismatch AND treatment within 4.5h of awakening. mRS 0–1 at 90 days: 53.3% vs 41.8%." />
+                  )}
+                </div>
+
+                {aRecognition === true && (
+                  <div className="animate-in slide-in-from-top-2">
+                    <h3 className="text-sm font-semibold text-slate-700 mb-1">DWI lesion smaller than 1/3 of the MCA territory?</h3>
+                    <p className="text-xs text-slate-500 mb-2">Visually estimate on axial DWI sequence</p>
+                    <div className="bg-white border border-slate-100 rounded-xl p-4">
+                      <PathwayCategoryRow
+                        label="DWI lesion size"
+                        options={[
+                          { value: 'yes', label: 'Yes — Small lesion', description: 'Small lesion — criteria met' },
+                          { value: 'no', label: 'No — Large lesion', description: 'Large lesion ≥ 1/3 MCA' },
+                        ]}
+                        value={aDwiSmall === null ? null : aDwiSmall ? 'yes' : 'no'}
+                        onChange={(val) => setADwiSmall(val === 'yes')}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {aRecognition === true && aDwiSmall === true && (
+                  <div className="animate-in slide-in-from-top-2">
+                    <h3 className="text-sm font-semibold text-slate-700 mb-1">DWI-FLAIR mismatch present?</h3>
+                    <p className="text-xs text-slate-500 mb-2">DWI positive (acute stroke) + no marked FLAIR signal change in same territory</p>
+                    <div className="bg-white border border-slate-100 rounded-xl p-4">
+                      <PathwayCategoryRow
+                        label="DWI-FLAIR mismatch"
+                        options={[
+                          { value: 'yes', label: 'Yes — Mismatch', description: 'DWI+ and FLAIR negative / subtle' },
+                          { value: 'no', label: 'No — FLAIR positive', description: 'FLAIR shows established infarct' },
+                        ]}
+                        value={aFlair === null ? null : aFlair ? 'yes' : 'no'}
+                        onChange={(val) => setAFlair(val === 'yes')}
+                      />
+                    </div>
+                    {aFlair !== null && (
+                      <PathwayLearningPearl title="DWI-FLAIR Mismatch Principle" content="DWI becomes positive within minutes of stroke onset. FLAIR signal changes emerge after ~4.5h. A DWI+/FLAIR− pattern suggests onset < 4.5h — the tissue is still viable." />
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── PATH B ── */}
+            {pathStage === 'B' && (
+              <div className="space-y-6 animate-in slide-in-from-top-2">
+                <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                  <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2 py-0.5 rounded">
+                    Path B — {imagingModality === 'ctp' ? 'CT Perfusion' : 'MRI PWI'}
+                  </span>
+                  <span className="text-xs text-slate-400">COR 2a · LOE B-R</span>
+                </div>
+
+                {/* Auto-computed time badge — sleep onset + CTP (EXTEND criterion) — §4.7 Outcome Row */}
+                {onsetMode === 'wake-up' && wakeTimestamp && hoursSinceMidpoint !== null && imagingModality === 'ctp' && (
+                  <div className={`grid grid-cols-[auto_1fr] gap-3 items-center px-4 py-3 rounded-2xl border ${
+                    hoursSinceMidpoint <= 9
+                      ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                      : 'bg-red-50 border-red-200 text-red-700'
+                  }`}>
+                    {hoursSinceMidpoint <= 9
+                      ? <Check size={20} className="text-emerald-500" aria-hidden="true" />
+                      : <AlertTriangle size={20} className="text-red-500" aria-hidden="true" />
+                    }
+                    <span className="text-sm font-medium">
+                      {hoursSinceMidpoint <= 9
+                        ? `Within 9h of sleep midpoint — ${hoursSinceMidpoint.toFixed(1)}h elapsed`
+                        : `Outside EXTEND window — ${hoursSinceMidpoint.toFixed(1)}h since sleep midpoint`}
+                    </span>
+                  </div>
+                )}
+
+                {/* CTP branch */}
+                {imagingModality === 'ctp' && (
+                  <>
+                    <div>
+                      <h3 className="text-sm font-semibold text-slate-700 mb-1">Ischemic core (CBF &lt;30%) &lt; 70 mL?</h3>
+                      <p className="text-xs text-slate-500 mb-2">Measured on RAPID or equivalent automated software</p>
+                      <div className="bg-white border border-slate-100 rounded-xl p-4">
+                        <PathwayCategoryRow
+                          label="Ischemic core volume"
+                          options={[
+                            { value: 'yes', label: 'Yes — Core < 70 mL', description: 'Small core — criteria met' },
+                            { value: 'no', label: 'No — Core ≥ 70 mL', description: 'Large established infarct' },
+                          ]}
+                          value={bCtpCore === null ? null : bCtpCore ? 'yes' : 'no'}
+                          onChange={(val) => setBCtpCore(val === 'yes')}
+                        />
+                      </div>
+                    </div>
+                    {bCtpCore === true && (
+                      <div className="animate-in slide-in-from-top-2">
+                        <h3 className="text-sm font-semibold text-slate-700 mb-1">Mismatch volume &gt; 10 mL AND ratio &gt; 1.2?</h3>
+                        <p className="text-xs text-slate-500 mb-2">Penumbra criteria from EXTEND trial (RAPID output)</p>
+                        <div className="bg-white border border-slate-100 rounded-xl p-4">
+                          <PathwayCategoryRow
+                            label="Mismatch criteria"
+                            options={[
+                              { value: 'yes', label: 'Yes — Mismatch met', description: 'Significant salvageable penumbra' },
+                              { value: 'no', label: 'No — Mismatch not met', description: 'Insufficient penumbra' },
+                            ]}
+                            value={bCtpMismatch === null ? null : bCtpMismatch ? 'yes' : 'no'}
+                            onChange={(val) => setBCtpMismatch(val === 'yes')}
+                          />
+                        </div>
+                        {bCtpMismatch !== null && (
+                          <PathwayLearningPearl title="EXTEND Trial" content="Ma et al., NEJM 2019. Alteplase 4.5–9h with RAPID-selected mismatch (core < 70 mL; mismatch > 10 mL, ratio > 1.2). mRS 0–1 at 90 days: 35.4% vs 29.5%; adjusted RR 1.44 (95% CI 1.01–2.06; P=0.04). NNT ≈ 17 from absolute risk reduction." />
+                        )}
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {/* MRI branch */}
+                {imagingModality === 'mri' && (
+                  <>
+                    <div>
+                      <h3 className="text-sm font-semibold text-slate-700 mb-1">PWI shows perfusion deficit beyond DWI lesion?</h3>
+                      <p className="text-xs text-slate-500 mb-2">Tmax &gt; 6s or equivalent perfusion delay extending beyond DWI abnormality</p>
+                      <div className="bg-white border border-slate-100 rounded-xl p-4">
+                        <PathwayCategoryRow
+                          label="PWI perfusion deficit"
+                          options={[
+                            { value: 'yes', label: 'Yes — PWI deficit present', description: 'Perfusion delay beyond DWI' },
+                            { value: 'no', label: 'No — No PWI deficit', description: 'No perfusion abnormality' },
+                          ]}
+                          value={bMriPwi === null ? null : bMriPwi ? 'yes' : 'no'}
+                          onChange={(val) => setBMriPwi(val === 'yes')}
+                        />
+                      </div>
+                    </div>
+                    {bMriPwi === true && (
+                      <div className="animate-in slide-in-from-top-2">
+                        <h3 className="text-sm font-semibold text-slate-700 mb-1">Diffusion-perfusion mismatch confirmed?</h3>
+                        <p className="text-xs text-slate-500 mb-2">Penumbra volume (PWI − DWI) &gt; 10 mL with ratio &gt; 1.2</p>
+                        <div className="bg-white border border-slate-100 rounded-xl p-4">
+                          <PathwayCategoryRow
+                            label="Diffusion-perfusion mismatch"
+                            options={[
+                              { value: 'yes', label: 'Yes — Mismatch confirmed', description: 'Viable ischemic penumbra present' },
+                              { value: 'no', label: 'No — No mismatch', description: 'No salvageable tissue' },
+                            ]}
+                            value={bMriMismatch === null ? null : bMriMismatch ? 'yes' : 'no'}
+                            onChange={(val) => setBMriMismatch(val === 'yes')}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {/* EVT question — shared for both CTP and MRI Path B */}
+                {((imagingModality === 'ctp' && bCtpCore === true && bCtpMismatch === true) ||
+                  (imagingModality === 'mri' && bMriPwi === true && bMriMismatch === true)) && (
+                  <div className="animate-in slide-in-from-top-2">
+                    <h3 className="text-sm font-semibold text-slate-700 mb-1">EVT (thrombectomy) also indicated?</h3>
+                    <p className="text-xs text-slate-500 mb-2">LVO confirmed and EVT-capable center accessible</p>
+                    <div className="bg-white border border-slate-100 rounded-xl p-4">
+                      <PathwayCategoryRow
+                        label="EVT indication"
+                        options={[
+                          { value: 'yes', label: 'Yes — Rapid EVT planned', description: 'Do not endorse extended IVT' },
+                          { value: 'no', label: 'No — IVT only', description: 'No LVO or EVT not available' },
+                        ]}
+                        value={bEvt === null ? null : bEvt ? 'yes' : 'no'}
+                        onChange={(val) => setBEvt(val === 'yes')}
+                      />
+                    </div>
+                    {bEvt !== null && (
+                      <PathwayLearningPearl title="Late IVT vs Rapid EVT" content="In the extended window, IVT should not be endorsed when rapid thrombectomy is already planned. This pathway applies only when prompt EVT is unavailable." />
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── PATH C ── */}
+            {pathStage === 'C' && (
+              <div className="space-y-6 animate-in slide-in-from-top-2">
+                <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                  <span className="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-0.5 rounded">Path C — Late-Window LVO Only</span>
+                  <span className="text-xs text-slate-400">COR 2b · LOE B-R</span>
+                </div>
+                <div className="flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs">
+                  <AlertTriangle size={14} className="shrink-0 mt-0.5" />
+                  <span><strong>COR 2b — Weaker Evidence.</strong> Path C is limited to LVO with salvageable penumbra when EVT cannot be performed promptly and treatment is directed by clinicians with expertise in thrombolytic stroke care.</span>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-700 mb-1">Salvageable penumbra / target mismatch on perfusion imaging?</h3>
+                  <p className="text-xs text-slate-500 mb-2">CT-P or MRI-PWI showing ischemic core with surrounding hypoperfused but viable tissue</p>
+                  <div className="bg-white border border-slate-100 rounded-xl p-4">
+                    <PathwayCategoryRow
+                      label="Salvageable penumbra"
+                      options={[
+                        { value: 'yes', label: 'Yes — Penumbra confirmed', description: 'Target mismatch present' },
+                        { value: 'no', label: 'No — No penumbra', description: 'No target mismatch' },
+                      ]}
+                      value={cPenumbra === null ? null : cPenumbra ? 'yes' : 'no'}
+                      onChange={(val) => setCPenumbra(val === 'yes')}
+                    />
+                  </div>
+                  {cPenumbra !== null && (
+                    <PathwayLearningPearl title="Path C Trials" content="TRACE-III (NEJM 2024, Xiong et al.) supports the 2026 AHA/ASA §4.6.3 Rec 3 Class 2b recommendation: in AIS due to LVO with salvageable penumbra, 4.5–24h from onset, who cannot receive EVT, IVT directed by clinicians with thrombolytic expertise may be beneficial. TRACE-III's inclusion was restricted to ICA/M1/M2 — this pathway uses that trial population as its evidence base, though the guideline is broader (any LVO). TIMELESS (NEJM 2024) was negative when rapid EVT was available, supporting the redirect away from extended-window IVT in EVT-feasible patients." />
+                  )}
+                </div>
+
+                {cPenumbra === true && (
+                  <div className="animate-in slide-in-from-top-2">
+                    <h3 className="text-sm font-semibold text-slate-700 mb-1">LVO (large vessel occlusion) confirmed on CTA / MRA?</h3>
+                    <p className="text-xs text-slate-500 mb-2">Qualifying Path C occlusion: internal carotid or MCA M1/M2</p>
+                    <div className="bg-white border border-slate-100 rounded-xl p-4">
+                      <PathwayCategoryRow
+                        label="LVO status"
+                        options={[
+                          { value: 'yes', label: 'Yes — LVO confirmed', description: 'ICA or MCA (M1/M2) occlusion' },
+                          { value: 'no', label: 'No — Non-LVO', description: 'Late Path C does not apply' },
+                        ]}
+                        value={cLvo === null ? null : cLvo ? 'yes' : 'no'}
+                        onChange={(val) => setCLvo(val === 'yes')}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* C-LVO branch */}
+                {cPenumbra === true && cLvo === true && (
+                  <div className="space-y-4 pl-4 border-l-2 border-slate-200 animate-in slide-in-from-top-2">
+                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">PATH C-LVO · TRACE-III late-window pathway</p>
+                    <div>
+                      <h3 className="text-sm font-semibold text-slate-700 mb-1">Is EVT (thrombectomy) feasible?</h3>
+                      <p className="text-xs text-slate-500 mb-2">Transfer to EVT-capable center possible within reasonable time window</p>
+                      <div className="bg-white border border-slate-100 rounded-xl p-4">
+                        <PathwayCategoryRow
+                          label="EVT feasibility"
+                          options={[
+                            { value: 'yes', label: 'Yes — EVT feasible', description: 'Refer to EVT pathway' },
+                            { value: 'no', label: 'No — EVT not possible', description: 'Proceed with extended IVT' },
+                          ]}
+                          value={cLvoEvt === null ? null : cLvoEvt ? 'yes' : 'no'}
+                          onChange={(val) => setCLvoEvt(val === 'yes')}
+                        />
+                      </div>
+                    </div>
+                    {cLvoEvt === false && (
+                      <div className="animate-in slide-in-from-top-2">
+                        <h3 className="text-sm font-semibold text-slate-700 mb-2">Reason EVT is not possible: <span className="text-xs font-normal text-slate-500">(select one)</span></h3>
+                        <div className="bg-white border border-slate-100 rounded-xl p-4">
+                          <PathwayCategoryRow
+                            label="EVT barrier"
+                            options={EVT_BARRIERS.map(b => ({ value: b.id, label: b.label }))}
+                            value={cLvoBarrier}
+                            onChange={(val) => setCLvoBarrier(val as EVTBarrierId)}
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {cLvoEvt === false && cLvoBarrier !== null && (
+                      <div>
+                        <h3 className="text-sm font-semibold text-slate-700 mb-1">Expertise in thrombolytic stroke care available?</h3>
+                        <p className="text-xs text-slate-500 mb-2">Stroke expertise available on site or through tele-stroke support</p>
+                        <div className="bg-white border border-slate-100 rounded-xl p-4">
+                          <PathwayCategoryRow
+                            label="Thrombolytic expertise"
+                            options={[
+                              { value: 'yes', label: 'Yes — Expert available', description: 'Late IVT can be directed safely' },
+                              { value: 'no', label: 'No — Expertise unavailable', description: 'Do not endorse late IVT at current site' },
+                            ]}
+                            value={cExpertise === null ? null : cExpertise ? 'yes' : 'no'}
+                            onChange={(val) => setCExpertise(val === 'yes')}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Criteria complete — Next nudge */}
+            {isCriteriaComplete && (
+              <button
+                onClick={() => setActiveSection(2)}
+                className="w-full mt-4 py-3.5 bg-neuro-500 text-white rounded-2xl font-bold hover:bg-neuro-600 shadow-lg transition-colors duration-150 flex items-center justify-center gap-2 active:scale-[0.99] transform-gpu min-h-[44px] touch-manipulation"
+              >
+                <Check size={16} />
+                {result?.eligible ? 'See Dosing & Result' : 'See Assessment'}
+              </button>
+            )}
+          </div>
+        </PathwayRailStep>
+
+        {/* Branch chip: Criteria → Decision */}
+        {isCriteriaComplete && (
+          <div className="ml-8 my-2">
+            <PathwayBranchChip
+              targetFieldId="extivt-criteria-summary"
+              label={getCriteriaSummary()}
+              onClick={() => setActiveSection(1)}
+            />
+          </div>
+        )}
+
+        {/* ════ STEP 3: DECISION ════ */}
+        <PathwayRailStep
+          stepNumber={3}
+          title={STEPS[2].title.toUpperCase()}
+          iconKey="decision"
+          nodeState={step3Node}
+          segmentAboveTraversed={isCriteriaComplete}
+          lockedAriaLabel="Step 3, locked, awaiting completion of Step 2"
+        >
+          {result ? (
+            <div className="space-y-6 animate-in zoom-in-95 duration-300">
+
+              {/* Copy to EMR */}
+              <button
+                onClick={copySummary}
+                className="w-full py-3.5 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 shadow-lg transition-colors duration-150 flex items-center justify-center gap-2 active:scale-[0.99] transform-gpu min-h-[44px] touch-manipulation"
+              >
+                <Copy size={16} />
+                Copy to EMR
+              </button>
+
+              {/* Result card — EVT-style border-l-[8px] */}
+              <div className={`rounded-2xl border-l-[8px] shadow-md overflow-hidden p-5 md:p-8
+                ${result.variant === 'success' ? 'border-l-emerald-500 bg-emerald-50'
+                : result.variant === 'warning' ? 'border-l-amber-400 bg-amber-50'
+                : result.variant === 'danger'  ? 'border-l-red-500 bg-red-50'
+                : 'border-l-slate-400 bg-slate-50'}`}
+              >
+                <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4
+                  ${result.variant === 'success' ? 'bg-emerald-100 text-emerald-700'
+                  : result.variant === 'warning' ? 'bg-amber-100 text-amber-700'
+                  : result.variant === 'danger'  ? 'bg-red-100 text-red-700'
+                  : 'bg-slate-100 text-slate-600'}`}
+                >
+                  <Activity size={12} /><span>Recommendation</span>
+                </div>
+
+                <div className="mb-6">
+                  <div className={`text-5xl font-black tracking-tight
+                    ${result.variant === 'success' ? 'text-emerald-900'
+                    : result.variant === 'warning' ? 'text-amber-900'
+                    : result.variant === 'danger'  ? 'text-red-900'
+                    : 'text-slate-900'}`}
+                  >
+                    {result.status}
+                  </div>
+                  {result.cor && (
+                    <div className="text-lg font-medium text-slate-600 mt-1">
+                      COR {result.cor} · LOE B-R · 2026 AHA/ASA
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-6 border-t border-slate-200">
+                  <div className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-2">Reasoning</div>
+                  <div className={`text-lg font-bold
+                    ${result.variant === 'success' ? 'text-emerald-900'
+                    : result.variant === 'warning' ? 'text-amber-900'
+                    : result.variant === 'danger'  ? 'text-red-900'
+                    : 'text-slate-900'}`}
+                  >
+                    {result.reason}
+                  </div>
+                  <div className="text-sm text-slate-700 mt-1 leading-relaxed">{result.details}</div>
+                </div>
+              </div>
+
+              {/* Dosing — only when eligible */}
+              {result.eligible && result.cor && (
+                <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Dosing</h4>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="p-4 rounded-xl bg-neuro-50 border border-neuro-200">
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <Zap size={14} className="text-neuro-600" />
+                        <span className="text-xs font-bold text-neuro-800">Tenecteplase (TNK)</span>
+                        {result.path === 'A' && (
+                          <span className="text-xs text-neuro-500 font-medium" title="Within 4.5h of symptom recognition — §4.6.2 Rec 1 applies">Preferred</span>
+                        )}
+                        {result.path !== 'A' && (
+                          <span className="text-xs text-slate-500 font-medium" title="AHA 2026 §4.6.2 Rec 1 scopes TNK preference to <4.5h; §4.6.3 (4.5h+) is agent-neutral. Extended-window evidence (EXTEND, EPITHET, ECASS-4) is alteplase-based.">§4.6.3 agent-neutral</span>
+                        )}
+                      </div>
+                      <p className="text-base font-bold text-slate-800">0.25 mg/kg IV bolus</p>
+                      <p className="text-xs text-slate-500 mt-0.5">Maximum: 25 mg · Single bolus over 5–10 sec</p>
+                    </div>
+                    {result.showBothAgents && (
+                      <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                        <div className="flex items-center gap-1.5 mb-2">
+                          <Activity size={14} className="text-slate-500" />
+                          <span className="text-xs font-bold text-slate-700">Alteplase (tPA)</span>
+                        </div>
+                        <p className="text-base font-bold text-slate-800">0.9 mg/kg IV infusion</p>
+                        <p className="text-xs text-slate-500 mt-0.5">Maximum: 90 mg · 10% bolus + 90% over 60 min</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {result.trialsBasis && result.trialsBasis.length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">Evidence Basis</p>
+                      <p className="text-xs text-slate-600">{trialList(result.trialsBasis)}</p>
+                    </div>
+                  )}
+
+                  {result.cor === '2b' && (
+                    <div className="flex items-start gap-2 pt-3 border-t border-slate-100 text-amber-700">
+                      <AlertTriangle size={14} className="shrink-0 mt-0.5" />
+                      <p className="text-xs font-medium">COR 2b — document shared decision-making with patient/surrogate before administration</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Standard-window redirect pearl */}
+              {pathStage === 'standard' && (
+                <PathwayLearningPearl title="Standard IVT Protocol" content="For patients within 4.5h, use the standard IVT eligibility checklist. Tenecteplase 0.25 mg/kg (max 25 mg) is COR 1 per 2026 AHA/ASA for the standard window." />
+              )}
+
+              <button
+                onClick={handleReset}
+                className="w-full py-3 border border-slate-200 text-slate-600 rounded-2xl font-semibold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 text-sm"
+              >
+                <RotateCcw size={14} />
+                New Patient
+              </button>
+            </div>
+          ) : (
+            <div className="py-8 text-center text-sm text-slate-400">
+              Complete Setup and Criteria to see the assessment.
+            </div>
+          )}
+        </PathwayRailStep>
       </div>
 
       {/* LKW Picker modal */}
@@ -1307,12 +1308,33 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
         }}
       />
 
+      {/* CalculatorDrawer — States A (pending) + C (verdict). No State B — result is null
+          until path-specific criteria complete, so there is no provisional-verdict surface.
+          This differs from Tier 4 EVT and is correct for ExtendedIVT. */}
+      <CalculatorDrawer
+        state={drawerState}
+        tokens={drawerTokens}
+        isExpanded={drawerExpanded}
+        onToggle={() => setDrawerExpanded(v => !v)}
+        ariaContentId="extivt-drawer-content"
+        ariaLabel="Extended IVT eligibility drawer"
+        stateAText={{ label: 'Eligibility', hint: 'Complete steps to see verdict' }}
+        collapsedLabel="Eligibility"
+        collapsedStat={
+          drawerState === 'C' && result
+            ? `${result.status} · ${result.reason.split('(')[0].trim()}`
+            : ''
+        }
+      >
+        {drawerState === 'C' && result && (
+          <div id="extivt-drawer-content" className="space-y-3 px-5 pt-4 pb-3">
+            <div className="text-base font-semibold text-slate-900">{result.reason}</div>
+            <div className="text-sm text-slate-700">{result.details}</div>
+          </div>
+        )}
+      </CalculatorDrawer>
+
       {/* Toast notifications */}
-      {showCopyToast && (
-        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[60] bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg animate-in fade-in slide-in-from-bottom-2">
-          Copied to clipboard
-        </div>
-      )}
       {showFavToast && (
         <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[60] bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg animate-in fade-in slide-in-from-bottom-2">
           {isFav ? 'Added to favorites' : 'Removed from favorites'}
