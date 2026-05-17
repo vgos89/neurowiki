@@ -1,6 +1,7 @@
-// HOME_SPEC §1.25.7 — FEATURED data array (V-curated, exactly 3 entries)
+// HOME_SPEC §1.25.7 — FEATURED data array (V-curated)
 // HOME_SPEC §1.25.7.1 — type union restricted to pathway | calculator
-// HOME_SPEC §1.25.7.2 — build-time length enforcement
+// HOME_SPEC §1.25.7.2 — build-time length enforcement (cap raised to 4
+//                       on 2026-05-17 per V direction — Stroke Code added)
 
 export type FeaturedItem = {
   id: string;
@@ -12,6 +13,14 @@ export type FeaturedItem = {
 };
 
 export const FEATURED: FeaturedItem[] = [
+  {
+    id: 'stroke-code',
+    type: 'pathway',
+    name: 'Stroke Code',
+    description: 'Bedside workflow for acute ischemic stroke — LKW, vitals, imaging, orders.',
+    categoryColor: '#dc2626',
+    href: '/pathways/stroke-code',
+  },
   {
     id: 'evt-pathway',
     type: 'pathway',
@@ -38,9 +47,11 @@ export const FEATURED: FeaturedItem[] = [
   },
 ];
 
-// HOME_SPEC §1.25.7.2 — build-time enforcement of exactly 3 entries
-if (FEATURED.length !== 3) {
+// HOME_SPEC §1.25.7.2 — build-time enforcement (3–4 entries; cap raised
+// to 4 on 2026-05-17 per V direction to add Stroke Code alongside the
+// existing EVT / Late-Window IVT / NIHSS featured items).
+if (FEATURED.length < 3 || FEATURED.length > 4) {
   throw new Error(
-    `FEATURED must contain exactly 3 entries; found ${FEATURED.length}`,
+    `FEATURED must contain 3 or 4 entries; found ${FEATURED.length}`,
   );
 }
