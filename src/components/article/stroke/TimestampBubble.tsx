@@ -164,7 +164,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
             <button
               type="button"
               onClick={() => { setEmergencyOpen(prev => !prev); setShowEmergencyThought(false); }}
-              className={`w-10 h-10 rounded-full shadow-lg transition-all border-2 flex items-center justify-center ${
+              className={`w-10 h-10 rounded-full shadow-lg transition-all border flex items-center justify-center ${
  emergencyOpen
  ? 'bg-slate-800 text-white border-slate-700 hover:bg-slate-700'
  : 'bg-red-600 text-white border-red-700 hover:bg-red-700'

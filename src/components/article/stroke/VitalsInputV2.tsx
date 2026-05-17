@@ -175,7 +175,7 @@ export const VitalsInputV2: React.FC = () => {
 
           {isBPElevated && (
             <div className="mt-3 space-y-3">
-              <div className={`p-3 rounded-lg border-2 ${
+              <div className={`p-3 rounded-lg border ${
  isBPCritical
  ? 'bg-red-50 border-red-300'
  : 'bg-orange-50 border-orange-300'

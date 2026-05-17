@@ -152,7 +152,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
                   : 'border-slate-200 bg-white hover:bg-slate-50'
               }`}
             >
-              <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${
+              <div className={`w-4 h-4 rounded-full border flex-shrink-0 flex items-center justify-center ${
                 ctResult === option.value ? 'border-neuro-500' : 'border-slate-300'
               }`}>
                 {ctResult === option.value && (
@@ -250,7 +250,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
                     : 'border-slate-200 bg-white hover:bg-slate-50'
                 }`}
               >
-                <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${
+                <div className={`w-4 h-4 rounded-full border flex-shrink-0 flex items-center justify-center ${
                   treatmentGiven === option.value ? 'border-neuro-500' : 'border-slate-300'
                 }`}>
                   {treatmentGiven === option.value && (

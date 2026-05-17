@@ -80,7 +80,7 @@ export const StrokeBasicsLayout: React.FC<StrokeBasicsLayoutProps> = ({
           {leftSidebar && (
             <button
               onClick={toggleLeftSidebar}
-              className="fixed top-1/2 -translate-y-1/2 w-10 h-20 bg-white border-2 border-slate-200 rounded-r-xl shadow-xl flex items-center justify-center hover:bg-slate-50 transition-all z-50 group hover:scale-105"
+              className="fixed top-1/2 -translate-y-1/2 w-10 h-20 bg-white border border-slate-200 rounded-r-xl shadow-xl flex items-center justify-center hover:bg-slate-50 transition-all z-50 group hover:scale-105"
               style={{
                 left: isLeftSidebarCollapsed ? '64px' : '344px', // 64px = main nav width, 344px = 64px (main nav) + 280px (sidebar)
                 transition: 'left 0.3s ease-in-out'

@@ -86,10 +86,10 @@ export const StrokeCardGrid: React.FC<StrokeCardGridProps> = ({
               'flex flex-col gap-1 p-3 rounded-xl text-left transition-all min-h-[72px]',
               card.id === 3 ? 'col-span-2' : '',
               isActive
-                ? 'border-2 border-neuro-500 bg-neuro-50 shadow-sm'
+                ? 'border border-neuro-500 bg-neuro-50 shadow-sm'
                 : filled
-                  ? 'border-2 border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'
-                  : 'border-2 border-dashed border-slate-200 bg-slate-50/60 hover:border-slate-300',
+                  ? 'border border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'
+                  : 'border border-dashed border-slate-200 bg-slate-50/60 hover:border-slate-300',
             ].join(' ')}
           >
             {/* Header row: number badge + title */}

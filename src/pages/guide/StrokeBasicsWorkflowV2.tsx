@@ -596,7 +596,7 @@ const MainContent: React.FC = () => {
 
         {/* Thrombectomy Recommendation Card */}
         {thrombectomyRecommendation && (
-          <div className="mt-4 mx-3 sm:mx-6 p-5 bg-gradient-to-r from-neuro-50 to-blue-50 border-2 border-neuro-200 rounded-2xl shadow-lg animate-in slide-in-from-bottom-4 duration-500">
+          <div className="mt-4 mx-3 sm:mx-6 p-5 bg-gradient-to-r from-neuro-50 to-blue-50 border border-neuro-200 rounded-2xl shadow-lg animate-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-start gap-4">
               <div className="flex-shrink-0 p-3 bg-gradient-to-br from-neuro-500 to-blue-600 rounded-xl shadow-md">
                 <Brain size={24} className="text-white" />
@@ -618,7 +618,7 @@ const MainContent: React.FC = () => {
                         setTimeout(() => setToastMessage(null), 2500);
                       });
                     }}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-neuro-50 text-neuro-700 text-sm font-medium rounded-lg transition-colors border-2 border-neuro-200 shadow-sm"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-neuro-50 text-neuro-700 text-sm font-medium rounded-lg transition-colors border border-neuro-200 shadow-sm"
                   >
                     <Copy size={16} />Copy to Clipboard
                   </button>

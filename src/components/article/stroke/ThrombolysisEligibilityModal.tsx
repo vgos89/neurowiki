@@ -269,7 +269,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
                 return (
                   <div key={chip.id}>
                     {/* MED-04 fix: chip body toggles contraindication; info icon controls expand only */}
-                    <div className={`relative flex min-h-[52px] rounded-xl border-2 overflow-hidden transition-colors ${
+                    <div className={`relative flex min-h-[52px] rounded-xl border overflow-hidden transition-colors ${
                       active ? 'bg-red-500 border-red-500' : 'bg-white border-slate-200 hover:border-red-200 hover:bg-red-50'
                     }`}>
                       <button
@@ -309,7 +309,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
                 const expanded = expandedChip === chip.id;
                 return (
                   <div key={chip.id}>
-                    <div className={`relative flex min-h-[52px] rounded-xl border-2 overflow-hidden transition-colors ${
+                    <div className={`relative flex min-h-[52px] rounded-xl border overflow-hidden transition-colors ${
                       active ? 'bg-red-500 border-red-500' : 'bg-white border-slate-200 hover:border-red-200 hover:bg-red-50'
                     }`}>
                       <button
@@ -348,7 +348,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
                 const expanded = expandedChip === chip.id;
                 return (
                   <div key={chip.id}>
-                    <div className={`relative flex min-h-[52px] rounded-xl border-2 overflow-hidden transition-colors ${
+                    <div className={`relative flex min-h-[52px] rounded-xl border overflow-hidden transition-colors ${
                       active ? 'bg-amber-500 border-amber-500' : 'bg-white border-slate-200 hover:border-amber-200 hover:bg-amber-50'
                     }`}>
                       <button
@@ -380,7 +380,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
 
           {/* ── 3–4.5h window extras — interactive chips (HIGH-04 fix) ── */}
           {showExtendedSection ? (
-            <section className="rounded-xl border-2 border-amber-300 bg-amber-50 overflow-hidden">
+            <section className="rounded-xl border border-amber-300 bg-amber-50 overflow-hidden">
               <div className="flex items-center gap-2 px-4 py-3 border-b border-amber-200">
                 <span className="text-xs font-bold uppercase tracking-wider text-amber-700">3–4.5h Window — Additional Exclusions</span>
                 <span className="ml-auto text-[10px] font-semibold text-amber-600 bg-amber-100 border border-amber-200 rounded-full px-2 py-0.5">Active window</span>
@@ -393,7 +393,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
                     const expanded = expandedChip === chip.id;
                     return (
                       <div key={chip.id}>
-                        <div className={`relative flex min-h-[52px] rounded-xl border-2 overflow-hidden transition-colors ${
+                        <div className={`relative flex min-h-[52px] rounded-xl border overflow-hidden transition-colors ${
                           active ? 'bg-amber-600 border-amber-600' : 'bg-white border-amber-200 hover:border-amber-400 hover:bg-amber-50'
                         }`}>
                           <button

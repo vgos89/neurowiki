@@ -17,7 +17,7 @@ export const TrialEmbed: React.FC<TrialEmbedProps> = ({ trialSlug }) => {
 
   if (!trial) {
     return (
-      <div className="p-6 bg-red-50 rounded-lg border-2 border-red-200">
+      <div className="p-6 bg-red-50 rounded-lg border border-red-200">
         <h4 className="text-lg font-bold text-red-900 mb-2">
           Trial Not Found
         </h4>
@@ -93,7 +93,7 @@ export const TrialEmbed: React.FC<TrialEmbedProps> = ({ trialSlug }) => {
           to={trialSlug}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-white hover:bg-slate-50 border-2 border-slate-200 rounded-xl transition-all text-sm font-semibold text-slate-700"
+          className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition-all text-sm font-semibold text-slate-700"
         >
           <span>View Complete Trial Details</span>
           <ArrowUpRight className="w-4 h-4" />

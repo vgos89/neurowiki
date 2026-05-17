@@ -194,7 +194,7 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
                       : 'bg-white text-slate-400 border-slate-300 opacity-50'
                   }`}
                 >
-                  <span className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                  <span className={`w-4 h-4 rounded border flex items-center justify-center ${
                     selectedFilters.has('I') ? 'border-green-600 bg-green-600' : 'border-slate-300'
                   }`}>
                     {selectedFilters.has('I') && <span className="material-icons-outlined text-white text-[10px]">check</span>}
@@ -211,7 +211,7 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
                       : 'bg-white text-slate-400 border-slate-300 opacity-50'
                   }`}
                 >
-                  <span className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                  <span className={`w-4 h-4 rounded border flex items-center justify-center ${
                     selectedFilters.has('IIa') ? 'border-blue-600 bg-blue-600' : 'border-slate-300'
                   }`}>
                     {selectedFilters.has('IIa') && <span className="material-icons-outlined text-white text-[10px]">check</span>}
@@ -228,7 +228,7 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
                       : 'bg-white text-slate-400 border-slate-300 opacity-50'
                   }`}
                 >
-                  <span className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                  <span className={`w-4 h-4 rounded border flex items-center justify-center ${
                     selectedFilters.has('IIb') ? 'border-yellow-600 bg-yellow-600' : 'border-slate-300'
                   }`}>
                     {selectedFilters.has('IIb') && <span className="material-icons-outlined text-white text-[10px]">check</span>}
@@ -245,7 +245,7 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
                       : 'bg-white text-slate-400 border-slate-300 opacity-50'
                   }`}
                 >
-                  <span className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                  <span className={`w-4 h-4 rounded border flex items-center justify-center ${
                     selectedFilters.has('III') ? 'border-red-600 bg-red-600' : 'border-slate-300'
                   }`}>
                     {selectedFilters.has('III') && <span className="material-icons-outlined text-white text-[10px]">check</span>}
@@ -262,7 +262,7 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
                       : 'bg-white text-slate-400 border-slate-300 opacity-50'
                   }`}
                 >
-                  <span className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                  <span className={`w-4 h-4 rounded border flex items-center justify-center ${
                     selectedFilters.has('none') ? 'border-slate-600 bg-slate-600' : 'border-slate-300'
                   }`}>
                     {selectedFilters.has('none') && <span className="material-icons-outlined text-white text-[10px]">check</span>}

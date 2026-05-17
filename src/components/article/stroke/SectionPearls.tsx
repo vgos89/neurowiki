@@ -65,7 +65,7 @@ export const SectionPearls: React.FC<SectionPearlsProps> = ({
   };
 
   return (
-    <div className={`mt-6 p-6 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl border-2 border-purple-200 ${
+    <div className={`mt-6 p-6 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl border border-purple-200 ${
  !showOnDesktop ? 'lg:hidden' : '' // Hide on desktop (lg and up) unless showOnDesktop=true
  }`}>
       {/* Header with Toggle */}
