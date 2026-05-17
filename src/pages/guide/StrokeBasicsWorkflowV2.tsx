@@ -49,6 +49,12 @@ export interface GWTGMilestones {
   groinPunctureTime?: Date | null;
   firstDeviceTime?: Date | null;
   firstReperfusionTime?: Date | null;
+  /** Time neuro-interventional radiology was contacted for EVT consult.
+   *  Added 2026-05-17 per V direction (TimestampBubble new field). */
+  neuroIrContactedTime?: Date | null;
+  /** Time NCC / ICU sign-out / handoff was completed.
+   *  Added 2026-05-17 per V direction (TimestampBubble new field). */
+  nccIcuSignoutTime?: Date | null;
 }
 
 const DEFAULT_STEP1_DATA: Step1Data = {
@@ -275,6 +281,8 @@ const MainContent: React.FC = () => {
             if (event === 'Code Activation') setMilestones(p => ({ ...p, doorTime: date }));
             else if (event === 'Neurology Evaluation') setMilestones(p => ({ ...p, neurologistEvaluationTime: date }));
             else if (event === 'CT Read Time') setMilestones(p => ({ ...p, ctInterpretedTime: date }));
+            else if (event === 'Neuro IR Contacted') setMilestones(p => ({ ...p, neuroIrContactedTime: date }));
+            else if (event === 'NCC/ICU Sign-out') setMilestones(p => ({ ...p, nccIcuSignoutTime: date }));
           }}
         />
 

@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, X, CheckCircle, AlertTriangle, AlertCircle } from 'lucide-react';
 
-const EVENTS = ['Code Activation', 'Neurology Evaluation', 'CT Read Time'] as const;
+const EVENTS = [
+  'Code Activation',
+  'Neurology Evaluation',
+  'CT Read Time',
+  'Neuro IR Contacted',
+  'NCC/ICU Sign-out',
+] as const;
 type EventName = typeof EVENTS[number];
 
 function formatTime(date: Date): string {
@@ -60,6 +66,8 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
     'Code Activation': null,
     'Neurology Evaluation': null,
     'CT Read Time': null,
+    'Neuro IR Contacted': null,
+    'NCC/ICU Sign-out': null,
   });
 
   // Auto-hide both thought bubbles after 5s
@@ -262,7 +270,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
             {stampedCount > 0 && (
               <div className="px-4 py-2 bg-slate-50 border-t border-slate-200">
                 <button
-                  onClick={() => setTimestamps({ 'Code Activation': null, 'Neurology Evaluation': null, 'CT Read Time': null })}
+                  onClick={() => setTimestamps({ 'Code Activation': null, 'Neurology Evaluation': null, 'CT Read Time': null, 'Neuro IR Contacted': null, 'NCC/ICU Sign-out': null })}
                   className="text-xs text-slate-400 hover:text-red-400 transition-colors"
                 >
                   Clear all timestamps

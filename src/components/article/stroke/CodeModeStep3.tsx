@@ -19,6 +19,8 @@ export interface MilestonesInput {
   groinPunctureTime?: Date | null;
   firstDeviceTime?: Date | null;
   firstReperfusionTime?: Date | null;
+  neuroIrContactedTime?: Date | null;
+  nccIcuSignoutTime?: Date | null;
 }
 
 interface CodeModeStep3Props {
@@ -120,7 +122,9 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
     note += `- Door time: ${door ? door.toLocaleString() : '—'}\n\n`;
 
     note += '3. NEUROLOGIST EVALUATION:\n';
-    note += `- Neurologist evaluation: ${milestones?.neurologistEvaluationTime ? milestones.neurologistEvaluationTime.toLocaleString() : '—'}\n\n`;
+    note += `- Neurologist evaluation: ${milestones?.neurologistEvaluationTime ? milestones.neurologistEvaluationTime.toLocaleString() : '—'}\n`;
+    note += `- Neuro IR contacted: ${milestones?.neuroIrContactedTime ? milestones.neuroIrContactedTime.toLocaleString() : '—'}\n`;
+    note += `- NCC/ICU sign-out: ${milestones?.nccIcuSignoutTime ? milestones.nccIcuSignoutTime.toLocaleString() : '—'}\n\n`;
 
     note += '4. BRAIN IMAGING TIMES:\n';
     note += `- CT ordered: ${milestones?.ctOrderedTime ? milestones.ctOrderedTime.toLocaleString() + (doorToCTOrderedMin != null ? ` (${doorToCTOrderedMin} min from door)` : '') : '—'}\n`;
