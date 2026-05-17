@@ -101,13 +101,17 @@ export const PathwayCascadeNotice: React.FC<PathwayCascadeNoticeProps> = ({
             <strong className="font-medium text-slate-700">{clearedPrefix}</strong>
             {' '}— re-confirm.
           </span>
+          {/* Undo: p-3 -m-3 wrapper achieves 44px touch target without inflating
+              the visible pill height (PATHWAY_SPEC §3.6 + §8). */}
           <button
             type="button"
             onClick={onUndo}
-            className="ml-2 px-2 py-0.5 -my-0.5 bg-white border border-slate-300 rounded-full text-xs text-slate-700 hover:bg-slate-100 hover:border-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none touch-manipulation active:scale-[0.98] transform-gpu"
+            className="ml-2 p-3 -m-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none touch-manipulation rounded-full"
             aria-label="Undo cascade clear"
           >
-            Undo
+            <span className="inline-flex items-center px-2 py-0.5 bg-white border border-slate-300 rounded-full text-xs text-slate-700 hover:bg-slate-100 hover:border-slate-400 active:scale-[0.98] transform-gpu transition-colors">
+              Undo
+            </span>
           </button>
         </div>
       )}

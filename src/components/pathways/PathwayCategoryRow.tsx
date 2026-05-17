@@ -20,8 +20,6 @@ export interface CategoryOption {
   label: string;
   /** Optional 11px description below the label (two-line stacked per §3.7.1). */
   description?: string;
-  /** Whether this option should render with a danger style. */
-  variant?: 'default' | 'danger';
 }
 
 export interface PathwayCategoryRowProps {
@@ -132,7 +130,6 @@ export const PathwayCategoryRow: React.FC<PathwayCategoryRowProps> = ({
         <div className="pb-2 space-y-0.5 animate-in slide-in-from-top-1 duration-150">
           {options.map((option) => {
             const isSelected = option.value === value;
-            const isDanger = option.variant === 'danger';
 
             return (
               <button
@@ -146,22 +143,14 @@ export const PathwayCategoryRow: React.FC<PathwayCategoryRowProps> = ({
                   active:scale-[0.98] transform-gpu touch-manipulation
                   ${
                     isSelected
-                      ? isDanger
-                        ? 'border-l-2 border-red-500 bg-red-50'
-                        : 'border-l-2 border-neuro-500 bg-neuro-50'
+                      ? 'border-l-2 border-neuro-500 bg-neuro-50'
                       : 'hover:bg-slate-50 border-l-2 border-transparent'
                   }
                 `}
               >
                 <span
                   className={`text-sm font-medium leading-snug ${
-                    isSelected
-                      ? isDanger
-                        ? 'text-red-900'
-                        : 'text-neuro-800'
-                      : isDanger
-                      ? 'text-red-700'
-                      : 'text-slate-700'
+                    isSelected ? 'text-neuro-800' : 'text-slate-700'
                   }`}
                 >
                   {option.label}
@@ -169,11 +158,7 @@ export const PathwayCategoryRow: React.FC<PathwayCategoryRowProps> = ({
                 {option.description && (
                   <span
                     className={`text-[11px] leading-snug ${
-                      isSelected
-                        ? isDanger
-                          ? 'text-red-700'
-                          : 'text-neuro-600'
-                        : 'text-slate-400'
+                      isSelected ? 'text-neuro-600' : 'text-slate-400'
                     }`}
                   >
                     {option.description}

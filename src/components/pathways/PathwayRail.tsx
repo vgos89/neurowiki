@@ -150,11 +150,6 @@ export const PathwayRailStep: React.FC<PathwayRailStepProps> = ({
   const isCompleted = nodeState === 'completed';
   const isActive = nodeState === 'active';
 
-  // Rail segment class above this node
-  const segmentClass = segmentAboveTraversed
-    ? 'border-l-2 border-neuro-500 transition-colors duration-[250ms]'
-    : 'border-l border-slate-200 transition-colors duration-[250ms]';
-
   // Node classes
   const nodeClass = isCompleted
     ? 'w-3 h-3 bg-neuro-500 rounded-full flex-shrink-0'
@@ -170,25 +165,40 @@ export const PathwayRailStep: React.FC<PathwayRailStepProps> = ({
   // Icon color
   const iconColorClass = isLocked ? 'text-slate-300' : 'text-slate-500';
 
+  // Above-segment color (cobalt if previous step completed, slate otherwise)
+  const aboveSegmentColor = segmentAboveTraversed ? 'bg-neuro-500' : 'bg-slate-200';
+  // Below-segment color (cobalt if THIS step completed, slate otherwise)
+  const belowSegmentColor = isCompleted ? 'bg-neuro-500' : 'bg-slate-200';
+
   return (
     <div
       className="relative"
       {...(isLocked && lockedAriaLabel ? { 'aria-label': lockedAriaLabel } : {})}
       {...(isActive ? { 'aria-current': 'step' as React.AriaAttributes['aria-current'] } : {})}
     >
-      {/* Vertical rail segment above this node (skip for first step) */}
+      {/* Vertical rail — continuous line at x=10, split above/below the node.
+          Rail width 2px (w-0.5), positioned left-[9px] so center sits at x=10.
+          Node column is 20px wide with items-center → node center at x=10.
+          Result: node sits exactly on the rail line per PATHWAY_SPEC §3.1+§3.2. */}
       {stepNumber > 1 && (
-        <div className={`absolute left-[10px] top-0 bottom-[100%] w-0 ${segmentClass}`} style={{ height: '0' }} />
+        <div
+          className={`absolute left-[9px] top-0 w-0.5 ${aboveSegmentColor} transition-colors duration-[250ms]`}
+          style={{ height: '14px' }}
+          aria-hidden="true"
+        />
       )}
+      <div
+        className={`absolute left-[9px] w-0.5 ${belowSegmentColor} transition-colors duration-[250ms]`}
+        style={{ top: '22px', bottom: '0' }}
+        aria-hidden="true"
+      />
 
       {/* Rail + node row */}
       <div className="flex items-start gap-3 pt-2">
-        {/* Left column: node + rail-below */}
-        <div className="flex flex-col items-center flex-shrink-0" style={{ width: '20px' }}>
-          {/* Node dot, centered on the rail line */}
+        {/* Left column: node sits on the rail line (centered at x=10 in 20px column) */}
+        <div className="flex flex-col items-center flex-shrink-0 relative z-10" style={{ width: '20px' }}>
+          {/* Node dot — opaque background covers the rail line at the node position */}
           <div className={`${nodeClass} mt-0.5`} />
-          {/* Rail segment below this node — drawn as a border on this column */}
-          {/* (The actual rail below is supplied by the NEXT step's segment-above) */}
         </div>
 
         {/* Right column: eyebrow + icon + children */}

@@ -429,49 +429,34 @@ const MigrainePathway: React.FC = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32 md:pb-20" ref={topRef}>
+    <div className="max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32 md:pb-20" ref={topRef}>
       <h1 className="sr-only">Acute Migraine Pathway — Headache Cocktail Decision Support</h1>
 
-      {/* ── Sticky compact header ─────────────────────────────────────────── */}
+      {/* ── Sticky compact header — PATHWAY_SPEC §2 anatomy ───────────────── */}
       <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-100 shadow-sm -mx-4 px-4 md:-mx-6 md:px-6">
-        <div className="max-w-3xl mx-auto flex items-center justify-between h-14 gap-3">
-          {/* Left: Back + Title */}
+        <div className="max-w-2xl mx-auto flex items-center justify-between h-14 gap-3">
+          {/* Left: Back + Identifier */}
           <div className="flex items-center gap-2 min-w-0">
             <button type="button" onClick={handleBack} aria-label="Back" className="p-2 rounded-lg hover:bg-slate-100 transition-colors shrink-0 text-slate-500 cursor-pointer bg-transparent border-0">
-              <ArrowLeft size={16} aria-hidden="true" />
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
             </button>
-            <div className="flex items-center gap-2 min-w-0">
-              <div className="p-1.5 bg-neuro-100 text-neuro-700 rounded-md shrink-0">
-                <Skull size={16} />
-              </div>
-              <span className="text-sm font-black text-slate-900 truncate">Migraine Pathway</span>
+            <div className="flex flex-col min-w-0">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">PATHWAY</span>
+              <span className="text-[15px] font-semibold text-slate-900 leading-tight tracking-tight mt-0.5 truncate">Migraine Pathway</span>
             </div>
           </div>
-          {/* Center: Step dots */}
-          <div className="flex items-center gap-1.5 shrink-0">
-            {STEPS.map((s, i) => {
-              const completedFlags = [isStep1Complete && step > 1, isStep2Complete && step > 2, isStep3Complete && step > 3, isStep4Complete && step > 4, step === 5];
-              const isComp = completedFlags[i];
-              const isCurr = step === s.id;
-              return (
-                <button
-                  key={s.id}
-                  onClick={() => { if (isComp || isCurr) setStep(s.id); }}
-                  aria-label={`Step ${s.id}: ${s.title}`}
-                  className={`transition-all duration-200 rounded-full flex items-center justify-center touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${isComp ? 'w-7 h-7 bg-emerald-500 text-white' : isCurr ? 'w-7 h-7 bg-neuro-500 text-white ring-2 ring-neuro-200' : 'w-2 h-2 bg-slate-200'}`}
-                >
-                  {isComp ? <Check size={12} /> : isCurr ? <span className="text-xs font-bold">{s.id}</span> : null}
-                </button>
-              );
-            })}
-          </div>
-          {/* Right: Favorite + Reset */}
+          {/* Right: Favorite + Reset + Copy */}
           <div className="flex items-center gap-1 shrink-0">
-            <button onClick={handleFavToggle} className="p-2 rounded-lg hover:bg-slate-100 transition-colors" aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}>
+            <button onClick={handleFavToggle} className="p-2 rounded-lg hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}>
               <Star size={16} className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'} />
             </button>
-            <button onClick={handleReset} className="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400" aria-label="Reset">
+            <button onClick={handleReset} className="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Reset">
               <RotateCcw size={16} />
+            </button>
+            <button onClick={copySummary} className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px]" aria-label="Copy summary">
+              Copy
             </button>
           </div>
         </div>
