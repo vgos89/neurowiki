@@ -302,17 +302,12 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Clinical impact:** none
 - **Origin:** filed as mandatory follow-up from arch-l55c-aspects-boston-rebuild.md (architect: claude-opus-4-7, 2026-05-13)
 
-### L5.6.1 — Migrate Cha2ds2VascCalculator onto CalculatorShell — Class C
-- **Status:** planned — 2026-05-13
-- **User-visible goal:** none (refactor)
-- **Origin:** L5.6 architect review condition C6. Cha2ds2VascCalculator currently uses the inline-everything pattern (own setToast, own Drawer, own header markup) but was excluded from L5.6 because it predates spec v1.1.
-- **Goal:** Migrate Cha2ds2VascCalculator to consume the L5.6 shell (CalculatorHeader + CalculatorDrawer + CalculatorToast + useDrawerState). This validates the shell is general enough for a 10th calculator and retires Cha2ds2Vasc's remaining inline copies.
-- **Files likely touched:** src/pages/Cha2ds2VascCalculator.tsx
-- **Acceptance checks:** tsc clean · build green · CHA2DS2-VASc renders identically to pre-migration · drawer state machine wired correctly (CHA2DS2-VASc likely uses partial-complete mode; verify by reading the file)
-- **Non-goals:** no clinical content changes; no scoring logic changes
+### L5.6.1 — Migrate Cha2ds2VascCalculator onto CalculatorShell — Class C — DONE commit 4ff84c2
+- **Status:** merged — 2026-05-15 (entry updated via librarian backlog reconciliation 2026-05-16)
+- **What shipped:** Cha2ds2VascCalculator migrated onto the L5.6 shell. Imports `CalculatorHeader`, `CalculatorDrawer`, `CalculatorToast`, `CalculatorFooter`, and `useDrawerState({ mode: 'binary', hasInteracted })`. Uses `CHADS_SEVERITY_TOKENS` mapping for drawer tokens. Zero remaining `createPortal`, zero inline setToast pattern, zero portal-wrapper classes — confirmed by grep 2026-05-16. Drawer state machine wired (binary mode — any interaction triggers State C). Validates the L5.6 shell is general enough for a 10th calculator.
+- **Companion change in same commit:** ASPECTS dead-field cleanup
 - **Clinical impact:** none
-- **Rollback plan:** git revert
-- **Blocking note:** None — L5.6 has landed; this is the validation task that confirms the shell is general enough.
+- **Origin:** L5.6 architect review condition C6 (closed)
 
 - [x] [L5] Typography audit — commit 88750a1 (2026-05-13), docs/L5-typography-audit.md (5H / 6M / 7L)
 - [x] [L5] Spacing consistency audit — commit 67dca9c (2026-05-13), docs/L5-spacing-audit.md
