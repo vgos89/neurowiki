@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ArrowLeft, Check, RotateCcw, Copy, AlertTriangle, ChevronRight, Skull, ShieldAlert, ClipboardCheck, Star } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { Check, RotateCcw, Copy, AlertTriangle, ShieldAlert, Star } from 'lucide-react';
 import { useFavorites } from '../hooks/useFavorites';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useRecents } from '../hooks/useRecents';
@@ -9,6 +9,10 @@ import { PathwayCategoryRow, type CategoryOption } from '../components/pathways/
 import { PathwayBranchChip } from '../components/pathways/PathwayBranchChip';
 import { PathwayLearningPearl } from '../components/pathways/PathwayLearningPearl';
 import { PathwayCascadeNotice } from '../components/pathways/PathwayCascadeNotice';
+import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
+import { PathwayCocktailSummary, type CocktailPill } from '../components/pathways/PathwayCocktailSummary';
+import { Chevron } from '../components/calculators/Chevron';
+import type { SeverityTokens } from '../lib/calculators/severityTokens';
 
 // --- Types ---
 interface RedFlags {
@@ -86,6 +90,45 @@ const STEPS = [
   { id: 5, title: "Plan" }
 ];
 
+// ─── TIER_TOKENS — inlined per architect condition 5 (do NOT extract to shared module in Tier 5) ──
+// Migraine uses only TIER_TOKENS.Low (neuro-blue calm chrome for State B and State C).
+// Follow-up: extract to src/lib/pathways/tierTokens.ts after PathwayBottomDrawer.tsx retirement.
+type MigraineTier = 'Low' | 'Intermediate' | 'High' | 'Negative';
+const TIER_TOKENS: Record<MigraineTier, SeverityTokens> = {
+  Low: {
+    borderColor: '#c7d2fe',         // neuro-200
+    headerBg: 'bg-neuro-50',
+    headerHover: 'hover:bg-neuro-100',
+    labelClass: 'text-[10px] font-bold text-neuro-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-neuro-700',
+    chevronClass: 'text-neuro-600',
+  },
+  Intermediate: {
+    borderColor: '#fcd34d',         // amber-300
+    headerBg: 'bg-amber-50',
+    headerHover: 'hover:bg-amber-100',
+    labelClass: 'text-[10px] font-bold text-amber-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-amber-700',
+    chevronClass: 'text-amber-700',
+  },
+  High: {
+    borderColor: '#fca5a5',         // red-300
+    headerBg: 'bg-red-50',
+    headerHover: 'hover:bg-red-100',
+    labelClass: 'text-[10px] font-bold text-red-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-red-700',
+    chevronClass: 'text-red-600',
+  },
+  Negative: {
+    borderColor: '#e2e8f0',         // slate-200
+    headerBg: 'bg-white',
+    headerHover: 'hover:bg-slate-50',
+    labelClass: 'text-[10px] font-bold text-slate-400 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-slate-900',
+    chevronClass: 'text-slate-400',
+  },
+};
+
 // ─── Cascade infrastructure ────────────────────────────────────────────────
 // When safety toggles change (safety→cocktail auto-deselect, §3.6 Pattern A),
 // we surface a PathwayCascadeNotice inline under the Safety Profile panel.
@@ -118,7 +161,7 @@ const MigrainePathway: React.FC = () => {
   const cocktailRef = useRef<HTMLDivElement>(null);
   const antiemeticRef = useRef<HTMLDivElement>(null);
   const ketorolacRef = useRef<HTMLDivElement>(null);
-  const dexRef = useRef<HTMLDivElement>(null);
+  const dexamethasoneRef = useRef<HTMLDivElement>(null);
   const addonsRef = useRef<HTMLDivElement>(null);
 
   // Favorites
@@ -194,8 +237,7 @@ const MigrainePathway: React.FC = () => {
   });
 
   const [copyToast, setCopyToast] = useState(false);
-
-  const [removedAlerts, setRemovedAlerts] = useState<string[]>([]);
+  const [drawerExpanded, setDrawerExpanded] = useState(false);
 
   // ─── Cascade notice state ─────────────────────────────────────────────────
   const [cascadeEvent, setCascadeEvent] = useState<CascadeEvent | null>(null);
@@ -294,9 +336,7 @@ const MigrainePathway: React.FC = () => {
       }
 
       if (alerts.length > 0) {
-          setRemovedAlerts(prev => [...prev, ...alerts]);
-          setTimeout(() => setRemovedAlerts([]), 5000);
-          // Surface PathwayCascadeNotice with Undo capability
+          // Surface PathwayCascadeNotice with Undo capability (PathwayCascadeNotice replaces legacy toast)
           setCascadeEvent({
               clearedFields: clearedForNotice,
               snapshot: { cocktail: cocktailSnapshot, firstLineAddOns: addOnsSnapshot },
@@ -318,7 +358,6 @@ const MigrainePathway: React.FC = () => {
     setDifferential({ clusterPhenotype: false, indomethacinResponsive: false, trigeminalNeuralgia: false, statusMigrainosus: false });
     setMohScreen({ headacheDaysHigh: false, acuteMedOveruse: false });
     setCascadeEvent(null);
-    setRemovedAlerts([]);
   };
 
   const generateSummary = () => {
@@ -387,12 +426,17 @@ const MigrainePathway: React.FC = () => {
     setTimeout(() => setCopyToast(false), 2000);
   };
 
+  // SafetyToggle red selected-state retained per clinical-pattern-a-fix-tier-5
+  // — patient-fact-with-cascade exception to PATHWAY_SPEC §4.2 input-chrome
+  // neutrality. Do NOT propagate this red pattern to tri-button decision
+  // groups (§4.2 / §11#6 forbids).
   const SafetyToggle = ({ label, active, onClick }: { label: string, active: boolean, onClick: () => void }) => (
-      <button 
+      <button
+        type="button"
         onClick={onClick}
-        className={`px-3 py-3 rounded-lg text-sm font-bold border transition-all touch-manipulation ${
-            active 
-            ? 'bg-red-100 text-red-800 border-red-200 shadow-inner' 
+        className={`px-3 py-3 rounded-full text-sm font-semibold border transition-all touch-manipulation ${
+            active
+            ? 'bg-red-100 text-red-800 border-red-200'
             : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300'
         }`}
       >
@@ -428,6 +472,57 @@ const MigrainePathway: React.FC = () => {
     return parts.length ? parts.join(' · ') : 'Cocktail pending';
   };
 
+  // ─── Drawer state (architect condition 1 / 3c) ─────────────────────────────
+  // State A: pre-decision. State B: cocktail-assembly underway. State C: post-cocktail/plan ready.
+  const hasAnyDrug = !!(cocktail.antiemetic || cocktail.ketorolac || cocktail.dexamethasone || cocktail.benadryl);
+  const drawerState: 'A' | 'B' | 'C' =
+    step >= 4 ? 'C'
+    : (step === 3 && hasAnyDrug) ? 'B'
+    : 'A';
+
+  // ─── Cocktail pills derivation (architect condition 4 + clinical condition 3) ──
+  // Consumer pre-formats each pill label with max-dose suffix where clinically meaningful.
+  const antiemeticLabelMap: Record<string, string> = {
+    prochlorperazine: 'Prochlorperazine 10mg IV',
+    metoclopramide:   'Metoclopramide 10mg IV',
+    ondansetron:      'Ondansetron 4-8mg IV',
+  };
+
+  const cocktailPills = useMemo<CocktailPill[]>(() => {
+    const pills: CocktailPill[] = [];
+    // Benadryl first (was first selected by default)
+    if (cocktail.benadryl) {
+      pills.push({ pillId: 'benadryl', label: 'Diphenhydramine 25/50mg IV' });
+    }
+    if (cocktail.antiemetic) {
+      const base = antiemeticLabelMap[cocktail.antiemetic] ?? `${cocktail.antiemetic} IV`;
+      pills.push({ pillId: 'antiemetic', label: base });
+    }
+    if (cocktail.ketorolac) {
+      // max-dose suffix per clinical condition 3: ketorolac has a repeat-dose ceiling
+      pills.push({ pillId: 'ketorolac', label: `Ketorolac ${cocktail.ketorolac}mg IV (max 2 doses)` });
+    }
+    if (cocktail.dexamethasone) {
+      pills.push({ pillId: 'dexamethasone', label: `Dexamethasone ${cocktail.dexamethasone}mg IV` });
+    }
+    return pills;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cocktail]);
+
+  // ─── onEditDrug — tap-to-edit handler (3f) ─────────────────────────────────
+  const onEditDrug = useCallback((pillId: string) => {
+    setStep(3);
+    const refMap: Record<string, React.RefObject<HTMLDivElement>> = {
+      antiemetic:    antiemeticRef,
+      ketorolac:     ketorolacRef,
+      dexamethasone: dexamethasoneRef,
+      benadryl:      cocktailRef,
+    };
+    setTimeout(() => {
+      refMap[pillId]?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  }, [antiemeticRef, ketorolacRef, dexamethasoneRef, cocktailRef]);
+
   return (
     <div className="max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32 md:pb-20" ref={topRef}>
       <h1 className="sr-only">Acute Migraine Pathway — Headache Cocktail Decision Support</h1>
@@ -462,17 +557,7 @@ const MigrainePathway: React.FC = () => {
         </div>
       </div>
 
-      {/* Alerts (legacy fixed toast — keep for safety) */}
-      {removedAlerts.length > 0 && (
-          <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4">
-              <div className="bg-red-600 text-white px-4 py-3 rounded-xl shadow-2xl flex items-start space-x-3 animate-in slide-in-from-top-2">
-                  <ShieldAlert className="shrink-0 mt-0.5" />
-                  <div className="text-sm font-medium">
-                      {removedAlerts.map((msg, i) => <div key={i}>{msg}</div>)}
-                  </div>
-              </div>
-          </div>
-      )}
+      {/* Legacy toast removed (E-7). PathwayCascadeNotice at field-safety now handles cascade feedback. */}
 
       {/* ── Step rail ─────────────────────────────────────────────────────── */}
       <div className="space-y-0 px-1 mt-4">
@@ -542,7 +627,7 @@ const MigrainePathway: React.FC = () => {
               ) : (
                 <div className="flex justify-end pt-2">
                   <button onClick={() => setStep(2)} className="px-6 py-3 bg-neuro-600 text-white font-bold rounded-xl shadow-lg hover:bg-neuro-700 transition-all flex items-center min-h-[44px]">
-                    No Red Flags — Continue <ChevronRight size={18} className="ml-2" />
+                    No Red Flags — Continue <Chevron direction="right" className="ml-2" />
                   </button>
                 </div>
               )}
@@ -554,7 +639,7 @@ const MigrainePathway: React.FC = () => {
         <PathwayRailStep
           stepNumber={2}
           title="TRIAGE"
-          iconKey="triage"
+          iconKey="clinical"
           nodeState={isStep2Complete && step > 2 ? 'completed' : step >= 2 ? 'active' : 'locked'}
           segmentAboveTraversed={isStep1Complete && step > 1}
           lockedAriaLabel="Step 2 Triage, awaiting Step 1"
@@ -579,25 +664,25 @@ const MigrainePathway: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <button
                     onClick={() => setDifferential({ clusterPhenotype: false, indomethacinResponsive: false, trigeminalNeuralgia: false, statusMigrainosus: differential.statusMigrainosus })}
-                    className={`text-left p-3 rounded-xl border-2 transition-all touch-manipulation min-h-[44px] ${!differential.clusterPhenotype && !differential.indomethacinResponsive && !differential.trigeminalNeuralgia ? 'border-neuro-500 bg-neuro-50' : 'border-slate-200 bg-white'}`}>
+                    className={`text-left p-3 rounded-xl border transition-all touch-manipulation min-h-[44px] ${!differential.clusterPhenotype && !differential.indomethacinResponsive && !differential.trigeminalNeuralgia ? 'border-neuro-500 bg-neuro-50' : 'border-slate-200 bg-white'}`}>
                     <div className="font-semibold text-sm text-slate-900">Migraine — proceed</div>
                     <div className="text-xs text-slate-500 mt-0.5">Default acute-headache pathway.</div>
                   </button>
                   <button
                     onClick={() => setDifferential({ clusterPhenotype: true, indomethacinResponsive: false, trigeminalNeuralgia: false, statusMigrainosus: false })}
-                    className={`text-left p-3 rounded-xl border-2 transition-all touch-manipulation min-h-[44px] ${differential.clusterPhenotype ? 'border-amber-500 bg-amber-50' : 'border-slate-200 bg-white'}`}>
+                    className={`text-left p-3 rounded-xl border transition-all touch-manipulation min-h-[44px] ${differential.clusterPhenotype ? 'border-amber-500 bg-amber-50' : 'border-slate-200 bg-white'}`}>
                     <div className="font-semibold text-sm text-slate-900">Cluster features</div>
                     <div className="text-xs text-slate-500 mt-0.5">Unilateral orbital/temporal + autonomic features + restlessness, 15–180 min attacks.</div>
                   </button>
                   <button
                     onClick={() => setDifferential({ clusterPhenotype: false, indomethacinResponsive: false, trigeminalNeuralgia: true, statusMigrainosus: false })}
-                    className={`text-left p-3 rounded-xl border-2 transition-all touch-manipulation min-h-[44px] ${differential.trigeminalNeuralgia ? 'border-amber-500 bg-amber-50' : 'border-slate-200 bg-white'}`}>
+                    className={`text-left p-3 rounded-xl border transition-all touch-manipulation min-h-[44px] ${differential.trigeminalNeuralgia ? 'border-amber-500 bg-amber-50' : 'border-slate-200 bg-white'}`}>
                     <div className="font-semibold text-sm text-slate-900">TN features</div>
                     <div className="text-xs text-slate-500 mt-0.5">Paroxysmal electric-shock pain in trigeminal distribution, triggered by light touch/chewing.</div>
                   </button>
                   <button
                     onClick={() => setDifferential({ clusterPhenotype: false, indomethacinResponsive: true, trigeminalNeuralgia: false, statusMigrainosus: differential.statusMigrainosus })}
-                    className={`text-left p-3 rounded-xl border-2 transition-all touch-manipulation min-h-[44px] ${differential.indomethacinResponsive ? 'border-amber-500 bg-amber-50' : 'border-slate-200 bg-white'}`}>
+                    className={`text-left p-3 rounded-xl border transition-all touch-manipulation min-h-[44px] ${differential.indomethacinResponsive ? 'border-amber-500 bg-amber-50' : 'border-slate-200 bg-white'}`}>
                     <div className="font-semibold text-sm text-slate-900">Indomethacin-responsive features</div>
                     <div className="text-xs text-slate-500 mt-0.5">Side-locked unilateral pain + cranial autonomic features (PH or HC).</div>
                   </button>
@@ -622,7 +707,7 @@ const MigrainePathway: React.FC = () => {
 
               {/* B1: Cluster terminal card */}
               {differential.clusterPhenotype && (
-                <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-4">
+                <div className="bg-amber-50 border border-amber-300 rounded-xl p-4">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-1">Cluster Headache — Distinct Acute Protocol</p>
                   <p className="text-xs text-amber-800 mb-3">Burish 2024 Table 6-3. AHS Grade A first-line triad. Migraine cocktail not indicated.</p>
                   <div className="space-y-2">
@@ -648,7 +733,7 @@ const MigrainePathway: React.FC = () => {
 
               {/* B4: TN terminal card */}
               {differential.trigeminalNeuralgia && (
-                <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-4">
+                <div className="bg-amber-50 border border-amber-300 rounded-xl p-4">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-1">Trigeminal Neuralgia — Route Out</p>
                   <p className="text-xs text-amber-800 mb-3">Nahas 2024 Table 10-2. Migraine cocktail not indicated.</p>
                   <div className="bg-white p-3 rounded-lg border border-amber-200 space-y-2">
@@ -686,15 +771,15 @@ const MigrainePathway: React.FC = () => {
                 <div id="field-caresetting">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Triage &amp; Care Setting</p>
                   <div className="space-y-2">
-                    <button onClick={() => setCareSetting('adequate')} className={`w-full text-left p-4 rounded-xl border-2 transition-all active:scale-[0.99] touch-manipulation min-h-[44px] ${careSetting === 'adequate' ? 'border-emerald-500 bg-emerald-50 text-emerald-900' : 'border-slate-200 hover:border-neuro-200'}`}>
+                    <button onClick={() => setCareSetting('adequate')} className={`w-full text-left p-4 rounded-xl border transition-all active:scale-[0.99] touch-manipulation min-h-[44px] ${careSetting === 'adequate' ? 'border-emerald-500 bg-emerald-50 text-emerald-900' : 'border-slate-200 hover:border-neuro-200'}`}>
                       <div className="font-semibold text-sm">Adequate response to home therapy</div>
                       <p className="text-xs text-slate-500 mt-0.5">Pain manageable, able to tolerate oral fluids.</p>
                     </button>
-                    <button onClick={() => setCareSetting('incomplete')} className={`w-full text-left p-4 rounded-xl border-2 transition-all active:scale-[0.99] touch-manipulation min-h-[44px] ${careSetting === 'incomplete' ? 'border-neuro-500 bg-neuro-50 text-neuro-900' : 'border-slate-200 hover:border-neuro-200'}`}>
+                    <button onClick={() => setCareSetting('incomplete')} className={`w-full text-left p-4 rounded-xl border transition-all active:scale-[0.99] touch-manipulation min-h-[44px] ${careSetting === 'incomplete' ? 'border-neuro-500 bg-neuro-50 text-neuro-900' : 'border-slate-200 hover:border-neuro-200'}`}>
                       <div className="font-semibold text-sm">Incomplete / Inconsistent response</div>
                       <p className="text-xs text-slate-500 mt-0.5">Home meds failed, significant pain persists.</p>
                     </button>
-                    <button onClick={() => setCareSetting('vomiting')} className={`w-full text-left p-4 rounded-xl border-2 transition-all active:scale-[0.99] touch-manipulation min-h-[44px] ${careSetting === 'vomiting' ? 'border-neuro-500 bg-neuro-50 text-neuro-900' : 'border-slate-200 hover:border-neuro-200'}`}>
+                    <button onClick={() => setCareSetting('vomiting')} className={`w-full text-left p-4 rounded-xl border transition-all active:scale-[0.99] touch-manipulation min-h-[44px] ${careSetting === 'vomiting' ? 'border-neuro-500 bg-neuro-50 text-neuro-900' : 'border-slate-200 hover:border-neuro-200'}`}>
                       <div className="font-semibold text-sm">Severe Nausea / Vomiting</div>
                       <p className="text-xs text-slate-500 mt-0.5">Cannot tolerate oral medications or fluids.</p>
                     </button>
@@ -723,7 +808,7 @@ const MigrainePathway: React.FC = () => {
                   <div className="text-emerald-600 font-semibold text-sm">Discharge / Outpatient Management.</div>
                 ) : (
                   <button disabled={!careSetting} onClick={() => setStep(3)} className="px-6 py-3 bg-neuro-600 text-white font-bold rounded-xl shadow-lg hover:bg-neuro-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center min-h-[44px]">
-                    Proceed to Cocktail <ChevronRight size={18} className="ml-2" />
+                    Proceed to Cocktail <Chevron direction="right" className="ml-2" />
                   </button>
                 )}
               </div>
@@ -760,15 +845,18 @@ const MigrainePathway: React.FC = () => {
                   <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Patient Safety Profile</p>
                 </div>
                 <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs font-medium text-slate-500 mb-1.5">Renal Function</label>
-                    <select value={safety.renal} onChange={(e) => setSafety({...safety, renal: e.target.value as RenalStatus})} className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 min-h-[44px]">
-                      <option value="normal">Normal (&gt;50)</option>
-                      <option value="30-50">eGFR 30–50</option>
-                      <option value="below30">eGFR &lt; 30</option>
-                      <option value="dialysis">Dialysis</option>
-                    </select>
-                  </div>
+                  <PathwayCategoryRow
+                    label="Renal Function"
+                    options={[
+                      { value: 'normal',   label: 'Normal (eGFR > 50)',   description: 'No renal contraindications to standard dosing.' },
+                      { value: '30-50',    label: 'eGFR 30–50',           description: 'Ketorolac contraindicated (GFR < 50). Use ketorolac-free cocktail.' },
+                      { value: 'below30',  label: 'eGFR < 30',            description: 'Ketorolac contraindicated. Magnesium: avoid or use with extreme caution.' },
+                      { value: 'dialysis', label: 'Dialysis',              description: 'Ketorolac contraindicated. Magnesium: contraindicated (cannot clear).' },
+                    ] as CategoryOption[]}
+                    value={safety.renal}
+                    onChange={(v) => setSafety({...safety, renal: v as RenalStatus})}
+                    defaultOpen={false}
+                  />
                   <div className="flex flex-wrap gap-2">
                     <SafetyToggle label="Pregnant" active={safety.pregnant} onClick={() => setSafety({...safety, pregnant: !safety.pregnant})} />
                     <SafetyToggle label="Age > 65" active={safety.age65} onClick={() => setSafety({...safety, age65: !safety.age65})} />
@@ -864,7 +952,7 @@ const MigrainePathway: React.FC = () => {
                 </div>
 
                 {/* D: Dexamethasone — PathwayCategoryRow (disabled when contraindicated) */}
-                <div ref={dexRef} className={checkEligibility('dexamethasone').disabled ? 'opacity-50' : ''}>
+                <div ref={dexamethasoneRef} className={checkEligibility('dexamethasone').disabled ? 'opacity-50' : ''}>
                   {checkEligibility('dexamethasone').disabled ? (
                     <div className="py-3 border-b border-slate-100 flex items-center justify-between min-h-[44px]">
                       <span className="text-sm font-medium text-slate-500">Dexamethasone</span>
@@ -995,7 +1083,7 @@ const MigrainePathway: React.FC = () => {
               <div className="flex justify-between items-center">
                 <button onClick={() => setStep(2)} className="text-slate-400 hover:text-slate-600 font-semibold px-2 min-h-[44px]">Back</button>
                 <button onClick={() => setStep(4)} className="px-6 py-3 bg-neuro-600 text-white font-bold rounded-xl shadow-lg hover:bg-neuro-700 transition-all flex items-center min-h-[44px]">
-                  Administer &amp; Check Response <ChevronRight size={18} className="ml-2" />
+                  Administer &amp; Check Response <Chevron direction="right" className="ml-2" />
                 </button>
               </div>
             </div>
@@ -1006,7 +1094,7 @@ const MigrainePathway: React.FC = () => {
         <PathwayRailStep
           stepNumber={4}
           title="RESPONSE"
-          iconKey="decision"
+          iconKey="imaging"
           nodeState={isStep4Complete && step > 4 ? 'completed' : step >= 4 ? 'active' : 'locked'}
           segmentAboveTraversed={isStep3Complete && step > 3}
           lockedAriaLabel="Step 4 Response, awaiting Step 3"
@@ -1029,7 +1117,7 @@ const MigrainePathway: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button
                     onClick={() => { setResponseImproved(true); setStep(5); }}
-                    className="p-4 bg-emerald-50 border-2 border-emerald-100 rounded-xl hover:border-emerald-500 hover:shadow-md transition-all group min-h-[44px]"
+                    className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl hover:border-emerald-500 hover:shadow-md transition-all group min-h-[44px]"
                   >
                     <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
                       <Check size={20} />
@@ -1039,7 +1127,7 @@ const MigrainePathway: React.FC = () => {
                   </button>
                   <button
                     onClick={() => setResponseImproved(false)}
-                    className={`p-4 border-2 rounded-xl hover:shadow-md transition-all group min-h-[44px] ${responseImproved === false ? 'bg-neuro-50 border-neuro-500 ring-2 ring-neuro-200' : 'bg-slate-50 border-slate-200 hover:border-neuro-500'}`}
+                    className={`p-4 border rounded-xl hover:shadow-md transition-all group min-h-[44px] ${responseImproved === false ? 'bg-neuro-50 border-neuro-500 ring-2 ring-neuro-200' : 'bg-slate-50 border-slate-200 hover:border-neuro-500'}`}
                   >
                     <div className="w-10 h-10 bg-neuro-100 text-neuro-600 rounded-full flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
                       <AlertTriangle size={20} />
@@ -1131,7 +1219,7 @@ const MigrainePathway: React.FC = () => {
 
                   <div className="flex justify-end mt-3">
                     <button onClick={() => setStep(5)} className="px-6 py-3 bg-neuro-600 text-white font-bold rounded-xl shadow-lg hover:bg-neuro-700 transition-all flex items-center min-h-[44px]">
-                      Finalize Plan <ChevronRight size={18} className="ml-2" />
+                      Finalize Plan <Chevron direction="right" className="ml-2" />
                     </button>
                   </div>
                 </div>
@@ -1194,21 +1282,8 @@ const MigrainePathway: React.FC = () => {
                 )}
               </div>
 
-              {/* Treatment Plan summary */}
-              <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-xl relative overflow-hidden">
-                <div className="relative z-10">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <div className="p-2 bg-white/10 rounded-lg"><ClipboardCheck size={22} /></div>
-                    <h2 className="text-xl font-black">Treatment Plan</h2>
-                  </div>
-                  <div className="space-y-3 opacity-90 text-sm font-mono">
-                    {generateSummary().split('\n').map((line, i) => (
-                      <div key={i} className={line.startsWith('-') ? 'ml-4' : 'font-bold mt-3 first:mt-0'}>{line}</div>
-                    ))}
-                  </div>
-                </div>
-                <div className="absolute top-0 right-0 w-64 h-64 bg-neuro-500 rounded-full blur-3xl opacity-20 -mr-16 -mt-16"></div>
-              </div>
+              {/* Treatment Plan summary — content rendered in CalculatorDrawer State C below (3g).
+                  Dark hero card removed (E-8). Per-line className pattern preserved per clinical condition 4. */}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button onClick={copySummary} className="py-3 bg-neuro-600 text-white font-bold rounded-xl shadow-lg hover:bg-neuro-700 transition-all flex items-center justify-center active:scale-95 min-h-[44px]">
@@ -1223,6 +1298,60 @@ const MigrainePathway: React.FC = () => {
         </PathwayRailStep>
 
       </div>{/* end step rail */}
+
+      {/* ── CalculatorDrawer — Treatment Plan (Tier 5 migration) ──────────────
+          State A: pre-decision. State B: cocktail-assembly (PathwayCocktailSummary).
+          State C: full plan rendered from unchanged generateSummary() (CLIN-2 preserved by construction).
+          Mirrors EvtPathway.tsx lines 1803-1869 (Tier 4 pattern). */}
+      <CalculatorDrawer
+        state={drawerState}
+        tokens={
+          drawerState === 'C' ? TIER_TOKENS.Low
+          : drawerState === 'B' ? TIER_TOKENS.Low
+          : null
+        }
+        isExpanded={drawerExpanded}
+        onToggle={() => setDrawerExpanded(v => !v)}
+        ariaContentId="migraine-drawer-content"
+        ariaLabel="Treatment plan drawer"
+        stateBTappable={true}
+        stateAText={{ label: 'Treatment Plan', hint: 'Complete steps to see plan' }}
+        stateBText={{ label: `Cocktail · ${cocktailPills.length} drug${cocktailPills.length === 1 ? '' : 's'}`, hint: 'Tap to review' }}
+        collapsedLabel="Treatment Plan"
+        collapsedStat={
+          drawerState === 'C' ? `Full cocktail · ${cocktailPills.length} agent${cocktailPills.length === 1 ? '' : 's'}`
+          : drawerState === 'B' ? `Cocktail · ${cocktailPills.length} drug${cocktailPills.length === 1 ? '' : 's'}`
+          : ''
+        }
+      >
+        {/* Drawer children — render switches by state */}
+        {drawerState === 'B' && (
+          <PathwayCocktailSummary
+            drugs={cocktailPills}
+            onEditDrug={onEditDrug}
+          />
+        )}
+        {drawerState === 'C' && (
+          <div
+            id="migraine-drawer-content"
+            className="bg-white border-t border-slate-100 px-5 py-4 max-h-[45vh] overflow-y-auto"
+          >
+            {/* Per-line className preserved per clinical condition 4:
+                bold section headers (FIRST-LINE COCKTAIL:, MOH DISCHARGE COUNSELING (..., etc.)
+                + indented dash-prefixed drug lines. Content sourced from unchanged generateSummary(). */}
+            <div className="space-y-0 text-sm text-slate-700">
+              {generateSummary().split('\n').map((line, i) => (
+                <div
+                  key={i}
+                  className={line.startsWith('-') ? 'ml-4' : 'font-bold mt-3 first:mt-0'}
+                >
+                  {line.startsWith('-') ? line.slice(1).trim() : line}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </CalculatorDrawer>
 
       {/* Disclaimer Footer */}
       <div className="mt-8 text-center text-xs text-slate-400 max-w-lg mx-auto leading-relaxed">
