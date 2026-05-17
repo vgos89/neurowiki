@@ -184,7 +184,17 @@ All clinical content must be traceable to a named guideline with year. No conten
 - ELAN pathway fix — commit 92e0a84
 - Duplicate fix — commit 35325c8
 
-## Current State (as of 2026-05-08)
+## Recent Work (post-ship fixes — 2026-05-16)
+
+**Pattern A post-ship fix series:** 5-commit series addressing 31 violations + 26 usage bugs from Pattern A v3 content audit. All three pathways now consume spec-mandated `CalculatorDrawer` (EVT retired `PathwayBottomDrawer`, Migraine migrated bespoke hero card). New `PathwayCocktailSummary` primitive shipping with Migraine pathway (handles live-cocktail state, clipboard, animation). All primitives (PathwayRail, PathwayLearningPearl, PathwayCascadeNotice, PathwayCategoryRow) patched for zero-height, icon sizing, button state consistency. Cross-pathway header sweep removes visual duplicates (step-dot clusters, icon-tile flourish) and adds canonical PATHWAY eyebrow + Copy pill, max-w-2xl, font-semibold. SE content rebuild fixes anatomy mismatch in Dose/Outcome rows, glucose check tri-button, and "Stage 2 ASM"→"Stage 2 Agent" wording. No clinical text changes — render-surface and primitive consolidation only. Gate 6 live-verify: PASS on all three pathway routes post-deploy.
+
+- Commits: 19f2a47 (audit doc), 0078c3b (Tier 1–2), bfa5c6d (Tier 3 SE), 1e4eecf (Tier 4 EVT), 77ce4e8 (Tier 5 Migraine)
+- Architects: arch-pattern-a-fix-tier-1-2.md, arch-pattern-a-fix-tier-4.md, arch-pattern-a-fix-tier-5.md
+- Clinical reviewers: clinical-pattern-a-fix-tier-4.md, clinical-pattern-a-fix-tier-5.md (both approve-with-conditions resolved)
+
+## Current State (as of 2026-05-16)
+
+**Pattern A post-ship fixes landed** — all three pathways now on spec-mandated CalculatorDrawer; PathwayCocktailSummary new primitive shipped; all primitive render bugs fixed.
 
 **Layer 1 — Foundation:** COMPLETE
 **Layer 2 — Stroke Pathway:** COMPLETE (all steps, modals, header, tabs shipped)

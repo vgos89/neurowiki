@@ -441,13 +441,29 @@
       "route": "/accessibility",
       "references": [],
       "referencedBy": []
+    },
+    "component/pathway-cocktail-summary": {
+      "type": "component",
+      "title": "PathwayCocktailSummary Primitive",
+      "references": [
+        "spec/pathway-spec",
+        "component/calculator-drawer",
+        "component/chevron"
+      ],
+      "referencedBy": [
+        "pathway/migraine"
+      ]
     }
   },
   "stubs": [
     "pathway/stroke/step-2",
     "trial/hemphill-2001",
     "guideline/aha-ich-2022",
-    "pathway/late-window-ivt"
+    "pathway/late-window-ivt",
+    "pathway/migraine",
+    "spec/pathway-spec",
+    "component/calculator-drawer",
+    "component/chevron"
   ],
   "_schema": {
     "nodes": {

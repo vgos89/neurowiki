@@ -122,8 +122,8 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] [L4] EmBillingCalculator UX rebuild — guided decision flow
 - [x] [L4] Calculators.tsx rebuild — Prompt 5d (see CONFIRMED CLEAN 2026-05-04)
 - [ ] [L4] ResidentToolkit.tsx rebuild
-- [ ] [L4] StatusEpilepticusPathway visual rebuild
-- [ ] [L4] MigrainePathway visual rebuild
+- [x] [L4] StatusEpilepticusPathway visual rebuild — commits 52c8371 (v3) + bfa5c6d (content)
+- [x] [L4] MigrainePathway visual rebuild — commits 03b55ab (v3) + 77ce4e8 (content + cocktail primitive)
 - [ ] [L4] ExtendedIVTPathway visual rebuild
 - [ ] [L4] All guide/* pages consistent layout
 
@@ -1344,6 +1344,15 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
   - Files: src/components/trials/TrialLegendCard.tsx · src/pages/guide/StrokeBasicsWorkflowV2.tsx
   - Shipped: TrialLegendCard star button `p-0.5` → `p-2 min-h-[44px] min-w-[44px]` · StrokeBasicsWorkflowV2 invalid `safe-area-inset-bottom` CSS class → `pb-[env(safe-area-inset-bottom,0px)]`
   - QA: tsc clean · build green ✓ · all interactive touch targets ≥44px on 375px viewport ✓ · iOS home indicator gap correctly applied ✓
+- [x] 2026-05-16 — Pattern A post-ship fix series — Class D-clinical (5 commits)
+  - 19f2a47: Audit findings doc — 31 violations enumerated across 5 primitives + 26 usage bugs (Sections A–G with line citations + 5-tier fix sequencing)
+  - 0078c3b: Tier 1 primitive bug fixes (PathwayRail zero-height rail + node centering; PathwayLearningPearl Lightbulb icon; PathwayCascadeNotice Undo button sizing; PathwayCategoryRow `variant: 'danger'` removal) + Tier 2 cross-pathway header sweep (strip duplicate step-dot clusters; canonical back-arrow SVG; remove icon-tile flourish; add PATHWAY eyebrow + Copy pill; max-w-2xl; font-semibold). 7 files, +169/-139. Architect: arch-pattern-a-fix-tier-1-2.md (approve-with-conditions, 10 conditions). All 5 `variant: 'danger'` call sites updated atomically with primitive change.
+  - bfa5c6d: Tier 3 SE content rebuild — §4.8 Dose Result Row anatomy (3 sites with `Computed from {weight} kg` hints); §4.7 Outcome Row anatomy (subtle emerald-50/amber-50, banishes bespoke big-block red/emerald-500 buttons); §4.6 Next-button token for Proceed buttons; §4.2 tri-button for glucose check; alert()→inline icon-swap; "Stage 2 ASM (ESETT-equivalent)"→"Stage 2 Agent" (root cause of V's "medication hidden" screenshot); comorbidity chips→44px touch targets. Single file, +125/-55. All 6 CLIN-2 SE phrases preserved at unchanged positions.
+  - 1e4eecf: Tier 4 EVT drawer migration — retired deprecated `PathwayBottomDrawer` (sole consumer) onto spec-mandated `CalculatorDrawer`; killed bespoke Step 4 hero result card (`border-l-[8px]`, `text-5xl font-black`, `text-emerald-900/amber-900/red-900`); State A/B/C semantics with State B forced slate-neutral chrome to preserve commit 9e34761 early-verdict-anchoring fix; Material Symbols→inline SVG (2 sites); removed mobile bottom-bar progress strip (3rd duplicate indicator); inlined CASCADE_NOTICE per upstream field; scroll-mt-4 + sectionRefs removed; Back/Next downgraded to cobalt-pill register. 3 files, +435/-149. Architect: arch-pattern-a-fix-tier-4.md (approve-with-conditions, 8 conditions); Clinical-reviewer: clinical-pattern-a-fix-tier-4.md (approve-with-conditions, 4 conditions including the load-bearing slate-neutral State B chrome). All 7 CLIN-2 EVT phrases preserved by construction.
+  - 77ce4e8: Tier 5 Migraine — new `PathwayCocktailSummary` primitive (~105 LOC, PATHWAY_SPEC §4.9: live cocktail row, chip-as-button per §3.4, owns clipboard call, pending-removal animation); Chevron extended with right/left directions; CalculatorDrawer migration replacing bespoke `bg-slate-900 font-mono` Treatment Plan hero card (preserves per-line className: bold section headers + indented dash drug lines); State B `Cocktail · N drugs` trigger rule pinned (step===3 + hasAnyDrug); native `<select>`→PathwayCategoryRow for renal function; border-2→border sweep; SafetyToggle clinically-motivated red retained with documented §4.2 exception code comment; legacy `removedAlerts` fixed-toast removed (state + setter + reset all cleaned, no dangling); lucide ChevronRight→shared Chevron × 4 sites; Step icon-key collisions fixed. 5 files, +512/-73. Architect: arch-pattern-a-fix-tier-5.md (approve-with-conditions, 12 conditions); Clinical-reviewer: clinical-pattern-a-fix-tier-5.md (approve-with-conditions, 6 conditions including the cocktail bare-lines max-dose suffix safety patch — "Ketorolac 30mg IV (max 2 doses)"). All 15 CLIN-2 Migraine phrases preserved (3 use JSX-safe `&gt;` entity).
+  - Gates: all 4 Gate 6 live-verifies PASS (/pathways/se-pathway, /pathways/evt, /pathways/migraine all 200 with shell intact post each deploy)
+  - Clinical impact: none (no clinical text, threshold, or interpretation logic changes across the series — render-surface migration only)
+  - Deferred follow-ups: (1) delete PathwayBottomDrawer.tsx after 1-week clean signal; (2) extract TIER_TOKENS to src/lib/pathways/tierTokens.ts after the deletion above; (3) extract PathwayHeader primitive (parked 2026-05-16)
 
 ## POST-MORTEMS
 Regressions that required rollback. Each entry links to a post-mortem
