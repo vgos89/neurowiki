@@ -14,7 +14,8 @@ import { PathwayCategoryRow, type CategoryOption } from '../components/pathways/
 import { PathwayBranchChip } from '../components/pathways/PathwayBranchChip';
 import { PathwayLearningPearl } from '../components/pathways/PathwayLearningPearl';
 import { useRecents } from '../hooks/useRecents';
-import { PathwayBottomDrawer, type PathwayTier } from '../components/pathways/PathwayBottomDrawer';
+import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
+import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import { PathwayCascadeNotice } from '../components/pathways/PathwayCascadeNotice';
 
 /**
@@ -82,18 +83,17 @@ type CascadeEvent = {
   snapshot: Inputs;
 };
 
+type EvtTier = 'Low' | 'Intermediate' | 'High' | 'Negative' | 'None';
+
 /**
- * Map the EVT Result.status to PathwayBottomDrawer's tier (color-coded badge).
- * Tier vocabulary in PathwayBottomDrawer was originally Low/Intermediate/High
- * for suspicion scoring; for EVT we override the visible label via
- * `tierLabel` and use tier only for color semantics:
+ * Map the EVT Result.status to a tier key for TIER_TOKENS lookup.
  *   Low (cobalt)         = proceed / eligible
  *   Intermediate (amber) = consult / case-by-case
  *   High (red)           = stop / not eligible
  *   Negative (slate)     = no recommendation
  *   None (slate)         = pending data
  */
-function evtStatusToTier(status: string): PathwayTier {
+function evtStatusToTier(status: string): EvtTier {
   switch (status) {
     case 'Eligible':
     case 'EVT Reasonable':
@@ -110,6 +110,47 @@ function evtStatusToTier(status: string): PathwayTier {
       return 'None';
   }
 }
+
+/**
+ * Map pathway tier to calculator SeverityTokens.
+ * Verbatim copy of PathwayBottomDrawer.tsx lines 54-87 per architect condition 1.
+ * Inline here so EvtPathway composes CalculatorDrawer directly without the
+ * PathwayBottomDrawer wrapper layer.
+ */
+const TIER_TOKENS: Record<Exclude<EvtTier, 'None'>, SeverityTokens> = {
+  Low: {
+    borderColor: '#c7d2fe',         // neuro-200
+    headerBg: 'bg-neuro-50',
+    headerHover: 'hover:bg-neuro-100',
+    labelClass: 'text-[10px] font-bold text-neuro-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-neuro-700',
+    chevronClass: 'text-neuro-600',
+  },
+  Intermediate: {
+    borderColor: '#fcd34d',         // amber-300
+    headerBg: 'bg-amber-50',
+    headerHover: 'hover:bg-amber-100',
+    labelClass: 'text-[10px] font-bold text-amber-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-amber-700',
+    chevronClass: 'text-amber-700',
+  },
+  High: {
+    borderColor: '#fca5a5',         // red-300
+    headerBg: 'bg-red-50',
+    headerHover: 'hover:bg-red-100',
+    labelClass: 'text-[10px] font-bold text-red-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-red-700',
+    chevronClass: 'text-red-600',
+  },
+  Negative: {
+    borderColor: '#e2e8f0',         // slate-200
+    headerBg: 'bg-white',
+    headerHover: 'hover:bg-slate-50',
+    labelClass: 'text-[10px] font-bold text-slate-400 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-slate-900',
+    chevronClass: 'text-slate-400',
+  },
+};
 
 type Tri = "yes" | "no" | "unknown";
 type MrsGroup = "yes" | "mrs2" | "mrs34" | "no" | "unknown"; // yes = mRS 0-1, mrs2 = mRS 2, mrs34 = mRS 3-4, no = mRS >4
@@ -743,6 +784,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
   const { isFavorite, toggleFavorite } = useFavorites();
   const [showFavToast, setShowFavToast] = useState(false);
   const [showCopyToast, setShowCopyToast] = useState(false);
+  const [drawerExpanded, setDrawerExpanded] = useState(false);
   const isFav = isFavorite('evt-pathway');
 
   const handleFavToggle = () => {
@@ -773,14 +815,6 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           }
       }
   }, [inputs, trackResult, onResultChange]);
-
-  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
-  useEffect(() => {
-    if (activeSection >= 0 && activeSection <= 3) {
-      const el = sectionRefs.current[activeSection];
-      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
-    }
-  }, [activeSection]);
 
   const updateInput = useCallback((field: keyof Inputs, value: string | boolean | number) => {
     setInputs(prev => {
@@ -1041,19 +1075,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
       )}
 
       <div ref={stepContainerRef} className="space-y-0 min-h-[300px] px-1">
-        {/* Cascade-clear notice (PATHWAY_SPEC §3.6, Pattern A integration). */}
-        {cascadeEvent && (
-          <PathwayCascadeNotice
-            visible={true}
-            changedFieldLabel={FIELD_LABELS[cascadeEvent.changedField]}
-            clearedFields={cascadeEvent.clearedFields.map(f => FIELD_LABELS[f])}
-            onUndo={handleCascadeUndo}
-            onDismiss={handleCascadeDismiss}
-          />
-        )}
-
         {/* ── Step 1: Triage ─────────────────────────────────────────────── */}
-        <div ref={el => { sectionRefs.current[0] = el; }} className="scroll-mt-4">
         <PathwayRailStep
           stepNumber={1}
           title="TRIAGE"
@@ -1087,6 +1109,15 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                   stepCompleted={isSection0Complete && activeSection !== 0}
                   defaultOpen={inputs.occlusionType === 'unknown'}
                 />
+                {cascadeEvent?.changedField === 'occlusionType' && (
+                  <PathwayCascadeNotice
+                    visible={true}
+                    changedFieldLabel={FIELD_LABELS.occlusionType}
+                    clearedFields={cascadeEvent.clearedFields.map(f => FIELD_LABELS[f])}
+                    onUndo={handleCascadeUndo}
+                    onDismiss={handleCascadeDismiss}
+                  />
+                )}
               </div>
 
               {isLvo && (
@@ -1103,6 +1134,15 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                       stepCompleted={isSection0Complete && activeSection !== 0}
                       defaultOpen={inputs.occlusionType !== 'unknown' && inputs.lvoLocation === 'unknown'}
                     />
+                    {cascadeEvent?.changedField === 'lvoLocation' && (
+                      <PathwayCascadeNotice
+                        visible={true}
+                        changedFieldLabel={FIELD_LABELS.lvoLocation}
+                        clearedFields={cascadeEvent.clearedFields.map(f => FIELD_LABELS[f])}
+                        onUndo={handleCascadeUndo}
+                        onDismiss={handleCascadeDismiss}
+                      />
+                    )}
                   </div>
 
                   {inputs.lvoLocation !== 'unknown' && (
@@ -1118,6 +1158,15 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         stepCompleted={isSection0Complete && activeSection !== 0}
                         defaultOpen={inputs.lvo === 'unknown'}
                       />
+                      {cascadeEvent?.changedField === 'lvo' && (
+                        <PathwayCascadeNotice
+                          visible={true}
+                          changedFieldLabel={FIELD_LABELS.lvo}
+                          clearedFields={cascadeEvent.clearedFields.map(f => FIELD_LABELS[f])}
+                          onUndo={handleCascadeUndo}
+                          onDismiss={handleCascadeDismiss}
+                        />
+                      )}
                     </div>
                   )}
 
@@ -1176,6 +1225,15 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                       stepCompleted={isSection0Complete && activeSection !== 0}
                       defaultOpen={inputs.occlusionType !== 'unknown' && inputs.mevoLocation === 'unknown'}
                     />
+                    {cascadeEvent?.changedField === 'mevoLocation' && (
+                      <PathwayCascadeNotice
+                        visible={true}
+                        changedFieldLabel={FIELD_LABELS.mevoLocation}
+                        clearedFields={cascadeEvent.clearedFields.map(f => FIELD_LABELS[f])}
+                        onUndo={handleCascadeUndo}
+                        onDismiss={handleCascadeDismiss}
+                      />
+                    )}
                   </div>
                   <div id="field-mevoDependent" ref={el => { fieldRefs.current['mevoDependent'] = el; }}>
                     <PathwayCategoryRow
@@ -1208,10 +1266,8 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
             </div>
           )}
         </PathwayRailStep>
-        </div>
 
         {/* ── Step 2: Clinical ───────────────────────────────────────────── */}
-        <div ref={el => { sectionRefs.current[1] = el; }} className="scroll-mt-4">
         <PathwayRailStep
           stepNumber={2}
           title="CLINICAL"
@@ -1245,6 +1301,15 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                   stepCompleted={isSection1Complete && activeSection !== 1}
                   defaultOpen={inputs.time === 'unknown'}
                 />
+                {cascadeEvent?.changedField === 'time' && (
+                  <PathwayCascadeNotice
+                    visible={true}
+                    changedFieldLabel={FIELD_LABELS.time}
+                    clearedFields={cascadeEvent.clearedFields.map(f => FIELD_LABELS[f])}
+                    onUndo={handleCascadeUndo}
+                    onDismiss={handleCascadeDismiss}
+                  />
+                )}
               </div>
 
               {isLvo && (
@@ -1311,10 +1376,8 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
             </div>
           )}
         </PathwayRailStep>
-        </div>
 
         {/* ── Step 3: Imaging ────────────────────────────────────────────── */}
-        <div ref={el => { sectionRefs.current[2] = el; }} className="scroll-mt-4">
         <PathwayRailStep
           stepNumber={3}
           title="IMAGING"
@@ -1360,7 +1423,17 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         onClick={() => setShowAspectsModal(true)}
                         className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-neuro-200 bg-neuro-50 text-neuro-700 hover:bg-neuro-100 transition-colors text-sm font-medium"
                       >
-                        <span className="material-symbols-outlined text-[18px]">calculate</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <rect x="4" y="2" width="16" height="20" rx="2" />
+                          <line x1="8" y1="6" x2="16" y2="6" />
+                          <line x1="8" y1="10" x2="10" y2="10" />
+                          <line x1="12" y1="10" x2="14" y2="10" />
+                          <line x1="16" y1="10" x2="16" y2="10" />
+                          <line x1="8" y1="14" x2="10" y2="14" />
+                          <line x1="12" y1="14" x2="14" y2="14" />
+                          <line x1="16" y1="14" x2="16" y2="14" />
+                          <line x1="8" y1="18" x2="14" y2="18" />
+                        </svg>
                         Calculate ASPECTS →
                       </button>
                       {(() => {
@@ -1463,7 +1536,17 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                             onClick={() => setShowAspectsModal(true)}
                             className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-neuro-200 bg-neuro-50 text-neuro-700 hover:bg-neuro-100 transition-colors text-sm font-medium"
                           >
-                            <span className="material-symbols-outlined text-[18px]">calculate</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                              <rect x="4" y="2" width="16" height="20" rx="2" />
+                              <line x1="8" y1="6" x2="16" y2="6" />
+                              <line x1="8" y1="10" x2="10" y2="10" />
+                              <line x1="12" y1="10" x2="14" y2="10" />
+                              <line x1="16" y1="10" x2="16" y2="10" />
+                              <line x1="8" y1="14" x2="10" y2="14" />
+                              <line x1="12" y1="14" x2="14" y2="14" />
+                              <line x1="16" y1="14" x2="16" y2="14" />
+                              <line x1="8" y1="18" x2="14" y2="18" />
+                            </svg>
                             Calculate ASPECTS →
                           </button>
 
@@ -1590,10 +1673,8 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
             </div>
           )}
         </PathwayRailStep>
-        </div>
 
         {/* ── Step 4: Decision ───────────────────────────────────────────── */}
-        <div ref={el => { sectionRefs.current[3] = el; }} className="scroll-mt-4">
         <PathwayRailStep
           stepNumber={4}
           title="DECISION"
@@ -1603,88 +1684,8 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           lockedAriaLabel="Step 4 Decision, locked — awaiting completion of Step 3"
         >
              {result && (<div className="space-y-6 animate-in zoom-in-95 duration-300 bg-white border border-slate-100 rounded-xl p-4">
-                {/* 1. Assessment Summary card — MOVED UP */}
-                <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Assessment Summary</h4>
-                    <ul className="space-y-3 text-sm text-slate-700 font-medium">
-                        <li className="flex justify-between border-b border-slate-50 pb-2"><span>Type</span><span className="font-bold">{isLvo ? (isBasilar ? 'LVO (Basilar)' : 'LVO (Anterior)') : 'MeVO / DVO'}</span></li>
-                        <li className="flex justify-between border-b border-slate-50 pb-2"><span>Time</span><span className="font-bold">{inputs.time === '0_6' ? '0-6h' : '6-24h'}</span></li>
-                        {isLvo && <li className="flex justify-between border-b border-slate-50 pb-2"><span>NIHSS</span><span className="font-bold">{inputs.nihss.replace('_', '-').replace('plus', '+')}</span></li>}
-                        {isMevo && (
-                            <>
-                                <li className="flex justify-between border-b border-slate-50 pb-2"><span>Location</span><span className="font-bold">{inputs.mevoLocation.replace(/_/g, ' ').toUpperCase()}</span></li>
-                                <li className="flex justify-between border-b border-slate-50 pb-2"><span>NIHSS</span><span className="font-bold">{inputs.nihssNumeric}</span></li>
-                                <li className="flex justify-between border-b border-slate-50 pb-2"><span>Disabling</span><span className="font-bold capitalize">{inputs.mevoDisabling}</span></li>
-                            </>
-                        )}
-                        {inputs.time === '0_6' && isLvo && !isBasilar && (<li className="flex justify-between"><span>ASPECTS</span><span className="font-bold">{inputs.aspects || '--'}</span></li>)}
-                        {inputs.time === '6_24' && isLvo && !isBasilar && (<>
-                          {inputs.aspects && <li className="flex justify-between border-b border-slate-50 pb-2"><span>ASPECTS</span><span className="font-bold">{inputs.aspects}</span></li>}
-                          {inputs.core && <li className="flex justify-between border-b border-slate-50 pb-2"><span>Core Vol</span><span className="font-bold">{inputs.core} ml</span></li>}
-                          {inputs.mismatchRatio && <li className="flex justify-between"><span>Mismatch Ratio</span><span className="font-bold">{inputs.mismatchRatio}</span></li>}
-                        </>)}
-                        {isBasilar && (<li className="flex justify-between"><span>pc-ASPECTS</span><span className="font-bold">{inputs.pcAspects || '--'}</span></li>)}
-                    </ul>
-                </div>
-
-                {/* 2. Copy to EMR button — ELEVATED */}
-                {result.status !== 'Incomplete' && (
-                    <button
-                        onClick={copySummary}
-                        className="w-full py-3.5 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 shadow-lg transition-colors duration-150 flex items-center justify-center gap-2 active:scale-[0.99] transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
-                    >
-                        <Copy size={16} />
-                        Copy to EMR
-                    </button>
-                )}
-
-                {/* 3. Result card — redesigned with left-border-stripe */}
-                <div className={`rounded-2xl border-l-[8px] shadow-md overflow-hidden p-5 md:p-8
- ${result.variant === 'success' ? 'border-l-emerald-500 bg-emerald-50' :
- result.variant === 'warning' ? 'border-l-amber-400 bg-amber-50' :
- result.variant === 'danger' ? 'border-l-red-500 bg-red-50' :
- 'border-l-slate-400 bg-slate-50'
- }`}>
-                    <div>
-                        <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4
- ${result.variant === 'success' ? 'bg-emerald-100 text-emerald-700' :
- result.variant === 'warning' ? 'bg-amber-100 text-amber-700' :
- result.variant === 'danger' ? 'bg-red-100 text-red-700' :
- 'bg-slate-100 text-slate-600'}`}>
-                            <Activity size={12} /><span>Recommendation</span>
-                        </div>
-                        <div className="mb-6">
-                            <div className={`text-5xl font-black tracking-tight
- ${result.variant === 'success' ? 'text-emerald-900' :
- result.variant === 'warning' ? 'text-amber-900' :
- result.variant === 'danger' ? 'text-red-900' :
- 'text-slate-900'}`}>
-                                {result.status}
-                            </div>
-                            {result.criteriaName && <div className="text-lg font-medium text-slate-600 mt-1">{result.criteriaName}</div>}
-                            {evidenceBadge && (
-                                <div className={`mt-3 inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide
- ${result.variant === 'success' ? 'bg-emerald-100/80 text-emerald-800' :
- result.variant === 'warning' ? 'bg-amber-100/80 text-amber-800' :
- result.variant === 'danger' ? 'bg-red-100/80 text-red-800' :
- 'bg-slate-200/80 text-slate-700'}`}>
-                                    {evidenceBadge}
-                                </div>
-                            )}
-                        </div>
-                        <div className="pt-6 border-t border-slate-200">
-                             <div className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-2">Reasoning</div>
-                             <div className={`text-lg font-bold
- ${result.variant === 'success' ? 'text-emerald-900' :
- result.variant === 'warning' ? 'text-amber-900' :
- result.variant === 'danger' ? 'text-red-900' :
- 'text-slate-900'}`}>
-                                 {result.reason}
-                             </div>
-                             <div className="text-sm text-slate-700 mt-1 leading-relaxed">{autoLinkReactNodes(result.details, openTrial)}</div>
-                        </div>
-                    </div>
-                </div>
+                {/* Result is now shown in the CalculatorDrawer (portal, bottom of screen).
+                    Tap the Eligibility drawer handle to expand status + details + assessment summary. */}
 
                 {/* 4. Risk & Evidence Box for MeVO (unchanged) */}
                 {isMevo && (
@@ -1749,27 +1750,14 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                 />
              </div>)}
         </PathwayRailStep>
-        </div>
       </div>
 
-      <div id="evt-action-bar" className={`mt-8 pt-4 md:border-t border-slate-100 scroll-mt-4 ${isInModal ? 'static' : 'fixed bottom-[4.5rem] md:static'} left-0 right-0 ${isInModal ? 'bg-transparent' : 'bg-white/95 backdrop-blur md:bg-transparent'} border-t md:border-0 ${isInModal ? '' : 'z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none'}`}>
-         {/* Mobile progress strip */}
-         {!isInModal && (
-           <div className="md:hidden flex gap-1 px-4 pt-3 pb-1">
-             {([0, 1, 2, 3] as const).map((i) => {
-               const flags = [isSection0Complete, isSection1Complete, isSection2Complete, isSection3Complete];
-               return (
-                 <div key={i} className={`flex-1 h-1 rounded-full transition-all duration-300
- ${flags[i] ? 'bg-emerald-500' : activeSection === i ? 'bg-neuro-500' : 'bg-slate-200'}`} />
-               );
-             })}
-           </div>
-         )}
+      <div id="evt-action-bar" className={`mt-8 pt-4 md:border-t border-slate-100 ${isInModal ? 'static' : 'fixed bottom-[4.5rem] md:static'} left-0 right-0 ${isInModal ? 'bg-transparent' : 'bg-white/95 backdrop-blur md:bg-transparent'} border-t md:border-0 ${isInModal ? '' : 'z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none'}`}>
          <div className="max-w-2xl mx-auto flex items-center justify-between gap-4 p-4 pb-[max(1rem,env(safe-area-inset-bottom,1rem))] md:p-0 md:pb-0">
-             <button onClick={handleBack} disabled={activeSection === 0} aria-hidden={activeSection === 0} className={`px-6 py-3 border border-slate-200 rounded-xl font-bold transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${activeSection === 0 ? 'opacity-0 pointer-events-none cursor-not-allowed' : 'bg-white text-slate-600 hover:bg-slate-50 hover:border-slate-300'}`}>Back</button>
-             {activeSection === 3 && (<button onClick={handleReset} className="hidden md:flex items-center text-slate-500 hover:text-neuro-500 font-bold px-4 py-2 rounded-lg transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><RotateCcw size={16} className="mr-2" /> Start Over</button>)}
-             {activeSection < 3 ? (<button onClick={handleNext} className="flex-1 md:flex-none px-8 py-3 bg-neuro-500 text-white rounded-xl font-bold hover:bg-teal-500 shadow-lg shadow-neuro-200 transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">Next <ChevronRight size={16} className="ml-2" /></button>) : (customActionButton ? (
-               <button onClick={customActionButton.onClick} className="flex-1 md:flex-none px-8 py-3 bg-neuro-500 text-white rounded-xl font-bold hover:bg-teal-500 shadow-lg shadow-neuro-200 transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
+             <button onClick={handleBack} disabled={activeSection === 0} aria-hidden={activeSection === 0} className={`px-4 py-2 border border-slate-200 rounded-full font-medium text-sm transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${activeSection === 0 ? 'opacity-0 pointer-events-none cursor-not-allowed' : 'bg-white text-slate-600 hover:bg-slate-50 hover:border-slate-300'}`}>Back</button>
+             {activeSection === 3 && (<button onClick={handleReset} className="hidden md:flex items-center text-slate-500 hover:text-neuro-500 font-medium text-sm px-4 py-2 rounded-full transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><RotateCcw size={16} className="mr-2" /> Start Over</button>)}
+             {activeSection < 3 ? (<button onClick={handleNext} className="flex-1 md:flex-none px-4 py-2 bg-neuro-500 hover:bg-neuro-600 text-white rounded-full text-sm font-medium transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">Next <ChevronRight size={16} className="ml-2" /></button>) : (customActionButton ? (
+               <button onClick={customActionButton.onClick} className="flex-1 md:flex-none px-4 py-2 bg-neuro-500 hover:bg-neuro-600 text-white rounded-full text-sm font-medium transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none">
                  {customActionButton.icon && <span className="mr-2">{customActionButton.icon}</span>}
                  {customActionButton.label}
                </button>
@@ -1811,20 +1799,176 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           setShowAspectsModal(false);
         }}
       />
-      {/* Persistent interpretation drawer — canary deployment of
-          PathwayBottomDrawer. Reassigned from GCA (retired) on 2026-05-15.
-          Updates live as the user fills the form; tier color reflects the
-          decision class (proceed/consult/stop). */}
-      {result && (
-        <PathwayBottomDrawer
-          pathwayName="EVT"
-          tier={evtStatusToTier(result.status)}
-          tierLabel={result.status === 'Incomplete' ? 'Pending' : result.status}
-          action={result.reason}
-          notes={result.details ? [result.details] : undefined}
-          expandedSummary={result.criteriaName || result.evidenceBadge || undefined}
-        />
-      )}
+
+      {/* EVT eligibility drawer — CalculatorDrawer composition (Tier 4 migration).
+          State A: no triage+clinical yet (muted bar, non-interactive).
+          State B: triage+clinical done, imaging incomplete (provisional — slate-neutral tokens,
+                   no tier-tinted chrome to avoid anchoring before imaging confirms verdict).
+          State C: full verdict (tier-tinted chrome, tappable, shows expanded summary). */}
+      {(() => {
+        const drawerState: 'A' | 'B' | 'C' =
+          !isSection0Complete || !isSection1Complete ? 'A' :
+          !isSection2Complete ? 'B' :
+          'C';
+
+        // State C: use tier-tinted tokens. State B: always slate-neutral (clinical condition 1).
+        const getTierTokens = (): SeverityTokens | null => {
+          if (drawerState === 'B') return TIER_TOKENS.Negative; // slate-neutral — clinical condition 1
+          if (drawerState === 'C' && result && result.status !== 'Incomplete') {
+            const tier = evtStatusToTier(result.status);
+            return tier !== 'None' ? TIER_TOKENS[tier] : TIER_TOKENS.Negative;
+          }
+          return null;
+        };
+        const drawerTokens = getTierTokens();
+
+        const tierLabel = result
+          ? (result.status === 'Incomplete' ? 'Pending' : result.status)
+          : '—';
+
+        // State B collapsedStat: must begin with "Provisional" — clinical condition 2.
+        // State C collapsedStat: "${tierLabel} · ${result.reason}" — architect condition 2.
+        const drawerCollapsedStat =
+          drawerState === 'B' && result
+            ? `Provisional · ${result.status}`
+            : drawerState === 'C' && result
+              ? `${tierLabel} · ${result.reason}`
+              : '—';
+
+        return (
+          <CalculatorDrawer
+            state={drawerState}
+            tokens={drawerTokens}
+            isExpanded={drawerExpanded}
+            onToggle={() => setDrawerExpanded((open) => !open)}
+            ariaContentId="evt-drawer-content"
+            ariaLabel="EVT eligibility drawer"
+            collapsedLabel="Eligibility"
+            collapsedStat={drawerCollapsedStat}
+            stateAText={{ label: 'Eligibility', hint: 'Complete steps to see verdict' }}
+            stateBText={{ label: drawerCollapsedStat, hint: 'Complete imaging to confirm' }}
+            stateBTappable={false}
+          >
+            {/* Expanded drawer content — replaces bespoke Step 4 result card */}
+            {result && drawerState === 'C' && (
+              <div
+                id="evt-drawer-content"
+                className="bg-white border-t border-slate-100 px-5 py-4 max-h-[45vh] overflow-y-auto"
+              >
+                {/* Status + criteria name */}
+                <div className="mb-3">
+                  <div className="text-base font-bold text-slate-900">{result.status}</div>
+                  {result.criteriaName && (
+                    <div className="text-sm text-slate-600 mt-0.5">{result.criteriaName}</div>
+                  )}
+                  {evidenceBadge && (
+                    <div className="mt-2 inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide bg-slate-100 text-slate-700">
+                      {evidenceBadge}
+                    </div>
+                  )}
+                </div>
+
+                {/* Reasoning */}
+                {result.reason && (
+                  <div className="mb-3">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Reasoning</p>
+                    <p className="text-sm font-semibold text-slate-800">{result.reason}</p>
+                  </div>
+                )}
+
+                {/* Details */}
+                {result.details && (
+                  <div className="mb-3">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Details</p>
+                    <p className="text-sm text-slate-700 leading-relaxed">
+                      {autoLinkReactNodes(result.details, openTrial)}
+                    </p>
+                  </div>
+                )}
+
+                {/* Exclusion reason */}
+                {result.exclusionReason && (
+                  <div className="mb-3">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Exclusion</p>
+                    <p className="text-sm text-slate-700">{result.exclusionReason}</p>
+                  </div>
+                )}
+
+                {/* Assessment summary dl rows */}
+                <div className="border-t border-slate-100 pt-3 mt-3">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Assessment Summary</p>
+                  <dl className="space-y-1.5 text-sm">
+                    <div className="flex justify-between">
+                      <dt className="text-slate-500">Type</dt>
+                      <dd className="font-medium text-slate-900">{isLvo ? (isBasilar ? 'LVO (Basilar)' : 'LVO (Anterior)') : 'MeVO / DVO'}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-slate-500">Time</dt>
+                      <dd className="font-medium text-slate-900">{inputs.time === '0_6' ? '0-6h' : '6-24h'}</dd>
+                    </div>
+                    {isLvo && (
+                      <div className="flex justify-between">
+                        <dt className="text-slate-500">NIHSS</dt>
+                        <dd className="font-medium text-slate-900">{inputs.nihss.replace('_', '-').replace('plus', '+')}</dd>
+                      </div>
+                    )}
+                    {isMevo && (
+                      <>
+                        <div className="flex justify-between">
+                          <dt className="text-slate-500">Location</dt>
+                          <dd className="font-medium text-slate-900">{inputs.mevoLocation.replace(/_/g, ' ').toUpperCase()}</dd>
+                        </div>
+                        <div className="flex justify-between">
+                          <dt className="text-slate-500">NIHSS</dt>
+                          <dd className="font-medium text-slate-900">{inputs.nihssNumeric}</dd>
+                        </div>
+                        <div className="flex justify-between">
+                          <dt className="text-slate-500">Disabling</dt>
+                          <dd className="font-medium text-slate-900 capitalize">{inputs.mevoDisabling}</dd>
+                        </div>
+                      </>
+                    )}
+                    {inputs.time === '0_6' && isLvo && !isBasilar && (
+                      <div className="flex justify-between">
+                        <dt className="text-slate-500">ASPECTS</dt>
+                        <dd className="font-medium text-slate-900">{inputs.aspects || '--'}</dd>
+                      </div>
+                    )}
+                    {inputs.time === '6_24' && isLvo && !isBasilar && (
+                      <>
+                        {inputs.aspects && (
+                          <div className="flex justify-between">
+                            <dt className="text-slate-500">ASPECTS</dt>
+                            <dd className="font-medium text-slate-900">{inputs.aspects}</dd>
+                          </div>
+                        )}
+                        {inputs.core && (
+                          <div className="flex justify-between">
+                            <dt className="text-slate-500">Core Vol</dt>
+                            <dd className="font-medium text-slate-900">{inputs.core} ml</dd>
+                          </div>
+                        )}
+                        {inputs.mismatchRatio && (
+                          <div className="flex justify-between">
+                            <dt className="text-slate-500">Mismatch Ratio</dt>
+                            <dd className="font-medium text-slate-900">{inputs.mismatchRatio}</dd>
+                          </div>
+                        )}
+                      </>
+                    )}
+                    {isBasilar && (
+                      <div className="flex justify-between">
+                        <dt className="text-slate-500">pc-ASPECTS</dt>
+                        <dd className="font-medium text-slate-900">{inputs.pcAspects || '--'}</dd>
+                      </div>
+                    )}
+                  </dl>
+                </div>
+              </div>
+            )}
+          </CalculatorDrawer>
+        );
+      })()}
     </div>
   );
 };
@@ -1832,4 +1976,4 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
 export default EvtPathway;
 
 // @medical-scientist 2026-05-16 — clinical fixes applied per docs/audits/2026-05-15/evt-pathway-fix-manifest.md (Patches 1-5; ship-blockers A3/A8/A9/A13 addressed; CLIN-2 verbatim phrases preserved).
-// @ui-architect 2026-05-16 — JSX shell rewrite to Pattern A. Clinical content + interpretation function + cascade-clear preserved verbatim. Composes PathwayRailStep + PathwayCategoryRow + PathwayBranchChip + PathwayLearningPearl + PathwayCascadeNotice + PathwayBottomDrawer (existing).
+// @ui-architect 2026-05-16 — JSX shell rewrite to Pattern A. Clinical content + interpretation function + cascade-clear preserved verbatim. Composes PathwayRailStep + PathwayCategoryRow + PathwayBranchChip + PathwayLearningPearl + PathwayCascadeNotice + CalculatorDrawer (post-Tier-4 migration; PathwayBottomDrawer retired).
