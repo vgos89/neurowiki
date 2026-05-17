@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { useBackNavigation } from '../../hooks/useBackNavigation';
+import { useModalFocusTrap } from '../../hooks/useModalFocusTrap';
 import {
   ArrowLeft, ExternalLink, Copy, Brain, Info, AlertTriangle, AlertCircle,
   InfoIcon, FlaskConical, Eye, FileText as FileTextIcon,
@@ -187,6 +188,13 @@ const MainContent: React.FC = () => {
   const [step3ModalOpen, setStep3ModalOpen] = useState(false);
   const [nihssModalOpen, setNihssModalOpen] = useState(false);
   const [nihssFromModal, setNihssFromModal] = useState<number | null>(null);
+
+  // a11y: NIHSS inline modal focus + keyboard wiring per useModalFocusTrap.
+  // Closes BLOCKER B-2 from audit-stroke-code-a11y-2026-05-17.md
+  // (WCAG 2.4.3 + 4.1.2 — new finding not in L5 baseline).
+  const nihssModalDialogRef = useRef<HTMLDivElement>(null);
+  const nihssModalCloseRef = useRef<HTMLButtonElement>(null);
+  useModalFocusTrap(nihssModalOpen, () => setNihssModalOpen(false), nihssModalDialogRef, nihssModalCloseRef);
   const [eligibilityModalOpen, setEligibilityModalOpen] = useState(false);
   const [thrombectomyModalOpen, setThrombectomyModalOpen] = useState(false);
   const [thrombectomyRecommendation, setThrombectomyRecommendation] = useState<string | null>(null);
@@ -687,10 +695,16 @@ const MainContent: React.FC = () => {
         {/* NIHSS Calculator Modal */}
         {nihssModalOpen && (
           <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[80] flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col min-h-0">
+            <div
+              ref={nihssModalDialogRef}
+              className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col min-h-0"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="nihss-modal-title"
+            >
               <div className="flex items-center justify-between h-12 px-4 border-b border-slate-100 flex-shrink-0">
-                <span className="text-sm font-bold text-slate-700">NIHSS Calculator</span>
-                <button onClick={() => setNihssModalOpen(false)} className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors flex items-center justify-center" aria-label="Close NIHSS calculator">
+                <span id="nihss-modal-title" className="text-sm font-bold text-slate-700">NIHSS Calculator</span>
+                <button ref={nihssModalCloseRef} onClick={() => setNihssModalOpen(false)} className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors flex items-center justify-center" aria-label="Close NIHSS calculator">
                   <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>

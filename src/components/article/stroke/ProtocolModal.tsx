@@ -22,8 +22,9 @@
  * Tokens: design-tokens skill (neuro-500 cobalt CTAs, slate-* neutral
  * chrome, red-400 / amber-400 severity strip per severity prop).
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { X, Copy } from 'lucide-react';
+import { useModalFocusTrap } from '../../../hooks/useModalFocusTrap';
 
 export interface ProtocolStep {
   title: string;
@@ -77,16 +78,6 @@ export interface ProtocolModalProps {
   references: ProtocolModalReferences;
 }
 
-// Tab-trap focusable selector — standard pattern (excludes disabled / tabindex=-1).
-const FOCUSABLE_SELECTOR = [
-  'a[href]',
-  'button:not([disabled])',
-  'input:not([disabled])',
-  'select:not([disabled])',
-  'textarea:not([disabled])',
-  '[tabindex]:not([tabindex="-1"])',
-].join(',');
-
 export function ProtocolModal({
   isOpen,
   onClose,
@@ -101,45 +92,10 @@ export function ProtocolModal({
 }: ProtocolModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const previousActiveElement = useRef<HTMLElement | null>(null);
 
-  // Focus-on-open + return-focus-on-close
-  useEffect(() => {
-    if (!isOpen) return;
-    previousActiveElement.current = document.activeElement as HTMLElement | null;
-    closeButtonRef.current?.focus();
-  }, [isOpen]);
-
-  // Escape + Tab-cycle trap
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-        previousActiveElement.current?.focus?.();
-        return;
-      }
-      if (e.key !== 'Tab') return;
-      const dialog = dialogRef.current;
-      if (!dialog) return;
-      const focusable = Array.from(
-        dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
-      ).filter((el) => !el.hasAttribute('aria-hidden') && el.offsetParent !== null);
-      if (focusable.length === 0) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      const active = document.activeElement as HTMLElement | null;
-      if (e.shiftKey && active === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && active === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [isOpen, onClose]);
+  // Modal focus + keyboard wiring (focus-on-open, return-focus-on-close,
+  // Escape, Tab-cycle trap) per useModalFocusTrap hook.
+  useModalFocusTrap(isOpen, onClose, dialogRef, closeButtonRef);
 
   const buildEmrText = (): string => {
     const lines = [
@@ -162,10 +118,8 @@ export function ProtocolModal({
     });
   };
 
-  const handleClose = () => {
-    previousActiveElement.current?.focus?.();
-    onClose();
-  };
+  // useModalFocusTrap restores focus on close — handler is now just onClose.
+  const handleClose = onClose;
 
   if (!isOpen) return null;
 
