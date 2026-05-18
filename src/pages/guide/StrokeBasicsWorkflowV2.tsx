@@ -540,10 +540,10 @@ const MainContent: React.FC = () => {
                   </summary>
                   <div className="px-4 pb-4 pt-1 space-y-3">
                     <p className="text-sm text-neuro-800 leading-relaxed">
-                      Large vessel occlusion (LVO) occurs in approximately 30% of acute ischemic strokes. The HERMES meta-analysis (2016) demonstrated that mechanical thrombectomy achieves functional independence in 46% vs 29% with medical therapy alone (NNT = 2.6).
+                      LVO accounts for about 30% of acute ischemic strokes. HERMES (Lancet 2016, pooled 5 RCTs): thrombectomy gave 46% vs 29% functional independence at 90 days (NNT 2.6). If LVO is present, activate IR in parallel with IV thrombolysis.
                     </p>
                     <p className="text-sm text-neuro-800 leading-relaxed">
-                      <strong>Extended Time Windows:</strong> The DAWN trial (2018) showed benefit up to 24 hours using clinical-core mismatch criteria (48.6% vs 13.1% good outcome, NNT=3). DEFUSE-3 demonstrated efficacy in 6-16 hour window with perfusion imaging.
+                      <strong>Extended windows:</strong> DAWN (NEJM 2018) — clinical-core mismatch selection, 6–24h from LKW, 48.6% vs 13.1% functional independence (NNT 3). DEFUSE-3 (NEJM 2018) — perfusion mismatch selection, 6–16h, 44.6% vs 16.7% functional independence.
                     </p>
                     <div className="pt-2 border-t border-neuro-200">
                       <p className="text-xs text-neuro-700">
@@ -670,10 +670,10 @@ const MainContent: React.FC = () => {
                     </summary>
                     <div className="px-4 pb-4 pt-1 space-y-3">
                       <p className="text-sm text-green-800 leading-relaxed">
-                        Stroke code documentation should capture precise LKW time, NIHSS subscores, contraindication assessment, door-to-needle time, and treatment rationale.
+                        Document LKW time, NIHSS total score, contraindications reviewed, door-to-needle time, and the treatment decision with rationale. Incomplete documentation delays GWTG submission and quality reporting.
                       </p>
                       <p className="text-sm text-green-800 leading-relaxed">
-                        <strong>Metrics:</strong> DTN &lt;60 min goal, &lt;30 min excellence. Dedicated stroke units reduce mortality by 18% (Stroke Unit Trialists Collaboration).
+                        <strong>Metrics:</strong> DTN &lt;60 min is the goal, &lt;30 min is excellence. Dedicated stroke units reduce mortality by ~18% (Stroke Unit Trialists Collaboration, Cochrane Review 2013).
                       </p>
                     </div>
                   </details>

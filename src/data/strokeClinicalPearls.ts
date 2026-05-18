@@ -124,7 +124,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'wake-up-trial',
         title: 'WAKE-UP Trial',
-        content: 'MRI-guided thrombolysis in wake-up strokes using DWI-FLAIR mismatch. 53.3% vs 41.8% good outcome (mRS 0-1, OR 1.61). Established MRI-guided treatment for unknown onset times - 25% of strokes occur during sleep.',
+        content: 'WAKE-UP enrolled wake-up strokes with DWI-FLAIR mismatch and randomized to alteplase vs placebo. 53.3% vs 41.8% achieved mRS 0–1 at 90 days (OR 1.61). About 25% of strokes occur during sleep; if the bedtime LKW puts the patient outside 4.5h, MRI mismatch makes them eligible.',
         type: 'trial',
         section: 'step-1',
         link: '/trials/wake-up',
@@ -166,7 +166,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'doac-management-2026',
         title: 'DOAC Management (2026 Update)',
-        content: 'Do NOT give tPA if last DOAC dose <48h or if drug-specific assay is elevated. If last dose >48h with normal renal function AND a normal drug-specific assay, tPA may be considered: anti-Xa level for apixaban/rivaroxaban/edoxaban, or ECT or dilute thrombin time for dabigatran.',
+        content: 'Last DOAC dose <48h, or any elevated drug-specific assay: do not give tPA. Last dose >48h with normal renal function and a normal drug-specific assay: tPA is an option (Class IIb). Check anti-Xa for apixaban, rivaroxaban, or edoxaban; check ECT or dilute thrombin time for dabigatran.',
         type: 'pearl',
         section: 'step-1',
         evidenceClass: 'IIb',
@@ -188,7 +188,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'stroke-mimics-safety',
         title: 'Stroke Mimics & tPA Safety',
-        content: 'Stroke mimics (seizure, migraine, conversion disorder, hypoglycemia) receive tPA in 1-2% of cases. Zinkstok multicenter cohort 2013 (n=5,581): sICH 1.0% (95% CI 0.0-5.0) in mimics vs 7.9% (95% CI 7.2-8.7) in ischemic strokes. No fatal ICH in mimics. Bottom line: Don\'t delay tPA for extensive workup if stroke is likely.',
+        content: 'Stroke mimics (seizure, migraine, conversion disorder, hypoglycemia) receive tPA in 1–2% of cases. Zinkstok 2013 (n=5,581): sICH 1.0% (95% CI 0.0–5.0) in mimics vs 7.9% (95% CI 7.2–8.7) in true strokes. No fatal ICH in the mimic group. If stroke is the likely diagnosis, give tPA — the mimic-sICH risk is far lower than the disability cost of withholding treatment from a real stroke.',
         type: 'pearl',
         section: 'step-1',
         evidenceClass: 'IIa',
@@ -290,7 +290,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'dawn-trial',
         title: 'DAWN Trial (6-24h)',
-        content: 'Clinical-core mismatch for thrombectomy 6-24h. Selection by age, NIHSS, and core volume. 48.6% vs 13.1% functional independence (mRS 0-2, NNT=3). Established benefit in the extended window with imaging-guided patient selection.',
+        content: 'Clinical-core mismatch thrombectomy 6–24h from LKW. Selection by age, NIHSS, and core volume. 48.6% vs 13.1% functional independence at 90 days (mRS 0–2, NNT 3).',
         type: 'trial',
         section: 'step-2',
         link: '/trials/dawn',
@@ -302,7 +302,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'defuse3-trial',
         title: 'DEFUSE-3 Trial (6-16h)',
-        content: 'Perfusion-based selection for thrombectomy 6-16h. Criteria: Core <70ml, mismatch ratio ≥1.8, penumbra ≥15ml. 44.6% vs 16.7% functional independence (mRS 0-2). Validated perfusion imaging selection for late-window treatment.',
+        content: 'Perfusion-selected thrombectomy 6–16h from LKW. Selection: core <70 mL, mismatch ratio ≥1.8, penumbra ≥15 mL. 44.6% vs 16.7% functional independence at 90 days (mRS 0–2).',
         type: 'trial',
         section: 'step-2',
         link: '/trials/defuse-3',
@@ -637,7 +637,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'anticoagulation-timing',
         title: 'Anticoagulation Restart Timing',
-        content: 'Hold ALL antithrombotics × 24h post-tPA (antiplatelets, anticoagulants). Mechanism: systemic fibrinolysis affects all vascular beds and increases bleeding risk at puncture sites. After 24h CT is negative for hemorrhage, start aspirin 81-325 mg. For AF requiring anticoagulation, AHA/ASA 2026 supports earlier DOAC initiation in carefully selected patients; the ELAN operational framework uses within 48 hours for TIA/minor/moderate events and day 6-7 for major stroke, with repeat imaging and caution after IVT or EVT.',
+        content: 'Hold all antithrombotics for 24h post-tPA — antiplatelets and anticoagulants both. Systemic fibrinolysis raises bleeding risk everywhere, especially puncture sites. At 24h, get a non-contrast CT; if it is clear, start aspirin 81–325 mg. For AF requiring anticoagulation, AHA/ASA 2026 endorses earlier DOAC starts in selected patients. The ELAN trial (NEJM 2023) gives the operational timing: within 48h for TIA, minor, or moderate stroke; day 6–7 for major stroke; repeat imaging first, and add caution after IVT or EVT.',
         type: 'pearl',
         section: 'step-5',
         evidence: 'ELAN trial 2023',
@@ -725,7 +725,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'hemorrhage-reversal-protocol',
         title: 'Coagulopathy Reversal Protocol',
-        content: 'STEP 1: Stop tPA infusion immediately. STEP 2: Cryoprecipitate 10 units IV push (replaces fibrinogen depleted by tPA). Target fibrinogen >150 mg/dL; check q30min until target. STEP 3: TXA is NOT routinely recommended per 2022 AHA/ASA ICH guidelines (Class III, Level A; TICH-2 showed no benefit, possible thromboembolic harm). STEP 4: Platelet transfusion NOT routinely recommended (2022 guidelines; may worsen outcomes). Reserve for severe thrombocytopenia or emergency surgery. STEP 5: Warfarin: 4-factor PCC 25-50 units/kg IV + Vitamin K 10 mg IV (goal INR <1.4). FFP if PCC unavailable. Dabigatran: idarucizumab 5 g IV. Xa inhibitors: andexanet alfa or 4-factor PCC.',
+        content: 'STEP 1: Stop the tPA infusion. STEP 2: Cryoprecipitate 10 units IV push to replace fibrinogen; target >150 mg/dL and recheck q30min until you hit it. STEP 3: Do not give TXA routinely. TICH-2 showed no benefit and a signal for thromboembolic harm (Class III, Level A; AHA/ASA 2022 ICH). STEP 4: Do not transfuse platelets routinely; PATCH 2016 showed worse outcomes in spontaneous ICH on antiplatelets. Reserve for severe thrombocytopenia or emergency surgery. STEP 5: Reverse the anticoagulant. Warfarin: 4-factor PCC 25–50 units/kg IV plus vitamin K 10 mg IV, goal INR <1.4; use FFP only if PCC is unavailable. Dabigatran: idarucizumab 5 g IV. Apixaban/rivaroxaban: andexanet alfa, or 4-factor PCC if andexanet is unavailable.',
         type: 'pearl',
         section: 'step-6',
         evidence: 'AHA/ASA 2022 ICH Guidelines, Sections 5.1, 6.2; TICH-2 2018',
