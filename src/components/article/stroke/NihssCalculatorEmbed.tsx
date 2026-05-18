@@ -159,9 +159,10 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
         {/* Right controls: Rapid/Detailed + Copy + Reset */}
         <div className="flex items-center gap-1.5 ml-auto flex-shrink-0">
           {/* Mode toggle */}
-          <div className="flex items-center bg-slate-100 rounded-md p-0.5">
+          <div className="flex items-center bg-slate-100 rounded-md p-0.5" role="group" aria-label="NIHSS assessment mode">
             <button
               onClick={() => setNihssMode('rapid')}
+              aria-pressed={nihssMode === 'rapid'}
               className={`px-2.5 py-1 rounded text-[10px] font-medium transition-colors ${
                 nihssMode === 'rapid'
                   ? 'bg-white text-slate-900 shadow-sm'
@@ -172,6 +173,7 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
             </button>
             <button
               onClick={() => setNihssMode('detailed')}
+              aria-pressed={nihssMode === 'detailed'}
               className={`px-2.5 py-1 rounded text-[10px] font-medium transition-colors ${
                 nihssMode === 'detailed'
                   ? 'bg-white text-slate-900 shadow-sm'
@@ -185,19 +187,19 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
           {/* Copy to EMR */}
           <button
             onClick={copyNihss}
-            title="Copy to EMR"
+            aria-label="Copy NIHSS to clipboard"
             className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-800"
           >
-            {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+            {copied ? <Check className="w-4 h-4 text-emerald-500" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
           </button>
 
           {/* Reset */}
           <button
             onClick={() => setNihssValues({})}
-            title="Reset"
+            aria-label="Reset NIHSS"
             className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-800"
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
       </div>

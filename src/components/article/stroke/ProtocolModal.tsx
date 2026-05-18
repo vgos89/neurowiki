@@ -160,10 +160,10 @@ export function ProtocolModal({
             ref={closeButtonRef}
             type="button"
             onClick={handleClose}
-            className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors flex items-center justify-center"
+            className="flex-shrink-0 min-h-[44px] min-w-[44px] rounded-full bg-slate-100 hover:bg-slate-200 transition-colors flex items-center justify-center"
             aria-label="Close"
           >
-            <X className="w-4 h-4 text-slate-500" />
+            <X className="w-4 h-4 text-slate-500" aria-hidden="true" />
           </button>
         </div>
 

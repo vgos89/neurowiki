@@ -197,21 +197,24 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
         <button
           type="button"
           onClick={onPrevMonth}
+          aria-label="Previous month"
           className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
         >
-          <ChevronLeft className="w-4 h-4 text-slate-500" />
+          <ChevronLeft className="w-4 h-4 text-slate-500" aria-hidden="true" />
         </button>
         <span className="text-sm font-bold text-slate-800 flex items-center gap-1">
           {MONTHS[viewMonth]} {viewYear}
-          <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+          <ChevronDown className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
         </span>
         <button
           type="button"
           onClick={onNextMonth}
           disabled={!canNextMonth}
+          aria-label="Next month"
+          aria-disabled={!canNextMonth}
           className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          <ChevronRight className="w-4 h-4 text-slate-500" />
+          <ChevronRight className="w-4 h-4 text-slate-500" aria-hidden="true" />
         </button>
       </div>
 
@@ -234,6 +237,9 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
               key={idx}
               type="button"
               disabled={future}
+              aria-disabled={future || undefined}
+              aria-pressed={sel}
+              aria-label={`${day} ${MONTHS[viewMonth]} ${viewYear}${future ? ', unavailable' : ''}${sel ? ', selected' : ''}`}
               onClick={() => onSelectDay(day)}
               className={`w-8 h-8 mx-auto flex items-center justify-center text-sm rounded-full font-medium transition-colors
                 ${sel ? 'bg-neuro-500 text-white font-bold' : ''}
@@ -295,6 +301,7 @@ const SleepTimeRow: React.FC<SleepTimeRowProps> = ({
           <button
             key={i}
             type="button"
+            aria-pressed={dayOffset === i}
             onClick={() => onDayOffset(i)}
             className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
               dayOffset === i
@@ -582,19 +589,24 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
         accentClass="text-amber-700"
       />
 
-      {/* Error */}
-      {sleepError && (
-        <p className="mx-4 mb-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-          {sleepError}
-        </p>
-      )}
+      {/* Error — role="alert" + aria-live ensures screen readers announce validation errors.
+          Container always rendered (empty when no error) so the live region is already in
+          the DOM when content is injected — prevents browsers that ignore newly-inserted
+          live regions from missing the announcement. */}
+      <p
+        role="alert"
+        aria-live="assertive"
+        className={`mx-4 mb-2 text-xs text-red-600 rounded-lg px-3 py-2 ${sleepError ? 'bg-red-50 border border-red-200' : ''}`}
+      >
+        {sleepError ?? ''}
+      </p>
     </div>
   );
 
   return (
     <div
       className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[90] flex items-end sm:items-center justify-center"
-      onClick={onClose}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div
         ref={dialogRef}

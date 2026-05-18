@@ -343,26 +343,26 @@ const MainContent: React.FC = () => {
         {/* Clinical Context Bar — outside sticky, scrolls away */}
         {step1DataLive && (
           <div className="mx-3 sm:mx-6 mb-3 px-4 py-2.5 rounded-xl bg-white border border-slate-100 flex flex-wrap items-center gap-x-4 gap-y-1.5" role="status" aria-label="Clinical context summary">
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs font-bold uppercase tracking-wide text-slate-400">NIHSS</span>
-              <span className="text-base font-mono font-bold text-slate-900">{step1DataLive.nihssScore}</span>
+            <div className="flex items-center gap-1.5" aria-label={`NIHSS: ${step1DataLive.nihssScore}`}>
+              <span className="text-xs font-bold uppercase tracking-wide text-slate-400" aria-hidden="true">NIHSS</span>
+              <span className="text-base font-mono font-bold text-slate-900" aria-hidden="true">{step1DataLive.nihssScore}</span>
             </div>
             <div className="w-px h-4 bg-slate-200 hidden sm:block" aria-hidden />
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs font-bold uppercase tracking-wide text-slate-400">BP</span>
-              <span className="text-base font-mono font-bold text-slate-900">{step1DataLive.systolicBP}/{step1DataLive.diastolicBP}</span>
+            <div className="flex items-center gap-1.5" aria-label={`Blood pressure: ${step1DataLive.systolicBP}/${step1DataLive.diastolicBP}`}>
+              <span className="text-xs font-bold uppercase tracking-wide text-slate-400" aria-hidden="true">BP</span>
+              <span className="text-base font-mono font-bold text-slate-900" aria-hidden="true">{step1DataLive.systolicBP}/{step1DataLive.diastolicBP}</span>
             </div>
             <div className="w-px h-4 bg-slate-200 hidden sm:block" aria-hidden />
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs font-bold uppercase tracking-wide text-slate-400">Glucose</span>
-              <span className="text-base font-mono font-bold text-slate-900">{step1DataLive.glucose}</span>
+            <div className="flex items-center gap-1.5" aria-label={`Glucose: ${step1DataLive.glucose}`}>
+              <span className="text-xs font-bold uppercase tracking-wide text-slate-400" aria-hidden="true">Glucose</span>
+              <span className="text-base font-mono font-bold text-slate-900" aria-hidden="true">{step1DataLive.glucose}</span>
             </div>
             <div className="w-px h-4 bg-slate-200 hidden sm:block" aria-hidden />
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs font-bold uppercase tracking-wide text-slate-400">LKW</span>
+            <div className="flex items-center gap-1.5" aria-label={step1DataLive.lkwUnknown ? 'Last known well: unknown' : `Last known well: ${liveLkwHours.toFixed(1)} hours ago`}>
+              <span className="text-xs font-bold uppercase tracking-wide text-slate-400" aria-hidden="true">LKW</span>
               {step1DataLive.lkwUnknown
-                ? <span className="text-sm font-semibold text-amber-600">Unknown</span>
-                : <span className="text-base font-mono font-bold text-slate-900">{liveLkwHours.toFixed(1)}h ago</span>}
+                ? <span className="text-sm font-semibold text-amber-600" aria-hidden="true">Unknown</span>
+                : <span className="text-base font-mono font-bold text-slate-900" aria-hidden="true">{liveLkwHours.toFixed(1)}h ago</span>}
             </div>
             {!step1DataLive.lkwUnknown && liveLkwHours > 0 && (
               <>
