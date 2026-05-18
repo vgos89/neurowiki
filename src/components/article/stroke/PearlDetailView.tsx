@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, ArrowLeft } from 'lucide-react';
+import { X, ArrowLeft, BookOpen, Lightbulb, BookMarked, Link2 } from 'lucide-react';
 import type { ClinicalPearl } from '../../../data/strokeClinicalPearls';
 import { TrialEmbed } from './TrialEmbed';
 
@@ -37,7 +37,7 @@ export const PearlDetailView: React.FC<PearlDetailViewProps> = ({
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/70 z-[60]"
+        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60]"
         onClick={onBack}
       />
 
@@ -45,39 +45,39 @@ export const PearlDetailView: React.FC<PearlDetailViewProps> = ({
       <div className="fixed inset-0 z-[70] overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-4 sm:p-6 md:p-8">
           {/* Modal Content */}
-          <div 
+          <div
             className="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="bg-white border-b-2 border-purple-200 p-4 sm:p-6 flex-shrink-0 rounded-t-2xl">
+            <div className="bg-white border-b border-slate-100 p-4 sm:p-6 flex-shrink-0 rounded-t-2xl">
               {/* Back and Close Buttons */}
               <div className="flex items-center justify-between mb-3">
                 <button
                   onClick={onBack}
-                  className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all"
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   <span>Back to Pearls</span>
                 </button>
                 <button
                   onClick={onClose}
-                  className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="p-2 rounded-lg hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500"
                   aria-label="Close all"
                 >
-                  <X className="w-5 h-5 text-gray-500" />
+                  <X className="w-5 h-5 text-slate-500" />
                 </button>
               </div>
 
               {/* Title, Evidence class/level, and Badge */}
               <div className="flex items-start justify-between gap-3">
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
+                <h3 className="text-xl sm:text-2xl font-semibold text-slate-900">
                   {pearl.title}
                 </h3>
                 <span className={`px-3 py-1 text-sm font-semibold rounded-full flex-shrink-0 ${
                   pearl.type === 'trial'
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'bg-purple-100 text-purple-700'
+                    ? 'bg-neuro-50 text-neuro-700'
+                    : 'bg-slate-100 text-slate-600'
                 }`}>
                   {pearl.type === 'trial' ? 'TRIAL' : 'PEARL'}
                 </span>
@@ -101,7 +101,7 @@ export const PearlDetailView: React.FC<PearlDetailViewProps> = ({
             {/* Scrollable Content */}
             <div className="flex-1 overflow-y-auto p-4 sm:p-6">
               {pearl.plainEnglish && (
-                <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg border-l-4 border-l-amber-500">
+                <div className="mb-6 p-4 bg-amber-50 border border-amber-200 border-l-4 border-l-amber-500 rounded-lg">
                   <h4 className="text-xs font-bold text-amber-800 uppercase tracking-wide mb-2">Key takeaway</h4>
                   <p className="text-sm text-amber-900 leading-relaxed font-medium">{pearl.plainEnglish}</p>
                 </div>
@@ -109,7 +109,7 @@ export const PearlDetailView: React.FC<PearlDetailViewProps> = ({
               {isLinkedTrial ? (
                 <TrialEmbed trialSlug={pearl.trialSlug!} />
               ) : (
-                /* Regular pearl content - keep existing code */
+                /* Regular pearl content */
                 <>
                   {pearl.detailedContent ? (
                     <>
@@ -117,13 +117,13 @@ export const PearlDetailView: React.FC<PearlDetailViewProps> = ({
                       {pearl.detailedContent.overview && (
                         <div className="mb-6">
                           <div className="flex items-center gap-2 mb-3">
-                            <span className="text-2xl">📖</span>
-                            <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
+                            <BookOpen className="w-4 h-4 text-neuro-500" aria-hidden="true" />
+                            <h4 className="text-sm font-semibold text-slate-900 uppercase tracking-wide">
                               Overview
                             </h4>
                           </div>
-                          <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                            <p className="text-sm text-gray-700 leading-relaxed">
+                          <div className="p-4 bg-neuro-50 rounded-lg border-l-4 border-neuro-500">
+                            <p className="text-sm text-slate-600 leading-[1.55]">
                               {pearl.detailedContent.overview}
                             </p>
                           </div>
@@ -134,8 +134,8 @@ export const PearlDetailView: React.FC<PearlDetailViewProps> = ({
                       {pearl.detailedContent.clinicalTips && pearl.detailedContent.clinicalTips.length > 0 && (
                         <div className="mb-6">
                           <div className="flex items-center gap-2 mb-3">
-                            <span className="text-2xl">💡</span>
-                            <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
+                            <Lightbulb className="w-4 h-4 text-amber-600" aria-hidden="true" />
+                            <h4 className="text-sm font-semibold text-slate-900 uppercase tracking-wide">
                               Clinical Tips
                             </h4>
                           </div>
@@ -143,12 +143,12 @@ export const PearlDetailView: React.FC<PearlDetailViewProps> = ({
                             {pearl.detailedContent.clinicalTips.map((tip, index) => (
                               <div
                                 key={index}
-                                className="flex gap-3 p-3 bg-purple-50 rounded-lg"
+                                className="flex gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100"
                               >
-                                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs font-bold">
+                                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-neuro-500 text-white flex items-center justify-center text-xs font-bold">
                                   {index + 1}
                                 </div>
-                                <p className="text-sm text-gray-700 leading-relaxed">
+                                <p className="text-sm text-slate-600 leading-[1.55]">
                                   {tip}
                                 </p>
                               </div>
@@ -161,13 +161,13 @@ export const PearlDetailView: React.FC<PearlDetailViewProps> = ({
                       {pearl.detailedContent.evidence && (
                         <div className="mb-6">
                           <div className="flex items-center gap-2 mb-3">
-                            <span className="text-2xl">📚</span>
-                            <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
+                            <BookMarked className="w-4 h-4 text-slate-500" aria-hidden="true" />
+                            <h4 className="text-sm font-semibold text-slate-900 uppercase tracking-wide">
                               Evidence
                             </h4>
                           </div>
-                          <div className="p-4 bg-gray-50 rounded-lg">
-                            <p className="text-sm text-gray-700">
+                          <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
+                            <p className="text-sm text-slate-600 leading-[1.55]">
                               {pearl.detailedContent.evidence}
                             </p>
                           </div>
@@ -178,13 +178,13 @@ export const PearlDetailView: React.FC<PearlDetailViewProps> = ({
                       {pearl.detailedContent.reference && (
                         <div className="mb-6">
                           <div className="flex items-center gap-2 mb-3">
-                            <span className="text-2xl">🔗</span>
-                            <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
+                            <Link2 className="w-4 h-4 text-slate-500" aria-hidden="true" />
+                            <h4 className="text-sm font-semibold text-slate-900 uppercase tracking-wide">
                               Reference
                             </h4>
                           </div>
-                          <div className="p-4 bg-gray-50 rounded-lg">
-                            <p className="text-xs text-gray-600 leading-relaxed">
+                          <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
+                            <p className="text-xs text-slate-500 leading-relaxed">
                               {pearl.detailedContent.reference}
                             </p>
                           </div>
@@ -193,13 +193,13 @@ export const PearlDetailView: React.FC<PearlDetailViewProps> = ({
                     </>
                   ) : (
                     /* Fallback if no detailed content */
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                      <p className="text-sm text-gray-700 leading-relaxed">
+                    <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
+                      <p className="text-sm text-slate-600 leading-[1.55]">
                         {pearl.content}
                       </p>
                       {pearl.evidence && (
-                        <div className="mt-4 pt-4 border-t border-gray-200">
-                          <p className="text-xs text-gray-500">
+                        <div className="mt-4 pt-4 border-t border-slate-100">
+                          <p className="text-xs text-slate-400">
                             <span className="font-semibold">Evidence:</span> {pearl.evidence}
                           </p>
                         </div>
@@ -211,8 +211,8 @@ export const PearlDetailView: React.FC<PearlDetailViewProps> = ({
             </div>
 
             {/* Footer */}
-            <div className="p-4 bg-gradient-to-t from-white to-transparent border-t border-gray-200 flex-shrink-0 rounded-b-2xl">
-              <p className="text-xs text-gray-500 text-center">
+            <div className="p-4 border-t border-slate-100 flex-shrink-0 rounded-b-2xl">
+              <p className="text-xs text-slate-400 text-center">
                 Clinical guidance with trial references
               </p>
             </div>

@@ -131,7 +131,7 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
     <>
       {/* Main Pearl List Modal */}
       <div
-        className="fixed inset-0 bg-black/40 z-40 transition-opacity"
+        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 transition-opacity"
         onClick={onClose}
       />
 
