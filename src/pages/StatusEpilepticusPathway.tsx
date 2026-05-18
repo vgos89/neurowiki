@@ -196,7 +196,7 @@ const StatusEpilepticusPathway: React.FC = () => {
         parts.push(`Stage 3: Refractory Management Initiated`);
         if (stage3Agent) parts.push(`Infusion Selected: ${stage3Agent} ${calculateDose(stage3Agent, patient.weight)}`);
     }
-    return `Status Epilepticus Pathway Note:\nWeight: ${patient.weight}kg\n\n${parts.join('\n\n')}`;
+    return `Status Epilepticus — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\nWeight: ${patient.weight} kg\n\n${parts.join('\n\n')}`;
   };
 
   const copySummary = useCallback(() => {

@@ -106,10 +106,9 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
   const generateEMRNote = (): string => {
     const door = doorTime ?? timerStartTime;
     let note = '';
-    note += 'GWTG STROKE CODE SUMMARY (Get With The Guidelines)\n';
-    note += '==================================================\n\n';
+    note += `Stroke Code Summary — ${door ? door.toLocaleString() : new Date().toLocaleString()}\n\n`;
 
-    note += '1. LAST KNOWN WELL (LKW) / LAST KNOWN NORMAL (LKN):\n';
+    note += '1. LKW:\n';
     note += step1Data?.lkwUnknown ? '- LKW: Unknown (wake-up/unwitnessed)\n' : `- LKW: ${step1Data?.lkwTimestamp ? step1Data.lkwTimestamp.toLocaleString() : `${step1Data?.lkwHours?.toFixed(1) ?? '—'} hours ago`}\n`;
     if (step1Data?.symptomDiscoveryTime && !step1Data?.lkwUnknown) {
       note += `- Time of symptom discovery: ${step1Data.symptomDiscoveryTime.toLocaleString()}\n`;
@@ -119,15 +118,15 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
     }
     note += '\n';
 
-    note += '2. HOSPITAL ARRIVAL (DOOR TIME):\n';
+    note += '2. Door Time:\n';
     note += `- Door time: ${door ? door.toLocaleString() : '—'}\n\n`;
 
-    note += '3. NEUROLOGIST EVALUATION:\n';
+    note += '3. Neurologist Evaluation:\n';
     note += `- Neurologist evaluation: ${milestones?.neurologistEvaluationTime ? milestones.neurologistEvaluationTime.toLocaleString() : '—'}\n`;
     note += `- Neuro IR contacted: ${milestones?.neuroIrContactedTime ? milestones.neuroIrContactedTime.toLocaleString() : '—'}\n`;
     note += `- NCC/ICU sign-out: ${milestones?.nccIcuSignoutTime ? milestones.nccIcuSignoutTime.toLocaleString() : '—'}\n\n`;
 
-    note += '4. BRAIN IMAGING TIMES:\n';
+    note += '4. Brain Imaging:\n';
     note += `- CT ordered: ${milestones?.ctOrderedTime ? milestones.ctOrderedTime.toLocaleString() + (doorToCTOrderedMin != null ? ` (${doorToCTOrderedMin} min from door)` : '') : '—'}\n`;
     const ctFirstImageSuffix = doorToCTMin != null
       ? ' (' + doorToCTMin + ' min from door' + (ctFirstImageMetTarget ? ', target ≤25)' : ')')
@@ -147,7 +146,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
     note += `- CTA: ${step2Data?.ctaOrdered ? 'Ordered' : 'Not ordered'}\n`;
     note += `- LVO: ${step2Data?.lvoPresent === true ? 'Yes' : step2Data?.lvoPresent === false ? 'No' : step2Data?.thrombectomyPlan ?? '—'}\n\n`;
 
-    note += '5. TREATMENT TIMES:\n';
+    note += '5. Treatment Times:\n';
     note += `- Door-to-Needle: ${doorToNeedleMin != null ? `${doorToNeedleMin} min (target ≤60${needleBest ? ', best ≤30' : needleOptimal ? ', optimal ≤45' : ''})` : '—'}\n`;
     if (step1Data?.lkwTimestamp && lkwToNeedleMin != null) {
       note += `- LKW-to-Needle: ${lkwToNeedleMin} min (must be ≤4.5h for standard IV tPA)\n`;
@@ -157,7 +156,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
     }
     note += `- Agent: ${treatmentLabel}\n\n`;
 
-    note += '6. THROMBECTOMY (if applicable):\n';
+    note += '6. Thrombectomy:\n';
     if (milestones?.groinPunctureTime || milestones?.firstDeviceTime || milestones?.firstReperfusionTime) {
       note += `- Door to groin puncture: ${doorToGroinMin != null ? `${doorToGroinMin} min` : '—'}\n`;
       note += `- First device deployment: ${milestones?.firstDeviceTime ? milestones.firstDeviceTime.toLocaleString() : '—'}\n`;
@@ -167,7 +166,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
     }
     note += '\n';
 
-    note += '7. ORDERS PLACED:\n';
+    note += '7. Orders Placed:\n';
     if (step4Orders?.length) {
       step4Orders.forEach((order) => {
         note += `- ${order}\n`;
@@ -178,12 +177,12 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
     note += '\n';
 
     if (thrombectomyRecommendation) {
-      note += 'THROMBECTOMY / NEXT STEPS:\n';
+      note += 'Thrombectomy / Next Steps:\n';
       note += `${thrombectomyRecommendation}\n\n`;
     }
 
     if (extendedIvtRecommendation) {
-      note += 'EXTENDED IVT ASSESSMENT:\n';
+      note += 'Extended IVT Assessment:\n';
       note += `${extendedIvtRecommendation}\n`;
     }
 

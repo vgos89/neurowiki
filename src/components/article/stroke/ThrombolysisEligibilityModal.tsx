@@ -186,9 +186,9 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
   };
 
   const buildEmrText = (): string => {
+    const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
     return [
-      'IV tPA ELIGIBILITY ASSESSMENT (AHA/ASA 2026)',
-      '='.repeat(48),
+      `tPA/TNK eligibility — ${today}`,
       '',
       `STATUS: ${eligibilityStatus.label}`,
       '',

@@ -525,34 +525,47 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
 
   const buildEmrText = (): string => {
     if (!result) return '';
-    const lines = [
-      'Late Window IVT Assessment',
-      `Status: ${result.status.toUpperCase()}`,
-      `Reason: ${result.reason}`,
-      '',
-      'Setup:',
-      `  LKW: ${
-        onsetMode === 'wake-up' && wakeTimestamp && lkwTimestamp && imagingModality === 'ctp'
-          ? `Bedtime ${lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} · Woke ${wakeTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} (${hoursSinceMidpoint?.toFixed(1)}h since sleep midpoint — EXTEND)`
-          : onsetMode === 'wake-up' && wakeTimestamp && lkwTimestamp
-          ? `Bedtime ${lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} · Woke ${wakeTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} (${Math.round(minutesSinceWaking ?? 0)} min since waking)`
-          : onsetMode === 'unknown-lkw' && lkwTimestamp
-          ? `${lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} last known well · onset unknown`
-          : onsetMode === 'unknown-no-lkw'
-          ? 'Unknown onset / no usable LKW'
-          : elapsedHours !== null ? `${formatElapsed(elapsedHours)} elapsed` : ''
-      }`,
-      `  Imaging: ${imagingModality === 'mri' ? 'MRI (DWI + FLAIR / PWI)' : 'CT Perfusion (RAPID/equivalent)'}`,
-      '',
-      `Details: ${result.details}`,
-    ];
+
+    // Line 1: pathway name + eligibility verdict + path context
+    const pathLabel = result.path
+      ? result.path === 'A'     ? 'Path A, WAKE-UP / DWI-FLAIR mismatch'
+      : result.path === 'B'     ? `Path B, perfusion mismatch on ${imagingModality === 'mri' ? 'MRI DWI-PWI' : 'CT perfusion'}`
+      : result.path === 'C-LVO' ? 'Path C-LVO, 9–24h with no feasible EVT'
+      : ''
+      : '';
+    const corLabel = result.cor ? `, Class ${result.cor}` : '';
+    const line1Parts = [pathLabel, corLabel].filter(Boolean).join('');
+    const line1 = line1Parts
+      ? `Extended IVT eligibility — ${result.status} (${line1Parts})`
+      : `Extended IVT eligibility — ${result.status}`;
+
+    // Line 2: compressed clinical inputs (LKW state + imaging modality)
+    const lkwStr = onsetMode === 'wake-up' && wakeTimestamp && lkwTimestamp && imagingModality === 'ctp'
+      ? `bedtime ${lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}, woke ${wakeTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} (${hoursSinceMidpoint?.toFixed(1)}h since sleep midpoint)`
+      : onsetMode === 'wake-up' && wakeTimestamp && lkwTimestamp
+      ? `bedtime ${lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}, woke ${wakeTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} (${Math.round(minutesSinceWaking ?? 0)} min since waking)`
+      : onsetMode === 'unknown-lkw' && lkwTimestamp
+      ? `LKW ${lkwTimestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}, onset unknown`
+      : onsetMode === 'unknown-no-lkw'
+      ? 'unknown onset, no usable LKW'
+      : elapsedHours !== null ? `${formatElapsed(elapsedHours)} elapsed` : '';
+    const imgStr = imagingModality === 'mri' ? 'MRI (DWI+FLAIR/PWI)' : 'CT perfusion (RAPID/equivalent)';
+    const line2Parts = [lkwStr, imgStr].filter(Boolean);
+    const line2 = line2Parts.join(', ') + (line2Parts.length ? '.' : '');
+
+    // Line 3: result.reason verbatim (CLIN-2 preserved by construction — not mutated)
+    // Line 4: result.details verbatim (CLIN-2 preserved by construction — not mutated)
+    // Line 5 (optional): trial basis
+    const lines: string[] = [line1, line2];
+    if (result.reason) lines.push(result.reason);
+    if (result.details && result.details !== result.reason) lines.push(result.details);
     if (result.trialsBasis?.length) {
-      lines.push('', `Evidence: ${trialList(result.trialsBasis)}`);
+      lines.push(`Basis: ${result.trialsBasis.join(', ')}`);
     }
     if (result.cor) {
-      lines.push(`Guideline: COR ${result.cor} · LOE B-R · 2026 AHA/ASA`);
+      lines.push(`AHA/ASA 2026 — COR ${result.cor}, LOE B-R`);
     }
-    return lines.join('\n');
+    return lines.filter(Boolean).join('\n');
   };
 
   const copySummary = () => {

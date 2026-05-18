@@ -378,7 +378,7 @@ const MigrainePathway: React.FC = () => {
       if (cocktail.antiemetic === 'prochlorperazine') lines.push("- Prochlorperazine 10 mg PO/IV x1 (Repeat q8h PRN)");
       if (cocktail.antiemetic === 'ondansetron') lines.push("- Ondansetron 4-8 mg PO/IV x1 (Repeat q8h PRN)");
 
-      if (cocktail.ketorolac) lines.push(`- Ketorolac ${cocktail.ketorolac} mg IM/IV x1 (Repeat x1 at 8h PRN, Max 2 doses)`);
+      if (cocktail.ketorolac) lines.push(`- Ketorolac ${cocktail.ketorolac} mg IM/IV x1 (q8h PRN, max 2 doses)`);
       if (cocktail.dexamethasone) lines.push(`- Dexamethasone ${cocktail.dexamethasone} mg IV x1`);
 
       if (firstLineAddOns.sumatriptan) lines.push("- Sumatriptan 6 mg SC x1 (Repeat x1 after 1h PRN, Max 12mg/24h)");
@@ -414,7 +414,7 @@ const MigrainePathway: React.FC = () => {
           lines.push("- Robblee 2025: DHE Level U — needs better quality ED-specific studies");
       }
 
-      let text = `MIGRAINE PATHWAY ORDERS\n\n${lines.join('\n')}`;
+      let text = `Migraine cocktail — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\n\n${lines.join('\n')}`;
       if (contraindications.length > 0) {
           text += `\n\nContraindications Applied:\n${contraindications.join('\n')}`;
       }

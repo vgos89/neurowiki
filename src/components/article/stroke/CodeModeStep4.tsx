@@ -420,25 +420,25 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
         groupedSelected[order.category].push(order.label);
       });
 
-    let emrNote = '# ACUTE ISCHEMIC STROKE - TREATMENT PLAN\n\n';
+    let emrNote = `Acute Ischemic Stroke — Treatment Orders\n\n`;
 
     if (groupedSelected['labs']?.length) {
-      emrNote += '## LAB WORK\n';
+      emrNote += 'Lab Work:\n';
       groupedSelected['labs'].forEach(label => { emrNote += `- ${label}\n`; });
       emrNote += '\n';
     }
     if (groupedSelected['post-tpa']?.length) {
-      emrNote += '## POST-THROMBOLYSIS MONITORING\n';
+      emrNote += 'Post-Thrombolysis Monitoring:\n';
       groupedSelected['post-tpa'].forEach(label => { emrNote += `- ${label}\n`; });
       emrNote += '\n';
     }
     if (groupedSelected['stroke-workup']?.length) {
-      emrNote += '## STROKE ETIOLOGY WORKUP\n';
+      emrNote += 'Stroke Etiology Workup:\n';
       groupedSelected['stroke-workup'].forEach(label => { emrNote += `- ${label}\n`; });
       emrNote += '\n';
     }
     if (groupedSelected['general']?.length) {
-      emrNote += '## GENERAL STROKE CARE\n';
+      emrNote += 'General Stroke Care:\n';
       groupedSelected['general'].forEach(label => { emrNote += `- ${label}\n`; });
       emrNote += '\n';
     }

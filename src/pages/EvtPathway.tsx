@@ -917,26 +917,51 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
 
   const buildEmrText = (): string => {
       if (!result) return "";
-      let summary = "";
+
       if (inputs.occlusionType === 'lvo') {
-          const imagingLine = inputs.lvoLocation === 'basilar'
-              ? `- pc-ASPECTS: ${inputs.pcAspects}`
-              : inputs.time === '0_6'
-                  ? [
-                      inputs.aspects ? `- ASPECTS: ${inputs.aspects}` : '',
-                      inputs.severeHypodensity26 !== 'unknown' ? `- Severe CT hypodensity >=26 mL: ${inputs.severeHypodensity26.toUpperCase()}` : '',
-                    ].filter(Boolean).join('\n')
-                  : [
-                      inputs.aspects ? `- ASPECTS: ${inputs.aspects}` : '',
-                      inputs.severeHypodensity26 !== 'unknown' ? `- Severe CT hypodensity >=26 mL: ${inputs.severeHypodensity26.toUpperCase()}` : '',
-                      inputs.core ? `- Core: ${inputs.core}ml` : '',
-                      inputs.mismatchVol ? `- Mismatch: ${inputs.mismatchVol}ml | Ratio: ${inputs.mismatchRatio}` : '',
-                    ].filter(Boolean).join('\n');
-          summary = `LVO EVT Assessment\nType: ${inputs.lvoLocation === 'basilar' ? 'Basilar' : 'Anterior'}\nStatus: ${result.status.toUpperCase()}\nProtocol: ${result.criteriaName || 'Standard Screening'}\n\nClinical Data:\n- Time Window: ${inputs.time === '0_6' ? '0-6h' : '6-24h'}\n- NIHSS: ${inputs.nihss.replace('_', '-').replace('plus', '+')}\n- Age: ${inputs.age.replace('_', '-').replace('plus', '+')}\n\nImaging Data:\n${imagingLine}\n\nReason: ${result.reason}\n${result.details}`;
-      } else {
-          summary = `MeVO EVT Assessment\nStatus: ${result.status.toUpperCase()}\nReason: ${result.reason}\n\nClinical Data:\n- Location: ${inputs.mevoLocation.replace(/_/g, ' ').toUpperCase()}\n- NIHSS: ${inputs.nihssNumeric}\n- Disabling: ${inputs.mevoDisabling}\n- Dependent: ${inputs.mevoDependent}\n- Time: ${inputs.time === '0_6' ? '0-6h' : '6-24h'}\n- Favorable Imaging: ${inputs.mevoSalvageable.toUpperCase()}\n\nDetails:\n${result.details}`;
+          const locLabel = inputs.lvoLocation === 'basilar' ? 'Basilar LVO' : 'Anterior LVO';
+          const protocol = result.criteriaName || (inputs.time === '0_6' ? '0–6h standard window' : '6–24h late window');
+          const line1 = `EVT eligibility — ${result.status} (${protocol})`;
+
+          const nihssLabel = inputs.nihss !== 'unknown' ? `NIHSS ${inputs.nihss.replace('_', '–').replace('plus', '+')}` : '';
+          const ageLabel   = inputs.age  !== 'unknown' ? `age ${inputs.age.replace('_', '–').replace('plus', '+')}` : '';
+          const timeLabel  = inputs.time !== 'unknown' ? (inputs.time === '0_6' ? '0–6h' : '6–24h') : '';
+          const imagingParts: string[] = [];
+          if (inputs.lvoLocation === 'basilar') {
+              if (inputs.pcAspects) imagingParts.push(`pc-ASPECTS ${inputs.pcAspects}`);
+          } else {
+              if (inputs.aspects) imagingParts.push(`ASPECTS ${inputs.aspects}`);
+              if (inputs.severeHypodensity26 === 'yes')  imagingParts.push('severe CT hypodensity ≥26 mL');
+              if (inputs.severeHypodensity26 === 'no')   imagingParts.push('no severe CT hypodensity ≥26 mL');
+              if (inputs.core)        imagingParts.push(`core ${inputs.core} mL`);
+              if (inputs.mismatchVol) imagingParts.push(`mismatch ${inputs.mismatchVol} mL (ratio ${inputs.mismatchRatio})`);
+          }
+          const inputParts = [locLabel, timeLabel, nihssLabel, ageLabel, ...imagingParts].filter(Boolean);
+          const line2 = inputParts.join(', ') + '.';
+
+          const lines = [line1, line2];
+          if (result.reason) lines.push(result.reason);
+          if (result.details && result.details !== result.reason) lines.push(result.details);
+          return lines.join('\n');
       }
-      return summary.trim();
+
+      // MeVO branch
+      const mevoLoc  = inputs.mevoLocation !== 'unknown' ? inputs.mevoLocation.replace(/_/g, ' ') : '';
+      const timeLabel = inputs.time !== 'unknown' ? (inputs.time === '0_6' ? '0–6h' : '6–24h') : '';
+      const line1 = `EVT eligibility (MeVO) — ${result.status}`;
+      const mevoParts = [
+          mevoLoc ? `${mevoLoc} occlusion` : '',
+          timeLabel,
+          inputs.nihssNumeric ? `NIHSS ${inputs.nihssNumeric}` : '',
+          inputs.mevoDisabling === 'yes' ? 'disabling deficit' : inputs.mevoDisabling === 'no' ? 'non-disabling' : '',
+          inputs.mevoDependent === 'yes' ? 'prior dependency' : '',
+          inputs.mevoSalvageable === 'yes' ? 'favorable imaging' : inputs.mevoSalvageable === 'no' ? 'unfavorable imaging' : '',
+      ].filter(Boolean);
+      const line2 = mevoParts.join(', ') + (mevoParts.length ? '.' : '');
+      const lines = [line1, line2];
+      if (result.reason) lines.push(result.reason);
+      if (result.details && result.details !== result.reason) lines.push(result.details);
+      return lines.filter(Boolean).join('\n').trim();
   };
 
   const copySummary = () => {
