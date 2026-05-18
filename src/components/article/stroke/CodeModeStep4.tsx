@@ -220,7 +220,7 @@ const ORDERS: Order[] = [
     label: '30-day cardiac event monitor',
     category: 'stroke-workup',
     evidence: 'Class I, Level B',
-    rationale: 'CRYSTAL-AF trial: 30-day monitoring detects AF in 16% of cryptogenic stroke patients vs 3% with 24h Holter. Detection rate increases with duration: 3% at 24h, 10% at 72h, 20% at 30 days. Changes anticoagulation strategy.',
+    rationale: 'CRYSTAL-AF trial: implantable cardiac monitor vs standard external monitoring after cryptogenic stroke. AF detection 8.9% at 6 months and 12.4% at 12 months with the implantable monitor, vs 1.4% at 6 months and 2.0% at 12 months with standard external monitoring. Detection rate continues to rise with longer monitoring duration; extended monitoring (minimum 30 days) is the standard after cryptogenic stroke and may change anticoagulation strategy.',
     defaultSelected: true,
     evidenceClass: 'I',
     evidenceLevel: 'B'
