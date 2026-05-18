@@ -140,7 +140,7 @@ export default function HasBledScoreCalculator() {
   }, []);
 
   // ── Handlers ───────────────────────────────────────────────────────────────
-  const handleCopy = () => {
+  const buildEmrText = () => {
     const lines = [
       `HAS-BLED Score: ${result.score}/9`,
       `Risk: ${HASBLED_RISK_LABELS[result.risk]}`,
@@ -155,8 +155,12 @@ export default function HasBledScoreCalculator() {
       `Drugs (antiplatelet/NSAIDs): ${inputs.drugs ? 'Yes' : 'No'}`,
       `Alcohol ≥8/wk: ${inputs.alcohol ? 'Yes' : 'No'}`,
     ];
+    return lines.join('\n');
+  };
+
+  const handleCopy = () => {
     trackResult(result.score);
-    copyToClipboard(lines.join('\n'), () => {
+    copyToClipboard(buildEmrText(), () => {
       showToast('Copied to clipboard');
     });
   };
@@ -255,6 +259,12 @@ export default function HasBledScoreCalculator() {
         onBack={handleBack}
         onReset={handleReset}
         onCopy={handleCopy}
+        shareText={buildEmrText}
+        shareTitle="HAS-BLED Score"
+        onShareResult={(r) => {
+          if (r === 'shared') showToast('Sent');
+          else if (r === 'copied') showToast('Copied to clipboard');
+        }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
       />

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Star, RefreshCw } from 'lucide-react';
 import { BackArrow } from './BackArrow';
+import { ShareButton } from './ShareButton';
 
 /**
  * Sticky top header for calculator pages per CALCULATOR_SPEC.md §1.1.
@@ -34,6 +35,16 @@ export interface CalculatorHeaderProps {
   onReset: () => void;
   /** Copy handler. */
   onCopy: () => void;
+  /** Optional Send-to text (string or lazy builder) for the share pill.
+   *  When provided, a Send button appears next to Copy. On mobile it
+   *  opens the native share sheet; on desktop it falls back to clipboard.
+   *  Added 2026-05-17 per V direction. */
+  shareText?: string | (() => string);
+  /** Optional title for the native share sheet (e.g. "NIHSS Score"). */
+  shareTitle?: string;
+  /** Called after the share/copy action with the result so the consumer
+   *  can show an appropriate toast. */
+  onShareResult?: (result: 'shared' | 'copied' | 'cancelled' | 'failed') => void;
   /** Favorite toggle handler. */
   onFavToggle: (e: React.MouseEvent) => void;
   /** Whether currently favorited. */
@@ -53,6 +64,9 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
   onBack,
   onReset,
   onCopy,
+  shareText,
+  shareTitle,
+  onShareResult,
   onFavToggle,
   isFav,
   headerRef,
@@ -124,6 +138,15 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
             >
               Copy
             </button>
+            {shareText && (
+              <ShareButton
+                text={shareText}
+                title={shareTitle ?? name}
+                onResult={onShareResult}
+                variant="pill"
+                label="Send"
+              />
+            )}
           </div>
         </div>
 

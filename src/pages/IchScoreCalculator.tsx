@@ -181,7 +181,7 @@ const IchScoreCalculator: React.FC = () => {
   };
 
   // ── Handlers ───────────────────────────────────────────────────────────────
-  const handleCopy = useCallback(() => {
+  const buildEmrText = useCallback(() => {
     const gcsPts = inputs.gcsPoints;
     const gcsLabel = gcsPts !== null ? ICH_GCS_OPTIONS[gcsPts].label : 'Not selected';
     const parts = [
@@ -193,11 +193,15 @@ const IchScoreCalculator: React.FC = () => {
       `Origin: ${inputs.infratentorial !== null ? (inputs.infratentorial ? 'Infratentorial' : 'Supratentorial') : 'Not selected'}`,
       `Age: ${inputs.age80OrOlder !== null ? (inputs.age80OrOlder ? '≥80 years' : '<80 years') : 'Not selected'}`,
     ];
+    return parts.join('\n');
+  }, [inputs, isComplete, result]);
+
+  const handleCopy = useCallback(() => {
     if (isComplete) trackResult(result!.score);
-    copyToClipboard(parts.join('\n'), () => {
+    copyToClipboard(buildEmrText(), () => {
       showToast('Copied to clipboard');
     });
-  }, [inputs, isComplete, result, trackResult, showToast]);
+  }, [buildEmrText, isComplete, result, trackResult, showToast]);
 
   const handleReset = useCallback(() => {
     setInputs(DEFAULT_INPUTS);
@@ -314,6 +318,12 @@ const IchScoreCalculator: React.FC = () => {
         onBack={handleBack}
         onReset={handleReset}
         onCopy={handleCopy}
+        shareText={buildEmrText}
+        shareTitle="ICH Score"
+        onShareResult={(r) => {
+          if (r === 'shared') showToast('Sent');
+          else if (r === 'copied') showToast('Copied to clipboard');
+        }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
       />

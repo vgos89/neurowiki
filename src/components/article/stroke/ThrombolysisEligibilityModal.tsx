@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { X, Copy, Check, ChevronDown, Zap, Info } from 'lucide-react';
 import { copyToClipboard } from '../../../utils/clipboard';
+import { ShareButton } from '../../calculators/ShareButton';
 
 export interface ThrombolysisEligibilityData {
   lkwTime: Date | null;
@@ -184,8 +185,8 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
     onClose();
   };
 
-  const handleCopyToEMR = () => {
-    const text = [
+  const buildEmrText = (): string => {
+    return [
       'IV tPA ELIGIBILITY ASSESSMENT (AHA/ASA 2026)',
       '='.repeat(48),
       '',
@@ -201,8 +202,10 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
       '',
       `Assessed: ${new Date().toLocaleString()}`,
     ].filter(Boolean).join('\n');
+  };
 
-    copyToClipboard(text, () => {
+  const handleCopyToEMR = () => {
+    copyToClipboard(buildEmrText(), () => {
       setCopiedToClipboard(true);
       setTimeout(() => setCopiedToClipboard(false), 2000);
     });
@@ -462,14 +465,23 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
 
         {/* Footer */}
         <div className="px-4 py-3 border-t border-slate-100 bg-white flex items-center justify-between gap-3 flex-shrink-0">
-          <button
-            type="button"
-            onClick={handleCopyToEMR}
-            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 border border-slate-200 hover:bg-slate-50 rounded-xl transition-colors"
-          >
-            {copiedToClipboard ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-            {copiedToClipboard ? 'Copied!' : 'Copy to EMR'}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleCopyToEMR}
+              className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 border border-slate-200 hover:bg-slate-50 rounded-xl transition-colors"
+            >
+              {copiedToClipboard ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              {copiedToClipboard ? 'Copied!' : 'Copy to EMR'}
+            </button>
+            <ShareButton
+              text={buildEmrText}
+              title="Thrombolysis Eligibility"
+              onResult={(r) => { if (r === 'shared' || r === 'copied') { setCopiedToClipboard(true); setTimeout(() => setCopiedToClipboard(false), 2000); } }}
+              variant="pill"
+              label="Send"
+            />
+          </div>
           <div className="flex gap-2">
             <button
               type="button"

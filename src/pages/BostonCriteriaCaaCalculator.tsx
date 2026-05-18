@@ -147,7 +147,7 @@ export default function BostonCriteriaCaaCalculator() {
   }, []);
 
   // ── Handlers ───────────────────────────────────────────────────────────────
-  const handleCopy = () => {
+  const buildEmrText = () => {
     const lines = [
       `Boston Criteria 2.0 for CAA: ${result.label}`,
       `Anticoagulation risk: ${result.anticoagulationRisk}`,
@@ -157,8 +157,12 @@ export default function BostonCriteriaCaaCalculator() {
       ...result.recommendations.map((r) => `• ${r}`),
       `Age: ${inputs.age} | Presentation: ${inputs.hasQualifyingPresentation ? 'Yes' : 'No'} | Lobar lesions: ${inputs.lobarHemorrhagicLesions === 2 ? '≥2' : inputs.lobarHemorrhagicLesions} | WM feature: ${inputs.whiteMatterFeature ? 'Yes' : 'No'} | Deep: ${inputs.deepHemorrhagicLesions ? 'Yes' : 'No'} | Other cause: ${inputs.otherCauseOfHemorrhage ? 'Yes' : 'No'}`,
     ];
+    return lines.join('\n');
+  };
+
+  const handleCopy = () => {
     trackResult(result.diagnosis);
-    copyToClipboard(lines.join('\n'), () => {
+    copyToClipboard(buildEmrText(), () => {
       showToast('Copied to clipboard');
     });
   };
@@ -264,6 +268,12 @@ export default function BostonCriteriaCaaCalculator() {
         onBack={handleBack}
         onReset={handleReset}
         onCopy={handleCopy}
+        shareText={buildEmrText}
+        shareTitle="Boston Criteria for CAA"
+        onShareResult={(r) => {
+          if (r === 'shared') showToast('Sent');
+          else if (r === 'copied') showToast('Copied to clipboard');
+        }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
       />

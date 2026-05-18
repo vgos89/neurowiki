@@ -915,8 +915,8 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
       setActiveSection(0); 
   };
 
-  const copySummary = () => { 
-      if (!result) return; 
+  const buildEmrText = (): string => {
+      if (!result) return "";
       let summary = "";
       if (inputs.occlusionType === 'lvo') {
           const imagingLine = inputs.lvoLocation === 'basilar'
@@ -936,7 +936,12 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
       } else {
           summary = `MeVO EVT Assessment\nStatus: ${result.status.toUpperCase()}\nReason: ${result.reason}\n\nClinical Data:\n- Location: ${inputs.mevoLocation.replace(/_/g, ' ').toUpperCase()}\n- NIHSS: ${inputs.nihssNumeric}\n- Disabling: ${inputs.mevoDisabling}\n- Dependent: ${inputs.mevoDependent}\n- Time: ${inputs.time === '0_6' ? '0-6h' : '6-24h'}\n- Favorable Imaging: ${inputs.mevoSalvageable.toUpperCase()}\n\nDetails:\n${result.details}`;
       }
-      navigator.clipboard.writeText(summary.trim());
+      return summary.trim();
+  };
+
+  const copySummary = () => {
+      if (!result) return;
+      navigator.clipboard.writeText(buildEmrText());
       setShowCopyToast(true);
       setTimeout(() => setShowCopyToast(false), 2000);
   };
@@ -1053,6 +1058,11 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
         onReset={handleReset}
         onCopy={copySummary}
         hideHeader={hideHeader}
+        shareText={buildEmrText}
+        shareTitle="EVT Pathway"
+        onShareResult={(r) => {
+          if (r === 'shared' || r === 'copied') { setShowCopyToast(true); setTimeout(() => setShowCopyToast(false), 2000); }
+        }}
       />
 
       <div ref={stepContainerRef} className="space-y-0 min-h-[300px] px-1">

@@ -536,6 +536,11 @@ const MigrainePathway: React.FC = () => {
         onFavToggle={handleFavToggle}
         onReset={handleReset}
         onCopy={copySummary}
+        shareText={generateSummary}
+        shareTitle="Migraine Pathway"
+        onShareResult={(r) => {
+          if (r === 'shared' || r === 'copied') { setCopyToast(true); setTimeout(() => setCopyToast(false), 2000); }
+        }}
       />
 
       {/* Legacy toast removed (E-7). PathwayCascadeNotice at field-safety now handles cascade feedback. */}

@@ -10,6 +10,7 @@ import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { scrollMainToTop } from '../utils/mainScroll';
 import { useRecents } from '../hooks/useRecents';
+import { ShareButton } from '../components/calculators/ShareButton';
 
 // ... (KEEP ALL TYPES, INTERFACES, STEPS, LOGIC, COMPONENTS SAME UNTIL RENDER) ...
 type Tri = "yes" | "no" | "unknown";
@@ -186,16 +187,20 @@ const ElanPathway: React.FC = () => {
   const handleNext = () => { if (step === 1 && (inputs.isIschemicAfib === 'no' || inputs.hasBleed === 'yes' || inputs.hasMechanicalValve === 'yes')) return; if (step < 4) setStep(step + 1); };
   const handleBack = () => { if (step > 1) setStep(step - 1); };
   const handleReset = () => { setInputs({ isIschemicAfib: 'unknown', hasBleed: 'unknown', hasMechanicalValve: 'unknown', hasPetechialHt: 'unknown', recentReperfusion: 'unknown', size: 'unknown', onset: '' }); setStep(1); };
-  const copySummary = () => {
-    if (!result) return;
+  const buildEmrText = (): string => {
+    if (!result) return '';
     let definition = "";
     if (result.size === 'tia') definition = "transient ischemic attack or no persistent infarct on follow-up imaging";
     else if (result.size === 'minor') definition = "infarct ≤ 1.5 cm";
     else if (result.size === 'moderate') definition = "cortical superficial branch of MCA/ACA/PCA, deep branch MCA, or internal border-zone";
     else if (result.size === 'major') definition = "large territory, ≥2 MCA cortical branches, or brainstem/cerebellum > 1.5 cm";
     const warningText = result.warnings.length ? `\n\nCaution flags:\n- ${result.warnings.join('\n- ')}` : '';
-    const summary = `Post-Stroke Anticoagulation Protocol Applied:\nImaging-based severity classified as ${result.size.charAt(0).toUpperCase() + result.size.slice(1)} (${definition}).\n\nThis calculator operationalizes the ELAN timing framework inside the broader AHA/ASA 2026 Class 2a recommendation for earlier DOAC initiation in carefully selected patients.\n\nEarlier ELAN-style DOAC window = ${result.earlyText} (${result.earlyDates}).\nLater comparator window = ${result.lateText} (${result.lateDates}).\n\nDecision based on imaging-defined infarct size, exclusion of major intracranial bleeding, and individualized review of hemorrhagic transformation and reperfusion therapy.${warningText}\n\nReference:\nELAN trial (NEJM 2023), OPTIMAS trial, TIMING trial, and 2026 AHA/ASA Guideline for the Early Management of Patients with Acute Ischemic Stroke.`.trim();
-    navigator.clipboard.writeText(summary);
+    return `Post-Stroke Anticoagulation Protocol Applied:\nImaging-based severity classified as ${result.size.charAt(0).toUpperCase() + result.size.slice(1)} (${definition}).\n\nThis calculator operationalizes the ELAN timing framework inside the broader AHA/ASA 2026 Class 2a recommendation for earlier DOAC initiation in carefully selected patients.\n\nEarlier ELAN-style DOAC window = ${result.earlyText} (${result.earlyDates}).\nLater comparator window = ${result.lateText} (${result.lateDates}).\n\nDecision based on imaging-defined infarct size, exclusion of major intracranial bleeding, and individualized review of hemorrhagic transformation and reperfusion therapy.${warningText}\n\nReference:\nELAN trial (NEJM 2023), OPTIMAS trial, TIMING trial, and 2026 AHA/ASA Guideline for the Early Management of Patients with Acute Ischemic Stroke.`.trim();
+  };
+
+  const copySummary = () => {
+    if (!result) return;
+    navigator.clipboard.writeText(buildEmrText());
     setShowCopyToast(true);
     setTimeout(() => setShowCopyToast(false), 2500);
   };
@@ -480,7 +485,7 @@ const ElanPathway: React.FC = () => {
          <div className="max-w-3xl mx-auto flex items-center justify-between gap-4">
              <button onClick={handleBack} disabled={step === 1} className={`px-6 py-3 border border-slate-200 rounded-xl font-bold transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${step === 1 ? 'opacity-0 pointer-events-none cursor-not-allowed' : 'bg-white text-slate-600 hover:bg-slate-50 hover:border-slate-300'}`}>Back</button>
              {step === 4 && (<button onClick={handleReset} className="hidden md:flex items-center text-slate-500 hover:text-neuro-500 font-bold px-4 py-2 rounded-lg transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><RotateCcw size={16} className="mr-2" /> Start Over</button>)}
-             {step < 4 ? (<button onClick={handleNext} disabled={step === 1 && isStep1Invalid} className={`flex-1 md:flex-none px-8 py-3 bg-purple-600 text-white rounded-xl font-bold hover:bg-purple-700 shadow-lg shadow-purple-200 transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${(step === 1 && isStep1Invalid) ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}>Next <ChevronRight size={16} className="ml-2" /></button>) : (<button onClick={copySummary} className="flex-1 md:flex-none px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><Copy size={16} className="mr-2" /> Copy to EMR</button>)}
+             {step < 4 ? (<button onClick={handleNext} disabled={step === 1 && isStep1Invalid} className={`flex-1 md:flex-none px-8 py-3 bg-purple-600 text-white rounded-xl font-bold hover:bg-purple-700 shadow-lg shadow-purple-200 transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${(step === 1 && isStep1Invalid) ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}>Next <ChevronRight size={16} className="ml-2" /></button>) : (<div className="flex items-center gap-2"><button onClick={copySummary} className="flex-1 md:flex-none px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><Copy size={16} className="mr-2" /> Copy to EMR</button><ShareButton text={buildEmrText} title="Post-Stroke Anticoagulation" variant="pill" label="Send" onResult={(r) => { if (r === 'shared' || r === 'copied') { setShowCopyToast(true); setTimeout(() => setShowCopyToast(false), 2500); } }} disabled={!result} /></div>)}
          </div>
       </div>
       

@@ -183,7 +183,7 @@ export default function Cha2ds2VascCalculator() {
   }, []);
 
   // ── Handlers ───────────────────────────────────────────────────────────────
-  const handleCopy = () => {
+  const buildEmrText = () => {
     const ageLabel = inputs.age75plus
       ? 'Age ≥75 (2 pts)'
       : inputs.age65to74
@@ -201,8 +201,12 @@ export default function Cha2ds2VascCalculator() {
       `Vascular disease: ${inputs.vascularDisease ? 'Yes' : 'No'}`,
       `Female sex: ${inputs.female ? 'Yes' : 'No'}`,
     ];
+    return lines.join('\n');
+  };
+
+  const handleCopy = () => {
     trackResult(result.score);
-    copyToClipboard(lines.join('\n'), () => {
+    copyToClipboard(buildEmrText(), () => {
       showToast('Copied to clipboard');
     });
   };
@@ -299,6 +303,12 @@ export default function Cha2ds2VascCalculator() {
         onBack={handleBack}
         onReset={handleReset}
         onCopy={handleCopy}
+        shareText={buildEmrText}
+        shareTitle="CHA₂DS₂-VASc Score"
+        onShareResult={(r) => {
+          if (r === 'shared') showToast('Sent');
+          else if (r === 'copied') showToast('Copied to clipboard');
+        }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
       />

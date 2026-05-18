@@ -202,9 +202,13 @@ const NihssCalculator: React.FC = () => {
     setNihssValues((prev) => ({ ...prev, '5a': val, '5b': val, '6a': val, '6b': val }));
   };
 
-  const copyNihss = () => {
+  const buildText = () => {
     const breakdown = NIHSS_ITEMS.map((i) => `${i.shortName}: ${nihssValues[i.id] ?? 0}`).join('\n');
-    navigator.clipboard.writeText(`NIHSS Total: ${total}\n\n${breakdown}`);
+    return `NIHSS Total: ${total}\n\n${breakdown}`;
+  };
+
+  const copyNihss = () => {
+    navigator.clipboard.writeText(buildText());
     showToast('Copied to clipboard', 2000);
   };
 
@@ -453,6 +457,12 @@ const NihssCalculator: React.FC = () => {
         onBack={handleBack}
         onReset={handleReset}
         onCopy={copyNihss}
+        shareText={buildText}
+        shareTitle="NIHSS"
+        onShareResult={(r) => {
+          if (r === 'shared') showToast('Sent');
+          else if (r === 'copied') showToast('Copied to clipboard');
+        }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
       />

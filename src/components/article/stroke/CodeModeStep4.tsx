@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Droplets, Pill, FlaskConical, HeartPulse, ChevronDown, ChevronUp, Copy, Check } from 'lucide-react';
+import { ShareButton } from '../../calculators/ShareButton';
 // Treatment Orders - AHA-based categories with evidence/rationale (v2)
 // BUG-01 fixed: renamed duplicate 'hba1c' id in stroke-workup to 'hba1c_workup'
 // BUG-03 fixed: Material Icons replaced with lucide-react throughout
@@ -567,6 +568,14 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
           {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
           <span>{copied ? 'Copied!' : 'Copy to EMR'}</span>
         </button>
+        <ShareButton
+          text={generateEMRNote}
+          title="Stroke Code Orders"
+          onResult={(r) => { if (r === 'shared' || r === 'copied') onCopySuccess?.(); }}
+          variant="pill"
+          label="Send"
+          disabled={selectedOrders.length === 0}
+        />
 
         <button
           type="button"

@@ -186,16 +186,19 @@ const AspectScoreCalculator: React.FC = () => {
     });
   }, []);
 
-  const handleCopy = () => {
+  const buildEmrText = () => {
     const involvedList = [...involved].join(', ') || 'None';
-    const text = [
+    return [
       `ASPECTS Score: ${score}/10`,
       `Interpretation: ${scoreInfo.label}`,
       `Involved regions (${involved.size}): ${involvedList}`,
       `EVT implication: ${scoreInfo.evtText}`,
     ].join('\n');
+  };
+
+  const handleCopy = () => {
     trackResult(score);
-    copyToClipboard(text, () => {
+    copyToClipboard(buildEmrText(), () => {
       showToast('Copied to clipboard');
     });
   };
@@ -279,6 +282,12 @@ const AspectScoreCalculator: React.FC = () => {
         onBack={handleBack}
         onReset={handleReset}
         onCopy={handleCopy}
+        shareText={buildEmrText}
+        shareTitle="ASPECTS"
+        onShareResult={(r) => {
+          if (r === 'shared') showToast('Sent');
+          else if (r === 'copied') showToast('Copied to clipboard');
+        }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
       />

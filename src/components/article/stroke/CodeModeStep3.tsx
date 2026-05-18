@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Copy, Check, Printer } from 'lucide-react';
 import type { Step1Data } from './CodeModeStep1';
 import type { Step2Data } from './CodeModeStep2';
+import { ShareButton } from '../../calculators/ShareButton';
 
 /** GWTG-aligned milestones (matches workflow GWTGMilestones) */
 export interface MilestonesInput {
@@ -389,6 +390,13 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
               </>
             )}
           </button>
+          <ShareButton
+            text={generateEMRNote}
+            title="Stroke Code Summary"
+            onResult={(r) => { if (r === 'shared' || r === 'copied') onCopySuccess?.(); }}
+            variant="pill"
+            label="Send"
+          />
           <button
             type="button"
             onClick={handlePrint}

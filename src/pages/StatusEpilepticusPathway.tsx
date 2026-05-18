@@ -261,6 +261,12 @@ const StatusEpilepticusPathway: React.FC = () => {
         onReset={handleReset}
         onCopy={copySummary}
         copyConfirm={copyConfirm}
+        shareText={generateEMRText}
+        shareTitle="Status Epilepticus Pathway"
+        onShareResult={(r) => {
+          if (r === 'shared') { setCopyConfirm(true); setTimeout(() => setCopyConfirm(false), 2000); }
+          else if (r === 'copied') { setCopyConfirm(true); setTimeout(() => setCopyConfirm(false), 2000); }
+        }}
       />
 
       <div ref={topRef} className="space-y-0 min-h-[300px] px-1 pt-4">

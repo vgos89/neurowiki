@@ -174,7 +174,7 @@ const Abcd2ScoreCalculator: React.FC = () => {
   };
 
   // ── Handlers ───────────────────────────────────────────────────────────────
-  const handleCopy = useCallback(() => {
+  const buildEmrText = useCallback(() => {
     const parts = isComplete && result
       ? [
           `ABCD² Score: ${result.score} / 7`,
@@ -186,12 +186,15 @@ const Abcd2ScoreCalculator: React.FC = () => {
           `Diabetes: ${inputs.diabetes ? 'Yes' : 'No'}`,
         ]
       : ['ABCD² Score: Incomplete — select all fields.'];
+    return parts.join('\n');
+  }, [inputs, isComplete, result]);
 
+  const handleCopy = useCallback(() => {
     if (isComplete && result) trackResult(result.score);
-    copyToClipboard(parts.join('\n'), () => {
+    copyToClipboard(buildEmrText(), () => {
       showToast('Copied to clipboard');
     });
-  }, [inputs, isComplete, result, trackResult, showToast]);
+  }, [buildEmrText, isComplete, result, trackResult, showToast]);
 
   const handleReset = useCallback(() => {
     setInputs(DEFAULT_INPUTS);
@@ -290,6 +293,12 @@ const Abcd2ScoreCalculator: React.FC = () => {
         onBack={handleBack}
         onReset={handleReset}
         onCopy={handleCopy}
+        shareText={buildEmrText}
+        shareTitle="ABCD² Score"
+        onShareResult={(r) => {
+          if (r === 'shared') showToast('Sent');
+          else if (r === 'copied') showToast('Copied to clipboard');
+        }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
       />

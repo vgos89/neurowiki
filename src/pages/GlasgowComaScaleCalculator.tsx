@@ -186,7 +186,7 @@ const GlasgowComaScaleCalculator: React.FC = () => {
   };
 
   // ── Handlers ───────────────────────────────────────────────────────────────
-  const handleCopy = useCallback(() => {
+  const buildEmrText = useCallback(() => {
     const eyeLabel    = inputs.eyeNotTestable
       ? 'not testable'
       : inputs.eye !== null ? String(inputs.eye) : 'not selected';
@@ -204,12 +204,15 @@ const GlasgowComaScaleCalculator: React.FC = () => {
           `Motor (M): ${motorLabel}`,
         ]
       : ['GCS: Incomplete — select Eye, Verbal, and Motor.'];
+    return parts.join('\n');
+  }, [inputs, isComplete, result]);
 
+  const handleCopy = useCallback(() => {
     if (isComplete) trackResult(result!.total);
-    copyToClipboard(parts.join('\n'), () => {
+    copyToClipboard(buildEmrText(), () => {
       showToast('Copied to clipboard');
     });
-  }, [inputs, isComplete, result, trackResult, showToast]);
+  }, [buildEmrText, isComplete, result, trackResult, showToast]);
 
   const handleReset = useCallback(() => {
     setInputs(DEFAULT_INPUTS);
@@ -330,6 +333,12 @@ const GlasgowComaScaleCalculator: React.FC = () => {
         onBack={handleBack}
         onReset={handleReset}
         onCopy={handleCopy}
+        shareText={buildEmrText}
+        shareTitle="GCS"
+        onShareResult={(r) => {
+          if (r === 'shared') showToast('Sent');
+          else if (r === 'copied') showToast('Copied to clipboard');
+        }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
       />

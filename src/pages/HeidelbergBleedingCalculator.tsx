@@ -181,7 +181,7 @@ const HeidelbergBleedingCalculator: React.FC = () => {
   };
 
   // ── Handlers ───────────────────────────────────────────────────────────────
-  const handleCopy = useCallback(() => {
+  const buildEmrText = useCallback(() => {
     const parts = isComplete && result
       ? [
           `Heidelberg Bleeding Classification: ${result.classification}`,
@@ -190,12 +190,15 @@ const HeidelbergBleedingCalculator: React.FC = () => {
           `Management: ${result.explanation}`,
         ].filter((x): x is string => x !== null)
       : ['Heidelberg Bleeding Classification: Select a bleeding class.'];
+    return parts.join('\n');
+  }, [isComplete, result]);
 
+  const handleCopy = useCallback(() => {
     if (isComplete && result) trackResult(result.shortLabel);
-    copyToClipboard(parts.join('\n'), () => {
+    copyToClipboard(buildEmrText(), () => {
       showToast('Copied to clipboard');
     });
-  }, [isComplete, result, trackResult, showToast]);
+  }, [buildEmrText, isComplete, result, trackResult, showToast]);
 
   const handleReset = useCallback(() => {
     setInputs(DEFAULT_INPUTS);
@@ -316,6 +319,12 @@ const HeidelbergBleedingCalculator: React.FC = () => {
         onBack={handleBack}
         onReset={handleReset}
         onCopy={handleCopy}
+        shareText={buildEmrText}
+        shareTitle="Heidelberg Bleeding Classification"
+        onShareResult={(r) => {
+          if (r === 'shared') showToast('Sent');
+          else if (r === 'copied') showToast('Copied to clipboard');
+        }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
       />

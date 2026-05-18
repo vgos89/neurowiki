@@ -150,7 +150,7 @@ export default function RopeScoreCalculator() {
   }, []);
 
   // ── Handlers ───────────────────────────────────────────────────────────────
-  const handleCopy = () => {
+  const buildEmrText = () => {
     const lines = [
       `RoPE Score: ${result.score}/10`,
       `PFO-attributable fraction: ${result.pfoAttributablePercent}%`,
@@ -161,8 +161,12 @@ export default function RopeScoreCalculator() {
       `Nonsmoker: ${inputs.nonsmoker ? 'Yes' : 'No'}`,
       `Cortical infarct on imaging: ${inputs.corticalInfarct ? 'Yes' : 'No'}`,
     ];
+    return lines.join('\n');
+  };
+
+  const handleCopy = () => {
     trackResult(result.score);
-    copyToClipboard(lines.join('\n'), () => {
+    copyToClipboard(buildEmrText(), () => {
       showToast('Copied to clipboard');
     });
   };
@@ -248,6 +252,12 @@ export default function RopeScoreCalculator() {
         onBack={handleBack}
         onReset={handleReset}
         onCopy={handleCopy}
+        shareText={buildEmrText}
+        shareTitle="RoPE Score"
+        onShareResult={(r) => {
+          if (r === 'shared') showToast('Sent');
+          else if (r === 'copied') showToast('Copied to clipboard');
+        }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
       />

@@ -523,8 +523,8 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     prevCriteriaRef.current = false;
   };
 
-  const copySummary = () => {
-    if (!result) return;
+  const buildEmrText = (): string => {
+    if (!result) return '';
     const lines = [
       'Late Window IVT Assessment',
       `Status: ${result.status.toUpperCase()}`,
@@ -552,7 +552,12 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
     if (result.cor) {
       lines.push(`Guideline: COR ${result.cor} · LOE B-R · 2026 AHA/ASA`);
     }
-    copyToClipboard(lines.join('\n'), () => {
+    return lines.join('\n');
+  };
+
+  const copySummary = () => {
+    if (!result) return;
+    copyToClipboard(buildEmrText(), () => {
       setShowCopyToast(true);
       setTimeout(() => setShowCopyToast(false), 2000);
     });
@@ -634,6 +639,11 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
         onCopy={copySummary}
         copyConfirm={showCopyToast}
         hideHeader={hideHeader}
+        shareText={buildEmrText}
+        shareTitle="Extended IVT Pathway"
+        onShareResult={(r) => {
+          if (r === 'shared' || r === 'copied') { setShowCopyToast(true); setTimeout(() => setShowCopyToast(false), 2000); }
+        }}
       />
 
       <div className="space-y-0 min-h-[300px] mt-6 px-4 md:px-0">

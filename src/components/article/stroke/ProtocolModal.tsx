@@ -25,6 +25,7 @@
 import React, { useRef } from 'react';
 import { X, Copy } from 'lucide-react';
 import { useModalFocusTrap } from '../../../hooks/useModalFocusTrap';
+import { ShareButton } from '../../calculators/ShareButton';
 
 export interface ProtocolStep {
   title: string;
@@ -219,6 +220,13 @@ export function ProtocolModal({
             <Copy className="w-4 h-4" aria-hidden />
             Copy to EMR
           </button>
+          <ShareButton
+            text={buildEmrText}
+            title={shortTitle}
+            onResult={(r) => { if (r === 'shared') onCopySuccess?.(); }}
+            variant="pill"
+            label="Send"
+          />
           <button
             type="button"
             onClick={handleClose}

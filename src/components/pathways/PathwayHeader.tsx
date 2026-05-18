@@ -17,6 +17,7 @@
  */
 import React from 'react';
 import { Star, RotateCcw } from 'lucide-react';
+import { ShareButton } from '../calculators/ShareButton';
 
 export interface PathwayHeaderProps {
   /** Display label rendered after the PATHWAY eyebrow. */
@@ -38,6 +39,15 @@ export interface PathwayHeaderProps {
    * Consumer controls the transient state; primitive is a pure renderer.
    */
   copyConfirm?: boolean;
+  /** Optional Send-to text (string or lazy builder) for the share pill.
+   *  When provided, a Send button appears next to Copy. On mobile opens
+   *  the native share sheet; on desktop falls back to clipboard.
+   *  Added 2026-05-17 per V direction. */
+  shareText?: string | (() => string);
+  /** Optional share-sheet title (defaults to pathwayLabel). */
+  shareTitle?: string;
+  /** Called after the share/copy action with the result. */
+  onShareResult?: (result: 'shared' | 'copied' | 'cancelled' | 'failed') => void;
   /**
    * When true, primitive renders nothing. Used by EVT's `isInModal` mode
    * (calculator-embedded surface — host provides header).
@@ -54,6 +64,9 @@ export const PathwayHeader: React.FC<PathwayHeaderProps> = ({
   onReset,
   onCopy,
   copyConfirm = false,
+  shareText,
+  shareTitle,
+  onShareResult,
   hideHeader = false,
 }) => {
   if (hideHeader) return null;
@@ -89,6 +102,15 @@ export const PathwayHeader: React.FC<PathwayHeaderProps> = ({
           <button onClick={onCopy} className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px]" aria-label="Copy summary">
             {copyConfirm ? 'Copied ✓' : 'Copy'}
           </button>
+          {shareText && (
+            <ShareButton
+              text={shareText}
+              title={shareTitle ?? pathwayLabel}
+              onResult={onShareResult}
+              variant="pill"
+              label="Send"
+            />
+          )}
         </div>
       </div>
     </div>
