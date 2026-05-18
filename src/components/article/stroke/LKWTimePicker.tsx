@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Moon, AlarmClock } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Moon, AlarmClock, Clock } from 'lucide-react';
 import { useModalFocusTrap } from '../../../hooks/useModalFocusTrap';
 
 export interface LKWTimePickerProps {
@@ -605,7 +605,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[90] flex items-end sm:items-center justify-center"
+      className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[90] flex items-end sm:items-center justify-center"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div
@@ -620,7 +620,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
         <div className="flex items-center justify-between h-14 px-4 border-b border-slate-100 flex-shrink-0">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="w-7 h-7 rounded-lg bg-neuro-500 flex items-center justify-center shrink-0">
-              <span className="text-white text-sm leading-none">🕐</span>
+              <Clock size={14} className="text-white" aria-hidden="true" />
             </div>
             <span id="lkw-picker-title" className="text-sm font-bold text-slate-900 truncate">Last Known Well</span>
           </div>

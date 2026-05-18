@@ -133,14 +133,13 @@ export function ProtocolModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-4">
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
         onClick={handleClose}
         aria-hidden
       />
       <div
         ref={dialogRef}
-        className="relative w-full max-w-lg max-h-[90vh] sm:min-h-0 bg-white rounded-2xl overflow-hidden flex flex-col"
-        style={{ boxShadow: '0 8px 40px rgba(0,0,0,0.18)' }}
+        className="relative w-full max-w-lg max-h-[90vh] sm:min-h-0 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
