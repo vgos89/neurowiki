@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated": "2026-05-13",
+  "generated": "2026-05-17",
   "nodes": {
     "hub/guide": {
       "type": "hub",
@@ -453,6 +453,48 @@
       "referencedBy": [
         "pathway/migraine"
       ]
+    },
+    "component/share-button": {
+      "type": "component",
+      "title": "ShareButton Primitive",
+      "file": "src/components/calculators/ShareButton.tsx",
+      "references": [
+        "util/share-or-copy"
+      ],
+      "referencedBy": [
+        "calc/nihss",
+        "calc/abcd2",
+        "calc/gcs",
+        "calc/ich-score",
+        "calc/has-bled",
+        "calc/rope",
+        "calc/aspects",
+        "calc/heidelberg",
+        "calc/boston-criteria",
+        "calc/chads-vasc",
+        "pathway/stroke",
+        "pathway/evt",
+        "pathway/extended-ivt",
+        "pathway/se-pathway",
+        "pathway/migraine",
+        "pathway/elan"
+      ]
+    },
+    "util/share-or-copy": {
+      "type": "utility",
+      "title": "shareOrCopy Utility",
+      "file": "src/utils/shareOrCopy.ts",
+      "references": [],
+      "referencedBy": [
+        "component/share-button"
+      ]
+    },
+    "doc/emr-text-standard": {
+      "type": "doc",
+      "title": "EMR-Text Doctor-Tone Standard",
+      "file": "docs/reviews/emr-text-standard-2026-05-17.md",
+      "references": [],
+      "referencedBy": []
     }
   },
   "stubs": [

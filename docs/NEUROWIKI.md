@@ -132,6 +132,13 @@ All clinical content must be traceable to a named guideline with year. No conten
 - `logo-lockup.png` — horizontal wordmark (icon + "NeuroWiki" text)
 - Inline SVG logo mark used in Layout.tsx (desktop sidebar + mobile header) — brain+circuit mark, cobalt background `#1746A2`, white paths
 
+## Recent Work (2026-05-17)
+- **EMR-text doctor-tone rewrite:** 10 calculators + 5 pathway pages + 6 modals rewritten per approved voice standard (docs/reviews/emr-text-standard-2026-05-17.md). NIHSS exception: all 15 items preserved as numbered list. No clinical thresholds or interpretation logic changed across 9 implementation commits (f8b8a2f, 5a5fca7, f87eea1).
+- **Share Button primitive:** New `ShareButton` component + `shareOrCopy` utility deployed across 21 surfaces (CalculatorHeader × 10 + PathwayHeader × 5 + Stroke Code result sections × 6). Enables native share sheet on mobile + copy fallback.
+- **Stroke Code feature enhancements:** Wake-up stroke cross-link to Extended IVT Pathway (f343370); Extended IVT outcome feeds back to Stroke Code summary + EMR copy (010bc15); TimestampBubble adds 2 new event types — Neuro IR Contacted + NCC/ICU Sign-out (d17a782).
+- **Accessibility remediation:** 10 HIGH-severity a11y findings closed across Stroke Code modals + components (b11y batch 75b0ddf); 0 BLOCKERs remain on Stroke Code.
+- **Governance:** Plain-English communication rule added to CLAUDE.md §10.2 for V-facing summaries (commit 3525667).
+
 ## Fix History (never regress these)
 - [2026-05-08] Wave 3 Batch 2 — schema-driven NNT suppression + result-type labeling — commit 3d571ac
   - Files: src/pages/trials/TrialPageNew.tsx, docs/reviews/arch-wave3-batch2-renderer.md, docs/reviews/clinical-wave3-batch2-renderer.md

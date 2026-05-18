@@ -1349,6 +1349,26 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
   - Clinical impact: none (no clinical text, threshold, or interpretation logic changes across the series — render-surface migration only)
   - Deferred follow-ups: (1) delete PathwayBottomDrawer.tsx after 1-week clean signal; (2) extract TIER_TOKENS to src/lib/pathways/tierTokens.ts after the deletion above; (3) extract PathwayHeader primitive (parked 2026-05-16)
 
+- [x] 2026-05-17 — EMR-text doctor-tone rewrite series + Send-to share button + Stroke Code a11y HIGH batch — Class D-clinical (12 commits)
+  **Stroke Code feature enhancements (4 commits):**
+  - f343370: feat(stroke): wake-up stroke cross-link to Extended IVT Pathway — cross-link card in CodeModeStep1
+  - 010bc15: feat(stroke): Extended IVT outcome feeds back into Stroke Code summary + EMR copy — onResultChange wired to update parent state
+  - d17a782: feat(stroke): TimestampBubble adds Neuro IR Contacted + NCC/ICU Sign-out — 2 new timestamp event types
+  - 3525667: docs(governance): add C-suite plain-English rule for V-facing summaries — CLAUDE.md §10.2 plain-English governance tier
+  **Share Button Primitive (1 commit):**
+  - 4c9fb20: feat(share): add "Send to" share button alongside Copy across the app — new shareOrCopy utility + ShareButton primitive + 21 file consumers (10 calculators + 5 pathway pages + 6 modals/stroke-code sections)
+  **EMR-Text Doctor-Tone Audit + Rewrites (3 research commits + 3 implementation commits):**
+  - e87f44b: docs(reviews): EMR-text audit + doctor-tone standard for V approval — docs/reviews/emr-text-standard-2026-05-17.md (audit findings + doctor-tone voice guidelines)
+  - c97fa12: docs(reviews): NIHSS exception — keep all 15 items as numbered list — EMR-standard revision
+  - f0299c1: docs(reviews): revise EMR-text standard per V — drop A/P + Source sections — final V-approved standard
+  - f8b8a2f: refactor(emr-text): Batch A — 5 high-priority calculator rewrites — CHA₂DS₂-VASc, NIHSS (15-item exception), HAS-BLED, ABCD², Boston (Class C-clinical)
+  - 5a5fca7: refactor(emr-text): Batch B — 5 MED-priority calculator rewrites — GCS, ICH, RoPE, ASPECTS, Heidelberg (Class C-clinical)
+  - f87eea1: refactor(emr-text): Batches C + D — pathway pages + modals doctor-tone rewrite — Stroke Code summary/orders, EVT, ExtendedIVT, SE, Migraine, ELAN, ThrombolysisEligibilityModal; ProtocolModal already compliant (Class C-clinical)
+  **Accessibility Remediation (1 commit):**
+  - 75b0ddf: fix(a11y): Stroke Code HIGH-severity batch — modals + components — 10 HIGH a11y findings closed: B-3, B-4, C-1, C-2, C-3, C-7, C-8, D-1, E-1, F-2 (0 BLOCKERs remaining)
+  **Gates:** tsc clean · build green · clinical-reviewer approve-with-conditions (docs/reviews/clinical-emr-text-2026-05-17.md) · all 21 consumers live-verified
+  **Clinical impact:** medium (EMR output text rewritten for doctor tone across 10 calculators + 5 pathway pages + 6 modals; no clinical thresholds or interpretation logic changed)
+
 ## POST-MORTEMS
 Regressions that required rollback. Each entry links to a post-mortem
 doc in docs/YYYY_MM_DD/post-mortem-<slug>.md.
