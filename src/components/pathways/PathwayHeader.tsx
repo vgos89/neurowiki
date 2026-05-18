@@ -69,6 +69,28 @@ export const PathwayHeader: React.FC<PathwayHeaderProps> = ({
   onShareResult,
   hideHeader = false,
 }) => {
+  // Wrap copy/share to fire GA4 events. Uses pathwayLabel as identifier so
+  // every pathway gets telemetry for free. Added 2026-05-18 — matches the
+  // pattern in CalculatorHeader.tsx.
+  const handleCopy = React.useCallback(() => {
+    import('../../utils/analytics').then(({ trackCalculatorCopied }) => {
+      trackCalculatorCopied(pathwayLabel);
+    }).catch(() => { /* best-effort */ });
+    onCopy();
+  }, [pathwayLabel, onCopy]);
+
+  const handleShareResult = React.useCallback(
+    (result: 'shared' | 'copied' | 'cancelled' | 'failed') => {
+      if (result === 'shared' || result === 'copied') {
+        import('../../utils/analytics').then(({ trackCalculatorShared }) => {
+          trackCalculatorShared(pathwayLabel, result);
+        }).catch(() => { /* best-effort */ });
+      }
+      onShareResult?.(result);
+    },
+    [pathwayLabel, onShareResult]
+  );
+
   if (hideHeader) return null;
 
   return (
@@ -99,14 +121,14 @@ export const PathwayHeader: React.FC<PathwayHeaderProps> = ({
           <button onClick={onReset} className="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Reset">
             <RotateCcw size={16} />
           </button>
-          <button onClick={onCopy} className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px]" aria-label="Copy summary">
+          <button onClick={handleCopy} className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px]" aria-label="Copy summary">
             {copyConfirm ? 'Copied ✓' : 'Copy'}
           </button>
           {shareText && (
             <ShareButton
               text={shareText}
               title={shareTitle ?? pathwayLabel}
-              onResult={onShareResult}
+              onResult={handleShareResult}
               variant="pill"
               label="Send"
             />

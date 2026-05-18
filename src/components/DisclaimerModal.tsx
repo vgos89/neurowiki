@@ -93,6 +93,10 @@ export const DisclaimerModal: React.FC = () => {
       userAgent: navigator.userAgent,
     };
     setStorageItem(DISCLAIMER_STORAGE_KEY, JSON.stringify(data));
+    // Fire GA4 compliance event. Lazy-import keeps modal bundle small.
+    import('../utils/analytics').then(({ trackDisclaimerAcknowledged }) => {
+      trackDisclaimerAcknowledged();
+    }).catch(() => { /* best-effort */ });
     setIsOpen(false);
   };
 

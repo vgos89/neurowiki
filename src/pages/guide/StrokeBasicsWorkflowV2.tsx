@@ -236,12 +236,35 @@ const MainContent: React.FC = () => {
     });
 
   const setStep1Data = (d: Step1Data | null) => {
+    // Fire pathway_step_advanced when Step 1 transitions from null → set
+    // (clinician completed Step 1 and is moving to Step 2). Best-effort.
+    if (!step1Data && d) {
+      import('../../utils/analytics').then(({ trackPathwayStepAdvanced }) => {
+        trackPathwayStepAdvanced('stroke-code', 1, 2);
+      }).catch(() => { /* noop */ });
+    }
     setStep1DataRaw(d);
     setLiveLkwHours(computeLkwHours(d));
     buildPersist({ step1Data: d });
   };
-  const setStep2Data = (d: Step2Data | null) => { setStep2DataRaw(d); buildPersist({ step2Data: d }); };
-  const setStep4Orders = (o: string[]) => { setStep4OrdersRaw(o); buildPersist({ step4Orders: o }); };
+  const setStep2Data = (d: Step2Data | null) => {
+    if (!step2Data && d) {
+      import('../../utils/analytics').then(({ trackPathwayStepAdvanced }) => {
+        trackPathwayStepAdvanced('stroke-code', 2, 3);
+      }).catch(() => { /* noop */ });
+    }
+    setStep2DataRaw(d);
+    buildPersist({ step2Data: d });
+  };
+  const setStep4Orders = (o: string[]) => {
+    if (step4Orders.length === 0 && o.length > 0) {
+      import('../../utils/analytics').then(({ trackPathwayStepAdvanced }) => {
+        trackPathwayStepAdvanced('stroke-code', 3, 4);
+      }).catch(() => { /* noop */ });
+    }
+    setStep4OrdersRaw(o);
+    buildPersist({ step4Orders: o });
+  };
   const setActiveCard = (id: number) => { setActiveCardRaw(id); buildPersist({ activeCard: id }); };
   const setEligibilityResult: React.Dispatch<React.SetStateAction<ThrombolysisEligibilityData | null>> = (action) => {
     setEligibilityResultRaw(prev => {

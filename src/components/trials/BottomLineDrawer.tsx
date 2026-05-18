@@ -286,6 +286,12 @@ export const BottomLineDrawer: React.FC<BottomLineDrawerProps> = ({
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-[#1746A2] hover:underline not-italic"
+                      onClick={() => {
+                        // Track outbound citation click — best-effort, never block nav.
+                        import('../../utils/analytics').then(({ trackExternalCitationClicked }) => {
+                          trackExternalCitationClicked('doi', doi, 'bottom-line-drawer');
+                        }).catch(() => { /* noop */ });
+                      }}
                     >
                       doi:{doi}
                     </a>

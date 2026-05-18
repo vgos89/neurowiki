@@ -71,6 +71,27 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
   isFav,
   headerRef,
 }) => {
+  // Wrap onCopy + onShareResult to fire GA4 events. Using the calculator's
+  // display `name` as the identifier so all 14 calculators get telemetry
+  // for free without each one having to opt in. Added 2026-05-18.
+  const handleCopy = React.useCallback(() => {
+    import('../../utils/analytics').then(({ trackCalculatorCopied }) => {
+      trackCalculatorCopied(name);
+    }).catch(() => { /* analytics is best-effort; never block UX */ });
+    onCopy();
+  }, [name, onCopy]);
+
+  const handleShareResult = React.useCallback(
+    (result: 'shared' | 'copied' | 'cancelled' | 'failed') => {
+      if (result === 'shared' || result === 'copied') {
+        import('../../utils/analytics').then(({ trackCalculatorShared }) => {
+          trackCalculatorShared(name, result);
+        }).catch(() => { /* best-effort */ });
+      }
+      onShareResult?.(result);
+    },
+    [name, onShareResult]
+  );
   return (
     <header
       ref={headerRef}
@@ -133,7 +154,7 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
 
             <button
               type="button"
-              onClick={onCopy}
+              onClick={handleCopy}
               className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px] flex items-center"
             >
               Copy
@@ -142,7 +163,7 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
               <ShareButton
                 text={shareText}
                 title={shareTitle ?? name}
-                onResult={onShareResult}
+                onResult={handleShareResult}
                 variant="pill"
                 label="Send"
               />

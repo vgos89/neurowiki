@@ -168,6 +168,11 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
         }),
       });
       if (res.ok) {
+        // Fire GA4 event on successful submit (lazy import to keep modal
+        // bundle small + analytics is best-effort).
+        import('../utils/analytics').then(({ trackFeedbackSubmitted }) => {
+          trackFeedbackSubmitted(feedbackType, Boolean(email.trim()));
+        }).catch(() => { /* noop */ });
         setSubmitStatus('success');
         setMessage('');
         setEmail('');

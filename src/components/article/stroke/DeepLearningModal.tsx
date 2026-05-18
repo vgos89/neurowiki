@@ -335,7 +335,13 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
               filteredPearls.map((pearl) => (
                 <button
                   key={pearl.id}
-                  onClick={() => setExpandedPearlId(pearl.id)}
+                  onClick={() => {
+                    // Track pearl open (best-effort; never block UX).
+                    import('../../../utils/analytics').then(({ trackDeepLearningOpened }) => {
+                      trackDeepLearningOpened(pearl.id, pearl.title);
+                    }).catch(() => { /* noop */ });
+                    setExpandedPearlId(pearl.id);
+                  }}
                   className="w-full text-left p-4 bg-white rounded-lg border border-slate-200 hover:shadow-md transition-shadow cursor-pointer"
                 >
                   <div className="flex items-start justify-between gap-3">

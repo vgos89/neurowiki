@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import type { TrialItem, TrialCategoryKey } from '../../data/trialListData';
+import { trackTrialCardClicked } from '../../utils/analytics';
 
 /**
  * v4 trial card anatomy. trials-legend-reference.html §Stage2/Stage3.
@@ -38,10 +39,12 @@ export function TrialLegendCard({ trial, isFav, onFavToggle }: TrialLegendCardPr
   const stat = trial.legend?.keyStat;
   const dotColor = CAT_DOT_COLOR[trial.category] ?? '#94a3b8';
   const hasLine3 = Boolean(tag || stat);
+  const location = useLocation();
 
   return (
     <Link
       to={trial.path}
+      onClick={() => trackTrialCardClicked(trial.id, location.pathname)}
       className={`
  group block relative
  pl-[34px] pr-5 py-3.5
