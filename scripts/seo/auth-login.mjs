@@ -72,8 +72,8 @@ async function main() {
           reject(new Error('Missing code parameter on loopback callback'));
           return;
         }
-        res.writeHead(200, { 'Content-Type': 'text/html' }).end(
-          `<!doctype html><html><body style="font-family:system-ui;padding:40px;text-align:center;">
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }).end(
+          `<!doctype html><html><head><meta charset="utf-8"></head><body style="font-family:system-ui;padding:40px;text-align:center;">
             <h1 style="color:#1746A2;">NeuroWiki SEO — connected</h1>
             <p>You can close this tab and return to the terminal.</p>
           </body></html>`
