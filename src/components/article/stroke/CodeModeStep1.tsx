@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Check, AlertTriangle, XCircle } from 'lucide-react';
 import { LKWTimePicker } from './LKWTimePicker';
 import { getTNKDose, getTpaDoses, toKg } from '../../../utils/strokeDosing';
 
@@ -148,10 +148,25 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   const WindowBadge: React.FC = () => {
     if (!lkwEntered || lkwUnknown) return null;
     if (lkwHours <= 4.5)
-      return <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-2.5 py-0.5">● Within 4.5h</span>;
+      return (
+        <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-2.5 py-0.5">
+          <Check size={14} aria-hidden="true" />
+          Within 4.5h
+        </span>
+      );
     if (lkwHours <= 9)
-      return <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-0.5">● Extended window</span>;
-    return <span className="inline-flex items-center gap-1 text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-full px-2.5 py-0.5">● Outside tPA window</span>;
+      return (
+        <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-0.5">
+          <AlertTriangle size={14} aria-hidden="true" />
+          Extended window
+        </span>
+      );
+    return (
+      <span className="inline-flex items-center gap-1 text-xs font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-full px-2.5 py-0.5">
+        <XCircle size={14} aria-hidden="true" />
+        Outside tPA window
+      </span>
+    );
   };
 
   return (
@@ -166,6 +181,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
               <button
                 type="button"
                 onClick={() => setClockPickerOpen(true)}
+                aria-label={`Last known well: ${lkwTimeDisplay}. Tap to change.`}
                 className="text-2xl font-semibold text-slate-900 tracking-tight hover:text-neuro-600 transition-colors whitespace-nowrap"
               >
                 {lkwTimeDisplay}

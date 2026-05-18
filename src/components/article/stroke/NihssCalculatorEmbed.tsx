@@ -85,7 +85,13 @@ export const NihssCalculatorEmbed: React.FC<NihssCalculatorEmbedProps> = ({
         {/* Score */}
         <div className="flex-shrink-0">
           <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">NIHSS</div>
-          <div className="flex items-baseline gap-1">
+          <div
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            aria-label={`NIHSS score: ${total} out of 42`}
+            className="flex items-baseline gap-1"
+          >
             <span className="text-3xl font-bold text-slate-900 leading-none">
               {total.toString().padStart(2, '0')}
             </span>

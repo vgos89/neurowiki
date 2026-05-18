@@ -142,7 +142,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
             {ctReadStamped ? '✓ CT Stamped' : 'Stamp CT Time'}
           </button>
         </div>
-        <div className="space-y-2">
+        <div role="radiogroup" aria-label="CT Result" className="space-y-2">
           {[
             { value: 'no-bleed', label: 'No acute hemorrhage' },
             { value: 'ich', label: 'ICH detected' },
@@ -151,6 +151,8 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
             <button
               key={option.value}
               type="button"
+              role="radio"
+              aria-checked={ctResult === option.value}
               onClick={() => {
                 setCtResult(option.value);
                 if (option.value === 'ich') onIchSelected?.();

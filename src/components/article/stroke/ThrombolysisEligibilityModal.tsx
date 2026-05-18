@@ -1,7 +1,8 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { X, Copy, Check, ChevronDown, Zap, Info } from 'lucide-react';
 import { copyToClipboard } from '../../../utils/clipboard';
 import { ShareButton } from '../../calculators/ShareButton';
+import { useModalFocusTrap } from '../../../hooks/useModalFocusTrap';
 
 export interface ThrombolysisEligibilityData {
   lkwTime: Date | null;
@@ -105,6 +106,12 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
   initialData,
   lkwDate,
 }) => {
+  // Refs for focus trap (B-3 a11y fix)
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useModalFocusTrap(isOpen, onClose, dialogRef, closeButtonRef);
+
   const [absoluteContraindications, setAbsoluteContraindications] = useState<Record<string, boolean>>(
     initialData?.absoluteContraindications.reduce((acc, id) => ({ ...acc, [id]: true }), {}) ?? {}
   );
@@ -138,11 +145,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => { if (e.key === 'Escape' && isOpen) onClose(); };
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
-  }, [isOpen, onClose]);
+  // Escape key and Tab cycling handled by useModalFocusTrap above.
 
   const toggleAbsolute = (id: string) =>
     setAbsoluteContraindications(prev => ({ ...prev, [id]: !prev[id] }));
@@ -225,6 +228,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} aria-hidden />
       <div
+        ref={dialogRef}
         className="relative w-full sm:max-w-lg max-h-[92dvh] sm:max-h-[88vh] bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl overflow-hidden flex flex-col"
         role="dialog"
         aria-modal="true"
@@ -239,11 +243,12 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
             <span id="eligibility-modal-title" className="text-sm font-bold text-slate-900 truncate">IV tPA Eligibility</span>
           </div>
           <button
+            ref={closeButtonRef}
             onClick={onClose}
             className="p-2 rounded-lg hover:bg-slate-100 transition-colors shrink-0 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
-            aria-label="Close"
+            aria-label="Close IV tPA eligibility panel"
           >
-            <X className="w-4 h-4 text-slate-500" />
+            <X className="w-4 h-4 text-slate-500" aria-hidden="true" />
           </button>
         </div>
 
@@ -278,7 +283,8 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
                       <button
                         type="button"
                         onClick={() => toggleAbsolute(chip.id)}
-                        className="flex-1 px-3 py-2.5 text-sm font-semibold text-left leading-snug focus-visible:outline-none"
+                        aria-pressed={active}
+                        className="flex-1 px-3 py-2.5 text-sm font-semibold text-left leading-snug focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500"
                         style={{ color: 'inherit' }}
                       >
                         <span className={active ? 'text-white' : 'text-slate-700'}>{chip.label}</span>
@@ -286,10 +292,10 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
                       <button
                         type="button"
                         onClick={() => setExpandedChip(expanded ? null : chip.id)}
-                        className={`px-2 flex items-center shrink-0 focus-visible:outline-none ${active ? 'text-red-100 hover:text-white' : 'text-slate-300 hover:text-slate-500'}`}
+                        className={`min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500 ${active ? 'text-red-100 hover:text-white' : 'text-slate-300 hover:text-slate-500'}`}
                         aria-label={`${expanded ? 'Hide' : 'Show'} details for ${chip.label}`}
                       >
-                        <Info className="w-3.5 h-3.5" aria-hidden />
+                        <Info className="w-3.5 h-3.5" aria-hidden="true" />
                       </button>
                     </div>
                     {expanded && (
@@ -318,17 +324,18 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
                       <button
                         type="button"
                         onClick={() => toggleAbsolute(chip.id)}
-                        className="flex-1 px-3 py-2.5 text-sm font-semibold text-left leading-snug focus-visible:outline-none"
+                        aria-pressed={active}
+                        className="flex-1 px-3 py-2.5 text-sm font-semibold text-left leading-snug focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500"
                       >
                         <span className={active ? 'text-white' : 'text-slate-700'}>{chip.label}</span>
                       </button>
                       <button
                         type="button"
                         onClick={() => setExpandedChip(expanded ? null : chip.id)}
-                        className={`px-2 flex items-center shrink-0 focus-visible:outline-none ${active ? 'text-red-100 hover:text-white' : 'text-slate-300 hover:text-slate-500'}`}
+                        className={`min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500 ${active ? 'text-red-100 hover:text-white' : 'text-slate-300 hover:text-slate-500'}`}
                         aria-label={`${expanded ? 'Hide' : 'Show'} details for ${chip.label}`}
                       >
-                        <Info className="w-3.5 h-3.5" aria-hidden />
+                        <Info className="w-3.5 h-3.5" aria-hidden="true" />
                       </button>
                     </div>
                     {expanded && (
@@ -357,17 +364,18 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
                       <button
                         type="button"
                         onClick={() => toggleRelative(chip.id)}
-                        className="flex-1 px-3 py-2.5 text-sm font-semibold text-left leading-snug focus-visible:outline-none"
+                        aria-pressed={active}
+                        className="flex-1 px-3 py-2.5 text-sm font-semibold text-left leading-snug focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500"
                       >
                         <span className={active ? 'text-white' : 'text-slate-700'}>{chip.label}</span>
                       </button>
                       <button
                         type="button"
                         onClick={() => setExpandedChip(expanded ? null : chip.id)}
-                        className={`px-2 flex items-center shrink-0 focus-visible:outline-none ${active ? 'text-amber-100 hover:text-white' : 'text-slate-300 hover:text-slate-500'}`}
+                        className={`min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500 ${active ? 'text-amber-100 hover:text-white' : 'text-slate-300 hover:text-slate-500'}`}
                         aria-label={`${expanded ? 'Hide' : 'Show'} details for ${chip.label}`}
                       >
-                        <Info className="w-3.5 h-3.5" aria-hidden />
+                        <Info className="w-3.5 h-3.5" aria-hidden="true" />
                       </button>
                     </div>
                     {expanded && (
@@ -402,17 +410,18 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
                           <button
                             type="button"
                             onClick={() => setExtendedContraindications(prev => ({ ...prev, [chip.id]: !prev[chip.id] }))}
-                            className="flex-1 px-3 py-2.5 text-sm font-semibold text-left leading-snug focus-visible:outline-none"
+                            aria-pressed={active}
+                            className="flex-1 px-3 py-2.5 text-sm font-semibold text-left leading-snug focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500"
                           >
                             <span className={active ? 'text-white' : 'text-slate-700'}>{chip.label}</span>
                           </button>
                           <button
                             type="button"
                             onClick={() => setExpandedChip(expanded ? null : chip.id)}
-                            className={`px-2 flex items-center shrink-0 focus-visible:outline-none ${active ? 'text-amber-100 hover:text-white' : 'text-slate-300 hover:text-slate-500'}`}
+                            className={`min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500 ${active ? 'text-amber-100 hover:text-white' : 'text-slate-300 hover:text-slate-500'}`}
                             aria-label={`${expanded ? 'Hide' : 'Show'} details for ${chip.label}`}
                           >
-                            <Info className="w-3.5 h-3.5" aria-hidden />
+                            <Info className="w-3.5 h-3.5" aria-hidden="true" />
                           </button>
                         </div>
                         {expanded && (

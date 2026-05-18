@@ -2,6 +2,7 @@ import React from 'react';
 import { X, Check, Lightbulb } from 'lucide-react';
 import type { ClinicalPearl } from '../../../data/strokeClinicalPearls';
 import { PearlDetailView } from './PearlDetailView';
+import { useModalFocusTrap } from '../../../hooks/useModalFocusTrap';
 
 const getEvidenceBadgeColors = (evidenceClass?: string) => {
   switch (evidenceClass) {
@@ -55,6 +56,12 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
   sectionTitle,
   pearls,
 }) => {
+  // Refs for focus trap (B-4 a11y fix)
+  const dialogRef = React.useRef<HTMLDivElement>(null);
+  const closeButtonRef = React.useRef<HTMLButtonElement>(null);
+
+  useModalFocusTrap(isOpen, onClose, dialogRef, closeButtonRef);
+
   // State to track expanded pearl
   const [expandedPearlId, setExpandedPearlId] = React.useState<string | null>(null);
 
@@ -94,23 +101,15 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
     }
   }, [isOpen]);
 
-  // Close on escape key
+  // Body scroll lock
   React.useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setExpandedPearlId(null);
-        onClose();
-      }
-    };
     if (isOpen) {
-      window.addEventListener('keydown', handleEscape);
       document.body.style.overflow = 'hidden';
     }
     return () => {
-      window.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = '';
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -136,19 +135,26 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
         onClick={onClose}
       />
 
-      <div className="fixed bg-white shadow-lg z-50 lg:top-0 lg:right-0 lg:h-screen lg:w-[400px] bottom-0 left-0 right-0 h-[90vh] lg:h-screen rounded-t-2xl lg:rounded-none overflow-hidden">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dlm-title"
+        className="fixed bg-white shadow-lg z-50 lg:top-0 lg:right-0 lg:h-screen lg:w-[400px] bottom-0 left-0 right-0 h-[90vh] lg:h-screen rounded-t-2xl lg:rounded-none overflow-hidden"
+      >
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-slate-200 p-4 z-10">
           <button
+            ref={closeButtonRef}
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-lg hover:bg-slate-100 transition-colors"
-            aria-label="Close"
+            className="absolute top-4 right-4 p-2 rounded-lg hover:bg-slate-100 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+            aria-label="Close deep learning panel"
           >
-            <X className="w-5 h-5 text-slate-500" />
+            <X className="w-5 h-5 text-slate-500" aria-hidden="true" />
           </button>
 
           <div className="pr-12">
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+            <h3 id="dlm-title" className="text-xs font-bold text-slate-500 uppercase tracking-wider">
               Deep Learning
             </h3>
             <p className="text-sm font-bold text-slate-900 mt-1">

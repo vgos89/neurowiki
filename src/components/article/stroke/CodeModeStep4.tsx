@@ -502,37 +502,41 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
                   return (
                     <div key={order.id} className="bg-white">
                       <div className="px-4 py-2.5 hover:bg-slate-50">
-                        <label className="flex items-start gap-2.5 cursor-pointer">
+                        <div className="flex items-start gap-2.5">
                           <input
+                            id={`order-${order.id}`}
                             type="checkbox"
                             checked={isSelected}
                             onChange={() => toggleOrder(order.id)}
                             className={`mt-0.5 w-4 h-4 rounded border-slate-300 ${classes.checkbox} cursor-pointer`}
                           />
                           <div className="flex-1 min-w-0">
-                            <span className="text-sm font-medium text-slate-900">
+                            <label
+                              htmlFor={`order-${order.id}`}
+                              className="text-sm font-medium text-slate-900 cursor-pointer"
+                            >
                               {order.label}
-                            </span>
-                            {/* MED-04-style: separate toggle button for rationale (not bundled with checkbox) */}
+                            </label>
+                            {/* MED-04-style: expand button is a sibling of label, not nested inside it */}
                             <button
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setExpandedRationale(isExpanded ? null : order.id);
-                              }}
+                              type="button"
+                              aria-expanded={isExpanded}
+                              aria-controls={`rationale-${order.id}`}
+                              onClick={() => setExpandedRationale(isExpanded ? null : order.id)}
                               className={`mt-1 text-xs font-medium ${classes.icon} hover:underline flex items-center gap-0.5`}
                             >
                               {isExpanded
-                                ? <ChevronUp className="w-3.5 h-3.5" />
-                                : <ChevronDown className="w-3.5 h-3.5" />
+                                ? <ChevronUp className="w-3.5 h-3.5" aria-hidden="true" />
+                                : <ChevronDown className="w-3.5 h-3.5" aria-hidden="true" />
                               }
                               {isExpanded ? 'Hide' : 'Why?'} Evidence & Rationale
                             </button>
                           </div>
-                        </label>
+                        </div>
                       </div>
 
                       {isExpanded && (
-                        <div className={`px-4 py-3 ${classes.bg} border-t ${classes.border}`}>
+                        <div id={`rationale-${order.id}`} className={`px-4 py-3 ${classes.bg} border-t ${classes.border}`}>
                           <div className="flex items-center gap-1.5 mb-1.5">
                             <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${getEvidenceBadgeStyle(order.evidenceClass)}`}>
                               {order.evidence}
