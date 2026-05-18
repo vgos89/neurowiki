@@ -412,6 +412,14 @@ function guideSchema(pathname: string, title: string, description: string, guide
       lastReviewed: LAST_REVIEWED,
       datePublished: DATE_PUBLISHED,
       dateModified: DATE_MODIFIED,
+      // Upgrade 2026-05-18: MedicalGuideline mainEntity per schema.org spec.
+      // Structural only — does NOT populate evidenceLevel/evidenceOrigin
+      // (those would be clinical claims requiring per-page registration).
+      mainEntity: {
+        '@type': 'MedicalGuideline',
+        name: guideLabel,
+        url,
+      },
     },
     {
       '@type': 'BreadcrumbList',
@@ -450,7 +458,16 @@ function trialSchema(pathname: string, title: string, description: string, trial
       url,
       medicalSpecialty: 'Neurology',
       audience: { '@type': 'MedicalAudience', audienceType: 'Physician, Neurologist, Resident' },
-      about: { '@type': 'MedicalScholarlyArticle', name: trialLabel, url },
+      // Upgrade 2026-05-18: dual @about — MedicalStudy is the more specific
+      // schema.org type for clinical trials (vs MedicalScholarlyArticle which
+      // is a write-up of any medical scholarship). Both kept for backwards
+      // compatibility with crawlers that haven't picked up MedicalStudy.
+      // Structural only — does NOT populate phase/enrollment/studyDesign
+      // (those are per-trial data, would require per-page registration).
+      about: [
+        { '@type': 'MedicalStudy', name: trialLabel, url, studyLocation: { '@type': 'AdministrativeArea', name: 'Multi-center' } },
+        { '@type': 'MedicalScholarlyArticle', name: trialLabel, url },
+      ],
       publisher: PUBLISHER,
       lastReviewed: LAST_REVIEWED,
       datePublished: DATE_PUBLISHED,
