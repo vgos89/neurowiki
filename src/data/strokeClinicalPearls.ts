@@ -23,6 +23,18 @@ export interface ClinicalPearl {
   pmid?: string; // PubMed ID
   nctId?: string; // ClinicalTrials.gov NCT ID
   trialSlug?: string; // Link to Neuro Trials database
+
+  /**
+   * W5.2 citation registry tag. When set, scripts/check-claims.ts
+   * (Phase 1 'data' surface) verifies this ID resolves to an entry in
+   * CLAIM_REGISTRY (src/lib/citations/claims.ts), which in turn points
+   * to one or more Citation IDs in CITATION_REGISTRY (src/lib/citations/registry.ts).
+   *
+   * Initial population (2026-05-19): the 11 new trial pearls from Batch 3B +
+   * 6 quick pearls from Batch 5 are registered. Backfill of the remaining
+   * ~140 pre-existing pearls is a separate W5.2 task.
+   */
+  claimId?: string;
 }
 
 export interface ClinicalPearlsData {
@@ -60,6 +72,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'tnk-class-i-quick',
+        claimId: 'tnk-class-i-quick-claim',
         title: 'TNK Now Class I — Equivalent to Alteplase',
         content: 'Tenecteplase 0.25 mg/kg single bolus is a Class 1, LOE A alternative to alteplase (AcT NI met; AHA/ASA 2026 §4.6.2). Single 5-second bolus; workflow advantage for transfer and EVT bridging.',
         type: 'trial',
@@ -71,6 +84,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'late-window-tnk-quick',
+        claimId: 'late-window-tnk-quick-claim',
         title: 'Late-Window TNK — Only Without EVT Access',
         content: 'TRACE-III: TNK 4.5–24h in anterior LVO without EVT access gives ~1 in 11 patients mRS 0–1 (Class 2b, LOE B-R). TIMELESS: no benefit when EVT is on the table. Route to EVT when available.',
         type: 'trial',
@@ -249,6 +263,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'trace-iii-trial',
+        claimId: 'trace-iii-late-window-tnk',
         title: 'TRACE-III — Tenecteplase 4.5–24h, no EVT access',
         content: 'Chinese adults with anterior LVO and salvageable tissue on perfusion imaging, 4.5–24h from LKW, randomized to IV tenecteplase 0.25 mg/kg vs standard medical care; most patients did not undergo EVT. mRS 0–1 at 90 days reached 33.0% with TNK vs 24.2% with control (RR 1.37, 95% CI 1.04–1.81, P=0.03; ARD 8.8 percentage points, 95% CI 1.8–15.8; NNT ≈ 11). sICH 3.0% vs 0.8%. AHA/ASA 2026 §4.6.3 Rec 3: Class 2b, LOE B-R for late-window TNK in LVO patients who cannot receive EVT.',
         type: 'trial',
@@ -275,6 +290,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'timeless-trial',
+        claimId: 'timeless-late-window-negative',
         title: 'TIMELESS — Late-window TNK negative when EVT is available',
         content: 'US/Canada adults with anterior LVO, NIHSS ≥5, and salvageable tissue 4.5–24h from LKW; randomized to IV tenecteplase 0.25 mg/kg vs placebo. 77% of patients received EVT, so TNK functioned as a pre-EVT bridging agent. Ordinal mRS at 90 days: adjusted common OR 1.13 (95% CI 0.82–1.57), P=0.45 — no benefit. sICH ~3% in both arms. AHA/ASA 2026 does not endorse late-window TNK in EVT-capable systems; TIMELESS constrains TRACE-III to no-EVT-access populations.',
         type: 'trial',
@@ -301,6 +317,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'act-trial',
+        claimId: 'act-tnk-class-i',
         title: 'AcT — Tenecteplase noninferior to alteplase',
         content: 'Canadian pragmatic trial in 1,577 adults with AIS within 4.5h, enrolled without advanced imaging selection. IV tenecteplase 0.25 mg/kg vs alteplase 0.9 mg/kg. mRS 0–1 at 90–120 days: 36.9% (TNK) vs 34.8% (alteplase); risk difference 2.1 percentage points (95% CI −2.6 to 6.9). Noninferiority margin Δ = −5%; lower CI bound (−2.6%) sits above the margin, so NI is met. sICH 3.4% vs 3.2% (NS); mortality 15.3% vs 15.4% (NS). AHA/ASA 2026 §4.6.2 Rec 1: TNK is a Class 1 alternative to alteplase.',
         type: 'trial',
@@ -354,6 +371,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'large-core-evt-quick',
+        claimId: 'large-core-evt-quick-claim',
         title: 'Large-Core EVT — Class I (2026)',
         content: 'ASPECTS 3–5 EVT is now Class 1, LOE A (SELECT-2, ANGEL-ASPECT, TENSION 2023). LASTE extends to ASPECTS 0–2 (Class 2a, LOE B-R) with a mortality benefit. NCCT-derived ASPECTS is sufficient — do not delay for CTP.',
         type: 'trial',
@@ -365,6 +383,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'posterior-circulation-evt-quick',
+        claimId: 'posterior-circulation-evt-quick-claim',
         title: 'Basilar AO — EVT 0–24h, Class I',
         content: 'Basilar artery occlusion with NIHSS ≥10 and PC-ASPECTS ≥6: EVT is Class 1, LOE A within 12h (ATTENTION) and 6–24h (BAOCHE). mRS 0–3 roughly doubles; mortality cut from ~55% to ~37%.',
         type: 'trial',
@@ -453,6 +472,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'select2-trial',
+        claimId: 'select2-large-core-evt',
         title: 'SELECT-2 — EVT for large-core anterior LVO',
         content: 'International trial in 352 adults with anterior LVO and large ischemic core (ASPECTS 3–5 on NCCT or core ≥50 mL on CTP/DWI), within 24h LKW. Randomized to EVT plus medical care vs medical care alone. Primary endpoint was ordinal mRS at 90 days: generalized OR 1.51 (95% CI 1.20–1.89), P<0.001 favoring EVT. mRS 0–2: 20% vs 7%. sICH 0.6% vs 1.1% (NS). AHA/ASA 2026 §4.7.2 Rec 3: Class 1, LOE A for ASPECTS 3–5 EVT.',
         type: 'trial',
@@ -479,6 +499,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'angel-aspect-trial',
+        claimId: 'angel-aspect-large-core-evt',
         title: 'ANGEL-ASPECT — Large-core EVT within 24h',
         content: 'Chinese trial in 455 adults with anterior LVO within 24h LKW, ASPECTS 3–5 or core 70–100 mL on perfusion imaging. EVT plus medical care vs medical care alone. Ordinal mRS at 90 days: generalized OR 1.37 (95% CI 1.11–1.69), P=0.004 favoring EVT. mRS 0–3 at 90 days: 47.0% vs 33.3%. sICH 6.1% vs 2.7% (P=0.07). AHA/ASA 2026 §4.7.2 Rec 3: Class 1, LOE A.',
         type: 'trial',
@@ -505,6 +526,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'laste-trial',
+        claimId: 'laste-unrestricted-large-core-evt',
         title: 'LASTE — EVT in unrestricted-size large core',
         content: 'French-Spanish trial in 333 adults with anterior LVO ≤6.5h from LKW and ASPECTS ≤5 with no lower bound on core size. EVT vs medical care alone. Ordinal mRS at 90 days: generalized OR 1.63 (95% CI 1.29–2.06) favoring EVT. Median mRS 4 vs 6. All-cause mortality 36.1% vs 55.5% (RR 0.65). sICH 9.6% vs 5.7%. AHA/ASA 2026 §4.7.2 Rec 4: Class 2a, LOE B-R for ASPECTS 0–2 (the lowest stratum).',
         type: 'trial',
@@ -532,6 +554,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'tension-trial',
+        claimId: 'tension-nct-only-evt',
         title: 'TENSION — Large-core EVT selected by NCCT alone',
         content: 'European-Canadian trial in 253 adults with anterior LVO and ASPECTS 3–5 by NCCT only (no advanced imaging required), up to 12h LKW. EVT vs medical care alone. Ordinal mRS at 90 days: adjusted common OR 2.58 (95% CI 1.60–4.15), P=0.0001 favoring EVT. Mortality 40% vs 51% (P=0.038). sICH 5% vs 5% (NS) — NCCT-only selection did not increase hemorrhage. Stopped early at first interim. Contributes to AHA/ASA 2026 §4.7.2 Class 1, LOE A.',
         type: 'trial',
@@ -558,6 +581,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'baoche-trial',
+        claimId: 'baoche-posterior-evt',
         title: 'BAOCHE — Basilar EVT 6–24h',
         content: 'Chinese trial in 217 adults with basilar artery occlusion, 6–24h from LKW, PC-ASPECTS ≥6, NIHSS ≥10 (after protocol amendment). 2:1 randomization to EVT vs best medical care. mRS 0–3 at 90 days (binary primary, amended from 0–4 during trial): 46% (EVT) vs 24% (medical); adjusted RR 1.81 (95% CI 1.26–2.60), P<0.001. sICH 6% vs 1% (NNH ≈ 20). AHA/ASA 2026 §4.7.3 Rec 1: Class 1, LOE A for basilar AO with NIHSS ≥10, PC-ASPECTS ≥6, within 24h.',
         type: 'trial',
@@ -585,6 +609,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'attention-trial',
+        claimId: 'attention-posterior-evt',
         title: 'ATTENTION — Basilar EVT within 12h',
         content: 'Chinese trial in 340 adults with basilar artery occlusion within 12h, NIHSS ≥10, randomized 2:1 to EVT vs best medical care. mRS 0–3 at 90 days: 46% vs 23%; adjusted RR 2.06 (95% CI 1.46–2.91), P<0.001. Mortality 37% vs 55%. sICH 5% vs 0%. AHA/ASA 2026 §4.7.3 Rec 1: Class 1, LOE A. Stopped early for efficacy.',
         type: 'trial',
@@ -857,6 +882,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'post-evt-bp-avoid-intensive-quick',
+        claimId: 'post-evt-bp-avoid-intensive-quick-claim',
         title: 'Post-EVT BP — Avoid Intensive Lowering',
         content: 'After successful EVT (mTICI ≥2b), do not chase SBP <140. OPTIMAL-BP (JAMA 2023): intensive lowering reduced functional independence (mRS 0–2 39% vs 54%; NNH ≈ 7). Target SBP 140–180 for 24h.',
         type: 'trial',
@@ -868,6 +894,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'post-evt-bp-under-120-quick',
+        claimId: 'post-evt-bp-under-120-quick-claim',
         title: 'Post-EVT SBP <120 is Harmful',
         content: 'ENCHANTED2/MT (Lancet 2022): an SBP <120 target after EVT increased major disability (OR 2.07, 95% CI 1.47–2.93). Combined with OPTIMAL-BP, intensive post-EVT lowering is harmful as a class. Hold SBP 140–180.',
         type: 'trial',
@@ -986,6 +1013,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'optimal-bp-trial',
+        claimId: 'optimal-bp-post-evt-harm',
         title: 'OPTIMAL-BP — Intensive post-EVT BP lowering is harmful',
         content: 'South Korean trial in 306 adults with anterior LVO who achieved successful reperfusion (mTICI ≥2b) after EVT. Randomized to intensive (SBP <140) vs conventional (140–180) BP target for 24h post-reperfusion. Functional independence (mRS 0–2) at 90 days: 39.4% (intensive) vs 54.4% (conventional); adjusted OR 0.56 (95% CI 0.33–0.96), P=0.03 — intensive lowering was HARMFUL. Risk difference −15.1 percentage points; NNH ≈ 7 for loss of functional independence. Stopped early for harm.',
         type: 'trial',
@@ -1012,6 +1040,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       },
       {
         id: 'enchanted2-mt-trial',
+        claimId: 'enchanted2-mt-sbp-under-120-harm',
         title: 'ENCHANTED2/MT — SBP <120 post-EVT is harmful',
         content: 'Chinese trial in 821 adults with persistent SBP ≥140 after successful EVT for anterior-circulation LVO. Randomized to more-intensive (SBP <120) vs less-intensive (140–180) BP target for 72h. Ordinal mRS at 90 days: common OR 1.37 (95% CI 1.07–1.76) for POOR outcome favoring the less-intensive arm — more-intensive lowering was HARMFUL. Major disability OR 2.07 (95% CI 1.47–2.93). Stopped early. China-only enrollment.',
         type: 'trial',
