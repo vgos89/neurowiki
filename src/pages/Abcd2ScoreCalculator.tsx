@@ -175,18 +175,20 @@ const Abcd2ScoreCalculator: React.FC = () => {
 
   // ── Handlers ───────────────────────────────────────────────────────────────
   const buildEmrText = useCallback(() => {
-    const parts = isComplete && result
-      ? [
-          `ABCD² Score: ${result.score} / 7`,
-          `${result.label} · 2-day stroke risk: ${result.twoDayRiskPercent}%`,
-          `Age: ${inputs.age === '60plus' ? '≥60' : '<60'}`,
-          `BP: ${inputs.bloodPressure === 'elevated' ? '≥140/90' : '<140/90'}`,
-          `Clinical: ${inputs.clinicalFeatures === 'weakness' ? 'Unilateral weakness' : inputs.clinicalFeatures === 'speech' ? 'Speech impairment' : 'Other'}`,
-          `Duration: ${inputs.duration === '60plus' ? '≥60 min' : inputs.duration === '10to59' ? '10–59 min' : '<10 min'}`,
-          `Diabetes: ${inputs.diabetes ? 'Yes' : 'No'}`,
-        ]
-      : ['ABCD² Score: Incomplete — select all fields.'];
-    return parts.join('\n');
+    if (!isComplete || !result) return 'ABCD² Score: Incomplete — select all fields.';
+    const contributingFactors: string[] = [];
+    if (inputs.age === '60plus') contributingFactors.push('age ≥60');
+    if (inputs.bloodPressure === 'elevated') contributingFactors.push('BP ≥140/90');
+    if (inputs.clinicalFeatures === 'weakness') contributingFactors.push('unilateral weakness');
+    else if (inputs.clinicalFeatures === 'speech') contributingFactors.push('speech impairment');
+    if (inputs.duration === '60plus') contributingFactors.push('duration ≥60 min');
+    else if (inputs.duration === '10to59') contributingFactors.push('duration 10–59 min');
+    if (inputs.diabetes) contributingFactors.push('DM');
+    const factorsLine = contributingFactors.length > 0 ? contributingFactors.join(', ') : 'none';
+    return [
+      `ABCD² — ${result.score}/7 (${result.label}, 2-day stroke risk ${result.twoDayRiskPercent}%)`,
+      `Risk factors: ${factorsLine}.`,
+    ].join('\n');
   }, [inputs, isComplete, result]);
 
   const handleCopy = useCallback(() => {

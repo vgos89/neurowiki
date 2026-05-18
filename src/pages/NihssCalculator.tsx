@@ -203,8 +203,31 @@ const NihssCalculator: React.FC = () => {
   };
 
   const buildText = () => {
-    const breakdown = NIHSS_ITEMS.map((i) => `${i.shortName}: ${nihssValues[i.id] ?? 0}`).join('\n');
-    return `NIHSS Total: ${total}\n\n${breakdown}`;
+    const severityBracket = (() => {
+      if (total === 0) return 'no stroke symptoms';
+      if (total <= 4) return 'minor stroke';
+      if (total <= 15) return 'moderate stroke';
+      if (total <= 20) return 'moderate-severe stroke';
+      return 'severe stroke';
+    })();
+    const itemLines = [
+      `1a. LOC: ${nihssValues['1a'] ?? 0}`,
+      `1b. LOC Questions: ${nihssValues['1b'] ?? 0}`,
+      `1c. LOC Commands: ${nihssValues['1c'] ?? 0}`,
+      `2. Best Gaze: ${nihssValues['2'] ?? 0}`,
+      `3. Visual Fields: ${nihssValues['3'] ?? 0}`,
+      `4. Facial Palsy: ${nihssValues['4'] ?? 0}`,
+      `5a. Motor L Arm: ${nihssValues['5a'] ?? 0}`,
+      `5b. Motor R Arm: ${nihssValues['5b'] ?? 0}`,
+      `6a. Motor L Leg: ${nihssValues['6a'] ?? 0}`,
+      `6b. Motor R Leg: ${nihssValues['6b'] ?? 0}`,
+      `7. Limb Ataxia: ${nihssValues['7'] ?? 0}`,
+      `8. Sensory: ${nihssValues['8'] ?? 0}`,
+      `9. Best Language: ${nihssValues['9'] ?? 0}`,
+      `10. Dysarthria: ${nihssValues['10'] === 9 ? 'UN' : (nihssValues['10'] ?? 0)}`,
+      `11. Extinction/Neglect: ${nihssValues['11'] ?? 0}`,
+    ];
+    return [`NIHSS — ${total} (${severityBracket})`, ...itemLines].join('\n');
   };
 
   const copyNihss = () => {

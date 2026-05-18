@@ -148,16 +148,13 @@ export default function BostonCriteriaCaaCalculator() {
 
   // ── Handlers ───────────────────────────────────────────────────────────────
   const buildEmrText = () => {
-    const lines = [
-      `Boston Criteria 2.0 for CAA: ${result.label}`,
-      `Anticoagulation risk: ${result.anticoagulationRisk}`,
-      ...result.criteriaMet.map((c) => `• ${c}`),
-      result.clinicalImplications,
-      'Recommendations:',
-      ...result.recommendations.map((r) => `• ${r}`),
-      `Age: ${inputs.age} | Presentation: ${inputs.hasQualifyingPresentation ? 'Yes' : 'No'} | Lobar lesions: ${inputs.lobarHemorrhagicLesions === 2 ? '≥2' : inputs.lobarHemorrhagicLesions} | WM feature: ${inputs.whiteMatterFeature ? 'Yes' : 'No'} | Deep: ${inputs.deepHemorrhagicLesions ? 'Yes' : 'No'} | Other cause: ${inputs.otherCauseOfHemorrhage ? 'Yes' : 'No'}`,
-    ];
-    return lines.join('\n');
+    const criteriaLine = result.criteriaMet.length > 0 ? result.criteriaMet.join(', ') : 'none';
+    const lobarLabel = inputs.lobarHemorrhagicLesions === 2 ? '≥2' : String(inputs.lobarHemorrhagicLesions);
+    return [
+      `Boston Criteria 2.0 for CAA — ${result.label} (anticoagulation risk: ${result.anticoagulationRisk})`,
+      `Criteria met: ${criteriaLine}.`,
+      `Inputs: age ${inputs.age}, qualifying presentation: ${inputs.hasQualifyingPresentation ? 'yes' : 'no'}, lobar lesions: ${lobarLabel}, WM feature: ${inputs.whiteMatterFeature ? 'yes' : 'no'}, deep lesions: ${inputs.deepHemorrhagicLesions ? 'yes' : 'no'}, other cause: ${inputs.otherCauseOfHemorrhage ? 'yes' : 'no'}.`,
+    ].join('\n');
   };
 
   const handleCopy = () => {

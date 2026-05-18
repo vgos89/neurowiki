@@ -141,21 +141,21 @@ export default function HasBledScoreCalculator() {
 
   // ── Handlers ───────────────────────────────────────────────────────────────
   const buildEmrText = () => {
-    const lines = [
-      `HAS-BLED Score: ${result.score}/9`,
-      `Risk: ${HASBLED_RISK_LABELS[result.risk]}`,
-      `Major bleeds: ${result.bleedsPer100PatientYears} per 100 patient-years`,
-      `Hypertension: ${inputs.hypertension ? 'Yes' : 'No'}`,
-      `Abnormal renal: ${inputs.abnormalRenal ? 'Yes' : 'No'}`,
-      `Abnormal liver: ${inputs.abnormalLiver ? 'Yes' : 'No'}`,
-      `Stroke history: ${inputs.strokeHistory ? 'Yes' : 'No'}`,
-      `Prior bleeding: ${inputs.priorBleeding ? 'Yes' : 'No'}`,
-      `On warfarin / Labile INR: ${inputs.onWarfarin && inputs.labileINR ? 'Yes' : 'No'}`,
-      `Elderly >65: ${inputs.elderly ? 'Yes' : 'No'}`,
-      `Drugs (antiplatelet/NSAIDs): ${inputs.drugs ? 'Yes' : 'No'}`,
-      `Alcohol ≥8/wk: ${inputs.alcohol ? 'Yes' : 'No'}`,
-    ];
-    return lines.join('\n');
+    const positiveFactors: string[] = [];
+    if (inputs.hypertension) positiveFactors.push('HTN');
+    if (inputs.abnormalRenal) positiveFactors.push('abnormal renal');
+    if (inputs.abnormalLiver) positiveFactors.push('abnormal liver');
+    if (inputs.strokeHistory) positiveFactors.push('prior stroke');
+    if (inputs.priorBleeding) positiveFactors.push('prior bleeding');
+    if (inputs.onWarfarin && inputs.labileINR) positiveFactors.push('labile INR on warfarin');
+    if (inputs.elderly) positiveFactors.push('age >65');
+    if (inputs.drugs) positiveFactors.push('antiplatelet/NSAID use');
+    if (inputs.alcohol) positiveFactors.push('alcohol ≥8/wk');
+    const factorsLine = positiveFactors.length > 0 ? positiveFactors.join(', ') : 'none';
+    return [
+      `HAS-BLED — ${result.score}/9 (major bleed ${result.bleedsPer100PatientYears}/100 patient-years)`,
+      `Risk factors: ${factorsLine}.`,
+    ].join('\n');
   };
 
   const handleCopy = () => {

@@ -184,24 +184,20 @@ export default function Cha2ds2VascCalculator() {
 
   // ── Handlers ───────────────────────────────────────────────────────────────
   const buildEmrText = () => {
-    const ageLabel = inputs.age75plus
-      ? 'Age ≥75 (2 pts)'
-      : inputs.age65to74
-      ? 'Age 65–74 (1 pt)'
-      : 'Age <65 (0 pts)';
-    const lines = [
-      `CHA₂DS₂-VASc Score: ${result.score}/9`,
-      `Risk: ${RISK_LABELS[result.risk]}`,
-      `Annual stroke rate: ~${result.annualStrokeRate}% per year`,
-      `CHF / LV dysfunction: ${inputs.chf ? 'Yes' : 'No'}`,
-      `Hypertension: ${inputs.hypertension ? 'Yes' : 'No'}`,
-      ageLabel,
-      `Diabetes: ${inputs.diabetes ? 'Yes' : 'No'}`,
-      `Stroke/TIA/thromboembolism: ${inputs.strokeTia ? 'Yes' : 'No'}`,
-      `Vascular disease: ${inputs.vascularDisease ? 'Yes' : 'No'}`,
-      `Female sex: ${inputs.female ? 'Yes' : 'No'}`,
-    ];
-    return lines.join('\n');
+    const positiveFactors: string[] = [];
+    if (inputs.chf) positiveFactors.push('CHF');
+    if (inputs.hypertension) positiveFactors.push('HTN');
+    if (inputs.age75plus) positiveFactors.push('age ≥75');
+    if (inputs.age65to74) positiveFactors.push('age 65–74');
+    if (inputs.diabetes) positiveFactors.push('DM');
+    if (inputs.strokeTia) positiveFactors.push('prior stroke/TIA');
+    if (inputs.vascularDisease) positiveFactors.push('vascular disease');
+    if (inputs.female) positiveFactors.push('female sex');
+    const factorsLine = positiveFactors.length > 0 ? positiveFactors.join(', ') : 'none';
+    return [
+      `CHA₂DS₂-VASc — ${result.score}/9 (annual stroke ${result.annualStrokeRate}%)`,
+      `Risk factors: ${factorsLine}.`,
+    ].join('\n');
   };
 
   const handleCopy = () => {
