@@ -94,7 +94,7 @@ export async function getGoogleAuthClient() {
  */
 export function getSeoConfig() {
   const ga4PropertyId = process.env.GA4_PROPERTY_ID;
-  const gscSiteUrl = process.env.GSC_SITE_URL || 'sc-domain:neurowiki.ai';
+  const gscSiteUrl = process.env.GSC_SITE_URL || 'https://neurowiki.ai/';
 
   if (!ga4PropertyId) {
     throw new Error(
