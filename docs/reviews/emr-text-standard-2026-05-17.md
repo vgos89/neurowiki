@@ -152,7 +152,9 @@ Risk factors: HTN, DM, vascular disease, age 65–74.
 
 2 lines instead of 10. Score + headline number on the top. Positive risk factors on the second. No "No" lines, no A/P, no source footer. The clinician decides what to do.
 
-### Sample 2: NIHSS (calculator with subscore drilldown)
+### Sample 2: NIHSS (calculator with subscore drilldown) — EXCEPTION TO THE "DROP 0 LINES" RULE
+
+NIHSS documentation convention is different from the other calculators: a "0" on a given item is itself a positive finding ("face assessed, no palsy"). It tells the next clinician the item was specifically tested and was negative. So NIHSS keeps all 15 items, and formats them as a numbered list (the standard NIHSS item numbering).
 
 **Before:**
 ```
@@ -175,13 +177,29 @@ Dysarthria: 1
 Extinction: 0
 ```
 
-**After:**
+**After (V direction 2026-05-17 — keep all items, format as list):**
 ```
 NIHSS — 8 (moderate stroke)
-Deficits: gaze 1, R facial palsy 1, L arm 2, L leg 2, mild aphasia 1, dysarthria 1.
+1a. LOC: 0
+1b. LOC Questions: 0
+1c. LOC Commands: 0
+2. Best Gaze: 1
+3. Visual Fields: 0
+4. Facial Palsy: 1
+5a. Motor L Arm: 2
+5b. Motor R Arm: 0
+6a. Motor L Leg: 2
+6b. Motor R Leg: 0
+7. Limb Ataxia: 0
+8. Sensory: 0
+9. Best Language: 1
+10. Dysarthria: 1
+11. Extinction/Neglect: 0
 ```
 
-2 lines instead of 17. Total + severity bracket on top. Only the non-zero items in plain anatomical language. Clinician sees the deficits and decides what to do.
+16 lines. Headline + severity bracket on top. All 15 items shown with standard NIHSS numbering. The numbered list makes scanning fast and matches the NIHSS examination order a clinician already knows.
+
+**Rule for the other calculators:** still drop the 0/No lines. This is a NIHSS-specific exception because of how NIHSS is conventionally charted.
 
 ### Sample 3: EVT eligibility verdict
 
