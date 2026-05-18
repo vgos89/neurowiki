@@ -182,18 +182,24 @@ const IchScoreCalculator: React.FC = () => {
 
   // ── Handlers ───────────────────────────────────────────────────────────────
   const buildEmrText = useCallback(() => {
-    const gcsPts = inputs.gcsPoints;
-    const gcsLabel = gcsPts !== null ? ICH_GCS_OPTIONS[gcsPts].label : 'Not selected';
-    const parts = [
-      `ICH Score: ${isComplete ? result!.score : '—'}/6`,
-      `30-day mortality: ${isComplete ? `${result!.mortality}%` : 'Incomplete'}`,
-      `GCS: ${gcsLabel}`,
-      `ICH volume: ${inputs.volume30OrMore !== null ? (inputs.volume30OrMore ? '≥30 mL' : '<30 mL') : 'Not selected'}`,
-      `IVH: ${inputs.ivh !== null ? (inputs.ivh ? 'Yes' : 'No') : 'Not selected'}`,
-      `Origin: ${inputs.infratentorial !== null ? (inputs.infratentorial ? 'Infratentorial' : 'Supratentorial') : 'Not selected'}`,
-      `Age: ${inputs.age80OrOlder !== null ? (inputs.age80OrOlder ? '≥80 years' : '<80 years') : 'Not selected'}`,
-    ];
-    return parts.join('\n');
+    if (!isComplete || !result) {
+      return 'ICH Score: Incomplete — select all five components.';
+    }
+    // Build components list — only items that contributed points
+    const components: string[] = [];
+    if (inputs.gcsPoints !== null && inputs.gcsPoints > 0) {
+      components.push(`GCS ${ICH_GCS_OPTIONS[inputs.gcsPoints].label}`);
+    }
+    if (inputs.volume30OrMore === true)  components.push('ICH volume ≥30 mL');
+    if (inputs.ivh === true)             components.push('IVH present');
+    if (inputs.infratentorial === true)  components.push('infratentorial origin');
+    if (inputs.age80OrOlder === true)    components.push('age ≥80');
+
+    const componentStr = components.length > 0 ? components.join(', ') : 'none';
+    return [
+      `ICH Score — ${result.score}/6 (30-day mortality ${result.mortality}%)`,
+      `Components: ${componentStr}.`,
+    ].join('\n');
   }, [inputs, isComplete, result]);
 
   const handleCopy = useCallback(() => {

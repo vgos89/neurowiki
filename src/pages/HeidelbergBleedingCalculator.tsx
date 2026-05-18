@@ -182,15 +182,16 @@ const HeidelbergBleedingCalculator: React.FC = () => {
 
   // ── Handlers ───────────────────────────────────────────────────────────────
   const buildEmrText = useCallback(() => {
-    const parts = isComplete && result
-      ? [
-          `Heidelberg Bleeding Classification: ${result.classification}`,
-          result.stat ? `Status: ${result.stat}` : null,
-          result.interpretation,
-          `Management: ${result.explanation}`,
-        ].filter((x): x is string => x !== null)
-      : ['Heidelberg Bleeding Classification: Select a bleeding class.'];
-    return parts.join('\n');
+    if (!isComplete || !result) {
+      return 'Heidelberg Bleeding Classification: Select a bleeding class.';
+    }
+    const headline = result.stat
+      ? `Heidelberg Bleeding Classification — ${result.classification} (${result.stat})`
+      : `Heidelberg Bleeding Classification — ${result.classification}`;
+    return [
+      headline,
+      result.interpretation,
+    ].join('\n');
   }, [isComplete, result]);
 
   const handleCopy = useCallback(() => {

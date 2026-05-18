@@ -187,12 +187,17 @@ const AspectScoreCalculator: React.FC = () => {
   }, []);
 
   const buildEmrText = () => {
-    const involvedList = [...involved].join(', ') || 'None';
+    let regionLine: string;
+    if (involved.size === 0) {
+      regionLine = 'No regions involved.';
+    } else if (involved.size === 1) {
+      regionLine = `Involved region: ${[...involved][0]}.`;
+    } else {
+      regionLine = `Involved regions (${involved.size}): ${[...involved].join(', ')}.`;
+    }
     return [
-      `ASPECTS Score: ${score}/10`,
-      `Interpretation: ${scoreInfo.label}`,
-      `Involved regions (${involved.size}): ${involvedList}`,
-      `EVT implication: ${scoreInfo.evtText}`,
+      `ASPECTS — ${score}/10 (${scoreInfo.label})`,
+      regionLine,
     ].join('\n');
   };
 

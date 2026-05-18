@@ -151,17 +151,17 @@ export default function RopeScoreCalculator() {
 
   // ── Handlers ───────────────────────────────────────────────────────────────
   const buildEmrText = () => {
-    const lines = [
-      `RoPE Score: ${result.score}/10`,
-      `PFO-attributable fraction: ${result.pfoAttributablePercent}%`,
-      `Age band: ${ROPE_AGE_OPTIONS.find((o) => o.value === inputs.ageBand)?.label ?? inputs.ageBand}`,
-      `No hypertension: ${inputs.noHypertension ? 'Yes' : 'No'}`,
-      `No diabetes: ${inputs.noDiabetes ? 'Yes' : 'No'}`,
-      `No prior stroke/TIA: ${inputs.noPriorStrokeTIA ? 'Yes' : 'No'}`,
-      `Nonsmoker: ${inputs.nonsmoker ? 'Yes' : 'No'}`,
-      `Cortical infarct on imaging: ${inputs.corticalInfarct ? 'Yes' : 'No'}`,
-    ];
-    return lines.join('\n');
+    const ageBandLabel = ROPE_AGE_OPTIONS.find((o) => o.value === inputs.ageBand)?.label ?? inputs.ageBand;
+    const findings: string[] = [ageBandLabel];
+    if (inputs.noHypertension)    findings.push('no HTN');
+    if (inputs.noDiabetes)        findings.push('no DM');
+    if (inputs.noPriorStrokeTIA)  findings.push('no prior stroke/TIA');
+    if (inputs.nonsmoker)         findings.push('nonsmoker');
+    if (inputs.corticalInfarct)   findings.push('cortical infarct on imaging');
+    return [
+      `RoPE — ${result.score}/10 (PFO-attributable ${result.pfoAttributablePercent}%)`,
+      `Findings: ${findings.join(', ')}.`,
+    ].join('\n');
   };
 
   const handleCopy = () => {

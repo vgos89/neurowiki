@@ -187,24 +187,16 @@ const GlasgowComaScaleCalculator: React.FC = () => {
 
   // ── Handlers ───────────────────────────────────────────────────────────────
   const buildEmrText = useCallback(() => {
-    const eyeLabel    = inputs.eyeNotTestable
-      ? 'not testable'
-      : inputs.eye !== null ? String(inputs.eye) : 'not selected';
-    const verbalLabel = inputs.verbalNotTestable
-      ? 'not testable (intubated)'
-      : inputs.verbal !== null ? String(inputs.verbal) : 'not selected';
-    const motorLabel  = inputs.motor !== null ? String(inputs.motor) : 'not selected';
-
-    const parts = isComplete && result
-      ? [
-          `GCS: ${result.display} / 15`,
-          `Severity: ${result.label}`,
-          `Eye (E): ${eyeLabel}`,
-          `Verbal (V): ${verbalLabel}`,
-          `Motor (M): ${motorLabel}`,
-        ]
-      : ['GCS: Incomplete — select Eye, Verbal, and Motor.'];
-    return parts.join('\n');
+    if (!isComplete || !result) {
+      return 'GCS: Incomplete — select Eye, Verbal, and Motor.';
+    }
+    const eyeVal    = inputs.eyeNotTestable   ? 'NT' : String(inputs.eye);
+    const verbalVal = inputs.verbalNotTestable ? 'T'  : String(inputs.verbal);
+    const motorVal  = String(inputs.motor);
+    return [
+      `GCS — ${result.display}/15 (${result.label})`,
+      `Eye ${eyeVal}, Verbal ${verbalVal}, Motor ${motorVal}`,
+    ].join('\n');
   }, [inputs, isComplete, result]);
 
   const handleCopy = useCallback(() => {
