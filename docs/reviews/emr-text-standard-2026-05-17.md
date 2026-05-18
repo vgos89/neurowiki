@@ -39,28 +39,28 @@ Pulled from chart-note conventions across the major US academic neurology progra
 
 ### The structural template — universal
 
+**REVISED 2026-05-17 per V direction: drop the A/P line and the Source footer entirely.** Clinicians own the plan — the app shouldn't propose one. And no one leaves "Source: NeuroWiki" in their note. The calculator/pathway is a tool the clinician used; it doesn't sign the chart.
+
 Every EMR note we generate should follow this skeleton:
 
 ```
-{HEADER — pathway/calculator name, date/time}
-============================================
-
-S/O: {one-line summary: age, sex, presentation, score}
-
-{NUMBERED SECTIONS — domain-specific, structured fields}
-
-A/P: {assessment + plan — 1-3 lines, action-oriented}
-
-—
-Source: NeuroWiki | {ref to guideline(s) used}
+{HEADLINE — name + headline number}
+{Positive findings / inputs that drove the number}
+{STRUCTURED SECTIONS for pathway pages — timeline, dose, etc.}
 ```
 
-That structure tracks the SOAP convention residents already use (Subjective / Objective / Assessment / Plan), but compresses S+O into the one-line top and surfaces A+P at the bottom. The numbered sections in the middle carry the structured data (vitals, exam, imaging, dose calculation, etc.).
+That's it. No A/P. No Source. No marketing tag.
+
+The calculator output is read by the clinician → the clinician makes the plan → the clinician writes whatever they want to write in the chart. The app's job is to give them the calculated number + the positive inputs that drove it, in a format they can paste and not have to clean up.
 
 **Why this works:**
-- The attending reading on a phone sees the headline (S/O) and the decision (A/P) without scrolling.
-- The clinician pasting into Epic gets clean structured sections that Epic's smart-text doesn't mangle.
-- The GWTG abstractor finds the timestamps in section 4/5 where they expect them.
+- The attending reading on a phone sees the headline number immediately.
+- The clinician pasting into Epic gets clean structured data without app-generated planning that the clinician didn't actually order.
+- The GWTG abstractor (for Stroke Code) finds the timestamps in the structured sections where they expect them — those sections are not "plan" language, they're factual fields.
+
+**What "calculator outputs vs A/P" means in practice:**
+- KEEP — the calculator's own factual output: "ABCD² 4/7" / "Annual stroke 4.0%" / "EVT eligibility — ELIGIBLE (0–6h standard window)" — these are what the algorithm computed. The clinician used the tool TO get this answer.
+- DROP — recommendations the clinician hasn't agreed to: "A/P: Anticoagulation indicated" / "Activate neuro-IR" / "Initiate DOAC unless contraindicated." These are plans the clinician decides, not outputs from the calculator.
 
 ### Per-surface-type variants
 
@@ -144,16 +144,13 @@ Vascular disease: Yes
 Female sex: No
 ```
 
-**After (proposed standard):**
+**After (revised standard):**
 ```
 CHA₂DS₂-VASc — 4/9 (annual stroke 4.0%)
 Risk factors: HTN, DM, vascular disease, age 65–74.
-A/P: Anticoagulation indicated (CHA₂DS₂-VASc ≥2 in male). Initiate DOAC unless contraindicated; assess HAS-BLED before starting.
-
-Source: NeuroWiki · 2024 ACC/AHA AF guideline
 ```
 
-5 lines instead of 10. Single positive-factor list (drops the 6 "No" lines). Clear A/P. Action-oriented.
+2 lines instead of 10. Score + headline number on the top. Positive risk factors on the second. No "No" lines, no A/P, no source footer. The clinician decides what to do.
 
 ### Sample 2: NIHSS (calculator with subscore drilldown)
 
@@ -182,13 +179,9 @@ Extinction: 0
 ```
 NIHSS — 8 (moderate stroke)
 Deficits: gaze 1, R facial palsy 1, L arm 2, L leg 2, mild aphasia 1, dysarthria 1.
-LVO probability: high (NIHSS ≥6 + gaze deviation).
-A/P: CTA head/neck stat; activate stroke team; assess for IV thrombolysis + thrombectomy.
-
-Source: NeuroWiki · NIHSS · AHA/ASA 2026
 ```
 
-6 lines instead of 17. Names only the non-zero items in plain anatomical language. Adds the clinically-relevant LVO inference. Ends with action.
+2 lines instead of 17. Total + severity bracket on top. Only the non-zero items in plain anatomical language. Clinician sees the deficits and decides what to do.
 
 ### Sample 3: EVT eligibility verdict
 
@@ -216,12 +209,9 @@ Standard EVT criteria for 0–6h window with NIHSS ≥6, ASPECTS ≥6, no severe
 ```
 EVT eligibility — ELIGIBLE (0–6h standard window)
 Anterior LVO, NIHSS 12, ASPECTS 8, age 65–79. No severe CT hypodensity.
-A/P: Activate neuro-IR for thrombectomy; standard EVT criteria met (AHA 2026 §5.1).
-
-Source: NeuroWiki · EVT Pathway
 ```
 
-4 lines instead of 12. Verdict + key inputs in two lines. Single A/P line with the activated next step + guideline anchor.
+2 lines instead of 12. Algorithm's eligibility verdict on top (this IS the output of the tool — clinician used the calculator to get THIS). Key inputs that drove it on second. No "activate neuro-IR" plan language — the clinician owns that.
 
 ---
 
