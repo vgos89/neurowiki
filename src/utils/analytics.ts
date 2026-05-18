@@ -2,11 +2,24 @@
 
 export const GA_MEASUREMENT_ID = 'G-0PD4HYYNTP';
 
-// Track page views (if using React Router)
-export const trackPageView = (url: string) => {
+/**
+ * Track a page view with an explicit title.
+ *
+ * Why we pass page_title explicitly: GA4's auto-page_view (from gtag config or
+ * Enhanced Measurement on history changes) reads document.title at the moment
+ * it fires. On direct entries (search results, deep links) GA4 fires BEFORE
+ * Seo.tsx's useEffect runs, so it captures the static index.html fallback
+ * title instead of the route-specific title. Passing page_title here gives
+ * us the correct title regardless of when document.title finishes updating.
+ *
+ * Called from Seo.tsx on every route change AFTER document.title is set.
+ */
+export const trackPageView = (url: string, title?: string) => {
   if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('config', GA_MEASUREMENT_ID, {
+    (window as any).gtag('event', 'page_view', {
       page_path: url,
+      page_title: title ?? document.title,
+      page_location: window.location.href,
     });
   }
 };
@@ -93,7 +106,14 @@ export const loadGA = (): void => {
   // GA4 gtag API requires the arguments object, not a rest-param array
   w.gtag = function() { w.dataLayer.push(arguments); }; // eslint-disable-line prefer-rest-params
   w.gtag('js', new Date());
-  w.gtag('config', GA_MEASUREMENT_ID, { anonymize_ip: true });
+  // send_page_view:false — we fire page_view manually from Seo.tsx after
+  // document.title is set, so GA4 captures the correct route-specific title
+  // instead of the static index.html fallback. Closes the title-capture
+  // bug surfaced by 2026-05-18 weekly report.
+  w.gtag('config', GA_MEASUREMENT_ID, {
+    anonymize_ip: true,
+    send_page_view: false,
+  });
 
   const script = document.createElement('script');
   script.async = true;

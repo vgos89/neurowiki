@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getRouteMeta } from '../seo/routeMeta';
 import { getSchemaForRoute } from '../seo/schema';
+import { trackPageView } from '../utils/analytics';
 
 const JSON_LD_SCRIPT_ID = 'neurowiki-json-ld';
 
@@ -87,6 +88,14 @@ const Seo: React.FC = () => {
       if (robotsMeta && robotsMeta.getAttribute('content') === 'noindex, nofollow') {
         document.head.removeChild(robotsMeta);
       }
+    }
+
+    // Fire page_view AFTER all meta + title are set. Passes title explicitly
+    // so GA4 captures the route-specific title (not the static fallback from
+    // index.html). Paired with `send_page_view:false` in loadGA() to prevent
+    // double-firing. Fixes title-capture bug from 2026-05-18 weekly report.
+    if (!isStaging) {
+      trackPageView(location.pathname, meta.title);
     }
   }, [location]);
 
