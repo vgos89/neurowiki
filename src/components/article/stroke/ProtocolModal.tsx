@@ -139,7 +139,7 @@ export function ProtocolModal({
       />
       <div
         ref={dialogRef}
-        className="relative w-full max-w-lg max-h-[90vh] sm:min-h-0 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col"
+        className="relative w-full max-w-lg max-h-[90vh] sm:min-h-0 bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden flex flex-col"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -169,7 +169,7 @@ export function ProtocolModal({
         {/* Scrollable body */}
         <div className="flex-1 overflow-y-auto px-6 py-6">
           <div className={`border-l-2 ${severityBorder} pl-4 mb-6`}>
-            <p className={`text-xs font-semibold ${severityText} uppercase tracking-wide`}>
+            <p className={`text-[10px] font-bold ${severityText} uppercase tracking-widest`}>
               {severity.eyebrow}
             </p>
             <p className="text-sm text-slate-600 mt-0.5">{severity.description}</p>
@@ -214,7 +214,7 @@ export function ProtocolModal({
           <button
             type="button"
             onClick={handleCopy}
-            className="flex-1 min-h-[44px] bg-neuro-500 hover:bg-neuro-600 text-white text-sm font-semibold rounded-xl transition-colors inline-flex items-center justify-center gap-2"
+            className="flex-1 min-h-[44px] bg-neuro-500 hover:bg-neuro-600 text-white text-sm font-semibold rounded-full transition-colors inline-flex items-center justify-center gap-2"
           >
             <Copy className="w-4 h-4" aria-hidden />
             Copy to EMR

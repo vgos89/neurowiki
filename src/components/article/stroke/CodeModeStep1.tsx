@@ -201,7 +201,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
           {lkwEntered && !lkwUnknown && (
             <p className="text-xs text-slate-400 mb-2">~{lkwHours.toFixed(1)}h ago</p>
           )}
-          <label className="flex items-center gap-2 cursor-pointer min-h-[36px] mb-3">
+          <label className="flex items-center gap-2 cursor-pointer min-h-[44px] mb-3">
             <input
               type="checkbox"
               checked={lkwUnknown}
@@ -288,13 +288,13 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
               &nbsp;·&nbsp;
               <strong>Nicardipine</strong> 5 mg/hr, ↑2.5 mg/hr q5–15 min (max 15 mg/hr)
             </p>
-            <p className="text-[10px] text-red-600">AHA/ASA 2026</p>
-            <label className="flex items-center gap-2 cursor-pointer min-h-[36px]">
+            <p className="text-[10px] text-red-600">AHA/ASA 2026 §4.3 (BP before IV thrombolysis)</p>
+            <label className="flex items-center gap-2 cursor-pointer min-h-[44px]">
               <input
                 type="checkbox"
                 checked={bpControlled}
                 onChange={(e) => setBpControlled(e.target.checked)}
-                className="w-4 h-4 rounded border-slate-300 text-blue-600 flex-shrink-0"
+                className="w-4 h-4 rounded border-slate-300 text-neuro-600 flex-shrink-0"
               />
               <span className="text-xs text-slate-700 font-medium">BP being controlled / treated</span>
             </label>
@@ -391,12 +391,12 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
           <>
             <div className="grid grid-cols-2 gap-2">
               <div className="p-3 rounded-lg bg-neuro-50 border border-neuro-100">
-                <p className="text-[9px] font-bold uppercase tracking-widest text-neuro-500 mb-1">tPA</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-1">tPA</p>
                 <p className="text-base font-semibold text-neuro-700">{tpaDose} mg</p>
                 <p className="text-[10px] text-neuro-500">{tpaBolus} bolus + {tpaInfusion} inf</p>
               </div>
               <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-100">
-                <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-600 mb-1">TNK</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 mb-1">TNK</p>
                 <p className="text-base font-semibold text-emerald-700">{tnkDose} mg</p>
                 <p className="text-[10px] text-emerald-500">Single bolus</p>
               </div>
@@ -408,10 +408,10 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
 
       {/* ── Disabling symptoms ── */}
       {showDisablingSymptomsChecklist && (
-        <div className="rounded-xl p-4 bg-sky-50 border border-sky-200 space-y-3">
+        <div className="rounded-xl p-4 bg-amber-50 border border-amber-200 space-y-3">
           <div>
-            <p className="text-sm font-bold text-sky-900">Low NIHSS — assess for disabling symptoms (AHA)</p>
-            <p className="text-xs text-sky-700 mt-0.5">Check any that are present. If so, consider TNK after discussing risk/benefit.</p>
+            <p className="text-sm font-bold text-amber-900">Low NIHSS — assess for disabling symptoms (AHA)</p>
+            <p className="text-xs text-amber-700 mt-0.5">Check any that are present. If so, consider TNK after discussing risk/benefit.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
             {[
@@ -421,19 +421,19 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
               { key: 'dysphagia', label: 'Dysphagia' },
               { key: 'handWeakness', label: 'Hand weakness affecting livelihood' },
             ].map(({ key, label }) => (
-              <label key={key} className="flex items-center gap-2 cursor-pointer min-h-[40px] py-0.5">
+              <label key={key} className="flex items-center gap-2 cursor-pointer min-h-[44px] py-0.5">
                 <input
                   type="checkbox"
                   checked={disablingSymptoms[key as keyof typeof disablingSymptoms] || false}
                   onChange={(e) => setDisablingSymptoms(prev => ({ ...prev, [key]: e.target.checked }))}
-                  className="w-4 h-4 rounded border-slate-300 text-sky-600 flex-shrink-0"
+                  className="w-4 h-4 rounded border-slate-300 text-neuro-600 flex-shrink-0"
                 />
                 <span className="text-sm text-slate-700">{label}</span>
               </label>
             ))}
           </div>
           {hasDisablingSymptom && (
-            <p className="text-sm font-semibold text-sky-900">→ Consider TNK after discussing risk/benefit with patient and team.</p>
+            <p className="text-sm font-semibold text-amber-900">→ Consider TNK after discussing risk/benefit with patient and team.</p>
           )}
         </div>
       )}

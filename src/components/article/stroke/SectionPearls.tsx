@@ -70,8 +70,7 @@ export const SectionPearls: React.FC<SectionPearlsProps> = ({
     }`}>
       {/* Header with Toggle */}
       <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-        <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 flex items-center gap-2">
-          <Info className="w-4 h-4" aria-hidden="true" />
+        <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
           Clinical Pearls
         </h3>
 

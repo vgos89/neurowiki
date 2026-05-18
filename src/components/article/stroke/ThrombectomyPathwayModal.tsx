@@ -55,7 +55,7 @@ export const ThrombectomyPathwayModal: React.FC<ThrombectomyPathwayModalProps> =
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
       <div
         ref={dialogRef}
-        className="relative w-full max-w-6xl max-h-[95vh] bg-white rounded-xl shadow-2xl border border-slate-100 flex flex-col overflow-hidden animate-in zoom-in-95 duration-300"
+        className="relative w-full max-w-6xl max-h-[95vh] bg-white rounded-xl shadow-lg border border-slate-100 flex flex-col overflow-hidden"
         role="dialog"
         aria-modal="true"
         aria-labelledby="thrombectomy-modal-title"
@@ -66,15 +66,15 @@ export const ThrombectomyPathwayModal: React.FC<ThrombectomyPathwayModalProps> =
           <div className="flex items-center justify-between h-14 px-5 gap-4">
             <div>
               <p id="thrombectomy-modal-title" className="text-base font-semibold text-slate-900 tracking-tight">EVT / Thrombectomy</p>
-              <p id="thrombectomy-modal-desc" className="text-xs text-slate-400">AHA/ASA 2019 · thrombectomy eligibility</p>
+              <p id="thrombectomy-modal-desc" className="text-xs text-slate-400">AHA/ASA 2026 · thrombectomy eligibility</p>
             </div>
             <button
               ref={closeButtonRef}
               onClick={onClose}
-              className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors flex items-center justify-center"
+              className="flex-shrink-0 min-h-[44px] min-w-[44px] rounded-full bg-slate-100 hover:bg-slate-200 transition-colors flex items-center justify-center"
               aria-label="Close"
             >
-              <X className="w-4 h-4 text-slate-500" />
+              <X className="w-4 h-4 text-slate-500" aria-hidden />
             </button>
           </div>
         </div>

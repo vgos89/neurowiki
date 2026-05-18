@@ -293,7 +293,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
                 <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
                   ctFirstImageMetTarget ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
                 }`}>
-                  {doorToCTMin} min {ctFirstImageMetTarget ? '✓' : '· target ≤25'}
+                  {doorToCTMin} min {ctFirstImageMetTarget ? <Check className="w-3 h-3 inline -mt-0.5" aria-label="met target" /> : '· target ≤25'}
                 </span>
               </div>
             )}
@@ -303,7 +303,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
                 <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
                   ctInterpretedMetTarget ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
                 }`}>
-                  {doorToCTInterpretedMin} min {ctInterpretedMetTarget ? '✓' : '· target ≤45'}
+                  {doorToCTInterpretedMin} min {ctInterpretedMetTarget ? <Check className="w-3 h-3 inline -mt-0.5" aria-label="met target" /> : '· target ≤45'}
                 </span>
               </div>
             )}
@@ -313,7 +313,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
                 <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
                   needleMetTarget ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
                 }`}>
-                  {doorToNeedleMin} min {needleMetTarget ? '✓' : '· target ≤60'}
+                  {doorToNeedleMin} min {needleMetTarget ? <Check className="w-3 h-3 inline -mt-0.5" aria-label="met target" /> : '· target ≤60'}
                 </span>
               </div>
             )}

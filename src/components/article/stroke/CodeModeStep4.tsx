@@ -311,43 +311,47 @@ const ORDERS: Order[] = [
 ];
 
 const getCategoryClasses = (category: string) => {
+  // Categories are organizational groupings, not severity states.
+  // All four use neutral slate or cobalt-soft neuro tokens per design-tokens skill.
+  // post-tpa keeps an amber accent to signal "time-sensitive monitoring" — amber is
+  // the canonical "consider / advisory" severity token (vs red which implies harm).
   if (category === 'post-tpa') {
     return {
-      bg: 'bg-red-50',
-      border: 'border-red-200',
-      text: 'text-red-900',
-      textLight: 'text-red-700',
-      icon: 'text-red-600',
-      checkbox: 'text-red-600 focus:ring-red-500'
+      bg: 'bg-amber-50',
+      border: 'border-amber-200',
+      text: 'text-amber-900',
+      textLight: 'text-amber-700',
+      icon: 'text-amber-600',
+      checkbox: 'text-neuro-600 focus:ring-neuro-500'
     };
   }
   if (category === 'stroke-workup') {
     return {
-      bg: 'bg-purple-50',
-      border: 'border-purple-200',
-      text: 'text-purple-900',
-      textLight: 'text-purple-700',
-      icon: 'text-purple-600',
-      checkbox: 'text-purple-600 focus:ring-purple-500'
+      bg: 'bg-neuro-50',
+      border: 'border-neuro-100',
+      text: 'text-neuro-900',
+      textLight: 'text-neuro-700',
+      icon: 'text-neuro-600',
+      checkbox: 'text-neuro-600 focus:ring-neuro-500'
     };
   }
   if (category === 'labs') {
     return {
-      bg: 'bg-sky-50',
-      border: 'border-sky-200',
-      text: 'text-sky-900',
-      textLight: 'text-sky-700',
-      icon: 'text-sky-600',
-      checkbox: 'text-sky-600 focus:ring-sky-500'
+      bg: 'bg-slate-50',
+      border: 'border-slate-100',
+      text: 'text-slate-900',
+      textLight: 'text-slate-600',
+      icon: 'text-slate-500',
+      checkbox: 'text-neuro-600 focus:ring-neuro-500'
     };
   }
   return {
-    bg: 'bg-blue-50',
-    border: 'border-blue-200',
-    text: 'text-blue-900',
-    textLight: 'text-blue-700',
-    icon: 'text-blue-600',
-    checkbox: 'text-blue-600 focus:ring-blue-500'
+    bg: 'bg-neuro-50',
+    border: 'border-neuro-100',
+    text: 'text-neuro-900',
+    textLight: 'text-neuro-700',
+    icon: 'text-neuro-600',
+    checkbox: 'text-neuro-600 focus:ring-neuro-500'
   };
 };
 
@@ -479,7 +483,7 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
           const selectedCount = orders.filter(o => selectedOrders.includes(o.id)).length;
 
           return (
-            <div key={category} className="rounded-lg border border-slate-200 overflow-hidden">
+            <div key={category} className="rounded-xl border border-slate-100 overflow-hidden">
               <div className={`px-4 py-3 ${classes.bg} ${classes.border} border-b`}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">

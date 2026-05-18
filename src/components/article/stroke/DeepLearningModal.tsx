@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Check, Lightbulb } from 'lucide-react';
+import { X, Check, Lightbulb, ChevronRight } from 'lucide-react';
 import type { ClinicalPearl } from '../../../data/strokeClinicalPearls';
 import { PearlDetailView } from './PearlDetailView';
 import { useModalFocusTrap } from '../../../hooks/useModalFocusTrap';
@@ -140,34 +140,34 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="dlm-title"
-        className="fixed bg-white shadow-lg z-50 lg:top-0 lg:right-0 lg:h-screen lg:w-[400px] bottom-0 left-0 right-0 h-[90vh] lg:h-screen rounded-t-2xl lg:rounded-none overflow-hidden"
+        className="fixed bg-white shadow-lg z-50 lg:top-0 lg:right-0 lg:h-screen lg:w-[400px] bottom-0 left-0 right-0 h-[90vh] lg:h-screen rounded-t-xl lg:rounded-none overflow-hidden"
       >
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-slate-200 p-4 z-10">
+        <div className="sticky top-0 bg-white border-b border-slate-100 p-4 z-10">
           <button
             ref={closeButtonRef}
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-lg hover:bg-slate-100 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+            className="absolute top-2 right-2 min-h-[44px] min-w-[44px] rounded-lg hover:bg-slate-100 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none flex items-center justify-center"
             aria-label="Close deep learning panel"
           >
             <X className="w-5 h-5 text-slate-500" aria-hidden="true" />
           </button>
 
           <div className="pr-12">
-            <h3 id="dlm-title" className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+            <h3 id="dlm-title" className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
               Deep Learning
             </h3>
-            <p className="text-sm font-bold text-slate-900 mt-1">
+            <p className="text-sm font-semibold text-slate-900 mt-1 tracking-[0.01em]">
               {sectionTitle}
             </p>
-            <p className="text-xs text-slate-500 mt-1">
-              {pearls.length} {pearls.length === 1 ? 'pearl' : 'pearls'} • with trial citations
+            <p className="text-[11px] font-medium uppercase tracking-[0.04em] text-slate-400 mt-1">
+              {pearls.length} {pearls.length === 1 ? 'pearl' : 'pearls'} · with trial citations
             </p>
           </div>
         </div>
 
         {/* Filter controls */}
-        <div className="px-4 py-4 bg-slate-50 border-b border-slate-200">
+        <div className="px-4 py-4 bg-slate-50 border-b border-slate-100">
           <div className="space-y-3">
             <div>
               <div className="flex items-center justify-between mb-2">
@@ -177,16 +177,16 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={selectAllFilters}
-                    className="text-xs font-medium text-neuro-500 hover:underline"
+                    className="min-h-[44px] px-2 -mx-2 text-xs font-medium text-neuro-500 hover:underline"
                   >
-                    Select All
+                    Select all
                   </button>
                   <span className="text-slate-300">|</span>
                   <button
                     onClick={clearAllFilters}
-                    className="text-xs font-medium text-slate-600 hover:underline"
+                    className="min-h-[44px] px-2 -mx-2 text-xs font-medium text-slate-600 hover:underline"
                   >
-                    Clear All
+                    Clear all
                   </button>
                 </div>
               </div>
@@ -278,7 +278,7 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-2 border-t border-slate-200">
+            <div className="flex items-center justify-between pt-2 border-t border-slate-100">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
@@ -342,11 +342,11 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
                     }).catch(() => { /* noop */ });
                     setExpandedPearlId(pearl.id);
                   }}
-                  className="w-full text-left p-4 bg-white rounded-lg border border-slate-200 hover:shadow-md transition-shadow cursor-pointer"
+                  className="w-full text-left p-4 bg-white rounded-xl border border-slate-100 hover:shadow-[0_2px_8px_rgba(15,23,42,0.06)] transition-shadow cursor-pointer"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-bold text-base text-slate-900">
+                      <h4 className="text-sm font-semibold text-slate-900 tracking-[0.01em]">
                         {pearl.title}
                       </h4>
                       <EvidenceBadge
@@ -390,11 +390,9 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
                     </p>
                   )}
 
-                  <div className="mt-3 flex items-center gap-2 text-xs text-neuro-500 font-medium">
+                  <div className="mt-3 flex items-center gap-1 text-xs text-neuro-500 font-medium">
                     <span>Tap to expand</span>
-                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <ChevronRight className="w-3 h-3" aria-hidden />
                   </div>
                 </button>
               ))

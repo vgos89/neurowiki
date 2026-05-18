@@ -525,7 +525,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
             : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
         }`}
       >
-        ⏰ Specific Time
+        <Clock size={14} aria-hidden /> Specific Time
       </button>
       <button
         type="button"
@@ -536,7 +536,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
             : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
         }`}
       >
-        🌙 Sleep Onset
+        <Moon size={14} aria-hidden /> Sleep Onset
       </button>
     </div>
   ) : null;
@@ -610,7 +610,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
     >
       <div
         ref={dialogRef}
-        className="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-3xl flex flex-col overflow-hidden max-h-[92vh] sm:max-h-[600px]"
+        className="bg-white rounded-t-xl sm:rounded-xl shadow-lg w-full sm:max-w-3xl flex flex-col overflow-hidden max-h-[92vh] sm:max-h-[600px]"
         onClick={e => e.stopPropagation()}
         role="dialog"
         aria-modal="true"

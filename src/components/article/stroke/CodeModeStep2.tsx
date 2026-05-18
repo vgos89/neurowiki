@@ -115,7 +115,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
 
       {/* BP alert — only when BP high and treatment selected */}
       {step1Data && (step1Data.systolicBP > 185 || step1Data.diastolicBP > 110) && (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
-        <div className="rounded-lg p-3 border border-red-200 bg-red-50">
+        <div className="rounded-xl p-3 border border-red-200 bg-red-50">
           <p className="text-xs font-bold text-red-800 mb-1">Pre-thrombolysis BP &gt;185/110 — treat before giving tPA/TNK (AHA)</p>
           <p className="text-xs text-slate-700">
             <strong>Labetalol</strong> 10–20 mg IV push, repeat q10–20 min (max 300 mg)
@@ -182,7 +182,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
 
       {/* ICH — show protocol button */}
       {isICH && (
-        <div className="rounded-lg p-3 border border-red-200 bg-red-50">
+        <div className="rounded-xl p-3 border border-red-200 bg-red-50">
           <p className="text-xs font-bold text-red-800 mb-2">ICH detected — do not give thrombolytics</p>
           <button
             type="button"
@@ -196,7 +196,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
 
       {/* Eligibility not checked warning */}
       {isNoBleed && !eligibilityResult && (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
-        <div className="rounded-lg p-3 border border-amber-200 bg-amber-50">
+        <div className="rounded-xl p-3 border border-amber-200 bg-amber-50">
           <p className="text-xs font-semibold text-amber-900 mb-2">Eligibility not checked — screen for contraindications before giving.</p>
           {onOpenEligibility && (
             <button
@@ -326,9 +326,10 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
               <button
                 type="button"
                 onClick={onOpenEVTPathway}
-                className="w-full min-h-[44px] py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
+                className="w-full min-h-[44px] py-2.5 bg-neuro-500 hover:bg-neuro-600 text-white font-semibold rounded-full transition-colors flex items-center justify-center gap-2 text-sm"
               >
-                → EVT Pathway
+                <AlertTriangle className="w-4 h-4 text-amber-300" aria-hidden />
+                EVT Pathway
               </button>
             )}
           </div>
