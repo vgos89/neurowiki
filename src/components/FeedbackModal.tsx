@@ -12,7 +12,7 @@
  * changed.
  */
 import React, { useState, useEffect, useRef } from 'react';
-import { AlertCircle, Lightbulb, HelpCircle, Heart, Check, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 
 interface FeedbackModalProps {
@@ -25,11 +25,11 @@ interface FeedbackModalProps {
 
 type FeedbackType = 'error' | 'suggestion' | 'question' | 'praise';
 
-const feedbackTypes: { value: FeedbackType; label: string; Icon: React.ComponentType<{ size?: number; className?: string; 'aria-hidden'?: boolean }> }[] = [
-  { value: 'error', label: 'Report an error', Icon: AlertCircle },
-  { value: 'suggestion', label: 'Suggestion', Icon: Lightbulb },
-  { value: 'question', label: 'Question', Icon: HelpCircle },
-  { value: 'praise', label: 'Praise', Icon: Heart },
+const feedbackTypes: { value: FeedbackType; label: string }[] = [
+  { value: 'error', label: 'Report an error' },
+  { value: 'suggestion', label: 'Suggestion' },
+  { value: 'question', label: 'Question' },
+  { value: 'praise', label: 'Praise' },
 ];
 
 declare global {
@@ -240,13 +240,10 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
         </div>
 
         {submitStatus === 'success' ? (
-          /* Success state */
-          <div className="px-6 py-12 text-center">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center">
-              <Check className="w-8 h-8 text-emerald-600" aria-hidden="true" />
-            </div>
-            <p className="text-[15px] font-semibold text-slate-900">Thank you</p>
-            <p className="text-[13.5px] text-slate-500 mt-1">Your feedback has been submitted.</p>
+          /* Success state — text-only confirmation per clinical pattern */
+          <div className="px-6 py-10">
+            <p className="text-[15px] font-semibold text-slate-900">Thank you.</p>
+            <p className="text-[13.5px] text-slate-600 mt-1">Your feedback has been submitted.</p>
           </div>
         ) : (
           /* Form */
@@ -265,14 +262,13 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                         role="radio"
                         aria-checked={isActive}
                         onClick={() => setFeedbackType(t.value)}
-                        className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-[13.5px] font-medium transition-colors min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
+                        className={`px-3 py-2 rounded-lg border text-[13.5px] font-medium transition-colors min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
                           isActive
                             ? 'border-neuro-500 bg-neuro-50 text-neuro-700'
                             : 'border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
                         }`}
                       >
-                        <t.Icon size={15} className={isActive ? 'text-neuro-600' : 'text-slate-500'} aria-hidden={true} />
-                        <span>{t.label}</span>
+                        {t.label}
                       </button>
                     );
                   })}
