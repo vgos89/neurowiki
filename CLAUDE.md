@@ -356,6 +356,8 @@ In `.claude/skills/`. Agents load via `skills:` frontmatter when the task touche
 | `deploy` | Vercel auto-deploy, env vars, rollback procedure, post-deploy smoke test checklist | `quality-assurance`, orchestrator |
 | `routing` | `src/App.tsx` route conventions, routeManifest.ts, lazy-import pattern, check:routes | `ui-architect`, `seo-specialist` |
 | `compliance-public-medical` | HIPAA/GDPR/CCPA/ADA review guide, data disclosure checklist, disclaimer patterns | `compliance-legal` |
+| `seo-audit-execution` | SEO audit methodology, keyword research, JSON-LD templates, pre-publish SEO playbook | `seo-specialist` |
+| `seo-analytics` | Weekly GA4/GSC report read pattern, decision thresholds, opportunity-query workflow, action-list template | `seo-specialist` |
 
 ### Shipped — Platform plugin skills (available as `namespace:skill`)
 
@@ -602,6 +604,10 @@ When V speaks in plain English, pattern-match against this table **before** clas
 | "add / update the privacy / terms / accessibility page" | `compliance-legal` + `content-writer` + `ui-architect` + `seo-specialist` · `compliance-public-medical`, `seo-audit-execution` |
 | "the citation is stale / wrong / needs updating" | `evidence-verifier` → `medical-scientist` → `clinical-reviewer` · `clinical-trial-audit` |
 | "is this accessible / check accessibility / WCAG" | `accessibility-specialist` · `accessibility-audit`, `design:accessibility-review` |
+| "what's the report show / read the weekly report / how is SEO doing / pull the latest GA4 [or] GSC data" | `seo-specialist` · `seo-analytics`, `seo-audit-execution` |
+| "why isn't [page / calculator / trial] ranking / show me traffic for / what queries are people using" | `seo-specialist` · `seo-analytics` |
+| "instrument / add an event for / track when [action]" | `seo-specialist` + `ui-architect` (event wiring) · `seo-analytics` (event-schema conventions) |
+| "submit the sitemap / request indexing for [url]" | `seo-specialist` · `seo-analytics`, `seo-audit-execution` |
 
 **After pattern-matching:** still classify (A/B/C/D/E), still get V approval for Class C+. The trigger map tells you *who*, classification tells you *how much process*.
 

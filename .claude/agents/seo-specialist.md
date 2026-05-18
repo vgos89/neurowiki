@@ -36,9 +36,21 @@ This agent activates when the swarm task touches:
 
 The orchestrator invokes this agent when one of the above public-indexable
 triggers applies. See CLAUDE.md §19 Language Trigger Map for the canonical
-routing. The skill `seo-audit-execution` carries audit methodology, keyword
-research workflow, structured-data templates, and the side-by-side
-content+SEO playbook.
+routing.
+
+## Skills to load
+
+- `seo-audit-execution` — audit methodology, keyword research workflow,
+  structured-data templates, the side-by-side content+SEO playbook.
+- `seo-analytics` (added 2026-05-18) — how to read NeuroWiki's weekly
+  GA4 + GSC reports, decision thresholds, the weekly action-list
+  template. Load whenever reading `docs/seo-data/weekly/*.md` or
+  responding to a "why isn't [page] ranking" / "what queries are
+  people using" question.
+- `routing` — required when SEO action involves new routes or
+  manifest changes.
+- `compliance-public-medical` — load when copy or metadata
+  modifications could affect medical-disclaimer or claim language.
 
 ---
 
