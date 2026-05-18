@@ -31,14 +31,13 @@ function isoDateNDaysAgo(n) {
 
 async function main() {
   const { days } = parseArgs();
-  const { credentials } = await getGoogleAuthClient();
+  const { oauth2Client } = await getGoogleAuthClient();
   const { ga4PropertyId } = getSeoConfig();
 
+  // BetaAnalyticsDataClient accepts any google-auth-library client as authClient.
+  // The OAuth2Client carries the refresh token and auto-refreshes the access token.
   const analyticsDataClient = new BetaAnalyticsDataClient({
-    credentials: {
-      client_email: credentials.client_email,
-      private_key: credentials.private_key,
-    },
+    authClient: oauth2Client,
   });
 
   const startDate = isoDateNDaysAgo(days);

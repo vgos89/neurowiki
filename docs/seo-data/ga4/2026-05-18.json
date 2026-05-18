@@ -1,0 +1,1566 @@
+{
+  "fetchedAt": "2026-05-18T04:24:05.602Z",
+  "propertyId": "367909578",
+  "dateRange": {
+    "startDate": "2026-04-20",
+    "endDate": "today"
+  },
+  "topPages": [
+    {
+      "dimensionValues": [
+        {
+          "value": "/",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "229",
+          "oneValue": "value"
+        },
+        {
+          "value": "61",
+          "oneValue": "value"
+        },
+        {
+          "value": "154.16369404929577",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/extend-trial",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "79",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "302.43991888888888",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/extend-trial",
+          "oneValue": "value"
+        },
+        {
+          "value": "EXTEND — Acute Reperfusion: Intravenous Thrombolysis (IVT) | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "43",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "531.29843921875",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/late-window-ivt",
+          "oneValue": "value"
+        },
+        {
+          "value": "Late Window IVT — Wake-Up Stroke & Thrombolysis Eligibility | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "19",
+          "oneValue": "value"
+        },
+        {
+          "value": "7",
+          "oneValue": "value"
+        },
+        {
+          "value": "205.13135075",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/nihss",
+          "oneValue": "value"
+        },
+        {
+          "value": "NIHSS Calculator — NIH Stroke Scale Online | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "19",
+          "oneValue": "value"
+        },
+        {
+          "value": "12",
+          "oneValue": "value"
+        },
+        {
+          "value": "177.02618231818181",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "19",
+          "oneValue": "value"
+        },
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "270.566926",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials",
+          "oneValue": "value"
+        },
+        {
+          "value": "Stroke Clinical Trials — Evidence Summaries for Neurologists | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "14",
+          "oneValue": "value"
+        },
+        {
+          "value": "7",
+          "oneValue": "value"
+        },
+        {
+          "value": "219.28432478947366",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/ims-iii-trial",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "12",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "132.681359",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki — Neurology Clinical Decision Support",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "11",
+          "oneValue": "value"
+        },
+        {
+          "value": "12",
+          "oneValue": "value"
+        },
+        {
+          "value": "159.27606190476192",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "9",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "4.6181688333333328",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/q/anticoagulation",
+          "oneValue": "value"
+        },
+        {
+          "value": "Anticoagulation - Clinical Trial | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "8",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "3235.824774",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators",
+          "oneValue": "value"
+        },
+        {
+          "value": "Neurology Calculators — NIHSS, ICH Score, GCS & More | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "7",
+          "oneValue": "value"
+        },
+        {
+          "value": "6",
+          "oneValue": "value"
+        },
+        {
+          "value": "79.561006333333339",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/skip-trial",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "7",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "285.909985",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/guide/iv-tpa",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "6",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "852.387256",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials",
+          "oneValue": "value"
+        },
+        {
+          "value": "Stroke Clinical Trials — Evidence Summaries | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "6",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "217.87875075",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/right-2-trial",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "6",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "361.6793695",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/heidelberg-bleeding-classification",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "205.535754",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/late-window-ivt",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "53.572841333333336",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/evt",
+          "oneValue": "value"
+        },
+        {
+          "value": "EVT Eligibility Tool — Thrombectomy Decision Support | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "382.6615745",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/ims-iii-trial",
+          "oneValue": "value"
+        },
+        {
+          "value": "Ims Iii Trial - Clinical Trial | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "262.746396",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/right-2-trial",
+          "oneValue": "value"
+        },
+        {
+          "value": "RIGHT-2 — Prehospital & Triage | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "128.14255225",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/nihss",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/evt",
+          "oneValue": "value"
+        },
+        {
+          "value": "EVT Eligibility Tool — Thrombectomy Decision | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "212.17100219999998",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/privacy",
+          "oneValue": "value"
+        },
+        {
+          "value": "Privacy Policy · NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "236.1578915",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/sammpris-trial",
+          "oneValue": "value"
+        },
+        {
+          "value": "SAMMPRIS — Secondary Prevention | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "335.705324",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/abcd2-score",
+          "oneValue": "value"
+        },
+        {
+          "value": "ABCD² Score Calculator — TIA Stroke Risk | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "58.397476",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/abcd2-score",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "150.9242335",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/boston-criteria-caa",
+          "oneValue": "value"
+        },
+        {
+          "value": "Boston Criteria 2.0 for CAA — Cerebral Amyloid Angiopathy | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "12.883609",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/guide/iv-tpa",
+          "oneValue": "value"
+        },
+        {
+          "value": "IV tPA Protocol — Alteplase & Tenecteplase Eligibility | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "136.6307725",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "3.840025",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/evt",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "32.796557",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/gca-pathway",
+          "oneValue": "value"
+        },
+        {
+          "value": "GCA Pathway — Giant Cell Arteritis Diagnostic | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "3.6424205",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/stroke-code",
+          "oneValue": "value"
+        },
+        {
+          "value": "Stroke Code Protocol — Acute Stroke Workflow for Residents | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "4.498312",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/mistie-iii-trial",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "355.084181",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/skip-trial",
+          "oneValue": "value"
+        },
+        {
+          "value": "SKIP — Acute Reperfusion: Endovascular Thrombectomy (EVT) | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1387.000378",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/",
+          "oneValue": "value"
+        },
+        {
+          "value": "Neurowiki | Digital Neurology Companion for Physicians",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/aspects-score",
+          "oneValue": "value"
+        },
+        {
+          "value": "ASPECTS Score Calculator — Alberta Stroke Program Early CT Score | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1465.375696",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/boston-criteria-caa",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "5.175661",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/glasgow-coma-scale",
+          "oneValue": "value"
+        },
+        {
+          "value": "Glasgow Coma Scale (GCS) Score Calculator | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "194.01569",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/heidelberg-bleeding-classification",
+          "oneValue": "value"
+        },
+        {
+          "value": "Heidelberg Bleeding Classification — Hemorrhagic Transformation | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1427.225798",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/rope-score",
+          "oneValue": "value"
+        },
+        {
+          "value": "RoPE Score — PFO-Attributable Stroke Risk | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.238176",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/se-pathway",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/se-pathway",
+          "oneValue": "value"
+        },
+        {
+          "value": "Status Epilepticus Protocol — Interactive Management Pathway | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "5.2615835",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/stroke-code",
+          "oneValue": "value"
+        },
+        {
+          "value": "Stroke Code Protocol — Acute Stroke Workflow for Residents | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "259.9822565",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/guide",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "5.414785",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/guide/aha-2026-guideline",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "42.124642",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/guide/seizure-workup",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "21.254363",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/guide/status-epilepticus",
+          "oneValue": "value"
+        },
+        {
+          "value": "Status Epilepticus Management Guide — First Line to Refractory | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "968.94955",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways",
+          "oneValue": "value"
+        },
+        {
+          "value": "Neurology Clinical Pathways — Stroke Code, EVT, Status Epilepticus | NeuroWiki",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "320.0275255",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways-code",
+          "oneValue": "value"
+        },
+        {
+          "value": "NeuroWiki | Neurology Calculators, Pathways & Trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "5.015292",
+          "oneValue": "value"
+        }
+      ]
+    }
+  ],
+  "sessionsBySource": [
+    {
+      "dimensionValues": [
+        {
+          "value": "(direct)",
+          "oneValue": "value"
+        },
+        {
+          "value": "(none)",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "153",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "google",
+          "oneValue": "value"
+        },
+        {
+          "value": "organic",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "101",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "bing",
+          "oneValue": "value"
+        },
+        {
+          "value": "organic",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "5",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "cn.bing.com",
+          "oneValue": "value"
+        },
+        {
+          "value": "referral",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "(not set)",
+          "oneValue": "value"
+        },
+        {
+          "value": "(not set)",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "echonimo.com",
+          "oneValue": "value"
+        },
+        {
+          "value": "referral",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "github.com",
+          "oneValue": "value"
+        },
+        {
+          "value": "referral",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "wotbox.com",
+          "oneValue": "value"
+        },
+        {
+          "value": "referral",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "dimensionValues": [
+        {
+          "value": "page_view",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "592",
+          "oneValue": "value"
+        },
+        {
+          "value": "80",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "session_start",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "275",
+          "oneValue": "value"
+        },
+        {
+          "value": "80",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "user_engagement",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "167",
+          "oneValue": "value"
+        },
+        {
+          "value": "43",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "first_visit",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "83",
+          "oneValue": "value"
+        },
+        {
+          "value": "73",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "calculator_used",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "10",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "search",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        }
+      ]
+    }
+  ]
+}

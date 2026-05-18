@@ -34,12 +34,12 @@ function isoDateNDaysAgo(n) {
 
 async function main() {
   const { days, limit } = parseArgs();
-  const { jwtClient } = await getGoogleAuthClient();
+  const { oauth2Client } = await getGoogleAuthClient();
   const { gscSiteUrl } = getSeoConfig();
 
   const searchconsole = google.searchconsole({
     version: 'v1',
-    auth: jwtClient,
+    auth: oauth2Client,
   });
 
   const startDate = isoDateNDaysAgo(days);

@@ -1,71 +1,92 @@
 /**
- * Shared Google service-account auth for GA4 + Search Console.
+ * Shared Google OAuth user-auth for GA4 + Search Console.
  *
- * Reads credentials from one of:
- *   1. GOOGLE_SERVICE_ACCOUNT_JSON env var (inline JSON — for Vercel)
- *   2. GOOGLE_APPLICATION_CREDENTIALS env var (path to JSON — for local)
- *   3. ./seo-credentials.json file at repo root (gitignored — for local dev)
+ * Why OAuth instead of service account: GA4 rejects service-account emails
+ * with "doesn't match a Google Account" when the GA4 property is owned by
+ * a personal Google account (vs a Workspace organization). OAuth user-auth
+ * sidesteps this by authenticating AS the property owner.
  *
- * Setup guide for V: docs/seo-data/api-integration-setup.md
+ * Two files involved:
+ *   1. oauth-credentials.json — downloaded from Google Cloud Console
+ *      (OAuth 2.0 Client ID, Desktop app type). Gitignored. Repo root.
+ *   2. .oauth-token.json — refresh token, produced ONCE by running
+ *      `npm run seo:auth-login`. Gitignored. Repo root.
+ *
+ * Setup guide: docs/seo-data/api-integration-setup.md
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { google } from 'googleapis';
 
-const SCOPES = [
+export const SCOPES = [
   'https://www.googleapis.com/auth/analytics.readonly',
   'https://www.googleapis.com/auth/webmasters.readonly',
-  'https://www.googleapis.com/auth/webmasters', // for submitting sitemaps + indexing requests
+  'https://www.googleapis.com/auth/webmasters', // submit sitemaps + request indexing
 ];
 
-function loadCredentials() {
-  // 1. Inline JSON (preferred for CI / Vercel)
-  if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
-    try {
-      return JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
-    } catch (err) {
-      throw new Error(
-        `GOOGLE_SERVICE_ACCOUNT_JSON env var is not valid JSON: ${err.message}`
-      );
-    }
-  }
+const OAUTH_CREDS_PATH = path.join(process.cwd(), 'oauth-credentials.json');
+const TOKEN_PATH = path.join(process.cwd(), '.oauth-token.json');
 
-  // 2. File path from env var (standard Google convention)
-  if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-    const credPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-    if (!fs.existsSync(credPath)) {
-      throw new Error(
-        `GOOGLE_APPLICATION_CREDENTIALS points to ${credPath} which does not exist.`
-      );
-    }
-    return JSON.parse(fs.readFileSync(credPath, 'utf-8'));
+function loadOAuthClientCreds() {
+  if (!fs.existsSync(OAUTH_CREDS_PATH)) {
+    throw new Error(
+      `oauth-credentials.json not found at repo root.\n` +
+      `Download from Google Cloud Console: APIs & Services → Credentials → ` +
+      `your Desktop-app OAuth client → Download JSON.\n` +
+      `See docs/seo-data/api-integration-setup.md`
+    );
   }
-
-  // 3. Repo-root fallback (must be gitignored)
-  const repoCredsPath = path.join(process.cwd(), 'seo-credentials.json');
-  if (fs.existsSync(repoCredsPath)) {
-    return JSON.parse(fs.readFileSync(repoCredsPath, 'utf-8'));
+  const raw = JSON.parse(fs.readFileSync(OAUTH_CREDS_PATH, 'utf-8'));
+  // Google downloads as { installed: { client_id, client_secret, ... } } for desktop apps
+  const creds = raw.installed || raw.web || raw;
+  if (!creds.client_id || !creds.client_secret) {
+    throw new Error(
+      `oauth-credentials.json missing client_id or client_secret. ` +
+      `Was this downloaded as a Desktop-app OAuth client?`
+    );
   }
+  return creds;
+}
 
-  throw new Error(
-    'No Google service account credentials found. See docs/seo-data/api-integration-setup.md for setup.'
+export function buildOAuth2Client() {
+  const creds = loadOAuthClientCreds();
+  // For Desktop-app flow we use a loopback redirect; auth-login.mjs spins up
+  // a one-shot localhost listener on a free port and sets redirect_uri to match.
+  return new google.auth.OAuth2(
+    creds.client_id,
+    creds.client_secret,
+    creds.redirect_uris?.[0] || 'http://localhost'
   );
 }
 
 /**
- * Returns an authenticated GoogleAuth client + a JWT for direct API use.
- * Use the JWT for both GA4 Data API and Search Console API.
+ * Load the saved refresh-token. Throws with a clear pointer if not present.
+ */
+function loadSavedToken() {
+  if (!fs.existsSync(TOKEN_PATH)) {
+    throw new Error(
+      `No saved OAuth token found at ${TOKEN_PATH}.\n` +
+      `Run \`npm run seo:auth-login\` once to authorize (opens a browser).`
+    );
+  }
+  return JSON.parse(fs.readFileSync(TOKEN_PATH, 'utf-8'));
+}
+
+export function saveToken(token) {
+  fs.writeFileSync(TOKEN_PATH, JSON.stringify(token, null, 2));
+}
+
+/**
+ * Returns an authenticated OAuth2 client ready for GA4 + Search Console.
+ * Used by fetch-ga4.mjs and fetch-gsc.mjs.
  */
 export async function getGoogleAuthClient() {
-  const credentials = loadCredentials();
-  const jwtClient = new google.auth.JWT({
-    email: credentials.client_email,
-    key: credentials.private_key,
-    scopes: SCOPES,
-  });
-  await jwtClient.authorize();
-  return { jwtClient, credentials };
+  const oauth2Client = buildOAuth2Client();
+  const token = loadSavedToken();
+  oauth2Client.setCredentials(token);
+  // googleapis auto-refreshes the access token using the refresh_token when needed.
+  return { oauth2Client };
 }
 
 /**
@@ -77,7 +98,9 @@ export function getSeoConfig() {
 
   if (!ga4PropertyId) {
     throw new Error(
-      'GA4_PROPERTY_ID env var is required. See docs/seo-data/api-integration-setup.md step 4.'
+      'GA4_PROPERTY_ID env var is required. ' +
+      'Find it in GA4 → Admin → Property Settings (numeric ID). ' +
+      'Add to .env.local: GA4_PROPERTY_ID=123456789'
     );
   }
 

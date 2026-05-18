@@ -23,4 +23,5 @@ service-account*.json
 *-credentials.json
 *-service-account.json
 token.json
+.oauth-token.json
 .gsc_*

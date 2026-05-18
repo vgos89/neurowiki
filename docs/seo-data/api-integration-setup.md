@@ -1,76 +1,73 @@
 # SEO API integration — one-time setup for V
 
-This is what enables the Tidbit-pattern "Claude has API access to GA4 + GSC for NeuroWiki." After this is set up, I can pull real GA4 metrics + Google Search Console queries on demand, generate weekly reports, and act on the data (submit sitemaps, request indexing, etc.).
+This is what enables "Claude has API access to GA4 + GSC for NeuroWiki." After this is set up, I can pull real GA4 metrics + Google Search Console queries on demand, generate weekly reports, and act on the data (submit sitemaps, request indexing, etc.).
 
 You do this once. After that, the integration is automatic.
 
-## What you're setting up (90-second mental model)
+## Why OAuth (not service-account)
 
-You'll create a **Google service account** — a special Google identity that represents this app, not a person. It gets read access (and limited write access) to your GA4 property and your Search Console property. The credentials live in one JSON file. That JSON file goes into a Vercel environment variable. From then on, the scripts in this repo can pull data + act on the two accounts without needing your password or 2FA.
+Originally this used a Google service account (the "robot identity" pattern). GA4 rejects service-account emails when the GA4 property is owned by a personal Google account (vs a Workspace organization) — the "This email doesn't match a Google Account" wall. OAuth user-auth sidesteps this entirely: the scripts authenticate **as you**, inheriting the access you already have as the property admin.
 
-## Five steps. Should take under 5 minutes.
+## What you've already done
 
-### Step 1 — Create a Google Cloud project (or use existing)
+If you got this far, you've already:
+- Created the `neurowiki-seo` Google Cloud project
+- Enabled the GA4 Data API and Search Console API
+- Configured the OAuth consent screen (External, app name `neurowiki-seo`)
+- Created an OAuth 2.0 Client ID of type **Desktop app** (`neurowiki-seo-oauth`)
+- Downloaded the OAuth JSON and saved it as `oauth-credentials.json` at the repo root
 
-1. Go to https://console.cloud.google.com.
-2. Top bar, project dropdown → "New Project".
-3. Name: `neurowiki-seo` (or any name — doesn't matter).
-4. Wait ~30 seconds for project to create. Select it from the project dropdown.
+## Two final pieces before the sign-in works
 
-### Step 2 — Enable the two APIs
+### A. Add yourself as a Test User on the consent screen
 
-1. Top bar search → type "Google Analytics Data API" → click the result → "Enable".
-2. Top bar search → type "Search Console API" → click the result → "Enable".
+Because the app is in "Testing" mode (not published), Google blocks OAuth flows for anyone not on the test-user list. Even if you own the project.
 
-(These are free for the volumes NeuroWiki uses.)
+1. Go to https://console.cloud.google.com/auth/audience (in the `neurowiki-seo` project)
+2. Under **Test users**, click **+ Add users**
+3. Enter your Google account email (the one that owns the GA4 property)
+4. Save
 
-### Step 3 — Create a service account + download its key
+### B. Make sure `GA4_PROPERTY_ID` is in `.env.local`
 
-1. Left sidebar → "IAM & Admin" → "Service Accounts" → "+ Create Service Account".
-2. Name: `neurowiki-seo-bot`. Skip the optional grants screens. Click Done.
-3. Click the new service account email in the list (looks like `neurowiki-seo-bot@neurowiki-seo.iam.gserviceaccount.com`).
-4. Tab → "Keys" → "Add Key" → "Create new key" → "JSON" → Create. A file downloads. **This file is the credentials. Don't email it, don't paste it into chat.**
+Find the numeric ID at: GA4 → Admin (bottom-left gear) → Property column → Property settings. It looks like `123456789`.
 
-### Step 4 — Grant the service account access to GA4 + GSC
+Add to `.env.local` at the repo root:
 
-The service account exists but has no permissions yet. Add it as a viewer on both:
+```
+GA4_PROPERTY_ID=123456789
+```
 
-**GA4 (Google Analytics):**
-1. Go to https://analytics.google.com → Admin (bottom left gear).
-2. Property column → "Property access management".
-3. "+" top right → "Add users".
-4. Email = the service account email from step 3 (e.g., `neurowiki-seo-bot@neurowiki-seo.iam.gserviceaccount.com`).
-5. Role = "Analyst" (or "Viewer" — Viewer is the minimum).
-6. Add.
-7. **While you're here, copy the GA4 Property ID** — it's the number in the top-right of the Property column, looks like `123456789`. You'll need it in step 5.
+(Replace with your actual number.)
 
-**Google Search Console:**
-1. Go to https://search.google.com/search-console.
-2. Select the NeuroWiki property.
-3. Settings (left sidebar) → "Users and permissions" → "Add User".
-4. Email = same service account email.
-5. Permission = "Full" (needed for submit-sitemap and request-indexing endpoints; if you prefer read-only, use "Restricted").
-6. Add.
+### Optional: GSC_SITE_URL override
 
-### Step 5 — Drop the credentials into Vercel + locally
+The script defaults to `sc-domain:neurowiki.ai` for Search Console. If your GSC property is registered differently (e.g., `https://neurowiki.ai/` as a URL-prefix property instead of a Domain property), set:
 
-**For Vercel (production reports + cron):**
-1. Vercel dashboard → NeuroWiki project → Settings → Environment Variables.
-2. Add **two** variables:
-   - Name: `GOOGLE_SERVICE_ACCOUNT_JSON` — Value: paste the entire contents of the JSON file from step 3.
-   - Name: `GA4_PROPERTY_ID` — Value: the number from GA4 (step 4).
-3. Apply to Production + Preview + Development. Save.
+```
+GSC_SITE_URL=https://neurowiki.ai/
+```
 
-**For local dev (so you can run reports on your laptop):**
-1. Save the JSON file as `seo-credentials.json` in the repo root (`/Users/vaibhav/Documents/NeuroWiki/Cursor/Neurowiki/neurowiki/seo-credentials.json`).
-2. That filename is already in `.gitignore` — it will never get committed.
-3. Add to `.env.local` in the repo root: `GA4_PROPERTY_ID=123456789` (replace with your number).
+If it's already a Domain property and the default matches, skip this.
 
-Done. The integration is live.
+## Run the one-time sign-in
 
-## How to use it after setup
+```bash
+npm run seo:auth-login
+```
 
-From the repo root:
+What happens:
+1. Script spins up a tiny local server on a free port
+2. Your default browser opens to a Google sign-in page
+3. You sign in as the Google account that owns the GA4 property
+4. You consent to the requested scopes (Analytics read, Search Console read+write)
+5. Google sends you back to the local server; the script captures the auth code
+6. Refresh token gets saved to `.oauth-token.json` (gitignored)
+7. Done. You can close the browser tab.
+
+From now on, all the `seo:*` scripts auto-refresh the access token using the saved refresh token. No re-sign-in required (unless you revoke access at https://myaccount.google.com/permissions).
+
+## Use it after setup
 
 ```bash
 # Pull the last 28 days of Search Console data
@@ -88,29 +85,22 @@ npm run seo:weekly
 
 Reports land in `docs/seo-data/weekly/{date}-report.md` — markdown tables with top queries, top pages, sessions by source, calculator-usage events. Both raw JSON snapshots (in `docs/seo-data/{ga4,gsc}/`) and the synthesized report get committed to the repo so you can read them on GitHub or on your phone via the docs/ folder.
 
-## What this unlocks (Claude's "full control")
-
-Once the integration is wired, I can:
+## What this unlocks
 
 **Read on demand:**
 - Top 100 search queries you're appearing for, with clicks/impressions/CTR/avg position
 - Top 50 pages by GA4 views, with sessions and average duration
 - Source/medium breakdown — how clinicians actually find the site
 - Custom event counts — which calculators get used, how often, by which user role
-- Indexability status — which URLs Google has discovered vs indexed vs excluded
+- Submitted sitemaps and their last-submission timestamps
 
-**Act on the data (write access):**
+**Act on the data:**
 - Submit a new sitemap version after a deploy
-- Request indexing for a specific URL (e.g., after you publish a new pathway)
-- Programmatically reconcile the route manifest titles/descriptions against actual GSC keyword performance
+- Request indexing for a specific URL (e.g., after a new pathway publishes)
+- Programmatically reconcile route titles/descriptions against actual query performance
 
-**Automate (with cron):**
-- Weekly report auto-generated and committed to the repo every Monday
-- Alerts if a high-traffic page drops out of the index
-- Trend tracking — week-over-week query growth/decline
+## Common gotchas
 
-## What I need from you before I can run anything
-
-Just confirm when steps 1–5 are done. You don't have to share the JSON contents with me — I can run scripts that read it from the env var, and you can verify the first report worked.
-
-If you'd rather I walk you through any single step in real-time, say so and I'll be more granular.
+- **"Access blocked: neurowiki-seo has not completed the Google verification process"** — you didn't add yourself as a Test User (step A above), or the email you're signing in with doesn't match the test user you added.
+- **"redirect_uri_mismatch"** — Google occasionally cares about the loopback port. Desktop apps are supposed to allow any loopback port automatically; if you hit this, paste the URL Google shows and tell me the exact mismatch text.
+- **No refresh token returned (warning at end of auth-login)** — Google only issues a refresh token on first consent. To force a fresh one: revoke access at https://myaccount.google.com/permissions, then re-run `seo:auth-login`.
