@@ -312,7 +312,7 @@ True subagents live in `.claude/agents/`. Each has frontmatter-enforced scope: `
 | 5 | `content-writer` | Educational prose, pearls, study-mode content, plain-language explanations | Read, Write, Edit |
 | 6 | `quality-assurance` | Tests, validation, performance budgets, deployment checks. Write/Edit restricted to docs/reviews/qa-* and test files. | Read, Write, Edit, Bash |
 
-### Contextual 10 — task-activated per brief
+### Contextual 11 — task-activated per brief
 
 | # | Agent | Activates when | Tool bounds |
 |---|---|---|---|
@@ -321,11 +321,12 @@ True subagents live in `.claude/agents/`. Each has frontmatter-enforced scope: `
 | 3 | `trial-statistician` | Trial pages, p-values, NNTs, mRS shift, NI/Bayesian/ordinal/registry trial changes | Read, Grep, Glob, WebFetch, WebSearch |
 | 4 | `design-prototyper` | New mockup needed at `docs/specs/mockups/` | Read, Write, Edit |
 | 5 | `design-guardian` | `docs/specs/*.md` creation or change | Read, Write, Edit, Grep, Glob |
-| 6 | `librarian` | Post-flight after every swarm. File scope: TASKS.md, ROADMAP.md, docs/reviews/, docs/NEUROWIKI.md, docs/link-graph.json only. | Read, Write, Edit, Grep, Glob |
+| 6 | `librarian` | Post-flight after every swarm. File scope: TASKS.md, ROADMAP.md, docs/reviews/, docs/NEUROWIKI.md, docs/link-graph.json only. **Emits privacy-drift TASKS.md entries when commits touch persistence/egress surfaces (see librarian.md "Privacy-drift detection").** | Read, Write, Edit, Grep, Glob |
 | 7 | `accessibility-specialist` | Interactive UI, ARIA, keyboard nav, focus management | Read, Write, Edit, Glob, Grep |
 | 8 | `seo-specialist` | New routes, `src/seo/`, structured data, metadata, pre-publish · **co-fires with `content-writer` on public-indexable content** (guide pages, trial pages, calculator landing/intro copy, FAQ pages). Does NOT fire on Study Mode pearls, tooltips, modal text, or in-calculator interpretation strings. | Read, Write, Edit, Glob, Grep |
 | 9 | `compliance-legal` | Auth flows, privacy/ToS, PHI paths, disclaimers, GDPR/CCPA. Reviewer-first — produces findings, delegates drafting. | Read, Grep, Glob |
 | 10 | `system-architect` | Class D/E plan review; structural decisions, composability, duplication prevention | Read, Grep, Glob (read-only) |
+| 11 | `security-engineer` | Cryptographic primitives, key derivation, RLS scope, secret-handling, transient-relay design, anonymous endpoints. Activates on `src/lib/crypto/**`, `src/lib/supabase.ts`, `src/lib/cases/transfer.ts`, `src/lib/cases/store.ts`, `api/**`, RLS SQL, `vercel.json` cron/headers, `src/utils/analytics.ts`, env-var additions, service-worker changes. Reviewer-first; can block on cryptographic-correctness grounds. See ADR `docs/adrs/2026-05-19-security-reviewer.md`. | Read, Grep, Glob (read-only) |
 
 ### Meta 3 — not invoked as subagents (live in `.claude/meta/`, not `.claude/agents/`)
 
@@ -358,6 +359,7 @@ In `.claude/skills/`. Agents load via `skills:` frontmatter when the task touche
 | `compliance-public-medical` | HIPAA/GDPR/CCPA/ADA review guide, data disclosure checklist, disclaimer patterns | `compliance-legal` |
 | `seo-audit-execution` | SEO audit methodology, keyword research, JSON-LD templates, pre-publish SEO playbook | `seo-specialist` |
 | `seo-analytics` | Weekly GA4/GSC report read pattern, decision thresholds, opportunity-query workflow, action-list template | `seo-specialist` |
+| `crypto-and-relay-security` | PBKDF2/AES-GCM parameter floors, RLS pattern review, transient-relay data-flow, cron secret rotation, IndexedDB schema-version safety. Includes NeuroWiki case-transfer data-flow diagram. | `security-engineer`; `system-architect` (when crypto in scope); `compliance-legal` (when disclosing crypto features) |
 
 ### Shipped — Platform plugin skills (available as `namespace:skill`)
 
@@ -532,6 +534,7 @@ What must exist after work is done, beyond the code itself:
 | C | Bilingual PR description · test for new logic · `TASKS.md` status update · committed and pushed · PR opened |
 | **C / C-clinical (public-indexable content)** | C artifacts **+ `### @seo-specialist — Sign-off` block in PR body** when the change touches guide pages, trial pages, calculator landing/intro copy, FAQ pages, or new routes. Use the template in `.claude/agents/seo-specialist.md`. Skip for changes scoped only to Study Mode pearls, tooltips, modal text, or in-calculator interpretation strings (non-indexable). |
 | D | C artifacts + ADR in `docs/adrs/` + rollback note + migration plan (if schema) + **architect review artifact (§17)** |
+| **D / D-clinical (security surface)** | D artifacts **+ `### @security-engineer — Sign-off` block in PR body + security review artifact at `docs/reviews/security-PR<#>-<slug>.md`** when the change touches `src/lib/crypto/**`, `src/lib/supabase.ts`, `src/lib/cases/transfer.ts`, `src/lib/cases/store.ts`, `api/**`, RLS SQL, `vercel.json` cron/CSP/rewrites, `src/utils/analytics.ts`, env-var additions, or service-worker logic. Decision must be `approve` or `approve-with-conditions` (all conditions addressed). Template in `.claude/agents/security-engineer.md`. |
 | E | D artifacts + citation record update + `last_reviewed` refresh via §13.6 + **clinical review artifact (§17)** + rollback plan |
 
 **Commit message format (all classes):**
@@ -602,6 +605,9 @@ When V speaks in plain English, pattern-match against this table **before** clas
 | "update the docs / README / TASKS / ROADMAP / NEUROWIKI" | `librarian` · `engineering:documentation` |
 | "is this GDPR / HIPAA / compliant / do we need a disclaimer" | `compliance-legal` · `compliance-public-medical` |
 | "add / update the privacy / terms / accessibility page" | `compliance-legal` + `content-writer` + `ui-architect` + `seo-specialist` · `compliance-public-medical`, `seo-audit-execution` |
+| "touching encryption / crypto / PBKDF2 / AES / Supabase / RLS / cron / service role / transient relay / case transfer / env secret" | `security-engineer` · `crypto-and-relay-security` |
+| "tri-overlap surface (`src/lib/supabase.ts`, `src/lib/cases/transfer.ts`, `src/lib/crypto/`, `api/`, RLS SQL)" | **Parallel:** `security-engineer` (crypto + RLS + secrets) · `system-architect` (boundaries + composability) · `compliance-legal` (disclosure obligations). Conflicts escalate per §4 — patient-impacting security findings promote to clinical-safety tier and route to `clinical-reviewer` for ratification. · `crypto-and-relay-security`, `engineering:architecture`, `compliance-public-medical` |
+| "production incident touching crypto / Supabase / cron / service role" | `quality-assurance` (primary, deploy/incident) **fan-out to** `security-engineer` when symptom touches the security surface list. Do NOT auto-fan-out on every incident. · `engineering:incident-response`, `crypto-and-relay-security`, `deploy` |
 | "the citation is stale / wrong / needs updating" | `evidence-verifier` → `medical-scientist` → `clinical-reviewer` · `clinical-trial-audit` |
 | "is this accessible / check accessibility / WCAG" | `accessibility-specialist` · `accessibility-audit`, `design:accessibility-review` |
 | "what's the report show / read the weekly report / how is SEO doing / pull the latest GA4 [or] GSC data" | `seo-specialist` · `seo-analytics`, `seo-audit-execution` |
