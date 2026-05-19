@@ -490,13 +490,16 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
         )}
       </div>
 
-      {/* LKW date + time picker */}
+      {/* LKW date + time picker — showSleepOnset=true matches Extended IVT
+          pathway behavior; Stroke Code cross-links to Extended IVT for wake-up
+          strokes, so the sleep-onset tab must be available here too. */}
       <LKWTimePicker
         isOpen={clockPickerOpen}
         onClose={() => setClockPickerOpen(false)}
         onConfirm={(date) => { setLkwDate(date); setLkwEntered(true); }}
         onUnknown={() => { setLkwUnknown(true); setLkwEntered(true); setClockPickerOpen(false); }}
         initialDate={lkwDate}
+        showSleepOnset={true}
       />
     </div>
   );

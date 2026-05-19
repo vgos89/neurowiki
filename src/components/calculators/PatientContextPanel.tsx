@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { formatClinicalDateShort } from '../../utils/clinicalDateTime';
+import { LKWTimePicker } from '../article/stroke/LKWTimePicker';
 
 /**
  * PatientContextPanel — optional collapsible accordion that captures
@@ -53,7 +54,7 @@ const ANTICOAG_LABELS: Record<Anticoag, string> = {
 
 export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({ values, onChange }) => {
   const [expanded, setExpanded] = useState(false);
-  const [lkwPickerOpen, setLkwPickerOpen] = useState(false);
+  const [lkwModalOpen, setLkwModalOpen] = useState(false);
 
   const hasAnyValue =
     values.lkw !== undefined ||
@@ -108,32 +109,20 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({ values
       {/* Expanded body */}
       {expanded && (
         <div id="patient-context-body" className="divide-y divide-slate-50">
-          {/* LKW row */}
-          <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3">
-            <label className="text-xs font-medium text-slate-600 flex-shrink-0">Last known well</label>
-            <button
-              type="button"
-              onClick={() => setLkwPickerOpen((v) => !v)}
-              className="flex items-center gap-1 text-sm text-slate-900 hover:bg-slate-50 px-2 py-1 -my-1 rounded transition-colors"
-              aria-expanded={lkwPickerOpen}
-            >
-              <span className={values.lkw === undefined ? 'text-slate-400' : ''}>{lkwDisplay}</span>
-              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${lkwPickerOpen ? 'rotate-180' : ''}`} aria-hidden />
-            </button>
-          </div>
-
-          {/* LKW picker — inline expansion */}
-          {lkwPickerOpen && (
-            <div className="px-4 py-3 bg-slate-50/50 space-y-2">
-              <LkwInlinePicker
-                value={values.lkw}
-                onChange={(next) => {
-                  onChange({ ...values, lkw: next });
-                  setLkwPickerOpen(false);
-                }}
-              />
-            </div>
-          )}
+          {/* LKW row — tap opens the canonical LKWTimePicker modal (same
+              component as Stroke Code Step 1 + Extended IVT pathway). */}
+          <button
+            type="button"
+            onClick={() => setLkwModalOpen(true)}
+            className="w-full min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 hover:bg-slate-50 transition-colors text-left"
+            aria-haspopup="dialog"
+          >
+            <span className="text-xs font-medium text-slate-600 flex-shrink-0">Last known well</span>
+            <span className="flex items-center gap-1">
+              <span className={`text-sm ${values.lkw === undefined ? 'text-slate-400' : 'text-slate-900'}`}>{lkwDisplay}</span>
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400" aria-hidden />
+            </span>
+          </button>
 
           {/* BP row */}
           <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3">
@@ -205,106 +194,29 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({ values
 
           {/* Disclaimer footer */}
           <div className="px-4 py-2 bg-slate-50/50">
-            <p className="text-[10px] text-slate-400 italic">Reference only — verify against patient chart.</p>
+            <p className="text-[10px] text-slate-400 italic">Reference only. Verify against patient chart.</p>
           </div>
         </div>
       )}
+
+      {/* LKW modal — canonical LKWTimePicker (portal). Same component used
+          by Stroke Code Step 1 and Extended IVT pathway. showSleepOnset
+          enabled so wake-up stroke documentation works in this context too. */}
+      <LKWTimePicker
+        isOpen={lkwModalOpen}
+        onClose={() => setLkwModalOpen(false)}
+        onConfirm={(date) => {
+          onChange({ ...values, lkw: date });
+          setLkwModalOpen(false);
+        }}
+        onUnknown={() => {
+          onChange({ ...values, lkw: null });
+          setLkwModalOpen(false);
+        }}
+        initialDate={values.lkw instanceof Date ? values.lkw : undefined}
+        showSleepOnset={true}
+      />
     </div>
-  );
-};
-
-// ──────────────────────────────────────────────────────────────────────────────
-// Inline LKW picker — compact variant of LKWTimePicker stripped of sleep-onset
-// mode complexity. Three quick presets + custom date/time + Unknown.
-// ──────────────────────────────────────────────────────────────────────────────
-
-interface LkwInlinePickerProps {
-  value: Date | null | undefined;
-  onChange: (next: Date | null) => void;
-}
-
-const LkwInlinePicker: React.FC<LkwInlinePickerProps> = ({ value, onChange }) => {
-  const now = new Date();
-
-  // Custom date/time fields — initialize from current value or now
-  const initial = value instanceof Date ? value : now;
-  const [dateInput, setDateInput] = useState(toDateInputValue(initial));
-  const [timeInput, setTimeInput] = useState(toTimeInputValue(initial));
-
-  const applyCustom = () => {
-    if (!dateInput || !timeInput) return;
-    const [y, m, d] = dateInput.split('-').map(Number);
-    const [h, min] = timeInput.split(':').map(Number);
-    const next = new Date(y, m - 1, d, h, min, 0, 0);
-    onChange(next);
-  };
-
-  const applyMinutesAgo = (mins: number) => {
-    const next = new Date(Date.now() - mins * 60_000);
-    onChange(next);
-  };
-
-  return (
-    <>
-      {/* Quick presets */}
-      <div className="flex flex-wrap gap-1.5">
-        {[
-          { label: 'Just now', mins: 0 },
-          { label: '30 min ago', mins: 30 },
-          { label: '1 hr ago', mins: 60 },
-          { label: '2 hr ago', mins: 120 },
-          { label: '4 hr ago', mins: 240 },
-        ].map((opt) => (
-          <button
-            key={opt.label}
-            type="button"
-            onClick={() => applyMinutesAgo(opt.mins)}
-            className="min-h-[44px] py-1.5 px-3 -my-1 text-xs font-semibold rounded-full border bg-white border-slate-200 text-slate-600 hover:border-slate-300 transition-colors"
-          >
-            {opt.label}
-          </button>
-        ))}
-        <button
-          type="button"
-          onClick={() => onChange(null)}
-          className={`min-h-[44px] py-1.5 px-3 -my-1 text-xs font-semibold rounded-full border transition-colors ${
-            value === null
-              ? 'bg-amber-50 border-amber-200 text-amber-700'
-              : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
-          }`}
-        >
-          Unknown / wake-up
-        </button>
-      </div>
-
-      {/* Custom date + time */}
-      <div className="flex items-center gap-2 pt-2 mt-1 border-t border-slate-100">
-        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 flex-shrink-0">
-          Custom
-        </span>
-        <input
-          type="date"
-          value={dateInput}
-          onChange={(e) => setDateInput(e.target.value)}
-          className="text-xs text-slate-900 bg-white border border-slate-200 rounded px-2 py-1.5 focus:border-neuro-500 focus:outline-none"
-          aria-label="Custom date"
-        />
-        <input
-          type="time"
-          value={timeInput}
-          onChange={(e) => setTimeInput(e.target.value)}
-          className="text-xs text-slate-900 bg-white border border-slate-200 rounded px-2 py-1.5 focus:border-neuro-500 focus:outline-none"
-          aria-label="Custom time"
-        />
-        <button
-          type="button"
-          onClick={applyCustom}
-          className="min-h-[36px] py-1.5 px-3 text-xs font-semibold rounded-full bg-neuro-500 hover:bg-neuro-600 text-white transition-colors"
-        >
-          Set
-        </button>
-      </div>
-    </>
   );
 };
 
@@ -315,19 +227,6 @@ const LkwInlinePicker: React.FC<LkwInlinePickerProps> = ({ value, onChange }) =>
 function sanitizeNumeric(input: string, maxDigits: number): string {
   const digits = input.replace(/[^0-9]/g, '');
   return digits.slice(0, maxDigits);
-}
-
-function toDateInputValue(d: Date): string {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
-}
-
-function toTimeInputValue(d: Date): string {
-  const h = String(d.getHours()).padStart(2, '0');
-  const m = String(d.getMinutes()).padStart(2, '0');
-  return `${h}:${m}`;
 }
 
 /** Build a 1-line summary chip string for the collapsed eyebrow. */
