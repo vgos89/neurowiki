@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(({ mode }) => {
     return {
@@ -21,6 +22,69 @@ export default defineConfig(({ mode }) => {
       plugins: [
         react(),
         tailwindcss(),
+        // PWA — service worker via Workbox. Caches the static shell + assets
+        // for instant subsequent launches; network-first for HTML so updates
+        // propagate quickly. Auto-update lifecycle: registered, prompts user
+        // unobtrusively on new version.
+        VitePWA({
+          registerType: 'autoUpdate',
+          includeAssets: [
+            'favicon.png',
+            'favicon-16.png',
+            'favicon-32.png',
+            'apple-touch-icon.png',
+            'icon-192.png',
+            'icon-512.png',
+            'icon-1024.png',
+            'og-image.png',
+          ],
+          manifest: false, // we ship our own /manifest.json — don't let the plugin overwrite it
+          workbox: {
+            // Cache: HTML network-first (so updates land fast); JS/CSS/images
+            // cache-first with short stale-while-revalidate window.
+            globPatterns: ['**/*.{js,css,html,png,svg,ico,woff2}'],
+            // Don't precache the giant trial data chunks — they're route-lazy.
+            globIgnores: ['**/trialData-*.js', '**/TrialPageNew-*.js', '**/TrialVisualizations-*.js'],
+            runtimeCaching: [
+              {
+                // Google Fonts CSS — stale-while-revalidate
+                urlPattern: ({ url }) => url.origin === 'https://fonts.googleapis.com',
+                handler: 'StaleWhileRevalidate',
+                options: { cacheName: 'gfonts-stylesheets' },
+              },
+              {
+                // Google Fonts files — cache-first, long expiry
+                urlPattern: ({ url }) => url.origin === 'https://fonts.gstatic.com',
+                handler: 'CacheFirst',
+                options: {
+                  cacheName: 'gfonts-files',
+                  expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 365 },
+                },
+              },
+              {
+                // Trial data (lazy chunks) — cache-first, expire after a day
+                urlPattern: /\/assets\/(trialData|TrialPageNew|TrialVisualizations)-.*\.js$/,
+                handler: 'CacheFirst',
+                options: {
+                  cacheName: 'trial-bundles',
+                  expiration: { maxEntries: 5, maxAgeSeconds: 60 * 60 * 24 },
+                },
+              },
+              {
+                // Never cache the API endpoints (transfer relay, feedback, NPI)
+                urlPattern: /\/api\//,
+                handler: 'NetworkOnly',
+              },
+            ],
+            // Navigation fallback so deep-link refreshes don't 404 offline
+            navigateFallback: '/index.html',
+            navigateFallbackDenylist: [/^\/api\//],
+          },
+          devOptions: {
+            // Don't register the SW in dev — avoids dev-mode caching weirdness
+            enabled: false,
+          },
+        }),
         ...(process.env.ANALYZE === 'true' ? [visualizer({ open: false, filename: 'dist/stats.html', gzipSize: true })] : []),
       ],
       resolve: {

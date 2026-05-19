@@ -2,6 +2,15 @@ import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './src/App';
+import { registerSW } from 'virtual:pwa-register';
+
+// Service worker — registered with autoUpdate. When a new build deploys,
+// the SW activates in the background and the next navigation picks it up
+// silently. No "reload to update" prompt — clinicians don't want that
+// friction. Skipped in dev mode (configured in vite.config.ts devOptions).
+if (typeof window !== 'undefined') {
+  registerSW({ immediate: true });
+}
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
