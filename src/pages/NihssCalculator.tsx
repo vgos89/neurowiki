@@ -94,7 +94,6 @@ const NihssCalculator: React.FC = () => {
   const [nihssMode, setNihssMode] = useState<'rapid' | 'detailed'>('rapid');
   const [userMode] = useState<'resident' | 'attending'>('resident');
   const [activePearl, setActivePearl] = useState<string | null>(null);
-  const [showLvoTooltip, setShowLvoTooltip] = useState(false);
   const [justCompleted, setJustCompleted] = useState(false);
 
   // Auto-captured "Performed" timestamp — set on first NIHSS item input.
@@ -108,7 +107,6 @@ const NihssCalculator: React.FC = () => {
     anticoag: new Set(),
   });
 
-  const lvoTooltipRef = useRef<HTMLDivElement>(null);
   const nihssHeaderRef = useRef<HTMLDivElement>(null);
   const wasCompleteRef = useRef(false);
 
@@ -138,18 +136,6 @@ const NihssCalculator: React.FC = () => {
     };
   }, []);
 
-  // Close LVO tooltip on outside click
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (lvoTooltipRef.current && !lvoTooltipRef.current.contains(event.target as Node)) {
-        setShowLvoTooltip(false);
-      }
-    };
-    if (showLvoTooltip) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showLvoTooltip]);
 
   // ── Derived values ─────────────────────────────────────────────────────────
 
@@ -410,135 +396,34 @@ const NihssCalculator: React.FC = () => {
         name="NIH Stroke Scale"
         headerRef={nihssHeaderRef}
         scoreDisplay={
-          <>
-            <span className="text-2xl font-semibold text-slate-900 tabular-nums leading-none">
-              {isComplete ? total : '—'}
-            </span>
-            <span className="text-slate-400 text-sm leading-none">/ 42</span>
-            {isComplete && severity === 'moderate' && (
-              <span className="text-xs font-medium text-amber-700 ml-1.5">
-                Moderate
-              </span>
-            )}
-            {isComplete && (severity === 'moderate-severe' || severity === 'severe') && (
-              <span className="text-xs font-medium text-red-600 ml-1.5">
-                {SEVERITY_LABEL[severity]}
-              </span>
-            )}
-          </>
+          // V direction (2026-05-19): tally moved out of header (still shown
+          // in the bottom drawer); Rapid/Detailed toggle takes the slot.
+          <div className="flex items-center gap-0.5 bg-slate-100 rounded-full p-0.5">
+            <button
+              type="button"
+              onClick={() => setNihssMode('rapid')}
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                nihssMode === 'rapid'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              Rapid
+            </button>
+            <button
+              type="button"
+              onClick={() => setNihssMode('detailed')}
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                nihssMode === 'detailed'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              Detailed
+            </button>
+          </div>
         }
-        scoreAriaLabel={
-          isComplete
-            ? `NIHSS ${total} of 42. ${SEVERITY_LABEL[severity]}.`
-            : 'NIH Stroke Scale — not yet calculated'
-        }
-        secondaryRow={
-          <>
-            {/* LVO cluster */}
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                LVO
-              </span>
-              <span className={`text-sm font-semibold leading-none ${
-                lvoData.label === 'High'
-                  ? 'text-red-600'
-                  : lvoData.label === 'Moderate'
-                  ? 'text-amber-700'
-                  : 'text-green-600'
-              }`}>
-                {lvoData.label} · {lvoData.probability}%
-              </span>
-              <div className="relative" ref={lvoTooltipRef}>
-                <button
-                  type="button"
-                  onClick={() => setShowLvoTooltip(!showLvoTooltip)}
-                  className="p-2 -m-2 rounded-full hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
-                  aria-label="LVO probability information"
-                  aria-expanded={showLvoTooltip}
-                >
-                  <svg className="w-3.5 h-3.5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="16" x2="12" y2="12" />
-                    <line x1="12" y1="8" x2="12.01" y2="8" />
-                  </svg>
-                </button>
-
-                {showLvoTooltip && (
-                  <div className="fixed md:absolute inset-x-4 md:inset-x-auto top-32 md:top-full md:left-0 md:mt-2 w-auto md:w-80 max-w-md mx-auto md:mx-0 p-4 bg-white rounded-lg shadow-xl border border-slate-200 z-50">
-                    <div className="text-sm font-bold text-slate-900 mb-3">
-                      LVO Probability (RACE Scale)
-                    </div>
-
-                    {/* RACE score breakdown */}
-                    <div className="mb-3 p-2 bg-slate-100 rounded-lg">
-                      <div className="text-xs font-bold text-slate-700 mb-1">
-                        RACE Score: {lvoData.raceScore}/9
-                      </div>
-                      <div className="text-[10px] text-slate-600 space-y-0.5">
-                        <div>Facial Palsy: {lvoData.breakdown.facial}/2</div>
-                        <div>Arm Motor (worst): {lvoData.breakdown.arm}/2</div>
-                        <div>Leg Motor (worst): {lvoData.breakdown.leg}/2</div>
-                        <div>Gaze Deviation: {lvoData.breakdown.gaze}/1</div>
-                        <div>Aphasia: {lvoData.breakdown.aphasia}/2</div>
-                        <div>Agnosia/Neglect: {lvoData.breakdown.agnosia}/1</div>
-                      </div>
-                    </div>
-
-                    {/* RACE interpretation */}
-                    <div className="text-xs text-slate-600 space-y-1 mb-3">
-                      <p className="font-semibold text-slate-700">RACE Interpretation:</p>
-                      <ul className="list-disc list-inside space-y-0.5 ml-2">
-                        <li><strong>0–4:</strong> Low — 20% LVO probability</li>
-                        <li><strong>5–6:</strong> Moderate — 55% LVO probability</li>
-                        <li><strong>7–9:</strong> High — 85% LVO probability</li>
-                      </ul>
-                    </div>
-
-                    {/* Source */}
-                    <div className="text-[10px] text-slate-500 border-t border-slate-200 pt-2">
-                      Pérez de la Ossa N et al. Stroke. 2014.
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => setShowLvoTooltip(false)}
-                      className="absolute top-2 right-2 p-1.5 text-slate-400 hover:text-slate-600 min-h-[44px] min-w-[44px] flex items-center justify-center"
-                      aria-label="Close"
-                    >
-                      ×
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Mode toggle — rounded-full per §3.1 */}
-            <div className="flex items-center gap-0.5 bg-slate-100 rounded-full p-0.5">
-              <button
-                type="button"
-                onClick={() => setNihssMode('rapid')}
-                className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                  nihssMode === 'rapid'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-              >
-                Rapid
-              </button>
-              <button
-                type="button"
-                onClick={() => setNihssMode('detailed')}
-                className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                  nihssMode === 'detailed'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-              >
-                Detailed
-              </button>
-            </div>
-          </>
-        }
+        scoreAriaLabel={`NIH Stroke Scale — ${nihssMode} mode. Score visible in bottom drawer.`}
         onBack={handleBack}
         onReset={handleReset}
         onCopy={copyNihss}
