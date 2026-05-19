@@ -11,6 +11,7 @@ import { getStorageItem } from './utils/storage';
 
 const DisclaimerModal = lazy(() => import('./components/DisclaimerModal'));
 const CookieConsentBanner = lazy(() => import('./components/CookieConsentBanner'));
+const InstallBubble = lazy(() => import('./components/InstallBubble'));
 const GlobalTrialModal = lazy(() =>
   import('./components/GlobalTrialModal').then((m) => ({ default: m.GlobalTrialModal }))
 );
@@ -152,6 +153,9 @@ const App: React.FC = () => {
           <Seo />
           <Suspense fallback={null}>
             <DisclaimerModal />
+          </Suspense>
+          <Suspense fallback={null}>
+            <InstallBubble />
           </Suspense>
           <Layout>
             <Suspense fallback={

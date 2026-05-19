@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Smartphone, Download } from 'lucide-react';
 import { getStorageItem, setStorageItem } from '../utils/storage';
+import { usePwaInstall } from '../hooks/usePwaInstall';
+import { IosInstallSheet } from './IosInstallSheet';
 
 const DISCLAIMER_STORAGE_KEY = 'neurowiki-disclaimer-accepted';
 const DISCLAIMER_VERSION = '2.0'; // Bumped from 1.0 to force re-acceptance with the modernized modal
@@ -15,8 +18,24 @@ export const DisclaimerModal: React.FC = () => {
   const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
   const [checkboxChecked, setCheckboxChecked] = useState(false);
   const [canAccept, setCanAccept] = useState(false);
+  const [showIosSheet, setShowIosSheet] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+
+  // PWA install — surfaced inside the disclaimer modal so first-time
+  // visitors are nudged to add the app immediately after they accept terms.
+  const { status, promptInstall } = usePwaInstall();
+  const canShowInstall = status === 'installable' || status === 'ios-manual';
+
+  const handleAddApp = async () => {
+    if (status === 'ios-manual') {
+      setShowIosSheet(true);
+      return;
+    }
+    if (status === 'installable') {
+      await promptInstall();
+    }
+  };
 
   // Check if already accepted
   useEffect(() => {
@@ -227,8 +246,38 @@ export const DisclaimerModal: React.FC = () => {
               : !checkboxChecked ? 'Check the box to continue'
               : 'Accept and continue'}
           </button>
+
+          {/* Add-to-phone option — only shown when the device can install
+              (Android Chrome with the prompt captured, or iOS Safari which
+              gets the manual instructions sheet). Already-installed users
+              don't see this row. */}
+          {canShowInstall && (
+            <div className="mt-4 pt-4 border-t border-slate-200 flex items-start gap-3">
+              <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-neuro-50 border border-neuro-100 flex items-center justify-center">
+                <Smartphone className="w-4 h-4 text-neuro-600" aria-hidden />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-slate-900 leading-snug">
+                  Add NeuroWiki app to your phone
+                </p>
+                <p className="text-xs text-slate-500 mt-0.5 leading-snug">
+                  Open it instantly from your home screen, even offline.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleAddApp}
+                  className="mt-2 min-h-[36px] px-3 py-1.5 rounded-full bg-white border border-neuro-300 hover:bg-neuro-50 text-neuro-700 text-xs font-semibold transition-colors inline-flex items-center gap-1.5"
+                >
+                  <Download className="w-3 h-3" aria-hidden />
+                  Add app
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+
+      <IosInstallSheet isOpen={showIosSheet} onClose={() => setShowIosSheet(false)} />
     </div>
   );
 };

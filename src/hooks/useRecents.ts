@@ -71,6 +71,25 @@ export function useRecents(): {
         writeStorage(next);
         return next;
       });
+      // Engagement tracker — feed distinct-tool-use signal to the install-prompt
+      // logic. Dynamic import keeps useRecents free of hook chains; failure is
+      // best-effort and never blocks recording the view.
+      import('./useInstallEngagement').then(({ useInstallEngagement: _ }) => {
+        // We can't call the hook directly here (not React context); instead
+        // mutate engagement storage via the same key shape.
+        try {
+          const KEY = 'neurowiki:install-engagement:v1';
+          const raw = window.localStorage.getItem(KEY);
+          const parsed = raw ? JSON.parse(raw) : { toolsUsed: [] };
+          const toolsUsed: string[] = Array.isArray(parsed.toolsUsed) ? parsed.toolsUsed : [];
+          if (!toolsUsed.includes(entry.id)) {
+            const next = { ...parsed, toolsUsed: [...toolsUsed, entry.id] };
+            window.localStorage.setItem(KEY, JSON.stringify(next));
+          }
+        } catch {
+          /* noop */
+        }
+      }).catch(() => { /* noop */ });
     },
     [],
   );
