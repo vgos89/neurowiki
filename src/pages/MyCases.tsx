@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Briefcase, Trash2, FileText, Shield } from 'lucide-react';
+import { ArrowLeft, Briefcase, Trash2, FileText, Shield, Send, Download } from 'lucide-react';
 import { listCases, deleteCase, clearAllCases } from '../lib/cases/store';
 import type { SavedCase } from '../lib/cases/types';
 import { formatClinicalDateShort } from '../utils/clinicalDateTime';
+import { SendCasesModal } from '../components/cases/SendCasesModal';
+import { isSupabaseConfigured } from '../lib/supabase';
 
 /**
  * MyCases — list of cases the clinician has saved locally on this device.
@@ -20,6 +22,8 @@ const MyCases: React.FC = () => {
   const navigate = useNavigate();
   const [cases, setCases] = useState<SavedCase[] | null>(null);
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);
+  const [sendOpen, setSendOpen] = useState(false);
+  const syncReady = isSupabaseConfigured();
 
   const loadCases = useCallback(async () => {
     const list = await listCases();
@@ -79,12 +83,38 @@ const MyCases: React.FC = () => {
 
       <main className="max-w-2xl mx-auto px-5 py-6">
         {/* Privacy banner */}
-        <div className="mb-5 p-3 bg-amber-50 border-l-2 border-amber-400 rounded-lg flex items-start gap-2">
+        <div className="mb-3 p-3 bg-amber-50 border-l-2 border-amber-400 rounded-lg flex items-start gap-2">
           <Shield className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" aria-hidden />
           <p className="text-xs text-amber-900 leading-relaxed">
             Saved cases live <span className="font-semibold">only on this device</span>. Never share full names or identifying info; use initials only.
           </p>
         </div>
+
+        {/* Transfer actions */}
+        {syncReady && (
+          <div className="mb-5 flex gap-2">
+            <button
+              type="button"
+              onClick={() => setSendOpen(true)}
+              disabled={!cases || cases.length === 0}
+              className={`flex-1 min-h-[44px] py-2.5 px-3 rounded-full text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-colors ${
+                !cases || cases.length === 0
+                  ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-100'
+                  : 'bg-white border border-neuro-200 text-neuro-700 hover:bg-neuro-50'
+              }`}
+            >
+              <Send className="w-3.5 h-3.5" aria-hidden />
+              Send to another device
+            </button>
+            <Link
+              to="/import"
+              className="flex-1 min-h-[44px] py-2.5 px-3 rounded-full text-xs font-semibold inline-flex items-center justify-center gap-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
+            >
+              <Download className="w-3.5 h-3.5" aria-hidden />
+              Import from another device
+            </Link>
+          </div>
+        )}
 
         {/* Loading */}
         {cases === null && (
@@ -127,6 +157,10 @@ const MyCases: React.FC = () => {
           </ul>
         )}
       </main>
+
+      {/* Send modal — encrypts cases with a 4-digit PIN and uploads to the
+          Supabase transient relay. Receiver enters the code+PIN at /import. */}
+      <SendCasesModal isOpen={sendOpen} onClose={() => setSendOpen(false)} />
     </div>
   );
 };

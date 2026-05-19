@@ -52,7 +52,8 @@ export type StaticRouteKey =
   | 'privacy'
   | 'terms'
   | 'accessibility'
-  | 'my-cases';
+  | 'my-cases'
+  | 'import-cases';
 
 export interface RouteDefinition {
   key: StaticRouteKey;
@@ -731,6 +732,22 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     meta: {
       title: 'My Cases · NeuroWiki',
       description: 'Patient cases saved locally on this device. Initials only; never sent to any server.',
+      keywords: '',
+      image: DEFAULT_IMAGE,
+    },
+  },
+  {
+    key: 'import-cases',
+    path: '/import',
+    publishGate: false,
+    published: true,
+    includeInSitemap: false, // private utility route; not crawlable
+    zone: 'reference',
+    bottomNavTab: null,
+    railItem: null,
+    meta: {
+      title: 'Import Cases · NeuroWiki',
+      description: 'Receive a case transfer from another device using a 6-digit code and 4-digit PIN.',
       keywords: '',
       image: DEFAULT_IMAGE,
     },

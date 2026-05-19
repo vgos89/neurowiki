@@ -25,7 +25,9 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.0",
+    "html5-qrcode": "^2.3.8",
     "lucide-react": "^0.562.0",
+    "qrcode": "^1.5.4",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-markdown": "^10.1.0",
@@ -38,6 +40,7 @@
     "@google-analytics/data": "^6.0.0",
     "@tailwindcss/vite": "^4.1.18",
     "@types/node": "^22.14.0",
+    "@types/qrcode": "^1.5.6",
     "@vercel/node": "^5.6.4",
     "@vitejs/plugin-react": "^5.0.0",
     "@vitest/coverage-v8": "^4.1.6",
