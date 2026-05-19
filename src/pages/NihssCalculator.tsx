@@ -32,6 +32,13 @@ import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import { NIHSS_ITEMS, calculateTotal, getItemWarning, calculateLvoProbability } from '../utils/nihssShortcuts';
 import { getMainScrollElement, scrollWithinMainOrWindow } from '../utils/mainScroll';
 import NihssItemCard from '../components/NihssItemCard';
+import {
+  PatientContextPanel,
+  EMPTY_PATIENT_CONTEXT,
+  type PatientContextValues,
+  type Anticoag,
+} from '../components/calculators/PatientContextPanel';
+import { formatClinicalDateTime } from '../utils/clinicalDateTime';
 
 // ─── Severity helpers ─────────────────────────────────────────────────────────
 
@@ -89,6 +96,17 @@ const NihssCalculator: React.FC = () => {
   const [activePearl, setActivePearl] = useState<string | null>(null);
   const [showLvoTooltip, setShowLvoTooltip] = useState(false);
   const [justCompleted, setJustCompleted] = useState(false);
+
+  // Auto-captured "Performed" timestamp — set on first NIHSS item input.
+  // Reset clears this back to null along with the rest of the calculator state.
+  const [performedAt, setPerformedAt] = useState<Date | null>(null);
+
+  // Optional patient context — LKW + BP + glucose + anticoagulant class.
+  // All optional; appears in EMR output only when populated.
+  const [patientContext, setPatientContext] = useState<PatientContextValues>({
+    ...EMPTY_PATIENT_CONTEXT,
+    anticoag: new Set(),
+  });
 
   const lvoTooltipRef = useRef<HTMLDivElement>(null);
   const nihssHeaderRef = useRef<HTMLDivElement>(null);
@@ -176,6 +194,11 @@ const NihssCalculator: React.FC = () => {
   // ── Handlers ───────────────────────────────────────────────────────────────
 
   const handleNihssChange = (id: string, val: number) => {
+    // Capture "Performed" timestamp on first input — clinical convention is
+    // that NIHSS time = when the exam started, not when the page opened.
+    if (performedAt === null) {
+      setPerformedAt(new Date());
+    }
     setNihssValues((prev) => ({ ...prev, [id]: val }));
     const idx = NIHSS_ITEMS.findIndex((i) => i.id === id);
     if (idx >= 0 && idx < NIHSS_ITEMS.length - 1) {
@@ -227,7 +250,40 @@ const NihssCalculator: React.FC = () => {
       `10. Dysarthria: ${nihssValues['10'] === 9 ? 'UN' : (nihssValues['10'] ?? 0)}`,
       `11. Extinction/Neglect: ${nihssValues['11'] ?? 0}`,
     ];
-    return [`NIHSS — ${total} (${severityBracket})`, ...itemLines].join('\n');
+
+    // ── Patient-context lines (each optional; omitted if not populated) ──────
+    const contextLines: string[] = [];
+    if (performedAt) {
+      contextLines.push(`Performed: ${formatClinicalDateTime(performedAt)}`);
+    }
+    if (patientContext.lkw === null) {
+      contextLines.push(`LKW: Unknown / wake-up`);
+    } else if (patientContext.lkw instanceof Date) {
+      contextLines.push(`LKW: ${formatClinicalDateTime(patientContext.lkw)}`);
+    }
+    if (patientContext.systolic && patientContext.diastolic) {
+      const glu = patientContext.glucose ? ` · Glucose: ${patientContext.glucose} mg/dL` : '';
+      contextLines.push(`BP: ${patientContext.systolic}/${patientContext.diastolic}${glu}`);
+    } else if (patientContext.glucose) {
+      contextLines.push(`Glucose: ${patientContext.glucose} mg/dL`);
+    }
+    if (patientContext.anticoag.size > 0) {
+      const ANTICOAG_LABELS: Record<Anticoag, string> = {
+        doac: 'DOAC',
+        warfarin: 'Warfarin',
+        antiplatelet: 'Antiplatelet',
+      };
+      const list = Array.from(patientContext.anticoag).map((k) => ANTICOAG_LABELS[k]).join(', ');
+      contextLines.push(`On: ${list}`);
+    }
+
+    const header = `NIHSS — ${total} (${severityBracket})`;
+    const blocks: string[] = [header];
+    if (contextLines.length > 0) {
+      blocks.push(contextLines.join('\n'));
+    }
+    blocks.push(itemLines.join('\n'));
+    return blocks.join('\n\n');
   };
 
   const copyNihss = () => {
@@ -244,6 +300,8 @@ const NihssCalculator: React.FC = () => {
 
   const handleReset = () => {
     setNihssValues({});
+    setPerformedAt(null);
+    setPatientContext({ ...EMPTY_PATIENT_CONTEXT, anticoag: new Set() });
     reset();
     showToast('Reset', 1500);
   };
@@ -251,6 +309,10 @@ const NihssCalculator: React.FC = () => {
   /** Normal exam shortcut — Phase 7E §3.5: set all 15 items to 0, open drawer */
   const handleNormalExam = () => {
     const allZero = Object.fromEntries(NIHSS_ITEMS.map(item => [item.id, 0]));
+    // Capture Performed timestamp on shortcut too — the exam was just done.
+    if (performedAt === null) {
+      setPerformedAt(new Date());
+    }
     setNihssValues(allZero);
     setDrawerOpen(true);
   };
@@ -492,6 +554,21 @@ const NihssCalculator: React.FC = () => {
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}
       <main className="max-w-2xl mx-auto px-5 pt-6 pb-4">
+        {/* Auto-captured Performed timestamp — single muted line, appears
+            as soon as any NIHSS item is scored. */}
+        {performedAt && (
+          <p className="text-[11px] font-medium uppercase tracking-[0.04em] text-slate-400 mb-3">
+            Performed · {formatClinicalDateTime(performedAt)}
+          </p>
+        )}
+
+        {/* Optional patient-context panel — collapsible accordion above items.
+            Captures LKW + BP + glucose + anticoagulant for inclusion in the
+            EMR copy/share output. Skinny settings-panel style. */}
+        <div className="mb-4">
+          <PatientContextPanel values={patientContext} onChange={setPatientContext} />
+        </div>
+
         {/* Normal exam shortcut — Phase 7E §3.5 */}
         <div className="flex justify-start mb-2">
           <button
