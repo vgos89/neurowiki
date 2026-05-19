@@ -6,6 +6,7 @@ export interface NihssItemDef {
   name: string;
   shortName: string;
   rapidOptions: { value: number; label: string; color?: string }[];
+  plainOptions: { value: number; label: string }[];
   detailedInfo: string;
   pearl: string;
   plainEnglish: string;
@@ -22,6 +23,12 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 2, label: '2: Stupor' },
       { value: 3, label: '3: Coma' }
     ],
+    plainOptions: [
+      { value: 0, label: '0: Awake and alert' },
+      { value: 1, label: '1: Sleepy but wakes up easily' },
+      { value: 2, label: '2: Hard to wake, needs strong stimulation' },
+      { value: 3, label: '3: No real response, may only posture' }
+    ],
     detailedInfo: '• 0: Keenly responsive.\n• 1: Drowsy/Somnolent but arouses to minor stimulation.\n• 2: Obtunded; requires strong/painful stimulation to move.\n• 3: Reflex posturing only or totally unresponsive.',
     pearl: 'If patient has a tube, score 1a based on arousal. 3 is reserved for essentially no response (posturing or worse).',
     plainEnglish: "**Testing how awake the patient is**\n\n**How to test:**\n• Start with voice, then gentle shoulder tap\n• Escalate to painful stimulus if needed (don't be shy)\n• Vigorous stimulation is acceptable\n\n**Key point:** Score 3 only if NO purposeful movement - just reflex posturing or complete unresponsiveness."
@@ -34,6 +41,11 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 0, label: '0: Both Correct' },
       { value: 1, label: '1: One Correct' },
       { value: 2, label: '2: None Correct' }
+    ],
+    plainOptions: [
+      { value: 0, label: '0: Got both right' },
+      { value: 1, label: '1: Got one right' },
+      { value: 2, label: '2: Got neither right' }
     ],
     detailedInfo: '• 0: Both questions answered correctly.\n• 1: One question answered correctly.\n• 2: Neither question answered correctly.\n• Ask: Current Month and Age.\n• Must be exact (no partial credit).\n• Aphasic/Stuporous = 2.\n• Intubated/Trauma/Language Barrier = 1.',
     pearl: 'If aphasic, score 2. If intubated/dysarthric/barrier, score 1. Do not coach.',
@@ -48,6 +60,11 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 1, label: '1: One Correct' },
       { value: 2, label: '2: None Correct' }
     ],
+    plainOptions: [
+      { value: 0, label: '0: Did both correctly' },
+      { value: 1, label: '1: Did one correctly' },
+      { value: 2, label: '2: Did neither correctly' }
+    ],
     detailedInfo: '• 0: Both commands performed correctly.\n• 1: One command performed correctly.\n• 2: Neither command performed correctly.\n• Ask: Open/Close eyes & Grip/Release hand.\n• Pantomime is allowed if communication barrier exists.\n• Credit given if attempt is unequivocal but weak.',
     pearl: 'Pantomime is allowed! If they mimic you, they get credit. Focus is on comprehension.',
     plainEnglish: "**Can they follow simple commands?**\n\n**How to test:**\n• Ask \"Close your eyes\" then \"Open your eyes\"\n• Ask \"Make a fist\" or \"Squeeze my hand\"\n• Pantomime is allowed! If they copy you, they get credit\n\n**Key points:**\n• Only need fist on ONE side (let them pick which hand)\n• Weak attempt that's clearly trying = give credit\n• Can substitute commands if hands unusable\n• Focus is on comprehension, not strength"
@@ -60,6 +77,11 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 0, label: '0: Normal' },
       { value: 1, label: '1: Partial Palsy' },
       { value: 2, label: '2: Forced Dev' }
+    ],
+    plainOptions: [
+      { value: 0, label: '0: Eyes move normally' },
+      { value: 1, label: '1: Eyes drift but can cross midline' },
+      { value: 2, label: '2: Eyes stuck to one side' }
     ],
     detailedInfo: '• 0: Normal.\n• 1: Partial gaze palsy OR overcomes deviation with Oculocephalic maneuver.\n• 2: Forced deviation (cannot overcome) OR total gaze paresis.',
     pearl: 'Test oculocephalic reflex (Doll\'s eyes) if unconscious. Forced deviation = 2.',
@@ -75,6 +97,12 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 2, label: '2: Complete' },
       { value: 3, label: '3: Bilateral' }
     ],
+    plainOptions: [
+      { value: 0, label: '0: Sees in all directions' },
+      { value: 1, label: '1: Misses one quadrant' },
+      { value: 2, label: '2: Misses a whole half' },
+      { value: 3, label: '3: Blind on both sides' }
+    ],
     detailedInfo: '• 0: No visual loss.\n• 1: Partial hemianopia (e.g., quadrantanopia) or extinction.\n• 2: Complete homonymous hemianopia.\n• 3: Bilateral blindness (cortical blindness).',
     pearl: 'In neglect/extinction, score 1 (parietal extinction) if they extinguish on double simultaneous stimulation but have fields intact.',
     plainEnglish: "**Can they see in all four visual quadrants?**\n\n**How to test:**\n• Cover one eye at a time\n• Count fingers if possible (\"How many fingers?\")\n• Use finger wiggling for confused/aphasic patients or those without glasses\n• Test from periphery moving inward in all 4 quadrants\n\n**Key point:** If extinction (ignore one side when both tested), score 1 - this also counts for item 11 (neglect)"
@@ -88,6 +116,12 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 1, label: '1: Minor' },
       { value: 2, label: '2: Partial' },
       { value: 3, label: '3: Complete' }
+    ],
+    plainOptions: [
+      { value: 0, label: '0: Face moves evenly' },
+      { value: 1, label: '1: Subtle droop or flat smile line' },
+      { value: 2, label: '2: Lower face droops' },
+      { value: 3, label: '3: Entire half of face paralyzed' }
     ],
     detailedInfo: '• 0: Normal symmetry.\n• 1: Minor (flattened nasolabial fold, subtle asymmetry).\n• 2: Partial (paralysis of lower face).\n• 3: Complete (paralysis of upper AND lower face).',
     pearl: 'Upper face sparing usually suggests central (stroke) vs peripheral (Bell\'s), but NIHSS captures severity regardless of etiology.',
@@ -104,6 +138,13 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 3, label: '3: No Gravity' },
       { value: 4, label: '4: No Move' }
     ],
+    plainOptions: [
+      { value: 0, label: '0: Holds arm up the full 10 seconds' },
+      { value: 1, label: '1: Drifts down but does not hit bed' },
+      { value: 2, label: '2: Falls to bed, some effort against gravity' },
+      { value: 3, label: '3: Cannot lift, only moves along the bed' },
+      { value: 4, label: '4: No movement at all' }
+    ],
     detailedInfo: 'Hold 10 seconds.\n• 0: Holds 10s.\n• 1: Drifts before 10s but does not hit bed.\n• 2: Falls to bed before 10s (some effort).\n• 3: No effort against gravity (shrugs/movements on bed).\n• 4: No movement.',
     pearl: 'Must hold for full 10 seconds. Count out loud.',
     plainEnglish: "**Can they hold arm up for 10 seconds?**\n\n**How to test:**\n• YOU can help lift arm to position (90° sitting, 45° lying)\n• Test is holding, not lifting\n• Count out loud with fingers: \"10...9...8...7...\"\n\n**If arm falls immediately:**\n• Ask to wiggle fingers or shrug shoulder\n• Helps distinguish score 3 (some movement) vs 4 (no movement)\n\n**Key point:** Score what you see - pain/arthritis doesn't get \"extra credit\""
@@ -118,6 +159,13 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 2, label: '2: Can\'t Hold' },
       { value: 3, label: '3: No Gravity' },
       { value: 4, label: '4: No Move' }
+    ],
+    plainOptions: [
+      { value: 0, label: '0: Holds arm up the full 10 seconds' },
+      { value: 1, label: '1: Drifts down but does not hit bed' },
+      { value: 2, label: '2: Falls to bed, some effort against gravity' },
+      { value: 3, label: '3: Cannot lift, only moves along the bed' },
+      { value: 4, label: '4: No movement at all' }
     ],
     detailedInfo: 'Hold 10 seconds.\n• 0: Holds 10s.\n• 1: Drifts before 10s but does not hit bed.\n• 2: Falls to bed before 10s (some effort).\n• 3: No effort against gravity (shrugs/movements on bed).\n• 4: No movement.',
     pearl: '',
@@ -134,6 +182,13 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 3, label: '3: No Gravity' },
       { value: 4, label: '4: No Move' }
     ],
+    plainOptions: [
+      { value: 0, label: '0: Holds leg up the full 5 seconds' },
+      { value: 1, label: '1: Drifts down but does not hit bed' },
+      { value: 2, label: '2: Falls to bed, some effort against gravity' },
+      { value: 3, label: '3: Cannot lift, only moves along the bed' },
+      { value: 4, label: '4: No movement at all' }
+    ],
     detailedInfo: 'Hold 5 seconds.\n• 0: Holds 5s.\n• 1: Drifts before 5s but does not hit bed.\n• 2: Falls to bed before 5s.\n• 3: No effort against gravity.\n• 4: No movement.',
     pearl: 'Leg hold is only 5 seconds.',
     plainEnglish: "**Can they hold leg up for 5 seconds?**\n\n**How to test:**\n• Position: 30° from bed if lying (straight out if sitting)\n• Count out loud: \"5...4...3...2...1\"\n• Only 5 seconds (not 10 like arms!)\n\n**If leg falls immediately:**\n• Ask to wiggle toes\n• Helps distinguish score 3 vs 4"
@@ -149,6 +204,13 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 3, label: '3: No Gravity' },
       { value: 4, label: '4: No Move' }
     ],
+    plainOptions: [
+      { value: 0, label: '0: Holds leg up the full 5 seconds' },
+      { value: 1, label: '1: Drifts down but does not hit bed' },
+      { value: 2, label: '2: Falls to bed, some effort against gravity' },
+      { value: 3, label: '3: Cannot lift, only moves along the bed' },
+      { value: 4, label: '4: No movement at all' }
+    ],
     detailedInfo: 'Hold 5 seconds.\n• 0: Holds 5s.\n• 1: Drifts before 5s but does not hit bed.\n• 2: Falls to bed before 5s.\n• 3: No effort against gravity.\n• 4: No movement.',
     pearl: '',
     plainEnglish: "**Can they hold leg up for 5 seconds?**\n\n**How to test:**\n• Position: 30° from bed if lying (straight out if sitting)\n• Count out loud: \"5...4...3...2...1\"\n• Only 5 seconds (not 10 like arms!)\n\n**If leg falls immediately:**\n• Ask to wiggle toes\n• Helps distinguish score 3 vs 4"
@@ -162,6 +224,11 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 1, label: '1: Present (1 limb)' },
       { value: 2, label: '2: Present (2+)' }
     ],
+    plainOptions: [
+      { value: 0, label: '0: Movements look smooth' },
+      { value: 1, label: '1: Clumsy in one limb' },
+      { value: 2, label: '2: Clumsy in two or more limbs' }
+    ],
     detailedInfo: '• 0: Absent.\n• 1: Present in one limb.\n• 2: Present in two or more limbs.\n• Finger-nose-finger and Heel-shin.\n• Score ONLY if present out of proportion to weakness.\n• Score 0 if paralyzed or cannot understand.',
     pearl: 'If paralyzed (Motor=4) or unable to understand, score 0. It must be out of proportion to weakness.',
     plainEnglish: "**Are movements clumsy/uncoordinated beyond weakness?**\n\n**How to test:**\n• Arms: Finger-to-nose test\n• Legs: Heel-to-shin test\n\n**Key rules:**\n• ONLY score if out of proportion to weakness\n• If paralyzed (Motor=4) → automatically score 0\n• If can't understand → automatically score 0\n\n**Remember:** Ataxia usually bilateral (posterior circulation), weakness usually unilateral (anterior circulation)"
@@ -174,6 +241,11 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 0, label: '0: Normal' },
       { value: 1, label: '1: Mild Loss' },
       { value: 2, label: '2: Severe Loss' }
+    ],
+    plainOptions: [
+      { value: 0, label: '0: Feels pinprick the same on both sides' },
+      { value: 1, label: '1: Pinprick feels duller on one side' },
+      { value: 2, label: '2: No feeling on one side, or both sides numb' }
     ],
     detailedInfo: '• 0: Normal.\n• 1: Mild/Moderate (feels less sharp/dull, but aware of touch).\n• 2: Severe/Total (not aware of touch or bilateral loss).',
     pearl: 'Test proximal and distal. Aphasic patients can usually demonstrate withdrawal or grimace.',
@@ -189,6 +261,12 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 2, label: '2: Severe' },
       { value: 3, label: '3: Mute/Global' }
     ],
+    plainOptions: [
+      { value: 0, label: '0: Speaks and understands normally' },
+      { value: 1, label: '1: Words come out, but some are wrong or missing' },
+      { value: 2, label: '2: Only bits of speech, you have to guess' },
+      { value: 3, label: '3: No speech, no understanding' }
+    ],
     detailedInfo: '• 0: Normal.\n• 1: Mild-Mod Aphasia (loss of fluency/comprehension but ideas conveyed).\n• 2: Severe Aphasia (fragmentary expression, inference needed).\n• 3: Mute/Global (no usable speech/comprehension).',
     pearl: 'Show the picture card, naming sheet, and sentences. Intubated patients cannot be scored 0 unless they can write fluently.',
     plainEnglish: "**Can they understand and express ideas?**\n\n**How to test:**\n• Show picture card (describe what's happening)\n• Name objects (pen, watch, etc.)\n• Read sentences out loud\n• Tests BOTH comprehension AND expression\n\n**Special cases:**\n• No glasses: Have them name objects placed in hand\n• Intubated: Can they write full sentences?\n• Cultural variations okay (\"cactus\" = \"plant\" is fine)\n• Comatose (1a=3) automatically gets 3 here"
@@ -203,6 +281,12 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 2, label: '2: Severe' },
       { value: 9, label: 'UN: Intubated' } // Using 9 internally for UN
     ],
+    plainOptions: [
+      { value: 0, label: '0: Speech sounds clear' },
+      { value: 1, label: '1: Slurred but you can still understand' },
+      { value: 2, label: '2: Too slurred to understand, or cannot speak' },
+      { value: 9, label: 'UN: Cannot test (intubated or barrier)' }
+    ],
     detailedInfo: '• 0: Normal.\n• 1: Mild-Mod (slurring but understandable).\n• 2: Severe (unintelligible or mute/anarthric).\n• UN: Intubated or physical barrier.',
     pearl: 'If intubated, select UN (score is typically calculated as 0 for total, but noted as Untestable).',
     plainEnglish: "**Is their speech slurred or unclear?**\n\n**How to test:**\n• Have them read tongue-twister words (\"Mama\", \"Tip-top\", etc.)\n• Testing motor function of speech (clarity), not content\n• Don't tell them why you're testing\n\n**Key points:**\n• If dentures normally worn, put them in first\n• For aphasic patients: Listen to ANY words they say for slurring\n• Intubated = UN (untestable)\n\n**Watch out:** Southern accent ≠ dysarthria (use standardized words)"
@@ -215,6 +299,11 @@ export const NIHSS_ITEMS: NihssItemDef[] = [
       { value: 0, label: '0: None' },
       { value: 1, label: '1: Partial' },
       { value: 2, label: '2: Complete' }
+    ],
+    plainOptions: [
+      { value: 0, label: '0: Notices both sides equally' },
+      { value: 1, label: '1: Ignores one side when both are tested at once' },
+      { value: 2, label: '2: Ignores one side completely, even their own arm' }
     ],
     detailedInfo: '• 0: No abnormality.\n• 1: Visual, tactile, OR spatial inattention (extinction to double simultaneous stimulation).\n• 2: Profound hemi-inattention (does not recognize own hand or orients to only one side).',
     pearl: 'Visual extinction counts as 1. Complete neglect (ignoring left side of room/body) is 2.',
