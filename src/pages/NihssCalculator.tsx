@@ -241,38 +241,38 @@ const NihssCalculator: React.FC = () => {
       `11. Extinction/Neglect: ${nihssValues['11'] ?? 0}`,
     ];
 
-    // ── Patient-context lines (each optional; omitted if not populated) ──────
-    const contextLines: string[] = [];
-    if (performedAt) {
-      contextLines.push(`Exam Performed: ${formatClinicalDateTime(performedAt)}`);
-    }
-    if (patientContext.lkw === null) {
-      contextLines.push(`LKW: Unknown / wake-up`);
-    } else if (patientContext.lkw instanceof Date) {
-      contextLines.push(`LKW: ${formatClinicalDateTime(patientContext.lkw)}`);
-    }
-    if (patientContext.systolic && patientContext.diastolic) {
-      const glu = patientContext.glucose ? ` · Glucose: ${patientContext.glucose} mg/dL` : '';
-      contextLines.push(`BP: ${patientContext.systolic}/${patientContext.diastolic}${glu}`);
-    } else if (patientContext.glucose) {
-      contextLines.push(`Glucose: ${patientContext.glucose} mg/dL`);
-    }
-    if (patientContext.anticoag.size > 0) {
-      const ANTICOAG_LABELS: Record<Anticoag, string> = {
-        doac: 'DOAC',
-        warfarin: 'Warfarin',
-        antiplatelet: 'Antiplatelet',
-      };
-      const list = Array.from(patientContext.anticoag).map((k) => ANTICOAG_LABELS[k]).join(', ');
-      contextLines.push(`Anti-Coag/Antiplatelet: ${list}`);
-    }
+    // ── Patient-context lines — always emit so the EMR record is complete.
+    //    Empty value → "Not entered" (timestamps, BP, glucose) or "None"
+    //    (anticoag/antiplatelet). V direction 2026-05-19: clinicians need
+    //    a complete documentation block even when some fields weren't
+    //    captured during the exam.
+    const ANTICOAG_LABELS: Record<Anticoag, string> = {
+      doac: 'DOAC',
+      warfarin: 'Warfarin',
+      antiplatelet: 'Antiplatelet',
+    };
+    const contextLines: string[] = [
+      performedAt
+        ? `Exam Performed: ${formatClinicalDateTime(performedAt)}`
+        : `Exam Performed: Not entered`,
+      patientContext.lkw === null
+        ? `LKW: Unknown / wake-up`
+        : patientContext.lkw instanceof Date
+        ? `LKW: ${formatClinicalDateTime(patientContext.lkw)}`
+        : `LKW: Not entered`,
+      patientContext.systolic && patientContext.diastolic
+        ? `BP: ${patientContext.systolic}/${patientContext.diastolic}`
+        : `BP: Not entered`,
+      patientContext.glucose
+        ? `Glucose: ${patientContext.glucose} mg/dL`
+        : `Glucose: Not entered`,
+      patientContext.anticoag.size > 0
+        ? `Anti-Coag/Antiplatelet: ${Array.from(patientContext.anticoag).map((k) => ANTICOAG_LABELS[k]).join(', ')}`
+        : `Anti-Coag/Antiplatelet: None`,
+    ];
 
     const header = `NIHSS — ${total} (${severityBracket})`;
-    const blocks: string[] = [header];
-    if (contextLines.length > 0) {
-      blocks.push(contextLines.join('\n'));
-    }
-    blocks.push(itemLines.join('\n'));
+    const blocks: string[] = [header, contextLines.join('\n'), itemLines.join('\n')];
     return blocks.join('\n\n');
   };
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Save, Shield } from 'lucide-react';
 import { useModalFocusTrap } from '../../hooks/useModalFocusTrap';
 import { isValidInitials, type SavedCase, SAVED_CASE_SCHEMA_VERSION } from '../../lib/cases/types';
@@ -92,7 +93,11 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
     if (error) setError(null);
   };
 
-  return (
+  // Portal to document.body so the modal escapes any ancestor with a
+  // `backdrop-filter` (e.g. CalculatorHeader's backdrop-blur-md), which
+  // creates a containing block that would otherwise trap a `fixed inset-0`
+  // child to the header's bounds. (V audit 2026-05-19.)
+  return createPortal(
     <div
       className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm"
       onClick={onClose}
@@ -208,7 +213,8 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

@@ -167,9 +167,9 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({ values
             </div>
           </div>
 
-          {/* Blood thinner row */}
+          {/* Anti-coag/Antiplatelet row */}
           <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 flex-wrap">
-            <label className="text-xs font-medium text-slate-600 flex-shrink-0">Blood thinner</label>
+            <label className="text-xs font-medium text-slate-600 flex-shrink-0">Anti-coag/Antiplatelet</label>
             <div className="flex items-center gap-1.5 flex-wrap">
               {(['doac', 'warfarin', 'antiplatelet'] as const).map((key) => {
                 const selected = values.anticoag.has(key);
