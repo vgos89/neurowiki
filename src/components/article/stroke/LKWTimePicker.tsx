@@ -319,7 +319,7 @@ const SleepTimeRow: React.FC<SleepTimeRowProps> = ({
         <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={onHourIdx} itemH={44} colW={56} ariaLabel={`${label} hour`} />
         <span className="text-2xl font-light text-slate-300 -mt-1">:</span>
         <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={onMinuteIdx} itemH={44} colW={56} ariaLabel={`${label} minute`} />
-        <div className="w-px h-12 bg-slate-150 mx-1" />
+        <div className="w-px h-12 bg-slate-200 mx-1" />
         <ScrollCol items={periodItems} selectedIdx={periodIdx} onSelect={onPeriodIdx} itemH={44} colW={56} ariaLabel={`${label} AM or PM`} />
       </div>
     </div>
@@ -400,6 +400,8 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
   const [wkMinIdx, setWkMinIdx] = useState(wakeDefaults.minuteIdx);
   const [wkPeriodIdx, setWkPeriodIdx] = useState(wakeDefaults.periodIdx);
   const [sleepError, setSleepError] = useState<string | null>(null);
+  // Future-time guard for specific-time confirm; mirrors sleepError shape.
+  const [specificError, setSpecificError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -410,6 +412,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
     setSelDay(v.day); setSelMonth(v.month); setSelYear(v.year);
     setHourIdx(v.hourIdx); setMinuteIdx(v.minuteIdx); setPeriodIdx(v.periodIdx);
     setActivePreset(null); setDateExpanded(false);
+    setSpecificError(null); setSleepError(null);
     // Reset mode to defaultMode on open
     setMode(defaultMode);
     // Reset sleep onset state
@@ -428,9 +431,16 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
   const minuteItems = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'));
   const periodItems = ['AM', 'PM'];
 
+  // 9 presets covering the tPA-window decision zone (0-4.5 h) with denser
+  // coverage. Previous list jumped from "Now" to "3 h ago" — left a clinician
+  // with a 1-h LKW manually scrolling all three drums. 2026-05-19 V approved.
   const PRESETS = [
-    { label: 'Now', hours: 0 },
+    { label: 'Just now', hours: 0 },
+    { label: '30 min ago', hours: 0.5 },
+    { label: '1 hour ago', hours: 1 },
+    { label: '2 hours ago', hours: 2 },
     { label: '3 hours ago', hours: 3 },
+    { label: '4 hours ago', hours: 4 },
     { label: '6 hours ago', hours: 6 },
     { label: '12 hours ago', hours: 12 },
     { label: '24 hours ago', hours: 24 },
@@ -470,6 +480,14 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
     if (periodIdx === 1 && h24 !== 12) h24 += 12;
     if (periodIdx === 0 && h24 === 12) h24 = 0;
     d.setHours(h24, minuteIdx * 5, 0, 0);
+    // Future-time guard: a flipped AM/PM scroll can produce a date in the
+    // future, which would propagate a negative treatment-window calculation
+    // upstream. Surface inline error and abort the confirm.
+    if (d > now) {
+      setSpecificError('LKW cannot be in the future. Check AM/PM.');
+      return;
+    }
+    setSpecificError(null);
     onConfirm(d); onClose();
   };
 
@@ -513,15 +531,27 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
     canNextMonth,
   };
 
-  /* ── Mode toggle (only shown when showSleepOnset=true) ── */
+  /* ── Mode toggle (only shown when showSleepOnset=true) ──
+     Wired as a proper tablist for screen readers — each button declares
+     role=tab and aria-selected; the visible content panels below should
+     declare role=tabpanel + matching aria-labelledby ids. Also removed
+     banned shadow-sm utility from the active state. */
   const modeToggle = showSleepOnset ? (
-    <div className="flex gap-1 px-4 py-2.5 border-b border-slate-100 bg-slate-50 flex-shrink-0">
+    <div
+      role="tablist"
+      aria-label="Time entry method"
+      className="flex gap-1 px-4 py-2.5 border-b border-slate-100 bg-slate-50 flex-shrink-0"
+    >
       <button
         type="button"
+        role="tab"
+        id="lkw-tab-specific"
+        aria-selected={mode === 'specific'}
+        aria-controls="lkw-panel-specific"
         onClick={() => setMode('specific')}
         className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-semibold transition-colors ${
           mode === 'specific'
-            ? 'bg-neuro-500 text-white shadow-sm'
+            ? 'bg-neuro-500 text-white'
             : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
         }`}
       >
@@ -529,10 +559,14 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
       </button>
       <button
         type="button"
+        role="tab"
+        id="lkw-tab-sleep"
+        aria-selected={mode === 'sleep'}
+        aria-controls="lkw-panel-sleep"
         onClick={() => setMode('sleep')}
         className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-semibold transition-colors ${
           mode === 'sleep'
-            ? 'bg-amber-500 text-white shadow-sm'
+            ? 'bg-amber-500 text-white'
             : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
         }`}
       >
@@ -638,7 +672,12 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
 
         {mode === 'sleep' ? (
           /* ══ SLEEP ONSET LAYOUT ══ */
-          <>
+          <div
+            id="lkw-panel-sleep"
+            role={showSleepOnset ? 'tabpanel' : undefined}
+            aria-labelledby={showSleepOnset ? 'lkw-tab-sleep' : undefined}
+            className="contents"
+          >
             {sleepBody}
             <div className="border-t border-slate-100 px-4 py-3 flex items-center justify-between flex-shrink-0 gap-3">
               <button
@@ -656,10 +695,15 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
                 Set Sleep Onset
               </button>
             </div>
-          </>
+          </div>
         ) : (
           /* ══ SPECIFIC TIME LAYOUT ══ */
-          <>
+          <div
+            id="lkw-panel-specific"
+            role={showSleepOnset ? 'tabpanel' : undefined}
+            aria-labelledby={showSleepOnset ? 'lkw-tab-specific' : undefined}
+            className="contents"
+          >
             {/* ══════════════════════════════════════
                 MOBILE LAYOUT  (hidden sm+)
             ══════════════════════════════════════ */}
@@ -699,7 +743,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
                   <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={setHourIdx} itemH={60} colW={72} ariaLabel="Hour" />
                   <span className="text-3xl font-thin text-slate-300 -mt-1">:</span>
                   <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={setMinuteIdx} itemH={60} colW={72} ariaLabel="Minute" />
-                  <div className="w-px h-16 bg-slate-150 mx-1" />
+                  <div className="w-px h-16 bg-slate-200 mx-1" />
                   <ScrollCol items={periodItems} selectedIdx={periodIdx} onSelect={setPeriodIdx} itemH={60} colW={72} ariaLabel="AM or PM" />
                 </div>
               </div>
@@ -776,6 +820,17 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
 
             </div>
 
+            {/* Specific-time future-time error (mirrors sleepError shape).
+                Always in the DOM with role=alert + aria-live so screen
+                readers announce the validation message. */}
+            <p
+              role="alert"
+              aria-live="assertive"
+              className={`mx-4 mb-2 text-xs text-red-600 rounded-lg px-3 py-2 ${specificError ? 'bg-red-50 border border-red-200' : ''}`}
+            >
+              {specificError ?? ''}
+            </p>
+
             {/* ── Footer ── */}
             <div className="border-t border-slate-100 px-4 py-3 flex justify-end flex-shrink-0">
               <button
@@ -783,10 +838,10 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
                 onClick={handleConfirm}
                 className="min-h-[44px] px-8 py-2 rounded-full text-sm font-medium bg-neuro-500 hover:bg-neuro-600 text-white transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
               >
-                OK
+                Set LKW Time
               </button>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
