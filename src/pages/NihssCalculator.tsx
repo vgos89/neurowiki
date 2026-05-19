@@ -240,7 +240,7 @@ const NihssCalculator: React.FC = () => {
     // ── Patient-context lines (each optional; omitted if not populated) ──────
     const contextLines: string[] = [];
     if (performedAt) {
-      contextLines.push(`Performed: ${formatClinicalDateTime(performedAt)}`);
+      contextLines.push(`Exam Performed: ${formatClinicalDateTime(performedAt)}`);
     }
     if (patientContext.lkw === null) {
       contextLines.push(`LKW: Unknown / wake-up`);
@@ -260,7 +260,7 @@ const NihssCalculator: React.FC = () => {
         antiplatelet: 'Antiplatelet',
       };
       const list = Array.from(patientContext.anticoag).map((k) => ANTICOAG_LABELS[k]).join(', ');
-      contextLines.push(`On: ${list}`);
+      contextLines.push(`Anti-Coag/Antiplatelet: ${list}`);
     }
 
     const header = `NIHSS — ${total} (${severityBracket})`;
@@ -443,7 +443,7 @@ const NihssCalculator: React.FC = () => {
             as soon as any NIHSS item is scored. */}
         {performedAt && (
           <p className="text-[11px] font-medium uppercase tracking-[0.04em] text-slate-400 mb-3">
-            Performed · {formatClinicalDateTime(performedAt)}
+            Exam Performed · {formatClinicalDateTime(performedAt)}
           </p>
         )}
 
