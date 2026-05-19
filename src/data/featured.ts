@@ -17,7 +17,7 @@ export const FEATURED: FeaturedItem[] = [
     id: 'stroke-code',
     type: 'pathway',
     name: 'Stroke Code',
-    description: 'Bedside workflow for acute ischemic stroke — LKW, vitals, imaging, orders.',
+    description: 'Acute ischemic stroke workflow. LKW, vitals, imaging, orders.',
     categoryColor: '#dc2626',
     href: '/pathways/stroke-code',
   },
