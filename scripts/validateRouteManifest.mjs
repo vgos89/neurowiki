@@ -46,6 +46,9 @@ if (missingPublishedFlag.length > 0) {
 }
 
 // LAYOUT_SPEC §7, §2, §6.1.2 — every route must declare zone, bottomNavTab, railItem
+// 2026-05-19: null is now permitted for bottomNavTab + railItem to support
+// private utility routes (e.g., /my-cases) that don't surface in the global
+// bottom nav or desktop rail.
 const VALID_ZONES = ['reading', 'reference', 'none'];
 const VALID_TABS = ['home', 'trials', 'calculators', 'pathways', 'guide'];
 
@@ -59,7 +62,7 @@ if (missingZone.length > 0) {
 }
 
 const missingBottomNavTab = STATIC_ROUTE_DEFINITIONS.filter(
-  (route) => !VALID_TABS.includes(route.bottomNavTab)
+  (route) => route.bottomNavTab !== null && !VALID_TABS.includes(route.bottomNavTab)
 );
 if (missingBottomNavTab.length > 0) {
   throw new Error(
@@ -68,7 +71,7 @@ if (missingBottomNavTab.length > 0) {
 }
 
 const missingRailItem = STATIC_ROUTE_DEFINITIONS.filter(
-  (route) => !VALID_TABS.includes(route.railItem)
+  (route) => route.railItem !== null && !VALID_TABS.includes(route.railItem)
 );
 if (missingRailItem.length > 0) {
   throw new Error(

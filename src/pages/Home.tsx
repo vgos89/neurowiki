@@ -7,6 +7,7 @@ import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import HomeHero from '../components/home/HomeHero';
 import FeaturedRail from '../components/home/FeaturedRail';
+import SavedCasesTile from '../components/home/SavedCasesTile';
 import ScenarioPillRow from '../components/home/ScenarioPillRow';
 import ScenarioSection from '../components/home/ScenarioSection';
 import ShowMoreToggle from '../components/home/ShowMoreToggle';
@@ -76,6 +77,7 @@ const Home: React.FC = () => {
       <HomeHero />
 
       {isAllView && <FeaturedRail />}
+      {isAllView && <SavedCasesTile />}
 
       <ScenarioPillRow
         scenarios={SCENARIOS}

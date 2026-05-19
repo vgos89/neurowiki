@@ -22,6 +22,7 @@ const Wiki = lazy(() => import('./pages/Wiki'));
 const Calculators = lazy(() => import('./pages/Calculators'));
 const Pathways = lazy(() => import('./pages/Pathways'));
 const NihssCalculator = lazy(() => import('./pages/NihssCalculator'));
+const MyCases = lazy(() => import('./pages/MyCases'));
 const IchScoreCalculator = lazy(() => import('./pages/IchScoreCalculator'));
 const Abcd2ScoreCalculator = lazy(() => import('./pages/Abcd2ScoreCalculator'));
 const HasBledScoreCalculator = lazy(() => import('./pages/HasBledScoreCalculator'));
@@ -115,6 +116,9 @@ const ROUTE_COMPONENTS: Record<StaticRouteKey, React.ReactNode> = {
   privacy: <PrivacyPage />,
   terms: <TermsPage />,
   accessibility: <AccessibilityPage />,
+
+  // On-device case memory (Flavor 1) — added 2026-05-19
+  'my-cases': <MyCases />,
 };
 
 const TrialModalWrapper: React.FC = () => {

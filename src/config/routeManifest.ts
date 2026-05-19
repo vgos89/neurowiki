@@ -51,7 +51,8 @@ export type StaticRouteKey =
   | 'trials-hub'
   | 'privacy'
   | 'terms'
-  | 'accessibility';
+  | 'accessibility'
+  | 'my-cases';
 
 export interface RouteDefinition {
   key: StaticRouteKey;
@@ -62,8 +63,8 @@ export interface RouteDefinition {
   comingSoonMessage?: string;
   meta: MetaData;
   zone: Zone;           // LAYOUT_SPEC §7 — width zone for main content wrapper
-  bottomNavTab: NavTab; // LAYOUT_SPEC §2 — which mobile nav tab is active on this route
-  railItem: NavTab;     // LAYOUT_SPEC §6.1.2 — which desktop rail item is active
+  bottomNavTab: NavTab | null; // LAYOUT_SPEC §2 — which mobile nav tab is active on this route (null for private utility routes)
+  railItem: NavTab | null;     // LAYOUT_SPEC §6.1.2 — which desktop rail item is active (null for private utility routes)
 }
 
 const DEFAULT_IMAGE = 'https://neurowiki.ai/og-image.png';
@@ -715,6 +716,22 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     meta: {
       title: 'Accessibility Statement · NeuroWiki',
       description: 'NeuroWiki targets WCAG 2.1 AA compliance. Learn what we have implemented and how to report accessibility issues.',
+      image: DEFAULT_IMAGE,
+    },
+  },
+  {
+    key: 'my-cases',
+    path: '/my-cases',
+    publishGate: false,
+    published: true,
+    includeInSitemap: false, // private surface; on-device data, not crawlable
+    zone: 'reference',
+    bottomNavTab: null,
+    railItem: null,
+    meta: {
+      title: 'My Cases · NeuroWiki',
+      description: 'Patient cases saved locally on this device. Initials only; never sent to any server.',
+      keywords: '',
       image: DEFAULT_IMAGE,
     },
   },

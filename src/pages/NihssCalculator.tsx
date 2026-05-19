@@ -39,6 +39,8 @@ import {
   type Anticoag,
 } from '../components/calculators/PatientContextPanel';
 import { formatClinicalDateTime } from '../utils/clinicalDateTime';
+import { SaveCaseModal } from '../components/cases/SaveCaseModal';
+import type { SavedCaseData } from '../lib/cases/types';
 
 // ─── Severity helpers ─────────────────────────────────────────────────────────
 
@@ -106,6 +108,10 @@ const NihssCalculator: React.FC = () => {
     ...EMPTY_PATIENT_CONTEXT,
     anticoag: new Set(),
   });
+
+  // Save Case modal — opens from the bottom drawer when the clinician
+  // wants to persist this exam to /my-cases (IndexedDB, on-device only).
+  const [saveCaseOpen, setSaveCaseOpen] = useState(false);
 
   const nihssHeaderRef = useRef<HTMLDivElement>(null);
   const wasCompleteRef = useRef(false);
@@ -368,14 +374,25 @@ const NihssCalculator: React.FC = () => {
           </p>
         </div>
 
-        {/* Copy shortcut */}
-        <button
-          type="button"
-          onClick={() => { copyNihss(); setDrawerOpen(false); /* collapses drawer after copy */ }}
-          className="w-full mt-1 bg-neuro-500 hover:bg-neuro-600 text-white py-2.5 rounded-full text-sm font-medium transition-colors"
-        >
-          Copy to clipboard
-        </button>
+        {/* Copy + Save row */}
+        <div className="mt-1 flex gap-2">
+          <button
+            type="button"
+            onClick={() => { copyNihss(); setDrawerOpen(false); /* collapses drawer after copy */ }}
+            className="flex-1 min-h-[44px] bg-neuro-500 hover:bg-neuro-600 text-white py-2.5 rounded-full text-sm font-medium transition-colors"
+          >
+            Copy to clipboard
+          </button>
+          {isComplete && (
+            <button
+              type="button"
+              onClick={() => setSaveCaseOpen(true)}
+              className="min-h-[44px] py-2.5 px-4 rounded-full text-sm font-medium border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors"
+            >
+              Save case
+            </button>
+          )}
+        </div>
 
         {/* Disclaimer */}
         <p className="mt-4 text-xs text-slate-400 leading-relaxed">
@@ -544,6 +561,36 @@ const NihssCalculator: React.FC = () => {
 
       {/* ── Toast ─────────────────────────────────────────────────────────── */}
       <CalculatorToast message={toast} />
+
+      {/* ── Save Case modal ──────────────────────────────────────────────────
+          Persists the current NIHSS score + patient context to IndexedDB
+          under the clinician's chosen initials. On-device only; no server. */}
+      <SaveCaseModal
+        isOpen={saveCaseOpen}
+        onClose={() => setSaveCaseOpen(false)}
+        source={{ type: 'calculator', id: 'nihss', title: 'NIHSS' }}
+        buildData={(): SavedCaseData => ({
+          nihss: {
+            score: total,
+            values: nihssValues,
+            mode: nihssMode,
+            severity: SEVERITY_LABEL[severity],
+            performedAt: performedAt ? performedAt.getTime() : undefined,
+          },
+          patientContext: {
+            lkw: patientContext.lkw instanceof Date
+              ? patientContext.lkw.getTime()
+              : patientContext.lkw,
+            systolic: patientContext.systolic || undefined,
+            diastolic: patientContext.diastolic || undefined,
+            glucose: patientContext.glucose || undefined,
+            anticoag: patientContext.anticoag.size > 0
+              ? Array.from(patientContext.anticoag)
+              : undefined,
+          },
+        })}
+        onSaved={() => showToast('Saved to My Cases')}
+      />
     </>
   );
 };
