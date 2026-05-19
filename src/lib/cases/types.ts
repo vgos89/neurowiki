@@ -70,6 +70,18 @@ export interface SavedCaseData {
     anticoag?: string[];
   };
 
+  /** Stroke timestamps (Code Activation, Neurology Eval, CT Read, Neuro IR, NCC/ICU Sign-out).
+   *  Keyed by event name; each value is Unix ms or null when unstamped. Added 2026-05-19 so
+   *  NIHSS standalone can carry the timestamp record into Save Case + cross-device transfer.
+   *  Stroke Code pathway can adopt the same field on its future Save Case rollout. */
+  strokeTimestamps?: {
+    'Code Activation'?: number | null;
+    'Neurology Evaluation'?: number | null;
+    'CT Read Time'?: number | null;
+    'Neuro IR Contacted'?: number | null;
+    'NCC/ICU Sign-out'?: number | null;
+  };
+
   /** Generic payload for any calculator/pathway. Keys are calculator/pathway ids.
    *  Each calc dumps its own state shape here. The MyCases display logic
    *  reads `headline` and `subline` fields by convention when present. */
@@ -89,7 +101,10 @@ export interface GenericCasePayload {
   [key: string]: unknown;
 }
 
-export const SAVED_CASE_SCHEMA_VERSION = 1;
+/** v1 → v2 (2026-05-19): additive — `strokeTimestamps` field. v1 cases load fine
+ *  on v2 readers (field is optional). v2 cases load on v1 readers but the new
+ *  field is ignored — safe degradation. No migration script needed. */
+export const SAVED_CASE_SCHEMA_VERSION = 2;
 
 /** Initials validation. */
 export const INITIALS_REGEX = /^[A-Z]{2,4}$/;

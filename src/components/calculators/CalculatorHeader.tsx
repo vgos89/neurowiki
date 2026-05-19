@@ -65,6 +65,16 @@ export interface CalculatorHeaderProps {
     source: SavedCase['source'];
     /** Snapshot the calculator's current state at the moment of save. */
     buildData: () => SavedCaseData;
+    /** When set, the next save updates this case row in place (same id,
+     *  same createdAt, bumped updatedAt) instead of creating a new row.
+     *  The consumer captures the id from `onSaved` after the first save
+     *  and passes it back here so subsequent saves overwrite. Supports
+     *  the "send mid-code, finish timestamps, re-save complete record"
+     *  workflow (V direction 2026-05-19). */
+    existingCaseId?: string;
+    /** Called after a successful save with the case id (new or existing).
+     *  The consumer typically stashes this so future saves update in place. */
+    onSaved?: (id: string) => void;
   };
 }
 
@@ -216,6 +226,8 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
           onClose={() => setSaveCaseOpen(false)}
           source={saveCase.source}
           buildData={saveCase.buildData}
+          existingCaseId={saveCase.existingCaseId}
+          onSaved={saveCase.onSaved}
         />
       )}
     </header>

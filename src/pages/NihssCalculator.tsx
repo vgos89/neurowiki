@@ -40,6 +40,13 @@ import {
 } from '../components/calculators/PatientContextPanel';
 import { formatClinicalDateTime } from '../utils/clinicalDateTime';
 import type { SavedCaseData } from '../lib/cases/types';
+import {
+  TimestampBubble,
+  STROKE_TIMESTAMP_EVENTS,
+  EMPTY_STROKE_TIMESTAMPS,
+  type StrokeTimestamps,
+  type StrokeTimestampEvent,
+} from '../components/article/stroke/TimestampBubble';
 
 // ─── Severity helpers ─────────────────────────────────────────────────────────
 
@@ -108,8 +115,18 @@ const NihssCalculator: React.FC = () => {
     anticoag: new Set(),
   });
 
-  // Save Case is now handled by the CalculatorHeader saveCase prop —
-  // no per-page state needed.
+  // Stroke timestamps — same bubble FAB as Stroke Code pathway. Carried into
+  // the EMR copy text (filled stamps only) and into the Save Case payload.
+  // V workflow 2026-05-19: clinician sends NIHSS to attending mid-code,
+  // finishes the timestamps later, hits Save again, and the record updates
+  // in place via `currentCaseId` (no duplicate row).
+  const [strokeTimestamps, setStrokeTimestamps] = useState<StrokeTimestamps>({
+    ...EMPTY_STROKE_TIMESTAMPS,
+  });
+
+  // Set after the first successful save so subsequent saves overwrite the
+  // same case row (preserves createdAt, bumps updatedAt). Cleared on Reset.
+  const [currentCaseId, setCurrentCaseId] = useState<string | null>(null);
 
   const nihssHeaderRef = useRef<HTMLDivElement>(null);
   const wasCompleteRef = useRef(false);
@@ -271,8 +288,34 @@ const NihssCalculator: React.FC = () => {
         : `Anti-Coag/Antiplatelet: None`,
     ];
 
+    // ── Stroke timestamps block — only emit stamps that have actually been
+    //    recorded. Empty stamps are silently omitted (V direction 2026-05-19:
+    //    clinician may send NIHSS mid-code without timestamps; entering them
+    //    later and re-sharing should include them automatically).
+    const stampLines: string[] = [];
+    const anchorMs = strokeTimestamps['Code Activation']?.getTime() ?? null;
+    const fmtTime = (d: Date) =>
+      d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    for (const event of STROKE_TIMESTAMP_EVENTS) {
+      const stamp = strokeTimestamps[event];
+      if (!stamp) continue;
+      if (event === 'Code Activation' || anchorMs === null) {
+        stampLines.push(`${event}: ${fmtTime(stamp)}`);
+      } else {
+        const diffMin = Math.max(0, Math.floor((stamp.getTime() - anchorMs) / 60000));
+        const hh = Math.floor(diffMin / 60);
+        const mm = diffMin % 60;
+        const elapsed = hh > 0 ? `+${hh}h ${mm}m` : `+${mm}m`;
+        stampLines.push(`${event}: ${fmtTime(stamp)} (${elapsed})`);
+      }
+    }
+
     const header = `NIHSS — ${total} (${severityBracket})`;
-    const blocks: string[] = [header, contextLines.join('\n'), itemLines.join('\n')];
+    const blocks: string[] = [header, contextLines.join('\n')];
+    if (stampLines.length > 0) {
+      blocks.push(`Timestamps:\n${stampLines.join('\n')}`);
+    }
+    blocks.push(itemLines.join('\n'));
     return blocks.join('\n\n');
   };
 
@@ -292,6 +335,9 @@ const NihssCalculator: React.FC = () => {
     setNihssValues({});
     setPerformedAt(null);
     setPatientContext({ ...EMPTY_PATIENT_CONTEXT, anticoag: new Set() });
+    setStrokeTimestamps({ ...EMPTY_STROKE_TIMESTAMPS });
+    // New patient / new exam → next save should create a fresh row.
+    setCurrentCaseId(null);
     reset();
     showToast('Reset', 1500);
   };
@@ -437,26 +483,41 @@ const NihssCalculator: React.FC = () => {
         shareTitle="NIHSS"
         saveCase={{
           source: { type: 'calculator', id: 'nihss', title: 'NIHSS' },
-          buildData: (): SavedCaseData => ({
-            nihss: {
-              score: total,
-              values: nihssValues,
-              mode: nihssMode,
-              severity: SEVERITY_LABEL[severity],
-              performedAt: performedAt ? performedAt.getTime() : undefined,
-            },
-            patientContext: {
-              lkw: patientContext.lkw instanceof Date
-                ? patientContext.lkw.getTime()
-                : patientContext.lkw,
-              systolic: patientContext.systolic || undefined,
-              diastolic: patientContext.diastolic || undefined,
-              glucose: patientContext.glucose || undefined,
-              anticoag: patientContext.anticoag.size > 0
-                ? Array.from(patientContext.anticoag)
-                : undefined,
-            },
-          }),
+          existingCaseId: currentCaseId ?? undefined,
+          onSaved: (id) => {
+            setCurrentCaseId(id);
+            showToast(currentCaseId ? 'Case updated' : 'Case saved', 2000);
+          },
+          buildData: (): SavedCaseData => {
+            // Serialize stamps to Unix ms (or undefined when null) so the
+            // payload round-trips cleanly through IndexedDB + transfer relay.
+            const stamps: SavedCaseData['strokeTimestamps'] = {};
+            for (const event of STROKE_TIMESTAMP_EVENTS) {
+              const d = strokeTimestamps[event];
+              if (d) stamps[event as StrokeTimestampEvent] = d.getTime();
+            }
+            return {
+              nihss: {
+                score: total,
+                values: nihssValues,
+                mode: nihssMode,
+                severity: SEVERITY_LABEL[severity],
+                performedAt: performedAt ? performedAt.getTime() : undefined,
+              },
+              patientContext: {
+                lkw: patientContext.lkw instanceof Date
+                  ? patientContext.lkw.getTime()
+                  : patientContext.lkw,
+                systolic: patientContext.systolic || undefined,
+                diastolic: patientContext.diastolic || undefined,
+                glucose: patientContext.glucose || undefined,
+                anticoag: patientContext.anticoag.size > 0
+                  ? Array.from(patientContext.anticoag)
+                  : undefined,
+              },
+              strokeTimestamps: Object.keys(stamps).length > 0 ? stamps : undefined,
+            };
+          },
         }}
         onShareResult={(r) => {
           if (r === 'shared') showToast('Sent');
@@ -570,6 +631,16 @@ const NihssCalculator: React.FC = () => {
       >
         <DrawerContent />
       </CalculatorDrawer>
+
+      {/* ── Stroke timestamps bubble — same FAB as Stroke Code pathway.
+            Controlled mode: NIHSS owns the state so it round-trips into the
+            EMR copy text + Save Case payload. Emergency FAB intentionally
+            omitted in this surface (no tPA-reversal / orolingual-edema
+            workflow lives in NIHSS standalone). */}
+      <TimestampBubble
+        value={strokeTimestamps}
+        onChange={setStrokeTimestamps}
+      />
 
       {/* ── Toast ─────────────────────────────────────────────────────────── */}
       <CalculatorToast message={toast} />

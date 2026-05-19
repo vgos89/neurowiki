@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { X, Save, Shield } from 'lucide-react';
 import { useModalFocusTrap } from '../../hooks/useModalFocusTrap';
 import { isValidInitials, type SavedCase, SAVED_CASE_SCHEMA_VERSION } from '../../lib/cases/types';
-import { saveCase, newCaseId } from '../../lib/cases/store';
+import { saveCase, newCaseId, getCase } from '../../lib/cases/store';
 
 /**
  * SaveCaseModal — prompts the clinician for initials + optional note, then
@@ -26,8 +26,13 @@ interface SaveCaseModalProps {
   source: SavedCase['source'];
   /** Callback that returns the calculator-specific data to embed in the case. */
   buildData: () => SavedCase['data'];
-  /** Called after successful save with the new case id. */
+  /** Called after successful save with the case id (new or existing). */
   onSaved?: (id: string) => void;
+  /** When set, the modal updates this case row in place (same id, original
+   *  createdAt preserved, updatedAt bumped) instead of creating a new row.
+   *  Initials + note pre-fill from the existing case so the clinician sees
+   *  what they're updating, not a blank form. */
+  existingCaseId?: string;
 }
 
 export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
@@ -36,24 +41,47 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
   source,
   buildData,
   onSaved,
+  existingCaseId,
 }) => {
   const [initials, setInitials] = useState('');
   const [note, setNote] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  /** Preserved when updating an existing case so createdAt doesn't reset. */
+  const [existingCreatedAt, setExistingCreatedAt] = useState<number | null>(null);
   const dialogRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   useModalFocusTrap(isOpen, onClose, dialogRef, inputRef);
 
-  // Reset state on open
+  // Reset / pre-fill state on open. If an existingCaseId is set, look it up
+  // and pre-fill initials + note so the clinician sees what they're updating.
   React.useEffect(() => {
-    if (isOpen) {
+    if (!isOpen) return;
+    setError(null);
+    setSaving(false);
+    if (existingCaseId) {
+      getCase(existingCaseId).then((existing) => {
+        if (existing) {
+          setInitials(existing.initials);
+          setNote(existing.note ?? '');
+          setExistingCreatedAt(existing.createdAt);
+        } else {
+          // Case was deleted from /my-cases between saves — fall back to new.
+          setInitials('');
+          setNote('');
+          setExistingCreatedAt(null);
+        }
+      }).catch(() => {
+        setInitials('');
+        setNote('');
+        setExistingCreatedAt(null);
+      });
+    } else {
       setInitials('');
       setNote('');
-      setError(null);
-      setSaving(false);
+      setExistingCreatedAt(null);
     }
-  }, [isOpen]);
+  }, [isOpen, existingCaseId]);
 
   if (!isOpen) return null;
 
@@ -66,9 +94,11 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
     setSaving(true);
     try {
       const now = Date.now();
+      const id = existingCaseId ?? newCaseId();
+      const createdAt = existingCreatedAt ?? now;
       const c: SavedCase = {
-        id: newCaseId(),
-        createdAt: now,
+        id,
+        createdAt,
         updatedAt: now,
         initials,
         note: note.trim() || undefined,
@@ -114,7 +144,7 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
         <div className="px-5 pt-5 pb-3 flex items-start justify-between gap-3">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">
-              Save case
+              {existingCaseId ? 'Update case' : 'Save case'}
             </p>
             <h2 id="save-case-title" className="text-base font-semibold text-slate-900 tracking-tight">
               {source.title}
@@ -209,7 +239,7 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
             }`}
           >
             <Save className="w-4 h-4" aria-hidden />
-            {saving ? 'Saving…' : 'Save case'}
+            {saving ? 'Saving…' : (existingCaseId ? 'Update case' : 'Save case')}
           </button>
         </div>
       </div>

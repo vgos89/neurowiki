@@ -1,14 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, X, CheckCircle, AlertTriangle, AlertCircle } from 'lucide-react';
 
-const EVENTS = [
+export const STROKE_TIMESTAMP_EVENTS = [
   'Code Activation',
   'Neurology Evaluation',
   'CT Read Time',
   'Neuro IR Contacted',
   'NCC/ICU Sign-out',
 ] as const;
-type EventName = typeof EVENTS[number];
+export type StrokeTimestampEvent = typeof STROKE_TIMESTAMP_EVENTS[number];
+/** Internal alias preserved so existing references in this file stay compact. */
+const EVENTS = STROKE_TIMESTAMP_EVENTS;
+type EventName = StrokeTimestampEvent;
+
+export type StrokeTimestamps = Record<StrokeTimestampEvent, Date | null>;
+
+export const EMPTY_STROKE_TIMESTAMPS: StrokeTimestamps = {
+  'Code Activation': null,
+  'Neurology Evaluation': null,
+  'CT Read Time': null,
+  'Neuro IR Contacted': null,
+  'NCC/ICU Sign-out': null,
+};
 
 function formatTime(date: Date): string {
   return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
@@ -30,6 +43,13 @@ interface TimestampBubbleProps {
   onStamp?: (event: EventName, date: Date) => void;
   /** When set, stamps CT Read Time externally (e.g. from CodeModeStep2 "Stamp CT Read" button) */
   ctReadExternalTime?: Date | null;
+  /** Controlled-mode value. When provided, the component uses this instead of
+   *  its own internal state. Pair with `onChange` to receive every mutation.
+   *  Added 2026-05-19 so NIHSS standalone can hold the same stamp state and
+   *  round-trip it through Save Case / copy / share without rebuilding the UI. */
+  value?: StrokeTimestamps;
+  /** Required when `value` is provided. */
+  onChange?: (next: StrokeTimestamps) => void;
 }
 
 // Shared left-pointing thought bubble — arrow uses SVG, no inline styles (MED-03 fix)
@@ -56,19 +76,29 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
   onOrolingualEdema,
   onStamp,
   ctReadExternalTime,
+  value,
+  onChange,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showClockThought, setShowClockThought] = useState(true);
   const [showEmergencyThought, setShowEmergencyThought] = useState(true);
   const [showPulse, setShowPulse] = useState(false);
   const [emergencyOpen, setEmergencyOpen] = useState(false);
-  const [timestamps, setTimestamps] = useState<Record<EventName, Date | null>>({
-    'Code Activation': null,
-    'Neurology Evaluation': null,
-    'CT Read Time': null,
-    'Neuro IR Contacted': null,
-    'NCC/ICU Sign-out': null,
-  });
+  const [internalTimestamps, setInternalTimestamps] = useState<StrokeTimestamps>({ ...EMPTY_STROKE_TIMESTAMPS });
+  // Controlled mode: caller owns the state. Uncontrolled mode: we own it.
+  const isControlled = value !== undefined && onChange !== undefined;
+  const timestamps = isControlled ? value : internalTimestamps;
+  const setTimestamps = React.useCallback(
+    (updater: StrokeTimestamps | ((prev: StrokeTimestamps) => StrokeTimestamps)) => {
+      if (isControlled) {
+        const next = typeof updater === 'function' ? updater(value!) : updater;
+        onChange!(next);
+      } else {
+        setInternalTimestamps(updater as React.SetStateAction<StrokeTimestamps>);
+      }
+    },
+    [isControlled, value, onChange]
+  );
 
   // Auto-hide both thought bubbles after 5s
   useEffect(() => {
