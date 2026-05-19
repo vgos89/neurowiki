@@ -49,7 +49,7 @@ export interface SavedCase {
 
 /** Calculator-specific data captured at save time. */
 export interface SavedCaseData {
-  /** NIHSS calculator data. */
+  /** NIHSS calculator data (preserved typed; pre-2026-05-19 cases use this shape). */
   nihss?: {
     score: number;
     values: Record<string, number>;
@@ -69,6 +69,24 @@ export interface SavedCaseData {
     /** Serialized as array because Set isn't JSON-friendly. */
     anticoag?: string[];
   };
+
+  /** Generic payload for any calculator/pathway. Keys are calculator/pathway ids.
+   *  Each calc dumps its own state shape here. The MyCases display logic
+   *  reads `headline` and `subline` fields by convention when present. */
+  payload?: Record<string, GenericCasePayload>;
+}
+
+/** Convention for generic case payloads. Each calculator should set
+ *  `headline` (e.g., 'ABCD2: 4') and optionally `subline` (e.g., 'Moderate
+ *  risk') so the My Cases list can show a meaningful summary. The rest of
+ *  the payload is calculator-specific and round-trips through transfer. */
+export interface GenericCasePayload {
+  /** Short display headline (e.g., 'ICH Score: 3'). Used by MyCases list. */
+  headline?: string;
+  /** Optional subline (e.g., 'Moderate severity', '30-day mortality 26%'). */
+  subline?: string;
+  /** Calculator-specific data — any shape; round-trips via transfer. */
+  [key: string]: unknown;
 }
 
 export const SAVED_CASE_SCHEMA_VERSION = 1;

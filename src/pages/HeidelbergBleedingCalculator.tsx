@@ -328,6 +328,21 @@ const HeidelbergBleedingCalculator: React.FC = () => {
         }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
+        saveCase={{
+          source: { type: 'calculator', id: 'heidelberg-bleeding-classification', title: 'Heidelberg Classification' },
+          buildData: () => ({
+            payload: {
+              'heidelberg-bleeding-classification': {
+                headline: result ? `Heidelberg: ${result.classification}` : 'Heidelberg: incomplete',
+                subline: result?.stat || result?.label,
+                classification: result?.classification,
+                label: result?.label,
+                stat: result?.stat,
+                inputs,
+              },
+            },
+          }),
+        }}
       />
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}

@@ -1,7 +1,9 @@
 import React from 'react';
-import { Star, RefreshCw } from 'lucide-react';
+import { Star, RefreshCw, Bookmark } from 'lucide-react';
 import { BackArrow } from './BackArrow';
 import { ShareButton } from './ShareButton';
+import { SaveCaseModal } from '../cases/SaveCaseModal';
+import type { SavedCase, SavedCaseData } from '../../lib/cases/types';
 
 /**
  * Sticky top header for calculator pages per CALCULATOR_SPEC.md §1.1.
@@ -54,6 +56,16 @@ export interface CalculatorHeaderProps {
    *  at runtime since HTMLDivElement extends HTMLElement. The slight type widening is intentional.
    */
   headerRef?: React.RefObject<HTMLElement>;
+  /** When provided, renders a Save Case icon button between Reset and Copy.
+   *  Tapping opens the SaveCaseModal (managed internally). On success, the
+   *  case lands in IndexedDB under /my-cases. Added 2026-05-19 to roll out
+   *  case memory across all calculators. */
+  saveCase?: {
+    /** Where this case is being saved from. */
+    source: SavedCase['source'];
+    /** Snapshot the calculator's current state at the moment of save. */
+    buildData: () => SavedCaseData;
+  };
 }
 
 export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
@@ -70,7 +82,9 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
   onFavToggle,
   isFav,
   headerRef,
+  saveCase,
 }) => {
+  const [saveCaseOpen, setSaveCaseOpen] = React.useState(false);
   // Wrap onCopy + onShareResult to fire GA4 events. Using the calculator's
   // display `name` as the identifier so all 14 calculators get telemetry
   // for free without each one having to opt in. Added 2026-05-18.
@@ -152,6 +166,19 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
               <RefreshCw size={17} aria-hidden="true" />
             </button>
 
+            {/* Save Case — icon button between Reset and Copy.
+                Visible only when the consumer passes a saveCase prop. */}
+            {saveCase && (
+              <button
+                type="button"
+                onClick={() => setSaveCaseOpen(true)}
+                className="p-2 rounded-full hover:bg-slate-50 transition-colors text-slate-400 hover:text-neuro-600 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                aria-label="Save case"
+              >
+                <Bookmark size={17} aria-hidden="true" />
+              </button>
+            )}
+
             <button
               type="button"
               onClick={handleCopy}
@@ -178,6 +205,19 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
           </div>
         )}
       </div>
+
+      {/* Save Case modal — mounted here so any calculator that passes the
+          saveCase prop gets the save flow for free. The modal is portal-less
+          but uses fixed positioning + z-[80] which lifts above the sticky
+          header (z-40) and CalculatorDrawer (z-40-ish). */}
+      {saveCase && (
+        <SaveCaseModal
+          isOpen={saveCaseOpen}
+          onClose={() => setSaveCaseOpen(false)}
+          source={saveCase.source}
+          buildData={saveCase.buildData}
+        />
+      )}
     </header>
   );
 };

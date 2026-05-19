@@ -303,6 +303,21 @@ const Abcd2ScoreCalculator: React.FC = () => {
         }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
+        saveCase={{
+          source: { type: 'calculator', id: 'abcd2-score', title: 'ABCD² Score' },
+          buildData: () => ({
+            payload: {
+              'abcd2-score': {
+                headline: result ? `ABCD²: ${result.score}/7` : 'ABCD²: incomplete',
+                subline: result ? `${result.label} · ${result.twoDayRiskPercent}% 2-day stroke risk` : undefined,
+                score: result?.score,
+                inputs,
+                label: result?.label,
+                twoDayRiskPercent: result?.twoDayRiskPercent,
+              },
+            },
+          }),
+        }}
       />
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}

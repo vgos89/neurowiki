@@ -273,6 +273,20 @@ export default function BostonCriteriaCaaCalculator() {
         }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
+        saveCase={{
+          source: { type: 'calculator', id: 'boston-criteria-caa', title: 'Boston Criteria 2.0' },
+          buildData: () => ({
+            payload: {
+              'boston-criteria-caa': {
+                headline: `Boston Criteria: ${result.label}`,
+                subline: `Anticoag risk: ${result.anticoagulationRisk}`,
+                label: result.label,
+                anticoagulationRisk: result.anticoagulationRisk,
+                inputs,
+              },
+            },
+          }),
+        }}
       />
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}

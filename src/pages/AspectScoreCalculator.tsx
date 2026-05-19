@@ -295,6 +295,19 @@ const AspectScoreCalculator: React.FC = () => {
         }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
+        saveCase={{
+          source: { type: 'calculator', id: 'aspects-score', title: 'ASPECTS Score' },
+          buildData: () => ({
+            payload: {
+              'aspects-score': {
+                headline: `ASPECTS: ${score}/10`,
+                subline: scoreInfo.label,
+                score,
+                involvedRegions: Array.from(involved),
+              },
+            },
+          }),
+        }}
       />
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}

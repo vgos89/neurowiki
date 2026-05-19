@@ -332,6 +332,21 @@ const IchScoreCalculator: React.FC = () => {
         }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
+        saveCase={{
+          source: { type: 'calculator', id: 'ich-score', title: 'ICH Score' },
+          buildData: () => ({
+            payload: {
+              'ich-score': {
+                headline: result ? `ICH Score: ${result.score}` : 'ICH Score: incomplete',
+                subline: result ? `${result.mortality}% 30-day mortality` : undefined,
+                score: result?.score,
+                inputs,
+                mortality: result?.mortality,
+                severity: result?.severity,
+              },
+            },
+          }),
+        }}
       />
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}

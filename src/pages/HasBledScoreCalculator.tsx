@@ -267,6 +267,21 @@ export default function HasBledScoreCalculator() {
         }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
+        saveCase={{
+          source: { type: 'calculator', id: 'has-bled-score', title: 'HAS-BLED Score' },
+          buildData: () => ({
+            payload: {
+              'has-bled-score': {
+                headline: `HAS-BLED: ${result.score}/9`,
+                subline: `${result.bleedsPer100PatientYears} major bleeds per 100 patient-years`,
+                score: result.score,
+                bleedsPer100PatientYears: result.bleedsPer100PatientYears,
+                risk: result.risk,
+                inputs,
+              },
+            },
+          }),
+        }}
       />
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}

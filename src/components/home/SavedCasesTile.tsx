@@ -61,7 +61,16 @@ export const SavedCasesTile: React.FC = () => {
                 <p className="text-xs text-slate-700 truncate">
                   {c.data.nihss
                     ? `NIHSS ${c.data.nihss.score} · ${c.data.nihss.severity}`
-                    : c.source.title}
+                    : (() => {
+                        const payload = c.data.payload;
+                        if (payload) {
+                          for (const key of Object.keys(payload)) {
+                            const block = payload[key];
+                            if (block?.headline) return block.headline;
+                          }
+                        }
+                        return c.source.title;
+                      })()}
                 </p>
               </div>
               <span className="text-[10px] font-medium uppercase tracking-[0.04em] text-slate-400 flex-shrink-0">

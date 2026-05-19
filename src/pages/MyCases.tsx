@@ -188,7 +188,26 @@ const CaseRow: React.FC<CaseRowProps> = ({
     if (caseData.data.nihss) {
       return `NIHSS ${caseData.data.nihss.score} · ${caseData.data.nihss.severity}`;
     }
+    // Generic payload: each calc stores under its own id key with optional
+    // headline + subline strings. We pick the first non-empty one.
+    const payload = caseData.data.payload;
+    if (payload) {
+      for (const key of Object.keys(payload)) {
+        const block = payload[key];
+        if (block?.headline) return block.headline;
+      }
+    }
     return caseData.source.title;
+  })();
+  const sublineStat = (() => {
+    const payload = caseData.data.payload;
+    if (payload) {
+      for (const key of Object.keys(payload)) {
+        const block = payload[key];
+        if (block?.subline) return block.subline;
+      }
+    }
+    return null;
   })();
 
   return (
@@ -209,6 +228,9 @@ const CaseRow: React.FC<CaseRowProps> = ({
           </span>
         </div>
         <p className="text-sm text-slate-700 leading-snug">{headlineStat}</p>
+        {sublineStat && (
+          <p className="text-xs text-slate-500 leading-snug mt-0.5">{sublineStat}</p>
+        )}
         {caseData.note && (
           <p className="text-xs text-slate-500 mt-1 leading-snug flex items-start gap-1.5">
             <FileText className="w-3 h-3 text-slate-400 flex-shrink-0 mt-0.5" aria-hidden />

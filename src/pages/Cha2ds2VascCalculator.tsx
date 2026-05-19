@@ -307,6 +307,21 @@ export default function Cha2ds2VascCalculator() {
         }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
+        saveCase={{
+          source: { type: 'calculator', id: 'chads-vasc', title: 'CHA₂DS₂-VASc' },
+          buildData: () => ({
+            payload: {
+              'chads-vasc': {
+                headline: `CHA₂DS₂-VASc: ${result.score}/9`,
+                subline: `${result.annualStrokeRate}% annual stroke risk`,
+                score: result.score,
+                annualStrokeRate: result.annualStrokeRate,
+                risk: result.risk,
+                inputs,
+              },
+            },
+          }),
+        }}
       />
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}

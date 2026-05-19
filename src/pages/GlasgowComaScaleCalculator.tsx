@@ -333,6 +333,20 @@ const GlasgowComaScaleCalculator: React.FC = () => {
         }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
+        saveCase={{
+          source: { type: 'calculator', id: 'glasgow-coma-scale', title: 'Glasgow Coma Scale' },
+          buildData: () => ({
+            payload: {
+              'glasgow-coma-scale': {
+                headline: result ? `GCS: ${result.display}/15` : 'GCS: incomplete',
+                subline: result?.label,
+                display: result?.display,
+                label: result?.label,
+                inputs,
+              },
+            },
+          }),
+        }}
       />
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}

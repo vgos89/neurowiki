@@ -260,6 +260,20 @@ export default function RopeScoreCalculator() {
         }}
         onFavToggle={handleFavToggle}
         isFav={isFav}
+        saveCase={{
+          source: { type: 'calculator', id: 'rope-score', title: 'RoPE Score' },
+          buildData: () => ({
+            payload: {
+              'rope-score': {
+                headline: `RoPE: ${result.score}/10`,
+                subline: `${result.pfoAttributablePercent}% PFO-attributable`,
+                score: result.score,
+                pfoAttributablePercent: result.pfoAttributablePercent,
+                inputs,
+              },
+            },
+          }),
+        }}
       />
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}
