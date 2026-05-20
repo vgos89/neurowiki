@@ -70,10 +70,20 @@ export interface SavedCaseData {
     anticoag?: string[];
   };
 
-  /** Stroke timestamps (Code Activation, Neurology Eval, CT Read, Neuro IR, NCC/ICU Sign-out).
-   *  Keyed by event name; each value is Unix ms or null when unstamped. Added 2026-05-19 so
-   *  NIHSS standalone can carry the timestamp record into Save Case + cross-device transfer.
-   *  Stroke Code pathway can adopt the same field on its future Save Case rollout. */
+  /** Stroke timestamps. Two storage modes:
+   *
+   *  - `absolute` (legacy + opt-in): each value is Unix milliseconds. Preserves
+   *    wall-clock time, supports quality metrics (door-to-needle), but is
+   *    HIPAA-sensitive — absolute time-of-day combined with initials is
+   *    re-identifiable in a hospital context (Safe Harbor §164.514(b)(2)(iii)).
+   *  - `relative` (default): each value is **milliseconds offset from the
+   *    earliest stamp**. The earliest stamp is the anchor at offset 0. No
+   *    wall-clock time is stored. Quality-metric utility (elapsed times)
+   *    survives; re-identification surface is removed.
+   *
+   *  Mode is recorded in `strokeTimestampsMode`. Legacy cases (no mode field)
+   *  are treated as `absolute` for backward compatibility.
+   */
   strokeTimestamps?: {
     'Code Activation'?: number | null;
     'Neurology Evaluation'?: number | null;
@@ -81,6 +91,11 @@ export interface SavedCaseData {
     'Neuro IR Contacted'?: number | null;
     'NCC/ICU Sign-out'?: number | null;
   };
+
+  /** Determines how `strokeTimestamps` numeric values are interpreted.
+   *  Defaults to 'absolute' for legacy cases (field absent). New cases written
+   *  2026-05-19+ explicitly set this. Compliance-legal Finding 6 option (c). */
+  strokeTimestampsMode?: 'absolute' | 'relative';
 
   /** Generic payload for any calculator/pathway. Keys are calculator/pathway ids.
    *  Each calc dumps its own state shape here. The MyCases display logic
@@ -101,10 +116,17 @@ export interface GenericCasePayload {
   [key: string]: unknown;
 }
 
-/** v1 → v2 (2026-05-19): additive — `strokeTimestamps` field. v1 cases load fine
- *  on v2 readers (field is optional). v2 cases load on v1 readers but the new
- *  field is ignored — safe degradation. No migration script needed. */
-export const SAVED_CASE_SCHEMA_VERSION = 2;
+/** v1 → v2 (2026-05-19a): additive — `strokeTimestamps` field. v1 cases load
+ *  fine on v2 readers (optional field). v2 cases load on v1 readers with the
+ *  new field ignored — safe degradation.
+ *  v2 → v3 (2026-05-19b): additive — `strokeTimestampsMode` field. v2 cases
+ *  load on v3 readers; absence of the mode is treated as 'absolute' (legacy
+ *  behavior preserved). v3 cases load on v2 readers but the new mode is
+ *  ignored — if the case was saved in 'relative' mode, the v2 reader will
+ *  interpret the values as Unix ms (wrong) — but v2 → v3 reader downgrade
+ *  is not a real flow (clients always run latest deployed code). No
+ *  migration script needed. */
+export const SAVED_CASE_SCHEMA_VERSION = 3;
 
 /** Initials validation. */
 export const INITIALS_REGEX = /^[A-Z]{2,4}$/;

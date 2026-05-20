@@ -134,22 +134,53 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
   }
   if (contextLines.length > 0) blocks.push(contextLines.join('\n'));
 
-  // ── Stroke timestamps — only filled stamps ─────────────────────────
+  // ── Stroke timestamps — branches on storage mode ───────────────────
+  //
+  //   `absolute` mode (legacy + opt-in): values are Unix ms. Display as
+  //     "Code Activation: 03:14 PM" plus elapsed-since-anchor offsets.
+  //   `relative` mode (default for new cases as of 2026-05-19): values are
+  //     ms offsets from the earliest stamp. No wall-clock time is stored;
+  //     display as offsets only ("anchor", "+12m", "+18m").
+  //
+  //   Mode field absence = legacy case = treat as `absolute`.
   const stamps = data.strokeTimestamps;
+  const mode = data.strokeTimestampsMode ?? 'absolute';
   if (stamps) {
-    const anchor = stamps['Code Activation'];
     const stampLines: string[] = [];
-    for (const event of TIMESTAMP_EVENTS) {
-      const t = stamps[event];
-      if (!t) continue;
-      if (event === 'Code Activation' || !anchor) {
-        stampLines.push(`${event}: ${fmtTime(t)}`);
-      } else {
-        const diffMin = Math.max(0, Math.floor((t - anchor) / 60000));
-        const hh = Math.floor(diffMin / 60);
-        const mm = diffMin % 60;
-        const elapsed = hh > 0 ? `+${hh}h ${mm}m` : `+${mm}m`;
-        stampLines.push(`${event}: ${fmtTime(t)} (${elapsed})`);
+    if (mode === 'absolute') {
+      const anchor = stamps['Code Activation'];
+      for (const event of TIMESTAMP_EVENTS) {
+        const t = stamps[event];
+        if (!t) continue;
+        if (event === 'Code Activation' || !anchor) {
+          stampLines.push(`${event}: ${fmtTime(t)}`);
+        } else {
+          const diffMin = Math.max(0, Math.floor((t - anchor) / 60000));
+          const hh = Math.floor(diffMin / 60);
+          const mm = diffMin % 60;
+          const elapsed = hh > 0 ? `+${hh}h ${mm}m` : `+${mm}m`;
+          stampLines.push(`${event}: ${fmtTime(t)} (${elapsed})`);
+        }
+      }
+    } else {
+      // Relative mode: values are offset-from-earliest in ms. The earliest
+      // (value === 0) is the anchor; everything else is positive elapsed.
+      // Identify the anchor event for labeling.
+      const filled = TIMESTAMP_EVENTS
+        .map((event) => [event, stamps[event]] as const)
+        .filter((e): e is readonly [typeof TIMESTAMP_EVENTS[number], number] => typeof e[1] === 'number');
+      const anchorEntry = filled.find(([, offset]) => offset === 0);
+      const anchorEvent = anchorEntry?.[0];
+      for (const [event, offset] of filled) {
+        if (event === anchorEvent) {
+          stampLines.push(`${event}: anchor (relative-only storage)`);
+        } else {
+          const diffMin = Math.max(0, Math.floor(offset / 60000));
+          const hh = Math.floor(diffMin / 60);
+          const mm = diffMin % 60;
+          const elapsed = hh > 0 ? `+${hh}h ${mm}m` : `+${mm}m`;
+          stampLines.push(`${event}: ${elapsed}`);
+        }
       }
     }
     if (stampLines.length > 0) {

@@ -24,15 +24,22 @@ interface SaveCaseModalProps {
   onClose: () => void;
   /** Where this case is being saved from (e.g., NIHSS calculator). */
   source: SavedCase['source'];
-  /** Callback that returns the calculator-specific data to embed in the case. */
-  buildData: () => SavedCase['data'];
+  /** Callback that returns the calculator-specific data to embed in the case.
+   *  Receives `{ saveAbsoluteTimestamps }` so the caller can convert its
+   *  in-memory absolute timestamps to relative-offset storage when the
+   *  clinician opted into the HIPAA-friendly default. */
+  buildData: (opts: { saveAbsoluteTimestamps: boolean }) => SavedCase['data'];
   /** Called after successful save with the case id (new or existing). */
   onSaved?: (id: string) => void;
   /** When set, the modal updates this case row in place (same id, original
    *  createdAt preserved, updatedAt bumped) instead of creating a new row.
-   *  Initials + note pre-fill from the existing case so the clinician sees
+   *  Initials pre-fill from the existing case so the clinician sees
    *  what they're updating, not a blank form. */
   existingCaseId?: string;
+  /** True if this calculator/source captures stroke timestamps that benefit
+   *  from the absolute-vs-relative storage opt-in. Toggles the disclosure
+   *  + checkbox in the modal. NIHSS = true. Other calculators = false. */
+  hasStrokeTimestamps?: boolean;
 }
 
 export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
@@ -42,6 +49,7 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
   buildData,
   onSaved,
   existingCaseId,
+  hasStrokeTimestamps = false,
 }) => {
   const [initials, setInitials] = useState('');
   const [note, setNote] = useState('');
@@ -49,22 +57,34 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
   const [error, setError] = useState<string | null>(null);
   /** Preserved when updating an existing case so createdAt doesn't reset. */
   const [existingCreatedAt, setExistingCreatedAt] = useState<number | null>(null);
+  /** Compliance-legal Finding 6 option (c): default is HIPAA-friendly
+   *  relative-elapsed storage. Clinicians opt into absolute timestamps when
+   *  they need them for quality-metric documentation (door-to-needle, etc.). */
+  const [saveAbsoluteTimestamps, setSaveAbsoluteTimestamps] = useState(false);
   const dialogRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   useModalFocusTrap(isOpen, onClose, dialogRef, inputRef);
 
   // Reset / pre-fill state on open. If an existingCaseId is set, look it up
-  // and pre-fill initials + note so the clinician sees what they're updating.
+  // and pre-fill initials so the clinician sees what they're updating.
+  // Note field input was removed 2026-05-19 (HIPAA risk) but the field is
+  // preserved in storage so legacy cases display their note in the detail view.
   React.useEffect(() => {
     if (!isOpen) return;
     setError(null);
     setSaving(false);
+    setSaveAbsoluteTimestamps(false);
     if (existingCaseId) {
       getCase(existingCaseId).then((existing) => {
         if (existing) {
           setInitials(existing.initials);
           setNote(existing.note ?? '');
           setExistingCreatedAt(existing.createdAt);
+          // Pre-select the toggle to match what the existing case was saved
+          // with, so a re-save preserves the clinician's earlier choice.
+          if (existing.data.strokeTimestampsMode === 'absolute') {
+            setSaveAbsoluteTimestamps(true);
+          }
         } else {
           // Case was deleted from /my-cases between saves — fall back to new.
           setInitials('');
@@ -103,7 +123,7 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
         initials,
         note: note.trim() || undefined,
         source,
-        data: buildData(),
+        data: buildData({ saveAbsoluteTimestamps }),
         schemaVersion: SAVED_CASE_SCHEMA_VERSION,
       };
       await saveCase(c);
@@ -199,6 +219,27 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
               the SavedCase schema so existing cases display their note in
               the detail view; only the input is removed. New cases will
               have no note. */}
+
+          {/* Stroke-timestamp storage opt-in. Default OFF = HIPAA-friendly
+              relative-elapsed storage. Toggle ON when the clinician needs
+              absolute timestamps for quality metrics. Compliance-legal
+              Finding 6 option (c), 2026-05-19. */}
+          {hasStrokeTimestamps && (
+            <label className="flex items-start gap-2.5 p-3 bg-slate-50 rounded-lg border border-slate-100 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={saveAbsoluteTimestamps}
+                onChange={(e) => setSaveAbsoluteTimestamps(e.target.checked)}
+                className="mt-0.5 w-4 h-4 rounded border-slate-300 text-neuro-500 focus:ring-neuro-500 focus:ring-offset-0 cursor-pointer flex-shrink-0"
+              />
+              <span className="text-xs text-slate-700 leading-relaxed">
+                <span className="font-semibold">Save absolute timestamps</span> (for quality documentation — door-to-needle, etc.)
+                <span className="block text-[11px] text-slate-500 mt-0.5">
+                  Off by default: stroke timestamps save as elapsed offsets (e.g., "+12m from anchor") to reduce identifiability. On preserves exact times for charting.
+                </span>
+              </span>
+            </label>
+          )}
 
           {error && (
             <p role="alert" className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">

@@ -63,8 +63,12 @@ export interface CalculatorHeaderProps {
   saveCase?: {
     /** Where this case is being saved from. */
     source: SavedCase['source'];
-    /** Snapshot the calculator's current state at the moment of save. */
-    buildData: () => SavedCaseData;
+    /** Snapshot the calculator's current state at the moment of save.
+     *  Receives `{ saveAbsoluteTimestamps }` so the calculator can convert
+     *  absolute Unix-ms timestamps to relative-offset storage when the
+     *  clinician left the HIPAA-friendly default in place. Calculators
+     *  without stroke timestamps may ignore the argument. */
+    buildData: (opts: { saveAbsoluteTimestamps: boolean }) => SavedCaseData;
     /** When set, the next save updates this case row in place (same id,
      *  same createdAt, bumped updatedAt) instead of creating a new row.
      *  The consumer captures the id from `onSaved` after the first save
@@ -75,6 +79,10 @@ export interface CalculatorHeaderProps {
     /** Called after a successful save with the case id (new or existing).
      *  The consumer typically stashes this so future saves update in place. */
     onSaved?: (id: string) => void;
+    /** True for calculators that capture stroke timestamps and benefit from
+     *  the absolute-vs-relative storage opt-in (currently NIHSS). The modal
+     *  surfaces the toggle + disclosure only when this is true. */
+    hasStrokeTimestamps?: boolean;
   };
 }
 
@@ -228,6 +236,7 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
           buildData={saveCase.buildData}
           existingCaseId={saveCase.existingCaseId}
           onSaved={saveCase.onSaved}
+          hasStrokeTimestamps={saveCase.hasStrokeTimestamps}
         />
       )}
     </header>

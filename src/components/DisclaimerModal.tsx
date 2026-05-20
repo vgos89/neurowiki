@@ -5,7 +5,7 @@ import { usePwaInstall } from '../hooks/usePwaInstall';
 import { IosInstallSheet } from './IosInstallSheet';
 
 const DISCLAIMER_STORAGE_KEY = 'neurowiki-disclaimer-accepted';
-const DISCLAIMER_VERSION = '2.0'; // Bumped from 1.0 to force re-acceptance with the modernized modal
+const DISCLAIMER_VERSION = '3.0'; // Bumped from 2.0 to force re-acceptance per compliance-legal HIPAA review (2026-05-19): the "no identifiable patient data" claim was revised to "no name, MRN, or DOB" + an honest acknowledgement that clinical context stored via Save Case may constitute PHI under the clinician's hospital's HIPAA policy.
 
 interface StoredDisclaimer {
   version: string;
@@ -200,9 +200,9 @@ export const DisclaimerModal: React.FC = () => {
             </div>
 
             <div>
-              <p className="text-[13px] font-semibold text-slate-900 mb-1">No patient data</p>
+              <p className="text-[13px] font-semibold text-slate-900 mb-1">Patient data</p>
               <p className="text-[13.5px]">
-                Calculator inputs run locally in your browser. NeuroWiki does not collect identifiable patient data. See the privacy policy for the full data inventory.
+                Calculator inputs run locally in your browser. NeuroWiki does not collect names, MRNs, or dates of birth. The Save Case feature stores patient initials plus the clinical context you enter (scores, vitals, timestamps) on this device only — that combination may constitute PHI under your hospital's HIPAA policy, and you remain responsible for using the tool in a way consistent with your institution's rules. See the privacy policy for the full data inventory.
               </p>
             </div>
           </div>

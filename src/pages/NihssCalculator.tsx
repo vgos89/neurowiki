@@ -484,18 +484,40 @@ const NihssCalculator: React.FC = () => {
         saveCase={{
           source: { type: 'calculator', id: 'nihss', title: 'NIHSS' },
           existingCaseId: currentCaseId ?? undefined,
+          hasStrokeTimestamps: true,
           onSaved: (id) => {
             setCurrentCaseId(id);
             showToast(currentCaseId ? 'Case updated' : 'Case saved', 2000);
           },
-          buildData: (): SavedCaseData => {
-            // Serialize stamps to Unix ms (or undefined when null) so the
-            // payload round-trips cleanly through IndexedDB + transfer relay.
+          buildData: ({ saveAbsoluteTimestamps }): SavedCaseData => {
+            // Stroke timestamps — convert based on opt-in. Default = relative
+            // (HIPAA-friendly offsets from the earliest stamp). Opt-in =
+            // absolute Unix ms (clinician needs door-to-needle timing).
+            // Compliance-legal Finding 6 option (c), 2026-05-19.
             const stamps: SavedCaseData['strokeTimestamps'] = {};
-            for (const event of STROKE_TIMESTAMP_EVENTS) {
-              const d = strokeTimestamps[event];
-              if (d) stamps[event as StrokeTimestampEvent] = d.getTime();
+            const filledEntries = STROKE_TIMESTAMP_EVENTS
+              .map((event) => [event, strokeTimestamps[event]] as const)
+              .filter((e): e is readonly [StrokeTimestampEvent, Date] => e[1] instanceof Date);
+            const hasAnyStamp = filledEntries.length > 0;
+            if (hasAnyStamp) {
+              if (saveAbsoluteTimestamps) {
+                for (const [event, d] of filledEntries) {
+                  stamps[event] = d.getTime();
+                }
+              } else {
+                // Anchor = earliest stamp. All offsets are non-negative ms.
+                const anchorMs = Math.min(...filledEntries.map(([, d]) => d.getTime()));
+                for (const [event, d] of filledEntries) {
+                  stamps[event] = d.getTime() - anchorMs;
+                }
+              }
             }
+            // Patient context — under default (relative) mode, LKW absolute
+            // time-of-day is also identifying. Strip to day-only? V's design
+            // call is to keep LKW absolute because LKW is needed for tPA
+            // window decisions and is typically already documented in the
+            // chart; the marginal HIPAA exposure is acceptable per Finding 6
+            // option (c) scope (stroke timestamps only).
             return {
               nihss: {
                 score: total,
@@ -515,7 +537,10 @@ const NihssCalculator: React.FC = () => {
                   ? Array.from(patientContext.anticoag)
                   : undefined,
               },
-              strokeTimestamps: Object.keys(stamps).length > 0 ? stamps : undefined,
+              strokeTimestamps: hasAnyStamp ? stamps : undefined,
+              strokeTimestampsMode: hasAnyStamp
+                ? (saveAbsoluteTimestamps ? 'absolute' : 'relative')
+                : undefined,
             };
           },
         }}
