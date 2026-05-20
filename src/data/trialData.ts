@@ -402,6 +402,20 @@ export interface TrialMetadata {
     currentTrialResult: string;
     whatChanged: string;
   };
+  // ─────────────────────────────────────────────────────────────────────────
+  /** Trial-chain lineage membership for the timeline footer at the bottom of
+   *  each trial page (arch-trial-chain-timeline-2026-05-20 architect resolution).
+   *  Lets a trial belong to multiple chains (e.g. THRACE is in both EVT-anterior
+   *  and EVT-bridging). Chain ids must resolve in `trialChainRegistry.ts`.
+   *  Role drives the in-chain position: 'predecessor' (earlier era),
+   *  'cohort-member' (same publication era as another), 'current' (this trial
+   *  in this chain), 'successor' (later era). Successors are derived at render
+   *  time across the catalogue, so each trial only declares its own membership.
+   */
+  chainMembership?: Array<{
+    chainId: string;
+    role: 'predecessor' | 'cohort-member' | 'current' | 'successor';
+  }>;
 }
 
 export const TRIAL_DATA: Record<string, TrialMetadata> = {
@@ -3868,6 +3882,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'DECIMAL Trial',
     subtitle: 'Early Decompressive Craniectomy in Malignant MCA Infarction',
     category: 'Neuro Trials',
+    chainMembership: [{ chainId: 'hemicraniectomy', role: 'cohort-member' }],
     stats: {
       sampleSize: {
         value: '38',
@@ -3968,6 +3983,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'DESTINY Trial',
     subtitle: 'Decompressive Surgery for Malignant MCA Infarction',
     category: 'Neuro Trials',
+    chainMembership: [{ chainId: 'hemicraniectomy', role: 'cohort-member' }],
     stats: {
       sampleSize: {
         value: '32',
@@ -4070,6 +4086,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     trialResult: 'NEUTRAL',
     primaryDesign: 'binary-superiority',
     primaryResult: 'not-met',
+    chainMembership: [{ chainId: 'hemicraniectomy', role: 'cohort-member' }],
     stats: {
       sampleSize: {
         value: '64',
@@ -4171,6 +4188,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     category: 'Neuro Trials',
     primaryDesign: 'binary-superiority',
     primaryResult: 'met',
+    chainMembership: [{ chainId: 'hemicraniectomy', role: 'successor' }],
     stats: {
       sampleSize: {
         value: '112',
@@ -5693,6 +5711,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1056/NEJMoa2206317',
     pmid: '36239644',
     primaryDesign: 'binary-superiority',
+    chainMembership: [{ chainId: 'basilar-evt', role: 'cohort-member' }],
     primaryResult: 'met',
     inclusionCriteria: [
       'Age ≥18 (≥80 with pre-stroke mRS 0 only)',
@@ -5826,6 +5845,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1056/NEJMoa2207576',
     pmid: '36239645',
     primaryDesign: 'binary-superiority',
+    chainMembership: [{ chainId: 'basilar-evt', role: 'cohort-member' }],
     primaryResult: 'met',
     inclusionCriteria: [
       'Age 18–80',
@@ -10542,6 +10562,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     isStub: true,
     trialResult: 'NEUTRAL',
     archetypeId: 'A' as const,
+    chainMembership: [{ chainId: 'basilar-evt', role: 'cohort-member' }],
     doi: '10.1016/S1474-4422(19)30395-3',
     source: 'Liu et al. (Lancet Neurol 2020)',
     listCategory: 'thrombectomy',
@@ -10614,6 +10635,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     isStub: true,
     trialResult: 'NEUTRAL',
     archetypeId: 'A' as const,
+    chainMembership: [{ chainId: 'basilar-evt', role: 'cohort-member' }],
     doi: '10.1056/NEJMoa2030297',
     source: 'Langezaal et al. (NEJM 2021)',
     listCategory: 'thrombectomy',

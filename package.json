@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit",
     "check:routes": "node scripts/validateRouteManifest.mjs",
     "check:claims": "tsx scripts/check-claims.ts",
+    "check:chains": "tsx scripts/check-trial-chains.ts",
     "check:humanizer": "node scripts/check-humanizer.mjs",
     "fix:em-dashes": "node scripts/fix-em-dashes.mjs --write",
     "seo:auth-login": "node --env-file=.env.local scripts/seo/auth-login.mjs",

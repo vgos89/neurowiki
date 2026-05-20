@@ -32,6 +32,7 @@ import { SubgroupWell } from '../../components/trials/SubgroupWell';
 import { TeachingWell } from '../../components/trials/TeachingWell';
 import { BottomLineDrawer } from '../../components/trials/BottomLineDrawer';
 import { HistoricalContextSection } from '../../components/trials/HistoricalContextSection';
+import TrialChainTimeline from '../../components/trials/TrialChainTimeline';
 
 function ChartFallback() {
   return <div className="h-32 bg-slate-100 rounded-xl animate-pulse" aria-hidden="true" />;
@@ -1405,6 +1406,7 @@ const TrialPageNew: React.FC = () => {
               <Link to="/pathways/evt" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">EVT Pathway</Link>
             </div>
           </div>
+          <TrialChainTimeline trialId="attention-trial" />
         </div>
         {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
           <BottomLineDrawer trialName="ATTENTION" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
@@ -1493,6 +1495,7 @@ const TrialPageNew: React.FC = () => {
               <Link to="/pathways/evt" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">EVT Pathway</Link>
             </div>
           </div>
+          <TrialChainTimeline trialId="baoche-trial" />
         </div>
         {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
           <BottomLineDrawer trialName="BAOCHE" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
@@ -7229,6 +7232,7 @@ const TrialPageNew: React.FC = () => {
               <Link to="/trials/destiny-ii-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DESTINY II</Link>
             </div>
           </div>
+          <TrialChainTimeline trialId="decimal-trial" />
         </div>
         {tm.bottomLineSummary && tm.bedsidePearl && (
           <BottomLineDrawer
@@ -7313,6 +7317,7 @@ const TrialPageNew: React.FC = () => {
               <Link to="/trials/destiny-ii-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DESTINY II</Link>
             </div>
           </div>
+          <TrialChainTimeline trialId="destiny-trial" />
         </div>
         {tm.bottomLineSummary && tm.bedsidePearl && (
           <BottomLineDrawer
@@ -7397,6 +7402,7 @@ const TrialPageNew: React.FC = () => {
               <Link to="/trials/destiny-ii-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DESTINY II</Link>
             </div>
           </div>
+          <TrialChainTimeline trialId="hamlet-trial" />
         </div>
         {tm.bottomLineSummary && tm.bedsidePearl && (
           <BottomLineDrawer
@@ -7485,6 +7491,7 @@ const TrialPageNew: React.FC = () => {
               <Link to="/trials/hamlet-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">HAMLET (under 61)</Link>
             </div>
           </div>
+          <TrialChainTimeline trialId="destiny-ii-trial" />
         </div>
         {tm.bottomLineSummary && tm.bedsidePearl && (
           <BottomLineDrawer
@@ -7826,6 +7833,10 @@ const TrialPageNew: React.FC = () => {
           </div>
         </div>
 
+        {/* Trial-chain timeline footer (renders null for trials without chainMembership) */}
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 pb-4">
+          <TrialChainTimeline trialId={tm.id} />
+        </div>
         {/* BottomLineDrawer — historical-reference bedsidePearl slot */}
         {tm.bottomLineSummary && (
           <BottomLineDrawer
