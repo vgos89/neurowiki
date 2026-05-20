@@ -109,7 +109,16 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
     note += `Stroke Code Summary: ${door ? door.toLocaleString() : new Date().toLocaleString()}\n\n`;
 
     note += '1. LKW:\n';
-    note += step1Data?.lkwUnknown ? '- LKW: Unknown (wake-up/unwitnessed)\n' : `- LKW: ${step1Data?.lkwTimestamp ? step1Data.lkwTimestamp.toLocaleString() : `${step1Data?.lkwHours?.toFixed(1) ?? '—'} hours ago`}\n`;
+    // Em-dash placeholders replaced with "Not entered" so the EMR-paste
+    // text reads naturally when fields are blank. (V feedback 2026-05-20.)
+    const lkwLine = step1Data?.lkwUnknown
+      ? '- LKW: Unknown (wake-up/unwitnessed)\n'
+      : step1Data?.lkwTimestamp
+        ? `- LKW: ${step1Data.lkwTimestamp.toLocaleString()}\n`
+        : step1Data?.lkwHours !== undefined && step1Data.lkwHours !== null
+          ? `- LKW: ${step1Data.lkwHours.toFixed(1)} hours ago\n`
+          : '- LKW: Not entered\n';
+    note += lkwLine;
     if (step1Data?.symptomDiscoveryTime && !step1Data?.lkwUnknown) {
       note += `- Time of symptom discovery: ${step1Data.symptomDiscoveryTime.toLocaleString()}\n`;
     }
@@ -119,35 +128,35 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
     note += '\n';
 
     note += '2. Door Time:\n';
-    note += `- Door time: ${door ? door.toLocaleString() : '—'}\n\n`;
+    note += `- Door time: ${door ? door.toLocaleString() : 'Not entered'}\n\n`;
 
     note += '3. Neurologist Evaluation:\n';
-    note += `- Neurologist evaluation: ${milestones?.neurologistEvaluationTime ? milestones.neurologistEvaluationTime.toLocaleString() : '—'}\n`;
-    note += `- Neuro IR contacted: ${milestones?.neuroIrContactedTime ? milestones.neuroIrContactedTime.toLocaleString() : '—'}\n`;
-    note += `- NCC/ICU sign-out: ${milestones?.nccIcuSignoutTime ? milestones.nccIcuSignoutTime.toLocaleString() : '—'}\n\n`;
+    note += `- Neurologist evaluation: ${milestones?.neurologistEvaluationTime ? milestones.neurologistEvaluationTime.toLocaleString() : 'Not entered'}\n`;
+    note += `- Neuro IR contacted: ${milestones?.neuroIrContactedTime ? milestones.neuroIrContactedTime.toLocaleString() : 'Not entered'}\n`;
+    note += `- NCC/ICU sign-out: ${milestones?.nccIcuSignoutTime ? milestones.nccIcuSignoutTime.toLocaleString() : 'Not entered'}\n\n`;
 
     note += '4. Brain Imaging:\n';
-    note += `- CT ordered: ${milestones?.ctOrderedTime ? milestones.ctOrderedTime.toLocaleString() + (doorToCTOrderedMin != null ? ` (${doorToCTOrderedMin} min from door)` : '') : '—'}\n`;
+    note += `- CT ordered: ${milestones?.ctOrderedTime ? milestones.ctOrderedTime.toLocaleString() + (doorToCTOrderedMin != null ? ` (${doorToCTOrderedMin} min from door)` : '') : 'Not entered'}\n`;
     const ctFirstImageSuffix = doorToCTMin != null
       ? ' (' + doorToCTMin + ' min from door' + (ctFirstImageMetTarget ? ', target ≤25)' : ')')
       : '';
     const ctFirstImageStr = milestones?.ctFirstImageTime
       ? milestones.ctFirstImageTime.toLocaleString() + ctFirstImageSuffix
-      : doorToCTMin != null ? doorToCTMin + ' min from door' : '—';
+      : doorToCTMin != null ? doorToCTMin + ' min from door' : 'Not entered';
     note += `- CT first image: ${ctFirstImageStr}\n`;
     const ctInterpretedSuffix = doorToCTInterpretedMin != null
       ? ' (' + doorToCTInterpretedMin + ' min from door' + (ctInterpretedMetTarget ? ', target ≤45)' : ')')
       : '';
     const ctInterpretedStr = milestones?.ctInterpretedTime
       ? milestones.ctInterpretedTime.toLocaleString() + ctInterpretedSuffix
-      : '—';
+      : 'Not entered';
     note += `- CT interpreted: ${ctInterpretedStr}\n`;
-    note += `- CT Result: ${step2Data?.ctResult === 'bleed' ? 'Bleed/ICH' : step2Data?.ctResult === 'no-bleed' ? 'No acute hemorrhage' : step2Data?.ctResult ?? '—'}\n`;
+    note += `- CT Result: ${step2Data?.ctResult === 'bleed' ? 'Bleed/ICH' : step2Data?.ctResult === 'no-bleed' ? 'No acute hemorrhage' : step2Data?.ctResult ?? 'Not entered'}\n`;
     note += `- CTA: ${step2Data?.ctaOrdered ? 'Ordered' : 'Not ordered'}\n`;
-    note += `- LVO: ${step2Data?.lvoPresent === true ? 'Yes' : step2Data?.lvoPresent === false ? 'No' : step2Data?.thrombectomyPlan ?? '—'}\n\n`;
+    note += `- LVO: ${step2Data?.lvoPresent === true ? 'Yes' : step2Data?.lvoPresent === false ? 'No' : step2Data?.thrombectomyPlan ?? 'Not entered'}\n\n`;
 
     note += '5. Treatment Times:\n';
-    note += `- Door-to-Needle: ${doorToNeedleMin != null ? `${doorToNeedleMin} min (target ≤60${needleBest ? ', best ≤30' : needleOptimal ? ', optimal ≤45' : ''})` : '—'}\n`;
+    note += `- Door-to-Needle: ${doorToNeedleMin != null ? `${doorToNeedleMin} min (target ≤60${needleBest ? ', best ≤30' : needleOptimal ? ', optimal ≤45' : ''})` : 'Not entered'}\n`;
     if (step1Data?.lkwTimestamp && lkwToNeedleMin != null) {
       note += `- LKW-to-Needle: ${lkwToNeedleMin} min (must be ≤4.5h for standard IV tPA)\n`;
       if (arriveBy35TreatBy45 !== null) {
@@ -158,9 +167,9 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
 
     note += '6. Thrombectomy:\n';
     if (milestones?.groinPunctureTime || milestones?.firstDeviceTime || milestones?.firstReperfusionTime) {
-      note += `- Door to groin puncture: ${doorToGroinMin != null ? `${doorToGroinMin} min` : '—'}\n`;
-      note += `- First device deployment: ${milestones?.firstDeviceTime ? milestones.firstDeviceTime.toLocaleString() : '—'}\n`;
-      note += `- First reperfusion: ${milestones?.firstReperfusionTime ? milestones.firstReperfusionTime.toLocaleString() : '—'}\n`;
+      note += `- Door to groin puncture: ${doorToGroinMin != null ? `${doorToGroinMin} min` : 'Not entered'}\n`;
+      note += `- First device deployment: ${milestones?.firstDeviceTime ? milestones.firstDeviceTime.toLocaleString() : 'Not entered'}\n`;
+      note += `- First reperfusion: ${milestones?.firstReperfusionTime ? milestones.firstReperfusionTime.toLocaleString() : 'Not entered'}\n`;
     } else {
       note += '- Not applicable / not recorded\n';
     }
