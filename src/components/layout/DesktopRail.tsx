@@ -4,11 +4,12 @@
 // navHref preserves ?scenario= for scenario-aware routes and ?favs= for all hubs.
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home } from 'lucide-react';
+import { Home, Download } from 'lucide-react';
 import { CalcsIcon } from './icons/CalcsIcon';
 import { PathwaysIcon } from './icons/PathwaysIcon';
 import { GuideIcon } from './icons/GuideIcon';
 import { TrialsIcon } from './icons/TrialsIcon';
+import { isSupabaseConfigured } from '../../lib/supabase';
 
 // LAYOUT_SPEC §6.1.2 — same order as mobile bottom nav §2.2
 const RAIL_ITEMS = [
@@ -89,16 +90,31 @@ export const DesktopRail: React.FC = () => {
       {/* Spacer */}
       <div className="flex-1" />
 
-      {/* Footer — LAYOUT_SPEC §6.1.4 — Phase 4D legal links */}
-      <div className="border-t border-slate-100 pt-3.5 px-3 flex flex-col gap-1">
-        <div className="flex gap-2.5 flex-wrap">
-          <Link to="/privacy" className="text-[11px] text-slate-500 hover:text-slate-700 transition-colors">Privacy</Link>
-          <span className="text-[11px] text-slate-300" aria-hidden="true">·</span>
-          <Link to="/terms" className="text-[11px] text-slate-500 hover:text-slate-700 transition-colors">Terms</Link>
-          <span className="text-[11px] text-slate-300" aria-hidden="true">·</span>
-          <Link to="/accessibility" className="text-[11px] text-slate-500 hover:text-slate-700 transition-colors">Accessibility</Link>
+      {/* Receive-from-phone entry — only when Supabase relay is configured.
+          Placed above the legal footer so a desktop user who just generated
+          a transfer code on their phone has a one-click path to /import.
+          V audit 2026-05-19. */}
+      {isSupabaseConfigured() && (
+        <Link
+          to="/import"
+          className="flex items-center gap-2 px-3 py-2 mb-2 rounded-lg text-[12px] font-medium text-neuro-700 bg-neuro-50/60 hover:bg-neuro-50 border border-neuro-100 transition-colors"
+        >
+          <Download className="w-3.5 h-3.5 flex-shrink-0" aria-hidden />
+          <span>Receive case from phone</span>
+        </Link>
+      )}
+
+      {/* Footer — single-line legal strip + copyright. V audit 2026-05-19. */}
+      <div className="border-t border-slate-100 pt-3 px-3">
+        <div className="flex items-center gap-1.5 text-[10px] text-slate-400 whitespace-nowrap">
+          <Link to="/privacy" className="hover:text-slate-700 transition-colors">Privacy</Link>
+          <span aria-hidden="true">·</span>
+          <Link to="/terms" className="hover:text-slate-700 transition-colors">Terms</Link>
+          <span aria-hidden="true">·</span>
+          <Link to="/accessibility" className="hover:text-slate-700 transition-colors">Accessibility</Link>
+          <span aria-hidden="true">·</span>
+          <span>© 2026</span>
         </div>
-        <p className="text-[10px] text-slate-400">© 2026 NeuroWiki</p>
       </div>
     </aside>
   );

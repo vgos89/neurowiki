@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Briefcase, Trash2, FileText, Shield, Send, Download } from 'lucide-react';
+import { ArrowLeft, Briefcase, Trash2, FileText, Shield, Send, Download, ChevronRight } from 'lucide-react';
 import { listCases, deleteCase, clearAllCases } from '../lib/cases/store';
 import type { SavedCase } from '../lib/cases/types';
 import { formatClinicalDateShort } from '../utils/clinicalDateTime';
 import { SendCasesModal } from '../components/cases/SendCasesModal';
+import { CaseDetailModal } from '../components/cases/CaseDetailModal';
 import { isSupabaseConfigured } from '../lib/supabase';
 
 /**
@@ -23,7 +24,12 @@ const MyCases: React.FC = () => {
   const [cases, setCases] = useState<SavedCase[] | null>(null);
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);
   const [sendOpen, setSendOpen] = useState(false);
+  const [openCaseId, setOpenCaseId] = useState<string | null>(null);
   const syncReady = isSupabaseConfigured();
+
+  const openedCase = cases && openCaseId
+    ? cases.find((c) => c.id === openCaseId) ?? null
+    : null;
 
   const loadCases = useCallback(async () => {
     const list = await listCases();
@@ -151,6 +157,7 @@ const MyCases: React.FC = () => {
                   onRequestDelete={() => setPendingDelete(c.id)}
                   onCancelDelete={() => setPendingDelete(null)}
                   onConfirmDelete={() => handleDelete(c.id)}
+                  onOpen={() => setOpenCaseId(c.id)}
                 />
               </li>
             ))}
@@ -161,6 +168,16 @@ const MyCases: React.FC = () => {
       {/* Send modal — encrypts cases with a 4-digit PIN and uploads to the
           Supabase transient relay. Receiver enters the code+PIN at /import. */}
       <SendCasesModal isOpen={sendOpen} onClose={() => setSendOpen(false)} />
+
+      {/* Case detail modal — tap a row to view full EMR text, Copy, Send,
+          Edit metadata (initials/note), or Delete. V audit 2026-05-19. */}
+      <CaseDetailModal
+        isOpen={!!openCaseId}
+        caseData={openedCase}
+        onClose={() => setOpenCaseId(null)}
+        onChanged={loadCases}
+        onRequestDelete={(id) => handleDelete(id)}
+      />
     </div>
   );
 };
@@ -175,6 +192,8 @@ interface CaseRowProps {
   onRequestDelete: () => void;
   onCancelDelete: () => void;
   onConfirmDelete: () => void;
+  /** Tap the row body to open detail modal. */
+  onOpen: () => void;
 }
 
 const CaseRow: React.FC<CaseRowProps> = ({
@@ -183,6 +202,7 @@ const CaseRow: React.FC<CaseRowProps> = ({
   onRequestDelete,
   onCancelDelete,
   onConfirmDelete,
+  onOpen,
 }) => {
   const headlineStat = (() => {
     if (caseData.data.nihss) {
@@ -212,32 +232,44 @@ const CaseRow: React.FC<CaseRowProps> = ({
 
   return (
     <div className="bg-white border border-slate-100 rounded-xl p-4 flex items-start gap-3">
-      {/* Initials avatar */}
-      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-neuro-50 border border-neuro-100 flex items-center justify-center">
-        <span className="text-sm font-bold text-neuro-700 tracking-wider">{caseData.initials}</span>
-      </div>
-
-      {/* Body */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-baseline gap-2 mb-0.5">
-          <span className="text-sm font-semibold text-slate-900 tracking-[0.01em]">
-            {caseData.initials}
-          </span>
-          <span className="text-[10px] font-medium uppercase tracking-[0.04em] text-slate-400">
-            {formatClinicalDateShort(new Date(caseData.createdAt))}
-          </span>
+      {/* Tappable body — opens detail modal. Avatar + body in one button so
+          tapping anywhere in the main area opens the case. Delete icon is a
+          sibling so it doesn't get swallowed. V audit 2026-05-19. */}
+      <button
+        type="button"
+        onClick={onOpen}
+        className="flex-1 min-w-0 flex items-start gap-3 text-left -m-1 p-1 rounded-lg hover:bg-slate-50 transition-colors"
+        aria-label={`Open case for ${caseData.initials}`}
+      >
+        {/* Initials avatar */}
+        <div className="flex-shrink-0 w-10 h-10 rounded-full bg-neuro-50 border border-neuro-100 flex items-center justify-center">
+          <span className="text-sm font-bold text-neuro-700 tracking-wider">{caseData.initials}</span>
         </div>
-        <p className="text-sm text-slate-700 leading-snug">{headlineStat}</p>
-        {sublineStat && (
-          <p className="text-xs text-slate-500 leading-snug mt-0.5">{sublineStat}</p>
-        )}
-        {caseData.note && (
-          <p className="text-xs text-slate-500 mt-1 leading-snug flex items-start gap-1.5">
-            <FileText className="w-3 h-3 text-slate-400 flex-shrink-0 mt-0.5" aria-hidden />
-            <span>{caseData.note}</span>
-          </p>
-        )}
-      </div>
+
+        {/* Body */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-baseline gap-2 mb-0.5">
+            <span className="text-sm font-semibold text-slate-900 tracking-[0.01em]">
+              {caseData.initials}
+            </span>
+            <span className="text-[10px] font-medium uppercase tracking-[0.04em] text-slate-400">
+              {formatClinicalDateShort(new Date(caseData.createdAt))}
+            </span>
+          </div>
+          <p className="text-sm text-slate-700 leading-snug">{headlineStat}</p>
+          {sublineStat && (
+            <p className="text-xs text-slate-500 leading-snug mt-0.5">{sublineStat}</p>
+          )}
+          {caseData.note && (
+            <p className="text-xs text-slate-500 mt-1 leading-snug flex items-start gap-1.5">
+              <FileText className="w-3 h-3 text-slate-400 flex-shrink-0 mt-0.5" aria-hidden />
+              <span>{caseData.note}</span>
+            </p>
+          )}
+        </div>
+
+        <ChevronRight className="w-4 h-4 text-slate-300 flex-shrink-0 mt-3" aria-hidden />
+      </button>
 
       {/* Delete cluster */}
       {pendingDelete ? (
