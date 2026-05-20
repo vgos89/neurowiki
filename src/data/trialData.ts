@@ -7803,6 +7803,216 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     listDescription: 'ASA + ER-dipyridamole vs clopidogrel monotherapy after stroke. NI margin not met; ICH higher with ASA–ERDP.',
   },
 
+  // ─── CREST TRIAL ──────────────────────────────────────────────────────────
+  // First large North American head-to-head of carotid stenting (CAS) versus
+  // carotid endarterectomy (CEA) in average-risk symptomatic and asymptomatic
+  // patients. Designed and analyzed as a SUPERIORITY trial; primary 4-year
+  // composite endpoint showed no significant difference between arms. The
+  // clinically meaningful story is the periprocedural signal split: CAS
+  // roughly doubles stroke risk; CEA roughly doubles MI risk and accounts for
+  // essentially all cranial nerve palsies. Age modifies treatment effect at a
+  // crossover near 70 years.
+  'crest-trial': {
+    id: 'crest-trial',
+    claimId: 'crest-cas-vs-cea-superiority-not-met-2010',
+    title: 'CREST Trial',
+    subtitle: 'Carotid Stenting versus Endarterectomy for Carotid-Artery Stenosis',
+    category: 'Neuro Trials',
+    trialResult: 'NEUTRAL',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'not-met',
+    harmSignal: 'Periprocedural stroke higher with CAS (4.1% vs 2.3%, HR 1.79); periprocedural MI higher with CEA (2.3% vs 1.1%, HR 0.50); cranial nerve palsy almost exclusively with CEA (4.7% vs 0.3%, HR 0.07).',
+    applicability: {
+      populationExclusions: [
+        'Average-surgical-risk patients only. High-surgical-risk patients (the SAPPHIRE population) are not represented and should not be extrapolated to.',
+        'Previous disabling stroke and chronic atrial fibrillation were excluded.',
+        'All operators were rigorously credentialed through a formal lead-in process. Outcomes outside such a credentialed environment, particularly for CAS, may be worse.',
+        '99% white North American cohort (108 US sites, 9 Canadian sites). Generalizability to other populations is unestablished.',
+      ],
+    },
+    stats: {
+      sampleSize: {
+        value: '2,502',
+        label: 'Randomized Patients',
+        info: '2,522 randomized; one site excluded for data fabrication (20 patients removed); final ITT cohort 2,502 (CAS 1,262 / CEA 1,240). 117 sites (108 US, 9 Canada). Symptomatic 52.7% / asymptomatic 47.3%. Mean age 68.9–69.2 years; 64–66% male. Enrolled December 2000 – July 2008. Median follow-up 2.5 years (planned to 4 years).'
+      },
+      primaryEndpoint: {
+        value: '4-year composite',
+        label: 'stroke, MI, death, ipsilateral stroke',
+        info: 'Composite of any stroke, myocardial infarction, or death during the periprocedural period (30 days, or 36 days if procedure delayed), plus any ipsilateral stroke within 4 years after randomization. Time-to-event analysis.'
+      },
+      pValue: {
+        value: 'HR 1.11 (0.81–1.51)',
+        label: 'P = 0.51 (superiority not met)',
+        info: 'Superiority design. Null hypothesis: the two treatments are equivalent. Powered (90%) to detect HR <0.54 or >1.49 (~1.2 percentage points/year absolute difference). Observed HR 1.11 with wide CI crossing 1.0; the trial failed to demonstrate superiority of either approach on the primary composite. This is not a noninferiority result — no NI margin was prespecified and the authors make no NI claim.',
+        highlight: false
+      },
+      effectSize: {
+        value: '7.2% vs 6.8%',
+        label: '4-year primary composite (CAS vs CEA)',
+        info: 'Kaplan–Meier estimates at 4 years: CAS 7.2% vs CEA 6.8%. HR 1.11 (95% CI 0.81–1.51). The headline result is "no difference on the composite"; the clinically meaningful story is the component split (see periprocedural breakdown).',
+        highlight: false
+      }
+    },
+    trialDesign: {
+      type: [
+        'Multicenter randomized open-label superiority trial',
+        '117 sites (108 US, 9 Canada)',
+        '1:1 allocation CAS vs CEA',
+        'Symptomatic (~52.7%) and asymptomatic (~47.3%) carotid stenosis combined',
+        'Formal operator credentialing / lead-in phase for both arms',
+        'Composite primary endpoint; time-to-event analysis'
+      ],
+      timeline: 'Enrolled December 2000 – July 2008; median follow-up 2.5 years (planned to 4 years); primary results published NEJM July 2010',
+      sampleSize: {
+        value: '2,502 patients',
+        info: '2,500 target. 90% power to detect HR <0.54 or >1.49 (~1.2 percentage points/year absolute difference). Trial ran to completion; not stopped early.'
+      },
+      primaryEndpoint: {
+        value: 'Periprocedural stroke/MI/death + 4-year ipsilateral stroke',
+        info: 'Composite of any stroke, MI, or death within the periprocedural window (30 days, or 36 days if procedure delayed) plus any ipsilateral stroke within 4 years after randomization.'
+      },
+      pValue: {
+        value: 'HR 1.11 (95% CI 0.81–1.51), P=0.51',
+        info: 'Superiority not demonstrated. No prespecified noninferiority margin. Failure to reject the null hypothesis is not proof of equivalence.'
+      }
+      // No NNT field. Failed-superiority composite without an NI claim does not yield
+      // a defensible NNT (Option Y rule, trial-statistics skill).
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 7.2,
+        label: '4-year primary composite',
+        name: 'Carotid Artery Stenting (CAS)'
+      },
+      control: {
+        percentage: 6.8,
+        label: '4-year primary composite',
+        name: 'Carotid Endarterectomy (CEA)'
+      }
+    },
+    intervention: {
+      treatment: {
+        name: 'Carotid Artery Stenting (CAS) with embolic protection',
+        description: 'RX Acculink stent plus RX Accunet distal embolic protection device (Abbott Vascular). Embolic protection required except when technically infeasible. Dual antiplatelet therapy (aspirin + clopidogrel) before and after the procedure per protocol.',
+        details: [
+          'Acculink self-expanding nitinol stent',
+          'Accunet distal filter embolic protection (required when technically feasible)',
+          'DAPT (ASA + clopidogrel) pre- and post-procedure',
+          'Interventionalists certified through a formal CREST lead-in / credentialing program'
+        ]
+      },
+      control: {
+        name: 'Carotid Endarterectomy (CEA)',
+        description: 'Standard carotid endarterectomy by certified vascular surgeons. Antiplatelet therapy per local practice.',
+        details: [
+          'Standard CEA technique',
+          'Surgeons certified through a formal CREST credentialing process',
+          'Antiplatelet management per local practice (typically aspirin)'
+        ]
+      }
+    },
+    clinicalContext: 'CREST sits in the carotid revascularization lineage between SAPPHIRE (Yadav 2004, high-surgical-risk only, CAS noninferior at 30 days), the CAS-skeptical European symptomatic trials EVA-3S (Mas 2006, halted for CAS harm), SPACE (Ringleb 2006, NI not established), and ICSS (Ederle 2010, higher periprocedural stroke with CAS), and the later asymptomatic trial ACT-1 (Rosenfield 2016, CAS noninferior to CEA in asymptomatic patients at 1 year). The contemporary open question — whether CAS or CEA confers any long-term benefit over modern intensive medical management in asymptomatic patients — is the subject of CREST-2 (NCT02089217), results awaited as of 2026-05-20.',
+    // No `calculations` block. Failed-superiority composite with no NI claim → NNT
+    // cannot be defended (Option Y rule, trial-statistics skill, and the pre-commit
+    // NNT guard for this design type).
+    pearls: [
+      'CREST was a SUPERIORITY trial, not a noninferiority trial. The primary 4-year composite of stroke, MI, death, and ipsilateral stroke was 7.2% (CAS) vs 6.8% (CEA), HR 1.11 (95% CI 0.81–1.51), P=0.51 — superiority was not demonstrated for either approach',
+      'Do not describe CREST as showing CAS and CEA are "equivalent" or "equally good". The honest framing is "no significant difference on the primary 4-year composite; failed to demonstrate superiority of either approach"',
+      'The clinically important signal is the COMPONENT SPLIT in the periprocedural window. CAS roughly doubles periprocedural stroke: 4.1% vs 2.3% (HR 1.79, 95% CI 1.14–2.82, P=0.01). CEA roughly doubles periprocedural MI: 2.3% vs 1.1% (HR 0.50, 95% CI 0.26–0.94, P=0.03 favoring CAS). Cranial nerve palsy is essentially CEA-only: 4.7% vs 0.3% (HR 0.07, 95% CI 0.02–0.18, P<0.001)',
+      'Periprocedural composite (stroke + MI + death within 30/36 days): 5.2% CAS vs 4.5% CEA, HR 1.18 (0.82–1.68), P=0.38 — no significant difference for the procedural window as a whole',
+      '4-year periprocedural-event-plus-ipsilateral-stroke: 6.2% CAS vs 4.7% CEA, HR 1.44, P=0.049 — secondary endpoint showing more long-term stroke burden with CAS',
+      'Age interaction: planned before unblinding but not specified in the original protocol — neither fully prespecified nor truly post-hoc. Treatment × age interaction P=0.02 with a crossover at approximately 70 years. CAS tended to outperform CEA in younger patients; CEA in older patients. Authors attributed the older-age CAS disadvantage to vascular tortuosity and severe vascular calcification in very elderly patients',
+      'Symptomatic vs asymptomatic interaction P=0.84. Symptomatic 4-year composite: 8.6% CAS vs 8.4% CEA, HR 1.08 (0.74–1.59), P=0.69. Asymptomatic: 5.6% CAS vs 4.9% CEA, HR 1.17 (0.69–1.98), P=0.56. No differential effect by symptomatic status',
+      'Stroke or death at 4 years (secondary): 6.4% CAS vs 4.7% CEA, HR 1.50, P=0.03 — directionally consistent with the periprocedural stroke excess on CAS',
+      'All operators were rigorously credentialed through a formal lead-in process. Real-world CAS in non-credentialed environments has historically performed worse',
+      'Industry support: Abbott Vascular Solutions (formerly Guidant) donated Acculink/Accunet systems equivalent to ~15% of total study cost, held a nonvoting Executive Committee seat, and reviewed the manuscript before submission. Primary funding was NINDS R01 NS 38384',
+      'Trial population was 99% white North American. Previous disabling stroke and chronic atrial fibrillation were excluded',
+      'CREST does not address CAS or CEA versus modern intensive medical management — that comparison is the question CREST-2 was designed to answer',
+      'Long-term follow-up (Brott NEJM 2016;374:1021) is a separate report. Do not blend 10-year follow-up data into the 2010 primary entry',
+      'Published: Brott TG, et al. N Engl J Med. 2010;363(1):11–23. DOI: 10.1056/NEJMoa0912321. PMID 20505173. PMCID PMC2932446'
+    ],
+    conclusion: '',
+    source: 'Brott TG, Hobson RW 2nd, Howard G, et al. Stenting versus endarterectomy for treatment of carotid-artery stenosis. N Engl J Med. 2010;363(1):11–23.',
+    doi: '10.1056/NEJMoa0912321',
+    pmid: '20505173',
+    clinicalTrialsId: 'NCT00004732',
+    keyMessage: 'CAS and CEA produced no significant difference on the 4-year primary composite (7.2% vs 6.8%, HR 1.11, P=0.51), but the periprocedural components diverge: CAS roughly doubles stroke; CEA roughly doubles MI; cranial nerve palsy is almost exclusively CEA. Age modifies the choice at a crossover near 70 years.',
+    safetyData: 'Within the periprocedural window (30 days, or 36 days if procedure delayed): any stroke 4.1% (CAS) vs 2.3% (CEA), HR 1.79 (95% CI 1.14–2.82), P=0.01. Major ipsilateral stroke 0.9% vs 0.3%, HR 2.67 (0.85–8.40), P=0.09. Minor ipsilateral stroke 2.9% vs 1.4%, HR 2.16 (1.22–3.83), P=0.009. Myocardial infarction 1.1% (CAS) vs 2.3% (CEA), HR 0.50 (0.26–0.94), P=0.03. Death 0.7% vs 0.3%, HR 2.25 (0.69–7.30), P=0.18. Cranial nerve palsy 0.3% (CAS) vs 4.7% (CEA), HR 0.07 (0.02–0.18), P<0.001. Periprocedural composite of stroke + MI + death: 5.2% vs 4.5%, HR 1.18 (0.82–1.68), P=0.38. The periprocedural component split is the clinically actionable signal from CREST.',
+    educationalContext: 'CREST is the largest North American head-to-head comparison of CAS and CEA in average-risk symptomatic and asymptomatic carotid stenosis. The trial was designed and powered for superiority. Failure to reject the null hypothesis on a wide CI (HR 0.81–1.51) is not proof of equivalence; it is simply absence of a demonstrated winner on the chosen composite. The clinically meaningful information lies one layer down, in the component breakdown: CAS exchanges a higher periprocedural stroke risk for a lower periprocedural MI risk and near-elimination of cranial nerve injury, while CEA exchanges a higher periprocedural MI risk and a sizeable cranial nerve palsy rate for a lower periprocedural stroke risk. The age interaction at approximately 70 years adds a second axis to the decision. The European symptomatic trials EVA-3S, SPACE, and ICSS consistently showed higher periprocedural stroke with CAS in symptomatic patients; CREST is internally consistent with that signal even when the trial-level composite is not.',
+    clinicalApplication: 'When advising a patient with average-surgical-risk carotid stenosis on revascularization, CREST supports a tradeoff conversation rather than a single answer. Periprocedural stroke is approximately twice as common with CAS; periprocedural MI is approximately twice as common with CEA; cranial nerve palsy is almost exclusively a CEA harm; long-term durability appears similar. Factors that may move the decision toward CEA include older age (approximate crossover at 70 years), favorable surgical anatomy, and patient prioritization of stroke avoidance. Factors that may move the decision toward CAS include younger age, hostile neck anatomy (prior radiation, prior CEA, high lesion), cardiac frailty making cranial nerve injury or surgical MI less acceptable, and patient prioritization of MI avoidance. The CREST result reflects rigorously credentialed operators; CAS results in non-credentialed environments may be substantially worse and the recommendation should be tempered accordingly. CREST does not compare either revascularization strategy to modern intensive medical management — that question is being addressed by CREST-2 and remains open as of 2026-05-20.',
+    limitations: [
+      'Superiority design with a wide CI (HR 0.81–1.51) — failure to reject the null is not proof of equivalence; no noninferiority margin was prespecified',
+      'Composite primary endpoint combined disparate harms (stroke, MI, death, ipsilateral stroke). The clinically actionable information requires unpacking the components',
+      'Industry support from Abbott Vascular (formerly Guidant) included donation of Acculink/Accunet systems equivalent to ~15% of total study cost, a nonvoting Executive Committee seat, and manuscript review before submission. Primary funding was NINDS R01 NS 38384',
+      'Operator credentialing was rigorous. Real-world CAS performed by less experienced operators has historically had worse periprocedural outcomes; CREST results may not generalize outside credentialed centers',
+      'Population was 99% white North American across 108 US and 9 Canadian sites; generalizability to other populations is unestablished',
+      'Patients with previous disabling stroke or chronic atrial fibrillation were excluded',
+      'Age interaction analysis was planned before unblinding but not specified in the original protocol — interpret as a robust internal observation, not a fully prespecified hypothesis test',
+      'Per-stratum age hazard ratios are displayed graphically in the published Figure 2B; discrete per-stratum HR/CI values were not extracted into this entry',
+      'No direct comparison to intensive medical management — the question being addressed by CREST-2 (NCT02089217)',
+      'Long-term outcomes are reported separately (Brott NEJM 2016;374:1021); this entry covers the 4-year primary analysis only'
+    ],
+    safetyProfile: {
+      sICH: {
+        evt: 4.1,
+        control: 2.3,
+        label: 'Periprocedural stroke (30 day)',
+        tooltip: 'Any periprocedural stroke: 4.1% (CAS) vs 2.3% (CEA), HR 1.79 (95% CI 1.14–2.82), P=0.01. CAS roughly doubles periprocedural stroke risk versus CEA. Minor ipsilateral stroke drove much of the difference (2.9% vs 1.4%, HR 2.16, P=0.009); major ipsilateral stroke was directionally consistent but not significant (0.9% vs 0.3%, HR 2.67, P=0.09).',
+        color: 'warning',
+      },
+      majorBleeding: {
+        evt: 1.1,
+        control: 2.3,
+        label: 'Periprocedural MI (30 day)',
+        tooltip: 'Periprocedural myocardial infarction: 1.1% (CAS) vs 2.3% (CEA), HR 0.50 (95% CI 0.26–0.94), P=0.03. CEA approximately doubles periprocedural MI risk versus CAS. Note: this row uses the majorBleeding slot to surface a non-bleeding harm that is the mirror image of the stroke signal — read it as "MI rate" not "major bleeding".',
+        color: 'warning',
+      },
+      mortality: {
+        evt: 0.7,
+        control: 0.3,
+        label: 'Periprocedural death (30 day)',
+        tooltip: 'Death within the periprocedural window: 0.7% (CAS) vs 0.3% (CEA), HR 2.25 (95% CI 0.69–7.30), P=0.18. Numerically higher with CAS but not statistically significant; absolute event counts are small.',
+        color: 'success',
+      },
+    },
+    inclusionCriteria: [
+      'Symptomatic carotid stenosis: TIA, amaurosis fugax, or minor nondisabling stroke within 180 days, with ipsilateral stenosis ≥50% by angiography, ≥70% by ultrasound, or ≥70% by CTA/MRA',
+      'Asymptomatic carotid stenosis: ≥60% by angiography, ≥70% by ultrasound, or ≥80% by CTA/MRA',
+      'Average surgical risk (distinct from the high-surgical-risk SAPPHIRE population)',
+      'Eligible for either CAS or CEA in the judgment of the treating team',
+    ],
+    exclusionCriteria: [
+      'Previous disabling stroke',
+      'Chronic atrial fibrillation',
+      'Inability to comply with dual antiplatelet therapy in the CAS arm',
+      'Anatomy precluding safe execution of either CAS or CEA',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: '4-year primary composite endpoint rates: 7.2% with carotid stenting and 6.8% with carotid endarterectomy. The bars are nearly identical. The hazard ratio is 1.11 with a 95% CI of 0.81–1.51 and a P-value of 0.51. The trial was designed to detect superiority of one approach over the other; no such difference was found.',
+      },
+      {
+        question: 'If the rates are this close, why isn\'t this a "tie"?',
+        answer: 'CREST was a superiority trial, not a noninferiority trial. No noninferiority margin was prespecified, and the authors make no NI claim. Failing to demonstrate superiority is not the same as proving equivalence — the 95% CI for the hazard ratio (0.81–1.51) is wide and consistent with either a modest CAS advantage or a modest CEA advantage on the composite. The actionable signal is one layer deeper, in the periprocedural components.',
+      },
+      {
+        question: 'What does it mean for my patient?',
+        answer: 'Average-surgical-risk patients can be offered either approach, but the procedural harms differ. CAS roughly doubles periprocedural stroke (4.1% vs 2.3%). CEA roughly doubles periprocedural MI (2.3% vs 1.1%) and accounts for essentially all cranial nerve palsies (4.7% vs 0.3%). At approximately 70 years and older, CEA tends to outperform CAS; under 70, CAS tends to outperform CEA. Discuss the tradeoff with the patient.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'On the primary 4-year composite of any periprocedural stroke, MI, or death plus 4-year ipsilateral stroke, CAS and CEA showed no significant difference (7.2% vs 6.8%, HR 1.11, 95% CI 0.81–1.51, P=0.51). The trial failed to demonstrate superiority of either approach. The clinically meaningful within-trial findings are in the periprocedural components: CAS doubles periprocedural stroke (4.1% vs 2.3%, HR 1.79, P=0.01), CEA doubles periprocedural MI (2.3% vs 1.1%, HR 0.50 favoring CAS, P=0.03), and cranial nerve palsy is essentially a CEA-only harm (4.7% vs 0.3%, HR 0.07, P<0.001). A treatment × age interaction was observed (P=0.02) with a crossover near 70 years.',
+      doesNotProve: 'It does not prove that CAS and CEA are equivalent or interchangeable. It does not address how either approach compares to modern intensive medical management — that question is the subject of CREST-2 and is unresolved as of 2026-05-20. It does not extend to high-surgical-risk patients (the SAPPHIRE population), patients with previous disabling stroke, or patients with chronic atrial fibrillation. It does not establish CAS outcomes outside the rigorously credentialed operator environment of the trial. Long-term outcomes are reported separately in the 10-year follow-up (Brott NEJM 2016) and should not be merged with the 2010 primary analysis.',
+      cautions: 'CREST was a superiority trial that failed to reject the null hypothesis; the wide CI (HR 0.81–1.51) does not establish equivalence. The age-interaction analysis was planned before unblinding but not specified in the original protocol — treat as a robust internal observation rather than a fully prespecified test. Industry sponsorship from Abbott Vascular included device donation worth ~15% of total study cost, a nonvoting Executive Committee seat, and manuscript review prior to submission, in addition to the primary NINDS R01 NS 38384 funding. Operator credentialing was rigorous in this trial; CAS performed in less experienced hands has historically had worse periprocedural outcomes, and the CREST results may not generalize outside credentialed centers.',
+    },
+    bedsidePearl: 'CREST compared carotid stenting with endarterectomy in average-surgical-risk patients. The 4-year primary composite was 7.2% (CAS) vs 6.8% (CEA), HR 1.11 (95% CI 0.81–1.51, P=0.51) — no significant difference; superiority not demonstrated. The actionable signal is the component split: CAS roughly doubles periprocedural stroke (4.1% vs 2.3%, HR 1.79), CEA roughly doubles periprocedural MI (2.3% vs 1.1%, HR 0.50 favoring CAS), and cranial nerve palsy is essentially a CEA-only harm (4.7% vs 0.3%, HR 0.07). Treatment-by-age interaction (P=0.02) crosses over near 70 years; CAS tends to do better in younger patients, CEA in older.',
+    bottomLineSummary: 'CREST is the largest North American head-to-head trial of carotid stenting and endarterectomy in average-surgical-risk symptomatic and asymptomatic patients. The 4-year primary composite of periprocedural stroke, MI, or death plus 4-year ipsilateral stroke showed no significant difference (7.2% CAS vs 6.8% CEA, HR 1.11, 95% CI 0.81–1.51, P=0.51) — superiority was not demonstrated for either approach. The clinical decision rests on the periprocedural component split: CAS roughly doubles stroke, CEA roughly doubles MI, and CEA accounts for nearly all cranial nerve palsy. Treatment effect varies by age (interaction P=0.02) with a crossover near 70 years. CREST does not address either approach versus intensive medical management — that question is the subject of CREST-2.',
+    listCategory: 'carotid',
+    listDescription: 'CAS vs CEA in average-risk carotid stenosis. No primary 4-yr difference; CAS↑stroke, CEA↑MI/cranial nerve palsy; age-dependent.',
+  },
+
   // ─── ENRICH TRIAL ─────────────────────────────────────────────────────────
   'enrich-trial': {
     id: 'enrich-trial',

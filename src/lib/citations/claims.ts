@@ -138,6 +138,14 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'Quick-pearl mirror of ENCHANTED2/MT: SBP <120 mmHg post-EVT increased major disability.',
   },
 
+  // ─── CREST (2010) — carotid revascularization head-to-head (CAS vs CEA) ──
+  'crest-cas-vs-cea-superiority-not-met-2010': {
+    id: 'crest-cas-vs-cea-superiority-not-met-2010',
+    citation_ids: ['crest-brott-2010'],
+    surfaces: [DATA_SURFACE],
+    description: 'CREST trial: superiority comparison of carotid artery stenting vs carotid endarterectomy in average-surgical-risk symptomatic and asymptomatic patients. Primary 4-year composite of periprocedural stroke/MI/death plus ipsilateral stroke showed no significant difference (7.2% CAS vs 6.8% CEA, HR 1.11, 95% CI 0.81–1.51, P=0.51); superiority not demonstrated. Periprocedural component split: CAS roughly doubles stroke (4.1% vs 2.3%, HR 1.79, P=0.01), CEA roughly doubles MI (2.3% vs 1.1%, HR 0.50, P=0.03), and cranial nerve palsy is essentially CEA-only (4.7% vs 0.3%, HR 0.07, P<0.001). Treatment × age interaction P=0.02 with crossover near 70 years.',
+  },
+
   // ─── PRoFESS (2008) — long-term antiplatelet monotherapy head-to-head ────
   'profess-clopidogrel-vs-asa-erdp-ni-2008': {
     id: 'profess-clopidogrel-vs-asa-erdp-ni-2008',

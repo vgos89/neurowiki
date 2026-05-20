@@ -201,6 +201,19 @@ export const CITATION_REGISTRY: CitationRegistry = {
     last_reviewed: '2026-05-19',
     quoted_text: 'Endovascular thrombectomy is recommended for patients with anterior-circulation large vessel occlusion and ASPECTS 3–5 within 24 hours of last known well (Class I, Level A). For ASPECTS 0–2 within 6 hours, thrombectomy is reasonable in selected patients (Class IIa, Level B-R).',
   },
+  // ─── 2010 trial: carotid revascularization head-to-head (CAS vs CEA) ─────
+  'crest-brott-2010': {
+    id: 'crest-brott-2010',
+    source: 'trial',
+    title: 'Stenting versus Endarterectomy for Treatment of Carotid-Artery Stenosis',
+    year: 2010,
+    url: 'https://www.nejm.org/doi/10.1056/NEJMoa0912321',
+    pmid: '20505173',
+    last_reviewed: '2026-05-20',
+    review_window_months: 36,
+    quoted_text: 'The primary end point was the composite of any stroke, myocardial infarction, or death during the periprocedural period or ipsilateral stroke within 4 years after randomization.',
+  },
+
   // ─── 2008 trial: long-term antiplatelet monotherapy head-to-head ─────────
   'profess-sacco-2008': {
     id: 'profess-sacco-2008',
