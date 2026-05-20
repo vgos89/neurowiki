@@ -423,6 +423,38 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
+  // Live future-time clamp (V audit 2026-05-19: "don't let user select
+  // future time. Last known well is always in the past."). Whenever the
+  // selected date is today and the composed time is in the future, snap
+  // the drums back to the current wall-clock time. Future days are
+  // already disabled in the calendar grid (`isFuture` in CalendarGrid),
+  // so we only need to handle today's drum overshoots.
+  useEffect(() => {
+    if (!isOpen || mode !== 'specific') return;
+    const n = nowRef.current;
+    const isToday =
+      selYear === n.getFullYear() &&
+      selMonth === n.getMonth() &&
+      selDay === n.getDate();
+    if (!isToday) return;
+
+    let h24 = hourIdx + 1;
+    if (periodIdx === 1 && h24 !== 12) h24 += 12;
+    if (periodIdx === 0 && h24 === 12) h24 = 0;
+    const candidate = new Date(selYear, selMonth, selDay, h24, minuteIdx * 5);
+
+    if (candidate > n) {
+      const nowH24 = n.getHours();
+      const nowH12 = (nowH24 % 12) || 12;
+      const nowPeriodIdx = nowH24 >= 12 ? 1 : 0;
+      const nowMin5Idx = Math.floor(n.getMinutes() / 5) % 12;
+      if (periodIdx !== nowPeriodIdx) setPeriodIdx(nowPeriodIdx);
+      if (hourIdx !== nowH12 - 1) setHourIdx(nowH12 - 1);
+      if (minuteIdx !== nowMin5Idx) setMinuteIdx(nowMin5Idx);
+      setActivePreset(null);
+    }
+  }, [isOpen, mode, selDay, selMonth, selYear, hourIdx, minuteIdx, periodIdx]);
+
   if (!isOpen) return null;
 
   const now = nowRef.current;
