@@ -240,7 +240,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
             </p>
             <div className="flex items-center gap-1">
               <input
-                type="number" min={0} max={300}
+                type="text" inputMode="numeric" min={0} max={300}
                 value={systolicBP || ''}
                 onChange={(e) => setSystolicBP(parseInt(e.target.value, 10) || 0)}
                 onFocus={(e) => e.target.select()}
@@ -249,7 +249,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
               />
               <span className="text-slate-400 text-sm font-medium flex-shrink-0">/</span>
               <input
-                type="number" min={0} max={200}
+                type="text" inputMode="numeric" min={0} max={200}
                 value={diastolicBP || ''}
                 onChange={(e) => setDiastolicBP(parseInt(e.target.value, 10) || 0)}
                 onFocus={(e) => e.target.select()}
@@ -266,7 +266,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
               Glucose
             </p>
             <input
-              type="number" min={0} max={600}
+              type="text" inputMode="numeric" min={0} max={600}
               value={glucose || ''}
               onChange={(e) => setGlucose(parseInt(e.target.value, 10) || 0)}
               onFocus={(e) => e.target.select()}
@@ -344,7 +344,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
           </div>
           <div className="flex items-center gap-1.5 flex-shrink-0">
             <input
-              type="number" min={0} max={42}
+              type="text" inputMode="numeric" min={0} max={42}
               value={nihssScore || ''}
               onChange={(e) => setNihssScore(clamp(parseInt(e.target.value, 10) || 0, 0, 42))}
               onFocus={(e) => e.target.select()}
@@ -367,7 +367,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
         <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Weight & Dosing</p>
         <div className="flex items-center gap-2 mb-3">
           <input
-            type="number" min={0}
+            type="text" inputMode="decimal" min={0}
             value={weightValue || ''}
             onChange={(e) => setWeightValue(parseFloat(e.target.value) || 0)}
             onFocus={(e) => e.target.select()}

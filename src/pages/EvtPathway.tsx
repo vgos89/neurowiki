@@ -1350,7 +1350,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                 <div className="space-y-4 pt-2">
                   <div id="field-nihssNumeric" ref={el => { fieldRefs.current['nihssNumeric'] = el; }}>
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">NIHSS Score (Numeric)</label>
-                    <input type="number" min="0" max="42" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 4" value={inputs.nihssNumeric} onChange={(e) => updateInput('nihssNumeric', e.target.value)} />
+                    <input type="text" inputMode="numeric" min="0" max="42" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 4" value={inputs.nihssNumeric} onChange={(e) => updateInput('nihssNumeric', e.target.value)} />
                   </div>
                   <div id="field-mevoDisabling" ref={el => { fieldRefs.current['mevoDisabling'] = el; }}>
                     <div className="bg-neuro-50 p-3 rounded-lg text-xs text-slate-600 mb-3 border border-neuro-100">
@@ -1433,7 +1433,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         <p>Enter ASPECTS score from non-contrast CT.</p>
                       </div>
                       <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">ASPECTS Score (0-10)</label>
-                      <input type="number" inputMode="numeric" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 8" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
+                      <input type="text" inputMode="numeric" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 8" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
                       <button
                         type="button"
                         onClick={() => setShowAspectsModal(true)}
@@ -1514,7 +1514,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         <p>Enter <strong>pc-ASPECTS</strong> score (from CTA source images or DWI).</p>
                       </div>
                       <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">pc-ASPECTS Score (0-10)</label>
-                      <input type="number" inputMode="numeric" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 8" value={inputs.pcAspects} onChange={(e) => updateInput('pcAspects', e.target.value)} />
+                      <input type="text" inputMode="numeric" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 8" value={inputs.pcAspects} onChange={(e) => updateInput('pcAspects', e.target.value)} />
                       <div className="pt-2 border-t border-slate-100 space-y-1 mt-4">
                         <PathwayLearningPearl
                           title="pc-ASPECTS & 2026 Guidelines"
@@ -1546,7 +1546,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                         <div id="field-aspects" ref={el => { fieldRefs.current['aspects'] = el; }} className="mb-4">
                           <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">ASPECTS from NCCT</label>
                           <p className="text-xs text-slate-500 mb-2">ASPECTS ≥6 → Class I (no other criteria needed). ASPECTS 3–5 → Class I if age &lt;80 + no mass effect + no severe CT hypodensity &gt;=26 mL. Enter 0–10 or leave blank to use perfusion criteria instead.</p>
-                          <input type="number" inputMode="numeric" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 7" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
+                          <input type="text" inputMode="numeric" min="0" max="10" className="w-full p-4 text-lg bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold" placeholder="e.g. 7" value={inputs.aspects} onChange={(e) => updateInput('aspects', e.target.value)} />
                           <button
                             type="button"
                             onClick={() => setShowAspectsModal(true)}
@@ -1607,16 +1607,16 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                             <div id="field-core" ref={el => { fieldRefs.current['core'] = el; }}>
                               <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Ischemic Core Volume (ml)</label>
                               <p className="text-xs text-slate-500 mb-2">For DAWN/DEFUSE-3 eligibility. Leave blank if using ASPECTS-based pathway.</p>
-                              <input type="number" inputMode="numeric" className="w-full p-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-lg" placeholder="CBF < 30%" value={inputs.core} onChange={(e) => updateInput('core', e.target.value)} />
+                              <input type="text" inputMode="numeric" className="w-full p-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-lg" placeholder="CBF < 30%" value={inputs.core} onChange={(e) => updateInput('core', e.target.value)} />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                               <div id="field-mismatchVol" ref={el => { fieldRefs.current['mismatchVol'] = el; }}>
                                 <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Mismatch Volume</label>
-                                <input type="number" inputMode="numeric" className="w-full p-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-lg" placeholder="Volume" value={inputs.mismatchVol} onChange={(e) => updateInput('mismatchVol', e.target.value)} />
+                                <input type="text" inputMode="numeric" className="w-full p-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-lg" placeholder="Volume" value={inputs.mismatchVol} onChange={(e) => updateInput('mismatchVol', e.target.value)} />
                               </div>
                               <div id="field-mismatchRatio" ref={el => { fieldRefs.current['mismatchRatio'] = el; }}>
                                 <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Mismatch Ratio</label>
-                                <input type="number" inputMode="decimal" step="0.1" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-slate-600 text-lg" placeholder="Ratio" value={inputs.mismatchRatio} onChange={(e) => updateInput('mismatchRatio', e.target.value)} />
+                                <input type="text" inputMode="decimal" step="0.1" className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-medium text-slate-600 text-lg" placeholder="Ratio" value={inputs.mismatchRatio} onChange={(e) => updateInput('mismatchRatio', e.target.value)} />
                               </div>
                             </div>
                           </div>

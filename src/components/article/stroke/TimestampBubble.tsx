@@ -132,6 +132,19 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
   const [editValue, setEditValue] = useState<string>('');       // digits only
   const [editPeriod, setEditPeriod] = useState<0 | 1>(0);       // 0 = AM, 1 = PM
   const [editError, setEditError] = useState<boolean>(false);
+  // Ref + effect for iOS-reliable autofocus. iOS Safari refuses to open the
+  // keyboard from a static autoFocus attribute on a conditionally-rendered
+  // input — it requires .focus() called within (or immediately after) a
+  // user-gesture chain. This effect fires synchronously after the click
+  // handler's state update produces a render with the input mounted, which
+  // iOS Safari treats as still inside the gesture chain reliably enough to
+  // open the keyboard on most iPhone versions.
+  const editInputRef = useRef<HTMLInputElement | null>(null);
+  useEffect(() => {
+    if (editingEvent !== null) {
+      editInputRef.current?.focus();
+    }
+  }, [editingEvent]);
   // One-shot guard for the auto-stamp listener — survives across renders
   // without re-firing.
   const hasAutoStampedRef = useRef<boolean>(false);
@@ -408,10 +421,10 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                           </div>
                           <div className="flex items-center gap-2 flex-wrap">
                             <input
+                              ref={editInputRef}
                               type="text"
                               inputMode="numeric"
                               autoComplete="off"
-                              autoFocus
                               value={editValue}
                               onChange={(e) => { setEditValue(e.target.value); setEditError(false); }}
                               onKeyDown={(e) => {

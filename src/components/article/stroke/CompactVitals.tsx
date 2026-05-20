@@ -23,7 +23,7 @@ export const CompactVitals: React.FC = () => {
         </label>
         <div className="flex items-center gap-2">
           <input
-            type="number"
+            type="text" inputMode="numeric"
             value={glucose}
             onChange={(e) => setGlucose(e.target.value)}
             placeholder="Enter glucose"
@@ -73,7 +73,7 @@ export const CompactVitals: React.FC = () => {
         </label>
         <div className="flex items-center gap-2">
           <input
-            type="number"
+            type="text" inputMode="numeric"
             value={systolic}
             onChange={(e) => setSystolic(e.target.value)}
             placeholder="SBP"
@@ -81,7 +81,7 @@ export const CompactVitals: React.FC = () => {
           />
           <span className="text-lg font-bold text-gray-400">/</span>
           <input
-            type="number"
+            type="text" inputMode="numeric"
             value={diastolic}
             onChange={(e) => setDiastolic(e.target.value)}
             placeholder="DBP"

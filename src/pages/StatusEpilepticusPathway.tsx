@@ -297,7 +297,8 @@ const StatusEpilepticusPathway: React.FC = () => {
                 <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Patient Weight (kg)</label>
                 <div className="flex items-center gap-3">
                   <input
-                    type="number"
+                    type="text"
+                    inputMode="decimal"
                     className="w-32 p-3 text-lg bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold"
                     value={patient.weight || ''}
                     onChange={e => setPatient({...patient, weight: parseFloat(e.target.value)})}

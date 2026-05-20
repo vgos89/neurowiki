@@ -7,7 +7,7 @@
  *   §2.2–2.3 Option row anatomy (radio rows) · §4.1–4.3 Checkbox row anatomy · §5 Drawer state machine
  *
  * Architect conditions (arch-l55c-aspects-boston-rebuild.md):
- *   - Keep <input type="number"> with inputMode="numeric" added for mobile — no number-input archetype in spec
+ *   - Keep <input type="text"> with inputMode="numeric" added for mobile — no number-input archetype in spec
  *   - Bespoke-per-file is the accepted L5.5 pattern; extraction deferred to L5.6
  *   - No variants — light-only theme matching ABCD²
  *   - No new clinical claim surfaces introduced
@@ -324,7 +324,7 @@ export default function BostonCriteriaCaaCalculator() {
               Age
             </h2>
             <input
-              type="number"
+              type="text"
               inputMode="numeric"
               min={18}
               max={120}

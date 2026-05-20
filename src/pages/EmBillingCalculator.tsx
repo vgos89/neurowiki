@@ -1949,7 +1949,7 @@ const EmBillingCalculator: React.FC = () => {
                     Total Time on Date of Service (minutes)
                   </label>
                   <input
-                    type="number" min="0" max="600"
+                    type="text" inputMode="numeric" min="0" max="600"
                     value={state.timeMinutes}
                     onChange={(e) => set({ timeMinutes: e.target.value })}
                     placeholder={state.visitType === 'critical_care' ? 'min 30' : 'e.g., 45'}
