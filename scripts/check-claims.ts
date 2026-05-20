@@ -214,6 +214,107 @@ if (!fs.existsSync(REG_FILE)) {
   }
 }
 
+// ── Check 4 — NNT validity per trial-statistics design taxonomy ───────────
+//
+// Per `.claude/skills/trial-statistics/` Option Y rule and the 2026-05-19
+// trial-statistician audit, `calculations.nnt` is valid only for designs
+// that produce a single-event ARR-derivable NNT:
+//   - binary-superiority      (standard ARR NNT)
+//   - bayesian-superiority    (canonical exception, DAWN pattern)
+//
+// `calculations.nnt` MUST NOT be set for:
+//   - ordinal-shift           (common OR is the right stat; binary NNT misleads)
+//   - noninferiority          (NI doesn't yield a meaningful NNT)
+//   - bayesian-noninferiority (same)
+//   - single-arm-registry     (no comparator)
+//   - estimation-strategy     (point-estimate framework, not threshold-based)
+//   - dose-finding-safety     (safety endpoint, not efficacy)
+//
+// Grandfather list captures known offenders awaiting Class E fixes
+// (Tier 1 #7 + #8 from docs/research/2026-05-19-trial-audit/). Remove from
+// the list as each fix lands.
+
+const NNT_VALID_DESIGNS = new Set<string>([
+  'binary-superiority',
+  'bayesian-superiority',
+]);
+
+// Trials with `ordinal-shift` design that are EXPLICITLY ALLOWED to keep
+// calculations.nnt because they have a co-secondary binary endpoint with
+// full prose disclosure throughout (pearls/cautions/applicability). These
+// are NOT awaiting fix — the disclosure pattern is the canonical reference.
+const NNT_EXPLICIT_ALLOW: Set<string> = new Set([
+  // DEFUSE-3: ordinal mRS shift primary + coprimary mRS 0-2 binary (52% vs
+  // 17%). NNT 3.6 with explicit "from coprimary mRS 0-2" disclosure. Canonical
+  // reference for the disclosure pattern other 2015 EVT trials should adopt.
+  'defuse-3-trial',
+]);
+
+const NNT_GRANDFATHERED: Set<string> = new Set([
+  // Tier 1 #7 — 2015 EVT cluster: bare "NNT" labels appear in legend.keyStat
+  // and bedsidePearl prose, not in calculations.nnt (those fields are unset
+  // on these trials, so they don't currently trip this check). Listed here
+  // for completeness so a future PR setting calculations.nnt on them is
+  // caught by the grandfather WARN path rather than failing the build.
+  'mr-clean-trial',
+  'escape-trial',
+  'revascat-trial',
+  'swift-prime-trial',
+  // Tier 1 #8 — BEST-MSU has calculations.nnt: 12.5 but no primaryDesign set
+  // (caught here once Tier 3 #17 fills primaryDesign='ordinal-shift').
+  'best-msu-trial',
+]);
+
+const TRIAL_DATA_FILE = path.resolve(ROOT, 'src/data/trialData.ts');
+if (fs.existsSync(TRIAL_DATA_FILE)) {
+  try {
+    const tdMod = await loadTsModule(TRIAL_DATA_FILE);
+    const TRIAL_DATA = tdMod['TRIAL_DATA'] as Record<string, {
+      id?: string;
+      primaryDesign?: string;
+      calculations?: { nnt?: number | null };
+    }> | undefined;
+    if (TRIAL_DATA) {
+      for (const [id, trial] of Object.entries(TRIAL_DATA)) {
+        const nnt = trial?.calculations?.nnt;
+        const design = trial?.primaryDesign;
+        if (nnt == null || design == null) continue;
+        if (!NNT_VALID_DESIGNS.has(design)) {
+          if (NNT_EXPLICIT_ALLOW.has(id)) {
+            // Permanently allowed — coprimary binary endpoint with full
+            // disclosure throughout. Not awaiting fix.
+            continue;
+          }
+          if (NNT_GRANDFATHERED.has(id)) {
+            process.stderr.write(
+              `[check-claims] WARN: Check 4 grandfathered — trial "${id}" has ` +
+              `calculations.nnt=${nnt} on disallowed design "${design}". ` +
+              `Awaiting Tier 1 fix (see docs/research/2026-05-19-trial-audit/).\n`,
+            );
+          } else {
+            failures.push(
+              `Check 4 — NNT validity: trial "${id}" has calculations.nnt=${nnt} ` +
+              `but primaryDesign="${design}" does not support NNT. Valid designs: ` +
+              `${[...NNT_VALID_DESIGNS].join(', ')}. See ` +
+              `.claude/skills/trial-statistics/ for the rule.`,
+            );
+          }
+        }
+      }
+    } else {
+      process.stderr.write(
+        `[check-claims] WARN: Check 4 skipped — TRIAL_DATA not exported from ` +
+        `${path.relative(ROOT, TRIAL_DATA_FILE)}.\n`,
+      );
+    }
+  } catch (e) {
+    process.stderr.write(
+      `[check-claims] WARN: Check 4 skipped — could not load ` +
+      `${path.relative(ROOT, TRIAL_DATA_FILE)}: ${e instanceof Error ? e.message : e}\n`,
+    );
+  }
+}
+
 // ── Output & exit ──────────────────────────────────────────────────────────
 
 if (failures.length === 0) {
