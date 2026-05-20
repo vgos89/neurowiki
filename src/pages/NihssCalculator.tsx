@@ -20,7 +20,9 @@
  */
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useNavigationSource } from '../hooks/useNavigationSource';
+import { getCase } from '../lib/cases/store';
 import { CalculatorHeader } from '../components/calculators/CalculatorHeader';
 import { CalculatorFooter } from '../components/calculators/CalculatorFooter';
 import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
@@ -134,6 +136,93 @@ const NihssCalculator: React.FC = () => {
   const { toggleFavorite, isFavorite } = useFavorites();
   const { recordView } = useRecents();
   const { handleBack } = useNavigationSource();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // ── Reload from saved case (V audit 2026-05-19: "Can you reload it
+  //    into the calculator?"). When the URL carries ?caseId=<id>, fetch
+  //    the saved case, restore the calculator state, and remember the
+  //    case id so subsequent saves update in place.
+  useEffect(() => {
+    const caseId = searchParams.get('caseId');
+    if (!caseId) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const saved = await getCase(caseId);
+        if (cancelled || !saved) {
+          setSearchParams((prev) => {
+            const next = new URLSearchParams(prev);
+            next.delete('caseId');
+            return next;
+          }, { replace: true });
+          return;
+        }
+        // Restore NIHSS scoring
+        if (saved.data.nihss) {
+          setNihssValues({ ...saved.data.nihss.values });
+          setNihssMode(saved.data.nihss.mode);
+          if (saved.data.nihss.performedAt) {
+            setPerformedAt(new Date(saved.data.nihss.performedAt));
+          }
+        }
+        // Restore patient context
+        if (saved.data.patientContext) {
+          const pc = saved.data.patientContext;
+          setPatientContext({
+            lkw: typeof pc.lkw === 'number'
+              ? new Date(pc.lkw)
+              : pc.lkw === null
+              ? null
+              : undefined,
+            systolic: pc.systolic ?? '',
+            diastolic: pc.diastolic ?? '',
+            glucose: pc.glucose ?? '',
+            anticoag: new Set((pc.anticoag ?? []) as Anticoag[]),
+          });
+        }
+        // Restore stroke timestamps — only in absolute mode. Relative-mode
+        // cases preserved clinical timing but stripped wall-clock; we can't
+        // re-display them as Date objects without inventing an anchor. We
+        // skip restoration and toast a note. Clinician can re-stamp as
+        // needed and re-save in absolute mode if they need wall-clock.
+        const mode = saved.data.strokeTimestampsMode ?? 'absolute';
+        if (saved.data.strokeTimestamps) {
+          if (mode === 'absolute') {
+            const restored: StrokeTimestamps = { ...EMPTY_STROKE_TIMESTAMPS };
+            for (const event of STROKE_TIMESTAMP_EVENTS) {
+              const t = saved.data.strokeTimestamps[event];
+              if (typeof t === 'number') {
+                restored[event] = new Date(t);
+              }
+            }
+            setStrokeTimestamps(restored);
+          } else {
+            // Relative mode — leave stamps unset; the clinician can re-stamp
+            // any events they want absolute times on, and opt into absolute
+            // storage at next save.
+            setStrokeTimestamps({ ...EMPTY_STROKE_TIMESTAMPS });
+            showToast('Timestamps were saved as relative offsets — re-stamp if you need exact times.', 4000);
+          }
+        }
+        // Capture the id so subsequent saves update in place
+        setCurrentCaseId(saved.id);
+        // Clear the query param so a reload of the page doesn't re-trigger
+        // (and so the URL stays clean while the clinician works).
+        setSearchParams((prev) => {
+          const next = new URLSearchParams(prev);
+          next.delete('caseId');
+          return next;
+        }, { replace: true });
+        showToast(`Opened ${saved.initials} from My Cases`, 2500);
+      } catch {
+        // Silent on lookup failure — clinician just sees a fresh calculator.
+      }
+    })();
+    return () => { cancelled = true; };
+    // We deliberately don't depend on showToast etc. — this effect should
+    // only fire when caseId changes (i.e. once on navigation).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   // ── Side effects ───────────────────────────────────────────────────────────
 

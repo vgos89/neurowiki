@@ -175,7 +175,6 @@ const MyCases: React.FC = () => {
         isOpen={!!openCaseId}
         caseData={openedCase}
         onClose={() => setOpenCaseId(null)}
-        onChanged={loadCases}
         onRequestDelete={(id) => handleDelete(id)}
       />
     </div>

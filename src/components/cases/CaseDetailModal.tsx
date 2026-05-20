@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Copy, Pencil, Trash2, FileText, Calendar, Activity, Shield } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { X, Copy, ExternalLink, Trash2, FileText, Calendar, Activity, Shield } from 'lucide-react';
 import { useModalFocusTrap } from '../../hooks/useModalFocusTrap';
 import { ShareButton } from '../calculators/ShareButton';
 import type { SavedCase } from '../../lib/cases/types';
 import { formatSavedCaseAsEmrText, getSavedCaseHeadline, getSavedCaseSubline } from '../../lib/cases/format';
 import { formatClinicalDateTime } from '../../utils/clinicalDateTime';
-import { SaveCaseModal } from './SaveCaseModal';
 
 /**
  * CaseDetailModal — opens when the clinician taps a row in /my-cases.
@@ -22,8 +22,6 @@ interface CaseDetailModalProps {
   isOpen: boolean;
   caseData: SavedCase | null;
   onClose: () => void;
-  /** Called after the case is edited; parent should refresh the list. */
-  onChanged?: () => void;
   /** Called when the user confirms delete from inside the modal. */
   onRequestDelete?: (id: string) => void;
 }
@@ -32,10 +30,9 @@ export const CaseDetailModal: React.FC<CaseDetailModalProps> = ({
   isOpen,
   caseData,
   onClose,
-  onChanged,
   onRequestDelete,
 }) => {
-  const [editOpen, setEditOpen] = useState(false);
+  const navigate = useNavigate();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -43,7 +40,6 @@ export const CaseDetailModal: React.FC<CaseDetailModalProps> = ({
 
   React.useEffect(() => {
     if (!isOpen) {
-      setEditOpen(false);
       setConfirmDelete(false);
       setToast(null);
     }
@@ -76,6 +72,20 @@ export const CaseDetailModal: React.FC<CaseDetailModalProps> = ({
     }
     onRequestDelete?.(caseData.id);
     onClose();
+  };
+
+  // Open the case back into the originating calculator with a ?caseId
+  // query param. The calculator restores its state from the saved case
+  // and the update-in-place save flow (existingCaseId) ties any re-save
+  // back to the same row. Only NIHSS implements reload today; other
+  // calculators receive the param but ignore it (they open fresh — the
+  // clinician can re-save manually if needed).
+  const handleOpenInCalculator = () => {
+    const calcPath = caseData.source.type === 'calculator'
+      ? `/calculators/${caseData.source.id}`
+      : `/pathways/${caseData.source.id}`;
+    onClose();
+    navigate(`${calcPath}?caseId=${encodeURIComponent(caseData.id)}`);
   };
 
   const content = (
@@ -181,11 +191,11 @@ export const CaseDetailModal: React.FC<CaseDetailModalProps> = ({
           />
           <button
             type="button"
-            onClick={() => setEditOpen(true)}
+            onClick={handleOpenInCalculator}
             className="min-h-[44px] px-4 py-2 rounded-full text-sm font-medium border border-slate-200 hover:bg-slate-100 text-slate-700 inline-flex items-center gap-1.5 transition-colors"
           >
-            <Pencil className="w-3.5 h-3.5" aria-hidden />
-            Edit
+            <ExternalLink className="w-3.5 h-3.5" aria-hidden />
+            Open in calculator
           </button>
           <button
             type="button"
@@ -209,29 +219,6 @@ export const CaseDetailModal: React.FC<CaseDetailModalProps> = ({
         )}
       </div>
 
-      {/* Edit modal — reuses SaveCaseModal with existingCaseId for update-in-place.
-          Only initials + note are editable; the underlying calculator data is
-          re-read from the existing case (we pass a buildData that returns the
-          unchanged data so nothing gets clobbered). */}
-      {editOpen && (
-        <SaveCaseModal
-          isOpen={editOpen}
-          onClose={() => setEditOpen(false)}
-          source={caseData.source}
-          buildData={() => caseData.data}
-          existingCaseId={caseData.id}
-          onSaved={async () => {
-            // Manually persist so the parent picks up the change. SaveCaseModal
-            // already persists via its own handleSave — onSaved fires after.
-            setEditOpen(false);
-            // Brief flash + close detail so parent refreshes the list.
-            flashToast('Updated');
-            onChanged?.();
-            // Keep the detail modal open so the clinician sees the updated
-            // metadata. Parent will pass a refreshed caseData on re-render.
-          }}
-        />
-      )}
     </div>
   );
 
