@@ -99,13 +99,25 @@ export async function createReceiveSession(): Promise<ReceiveSession> {
 }
 
 /**
- * Poll the relay until the sender attaches ciphertext, then decrypt.
- * Returns the decoded payload. Caller (ImportCases) is responsible for
- * deciding what to do with the cases (typically: merge into local
- * IndexedDB).
+ * Wait for the sender to attach ciphertext, then decrypt.
  *
- * Aborts cleanly when the AbortSignal fires (e.g. user closes the page
- * or hits "Cancel").
+ * Hybrid implementation (architect P3 follow-up, 2026-05-19):
+ *
+ *   - Fast path — Supabase Realtime subscription on the `transfers` row.
+ *     When the sender's UPDATE lands, the postgres_changes event lights
+ *     us up sub-second. No SELECT round-trip on the receive side.
+ *
+ *   - Backup path — 2-second polling. Covers three failure modes:
+ *       (a) the sender raced ahead and uploaded before we subscribed
+ *           (initial checkOnce catches this);
+ *       (b) Realtime is not enabled on the `transfers` table in this
+ *           Supabase project — the channel never delivers events but
+ *           polling still resolves the transfer;
+ *       (c) the postgres_changes event is dropped (replication lag,
+ *           RLS filtering, network blip).
+ *
+ *   First path to resolve wins; the other cleans up its subscription /
+ *   timer. AbortSignal cancels both paths.
  */
 export async function pollForCases(
   code: string,
@@ -116,47 +128,89 @@ export async function pollForCases(
   if (!supabase) {
     throw new Error('Sync is not configured on this device.');
   }
-  while (!signal?.aborted) {
-    const { data, error } = await supabase
-      .from('transfers')
-      .select('ciphertext, sender_public_key, expires_at')
-      .eq('token', code)
-      .maybeSingle();
 
-    if (error) {
-      throw new Error(`Could not check for incoming transfer: ${error.message}`);
-    }
-    if (!data) {
-      // Row was deleted (TTL sweep) or never existed (race condition with
-      // the session itself being purged by the cron).
-      throw new Error('This session has expired. Start over to get a new code.');
-    }
-    if (new Date(data.expires_at).getTime() < Date.now()) {
-      // Defensive — the SELECT RLS already filters expired rows, but the
-      // app-side check guarantees consistent UX.
-      await supabase.from('transfers').delete().eq('token', code);
-      throw new Error('This session expired before the sender finished.');
-    }
-    if (data.ciphertext && data.sender_public_key) {
-      // Decrypt before deleting so we don't destroy the only copy on a
-      // decrypt failure. If decrypt throws, the row remains until TTL —
-      // which is the intended behavior (sender can retry the upload? no,
-      // RLS UPDATE-on-null-ciphertext blocks that; but we don't make
-      // the situation worse by deleting prematurely).
-      const payload = await decryptAsReceiver<{ cases: SavedCase[]; version: number }>(
-        data.ciphertext,
-        data.sender_public_key,
-        privateKey
-      );
-      await supabase.from('transfers').delete().eq('token', code);
-      if (!Array.isArray(payload.cases)) {
-        throw new Error('Transfer payload is invalid.');
+  return new Promise<{ cases: SavedCase[] }>((resolve, reject) => {
+    let settled = false;
+    let pollTimer: ReturnType<typeof setInterval> | null = null;
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+
+    const cleanup = () => {
+      if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+      if (channel) { void supabase.removeChannel(channel); channel = null; }
+      signal?.removeEventListener('abort', onAbort);
+    };
+    const finish = (result: { cases: SavedCase[] } | Error) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      if (result instanceof Error) reject(result);
+      else resolve(result);
+    };
+    const onAbort = () => finish(new Error('Polling cancelled.'));
+    if (signal?.aborted) { onAbort(); return; }
+    signal?.addEventListener('abort', onAbort);
+
+    /** Decrypt + delete-row when we have ciphertext + sender public key. */
+    const tryDecrypt = async (row: { ciphertext: string; sender_public_key: string }) => {
+      if (settled) return;
+      try {
+        const payload = await decryptAsReceiver<{ cases: SavedCase[]; version: number }>(
+          row.ciphertext, row.sender_public_key, privateKey,
+        );
+        await supabase.from('transfers').delete().eq('token', code);
+        if (!Array.isArray(payload.cases)) {
+          finish(new Error('Transfer payload is invalid.'));
+          return;
+        }
+        finish({ cases: payload.cases });
+      } catch (e) {
+        finish(e instanceof Error ? e : new Error('Decrypt failed.'));
       }
-      return { cases: payload.cases };
-    }
-    await sleep(POLL_INTERVAL_MS, signal);
-  }
-  throw new Error('Polling cancelled.');
+    };
+
+    /** One-shot row check — handles ciphertext-present / expired / not-found. */
+    const checkOnce = async () => {
+      if (settled) return;
+      const { data, error } = await supabase
+        .from('transfers')
+        .select('ciphertext, sender_public_key, expires_at')
+        .eq('token', code)
+        .maybeSingle();
+      if (settled) return;
+      if (error) return finish(new Error(`Could not check for incoming transfer: ${error.message}`));
+      if (!data) return finish(new Error('This session has expired. Start over to get a new code.'));
+      if (new Date(data.expires_at).getTime() < Date.now()) {
+        await supabase.from('transfers').delete().eq('token', code);
+        return finish(new Error('This session expired before the sender finished.'));
+      }
+      if (data.ciphertext && data.sender_public_key) {
+        await tryDecrypt(data as { ciphertext: string; sender_public_key: string });
+      }
+    };
+
+    // Fast path — Realtime subscription. The cast on `postgres_changes` is
+    // because @supabase/supabase-js's channel typing is overloaded in a way
+    // that doesn't inline-narrow well; the runtime accepts the literal.
+    channel = supabase
+      .channel(`transfers:${code}`)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .on('postgres_changes' as any,
+        { event: 'UPDATE', schema: 'public', table: 'transfers', filter: `token=eq.${code}` },
+        (payload: { new: { ciphertext: string | null; sender_public_key: string | null } }) => {
+          const row = payload.new;
+          if (row.ciphertext && row.sender_public_key) {
+            void tryDecrypt(row as { ciphertext: string; sender_public_key: string });
+          }
+        },
+      )
+      .subscribe();
+
+    // Backup path — immediate check + polling. Always runs alongside
+    // Realtime so we handle the cases where Realtime isn't enabled or
+    // the event is dropped. First path to resolve wins.
+    void checkOnce();
+    pollTimer = setInterval(checkOnce, POLL_INTERVAL_MS);
+  });
 }
 
 // ─── Sender-side (phone) ────────────────────────────────────────────────
@@ -225,24 +279,7 @@ export async function sendCases(
   }
 }
 
-// ─── Helpers ────────────────────────────────────────────────────────────
-
-function sleep(ms: number, signal?: AbortSignal): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (signal?.aborted) {
-      reject(new Error('Aborted'));
-      return;
-    }
-    const t = setTimeout(() => {
-      cleanup();
-      resolve();
-    }, ms);
-    const onAbort = () => {
-      clearTimeout(t);
-      cleanup();
-      reject(new Error('Aborted'));
-    };
-    const cleanup = () => signal?.removeEventListener('abort', onAbort);
-    signal?.addEventListener('abort', onAbort);
-  });
-}
+// `sleep()` helper retired 2026-05-19 — the pollForCases polling loop was
+// replaced with a Realtime-channel + setInterval hybrid that no longer needs
+// an abortable sleep. If a future caller needs the helper back, recover it
+// from git history at commit e25a3ea.

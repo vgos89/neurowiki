@@ -21,6 +21,28 @@
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
+import { timingSafeEqual } from 'node:crypto';
+
+/**
+ * Constant-time bearer-token comparison. Closes baseline F3
+ * (docs/reviews/security-PR-baseline-2026-05-19.md): the prior
+ * `authHeader !== \`Bearer ${expectedSecret}\`` was a string `!==` that
+ * leaks timing information about how many prefix bytes matched. With
+ * enough requests an attacker could brute-force the secret one byte at
+ * a time. Vercel's edge has cold-start variance that probably hides the
+ * signal in practice, but the fix is one helper.
+ *
+ * Two-step compare: (1) length check (cheap, before timingSafeEqual,
+ * which throws on length mismatch — and a length-throw IS a timing
+ * leak on its own, so we early-return identically-shaped failure for
+ * any mismatch); (2) constant-time byte compare on equal-length buffers.
+ */
+function safeCompare(a: string, b: string): boolean {
+  const aBuf = Buffer.from(a, 'utf8');
+  const bBuf = Buffer.from(b, 'utf8');
+  if (aBuf.length !== bBuf.length) return false;
+  return timingSafeEqual(aBuf, bBuf);
+}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Auth check — Vercel cron passes Authorization: Bearer <CRON_SECRET>
@@ -29,7 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!expectedSecret) {
     return res.status(500).json({ error: 'CRON_SECRET env var not set' });
   }
-  if (authHeader !== `Bearer ${expectedSecret}`) {
+  if (!authHeader || !safeCompare(authHeader, `Bearer ${expectedSecret}`)) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
