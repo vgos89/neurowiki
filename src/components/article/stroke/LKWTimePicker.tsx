@@ -299,18 +299,21 @@ const SleepTimeRow: React.FC<SleepTimeRowProps> = ({
 
   const hourItems  = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
   const minuteItems = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'));
-  const periodItems = ['AM', 'PM'];
+  // AM/PM scroll column replaced with the horizontal AmPmToggle for parity
+  // with the specific-time picker. (V feedback 2026-05-20: Sleep Onset body
+  // "looks so AI" — three stacked scroll columns × 2 pickers was the main
+  // tell. Replacing the period column tightens the visual.)
 
   return (
-    <div className="py-4 px-4">
+    <div className="py-3 px-4">
       {/* Label row */}
-      <div className={`flex items-center gap-2 mb-3 ${accentClass}`}>
+      <div className={`flex items-center gap-2 mb-2.5 ${accentClass}`}>
         {icon}
-        <span className="text-sm font-bold">{label}</span>
+        <span className="text-sm font-semibold tracking-tight">{label}</span>
       </div>
 
       {/* Day toggle pills */}
-      <div className="flex gap-1.5 mb-4 flex-wrap">
+      <div className="flex gap-1.5 mb-3 flex-wrap">
         {dayLabels.slice(0, maxDayOffset + 1).map((d, i) => (
           <button
             key={i}
@@ -328,13 +331,17 @@ const SleepTimeRow: React.FC<SleepTimeRowProps> = ({
         ))}
       </div>
 
-      {/* Drum rollers */}
+      {/* Drum rollers + AM/PM toggle */}
       <div className="flex items-center justify-center gap-3">
         <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={onHourIdx} itemH={44} colW={56} ariaLabel={`${label} hour`} />
         <span className="text-2xl font-light text-slate-300 -mt-1">:</span>
         <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={onMinuteIdx} itemH={44} colW={56} ariaLabel={`${label} minute`} />
-        <div className="w-px h-12 bg-slate-200 mx-1" />
-        <ScrollCol items={periodItems} selectedIdx={periodIdx} onSelect={onPeriodIdx} itemH={44} colW={56} ariaLabel={`${label} AM or PM`} />
+        <AmPmToggle
+          periodIdx={periodIdx}
+          onSelect={onPeriodIdx}
+          size="sm"
+          ariaLabel={`${label} AM or PM`}
+        />
       </div>
     </div>
   );
@@ -827,19 +834,18 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
   /* ── Sleep Onset body ── */
   const sleepBody = (
     <div className="flex-1 overflow-y-auto min-h-0">
-      {/* Clinical note */}
-      <div className="px-4 pt-3 pb-1">
-        <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 leading-relaxed">
-          <strong>WAKE-UP / THAWS method:</strong> LKW = last time asleep without symptoms (bedtime). Treatment window = 4.5h from awakening.
+      {/* Method note — terse, no bold-callout. Clinicians who use the
+          WAKE-UP / THAWS pathway already know the framework; this line
+          is a quick refresher, not a tutorial. */}
+      <div className="px-4 pt-3 pb-2">
+        <p className="text-[11px] text-amber-700 leading-snug">
+          WAKE-UP / THAWS · Treatment window runs 4.5 h from awakening.
         </p>
       </div>
 
-      {/* Divider */}
-      <div className="border-t border-slate-100 mt-3" />
-
       {/* Bedtime picker */}
       <SleepTimeRow
-        label="Went to sleep (Last Known Well)"
+        label="Last asleep without symptoms"
         icon={<Moon size={14} className="text-slate-500" />}
         dayOffset={bdDayOffset}
         onDayOffset={setBdDayOffset}
@@ -853,12 +859,12 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
         accentClass="text-slate-700"
       />
 
-      {/* Divider */}
+      {/* Hairline divider */}
       <div className="border-t border-slate-100 mx-4" />
 
       {/* Wake-up picker */}
       <SleepTimeRow
-        label="Woke with symptoms (Recognition time)"
+        label="Woke with symptoms"
         icon={<AlarmClock size={14} className="text-amber-600" />}
         dayOffset={wkDayOffset}
         onDayOffset={setWkDayOffset}
