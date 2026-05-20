@@ -4617,7 +4617,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ESCAPE-MeVO Trial',
     subtitle: 'EVT for Medium Vessel Occlusions',
     category: 'Neuro Trials',
-    primaryDesign: 'ordinal-shift',
+    // Class E correction 2026-05-20: primaryDesign was incorrectly tagged as
+    // 'ordinal-shift'; the published primary endpoint is the binary proportion
+    // of mRS 0-1 at 90 days (rate ratio, not common OR). Per Goyal NEJM 2025
+    // (PMID 39908448, DOI 10.1056/NEJMoa2411668) Methods section: "modified
+    // Rankin scale score… at 90 days, reported as the percentage of patients
+    // with a score of 0 or 1." See docs/reviews/clinical-PR-escape-mevo-2026-05-20.md.
+    primaryDesign: 'binary-superiority',
     primaryResult: 'not-met',
     applicability: {
       populationExclusions: [
@@ -4632,7 +4638,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'Randomized Patients'
       },
       primaryEndpoint: {
-        value: 'mRS 0-2',
+        // Class E correction 2026-05-20: published primary was mRS 0-1
+        // (excellent outcome), not mRS 0-2. The 41.6% vs 43.1% figures already
+        // stored in efficacyResults are correct for mRS 0-1 framing.
+        value: 'mRS 0-1',
         label: 'at 90 Days'
       },
       pValue: {
@@ -4640,8 +4649,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'Not Significant'
       },
       effectSize: {
-        value: 'Possible Harm',
-        label: '41.6% vs 43.1%'
+        value: 'aRR 0.95',
+        label: '95% CI 0.79–1.15'
       }
     },
     trialDesign: {
@@ -4655,12 +4664,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     efficacyResults: {
       treatment: {
         percentage: 41.6,
-        label: 'Functional independence (mRS 0-2) at 90 days',
+        // Label corrected 2026-05-20: published primary was mRS 0-1, not mRS 0-2.
+        label: 'Excellent functional outcome (mRS 0-1) at 90 days',
         name: 'EVT + Usual Care'
       },
       control: {
         percentage: 43.1,
-        label: 'Functional independence (mRS 0-2) at 90 days',
+        label: 'Excellent functional outcome (mRS 0-1) at 90 days',
         name: 'Usual Care Alone'
       }
     },
@@ -4670,10 +4680,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     clinicalContext: 'Conducted in parallel with DISTAL, the ESCAPE-MeVO trial investigated the efficacy and safety of endovascular thrombectomy for Medium Vessel Occlusions (MeVO), specifically targeting the M2/M3 MCA, A2/A3 ACA, and P2/P3 PCA segments.',
     calculations: {
-      // Negative trial with harm signal - no NNT
+      // Negative binary-superiority trial with harm signal — no NNT (aRR CI crosses 1).
     },
     pearls: [
-      'No functional benefit (mRS 0-2: 41.6% vs 43.1%, rate ratio 0.95; P=0.61); 90-day mortality was higher with EVT',
+      'No benefit on excellent functional outcome (mRS 0-1: 41.6% vs 43.1%, aRR 0.95, 95% CI 0.79–1.15; P=0.61); 90-day mortality was higher with EVT',
       '90-day mortality 13.3% vs 8.4% (HR 1.82, 95% CI 1.06-3.12)',
       'sICH significantly more frequent in EVT arm (5.4% vs 2.2%)',
       '12-hour treatment window from last known well',
@@ -4721,7 +4731,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToReadChart: [
       {
         question: 'What does the chart show?',
-        answer: '100 dots represent 100 patients in each arm. A filled dot is a patient who was functionally independent at 90 days (mRS 0-2); an open dot is one who was not.',
+        answer: '100 dots represent 100 patients in each arm. A filled dot is a patient who achieved an excellent functional outcome at 90 days (mRS 0-1); an open dot is one who did not.',
       },
       {
         question: 'What should I look at first?',
@@ -4734,13 +4744,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     howToInterpret: {
       /* claimId: escape-mevo.interpret | source: ESCAPE-MeVO Investigators, NEJM 2025 */
-      proves: 'In unselected patients with medium vessel occlusion treated within 12 hours, EVT did not improve 90-day functional independence compared with best medical management.',
+      proves: 'In unselected patients with medium vessel occlusion treated within 12 hours, EVT did not improve the rate of excellent functional outcome (mRS 0-1) at 90 days compared with best medical management.',
       doesNotProve: 'It does not prove that no MeVO patient can benefit from EVT. It does not generalize to all imaging selection strategies, all device approaches, or centers with exceptional MeVO-specific technical expertise.',
-      cautions: 'EVT carries real procedural risk in medium caliber vessels: sICH was more than doubled (5.4% vs 2.2%) and mortality was significantly higher (13.3% vs 8.4%, HR 1.82). The rate ratio for functional independence was 0.95 (95% CI 0.82 to 1.10), consistent with possible modest harm. Parallel neutral results from DISTAL reinforce this finding for unselected MeVO populations.',
+      cautions: 'EVT carries real procedural risk in medium caliber vessels: sICH was more than doubled (5.4% vs 2.2%) and mortality was significantly higher (13.3% vs 8.4%, HR 1.82). The adjusted rate ratio for mRS 0-1 was 0.95 (95% CI 0.79–1.15), consistent with possible modest harm. Parallel neutral results from DISTAL reinforce this finding for unselected MeVO populations.',
     },
     /* claimId: escape-mevo.bedside-pearl | source: ESCAPE-MeVO Investigators, NEJM 2025 */
-    bedsidePearl: 'ESCAPE-MeVO stopped the routine-EVT-for-MeVO question: sICH was 5.4% vs 2.2% and mortality was 13.3% vs 8.4% with no functional gain. Medium vessel occlusion is not a thrombectomy trigger by default. Procedural risk vs uncertain benefit must be discussed individually.',
-    bottomLineSummary: 'ESCAPE-MeVO showed that EVT for medium vessel occlusion (M2, M3, ACA, PCA branches) did not improve functional independence at 90 days compared with best medical management, and was associated with higher rates of symptomatic hemorrhage and 90-day mortality. Routine EVT for MeVO is not supported by this evidence.',
+    bedsidePearl: 'ESCAPE-MeVO stopped the routine-EVT-for-MeVO question: sICH was 5.4% vs 2.2% and mortality was 13.3% vs 8.4% with no gain in excellent functional outcome (mRS 0-1). Medium vessel occlusion is not a thrombectomy trigger by default. Procedural risk vs uncertain benefit must be discussed individually.',
+    bottomLineSummary: 'ESCAPE-MeVO showed that EVT for medium vessel occlusion (M2, M3, ACA, PCA branches) did not improve the rate of excellent functional outcome (mRS 0-1) at 90 days compared with best medical management, and was associated with higher rates of symptomatic hemorrhage and 90-day mortality. Routine EVT for MeVO is not supported by this evidence.',
     listCategory: 'thrombectomy',
     listDescription: 'EVT for medium vessel occlusion (MeVO); no functional benefit, higher sICH and mortality (NEJM 2025).',
   },
