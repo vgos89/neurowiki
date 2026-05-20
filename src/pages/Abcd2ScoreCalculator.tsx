@@ -177,7 +177,7 @@ const Abcd2ScoreCalculator: React.FC = () => {
 
   // ── Handlers ───────────────────────────────────────────────────────────────
   const buildEmrText = useCallback(() => {
-    if (!isComplete || !result) return 'ABCD² Score: Incomplete — select all fields.';
+    if (!isComplete || !result) return 'ABCD² Score: Incomplete. Select all fields.';
     const contributingFactors: string[] = [];
     if (inputs.age === '60plus') contributingFactors.push('age ≥60');
     if (inputs.bloodPressure === 'elevated') contributingFactors.push('BP ≥140/90');
@@ -187,8 +187,13 @@ const Abcd2ScoreCalculator: React.FC = () => {
     else if (inputs.duration === '10to59') contributingFactors.push('duration 10–59 min');
     if (inputs.diabetes) contributingFactors.push('DM');
     const factorsLine = contributingFactors.length > 0 ? contributingFactors.join(', ') : 'none';
+    // Risk-tier label (low/moderate/high) intentionally omitted from the
+    // exported summary — the interpretation tier lives in the in-app drawer
+    // for clinical guidance. The 2-day stroke risk percentage is kept because
+    // it is a derived statistic, not an interpretation tier. (V direction
+    // 2026-05-20.)
     return [
-      `ABCD² — ${result.score}/7 (${result.label}, 2-day stroke risk ${result.twoDayRiskPercent}%)`,
+      `ABCD²: ${result.score}/7 (2-day stroke risk ${result.twoDayRiskPercent}%)`,
       `Risk factors: ${factorsLine}.`,
     ].join('\n');
   }, [inputs, isComplete, result]);

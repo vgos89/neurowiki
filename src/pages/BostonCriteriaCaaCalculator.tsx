@@ -152,8 +152,13 @@ export default function BostonCriteriaCaaCalculator() {
   const buildEmrText = () => {
     const criteriaLine = result.criteriaMet.length > 0 ? result.criteriaMet.join(', ') : 'none';
     const lobarLabel = inputs.lobarHemorrhagicLesions === 2 ? '≥2' : String(inputs.lobarHemorrhagicLesions);
+    // Anticoagulation risk tier (low/moderate/high) intentionally omitted —
+    // that interpretation tier lives in the in-app drawer for clinical
+    // guidance. The diagnostic category (result.label) IS the calculator's
+    // primary output and is kept. Em-dash replaced with colon for clean EMR
+    // paste. (V direction 2026-05-20.)
     return [
-      `Boston Criteria 2.0 for CAA — ${result.label} (anticoagulation risk: ${result.anticoagulationRisk})`,
+      `Boston Criteria 2.0 for CAA: ${result.label}`,
       `Criteria met: ${criteriaLine}.`,
       `Inputs: age ${inputs.age}, qualifying presentation: ${inputs.hasQualifyingPresentation ? 'yes' : 'no'}, lobar lesions: ${lobarLabel}, WM feature: ${inputs.whiteMatterFeature ? 'yes' : 'no'}, deep lesions: ${inputs.deepHemorrhagicLesions ? 'yes' : 'no'}, other cause: ${inputs.otherCauseOfHemorrhage ? 'yes' : 'no'}.`,
     ].join('\n');

@@ -191,7 +191,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
   const buildEmrText = (): string => {
     const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
     return [
-      `tPA/TNK eligibility — ${today}`,
+      `tPA/TNK eligibility: ${today}`,
       '',
       `STATUS: ${eligibilityStatus.label}`,
       '',

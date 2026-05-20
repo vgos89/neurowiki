@@ -322,13 +322,10 @@ const NihssCalculator: React.FC = () => {
   };
 
   const buildText = () => {
-    const severityBracket = (() => {
-      if (total === 0) return 'no stroke symptoms';
-      if (total <= 4) return 'minor stroke';
-      if (total <= 15) return 'moderate stroke';
-      if (total <= 20) return 'moderate-severe stroke';
-      return 'severe stroke';
-    })();
+    // Severity bracket (minor/moderate/severe) intentionally NOT included in
+    // the exported summary — that interpretation tier lives in the in-app
+    // drawer for clinical guidance. The export string carries the number and
+    // the documentation block only. (V direction 2026-05-20.)
     const itemLines = [
       `1a. LOC: ${nihssValues['1a'] ?? 0}`,
       `1b. LOC Questions: ${nihssValues['1b'] ?? 0}`,
@@ -399,7 +396,7 @@ const NihssCalculator: React.FC = () => {
       }
     }
 
-    const header = `NIHSS — ${total} (${severityBracket})`;
+    const header = `NIHSS: ${total}`;
     const blocks: string[] = [header, contextLines.join('\n')];
     if (stampLines.length > 0) {
       blocks.push(`Timestamps:\n${stampLines.join('\n')}`);

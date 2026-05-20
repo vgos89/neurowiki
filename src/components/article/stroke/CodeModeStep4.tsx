@@ -424,7 +424,7 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
         groupedSelected[order.category].push(order.label);
       });
 
-    let emrNote = `Acute Ischemic Stroke — Treatment Orders\n\n`;
+    let emrNote = `Acute Ischemic Stroke: Treatment Orders\n\n`;
 
     if (groupedSelected['labs']?.length) {
       emrNote += 'Lab Work:\n';

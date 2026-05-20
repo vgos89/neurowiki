@@ -196,8 +196,11 @@ export default function Cha2ds2VascCalculator() {
     if (inputs.vascularDisease) positiveFactors.push('vascular disease');
     if (inputs.female) positiveFactors.push('female sex');
     const factorsLine = positiveFactors.length > 0 ? positiveFactors.join(', ') : 'none';
+    // Em-dash replaced with colon in exported summary for clean EMR paste.
+    // Annual stroke rate is a derived statistic (not an interpretation tier)
+    // and is kept. (V direction 2026-05-20.)
     return [
-      `CHA₂DS₂-VASc — ${result.score}/9 (annual stroke ${result.annualStrokeRate}%)`,
+      `CHA₂DS₂-VASc: ${result.score}/9 (annual stroke ${result.annualStrokeRate}%)`,
       `Risk factors: ${factorsLine}.`,
     ].join('\n');
   };

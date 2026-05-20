@@ -106,7 +106,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
   const generateEMRNote = (): string => {
     const door = doorTime ?? timerStartTime;
     let note = '';
-    note += `Stroke Code Summary — ${door ? door.toLocaleString() : new Date().toLocaleString()}\n\n`;
+    note += `Stroke Code Summary: ${door ? door.toLocaleString() : new Date().toLocaleString()}\n\n`;
 
     note += '1. LKW:\n';
     note += step1Data?.lkwUnknown ? '- LKW: Unknown (wake-up/unwitnessed)\n' : `- LKW: ${step1Data?.lkwTimestamp ? step1Data.lkwTimestamp.toLocaleString() : `${step1Data?.lkwHours?.toFixed(1) ?? '—'} hours ago`}\n`;

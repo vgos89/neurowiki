@@ -190,13 +190,16 @@ const GlasgowComaScaleCalculator: React.FC = () => {
   // ── Handlers ───────────────────────────────────────────────────────────────
   const buildEmrText = useCallback(() => {
     if (!isComplete || !result) {
-      return 'GCS: Incomplete — select Eye, Verbal, and Motor.';
+      return 'GCS: Incomplete. Select Eye, Verbal, and Motor.';
     }
     const eyeVal    = inputs.eyeNotTestable   ? 'NT' : String(inputs.eye);
     const verbalVal = inputs.verbalNotTestable ? 'T'  : String(inputs.verbal);
     const motorVal  = String(inputs.motor);
+    // Severity label (Mild/Moderate/Severe) intentionally omitted from the
+    // exported summary — that interpretation tier lives in the in-app drawer
+    // for clinical guidance. (V direction 2026-05-20.)
     return [
-      `GCS — ${result.display}/15 (${result.label})`,
+      `GCS: ${result.display}/15`,
       `Eye ${eyeVal}, Verbal ${verbalVal}, Motor ${motorVal}`,
     ].join('\n');
   }, [inputs, isComplete, result]);
