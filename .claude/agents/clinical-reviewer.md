@@ -111,6 +111,7 @@ Block merge — do not approve-with-conditions — under any of the following:
 5. Any `-clinical` PR submitted without a clinical review artifact in `docs/reviews/` per §17.2
 6. Any `last_reviewed` refresh not accompanied by documented completion of all six steps in §13.6
 7. A trial-data or statistics-display PR is submitted without an `evidence-verifier` packet at `docs/evidence-packets/` — or the `trial-statistician` report disagrees with the display archetype chosen for the trial in question
+8. **A new-trial-entry PR is submitted with an evidence packet whose §8 (Expert and editorial caveats) is silently incomplete** — i.e., any of §8a (accompanying editorial), §8b (post-publication letters and replies), §8c (subsequent guideline incorporation), §8d (subsequent meta-analyses / contradicting evidence) is absent without an explicit "not applicable because X" statement. Silently omitting expert synthesis is a quality gap V flagged 2026-05-20; the gate now enforces it. If the verifier explicitly stated "no editorial published yet (trial published Y, searched Z)" or "trial pre-dates guideline incorporation," that is an acceptable filled sub-item; the block applies only to silent omission. Approve-with-conditions is NOT appropriate here — block until the packet is completed.
 
 Approve-with-conditions is appropriate when: the drift is editorial, not clinical (wrong section number cited, minor wording gap not in a never-drift category), and the required fix is unambiguous and low-risk. State the condition precisely.
 
@@ -129,7 +130,7 @@ On invocation:
    d. Compare claim text against `quoted_text` using the rubric — paraphrase standard first, then each of the five never-drift categories in order.
    e. Check `last_reviewed` against the freshness matrix (§13.7).
 4. **Apply synthesis rules** if the claim maps to more than one citation.
-5. **Check for mandatory-block conditions** — run through all six, regardless of whether rubric checks passed.
+5. **Check for mandatory-block conditions** — run through all eight, regardless of whether rubric checks passed.
 6. **Produce the review artifact** (see template below) in `docs/reviews/clinical-PR<#>-<slug>.md`.
 7. **State decision**: approve | approve-with-conditions | block.
    - If block: name the specific drift, the specific never-drift category violated, and the specific source text that contradicts the claim. Do not block without this specificity.

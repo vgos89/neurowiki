@@ -42,8 +42,23 @@ Point estimate + confidence interval + p-value (for frequentist superiority), po
 **7. Key safety results**
 Any safety signal (sICH rate, mortality, serious adverse events) relevant to the clinical context in NeuroWiki.
 
-**8. Expert and editorial caveats**
-Published editorials in same journal issue, accompanying perspectives, subsequent meta-analyses that contextualize or limit the trial's conclusions. Guideline class/level assigned to this trial if incorporated into AHA/ASA or AAN guidance.
+**8. Expert and editorial caveats — REQUIRED, not optional**
+
+This section is a **hard requirement** for any new trial entry or for any Class E re-review of an existing entry. A packet that does not satisfy all four sub-items below is incomplete and downstream authoring is blocked until they are addressed. V direction 2026-05-20: clinical bedside relevance depends as much on post-publication expert synthesis as on the primary paper itself; entries shipped without editorial context are a known quality gap and are no longer acceptable.
+
+Each new-trial packet must include:
+
+**8a. Accompanying editorial / perspective.** For trials published in NEJM, Lancet, JAMA, Stroke, Neurology, or any journal that runs paired editorial commentary, the editorial accompanying the trial publication must be located and read. Quote one or two sentences that capture the editorial's central critique or contextualization. If the editorial cannot be retrieved (paywall, missing, not yet published), state which it is and how you searched — do not silently omit.
+
+**8b. Post-publication letters and replies.** Search PubMed and the journal site for letters-to-the-editor responding to the trial within 12 months of publication, plus the authors' replies. Note any methodological critique that survived the reply.
+
+**8c. Subsequent guideline incorporation.** Identify the AHA/ASA, AAN, ESO, or other major-society guideline that incorporated this trial, and quote the class/level assigned. If a trial pre-dates current guidance, note the most recent guideline that still cites it.
+
+**8d. Subsequent meta-analyses and contradicting evidence.** Search for individual-patient-data meta-analyses, Cochrane reviews, or subsequent confirmatory/refuting RCTs published after this trial. List the top one or two with their year and effect estimate; note if they materially change the bedside interpretation.
+
+The packet does not need to be encyclopedic — one or two well-chosen sentences per sub-item is the target. The goal is to ensure downstream authoring can place the trial in its expert-synthesized context, not to reproduce a systematic review.
+
+If a sub-item legitimately cannot be filled (e.g., the trial is so new no editorial exists yet), state that explicitly — do not silently skip. The clinical-reviewer gate will check for explicit non-applicability statements vs missing-due-to-shortcut.
 
 **9. NeuroWiki field mapping**
 Which specific fields in `trialData.ts`, `trialCatalogMeta.ts`, or claim surfaces can be safely updated based on this packet. List each field and the verified value.
@@ -75,6 +90,7 @@ Do not produce a packet. Instead, emit a blocking message if any of the followin
 - NNT is being calculated from a non-primary or ordinal outcome without an explicit label to that effect.
 - A registry or single-arm study is displayed as a superiority RCT without a disclaimer.
 - The statistical framework cannot be determined from the abstract or full text.
+- **Section 8 (Expert and editorial caveats) cannot be filled and the gap is not explicitly explained.** A packet that silently omits editorial context — as opposed to one that explicitly states "no editorial published" or "paywalled, searched on X date" — is a block, not a Medium-confidence shipping packet. This block exists because shipping without expert synthesis has been the recurring quality gap in our trial entries (V direction 2026-05-20).
 
 Blocking message format:
 ```

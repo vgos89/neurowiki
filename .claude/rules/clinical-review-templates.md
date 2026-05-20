@@ -49,6 +49,15 @@ Review standard lives in .claude/agents/clinical-reviewer.md.]
 ## Citation accuracy
 [Each citation checked for current version, correct section, accurate quote]
 
+## Editorial / expert context (REQUIRED for new-trial-entry PRs)
+[For new-trial entries: confirm that evidence-verifier packet §8 is complete —
+§8a accompanying editorial, §8b post-publication letters and replies, §8c
+subsequent guideline incorporation, §8d subsequent meta-analyses / contradicting
+evidence. State explicitly which sub-items were filled, which were marked
+"not applicable" with stated reason, and (if any) which are silently incomplete
+(silent incomplete = block per mandatory-block #8). For non-new-trial PRs, write
+"not applicable — no new trial entry in this PR."]
+
 ## Freshness
 [For each citation: `last_reviewed` still within window (§13.7) → pass, or refresh required via §13.6]
 
