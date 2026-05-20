@@ -167,9 +167,11 @@ html {
 /* Modal scroll containment — when a modal's scroll reaches its end,
    iOS Safari's rubber-band would otherwise scroll the body underneath.
    `overscroll-behavior: contain` keeps the gesture trapped in the modal.
-   Applied via a utility class so consumers opt in deliberately. */
-.modal-overscroll-contain,
-.modal-overscroll-contain * {
+   Auto-applied to any element with role="dialog" since that's the right
+   default for every modal in this app. Plus the legacy utility class for
+   any consumer that wants to opt in explicitly on a non-dialog container. */
+[role="dialog"],
+.modal-overscroll-contain {
   overscroll-behavior: contain;
 }
 
