@@ -30,6 +30,7 @@ import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useDrawerState } from '../hooks/useDrawerState';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useCaseReload } from '../hooks/useCaseReload';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
@@ -94,6 +95,7 @@ const SEE_ALSO_LINKS: Record<string, { path: string; label: string }> = {
 const GlasgowComaScaleCalculator: React.FC = () => {
   // ── State ──────────────────────────────────────────────────────────────────
   const [inputs, setInputs]               = useState<GCSInputs>(DEFAULT_INPUTS);
+  const [currentCaseId, setCurrentCaseId] = useState<string | null>(null);
   const [justCompleted, setJustCompleted] = useState(false);
 
   // Refs — mutations must not trigger re-renders
@@ -206,8 +208,18 @@ const GlasgowComaScaleCalculator: React.FC = () => {
     });
   }, [buildEmrText, isComplete, result, trackResult, showToast]);
 
+  useCaseReload({
+    payloadKey: 'glasgow-coma-scale',
+    restore: (payload) => {
+      if (payload.inputs) setInputs(payload.inputs as GCSInputs);
+    },
+    onCaseLoaded: setCurrentCaseId,
+    onSuccess: (initials) => showToast(`Opened ${initials} from My Cases`, 2500),
+  });
+
   const handleReset = useCallback(() => {
     setInputs(DEFAULT_INPUTS);
+    setCurrentCaseId(null);
     resetDrawer();
     resetTracking();
     showToast('Reset', 1500);
@@ -335,6 +347,11 @@ const GlasgowComaScaleCalculator: React.FC = () => {
         isFav={isFav}
         saveCase={{
           source: { type: 'calculator', id: 'glasgow-coma-scale', title: 'Glasgow Coma Scale' },
+          existingCaseId: currentCaseId ?? undefined,
+          onSaved: (id) => {
+            setCurrentCaseId(id);
+            showToast(currentCaseId ? 'Case updated' : 'Case saved', 2000);
+          },
           buildData: () => ({
             payload: {
               'glasgow-coma-scale': {

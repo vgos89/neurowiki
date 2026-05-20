@@ -32,6 +32,7 @@ import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useDrawerState } from '../hooks/useDrawerState';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useCaseReload } from '../hooks/useCaseReload';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
@@ -96,6 +97,7 @@ const SICH_OPTIONS: { value: boolean; label: string; sub: string }[] = [
 const HeidelbergBleedingCalculator: React.FC = () => {
   // ── State ──────────────────────────────────────────────────────────────────
   const [inputs, setInputs]               = useState<HeidelbergState>(DEFAULT_INPUTS);
+  const [currentCaseId, setCurrentCaseId] = useState<string | null>(null);
   const [justCompleted, setJustCompleted] = useState(false);
 
   const wasCompleteRef  = useRef<boolean>(false);
@@ -201,8 +203,18 @@ const HeidelbergBleedingCalculator: React.FC = () => {
     });
   }, [buildEmrText, isComplete, result, trackResult, showToast]);
 
+  useCaseReload({
+    payloadKey: 'heidelberg-bleeding-classification',
+    restore: (payload) => {
+      if (payload.inputs) setInputs(payload.inputs as HeidelbergState);
+    },
+    onCaseLoaded: setCurrentCaseId,
+    onSuccess: (initials) => showToast(`Opened ${initials} from My Cases`, 2500),
+  });
+
   const handleReset = useCallback(() => {
     setInputs(DEFAULT_INPUTS);
+    setCurrentCaseId(null);
     resetDrawer();
     resetTracking();
     showToast('Reset', 1500);
@@ -330,6 +342,11 @@ const HeidelbergBleedingCalculator: React.FC = () => {
         isFav={isFav}
         saveCase={{
           source: { type: 'calculator', id: 'heidelberg-bleeding-classification', title: 'Heidelberg Classification' },
+          existingCaseId: currentCaseId ?? undefined,
+          onSaved: (id) => {
+            setCurrentCaseId(id);
+            showToast(currentCaseId ? 'Case updated' : 'Case saved', 2000);
+          },
           buildData: () => ({
             payload: {
               'heidelberg-bleeding-classification': {

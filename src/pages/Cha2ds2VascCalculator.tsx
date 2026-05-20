@@ -25,6 +25,7 @@ import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useDrawerState } from '../hooks/useDrawerState';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useCaseReload } from '../hooks/useCaseReload';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
@@ -139,6 +140,7 @@ const CHADS_SEVERITY_TOKENS: Record<Cha2ds2VascRisk, SeverityTokens> = {
 
 export default function Cha2ds2VascCalculator() {
   const [inputs, setInputs] = useState<Cha2ds2VascInputs>(defaultInputs);
+  const [currentCaseId, setCurrentCaseId] = useState<string | null>(null);
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const { handleBack } = useNavigationSource();
@@ -207,8 +209,18 @@ export default function Cha2ds2VascCalculator() {
     });
   };
 
+  useCaseReload({
+    payloadKey: 'chads-vasc',
+    restore: (payload) => {
+      if (payload.inputs) setInputs(payload.inputs as Cha2ds2VascInputs);
+    },
+    onCaseLoaded: setCurrentCaseId,
+    onSuccess: (initials) => showToast(`Opened ${initials} from My Cases`, 2500),
+  });
+
   const handleReset = () => {
     setInputs(defaultInputs);
+    setCurrentCaseId(null);
     setHasInteracted(false);
     resetDrawer();
     resetTracking();
@@ -309,6 +321,11 @@ export default function Cha2ds2VascCalculator() {
         isFav={isFav}
         saveCase={{
           source: { type: 'calculator', id: 'chads-vasc', title: 'CHA₂DS₂-VASc' },
+          existingCaseId: currentCaseId ?? undefined,
+          onSaved: (id) => {
+            setCurrentCaseId(id);
+            showToast(currentCaseId ? 'Case updated' : 'Case saved', 2000);
+          },
           buildData: () => ({
             payload: {
               'chads-vasc': {

@@ -29,6 +29,7 @@ import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useDrawerState } from '../hooks/useDrawerState';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useCaseReload } from '../hooks/useCaseReload';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
@@ -90,6 +91,7 @@ const DIABETES_OPTIONS = [
 const Abcd2ScoreCalculator: React.FC = () => {
   // ── State ──────────────────────────────────────────────────────────────────
   const [inputs, setInputs]               = useState<ABCD2State>(DEFAULT_INPUTS);
+  const [currentCaseId, setCurrentCaseId] = useState<string | null>(null);
   const [justCompleted, setJustCompleted] = useState(false);
 
   const wasCompleteRef = useRef<boolean>(false);
@@ -198,8 +200,19 @@ const Abcd2ScoreCalculator: React.FC = () => {
     });
   }, [buildEmrText, isComplete, result, trackResult, showToast]);
 
+  // Reload from saved case (?caseId) — restores inputs + wires update-in-place.
+  useCaseReload({
+    payloadKey: 'abcd2-score',
+    restore: (payload) => {
+      if (payload.inputs) setInputs(payload.inputs as ABCD2State);
+    },
+    onCaseLoaded: setCurrentCaseId,
+    onSuccess: (initials) => showToast(`Opened ${initials} from My Cases`, 2500),
+  });
+
   const handleReset = useCallback(() => {
     setInputs(DEFAULT_INPUTS);
+    setCurrentCaseId(null);
     resetDrawer();
     resetTracking();
     showToast('Reset', 1500);
@@ -305,6 +318,11 @@ const Abcd2ScoreCalculator: React.FC = () => {
         isFav={isFav}
         saveCase={{
           source: { type: 'calculator', id: 'abcd2-score', title: 'ABCD² Score' },
+          existingCaseId: currentCaseId ?? undefined,
+          onSaved: (id) => {
+            setCurrentCaseId(id);
+            showToast(currentCaseId ? 'Case updated' : 'Case saved', 2000);
+          },
           buildData: () => ({
             payload: {
               'abcd2-score': {

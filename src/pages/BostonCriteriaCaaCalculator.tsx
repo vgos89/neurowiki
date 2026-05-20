@@ -27,6 +27,7 @@ import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useDrawerState } from '../hooks/useDrawerState';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useCaseReload } from '../hooks/useCaseReload';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
@@ -107,6 +108,7 @@ const BOSTON_SEVERITY_TOKENS: Record<BostonRisk, SeverityTokens> = {
 
 export default function BostonCriteriaCaaCalculator() {
   const [inputs, setInputs] = useState<BostonCaaInputs>(defaultInputs);
+  const [currentCaseId, setCurrentCaseId] = useState<string | null>(null);
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const { handleBack } = useNavigationSource();
@@ -164,8 +166,18 @@ export default function BostonCriteriaCaaCalculator() {
     });
   };
 
+  useCaseReload({
+    payloadKey: 'boston-criteria-caa',
+    restore: (payload) => {
+      if (payload.inputs) setInputs(payload.inputs as BostonCaaInputs);
+    },
+    onCaseLoaded: setCurrentCaseId,
+    onSuccess: (initials) => showToast(`Opened ${initials} from My Cases`, 2500),
+  });
+
   const handleReset = () => {
     setInputs(defaultInputs);
+    setCurrentCaseId(null);
     setHasInteracted(false);
     resetDrawer();
     resetTracking();
@@ -275,6 +287,11 @@ export default function BostonCriteriaCaaCalculator() {
         isFav={isFav}
         saveCase={{
           source: { type: 'calculator', id: 'boston-criteria-caa', title: 'Boston Criteria 2.0' },
+          existingCaseId: currentCaseId ?? undefined,
+          onSaved: (id) => {
+            setCurrentCaseId(id);
+            showToast(currentCaseId ? 'Case updated' : 'Case saved', 2000);
+          },
           buildData: () => ({
             payload: {
               'boston-criteria-caa': {

@@ -26,6 +26,7 @@ import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useDrawerState } from '../hooks/useDrawerState';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useCaseReload } from '../hooks/useCaseReload';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
@@ -105,6 +106,7 @@ const HASBLED_SEVERITY_TOKENS: Record<HASBLEDRisk, SeverityTokens> = {
 
 export default function HasBledScoreCalculator() {
   const [inputs, setInputs] = useState<HASBLEDInputs>(defaultInputs);
+  const [currentCaseId, setCurrentCaseId] = useState<string | null>(null);
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const { handleBack } = useNavigationSource();
@@ -165,8 +167,18 @@ export default function HasBledScoreCalculator() {
     });
   };
 
+  useCaseReload({
+    payloadKey: 'has-bled-score',
+    restore: (payload) => {
+      if (payload.inputs) setInputs(payload.inputs as HASBLEDInputs);
+    },
+    onCaseLoaded: setCurrentCaseId,
+    onSuccess: (initials) => showToast(`Opened ${initials} from My Cases`, 2500),
+  });
+
   const handleReset = () => {
     setInputs(defaultInputs);
+    setCurrentCaseId(null);
     setHasInteracted(false);
     resetDrawer();
     resetTracking();
@@ -269,6 +281,11 @@ export default function HasBledScoreCalculator() {
         isFav={isFav}
         saveCase={{
           source: { type: 'calculator', id: 'has-bled-score', title: 'HAS-BLED Score' },
+          existingCaseId: currentCaseId ?? undefined,
+          onSaved: (id) => {
+            setCurrentCaseId(id);
+            showToast(currentCaseId ? 'Case updated' : 'Case saved', 2000);
+          },
           buildData: () => ({
             payload: {
               'has-bled-score': {

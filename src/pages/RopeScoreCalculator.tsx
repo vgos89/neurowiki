@@ -25,6 +25,7 @@ import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useDrawerState } from '../hooks/useDrawerState';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useCaseReload } from '../hooks/useCaseReload';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
@@ -89,6 +90,7 @@ const ROPE_SEVERITY_TOKENS: Record<RoPESeverity, SeverityTokens> = {
 
 export default function RopeScoreCalculator() {
   const [inputs, setInputs] = useState<RoPEInputs>(defaultInputs);
+  const [currentCaseId, setCurrentCaseId] = useState<string | null>(null);
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const { handleBack } = useNavigationSource();
@@ -171,8 +173,18 @@ export default function RopeScoreCalculator() {
     });
   };
 
+  useCaseReload({
+    payloadKey: 'rope-score',
+    restore: (payload) => {
+      if (payload.inputs) setInputs(payload.inputs as RoPEInputs);
+    },
+    onCaseLoaded: setCurrentCaseId,
+    onSuccess: (initials) => showToast(`Opened ${initials} from My Cases`, 2500),
+  });
+
   const handleReset = () => {
     setInputs(defaultInputs);
+    setCurrentCaseId(null);
     setHasInteracted(false);
     resetDrawer();
     resetTracking();
@@ -262,6 +274,11 @@ export default function RopeScoreCalculator() {
         isFav={isFav}
         saveCase={{
           source: { type: 'calculator', id: 'rope-score', title: 'RoPE Score' },
+          existingCaseId: currentCaseId ?? undefined,
+          onSaved: (id) => {
+            setCurrentCaseId(id);
+            showToast(currentCaseId ? 'Case updated' : 'Case saved', 2000);
+          },
           buildData: () => ({
             payload: {
               'rope-score': {

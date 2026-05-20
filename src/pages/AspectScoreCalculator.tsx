@@ -28,6 +28,7 @@ import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useDrawerState } from '../hooks/useDrawerState';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
+import { useCaseReload } from '../hooks/useCaseReload';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
@@ -142,6 +143,7 @@ const ASPECTS_SEVERITY_TOKENS: Record<AspectsSeverity, SeverityTokens> = {
 
 const AspectScoreCalculator: React.FC = () => {
   const [involved, setInvolved] = useState<Set<RegionId>>(new Set());
+  const [currentCaseId, setCurrentCaseId] = useState<string | null>(null);
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const { handleBack } = useNavigationSource();
@@ -208,8 +210,25 @@ const AspectScoreCalculator: React.FC = () => {
     });
   };
 
+  // ASPECTS stores state as a Set<RegionId> (not an `inputs` object like the
+  // other 8 generic calcs), so the restore reads `involvedRegions: string[]`
+  // from the payload and rebuilds the Set.
+  useCaseReload({
+    payloadKey: 'aspects-score',
+    restore: (payload) => {
+      const regions = payload.involvedRegions;
+      if (Array.isArray(regions)) {
+        setInvolved(new Set(regions as RegionId[]));
+        setHasInteracted(true);
+      }
+    },
+    onCaseLoaded: setCurrentCaseId,
+    onSuccess: (initials) => showToast(`Opened ${initials} from My Cases`, 2500),
+  });
+
   const handleReset = () => {
     setInvolved(new Set());
+    setCurrentCaseId(null);
     setHasInteracted(false);
     resetDrawer();
     resetTracking();
@@ -297,6 +316,11 @@ const AspectScoreCalculator: React.FC = () => {
         isFav={isFav}
         saveCase={{
           source: { type: 'calculator', id: 'aspects-score', title: 'ASPECTS Score' },
+          existingCaseId: currentCaseId ?? undefined,
+          onSaved: (id) => {
+            setCurrentCaseId(id);
+            showToast(currentCaseId ? 'Case updated' : 'Case saved', 2000);
+          },
           buildData: () => ({
             payload: {
               'aspects-score': {

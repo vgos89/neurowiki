@@ -24,6 +24,7 @@ import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
+import { useCaseReload } from '../hooks/useCaseReload';
 import { copyToClipboard } from '../utils/clipboard';
 import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import {
@@ -83,6 +84,7 @@ const IchScoreCalculator: React.FC = () => {
   // ── State ──────────────────────────────────────────────────────────────────
   const [inputs, setInputs]               = useState<ICHScoreInputs>(DEFAULT_INPUTS);
   const [justCompleted, setJustCompleted] = useState(false);
+  const [currentCaseId, setCurrentCaseId] = useState<string | null>(null);
 
   // Refs — not state: mutations must not trigger re-renders
   const wasCompleteRef = useRef<boolean>(false);
@@ -209,8 +211,20 @@ const IchScoreCalculator: React.FC = () => {
     });
   }, [buildEmrText, isComplete, result, trackResult, showToast]);
 
+  // Reload from saved case (?caseId query param) — restores `inputs` from
+  // the case's payload and wires update-in-place via currentCaseId.
+  useCaseReload({
+    payloadKey: 'ich-score',
+    restore: (payload) => {
+      if (payload.inputs) setInputs(payload.inputs as ICHScoreInputs);
+    },
+    onCaseLoaded: setCurrentCaseId,
+    onSuccess: (initials) => showToast(`Opened ${initials} from My Cases`, 2500),
+  });
+
   const handleReset = useCallback(() => {
     setInputs(DEFAULT_INPUTS);
+    setCurrentCaseId(null);
     resetDrawer();
     // wasCompleteRef resets via isComplete effect — discovery animation re-arms on next completion
     resetTracking();
@@ -334,6 +348,11 @@ const IchScoreCalculator: React.FC = () => {
         isFav={isFav}
         saveCase={{
           source: { type: 'calculator', id: 'ich-score', title: 'ICH Score' },
+          existingCaseId: currentCaseId ?? undefined,
+          onSaved: (id) => {
+            setCurrentCaseId(id);
+            showToast(currentCaseId ? 'Case updated' : 'Case saved', 2000);
+          },
           buildData: () => ({
             payload: {
               'ich-score': {
