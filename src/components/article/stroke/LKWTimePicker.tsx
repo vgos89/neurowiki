@@ -657,37 +657,15 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  // Live future-time clamp (V audit 2026-05-19: "don't let user select
-  // future time. Last known well is always in the past."). Whenever the
-  // selected date is today and the composed time is in the future, snap
-  // the drums back to the current wall-clock time. Future days are
-  // already disabled in the calendar grid (`isFuture` in CalendarGrid),
-  // so we only need to handle today's drum overshoots.
-  useEffect(() => {
-    if (!isOpen || mode !== 'specific') return;
-    const n = nowRef.current;
-    const isToday =
-      selYear === n.getFullYear() &&
-      selMonth === n.getMonth() &&
-      selDay === n.getDate();
-    if (!isToday) return;
-
-    let h24 = hourIdx + 1;
-    if (periodIdx === 1 && h24 !== 12) h24 += 12;
-    if (periodIdx === 0 && h24 === 12) h24 = 0;
-    const candidate = new Date(selYear, selMonth, selDay, h24, minuteIdx * 5);
-
-    if (candidate > n) {
-      const nowH24 = n.getHours();
-      const nowH12 = (nowH24 % 12) || 12;
-      const nowPeriodIdx = nowH24 >= 12 ? 1 : 0;
-      const nowMin5Idx = Math.floor(n.getMinutes() / 5) % 12;
-      if (periodIdx !== nowPeriodIdx) setPeriodIdx(nowPeriodIdx);
-      if (hourIdx !== nowH12 - 1) setHourIdx(nowH12 - 1);
-      if (minuteIdx !== nowMin5Idx) setMinuteIdx(nowMin5Idx);
-      setActivePreset(null);
-    }
-  }, [isOpen, mode, selDay, selMonth, selYear, hourIdx, minuteIdx, periodIdx]);
+  // Future-time enforcement moved to handleConfirm (line ~745) per V
+  // feedback 2026-05-20: the previous live scroll-snap clamp here was
+  // auto-correcting the wheels back to "now" whenever a user scrolled
+  // past the picker-open minute, which made the drums feel unusable
+  // ("keeps auto snapping to the same time"). Future days are already
+  // disabled in the calendar grid (`isFuture` in CalendarGrid). The
+  // confirm-time guard shows an inline error if the composed time is in
+  // the future — that's the right enforcement point because it doesn't
+  // fight the user during data entry, only at submit.
 
   if (!isOpen) return null;
 
@@ -750,8 +728,11 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
     d.setHours(h24, minuteIdx * 5, 0, 0);
     // Future-time guard: a flipped AM/PM scroll can produce a date in the
     // future, which would propagate a negative treatment-window calculation
-    // upstream. Surface inline error and abort the confirm.
-    if (d > now) {
+    // upstream. Surface inline error and abort the confirm. Uses a fresh
+    // `new Date()` (not the open-time `nowRef.current`) so a clinician who
+    // leaves the picker open for several minutes can still set a time that
+    // was briefly "future" at open but is now legitimately past.
+    if (d > new Date()) {
       setSpecificError('LKW cannot be in the future. Check AM/PM.');
       return;
     }
