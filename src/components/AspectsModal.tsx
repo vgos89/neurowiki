@@ -117,7 +117,7 @@ export const AspectsModal: React.FC<AspectsModalProps> = ({
       />
 
       {/* Panel */}
-      <div className="relative w-full sm:max-w-lg bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+      <div className="relative w-full sm:max-w-lg bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl border border-slate-200 max-h-[90dvh] overflow-y-auto">
 
         {/* Header */}
         <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-4 bg-white border-b border-slate-200">

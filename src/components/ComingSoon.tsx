@@ -9,7 +9,7 @@ export const ComingSoon: React.FC = () => {
   const message = getComingSoonMessage(location.pathname);
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-6">
+    <div className="min-h-dvh bg-white flex items-center justify-center p-6">
       <div className="max-w-md w-full text-center">
         {/* Icon */}
         <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">

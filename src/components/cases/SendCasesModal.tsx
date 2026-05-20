@@ -184,7 +184,7 @@ export const SendCasesModal: React.FC<SendCasesModalProps> = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="send-cases-title"
-        className="relative w-full sm:max-w-md bg-white rounded-t-xl sm:rounded-xl shadow-lg border border-slate-100 max-h-[92vh] overflow-y-auto"
+        className="relative w-full sm:max-w-md bg-white rounded-t-xl sm:rounded-xl shadow-lg border border-slate-100 max-h-[92dvh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -240,7 +240,7 @@ export const SendCasesModal: React.FC<SendCasesModalProps> = ({
                     {selectedCount === cases.length ? 'Clear all' : 'Select all'}
                   </button>
                 </div>
-                <ul className="space-y-1.5 max-h-[40vh] overflow-y-auto -mx-1 px-1">
+                <ul className="space-y-1.5 max-h-[40dvh] overflow-y-auto -mx-1 px-1">
                   {cases.map((c) => {
                     const selected = selectedIds.has(c.id);
                     return (

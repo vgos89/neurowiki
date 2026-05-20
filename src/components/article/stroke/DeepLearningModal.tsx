@@ -140,7 +140,7 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="dlm-title"
-        className="fixed bg-white shadow-lg z-50 lg:top-0 lg:right-0 lg:h-screen lg:w-[400px] bottom-0 left-0 right-0 h-[90vh] lg:h-screen rounded-t-xl lg:rounded-none overflow-hidden"
+        className="fixed bg-white shadow-lg z-50 lg:top-0 lg:right-0 lg:h-dvh lg:w-[400px] bottom-0 left-0 right-0 h-[90dvh] lg:h-dvh rounded-t-xl lg:rounded-none overflow-hidden"
       >
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-slate-100 p-4 z-10">

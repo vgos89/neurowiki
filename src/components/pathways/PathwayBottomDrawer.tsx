@@ -155,7 +155,7 @@ const PathwayDrawerContent: React.FC<DrawerContentProps> = ({
   return (
     <div
       id={`${pathwayName.toLowerCase()}-pathway-drawer-content`}
-      className="bg-white border-t border-slate-100 px-5 py-4 max-h-[40vh] overflow-y-auto"
+      className="bg-white border-t border-slate-100 px-5 py-4 max-h-[40dvh] overflow-y-auto"
     >
       {expandedSummary && (
         <p className="text-sm text-slate-700 leading-relaxed mb-3">

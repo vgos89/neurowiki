@@ -68,7 +68,7 @@ export const GlobalTrialModal: React.FC<GlobalTrialModalProps> = ({
           role="dialog"
           aria-modal="true"
           aria-labelledby="trial-modal-title"
-          className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col pointer-events-auto animate-in zoom-in-95 slide-in-from-bottom-4 duration-300"
+          className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90dvh] flex flex-col pointer-events-auto animate-in zoom-in-95 slide-in-from-bottom-4 duration-300"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}

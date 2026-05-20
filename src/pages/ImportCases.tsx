@@ -126,7 +126,7 @@ const ImportCases: React.FC = () => {
   const ss = (secondsRemaining % 60).toString().padStart(2, '0');
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-dvh bg-slate-50">
       {/* Sticky header */}
       <header className="sticky top-0 z-10 bg-white/95 backdrop-blur-md border-b border-slate-100">
         <div className="max-w-2xl mx-auto px-5 py-3 flex items-center gap-3">

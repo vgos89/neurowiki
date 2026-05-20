@@ -139,7 +139,7 @@ export function ProtocolModal({
       />
       <div
         ref={dialogRef}
-        className="relative w-full max-w-lg max-h-[90vh] sm:min-h-0 bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden flex flex-col"
+        className="relative w-full max-w-lg max-h-[90dvh] sm:min-h-0 bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden flex flex-col"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}

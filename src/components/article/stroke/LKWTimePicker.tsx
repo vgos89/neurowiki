@@ -912,7 +912,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
     >
       <div
         ref={dialogRef}
-        className="bg-white rounded-t-xl sm:rounded-xl shadow-lg w-full sm:max-w-3xl flex flex-col overflow-hidden max-h-[92vh] sm:max-h-[600px]"
+        className="bg-white rounded-t-xl sm:rounded-xl shadow-lg w-full sm:max-w-3xl flex flex-col overflow-hidden max-h-[92dvh] sm:max-h-[600px]"
         onClick={e => e.stopPropagation()}
         role="dialog"
         aria-modal="true"

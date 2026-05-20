@@ -58,9 +58,9 @@ export const StrokeBasicsLayout: React.FC<StrokeBasicsLayoutProps> = ({
 
   return (
     <LayoutContext.Provider value={layoutContextValue}>
-      <div className="min-h-screen bg-white">
+      <div className="min-h-dvh bg-white">
       {/* Desktop Layout: 3-column flex structure with floating toggles */}
-      <div className="hidden lg:flex min-h-screen">
+      <div className="hidden lg:flex min-h-dvh">
         {/* Left Sidebar - Optional, show/hide */}
         {leftSidebar && (
           <aside className={`bg-white border-r border-slate-200 transition-all duration-300 flex-shrink-0 overflow-hidden ${
@@ -96,7 +96,7 @@ export const StrokeBasicsLayout: React.FC<StrokeBasicsLayoutProps> = ({
           )}
 
           {/* Article Content */}
-          <div className="min-h-screen">
+          <div className="min-h-dvh">
             {/* Content Container - centered with max-width */}
             {/* Remove top padding to allow sticky header to stick to top */}
             <div className="max-w-[900px] mx-auto pb-6">

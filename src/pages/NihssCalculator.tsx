@@ -447,7 +447,7 @@ const NihssCalculator: React.FC = () => {
       id="nihss-drawer-content"
       role="region"
       aria-label="NIHSS Score Interpretation"
-      className="max-h-[60vh] overflow-y-auto"
+      className="max-h-[60dvh] overflow-y-auto"
     >
       <div className="px-5 pt-4 pb-6">
         {/* Partial score note — State B only */}

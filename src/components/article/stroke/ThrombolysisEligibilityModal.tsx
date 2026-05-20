@@ -229,7 +229,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} aria-hidden />
       <div
         ref={dialogRef}
-        className="relative w-full sm:max-w-lg max-h-[92dvh] sm:max-h-[88vh] bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl overflow-hidden flex flex-col"
+        className="relative w-full sm:max-w-lg max-h-[92dvh] sm:max-h-[88dvh] bg-white sm:rounded-2xl rounded-t-2xl shadow-2xl overflow-hidden flex flex-col"
         role="dialog"
         aria-modal="true"
         aria-labelledby="eligibility-modal-title"

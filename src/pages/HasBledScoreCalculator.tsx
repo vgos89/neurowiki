@@ -200,7 +200,7 @@ export default function HasBledScoreCalculator() {
       id="hasbled-drawer-content"
       role="region"
       aria-label="HAS-BLED Interpretation"
-      className="max-h-[60vh] overflow-y-auto"
+      className="max-h-[60dvh] overflow-y-auto"
     >
       <div className="px-5 pt-4 pb-6">
         {/* Interpretation */}

@@ -51,7 +51,7 @@ function BackLink() {
 
 function QuestionNotFound() {
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-5 px-8 py-16">
+    <div className="min-h-dvh bg-white flex flex-col items-center justify-center gap-5 px-8 py-16">
       <div className="text-center max-w-sm">
         <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-400 mb-3">
           Question not found
@@ -145,7 +145,7 @@ export default function QuestionDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-dvh bg-white">
 
       {/* ── Header strip ───────────────────────────────────────────────────── */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-5 pb-2">

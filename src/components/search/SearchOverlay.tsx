@@ -147,7 +147,7 @@ export const SearchOverlay: React.FC = () => {
       <div
         role="dialog"
         aria-label="Site search"
-        className="w-full max-w-[640px] bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[75vh]"
+        className="w-full max-w-[640px] bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[75dvh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Input row */}

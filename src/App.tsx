@@ -173,7 +173,7 @@ const App: React.FC = () => {
           </Suspense>
           <Layout>
             <Suspense fallback={
-              <div className="min-h-screen flex items-center justify-center bg-slate-50">
+              <div className="min-h-dvh flex items-center justify-center bg-slate-50">
                 <div className="text-center">
                   <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-neuro-500"></div>
                   <p className="mt-4 text-slate-600">Loading...</p>

@@ -98,7 +98,7 @@ export const CaseDetailModal: React.FC<CaseDetailModalProps> = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="case-detail-title"
-        className="relative w-full sm:max-w-md bg-white rounded-t-xl sm:rounded-xl shadow-lg border border-slate-100 max-h-[90vh] overflow-y-auto"
+        className="relative w-full sm:max-w-md bg-white rounded-t-xl sm:rounded-xl shadow-lg border border-slate-100 max-h-[90dvh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -156,7 +156,7 @@ export const CaseDetailModal: React.FC<CaseDetailModalProps> = ({
             </span>
             <span className="text-[10px] text-slate-400">tap Copy to capture</span>
           </div>
-          <pre className="text-[11px] text-slate-700 bg-slate-50 border border-slate-100 rounded-lg p-3 whitespace-pre-wrap font-mono leading-relaxed max-h-[40vh] overflow-y-auto">
+          <pre className="text-[11px] text-slate-700 bg-slate-50 border border-slate-100 rounded-lg p-3 whitespace-pre-wrap font-mono leading-relaxed max-h-[40dvh] overflow-y-auto">
             {emrText}
           </pre>
         </div>

@@ -247,7 +247,7 @@ const IchScoreCalculator: React.FC = () => {
       id="ich-drawer-content"
       role="region"
       aria-label="Interpretation"
-      className="max-h-[60vh] overflow-y-auto"
+      className="max-h-[60dvh] overflow-y-auto"
     >
       <div className="px-5 pt-4 pb-6">
         {/* 1. Interpretation headline — §5.1 */}

@@ -67,7 +67,7 @@ export const PearlDetailView: React.FC<PearlDetailViewProps> = ({
       <div className="fixed inset-0 z-[70] overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-4 sm:p-6 md:p-8">
           <div
-            className="relative bg-white rounded-xl shadow-lg border border-slate-100 w-full max-w-4xl max-h-[90vh] flex flex-col"
+            className="relative bg-white rounded-xl shadow-lg border border-slate-100 w-full max-w-4xl max-h-[90dvh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"

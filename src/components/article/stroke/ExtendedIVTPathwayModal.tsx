@@ -59,7 +59,7 @@ export const ExtendedIVTPathwayModal: React.FC<ExtendedIVTPathwayModalProps> = (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
       <div
         ref={dialogRef}
-        className="relative w-full max-w-6xl max-h-[95vh] bg-white rounded-xl shadow-lg border border-slate-100 flex flex-col overflow-hidden"
+        className="relative w-full max-w-6xl max-h-[95dvh] bg-white rounded-xl shadow-lg border border-slate-100 flex flex-col overflow-hidden"
         role="dialog"
         aria-modal="true"
         aria-labelledby="extivt-modal-title"

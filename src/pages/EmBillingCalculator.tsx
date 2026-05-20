@@ -1290,7 +1290,7 @@ const EmBillingCalculator: React.FC = () => {
   const toggleFaq = (i: number) => setOpenFaqs(prev => { const s = new Set(prev); s.has(i) ? s.delete(i) : s.add(i); return s; });
 
   return (
-    <div className="min-h-screen bg-slate-100 font-sans pb-28 md:pb-0">
+    <div className="min-h-dvh bg-slate-100 font-sans pb-28 md:pb-0">
       {/* ── Sticky Header ── */}
       <div className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200">
         <div className="flex items-center gap-3 px-4 py-3">
@@ -2380,7 +2380,7 @@ const EmBillingCalculator: React.FC = () => {
 
         {/* Expanded drawer body */}
         {billingDrawerOpen && (
-          <div className="bg-white border-x border-slate-200 shadow-2xl max-h-[58vh] overflow-y-auto">
+          <div className="bg-white border-x border-slate-200 shadow-2xl max-h-[58dvh] overflow-y-auto">
             <div className="p-4 space-y-3">
               {/* Combined output pre block */}
               <pre className="whitespace-pre-wrap break-words text-sm font-mono text-slate-800 leading-relaxed bg-slate-50 rounded-lg px-4 py-3 border border-slate-200 max-h-44 overflow-y-auto">

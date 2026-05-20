@@ -1869,7 +1869,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
             {result && drawerState === 'C' && (
               <div
                 id="evt-drawer-content"
-                className="bg-white border-t border-slate-100 px-5 py-4 max-h-[45vh] overflow-y-auto"
+                className="bg-white border-t border-slate-100 px-5 py-4 max-h-[45dvh] overflow-y-auto"
               >
                 {/* Status + criteria name */}
                 <div className="mb-3">

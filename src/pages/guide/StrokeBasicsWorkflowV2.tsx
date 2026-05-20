@@ -832,7 +832,7 @@ const MainContent: React.FC = () => {
           <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[80] flex items-center justify-center p-4">
             <div
               ref={nihssModalDialogRef}
-              className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col min-h-0"
+              className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90dvh] overflow-hidden flex flex-col min-h-0"
               role="dialog"
               aria-modal="true"
               aria-labelledby="nihss-modal-title"

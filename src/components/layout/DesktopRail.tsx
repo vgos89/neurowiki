@@ -53,7 +53,7 @@ export const DesktopRail: React.FC = () => {
 
   return (
     <aside
-      className="hidden md:flex w-[224px] flex-shrink-0 bg-white border-r border-slate-100 flex-col py-[18px] px-[14px] sticky top-0 h-screen"
+      className="hidden md:flex w-[224px] flex-shrink-0 bg-white border-r border-slate-100 flex-col py-[18px] px-[14px] sticky top-0 h-dvh"
     >
       {/* Brand lockup — LAYOUT_SPEC §6.1.1 */}
       <Link to="/" className="flex items-center gap-2.5 px-2 pb-5 mb-3 border-b border-slate-100" aria-label="NeuroWiki home">

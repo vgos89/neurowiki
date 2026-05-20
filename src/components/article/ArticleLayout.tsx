@@ -25,7 +25,7 @@ export const ArticleLayout: React.FC<ArticleLayoutProps> = ({
   const { handleBack, getBackLabel, source } = useNavigationSource();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-dvh bg-white">
       {/* Header */}
       <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-sm border-b border-slate-100">
         <div className="max-w-2xl mx-auto px-5 md:px-8">

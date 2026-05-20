@@ -30,7 +30,7 @@ export const IosInstallSheet: React.FC<IosInstallSheetProps> = ({ isOpen, onClos
         role="dialog"
         aria-modal="true"
         aria-labelledby="ios-install-title"
-        className="relative w-full sm:max-w-md bg-white rounded-t-xl sm:rounded-xl shadow-lg border border-slate-100 max-h-[90vh] overflow-y-auto"
+        className="relative w-full sm:max-w-md bg-white rounded-t-xl sm:rounded-xl shadow-lg border border-slate-100 max-h-[90dvh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}

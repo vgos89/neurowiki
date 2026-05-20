@@ -375,7 +375,7 @@ const TrialPageNew: React.FC = () => {
 
   if (isLoadingPayload) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-dvh flex items-center justify-center bg-slate-50">
         <div className="text-center">
           <div className="inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-neuro-500" />
           <p className="mt-4 text-slate-600">Loading trial summary...</p>
@@ -390,7 +390,7 @@ const TrialPageNew: React.FC = () => {
 
   if (isPlaceholderTrial && catalogTrial) {
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-dvh bg-slate-50">
         <div className="bg-white border-b border-slate-100 shadow-sm">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <button
@@ -447,7 +447,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
 
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
 
         {/* Section 1: Sticky header — abbreviated name + category badge */}
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
@@ -923,7 +923,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -1006,7 +1006,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -1089,7 +1089,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -1172,7 +1172,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -1256,7 +1256,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -1340,7 +1340,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -1424,7 +1424,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -1513,7 +1513,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -1593,7 +1593,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -1674,7 +1674,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -1762,7 +1762,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -1850,7 +1850,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -1938,7 +1938,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -2026,7 +2026,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -2111,7 +2111,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -2205,7 +2205,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -2281,7 +2281,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -2357,7 +2357,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -2441,7 +2441,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -2525,7 +2525,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -2602,7 +2602,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -2678,7 +2678,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -2761,7 +2761,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -2845,7 +2845,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -2926,7 +2926,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -3013,7 +3013,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -3089,7 +3089,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -3164,7 +3164,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -3240,7 +3240,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -3321,7 +3321,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -3396,7 +3396,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -3471,7 +3471,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -3546,7 +3546,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -3621,7 +3621,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -3697,7 +3697,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -3773,7 +3773,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -3849,7 +3849,7 @@ const TrialPageNew: React.FC = () => {
       ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -3932,7 +3932,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
 
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
 
         {/* Section 1: Sticky header */}
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
@@ -4029,7 +4029,7 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -4106,7 +4106,7 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -4181,7 +4181,7 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -4256,7 +4256,7 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -4331,7 +4331,7 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -4408,7 +4408,7 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -4483,7 +4483,7 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -4560,7 +4560,7 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
 
         {/* Sticky header */}
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
@@ -4710,7 +4710,7 @@ const TrialPageNew: React.FC = () => {
       : false;
 
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
 
         {/* Section 1: Sticky header */}
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
@@ -4887,7 +4887,7 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -4976,7 +4976,7 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -5065,7 +5065,7 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -5154,7 +5154,7 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -5240,7 +5240,7 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -5329,7 +5329,7 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -5419,7 +5419,7 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -5542,7 +5542,7 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -5665,7 +5665,7 @@ const TrialPageNew: React.FC = () => {
     const isPositive = tm.trialResult === 'POSITIVE';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -5753,7 +5753,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -5841,7 +5841,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -5928,7 +5928,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -6015,7 +6015,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -6103,7 +6103,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -6190,7 +6190,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -6275,7 +6275,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -6383,7 +6383,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -6468,7 +6468,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -6553,7 +6553,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -6655,7 +6655,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -6736,7 +6736,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -6822,7 +6822,7 @@ const TrialPageNew: React.FC = () => {
     const isHarm = tm.trialResult === 'HARM';
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -6907,7 +6907,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -7000,7 +7000,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -7079,7 +7079,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -7169,7 +7169,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -7254,7 +7254,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -7339,7 +7339,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -7424,7 +7424,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -7513,7 +7513,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -7599,7 +7599,7 @@ const TrialPageNew: React.FC = () => {
     const tm = trialMetadata;
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
@@ -7695,7 +7695,7 @@ const TrialPageNew: React.FC = () => {
       ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1)
       : 'Trial';
     return (
-      <div className="min-h-screen bg-slate-50 pb-28">
+      <div className="min-h-dvh bg-slate-50 pb-28">
         {/* Sticky header */}
         <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
@@ -8000,7 +8000,7 @@ const TrialPageNew: React.FC = () => {
 
   if (!trial) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-dvh flex items-center justify-center bg-slate-50">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-slate-900 mb-4">
             Trial Not Found
@@ -8022,7 +8022,7 @@ const TrialPageNew: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-dvh bg-slate-50">
       {/* Header */}
       <div className="bg-white border-b border-slate-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">

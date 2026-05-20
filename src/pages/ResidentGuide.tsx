@@ -314,7 +314,7 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                 </div>
 
                 {/* Panel Content */}
-                <div className="flex-1 overflow-y-auto px-3 py-3 max-h-[50vh]">
+                <div className="flex-1 overflow-y-auto px-3 py-3 max-h-[50dvh]">
                   {GUIDE_NAVIGATION.map((category) => {
                     // Filter items based on search query
                     const filteredItems = sidebarSearchQuery.trim()
@@ -490,7 +490,7 @@ const ResidentGuide: React.FC<ResidentGuideProps> = ({ context = 'guide' }) => {
                     {sections.length > 0 && (
                         <div className="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden">
                             <div className="p-4 border-b border-slate-50 bg-slate-50/80"><h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center"><List size={14} className={`mr-2 ${iconColor}`} />Contents</h3></div>
-                            <nav className="max-h-[70vh] overflow-y-auto p-2 custom-scrollbar">
+                            <nav className="max-h-[70dvh] overflow-y-auto p-2 custom-scrollbar">
                                 {sections.map((h, i) => (
                                     <button key={i} onClick={() => scrollToSection(h.id)} className="text-left w-full text-sm text-slate-600 hover:text-teal-500 hover:bg-slate-50 px-3 py-2.5 rounded-lg transition-colors duration-150 group flex items-start">
                                         <span className={`mt-1.5 mr-2 w-1.5 h-1.5 rounded-full ${isTrialMode ? 'bg-emerald-200 group-hover:bg-emerald-500' : 'bg-neuro-200 group-hover:bg-neuro-500'} flex-shrink-0`}></span>

@@ -244,7 +244,7 @@ export default function Cha2ds2VascCalculator() {
       id="chads-drawer-content"
       role="region"
       aria-label="CHA₂DS₂-VASc Interpretation"
-      className="max-h-[60vh] overflow-y-auto"
+      className="max-h-[60dvh] overflow-y-auto"
     >
       <div className="px-5 pt-4 pb-6">
         <p className="text-xl font-semibold text-slate-900 leading-tight">

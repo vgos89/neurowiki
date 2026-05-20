@@ -231,7 +231,7 @@ export const BottomLineDrawer: React.FC<BottomLineDrawerProps> = ({
 
           {/* Expanded content */}
           {drawerState === 'D' && (
-            <div className="px-4 pb-safe-4 border-t border-slate-100 space-y-4 max-h-[50vh] overflow-y-auto pb-4">
+            <div className="px-4 pb-safe-4 border-t border-slate-100 space-y-4 max-h-[50dvh] overflow-y-auto pb-4">
               {/* Bottom line prose */}
               <p className="text-sm text-slate-700 leading-relaxed pt-3">
                 {body}

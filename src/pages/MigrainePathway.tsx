@@ -1320,7 +1320,7 @@ const MigrainePathway: React.FC = () => {
         {drawerState === 'C' && (
           <div
             id="migraine-drawer-content"
-            className="bg-white border-t border-slate-100 px-5 py-4 max-h-[45vh] overflow-y-auto"
+            className="bg-white border-t border-slate-100 px-5 py-4 max-h-[45dvh] overflow-y-auto"
           >
             {/* Per-line className preserved per clinical condition 4:
                 bold section headers (FIRST-LINE COCKTAIL:, MOH DISCHARGE COUNSELING (..., etc.)

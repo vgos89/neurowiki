@@ -221,7 +221,7 @@ const ResidentToolkit: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-16">
+    <div className="min-h-dvh bg-slate-50 pb-16">
 
       {/* ── Hero / Header ─────────────────────────────────────────────────── */}
       <div className="bg-white border-b border-slate-200">
