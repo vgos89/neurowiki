@@ -1,109 +1,225 @@
 /**
- * Symmetric encryption for case-transfer payloads.
+ * Asymmetric (receiver-initiated) encryption envelope — Option Q (2026-05-19).
  *
- * Algorithm: AES-256-GCM via the native SubtleCrypto API (no external deps).
- *   - Key derivation: PBKDF2 with 250,000 iterations, SHA-256, 32-byte output
- *   - Salt: 16 random bytes, prepended to ciphertext
- *   - IV (nonce): 12 random bytes, prepended after salt
- *   - Ciphertext format: base64(salt[16] | iv[12] | gcmCiphertext)
+ * Replaces the prior PIN-derived symmetric model. Used by the case-transfer
+ * relay (`src/lib/cases/transfer.ts`). Composable on `unknown` payloads —
+ * future device-pair flows can reuse these primitives without touching
+ * cases-specific types.
  *
- * The PIN is the user's 4-digit choice. The 6-digit transfer token is NOT the
- * key (it's the lookup identifier on Supabase). An attacker who steals the
- * Supabase row still needs the PIN to decrypt — and the PIN never reaches the
- * server.
+ * Algorithm:
+ *   - ECDH P-256 key agreement (Web Crypto SubtleCrypto, no userland).
+ *     Receiver generates `{privateKey, publicKey}`. Sender generates an
+ *     ephemeral pair, derives a shared secret with the receiver's public,
+ *     and uploads its own public alongside the ciphertext.
+ *   - HKDF-SHA256 derives the symmetric AES-GCM-256 key from the ECDH
+ *     output. Domain-separated via `info = "neurowiki-case-transfer-v1"`
+ *     so a future protocol revision can't share keys with this one.
+ *   - AES-256-GCM with a fresh 12-byte IV per encryption.
+ *   - Wire encoding: base64url (URL-safe) for keys and ciphertext.
  *
- * PBKDF2 250k iterations is OWASP-recommended for SHA-256 (2023). Slow enough
- * to make 4-digit brute force unattractive without making single decrypts
- * feel sluggish (target: ~150ms on a mid-tier phone).
+ * Security properties:
+ *   - The receiver's private key never leaves the device.
+ *   - The server never sees plaintext — it holds ciphertext + ephemeral
+ *     public keys (which are public by design).
+ *   - An attacker with the lookup token alone cannot decrypt; they would
+ *     need to break P-256 ECDH.
+ *
+ * Architect-review conditions honored (arch-PR-option-q-asymmetric-transfer.md):
+ *   #4 wire encoding = base64url + raw key export
+ *   #5 HKDF wrap with domain-separated info
+ *   #8 primitives generic on `unknown` — cases-aware code lives in transfer.ts
+ *   #1 symmetric encryptWithPin / decryptWithPin / generateTransferCode
+ *      exports removed in the same commit.
  */
 
-const PBKDF2_ITERATIONS = 250_000;
-const SALT_LEN = 16;
-const IV_LEN = 12;
+const ECDH_CURVE = 'P-256';
+const AES_LEN_BITS = 256;
+const IV_LEN_BYTES = 12;
+const HKDF_INFO_STRING = 'neurowiki-case-transfer-v1';
 
-/** Derive an AES-GCM key from a PIN + salt. */
-async function deriveKey(pin: string, salt: Uint8Array): Promise<CryptoKey> {
-  const enc = new TextEncoder();
-  const baseKey = await crypto.subtle.importKey(
-    'raw',
-    enc.encode(pin),
-    { name: 'PBKDF2' },
-    false,
-    ['deriveKey'],
-  );
-  return crypto.subtle.deriveKey(
-    {
-      name: 'PBKDF2',
-      salt,
-      iterations: PBKDF2_ITERATIONS,
-      hash: 'SHA-256',
-    },
-    baseKey,
-    { name: 'AES-GCM', length: 256 },
-    false,
-    ['encrypt', 'decrypt'],
-  );
+// ─── Public API ─────────────────────────────────────────────────────────
+
+export interface ReceiverKeypair {
+  /** Held in component state on the receiver device. Never persisted. */
+  privateKey: CryptoKey;
+  /** Uploaded to Supabase as the public side of the handshake. */
+  publicKeyB64Url: string;
 }
 
-/** Encrypt a JSON-serializable payload with a PIN. Returns base64 ciphertext. */
-export async function encryptWithPin(payload: unknown, pin: string): Promise<string> {
-  const salt = crypto.getRandomValues(new Uint8Array(SALT_LEN));
-  const iv = crypto.getRandomValues(new Uint8Array(IV_LEN));
-  const key = await deriveKey(pin, salt);
+export interface SenderEnvelope {
+  /** base64url(iv[12] || aes-gcm-ciphertext) */
+  ciphertextB64Url: string;
+  /** base64url(raw P-256 ephemeral public key, 65 bytes) */
+  senderPublicKeyB64Url: string;
+}
+
+/**
+ * Receiver-side: create a fresh ephemeral keypair for a single transfer
+ * session. The private key stays in memory; the public key gets uploaded
+ * to the relay as part of the session row.
+ */
+export async function generateReceiverKeypair(): Promise<ReceiverKeypair> {
+  const kp = await crypto.subtle.generateKey(
+    { name: 'ECDH', namedCurve: ECDH_CURVE },
+    true, // extractable so we can export the public side
+    ['deriveKey']
+  ) as CryptoKeyPair;
+  const rawPub = await crypto.subtle.exportKey('raw', kp.publicKey);
+  return {
+    privateKey: kp.privateKey,
+    publicKeyB64Url: bytesToBase64Url(new Uint8Array(rawPub)),
+  };
+}
+
+/**
+ * Sender-side: encrypt a payload destined for the holder of
+ * `receiverPublicKeyB64Url`. Generates a fresh ephemeral keypair internally
+ * and returns the sender's public key so the receiver can derive the same
+ * shared secret.
+ */
+export async function encryptForReceiver(
+  payload: unknown,
+  receiverPublicKeyB64Url: string,
+): Promise<SenderEnvelope> {
+  const receiverPublicKey = await importEcdhPublicKey(receiverPublicKeyB64Url);
+  const senderKp = await crypto.subtle.generateKey(
+    { name: 'ECDH', namedCurve: ECDH_CURVE },
+    true,
+    ['deriveKey']
+  ) as CryptoKeyPair;
+  const aesKey = await deriveAesKeyFromEcdh(senderKp.privateKey, receiverPublicKey);
+
+  const iv = crypto.getRandomValues(new Uint8Array(IV_LEN_BYTES));
   const plaintext = new TextEncoder().encode(JSON.stringify(payload));
-  const ciphertext = await crypto.subtle.encrypt(
+  const cipherBuf = await crypto.subtle.encrypt(
     { name: 'AES-GCM', iv },
-    key,
-    plaintext,
+    aesKey,
+    plaintext
   );
-  // Concatenate salt | iv | ciphertext, then base64
-  const combined = new Uint8Array(salt.length + iv.length + ciphertext.byteLength);
-  combined.set(salt, 0);
-  combined.set(iv, salt.length);
-  combined.set(new Uint8Array(ciphertext), salt.length + iv.length);
-  return bytesToBase64(combined);
+
+  const cipherBytes = new Uint8Array(cipherBuf);
+  const combined = new Uint8Array(iv.length + cipherBytes.length);
+  combined.set(iv, 0);
+  combined.set(cipherBytes, iv.length);
+
+  const senderPubRaw = await crypto.subtle.exportKey('raw', senderKp.publicKey);
+  return {
+    ciphertextB64Url: bytesToBase64Url(combined),
+    senderPublicKeyB64Url: bytesToBase64Url(new Uint8Array(senderPubRaw)),
+  };
 }
 
-/** Decrypt a base64 ciphertext with a PIN. Throws on wrong PIN / corrupted data. */
-export async function decryptWithPin<T = unknown>(b64: string, pin: string): Promise<T> {
-  const combined = base64ToBytes(b64);
-  if (combined.length < SALT_LEN + IV_LEN + 16) {
-    throw new Error('Ciphertext too short');
+/**
+ * Receiver-side: decrypt a payload encrypted by `encryptForReceiver`. Uses
+ * the receiver's private key (held in component state) and the sender's
+ * ephemeral public key (received from the relay alongside the ciphertext).
+ */
+export async function decryptAsReceiver<T = unknown>(
+  ciphertextB64Url: string,
+  senderPublicKeyB64Url: string,
+  receiverPrivateKey: CryptoKey,
+): Promise<T> {
+  const senderPublicKey = await importEcdhPublicKey(senderPublicKeyB64Url);
+  const aesKey = await deriveAesKeyFromEcdh(receiverPrivateKey, senderPublicKey);
+
+  const combined = base64UrlToBytes(ciphertextB64Url);
+  if (combined.length < IV_LEN_BYTES + 16) {
+    throw new Error('Ciphertext too short to be valid.');
   }
-  const salt = combined.slice(0, SALT_LEN);
-  const iv = combined.slice(SALT_LEN, SALT_LEN + IV_LEN);
-  const ciphertext = combined.slice(SALT_LEN + IV_LEN);
-  const key = await deriveKey(pin, salt);
+  const iv = combined.slice(0, IV_LEN_BYTES);
+  const ct = combined.slice(IV_LEN_BYTES);
+
+  let plainBuf: ArrayBuffer;
   try {
-    const plaintext = await crypto.subtle.decrypt(
+    plainBuf = await crypto.subtle.decrypt(
       { name: 'AES-GCM', iv },
-      key,
-      ciphertext,
+      aesKey,
+      ct
     );
-    const json = new TextDecoder().decode(plaintext);
-    return JSON.parse(json) as T;
   } catch {
-    throw new Error('Wrong PIN or corrupted transfer.');
+    throw new Error('Decryption failed. The transfer may be corrupted or intended for a different device.');
   }
+  const json = new TextDecoder().decode(plainBuf);
+  return JSON.parse(json) as T;
 }
 
-/** Generate a 6-digit transfer code as a string with leading zeros preserved. */
+/**
+ * Generate a 5-digit transfer code as a zero-padded string. Used by the
+ * receiver when creating a new session. Entropy is intentionally modest
+ * (~17 bits) — the asymmetric envelope means an attacker with the code
+ * alone cannot decrypt; the code is a lookup identifier, not a key.
+ */
 export function generateTransferCode(): string {
   const arr = new Uint32Array(1);
   crypto.getRandomValues(arr);
-  return String(arr[0] % 1_000_000).padStart(6, '0');
+  return String(arr[0] % 100_000).padStart(5, '0');
 }
 
-// ─── base64 helpers (Uint8Array <-> base64 string) ───────────────────────────
+// ─── Internal helpers ───────────────────────────────────────────────────
 
-function bytesToBase64(bytes: Uint8Array): string {
+async function importEcdhPublicKey(b64Url: string): Promise<CryptoKey> {
+  const raw = base64UrlToBytes(b64Url);
+  return crypto.subtle.importKey(
+    'raw',
+    raw,
+    { name: 'ECDH', namedCurve: ECDH_CURVE },
+    false,
+    [] // public key usage = derive-only, no direct encrypt/decrypt
+  );
+}
+
+/**
+ * ECDH → HKDF → AES-GCM key. Two SubtleCrypto deriveKey calls.
+ *
+ *   Step 1: ECDH between (own private, peer public) produces an HKDF input
+ *           key. We never expose the raw shared secret — SubtleCrypto keeps
+ *           it as a non-extractable CryptoKey.
+ *   Step 2: HKDF-SHA256 with domain-separated `info` produces the AES-256
+ *           key. Empty salt is the standard "no preshared salt" pattern
+ *           since both parties contribute fresh ephemeral material to the
+ *           shared secret already.
+ */
+async function deriveAesKeyFromEcdh(
+  ownPrivateKey: CryptoKey,
+  peerPublicKey: CryptoKey,
+): Promise<CryptoKey> {
+  // Step 1: ECDH → HKDF base key
+  const hkdfBase = await crypto.subtle.deriveKey(
+    { name: 'ECDH', public: peerPublicKey },
+    ownPrivateKey,
+    // The TypeScript lib types don't currently express HKDF as a valid
+    // derivedKeyType for deriveKey; the runtime accepts it. Cast through
+    // unknown to express the intent without relaxing other types.
+    { name: 'HKDF' } as unknown as AesKeyAlgorithm,
+    false,
+    ['deriveKey']
+  );
+  // Step 2: HKDF-SHA256 → AES-GCM-256 key (domain-separated by info)
+  return crypto.subtle.deriveKey(
+    {
+      name: 'HKDF',
+      hash: 'SHA-256',
+      salt: new Uint8Array(0),
+      info: new TextEncoder().encode(HKDF_INFO_STRING),
+    },
+    hkdfBase,
+    { name: 'AES-GCM', length: AES_LEN_BITS },
+    false,
+    ['encrypt', 'decrypt']
+  );
+}
+
+// ─── base64url helpers ──────────────────────────────────────────────────
+
+function bytesToBase64Url(bytes: Uint8Array): string {
   let bin = '';
   for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
-  return btoa(bin);
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-function base64ToBytes(b64: string): Uint8Array {
-  const bin = atob(b64);
+function base64UrlToBytes(s: string): Uint8Array {
+  const padded = s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - (s.length % 4)) % 4);
+  const bin = atob(padded);
   const out = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
   return out;

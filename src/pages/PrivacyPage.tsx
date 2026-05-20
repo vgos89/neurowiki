@@ -175,28 +175,34 @@ export default function PrivacyPage() {
           If you save cases on your phone and want to view them on a desktop browser (or
           vice-versa), the Send feature creates a short-lived encrypted package on a relay
           server. NeuroWiki uses Supabase as the relay. The server only ever holds opaque
-          ciphertext — it never sees your initials, scores, or notes in plaintext.
+          ciphertext and a couple of public keys — it never sees your initials, scores, or
+          timestamps in plaintext.
         </p>
         <p>
-          <span className="font-medium text-slate-700">How the encryption works:</span> you pick
-          a 4-digit PIN on the sending device. Your browser uses that PIN to derive an AES-256
-          encryption key (via PBKDF2 with 250,000 iterations) and encrypts the case bundle
-          locally. Only the encrypted blob is uploaded. The PIN never leaves your device. The
-          receiver enters the same PIN to decrypt locally. Without the PIN, the ciphertext is
-          unreadable even to NeuroWiki and Supabase.
+          <span className="font-medium text-slate-700">How the handshake works:</span> the
+          receiving device generates a fresh public/private key pair locally. It uploads only
+          the public key to Supabase along with a 5-digit lookup code. The sending device
+          fetches the public key by code, encrypts the case bundle with it (AES-256-GCM, using
+          an ECDH-derived session key), and uploads the encrypted blob. The receiving device
+          polls for the blob, decrypts it with its local private key, and deletes the relay
+          row. <span className="font-medium text-slate-700">The receiver's private key never
+          leaves the receiver's device.</span> Even Supabase or a network interceptor with the
+          code cannot decrypt — they would need to break P-256 elliptic-curve cryptography.
         </p>
         <p>
           <span className="font-medium text-slate-700">How long it sits on the server:</span>{' '}
-          15 minutes maximum. The row is deleted the moment the receiver fetches it (one-time
-          read). If nobody fetches it, an automated daily cleanup job sweeps any expired rows
-          as a backstop. The 15-minute TTL is the nominal limit; the backstop only matters for
-          rows that somehow survive longer (it never has, but the safety net exists).
+          15 minutes maximum. The row is deleted the moment the receiver decrypts it (one-time
+          read). If the receiver tab closes mid-transfer, the row sits idle until the
+          15-minute expiry, then a daily cleanup cron sweeps any orphaned rows as a backstop.
+          The 15-minute TTL is the hard limit.
         </p>
         <p>
-          <span className="font-medium text-slate-700">What the receiver does:</span> opens the
-          Import page on their other device, enters the 6-digit transfer code shown on the
-          sending device, then enters the same 4-digit PIN. The cases land in their local
-          IndexedDB; the server-side copy is destroyed.
+          <span className="font-medium text-slate-700">What you do as the sender:</span> on the
+          receiving device, open <em>"Receive case from phone"</em> (the desktop rail has a
+          link). A 5-digit code and QR appear. On your phone, open My Cases → Send, tick which
+          cases to send, then either type the code or scan the QR. The cases land in the
+          receiver's local IndexedDB; the server-side copy is destroyed automatically on
+          successful decrypt.
         </p>
         <p>
           The transfer feature is optional. It only runs when you initiate it — Save Case alone

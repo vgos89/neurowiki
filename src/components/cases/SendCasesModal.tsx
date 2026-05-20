@@ -1,126 +1,180 @@
-import React, { useState, useEffect, useRef } from 'react';
-import QRCode from 'qrcode';
-import { X, Send, Copy, Check, Loader2 } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Html5Qrcode } from 'html5-qrcode';
+import { X, Send, Camera, Loader2, Check, AlertTriangle, KeyRound } from 'lucide-react';
+import { createPortal } from 'react-dom';
 import { useModalFocusTrap } from '../../hooks/useModalFocusTrap';
 import { listCases } from '../../lib/cases/store';
-import { createTransfer, TRANSFER_TTL_MIN } from '../../lib/cases/transfer';
+import { sendCases } from '../../lib/cases/transfer';
 import { isSupabaseConfigured } from '../../lib/supabase';
+import type { SavedCase } from '../../lib/cases/types';
+import { getSavedCaseHeadline } from '../../lib/cases/format';
+import { formatClinicalDateShort } from '../../utils/clinicalDateTime';
 
 /**
- * SendCasesModal — wraps the cases-export flow:
- *   1. Prompt for 4-digit PIN
- *   2. Encrypt + POST to Supabase → 6-digit code
- *   3. Show large 6-digit code + QR
- *   4. User shares code + PIN with receiving device (text, in-person, etc.)
+ * SendCasesModal — phone-side sender flow under the asymmetric Option Q
+ * model (2026-05-19).
  *
- * Visibility: the row deletes the moment any client successfully fetches it;
- * a TTL sweep also purges expired rows. Window is 15 minutes.
+ * Stages:
+ *   1. 'select'    — list saved cases with checkboxes (all selected by
+ *                    default). User unchecks ones to exclude. Per-case
+ *                    selection is V's audit request.
+ *   2. 'enter-code'— receiver opens /import on their other device, which
+ *                    shows a 5-digit code. User types it here OR taps
+ *                    "Scan QR" to use the phone camera.
+ *   3. 'scanning'  — html5-qrcode active. Stops on successful scan.
+ *   4. 'sending'   — encrypt + UPDATE the relay row.
+ *   5. 'done'      — confirmation.
+ *   6. 'error'     — recoverable; "Try again" returns to 'enter-code'.
+ *
+ * No PIN. Encryption is ECDH with the receiver's ephemeral public key
+ * fetched from the relay by code. Receiver's private key never crosses
+ * the wire. See `src/lib/crypto/caseCipher.ts` for the envelope.
  */
 
 interface SendCasesModalProps {
   isOpen: boolean;
   onClose: () => void;
+  /** When set, the modal pre-selects only these case ids (skip the
+   *  selection stage). Used by CaseDetailModal's "Send this case" button. */
+  initialCaseIds?: string[];
 }
 
-type Stage = 'pin' | 'creating' | 'ready' | 'error';
+type Stage = 'select' | 'enter-code' | 'scanning' | 'sending' | 'done' | 'error';
 
-export const SendCasesModal: React.FC<SendCasesModalProps> = ({ isOpen, onClose }) => {
-  const [stage, setStage] = useState<Stage>('pin');
-  const [pin, setPin] = useState('');
+const QR_REGION_ID = 'send-cases-qr-region';
+
+export const SendCasesModal: React.FC<SendCasesModalProps> = ({
+  isOpen,
+  onClose,
+  initialCaseIds,
+}) => {
+  const [stage, setStage] = useState<Stage>('select');
+  const [cases, setCases] = useState<SavedCase[] | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [code, setCode] = useState('');
+  const [scanError, setScanError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [code, setCode] = useState<string | null>(null);
-  const [expiresAt, setExpiresAt] = useState<string | null>(null);
-  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
-  const [copiedField, setCopiedField] = useState<'code' | 'pin' | null>(null);
-  const [secondsRemaining, setSecondsRemaining] = useState<number>(TRANSFER_TTL_MIN * 60);
+  const [sentCount, setSentCount] = useState<number>(0);
 
   const dialogRef = useRef<HTMLDivElement>(null);
-  const pinInputRef = useRef<HTMLInputElement>(null);
-  useModalFocusTrap(isOpen, onClose, dialogRef, pinInputRef);
+  const codeInputRef = useRef<HTMLInputElement>(null);
+  const scannerRef = useRef<Html5Qrcode | null>(null);
+  useModalFocusTrap(isOpen, onClose, dialogRef, codeInputRef);
 
-  // Reset all state on open
+  // ─── Lifecycle ────────────────────────────────────────────────────────
+
   useEffect(() => {
-    if (isOpen) {
-      setStage('pin');
-      setPin('');
-      setError(null);
-      setCode(null);
-      setExpiresAt(null);
-      setQrDataUrl(null);
-      setCopiedField(null);
-      setSecondsRemaining(TRANSFER_TTL_MIN * 60);
+    if (!isOpen) {
+      // Stop any running scanner on close.
+      void stopScanning();
+      return;
     }
+    // Reset everything on open.
+    setStage('select');
+    setCode('');
+    setScanError(null);
+    setError(null);
+    setSentCount(0);
+    listCases().then((all) => {
+      setCases(all);
+      // Pre-select either the caller-specified subset or everything.
+      const initial = initialCaseIds && initialCaseIds.length > 0
+        ? new Set(initialCaseIds.filter((id) => all.some((c) => c.id === id)))
+        : new Set(all.map((c) => c.id));
+      setSelectedIds(initial);
+      // If initialCaseIds was passed, jump past selection — V's "tap
+      // a case → Send this case" flow.
+      if (initialCaseIds && initialCaseIds.length > 0) {
+        setStage('enter-code');
+      }
+    }).catch(() => setCases([]));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  // Countdown
-  useEffect(() => {
-    if (stage !== 'ready' || !expiresAt) return;
-    const id = setInterval(() => {
-      const remaining = Math.max(0, Math.floor((new Date(expiresAt).getTime() - Date.now()) / 1000));
-      setSecondsRemaining(remaining);
-      if (remaining === 0) clearInterval(id);
-    }, 1000);
-    return () => clearInterval(id);
-  }, [stage, expiresAt]);
+  const stopScanning = useCallback(async () => {
+    if (scannerRef.current) {
+      try { await scannerRef.current.stop(); } catch { /* noop */ }
+      try { scannerRef.current.clear(); } catch { /* noop */ }
+      scannerRef.current = null;
+    }
+  }, []);
 
-  // Generate QR when code becomes available
-  useEffect(() => {
-    if (!code) return;
-    QRCode.toDataURL(code, { width: 240, margin: 1, color: { dark: '#1746A2', light: '#ffffff' } })
-      .then(setQrDataUrl)
-      .catch(() => setQrDataUrl(null));
-  }, [code]);
+  // ─── Stage transitions ────────────────────────────────────────────────
+
+  const handleStartScan = async () => {
+    setScanError(null);
+    setStage('scanning');
+    // One frame so the QR region div mounts.
+    await new Promise((r) => requestAnimationFrame(() => r(null)));
+    try {
+      const scanner = new Html5Qrcode(QR_REGION_ID);
+      scannerRef.current = scanner;
+      await scanner.start(
+        { facingMode: 'environment' },
+        { fps: 10, qrbox: { width: 220, height: 220 } },
+        (decoded) => {
+          // QR encodes the 5-digit code. Strip anything non-digit defensively.
+          const cleaned = decoded.replace(/[^0-9]/g, '').slice(0, 5);
+          if (cleaned.length === 5) {
+            setCode(cleaned);
+            void stopScanning();
+            setStage('enter-code');
+          }
+        },
+        // Frame-level errors fire constantly while no QR is in view —
+        // ignore them. Camera-permission / start errors fire below.
+        () => { /* noop */ }
+      );
+    } catch (e) {
+      setScanError(e instanceof Error ? e.message : 'Could not start camera.');
+      setStage('enter-code');
+    }
+  };
+
+  const handleCancelScan = async () => {
+    await stopScanning();
+    setStage('enter-code');
+  };
+
+  const handleSend = async () => {
+    if (code.length !== 5 || !cases) return;
+    if (!isSupabaseConfigured()) {
+      setError('Sync is not available on this device.');
+      setStage('error');
+      return;
+    }
+    const toSend = cases.filter((c) => selectedIds.has(c.id));
+    if (toSend.length === 0) {
+      setError('Select at least one case to send.');
+      return;
+    }
+    setStage('sending');
+    setError(null);
+    try {
+      await sendCases(code, toSend);
+      setSentCount(toSend.length);
+      setStage('done');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not send.');
+      setStage('error');
+    }
+  };
+
+  const toggleSelected = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  // ─── Render ───────────────────────────────────────────────────────────
 
   if (!isOpen) return null;
 
-  const handlePinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const cleaned = e.target.value.replace(/[^0-9]/g, '').slice(0, 4);
-    setPin(cleaned);
-    if (error) setError(null);
-  };
+  const selectedCount = selectedIds.size;
 
-  const handleCreate = async () => {
-    if (pin.length !== 4) {
-      setError('PIN must be exactly 4 digits.');
-      return;
-    }
-    if (!isSupabaseConfigured()) {
-      setError('Sync is not available on this device.');
-      return;
-    }
-    setStage('creating');
-    setError(null);
-    try {
-      const cases = await listCases();
-      if (cases.length === 0) {
-        setStage('error');
-        setError('No saved cases to send.');
-        return;
-      }
-      const result = await createTransfer(cases, pin);
-      setCode(result.code);
-      setExpiresAt(result.expiresAt);
-      setStage('ready');
-    } catch (e) {
-      setStage('error');
-      setError(e instanceof Error ? e.message : 'Could not create transfer.');
-    }
-  };
-
-  const handleCopy = async (kind: 'code' | 'pin', value: string) => {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopiedField(kind);
-      setTimeout(() => setCopiedField(null), 2000);
-    } catch {
-      /* noop */
-    }
-  };
-
-  const mm = Math.floor(secondsRemaining / 60).toString().padStart(2, '0');
-  const ss = (secondsRemaining % 60).toString().padStart(2, '0');
-
-  return (
+  const content = (
     <div
       className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm"
       onClick={onClose}
@@ -134,13 +188,18 @@ export const SendCasesModal: React.FC<SendCasesModalProps> = ({ isOpen, onClose 
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-5 pt-5 pb-3 flex items-start justify-between gap-3">
+        <div className="px-5 pt-5 pb-3 flex items-start justify-between gap-3 border-b border-slate-100">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">
               Send cases
             </p>
             <h2 id="send-cases-title" className="text-base font-semibold text-slate-900 tracking-tight">
-              Transfer to another device
+              {stage === 'select' && 'Pick which to send'}
+              {stage === 'enter-code' && 'Enter the code from your other device'}
+              {stage === 'scanning' && 'Scan the QR code'}
+              {stage === 'sending' && 'Sending…'}
+              {stage === 'done' && 'Sent'}
+              {stage === 'error' && 'Could not send'}
             </h2>
           </div>
           <button
@@ -153,138 +212,215 @@ export const SendCasesModal: React.FC<SendCasesModalProps> = ({ isOpen, onClose 
           </button>
         </div>
 
-        {/* PIN stage */}
-        {stage === 'pin' && (
-          <div className="px-5 pb-5 space-y-4">
+        {/* SELECT stage */}
+        {stage === 'select' && (
+          <div className="px-5 py-4 space-y-3">
             <p className="text-sm text-slate-600 leading-relaxed">
-              Cases stay encrypted. The other device will need both the transfer code AND the PIN you set here.
+              Choose which saved cases to send. They'll be encrypted on this device before they leave.
             </p>
+            {cases === null && (
+              <div className="text-center py-8 text-sm text-slate-500">Loading…</div>
+            )}
+            {cases && cases.length === 0 && (
+              <div className="text-center py-8 text-sm text-slate-500">
+                You don't have any saved cases yet.
+              </div>
+            )}
+            {cases && cases.length > 0 && (
+              <>
+                <div className="flex items-center justify-between text-[11px] text-slate-500">
+                  <span>{selectedCount} of {cases.length} selected</span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedIds(
+                      selectedCount === cases.length ? new Set() : new Set(cases.map((c) => c.id))
+                    )}
+                    className="text-neuro-600 hover:text-neuro-700 font-medium"
+                  >
+                    {selectedCount === cases.length ? 'Clear all' : 'Select all'}
+                  </button>
+                </div>
+                <ul className="space-y-1.5 max-h-[40vh] overflow-y-auto -mx-1 px-1">
+                  {cases.map((c) => {
+                    const selected = selectedIds.has(c.id);
+                    return (
+                      <li key={c.id}>
+                        <label className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
+                          selected
+                            ? 'bg-neuro-50/60 border-neuro-200'
+                            : 'bg-white border-slate-100 hover:bg-slate-50'
+                        }`}>
+                          <input
+                            type="checkbox"
+                            checked={selected}
+                            onChange={() => toggleSelected(c.id)}
+                            className="mt-0.5 w-4 h-4 rounded border-slate-300 text-neuro-500 focus:ring-neuro-500 focus:ring-offset-0 flex-shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-baseline gap-2">
+                              <span className="text-sm font-semibold text-slate-900 tracking-[0.01em]">
+                                {c.initials}
+                              </span>
+                              <span className="text-[10px] font-medium uppercase tracking-[0.04em] text-slate-400">
+                                {formatClinicalDateShort(new Date(c.createdAt))}
+                              </span>
+                            </div>
+                            <p className="text-xs text-slate-600 truncate">{getSavedCaseHeadline(c)}</p>
+                          </div>
+                        </label>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </>
+            )}
+            <button
+              type="button"
+              onClick={() => setStage('enter-code')}
+              disabled={selectedCount === 0}
+              className={`w-full min-h-[44px] py-2.5 rounded-full text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
+                selectedCount === 0
+                  ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  : 'bg-neuro-500 hover:bg-neuro-600 text-white'
+              }`}
+            >
+              Continue with {selectedCount} {selectedCount === 1 ? 'case' : 'cases'}
+            </button>
+          </div>
+        )}
 
+        {/* ENTER-CODE stage */}
+        {stage === 'enter-code' && (
+          <div className="px-5 py-4 space-y-4">
+            <p className="text-sm text-slate-600 leading-relaxed">
+              On your other device, open <span className="font-semibold">Receive case from phone</span> (the desktop rail has a link). You'll see a 5-digit code. Enter it below, or tap <span className="font-semibold">Scan QR</span> to use your camera.
+            </p>
             <div>
-              <label htmlFor="send-pin" className="block text-xs font-semibold text-slate-700 mb-1.5">
-                Choose a 4-digit PIN
+              <label htmlFor="send-code" className="block text-xs font-semibold text-slate-700 mb-1.5">
+                5-digit code
               </label>
               <input
-                id="send-pin"
-                ref={pinInputRef}
+                id="send-code"
+                ref={codeInputRef}
                 type="text"
                 inputMode="numeric"
                 autoComplete="off"
-                value={pin}
-                onChange={handlePinChange}
-                placeholder="• • • •"
-                maxLength={4}
-                className="w-full px-3 py-3 text-2xl text-center text-slate-900 bg-white border border-slate-200 rounded-lg focus:border-neuro-500 focus:outline-none focus:ring-1 focus:ring-neuro-500 placeholder:text-slate-300 tracking-[0.4em] font-mono"
+                value={code}
+                onChange={(e) => {
+                  setCode(e.target.value.replace(/[^0-9]/g, '').slice(0, 5));
+                  if (error) setError(null);
+                }}
+                placeholder="—————"
+                maxLength={5}
+                className="w-full px-3 py-3 text-3xl text-center text-slate-900 bg-white border border-slate-200 rounded-lg focus:border-neuro-500 focus:outline-none focus:ring-1 focus:ring-neuro-500 placeholder:text-slate-200 tracking-[0.4em] font-mono"
               />
-              <p className="text-[11px] text-slate-500 mt-1">
-                Pick something easy to share. Same PIN unlocks the cases on the other device.
-              </p>
             </div>
-
+            <button
+              type="button"
+              onClick={handleStartScan}
+              className="w-full min-h-[44px] py-2.5 rounded-full text-sm font-medium border border-slate-200 hover:bg-slate-50 text-slate-700 inline-flex items-center justify-center gap-2 transition-colors"
+            >
+              <Camera className="w-4 h-4" aria-hidden />
+              Scan QR code instead
+            </button>
+            {scanError && (
+              <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 leading-relaxed">
+                {scanError}
+              </p>
+            )}
             {error && (
               <p role="alert" className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
                 {error}
               </p>
             )}
-
             <button
               type="button"
-              onClick={handleCreate}
-              disabled={pin.length !== 4}
-              className={`w-full min-h-[44px] py-2.5 rounded-full text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
-                pin.length !== 4
+              onClick={handleSend}
+              disabled={code.length !== 5}
+              className={`w-full min-h-[44px] py-2.5 rounded-full text-sm font-semibold transition-colors inline-flex items-center justify-center gap-2 ${
+                code.length !== 5
                   ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                   : 'bg-neuro-500 hover:bg-neuro-600 text-white'
               }`}
             >
               <Send className="w-4 h-4" aria-hidden />
-              Create transfer
+              Send {selectedCount} {selectedCount === 1 ? 'case' : 'cases'}
             </button>
           </div>
         )}
 
-        {/* Creating stage */}
-        {stage === 'creating' && (
-          <div className="px-5 pb-10 pt-4 flex flex-col items-center text-center">
+        {/* SCANNING stage */}
+        {stage === 'scanning' && (
+          <div className="px-5 py-4 space-y-4">
+            <p className="text-sm text-slate-600 leading-relaxed text-center">
+              Point your camera at the QR code on your other device.
+            </p>
+            <div id={QR_REGION_ID} className="w-full max-w-[280px] mx-auto rounded-xl overflow-hidden border border-slate-200" />
+            <button
+              type="button"
+              onClick={handleCancelScan}
+              className="w-full min-h-[44px] py-2.5 rounded-full text-sm font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+            >
+              Cancel scan
+            </button>
+          </div>
+        )}
+
+        {/* SENDING stage */}
+        {stage === 'sending' && (
+          <div className="px-5 py-10 flex flex-col items-center text-center">
             <Loader2 className="w-8 h-8 text-neuro-500 animate-spin mb-3" aria-hidden />
             <p className="text-sm text-slate-700">Encrypting and uploading…</p>
             <p className="text-xs text-slate-500 mt-1">Usually takes a couple seconds.</p>
           </div>
         )}
 
-        {/* Ready stage — show code + QR */}
-        {stage === 'ready' && code && (
-          <div className="px-5 pb-5 space-y-4">
-            {/* Transfer code */}
-            <div className="bg-slate-50 rounded-xl p-4 text-center">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">
-                Transfer code
-              </p>
-              <p className="text-[40px] font-mono font-bold text-slate-900 tracking-[0.15em] leading-none mb-3">
-                {code.slice(0, 3)} {code.slice(3)}
-              </p>
-              <button
-                type="button"
-                onClick={() => handleCopy('code', code)}
-                className="min-h-[36px] px-3 py-1.5 rounded-full bg-white border border-slate-200 hover:bg-slate-100 text-xs font-semibold text-slate-700 transition-colors inline-flex items-center gap-1.5"
-              >
-                {copiedField === 'code' ? (
-                  <><Check className="w-3 h-3 text-emerald-600" aria-hidden /> Copied</>
-                ) : (
-                  <><Copy className="w-3 h-3" aria-hidden /> Copy code</>
-                )}
-              </button>
+        {/* DONE stage */}
+        {stage === 'done' && (
+          <div className="px-5 py-6 flex flex-col items-center text-center">
+            <div className="w-14 h-14 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mb-3">
+              <Check className="w-6 h-6 text-emerald-600" aria-hidden />
             </div>
-
-            {/* QR */}
-            {qrDataUrl && (
-              <div className="flex justify-center">
-                <img src={qrDataUrl} alt="QR code for transfer" className="w-44 h-44 rounded-lg border border-slate-100" />
-              </div>
-            )}
-
-            {/* PIN reminder */}
-            <div className="bg-amber-50 border-l-2 border-amber-400 rounded-lg px-3 py-2">
-              <p className="text-xs text-amber-900 leading-relaxed">
-                <span className="font-semibold">Remember the PIN:</span> the other device needs both the code AND your 4-digit PIN to open the cases. The PIN was never sent anywhere — you share it separately.
-              </p>
-            </div>
-
-            {/* Expiry timer */}
-            <p className="text-center text-xs text-slate-500">
-              {secondsRemaining > 0
-                ? <>Code valid for <span className="font-mono font-semibold text-slate-700">{mm}:{ss}</span></>
-                : <span className="text-red-600 font-semibold">Code expired. Start over to get a new one.</span>}
+            <p className="text-base font-semibold text-slate-900 mb-1">
+              Sent {sentCount} {sentCount === 1 ? 'case' : 'cases'}
             </p>
-
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Your other device should show them now. The encrypted package is gone from the server.
+            </p>
             <button
               type="button"
               onClick={onClose}
-              className="w-full min-h-[44px] py-2.5 rounded-full text-sm font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+              className="mt-5 w-full min-h-[44px] py-2.5 rounded-full text-sm font-semibold bg-neuro-500 hover:bg-neuro-600 text-white transition-colors"
             >
               Done
             </button>
           </div>
         )}
 
-        {/* Error stage */}
+        {/* ERROR stage */}
         {stage === 'error' && (
-          <div className="px-5 pb-5 space-y-3">
-            <p role="alert" className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-3 leading-relaxed">
-              {error ?? 'Something went wrong.'}
-            </p>
+          <div className="px-5 py-5 space-y-3">
+            <div className="flex items-start gap-2 px-3 py-3 bg-red-50 border border-red-200 rounded-lg">
+              <AlertTriangle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" aria-hidden />
+              <p className="text-sm text-red-700 leading-relaxed">
+                {error ?? 'Something went wrong.'}
+              </p>
+            </div>
             <button
               type="button"
-              onClick={() => setStage('pin')}
-              className="w-full min-h-[44px] py-2.5 rounded-full text-sm font-semibold bg-neuro-500 hover:bg-neuro-600 text-white transition-colors"
+              onClick={() => { setStage('enter-code'); setError(null); }}
+              className="w-full min-h-[44px] py-2.5 rounded-full text-sm font-semibold bg-neuro-500 hover:bg-neuro-600 text-white transition-colors inline-flex items-center justify-center gap-2"
             >
-              Try again
+              <KeyRound className="w-4 h-4" aria-hidden />
+              Try a different code
             </button>
           </div>
         )}
       </div>
     </div>
   );
+
+  return createPortal(content, document.body);
 };
 
 export default SendCasesModal;
