@@ -8,7 +8,7 @@ export interface MetaData {
 // LAYOUT_SPEC §7 — width zone for main content wrapper
 export type Zone = 'reading' | 'reference' | 'none';
 // LAYOUT_SPEC §2 / §6.1.2 — nav tab identifiers
-export type NavTab = 'home' | 'trials' | 'calculators' | 'pathways' | 'guide';
+export type NavTab = 'home' | 'trials' | 'calculators' | 'pathways' | 'guide' | 'cases';
 
 export type StaticRouteKey =
   | 'home'
@@ -727,7 +727,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     published: true,
     includeInSitemap: false, // private surface; on-device data, not crawlable
     zone: 'reference',
-    bottomNavTab: null,
+    bottomNavTab: 'cases',
     railItem: null,
     meta: {
       title: 'My Cases · NeuroWiki',

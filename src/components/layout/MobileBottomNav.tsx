@@ -5,19 +5,22 @@
 // navHref preserves ?scenario= for scenario-aware routes and ?favs= for all hubs.
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home } from 'lucide-react';
+import { Home, Briefcase } from 'lucide-react';
 import { CalcsIcon } from './icons/CalcsIcon';
 import { PathwaysIcon } from './icons/PathwaysIcon';
 import { GuideIcon } from './icons/GuideIcon';
 import { TrialsIcon } from './icons/TrialsIcon';
 
-// LAYOUT_SPEC §2.4 — active tab matching rules
+// LAYOUT_SPEC §2.4 — active tab matching rules.
+// 2026-05-19: added Cases tab (6th) per V audit — phone users need direct
+// access to /my-cases without going through a stack of menus.
 const NAV_TABS = [
   { label: 'Home',     path: '/',            Icon: Home,         isActive: (p: string) => p === '/' },
   { label: 'Trials',   path: '/trials',      Icon: TrialsIcon,   isActive: (p: string) => p.startsWith('/trials') },
   { label: 'Calcs',    path: '/calculators', Icon: CalcsIcon,    isActive: (p: string) => p.startsWith('/calculators') },
   { label: 'Pathways', path: '/pathways',    Icon: PathwaysIcon, isActive: (p: string) => p.startsWith('/pathways') },
   { label: 'Guide',    path: '/guide',       Icon: GuideIcon,    isActive: (p: string) => p.startsWith('/guide') },
+  { label: 'Cases',    path: '/my-cases',    Icon: Briefcase,    isActive: (p: string) => p.startsWith('/my-cases') },
 ] as const;
 
 // Routes that share the ?scenario= vocabulary (HUB_SPEC §1.4.2)

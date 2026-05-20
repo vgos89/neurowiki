@@ -193,23 +193,12 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
             </p>
           </div>
 
-          <div>
-            <label htmlFor="case-note" className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Note <span className="font-normal text-slate-400">(optional)</span>
-            </label>
-            <input
-              id="case-note"
-              type="text"
-              value={note}
-              onChange={(e) => setNote(e.target.value.slice(0, 120))}
-              placeholder="e.g., Bed 3, LVO ruled out"
-              maxLength={120}
-              className="w-full px-3 py-2.5 text-sm text-slate-900 bg-white border border-slate-200 rounded-lg focus:border-neuro-500 focus:outline-none focus:ring-1 focus:ring-neuro-500 placeholder:text-slate-300"
-            />
-            <p className="text-[11px] text-slate-500 mt-1">
-              A short reminder for yourself. {120 - note.length} characters left.
-            </p>
-          </div>
+          {/* Note input removed 2026-05-19 (V audit) — the free-text field
+              was a HIPAA risk because nothing prevented a clinician from
+              typing a full patient name. The `note` field is preserved in
+              the SavedCase schema so existing cases display their note in
+              the detail view; only the input is removed. New cases will
+              have no note. */}
 
           {error && (
             <p role="alert" className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">

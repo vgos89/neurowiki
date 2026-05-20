@@ -50,7 +50,7 @@ if (missingPublishedFlag.length > 0) {
 // private utility routes (e.g., /my-cases) that don't surface in the global
 // bottom nav or desktop rail.
 const VALID_ZONES = ['reading', 'reference', 'none'];
-const VALID_TABS = ['home', 'trials', 'calculators', 'pathways', 'guide'];
+const VALID_TABS = ['home', 'trials', 'calculators', 'pathways', 'guide', 'cases'];
 
 const missingZone = STATIC_ROUTE_DEFINITIONS.filter(
   (route) => !VALID_ZONES.includes(route.zone)
