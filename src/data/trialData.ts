@@ -128,6 +128,8 @@ export interface SafetyProfile {
 
 export interface TrialMetadata {
   id: string;
+  /** Optional clinical-claim tag per CLAUDE.md §13.4 Phase 1. When set, this trial entry is treated as a tagged "data" surface and the claim must be registered in src/lib/citations/claims.ts. */
+  claimId?: string;
   title: string;
   subtitle: string;
   category: string;
@@ -7600,6 +7602,205 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     listCategory: 'antiplatelets',
     listDescription: 'Ticagrelor vs clopidogrel DAPT in CYP2C19 loss-of-function carriers. NNT=63. AHA 2026 COR 2b.',
+  },
+
+  // ─── PRoFESS TRIAL ────────────────────────────────────────────────────────
+  'profess-trial': {
+    id: 'profess-trial',
+    claimId: 'profess-clopidogrel-vs-asa-erdp-ni-2008',
+    title: 'PRoFESS Trial',
+    subtitle: 'Aspirin + Extended-Release Dipyridamole vs Clopidogrel for Recurrent Stroke',
+    category: 'Neuro Trials',
+    trialResult: 'NEUTRAL',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-not-established',
+    resultSubtype: 'non-inferiority',
+    harmSignal: 'ICH 1.4% vs 1.0% with ASA–ERDP (HR 1.42, 95% CI 1.11–1.83); discontinuation 29.1% vs 22.6% (P<0.001)',
+    applicability: {
+      populationExclusions: [
+        'Completed ischemic stroke within 90 days only. TIA was NOT a qualifying event',
+        'Non-cardioembolic mechanism assumed; cardioembolic stroke (e.g., atrial fibrillation) was not the trial population',
+        'Two long-term monotherapy regimens compared head-to-head. PRoFESS is not a DAPT trial and does not inform the acute minor-stroke/TIA window covered by CHANCE and POINT',
+      ],
+    },
+    stats: {
+      sampleSize: {
+        value: '20,332',
+        label: 'Randomized Patients',
+        info: 'Patients with non-cardioembolic ischemic stroke within 90 days before randomization. Median 15 days from index event to enrollment; 39.8% enrolled within 10 days. 695 centers across 35 countries. Mean age 66 years. 2×2 factorial with telmisartan vs placebo. ASA–ERDP arm n=10,181; clopidogrel arm n=10,151. Mean follow-up 2.5 years (range 1.5–4.4).'
+      },
+      primaryEndpoint: {
+        value: 'Stroke recurrence',
+        label: 'over 2.5 Years',
+        info: 'First recurrence of stroke of any type (ischemic or hemorrhagic), analyzed by Cox proportional hazards over mean 2.5-year follow-up.'
+      },
+      pValue: {
+        value: 'HR 1.01 (0.92–1.11)',
+        label: 'Noninferiority not established',
+        info: 'Noninferiority design with prespecified hazard-ratio margin of 1.075 (one-sided α=0.025). Observed HR 1.01 favored neither arm, but the upper bound of the 95% CI (1.11) crossed the noninferiority margin (1.075). Noninferiority was not formally established. Do not interpret this as proof of equivalence — it is a failed NI conclusion despite overlapping event curves.',
+        highlight: false
+      },
+      effectSize: {
+        value: '9.0% vs 8.8%',
+        label: 'Recurrent stroke rate',
+        info: 'Stroke recurrence: 916/10,181 (9.0%) with ASA–ERDP vs 898/10,151 (8.8%) with clopidogrel. Hazard ratio 1.01 (95% CI 0.92–1.11). Curves overlapped throughout follow-up.',
+        highlight: false
+      }
+    },
+    trialDesign: {
+      type: [
+        'Randomized double-blind double-dummy noninferiority trial',
+        '2×2 factorial (antiplatelet × telmisartan/placebo)',
+        '695 centers, 35 countries',
+        '1:1 allocation between ASA–ERDP and clopidogrel',
+        'Noninferiority margin: hazard ratio 1.075'
+      ],
+      timeline: 'Enrolled Sep 2003 – Feb 2008; mean follow-up 2.5 years',
+      sampleSize: {
+        value: '20,332 patients',
+        info: 'Powered to detect a 6.5% relative risk reduction with 82% power, predicated on 1,715 recurrent strokes. Trial ran to the prespecified event count and was not stopped early.'
+      },
+      primaryEndpoint: {
+        value: 'First recurrence of stroke of any type',
+        info: 'Time-to-event analysis using Cox proportional hazards. The noninferiority comparison hinged on whether the upper bound of the 95% CI for the ASA–ERDP vs clopidogrel hazard ratio lay below 1.075.'
+      },
+      pValue: {
+        value: 'HR 1.01 (95% CI 0.92–1.11); NI margin 1.075',
+        info: 'The observed hazard ratio is essentially 1.0, but the upper confidence bound crosses the prespecified margin. The trial therefore failed to formally establish noninferiority of ASA–ERDP versus clopidogrel.'
+      }
+      // No NNT field. Noninferiority design with NI not established precludes a meaningful NNT.
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 9.0,
+        label: 'Stroke recurrence over 2.5 years',
+        name: 'ASA + ER-Dipyridamole (Aggrenox)'
+      },
+      control: {
+        percentage: 8.8,
+        label: 'Stroke recurrence over 2.5 years',
+        name: 'Clopidogrel 75mg daily'
+      }
+    },
+    intervention: {
+      treatment: {
+        name: 'Aspirin 25mg + Extended-Release Dipyridamole 200mg twice daily (Aggrenox)',
+        description: 'Aspirin 50 mg/day plus extended-release dipyridamole 400 mg/day, given as a fixed-dose combination twice daily.',
+        details: [
+          '25 mg aspirin + 200 mg ER-dipyridamole, twice daily',
+          'Total daily dose: ASA 50 mg + ER-DP 400 mg',
+          'Double-dummy with matching clopidogrel placebo',
+          'Headache is a recognized class effect of dipyridamole and contributed to higher discontinuation in this arm'
+        ]
+      },
+      control: {
+        name: 'Clopidogrel 75mg once daily',
+        description: 'Standard long-term clopidogrel monotherapy with matching ASA–ERDP placebo.',
+        details: [
+          'Clopidogrel 75 mg once daily',
+          'Double-dummy with matching ASA–ERDP placebo',
+          'No aspirin background in this arm'
+        ]
+      }
+    },
+    clinicalContext: 'PRoFESS sits in the long-term secondary-prevention monotherapy lineage. CAPRIE (1996) showed clopidogrel was at least as effective as aspirin alone. ESPS-2 (1996) showed aspirin plus extended-release dipyridamole outperformed aspirin alone. By 2003 the open question was whether the two strongest monotherapies — clopidogrel and ASA–ERDP — were interchangeable. PRoFESS was the head-to-head answer. The later short-course DAPT trials (CHANCE 2013, POINT 2018, THALES 2020) addressed a different clinical scenario: the first 21–90 days after minor stroke or TIA. PRoFESS does not speak to that window. The qualifying event in PRoFESS was a completed ischemic stroke within 90 days, and the comparison was sustained monotherapy over years.',
+    // No `calculations` block. NI design + noninferiority not established precludes a valid NNT.
+    // Showing an NNT here would violate the Option Y rule (trial-statistics skill) and the
+    // pre-commit NNT guard.
+    pearls: [
+      'Recurrent stroke rates were similar in both arms (9.0% ASA–ERDP vs 8.8% clopidogrel) but the upper bound of the 95% CI (1.11) crossed the prespecified noninferiority margin of 1.075',
+      'Noninferiority was not formally established. Do not describe the regimens as "equivalent" or "interchangeable" on PRoFESS evidence alone',
+      'Intracranial hemorrhage was significantly higher with ASA–ERDP: 1.4% vs 1.0%, HR 1.42 (95% CI 1.11–1.83)',
+      'Major hemorrhagic events: 4.1% (ASA–ERDP) vs 3.6% (clopidogrel), HR 1.15 (95% CI 1.00–1.32)',
+      'Discontinuation for any cause: 29.1% (ASA–ERDP) vs 22.6% (clopidogrel), P<0.001 — headache from dipyridamole was the main driver',
+      'New or worsening congestive heart failure was lower with ASA–ERDP: 1.4% vs 1.8%, HR 0.78 (95% CI 0.62–0.96)',
+      'All-cause mortality was comparable: 7.3% vs 7.4%',
+      'Qualifying event: ischemic stroke within 90 days. TIA was NOT eligible',
+      'Median time from index stroke to randomization: 15 days; 39.8% within 10 days',
+      'Trial ran to its prespecified 1,715-event count — not stopped early',
+      '2×2 factorial with telmisartan; the antihypertensive arm reported separately (Yusuf, NEJM 2008)',
+      'AHA/ASA 2021 Secondary Prevention Guideline still lists clopidogrel, aspirin, and ASA–ERDP as acceptable long-term monotherapy options after non-cardioembolic ischemic stroke',
+      'Sponsor: Boehringer Ingelheim (Aggrenox licensor and telmisartan manufacturer) — disclosed in the publication',
+      'PRoFESS is not a DAPT trial. CHANCE (2013) and POINT (2018) address short-course dual antiplatelet therapy after minor stroke or TIA, a separate clinical question',
+      'Published: Sacco RL, et al. N Engl J Med. 2008;359(12):1238–1251. DOI: 10.1056/NEJMoa0805002'
+    ],
+    conclusion: '',
+    source: 'Sacco RL, Diener HC, Yusuf S, et al. Aspirin and extended-release dipyridamole versus clopidogrel for recurrent stroke. N Engl J Med. 2008;359(12):1238–1251.',
+    doi: '10.1056/NEJMoa0805002',
+    pmid: '18753638',
+    clinicalTrialsId: 'NCT00153062',
+    keyMessage: 'Stroke recurrence rates were similar with ASA + ER-dipyridamole versus clopidogrel, but the 95% CI crossed the prespecified noninferiority margin so noninferiority was not formally established. Intracranial hemorrhage and discontinuation were higher with ASA–ERDP.',
+    safetyData: 'Intracranial hemorrhage was significantly more frequent with ASA–ERDP: 147 events (1.4%) vs 103 events (1.0%) with clopidogrel, HR 1.42 (95% CI 1.11–1.83). Major hemorrhagic events of any kind: 419 (4.1%) vs 365 (3.6%), HR 1.15 (95% CI 1.00–1.32). All-cause mortality was 7.3% vs 7.4% (comparable). New or worsening congestive heart failure was lower with ASA–ERDP: 1.4% vs 1.8%, HR 0.78 (95% CI 0.62–0.96; P=0.02) — an unexplained signal favoring dipyridamole that has not been replicated in dedicated heart-failure trials. Drug discontinuation from any cause was significantly higher with ASA–ERDP (29.1% vs 22.6%, P<0.001), driven largely by dipyridamole-induced headache.',
+    educationalContext: 'PRoFESS is the operational head-to-head test of the two dominant long-term antiplatelet monotherapies after ischemic stroke. CAPRIE (1996) had established clopidogrel at least equal to aspirin; ESPS-2 (1996) had established ASA + ER-dipyridamole superior to aspirin alone. PRoFESS asked: between these two, is one preferable? The answer is "neither is clearly preferable on efficacy, but the side-effect profiles differ." Curves for stroke recurrence overlapped, the formal noninferiority margin was not met, intracranial hemorrhage was higher with ASA–ERDP, and discontinuation from dipyridamole headache was higher with ASA–ERDP. The trial does not address short-course DAPT after minor stroke or TIA — CHANCE (2013), POINT (2018), and THALES (2020) cover that distinct clinical question, with different populations, different time windows, and different mechanisms.',
+    clinicalApplication: 'When choosing long-term antiplatelet monotherapy for a patient with non-cardioembolic ischemic stroke, clopidogrel 75mg daily and aspirin + ER-dipyridamole are both acceptable per AHA/ASA 2021 secondary-prevention guidance. PRoFESS did not formally establish noninferiority of ASA–ERDP versus clopidogrel; the regimens cannot be presented to patients as interchangeable on efficacy. Factors that may guide selection: (1) tolerance for dipyridamole-induced headache — discontinuation in PRoFESS was 29.1% vs 22.6%, and headache was the main driver; (2) intracranial hemorrhage risk — significantly higher with ASA–ERDP (HR 1.42), so favor clopidogrel in patients with cerebral microbleeds, prior ICH, or other elevated bleeding risk; (3) cost, formulary, and availability — clopidogrel is widely generic, ASA–ERDP is a fixed-dose combination; (4) genotype where available — CYP2C19 loss-of-function carriers have reduced clopidogrel activation (see CHANCE-2). PRoFESS does not inform treatment in the first 21 days after minor stroke or TIA — that window is governed by CHANCE and POINT.',
+    limitations: [
+      'Noninferiority margin of HR 1.075 is generous; failing to establish noninferiority under a generous margin strengthens the conclusion that interchangeability cannot be claimed',
+      'TIA was not a qualifying event — results do not extend to the TIA population',
+      'Discontinuation differential of ~6.5 percentage points (29.1% vs 22.6%) raises concerns about treatment exposure differences between arms in the ITT analysis',
+      'Funded and operationally managed by Boehringer Ingelheim, the licensor of Aggrenox and manufacturer of telmisartan, with the usual sponsor-disclosure considerations',
+      '2×2 factorial with telmisartan introduces potential interaction with blood-pressure management, although the antihypertensive arm was analyzed separately',
+      'Mean follow-up of 2.5 years limits inference about very long-term (5–10 year) comparative efficacy',
+      'Headache-specific discontinuation rate was not separately reported in the publication used for this entry; aggregate discontinuation is verified but headache-only granularity was not extracted'
+    ],
+    safetyProfile: {
+      sICH: {
+        evt: 1.4,
+        control: 1.0,
+        label: 'Intracranial hemorrhage',
+        tooltip: 'Intracranial hemorrhage: 147 (1.4%) with ASA–ERDP vs 103 (1.0%) with clopidogrel. HR 1.42 (95% CI 1.11–1.83). Statistically significant excess with the dipyridamole-containing regimen. Source: Sacco RL et al., NEJM 2008, Table 3.',
+        color: 'warning',
+      },
+      majorBleeding: {
+        evt: 4.1,
+        control: 3.6,
+        label: 'Major hemorrhagic events',
+        tooltip: 'Major hemorrhagic events of any kind: 419 (4.1%) ASA–ERDP vs 365 (3.6%) clopidogrel. HR 1.15 (95% CI 1.00–1.32). Borderline significance; consistent with the directional excess seen in intracranial bleeding.',
+        color: 'warning',
+      },
+      mortality: {
+        evt: 7.3,
+        control: 7.4,
+        label: 'All-cause mortality',
+        tooltip: 'Death from any cause: 739 (7.3%) ASA–ERDP vs 756 (7.4%) clopidogrel. Comparable between arms.',
+        color: 'success',
+      },
+    },
+    inclusionCriteria: [
+      'Ischemic stroke within 90 days before randomization',
+      'Stroke confirmed by clinical features and neuroimaging (symptoms >24 hours, or shorter with imaging evidence of new infarction)',
+      'Age 50 or older (with additional vascular risk factors for those 50–54)',
+      'Independent enough to attend follow-up visits',
+    ],
+    exclusionCriteria: [
+      'Cardioembolic source requiring anticoagulation (e.g., atrial fibrillation, mechanical valve)',
+      'Contraindication to aspirin, dipyridamole, or clopidogrel',
+      'Planned use of any other antiplatelet or anticoagulant during the trial',
+      'Severe disability precluding follow-up',
+      'TIA without infarction (not a qualifying event)',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'Stroke recurrence rates over 2.5 years: 9.0% with ASA + ER-dipyridamole and 8.8% with clopidogrel. The bars are essentially the same height. The hazard ratio is 1.01 with a 95% confidence interval of 0.92 to 1.11.',
+      },
+      {
+        question: 'If the rates are similar, why isn\'t this a "tie"?',
+        answer: 'PRoFESS was designed as a noninferiority trial with a prespecified hazard-ratio margin of 1.075. To declare noninferiority, the upper bound of the 95% CI had to lie below 1.075. The observed upper bound was 1.11, which crossed the margin. The trial therefore did not formally establish that ASA–ERDP is noninferior to clopidogrel. Overlapping event curves are not the same as a positive noninferiority result.',
+      },
+      {
+        question: 'What does this mean at the bedside?',
+        answer: 'Both regimens remain acceptable long-term monotherapy after non-cardioembolic ischemic stroke per AHA/ASA 2021 guidance, but they cannot be presented as interchangeable on efficacy. Selection rests on side-effect profile (ASA–ERDP has higher intracranial hemorrhage and higher discontinuation from headache), bleeding risk, cost, and CYP2C19 status where available.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'Stroke recurrence rates were similar in both arms (9.0% ASA–ERDP vs 8.8% clopidogrel, HR 1.01), but the upper bound of the confidence interval crossed the prespecified noninferiority margin of 1.075, so noninferiority was not formally established. The trial does show that intracranial hemorrhage is significantly more frequent with ASA + ER-dipyridamole (1.4% vs 1.0%, HR 1.42, 95% CI 1.11–1.83) and that discontinuation from any cause is significantly higher with ASA–ERDP (29.1% vs 22.6%, P<0.001).',
+      doesNotProve: 'It does not prove that ASA–ERDP and clopidogrel are equivalent or interchangeable. It does not address minor stroke or TIA in the first 21 days after onset — that question belongs to CHANCE and POINT, which test short-course dual antiplatelet therapy. It does not address cardioembolic stroke, where anticoagulation rather than antiplatelet therapy is indicated.',
+      cautions: 'Intracranial hemorrhage was significantly higher with ASA–ERDP (HR 1.42, 95% CI 1.11–1.83). Discontinuation was significantly higher with ASA–ERDP (29.1% vs 22.6%, P<0.001), driven largely by dipyridamole-induced headache, which raises an exposure imbalance in the ITT analysis. The noninferiority margin of HR 1.075 was generous; failure to meet a generous margin weakens any claim of practical equivalence. The trial was sponsored and operationally managed by Boehringer Ingelheim, the licensor of Aggrenox and manufacturer of telmisartan.',
+    },
+    bedsidePearl: 'PRoFESS compared aspirin + ER-dipyridamole with clopidogrel as long-term monotherapy after non-cardioembolic ischemic stroke. Recurrent stroke rates were 9.0% vs 8.8% (HR 1.01, 95% CI 0.92–1.11), but the CI crossed the prespecified noninferiority margin of 1.075 so noninferiority was not formally established. Intracranial hemorrhage was higher with ASA–ERDP (1.4% vs 1.0%, HR 1.42) and discontinuation was higher (29.1% vs 22.6%). Choose between the two regimens based on side-effect profile, bleeding risk, and CYP2C19 status, not on a claim of equivalence.',
+    bottomLineSummary: 'PRoFESS is the head-to-head trial of two long-term monotherapies after non-cardioembolic ischemic stroke. Stroke recurrence rates were similar in both arms (9.0% ASA–ERDP vs 8.8% clopidogrel, HR 1.01, 95% CI 0.92–1.11), but the upper bound of the confidence interval crossed the prespecified noninferiority margin of 1.075, so noninferiority was not formally established. Intracranial hemorrhage was significantly higher with ASA–ERDP (HR 1.42) and discontinuation was higher (29.1% vs 22.6%). PRoFESS does not test short-course DAPT — that scenario is covered by CHANCE and POINT.',
+    listCategory: 'antiplatelets',
+    listDescription: 'ASA + ER-dipyridamole vs clopidogrel monotherapy after stroke. NI margin not met; ICH higher with ASA–ERDP.',
   },
 
   // ─── ENRICH TRIAL ─────────────────────────────────────────────────────────

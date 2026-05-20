@@ -137,4 +137,12 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     surfaces: [DATA_SURFACE],
     description: 'Quick-pearl mirror of ENCHANTED2/MT: SBP <120 mmHg post-EVT increased major disability.',
   },
+
+  // ─── PRoFESS (2008) — long-term antiplatelet monotherapy head-to-head ────
+  'profess-clopidogrel-vs-asa-erdp-ni-2008': {
+    id: 'profess-clopidogrel-vs-asa-erdp-ni-2008',
+    citation_ids: ['profess-sacco-2008'],
+    surfaces: [DATA_SURFACE],
+    description: 'PRoFESS trial: head-to-head noninferiority comparison of ASA + ER-dipyridamole vs clopidogrel for long-term secondary prevention after non-cardioembolic ischemic stroke. Recurrence rates similar (9.0% vs 8.8%, HR 1.01, 95% CI 0.92–1.11) but the upper CI bound crossed the prespecified NI margin of 1.075; noninferiority was not formally established. Intracranial hemorrhage was significantly higher with ASA–ERDP (1.4% vs 1.0%, HR 1.42).',
+  },
 };
