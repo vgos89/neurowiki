@@ -754,6 +754,7 @@ const NihssCalculator: React.FC = () => {
       <TimestampBubble
         value={strokeTimestamps}
         onChange={setStrokeTimestamps}
+        autoStampNeuroEvalOnFirstInteraction
       />
 
       {/* ── Toast ─────────────────────────────────────────────────────────── */}

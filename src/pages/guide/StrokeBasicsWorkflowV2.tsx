@@ -299,6 +299,7 @@ const MainContent: React.FC = () => {
           onTpaReversal={() => setTpaReversalModalOpen(true)}
           onOrolingualEdema={() => setOrolingualEdemaModalOpen(true)}
           ctReadExternalTime={ctReadExternalTime}
+          autoStampNeuroEvalOnFirstInteraction
           onStamp={(event, date) => {
             // BUG-02 fix: wire stamps to GWTGMilestones
             if (event === 'Code Activation') setMilestones(p => ({ ...p, doorTime: date }));

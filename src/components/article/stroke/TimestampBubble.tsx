@@ -1,5 +1,57 @@
-import React, { useState, useEffect } from 'react';
-import { Clock, X, CheckCircle, AlertTriangle, AlertCircle } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Clock, X, CheckCircle, AlertTriangle, AlertCircle, Pencil } from 'lucide-react';
+
+/**
+ * parseTimeString — minimal manual-time parser scoped to the timestamp
+ * edit affordance. Accepts:
+ *   "11:25 PM" / "1:25am"   — 12-hour with am/pm suffix
+ *   "23:25" / "1325"        — 24-hour military (HH ≥ 13 unambiguous)
+ *   "1125" / "1:25"         — 12-hour by default (ambiguous; uses existing
+ *                              period from baseDate)
+ * Returns a new Date with hours and minutes replaced, date preserved
+ * from baseDate. Returns null on parse failure.
+ */
+function parseTimeString(raw: string, baseDate: Date): Date | null {
+  const s = raw.trim().toLowerCase().replace(/\s+/g, '');
+  if (!s) return null;
+  let suffix: 'am' | 'pm' | null = null;
+  let body = s;
+  if (s.endsWith('am')) { suffix = 'am'; body = s.slice(0, -2); }
+  else if (s.endsWith('pm')) { suffix = 'pm'; body = s.slice(0, -2); }
+  body = body.replace(/[^0-9:]/g, '');
+  let hh = 0;
+  let mm = 0;
+  if (body.includes(':')) {
+    const [h, m] = body.split(':');
+    if (!/^\d{1,2}$/.test(h) || !/^\d{1,2}$/.test(m)) return null;
+    hh = Number(h); mm = Number(m);
+  } else if (/^\d{3,4}$/.test(body)) {
+    hh = Number(body.slice(0, body.length - 2));
+    mm = Number(body.slice(-2));
+  } else if (/^\d{1,2}$/.test(body)) {
+    hh = Number(body); mm = 0;
+  } else {
+    return null;
+  }
+  if (mm < 0 || mm > 59) return null;
+  if (hh < 0 || hh > 23) return null;
+  let h24: number;
+  if (suffix) {
+    if (hh < 1 || hh > 12) return null;
+    if (suffix === 'pm') h24 = hh === 12 ? 12 : hh + 12;
+    else h24 = hh === 12 ? 0 : hh;
+  } else if (hh >= 13 || hh === 0) {
+    h24 = hh; // unambiguous military
+  } else {
+    // ambiguous 1–12 — keep existing AM/PM from baseDate
+    const baseH = baseDate.getHours();
+    if (baseH >= 12) h24 = hh === 12 ? 12 : hh + 12;
+    else h24 = hh === 12 ? 0 : hh;
+  }
+  const next = new Date(baseDate);
+  next.setHours(h24, mm, 0, 0);
+  return next;
+}
 
 export const STROKE_TIMESTAMP_EVENTS = [
   'Code Activation',
@@ -50,6 +102,12 @@ interface TimestampBubbleProps {
   value?: StrokeTimestamps;
   /** Required when `value` is provided. */
   onChange?: (next: StrokeTimestamps) => void;
+  /** When true, the first click/keydown ANYWHERE in the document auto-stamps
+   *  "Neurology Evaluation" if it isn't already stamped. Used by NIHSS and
+   *  the stroke pathway per V direction 2026-05-20: the moment a clinician
+   *  starts interacting with the calculator or pathway IS the neurology-
+   *  evaluation time. One-shot — listener detaches after first fire. */
+  autoStampNeuroEvalOnFirstInteraction?: boolean;
 }
 
 // Shared left-pointing thought bubble — arrow uses SVG, no inline styles (MED-03 fix)
@@ -78,6 +136,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
   ctReadExternalTime,
   value,
   onChange,
+  autoStampNeuroEvalOnFirstInteraction = false,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showClockThought, setShowClockThought] = useState(true);
@@ -85,6 +144,13 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
   const [showPulse, setShowPulse] = useState(false);
   const [emergencyOpen, setEmergencyOpen] = useState(false);
   const [internalTimestamps, setInternalTimestamps] = useState<StrokeTimestamps>({ ...EMPTY_STROKE_TIMESTAMPS });
+  // Per-row inline edit state — when set, that row shows a manual time input.
+  const [editingEvent, setEditingEvent] = useState<EventName | null>(null);
+  const [editValue, setEditValue] = useState<string>('');
+  const [editError, setEditError] = useState<boolean>(false);
+  // One-shot guard for the auto-stamp listener — survives across renders
+  // without re-firing.
+  const hasAutoStampedRef = useRef<boolean>(false);
   // Controlled mode: caller owns the state. Uncontrolled mode: we own it.
   const isControlled = value !== undefined && onChange !== undefined;
   const timestamps = isControlled ? value : internalTimestamps;
@@ -146,6 +212,69 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
   const handleClear = (event: EventName, e: React.MouseEvent) => {
     e.stopPropagation();
     setTimestamps(prev => ({ ...prev, [event]: null }));
+  };
+
+  // One-shot listener: auto-stamps Neurology Evaluation on first user click
+  // or keydown anywhere in the document. Detaches after firing or after the
+  // event is already stamped via other means.
+  useEffect(() => {
+    if (!autoStampNeuroEvalOnFirstInteraction) return;
+    if (hasAutoStampedRef.current) return;
+    if (timestamps['Neurology Evaluation']) {
+      hasAutoStampedRef.current = true;
+      return;
+    }
+    const handler = () => {
+      if (hasAutoStampedRef.current) return;
+      hasAutoStampedRef.current = true;
+      const now = new Date();
+      setTimestamps(prev => {
+        if (prev['Neurology Evaluation']) return prev;
+        const updated = { ...prev, 'Neurology Evaluation': now };
+        onStamp?.('Neurology Evaluation', now);
+        return updated;
+      });
+    };
+    document.addEventListener('click', handler, { once: true, capture: true });
+    document.addEventListener('keydown', handler, { once: true, capture: true });
+    return () => {
+      document.removeEventListener('click', handler, { capture: true } as EventListenerOptions);
+      document.removeEventListener('keydown', handler, { capture: true } as EventListenerOptions);
+    };
+  }, [autoStampNeuroEvalOnFirstInteraction, timestamps, setTimestamps, onStamp]);
+
+  // ── Inline edit handlers (V feedback 2026-05-20: each stamp needs an
+  //    edit affordance that opens a simplified manual-only time entry) ──
+  const formatForEdit = (d: Date): string => {
+    const h = d.getHours();
+    const m = d.getMinutes();
+    const h12 = h % 12 || 12;
+    return `${String(h12).padStart(2, '0')}:${String(m).padStart(2, '0')} ${h >= 12 ? 'PM' : 'AM'}`;
+  };
+  const handleEditOpen = (event: EventName, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const current = timestamps[event];
+    setEditingEvent(event);
+    setEditValue(current ? formatForEdit(current) : '');
+    setEditError(false);
+  };
+  const handleEditCancel = () => {
+    setEditingEvent(null);
+    setEditValue('');
+    setEditError(false);
+  };
+  const handleEditSave = (event: EventName) => {
+    const base = timestamps[event] ?? new Date();
+    const parsed = parseTimeString(editValue, base);
+    if (!parsed) {
+      setEditError(true);
+      return;
+    }
+    setTimestamps(prev => ({ ...prev, [event]: parsed }));
+    onStamp?.(event, parsed);
+    setEditingEvent(null);
+    setEditValue('');
+    setEditError(false);
   };
 
   const anchorTime = timestamps['Code Activation'];
@@ -252,45 +381,111 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                   ? getElapsed(anchorTime, stamped)
                   : null;
 
+                const isEditing = editingEvent === event;
                 return (
                   <div key={event} className="px-4 py-3">
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex-1 min-w-0">
-                        <div className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-0.5">
+                    {isEditing ? (
+                      <div>
+                        <div className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">
                           {event}
                         </div>
-                        {stamped ? (
-                          <div className="flex items-center gap-2">
-                            <CheckCircle className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
-                            <span className="text-sm font-semibold text-slate-800 tabular-nums">
-                              {formatTime(stamped)}
-                            </span>
-                            {elapsed && (
-                              <span className="text-xs text-neuro-500 font-medium">{elapsed}</span>
-                            )}
-                          </div>
-                        ) : (
-                          <span className="text-xs text-slate-400 italic">Not yet recorded</span>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            autoComplete="off"
+                            autoFocus
+                            value={editValue}
+                            onChange={(e) => { setEditValue(e.target.value); setEditError(false); }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleEditSave(event);
+                              if (e.key === 'Escape') handleEditCancel();
+                            }}
+                            placeholder="11:25 PM or 23:25"
+                            aria-label={`Edit ${event} time. Accepts 12-hour with AM or PM, or 24-hour military.`}
+                            aria-invalid={editError}
+                            className={`flex-1 min-w-0 px-2.5 py-1.5 rounded-md border text-sm tabular-nums focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
+                              editError ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'
+                            }`}
+                          />
+                          <button
+                            onClick={() => handleEditSave(event)}
+                            className="px-3 py-1.5 text-xs font-semibold bg-neuro-500 hover:bg-neuro-600 text-white rounded-lg transition-colors whitespace-nowrap"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={handleEditCancel}
+                            className="text-xs text-slate-500 hover:text-slate-700 transition-colors px-2 py-1.5 rounded"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                        {editError && (
+                          <p className="mt-1 text-[11px] text-red-600">
+                            Try a format like 11:25 PM or 23:25.
+                          </p>
                         )}
                       </div>
+                    ) : (
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-0.5">
+                            {event}
+                          </div>
+                          {stamped ? (
+                            <div className="flex items-center gap-2">
+                              <CheckCircle className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
+                              <span className="text-sm font-semibold text-slate-800 tabular-nums">
+                                {formatTime(stamped)}
+                              </span>
+                              {elapsed && (
+                                <span className="text-xs text-neuro-500 font-medium">{elapsed}</span>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-xs text-slate-400 italic">Not yet recorded</span>
+                          )}
+                        </div>
 
-                      {stamped ? (
-                        <button
-                          onClick={(e) => handleClear(event, e)}
-                          className="text-xs text-slate-400 hover:text-red-400 transition-colors px-2 py-1 rounded"
-                          title="Clear timestamp"
-                        >
-                          Clear
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => handleStamp(event)}
-                          className="px-3 py-1.5 text-xs font-semibold bg-neuro-500 hover:bg-neuro-600 text-white rounded-lg transition-colors whitespace-nowrap"
-                        >
-                          Stamp
-                        </button>
-                      )}
-                    </div>
+                        {stamped ? (
+                          <div className="flex items-center gap-1">
+                            <button
+                              onClick={(e) => handleEditOpen(event, e)}
+                              className="p-1.5 text-slate-400 hover:text-neuro-600 hover:bg-slate-100 transition-colors rounded"
+                              aria-label={`Edit ${event} time`}
+                              title="Edit time"
+                            >
+                              <Pencil className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={(e) => handleClear(event, e)}
+                              className="text-xs text-slate-400 hover:text-red-400 transition-colors px-2 py-1 rounded"
+                              title="Clear timestamp"
+                            >
+                              Clear
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-1">
+                            <button
+                              onClick={(e) => handleEditOpen(event, e)}
+                              className="p-1.5 text-slate-400 hover:text-neuro-600 hover:bg-slate-100 transition-colors rounded"
+                              aria-label={`Type ${event} time`}
+                              title="Type time"
+                            >
+                              <Pencil className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleStamp(event)}
+                              className="px-3 py-1.5 text-xs font-semibold bg-neuro-500 hover:bg-neuro-600 text-white rounded-lg transition-colors whitespace-nowrap"
+                            >
+                              Stamp
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 );
               })}
