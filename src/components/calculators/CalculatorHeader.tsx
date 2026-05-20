@@ -191,16 +191,22 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
               <RefreshCw size={17} aria-hidden="true" />
             </button>
 
-            {/* Save Case — icon button between Reset and Copy.
+            {/* Save Case — labeled pill between Reset and Copy. The label
+                "Save" is visible alongside the bookmark icon so clinicians
+                can see at a glance that this action saves the case rather
+                than (e.g.) bookmarking the calculator. (V feedback
+                2026-05-20: bookmark icon alone isn't obvious enough to
+                suggest the save-pathway feature.)
                 Visible only when the consumer passes a saveCase prop. */}
             {saveCase && (
               <button
                 type="button"
                 onClick={() => setSaveCaseOpen(true)}
-                className="p-2 rounded-full hover:bg-slate-50 transition-colors text-slate-400 hover:text-neuro-600 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="ml-1 inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium text-slate-600 hover:text-neuro-700 hover:bg-neuro-50 transition-colors min-h-[44px]"
                 aria-label="Save case"
               >
-                <Bookmark size={17} aria-hidden="true" />
+                <Bookmark size={16} aria-hidden="true" />
+                <span>Save</span>
               </button>
             )}
 

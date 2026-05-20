@@ -142,6 +142,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
   const [showClockThought, setShowClockThought] = useState(true);
   const [showEmergencyThought, setShowEmergencyThought] = useState(true);
   const [showPulse, setShowPulse] = useState(false);
+  const [hasBeenOpened, setHasBeenOpened] = useState(false);
   const [emergencyOpen, setEmergencyOpen] = useState(false);
   const [internalTimestamps, setInternalTimestamps] = useState<StrokeTimestamps>({ ...EMPTY_STROKE_TIMESTAMPS });
   // Per-row inline edit state — when set, that row shows a manual time input.
@@ -177,9 +178,14 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
     return () => clearTimeout(t);
   }, []);
 
-  // Show pulse ring after 10s if no stamps yet
+  // Pulse-ring attention loop (V feedback 2026-05-20: "needs to flash more
+  // obviously to grab the eye, and keep flashing until they click on it").
+  // Start the pulse at 3 s instead of 10 s, keep it on continuously until
+  // either the user opens the FAB or records any stamp via another path.
+  // The actual visual is escalated below (larger amber ring on top of the
+  // existing neuro ring).
   useEffect(() => {
-    const t = setTimeout(() => setShowPulse(true), 10000);
+    const t = setTimeout(() => setShowPulse(true), 3000);
     return () => clearTimeout(t);
   }, []);
 
@@ -198,6 +204,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
   const handleOpen = () => {
     setShowClockThought(false);
     setShowPulse(false);
+    setHasBeenOpened(true);
     setIsExpanded(prev => !prev);
   };
 
@@ -279,7 +286,10 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
 
   const anchorTime = timestamps['Code Activation'];
   const stampedCount = Object.values(timestamps).filter(Boolean).length;
-  const needsAttention = showPulse && stampedCount === 0 && !isExpanded;
+  // Per V 2026-05-20: keep flashing until the user explicitly OPENS the FAB,
+  // not just until any stamp lands (auto-stamps from elsewhere shouldn't
+  // silence the prompt — the clinician still needs to see the tracker).
+  const needsAttention = showPulse && !hasBeenOpened && !isExpanded;
 
   const hasEmergency = onTpaReversal || onOrolingualEdema;
 
@@ -505,14 +515,25 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
           </div>
         )}
 
+        {/* Attention halo — extra amber outer ring that pulses behind the
+            FAB until the user opens the timestamp tracker. Sits outside the
+            button so the button's hit area and animation are not disrupted.
+            (V feedback 2026-05-20: flash more obviously, keep flashing until
+            clicked.) */}
+        {needsAttention && (
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 -m-2 rounded-full bg-amber-400/70 animate-ping pointer-events-none"
+          />
+        )}
         {/* Clock button */}
         <button
           onClick={handleOpen}
           aria-label="Open timestamp tracker"
-          className={`w-10 h-10 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${
+          className={`relative w-10 h-10 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${
             isExpanded
               ? 'bg-slate-700 scale-90'
-              : `bg-neuro-600 hover:bg-neuro-700 ${showClockThought ? 'bubble-wobble' : ''} ${needsAttention ? 'ring-4 ring-neuro-400 ring-offset-2 animate-pulse' : ''}`
+              : `bg-neuro-600 hover:bg-neuro-700 ${showClockThought ? 'bubble-wobble' : ''} ${needsAttention ? 'ring-4 ring-amber-400 ring-offset-2 ring-offset-white animate-pulse shadow-amber-400/50' : ''}`
           }`}
         >
           {isExpanded ? (
