@@ -574,6 +574,9 @@ const NihssCalculator: React.FC = () => {
           source: { type: 'calculator', id: 'nihss', title: 'NIHSS' },
           existingCaseId: currentCaseId ?? undefined,
           hasStrokeTimestamps: true,
+          hasFilledStrokeTimestamps: STROKE_TIMESTAMP_EVENTS.some(
+            (event) => strokeTimestamps[event] instanceof Date
+          ),
           onSaved: (id) => {
             setCurrentCaseId(id);
             showToast(currentCaseId ? 'Case updated' : 'Case saved', 2000);

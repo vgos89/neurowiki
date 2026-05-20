@@ -83,6 +83,16 @@ export async function createReceiveSession(): Promise<ReceiveSession> {
     // 23505 = unique-violation = token collision. With 100k codes + 15-min
     // TTL the collision rate is low; one retry is enough in practice.
     if (error.code === '23505') return createReceiveSession();
+    // Schema-mismatch detection — if the Supabase database hasn't had
+    // db/migrations/0002_transfers_asymmetric.sql applied yet, PostgREST
+    // returns an "Could not find the 'receiver_public_key' column" error
+    // with code PGRST204. Translate that to actionable plain language
+    // instead of leaking the raw schema-cache message to clinicians.
+    if (error.code === 'PGRST204' || /receiver_public_key|column .* schema cache/i.test(error.message)) {
+      throw new Error(
+        'Cross-device transfer is being upgraded on this site. Try again in a few minutes — if the issue persists, ask the admin to apply the latest database migration.'
+      );
+    }
     throw new Error(`Could not create receive session: ${error.message}`);
   }
   return { code, privateKey, expiresAt };

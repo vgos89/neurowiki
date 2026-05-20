@@ -37,9 +37,15 @@ interface SaveCaseModalProps {
    *  what they're updating, not a blank form. */
   existingCaseId?: string;
   /** True if this calculator/source captures stroke timestamps that benefit
-   *  from the absolute-vs-relative storage opt-in. Toggles the disclosure
+   *  from the absolute-vs-relative storage choice. Toggles the disclosure
    *  + checkbox in the modal. NIHSS = true. Other calculators = false. */
   hasStrokeTimestamps?: boolean;
+  /** True when at least one stroke-code timestamp has actually been
+   *  stamped in the current session. Drives the smart default — when a
+   *  real code is in progress the checkbox defaults ON so the clinician
+   *  doesn't have to tick it to preserve quality-metric timing.
+   *  Compliance-legal Finding 6 follow-up (2026-05-19). */
+  hasFilledStrokeTimestamps?: boolean;
 }
 
 export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
@@ -50,6 +56,7 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
   onSaved,
   existingCaseId,
   hasStrokeTimestamps = false,
+  hasFilledStrokeTimestamps = false,
 }) => {
   const [initials, setInitials] = useState('');
   const [note, setNote] = useState('');
@@ -73,17 +80,25 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
     if (!isOpen) return;
     setError(null);
     setSaving(false);
-    setSaveAbsoluteTimestamps(false);
+    // Smart default for the keep-wall-clock-times checkbox: when stamps
+    // are filled in the current session, default ON (clinician was
+    // actually running a code → quality-metric data matters). When
+    // empty, default OFF (no quality data to preserve). Per compliance-
+    // legal Finding 6 follow-up (2026-05-19).
+    setSaveAbsoluteTimestamps(hasFilledStrokeTimestamps);
     if (existingCaseId) {
       getCase(existingCaseId).then((existing) => {
         if (existing) {
           setInitials(existing.initials);
           setNote(existing.note ?? '');
           setExistingCreatedAt(existing.createdAt);
-          // Pre-select the toggle to match what the existing case was saved
-          // with, so a re-save preserves the clinician's earlier choice.
+          // When editing an existing case, the saved mode wins over the
+          // smart default — a re-save preserves the clinician's earlier
+          // choice rather than silently changing storage shape.
           if (existing.data.strokeTimestampsMode === 'absolute') {
             setSaveAbsoluteTimestamps(true);
+          } else if (existing.data.strokeTimestampsMode === 'relative') {
+            setSaveAbsoluteTimestamps(false);
           }
         } else {
           // Case was deleted from /my-cases between saves — fall back to new.
@@ -101,14 +116,14 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
       setNote('');
       setExistingCreatedAt(null);
     }
-  }, [isOpen, existingCaseId]);
+  }, [isOpen, existingCaseId, hasFilledStrokeTimestamps]);
 
   if (!isOpen) return null;
 
   const handleSave = async () => {
     setError(null);
     if (!isValidInitials(initials)) {
-      setError('Initials must be 2–4 uppercase letters.');
+      setError('Use exactly 2 uppercase letters (first-initial + last-initial).');
       return;
     }
     setSaving(true);
@@ -137,8 +152,9 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
   };
 
   const handleInitialsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Auto-uppercase + strip non-letters; cap at 4 chars
-    const cleaned = e.target.value.replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 4);
+    // Auto-uppercase + strip non-letters; cap at 2 chars (V audit 2026-05-19
+    // — permitting more let clinicians type short full names like "Jen").
+    const cleaned = e.target.value.replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 2);
     setInitials(cleaned);
     if (error) setError(null);
   };
@@ -204,12 +220,12 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
               autoComplete="off"
               autoCapitalize="characters"
               inputMode="text"
-              maxLength={4}
+              maxLength={2}
               aria-describedby="case-initials-help"
               className="w-full px-3 py-2.5 text-base text-slate-900 bg-white border border-slate-200 rounded-lg focus:border-neuro-500 focus:outline-none focus:ring-1 focus:ring-neuro-500 placeholder:text-slate-300 tracking-widest font-semibold uppercase"
             />
             <p id="case-initials-help" className="text-[11px] text-slate-500 mt-1">
-              Initials only — 2 to 4 uppercase letters. Never the full name.
+              First initial + last initial. Two uppercase letters, nothing more.
             </p>
           </div>
 
@@ -222,8 +238,10 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
 
           {/* Stroke-timestamp storage opt-in. Default OFF = HIPAA-friendly
               relative-elapsed storage. Toggle ON when the clinician needs
-              absolute timestamps for quality metrics. Compliance-legal
-              Finding 6 option (c), 2026-05-19. */}
+              wall-clock times for quality metrics. Copy rewritten per
+              humanizer pass (V audit 2026-05-19) — dropped AI-tic em-dash
+              connectors, "e.g.", and the abstract noun "identifiability"
+              for a direct clinical voice. */}
           {hasStrokeTimestamps && (
             <label className="flex items-start gap-2.5 p-3 bg-slate-50 rounded-lg border border-slate-100 cursor-pointer">
               <input
@@ -233,9 +251,9 @@ export const SaveCaseModal: React.FC<SaveCaseModalProps> = ({
                 className="mt-0.5 w-4 h-4 rounded border-slate-300 text-neuro-500 focus:ring-neuro-500 focus:ring-offset-0 cursor-pointer flex-shrink-0"
               />
               <span className="text-xs text-slate-700 leading-relaxed">
-                <span className="font-semibold">Save absolute timestamps</span> (for quality documentation — door-to-needle, etc.)
+                <span className="font-semibold">Keep wall-clock times</span>
                 <span className="block text-[11px] text-slate-500 mt-0.5">
-                  Off by default: stroke timestamps save as elapsed offsets (e.g., "+12m from anchor") to reduce identifiability. On preserves exact times for charting.
+                  Off saves stamps as elapsed offsets ("+12m", "+18m") so the record can't be tied to a specific time of day. Turn on when you need exact times for door-to-needle reporting.
                 </span>
               </span>
             </label>

@@ -80,9 +80,16 @@ export interface CalculatorHeaderProps {
      *  The consumer typically stashes this so future saves update in place. */
     onSaved?: (id: string) => void;
     /** True for calculators that capture stroke timestamps and benefit from
-     *  the absolute-vs-relative storage opt-in (currently NIHSS). The modal
+     *  the absolute-vs-relative storage choice (currently NIHSS). The modal
      *  surfaces the toggle + disclosure only when this is true. */
     hasStrokeTimestamps?: boolean;
+    /** True when at least one stroke-code timestamp has actually been
+     *  stamped in the current session. Drives the smart default for the
+     *  modal's "keep wall-clock times" checkbox per compliance-legal
+     *  Finding 6 follow-up (2026-05-19): when a real code is in progress
+     *  the default flips ON so the clinician doesn't have to tick a box
+     *  to preserve quality-metric timing. */
+    hasFilledStrokeTimestamps?: boolean;
   };
 }
 
@@ -237,6 +244,7 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
           existingCaseId={saveCase.existingCaseId}
           onSaved={saveCase.onSaved}
           hasStrokeTimestamps={saveCase.hasStrokeTimestamps}
+          hasFilledStrokeTimestamps={saveCase.hasFilledStrokeTimestamps}
         />
       )}
     </header>

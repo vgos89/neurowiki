@@ -128,8 +128,16 @@ export interface GenericCasePayload {
  *  migration script needed. */
 export const SAVED_CASE_SCHEMA_VERSION = 3;
 
-/** Initials validation. */
-export const INITIALS_REGEX = /^[A-Z]{2,4}$/;
+/** Initials validation — exactly 2 uppercase letters.
+ *
+ *  Tightened from {2,4} to {2} on 2026-05-19 (V audit). Rationale:
+ *  permitting 3–4 character inputs let clinicians type entire short
+ *  first names ("Jen", "Bob", "John", "Tomm") into the "initials" field,
+ *  which defeats the privacy guardrail. Two letters forces the first-
+ *  initial + last-initial convention. Middle-initial cases (JFK-style
+ *  3 letters) are a small loss but rare in chart-handoff initials.
+ */
+export const INITIALS_REGEX = /^[A-Z]{2}$/;
 
 export function isValidInitials(s: string): boolean {
   return INITIALS_REGEX.test(s);
