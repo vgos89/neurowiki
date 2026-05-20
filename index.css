@@ -155,6 +155,33 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* iOS Safari hardening (P2 audit pass 2026-05-20).
+   text-size-adjust prevents Safari from auto-zooming text on orientation
+   change. The mobile viewport meta tag handles most cases already, but
+   the explicit reset removes the last edge cases on older devices. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Modal scroll containment — when a modal's scroll reaches its end,
+   iOS Safari's rubber-band would otherwise scroll the body underneath.
+   `overscroll-behavior: contain` keeps the gesture trapped in the modal.
+   Applied via a utility class so consumers opt in deliberately. */
+.modal-overscroll-contain,
+.modal-overscroll-contain * {
+  overscroll-behavior: contain;
+}
+
+/* Scroll-margin anchor for elements targeted by scrollIntoView when a
+   sticky header is present. Adding `scroll-anchor` to the target gives
+   the browser an explicit offset so the element doesn't slide behind
+   the header. 80px covers the typical mobile sticky-header (~64) + a
+   small visual buffer. */
+.scroll-anchor {
+  scroll-margin-top: 5rem;
+}
+
 /* GPU acceleration for transformed elements */
 .transform-gpu {
   transform: translateZ(0);
