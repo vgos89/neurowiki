@@ -62,10 +62,14 @@ const Home: React.FC = () => {
     if (validScenarioId) {
       const scenario = SCENARIOS.find((s) => s.id === validScenarioId);
       if (scenario) {
-        document.title = `${scenario.title} tools — NeuroWiki`;
+        document.title = `${scenario.title} tools | NeuroWiki`;
       }
     } else {
-      document.title = 'NeuroWiki — Neurology Clinical Decision Support';
+      // Aligned 2026-05-19 with the index.html site-shell title. Prior
+      // "NeuroWiki — Neurology Clinical Decision Support" override created
+       // a second source of truth + introduced an em-dash that Google
+      // surfaced in search snippets (V audit).
+      document.title = 'NeuroWiki | Neurology Calculators, Pathways & Trials';
     }
     return () => {
       document.title = 'NeuroWiki';

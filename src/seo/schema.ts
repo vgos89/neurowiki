@@ -95,8 +95,8 @@ const TRIALS_HUB_SCHEMA = {
   '@graph': [
     {
       '@type': 'WebPage',
-      name: 'Stroke Clinical Trials — Evidence Summaries for Neurologists | NeuroWiki',
-      description: 'Summaries of 79 landmark stroke clinical trials: DAWN, DEFUSE-3, NINDS, ORIGINAL, MR CLEAN, INSPIRES, ENRICH, TRACE-III, ELAN, CHANCE, POINT, and more. NNT, mRS outcomes, AHA/ASA 2026 guideline recommendations.',
+      name: 'Stroke Clinical Trials | Evidence Summaries for Neurologists | NeuroWiki',
+      description: '79 landmark stroke trials summarized for the bedside. NNT, mRS-shift outcomes, AHA/ASA 2026 recommendations. DAWN, DEFUSE-3, NINDS, MR CLEAN, ELAN, CHANCE, POINT, INSPIRES, ENRICH, TRACE-III all covered.',
       url: `${BASE_URL}/trials`,
       medicalSpecialty: 'Neurology',
       audience: { '@type': 'MedicalAudience', audienceType: 'Physician, Neurologist, Resident' },

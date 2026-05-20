@@ -74,7 +74,7 @@ const DEFAULT_IMAGE = 'https://neurowiki.ai/og-image.png?v=3';
 
 export const DEFAULT_META: MetaData = {
   title: 'NeuroWiki | Neurology Calculators, Pathways & Trials',
-  description: 'Free stroke calculators, clinical pathways, and landmark trial summaries for neurologists and residents. NIHSS, EVT eligibility, long-window IVT, and more.',
+  description: 'Bedside reference for neurologists. Score NIHSS and ICH, walk through stroke code, look up landmark trials. Save cases on this device, sync phone to desktop.',
   keywords: 'neurology calculators, NIHSS calculator, stroke pathway, EVT eligibility, IVT calculator, stroke calculator, neurology trials, neurology resident tools, clinical decision support',
   image: DEFAULT_IMAGE,
 };
@@ -403,7 +403,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'guide',
     meta: {
       title: 'Neurology Toolkit — Clinical Guides & Protocols | NeuroWiki',
-      description: 'Neurology protocols and clinical guides for residents, attendings, and medical students. Stroke code, EVT, status epilepticus, ASPECTS, NIHSS, and more.',
+      description: 'Stroke code, EVT, long-window IVT, status epilepticus, and headache pathways for neurology residents and attendings. Inline NIHSS, ICH, and ASPECTS scoring.',
       keywords: 'neurology toolkit, neurology protocols for residents, neurology resident guide, clinical neurology reference, stroke guide, epilepsy protocol, neurology calculators',
       image: DEFAULT_IMAGE,
     },
@@ -677,7 +677,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'trials',
     meta: {
       title: 'Stroke Clinical Trials — Evidence Summaries | NeuroWiki',
-      description: '79 landmark stroke trials: DAWN, DEFUSE-3, NINDS, ORIGINAL, MR CLEAN, INSPIRES, ENRICH, TRACE-III, ELAN, CHANCE, POINT, and more. NNT and mRS outcomes.',
+      description: '79 landmark stroke trials with NNT and mRS-shift outcomes. DAWN, DEFUSE-3, NINDS, MR CLEAN, ELAN, CHANCE, POINT, INSPIRES, ENRICH, TRACE-III all covered.',
       keywords: 'landmark stroke clinical trials, stroke trial results, thrombectomy trials, IV thrombolysis trials, DAWN trial, DEFUSE-3 trial, NINDS tPA trial, ORIGINAL tenecteplase trial, MR CLEAN trial, INSPIRES DAPT stroke, ENRICH ICH surgery, secondary prevention stroke trials, NNT stroke, NEJM stroke trials, vascular neurology clinical trials',
       image: DEFAULT_IMAGE,
     },
