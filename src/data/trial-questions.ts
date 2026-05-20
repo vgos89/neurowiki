@@ -236,4 +236,98 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'direct-safe-trial',     // DIRECT-SAFE 2022 — multinational, NI failed
     ],
   },
+  // ─── Tier 4 #21: new questions per docs/research/2026-05-19-trial-audit/03 Part B ───
+  {
+    id: 'large-core-evt',
+    text: 'Should I do EVT for large-core stroke (low ASPECTS)?',
+    icon: 'target',
+    meta: 'four positive RCTs (2022–2023) reversing the small-core-only EVT paradigm',
+    trialCount: 4,
+    trialIds: [
+      'laste-trial',          // LASTE 2022 — late window 6.5-24 h, general population
+      'select2-trial',        // SELECT2 2023 — large-core, non-contrast CT selected
+      'angel-aspect-trial',   // ANGEL-ASPECT 2023 — large-core (China)
+      'tension-trial',        // TENSION 2023 — large-core (ASPECTS 3-5), unrestricted
+      // TODO (V review): add rescue-japan-limit-trial once it lands in the catalog
+      // (currently in V's paywalled Tier 2 PDF queue).
+    ],
+  },
+  {
+    id: 'late-window-selection',
+    text: 'Perfusion imaging or non-contrast CT for late-window selection?',
+    icon: 'target',
+    meta: 'evolution from CT-perfusion / MRI mismatch (DAWN, DEFUSE-3) to plain-CT selection (LASTE, SELECT2, ANGEL-ASPECT)',
+    trialCount: 7,
+    trialIds: [
+      'dawn-trial',           // DAWN 2018 — clinical-core mismatch, 6-24h
+      'defuse-3-trial',       // DEFUSE-3 2018 — perfusion mismatch, 6-16h
+      'extend-trial',         // EXTEND 2019 — perfusion-guided IVT 4.5-9h
+      'laste-trial',          // LASTE 2022 — late window without perfusion
+      'tension-trial',        // TENSION 2023 — non-contrast CT large-core
+      'select2-trial',        // SELECT2 2023 — non-contrast CT large-core
+      'angel-aspect-trial',   // ANGEL-ASPECT 2023 — non-contrast CT large-core
+    ],
+  },
+  {
+    id: 'aspiration-vs-stentriever',
+    text: 'Aspiration first or stent retriever first for thrombectomy?',
+    icon: 'layers',
+    meta: 'three RCTs comparing direct aspiration with stent-retriever-first thrombectomy',
+    trialCount: 3,
+    trialIds: [
+      'aster-trial',    // ASTER 2017 — French RCT, no significant difference in reperfusion
+      'compass-trial',  // COMPASS 2019 — US RCT, aspiration noninferior on functional outcome
+      'aster2-trial',   // ASTER2 2021 — combined-technique vs stent retriever (no functional benefit)
+    ],
+  },
+  {
+    id: 'evt-adjunct-pharmacotherapy',
+    text: 'Is neuroprotection or adjunct pharmacotherapy useful during EVT?',
+    icon: 'pill',
+    meta: 'pharmacologic adjuncts to EVT — nerinetide, tirofiban, and post-EVT IA fibrinolysis',
+    trialCount: 3,
+    trialIds: [
+      'escape-na1-trial',  // ESCAPE-NA1 2020 — nerinetide during EVT (negative)
+      'choice-trial',      // CHOICE 2022 — adjunctive IA alteplase after successful EVT
+      'rescue-bt-trial',   // RESCUE BT 2022 — periprocedural tirofiban (signal in non-large-artery atherosclerosis)
+    ],
+  },
+  {
+    id: 'minor-stroke-choice',
+    text: 'Minor non-disabling stroke — alteplase, DAPT, or aspirin?',
+    icon: 'pill',
+    meta: 'the trade-off between thrombolysis benefit, DAPT noninferiority, and aspirin baseline in mild stroke',
+    trialCount: 5,
+    trialIds: [
+      'chance-trial',    // CHANCE 2013 — DAPT vs aspirin, established short-course DAPT
+      'point-trial',     // POINT 2018 — confirmed CHANCE in Western population
+      'prisms-trial',    // PRISMS 2018 — alteplase failed superiority vs aspirin in minor non-disabling stroke
+      'aramis-trial',    // ARAMIS 2023 — DAPT noninferior to alteplase in minor non-disabling stroke
+      'inspires-trial',  // INSPIRES 2024 — DAPT for atherosclerotic minor stroke/TIA ≤72 h
+    ],
+  },
+  {
+    id: 'mevo-distal-evt',
+    text: 'Does my MeVO or distal-occlusion patient benefit from EVT?',
+    icon: 'target',
+    meta: 'first two RCTs in medium-vessel and distal occlusions — both define the negative end of EVT',
+    trialCount: 2,
+    trialIds: [
+      'escape-mevo-trial',  // ESCAPE-MeVO 2024 — M2/M3, ACA, PCA EVT (primary not met)
+      'distal-trial',       // DISTAL 2024 — distal occlusion EVT (primary not met)
+    ],
+  },
+  {
+    id: 'post-evt-bp-target',
+    text: "What's the post-EVT blood pressure target?",
+    icon: 'waveform',
+    meta: 'four RCTs across the post-EVT BP target question — and one harm signal',
+    trialCount: 4,
+    trialIds: [
+      'enchanted-trial',   // ENCHANTED 2019 — peri-thrombolysis BP context (peri-EVT framework reference)
+      'bp-target-trial',   // BP-TARGET 2020 — intensive vs standard SBP post-EVT (negative)
+      'best-ii-trial',     // BEST-II 2022 — three-arm dose-finding futility post-EVT
+      'optimal-bp-trial',  // OPTIMAL-BP 2022 — intensive BP harm signal post-EVT (stopped early)
+    ],
+  },
 ];
