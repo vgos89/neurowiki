@@ -13,6 +13,7 @@ const DisclaimerModal = lazy(() => import('./components/DisclaimerModal'));
 const CookieConsentBanner = lazy(() => import('./components/CookieConsentBanner'));
 const InstallBubble = lazy(() => import('./components/InstallBubble'));
 const InstallPromptOverlay = lazy(() => import('./components/InstallPromptOverlay'));
+const OnboardingTour = lazy(() => import('./components/OnboardingTour'));
 const GlobalTrialModal = lazy(() =>
   import('./components/GlobalTrialModal').then((m) => ({ default: m.GlobalTrialModal }))
 );
@@ -163,6 +164,9 @@ const App: React.FC = () => {
           </Suspense>
           <Suspense fallback={null}>
             <InstallPromptOverlay />
+          </Suspense>
+          <Suspense fallback={null}>
+            <OnboardingTour />
           </Suspense>
           <Suspense fallback={null}>
             <InstallBubble />

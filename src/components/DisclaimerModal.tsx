@@ -274,6 +274,26 @@ export const DisclaimerModal: React.FC = () => {
               </div>
             </div>
           )}
+
+          {/* Replay tour — clears the tour-complete flag and reloads to the
+              home route so OnboardingTour re-fires. Visible only to users
+              who have completed the tour at least once (otherwise it would
+              compete with the auto-launch on first visit). */}
+          {typeof window !== 'undefined' &&
+            window.localStorage.getItem('neurowiki:tour-complete:v1') === '1' && (
+            <div className="mt-3 text-center">
+              <button
+                type="button"
+                onClick={() => {
+                  window.localStorage.removeItem('neurowiki:tour-complete:v1');
+                  window.location.assign('/');
+                }}
+                className="text-xs text-slate-500 hover:text-neuro-600 underline transition-colors"
+              >
+                Replay the welcome tour
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
