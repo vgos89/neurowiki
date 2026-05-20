@@ -5144,8 +5144,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     clinicalContext: 'Patients with large ischemic cores (ASPECTS < 6 or Core Volume > 50ml) were historically excluded from thrombectomy trials due to fears of futile reperfusion and hemorrhagic transformation. SELECT2 challenged this dogma.',
     calculations: {
-      nnt: 7.7, // 1 / (0.20 - 0.07) = 7.69 ≈ 7.7
-      nntExplanation: 'For every 7.7 patients with large core treated with thrombectomy, one additional patient achieves functional independence (mRS 0-2) compared to medical management alone'
+      // Class E correction 2026-05-20: SELECT2's primary endpoint is an
+      // ordinal mRS shift (gOR 1.51, 95% CI 1.20-1.89). Per clinical-trial-
+      // audit skill rules and audit findings, ordinal-shift primaries do
+      // not yield a valid NNT. The previously-stored numeric NNT 7.7 was
+      // computed from the SECONDARY mRS 0-2 dichotomized outcome; that
+      // disclosure remains in pearls/cautions/bedsidePearl/bottomLineSummary
+      // prose. Numeric NNT field nulled so a quick-scan summary chip
+      // cannot mis-display it as a primary-endpoint NNT. See
+      // docs/reviews/clinical-PR-select2-angel-aspect-2026-05-20.md.
     },
     pearls: [
       'Large core: No longer an absolute contraindication; SELECT2 showed ordinal disability shift even at ASPECTS 3–5',
@@ -5285,8 +5292,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     clinicalContext: 'Conducted in China, ANGEL-ASPECT complemented SELECT2 by investigating thrombectomy in patients with large infarct cores, including those with cores up to 100ml.',
     calculations: {
-      nnt: 5.4, // 1 / (0.30 - 0.116) = 5.43 ≈ 5.4
-      nntExplanation: 'For every 5.4 patients with large core (up to 100ml) treated with thrombectomy, one additional patient achieves functional independence (mRS 0-2) compared to medical therapy alone'
+      // Class E correction 2026-05-20: ANGEL-ASPECT's primary endpoint is
+      // an ordinal mRS shift (gOR 1.37, P=0.004). Per clinical-trial-audit
+      // skill rules, ordinal-shift primaries do not yield a valid NNT.
+      // The previously-stored numeric NNT 5.4 was computed from the
+      // SECONDARY mRS 0-2 dichotomized outcome (30% vs 11.6%); that
+      // disclosure remains in pearls/cautions/bedsidePearl prose. Numeric
+      // NNT field nulled to match SELECT2 (paired large-core ordinal
+      // trial). See docs/reviews/clinical-PR-select2-angel-aspect-2026-05-20.md.
     },
     pearls: [
       'Confirmation: Validated SELECT2 findings in a Chinese population with broader volume criteria (cores up to 100ml; ASPECTS 0–2 with cores 70–100 mL also enrolled)',
