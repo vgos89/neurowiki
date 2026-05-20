@@ -68,7 +68,9 @@ export interface RouteDefinition {
   railItem: NavTab | null;     // LAYOUT_SPEC §6.1.2 — which desktop rail item is active (null for private utility routes)
 }
 
-const DEFAULT_IMAGE = 'https://neurowiki.ai/og-image.png';
+// v=3 bump (2026-05-19): new OG image generated via Nano Banana from
+// docs/og-image-brief.md. Query suffix forces social platforms to refetch.
+const DEFAULT_IMAGE = 'https://neurowiki.ai/og-image.png?v=3';
 
 export const DEFAULT_META: MetaData = {
   title: 'NeuroWiki | Neurology Calculators, Pathways & Trials',

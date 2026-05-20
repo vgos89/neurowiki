@@ -36,7 +36,13 @@ export default defineConfig(({ mode }) => {
             'icon-192.png',
             'icon-512.png',
             'icon-1024.png',
-            'og-image.png',
+            // og-image.png is intentionally NOT precached. It is consumed by
+            // external link-preview renderers (iMessage / Twitter / Slack /
+            // LinkedIn / Facebook), never by the in-app surface. Precaching
+            // it ballooned the PWA footprint by 3 MB after the 2026-05-19
+            // image refresh and also tripped Workbox's 2 MB per-asset
+            // default (https://vite-pwa-org.netlify.app/guide/faq.html).
+            // Vercel still serves it normally from /og-image.png.
           ],
           manifest: false, // we ship our own /manifest.json — don't let the plugin overwrite it
           workbox: {
@@ -44,7 +50,16 @@ export default defineConfig(({ mode }) => {
             // cache-first with short stale-while-revalidate window.
             globPatterns: ['**/*.{js,css,html,png,svg,ico,woff2}'],
             // Don't precache the giant trial data chunks — they're route-lazy.
-            globIgnores: ['**/trialData-*.js', '**/TrialPageNew-*.js', '**/TrialVisualizations-*.js'],
+            // Also exclude og-image.png: it's for external link-preview
+            // renderers only (iMessage / Twitter / Slack), never consumed
+            // in-app, and after the 2026-05-19 Nano Banana refresh it's
+            // 3 MB which exceeds Workbox's 2 MB default per-asset cap.
+            globIgnores: [
+              '**/trialData-*.js',
+              '**/TrialPageNew-*.js',
+              '**/TrialVisualizations-*.js',
+              '**/og-image.png',
+            ],
             runtimeCaching: [
               {
                 // Google Fonts CSS — stale-while-revalidate

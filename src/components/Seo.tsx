@@ -12,7 +12,11 @@ const JSON_LD_SCRIPT_ID = 'neurowiki-json-ld';
 // pathways, that will not look good"); they fall back to the branded
 // site-shell og-image.png so link previews still render a brand card
 // instead of a missing-image placeholder.
-const DEFAULT_OG_IMAGE = 'https://neurowiki.ai/og-image.png';
+// v=3 bump (2026-05-19): new OG image generated via Nano Banana from the
+// brief at docs/og-image-brief.md. The query suffix forces iMessage /
+// Twitter / Slack / LinkedIn / Facebook to refetch instead of serving
+// the cached prior image.
+const DEFAULT_OG_IMAGE = 'https://neurowiki.ai/og-image.png?v=3';
 
 const Seo: React.FC = () => {
   const location = useLocation();
