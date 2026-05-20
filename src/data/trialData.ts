@@ -2441,7 +2441,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'LASTE Trial',
     subtitle: 'Thrombectomy for Large Infarct of Unrestricted Size',
     category: 'Neuro Trials',
-    primaryDesign: 'binary-superiority',
+    // Class E correction 2026-05-20: primaryDesign was mislabeled as
+    // 'binary-superiority'. The published primary endpoint per Costalat
+    // NEJM 2024 is the mRS distribution at 90 days analyzed as an
+    // ordinal shift (generalized OR 1.63, 95% CI 1.29-2.06). The
+    // ordinalStats below already carry the correct cOR; only the design
+    // tag was wrong. See docs/reviews/clinical-PR-laste-2026-05-20.md.
+    primaryDesign: 'ordinal-shift',
     primaryResult: 'met',
     applicability: {
       imagingSelection: 'No upper core size limit. Unrestricted large-core selection (cf. SELECT2/ANGEL-ASPECT which used ASPECTS/perfusion gates)',
