@@ -3238,6 +3238,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Intensive Blood Pressure Reduction During IV Alteplase Treatment',
     category: 'Neuro Trials',
     trialResult: 'NEUTRAL',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'not-met',
     stats: {
       sampleSize: {
         value: '2196',
@@ -3341,6 +3343,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Blood Pressure Targets After Successful Endovascular Therapy',
     category: 'Neuro Trials',
     trialResult: 'NEUTRAL',
+    primaryDesign: 'estimation-strategy',
+    primaryResult: 'futility-stopped',
     stats: {
       sampleSize: {
         value: '120',
@@ -3444,6 +3448,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Intensive vs Standard Blood Pressure Control After Successful EVT',
     category: 'Neuro Trials',
     trialResult: 'NEGATIVE',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'not-met',
     stats: {
       sampleSize: {
         value: '324',
@@ -3547,6 +3553,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Intensive vs Conventional BP Lowering After EVT',
     category: 'Neuro Trials',
     trialResult: 'HARM',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'harm-stopped',
     stats: {
       sampleSize: {
         value: '306',
@@ -3650,6 +3658,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Intravenous Glibenclamide for Cerebral Edema After Large Hemispheric Stroke',
     category: 'Neuro Trials',
     trialResult: 'NEGATIVE',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'not-met',
     stats: {
       sampleSize: {
         value: '535',
@@ -3752,6 +3762,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Nerinetide Neuroprotection During EVT for Acute Ischemic Stroke',
     category: 'Neuro Trials',
     trialResult: 'NEGATIVE',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'not-met',
     stats: {
       sampleSize: {
         value: '1105',
@@ -4054,6 +4066,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     subtitle: 'Hemicraniectomy for Space-Occupying Hemispheric Infarction',
     category: 'Neuro Trials',
     trialResult: 'NEUTRAL',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'not-met',
     stats: {
       sampleSize: {
         value: '64',
@@ -4153,6 +4167,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'DESTINY II Trial',
     subtitle: 'Hemicraniectomy in Older Patients With Malignant MCA Stroke',
     category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
     stats: {
       sampleSize: {
         value: '112',
@@ -8018,6 +8034,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'INTERACT4 Trial',
     subtitle: 'Prehospital Blood-Pressure Reduction Before Stroke Type Is Known',
     category: 'Neuro Trials',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'not-met',
     stats: {
       sampleSize: {
         value: '2404',
