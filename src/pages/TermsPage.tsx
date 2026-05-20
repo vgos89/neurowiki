@@ -29,15 +29,18 @@ export default function TermsPage() {
         </p>
       </div>
 
-      {/* Clinical safety notice — prominent */}
+      {/* Clinical safety notice — prominent. Rewritten 2026-05-19 per V audit
+          to drop AI-fingerprint patterns (negative parallelism "supports X.
+          It does not replace X."; rule-of-three "scores, pathways, and dosing";
+          vague-formal "any/solely/do not"). Clinical voice instead. */}
       <div className="mb-10 p-4 rounded-lg bg-amber-50 border border-amber-200">
         <p className="text-sm font-semibold text-amber-800 mb-2">
-          Clinical reference only
+          Reference, not a replacement
         </p>
         <p className="text-sm text-amber-700 leading-relaxed">
-          NeuroWiki supports clinical judgment. It does not replace it. Verify all scores,
-          pathways, and dosing against your institutional protocol and the patient in front of
-          you. Do not base any clinical decision solely on this tool.
+          Cross-check scores and dosing against your hospital's protocol and the patient
+          in front of you before acting. Treat this as a starting point — your judgment
+          closes the loop.
         </p>
       </div>
 

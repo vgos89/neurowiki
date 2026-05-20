@@ -104,7 +104,12 @@ export const DesktopRail: React.FC = () => {
         </Link>
       )}
 
-      {/* Footer — single-line legal strip + copyright. V audit 2026-05-19. */}
+      {/* Footer — legal links on row 1 (now all on one line), copyright
+          tucked on row 2. V audit 2026-05-19: the prior "all-on-one-line"
+          fit was too tight (224px rail couldn't hold all 4 items + 3
+          separators at text-[10px]); © was overflowing. Two compact rows
+          honor V's earlier "no Accessibility wrap" complaint without the
+          overflow. */}
       <div className="border-t border-slate-100 pt-3 px-3">
         <div className="flex items-center gap-1.5 text-[10px] text-slate-400 whitespace-nowrap">
           <Link to="/privacy" className="hover:text-slate-700 transition-colors">Privacy</Link>
@@ -112,9 +117,8 @@ export const DesktopRail: React.FC = () => {
           <Link to="/terms" className="hover:text-slate-700 transition-colors">Terms</Link>
           <span aria-hidden="true">·</span>
           <Link to="/accessibility" className="hover:text-slate-700 transition-colors">Accessibility</Link>
-          <span aria-hidden="true">·</span>
-          <span>© 2026</span>
         </div>
+        <p className="text-[10px] text-slate-400 mt-0.5">© 2026</p>
       </div>
     </aside>
   );
