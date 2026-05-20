@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { useFavorites } from '../hooks/useFavorites';
+import { useRecents } from '../hooks/useRecents';
 import {
   trials,
   categoryNames,
@@ -113,10 +114,22 @@ export default function TrialsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<TrialCategoryKey | null>(null);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-  const [collapsedCategories, setCollapsedCategories] = useState<Set<TrialCategoryKey>>(new Set());
+  const [showRecentOnly, setShowRecentOnly] = useState(false);
+  const [showNewOnly, setShowNewOnly] = useState(false);
+  // V audit 2026-05-19: default-closed accordions — initialize with EVERY
+  // category in the collapsed set. Users tap a heading to open.
+  const [collapsedCategories, setCollapsedCategories] = useState<Set<TrialCategoryKey>>(
+    () => new Set(TRIAL_CATEGORY_IDS)
+  );
   const searchRef = useRef<HTMLInputElement>(null);
 
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { recents } = useRecents();
+  // IDs of trials viewed recently — drives the "Recent" filter pill.
+  const recentTrialIds = useMemo(
+    () => new Set(recents.filter((r) => r.type === 'trial').map((r) => r.id)),
+    [recents]
+  );
 
   // Sync ?favorites=true from URL
   useEffect(() => {
@@ -135,6 +148,20 @@ export default function TrialsPage() {
   if (showFavoritesOnly) {
     filteredTrials = filteredTrials.filter((t) => isFavorite(t.id));
   }
+  if (showRecentOnly) {
+    // Order by most-recent-first using the recents list, not the catalog order.
+    const recentOrder = recents
+      .filter((r) => r.type === 'trial')
+      .map((r) => r.id);
+    const inRecents = filteredTrials.filter((t) => recentTrialIds.has(t.id));
+    filteredTrials = recentOrder
+      .map((id) => inRecents.find((t) => t.id === id))
+      .filter((t): t is TrialItem => !!t);
+  }
+  if (showNewOnly) {
+    // V audit 2026-05-19: "New 2024–25" = trials with publication year 2024 or 2025.
+    filteredTrials = filteredTrials.filter((t) => t.year >= 2024 && t.year <= 2025);
+  }
   if (activeCategory) {
     filteredTrials = filteredTrials.filter((t) => t.category === activeCategory);
   }
@@ -144,7 +171,11 @@ export default function TrialsPage() {
       (t) =>
         t.name.toLowerCase().includes(q) ||
         t.description?.toLowerCase().includes(q) ||
-        t.legend?.finding?.toLowerCase().includes(q)
+        t.legend?.finding?.toLowerCase().includes(q) ||
+        t.legend?.bottomLineTag?.toLowerCase().includes(q) ||
+        t.clinicalContext?.toLowerCase().includes(q) ||
+        // Year as a search term — clinicians often look up trials by year
+        String(t.year).includes(q)
     );
   }
 
@@ -216,13 +247,20 @@ export default function TrialsPage() {
         </div>
       </div>
 
-      {/* Chip rail */}
+      {/* Chip rail — V audit 2026-05-19: Recent + New 2024–25 wired.
+          Guidelines stays inert pending the trial-audit agent's output
+          (no `guidelineRecommendation` flag in trial data today; populating
+          it is a Class C-clinical follow-up). */}
       <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-0.5">
         <Chip
           active={showFavoritesOnly}
           onClick={() => {
             setShowFavoritesOnly((v) => !v);
-            if (!showFavoritesOnly) setView('catalog');
+            if (!showFavoritesOnly) {
+              setView('catalog');
+              setShowRecentOnly(false);
+              setShowNewOnly(false);
+            }
           }}
         >
           <svg width="11" height="11" viewBox="0 0 24 24" fill={showFavoritesOnly ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -230,9 +268,42 @@ export default function TrialsPage() {
           </svg>
           Favourites
         </Chip>
-        <Chip>Recent</Chip>
-        <Chip>New 2024–25</Chip>
-        <Chip>Guidelines</Chip>
+        <Chip
+          active={showRecentOnly}
+          onClick={() => {
+            setShowRecentOnly((v) => !v);
+            if (!showRecentOnly) {
+              setView('catalog');
+              setShowFavoritesOnly(false);
+              setShowNewOnly(false);
+            }
+          }}
+        >
+          Recent
+        </Chip>
+        <Chip
+          active={showNewOnly}
+          onClick={() => {
+            setShowNewOnly((v) => !v);
+            if (!showNewOnly) {
+              setView('catalog');
+              setShowFavoritesOnly(false);
+              setShowRecentOnly(false);
+            }
+          }}
+        >
+          New 2024–25
+        </Chip>
+        <Chip
+          onClick={() => {
+            // TODO(guidelines-filter): pending evidence-verifier audit
+            // (running 2026-05-19) to mark trials cited in AHA/ASA 2026
+            // guidelines. Once the `guidelineRecommendation` field lands
+            // on TrialItem, wire this filter. Inert for now.
+          }}
+        >
+          Guidelines
+        </Chip>
       </div>
     </>
   );
@@ -315,9 +386,9 @@ export default function TrialsPage() {
         <div className="flex gap-1.5 overflow-x-auto scrollbar-hide flex-1">
           {/* All pill */}
           <button
-            onClick={() => { setActiveCategory(null); setShowFavoritesOnly(false); }}
+            onClick={() => { setActiveCategory(null); setShowFavoritesOnly(false); setShowRecentOnly(false); setShowNewOnly(false); }}
             className={`inline-flex items-center gap-[5px] px-3 py-[5px] rounded-full text-xs font-medium border whitespace-nowrap flex-shrink-0 transition-colors ${
- !activeCategory && !showFavoritesOnly
+ !activeCategory && !showFavoritesOnly && !showRecentOnly && !showNewOnly
  ? 'bg-[rgba(23,70,162,0.08)] border-[rgba(23,70,162,0.2)] text-[#1746A2] font-semibold'
  : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'
  }`}
@@ -387,7 +458,13 @@ export default function TrialsPage() {
           {TRIAL_CATEGORY_IDS.map((cat) => {
             const catTrials = groupedTrials[cat];
             if (!catTrials || catTrials.length === 0) return null;
-            const isCollapsed = !activeCategory && !searchQuery && collapsedCategories.has(cat);
+            // Categories collapse by default (V audit 2026-05-19). When ANY
+            // filter is active (search / favourites / recent / new / pinned
+            // category), auto-expand so the matching trials are visible
+            // without having to tap each section.
+            const isCollapsed = !activeCategory && !searchQuery
+              && !showFavoritesOnly && !showRecentOnly && !showNewOnly
+              && collapsedCategories.has(cat);
             const catColor = CAT_COLOR[cat];
 
             return (
@@ -438,9 +515,12 @@ export default function TrialsPage() {
                   </button>
                 )}
 
-                {/* Trial cards */}
+                {/* Trial cards — indented under the category heading per V
+                    audit 2026-05-19 ("trials under their headings should be
+                    indented"). pl-3 mobile / pl-6 desktop creates a clear
+                    visual hierarchy without crowding small viewports. */}
                 {!isCollapsed && (
-                  <div className="bg-white">
+                  <div className="bg-white pl-3 md:pl-6">
                     {catTrials.map((trial: TrialItem) => (
                       <TrialLegendCard
                         key={trial.id}
@@ -468,7 +548,7 @@ export default function TrialsPage() {
                 {searchQuery ? `No results for "${searchQuery}"` : showFavoritesOnly ? 'No favorites yet' : 'Try a different filter'}
               </p>
               <button
-                onClick={() => { setShowFavoritesOnly(false); setActiveCategory(null); setSearchQuery(''); }}
+                onClick={() => { setShowFavoritesOnly(false); setShowRecentOnly(false); setShowNewOnly(false); setActiveCategory(null); setSearchQuery(''); }}
                 className="mt-4 px-4 py-2 text-sm text-[#1746A2] hover:text-[#0E2D6B] font-medium"
               >
                 Clear filters
