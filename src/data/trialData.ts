@@ -9011,8 +9011,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'PRISMS Trial',
     subtitle: 'Alteplase vs Aspirin in Minor Nondisabling Stroke',
     category: 'Neuro Trials',
+    // Class E correction 2026-05-20: primaryResult was 'futility-stopped'
+    // but PRISMS was terminated by the sponsor (Genentech) for slow
+    // enrollment, not because a prespecified futility boundary was
+    // crossed. Per Khatri et al. JAMA 2018 + the schema legend for
+    // 'futility-stopped' (which requires DSMB-crossed futility), the
+    // correct tag is 'terminated-administrative'.
+    // See docs/reviews/clinical-PR-prisms-2026-05-20.md.
     primaryDesign: 'binary-superiority',
-    primaryResult: 'futility-stopped',
+    primaryResult: 'terminated-administrative',
     applicability: {
       populationExclusions: [
         'Disabling minor stroke. PRISMS enrolled nondisabling deficits only (mRS ≤1 at baseline)',
