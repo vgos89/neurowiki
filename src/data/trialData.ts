@@ -8782,8 +8782,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'NOR-TEST Trial',
     subtitle: 'Tenecteplase 0.4 mg/kg vs Alteplase',
     category: 'Neuro Trials',
-    primaryDesign: 'noninferiority',
-    primaryResult: 'noninferiority-not-established',
+    // Class E correction 2026-05-20: primaryDesign was mislabeled as
+    // 'noninferiority'. The published trial was designed as a SUPERIORITY
+    // trial (mRS 0-1 at 3 months) which DID NOT meet superiority — see
+    // Logallo et al., Lancet Neurol 2017;16:781-788. The catalog's own
+    // trialDesign.type[0] correctly says "superiority trial" and
+    // pValue.label says "Not Superior"; only the primaryDesign tag was
+    // out of sync. See docs/reviews/clinical-PR-nor-test-2026-05-20.md.
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'not-met',
     applicability: {
       doseSpecific: '0.4 mg/kg tenecteplase. Not the standard 0.25 mg/kg stroke dose',
       populationExclusions: [
