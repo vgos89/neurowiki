@@ -71,7 +71,16 @@ const ScrollCol: React.FC<ScrollColProps> = ({
   };
 
   return (
-    <div className="relative select-none flex-shrink-0" style={{ width: colW }}>
+    // `isolation: isolate` creates a fresh stacking context for this column
+    // so the selection highlight (z-10), fades (z-20) and item text (z-30)
+    // stack predictably on iOS Safari. Without isolation, the scroll
+    // container's implicit stacking context (from `-webkit-overflow-scrolling`)
+    // hides the selected item's white text behind the solid blue highlight.
+    // (V iPhone bug report 2026-05-20.)
+    <div
+      className="relative select-none flex-shrink-0"
+      style={{ width: colW, isolation: 'isolate' }}
+    >
       {/* Selection highlight */}
       <div
         className="absolute inset-x-1 rounded-xl bg-neuro-500 pointer-events-none z-10"
@@ -94,6 +103,11 @@ const ScrollCol: React.FC<ScrollColProps> = ({
           height: itemH * 3,
           scrollbarWidth: 'none',
           WebkitOverflowScrolling: 'touch',
+          // Belt-and-suspenders: explicit z-index on the scroll container
+          // keeps the items at z-30 above the absolutely-positioned
+          // highlight at z-10 even on iOS where the implicit stacking
+          // context from the overflow style would otherwise win.
+          zIndex: 30,
         } as React.CSSProperties}
         onScroll={handleScroll}
         // a11y: keyboard-navigable listbox per WCAG 2.1.1 — previously
@@ -327,6 +341,205 @@ const SleepTimeRow: React.FC<SleepTimeRowProps> = ({
 };
 
 /* ─────────────────────────────────────────────
+   AM/PM toggle — replaces the AM/PM scroll column
+   per V feedback 2026-05-20 ("AM/PM should be a
+   toggle rather than scroll"). Two-button group.
+───────────────────────────────────────────── */
+interface AmPmToggleProps {
+  periodIdx: number;                 // 0 = AM, 1 = PM
+  onSelect: (idx: number) => void;
+  /** Hidden when manual entry is in unambiguous 24-hour format. */
+  hidden?: boolean;
+  /** Visual size — 'lg' for mobile (matches drum height), 'sm' for desktop column. */
+  size?: 'sm' | 'lg';
+  ariaLabel?: string;
+}
+
+const AmPmToggle: React.FC<AmPmToggleProps> = ({
+  periodIdx, onSelect, hidden = false, size = 'lg', ariaLabel = 'AM or PM',
+}) => {
+  if (hidden) {
+    // Render a same-width placeholder so the drum layout doesn't reflow.
+    return (
+      <div
+        aria-hidden="true"
+        style={{ width: size === 'lg' ? 72 : 56 }}
+        className="flex-shrink-0"
+      />
+    );
+  }
+  const btnH = size === 'lg' ? 44 : 36;
+  return (
+    <div
+      className="flex flex-col gap-1.5 flex-shrink-0"
+      role="radiogroup"
+      aria-label={ariaLabel}
+      style={{ width: size === 'lg' ? 72 : 56 }}
+    >
+      {(['AM', 'PM'] as const).map((label, i) => {
+        const active = i === periodIdx;
+        return (
+          <button
+            key={label}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            onClick={() => onSelect(i)}
+            className={`w-full rounded-xl text-sm font-bold tabular-nums transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
+              active
+                ? 'bg-neuro-500 text-white'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+            style={{ height: btnH }}
+          >
+            {label}
+          </button>
+        );
+      })}
+    </div>
+  );
+};
+
+/* ─────────────────────────────────────────────
+   Manual time-entry input
+   Accepts: "11:25 PM", "1:25 am", "1125", "23:25", "2325", "1325".
+   - HH:MM with AM/PM suffix → 12-hour interpretation, AM/PM forced.
+   - HH:MM with HH ≥ 13 → military, AM/PM hidden.
+   - 4 digits "HHMM" interpreted same way.
+   Returns parsed { hourIdx, minuteIdx5, periodIdx, isMilitary } or null.
+───────────────────────────────────────────── */
+interface ParsedTime {
+  hourIdx: number;       // 0–11 (matches drum)
+  minuteIdx5: number;    // 0–11 (5-minute snap, matches drum)
+  periodIdx: number;     // 0 = AM, 1 = PM
+  isMilitary: boolean;   // typed value > 12 → suppress AM/PM toggle
+}
+
+function parseManualTime(raw: string): ParsedTime | null {
+  const s = raw.trim().toLowerCase().replace(/\s+/g, '');
+  if (!s) return null;
+  // Detect explicit am/pm suffix.
+  let suffix: 'am' | 'pm' | null = null;
+  let body = s;
+  if (s.endsWith('am')) { suffix = 'am'; body = s.slice(0, -2); }
+  else if (s.endsWith('pm')) { suffix = 'pm'; body = s.slice(0, -2); }
+  body = body.replace(/[^0-9:]/g, '');
+  let hh = 0;
+  let mm = 0;
+  if (body.includes(':')) {
+    const [h, m] = body.split(':');
+    if (h === '' || m === '' || !/^\d{1,2}$/.test(h) || !/^\d{1,2}$/.test(m)) return null;
+    hh = Number(h); mm = Number(m);
+  } else if (/^\d{3,4}$/.test(body)) {
+    // 3 or 4 digits: last two are minutes
+    hh = Number(body.slice(0, body.length - 2));
+    mm = Number(body.slice(-2));
+  } else if (/^\d{1,2}$/.test(body)) {
+    hh = Number(body); mm = 0;
+  } else {
+    return null;
+  }
+  if (mm < 0 || mm > 59) return null;
+  if (hh < 0 || hh > 23) return null;
+  let isMilitary: boolean;
+  let h12: number;
+  let periodIdx: number;
+  if (suffix) {
+    // AM/PM explicit → 12-hour
+    if (hh < 1 || hh > 12) return null;
+    isMilitary = false;
+    h12 = hh % 12; // 12 → 0
+    periodIdx = suffix === 'pm' ? 1 : 0;
+  } else if (hh >= 13) {
+    // Military
+    isMilitary = true;
+    h12 = (hh - 12) % 12;
+    periodIdx = 1;
+  } else if (hh === 0) {
+    // Military midnight
+    isMilitary = true;
+    h12 = 0;
+    periodIdx = 0;
+  } else {
+    // 1–12 without suffix — assume the current AM/PM keeps; not military.
+    isMilitary = false;
+    h12 = hh % 12;
+    periodIdx = -1; // sentinel: caller keeps existing periodIdx
+  }
+  const hourIdx = (h12 + 11) % 12; // h12=1 → idx 0; h12=12/0 → idx 11
+  const minuteIdx5 = Math.round(mm / 5) % 12;
+  return { hourIdx, minuteIdx5, periodIdx, isMilitary };
+}
+
+interface ManualTimeInputProps {
+  hourIdx: number;
+  minuteIdx: number;
+  periodIdx: number;
+  isMilitary: boolean;
+  onParsed: (p: ParsedTime) => void;
+}
+
+const ManualTimeInput: React.FC<ManualTimeInputProps> = ({
+  hourIdx, minuteIdx, periodIdx, isMilitary, onParsed,
+}) => {
+  // Mirror the wheels into the input as a starting value.
+  const display = (() => {
+    if (isMilitary) {
+      const h24 = periodIdx === 1
+        ? (hourIdx + 1 === 12 ? 12 : hourIdx + 13)
+        : (hourIdx + 1 === 12 ? 0 : hourIdx + 1);
+      return `${String(h24).padStart(2, '0')}:${String(minuteIdx * 5).padStart(2, '0')}`;
+    }
+    const h12 = hourIdx + 1;
+    return `${String(h12).padStart(2, '0')}:${String(minuteIdx * 5).padStart(2, '0')} ${periodIdx === 1 ? 'PM' : 'AM'}`;
+  })();
+  const [value, setValue] = useState(display);
+  const [touched, setTouched] = useState(false);
+  // Re-sync when wheels change externally (presets, etc) and the user hasn't typed.
+  useEffect(() => {
+    if (!touched) setValue(display);
+  }, [display, touched]);
+  const parsed = parseManualTime(value);
+  const valid = parsed !== null;
+  return (
+    <div className="px-4 pt-3 pb-1">
+      <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1.5">
+        Type time
+      </label>
+      <input
+        type="text"
+        inputMode="numeric"
+        autoComplete="off"
+        value={value}
+        onChange={(e) => {
+          setTouched(true);
+          setValue(e.target.value);
+          const p = parseManualTime(e.target.value);
+          if (p) onParsed(p);
+        }}
+        onBlur={() => {
+          if (parsed) setValue(parsed.isMilitary
+            ? `${String(parsed.periodIdx === 1 && parsed.hourIdx + 1 !== 12 ? parsed.hourIdx + 13 : (parsed.hourIdx + 1 === 12 ? (parsed.periodIdx === 1 ? 12 : 0) : parsed.hourIdx + 1)).padStart(2, '0')}:${String(parsed.minuteIdx5 * 5).padStart(2, '0')}`
+            : `${String(parsed.hourIdx + 1).padStart(2, '0')}:${String(parsed.minuteIdx5 * 5).padStart(2, '0')} ${parsed.periodIdx === 1 ? 'PM' : 'AM'}`,
+          );
+        }}
+        placeholder="11:25 PM  or  23:25"
+        aria-label="Type Last Known Well time. Accepts 12-hour with AM or PM, or 24-hour military format."
+        aria-invalid={!valid && touched}
+        className={`w-full px-3 py-2 rounded-lg border text-sm tabular-nums focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
+          !valid && touched ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'
+        }`}
+      />
+      {!valid && touched && (
+        <p className="mt-1 text-[11px] text-red-600">
+          Try a format like &quot;11:25 PM&quot; or &quot;23:25&quot;.
+        </p>
+      )}
+    </div>
+  );
+};
+
+/* ─────────────────────────────────────────────
    Main LKW Time Picker
 ───────────────────────────────────────────── */
 export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
@@ -363,6 +576,20 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
   const [hourIdx, setHourIdx] = useState(iv.hourIdx);
   const [minuteIdx, setMinuteIdx] = useState(iv.minuteIdx);
   const [periodIdx, setPeriodIdx] = useState(iv.periodIdx);
+  // Tracks whether the user entered a 24-hour value via the manual input
+  // (e.g. "23:25"). Hides the AM/PM toggle in that case. Wheels never
+  // produce military mode — they're always 12-hour with AM/PM.
+  const [isMilitary, setIsMilitary] = useState(false);
+  // Manual-input handler — keeps wheels and AM/PM toggle in sync with typed value.
+  const handleParsedTime = (p: ParsedTime) => {
+    setHourIdx(p.hourIdx);
+    setMinuteIdx(p.minuteIdx5);
+    if (p.periodIdx !== -1) setPeriodIdx(p.periodIdx);
+    setIsMilitary(p.isMilitary);
+  };
+  // Wheel changes always cancel military mode (wheels are 12-hour).
+  const setHourIdxFromWheel = (i: number) => { setHourIdx(i); setIsMilitary(false); };
+  const setMinuteIdxFromWheel = (i: number) => { setMinuteIdx(i); setIsMilitary(false); };
   const [activePreset, setActivePreset] = useState<string | null>(null);
   const [dateExpanded, setDateExpanded] = useState(false);
 
@@ -461,7 +688,9 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
 
   const hourItems = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
   const minuteItems = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'));
-  const periodItems = ['AM', 'PM'];
+  // periodItems removed — AM/PM now rendered via <AmPmToggle> (V feedback
+  // 2026-05-20). Sleep Onset's SleepTimeRow still uses the scroll-column
+  // AM/PM internally; that secondary view is unchanged in this commit.
 
   // 9 presets covering the tPA-window decision zone (0-4.5 h) with denser
   // coverage. Previous list jumped from "Now" to "3 h ago" — left a clinician
@@ -769,14 +998,28 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
                 </button>
               </div>
 
+              {/* Manual time entry — accepts 12h ("11:25 PM") or 24h ("23:25") */}
+              <ManualTimeInput
+                hourIdx={hourIdx}
+                minuteIdx={minuteIdx}
+                periodIdx={periodIdx}
+                isMilitary={isMilitary}
+                onParsed={handleParsedTime}
+              />
+
               {/* Time drums — large, centered */}
               <div className="flex-1 flex items-center justify-center px-6 py-4">
                 <div className="flex items-center gap-4">
-                  <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={setHourIdx} itemH={60} colW={72} ariaLabel="Hour" />
+                  <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={setHourIdxFromWheel} itemH={60} colW={72} ariaLabel="Hour" />
                   <span className="text-3xl font-thin text-slate-300 -mt-1">:</span>
-                  <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={setMinuteIdx} itemH={60} colW={72} ariaLabel="Minute" />
+                  <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={setMinuteIdxFromWheel} itemH={60} colW={72} ariaLabel="Minute" />
                   <div className="w-px h-16 bg-slate-200 mx-1" />
-                  <ScrollCol items={periodItems} selectedIdx={periodIdx} onSelect={setPeriodIdx} itemH={60} colW={72} ariaLabel="AM or PM" />
+                  <AmPmToggle
+                    periodIdx={periodIdx}
+                    onSelect={setPeriodIdx}
+                    hidden={isMilitary}
+                    size="lg"
+                  />
                 </div>
               </div>
 
@@ -840,13 +1083,27 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
                 <CalendarGrid {...calendarProps} />
               </div>
 
-              {/* Right: Time drums */}
-              <div className="w-[210px] flex-shrink-0 border-l border-slate-100 flex items-center justify-center px-3 py-6">
-                <div className="flex items-center gap-2">
-                  <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={setHourIdx} ariaLabel="Hour" />
-                  <span className="text-2xl font-light text-slate-300">:</span>
-                  <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={setMinuteIdx} ariaLabel="Minute" />
-                  <ScrollCol items={periodItems} selectedIdx={periodIdx} onSelect={setPeriodIdx} ariaLabel="AM or PM" />
+              {/* Right: Manual entry + time drums */}
+              <div className="w-[240px] flex-shrink-0 border-l border-slate-100 flex flex-col px-3 py-4">
+                <ManualTimeInput
+                  hourIdx={hourIdx}
+                  minuteIdx={minuteIdx}
+                  periodIdx={periodIdx}
+                  isMilitary={isMilitary}
+                  onParsed={handleParsedTime}
+                />
+                <div className="flex-1 flex items-center justify-center mt-2">
+                  <div className="flex items-center gap-2">
+                    <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={setHourIdxFromWheel} ariaLabel="Hour" />
+                    <span className="text-2xl font-light text-slate-300">:</span>
+                    <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={setMinuteIdxFromWheel} ariaLabel="Minute" />
+                    <AmPmToggle
+                      periodIdx={periodIdx}
+                      onSelect={setPeriodIdx}
+                      hidden={isMilitary}
+                      size="sm"
+                    />
+                  </div>
                 </div>
               </div>
 
