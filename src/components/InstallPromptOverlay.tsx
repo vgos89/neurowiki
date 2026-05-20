@@ -31,7 +31,11 @@ import { usePwaInstall } from '../hooks/usePwaInstall';
 import { IosInstallSheet } from './IosInstallSheet';
 
 const DISCLAIMER_KEY = 'neurowiki:disclaimer:v1';
-const OVERLAY_SHOWN_KEY = 'neurowiki:install-overlay:v1';
+// Bumped v1 → v2 on 2026-05-20 per V iPhone user-testing feedback ("I do
+// not see the PWA add to home screen jump out") — early testers
+// permanently dismissed the v1 overlay. Bumping the key forces a single
+// re-show for everyone; subsequent dismissals stick at v2.
+const OVERLAY_SHOWN_KEY = 'neurowiki:install-overlay:v2';
 
 export const InstallPromptOverlay: React.FC = () => {
   const { status, promptInstall } = usePwaInstall();
@@ -82,9 +86,10 @@ export const InstallPromptOverlay: React.FC = () => {
       {/* Backdrop — opaque to keep the focus on the prompt */}
       <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm" aria-hidden="true" />
 
-      {/* Card */}
+      {/* Card — scale-in entry animation so it "jumps out" rather than
+          quietly fading in (V iPhone user-testing feedback 2026-05-20). */}
       <div
-        className="relative max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden"
+        className="relative max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden animate-install-overlay-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
