@@ -2,23 +2,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Clock, X, CheckCircle, AlertTriangle, AlertCircle, Pencil } from 'lucide-react';
 
 /**
- * parseTimeString — minimal manual-time parser scoped to the timestamp
- * edit affordance. Accepts:
- *   "11:25 PM" / "1:25am"   — 12-hour with am/pm suffix
- *   "23:25" / "1325"        — 24-hour military (HH ≥ 13 unambiguous)
- *   "1125" / "1:25"         — 12-hour by default (ambiguous; uses existing
- *                              period from baseDate)
- * Returns a new Date with hours and minutes replaced, date preserved
- * from baseDate. Returns null on parse failure.
+ * parseTimeDigits — extracts hours and minutes from a digits-only (or
+ * digits + colon) input. Does NOT resolve AM/PM — the caller pairs the
+ * parsed digits with an AM/PM toggle state to produce a final 24-hour
+ * time. HH ≥ 13 is flagged as military so the toggle can hide.
+ *
+ * Accepts: "11:25", "1125", "23:25", "2325", "1:25", "0", "00:00".
+ * Rejects: empty strings, malformed digits, hh > 23, mm > 59.
+ *
+ * Refactored 2026-05-20 per V feedback: timestamp edit row now uses an
+ * AM/PM toggle (matching the LKW picker pattern) instead of accepting
+ * a free-text "PM" suffix inside the input. User types digits only.
  */
-function parseTimeString(raw: string, baseDate: Date): Date | null {
-  const s = raw.trim().toLowerCase().replace(/\s+/g, '');
-  if (!s) return null;
-  let suffix: 'am' | 'pm' | null = null;
-  let body = s;
-  if (s.endsWith('am')) { suffix = 'am'; body = s.slice(0, -2); }
-  else if (s.endsWith('pm')) { suffix = 'pm'; body = s.slice(0, -2); }
-  body = body.replace(/[^0-9:]/g, '');
+export function parseTimeDigits(raw: string): { hh: number; mm: number; isMilitary: boolean } | null {
+  const body = raw.trim().replace(/\s+/g, '').replace(/[^0-9:]/g, '');
+  if (!body) return null;
   let hh = 0;
   let mm = 0;
   if (body.includes(':')) {
@@ -33,24 +31,8 @@ function parseTimeString(raw: string, baseDate: Date): Date | null {
   } else {
     return null;
   }
-  if (mm < 0 || mm > 59) return null;
-  if (hh < 0 || hh > 23) return null;
-  let h24: number;
-  if (suffix) {
-    if (hh < 1 || hh > 12) return null;
-    if (suffix === 'pm') h24 = hh === 12 ? 12 : hh + 12;
-    else h24 = hh === 12 ? 0 : hh;
-  } else if (hh >= 13 || hh === 0) {
-    h24 = hh; // unambiguous military
-  } else {
-    // ambiguous 1–12 — keep existing AM/PM from baseDate
-    const baseH = baseDate.getHours();
-    if (baseH >= 12) h24 = hh === 12 ? 12 : hh + 12;
-    else h24 = hh === 12 ? 0 : hh;
-  }
-  const next = new Date(baseDate);
-  next.setHours(h24, mm, 0, 0);
-  return next;
+  if (mm < 0 || mm > 59 || hh < 0 || hh > 23) return null;
+  return { hh, mm, isMilitary: hh >= 13 };
 }
 
 export const STROKE_TIMESTAMP_EVENTS = [
@@ -147,7 +129,8 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
   const [internalTimestamps, setInternalTimestamps] = useState<StrokeTimestamps>({ ...EMPTY_STROKE_TIMESTAMPS });
   // Per-row inline edit state — when set, that row shows a manual time input.
   const [editingEvent, setEditingEvent] = useState<EventName | null>(null);
-  const [editValue, setEditValue] = useState<string>('');
+  const [editValue, setEditValue] = useState<string>('');       // digits only
+  const [editPeriod, setEditPeriod] = useState<0 | 1>(0);       // 0 = AM, 1 = PM
   const [editError, setEditError] = useState<boolean>(false);
   // One-shot guard for the auto-stamp listener — survives across renders
   // without re-firing.
@@ -250,19 +233,25 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
     };
   }, [autoStampNeuroEvalOnFirstInteraction, timestamps, setTimestamps, onStamp]);
 
-  // ── Inline edit handlers (V feedback 2026-05-20: each stamp needs an
-  //    edit affordance that opens a simplified manual-only time entry) ──
-  const formatForEdit = (d: Date): string => {
-    const h = d.getHours();
-    const m = d.getMinutes();
-    const h12 = h % 12 || 12;
-    return `${String(h12).padStart(2, '0')}:${String(m).padStart(2, '0')} ${h >= 12 ? 'PM' : 'AM'}`;
-  };
+  // ── Inline edit handlers — digits-only input + AM/PM toggle.
+  // Per V feedback 2026-05-20 (follow-up): match the LKW picker
+  // pattern. User types digits only; AM/PM is a toggle. If the typed
+  // value is military (HH ≥ 13), the toggle hides and the time is
+  // interpreted as 24-hour.
   const handleEditOpen = (event: EventName, e: React.MouseEvent) => {
     e.stopPropagation();
     const current = timestamps[event];
     setEditingEvent(event);
-    setEditValue(current ? formatForEdit(current) : '');
+    // Pre-fill digits in 12-hour HH:MM form. AM/PM goes into the toggle
+    // so the user can adjust either independently.
+    if (current) {
+      const h12 = current.getHours() % 12 || 12;
+      setEditValue(`${String(h12).padStart(2, '0')}:${String(current.getMinutes()).padStart(2, '0')}`);
+      setEditPeriod(current.getHours() >= 12 ? 1 : 0);
+    } else {
+      setEditValue('');
+      setEditPeriod(new Date().getHours() >= 12 ? 1 : 0);
+    }
     setEditError(false);
   };
   const handleEditCancel = () => {
@@ -271,14 +260,29 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
     setEditError(false);
   };
   const handleEditSave = (event: EventName) => {
-    const base = timestamps[event] ?? new Date();
-    const parsed = parseTimeString(editValue, base);
+    const parsed = parseTimeDigits(editValue);
     if (!parsed) {
       setEditError(true);
       return;
     }
-    setTimestamps(prev => ({ ...prev, [event]: parsed }));
-    onStamp?.(event, parsed);
+    const { hh, mm, isMilitary } = parsed;
+    let h24: number;
+    if (isMilitary) {
+      h24 = hh;
+    } else {
+      // 12-hour interpretation. Combine with the toggle.
+      if (hh < 1 || hh > 12) {
+        setEditError(true);
+        return;
+      }
+      if (editPeriod === 1) h24 = hh === 12 ? 12 : hh + 12;
+      else h24 = hh === 12 ? 0 : hh;
+    }
+    const base = timestamps[event] ?? new Date();
+    const next = new Date(base);
+    next.setHours(h24, mm, 0, 0);
+    setTimestamps(prev => ({ ...prev, [event]: next }));
+    onStamp?.(event, next);
     setEditingEvent(null);
     setEditValue('');
     setEditError(false);
@@ -394,50 +398,79 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                 const isEditing = editingEvent === event;
                 return (
                   <div key={event} className="px-4 py-3">
-                    {isEditing ? (
-                      <div>
-                        <div className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">
-                          {event}
+                    {isEditing ? (() => {
+                      const parsedDigits = parseTimeDigits(editValue);
+                      const isMilitaryInput = parsedDigits?.isMilitary ?? false;
+                      return (
+                        <div>
+                          <div className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">
+                            {event}
+                          </div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <input
+                              type="text"
+                              inputMode="numeric"
+                              autoComplete="off"
+                              autoFocus
+                              value={editValue}
+                              onChange={(e) => { setEditValue(e.target.value); setEditError(false); }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') handleEditSave(event);
+                                if (e.key === 'Escape') handleEditCancel();
+                              }}
+                              placeholder="11:25"
+                              aria-label={`Edit ${event} time. Type 12-hour digits and use the AM PM toggle, or type 24-hour military.`}
+                              aria-invalid={editError}
+                              className={`flex-1 min-w-[88px] px-2.5 py-1.5 rounded-md border text-sm tabular-nums focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
+                                editError ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'
+                              }`}
+                            />
+                            {/* AM/PM toggle — hidden when input parses as military (HH ≥ 13).
+                                Same rule as the LKW picker. */}
+                            {!isMilitaryInput && (
+                              <div role="radiogroup" aria-label="AM or PM" className="inline-flex rounded-md overflow-hidden border border-slate-200">
+                                {(['AM', 'PM'] as const).map((label, i) => {
+                                  const active = i === editPeriod;
+                                  return (
+                                    <button
+                                      key={label}
+                                      type="button"
+                                      role="radio"
+                                      aria-checked={active}
+                                      onClick={() => setEditPeriod(i as 0 | 1)}
+                                      className={`px-2.5 py-1.5 text-xs font-bold tabular-nums transition-colors ${
+                                        active
+                                          ? 'bg-neuro-500 text-white'
+                                          : 'bg-white text-slate-500 hover:bg-slate-50'
+                                      }`}
+                                    >
+                                      {label}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            )}
+                            <button
+                              onClick={() => handleEditSave(event)}
+                              className="px-3 py-1.5 text-xs font-semibold bg-neuro-500 hover:bg-neuro-600 text-white rounded-lg transition-colors whitespace-nowrap"
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={handleEditCancel}
+                              className="text-xs text-slate-500 hover:text-slate-700 transition-colors px-2 py-1.5 rounded"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                          {editError && (
+                            <p className="mt-1 text-[11px] text-red-600">
+                              Enter HH:MM (12-hour) with the AM/PM toggle, or HH:MM 24-hour military.
+                            </p>
+                          )}
                         </div>
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="text"
-                            inputMode="numeric"
-                            autoComplete="off"
-                            autoFocus
-                            value={editValue}
-                            onChange={(e) => { setEditValue(e.target.value); setEditError(false); }}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') handleEditSave(event);
-                              if (e.key === 'Escape') handleEditCancel();
-                            }}
-                            placeholder="11:25 PM or 23:25"
-                            aria-label={`Edit ${event} time. Accepts 12-hour with AM or PM, or 24-hour military.`}
-                            aria-invalid={editError}
-                            className={`flex-1 min-w-0 px-2.5 py-1.5 rounded-md border text-sm tabular-nums focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
-                              editError ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'
-                            }`}
-                          />
-                          <button
-                            onClick={() => handleEditSave(event)}
-                            className="px-3 py-1.5 text-xs font-semibold bg-neuro-500 hover:bg-neuro-600 text-white rounded-lg transition-colors whitespace-nowrap"
-                          >
-                            Save
-                          </button>
-                          <button
-                            onClick={handleEditCancel}
-                            className="text-xs text-slate-500 hover:text-slate-700 transition-colors px-2 py-1.5 rounded"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                        {editError && (
-                          <p className="mt-1 text-[11px] text-red-600">
-                            Try a format like 11:25 PM or 23:25.
-                          </p>
-                        )}
-                      </div>
-                    ) : (
+                      );
+                    })() : (
                       <div className="flex items-center justify-between gap-2">
                         <div className="flex-1 min-w-0">
                           <div className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-0.5">

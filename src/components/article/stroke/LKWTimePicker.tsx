@@ -493,10 +493,17 @@ const ManualTimeInput: React.FC<ManualTimeInputProps> = ({
     const h12 = hourIdx + 1;
     return `${String(h12).padStart(2, '0')}:${String(minuteIdx * 5).padStart(2, '0')} ${periodIdx === 1 ? 'PM' : 'AM'}`;
   })();
-  const [value, setValue] = useState(display);
+  // V feedback 2026-05-20: keep the input blank on mount so clinicians can
+  // free-text from the get-go without having to delete the prefilled value.
+  // Only mirror the wheels once they actually change (preset click, scroll,
+  // etc.) — that lets the input show the wheel state if the user pivots
+  // away from typing.
+  const [value, setValue] = useState('');
   const [touched, setTouched] = useState(false);
-  // Re-sync when wheels change externally (presets, etc) and the user hasn't typed.
+  const initialDisplay = useRef(display);
   useEffect(() => {
+    // First render: display === initialDisplay.current, skip — keep blank.
+    if (display === initialDisplay.current) return;
     if (!touched) setValue(display);
   }, [display, touched]);
   const parsed = parseManualTime(value);
