@@ -445,6 +445,99 @@ function guideSchema(pathname: string, title: string, description: string, guide
   return { '@context': 'https://schema.org', '@graph': graph };
 }
 
+// ── Clinical question schema (/trials/q/:questionId) ──────────────────────────
+
+/**
+ * Per-question metadata for /trials/q/:id pages.
+ * title: ≤60 chars, description: ≤160 chars, answer: concise synthesis for FAQPage JSON-LD.
+ */
+const QUESTION_META: Record<string, { title: string; description: string; answer: string }> = {
+  'large-core-evt': {
+    title: 'EVT for Large-Core Stroke (Low ASPECTS) · NeuroWiki',
+    description: 'Four positive RCTs (LASTE, SELECT2, ANGEL-ASPECT, TENSION) changed EVT practice for low-ASPECTS large-core stroke. Evidence summary.',
+    answer: 'EVT is now supported for large-core stroke (ASPECTS 3–5) by four positive RCTs published 2022–2023: LASTE, SELECT2, ANGEL-ASPECT, and TENSION. Each showed functional benefit despite large established infarcts. The 2026 AHA/ASA guidelines rate large-core EVT COR 1.',
+  },
+  'late-window-selection': {
+    title: 'Perfusion vs Non-Contrast CT for Late-Window EVT · NeuroWiki',
+    description: 'How to select patients for late-window EVT — perfusion mismatch (DAWN, DEFUSE-3) versus plain-CT large-core approach (LASTE, TENSION, SELECT2).',
+    answer: 'Late-window EVT selection evolved from mandatory perfusion imaging in DAWN and DEFUSE-3 (6–24 h) to plain non-contrast CT for large-core trials (LASTE, TENSION, SELECT2, ANGEL-ASPECT). Both strategies show benefit; choice depends on imaging availability, time, and core size.',
+  },
+  'aspiration-vs-stentriever': {
+    title: 'Aspiration vs Stent Retriever for Thrombectomy · NeuroWiki',
+    description: 'Three RCTs (ASTER, COMPASS, ASTER2) comparing direct aspiration first versus stent-retriever-first thrombectomy. No clear winner on functional outcomes.',
+    answer: 'Three RCTs — ASTER, COMPASS, and ASTER2 — found no statistically significant difference in functional outcomes between aspiration-first and stent-retriever-first strategies. Reperfusion rates were similar. Device choice is largely operator-dependent.',
+  },
+  'evt-adjunct-pharmacotherapy': {
+    title: 'Adjunct Pharmacotherapy During EVT · NeuroWiki',
+    description: 'Nerinetide (ESCAPE-NA1), adjunct IA alteplase (CHOICE), and tirofiban (RESCUE BT): evidence on pharmacologic adjuncts to mechanical thrombectomy.',
+    answer: 'ESCAPE-NA1 found nerinetide neutral overall. CHOICE showed adjunct intra-arterial alteplase after successful EVT may improve excellent outcomes. RESCUE BT found tirofiban did not improve functional outcomes globally, though signals emerged in non-large-artery atherosclerosis.',
+  },
+  'minor-stroke-choice': {
+    title: 'Minor Stroke — tPA, DAPT, or Aspirin? · NeuroWiki',
+    description: 'PRISMS, ARAMIS, CHANCE, POINT, and INSPIRES define the evidence for treating minor non-disabling ischemic stroke without thrombolysis.',
+    answer: 'PRISMS showed alteplase did not outperform aspirin in minor non-disabling stroke and caused more symptomatic ICH. ARAMIS confirmed DAPT was noninferior to alteplase. CHANCE and POINT established short-course DAPT; INSPIRES extended DAPT to atherosclerotic minor stroke within 72 h.',
+  },
+  'mevo-distal-evt': {
+    title: 'EVT for MeVO or Distal Occlusion · NeuroWiki',
+    description: 'ESCAPE-MeVO and DISTAL — the first two RCTs in medium-vessel and distal occlusions — both failed their primary endpoints. Evidence summary.',
+    answer: 'ESCAPE-MeVO (M2/M3, ACA, PCA) and DISTAL both failed their primary functional outcome endpoints, suggesting that EVT benefit does not extend reliably to medium-vessel and distal occlusions under current evidence. Routine EVT for MeVO cannot be recommended based on these RCTs.',
+  },
+  'post-evt-bp-target': {
+    title: 'Post-EVT Blood Pressure Target · NeuroWiki',
+    description: 'Four RCTs (BP-TARGET, BEST-II, OPTIMAL-BP, ENCHANTED) on post-EVT blood pressure management. OPTIMAL-BP showed harm from intensive lowering.',
+    answer: 'Post-EVT BP evidence from four RCTs does not support intensive BP lowering after successful thrombectomy. OPTIMAL-BP showed early harm with intensive targets. BP-TARGET and BEST-II were neutral. Current guidance (AHA/ASA 2026) recommends avoiding aggressive BP lowering to below 130 mmHg post-EVT.',
+  },
+};
+
+function questionSchema(
+  pathname: string,
+  _questionId: string,
+  title: string,
+  description: string,
+  answer: string
+): object {
+  const url = `${BASE_URL}${pathname}`;
+
+  const graph: object[] = [
+    {
+      '@type': 'MedicalWebPage',
+      name: title,
+      description,
+      url,
+      medicalSpecialty: 'Neurology',
+      audience: { '@type': 'MedicalAudience', audienceType: 'Physician, Neurologist, Resident' },
+      publisher: PUBLISHER,
+      lastReviewed: LAST_REVIEWED,
+      datePublished: DATE_PUBLISHED,
+      dateModified: DATE_MODIFIED,
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+        { '@type': 'ListItem', position: 2, name: 'Clinical Trials', item: `${BASE_URL}/trials` },
+        { '@type': 'ListItem', position: 3, name: 'Clinical Questions', item: `${BASE_URL}/trials` },
+        { '@type': 'ListItem', position: 4, name: title.replace(' · NeuroWiki', ''), item: url },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: title.replace(' · NeuroWiki', ''),
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: answer,
+          },
+        },
+      ],
+    },
+  ];
+
+  return { '@context': 'https://schema.org', '@graph': graph };
+}
+
 // ── Trial schema ──────────────────────────────────────────────────────────────
 
 function trialSchema(pathname: string, title: string, description: string, trialLabel: string): object {
@@ -619,6 +712,9 @@ const TRIAL_LABELS: Record<string, string> = {
   // Secondary Prevention
   '/trials/timing-trial':            'TIMING Trial',
   '/trials/optimas-trial':           'OPTIMAS Trial',
+  // Added 2026-05-20
+  '/trials/profess-trial':           'PRoFESS Trial',
+  '/trials/crest-trial':             'CREST Trial',
 };
 
 // ── Main export ───────────────────────────────────────────────────────────────
@@ -654,6 +750,25 @@ export function getSchemaForRoute(
   if (pathname.startsWith('/guide/')) {
     const label = GUIDE_LABELS[pathname] ?? pathname.split('/').pop()?.replace(/-/g, ' ') ?? 'Guide';
     return guideSchema(pathname, meta.title, meta.description, label);
+  }
+
+  if (pathname.startsWith('/trials/q/')) {
+    const questionId = pathname.split('/').pop() ?? '';
+    const qMeta = QUESTION_META[questionId];
+    if (qMeta) {
+      return questionSchema(pathname, questionId, qMeta.title, qMeta.description, qMeta.answer);
+    }
+    // Fallback for question IDs not yet in QUESTION_META: generic MedicalWebPage
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'MedicalWebPage',
+      name: meta.title,
+      description: meta.description,
+      url: `${BASE_URL}${pathname}`,
+      medicalSpecialty: 'Neurology',
+      audience: { '@type': 'MedicalAudience', audienceType: 'Physician, Neurologist, Resident' },
+      publisher: PUBLISHER,
+    };
   }
 
   if (pathname.startsWith('/trials/')) {

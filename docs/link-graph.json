@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated": "2026-05-17",
+  "generated": "2026-05-20",
   "nodes": {
     "hub/guide": {
       "type": "hub",
@@ -421,6 +421,104 @@
       "references": [],
       "referencedBy": []
     },
+    "trial/profess-trial": {
+      "type": "trial",
+      "title": "PRoFESS Trial",
+      "route": "/trials/profess-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "trial/crest-trial": {
+      "type": "trial",
+      "title": "CREST Trial",
+      "route": "/trials/crest-trial",
+      "references": [],
+      "referencedBy": []
+    },
+    "question/large-core-evt": {
+      "type": "question",
+      "title": "Should I do EVT for large-core stroke (low ASPECTS)?",
+      "route": "/trials/q/large-core-evt",
+      "references": [
+        "trial/laste-trial",
+        "trial/select2-trial",
+        "trial/angel-aspect-trial",
+        "trial/tension-trial"
+      ],
+      "referencedBy": []
+    },
+    "question/late-window-selection": {
+      "type": "question",
+      "title": "Perfusion imaging or non-contrast CT for late-window selection?",
+      "route": "/trials/q/late-window-selection",
+      "references": [
+        "trial/dawn-trial",
+        "trial/defuse-3-trial",
+        "trial/extend-trial",
+        "trial/laste-trial",
+        "trial/tension-trial",
+        "trial/select2-trial",
+        "trial/angel-aspect-trial"
+      ],
+      "referencedBy": []
+    },
+    "question/aspiration-vs-stentriever": {
+      "type": "question",
+      "title": "Aspiration first or stent retriever first for thrombectomy?",
+      "route": "/trials/q/aspiration-vs-stentriever",
+      "references": [
+        "trial/aster-trial",
+        "trial/compass-trial",
+        "trial/aster2-trial"
+      ],
+      "referencedBy": []
+    },
+    "question/evt-adjunct-pharmacotherapy": {
+      "type": "question",
+      "title": "Is neuroprotection or adjunct pharmacotherapy useful during EVT?",
+      "route": "/trials/q/evt-adjunct-pharmacotherapy",
+      "references": [
+        "trial/escape-na1-trial",
+        "trial/choice-trial",
+        "trial/rescue-bt-trial"
+      ],
+      "referencedBy": []
+    },
+    "question/minor-stroke-choice": {
+      "type": "question",
+      "title": "Minor non-disabling stroke — alteplase, DAPT, or aspirin?",
+      "route": "/trials/q/minor-stroke-choice",
+      "references": [
+        "trial/chance-trial",
+        "trial/point-trial",
+        "trial/prisms-trial",
+        "trial/aramis-trial",
+        "trial/inspires-trial"
+      ],
+      "referencedBy": []
+    },
+    "question/mevo-distal-evt": {
+      "type": "question",
+      "title": "Does my MeVO or distal-occlusion patient benefit from EVT?",
+      "route": "/trials/q/mevo-distal-evt",
+      "references": [
+        "trial/escape-mevo-trial",
+        "trial/distal-trial"
+      ],
+      "referencedBy": []
+    },
+    "question/post-evt-bp-target": {
+      "type": "question",
+      "title": "What's the post-EVT blood pressure target?",
+      "route": "/trials/q/post-evt-bp-target",
+      "references": [
+        "trial/enchanted-trial",
+        "trial/bp-target-trial",
+        "trial/best-ii-trial",
+        "trial/optimal-bp-trial"
+      ],
+      "referencedBy": []
+    },
     "page/privacy": {
       "type": "page",
       "title": "Privacy Policy",
@@ -505,7 +603,25 @@
     "pathway/migraine",
     "spec/pathway-spec",
     "component/calculator-drawer",
-    "component/chevron"
+    "component/chevron",
+    "trial/laste-trial",
+    "trial/select2-trial",
+    "trial/angel-aspect-trial",
+    "trial/tension-trial",
+    "trial/dawn-trial",
+    "trial/defuse-3-trial",
+    "trial/aster-trial",
+    "trial/aster2-trial",
+    "trial/compass-trial",
+    "trial/escape-na1-trial",
+    "trial/choice-trial",
+    "trial/rescue-bt-trial",
+    "trial/inspires-trial",
+    "trial/distal-trial",
+    "trial/enchanted-trial",
+    "trial/bp-target-trial",
+    "trial/best-ii-trial",
+    "trial/optimal-bp-trial"
   ],
   "_schema": {
     "nodes": {

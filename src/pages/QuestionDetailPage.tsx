@@ -16,7 +16,7 @@
  *   - Unresolvable individual trial ID → silently skipped (findTrialById returns undefined).
  */
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { TRIAL_QUESTIONS } from '../data/trial-questions';
 import { findTrialById, type TrialItem } from '../data/trialListData';
@@ -89,16 +89,9 @@ export default function QuestionDetailPage() {
 
   const question = TRIAL_QUESTIONS.find((q) => q.id === questionId);
 
-  // SEO — declared before early return to satisfy Rules of Hooks.
-  useEffect(() => {
-    const title = question
-      ? `${question.text} · NeuroWiki Trials`
-      : 'Question not found · NeuroWiki Trials';
-    document.title = title;
-    return () => {
-      document.title = 'NeuroWiki';
-    };
-  }, [question?.text]);
+  // SEO: title, description, canonical, OG, and JSON-LD are handled globally
+  // by the Seo component (src/components/Seo.tsx) via getRouteMeta() and
+  // getSchemaForRoute(). No document.title override needed here.
 
   // ── 404 state ───────────────────────────────────────────────────────────────
   if (!question) {

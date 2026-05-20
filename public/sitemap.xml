@@ -847,4 +847,80 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- TRIALS — Secondary Prevention (new 2026-05-20)                      -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+
+  <url>
+    <loc>https://neurowiki.ai/trials/profess-trial</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- TRIALS — Surgical Interventions (new 2026-05-20)                    -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+
+  <url>
+    <loc>https://neurowiki.ai/trials/crest-trial</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- TRIALS — Clinical Questions (/trials/q/*)                           -->
+  <!-- Shipped 2026-05-20. Questions synthesise multiple trials.           -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+
+  <url>
+    <loc>https://neurowiki.ai/trials/q/large-core-evt</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/trials/q/late-window-selection</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/trials/q/aspiration-vs-stentriever</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/trials/q/evt-adjunct-pharmacotherapy</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/trials/q/minor-stroke-choice</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/trials/q/mevo-distal-evt</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://neurowiki.ai/trials/q/post-evt-bp-target</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>

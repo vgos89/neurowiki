@@ -352,6 +352,18 @@ const manualTrials: Omit<TrialItem, 'year'>[] = [
     isPlaceholder: false,
     description: 'Large phase 4 trial showing early DOAC initiation was noninferior to delayed start.',
   }),
+  // PRoFESS: long-term antiplatelet monotherapy comparison. listCategory in trialData.ts
+  // is 'antiplatelets' (not a TrialCategoryKey); mapped to 'secondary-prevention' here.
+  buildTrial('profess-trial', 'PRoFESS', 'secondary-prevention', '10.1056/NEJMoa0805002', {
+    isPlaceholder: false,
+    description: 'ASA + ER-dipyridamole vs clopidogrel monotherapy after stroke. NI margin not met; ICH higher with ASA–ERDP.',
+  }),
+  // CREST: carotid stenting vs endarterectomy. listCategory in trialData.ts is 'carotid'
+  // (not a TrialCategoryKey); mapped to 'surgical-interventions' here.
+  buildTrial('crest-trial', 'CREST', 'surgical-interventions', '10.1056/NEJMoa0912321', {
+    isPlaceholder: false,
+    description: 'CAS vs CEA in average-risk carotid stenosis. No primary 4-yr difference; CAS↑stroke, CEA↑MI/cranial nerve palsy; age-dependent.',
+  }),
 ];
 
 const legacyTrialCategories: Record<string, TrialCategoryKey> = {
