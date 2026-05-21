@@ -8358,6 +8358,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'BEST-MSU Trial',
     subtitle: 'Mobile Stroke Units vs Standard EMS in Acute Stroke',
     category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
     stats: {
       sampleSize: {
         value: '1515',

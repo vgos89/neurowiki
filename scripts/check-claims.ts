@@ -260,9 +260,13 @@ const NNT_GRANDFATHERED: Set<string> = new Set([
   'escape-trial',
   'revascat-trial',
   'swift-prime-trial',
-  // Tier 1 #8 — BEST-MSU has calculations.nnt: 12.5 but no primaryDesign set
-  // (caught here once Tier 3 #17 fills primaryDesign='ordinal-shift').
-  'best-msu-trial',
+  // 'best-msu-trial' removed 2026-05-20 — the original audit recorded
+  // BEST-MSU's primary as ordinal-shift, but the NEJM 2021 full text shows
+  // the primary outcome is utility-weighted mRS DICHOTOMIZED at ≥0.91
+  // (approximates mRS 0-1, aOR 2.12, P<0.001). That is a binary-superiority
+  // design and the NNT 12.5 is valid for the dichotomized primary. BEST-MSU
+  // now carries primaryDesign='binary-superiority' / primaryResult='met'
+  // and passes the NNT validity check naturally.
 ]);
 
 const TRIAL_DATA_FILE = path.resolve(ROOT, 'src/data/trialData.ts');
