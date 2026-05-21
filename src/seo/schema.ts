@@ -6,9 +6,17 @@
 
 
 const BASE_URL = 'https://neurowiki.ai';
-const LAST_REVIEWED = '2026-02-18';
+
+// Build-time date injected via vite.config.ts `define`. Replaces previous
+// hardcoded '2026-02-18' which staled on every release. Fresh on each
+// deploy. Per the 2026-05-21 SEO audit Finding 8b: every MedicalWebPage
+// schema needs an accurate freshness signal for Google E-E-A-T quality.
+// Per-route lastmod refinement is a future enhancement once routeManifest
+// gains a lastmod field.
+declare const __BUILD_DATE__: string;
+const LAST_REVIEWED = typeof __BUILD_DATE__ !== 'undefined' ? __BUILD_DATE__ : '2026-05-21';
 const DATE_PUBLISHED = '2025-09-01';
-const DATE_MODIFIED = '2026-03-18';
+const DATE_MODIFIED = LAST_REVIEWED;
 
 // ── Shared publisher/provider block ──────────────────────────────────────────
 const PUBLISHER = {

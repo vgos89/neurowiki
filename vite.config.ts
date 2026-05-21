@@ -7,7 +7,15 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(({ mode }) => {
+    // Build-time date constant — injected via define() so schema.ts can
+    // stamp MedicalWebPage lastReviewed / dateModified with the build date
+    // instead of a stale hardcoded value. Fresh on every deploy. ISO YYYY-MM-DD.
+    const BUILD_DATE = new Date().toISOString().slice(0, 10);
+
     return {
+      define: {
+        __BUILD_DATE__: JSON.stringify(BUILD_DATE),
+      },
       server: {
         port: parseInt(process.env.PORT || '3000'),
         host: '0.0.0.0',
