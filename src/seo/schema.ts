@@ -14,6 +14,7 @@ const DATE_MODIFIED = '2026-03-18';
 const PUBLISHER = {
   '@type': 'Organization',
   name: 'NeuroWiki',
+  alternateName: ['Neuro Wiki', 'Neurology Resident Guide'],
   url: BASE_URL,
   logo: `${BASE_URL}/favicon.png`,
 };
@@ -23,9 +24,14 @@ const ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'NeuroWiki',
-  description: 'Free neurology protocols, calculators, and clinical guidelines for neurologists and residents. Built on AHA/ASA 2026 stroke guidelines.',
+  alternateName: ['Neuro Wiki', 'Neurology Resident Guide'],
+  description: 'A neurology resident and attending guide. Free protocols, calculators, and clinical guidelines built on AHA/ASA 2026 stroke guidelines.',
   url: BASE_URL,
   logo: `${BASE_URL}/favicon.png`,
+  audience: {
+    '@type': 'MedicalAudience',
+    audienceType: 'Neurology Resident, Neurology Fellow, Neurology Attending, Physician',
+  },
   sameAs: [],
   foundingDate: '2024',
 };
