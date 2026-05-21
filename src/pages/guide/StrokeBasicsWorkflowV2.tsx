@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
+import DiscreteFAQ from '../../components/seo/DiscreteFAQ';
+import { getFAQsForPath } from '../../seo/schema';
 import { useBackNavigation } from '../../hooks/useBackNavigation';
 import { useModalFocusTrap } from '../../hooks/useModalFocusTrap';
 import { PathwayRailStep } from '../../components/pathways/PathwayRail';
@@ -826,6 +828,9 @@ const MainContent: React.FC = () => {
             </Link>
           </div>
         </section>
+
+        {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute. */}
+        <DiscreteFAQ items={getFAQsForPath('/guide/stroke-basics')} />
 
         {/* NIHSS Calculator Modal */}
         {nihssModalOpen && (

@@ -12,6 +12,8 @@ import { PathwayBranchChip } from '../components/pathways/PathwayBranchChip';
 import { PathwayLearningPearl } from '../components/pathways/PathwayLearningPearl';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useRecents } from '../hooks/useRecents';
+import DiscreteFAQ from '../components/seo/DiscreteFAQ';
+import { getFAQsForPath } from '../seo/schema';
 
 // --- Types & Logic ---
 type Agent = "levetiracetam" | "fosphenytoin" | "valproate" | "lacosamide" | "phenobarbital";
@@ -799,6 +801,9 @@ const StatusEpilepticusPathway: React.FC = () => {
         </PathwayRailStep>
 
       </div>
+
+      {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute. */}
+      <DiscreteFAQ items={getFAQsForPath('/pathways/se-pathway')} />
 
       {showFavToast && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">

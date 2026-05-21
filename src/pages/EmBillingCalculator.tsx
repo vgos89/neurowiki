@@ -28,6 +28,8 @@ import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useFavorites } from '../hooks/useFavorites';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
+import DiscreteFAQ from '../components/seo/DiscreteFAQ';
+import { getFAQsForPath } from '../seo/schema';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -2468,6 +2470,9 @@ const EmBillingCalculator: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute. */}
+      <DiscreteFAQ items={getFAQsForPath('/calculators/em-billing')} />
 
       {/* ── Toast ── */}
       {state.toast && (

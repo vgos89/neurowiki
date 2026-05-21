@@ -18,6 +18,8 @@ import { useRecents } from '../hooks/useRecents';
 import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
 import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import { PathwayCascadeNotice } from '../components/pathways/PathwayCascadeNotice';
+import DiscreteFAQ from '../components/seo/DiscreteFAQ';
+import { getFAQsForPath } from '../seo/schema';
 
 /**
  * Cascade-clear infrastructure (PATHWAY_SPEC §3.6, Pattern A integration).
@@ -1795,6 +1797,9 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
               </ul>
           </div>
       )}
+      {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute. */}
+      <DiscreteFAQ items={getFAQsForPath('/pathways/evt')} />
+
       {showFavToast && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
           {isFav ? 'Saved to Favorites' : 'Removed from Favorites'}

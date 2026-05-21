@@ -11,6 +11,8 @@ import { useNavigationSource } from '../hooks/useNavigationSource';
 import { scrollMainToTop } from '../utils/mainScroll';
 import { useRecents } from '../hooks/useRecents';
 import { ShareButton } from '../components/calculators/ShareButton';
+import DiscreteFAQ from '../components/seo/DiscreteFAQ';
+import { getFAQsForPath } from '../seo/schema';
 
 // ... (KEEP ALL TYPES, INTERFACES, STEPS, LOGIC, COMPONENTS SAME UNTIL RENDER) ...
 type Tri = "yes" | "no" | "unknown";
@@ -490,6 +492,9 @@ const ElanPathway: React.FC = () => {
       </div>
       
 
+
+      {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute. */}
+      <DiscreteFAQ items={getFAQsForPath('/pathways/elan-pathway')} />
 
       {showFavToast && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">

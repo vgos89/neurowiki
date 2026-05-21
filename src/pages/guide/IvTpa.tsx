@@ -11,6 +11,8 @@ import {
   Warning,
 } from '../../components/article';
 import { useRecents } from '../../hooks/useRecents';
+import DiscreteFAQ from '../../components/seo/DiscreteFAQ';
+import { getFAQsForPath } from '../../seo/schema';
 
 export default function IvTpa() {
   const { recordView } = useRecents();
@@ -26,6 +28,7 @@ export default function IvTpa() {
   }, [recordView]);
 
   return (
+    <>
     <ArticleLayout
       category="Vascular Neurology"
       categoryPath="/guide"
@@ -171,5 +174,8 @@ export default function IvTpa() {
         </>
       )}
     </ArticleLayout>
+    {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute. */}
+    <DiscreteFAQ items={getFAQsForPath('/guide/iv-tpa')} />
+    </>
   );
 }

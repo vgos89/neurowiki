@@ -16,6 +16,8 @@ import { LKWTimePicker } from '../components/article/stroke/LKWTimePicker';
 import { copyToClipboard } from '../utils/clipboard';
 import { useRecents } from '../hooks/useRecents';
 import type { SeverityTokens } from '../lib/calculators/severityTokens';
+import DiscreteFAQ from '../components/seo/DiscreteFAQ';
+import { getFAQsForPath } from '../seo/schema';
 
 /* ─── Types ─────────────────────────────────────────────────────── */
 
@@ -1330,6 +1332,9 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
           setLkwPickerOpen(false);
         }}
       />
+
+      {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute. */}
+      <DiscreteFAQ items={getFAQsForPath('/pathways/late-window-ivt')} />
 
       {/* CalculatorDrawer — States A (pending) + C (verdict). No State B — result is null
           until path-specific criteria complete, so there is no provisional-verdict surface.
