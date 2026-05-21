@@ -33,6 +33,7 @@ import { TeachingWell } from '../../components/trials/TeachingWell';
 import { BottomLineDrawer } from '../../components/trials/BottomLineDrawer';
 import { HistoricalContextSection } from '../../components/trials/HistoricalContextSection';
 import TrialChainTimeline from '../../components/trials/TrialChainTimeline';
+import { RelatedTrialsSidebar } from '../../components/trials/RelatedTrialsSidebar';
 
 function ChartFallback() {
   return <div className="h-32 bg-slate-100 rounded-xl animate-pulse" aria-hidden="true" />;
@@ -8492,6 +8493,10 @@ const TrialPageNew: React.FC = () => {
                 render trial. Lights up Phase 2 chains (pfo-closure,
                 carotid, evt-mevo) without per-trial wiring. */}
             {trialId && <TrialChainTimeline trialId={trialId} />}
+
+            {/* Related trials — heuristic sidebar (chain → category → question → era).
+                Memoized on currentTrialId. Renders null when no candidates found. */}
+            {trialId && <RelatedTrialsSidebar currentTrialId={trialId} />}
           </div>
 
           {/* Dark Sidebar */}
