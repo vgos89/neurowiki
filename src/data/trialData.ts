@@ -3882,6 +3882,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'DECIMAL Trial',
     subtitle: 'Early Decompressive Craniectomy in Malignant MCA Infarction',
     category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'not-met',
     chainMembership: [{ chainId: 'hemicraniectomy', role: 'cohort-member' }],
     stats: {
       sampleSize: {
@@ -3983,6 +3985,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'DESTINY Trial',
     subtitle: 'Decompressive Surgery for Malignant MCA Infarction',
     category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'not-met',
     chainMembership: [{ chainId: 'hemicraniectomy', role: 'cohort-member' }],
     stats: {
       sampleSize: {
