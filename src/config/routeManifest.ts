@@ -311,7 +311,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     comingSoonMessage: 'EVT pathway',
     meta: {
       title: 'EVT Eligibility Tool — Thrombectomy Decision | NeuroWiki',
-      description: 'EVT eligibility pathway for mechanical thrombectomy in acute ischemic stroke. Based on DAWN, DEFUSE-3, SELECT-2, ANGEL-ASPECT, and AHA/ASA 2026 guidelines.',
+      description: 'EVT eligibility pathway for mechanical thrombectomy in acute ischemic stroke. Based on DAWN, DEFUSE-3, SELECT-2, ANGEL-ASPECT, and AHA/ASA 2026.',
       keywords: 'EVT eligibility calculator, thrombectomy eligibility criteria, mechanical thrombectomy decision support, DAWN trial criteria, DEFUSE-3 criteria, EVT pathway stroke, ASPECTS score stroke',
     },
   },
@@ -327,7 +327,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     comingSoonMessage: 'Late Window IVT',
     meta: {
       title: 'Late Window IVT — Wake-Up Stroke & Thrombolysis | NeuroWiki',
-      description: 'Late window IVT eligibility for wake-up stroke and perfusion-selected 4.5–9h thrombolysis. Based on WAKE-UP, EXTEND, TIMELESS, TRACE-3, and AHA/ASA 2026.',
+      description: 'Late window IVT for wake-up stroke and perfusion-selected 4.5–9h thrombolysis. Based on WAKE-UP, EXTEND, TIMELESS, TRACE-3, and AHA/ASA 2026.',
       keywords: 'late window IVT, wake-up stroke thrombolysis, extended window tPA, DWI FLAIR mismatch eligibility, WAKE-UP trial criteria, TIMELESS trial tenecteplase, late window thrombolysis calculator, unknown onset stroke tPA',
     },
   },
@@ -389,7 +389,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'calculators',
     meta: {
       title: 'E/M Billing Calculator — CPT 99202–99215 | NeuroWiki',
-      description: 'Free E/M billing calculator. Select the correct CPT code (99202–99215, 99221–99233) using 2021 AMA MDM or time-based criteria. Neurology, hospitalist, and IM.',
+      description: 'Free E/M billing calculator. Select CPT 99202–99215 or 99221–99233 using 2021 AMA MDM or time-based criteria. For neurology and hospitalist billing.',
       keywords: 'EM billing calculator, E/M billing calculator neurology, CPT 99202 99205 99212 99215 calculator, MDM calculator 2021, medical decision making calculator, evaluation and management billing physician, hospitalist EM billing calculator, inpatient EM coding 99221 99222 99223 99231 99232 99233, time vs MDM calculator, 2021 AMA EM coding, neurology CPT code calculator, evaluation and management calculator free',
     },
   },
@@ -471,7 +471,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'guide',
     meta: {
       title: 'Mechanical Thrombectomy Guide — EVT Criteria | NeuroWiki',
-      description: 'Mechanical thrombectomy guide for LVO stroke. EVT eligibility, imaging selection (ASPECTS, perfusion), and post-procedure management. DAWN, DEFUSE-3, 2026.',
+      description: 'Mechanical thrombectomy guide for LVO stroke. EVT eligibility, imaging selection with ASPECTS and perfusion, and post-procedure management.',
       keywords: 'mechanical thrombectomy guide, EVT stroke criteria, thrombectomy eligibility, LVO stroke treatment, ASPECTS score thrombectomy, thrombectomy time window, stent retriever thrombectomy',
     },
   },
@@ -503,7 +503,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'guide',
     meta: {
       title: 'Status Epilepticus Guide — First to Refractory | NeuroWiki',
-      description: 'Status epilepticus: lorazepam first-line, levetiracetam/valproate/fosphenytoin second-line, propofol/midazolam/ketamine for refractory SE. Based on ESETT trial.',
+      description: 'Status epilepticus: lorazepam first, levetiracetam/valproate/fosphenytoin second, propofol/midazolam for refractory SE. Based on ESETT trial.',
       keywords: 'status epilepticus management, status epilepticus treatment protocol, refractory status epilepticus treatment, lorazepam status epilepticus, ESETT trial, super-refractory status epilepticus, SE benzodiazepine',
     },
   },
@@ -519,7 +519,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'guide',
     meta: {
       title: 'ICH Management — Intracerebral Hemorrhage | NeuroWiki',
-      description: 'Acute ICH management per 2022 AHA/ASA: SBP <140 mmHg, 4-factor PCC reversal, cerebellar hemorrhage surgery criteria, hematoma expansion prevention.',
+      description: 'Acute ICH management per 2022 AHA/ASA: SBP <140, 4-factor PCC reversal, cerebellar hemorrhage surgery criteria, hematoma expansion prevention.',
       keywords: 'ICH management protocol, intracerebral hemorrhage treatment, ICH blood pressure target, 4-factor PCC reversal, cerebellar hemorrhage surgery, hematoma expansion, ICH guidelines 2022',
     },
   },
@@ -551,7 +551,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'guide',
     meta: {
       title: 'Guillain-Barré Syndrome (GBS) — Diagnosis | NeuroWiki',
-      description: 'GBS clinical guide: Brighton criteria, NCS findings, CSF albumino-cytologic dissociation, IVIG vs. plasmapheresis, and respiratory monitoring (NIF, FVC).',
+      description: 'GBS clinical guide: Brighton criteria, NCS, CSF dissociation, IVIG vs plasmapheresis, respiratory monitoring with NIF and FVC.',
       keywords: 'Guillain-Barre syndrome treatment, GBS IVIG protocol, GBS plasmapheresis, GBS respiratory monitoring NIF FVC, GBS diagnosis criteria, acute inflammatory demyelinating polyneuropathy',
     },
   },
@@ -567,7 +567,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'guide',
     meta: {
       title: 'Myasthenia Gravis — Crisis & Treatment | NeuroWiki',
-      description: 'Myasthenia gravis guide: pyridostigmine dosing, myasthenic crisis management, IVIG/plasmapheresis, thymectomy indications, and long-term immunosuppression.',
+      description: 'Myasthenia gravis: pyridostigmine dosing, myasthenic crisis management, IVIG/plasmapheresis, thymectomy indications, long-term immunosuppression.',
       keywords: 'myasthenia gravis treatment, myasthenic crisis management, MG pyridostigmine dosing, IVIG myasthenia gravis, myasthenia gravis thymectomy, acetylcholine receptor antibody MG',
     },
   },
@@ -583,7 +583,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'guide',
     meta: {
       title: 'Multiple Sclerosis — Diagnosis, Relapse & DMT | NeuroWiki',
-      description: 'MS clinical guide: McDonald criteria, relapse management with high-dose methylprednisolone, disease-modifying therapy overview, and monitoring.',
+      description: 'MS clinical guide: McDonald criteria, relapse management with methylprednisolone, disease-modifying therapy overview, and monitoring.',
       keywords: 'multiple sclerosis treatment protocol, MS relapse treatment, MS disease modifying therapy, McDonald criteria MS, MS diagnosis, MS methylprednisolone protocol, MS DMT overview',
     },
   },
@@ -599,7 +599,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'guide',
     meta: {
       title: 'Seizure Workup — First Seizure Evaluation | NeuroWiki',
-      description: 'First seizure workup: EEG, MRI brain, LP indications, seizure mimics, AED initiation criteria, and recurrence risk. For emergency and neurology residents.',
+      description: 'First seizure evaluation: EEG, MRI brain, LP indications, seizure mimics, AED initiation, and recurrence risk. For neurology residents.',
       keywords: 'first seizure workup, seizure evaluation, new onset seizure diagnosis, EEG first seizure, seizure vs syncope, seizure MRI protocol, AED initiation first seizure',
     },
   },
@@ -663,7 +663,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'guide',
     meta: {
       title: 'Weakness Workup — Upper vs Lower Motor Neuron | NeuroWiki',
-      description: 'Systematic weakness evaluation: UMN vs. LMN localization, neuromuscular junction, myopathy workup, MRC grading, diagnostic algorithm. Neurology residents.',
+      description: 'Systematic weakness evaluation: UMN vs LMN localization, neuromuscular junction, myopathy workup, MRC grading, diagnostic algorithm.',
       keywords: 'weakness workup neurology, upper motor neuron lower motor neuron, UMN LMN weakness, neuromuscular junction weakness, myopathy evaluation, weakness localization neurology, MRC grading weakness',
     },
   },
@@ -677,7 +677,7 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     railItem: 'trials',
     meta: {
       title: 'Stroke Clinical Trials — Evidence Summaries | NeuroWiki',
-      description: '79 landmark stroke trials with NNT and mRS-shift outcomes. DAWN, DEFUSE-3, NINDS, MR CLEAN, ELAN, CHANCE, POINT, INSPIRES, ENRICH, TRACE-III all covered.',
+      description: '101 landmark stroke trials with NNT and mRS-shift outcomes. DAWN, DEFUSE-3, NINDS, MR CLEAN, ELAN, CHANCE, INSPIRES, ENRICH, TRACE-III all covered.',
       keywords: 'landmark stroke clinical trials, stroke trial results, thrombectomy trials, IV thrombolysis trials, DAWN trial, DEFUSE-3 trial, NINDS tPA trial, ORIGINAL tenecteplase trial, MR CLEAN trial, INSPIRES DAPT stroke, ENRICH ICH surgery, secondary prevention stroke trials, NNT stroke, NEJM stroke trials, vascular neurology clinical trials',
       image: DEFAULT_IMAGE,
     },
