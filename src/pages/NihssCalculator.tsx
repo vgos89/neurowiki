@@ -34,6 +34,8 @@ import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import { NIHSS_ITEMS, calculateTotal, getItemWarning, calculateLvoProbability } from '../utils/nihssShortcuts';
 import { getMainScrollElement, scrollWithinMainOrWindow } from '../utils/mainScroll';
 import NihssItemCard from '../components/NihssItemCard';
+import DiscreteFAQ from '../components/seo/DiscreteFAQ';
+import { getFAQsForPath } from '../seo/schema';
 import {
   PatientContextPanel,
   EMPTY_PATIENT_CONTEXT,
@@ -724,6 +726,11 @@ const NihssCalculator: React.FC = () => {
           citation="Brott T et al. Measurements of acute cerebral infarction: a clinical examination scale. Stroke. 1989;20(7):864–870."
           disclaimer="Educational use only. Not a substitute for clinical judgment."
         />
+
+        {/* Discrete FAQ — Option A (V approval 2026-05-21). Closed-by-default
+            accordion at page bottom. Same data feeds JSON-LD FAQPage schema
+            via getSchemaForRoute → both surfaces stay in sync. */}
+        <DiscreteFAQ items={getFAQsForPath('/calculators/nihss')} />
 
         {/* Drawer spacer — prevents content hiding behind fixed drawer (§1.3) */}
         <div className={drawerOpen ? 'drawer-spacer-expanded' : 'drawer-spacer-collapsed'} aria-hidden="true" />

@@ -146,6 +146,15 @@ const TRIALS_HUB_SCHEMA = {
 };
 
 // ── FAQ data for high-value pages ─────────────────────────────────────────────
+//
+// This registry feeds two surfaces — JSON-LD FAQPage schema (machine-readable,
+// fed via getSchemaForRoute) AND the visible DiscreteFAQ accordion at the
+// bottom of each page (human-readable, fed via getFAQsForPath). Both must
+// stay in sync: Google's FAQ-rich-result eligibility requires the FAQ
+// content to be visible to the user on page load (which a closed-by-default
+// native `<details>` accordion satisfies).
+//
+// Source: V approval 2026-05-21 (Option A — single bottom accordion).
 const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
   '/calculators/nihss': [
     {
@@ -783,4 +792,19 @@ export function getSchemaForRoute(
   }
 
   return null;
+}
+
+/**
+ * Returns the FAQ items for a given route (for rendering in the visible
+ * DiscreteFAQ accordion). The same data is already fed into JSON-LD
+ * FAQPage schema via getSchemaForRoute — both surfaces share PAGE_FAQS.
+ *
+ * Returns an empty array when the route has no FAQ entry. Pages decide
+ * whether to render the accordion based on whether the returned array
+ * is non-empty.
+ */
+export function getFAQsForPath(
+  pathname: string
+): Array<{ question: string; answer: string }> {
+  return PAGE_FAQS[pathname] ?? [];
 }
