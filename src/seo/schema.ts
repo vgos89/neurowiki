@@ -278,6 +278,62 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
       answer: 'Standard window is 0–3 hours from symptom onset (or last known well). Extended window is 3–4.5 hours with additional exclusions (age >80, NIHSS >25, prior stroke + diabetes, anticoagulation use). Beyond 4.5 hours, perfusion-guided tPA is possible in selected patients (EXTEND trial, 4.5–9 hours).',
     },
   ],
+  '/guide/meningitis': [
+    {
+      question: 'What is the empiric antibiotic regimen for bacterial meningitis?',
+      answer: 'Empiric therapy for community-acquired bacterial meningitis is vancomycin (15–20 mg/kg IV q8–12h, target trough 15–20 µg/mL) plus a third-generation cephalosporin — ceftriaxone 2 g IV q12h (or cefotaxime 2 g IV q4–6h). Add ampicillin 2 g IV q4h to cover Listeria monocytogenes for patients >50 years, immunocompromised, pregnant, or with alcohol use disorder. Substitute meropenem 2 g IV q8h for the cephalosporin if Pseudomonas is suspected (post-neurosurgical, penetrating head trauma, CSF shunt). Antibiotics should be given within 60 minutes of presentation; do not delay for LP or imaging if access is delayed.',
+    },
+    {
+      question: 'When should dexamethasone be given in bacterial meningitis?',
+      answer: 'Dexamethasone 0.15 mg/kg IV every 6 hours for 4 days, started 10–20 minutes before — or concurrently with — the first dose of antibiotics. Adjunctive dexamethasone reduces mortality and unfavorable outcomes in pneumococcal meningitis (de Gans & van de Beek, NEJM 2002; IDSA 2004 guidelines). Continue only if CSF Gram stain or culture confirms Streptococcus pneumoniae or Haemophilus influenzae. If a different pathogen is identified or cultures are negative, dexamethasone is generally discontinued. Do not start dexamethasone after antibiotics have already been given — the meningeal inflammatory effect that the steroid blunts has already occurred.',
+    },
+    {
+      question: 'When is LP contraindicated before antibiotics, and what should I do instead?',
+      answer: 'Obtain CT head before LP if any of the following are present: immunocompromised state, history of CNS disease, new-onset seizure within 1 week, papilledema, abnormal level of consciousness (GCS <10), or focal neurologic deficit (IDSA 2004). In these patients, the sequence is: draw blood cultures → give empiric antibiotics and dexamethasone immediately → then obtain CT → then LP if no mass effect. Antibiotics must not be delayed waiting for imaging. CSF Gram stain remains positive for several hours after antibiotic administration, and culture yield drops only modestly within the first 2–4 hours.',
+    },
+  ],
+  '/guide/gbs': [
+    {
+      question: 'What CSF findings support a diagnosis of Guillain-Barré syndrome?',
+      answer: 'The classic CSF finding in GBS is albumino-cytologic dissociation — elevated protein (typically >45 mg/dL, often 100–1000 mg/dL) with a normal or only minimally elevated white cell count (<10 cells/µL, predominantly mononuclear). This pattern develops over the first week of illness: CSF protein is normal in approximately 50% of patients within the first 3 days, rises in 75% by the end of week 1, and exceeds 80–90% by week 2. A normal CSF protein early in the course does not exclude GBS. WBC >50 cells/µL should prompt evaluation for alternative diagnoses including HIV seroconversion, Lyme, sarcoidosis, or carcinomatous meningitis.',
+    },
+    {
+      question: 'When should IVIG versus plasmapheresis be used in Guillain-Barré syndrome?',
+      answer: 'IVIG and plasma exchange are equally effective for GBS — neither is superior on disability at 4 weeks (Hughes Cochrane review). IVIG 0.4 g/kg/day for 5 days is the most common first-line treatment because it is more widely available, easier to administer, and does not require central venous access. Plasma exchange (5 sessions over 1–2 weeks, total exchange volume ~250 mL/kg) is preferred when IVIG is contraindicated (IgA deficiency, severe renal failure, hypercoagulable state) or when cardiac instability makes the volume load of IVIG hazardous. Combining IVIG with plasmapheresis offers no additional benefit and is not recommended. Treatment should begin within 2–4 weeks of symptom onset; benefit is greatest when started in patients still able to walk independently.',
+    },
+    {
+      question: 'What respiratory monitoring is required in Guillain-Barré syndrome?',
+      answer: 'Bedside pulmonary mechanics should be checked every 4 hours during the progressive phase. Intubate when any of the 20/30/40 criteria are met: forced vital capacity <20 mL/kg, maximum inspiratory pressure (NIF) less negative than -30 cmH2O, or maximum expiratory pressure <40 cmH2O. Other indications for intubation include rapid decline (>30% drop in FVC in 24 hours), bulbar dysfunction with aspiration risk, or autonomic instability with cardiovascular collapse. Elective intubation in a controlled setting is strongly preferred over emergent intubation after respiratory failure. Approximately 20–30% of GBS patients require mechanical ventilation; the Erasmus GBS Respiratory Insufficiency Score (EGRIS) can help risk-stratify at admission.',
+    },
+  ],
+  '/guide/multiple-sclerosis': [
+    {
+      question: 'How are the McDonald 2017 criteria used to diagnose multiple sclerosis?',
+      answer: 'McDonald 2017 criteria diagnose MS by demonstrating dissemination in space (DIS) and dissemination in time (DIT). DIS requires ≥1 T2 lesion in ≥2 of 4 CNS locations: periventricular, cortical/juxtacortical, infratentorial, or spinal cord. DIT requires either simultaneous gadolinium-enhancing and non-enhancing lesions on a single MRI, a new T2 or gadolinium-enhancing lesion on follow-up MRI, or CSF-specific oligoclonal bands. For a typical clinically isolated syndrome (CIS), MS can be diagnosed at the first clinical event if DIS is met on MRI plus either DIT on MRI or positive CSF oligoclonal bands. The 2017 revision added cortical lesions and symptomatic lesions as contributors to DIS and lowered the threshold to first attack with appropriate paraclinical evidence.',
+    },
+    {
+      question: 'What is the treatment for an acute multiple sclerosis relapse?',
+      answer: 'Acute MS relapses with new disabling neurologic deficit are treated with high-dose corticosteroids: methylprednisolone 1 g IV daily for 3–5 days, or oral methylprednisolone 1000 mg daily for 3–5 days (oral and IV are equivalent per multiple RCTs and the 2018 AAN guideline). An oral prednisone taper is not routinely required. Steroids shorten the duration of relapse but do not alter long-term disability. Plasma exchange (5–7 exchanges over 10–14 days) is the standard of care for steroid-refractory, severely disabling relapses (AAN 2011, Class I, Level A) — particularly tumefactive demyelination, severe optic neuritis, or transverse myelitis with paraplegia. IVIG is not recommended for acute MS relapse treatment.',
+    },
+    {
+      question: 'What are the high-efficacy disease-modifying therapies for multiple sclerosis?',
+      answer: 'High-efficacy DMTs for relapsing MS include the anti-CD20 monoclonals ocrelizumab and ofatumumab, natalizumab (anti-VLA-4), alemtuzumab (anti-CD52), and cladribine. Recent evidence — including the TREAT-MS trial and large registry analyses — supports an early high-efficacy strategy (starting one of these agents at diagnosis) over the traditional escalation approach (starting an injectable platform therapy and escalating only after breakthrough activity). Choice among high-efficacy agents balances efficacy, safety monitoring requirements (JC virus serology for natalizumab, immunoglobulin levels for anti-CD20s, autoimmunity surveillance for alemtuzumab), and patient factors (pregnancy planning, infection risk, vaccination status).',
+    },
+  ],
+  '/guide/headache-workup': [
+    {
+      question: 'What are the SNOOP4 red flags for secondary headache?',
+      answer: 'SNOOP4 is a mnemonic for red flags suggesting secondary headache: S — Systemic symptoms (fever, weight loss) or Secondary risk factors (HIV, cancer); N — Neurologic signs or symptoms (focal deficit, papilledema, altered mental status); O — Onset sudden (thunderclap, peaking in <1 minute); O — Older age at onset (>50 years suggests temporal arteritis); P — Pattern change (progressive, change from prior pattern), Positional (worse lying down → ICP), Precipitated by Valsalva (cough, exertion, sexual activity), Progressive, Pregnancy or Postpartum (cerebral venous thrombosis, PRES, RCVS). Any positive red flag warrants neuroimaging and targeted workup; thunderclap onset specifically mandates evaluation for subarachnoid hemorrhage.',
+    },
+    {
+      question: 'When is lumbar puncture indicated after a negative CT for thunderclap headache?',
+      answer: 'Non-contrast CT performed within 6 hours of thunderclap headache onset, interpreted by an attending radiologist on a modern scanner, has approximately 100% sensitivity for aneurysmal subarachnoid hemorrhage (Perry, BMJ 2011). Beyond 6 hours, CT sensitivity drops progressively (~85% at 24 h, <50% at 1 week), and LP is required to exclude SAH in patients with continued clinical suspicion. CSF findings supporting SAH include elevated RBC count that does not clear between tubes 1 and 4, and xanthochromia on spectrophotometry (best detected 12 hours to 2 weeks after bleed). If LP is negative, consider CTA or MRA to evaluate for unruptured aneurysm, RCVS, or cervical artery dissection as alternative causes of thunderclap headache.',
+    },
+    {
+      question: 'What imaging is preferred for suspected subarachnoid hemorrhage?',
+      answer: 'Non-contrast CT head is the first-line imaging study for suspected SAH — fast, widely available, and ~100% sensitive within 6 hours of symptom onset. If CT confirms SAH, CT angiography of the head and neck identifies the aneurysm or other vascular cause in >95% of cases and guides definitive treatment (clipping vs coiling). If CT is negative but clinical suspicion remains, LP for RBC count and xanthochromia is the standard next step beyond 6 hours from onset. MRI with FLAIR and gradient-echo sequences is useful in subacute SAH (>1 week) when CT sensitivity has dropped, and is preferred in pregnancy to limit ionizing radiation, paired with MRA for vascular evaluation. Catheter angiography remains the gold standard when CTA is negative but suspicion for aneurysm remains high.',
+    },
+  ],
   '/guide/stroke-basics': [
     {
       question: 'What is a stroke code?',
@@ -501,6 +557,87 @@ const QUESTION_META: Record<string, { title: string; description: string; answer
     title: 'Post-EVT Blood Pressure Target · NeuroWiki',
     description: 'Four RCTs (BP-TARGET, BEST-II, OPTIMAL-BP, ENCHANTED) on post-EVT blood pressure management. OPTIMAL-BP showed harm from intensive lowering.',
     answer: 'Post-EVT BP evidence from four RCTs does not support intensive BP lowering after successful thrombectomy. OPTIMAL-BP showed early harm with intensive targets. BP-TARGET and BEST-II were neutral. Current guidance (AHA/ASA 2026) recommends avoiding aggressive BP lowering to below 130 mmHg post-EVT.',
+  },
+  // ─── Phase 2c additions (2026-05-21) — 16 new question pages ────────────────
+  'tpa-timing': {
+    title: 'When to Give IV Thrombolysis for Stroke · NeuroWiki',
+    description: 'Evidence for IV thrombolysis windows in acute ischemic stroke: 0–3h (NINDS), 0–4.5h (ECASS-3), wake-up (WAKE-UP), and 4.5–24h (EXTEND, TRACE-III, TIMELESS).',
+    answer: 'IV thrombolysis is established 0–3 h (NINDS 1995) and 3–4.5 h (ECASS-3 2008). MRI DWI-FLAIR mismatch supports treatment for wake-up or unknown-onset stroke within 4.5 h of recognition (WAKE-UP 2018). Perfusion-imaging selection extends the window to 4.5–9 h (EXTEND 2019). Late-window tenecteplase for LVO when EVT is unavailable is supported by TRACE-III (2024) and TIMELESS (2024). Tenecteplase 0.25 mg/kg single bolus is COR 1 alongside alteplase in the 2026 AHA/ASA guideline.',
+  },
+  'lvo-evt': {
+    title: 'EVT for Large Vessel Occlusion Stroke · NeuroWiki',
+    description: 'Mechanical thrombectomy for LVO stroke: early window (HERMES meta-analysis), late window (DAWN, DEFUSE-3), and large-core (SELECT2, ANGEL-ASPECT, LASTE, TENSION).',
+    answer: 'EVT is COR 1 for ICA, M1, or basilar occlusion within 6 h based on HERMES meta-analysis (MR CLEAN, ESCAPE, EXTEND-IA, SWIFT PRIME, REVASCAT). Late-window EVT (6–24 h) requires clinical-imaging mismatch (DAWN) or perfusion mismatch (DEFUSE-3). Large-core EVT (ASPECTS 3–5) is now COR 1 based on five positive RCTs — RESCUE-Japan LIMIT, SELECT2, ANGEL-ASPECT, TENSION, and LASTE. ESCAPE-MeVO and DISTAL did not establish benefit for medium-vessel or distal occlusions.',
+  },
+  'anticoagulation': {
+    title: 'When to Anticoagulate After Stroke · NeuroWiki',
+    description: 'Timing of DOAC initiation after cardioembolic stroke: ELAN, TIMING, and OPTIMAS trial framework for AF-related ischemic stroke.',
+    answer: 'ELAN (2023), TIMING (2022), and OPTIMAS (2024) showed that earlier DOAC initiation after AF-related stroke does not increase symptomatic ICH compared with later starts. ELAN suggested earlier treatment may reduce recurrent ischemic events. NeuroWiki operationalizes earlier-start using the ELAN framework: TIA/minor stroke within 48 h, moderate stroke around day 3–4, and major stroke at day 6–7, with imaging confirmation that hemorrhagic transformation is limited (HI1/HI2 acceptable; PH1/PH2 prompts delay).',
+  },
+  'hemicraniectomy': {
+    title: 'Decompressive Hemicraniectomy for Malignant MCA Stroke · NeuroWiki',
+    description: 'Evidence for decompressive surgery in malignant MCA infarction: DECIMAL, DESTINY, HAMLET pooled analysis, and DESTINY II for age >60.',
+    answer: 'Decompressive hemicraniectomy within 48 h of malignant MCA infarction reduces mortality from approximately 70% to 20–30% in patients ≤60 years (pooled DECIMAL, DESTINY, HAMLET — Vahedi Lancet Neurology 2007). In patients >60 years, DESTINY II showed survival benefit but with most survivors at mRS 4–5; the decision is individualized around acceptable disability outcomes. CHARM (2024) tested glibenclamide for malignant edema prevention as an adjunct in the same population. The 2026 AHA/ASA guideline supports hemicraniectomy as COR 1 for patients ≤60 years and COR 2a for older patients with appropriate goals-of-care discussion.',
+  },
+  'bp-control': {
+    title: 'Blood Pressure Targets in Acute Stroke · NeuroWiki',
+    description: 'Evidence-based BP targets across the acute stroke continuum: pre-IVT, post-IVT, post-EVT, and ICH (ENCHANTED, INTERACT4, OPTIMAL-BP).',
+    answer: 'Pre-tPA BP must be lowered to <185/110 mmHg before treatment and maintained <180/105 mmHg for 24 h post-tPA. ENCHANTED (2019) found no benefit and a numerical excess of disability with intensive (<140 mmHg) BP lowering during alteplase. Post-EVT, OPTIMAL-BP (2022) showed harm from intensive (<140 mmHg) targets; BP-TARGET and BEST-II were neutral. Prehospital BP lowering is not beneficial (RIGHT-2, MR ASAP, INTERACT4). For acute ICH, INTERACT-2 and ATACH-2 support SBP <140 mmHg within 1 hour without excess harm.',
+  },
+  'dapt': {
+    title: 'Dual Antiplatelet Therapy After Stroke or TIA · NeuroWiki',
+    description: 'Short-course DAPT for minor stroke and TIA: CHANCE, POINT, THALES, CHANCE-2, INSPIRES, and ARAMIS. SPS3 defines the duration boundary.',
+    answer: 'Short-course DAPT (clopidogrel + aspirin for 21 days, then aspirin monotherapy) reduces 90-day stroke recurrence by approximately 25% in minor ischemic stroke (NIHSS ≤3) or high-risk TIA (ABCD2 ≥4) — established by CHANCE (2013, China) and confirmed by POINT (2018, North America). THALES (2020) showed ticagrelor + aspirin also works. CHANCE-2 (2021) addressed CYP2C19 loss-of-function carriers with ticagrelor. INSPIRES (2024) extended DAPT to atherosclerotic minor stroke/TIA within 72 h. SPS3 (2012) showed long-term DAPT for lacunar stroke causes net harm — duration must be limited to ~21 days.',
+  },
+  'basilar-evt': {
+    title: 'EVT for Basilar Artery Occlusion · NeuroWiki',
+    description: 'Basilar artery occlusion thrombectomy evidence: BEST and BASICS neutral, ATTENTION and BAOCHE positive. EVT now recommended up to 24 hours.',
+    answer: 'Early basilar EVT trials BEST (2020, stopped early; substantial crossover) and BASICS (2021, neutral; 80% of controls received IV alteplase) did not establish benefit. Two later Chinese trials — ATTENTION (2022, 0–12 h) and BAOCHE (2022, 6–24 h, stopped early for benefit) — both showed improved functional outcomes with EVT. AHA/ASA 2026 endorses basilar EVT within 24 h based on ATTENTION and BAOCHE; BAOCHE was stopped early and effect size may be overestimated.',
+  },
+  'ich-surgery': {
+    title: 'Surgical Evacuation for Intracerebral Hemorrhage · NeuroWiki',
+    description: 'Four decades of ICH surgery trials: STICH I and STICH II neutral, MISTIE III neutral on function, ENRICH positive for minimally invasive parafascicular surgery.',
+    answer: 'STICH I (2005) and STICH II (2013) found no overall benefit from open craniotomy for supratentorial ICH, though STICH II suggested directional benefit in superficial lobar hemorrhage. MISTIE III (2019) showed minimally invasive catheter aspiration plus tPA reduced clot volume but did not improve mRS at 1 year. ENRICH (2024) — using a Bayesian design — showed minimally invasive parafascicular surgery improved 180-day utility-weighted mRS for lobar and anterior basal ganglia ICH. ENRICH supports a new role for minimally invasive surgery in selected ICH; AHA/ASA 2022 guidelines pre-date ENRICH and rate minimally invasive surgery COR 2b.',
+  },
+  'msu-dispatch': {
+    title: 'Mobile Stroke Unit Dispatch · NeuroWiki',
+    description: 'Mobile stroke unit evidence: B_PROUD and BEST-MSU both showed improved functional outcomes with prehospital CT-equipped ambulance dispatch.',
+    answer: 'B_PROUD (Berlin, 2021) and BEST-MSU (US, 2021) both demonstrated improved 90-day functional outcomes with mobile stroke unit dispatch versus conventional EMS. B_PROUD used a quasi-experimental design with ordinal mRS shift (common OR 0.71). BEST-MSU used alternating-week cluster randomization with utility-weighted mRS as the primary outcome. Both gain comes primarily from earlier tPA delivery. Implementation is constrained by cost and population density; the optimal MSU operational model and value-per-population threshold remain open questions.',
+  },
+  'icas-stenting': {
+    title: 'Stenting for Intracranial Atherosclerosis · NeuroWiki',
+    description: 'SAMMPRIS established harm from PTAS for symptomatic intracranial atherosclerotic stenosis; WEAVE provides post-market on-label safety data.',
+    answer: 'SAMMPRIS (2011) was stopped early for harm and futility: percutaneous transluminal angioplasty and stenting with the Wingspan stent showed 14.7% 30-day stroke or death versus 5.8% with aggressive medical management for symptomatic 70–99% intracranial stenosis. WEAVE (2019) — an FDA-mandated post-market registry of on-label Wingspan use — reported a 2.6% 72-hour periprocedural event rate, much lower than SAMMPRIS, supporting that careful patient selection improves safety. Stenting is not first-line for symptomatic intracranial atherosclerosis; aggressive medical management with DAPT and statin remains the standard.',
+  },
+  'tnk-vs-alteplase': {
+    title: 'Tenecteplase vs Alteplase for Stroke Thrombolysis · NeuroWiki',
+    description: 'Head-to-head IVT trials from NOR-TEST (2017) to RAISE (2024): tenecteplase 0.25 mg/kg is noninferior to alteplase, easier to administer, and now COR 1 in AHA/ASA 2026.',
+    answer: 'Tenecteplase 0.25 mg/kg single bolus is noninferior to alteplase across multiple RCTs — AcT (2022, Canada), TRACE-2 (2023, China), ORIGINAL (2024, China) — and showed superior angiographic reperfusion in EXTEND-IA TNK (2018) for LVO patients prior to EVT. NOR-TEST 2 Part A (2022) showed harm with high-dose 0.4 mg/kg TNK; the dose ceiling is 0.25 mg/kg. RAISE (2024) found reteplase superior to alteplase, expanding the agent-choice landscape. The 2026 AHA/ASA guideline lists tenecteplase 0.25 mg/kg as COR 1 alongside alteplase 0.9 mg/kg; tenecteplase is preferred operationally for its single-bolus administration.',
+  },
+  'direct-vs-bridging': {
+    title: 'Direct EVT vs Bridging IV Thrombolysis · NeuroWiki',
+    description: 'Six RCTs on direct thrombectomy vs IVT-bridging: DIRECT-MT and DEVT met noninferiority; SKIP, MR CLEAN-NO IV, SWIFT-DIRECT, and DIRECT-SAFE did not.',
+    answer: 'Six RCTs tested whether direct EVT is noninferior to IV-thrombolysis-bridging in tPA-eligible LVO patients. DIRECT-MT (2020, China) and DEVT (2020, China) met noninferiority. SKIP (2020, Japan), MR CLEAN-NO IV (2021, Europe), SWIFT-DIRECT (2022, Europe), and DIRECT-SAFE (2022, multinational) did not meet noninferiority. Pooled evidence favors bridging for most tPA-eligible patients; AHA/ASA 2026 recommends IV thrombolysis should not be withheld in patients eligible for both treatments. Direct EVT is reasonable when tPA is contraindicated.',
+  },
+  'pfo-closure-cryptogenic': {
+    title: 'PFO Closure for Cryptogenic Stroke · NeuroWiki',
+    description: 'Three NEJM 2017 RCTs — CLOSE, RESPECT long-term, REDUCE — established benefit of PFO closure for cryptogenic stroke, with excess atrial fibrillation as the trade-off.',
+    answer: 'Three RCTs published in NEJM 2017 established benefit of PFO closure for cryptogenic stroke in patients <60 years. CLOSE required atrial septal aneurysm or large shunt (NNT ~20 over 5 y). RESPECT long-term follow-up showed HR 0.55 for stroke recurrence (NNT ~42). REDUCE used a clean antiplatelet comparator and showed HR 0.23 (NNT ~28). All three trials demonstrated excess atrial fibrillation — typically transient and periprocedural — as a consistent trade-off. The earlier CLOSURE-I (2012) and original RESPECT (2013) were neutral; refined patient selection (RoPE score, shunt size, septal aneurysm) was needed for benefit.',
+  },
+  'asymptomatic-carotid': {
+    title: 'Carotid Revascularization vs Medical Management · NeuroWiki',
+    description: 'CREST (2010) compared CAS vs CEA; CREST-2 (2025) tested both against modern intensive medical management. CAS met its endpoint; CEA did not.',
+    answer: 'CREST (2010) compared carotid artery stenting (CAS) with carotid endarterectomy (CEA) in mixed symptomatic and asymptomatic stenosis and found no difference in the composite primary endpoint, though periprocedural stroke favored CEA and periprocedural MI favored CAS. CREST-2 (2025) tested CAS and CEA separately against intensive medical management for asymptomatic ≥70% stenosis: stenting met its primary endpoint (P=0.02), while CEA did not (P=0.24). Intensive medical management — high-intensity statin, antiplatelet, BP and glycemic targets — has substantially narrowed the margin for revascularization in asymptomatic carotid stenosis.',
+  },
+  'ich-anticoagulation-reversal': {
+    title: 'Anticoagulation Reversal in ICH · NeuroWiki',
+    description: 'Four-PCC vs FFP for warfarin (Sarode 2013), platelet HARM in antiplatelet-ICH (PATCH), andexanet for FXa inhibitors (ANNEXA-4, ANNEXA-I).',
+    answer: 'For warfarin-associated ICH, Sarode (2013) established 4-factor PCC as noninferior to FFP for hemostasis with faster INR correction — underwriting the AHA/ASA Class I, Level A recommendation. Dose 25–50 units/kg IV with vitamin K 10 mg IV. PATCH (2016) showed platelet transfusion in antiplatelet-associated ICH caused HARM (COR 3: Harm per AHA/ASA 2022 ICH guideline). ANNEXA-4 (2019) — the single-arm cohort behind FDA approval of andexanet alfa for FXa-inhibitor reversal — reported good hemostasis in ~80%. ANNEXA-I (2024) was the first RCT specifically in FXa-inhibitor-associated ICH and showed andexanet improved hemostasis versus usual care, with a small excess of ischemic events (notably ischemic stroke) as the trade-off. Idarucizumab 5 g IV is first-line for dabigatran reversal.',
+  },
+  'crao-management': {
+    title: 'CRAO Thrombolysis: EAGLE and THEIA · NeuroWiki',
+    description: 'Central retinal artery occlusion: intra-arterial alteplase halted for harm in EAGLE (2010); IV alteplase neutral but directionally favorable in the small THEIA RCT (2025).',
+    answer: 'EAGLE (2010) — intra-arterial alteplase within 24 h of CRAO — was halted for harm versus conservative management; intra-arterial thrombolysis is not recommended. THEIA (2025) was the first RCT of IV alteplase versus aspirin in CRAO within 4.5 h. The trial was small (N=70) and neutral on the primary endpoint, but directionally favored alteplase. Evidence is insufficient to recommend systemic thrombolysis routinely for CRAO; treatment within a 4.5 h ischemia window, weighed against hemorrhagic risk, is reasonable on a case-by-case basis at centers familiar with stroke thrombolysis. CRAO is a stroke equivalent and warrants full stroke workup.',
   },
 };
 
