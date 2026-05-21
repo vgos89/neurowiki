@@ -11459,4 +11459,212 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     conclusion: 'EXTEND-IA TNK was the first randomized comparison of tenecteplase 0.25 mg/kg vs alteplase 0.9 mg/kg as the IV thrombolytic agent before endovascular thrombectomy in patients with large-vessel occlusion within 4.5 hours of stroke onset. The angiographic primary outcome of substantial reperfusion at initial angiographic assessment occurred in 22% of TNK patients vs 10% of alteplase patients (absolute difference 12 percentage points, 95% CI 2-21; P=0.002 for noninferiority and P=0.03 for superiority under sequential gatekeeping). The ordinal mRS distribution at 90 days favored TNK (common OR 1.7, 95% CI 1.0-2.8, P=0.04). Binary mRS 0-2 was directional but not significant (64% vs 51%, aOR 1.8, P=0.06). Symptomatic ICH occurred in 1% of patients in both arms. The trial established TNK 0.25 mg/kg as the IVT agent of first choice in the LVO-EVT pathway, seeded the broader TNK-vs-alteplase literature (NOR-TEST, AcT, TRACE-2, ATTEST-2, ORIGINAL), and supports the AHA/ASA 2026 §4.6.2 Class I Level A recommendation that lists TNK 0.25 mg/kg and alteplase 0.9 mg/kg in parallel within 4.5 hours of stroke onset.',
   },
+  // ========== FXA-INHIBITOR REVERSAL IN ACUTE ICH (2024) ==========
+  // ANNEXA-I is the first randomized trial of an FXa-inhibitor antidote in
+  // acute intracerebral hemorrhage. The DSMB halted the trial at a
+  // pre-specified interim analysis (452 of 900 planned patients) for
+  // hemostatic efficacy. Central clinical message: hemostasis improved,
+  // ischemic-stroke rate quadrupled, and there was no functional or
+  // mortality benefit at 30 days. Class E entry: medical-scientist authored
+  // 2026-05-20 from V-supplied NEJM PDF; full evidence packet at
+  // docs/evidence-packets/annexa-i-2026-05-20.md.
+  /* claimId: annexa-i-andexanet-fxa-ich-2024 */
+  'annexa-i-trial': {
+    id: 'annexa-i-trial',
+    title: 'ANNEXA-I Trial',
+    subtitle: 'Andexanet Alfa for Factor Xa Inhibitor-Associated Acute Intracerebral Hemorrhage',
+    category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    trialResult: 'POSITIVE',
+    claimId: 'annexa-i-andexanet-fxa-ich-2024',
+    doi: '10.1056/NEJMoa2313040',
+    pmid: '38749032',
+    clinicalTrialsId: 'NCT03661528',
+    source: 'Connolly SJ et al. (NEJM 2024;390(19):1745-1755)',
+    listCategory: 'acute',
+    listDescription: 'First RCT of FXa-inhibitor reversal in acute ICH: hemostatic efficacy 67% vs 53% but ischemic stroke 6.5% vs 1.5%. DSMB-halted early.',
+    harmSignal: 'Thrombotic events 10.3% vs 5.6% (P=0.048); ischemic stroke 6.5% vs 1.5% (+5.0 pp, 95% CI 1.5-8.8); no functional or mortality benefit at 30 days',
+    designDisclaimer: {
+      category: 'stopped-early-efficacy',
+      text: 'Trial halted by DSMB at pre-specified interim analysis (452 of 900 planned patients) after the hemostatic-efficacy threshold was crossed. Effect sizes from trials stopped early for benefit may be overestimated.',
+    },
+    applicability: {
+      populationExclusions: [
+        'Hematoma volume above 60 mL excluded. Very large ICH not represented',
+        'GCS below 7 or NIHSS above 35 excluded. Severe early presentations not addressed',
+        'Most recent FXa-inhibitor dose more than 15 hours before randomization excluded. Late-window reversal not addressed',
+        'Subdural and subarachnoid hemorrhage excluded after protocol amendment. ANNEXA-I applies to intracerebral hemorrhage only',
+        'Planned neurosurgery within 12 hours after enrollment excluded',
+        'Thrombotic event within 2 weeks before enrollment excluded — these patients carry the highest baseline thrombotic risk and are not represented',
+        'Prior andexanet exposure excluded',
+      ],
+      imagingSelection: 'CT or MRI within 2 hours before randomization confirming intracerebral hemorrhage with volume 0.5 to 60 mL. After amendment, time from symptom onset to baseline scan tightened from 12 hours to 6 hours',
+      doseSpecific: 'Andexanet dose (high-dose or low-dose bolus + 2-hour infusion) chosen per FDA label based on FXa inhibitor type, amount, and timing of last dose. 78.1% of andexanet patients received the low-dose regimen; 20.1% received high-dose. Each vial contains 500 mg of mannitol — relevant for fluid and osmotic load',
+      geography: 'Conducted at 131 sites in 23 countries, June 2019 to May 2023',
+    },
+    stats: {
+      sampleSize: {
+        value: '530',
+        label: 'Randomized Patients (extended population)',
+        info: 'Multinational open-label RCT with blinded outcome adjudication at 131 sites across 23 countries. 530 in the extended safety population (263 andexanet, 267 usual care). Primary efficacy analysis at the pre-specified interim (DSMB-triggered): 452 patients (224 andexanet, 228 usual care). Originally planned for 900 patients; trial halted early.',
+      },
+      primaryEndpoint: {
+        value: 'Hemostatic efficacy',
+        label: 'composite at 12 h',
+        info: 'Composite endpoint at 12 hours after randomization: hematoma volume change of 35% or less from baseline (good hemostatic efficacy; 20% or less = excellent), AND increase in NIHSS of less than 7 points at 12 h, AND no rescue therapy (andexanet, PCC, or surgery) between 3 and 12 h. Binary-superiority primary; NNT computable. Composite was driven primarily by the hematoma-volume component.',
+      },
+      pValue: {
+        value: '0.003',
+        label: 'Statistically Sig.',
+        highlight: true,
+        info: 'P=0.003 by Cochran-Mantel-Haenszel test stratified by symptom-onset-to-baseline-scan time. Pre-specified interim significance threshold was P<0.031; trial crossed this and was halted.',
+      },
+      effectSize: {
+        value: '+13.4 pp',
+        label: '95% CI 4.6-22.2',
+        highlight: true,
+        info: 'Adjusted absolute difference 13.4 percentage points in hemostatic efficacy (andexanet 67.0% vs usual care 53.1%). The hematoma-volume component drove the composite; the NIHSS-change and rescue-therapy components did not differ significantly between groups.',
+      },
+      absoluteReduction: {
+        value: '13.4 pp',
+        label: 'Absolute Benefit (hemostatic surrogate)',
+        info: 'NNT 8 for the composite hemostatic-efficacy primary, computed as 1 / 0.134. This NNT reflects the radiographic-and-biochemical hemostatic surrogate, NOT functional independence or survival. The exploratory mRS 0-3 at 30 days was 28.0% vs 31.0% (no benefit) and 30-day mortality 27.8% vs 25.5% (P=0.51).',
+        highlight: true,
+      },
+    },
+    trialDesign: {
+      type: [
+        'Multicenter multinational open-label RCT with blinded outcome adjudication',
+        '1:1 randomization stratified by intention to use PCC and (after amendment) time-to-baseline-scan',
+        'Pre-specified interim analysis at 450 patients with significance threshold P<0.031',
+        'DSMB-halted at interim for hemostatic efficacy (May 2023, 452 patients analyzed)',
+        'Hierarchical testing to preserve family-wise alpha at 5%',
+      ],
+      timeline: 'Enrolled June 2019 to May 2023; stopped early for efficacy at pre-specified interim analysis',
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 67.0,
+        label: 'Hemostatic efficacy (composite) at 12 h',
+        name: 'Andexanet Alfa',
+      },
+      control: {
+        percentage: 53.1,
+        label: 'Hemostatic efficacy (composite) at 12 h',
+        name: 'Usual Care (85.5% received 4F-PCC)',
+      },
+    },
+    intervention: {
+      treatment: 'Andexanet alfa bolus (high-dose or low-dose per FDA label, based on FXa inhibitor type and timing of last dose) over 15 to 30 minutes followed by continuous infusion over 2 hours. Each vial contains 500 mg of mannitol.',
+      control: 'Usual care per local physician judgment, with andexanet excluded. PCC permitted. 85.5% of usual-care patients received PCC within the first 3 hours (median dose 3000 IU; 92.4% received four-factor PCC).',
+    },
+    clinicalContext: 'Before ANNEXA-I, the AHA/ASA 2022 ICH guideline already listed andexanet alfa as a Class IIa, Level B option for FXa-inhibitor-associated acute ICH based on the single-arm ANNEXA-4 study (Connolly 2019) and observational data. ANNEXA-I was the first randomized trial to test andexanet against a real-world comparator (predominantly 4-factor PCC) in patients with acute intracerebral hemorrhage taking apixaban, rivaroxaban, or edoxaban within 15 hours of last dose. The composite primary endpoint of hemostatic efficacy was met, but the safety signal — a roughly four-fold increase in ischemic stroke (6.5% vs 1.5%) and a significant increase in any thrombotic event (10.3% vs 5.6%, P=0.048) — defines the central clinical trade-off. There was no functional benefit (exploratory mRS 0-3 at 30 days 28.0% vs 31.0%) and no mortality benefit (27.8% vs 25.5%, P=0.51). The trial clarifies but does not resolve the question of when andexanet should be preferred over 4F-PCC in routine practice. Cost-effectiveness debate (andexanet ~US$23,000 per dose vs 4F-PCC ~US$3,000-5,000) is unresolved in the published literature as of mid-2026.',
+    calculations: {
+      nnt: 8,
+      nntExplanation: 'NNT 8 for the composite hemostatic-efficacy primary, computed from the absolute risk difference of 13.4 percentage points (67.0% andexanet vs 53.1% usual care). For approximately every 8 patients with FXa-inhibitor-associated acute ICH treated with andexanet instead of usual care, one additional patient meets the composite hemostatic-efficacy endpoint at 12 h. This NNT reflects a radiographic-and-biochemical surrogate, NOT functional independence or survival. The exploratory mRS 0-3 at 30 days did not differ (28.0% vs 31.0%); 30-day mortality did not differ (27.8% vs 25.5%, P=0.51). Quote alongside the NNH: NNH for ≥1 thrombotic event is approximately 22 (5.6% to 10.3%; +4.6 pp); NNH for ischemic stroke specifically is approximately 20 (1.5% to 6.5%; +5.0 pp).',
+    },
+    pearls: [
+      'First randomized trial of an FXa-inhibitor antidote in acute intracerebral hemorrhage. The comparator was usual care (predominantly 4-factor PCC in 85.5% of usual-care patients).',
+      'Primary outcome was a composite hemostatic-efficacy surrogate at 12 h: hematoma volume change ≤35% AND NIHSS rise <7 AND no rescue therapy 3-12 h. Andexanet 67.0% vs usual care 53.1% (+13.4 pp, 95% CI 4.6-22.2, P=0.003). NNT 8 for the surrogate.',
+      'Composite was driven by the hematoma-volume component. The NIHSS-change and rescue-therapy components did not differ significantly between groups.',
+      'DSMB halted the trial early at the pre-specified interim analysis (452 of 900 planned patients) after the hemostatic-efficacy threshold was crossed. Effect sizes from trials stopped early for benefit may be overestimated.',
+      'Anti-FXa activity dropped by a median of 94.5% with andexanet vs 26.9% with usual care (P<0.001) at the 1-to-2-hour nadir. The biochemical reversal is rapid and substantial.',
+      'Thrombotic events significantly increased: 10.3% andexanet vs 5.6% usual care (+4.6 pp, 95% CI 0.1-9.2, P=0.048). NNH approximately 22.',
+      'Ischemic stroke was the dominant thrombotic event: 6.5% andexanet vs 1.5% usual care (+5.0 pp, 95% CI 1.5-8.8). NNH approximately 20 for ischemic stroke specifically.',
+      'No functional benefit at 30 days. Exploratory mRS 0-3 (post-hoc, dichotomized): 28.0% andexanet vs 31.0% usual care. Numerically favors usual care. Trial not powered for this endpoint.',
+      'No mortality difference at 30 days. 27.8% andexanet vs 25.5% usual care (P=0.51).',
+      'Population: acute ICH on apixaban (62.5% andexanet, 59.2% usual care), rivaroxaban (~29%), or edoxaban (~10%), within 15 hours of last FXa-inhibitor dose, with hematoma volume 0.5-60 mL on CT or MRI, NIHSS ≤35, no planned surgery within 12 h, GCS ≥7. Atrial fibrillation in ~87%.',
+      'Baseline median hematoma volume 10.5 mL andexanet vs 9.0 mL usual care. Median NIHSS 9 both arms. Median time from symptom onset to baseline scan ~2.3-2.4 h.',
+      'Andexanet dose: 78.1% received low-dose; 20.1% received high-dose. Dose chosen by FDA-label algorithm based on FXa-inhibitor type, amount, and timing of last dose.',
+      'Open-label design with blinded outcome adjudication. Steering committee and adjudicators were blinded to group assignment.',
+      'Atrial fibrillation was significantly more common in the andexanet arm (90.2% vs 84.2%). This higher baseline cardioembolic risk could contribute to the ischemic-stroke excess after rapid anticoagulation reversal.',
+      'AHA/ASA 2022 ICH guideline already graded andexanet as Class IIa, Level B for FXa-inhibitor reversal in acute ICH, based on pre-ANNEXA-I single-arm and observational data (ANNEXA-4, Connolly 2019). A focused update incorporating ANNEXA-I has not yet been published as of 2026-05-20.',
+      'Cost is a documented concern in editorial follow-up (Smith and Hemphill, NEJM 2024;390:1815). Andexanet cost (~US$23,000/dose) substantially exceeds 4F-PCC (~US$3,000-5,000). Observational comparative-effectiveness studies in 2024-2025 suggest similar hematoma outcomes with 4F-PCC at lower cost; formal comparative trial pending.',
+      'Funded by Alexion AstraZeneca Rare Disease (previously Portola Pharmaceuticals). Trial sponsor provided andexanet free of charge.',
+    ],
+    bedsidePearl: 'For acute intracerebral hemorrhage on an FXa inhibitor (apixaban, rivaroxaban, edoxaban) within 15 hours of last dose, andexanet improved a composite hemostatic surrogate (hematoma expansion, NIHSS, rescue therapy) at 12 h from 53.1% to 67.0% (NNT 8). Anti-FXa activity dropped 94.5% vs 26.9%. The cost: ischemic stroke 6.5% vs 1.5% (NNH 20) and any thrombotic event 10.3% vs 5.6% (NNH 22). No functional benefit or mortality benefit at 30 days. Quote both NNT and NNH when consenting; if patient has high cardioembolic baseline (atrial fibrillation, recent thrombotic event) the trade-off shifts. 4F-PCC remains the comparator that 85.5% of usual-care patients actually received.',
+    bottomLineSummary: 'ANNEXA-I was the first randomized trial of an FXa-inhibitor antidote in acute intracerebral hemorrhage. Among 452 patients with ICH on apixaban, rivaroxaban, or edoxaban within 15 hours of last dose, andexanet improved a composite hemostatic-efficacy surrogate at 12 h compared with usual care (67.0% vs 53.1%; +13.4 pp, 95% CI 4.6-22.2, P=0.003; NNT 8). The DSMB halted the trial at the pre-specified interim analysis for efficacy. Anti-FXa activity fell 94.5% vs 26.9% with usual care. The hemostatic benefit was offset by a near-four-fold increase in ischemic stroke (6.5% vs 1.5%; NNH 20) and a significant increase in any thrombotic event (10.3% vs 5.6%, P=0.048). There was no functional benefit at 30 days (exploratory mRS 0-3 28.0% vs 31.0%) and no mortality benefit (27.8% vs 25.5%, P=0.51). The trial confirms hemostatic activity and clarifies the ischemic-stroke trade-off but does not resolve whether andexanet should be preferred over 4F-PCC, which 85.5% of usual-care patients received. Supports AHA/ASA 2022 ICH guideline Class IIa, Level B for FXa-inhibitor reversal; a focused guideline update incorporating ANNEXA-I is pending.',
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: '100 dots per arm. A filled dot is a patient who met the composite hemostatic-efficacy endpoint at 12 hours: hematoma expansion 35% or less, NIHSS rise less than 7 points, and no rescue therapy between 3 and 12 hours. Andexanet has 67 filled dots; usual care has 53. The 13-dot gap is the absolute benefit on the hemostatic surrogate.',
+      },
+      {
+        question: 'What should I look at first?',
+        answer: 'The 13 percentage-point gap and the NNT of 8 — but read these as a surrogate, not a clinical outcome. The composite was driven by hematoma-volume control. The NIHSS-change and rescue-therapy components did not differ between groups. And the exploratory functional outcome at 30 days (mRS 0-3) was 28.0% vs 31.0%, numerically favoring usual care. The hemostatic surrogate did not translate to functional benefit by 30 days.',
+      },
+      {
+        question: 'What does it mean for my patient?',
+        answer: 'For acute ICH on apixaban, rivaroxaban, or edoxaban within 15 hours of last dose, andexanet improves hematoma-expansion control but increases ischemic stroke from 1.5% to 6.5% (NNH 20) and any thrombotic event from 5.6% to 10.3% (NNH 22). No functional or mortality benefit at 30 days. Quote NNT and NNH together when consenting. In patients with high baseline cardioembolic risk (atrial fibrillation, recent thrombotic event), the trade-off shifts further. 4F-PCC remains the comparator that 85.5% of usual-care patients actually received.',
+      },
+      {
+        question: 'How was the cohort selected?',
+        answer: 'Adults with acute intracerebral hemorrhage on apixaban, rivaroxaban, or edoxaban with last dose within 15 hours, hematoma volume 0.5 to 60 mL on CT or MRI within 2 hours before randomization, NIHSS at most 35, GCS at least 7, no planned surgery within 12 hours, and no thrombotic event in the prior 2 weeks. Subdural and subarachnoid hemorrhages were excluded after protocol amendment.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In adults with acute intracerebral hemorrhage on apixaban, rivaroxaban, or edoxaban within 15 hours of last dose and hematoma 0.5-60 mL, andexanet alfa improves a composite hemostatic-efficacy surrogate at 12 hours compared with usual care (NNT 8 for the surrogate). Anti-FXa activity falls rapidly and substantially. Andexanet increases the rate of thrombotic events, primarily ischemic stroke, relative to usual care.',
+      doesNotProve: 'It does not prove functional benefit. Exploratory mRS 0-3 at 30 days was 28.0% vs 31.0%, numerically favoring usual care; the trial was not powered for this endpoint and the analysis was post-hoc. It does not prove mortality benefit (27.8% vs 25.5%, P=0.51). It does not prove andexanet is superior to 4F-PCC specifically — the comparator was usual care (85.5% of usual-care patients received PCC, predominantly 4F-PCC). It does not apply to hematomas above 60 mL, to ICH presenting more than 15 hours after the FXa-inhibitor dose, to subdural or subarachnoid hemorrhage, or to patients with thrombotic events in the prior 2 weeks. It does not address cost-effectiveness; that question is unresolved.',
+      cautions: 'Trial stopped early for benefit by the DSMB at the pre-specified interim analysis; effect sizes from such trials may be overestimated. Open-label design (outcome adjudication blinded). Composite primary endpoint was driven primarily by hematoma-volume control; the other components did not differ. The hemostatic-efficacy outcome is a radiographic-and-biochemical surrogate, not a clinical outcome. Ischemic-stroke excess was substantial (6.5% vs 1.5%; NNH 20). Atrial fibrillation was significantly more common in the andexanet arm (90.2% vs 84.2%), and rapid reversal of anticoagulation in this high-cardioembolic-risk population may contribute to the ischemic-stroke signal. Cost of andexanet (~US$23,000/dose) substantially exceeds 4F-PCC; observational comparative-effectiveness data suggest similar hematoma outcomes with 4F-PCC, but no head-to-head randomized comparison exists yet.',
+    },
+    inclusionCriteria: [
+      'Adults with acute intracerebral hemorrhage confirmed on CT or MRI within 2 hours before randomization',
+      'Hematoma volume 0.5 to 60 mL on baseline imaging',
+      'Most recent FXa inhibitor (apixaban, rivaroxaban, or edoxaban) dose within 15 hours before randomization',
+      'NIHSS at most 35',
+      'GCS at least 7 at time of consent',
+      'Time from symptom onset to baseline scan within 6 hours (per amendment; originally 12 hours)',
+    ],
+    exclusionCriteria: [
+      'Hematoma volume greater than 60 mL',
+      'Planned neurosurgical intervention within 12 hours of enrollment',
+      'Thrombotic event within 2 weeks before randomization',
+      'Prior andexanet exposure',
+      'Subdural or subarachnoid hemorrhage as primary bleeding site (after protocol amendment)',
+      'GCS below 7 or NIHSS above 35',
+    ],
+    safetyProfile: {
+      adverseEvents: {
+        evt: 10.3,
+        control: 5.6,
+        label: 'Any thrombotic event within 30 days',
+        tooltip: 'Any thrombotic event within 30 days: 27 of 263 (10.3%) andexanet vs 15 of 267 (5.6%) usual care. Adjusted increase 4.6 percentage points (95% CI 0.1-9.2), P=0.048. Assessed in the extended population (530 patients including those enrolled after database lock for the interim analysis). Source: Connolly SJ et al., NEJM 2024, Table 3 p.1753.',
+        color: 'danger',
+      },
+      hemorrhagicStroke: {
+        evt: 6.5,
+        control: 1.5,
+        label: 'Ischemic stroke within 30 days',
+        tooltip: 'Ischemic stroke within 30 days: 17 of 263 (6.5%) andexanet vs 4 of 267 (1.5%) usual care. Increase 5.0 percentage points (95% CI 1.5-8.8). NNH approximately 20 for ischemic stroke. Source: Connolly SJ et al., NEJM 2024, Table 3 p.1753. Note: hemorrhagicStroke field repurposed here to surface the dominant thrombotic-event component; this is an ISCHEMIC stroke signal in ANNEXA-I.',
+        color: 'danger',
+      },
+      mortality: {
+        evt: 27.8,
+        control: 25.5,
+        label: '30-day mortality',
+        tooltip: '30-day mortality 73 of 263 (27.8%) andexanet vs 68 of 267 (25.5%) usual care. Adjusted difference 2.5 percentage points (95% CI -5.0 to 10.0), P=0.51. No mortality benefit; trial not powered to detect a mortality difference. Source: Connolly SJ et al., NEJM 2024, Table 3 p.1753.',
+      },
+    },
+    safetyData: 'The ischemic-stroke signal is the central safety trade-off of andexanet in FXa-inhibitor-associated acute ICH. Any thrombotic event within 30 days occurred in 10.3% of andexanet patients vs 5.6% of usual-care patients (adjusted increase 4.6 percentage points, 95% CI 0.1-9.2, P=0.048; NNH approximately 22). The dominant component was ischemic stroke (6.5% vs 1.5%; +5.0 percentage points, 95% CI 1.5-8.8; NNH approximately 20). Myocardial infarction was numerically higher (4.2% vs 1.5%) but did not reach significance. Deep-vein thrombosis (0.4% vs 0.7%) and pulmonary embolism (0.4% vs 2.2%) were numerically lower with andexanet. The 30-day mortality did not differ (27.8% vs 25.5%, P=0.51). The mechanism of the thrombotic excess is uncertain — rapid removal of FXa-inhibitor protection in a high-AF-burden cohort (90.2% AF in the andexanet arm) is the leading hypothesis; a direct procoagulant effect from tissue-factor-pathway-inhibitor sequestration has also been proposed. Source: Connolly SJ et al., NEJM 2024, Table 3 p.1753 and Discussion.',
+    limitations: [
+      'Trial stopped early for benefit at the pre-specified interim analysis (452 of 900 planned patients). Effect sizes from trials stopped early for benefit may be overestimated.',
+      'Open-label design. Outcome adjudication was blinded; treatment was not.',
+      'Composite primary endpoint. The composite was driven by the hematoma-volume component; the NIHSS-change and rescue-therapy components did not differ significantly between groups.',
+      'Primary endpoint is a radiographic-and-biochemical surrogate. The trial did not demonstrate functional or survival benefit.',
+      'Exploratory mRS 0-3 at 30 days was 28.0% vs 31.0%, numerically favoring usual care. Post-hoc dichotomization; trial not powered for functional outcome.',
+      'No mortality benefit at 30 days (27.8% vs 25.5%, P=0.51). Trial not powered to detect a mortality difference.',
+      'Comparator was "usual care" rather than protocolized 4F-PCC. 85.5% of usual-care patients received PCC within the first 3 hours (92.4% four-factor PCC), but dose, timing, and product varied.',
+      'Atrial fibrillation was significantly more common in the andexanet arm (90.2% vs 84.2%). This baseline imbalance could amplify the ischemic-stroke signal because AF patients have higher baseline cardioembolic risk after rapid anticoagulation reversal.',
+      'Population restrictions: hematoma volume 0.5-60 mL, NIHSS ≤35, GCS ≥7, last FXa-inhibitor dose within 15 hours, no planned surgery within 12 hours, no recent thrombotic event. Do not generalize beyond these bounds.',
+      'Cost-effectiveness not addressed. Andexanet ~US$23,000 per dose substantially exceeds 4F-PCC. Observational comparative-effectiveness data are evolving but no head-to-head randomized trial exists.',
+      'Industry-funded by Alexion AstraZeneca Rare Disease (previously Portola Pharmaceuticals); sponsor provided andexanet free of charge and held confidentiality agreements with authors. Statistical analysis performed by an author at the Population Health Research Institute.',
+    ],
+    legend: {
+      finding: 'Andexanet improves hemostatic surrogate but increases ischemic stroke; no functional or mortality benefit at 30 days.',
+      bottomLineTag: 'NNT 8 / NNH 20',
+      keyStat: '+13.4 pp (4.6-22.2)',
+    },
+    conclusion: 'ANNEXA-I was the first randomized trial to test an FXa-inhibitor antidote (andexanet alfa) against usual care in patients with acute intracerebral hemorrhage on apixaban, rivaroxaban, or edoxaban within 15 hours of their last dose. The DSMB halted the trial at the pre-specified interim analysis (452 of 900 planned patients) after the composite hemostatic-efficacy endpoint was met (67.0% vs 53.1%, adjusted difference +13.4 percentage points, 95% CI 4.6-22.2, P=0.003; NNT 8 for the surrogate). The composite was driven primarily by hematoma-volume control. Anti-FXa activity fell by a median of 94.5% with andexanet vs 26.9% with usual care. The hemostatic benefit was offset by a significant increase in thrombotic events (10.3% vs 5.6%, P=0.048), driven by a near-four-fold increase in ischemic stroke (6.5% vs 1.5%; NNH approximately 20). Exploratory mRS 0-3 at 30 days did not differ (28.0% vs 31.0%) and 30-day mortality did not differ (27.8% vs 25.5%, P=0.51). The trial confirms hemostatic activity, clarifies the ischemic-stroke trade-off, and supports the AHA/ASA 2022 ICH guideline Class IIa, Level B recommendation for FXa-inhibitor reversal. It does not establish superiority over 4F-PCC (which 85.5% of usual-care patients received), does not address cost-effectiveness, and does not demonstrate functional or survival benefit.',
+  },
 };

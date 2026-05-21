@@ -273,4 +273,22 @@ export const CITATION_REGISTRY: CitationRegistry = {
     review_window_months: 36,
     quoted_text: 'Tenecteplase before thrombectomy was associated with a higher incidence of reperfusion and better functional outcome than alteplase among patients with ischemic stroke treated within 4.5 hours after symptom onset.',
   },
+
+  // ─── 2024 trial: andexanet alfa for FXa-inhibitor-associated acute ICH ────
+  // Connolly SJ et al., NEJM 2024. First randomized trial of an FXa-inhibitor
+  // antidote in acute ICH. DSMB-halted at pre-specified interim for hemostatic
+  // efficacy. Verbatim quote from NEJM PDF read by medical-scientist on
+  // 2026-05-20 (V supplied full text). 36-month review window per §13.7
+  // (landmark trial — first FXa-inhibitor reversal RCT in acute ICH).
+  'connolly-annexa-i-2024': {
+    id: 'connolly-annexa-i-2024',
+    source: 'trial',
+    title: 'Andexanet for Factor Xa Inhibitor-Associated Acute Intracerebral Hemorrhage',
+    year: 2024,
+    url: 'https://www.nejm.org/doi/10.1056/NEJMoa2313040',
+    pmid: '38749032',
+    last_reviewed: '2026-05-20',
+    review_window_months: 36,
+    quoted_text: 'Among patients with intracerebral hemorrhage who were receiving factor Xa inhibitors, andexanet resulted in better control of hematoma expansion than usual care but was associated with thrombotic events, including ischemic stroke.',
+  },
 };

@@ -167,6 +167,14 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'PRoFESS trial: head-to-head noninferiority comparison of ASA + ER-dipyridamole vs clopidogrel for long-term secondary prevention after non-cardioembolic ischemic stroke. Recurrence rates similar (9.0% vs 8.8%, HR 1.01, 95% CI 0.92–1.11) but the upper CI bound crossed the prespecified NI margin of 1.075; noninferiority was not formally established. Intracranial hemorrhage was significantly higher with ASA–ERDP (1.4% vs 1.0%, HR 1.42).',
   },
 
+  // ─── ANNEXA-I (2024) — andexanet alfa for FXa-inhibitor-associated acute ICH ──
+  'annexa-i-andexanet-fxa-ich-2024': {
+    id: 'annexa-i-andexanet-fxa-ich-2024',
+    citation_ids: ['connolly-annexa-i-2024'],
+    surfaces: [DATA_SURFACE],
+    description: 'ANNEXA-I trial: in 452 patients with acute intracerebral hemorrhage on a factor Xa inhibitor (apixaban, rivaroxaban, or edoxaban) within 15 hours of last dose, andexanet alfa improved hemostatic efficacy (composite of ≤35% hematoma expansion, NIHSS rise <7, and no rescue therapy at 12 h) compared with usual care (67.0% vs 53.1%; adjusted difference +13.4 pp, 95% CI 4.6–22.2; P=0.003). The trial was halted early for efficacy at a pre-specified interim analysis by the DSMB. Anti-FXa activity fell by a median of 94.5% with andexanet vs 26.9% with usual care (P<0.001). Thrombotic events were significantly increased with andexanet (10.3% vs 5.6%; +4.6 pp, 95% CI 0.1–9.2, P=0.048), driven primarily by ischemic stroke (6.5% vs 1.5%; +5.0 pp, 95% CI 1.5–8.8). Exploratory 30-day mRS 0–3 did not differ (28.0% vs 31.0%); 30-day mortality did not differ (27.8% vs 25.5%, P=0.51). The trial established andexanet as a hemostatic — but not functional — therapy for FXa-ICH and clarified the ischemic-stroke trade-off that informs the AHA/ASA 2022 ICH guideline Class IIa, Level B recommendation for FXa-inhibitor reversal. Stopped-early-for-efficacy caveat applies: effect size may be overestimated.',
+  },
+
   // ─── EXTEND-IA TNK (2018) — foundational TNK-vs-alteplase in the LVO-EVT pathway ─
   'extend-ia-tnk-tnk-vs-alteplase-2018': {
     id: 'extend-ia-tnk-tnk-vs-alteplase-2018',
