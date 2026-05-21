@@ -166,4 +166,12 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     surfaces: [DATA_SURFACE],
     description: 'PRoFESS trial: head-to-head noninferiority comparison of ASA + ER-dipyridamole vs clopidogrel for long-term secondary prevention after non-cardioembolic ischemic stroke. Recurrence rates similar (9.0% vs 8.8%, HR 1.01, 95% CI 0.92–1.11) but the upper CI bound crossed the prespecified NI margin of 1.075; noninferiority was not formally established. Intracranial hemorrhage was significantly higher with ASA–ERDP (1.4% vs 1.0%, HR 1.42).',
   },
+
+  // ─── EXTEND-IA TNK (2018) — foundational TNK-vs-alteplase in the LVO-EVT pathway ─
+  'extend-ia-tnk-tnk-vs-alteplase-2018': {
+    id: 'extend-ia-tnk-tnk-vs-alteplase-2018',
+    citation_ids: ['campbell-extend-ia-tnk-2018', 'aha-asa-2026-4.6.2'],
+    surfaces: [DATA_SURFACE],
+    description: 'EXTEND-IA TNK trial: in EVT-eligible LVO patients within 4.5 hours, tenecteplase 0.25 mg/kg (single bolus, max 25 mg) achieved substantial reperfusion at initial angiographic assessment in 22% vs 10% with alteplase 0.9 mg/kg (difference 12 pp, 95% CI 2–21; P=0.002 for noninferiority and P=0.03 for superiority). Sequential gatekeeping: noninferiority established first (margin −2.3 pp), then superiority. Ordinal mRS shift at 90 days favored TNK (common OR 1.7, 95% CI 1.0–2.8, P=0.04); mRS 0–2 binary 64% vs 51% (aOR 1.8, P=0.06, not significant). Symptomatic ICH 1% in both arms. Established TNK 0.25 mg/kg as the IVT agent of first choice in the LVO-EVT pathway and seeded the broader TNK-vs-alteplase literature (NOR-TEST, AcT, ATTEST-2, TRACE-2, ORIGINAL) and AHA/ASA 2026 §4.6.2 Class I Level A recommendation.',
+  },
 };

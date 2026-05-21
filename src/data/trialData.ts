@@ -11263,4 +11263,200 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     conclusion: 'RESCUE-Japan LIMIT was the first RCT to demonstrate that endovascular therapy improves functional outcome in patients with large ischemic core (ASPECTS 3-5), a population historically excluded from EVT trials. The 18-point absolute increase in mRS 0-3 (31% vs 13%, NNT 5) came at the cost of a significant excess in any intracranial hemorrhage (58% vs 31%, P<0.001), though symptomatic ICH did not differ significantly. SELECT2, ANGEL-ASPECT, TENSION, and LASTE later confirmed the signal across Western and broader populations.',
   },
+  // ========== TNK FOR LVO-EVT (2018) — FOUNDATIONAL TNK-vs-ALTEPLASE TRIAL ==========
+  // EXTEND-IA TNK established TNK 0.25 mg/kg as the IVT agent of first choice in
+  // the LVO-EVT pathway. Distinct from EXTEND-IA (2015), which compared EVT + IVT
+  // vs IVT alone. Predecessor to AcT (2022), TRACE-2 (2023), ORIGINAL (2024), and
+  // the broader TNK lineage that elevated TNK to Class I Level A in AHA/ASA 2026
+  // §4.6.2 alongside alteplase. Class E entry: medical-scientist authored
+  // 2026-05-20 from V-supplied NEJM PDF; full evidence packet at
+  // docs/evidence-packets/extend-ia-tnk-2026-05-20.md.
+  // PRIMARY ENDPOINT: angiographic substantial reperfusion (binary, surrogate),
+  // not functional outcome. Sequential gatekeeping (NI then superiority); both met.
+  /* claimId: extend-ia-tnk-tnk-vs-alteplase-2018 */
+  'extend-ia-tnk-trial': {
+    id: 'extend-ia-tnk-trial',
+    title: 'EXTEND-IA TNK Trial',
+    subtitle: 'Tenecteplase versus Alteplase before Thrombectomy for Ischemic Stroke',
+    category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    trialResult: 'POSITIVE',
+    claimId: 'extend-ia-tnk-tnk-vs-alteplase-2018',
+    doi: '10.1056/NEJMoa1716405',
+    pmid: '29694815',
+    clinicalTrialsId: 'NCT02388061',
+    source: 'Campbell BCV et al. (NEJM 2018;378(17):1573-1582)',
+    listCategory: 'thrombectomy',
+    listDescription: 'First head-to-head TNK vs alteplase in LVO-EVT: substantial reperfusion 22% vs 10%; NI and superiority both met.',
+    harmSignal: 'Symptomatic ICH 1% in both arms; parenchymal hematoma 6% vs 5% (no difference); 90-day mortality 10% TNK vs 18% alteplase (aRR 0.5, 95% CI 0.3-1.0)',
+    applicability: {
+      populationExclusions: [
+        'Non-LVO ischemic stroke not addressed directly. EXTEND-IA TNK enrolled only ICA, M1, M2, or basilar occlusions. Generalization to non-LVO AIS came from NOR-TEST 2017, AcT 2022, and TRACE-2 2023',
+        'Pre-stroke mRS above 3 excluded. Patients with substantial pre-existing disability not represented',
+        'Beyond 4.5 hours from onset not addressed. Late-window TNK is the domain of TRACE-III 2024 and TIMELESS 2024',
+        'EVT-ineligible patients not addressed by this trial. EXTEND-IA TNK required planned EVT; for EVT-ineligible patients within 4.5h the AcT and TRACE-2 trials inform TNK choice',
+      ],
+      evtContext: 'evt-co-treated',
+      imagingSelection: 'CTA confirmation of ICA, M1, M2, or basilar occlusion. Initial protocol required CT-perfusion mismatch (Tmax >6s lesion volume; core <70 mL, mismatch ratio >1.2); CT-perfusion mismatch criterion removed by amendment after approximately 80 patients had been enrolled (October 2016)',
+      doseSpecific: 'TNK 0.25 mg/kg single IV bolus, maximum 25 mg. NOT the 0.4 mg/kg dose used in NOR-TEST (2017) or NOR-TEST 2 Part A (2022, harm signal). EXTEND-IA TNK Part 2 (2020 JAMA) compared 0.25 vs 0.4 mg/kg in the same LVO-EVT population and found no advantage to the higher dose',
+      geography: 'Conducted at 12 centers in Australia and 1 center in New Zealand, March 2015 to October 2017. Single-payer health-system stroke pathways; high inter-hospital transfer rate reflects ANZ thrombectomy referral patterns',
+    },
+    stats: {
+      sampleSize: {
+        value: '202',
+        label: 'Randomized Patients',
+        info: 'Investigator-initiated multicenter RCT at 13 sites in Australia and New Zealand. 101 assigned to TNK, 101 to alteplase. 2 alteplase patients excluded before treatment (1 withdrew consent, 1 ineligibility error). Blinded adaptive sample-size re-estimation after 100 patients enrolled set final size at 202.',
+      },
+      primaryEndpoint: {
+        value: 'Substantial reperfusion',
+        label: 'at initial angiographic assessment',
+        info: 'Restoration of blood flow to greater than 50% of the involved territory OR absence of retrievable thrombus in the target vessel at the time of the initial angiographic assessment. Surrogate angiographic endpoint, not functional outcome. Sequential gatekeeping: noninferiority tested first (margin -2.3 pp), then superiority. Both established.',
+      },
+      pValue: {
+        value: '0.002 / 0.03',
+        label: 'NI / Superiority',
+        info: 'P=0.002 for noninferiority (lower bound of 95% CI of the absolute difference was +2 pp, well above the prespecified -2.3 pp margin). P=0.03 for superiority on the adjusted incidence ratio. Both gates passed.',
+        highlight: true,
+      },
+      effectSize: {
+        value: '+12 pp',
+        label: '95% CI 2 to 21',
+        highlight: true,
+        info: 'Absolute incidence difference 12 percentage points (TNK 22% vs alteplase 10%) in substantial reperfusion at initial angiographic assessment. Adjusted incidence ratio 2.2 (95% CI 1.1-4.4); adjusted odds ratio 2.6 (95% CI 1.1-5.9).',
+      },
+      absoluteReduction: {
+        value: '12 pp',
+        label: 'Absolute Benefit (angiographic)',
+        info: 'NNT for the angiographic surrogate primary = 1 / 0.12 = approximately 9. This NNT reflects the angiographic reperfusion outcome, not functional independence. mRS 0-2 binary did not reach statistical significance (64% vs 51%, aOR 1.8, P=0.06). The ordinal mRS shift did favor TNK (common OR 1.7, P=0.04).',
+        highlight: true,
+      },
+    },
+    trialDesign: {
+      type: [
+        'Investigator-initiated multicenter prospective RCT',
+        'Open-label with blinded outcome assessment (PROBE design)',
+        '1:1 randomization stratified by site of vessel occlusion',
+        'Sequential gatekeeping: noninferiority then superiority (NI margin -2.3 pp)',
+        'Blinded adaptive sample-size re-estimation after 100 patients',
+      ],
+      timeline: 'Enrolled March 2015 to October 2017',
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 22,
+        label: 'Substantial reperfusion at initial angiography',
+        name: 'Tenecteplase 0.25 mg/kg',
+      },
+      control: {
+        percentage: 10,
+        label: 'Substantial reperfusion at initial angiography',
+        name: 'Alteplase 0.9 mg/kg',
+      },
+    },
+    intervention: {
+      treatment: 'Tenecteplase 0.25 mg/kg single IV bolus (maximum 25 mg), followed by standard endovascular thrombectomy. Single-bolus administration permits initiation of inter-hospital transport sooner than the 1-hour alteplase infusion.',
+      control: 'Alteplase 0.9 mg/kg IV (10% bolus, 90% infusion over 60 minutes, maximum 90 mg), followed by standard endovascular thrombectomy.',
+    },
+    clinicalContext: 'Before EXTEND-IA TNK, alteplase was the only proven IV thrombolytic for acute ischemic stroke. Tenecteplase, a genetically modified variant with greater fibrin specificity and a longer half-life permitting single-bolus administration, had shown promise in earlier phase 2 work (Parsons 2012 ATTEST) and in cardiac infarction (ASSENT-2). EXTEND-IA TNK was the first randomized head-to-head comparison of TNK 0.25 mg/kg vs alteplase 0.9 mg/kg specifically in patients with large-vessel occlusion who were planned for endovascular thrombectomy. The trial established TNK as the IVT agent of first choice in the LVO-EVT pathway and seeded the broader TNK-vs-alteplase literature (NOR-TEST 2017 in mostly non-LVO patients; AcT 2022 generalizing to all-comers AIS in Canada; TRACE-2 2023 in China; ORIGINAL 2024). AHA/ASA 2019 incorporated EXTEND-IA TNK as Class IIb evidence; the 2026 AHA/ASA guideline §4.6.2 now lists TNK 0.25 mg/kg and alteplase 0.9 mg/kg in parallel (Class I, Level A) for IVT within 4.5 hours.',
+    calculations: {
+      nnt: 9,
+      nntExplanation: 'NNT 9 for the angiographic surrogate primary, computed from the absolute risk difference of 12 percentage points (22% vs 10% substantial reperfusion at initial angiographic assessment). For approximately every 9 EVT-eligible LVO patients treated with TNK 0.25 mg/kg instead of alteplase 0.9 mg/kg before thrombectomy, one additional patient achieves substantial reperfusion before the EVT procedure begins. Note: this NNT is for the angiographic surrogate, not for functional independence. The mRS 0-2 dichotomization at 90 days did not reach statistical significance (64% vs 51%, aOR 1.8, P=0.06), although the ordinal mRS shift did favor TNK (common OR 1.7, P=0.04). Communicate the surrogate framing when quoting this NNT.',
+    },
+    pearls: [
+      'First randomized head-to-head trial of TNK 0.25 mg/kg vs alteplase 0.9 mg/kg in the LVO-EVT pathway. Foundational evidence for the modern TNK-first approach to bridging thrombolysis before thrombectomy.',
+      'Primary endpoint was angiographic, not functional: substantial reperfusion at initial angiographic assessment, defined as greater than 50% reperfusion of the involved territory or absence of retrievable thrombus. Surrogate outcome chosen because the trial was not powered for a functional primary against EVT background.',
+      'Sequential gatekeeping: noninferiority tested first (margin -2.3 pp), then superiority. Both met. P=0.002 for noninferiority; P=0.03 for superiority on the adjusted incidence ratio.',
+      'Substantial reperfusion 22% TNK vs 10% alteplase (absolute difference 12 pp, 95% CI 2-21; aIR 2.2, 95% CI 1.1-4.4). NNT 9 for the angiographic surrogate.',
+      'Ordinal mRS shift at 90 days favored TNK (median 2 vs 3; common OR 1.7, 95% CI 1.0-2.8, P=0.04). Functional benefit directionally consistent with the angiographic primary.',
+      'mRS 0-2 (functionally independent) 64% TNK vs 51% alteplase; aOR 1.8 (95% CI 1.0-3.4), P=0.06. Binary functional outcome did NOT reach statistical significance; do not quote NNT for functional independence from this trial.',
+      'mRS 0-1 (excellent outcome) 51% vs 43%; aOR 1.4 (95% CI 0.8-2.6), P=0.23. Not significant.',
+      'Symptomatic ICH 1% in both arms (1 patient each). Parenchymal hematoma 6% TNK vs 5% alteplase. No safety signal against TNK in this LVO-EVT population.',
+      '90-day mortality 10% TNK vs 18% alteplase; adjusted RR 0.5 (95% CI 0.3-1.0, P=0.049), adjusted OR 0.4 (95% CI 0.2-1.1, P=0.08). Authors did not claim a mortality benefit because the prespecified logistic-regression OR did not reach significance.',
+      'Single-bolus TNK administration permits initiation of inter-hospital transport before the 1-hour alteplase infusion would have finished. Among transferred patients, median time from IVT to arterial puncture was 65 min TNK vs 75 min alteplase (P=0.18, not significant); on-site patients 32 vs 37 min (P=0.44).',
+      'TNK dose 0.25 mg/kg is the LVO-EVT dose. Higher dose (0.4 mg/kg) showed no reperfusion advantage in EXTEND-IA TNK Part 2 (Campbell, JAMA 2020) and was associated with harm in higher-severity strokes in NOR-TEST 2 Part A (Kvistad, Lancet Neurol 2022). Use 0.25 mg/kg unless a specific protocol mandates otherwise.',
+      'Mid-trial protocol amendment: CT-perfusion mismatch inclusion criterion was removed in October 2016 after approximately 80 patients had been enrolled, when pooled data from other EVT trials suggested benefit in larger ischemic-core volumes. Late enrollees were selected by CTA alone.',
+      'Vessel-occlusion distribution: ICA 24%, M1 58-59%, M2 14-15%, basilar 3%. Median NIHSS 17 in both arms; median age 70-71 years.',
+      'Subsequent TNK lineage generalized the equivalence: NOR-TEST 2017 (broader, mostly mild AIS, mostly non-LVO), AcT 2022 (1577 patients, Canada, all-comers AIS, NI met), TRACE-2 2023 (1430 Chinese patients, NI met), ORIGINAL 2024 (Chinese NI). ATTEST-2 2023 (UK, ordinal-shift primary) did not show superiority.',
+      'Late-window TNK is a separate question (TRACE-III 2024 positive when EVT not available; TIMELESS 2024 negative when EVT was available). Do not generalize EXTEND-IA TNK findings to the 4.5-24h window.',
+      'AHA/ASA 2019 graded TNK as Class IIb Level B-R as an alternative to alteplase in EVT-eligible patients (EXTEND-IA TNK was the foundational citation). AHA/ASA 2026 §4.6.2 elevated TNK 0.25 mg/kg to Class I, Level A in parallel with alteplase 0.9 mg/kg within 4.5h.',
+      'No industry involvement in design, conduct, or analysis. Medtronic provided an unrestricted infrastructure grant. RAPID research software provided by iSchemaView with no other involvement.',
+    ],
+    bedsidePearl: 'For an EVT-eligible LVO patient within 4.5 hours of onset, TNK 0.25 mg/kg as a single IV bolus (max 25 mg) achieved substantial angiographic reperfusion in 22% before EVT vs 10% with alteplase 0.9 mg/kg (absolute difference 12 pp, P=0.002 for NI, P=0.03 for superiority). Ordinal mRS shift favored TNK at 90 days (common OR 1.7, P=0.04). Symptomatic ICH 1% in both arms. The single-bolus administration also accelerates inter-hospital transfer logistics. TNK 0.25 mg/kg is the preferred IVT agent before EVT in modern practice (AHA/ASA 2026 §4.6.2 Class I, Level A).',
+    bottomLineSummary: 'EXTEND-IA TNK was the first randomized trial to compare tenecteplase 0.25 mg/kg with alteplase 0.9 mg/kg as the IV thrombolytic agent before endovascular thrombectomy in patients with large-vessel occlusion within 4.5 hours. The primary endpoint was angiographic substantial reperfusion at initial angiographic assessment, a surrogate chosen because the trial was not powered for functional outcome against the EVT background. TNK achieved the primary in 22% vs 10% with alteplase (absolute difference 12 pp; P=0.002 for noninferiority, P=0.03 for superiority). Ordinal mRS shift at 90 days favored TNK (common OR 1.7, P=0.04); binary mRS 0-2 was directional but not significant. Symptomatic ICH 1% in both arms. The trial established TNK 0.25 mg/kg as the IVT agent of first choice in the LVO-EVT pathway, supports AHA/ASA 2026 §4.6.2 Class I Level A, and seeded the broader TNK lineage confirmed by AcT, TRACE-2, and ORIGINAL.',
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: '100 dots per arm. A filled dot is a patient who achieved substantial angiographic reperfusion (greater than 50% of the involved territory reperfused, or no retrievable thrombus) at the initial angiographic assessment, before the EVT procedure begins. TNK has 22 filled dots; alteplase has 10. The 12-dot gap is the absolute benefit on the angiographic surrogate.',
+      },
+      {
+        question: 'What should I look at first?',
+        answer: 'The 12 percentage-point gap on the primary endpoint. That translates to NNT 9 on the angiographic surrogate. Do not read this as NNT 9 for functional independence: the binary mRS 0-2 dichotomization did not reach statistical significance (64% vs 51%, P=0.06). The ordinal mRS shift did favor TNK (common OR 1.7, P=0.04), so functional benefit is directionally present but smaller and weaker than the angiographic effect.',
+      },
+      {
+        question: 'What does it mean for my patient?',
+        answer: 'For an EVT-eligible LVO patient within 4.5 hours, TNK 0.25 mg/kg as a single bolus is at least as good as alteplase 0.9 mg/kg, with a higher chance of reperfusion before the catheter reaches the clot and a directionally better mRS distribution at 90 days. Symptomatic ICH is identical (1%). The single-bolus administration also reduces transfer-window pressure. Use TNK 0.25 mg/kg as the IVT agent of first choice in this population.',
+      },
+      {
+        question: 'How was the cohort selected?',
+        answer: 'Adults with ischemic stroke within 4.5 hours, LVO on CTA (ICA, M1, M2, or basilar), eligible for IV thrombolysis, and with planned EVT (arterial puncture able to commence within 6 hours). The initial protocol required CT-perfusion mismatch but that criterion was removed October 2016 after about 80 patients had been enrolled. No age limit, no NIHSS limit, pre-stroke mRS up to 3 allowed.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In adults with EVT-eligible LVO (ICA, M1, M2, or basilar) within 4.5 hours of stroke onset, IV tenecteplase 0.25 mg/kg given before thrombectomy achieves substantial angiographic reperfusion more often than IV alteplase 0.9 mg/kg (22% vs 10%, absolute difference 12 pp; noninferiority and superiority both met). The ordinal mRS distribution at 90 days favored TNK (common OR 1.7, P=0.04). Symptomatic ICH was identical at 1% in both arms.',
+      doesNotProve: 'It does not prove a binary functional-independence benefit; mRS 0-2 at 90 days was 64% vs 51% (aOR 1.8, P=0.06) and mRS 0-1 was 51% vs 43% (aOR 1.4, P=0.23). It does not prove benefit beyond 4.5 hours (see TRACE-III 2024 and TIMELESS 2024 for the late window). It does not generalize directly to non-LVO patients (see NOR-TEST 2017, AcT 2022, TRACE-2 2023 for the broader population). It does not support the higher 0.4 mg/kg TNK dose, which was studied separately in EXTEND-IA TNK Part 2 (2020) and showed no advantage, and was associated with harm in higher-severity strokes in NOR-TEST 2 Part A (2022). It does not address EVT-ineligible patients within 4.5h directly.',
+      cautions: 'Primary outcome is an angiographic surrogate, not a clinical outcome. The 12 pp benefit applies to reperfusion before the catheter reaches the clot; downstream EVT obscures any additional functional difference. Open-label design; outcome assessment was blinded but treating clinicians knew assignment. Sample size of 202 limited power for the secondary functional endpoints. Mortality reduction 10% vs 18% was nominally significant on RR (aRR 0.5, P=0.049) but not on OR (aOR 0.4, P=0.08); authors did not claim a mortality benefit. Mid-trial removal of the CT-perfusion mismatch criterion broadened the late-enrollee population. Australia/NZ stroke pathways; high inter-hospital transfer rate may differ from other systems. The 0.25 mg/kg dose is specific to this trial and the LVO-EVT population; do not extrapolate to 0.4 mg/kg without separate evidence (Part 2 and NOR-TEST 2 Part A).',
+    },
+    inclusionCriteria: [
+      'Ischemic stroke within 4.5 hours of symptom onset',
+      'Large-vessel occlusion on CTA: internal carotid artery, first segment of MCA (M1), second segment of MCA (M2), or basilar artery',
+      'Eligible for IV thrombolysis per standard contraindications',
+      'Planned endovascular thrombectomy with arterial puncture able to commence within 6 hours of stroke onset',
+      'No upper age limit',
+      'No NIHSS restriction',
+      'CT-perfusion mismatch (Tmax >6s lesion volume; core <70 mL, mismatch ratio >1.2) required for the first ~80 patients; criterion removed by protocol amendment October 2016',
+    ],
+    exclusionCriteria: [
+      'Severe pre-existing disability (modified Rankin scale greater than 3 before stroke)',
+      'Standard IV thrombolysis contraindications (recent surgery, active bleeding, untreated severe hypertension, etc.)',
+    ],
+    safetyProfile: {
+      sICH: {
+        evt: 1.0,
+        control: 1.0,
+        label: 'Symptomatic ICH within 36h',
+        tooltip: 'Symptomatic ICH defined as parenchymal hematoma type 2 within 36 hours, combined with NIHSS increase of at least 4 points and clinical symptoms, centrally adjudicated by a blinded panel. 1 patient each arm (1% vs 1%). The TNK patient also received intravenous heparin during carotid endarterectomy. RR 1.0 (95% CI 0.1-15.9). Source: Campbell BCV et al., NEJM 2018, Table 2 p.1578.',
+      },
+      mortality: {
+        evt: 10.0,
+        control: 18.0,
+        label: '90-day mortality',
+        tooltip: '90-day mortality 10% TNK vs 18% alteplase. Adjusted RR 0.5 (95% CI 0.3-1.0, P=0.049). Adjusted OR 0.4 (95% CI 0.2-1.1, P=0.08). Nominally significant on RR but not on OR; authors did not claim a mortality benefit because the prespecified logistic-regression analysis did not reach significance. Source: Campbell BCV et al., NEJM 2018, Table 2.',
+      },
+      hemorrhagicStroke: {
+        evt: 6.0,
+        control: 5.0,
+        label: 'Parenchymal hematoma',
+        tooltip: 'Parenchymal hematoma defined as intraparenchymal blood clot with mass effect. 6 (6%) TNK vs 5 (5%) alteplase. RR 1.2 (95% CI 0.4-3.8). No significant difference. Source: Campbell BCV et al., NEJM 2018, Table 2.',
+      },
+    },
+    safetyData: 'Symptomatic intracerebral hemorrhage occurred in 1 patient (1%) in each arm, with no safety signal against TNK in the LVO-EVT population. The TNK sICH patient also received intravenous heparin during carotid endarterectomy. Parenchymal hematoma rates were similar (6% TNK vs 5% alteplase). Ninety-day mortality was 10% with TNK vs 18% with alteplase; the adjusted risk ratio reached nominal significance (aRR 0.5, 95% CI 0.3-1.0, P=0.049) but the adjusted odds ratio did not (aOR 0.4, 95% CI 0.2-1.1, P=0.08), and the authors stopped short of claiming a mortality benefit. The 0.25 mg/kg TNK dose used here is the LVO-EVT dose and is NOT interchangeable with the higher 0.4 mg/kg dose, which was studied separately in EXTEND-IA TNK Part 2 (2020 JAMA, no reperfusion advantage) and showed a harm signal in higher-severity strokes in NOR-TEST 2 Part A (2022).',
+    limitations: [
+      'Angiographic primary endpoint is a surrogate, not a functional outcome. The 12 pp reperfusion benefit applies to flow at initial angiographic assessment; subsequent EVT may obscure downstream clinical differences.',
+      'Open-label design. Outcome assessment (mRS by blinded telephone interview; angiographic primary by central adjudication) was blinded, but treating clinicians and patients knew assignment.',
+      'Sample size of 202 limited power for the secondary functional endpoints. mRS 0-2 binary aOR 1.8 (CI 1.0-3.4, P=0.06) was likely real but did not reach P<0.05.',
+      'Mid-trial protocol amendment: CT-perfusion mismatch inclusion criterion was removed October 2016 after approximately 80 patients had been enrolled. Late enrollees were selected by CTA alone; the cohort is mixed.',
+      'LVO-only population. Findings do not directly generalize to non-LVO acute ischemic stroke; generalization came subsequently from NOR-TEST 2017, AcT 2022, TRACE-2 2023, and ORIGINAL 2024.',
+      'TNK dose specific to 0.25 mg/kg. Higher dose (0.4 mg/kg) was studied separately in EXTEND-IA TNK Part 2 (2020) with no advantage, and in NOR-TEST 2 Part A (2022) with a harm signal in higher-severity strokes.',
+      'Australia/NZ only; 12 sites in Australia and 1 in NZ. Stroke-system pathways and inter-hospital transfer patterns reflect ANZ practice.',
+      'Mortality benefit borderline: nominally significant on RR (aRR 0.5, P=0.049) but not on OR (aOR 0.4, P=0.08). Authors did not claim a mortality benefit.',
+      'Industry-adjacent funding via unrestricted Medtronic grant (devices) and iSchemaView (RAPID software). Sponsors had no role in design, conduct, analysis, or manuscript preparation per authors.',
+    ],
+    legend: {
+      finding: 'TNK 0.25 mg/kg achieves more reperfusion before EVT than alteplase 0.9 mg/kg in LVO patients within 4.5h.',
+      bottomLineTag: 'Superior',
+      keyStat: '22% vs 10% reperfusion',
+    },
+    conclusion: 'EXTEND-IA TNK was the first randomized comparison of tenecteplase 0.25 mg/kg vs alteplase 0.9 mg/kg as the IV thrombolytic agent before endovascular thrombectomy in patients with large-vessel occlusion within 4.5 hours of stroke onset. The angiographic primary outcome of substantial reperfusion at initial angiographic assessment occurred in 22% of TNK patients vs 10% of alteplase patients (absolute difference 12 percentage points, 95% CI 2-21; P=0.002 for noninferiority and P=0.03 for superiority under sequential gatekeeping). The ordinal mRS distribution at 90 days favored TNK (common OR 1.7, 95% CI 1.0-2.8, P=0.04). Binary mRS 0-2 was directional but not significant (64% vs 51%, aOR 1.8, P=0.06). Symptomatic ICH occurred in 1% of patients in both arms. The trial established TNK 0.25 mg/kg as the IVT agent of first choice in the LVO-EVT pathway, seeded the broader TNK-vs-alteplase literature (NOR-TEST, AcT, TRACE-2, ATTEST-2, ORIGINAL), and supports the AHA/ASA 2026 §4.6.2 Class I Level A recommendation that lists TNK 0.25 mg/kg and alteplase 0.9 mg/kg in parallel within 4.5 hours of stroke onset.',
+  },
 };

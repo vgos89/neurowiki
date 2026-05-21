@@ -255,4 +255,22 @@ export const CITATION_REGISTRY: CitationRegistry = {
     last_reviewed: '2026-05-19',
     quoted_text: 'Endovascular thrombectomy is recommended for patients with basilar-artery occlusion presenting within 24 hours, with NIHSS ≥10 and PC-ASPECTS ≥6 (Class I, Level A).',
   },
+
+  // ─── 2018 trial: foundational TNK-vs-alteplase comparison in the LVO-EVT pathway ─
+  // Campbell BCV et al., NEJM 2018. Established TNK 0.25 mg/kg as the IVT agent
+  // of first choice for EVT-eligible LVO patients within 4.5h. Verbatim quote
+  // from NEJM PDF read by medical-scientist on 2026-05-20 (V supplied full text).
+  // 36-month review window per §13.7 (landmark trial — foundational evidence
+  // for the TNK lineage, now Class I Level A per AHA/ASA 2026 §4.6.2).
+  'campbell-extend-ia-tnk-2018': {
+    id: 'campbell-extend-ia-tnk-2018',
+    source: 'trial',
+    title: 'Tenecteplase versus Alteplase before Thrombectomy for Ischemic Stroke',
+    year: 2018,
+    url: 'https://www.nejm.org/doi/10.1056/NEJMoa1716405',
+    pmid: '29694815',
+    last_reviewed: '2026-05-20',
+    review_window_months: 36,
+    quoted_text: 'Tenecteplase before thrombectomy was associated with a higher incidence of reperfusion and better functional outcome than alteplase among patients with ischemic stroke treated within 4.5 hours after symptom onset.',
+  },
 };

@@ -43,12 +43,13 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     text: 'When can I give tPA?',
     icon: 'clock',
     meta: '0–3 h classic window through imaging-selected extended window',
-    trialCount: 14,
+    trialCount: 15,
     trialIds: [
       'ninds-trial',              // NINDS rt-PA 1995 — 0-3 h alteplase, landmark RCT
       'ecass3-trial',             // ECASS III 2008 — 3-4.5 h alteplase
       'wake-up-trial',            // WAKE-UP 2018 — unknown onset, MRI-guided
       'prisms-trial',             // PRISMS 2018 — minor non-disabling stroke; tPA did not outperform aspirin (severity threshold)
+      'extend-ia-tnk-trial',      // EXTEND-IA TNK 2018 — TNK 0.25 vs alteplase in LVO-EVT (foundational TNK-first trial within 4.5h)
       'extend-trial',             // EXTEND 2019 — perfusion-imaging 4.5-9 h
       'act-trial',                // AcT 2022 — tenecteplase vs alteplase (Canada)
       'nor-test-2-part-a-trial',  // NOR-TEST 2 Part A 2022 — high-dose TNK 0.4 mg/kg harm (dose-escalation boundary)
@@ -206,9 +207,10 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     text: 'Tenecteplase or alteplase?',
     icon: 'pill',
     meta: 'head-to-head IVT comparisons across geographies, dose, and time-window extensions',
-    trialCount: 11,
+    trialCount: 12,
     trialIds: [
       'nor-test-trial',           // NOR-TEST 2017 — 0.4 mg/kg TNK vs alteplase (mostly mild, positive)
+      'extend-ia-tnk-trial',      // EXTEND-IA TNK 2018 — TNK 0.25 vs alteplase in LVO-EVT pathway (angiographic primary; NI and superiority both met)
       'act-trial',                // AcT 2022 — TNK 0.25 vs alteplase non-inferiority (Canada)
       'nor-test-2-part-a-trial',  // NOR-TEST 2 Part A 2022 — high-dose TNK 0.4 mg/kg HARM (safety boundary)
       'taste-trial',              // TASTE 2022 — TNK vs alteplase, perfusion-imaging selected
