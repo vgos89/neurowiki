@@ -312,4 +312,47 @@ export const CITATION_REGISTRY: CitationRegistry = {
     review_window_months: 36,
     quoted_text: 'Among patients with high-grade stenosis without recent symptoms, the addition of stenting led to a lower risk of a composite of perioperative stroke or death or ipsilateral stroke within 4 years than intensive medical management alone. Carotid endarterectomy did not lead to a significant benefit.',
   },
+
+  // ─── 2017 PFO closure cluster — three NEJM trials published together ─────
+  //     CLOSE (Mas), RESPECT long-term (Saver), REDUCE (Søndergaard) — all in
+  //     NEJM 2017;377(11), September 14, 2017 issue. Together they resolved a
+  //     decade of pre-2017 PFO-closure ambiguity (CLOSURE-I 2012 negative,
+  //     original RESPECT 2013 borderline, PC trial 2013 negative) and now
+  //     support AHA/ASA 2021 Class IIa, Level B-R. All three verbatim quotes
+  //     are from full-text NEJM PDFs read by medical-scientist on 2026-05-20
+  //     (V supplied). 36-month review window per §13.7 (landmark trials).
+  //     See docs/evidence-packets/{close,respect-longterm,reduce}-2017-2026-05-20.md
+  'mas-close-2017': {
+    id: 'mas-close-2017',
+    source: 'trial',
+    title: 'Patent Foramen Ovale Closure or Anticoagulation vs. Antiplatelets after Stroke',
+    year: 2017,
+    url: 'https://www.nejm.org/doi/10.1056/NEJMoa1705915',
+    pmid: '28902593',
+    last_reviewed: '2026-05-20',
+    review_window_months: 36,
+    quoted_text: 'Among patients who had had a recent cryptogenic stroke attributed to PFO with an associated atrial septal aneurysm or large interatrial shunt, the rate of stroke recurrence was lower among those assigned to PFO closure combined with antiplatelet therapy than among those assigned to antiplatelet therapy alone. PFO closure was associated with an increased risk of atrial fibrillation.',
+  },
+  'saver-respect-2017': {
+    id: 'saver-respect-2017',
+    source: 'trial',
+    title: 'Long-Term Outcomes of Patent Foramen Ovale Closure or Medical Therapy after Stroke',
+    year: 2017,
+    url: 'https://www.nejm.org/doi/10.1056/NEJMoa1610057',
+    pmid: '28902590',
+    last_reviewed: '2026-05-20',
+    review_window_months: 36,
+    quoted_text: 'Among adults who had had a cryptogenic ischemic stroke, closure of a PFO was associated with a lower rate of recurrent ischemic strokes than medical therapy alone during extended follow-up.',
+  },
+  'sondergaard-reduce-2017': {
+    id: 'sondergaard-reduce-2017',
+    source: 'trial',
+    title: 'Patent Foramen Ovale Closure or Antiplatelet Therapy for Cryptogenic Stroke',
+    year: 2017,
+    url: 'https://www.nejm.org/doi/10.1056/NEJMoa1707404',
+    pmid: '28902580',
+    last_reviewed: '2026-05-20',
+    review_window_months: 36,
+    quoted_text: 'Among patients with a PFO who had had a cryptogenic stroke, the risk of subsequent ischemic stroke was lower among those assigned to PFO closure combined with antiplatelet therapy than among those assigned to antiplatelet therapy alone; however, PFO closure was associated with higher rates of device complications and atrial fibrillation.',
+  },
 };

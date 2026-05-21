@@ -372,6 +372,27 @@ const manualTrials: Omit<TrialItem, 'year'>[] = [
     isPlaceholder: false,
     description: 'Asymptomatic ≥70% carotid stenosis. Stenting beat modern intensive medical management (2.8% vs 6.0%, NNT 31). Endarterectomy did not (3.7% vs 5.3%, P=0.24).',
   }),
+
+  // ─── 2017 PFO closure cluster (CLOSE, RESPECT long-term, REDUCE) ─────────
+  //     All three NEJM 2017;377(11), September 14 issue. listCategory in
+  //     trialData.ts is 'antiplatelets' (closest valid match — comparator
+  //     arm is antiplatelet medical therapy; neither 'thrombolysis',
+  //     'thrombectomy', 'carotid', nor 'acute' fits cleanly). Mapped here to
+  //     'secondary-prevention' (TrialCategoryKey) since PFO closure is a
+  //     secondary-prevention procedure. See evidence packets in
+  //     docs/evidence-packets/{close,respect-longterm,reduce}-2017-2026-05-20.md
+  buildTrial('close-trial', 'CLOSE', 'secondary-prevention', '10.1056/NEJMoa1705915', {
+    isPlaceholder: false,
+    description: 'Cryptogenic stroke <60y with PFO + atrial septal aneurysm OR large shunt. PFO closure + antiplatelet abolished recurrent stroke vs antiplatelet alone (0% vs 6.0%, HR 0.03, NNT 20 over 5y). AF excess 4.6% vs 0.9%.',
+  }),
+  buildTrial('respect-trial', 'RESPECT (long-term)', 'secondary-prevention', '10.1056/NEJMoa1610057', {
+    isPlaceholder: false,
+    description: 'Cryptogenic stroke 18–60y with PFO. Extended 5.9-year follow-up of Amplatzer PFO Occluder vs medical therapy: recurrent ischemic stroke 3.6% vs 5.8% (HR 0.55, P=0.046, NNT 42). VTE higher with closure.',
+  }),
+  buildTrial('reduce-trial', 'REDUCE', 'secondary-prevention', '10.1056/NEJMoa1707404', {
+    isPlaceholder: false,
+    description: 'Cryptogenic stroke 18–59y with PFO. Gore HELEX/Cardioform closure + antiplatelet vs antiplatelet alone: clinical stroke 1.4% vs 5.4% (HR 0.23, P=0.002, NNT ~28 over 2y). AF excess 6.6% vs 0.4%.',
+  }),
 ];
 
 const legacyTrialCategories: Record<string, TrialCategoryKey> = {
