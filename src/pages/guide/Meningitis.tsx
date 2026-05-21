@@ -10,6 +10,8 @@ import {
   Warning,
 } from '../../components/article';
 import { useRecents } from '../../hooks/useRecents';
+import DiscreteFAQ from '../../components/seo/DiscreteFAQ';
+import { getFAQsForPath } from '../../seo/schema';
 
 export default function Meningitis() {
   const { recordView } = useRecents();
@@ -25,6 +27,7 @@ export default function Meningitis() {
   }, [recordView]);
 
   return (
+    <>
     <ArticleLayout
       category="Neurocritical Care"
       categoryPath="/guide"
@@ -95,5 +98,10 @@ export default function Meningitis() {
         </>
       )}
     </ArticleLayout>
+    {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute. */}
+    <div className="max-w-3xl mx-auto px-4 sm:px-6">
+      <DiscreteFAQ items={getFAQsForPath('/guide/meningitis')} />
+    </div>
+    </>
   );
 }
