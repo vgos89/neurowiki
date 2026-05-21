@@ -393,6 +393,21 @@ const manualTrials: Omit<TrialItem, 'year'>[] = [
     isPlaceholder: false,
     description: 'Cryptogenic stroke 18–59y with PFO. Gore HELEX/Cardioform closure + antiplatelet vs antiplatelet alone: clinical stroke 1.4% vs 5.4% (HR 0.23, P=0.002, NNT ~28 over 2y). AF excess 6.6% vs 0.4%.',
   }),
+
+  // ─── 1997 foundational aspirin-in-AIS pair (IST + CAST) ────────────────────
+  //     Lancet 1997;349(9065,9066). Together ~40,000 patients within 48h of
+  //     acute ischaemic stroke. listCategory in trialData.ts is 'antiplatelets'
+  //     (not a TrialCategoryKey); mapped to 'secondary-prevention' here
+  //     following the PRoFESS / 2017 PFO cluster precedent. See evidence
+  //     packets at docs/evidence-packets/{ist,cast}-1997-2026-05-20.md.
+  buildTrial('ist-trial', 'IST', 'secondary-prevention', '10.1016/S0140-6736(97)04011-7', {
+    isPlaceholder: false,
+    description: 'International factorial 2x2 trial (N=19,435; UK CTSU + 36 countries) of aspirin 300 mg/d and/or subcutaneous heparin within 48h of acute ischaemic stroke. Aspirin reduced 14-day death or non-fatal recurrent stroke (11.3% vs 12.4%, 2p=0.02). Heparin (low or medium dose) showed no net 6-month benefit and increased haemorrhagic stroke.',
+  }),
+  buildTrial('cast-trial', 'CAST', 'secondary-prevention', '10.1016/S0140-6736(97)04010-5', {
+    isPlaceholder: false,
+    description: 'Chinese double-blind placebo-controlled trial (N=21,106 across 413 hospitals) of aspirin 160 mg/d vs placebo within 48h of acute ischaemic stroke. In-hospital mortality 3.3% vs 3.9% (2p=0.04); combined 4-week death or non-fatal stroke 5.3% vs 5.9% (2p=0.03). Paired with IST in Chen et al. 2000 pooled analysis.',
+  }),
 ];
 
 const legacyTrialCategories: Record<string, TrialCategoryKey> = {

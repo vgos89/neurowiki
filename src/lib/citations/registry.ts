@@ -355,4 +355,43 @@ export const CITATION_REGISTRY: CitationRegistry = {
     review_window_months: 36,
     quoted_text: 'Among patients with a PFO who had had a cryptogenic stroke, the risk of subsequent ischemic stroke was lower among those assigned to PFO closure combined with antiplatelet therapy than among those assigned to antiplatelet therapy alone; however, PFO closure was associated with higher rates of device complications and atrial fibrillation.',
   },
+
+  // ─── IST (International Stroke Trial, 1997) — foundational aspirin RCT ───
+  // Lancet 1997;349(9065):1569-1581. UK CTSU-led international factorial 2x2
+  // trial of subcutaneous heparin (5000 IU or 12500 IU bd) and/or aspirin
+  // 300 mg/d vs avoid, within 48h of suspected acute ischaemic stroke.
+  // N=19,435. Pre-thrombolytic era foundational evidence. Paired with CAST
+  // (1997) in Chen et al. 2000 pooled analysis (PMID 10835439) — the
+  // canonical reference modern AHA/ASA guidelines cite for the Class I,
+  // Level A early-aspirin recommendation. 36-month review window per §13.7
+  // (landmark trial). See docs/evidence-packets/ist-1997-2026-05-20.md.
+  'sandercock-ist-1997': {
+    id: 'sandercock-ist-1997',
+    source: 'trial',
+    title: 'The International Stroke Trial (IST): a randomised trial of aspirin, subcutaneous heparin, both, or neither among 19 435 patients with acute ischaemic stroke',
+    year: 1997,
+    url: 'https://doi.org/10.1016/S0140-6736(97)04011-7',
+    pmid: '9174558',
+    last_reviewed: '2026-05-20',
+    review_window_months: 36,
+    quoted_text: 'Aspirin-allocated patients had significantly fewer recurrent ischaemic strokes within 14 days (2.8% vs 3.9%) with no significant excess of haemorrhagic strokes (0.9% vs 0.8%), so the reduction in death or non-fatal recurrent stroke with aspirin (11.3% vs 12.4%) was significant. Neither heparin regimen offered any clinical advantage at 6 months. Taking the IST together with the comparably large Chinese Acute Stroke Trial, aspirin produces a small but real reduction of about 10 deaths or recurrent strokes per 1000 during the first few weeks.',
+  },
+
+  // ─── CAST (Chinese Acute Stroke Trial, 1997) — foundational aspirin RCT ──
+  // Lancet 1997;349(9066):1641-1649. Randomised double-blind placebo-
+  // controlled trial of aspirin 160 mg/day vs placebo within 48h of acute
+  // ischaemic stroke. N=21,106 across 413 Chinese hospitals. Paired with IST
+  // in Chen et al. 2000 pooled analysis. 36-month review window per §13.7
+  // (landmark trial). See docs/evidence-packets/cast-1997-2026-05-20.md.
+  'cast-1997': {
+    id: 'cast-1997',
+    source: 'trial',
+    title: 'CAST: randomised placebo-controlled trial of early aspirin use in 20 000 patients with acute ischaemic stroke',
+    year: 1997,
+    url: 'https://doi.org/10.1016/S0140-6736(97)04010-5',
+    pmid: '9186381',
+    last_reviewed: '2026-05-20',
+    review_window_months: 36,
+    quoted_text: 'There was a significant 14% (SD 7) proportional reduction in mortality during the scheduled treatment period (343 [3.3%] deaths among aspirin-allocated patients vs 398 [3.9%] deaths among placebo-allocated patients; 2p=0.04). There were significantly fewer recurrent ischaemic strokes in the aspirin-allocated than in the placebo-allocated group (167 [1.6%] vs 215 [2.1%]; 2p=0.01) but slightly more haemorrhagic strokes (115 [1.1%] vs 93 [0.9%]; 2p>0.1). For the combined in-hospital endpoint of death or non-fatal stroke at 4 weeks, there was a 12% (6) proportional risk reduction with aspirin (545 [5.3%] vs 614 [5.9%]; 2p=0.03), an absolute difference of 6.8 (3.2) fewer cases per 1000.',
+  },
 };
