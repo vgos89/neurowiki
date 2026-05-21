@@ -392,7 +392,7 @@ const TrialPageNew: React.FC = () => {
   if (isPlaceholderTrial && catalogTrial) {
     return (
       <div className="min-h-dvh bg-slate-50">
-        <div className="bg-white border-b border-slate-100 shadow-sm">
+        <div className="bg-white border-b border-slate-100">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <button
               type="button"
@@ -451,7 +451,7 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
 
         {/* Section 1: Sticky header — abbreviated name + category badge */}
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button
               type="button"
@@ -506,9 +506,9 @@ const TrialPageNew: React.FC = () => {
 
           {/* Section 3: Population snapshot — inclusion + exclusion criteria */}
           {(trialMetadata.inclusionCriteria?.length || trialMetadata.exclusionCriteria?.length) && (
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
                   Population
                 </p>
               </div>
@@ -544,9 +544,9 @@ const TrialPageNew: React.FC = () => {
           )}
 
           {/* Section 4: Primary outcome — Archetype A DeltaBandChart */}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
                 Primary Outcome
               </p>
             </div>
@@ -567,7 +567,7 @@ const TrialPageNew: React.FC = () => {
               {/* NNT row — reads calculations.nnt, displayed as integer with ~ prefix */}
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">
                     ~{Math.round(trialMetadata.calculations.nnt as number)}
                   </span>
@@ -597,9 +597,9 @@ const TrialPageNew: React.FC = () => {
 
           {/* Section 7: Safety profile */}
           {trialMetadata.safetyProfile && (
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
                   Safety
                 </p>
               </div>
@@ -653,9 +653,9 @@ const TrialPageNew: React.FC = () => {
           )}
 
           {/* Section 8: Trial design */}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
                 Trial Design
               </p>
             </div>
@@ -731,12 +731,12 @@ const TrialPageNew: React.FC = () => {
             <div
               style={{
                 background: '#EEF2FF',
-                borderLeft: '3px solid #1746A2',
+                borderLeft: '2px solid #1746A2',
                 borderRadius: '0 10px 10px 0',
                 padding: '16px 18px',
               }}
             >
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">
                 Bedside Pearl
               </p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
@@ -745,7 +745,7 @@ const TrialPageNew: React.FC = () => {
 
           {/* Section 10: See-also links */}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link
                 to="/guide/stroke-code"
@@ -792,9 +792,9 @@ const TrialPageNew: React.FC = () => {
       .filter((m): m is NonNullable<typeof m> => m != null);
     if (items.length === 0) return null;
     return (
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
         <div className="px-4 py-3 border-b border-slate-100">
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Safety</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Safety</p>
         </div>
         <div className="divide-y divide-slate-100">
           {items.map((metric, idx) => {
@@ -825,9 +825,9 @@ const TrialPageNew: React.FC = () => {
   const renderPopulationSection = (tm: TrialMetadata) => {
     if (!tm.inclusionCriteria?.length && !tm.exclusionCriteria?.length) return null;
     return (
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
         <div className="px-4 py-3 border-b border-slate-100">
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Population</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Population</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
           {tm.inclusionCriteria && (
@@ -863,9 +863,9 @@ const TrialPageNew: React.FC = () => {
 
   // ── Shared trial design section (Section 8) ───────────────────────────────
   const renderTrialDesign = (tm: TrialMetadata, enrollmentDetail?: string) => (
-    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+    <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
       <div className="px-4 py-3 border-b border-slate-100">
-        <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Trial Design</p>
+        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Trial Design</p>
       </div>
       <div className="p-4 space-y-3">
         <div>
@@ -925,7 +925,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -947,9 +947,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -966,7 +966,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">to gain one additional excellent recovery (mRS 0-1)</span>
                 </div>
@@ -978,13 +978,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '503 of 800 planned patients (251 alteplase / 252 placebo). Stopped early when funding lapsed. Enrolled Sep 2012 to Jun 2017.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
@@ -1008,7 +1008,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1030,9 +1030,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -1049,7 +1049,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">to achieve mRS 0–1 at 90 days</span>
                 </div>
@@ -1061,13 +1061,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '821 patients (418 alteplase / 403 placebo, ITT) at 130 sites across 19 European countries. Enrolled July 2003 – November 2007. Published NEJM 2008.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/pathways/late-window-ivt" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">Late Window IVT Pathway</Link>
@@ -1091,7 +1091,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1113,9 +1113,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -1132,7 +1132,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">to achieve mRS 0–1 at 90 days</span>
                 </div>
@@ -1144,13 +1144,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '624 patients across 8 US centers, 2 parts (291 + 333). Enrolled January 1991 – October 1994. Published NEJM 1995. Foundational FDA approval data for IV alteplase in acute ischemic stroke.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
@@ -1174,7 +1174,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1196,9 +1196,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               {/* Complement: stroke-free at 90d (100 - recurrence) */}
@@ -1216,7 +1216,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">to prevent one recurrent stroke at 90 days</span>
                 </div>
@@ -1228,13 +1228,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '6,100 patients at 222 hospitals in China; 2×2 factorial. Enrolled 2019–2023. Published NEJM 2023.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/chance-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">CHANCE</Link>
               <Link to="/trials/point-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">POINT</Link>
@@ -1258,7 +1258,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1280,9 +1280,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               {/* Complement: stroke-free at 90d */}
@@ -1300,7 +1300,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">to prevent one recurrent stroke at 90 days</span>
                 </div>
@@ -1312,13 +1312,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '6,412 CYP2C19 LOF carriers at 202 centers in China. Rapid point-of-care genotyping required. Enrolled 2019–2021. Published NEJM 2021.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/chance-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">CHANCE</Link>
               <Link to="/trials/thales-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">THALES</Link>
@@ -1342,7 +1342,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1364,9 +1364,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -1383,7 +1383,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">to achieve mRS 0–3 at 90 days</span>
                 </div>
@@ -1395,13 +1395,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '340 patients (226 EVT / 114 control, 2:1 ITT) at 36 centers in China. Enrolled Feb 2021 – Jan 2022. Published NEJM 2022.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/baoche-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">BAOCHE (6–24h)</Link>
               <Link to="/pathways/evt" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">EVT Pathway</Link>
@@ -1426,7 +1426,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1448,9 +1448,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
@@ -1472,7 +1472,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">to achieve mRS 0–3 at 90 days (display with amendment caveat)</span>
                 </div>
@@ -1484,13 +1484,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '217 patients (110 EVT / 107 control, 1:1 ITT) in China. Enrolled Aug 2016 – Jun 2021. Stopped early Apr 2022 at planned interim for efficacy. Published NEJM 2022.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/attention-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">ATTENTION (0–12h)</Link>
               <Link to="/pathways/evt" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">EVT Pathway</Link>
@@ -1515,7 +1515,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1537,9 +1537,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-red-50 border border-red-200 px-3 py-2">
@@ -1572,7 +1572,7 @@ const TrialPageNew: React.FC = () => {
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/weave-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">WEAVE (on-label registry)</Link>
               <Link to="/calculators/has-bled-score" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">HAS-BLED</Link>
@@ -1595,7 +1595,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1617,9 +1617,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Non-inferiority</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Non-inferiority</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
@@ -1646,13 +1646,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '1,465 patients (732 TNK / 733 alteplase) at 55 stroke centers in China. Enrolled July 2021 – July 2023. Published JAMA 2024;332(17):1437–1445.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/act-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">AcT (Canada)</Link>
               <Link to="/guide/iv-tpa" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">IV tPA guide</Link>
@@ -1676,7 +1676,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1698,9 +1698,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Ordinal mRS Shift</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Ordinal mRS Shift</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
@@ -1722,7 +1722,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">from mRS 0–2 secondary (ordinal-shift primary does not yield valid NNT)</span>
                 </div>
@@ -1734,13 +1734,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '182 patients (92 EVT / 90 medical) at 38 US centers. Enrolled May 2016 – Dec 2017. Stopped early at pre-specified interim. Published NEJM 2018.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/dawn-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">DAWN</Link>
               <Link to="/pathways/evt" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">EVT Pathway</Link>
@@ -1764,7 +1764,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1786,9 +1786,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Bayesian Superiority</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Bayesian Superiority</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
@@ -1810,7 +1810,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">from binary coprimary (Bayesian uw-mRS primary; NNT displayed with annotation)</span>
                 </div>
@@ -1822,13 +1822,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '206 patients at 26 centers (US/Canada/Europe/Australia). Enrolled Sep 2014 – Feb 2017. Stopped early at 31 months for predictive probability of success >=95%. Trevo device. Published NEJM 2018.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/defuse-3-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">DEFUSE-3</Link>
               <Link to="/pathways/evt" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">EVT Pathway</Link>
@@ -1852,7 +1852,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1874,9 +1874,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Ordinal mRS Shift</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Ordinal mRS Shift</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
@@ -1898,7 +1898,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">from mRS 0–2 secondary (ordinal-shift primary does not yield valid NNT)</span>
                 </div>
@@ -1910,13 +1910,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '352 patients (178 EVT / 174 medical) internationally; age ≤85. Stopped early at 2nd interim for efficacy. Published NEJM 2023;388(14):1259–1271.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/angel-aspect-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">ANGEL-ASPECT</Link>
               <Link to="/pathways/evt" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">EVT Pathway</Link>
@@ -1940,7 +1940,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -1962,9 +1962,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Ordinal mRS Shift</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Ordinal mRS Shift</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
@@ -1986,7 +1986,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">from mRS 0–2 secondary (ordinal-shift primary does not yield valid NNT)</span>
                 </div>
@@ -1998,13 +1998,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '456 patients in China; age ≤80; NIHSS 6–30. Stopped early at 2nd interim. Published NEJM 2023;388(14):1272–1283.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/select2-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">SELECT2</Link>
               <Link to="/pathways/evt" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">EVT Pathway</Link>
@@ -2028,7 +2028,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2050,9 +2050,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Bayesian Superiority</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Bayesian Superiority</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-blue-50 border border-blue-200 px-3 py-2">
@@ -2073,7 +2073,7 @@ const TrialPageNew: React.FC = () => {
                 winnerArm="treatment"
               />
               <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Approx NNT</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Approx NNT</span>
                 <span className="text-sm font-semibold text-slate-700">~12</span>
                 <span className="text-xs text-slate-500">approximate, from primary safety endpoint (30-day mortality); Bayesian primaries do not yield valid NNT</span>
               </div>
@@ -2084,13 +2084,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '300 patients at 37 US hospitals (59 trained neurosurgeons; BrainPath + Myriad, NICO Corporation). Bayesian adaptive RAR design. Enrolled Dec 2016 – Aug 2022. Published NEJM 2024;390(14):1277–1289.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/mistie-iii-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">MISTIE III</Link>
               <Link to="/calculators/ich-score" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ICH Score</Link>
@@ -2113,7 +2113,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2145,9 +2145,9 @@ const TrialPageNew: React.FC = () => {
             </aside>
           )}
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Ordinal mRS Shift</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Ordinal mRS Shift</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
@@ -2177,13 +2177,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '1,543 patients in Berlin (3 MSU base stations, 7am–11pm operating hours). Enrolled Feb 2017 – Oct 2019. Published JAMA 2021;325(5):454–466.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/best-msu-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">BEST-MSU (US)</Link>
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">Stroke Code pathway</Link>
@@ -2207,7 +2207,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2229,9 +2229,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -2253,13 +2253,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '530 patients at 48 centers across 8 countries. Enrolled 2019 to 2024. Published NEJM 2024.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
@@ -2284,7 +2284,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2306,9 +2306,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               {/* ELAN is an estimation trial. No superiority test; complementary event-free rates shown. */}
@@ -2331,13 +2331,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '2,013 patients across 103 sites in 15 countries. Enrolled Nov 2017 to Sep 2022.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
             </div>
@@ -2360,7 +2360,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2382,9 +2382,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               {/* Complement rates: 100 - stroke recurrence. More filled = stroke-free = better. */}
@@ -2402,7 +2402,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">to prevent one recurrent stroke at 90 days</span>
                 </div>
@@ -2414,13 +2414,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '5,170 patients at 114 centers in China. Enrolled 2009 to 2012.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
@@ -2444,7 +2444,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2466,9 +2466,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               {/* Complement rates: 100 - major ischemic event rate. More filled = event-free = better. */}
@@ -2486,7 +2486,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">to prevent one major ischemic event at 90 days</span>
                 </div>
@@ -2498,13 +2498,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '4,881 patients at 269 sites in 10 countries. Enrolled 2010 to 2017. Stopped early for efficacy at the prespecified 90-day interim analysis.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
@@ -2528,7 +2528,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2550,9 +2550,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               {/* Complement rates: 100 - event rate. More filled = event-free = better. */}
@@ -2575,13 +2575,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '13,199 patients at 674 centers in 33 countries. Enrolled 2014 to 2015. Published NEJM 2016.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
@@ -2605,7 +2605,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2627,9 +2627,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               {/* Complement of annual recurrent stroke rate. More filled = stroke-free = better. */}
@@ -2652,13 +2652,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '3,020 of 3,600 planned patients enrolled. Stopped early by DSMB for harm (increased mortality in DAPT arm). Enrolled 2003 to 2011.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
             </div>
@@ -2681,7 +2681,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2703,9 +2703,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               {/* Complement of 5-year recurrent stroke rate. More filled = stroke-free = better. */}
@@ -2723,7 +2723,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">to prevent one stroke recurrence over 5 years</span>
                 </div>
@@ -2735,13 +2735,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '4,731 patients across 205 centers in 27 countries. Enrolled 2001 to 2005. Median follow-up 4.9 years.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
             </div>
@@ -2764,7 +2764,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2786,9 +2786,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               {/* Complement: 100 - event rate. More filled = event-free = better. */}
@@ -2806,7 +2806,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">to prevent one stroke or death at 30 days</span>
                 </div>
@@ -2818,13 +2818,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '11,016 patients at 414 sites in 28 countries. Enrolled 2018 to 2019. Published NEJM 2020.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
@@ -2848,7 +2848,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2871,9 +2871,9 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(trialMetadata)}
           {/* Section 4: Secondary outcome chart — EAGLE primary was negative; chart shows secondary dichotomized endpoint */}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Secondary outcome: ≥15-letter improvement (dichotomized)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Secondary outcome: ≥15-letter improvement (dichotomized)</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
@@ -2900,13 +2900,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '84 of 200 planned patients (42 LIF / 42 CST). Stopped early by DSMB for futility and safety. Enrolled 2002 to 2007.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
             </div>
@@ -2929,7 +2929,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -2951,9 +2951,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
@@ -2975,7 +2975,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">to gain one additional excellent recovery (mRS 0-1)</span>
                 </div>
@@ -2987,13 +2987,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '1,515 patients at 5 MSU sites in the United States. Alternating-week controlled trial. August 2014 to August 2020. Published NEJM 2021.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
             </div>
@@ -3016,7 +3016,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3038,9 +3038,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -3062,13 +3062,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '1,577 patients at 22 stroke centres across Canada. Pragmatic open-label registry-linked RCT. December 2019 to January 2022. Published Lancet 2022.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
@@ -3092,7 +3092,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3114,9 +3114,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -3138,13 +3138,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '760 patients at 28 centers in China. Open-label blinded-endpoint NI RCT. October 2018 to April 2022. Published JAMA 2023.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
             </div>
@@ -3167,7 +3167,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3189,9 +3189,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -3213,13 +3213,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '1,100 patients at 13 Norwegian hospitals. Phase 3, open-label, blinded-endpoint superiority RCT. September 2012 to September 2016. Published Lancet Neurol 2017.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
@@ -3243,7 +3243,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3265,9 +3265,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-red-50 border border-red-200 px-3 py-2">
@@ -3300,7 +3300,7 @@ const TrialPageNew: React.FC = () => {
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
@@ -3324,7 +3324,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3346,9 +3346,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -3370,13 +3370,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '313 of 948 planned patients. Stopped early (futility). May 2014 to December 2016. Published JAMA 2018.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
             </div>
@@ -3399,7 +3399,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3421,9 +3421,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -3445,13 +3445,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '663 patients at 35 centres in China. Open-label, alteplase-controlled phase 3 RCT. May 2018 to May 2020. Published JAMA Netw Open 2023.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
             </div>
@@ -3474,7 +3474,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3496,9 +3496,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -3520,13 +3520,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '1,552 patients at multiple Chinese centres. Phase 3 open-label NI RCT. January 2023 to March 2024. Published Lancet Neurol 2024.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
             </div>
@@ -3549,7 +3549,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3571,9 +3571,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -3595,13 +3595,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '1,412 patients at multiple centres in China. Randomized superiority trial. Published NEJM 2024.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
             </div>
@@ -3624,7 +3624,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3646,9 +3646,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -3670,13 +3670,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '680 patients at multiple centers in 8 countries. International multicenter NI RCT. March 2014 to October 2023. Published Lancet Neurol 2024.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
@@ -3700,7 +3700,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3722,9 +3722,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -3746,13 +3746,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '131 of 300 planned patients. Stopped pragmatically after WAKE-UP results. Published Stroke 2020.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/wake-up-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">WAKE-UP Trial</Link>
@@ -3776,7 +3776,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3798,9 +3798,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -3822,13 +3822,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '1,430 patients at 53 centres in China. Phase 3 open-label blinded-endpoint NI RCT. June 2021 to May 2022. Published Lancet 2023.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
@@ -3852,7 +3852,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3874,9 +3874,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(trialMetadata)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
             </div>
             <div className="p-4">
               <DeltaBandChart
@@ -3893,7 +3893,7 @@ const TrialPageNew: React.FC = () => {
               />
               {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
                 <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
                   <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
                   <span className="text-xs text-slate-500">to gain one additional excellent recovery (mRS 0-1)</span>
                 </div>
@@ -3905,13 +3905,13 @@ const TrialPageNew: React.FC = () => {
           {renderSafetySection(trialMetadata)}
           {renderTrialDesign(trialMetadata, '516 patients at multiple centres in China. Multicenter RCT with perfusion-imaging selection. 4.5–24 hour enrollment window. Published NEJM 2024.')}
           {trialMetadata.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
             </div>
@@ -3937,7 +3937,7 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
 
         {/* Section 1: Sticky header */}
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -3969,9 +3969,9 @@ const TrialPageNew: React.FC = () => {
 
           {/* Section 4: Primary outcome — Archetype B GrottaBarChart */}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">Undifferentiated stroke (all patients)</p>
               </div>
               <div className="p-4">
@@ -3994,15 +3994,15 @@ const TrialPageNew: React.FC = () => {
 
           {/* Section 7: Bedside pearl */}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
 
           {/* Section 8: See also */}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
             </div>
@@ -4032,7 +4032,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4057,9 +4057,9 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">All randomized patients (medium/distal vessel occlusion)</p>
               </div>
               <div className="p-4">
@@ -4075,13 +4075,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Randomized December 2021 to July 2024 at 55 sites across 11 countries (predominantly Europe). International, assessor-blinded RCT. Any EVT technique allowed; treated within 24 hours of last known well.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/escape-mevo-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">ESCAPE-MeVO</Link>
             </div>
@@ -4110,7 +4110,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4135,9 +4135,9 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">Total population (presumed stroke within 3 hours)</p>
               </div>
               <div className="p-4">
@@ -4151,13 +4151,13 @@ const TrialPageNew: React.FC = () => {
           )}
           {renderTrialDesign(tm, 'Randomized April 2018 to February 2021 in the Netherlands. Phase 3, ambulance-based, open-label, blinded-endpoint trial. Stopped after 380 of planned 1200 randomizations due to a safety signal in ICH patients.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/right-2-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">RIGHT-2</Link>
             </div>
@@ -4185,7 +4185,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4210,9 +4210,9 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">Ischemic stroke or TIA population (primary endpoint, n=949)</p>
               </div>
               <div className="p-4">
@@ -4226,13 +4226,13 @@ const TrialPageNew: React.FC = () => {
           )}
           {renderTrialDesign(tm, 'Population-based cluster-randomized trial in Catalonia, Spain. Enrollment March 2017 to June 2020. Stopped early for futility after interim analysis. Nonurban network with real-world ambulance routing.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/triage-stroke-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">TRIAGE-STROKE</Link>
             </div>
@@ -4260,7 +4260,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4285,9 +4285,9 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">Acute ischemic stroke population (primary endpoint, n=104)</p>
               </div>
               <div className="p-4">
@@ -4301,13 +4301,13 @@ const TrialPageNew: React.FC = () => {
           )}
           {renderTrialDesign(tm, 'Randomized September 2018 to May 2022 across Denmark. National, multicenter, assessor-blinded trial. Stopped early at 171 of 424 planned patients. Ambulance-based randomization.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/racecat-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">RACECAT</Link>
             </div>
@@ -4335,7 +4335,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4360,9 +4360,9 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">All treated patients (1777 patients, 39 UK centres)</p>
               </div>
               <div className="p-4">
@@ -4376,13 +4376,13 @@ const TrialPageNew: React.FC = () => {
           )}
           {renderTrialDesign(tm, 'Randomized January 2017 to May 2023 at 39 UK stroke centres. Open-label, masked-endpoint (PROBE design). Primary analysis was noninferiority in the treated population.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/act-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">AcT</Link>
               <Link to="/trials/trace-2-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">TRACE-2</Link>
@@ -4412,7 +4412,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4437,9 +4437,9 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">All randomized patients (458 patients, 77% underwent EVT)</p>
               </div>
               <div className="p-4">
@@ -4453,13 +4453,13 @@ const TrialPageNew: React.FC = () => {
           )}
           {renderTrialDesign(tm, 'Multicenter, double-blind, placebo-controlled trial. ICA or MCA occlusion with CTP-confirmed salvageable tissue. 4.5-24 hours from onset. Published NEJM 2024. 77% of patients proceeded to EVT.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/trace-iii-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">TRACE-III</Link>
             </div>
@@ -4487,7 +4487,7 @@ const TrialPageNew: React.FC = () => {
       : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4512,9 +4512,9 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {tm.mrsDistribution && tm.ordinalStats && (
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
                 <p className="text-xs text-slate-500 mt-0.5">All randomized patients (578 patients, non-contrast CT selection)</p>
               </div>
               <div className="p-4">
@@ -4528,13 +4528,13 @@ const TrialPageNew: React.FC = () => {
           )}
           {renderTrialDesign(tm, 'Randomized June 2017 to September 2021 across 10 countries. Investigator-initiated, multicenter, open-label trial. Wake-up stroke or unwitnessed onset; selected by NCCT alone (ASPECTS 4 or higher).')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/timeless-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">TIMELESS</Link>
             </div>
@@ -4566,7 +4566,7 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
 
         {/* Sticky header */}
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4597,9 +4597,9 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
 
           {/* Primary outcome — prose-narrative variant (no Grotta Bar) */}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome · mRS Shift at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome · mRS Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">Confirmed stroke or TIA (cohort 1, N=852); full ITT (cohort 2, N=1149)</p>
             </div>
             <div className="p-4 space-y-4">
@@ -4646,9 +4646,9 @@ const TrialPageNew: React.FC = () => {
           </div>
 
           {/* Safety — prose card (slate, not red: trial not stopped for harm) */}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Safety Signals</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Safety Signals</p>
             </div>
             <div className="p-4">
               <p className="text-sm text-slate-700 leading-relaxed">
@@ -4667,15 +4667,15 @@ const TrialPageNew: React.FC = () => {
 
           {/* Bedside pearl */}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
 
           {/* See also */}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/mr-asap-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">MR ASAP</Link>
             </div>
@@ -4716,7 +4716,7 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
 
         {/* Section 1: Sticky header */}
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button
               type="button"
@@ -4773,9 +4773,9 @@ const TrialPageNew: React.FC = () => {
 
           {/* Section 4: Primary Outcome — BenchmarkThresholdChart (Archetype G) */}
           {bm && oer && (
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
                   Primary Outcome
                 </p>
               </div>
@@ -4834,12 +4834,12 @@ const TrialPageNew: React.FC = () => {
             <div
               style={{
                 background: '#EEF2FF',
-                borderLeft: '3px solid #1746A2',
+                borderLeft: '2px solid #1746A2',
                 borderRadius: '0 10px 10px 0',
                 padding: '16px 18px',
               }}
             >
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">
                 Bedside Pearl
               </p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">
@@ -4850,7 +4850,7 @@ const TrialPageNew: React.FC = () => {
 
           {/* Section 9: See also */}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">
               See also
             </p>
             <div className="flex flex-wrap gap-2">
@@ -4891,7 +4891,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -4913,9 +4913,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO)</p>
             </div>
             <div className="p-4">
@@ -4945,13 +4945,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Pragmatic phase 3 RCT enrolling 500 patients across 16 Dutch centers between December 2010 and June 2014 (Berkhemer NEJM 2015).')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/escape-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ESCAPE</Link>
@@ -4980,7 +4980,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5002,9 +5002,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (small core, good collaterals)</p>
             </div>
             <div className="p-4">
@@ -5034,13 +5034,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'International phase 3 RCT enrolling 316 patients across 22 centers between February 2013 and October 2014 (Goyal NEJM 2015). Stopped early for efficacy.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/mr-clean-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">MR CLEAN</Link>
@@ -5069,7 +5069,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5091,9 +5091,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, within 8 hours)</p>
             </div>
             <div className="p-4">
@@ -5123,13 +5123,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Phase 3 RCT embedded in a population-based stroke registry, enrolling 206 patients across 4 Catalan centers between November 2012 and December 2014 (Jovin NEJM 2015). Stopped early after the other 2015 EVT trials reported positive results.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/escape-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ESCAPE</Link>
@@ -5158,7 +5158,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5181,9 +5181,9 @@ const TrialPageNew: React.FC = () => {
           </div>
           {renderPopulationSection(tm)}
           {/* Secondary outcome chart — primary was co-primary reperfusion + neurological improvement */}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Secondary outcome: mRS 0-2 at 90 days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Secondary outcome: mRS 0-2 at 90 days</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
@@ -5209,13 +5209,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Investigator-initiated multicenter RCT enrolling 70 patients in Australia and New Zealand between August 2012 and October 2014 (Campbell NEJM 2015). Stopped early for efficacy after 70 of 100 planned patients.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/swift-prime-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">SWIFT PRIME</Link>
@@ -5244,7 +5244,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5266,9 +5266,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Distribution at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, IV alteplase within 4.5 hours)</p>
             </div>
             <div className="p-4">
@@ -5298,13 +5298,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'International multicenter RCT enrolling 196 patients across 39 centers between December 2012 and November 2014 (Saver NEJM 2015). Stopped early for efficacy at 196 of a planned 833 patients.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/escape-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ESCAPE</Link>
@@ -5333,7 +5333,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5355,9 +5355,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 3 Months</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 3 Months</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (proximal anterior circulation LVO, NIHSS 10 to 25)</p>
             </div>
             <div className="p-4">
@@ -5387,13 +5387,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'French multicenter RCT enrolling 414 patients across 26 centers between 2010 and 2015 (Bracard Lancet Neurol 2016).')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/mr-clean-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">MR CLEAN</Link>
@@ -5423,7 +5423,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5445,9 +5445,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, ASPECTS 5 or lower)</p>
             </div>
             <div className="p-4">
@@ -5511,13 +5511,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'French multicenter RCT enrolling 333 patients across multiple centers (Costalat NEJM 2024). Stopped early after external positive large-core data emerged from ANGEL-ASPECT, SELECT2, and TESLA.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/tension-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">TENSION</Link>
@@ -5546,7 +5546,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5568,9 +5568,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, ASPECTS 3 to 5)</p>
             </div>
             <div className="p-4">
@@ -5634,13 +5634,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'European multicenter RCT enrolling 253 patients between 2018 and 2023 (Bendszus Lancet 2023). Stopped early at the first interim analysis for efficacy.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/laste-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">LASTE</Link>
@@ -5669,7 +5669,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5691,9 +5691,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-1 at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-1 at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (LVO, eTICI 2b50+ reperfusion after thrombectomy)</p>
             </div>
             <div className="p-4">
@@ -5723,13 +5723,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Phase 2b randomized double-blind placebo-controlled trial enrolling 121 patients across 7 stroke centers in Catalonia between 2018 and 2021 (Renu JAMA 2022). Stopped early during the COVID-19 pandemic.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/mr-clean-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">MR CLEAN</Link>
@@ -5757,7 +5757,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5779,9 +5779,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, eligible for IV alteplase)</p>
             </div>
             {/* NI amber banner — mandatory for non-inferiority design */}
@@ -5810,13 +5810,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Multicenter Chinese noninferiority RCT enrolling 656 patients at 41 tertiary centers (Yang NEJM 2020). Open-label with blinded endpoint assessment.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/devt-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DEVT</Link>
@@ -5845,7 +5845,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5867,9 +5867,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (proximal anterior circulation LVO, alteplase-eligible)</p>
             </div>
             {/* NI amber banner */}
@@ -5898,13 +5898,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Multicenter Chinese noninferiority RCT enrolling 234 patients at 33 stroke centers between 2018 and 2020 (Zi JAMA 2021). Stopped early for efficacy of non-inferiority.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/direct-mt-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DIRECT-MT</Link>
@@ -5932,7 +5932,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -5954,9 +5954,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">All randomized patients (anterior circulation LVO, within 6 hours)</p>
             </div>
             {/* NI amber banner */}
@@ -5985,13 +5985,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Multicenter randomized open-label non-inferiority trial enrolling 270 patients at 15 North American sites (Turk Lancet 2019). Blinded outcome assessment.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/aster-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ASTER</Link>
@@ -6019,7 +6019,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6041,9 +6041,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Successful Revascularization (mTICI 2b-3)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Successful Revascularization (mTICI 2b-3)</p>
               <p className="text-xs text-slate-500 mt-0.5">Procedural endpoint — not a clinical outcome measure</p>
             </div>
             {/* Procedural-endpoint amber banner */}
@@ -6072,13 +6072,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'French multicenter randomized open-label blinded-endpoint (PROBE) trial enrolling 381 patients at 8 comprehensive stroke centers between 2015 and 2016 (Lapergue JAMA 2017).')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/compass-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">COMPASS</Link>
@@ -6107,7 +6107,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6129,9 +6129,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Near-Total Reperfusion (eTICI 2c-3)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Near-Total Reperfusion (eTICI 2c-3)</p>
               <p className="text-xs text-slate-500 mt-0.5">Procedural endpoint — not a clinical outcome measure</p>
             </div>
             {/* Procedural-endpoint amber banner */}
@@ -6160,13 +6160,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'French multicenter randomized open-label blinded-endpoint trial enrolling 408 patients at 11 comprehensive stroke centers between 2017 and 2018 (Lapergue JAMA 2021).')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/aster-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ASTER</Link>
@@ -6194,7 +6194,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6220,9 +6220,9 @@ const TrialPageNew: React.FC = () => {
             <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Non-inferiority design: margin not met</p>
             <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>SKIP tested whether direct EVT was acceptably close to low-dose alteplase (0.6 mg/kg) plus EVT (NI margin: OR lower CI greater than 0.75). Non-inferiority was not demonstrated: the lower CI bound (0.72) fell below the margin. Similar point estimates (59.4% vs 57.3%) do not establish equivalence.</p>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">LVO stroke within 4.5 h; Japanese low-dose alteplase (0.6 mg/kg) comparator</p>
             </div>
             <div className="p-4">
@@ -6244,13 +6244,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '204 patients at 23 stroke networks across Japan. Open-label randomized non-inferiority trial. Enrolled 2017 to 2019. IV alteplase at Japanese approved dose of 0.6 mg/kg (not the 0.9 mg/kg dose used in European and American trials). Published JAMA 2021.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/direct-mt-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DIRECT-MT</Link>
@@ -6279,7 +6279,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6305,9 +6305,9 @@ const TrialPageNew: React.FC = () => {
             <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Superiority and non-inferiority: both not demonstrated</p>
             <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>MR CLEAN-NO IV tested both superiority and non-inferiority of direct EVT vs alteplase 0.9 mg/kg plus EVT. Neither was met (adjusted common OR 0.84, 95% CI 0.62-1.15, P = 0.28). The point estimate numerically favors bridging therapy; median mRS was 3 (direct EVT) vs 2 (bridging).</p>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">Direct presenters at EVT-capable centers within 4.5 h</p>
             </div>
             <div className="p-4">
@@ -6352,13 +6352,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '539 patients across European centers. Open-label randomized trial. Enrolled 2017 to 2020. Alteplase dose in bridging arm: 0.9 mg/kg (standard Western dose). Published NEJM 2021.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/swift-direct-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">SWIFT DIRECT</Link>
@@ -6387,7 +6387,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6413,9 +6413,9 @@ const TrialPageNew: React.FC = () => {
             <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Non-inferiority design: margin not met</p>
             <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>DIRECT-SAFE tested whether direct EVT was acceptably close to bridging thrombolysis (NI margin: -12 pp). Non-inferiority was not demonstrated: the lower CI bound (-15.4 pp) crossed the margin. The adjusted risk difference (-5.1%, CI -15.4% to 5.3%) does not establish equivalence.</p>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 or Pre-stroke Baseline at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 or Pre-stroke Baseline at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">LVO within 4.5 h; alteplase or tenecteplase in bridging arm</p>
             </div>
             <div className="p-4">
@@ -6437,13 +6437,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '295 patients across Australia, New Zealand, China, and Vietnam. PROBE design (open-label, blinded endpoint assessment). Enrolled 2018 to 2021. Bridging arm allowed alteplase or tenecteplase at national standard doses. Published Lancet 2022.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/swift-direct-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">SWIFT DIRECT</Link>
@@ -6472,7 +6472,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6498,9 +6498,9 @@ const TrialPageNew: React.FC = () => {
             <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Non-inferiority design: margin not met</p>
             <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>SWIFT DIRECT tested whether thrombectomy alone was acceptably close to alteplase plus thrombectomy (NI margin: -10 pp). Non-inferiority was not demonstrated: the adjusted RD was -7.3% (95% CI -14.0% to -0.6%). The entire confidence interval is negative; even the most optimistic estimate favors bridging therapy.</p>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS 0-2 at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">Anterior circulation proximal LVO; direct presenters within 4.5 h</p>
             </div>
             <div className="p-4">
@@ -6522,13 +6522,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '423 patients across European and Canadian comprehensive stroke centers. Open-label randomized non-inferiority trial. Enrolled 2018 to 2021. Stent-retriever technique per protocol. Published Lancet 2022.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/mr-clean-no-iv-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">MR CLEAN-NO IV</Link>
@@ -6557,7 +6557,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6579,9 +6579,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">948 patients; IV tirofiban vs placebo before and during EVT</p>
             </div>
             <div className="p-4">
@@ -6626,13 +6626,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '948 patients at 55 hospitals in China. Double-blind placebo-controlled randomized trial. Enrolled 2018 to 2021. Tirofiban: 10 mcg/kg IV bolus then 0.15 mcg/kg/min for 24 hours. Published JAMA 2022.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
             </div>
@@ -6659,7 +6659,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6681,9 +6681,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Radiographic iPH at 24-36 hours</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Radiographic iPH at 24-36 hours</p>
               <p className="text-xs text-slate-500 mt-0.5">324 patients; SBP 100-129 mm Hg vs 130-185 mm Hg after successful EVT</p>
             </div>
             <div className="p-4">
@@ -6705,13 +6705,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '324 patients at four French academic stroke centers. Open-label randomized controlled trial with blinded endpoint assessment. Intensive BP target (SBP 100-129 mm Hg) achieved within 1 hour and maintained for 24 hours. Published Lancet Neurol 2021.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/best-ii-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">BEST-II</Link>
@@ -6740,7 +6740,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6766,9 +6766,9 @@ const TrialPageNew: React.FC = () => {
             <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Futility design: low predicted success for lower BP targets</p>
             <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>BEST-II was a phase 2 futility trial. Neither lower target formally crossed the futility boundary (P=0.93), but predicted success in a future superiority trial was only 14-25% for lower targets. The highest-target arm (SBP &lt;=180 mm Hg) produced the best utility-weighted mRS (0.58 vs 0.51). OPTIMAL-BP subsequently confirmed functional harm from SBP &lt;140 mm Hg.</p>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Utility-Weighted mRS at 90 days (x100)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Utility-Weighted mRS at 90 days (x100)</p>
               <p className="text-xs text-slate-500 mt-0.5">120 patients; 3-arm futility trial: SBP &lt;140, &lt;160, or &lt;=180 mm Hg after successful EVT</p>
             </div>
             <div className="p-4">
@@ -6790,13 +6790,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '120 patients at three US comprehensive stroke centers. Phase 2 open-label randomized futility trial with three arms. BP targeting initiated within 60 minutes of successful EVT and maintained for 24 hours. Published JAMA 2023.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/bp-target-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">BP-TARGET</Link>
@@ -6826,7 +6826,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6848,9 +6848,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Functional Independence (mRS 0-2) at 3 Months</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Functional Independence (mRS 0-2) at 3 Months</p>
             </div>
             <div className="p-4">
               <div className="mb-3 rounded-lg bg-red-50 border border-red-200 px-3 py-2">
@@ -6882,7 +6882,7 @@ const TrialPageNew: React.FC = () => {
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/bp-target-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">BP-TARGET</Link>
@@ -6911,7 +6911,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -6933,9 +6933,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">2196 patients; intensive SBP 130-140 mm Hg vs guideline below 180 mm Hg for 72 hours</p>
             </div>
             <div className="p-4">
@@ -6969,13 +6969,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '2196 patients at 110 sites across 15 countries. Open-label trial with blinded endpoint assessment. Intensive SBP target 130-140 mm Hg vs guideline less than 180 mm Hg for 72 hours. Published Lancet 2019.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
               <Link to="/trials/bp-target-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">BP-TARGET</Link>
@@ -7004,7 +7004,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -7026,9 +7026,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Functional Independence (mRS 0-2) at 90 Days</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Functional Independence (mRS 0-2) at 90 Days</p>
               <p className="text-xs text-slate-500 mt-0.5">1105 patients; nerinetide vs placebo before or during EVT within 12 hours</p>
             </div>
             <div className="p-4">
@@ -7050,13 +7050,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '1105 patients at 48 hospitals across 8 countries. Double-blind placebo-controlled randomized trial. Single IV nerinetide dose before or during EVT. Treatment window up to 12 hours with favorable imaging. Published Lancet 2020.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
             </div>
@@ -7083,7 +7083,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -7109,9 +7109,9 @@ const TrialPageNew: React.FC = () => {
             <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>Stopped early: findings are inconclusive</p>
             <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>CHARM was halted before planned enrollment (535 of approximately 750 patients) due to COVID-19 operational disruptions. The trial was neither futile nor stopped for safety -- it was underpowered. Results should be interpreted with this context: the confidence interval (0.80-1.71) excludes neither meaningful benefit nor meaningful harm.</p>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days (age 18-70)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — mRS Ordinal Shift at 90 Days (age 18-70)</p>
               <p className="text-xs text-slate-500 mt-0.5">535 patients; IV glibenclamide vs placebo within 10 hours of onset</p>
             </div>
             <div className="p-4">
@@ -7140,13 +7140,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '535 patients at 143 stroke centers across 21 countries. Phase 3 double-blind placebo-controlled trial. IV glibenclamide 8.6 mg over 72 hours started within 10 hours of onset. Stopped early for COVID-19 operational disruptions. Published Lancet Neurol 2024.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
             </div>
@@ -7173,7 +7173,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -7195,9 +7195,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Mortality Outcome — 6-Month Survival</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mortality Outcome — 6-Month Survival</p>
               <p className="text-xs text-slate-500 mt-0.5">38 patients; decompressive hemicraniectomy vs medical therapy alone</p>
             </div>
             <div className="p-4 space-y-3">
@@ -7222,13 +7222,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '38 patients at multiple French centers (planned 70; stopped early for pooled analysis). Sequential design with blinded primary endpoint assessment. Patients aged 18-55 with malignant MCA infarction. Randomization within 24-30 hours of onset. Published Stroke 2007.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/destiny-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DESTINY</Link>
               <Link to="/trials/hamlet-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">HAMLET</Link>
@@ -7258,7 +7258,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -7280,9 +7280,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Mortality Outcome — 30-Day and 6-Month Survival</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mortality Outcome — 30-Day and 6-Month Survival</p>
               <p className="text-xs text-slate-500 mt-0.5">32 patients; early hemicraniectomy vs conservative therapy</p>
             </div>
             <div className="p-4 space-y-3">
@@ -7307,13 +7307,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '32 patients at multiple German centers (planned 60; stopped early for pooled analysis). Prospective sequential design. Patients aged 18-60 with malignant MCA infarction. Randomization within 36 hours of onset. Published Stroke 2007.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/decimal-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DECIMAL</Link>
               <Link to="/trials/hamlet-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">HAMLET</Link>
@@ -7343,7 +7343,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -7365,9 +7365,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Mortality Outcome — 1-Year Survival</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Mortality Outcome — 1-Year Survival</p>
               <p className="text-xs text-slate-500 mt-0.5">64 patients; surgical decompression vs best medical treatment (enrollment up to 96 hours)</p>
             </div>
             <div className="p-4 space-y-3">
@@ -7392,13 +7392,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '64 patients at multiple Dutch centers. Multicenter open randomized trial. Patients aged 18-60 randomized within 4 days (96 hours) of stroke onset. Primary endpoint mRS 0-3 at 1 year. Published Lancet Neurol 2009.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/decimal-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DECIMAL</Link>
               <Link to="/trials/destiny-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DESTINY</Link>
@@ -7428,7 +7428,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -7450,9 +7450,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Survival Without Severe Disability (mRS 0-4) at 6 Months</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Survival Without Severe Disability (mRS 0-4) at 6 Months</p>
               <p className="text-xs text-slate-500 mt-0.5">112 patients aged 61-82; early hemicraniectomy vs conservative intensive care</p>
             </div>
             {/* Mandatory QoL caveat banner — equal weight to the positive result per Modification 1 */}
@@ -7481,13 +7481,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '112 patients aged 61-82 at multiple German centers (planned 188; stopped early for enrollment difficulty). Open-label randomized trial with blinded outcome assessment. Surgery within 48 hours of stroke onset. Published NEJM 2014.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/decimal-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DECIMAL (under 56)</Link>
               <Link to="/trials/destiny-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DESTINY (under 61)</Link>
@@ -7517,7 +7517,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -7539,9 +7539,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Composite at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Composite at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">888 patients; early NOAC within 4 days vs delayed 5-10 days after AF-related stroke</p>
             </div>
             <div style={{ background: '#FFFBEB', borderLeft: '3px solid #D97706', margin: '12px 16px 0', borderRadius: '0 6px 6px 0', padding: '10px 14px' }} role="note">
@@ -7569,13 +7569,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '888 patients randomized via the Swedish Stroke Register. Registry-based open-label randomized noninferiority trial. NOAC started within 4 days (early) or 5-10 days (delayed). Published Circulation 2022.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/optimas-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">OPTIMAS</Link>
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
@@ -7603,7 +7603,7 @@ const TrialPageNew: React.FC = () => {
     const categoryBadgeLabel = tm.listCategory ? tm.listCategory.charAt(0).toUpperCase() + tm.listCategory.slice(1) : 'Trial';
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -7625,9 +7625,9 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
           {renderPopulationSection(tm)}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Primary Outcome — Composite at 90 Days (Non-inferiority)</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Composite at 90 Days (Non-inferiority)</p>
               <p className="text-xs text-slate-500 mt-0.5">3621 patients at 100 UK hospitals; early DOAC within 4 days vs delayed 7-14 days</p>
             </div>
             <div style={{ background: '#FFFBEB', borderLeft: '3px solid #D97706', margin: '12px 16px 0', borderRadius: '0 6px 6px 0', padding: '10px 14px' }} role="note">
@@ -7655,13 +7655,13 @@ const TrialPageNew: React.FC = () => {
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '3621 patients at 100 UK hospitals (2019-2024). Multicenter open-label blinded-endpoint phase 4 randomized trial. Early DOAC within 4 days vs delayed 7-14 days. Gatekeeper design: NI tested first, then superiority. Published Lancet 2024.')}
           {tm.bedsidePearl && (
-            <div style={{ background: '#EEF2FF', borderLeft: '3px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
               <p className="text-sm text-[#0E2D6B] leading-relaxed">{tm.bedsidePearl}</p>
             </div>
           )}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               <Link to="/trials/timing-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">TIMING</Link>
               <Link to="/guide/stroke-code" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Stroke Code pathway</Link>
@@ -7700,7 +7700,7 @@ const TrialPageNew: React.FC = () => {
     return (
       <div className="min-h-dvh bg-slate-50 pb-28">
         {/* Sticky header */}
-        <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-40">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
             <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
               <ArrowLeft className="w-4 h-4" />
@@ -7764,9 +7764,9 @@ const TrialPageNew: React.FC = () => {
           {renderPopulationSection(tm)}
 
           {/* Primary outcome — prose-narrative variant (no archetype viz) */}
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
             <div className="px-4 py-3 border-b border-slate-100">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">{outcomeSectionLabel}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{outcomeSectionLabel}</p>
               <p className="text-xs text-slate-500 mt-0.5">{outcomeSectionMeta}</p>
             </div>
             <div className="p-4 space-y-4">
@@ -7798,9 +7798,9 @@ const TrialPageNew: React.FC = () => {
 
           {/* Trial design narrative */}
           {tm.trialDesignNarrative && (
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Trial Design</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Trial Design</p>
               </div>
               <div className="p-4">
                 <p className="text-sm text-slate-700 leading-relaxed">{tm.trialDesignNarrative}</p>
@@ -7810,9 +7810,9 @@ const TrialPageNew: React.FC = () => {
 
           {/* Safety brief */}
           {tm.safetyBrief && (
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Safety</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Safety</p>
               </div>
               <div className="p-4">
                 <p className="text-sm text-slate-700 leading-relaxed">{tm.safetyBrief}</p>
@@ -7822,7 +7822,7 @@ const TrialPageNew: React.FC = () => {
 
           {/* See also */}
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
             <div className="flex flex-wrap gap-2">
               {tm.successorTrialId && (
                 <Link to={`/trials/${tm.successorTrialId}`} className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">
@@ -8027,7 +8027,7 @@ const TrialPageNew: React.FC = () => {
   return (
     <div className="min-h-dvh bg-slate-50">
       {/* Header */}
-      <div className="bg-white border-b border-slate-100 shadow-sm">
+      <div className="bg-white border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <button
             type="button"
