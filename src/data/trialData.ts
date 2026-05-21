@@ -12437,4 +12437,180 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     bottomLineSummary: 'In 21,106 patients within 48h of acute ischaemic stroke, double-blind aspirin 160 mg/day vs placebo reduced in-hospital mortality (3.3% vs 3.9%, 2p=0.04) and combined 4-week death or non-fatal stroke (5.3% vs 5.9%, 2p=0.03; 6.8 fewer per 1000). Dead-or-dependent at discharge directionally favoured aspirin (30.5% vs 31.6%, 2p=0.08; trend). Foundational evidence (with IST) for the AHA/ASA Class I, Level A early-aspirin recommendation.',
     conclusion: 'CAST is one of two foundational randomised trials (with IST) establishing early aspirin within 48 hours of acute ischaemic stroke as standard care. The trial enrolled 21,106 patients across 413 Chinese hospitals between November 1993 and March 1997, using a double-blind placebo-controlled design — the methodologically rigorous counterpart to the open-label IST. Patients with suspected acute ischaemic stroke within 48 hours of onset, with no contraindication to aspirin, were randomised to aspirin 160 mg/day or matching placebo for up to 4 weeks (or until earlier discharge or death). CT before randomisation was mandatory only for comatose patients; 87% had CT before randomisation and 94% had at least one in-hospital CT. The intention-to-treat analysis confirmed an ischaemic stroke diagnosis in approximately 98% of randomised patients; 1.5% turned out to have haemorrhagic stroke, brain tumour, or other final diagnosis and were retained in the ITT analysis with no signal of net harm. Both pre-specified co-primary endpoints favoured aspirin: in-hospital mortality at 4 weeks was 3.3% (343/10,554) on aspirin vs 3.9% (398/10,552) on placebo, a 14% (SD 7) proportional reduction (2p=0.04; absolute difference 5.4 [SD 2.6] fewer deaths per 1000), and the combined in-hospital endpoint of death or non-fatal stroke at 4 weeks was 5.3% (545) vs 5.9% (614), a 12% (SD 6) proportional reduction (2p=0.03; 6.8 [SD 3.2] fewer per 1000). The third co-primary endpoint of dead or dependent at discharge (assessed on the modified Rankin scale) was directionally favourable but did not reach conventional significance: 30.5% (3153) vs 31.6% (3266); 11.4 (SD 6.4) fewer per 1000 (2p=0.08). The recurrent ischaemic stroke component drove the benefit (1.6% vs 2.1%, 2p=0.01); haemorrhagic stroke was non-significantly higher with aspirin (1.1% vs 0.9%, 2p>0.1; +2 per 1000). Major extracranial bleeding (transfused or fatal) was significantly increased (0.8% vs 0.6%, 2p=0.02; +2.7 per 1000). Limitations: Chinese-only enrolment with case-mix weighted toward intracranial atherosclerosis and lacunar stroke (the IST + CAST joint signal is the basis for global generalisability); in-hospital outcome only (no protocolised long-term follow-up; IST provides 6-month follow-up); pre-alteplase era; aspirin dose 160 mg/day (IST used 300 mg/day; pooled experience covers the modern AHA/ASA-recommended 160-325 mg range); no written consent (verbal-discussion protocol exception at the time; modern ethics frameworks would not permit this design). The Chen et al. 2000 pooled analysis of CAST + IST (Stroke 2000;31:1240-1249, PMID 10835439) is the canonical clinical reference: in approximately 40,000 randomised patients, early aspirin prevented approximately 9 deaths or non-fatal recurrent strokes per 1000 in the acute phase against approximately 2 excess haemorrhagic strokes per 1000 — net benefit of approximately 7 per 1000. This pooled analysis underwrites the AHA/ASA Class I, Level A recommendation for aspirin within 24-48 hours of acute ischaemic stroke once intracranial haemorrhage is excluded, maintained from 1997 (Adams HP et al., AHA Stroke statement) through 2007 (Adams HP), 2013 (Jauch EC), 2018/2019 (Powers WJ), and 2026 (Powers WJ) successive AHA/ASA early-management guidelines.',
   },
+
+  // ─── THEIA (2025) — IV alteplase vs oral aspirin for non-arteritic CRAO ──
+  //     Lancet Neurology 2025;24(11):909-919. First phase 3 RCT of IV
+  //     thrombolysis for CRAO within 4.5h. Neutral (underpowered) on the
+  //     primary; safety reassuring (0 sICH). See
+  //     docs/evidence-packets/theia-2026-05-20.md for full verbatim audit.
+  //     Predecessor: EAGLE (Schumacher 2010, intra-arterial fibrinolysis).
+  'theia-trial': {
+    id: 'theia-trial',
+    claimId: 'theia-crao-alteplase-2025',
+    title: 'THEIA Trial',
+    subtitle: 'IV Alteplase vs Oral Aspirin for Acute Non-Arteritic CRAO within 4.5 Hours',
+    category: 'Neuro Trials',
+    pmid: '41109232',
+    doi: '10.1016/S1474-4422(25)00308-4',
+    clinicalTrialsId: 'NCT03197194',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'not-met',
+    trialResult: 'NEUTRAL',
+    listCategory: 'thrombolysis',
+    listDescription: 'First phase 3 RCT of IV alteplase for CRAO within 4.5h. Neutral on visual acuity vs aspirin; underpowered (N=70); safety reassuring.',
+    inclusionCriteria: [
+      'Adults aged 18 years or older',
+      'Sudden severe persistent monocular vision loss (Snellen <20/400; >1.3 LogMAR)',
+      'Suspected non-arteritic acute CRAO confirmed by ophthalmologist (fundoscopy or non-mydriatic retinophotography showing diffuse retinal pallor, macular cherry red spot, vessel attenuation, or visible emboli)',
+      'Relative afferent pupillary defect on the affected side',
+      'Treatment startable within 4.5 hours of symptom onset',
+      'No clinical or laboratory evidence of giant cell arteritis',
+      'No clinical or radiological evidence of stroke within the prior 3 months (except asymptomatic punctate or small DWI lesions)',
+      'Baseline CT or MRI brain imaging available',
+    ],
+    exclusionCriteria: [
+      'Minor visual acuity deficits or rapid pre-treatment improvement',
+      'Unknown or uncertain symptom onset time',
+      'Isolated branch retinal artery occlusion without clinically significant vision loss',
+      'CRAO with foveal sparing due to cilioretinal artery (no foveal ischaemia)',
+      'Current use of anticoagulant medication',
+      'Standard contraindications to IV alteplase (active bleeding, recent major surgery, BP >185/110)',
+    ],
+    intervention: {
+      treatment: 'IV alteplase 0.9 mg/kg (10% bolus, 90% infused over 1h, max 90 mg) + oral placebo',
+      control: 'Oral aspirin 300 mg single dose + IV saline placebo (10 mL bolus over 1 min, then 50 mL over 1h)',
+    },
+    stats: {
+      sampleSize: {
+        value: '70',
+        label: 'Randomised patients (16 French stroke units; June 2018 – Oct 2023)',
+        info: 'Powered for a 30 pp absolute improvement (40% alteplase vs 10% aspirin). Observed aspirin improvement was 48%, leaving the trial underpowered for the smaller real difference.',
+      },
+      primaryEndpoint: {
+        value: '≥0.3 LogMAR gain',
+        label: 'Visual acuity improvement at 1 month (≥3 ETDRS Snellen lines / 15 letters)',
+      },
+      pValue: {
+        value: '0.95',
+        label: 'Adjusted, not significant',
+        highlight: false,
+      },
+      effectSize: {
+        value: '+17.4 pp',
+        label: 'Unadjusted risk difference, 95% CI -11.8 to +46.5',
+        info: 'Adjusted OR 1.10 (95% CI 0.07–18.39). Directionally favouring alteplase but CI very wide due to N=70.',
+      },
+    },
+    trialDesign: {
+      type: [
+        'Phase 3, multicentre randomised controlled trial',
+        'Double-dummy, patient-blinded and assessor-blinded',
+        '1:1 allocation (alteplase + oral placebo vs aspirin + IV saline placebo)',
+        'Conducted across 16 French stroke units',
+        'Binary-superiority primary; underpowered per investigators',
+      ],
+      timeline: 'Enrolled 8 June 2018 – 2 October 2023; published Lancet Neurology November 2025.',
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 66,
+        label: 'Visual acuity improvement ≥0.3 LogMAR at 1 month',
+        name: 'Alteplase Group (19 of 29)',
+      },
+      control: {
+        percentage: 48,
+        label: 'Visual acuity improvement ≥0.3 LogMAR at 1 month',
+        name: 'Aspirin Group (13 of 27)',
+      },
+    },
+    clinicalContext: 'THEIA was the first phase 3 randomised controlled trial of intravenous thrombolysis for acute central retinal artery occlusion (CRAO) within a 4.5h window — the same therapeutic window used for acute ischaemic stroke. CRAO is a subtype of ischaemic stroke affecting the carotid artery territory: an embolus or thrombus in the central retinal artery causes terminal end-organ retinal ischaemia, and without reperfusion vision loss is typically permanent. Pre-THEIA, the AHA / NANOS 2021 Scientific Statement (Mac Grory et al., Stroke 2021) suggested IV alteplase "may be considered" for disabling CRAO based on retrospective and individual-patient-data meta-analyses (Schrag et al. 2015; Mac Grory et al. 2020) showing approximately 50% functional recovery when treated within 4.5h vs ~18% untreated. THEIA was designed to provide randomised confirmation in the early-window population. The trial enrolled 70 patients (35 per arm) across 16 French stroke units between June 2018 and October 2023 — slow recruitment reflecting both the rarity of CRAO and the narrowness of the treatment window. Eligible patients had Snellen <20/400 monocular vision loss confirmed as non-arteritic CRAO by an ophthalmologist (fundoscopy or retinophotography), with a relative afferent pupillary defect. Treatment was IV alteplase 0.9 mg/kg (the standard ischaemic-stroke dose) versus 300 mg oral aspirin within 4.5h of symptom onset. Aspirin was chosen as comparator rather than placebo because at least one-third of CRAO patients have signs of concomitant cerebral ischaemia on DWI MRI — delaying antiplatelet therapy by placebo control was judged unethical. CRAO management sits at the intersection of ophthalmology and stroke neurology: THEIA was conducted by stroke units in France with ophthalmologist co-management and provides the first randomised evidence relevant to both specialties.',
+    safetyProfile: {
+      sICH: {
+        evt: 0,
+        control: 0,
+        label: 'Symptomatic intracranial haemorrhage (ECASS II)',
+        tooltip: 'Zero symptomatic ICH in either arm. One asymptomatic intracranial haemorrhage (15 mm right parietal haematoma) detected on day 1 CT in the alteplase group — not present on initial MRI, no neurological consequences. No symptomatic haemorrhages or major bleeding related to study treatment in either arm. This is much lower than the typical ~6% sICH rate with IV alteplase in acute ischaemic stroke, likely reflecting the absence of established ischaemic brain lesion in CRAO.',
+        color: 'success',
+      },
+      majorBleeding: {
+        evt: 0,
+        control: 0,
+        label: 'Major extracranial bleeding related to treatment',
+        tooltip: 'Zero major extracranial bleeds related to study treatment in either arm. One after-acute-phase gastrointestinal bleed (colon polyps, requiring transfusion) in the aspirin group attributed to secondary-prevention antithrombotic therapy, not the acute study drug.',
+      },
+      adverseEvents: {
+        evt: 14,
+        control: 17,
+        label: 'Serious adverse events after acute phase (%)',
+        tooltip: 'Alteplase 5/35 (14%) vs aspirin 6/35 (17%). Most were extra-ocular ischaemic events (carotid endarterectomy in 6, pyelonephritis in 5, melena on colon polyps, and one manic episode in a known bipolar patient). None related to acute study treatment.',
+      },
+    },
+    safetyData: 'Zero symptomatic intracranial haemorrhages in either arm. One asymptomatic intracranial haemorrhage (alteplase group): a 15 mm right parietal haematoma detected on day 1 CT, with no lesion on initial MRI, no neurological consequences, and judged unrelated to active treatment. Zero major extracranial bleeding events related to study treatment. The very low haemorrhagic-event rate is a striking deviation from the typical 6% sICH rate seen with IV alteplase in acute ischaemic stroke, and most likely reflects the smaller territory of ischaemic brain at risk in CRAO (a retinal artery occlusion without established brain infarct). One alteplase patient with known bipolar disorder experienced a manic episode shortly after treatment. Serious adverse events after the acute phase were similar between arms (alteplase 14%, aspirin 17%) and were mostly atherosclerotic — six patients required carotid endarterectomy and five had pyelonephritis. Retinal neovascularisation occurred in 2 (6%) alteplase and 1 (3%) aspirin patients between 1-month and 3-month follow-up, including one intravitreal haemorrhage at 3 months. THEIA confirms that IV alteplase within 4.5h of CRAO onset is safe at the standard 0.9 mg/kg dose.',
+    pearls: [
+      'First Phase 3 RCT: THEIA is the first randomised controlled trial of IV alteplase for CRAO. Pre-THEIA evidence was limited to retrospective cohorts and individual-patient-data meta-analyses (Schrag 2015, Mac Grory 2020).',
+      'Primary Result Neutral, Trial Underpowered: 66% alteplase vs 48% aspirin reached ≥0.3 LogMAR improvement at 1 month (adjusted OR 1.10, 95% CI 0.07–18.39, p=0.95). Sample size of 70 powered for a 30 pp difference; observed aspirin response of 48% (not the assumed 10%) made the real difference too small to detect.',
+      'CRAO as Retinal Stroke: CRAO is a subtype of ischaemic stroke (carotid artery territory). THEIA tested whether the IV alteplase 4.5h paradigm extends from cerebral to retinal ischaemia. The trial neither confirmed nor refuted that translation.',
+      'Retinal Ischaemic Tolerance May Be Much Shorter Than 4.5h: Authors explicitly cite Tobalem 2018 evidence that complete CRAO can cause irreversible retinal ganglion cell death within as little as 15 minutes. Most THEIA patients were treated near the 4.5h boundary (mean onset-to-treatment 232 min); only 11% within 3.0h. The window itself may be too late for many patients regardless of agent.',
+      'Aspirin Comparator, Not Placebo: 300 mg aspirin was chosen because ≥1/3 of CRAO patients have concomitant cerebral ischaemia on DWI; delaying antiplatelet therapy by placebo was judged unethical. The observed 48% aspirin improvement rate is much higher than the assumed 10% — aspirin itself may contribute to recovery in CRAO, or natural recovery rates were systematically underestimated by prior meta-analyses.',
+      'Safety: Zero Symptomatic ICH: One asymptomatic 15 mm parietal haematoma in the alteplase arm. No symptomatic ICH or major extracranial bleeding. THEIA confirms standard-dose alteplase 0.9 mg/kg is safe in CRAO — substantially safer than IV alteplase in acute ischaemic stroke (typical sICH ~6%) because there is no large ischaemic brain lesion to bleed into.',
+      'EAGLE Contrast (Different Intervention): The prior negative CRAO trial — EAGLE (Schumacher 2010) — tested intra-arterial fibrinolysis with much longer windows (up to 20h) and showed no efficacy with increased adverse events (37% vs 4%). THEIA tested intravenous thrombolysis within a strict 4.5h window and showed neither efficacy nor harm. The two trials test fundamentally different interventions.',
+      'Functional Recovery Rate Low in Both Arms: Only 14% alteplase and 7% aspirin achieved functional reading vision (≤0.5 LogMAR / Snellen 20/63) at 1 month. Most patients in both arms remained legally blind in the affected eye.',
+      'AHA / NANOS 2021 Statement Unchanged Pending IPD: The Mac Grory et al. 2021 Stroke Scientific Statement on CRAO management (suggesting IV tPA "may be considered" for disabling visual deficits within criteria) is not superseded by THEIA. THEIA authors call for an individual-patient-data meta-analysis combining THEIA + TenCRAOS (NCT04526951) + REVISION (NCT04965038) to produce level 1 evidence.',
+      'CRAO Belongs in the Stroke Pathway: A CRAO patient should be triaged through stroke code, with funduscopy added to the workflow, GCA screening performed, and ophthalmology co-management. CRAO is "a cardiovascular problem disguised as an eye problem" (Mac Grory) — secondary-prevention workup should follow the standard ischaemic stroke pathway.',
+    ],
+    limitations: [
+      'Severely underpowered. Sample size calculated for 30 pp absolute improvement (40% alteplase vs assumed 10% aspirin). Observed aspirin response 48% made the real effect undetectable at N=70.',
+      'Slow recruitment over 5 years 4 months, exacerbated by COVID-19 pandemic and the inherent rarity of CRAO. Dropout 20% (vs anticipated 10%).',
+      'Aspirin comparator (not placebo) makes the trial a head-to-head between two active therapies; the contribution of aspirin to the 48% improvement rate cannot be isolated from natural history.',
+      'Mean onset-to-treatment 232 min (~3.9h); only 11% within the most-likely-to-respond 3.0h subgroup. If retinal tolerance is closer to 15 minutes than to 4.5 hours (as authors hypothesise), most patients were treated too late regardless of agent.',
+      'Open-label nurses and neurologists despite double-dummy patient and assessor masking. Three aspirin-group patients received alteplase off-protocol (potential behavioural bias).',
+      'Conducted exclusively in French stroke units with mature ophthalmology-stroke integration; generalisability to systems without such integration is uncertain.',
+      'Boehringer Ingelheim co-sponsored the trial and reviewed the manuscript for accuracy "related to its substances" (alteplase). Investigators retained final publication decision; confidentiality clause specifies sponsor cannot prohibit disclosure.',
+      'Single trial cannot establish or refute efficacy. Pooled IPD meta-analysis with TenCRAOS (NCT04526951) and REVISION (NCT04965038) — both still recruiting at time of THEIA publication — is the planned path to level 1 evidence.',
+    ],
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: 'The proportion of patients with available data who achieved an improvement in visual acuity of at least 0.3 LogMAR (about 3 Snellen lines, or 15 ETDRS letters) from baseline to 1 month. 66% (19 of 29) in the alteplase arm vs 48% (13 of 27) in the aspirin arm. The unadjusted risk difference is +17.4 percentage points (95% CI -11.8 to +46.5) — directionally favouring alteplase, but the confidence interval crosses zero and is very wide.',
+      },
+      {
+        question: 'Why is the p-value 0.95 when alteplase looks better numerically?',
+        answer: 'The trial was powered for a 30 pp absolute difference (40% alteplase vs assumed 10% aspirin). Observed aspirin response was 48%, far higher than expected. With N=70 the trial cannot distinguish a 17 pp difference from chance. Authors explicitly state the study was likely underpowered. The p=0.95 reflects no statistical signal — not evidence of no effect.',
+      },
+      {
+        question: 'Does THEIA prove IV alteplase does not work for CRAO?',
+        answer: 'No. THEIA fails to demonstrate superiority but does not prove absence of effect. The 17 pp numerical difference, low durable recovery rates in both arms (functional reading vision in only 14% alteplase and 7% aspirin), and the 15-minute retinal tolerance hypothesis all suggest the real questions are about window timing and patient selection, not the agent. The planned IPD meta-analysis with TenCRAOS and REVISION is the next step.',
+      },
+      {
+        question: 'How does this compare to EAGLE (the older CRAO trial)?',
+        answer: 'EAGLE (Schumacher 2010) tested intra-arterial fibrinolysis with treatment windows up to 20 hours — a fundamentally different intervention. EAGLE showed no efficacy and a 37% adverse-event rate vs 4%. THEIA tested intravenous alteplase within a strict 4.5h window and showed neither efficacy nor harm (0 symptomatic ICH, 1 asymptomatic incidental haematoma). The two trials test different drugs, different routes, different windows, and different patient populations.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'Among 56 patients with non-arteritic acute CRAO treated within 4.5 h of severe vision loss (Snellen <20/400) in 16 French stroke units, IV alteplase 0.9 mg/kg did not produce a statistically significant improvement in visual acuity at 1 month compared with 300 mg oral aspirin (66% vs 48%, adjusted OR 1.10, 95% CI 0.07–18.39, p=0.95). IV alteplase at this dose within this window was safe in this population: 0 symptomatic ICH, 0 major extracranial bleeds, and only 1 asymptomatic incidentally-detected intracranial haematoma in the alteplase arm.',
+      doesNotProve: 'THEIA does not prove IV alteplase is ineffective for CRAO. The trial was underpowered (N=70 instead of the planned size that would be needed to detect a smaller real difference); the directionally favourable +17 pp result is compatible with a true benefit. It does not establish or refute efficacy outside the 4.5h window or in patients with foveal-sparing CRAO. It does not justify withholding aspirin or other antiplatelet therapy from a CRAO patient (≥1/3 have concomitant cerebral ischaemia on DWI). It does not test tenecteplase (TenCRAOS) or earlier treatment windows specifically.',
+      cautions: 'Trial underpowered. Aspirin comparator means alteplase was tested against an active treatment, not placebo — interpret the 17 pp signal accordingly. Mean treatment time was 232 min and only 11% of patients were treated within 3.0h; retinal ischaemic tolerance may be much shorter than 4.5h (potentially as short as 15 min for complete CRAO), making the trial window itself a potential confounder. Boehringer Ingelheim co-sponsorship with manuscript review for alteplase-related accuracy noted. Conducted in French stroke units with mature ophthalmology-stroke integration; generalisability to systems without such integration uncertain. Apply the AHA / NANOS 2021 Scientific Statement "may be considered" recommendation pending the planned IPD meta-analysis with TenCRAOS and REVISION.',
+    },
+    bedsidePearl: 'THEIA (Lancet Neurology 2025): first phase 3 RCT of IV alteplase 0.9 mg/kg vs aspirin 300 mg within 4.5h of non-arteritic CRAO. Visual acuity improvement at 1 month 66% vs 48% (adjusted OR 1.10, p=0.95) — directionally favouring alteplase but not significant; trial underpowered at N=70. Zero symptomatic ICH in either arm. Result does not prove alteplase ineffective; it underscores the need for the planned IPD meta-analysis (THEIA + TenCRAOS + REVISION). Pre-THEIA guidance (Mac Grory AHA/NANOS 2021): IV alteplase "may be considered" for disabling CRAO meeting criteria. THEIA does not change that.',
+    bottomLineSummary: 'THEIA enrolled 70 patients with acute non-arteritic CRAO (Snellen <20/400) within 4.5h across 16 French stroke units and randomised them to IV alteplase 0.9 mg/kg or 300 mg oral aspirin. Visual acuity improvement of at least 0.3 LogMAR at 1 month occurred in 19/29 (66%) alteplase vs 13/27 (48%) aspirin patients — adjusted OR 1.10 (95% CI 0.07–18.39), p=0.95. The trial was explicitly underpowered (sized for a 30 pp difference; observed difference 17 pp). Safety was reassuring: 0 symptomatic ICH, 0 major bleeding related to study treatment, 1 asymptomatic incidental haematoma in the alteplase arm. Functional reading vision (Snellen 20/63) was achieved in only 14% alteplase and 7% aspirin patients, consistent with the hypothesis that retinal ischaemic tolerance may be much shorter than 4.5h. Authors call for an individual-patient-data meta-analysis combining THEIA + TenCRAOS (NCT04526951) + REVISION (NCT04965038) to produce level 1 evidence.',
+    conclusion: 'THEIA is the first phase 3 randomised controlled trial of intravenous thrombolysis for acute non-arteritic central retinal artery occlusion (CRAO). Conducted across 16 French stroke units between June 2018 and October 2023, the trial enrolled 70 patients with severe monocular vision loss (Snellen <20/400) confirmed as CRAO by ophthalmologist within 4.5h of symptom onset and randomised them 1:1 to IV alteplase 0.9 mg/kg (the standard ischaemic-stroke dose) plus oral placebo or to 300 mg oral aspirin plus IV saline placebo, using a double-dummy patient-blinded and assessor-blinded design. The primary endpoint of visual acuity improvement of at least 0.3 LogMAR at 1 month occurred in 19/29 (66%) alteplase patients vs 13/27 (48%) aspirin patients — unadjusted risk difference +17.4 percentage points (95% CI -11.8 to +46.5), adjusted OR 1.10 (95% CI 0.07–18.39), p=0.95. The directionally favourable but non-significant primary result was explicitly attributed by the authors to underpowering: the trial was sized for a 30 pp absolute improvement (40% alteplase vs assumed 10% aspirin), but observed aspirin response was 48%, far higher than expected. Functional reading vision (≤0.5 LogMAR / Snellen 20/63) at 1 month occurred in only 14% alteplase and 7% aspirin patients — low durable recovery in both arms is consistent with the hypothesis that retinal ischaemic tolerance may be much shorter than the trial window (potentially as little as 15 minutes for complete CRAO per Tobalem 2018). Safety was strongly reassuring: zero symptomatic intracranial haemorrhages, zero major extracranial bleeds related to study treatment in either arm; one asymptomatic 15 mm parietal haematoma detected on day 1 CT in the alteplase arm without neurological consequence. The low haemorrhagic-event rate is striking given the typical 6% sICH rate with IV alteplase in acute ischaemic stroke and likely reflects the absence of an established large ischaemic brain lesion in CRAO. Limitations include the small sample size, the use of aspirin (rather than placebo) as comparator (chosen because at least one-third of CRAO patients have concomitant cerebral ischaemia on DWI MRI), open-label treating staff despite double-dummy patient and assessor masking, slow recruitment over 5+ years extended by COVID-19, and Boehringer Ingelheim co-sponsorship with manuscript review for alteplase-related accuracy. THEIA does not change the existing AHA / NANOS 2021 Scientific Statement on CRAO management (Mac Grory et al., Stroke 2021;52:e282-e294), which suggests IV alteplase "may be considered" for patients with disabling visual deficits meeting criteria. The trial confirms that IV alteplase 0.9 mg/kg within 4.5h is safe in CRAO, fails to demonstrate (but does not refute) efficacy versus active aspirin comparator, and motivates the planned individual-patient-data meta-analysis combining THEIA with TenCRAOS (NCT04526951) and REVISION (NCT04965038) — both still recruiting at time of THEIA publication — to produce level 1 evidence. The predecessor CRAO trial, EAGLE (Schumacher et al., Ophthalmology 2010), tested intra-arterial fibrinolysis with windows up to 20 hours and found no efficacy with increased adverse events; THEIA tests a fundamentally different intervention (IV vs IA) within a much narrower and earlier window. The clinical implications are: CRAO belongs in the stroke pathway (triage to ED, stroke code activation, funduscopy, GCA screening, brain imaging, ophthalmology co-management); IV alteplase remains "may be considered" pending the IPD meta-analysis; aspirin should not be withheld; the secondary-prevention workup follows the standard ischaemic stroke pathway because CRAO is a marker of cerebrovascular and cardiovascular disease.',
+    source: 'Préterre et al. (Lancet Neurology 2025)',
+    applicability: {
+      populationExclusions: [
+        'Branch retinal artery occlusion without significant central vision loss',
+        'CRAO with foveal sparing due to cilioretinal artery (no foveal ischaemia)',
+        'Suspected arteritic CRAO (giant cell arteritis)',
+        'Unknown or uncertain symptom onset time',
+        'Patients on therapeutic anticoagulation',
+        'Patients beyond the 4.5h window (THEIA tested only the early window)',
+      ],
+      geography: 'Enrolled exclusively in 16 French stroke units with established ophthalmology-stroke co-management. Generalisability to systems without such integration is uncertain. The trial design implicitly assumes rapid ophthalmologist availability for diagnostic confirmation.',
+      doseSpecific: 'Tested IV alteplase 0.9 mg/kg (the standard acute-ischaemic-stroke dose) only. Tenecteplase has not been tested in a completed phase 3 CRAO trial; TenCRAOS (NCT04526951) is recruiting. Low-dose alteplase (e.g. 0.6 mg/kg) has not been tested in CRAO.',
+    },
+    legend: {
+      finding: 'First phase 3 RCT of IV alteplase vs aspirin for CRAO within 4.5h; directional but underpowered; safety reassuring.',
+      bottomLineTag: 'No benefit',
+      keyStat: '66% vs 48%, p=0.95',
+    },
+  },
 };

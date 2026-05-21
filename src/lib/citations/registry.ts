@@ -394,4 +394,46 @@ export const CITATION_REGISTRY: CitationRegistry = {
     review_window_months: 36,
     quoted_text: 'There was a significant 14% (SD 7) proportional reduction in mortality during the scheduled treatment period (343 [3.3%] deaths among aspirin-allocated patients vs 398 [3.9%] deaths among placebo-allocated patients; 2p=0.04). There were significantly fewer recurrent ischaemic strokes in the aspirin-allocated than in the placebo-allocated group (167 [1.6%] vs 215 [2.1%]; 2p=0.01) but slightly more haemorrhagic strokes (115 [1.1%] vs 93 [0.9%]; 2p>0.1). For the combined in-hospital endpoint of death or non-fatal stroke at 4 weeks, there was a 12% (6) proportional risk reduction with aspirin (545 [5.3%] vs 614 [5.9%]; 2p=0.03), an absolute difference of 6.8 (3.2) fewer cases per 1000.',
   },
+
+  // ─── THEIA (2025) — first phase 3 RCT of IV alteplase for non-arteritic CRAO
+  // Lancet Neurology 2025;24(11):909-919. Préterre C, Gaultier A, Obadia M
+  // et al. on behalf of the THEIA collaborators. 16 French stroke units;
+  // N=70 (Snellen <20/400 CRAO within 4.5h); IV alteplase 0.9 mg/kg vs oral
+  // aspirin 300 mg in a double-dummy, patient- and assessor-blinded design.
+  // Neutral primary (underpowered) but safety reassuring (0 sICH). 36-month
+  // review window per §13.7 (landmark RCT in a rare disease). Full PDF read
+  // by medical-scientist on 2026-05-20; PMID confirmed via PubMed. See
+  // docs/evidence-packets/theia-2026-05-20.md.
+  'preterre-theia-2025': {
+    id: 'preterre-theia-2025',
+    source: 'trial',
+    title: 'Intravenous alteplase versus oral aspirin for acute central retinal artery occlusion within 4·5 h of severe vision loss (THEIA): a multicentre, double-dummy, patient-blinded and assessor-blinded, randomised, controlled, phase 3 trial',
+    year: 2025,
+    url: 'https://doi.org/10.1016/S1474-4422(25)00308-4',
+    pmid: '41109232',
+    last_reviewed: '2026-05-20',
+    review_window_months: 36,
+    quoted_text: 'Among 56 patients with available data on the primary endpoint, 19 (66%) of 29 patients in the alteplase group and 13 (48%) of 27 patients in the aspirin group showed an improvement in visual acuity of at least 0·3 LogMAR at 1 month (unadjusted risk difference 17·4 [95% CI –11·8 to 46·5]; adjusted odds ratio 1·1 [95% CI 0·07 to 18·39]; p=0·95). One asymptomatic intracranial haemorrhage related to study treatment was reported in the alteplase group. No symptomatic haemorrhages or major bleeding related to study treatment were reported. Intravenous alteplase administered within 4·5 h of CRAO onset was not associated with a significant improvement in visual acuity compared with aspirin, despite a higher rate of improvement in the alteplase group. However, the study was likely underpowered to detect a statistical difference.',
+  },
+
+  // ─── AHA / NANOS 2021 Scientific Statement on CRAO management ────────────
+  // Mac Grory B, et al. Stroke 2021;52:e282-e294. The pre-THEIA statement
+  // that established "IV tPA may be considered" framing for disabling CRAO
+  // and that CRAO triage belongs in the stroke pathway. THEIA does not
+  // supersede this statement; the planned IPD meta-analysis (THEIA +
+  // TenCRAOS + REVISION) is the path to level 1 evidence. 24-month review
+  // window per §13.7 (guideline-statement currency; expect post-THEIA
+  // update).
+  'mac-grory-aha-nanos-crao-2021': {
+    id: 'mac-grory-aha-nanos-crao-2021',
+    source: 'guideline',
+    title: 'Management of Central Retinal Artery Occlusion: A Scientific Statement From the American Heart Association',
+    year: 2021,
+    section: 'Treatment — Intravenous Thrombolysis',
+    url: 'https://www.ahajournals.org/doi/10.1161/STR.0000000000000366',
+    pmid: '33677974',
+    last_reviewed: '2026-05-20',
+    review_window_months: 24,
+    quoted_text: 'Acute CRAO is a medical emergency, and immediate triage to an emergency department capable of advanced stroke care is necessary. … Treatment with intravenous tissue plasminogen activator within 4.5 hours of symptom onset is suggested and may be considered for patients with disabling visual deficits who present early in the disease course and meet criteria for thrombolysis.',
+  },
 };

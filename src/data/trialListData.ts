@@ -216,6 +216,15 @@ const manualTrials: Omit<TrialItem, 'year'>[] = [
     isPlaceholder: false,
     description: 'Large phase 3 prourokinase trial confirming noninferiority to alteplase with lower bleeding rates.',
   }),
+  // THEIA: first phase 3 RCT of IV alteplase for non-arteritic CRAO within
+  // 4.5h. Neutral primary (underpowered, N=70); safety reassuring (0 sICH).
+  // Categorised under 'ivt' (Acute Reperfusion: IVT) — listCategory in
+  // trialData.ts is 'thrombolysis' (string literal). Predecessor: EAGLE
+  // (intra-arterial fibrinolysis, 2010).
+  buildTrial('theia-trial', 'THEIA', 'ivt', '10.1016/S1474-4422(25)00308-4', {
+    isPlaceholder: false,
+    description: 'First phase 3 RCT of IV alteplase vs aspirin for non-arteritic CRAO within 4.5h. Directionally favourable but underpowered (N=70); zero symptomatic ICH.',
+  }),
 
   buildTrial('mr-clean-trial', 'MR CLEAN', 'evt', '10.1056/NEJMoa1411587', {
     isPlaceholder: false,
