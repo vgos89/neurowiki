@@ -66,22 +66,23 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     text: 'Does my LVO patient need EVT?',
     icon: 'target',
     meta: 'early window, late window, large-core, and MeVO boundary',
-    trialCount: 14,
+    trialCount: 15,
     trialIds: [
-      'mr-clean-trial',       // MR CLEAN 2015 — first positive EVT RCT
-      'escape-trial',         // ESCAPE 2015 — early window, small-core
-      'extend-ia-trial',      // EXTEND-IA 2015 — perfusion-selected early window
-      'swift-prime-trial',    // SWIFT PRIME 2015 — early window stent retriever
-      'revascat-trial',       // REVASCAT 2015 — early window Catalan
-      'thrace-trial',         // THRACE 2016 — French bridging-therapy LVO-EVT
-      'defuse-3-trial',       // DEFUSE-3 2018 — late window 6-16 h, perfusion-guided
-      'dawn-trial',           // DAWN 2018 — late window to 24 h, clinical-core mismatch
-      'laste-trial',          // LASTE 2022 — late window 6.5-24 h general population
-      'tension-trial',        // TENSION 2023 — large-core (ASPECTS 3-5), unrestricted
-      'select2-trial',        // SELECT2 2023 — large-core, non-contrast CT selected
-      'angel-aspect-trial',   // ANGEL-ASPECT 2023 — large-core (China)
-      'escape-mevo-trial',    // ESCAPE-MeVO 2024 — extends LVO question into M2/M3, ACA, PCA territory
-      'distal-trial',         // DISTAL 2024 — distal occlusion boundary (negative end of EVT)
+      'mr-clean-trial',           // MR CLEAN 2015 — first positive EVT RCT
+      'escape-trial',             // ESCAPE 2015 — early window, small-core
+      'extend-ia-trial',          // EXTEND-IA 2015 — perfusion-selected early window
+      'swift-prime-trial',        // SWIFT PRIME 2015 — early window stent retriever
+      'revascat-trial',           // REVASCAT 2015 — early window Catalan
+      'thrace-trial',             // THRACE 2016 — French bridging-therapy LVO-EVT
+      'defuse-3-trial',           // DEFUSE-3 2018 — late window 6-16 h, perfusion-guided
+      'dawn-trial',               // DAWN 2018 — late window to 24 h, clinical-core mismatch
+      'rescue-japan-limit-trial', // RESCUE-Japan LIMIT 2022 — first positive large-core EVT RCT (ASPECTS 3-5)
+      'laste-trial',              // LASTE 2024 — unrestricted-size large infarct
+      'tension-trial',            // TENSION 2023 — large-core (ASPECTS 3-5), unrestricted
+      'select2-trial',            // SELECT2 2023 — large-core, non-contrast CT selected
+      'angel-aspect-trial',       // ANGEL-ASPECT 2023 — large-core (China)
+      'escape-mevo-trial',        // ESCAPE-MeVO 2024 — extends LVO question into M2/M3, ACA, PCA territory
+      'distal-trial',             // DISTAL 2024 — distal occlusion boundary (negative end of EVT)
     ],
   },
   {
@@ -241,31 +242,31 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'large-core-evt',
     text: 'Should I do EVT for large-core stroke (low ASPECTS)?',
     icon: 'target',
-    meta: 'four positive RCTs (2022–2023) reversing the small-core-only EVT paradigm',
-    trialCount: 4,
+    meta: 'five positive RCTs (2022–2024) reversing the small-core-only EVT paradigm',
+    trialCount: 5,
     trialIds: [
-      'laste-trial',          // LASTE 2022 — late window 6.5-24 h, general population
-      'select2-trial',        // SELECT2 2023 — large-core, non-contrast CT selected
-      'angel-aspect-trial',   // ANGEL-ASPECT 2023 — large-core (China)
-      'tension-trial',        // TENSION 2023 — large-core (ASPECTS 3-5), unrestricted
-      // TODO (V review): add rescue-japan-limit-trial once it lands in the catalog
-      // (currently in V's paywalled Tier 2 PDF queue).
+      'rescue-japan-limit-trial', // RESCUE-Japan LIMIT 2022 — first positive RCT for large-core EVT (ASPECTS 3-5, Japan)
+      'laste-trial',              // LASTE 2024 — unrestricted-size large infarct (ASPECTS 0-2 stratum)
+      'select2-trial',            // SELECT2 2023 — large-core, non-contrast CT selected
+      'angel-aspect-trial',       // ANGEL-ASPECT 2023 — large-core (China)
+      'tension-trial',            // TENSION 2023 — large-core (ASPECTS 3-5), unrestricted
     ],
   },
   {
     id: 'late-window-selection',
     text: 'Perfusion imaging or non-contrast CT for late-window selection?',
     icon: 'target',
-    meta: 'evolution from CT-perfusion / MRI mismatch (DAWN, DEFUSE-3) to plain-CT selection (LASTE, SELECT2, ANGEL-ASPECT)',
-    trialCount: 7,
+    meta: 'evolution from CT-perfusion / MRI mismatch (DAWN, DEFUSE-3) to plain-CT and MRI ASPECTS selection (RESCUE-Japan LIMIT, LASTE, SELECT2, ANGEL-ASPECT)',
+    trialCount: 8,
     trialIds: [
-      'dawn-trial',           // DAWN 2018 — clinical-core mismatch, 6-24h
-      'defuse-3-trial',       // DEFUSE-3 2018 — perfusion mismatch, 6-16h
-      'extend-trial',         // EXTEND 2019 — perfusion-guided IVT 4.5-9h
-      'laste-trial',          // LASTE 2022 — late window without perfusion
-      'tension-trial',        // TENSION 2023 — non-contrast CT large-core
-      'select2-trial',        // SELECT2 2023 — non-contrast CT large-core
-      'angel-aspect-trial',   // ANGEL-ASPECT 2023 — non-contrast CT large-core
+      'dawn-trial',               // DAWN 2018 — clinical-core mismatch, 6-24h
+      'defuse-3-trial',           // DEFUSE-3 2018 — perfusion mismatch, 6-16h
+      'extend-trial',             // EXTEND 2019 — perfusion-guided IVT 4.5-9h
+      'rescue-japan-limit-trial', // RESCUE-Japan LIMIT 2022 — MRI ASPECTS + FLAIR-mismatch selection, 6-24h
+      'laste-trial',              // LASTE 2024 — late window without perfusion
+      'tension-trial',            // TENSION 2023 — non-contrast CT large-core
+      'select2-trial',            // SELECT2 2023 — non-contrast CT large-core
+      'angel-aspect-trial',       // ANGEL-ASPECT 2023 — non-contrast CT large-core
     ],
   },
   {

@@ -11064,4 +11064,199 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'INR above 1.5 or platelets below 100,000 at enrollment',
     ],
   },
+  // ========== LARGE-CORE EVT INDEX TRIAL (2022) ==========
+  // Placed near ANGEL-ASPECT, SELECT2, TENSION, LASTE per V intent
+  // (large-core EVT cluster). RESCUE-Japan LIMIT was the first positive
+  // RCT in this lineage; SELECT2 and ANGEL-ASPECT (2023) confirmed.
+  // Class E entry: medical-scientist authored 2026-05-20 from V-supplied
+  // NEJM PDF; full evidence packet at docs/evidence-packets/rescue-japan-limit-2026-05-20.md.
+  /* claimId: rescue-japan-limit-evt-large-core-2022 */
+  'rescue-japan-limit-trial': {
+    id: 'rescue-japan-limit-trial',
+    title: 'RESCUE-Japan LIMIT Trial',
+    subtitle: 'Endovascular Therapy for Acute Stroke with a Large Ischemic Region',
+    category: 'Neuro Trials',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    trialResult: 'POSITIVE',
+    claimId: 'rescue-japan-limit-evt-large-core-2022',
+    doi: '10.1056/NEJMoa2118191',
+    pmid: '35138767',
+    clinicalTrialsId: 'NCT03702413',
+    source: 'Yoshimura S et al. (NEJM 2022;386:1303-1313)',
+    listCategory: 'thrombectomy',
+    listDescription: 'First positive large-core EVT trial: ASPECTS 3-5; mRS 0-3 31% vs 13%; NNT 5.',
+    harmSignal: 'Any ICH within 48h was 58.0% vs 31.4% (RR 1.85, 95% CI 1.33-2.58, P<0.001); symptomatic ICH numerically higher (9.0% vs 4.9%) but not significant',
+    applicability: {
+      populationExclusions: [
+        'ASPECTS 0-2 (extensive infarction) excluded. RESCUE-Japan LIMIT does not support EVT in this stratum; see LASTE 2024 for unrestricted-size data',
+        'Pre-stroke mRS above 1 excluded. Patients with prior disability not represented',
+        'Japanese population only. Generalizability beyond Japan acknowledged as a limitation by the authors',
+        'Posterior circulation occlusion not addressed. See ATTENTION and BAOCHE',
+      ],
+      imagingSelection: 'CT or MRI ASPECTS 3-5; MRI predominant (88% of enrollees). For 6-24h subgroup, no signal change on FLAIR required to confirm recent infarction',
+      doseSpecific: 'Approximately 27% of patients in each arm received IV alteplase at the Japanese standard dose of 0.6 mg/kg (lower than the 0.9 mg/kg standard in US and European guidelines). The low rt-PA rate and reduced dose may limit generalizability of the medical-care comparator',
+      geography: 'Conducted at 45 hospitals in Japan, November 2018 to September 2021. No industry involvement; funded by the Mihara Cerebrovascular Disorder Research Promotion Fund and the Japanese Society for Neuroendovascular Therapy',
+    },
+    stats: {
+      sampleSize: {
+        value: '203',
+        label: 'Randomized Patients',
+        info: 'Multicenter open-label RCT at 45 hospitals in Japan. 101 assigned to EVT, 102 to medical care alone. 1 EVT patient withdrew consent; final analysis 100 vs 102.',
+      },
+      primaryEndpoint: {
+        value: 'mRS 0-3',
+        label: 'at 90 Days',
+        info: 'Primary outcome was binary proportion with modified Rankin scale score of 0 to 3 at 90 days. Binary-superiority design; NNT valid.',
+      },
+      pValue: {
+        value: '0.002',
+        label: 'Statistically Sig.',
+        highlight: true,
+      },
+      effectSize: {
+        value: 'RR 2.43',
+        label: '95% CI 1.35-4.37',
+        highlight: true,
+        info: 'Relative risk 2.43 (95% CI 1.35-4.37). Absolute risk difference 18.3 percentage points (31.0% EVT vs 12.7% medical care).',
+      },
+      absoluteReduction: {
+        value: '18.3%',
+        label: 'Absolute Benefit',
+        info: '18.3 percentage point absolute increase in mRS 0-3 at 90 days. NNT = 1 / 0.183 = approximately 5.',
+        highlight: true,
+      },
+    },
+    trialDesign: {
+      type: [
+        'Multicenter randomized clinical trial',
+        'Open-label with blinded mRS assessment at 90 days',
+        '1:1 stochastic minimization (EVT + medical care vs medical care alone)',
+        'Pragmatic enrollment at 45 hospitals in Japan',
+      ],
+      timeline: 'Enrolled November 2018 to September 2021',
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 31.0,
+        label: 'mRS 0-3 at 90 days',
+        name: 'EVT + Medical Care',
+      },
+      control: {
+        percentage: 12.7,
+        label: 'mRS 0-3 at 90 days',
+        name: 'Medical Care Alone',
+      },
+    },
+    intervention: {
+      treatment: 'Endovascular therapy plus medical care. Device choice at operator discretion: stent retriever, aspiration catheter, balloon angioplasty, intracranial stent, or carotid-artery stent. TICI 2b reperfusion achieved in 86% of EVT patients.',
+      control: 'Medical care alone per AHA/ASA guidelines. IV alteplase given when appropriate at the Japanese low-dose of 0.6 mg/kg (29 of 102 medical-care patients, 28.4%).',
+    },
+    clinicalContext: 'Before RESCUE-Japan LIMIT, EVT was generally avoided in large infarctions (ASPECTS at most 5). Foundational EVT trials (MR CLEAN, ESCAPE, EXTEND-IA, SWIFT PRIME, REVASCAT, DAWN, DEFUSE-3) had excluded large cores; the AHA/ASA 2019 guideline recommended EVT for ASPECTS at least 6. A meta-analysis of observational data (Roman, Menon, Blasco; Lancet Neurol 2018) suggested that EVT might still benefit patients with ASPECTS at most 5. RESCUE-Japan LIMIT was the first randomized trial to test this directly. It is the index trial of the large-core EVT lineage that SELECT2 (2023), ANGEL-ASPECT (2023), TENSION (2023), and LASTE (2024) subsequently confirmed.',
+    calculations: {
+      nnt: 5.5,
+      nntExplanation: 'NNT 5.5, computed from the absolute risk difference of 18.3 percentage points (mRS 0-3 31.0% with EVT vs 12.7% with medical care alone). For approximately every 5 to 6 patients with ASPECTS 3-5 LVO treated with EVT instead of medical care alone, one additional patient achieves mRS 0-3 at 90 days. This NNT is among the strongest in the EVT literature. Binary-superiority primary; NNT framing valid (not an ordinal-shift trial).',
+    },
+    pearls: [
+      'First positive RCT showing EVT benefit in ASPECTS 3-5. Opened the large-core EVT question that SELECT2, ANGEL-ASPECT, TENSION, and LASTE subsequently confirmed.',
+      'Primary outcome mRS 0-3 at 90 days reached 31.0% with EVT vs 12.7% with medical care alone (RR 2.43, 95% CI 1.35-4.37, P=0.002).',
+      'NNT 5 from the binary primary outcome. Among the largest absolute treatment effects in the EVT literature.',
+      'Safety trade-off: any intracranial hemorrhage within 48 hours was 58.0% with EVT vs 31.4% with medical care alone (RR 1.85, 95% CI 1.33-2.58, P<0.001). Symptomatic ICH was higher but not significant (9.0% vs 4.9%, P=0.25).',
+      'No mortality difference at 90 days (18.0% EVT vs 23.5% medical, RR 0.77, 95% CI 0.44-1.32, P=0.33). The hemorrhage signal did not translate to excess death.',
+      'Inclusion: age 18 or older, NIHSS 6 or greater, pre-stroke mRS 0 or 1, ICA or M1 occlusion, ASPECTS 3-5, within 6 hours of LKW or 6-24 hours with no FLAIR signal change.',
+      'ASPECTS predominantly assessed by MRI (88% of enrollees). MRI ASPECTS may classify infarcts one level lower than CT (i.e., larger); CT-assessed patients with ASPECTS 3-4 in this trial might have measured 4-5 on MRI.',
+      'Japanese low-dose alteplase 0.6 mg/kg used in only 27% of patients. The standard 0.9 mg/kg dose elsewhere and a higher rt-PA rate might have improved outcomes in both arms.',
+      'Mean age was 76 years (older than SELECT2 and ANGEL-ASPECT cohorts). Median NIHSS 22. Median infarct volume 94 mL (EVT) and 110 mL (medical).',
+      'TICI 2b reperfusion achieved in 86% of the EVT arm. High technical success despite the large-core population.',
+      'Subgroup analysis directionally favored EVT across age (under 75 vs 75 or older), LKW-to-randomization interval (under 6h vs 6h or longer), NIHSS (under 21 vs 21 or higher), and rt-PA use. Subgroup analyses were exploratory and underpowered.',
+      'NIHSS improvement of at least 8 points at 48 hours: 31.0% with EVT vs 8.8% with medical care (RR 3.51, 95% CI 1.76-7.00). Early neurological improvement supported the primary finding.',
+      'Ordinal shift across mRS (secondary outcome): common OR 2.42 (95% CI 1.46-4.01). The full mRS distribution favored EVT, consistent with the binary primary.',
+      'Decompressive craniectomy within 7 days: 10.0% EVT vs 13.7% medical (RR 0.73, 95% CI 0.34-1.56). No statistical difference; numerically lower with EVT.',
+      'Recurrent ischemic stroke within 90 days: 5.0% EVT vs 6.9% medical (RR 0.73, 95% CI 0.24-2.22). No difference.',
+      'Trial stopped at the pre-specified sample size of 200 (203 enrolled), powered at 90% to detect the registry-derived OR of 2.7 assumed for the comparison.',
+      'Open-label design without sham. mRS at 90 days assessed by physicians or physical therapists who were unaware of group assignment.',
+      'No industry involvement. Funded by Mihara Cerebrovascular Disorder Research Promotion Fund and Japanese Society for Neuroendovascular Therapy.',
+    ],
+    bedsidePearl: 'For ASPECTS 3-5 anterior LVO within 6 hours of LKW, or 6-24 hours without FLAIR signal change, EVT improved mRS 0-3 at 90 days from 12.7% to 31.0% (RR 2.43, NNT 5). The trade-off is a near-doubling of any-ICH rate (58% vs 31%, P<0.001), although symptomatic ICH and mortality were not significantly different. Quote both numbers when consenting: 5 patients treated to gain one functional outcome, against the higher hemorrhage rate.',
+    bottomLineSummary: 'RESCUE-Japan LIMIT was the first randomized trial to show EVT benefit in large-core stroke (ASPECTS 3-5). Among 203 Japanese patients with ICA or M1 occlusion within 24 hours of LKW, EVT increased mRS 0-3 at 90 days from 12.7% to 31.0% (RR 2.43, 95% CI 1.35-4.37, P=0.002, NNT 5). The any-ICH rate nearly doubled (58.0% vs 31.4%, P<0.001) but symptomatic ICH and 90-day mortality were not significantly different. The trial opened the large-core EVT question that SELECT2, ANGEL-ASPECT, TENSION, and LASTE confirmed. AHA/ASA 2026 §4.7.2 supports Class I large-core EVT based in part on this index trial.',
+    howToReadChart: [
+      {
+        question: 'What does the chart show?',
+        answer: '100 dots per arm. A filled dot is a patient who reached mRS 0-3 at 90 days. The EVT arm has 31 filled dots; medical care alone has 13. The 18-dot gap is the absolute benefit.',
+      },
+      {
+        question: 'What should I look at first?',
+        answer: 'The 18 percentage-point gap. That translates to NNT 5: for every 5 to 6 patients with ASPECTS 3-5 LVO treated with EVT instead of medical care, one additional patient achieves mRS 0-3. This is one of the largest absolute treatment effects in stroke EVT.',
+      },
+      {
+        question: 'What does it mean for my patient?',
+        answer: 'For an ASPECTS 3-5 anterior LVO within 24 hours, EVT offers a substantial chance of achieving moderate disability or better at 90 days. The hemorrhage risk is real (any ICH 58% vs 31%) but symptomatic ICH and mortality are not significantly different. Quote both numbers when consenting.',
+      },
+      {
+        question: 'How was the cohort selected?',
+        answer: 'Adults 18 or older, NIHSS 6 or greater, pre-stroke mRS 0 or 1, ICA or M1 occlusion on CTA or MRA, ASPECTS 3-5 (predominantly MRI-determined), within 6 hours of LKW or 6-24 hours if no FLAIR signal change. ASPECTS 0-2 was excluded.',
+      },
+    ],
+    howToInterpret: {
+      proves: 'In Japanese adults 18 or older with NIHSS 6 or greater, pre-stroke mRS 0 or 1, and ICA or M1 occlusion, with ASPECTS 3-5 by CT or MRI, EVT within 6 hours of LKW (or 6-24 hours with no FLAIR signal change) improves the chance of mRS 0-3 at 90 days vs medical care alone (RR 2.43, NNT 5).',
+      doesNotProve: 'It does not prove benefit for ASPECTS 0-2 (excluded; addressed by LASTE 2024). It does not prove benefit in non-Japanese populations directly; SELECT2, ANGEL-ASPECT, and TENSION subsequently confirmed the finding in US, Chinese, and European cohorts. It does not address posterior circulation (see ATTENTION and BAOCHE). The narrow rt-PA use and Japanese low-dose alteplase limit direct application to settings where 0.9 mg/kg alteplase is standard.',
+      cautions: 'The any-ICH rate was significantly higher with EVT (58.0% vs 31.4%, P<0.001), although symptomatic ICH was not significantly different (9.0% vs 4.9%, P=0.25). Open-label design with blinded mRS assessment. Per-protocol analysis excluded 14 patients but showed results consistent with the primary analysis. Subgroup and post hoc analyses were exploratory; no multiplicity adjustment. ASPECTS determined by MRI in 88% of patients; MRI ASPECTS may classify infarcts one level lower than CT, so CT-equivalent ASPECTS in this cohort may have been 4-6.',
+    },
+    inclusionCriteria: [
+      'Age 18 years or older',
+      'NIHSS at admission of 6 or greater',
+      'Pre-stroke modified Rankin scale 0 or 1',
+      'Occlusion of internal carotid artery or M1 segment of MCA on CTA or MRA',
+      'ASPECTS 3 to 5 by CT or DWI-MRI',
+      'Randomization within 6 hours of LKW, or 6 to 24 hours with no signal change on FLAIR (indicating recent infarction)',
+      'Endovascular therapy could be initiated within 60 minutes of randomization',
+    ],
+    exclusionCriteria: [
+      'ASPECTS 0 to 2 (extensive infarction, unlikely to regain independence)',
+      'Clinically significant cerebral mass effect with midline shift',
+      'Acute intracranial hemorrhage on CT or MRI',
+      'Investigator-judged high risk of hemorrhage',
+    ],
+    safetyProfile: {
+      sICH: {
+        evt: 9.0,
+        control: 4.9,
+        label: 'Symptomatic ICH within 48h',
+        tooltip: 'Symptomatic ICH defined as parenchymal hematoma type 2 (clot in at least 30% of the infarcted area with space-occupying effect) plus worsening of NIHSS by at least 4 points within 48 hours. EVT 9.0% vs medical care 4.9% (RR 1.84, 95% CI 0.64-5.29, P=0.25). Not statistically significant. Source: Yoshimura S et al., NEJM 2022, Table 2 p.1309.',
+        color: 'warning',
+      },
+      mortality: {
+        evt: 18.0,
+        control: 23.5,
+        label: '90-day mortality',
+        tooltip: '90-day mortality 18.0% EVT vs 23.5% medical care (RR 0.77, 95% CI 0.44-1.32, P=0.33). No significant difference; numerically lower with EVT despite the higher any-ICH rate. Source: Yoshimura S et al., NEJM 2022, Table 2.',
+      },
+      adverseEvents: {
+        evt: 58.0,
+        control: 31.4,
+        label: 'Any intracranial hemorrhage within 48h',
+        tooltip: 'Any intracranial hemorrhage within 48 hours: 58.0% EVT vs 31.4% medical care (RR 1.85, 95% CI 1.33-2.58, P<0.001). The any-ICH signal is the central safety trade-off of large-core EVT. Symptomatic ICH and mortality were not significantly different. Source: Yoshimura S et al., NEJM 2022, Table 2 p.1309.',
+        color: 'danger',
+      },
+    },
+    safetyData: 'The any-ICH signal is the central safety trade-off of EVT in large-core stroke. Any ICH within 48 hours was nearly doubled in the EVT arm (58.0% vs 31.4%, RR 1.85, P<0.001), although symptomatic ICH (9.0% vs 4.9%, P=0.25) and 90-day mortality (18.0% vs 23.5%, P=0.33) were not significantly different. The hemorrhage excess did not translate to excess death or excess decompressive craniectomy (10.0% vs 13.7%). The pattern matches subsequent large-core EVT trials (SELECT2, ANGEL-ASPECT, TENSION, LASTE), each of which showed increased hemorrhage without proportional mortality harm. Source: Yoshimura S et al., NEJM 2022, Table 2 p.1309.',
+    limitations: [
+      'Generalizability limited beyond the Japanese population. Authors explicitly acknowledged this.',
+      'Open-label design; mRS assessment was blinded but treating physicians and patients knew group assignment.',
+      'Pragmatic enrollment based on treating-neurologist judgment about EVT indication, which may have selected patients with more favorable characteristics.',
+      'IV rt-PA used in only 27% of patients at the Japanese low-dose of 0.6 mg/kg, lower than the 0.9 mg/kg standard elsewhere. Higher rt-PA use or higher dose might have improved outcomes in both groups and might have disadvantaged the medical-care comparator.',
+      'Perfusion imaging was not available at most participating Japanese hospitals during trial conduct; selection relied on ASPECTS rather than core/penumbra volumetry.',
+      'MRI-based ASPECTS may classify infarcts one level lower (larger) than CT-based ASPECTS. CT-equivalent ASPECTS in this cohort may have measured 4-6 rather than 3-5.',
+      'Secondary outcomes were not adjusted for multiple comparisons; the trial protocol states no definite conclusions can be drawn from them.',
+      'Subgroup analyses (age, time interval, NIHSS, rt-PA use) were exploratory and not powered.',
+      '14 patients (6 EVT, 8 medical) were excluded from the per-protocol analysis after adjudication for inclusion-criteria violations. Per-protocol results were consistent with the primary analysis.',
+      'Causes of death were not collected; whether deaths were procedure-related vs disease-related could not be determined.',
+    ],
+    legend: {
+      finding: 'EVT for ASPECTS 3-5 LVO improves 90-day mRS 0-3 (31% vs 13%).',
+      bottomLineTag: 'NNT 5',
+      keyStat: 'RR 2.43 (1.35-4.37)',
+    },
+    conclusion: 'RESCUE-Japan LIMIT was the first RCT to demonstrate that endovascular therapy improves functional outcome in patients with large ischemic core (ASPECTS 3-5), a population historically excluded from EVT trials. The 18-point absolute increase in mRS 0-3 (31% vs 13%, NNT 5) came at the cost of a significant excess in any intracranial hemorrhage (58% vs 31%, P<0.001), though symptomatic ICH did not differ significantly. SELECT2, ANGEL-ASPECT, TENSION, and LASTE later confirmed the signal across Western and broader populations.',
+  },
 };

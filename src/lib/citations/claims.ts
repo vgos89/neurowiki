@@ -27,6 +27,19 @@ import type { ClaimRegistry } from './schema';
 const DATA_SURFACE = { type: 'data' as const, field: 'claimId' as const };
 
 export const CLAIM_REGISTRY: ClaimRegistry = {
+  // ─── 2022 index large-core EVT trial (Japan) ─────────────────────────────
+  'rescue-japan-limit-evt-large-core-2022': {
+    id: 'rescue-japan-limit-evt-large-core-2022',
+    citation_ids: ['yoshimura-rescue-japan-limit-2022', 'aha-asa-2026-4.7.2'],
+    surfaces: [DATA_SURFACE],
+    description: 'RESCUE-Japan LIMIT trial: EVT for ASPECTS 3–5 within 6h (or 6–24h without FLAIR signal change) improved 90-day mRS 0–3 (31.0% vs 12.7%, RR 2.43, P=0.002). First positive RCT for large-core EVT; opened the question confirmed by SELECT2/ANGEL-ASPECT/TENSION/LASTE. Supports AHA/ASA 2026 §4.7.2.',
+  },
+  // ICH safety claim removed 2026-05-20 — TrialMetadata supports a single
+  // typed claimId per entry; the safety narrative is bound under the primary
+  // efficacy claim (rescue-japan-limit-evt-large-core-2022) whose description
+  // already cites the ICH trade-off. Re-introducing a separate safety claim
+  // would need a multi-claimId schema extension (deferred).
+
   // ─── Batch 3B deep pearls (step-2 LVO/EVT) ───────────────────────────────
   'select2-large-core-evt': {
     id: 'select2-large-core-evt',

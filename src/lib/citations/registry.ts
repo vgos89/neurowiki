@@ -18,6 +18,24 @@
 import type { CitationRegistry } from './schema';
 
 export const CITATION_REGISTRY: CitationRegistry = {
+  // ─── 2022 trial: index large-core EVT signal (Japan) ─────────────────────
+  // First positive RCT showing EVT benefit in ASPECTS 3–5; opened the large-
+  // core EVT question that SELECT2/ANGEL-ASPECT (2023), TENSION (2023), and
+  // LASTE (2024) subsequently confirmed. Verbatim quote from NEJM PDF read
+  // by medical-scientist on 2026-05-20 (V supplied full text). 36-month
+  // review window per §13.7 (landmark trial).
+  'yoshimura-rescue-japan-limit-2022': {
+    id: 'yoshimura-rescue-japan-limit-2022',
+    source: 'trial',
+    title: 'Endovascular Therapy for Acute Stroke with a Large Ischemic Region',
+    year: 2022,
+    url: 'https://www.nejm.org/doi/full/10.1056/NEJMoa2118191',
+    pmid: '35138767',
+    last_reviewed: '2026-05-20',
+    review_window_months: 36,
+    quoted_text: 'In a trial conducted in Japan, patients with large cerebral infarctions had better functional outcomes with endovascular therapy than with medical care alone but had more intracranial hemorrhages.',
+  },
+
   // ─── 2023–2024 trials: large-core EVT ────────────────────────────────────
   'select2-trial-2023': {
     id: 'select2-trial-2023',
