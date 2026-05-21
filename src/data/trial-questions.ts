@@ -357,4 +357,32 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'crest-2-trial',  // CREST-2 2025 — vs intensive medical management: stenting met (P=0.02), CEA did not (P=0.24)
     ],
   },
+  {
+    // Starter question — only ANNEXA-I in the catalog so far. Expansion
+    // queued on V's PDF queue: ANNEXA-4 (Connolly NEJM 2019, FXa broad),
+    // REVERSE-AD (Pollack NEJM 2017, dabigatran), INCH (Steiner Lancet Neurol
+    // 2016, 4F-PCC vs FFP warfarin RCT), Sarode 2013 (Circulation, 4F-PCC vs
+    // FFP general), and PATCH (Baharoglu Lancet 2016, antiplatelet-ICH —
+    // showed HARM, critical boundary). When those land, trialIds expands and
+    // trialCount bumps accordingly.
+    id: 'ich-anticoagulation-reversal',
+    text: 'How do I reverse anticoagulation in ICH?',
+    icon: 'pill',
+    meta: 'FXa, dabigatran, warfarin, and antiplatelet ICH — each requires a different reversal strategy',
+    trialCount: 1,
+    trialIds: [
+      'annexa-i-trial',  // ANNEXA-I 2024 — andexanet for FXa-inhibitor ICH; primary met, thrombotic-event safety counterbalance
+    ],
+  },
+  {
+    id: 'crao-management',
+    text: 'CRAO: thrombolysis or supportive care?',
+    icon: 'pill',
+    meta: 'central retinal artery occlusion — narrow ischemia window, first IV alteplase RCT plus the older intra-arterial trial',
+    trialCount: 2,
+    trialIds: [
+      'eagle-trial',   // EAGLE 2010 — intra-arterial tPA, halted for harm
+      'theia-trial',   // THEIA 2025 — IV alteplase vs aspirin, NEUTRAL/underpowered (N=70); directionally favors alteplase
+    ],
+  },
 ];
