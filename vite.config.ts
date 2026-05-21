@@ -54,6 +54,18 @@ export default defineConfig(({ mode }) => {
           ],
           manifest: false, // we ship our own /manifest.json — don't let the plugin overwrite it
           workbox: {
+            // Fast-update flags (V approval 2026-05-21): activate a newly-
+            // installed service worker IMMEDIATELY rather than waiting for
+            // all NeuroWiki tabs to close. Combined with clientsClaim, the
+            // new SW takes over all open tabs on the user's next navigation
+            // — meaning every active clinician gets the latest code within
+            // one click of their next interaction, not "whenever they next
+            // restart their phone." Safe for NeuroWiki specifically because
+            // we have no unsaved per-page user state that would be lost on
+            // an SW swap (calculator forms are intra-page; Saved Cases are
+            // localStorage and persist across any SW update).
+            skipWaiting: true,
+            clientsClaim: true,
             // Cache: HTML network-first (so updates land fast); JS/CSS/images
             // cache-first with short stale-while-revalidate window.
             globPatterns: ['**/*.{js,css,html,png,svg,ico,woff2}'],
