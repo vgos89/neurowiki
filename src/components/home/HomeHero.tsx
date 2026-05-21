@@ -12,7 +12,7 @@ export const HomeHero: React.FC = () => {
         What&apos;s the case?
       </h1>
       <p className="text-[14.5px] text-slate-500 leading-snug">
-        Pick a scenario or browse all the tools.
+        Your neurology resident and attending guide. Pick a scenario or browse all the tools.
       </p>
     </div>
   );

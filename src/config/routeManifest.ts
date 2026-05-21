@@ -73,9 +73,9 @@ export interface RouteDefinition {
 const DEFAULT_IMAGE = 'https://neurowiki.ai/og-image.png?v=4';
 
 export const DEFAULT_META: MetaData = {
-  title: 'NeuroWiki | Neurology Calculators, Pathways & Trials',
-  description: 'Bedside reference for neurologists. Score NIHSS and ICH, walk through stroke code, look up landmark trials. Save cases on this device, sync phone to desktop.',
-  keywords: 'neurology calculators, NIHSS calculator, stroke pathway, EVT eligibility, IVT calculator, stroke calculator, neurology trials, neurology resident tools, clinical decision support',
+  title: 'Neuro Wiki: Neurology Resident & Attending Guide',
+  description: 'Your Neuro Wiki resident and attending guide. Score NIHSS and ICH, walk through stroke code, look up landmark trials. Save cases on this device, sync to phone.',
+  keywords: 'neurology resident guide, neurology tools, neurology attending guide, NIHSS calculator, stroke pathway, EVT eligibility, IVT calculator, neurology trials, clinical decision support, Neuro Wiki',
   image: DEFAULT_IMAGE,
 };
 
