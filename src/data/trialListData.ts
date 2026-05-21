@@ -417,6 +417,26 @@ const manualTrials: Omit<TrialItem, 'year'>[] = [
     isPlaceholder: false,
     description: 'Chinese double-blind placebo-controlled trial (N=21,106 across 413 hospitals) of aspirin 160 mg/d vs placebo within 48h of acute ischaemic stroke. In-hospital mortality 3.3% vs 3.9% (2p=0.04); combined 4-week death or non-fatal stroke 5.3% vs 5.9% (2p=0.03). Paired with IST in Chen et al. 2000 pooled analysis.',
   }),
+
+  // ─── ICH anticoagulation reversal chain (2026-05-21) ─────────────────────
+  //     PATCH (2016), ANNEXA-4 (2019), and Sarode 2013 — three trials added
+  //     to the ich-anticoagulation-reversal question alongside ANNEXA-I.
+  //     listCategory in trialData.ts is 'acute' (valid TrialCategoryKey
+  //     wrapper 'acute-management' is the closest match here — all three
+  //     are acute reversal interventions during the hyperacute ICH window).
+  //     Evidence packets in docs/evidence-packets/.
+  buildTrial('patch-trial', 'PATCH', 'acute-management', '10.1016/S0140-6736(16)30392-0', {
+    isPlaceholder: false,
+    description: 'Open-label RCT in 190 patients with spontaneous antiplatelet-associated ICH within 6h. Platelet transfusion INCREASED odds of death or dependence at 3 months (adjusted common OR 2.05, 95% CI 1.18-3.56, P=0.0114). Establishes AHA/ASA 2022 Class III: Harm against routine platelet transfusion in antiplatelet-ICH.',
+  }),
+  buildTrial('annexa-4-trial', 'ANNEXA-4', 'acute-management', '10.1056/NEJMoa1814051', {
+    isPlaceholder: false,
+    description: 'Single-arm prospective cohort of 352 patients with acute major bleeding (64% intracranial) on FXa inhibitors. Anti-FXa activity reduced 92%; excellent/good hemostasis at 12 h in 82%. Supported FDA accelerated approval of andexanet alfa (May 2018). Randomized confirmation in ICH = ANNEXA-I (NEJM 2024).',
+  }),
+  buildTrial('sarode-2013-trial', 'Sarode 2013', 'acute-management', '10.1161/CIRCULATIONAHA.113.002283', {
+    isPlaceholder: false,
+    description: 'Phase IIIb open-label NI RCT in 202 VKA-treated adults with acute major bleeding. 4F-PCC noninferior to FFP for hemostatic efficacy (+7.1 pp, 95% CI -5.8 to +19.9) and superior for rapid INR reduction (62.2% vs 9.6% at 30 min). Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class I, Level A.',
+  }),
 ];
 
 const legacyTrialCategories: Record<string, TrialCategoryKey> = {

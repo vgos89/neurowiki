@@ -12620,4 +12620,466 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       keyStat: '66% vs 48%, p=0.95',
     },
   },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // PATCH (2016) — Platelet transfusion in antiplatelet-associated ICH.
+  // Lancet 2016;387(10038):2605-2613. The trial that established AHA/ASA
+  // 2022 Class III: Harm against routine platelet transfusion in
+  // antiplatelet-ICH (Greenberg SM et al., Stroke 2022 §5.2.4). Open-label
+  // PROBE RCT; ordinal-shift primary; HARM direction (adjusted common
+  // OR 2.05, 95% CI 1.18-3.56, P=0.0114). Evidence packet:
+  // docs/evidence-packets/patch-2016-2026-05-21.md
+  // ─────────────────────────────────────────────────────────────────────────
+  'patch-trial': {
+    id: 'patch-trial',
+    claimId: 'patch-platelet-transfusion-harm-2016',
+    title: 'PATCH Trial',
+    subtitle: 'Platelet Transfusion in Antiplatelet-Associated Spontaneous ICH',
+    category: 'Neuro Trials',
+    trialResult: 'HARM',
+    pmid: '27178479',
+    doi: '10.1016/S0140-6736(16)30392-0',
+    primaryDesign: 'ordinal-shift',
+    primaryResult: 'not-met',
+    listCategory: 'acute',
+    listDescription: 'Open-label RCT showing platelet transfusion INCREASED odds of death or dependence at 3 months in antiplatelet-associated ICH (adjusted common OR 2.05, P=0.0114). Establishes AHA/ASA 2022 Class III: Harm.',
+    source: 'Baharoglu MI, et al. for the PATCH Investigators (Lancet 2016;387:2605-2613)',
+    inclusionCriteria: [
+      'Adults with spontaneous supratentorial intracerebral hemorrhage confirmed on CT',
+      'On antiplatelet therapy (aspirin, clopidogrel, dipyridamole, or combinations) for at least 7 days before ICH',
+      'Randomization within 6 hours of symptom onset',
+      'Platelet transfusion possible within 90 minutes of diagnostic brain imaging',
+      'GCS at least 8 at randomization',
+    ],
+    exclusionCriteria: [
+      'Infratentorial (cerebellar or brainstem) hemorrhage',
+      'Underlying structural cause (aneurysm, AVM, tumor, hemorrhagic transformation of infarct)',
+      'Planned neurosurgical evacuation within 24 hours of randomization',
+      'Coagulopathy unrelated to antiplatelet therapy (INR >1.5, platelet count <100 x 10^9/L)',
+      'Death imminent within 24 hours',
+    ],
+    intervention: {
+      treatment: 'Platelet transfusion within 90 minutes of brain imaging (1 unit for COX inhibitors; 2 units for ADP receptor inhibitors) plus standard care',
+      control: 'Standard care alone (no platelet transfusion)',
+    },
+    stats: {
+      sampleSize: {
+        value: '190',
+        label: 'Randomized Patients',
+        info: '97 platelet transfusion, 93 standard care. 60 hospitals in the Netherlands, UK, and France. Enrolled February 2009 to October 2015.',
+      },
+      primaryEndpoint: {
+        value: 'mRS shift at 3 mo',
+        label: 'death or dependence',
+        info: 'Pre-specified primary outcome: shift toward death or dependence on the modified Rankin Scale at 3 months, analyzed by ordinal logistic regression, adjusted for stratification variables and ICH Score.',
+      },
+      pValue: {
+        value: '0.0114',
+        label: 'Statistically Sig.',
+        highlight: true,
+        info: 'P=0.0114 for the ordinal shift. Direction: HARM. Higher odds of death or dependence in the platelet-transfusion arm.',
+      },
+      effectSize: {
+        value: 'aOR 2.05',
+        label: '95% CI 1.18-3.56',
+        highlight: true,
+        info: 'Adjusted common odds ratio 2.05 (95% CI 1.18-3.56) for shift toward worse mRS outcome in the platelet-transfusion arm. Effect adjusted for stratification variables (use of antiplatelet, hospital) and baseline ICH Score.',
+      },
+    },
+    trialDesign: {
+      type: [
+        'Open-label, multicenter, masked-endpoint phase 3 RCT (PROBE design)',
+        '1:1 randomization stratified by hospital and antiplatelet type',
+        'Outcome adjudication blinded',
+        'Ordinal logistic regression on full mRS distribution',
+      ],
+      timeline: 'Enrolled February 2009 to October 2015; 3-month mRS follow-up',
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 76,
+        label: 'mRS 3-6 at 3 months (proxy for death or dependence)',
+        name: 'Platelet Transfusion',
+      },
+      control: {
+        percentage: 56,
+        label: 'mRS 3-6 at 3 months (proxy for death or dependence)',
+        name: 'Standard Care',
+      },
+    },
+    safetyProfile: {
+      mortality: {
+        evt: 24,
+        control: 17,
+        label: '3-month all-cause mortality',
+        tooltip: 'Death by 3 months: 23 of 97 (24%) platelet transfusion vs 16 of 93 (17%) standard care. Numerically higher with platelet transfusion; consistent direction with the primary mRS shift toward worse outcome.',
+        color: 'danger',
+      },
+      adverseEvents: {
+        evt: 42,
+        control: 30,
+        label: 'Serious adverse events during hospitalization',
+        tooltip: 'Serious adverse events: 40 of 97 (42%) platelet transfusion vs 28 of 93 (30%) standard care. The platelet-transfusion arm carried higher serious-event burden in addition to worse mRS at 3 months.',
+        color: 'danger',
+      },
+    },
+    safetyData: 'PATCH is one of the rare neurovascular RCTs where the intervention arm showed HARM on the primary outcome. The adjusted common OR of 2.05 for shift toward death or dependence is statistically significant (P=0.0114), the absolute death excess is 7 percentage points (24% vs 17%), and serious adverse events were 12 percentage points higher (42% vs 30%). Hematoma expansion did not differ significantly between arms — the mechanism of harm is not simply rebleeding. Postulated mechanisms include thromboembolic complications of platelet transfusion in this elderly atherothrombotic-risk population and pro-inflammatory effects of stored platelets. The trial design excluded patients with planned neurosurgical evacuation; therefore PATCH does NOT speak to platelet transfusion before craniotomy, which remains a case-by-case off-trial decision.',
+    clinicalContext: 'Before PATCH, platelet transfusion was routine in antiplatelet-associated ICH despite weak observational evidence. PATCH was the first randomized trial to test the practice and produced a clear HARM signal: adjusted common OR 2.05 (95% CI 1.18-3.56, P=0.0114) for shift toward death or dependence at 3 months. The AHA/ASA 2022 ICH Guideline (Greenberg et al., Stroke 2022 §5.2.4) graded platelet transfusion in antiplatelet-associated ICH as Class III: Harm, Level of Evidence B-R, directly citing PATCH. ESO 2022 strongly recommends against routine platelet transfusion. The trial defines the NEGATIVE boundary of the broader "reverse antiplatelets in ICH" question. Bridging to emergent neurosurgery is the only setting where platelet transfusion may still be considered off-trial.',
+    keyMessage: 'Platelet transfusion in spontaneous antiplatelet-associated ICH is HARMFUL and is contraindicated per AHA/ASA 2022 Class III: Harm, Level B-R. Adjusted common OR 2.05 (95% CI 1.18-3.56, P=0.0114) for shift toward death or dependence at 3 months. Exception: bridging to emergent neurosurgical evacuation remains a case-by-case off-trial decision because PATCH excluded that population.',
+    pearls: [
+      'PATCH is a HARM trial. Platelet transfusion increased the odds of death or dependence at 3 months (adjusted common OR 2.05, 95% CI 1.18-3.56, P=0.0114).',
+      'Population: spontaneous supratentorial ICH on antiplatelet therapy for at least 7 days, randomized within 6 hours of symptom onset, GCS at least 8.',
+      'Primary endpoint was an ordinal shift on the full mRS distribution at 3 months. NNT is not appropriate; the effect measure is a common odds ratio.',
+      'Mortality 24% platelet vs 17% standard care. Serious adverse events 42% vs 30%. Both directions consistent with the primary shift.',
+      'Hematoma expansion did not differ significantly between arms. The mechanism of harm is not simple rebleeding; thromboembolic and pro-inflammatory effects of platelet transfusion are the leading hypotheses.',
+      'Excluded patients with planned neurosurgical evacuation. PATCH does NOT apply to platelet transfusion before craniotomy, which remains an off-trial case-by-case decision.',
+      'AHA/ASA 2022 ICH Guideline §5.2.4: Class III: Harm, Level B-R — platelet transfusions should not be administered in antiplatelet-associated ICH.',
+      'ESO 2022 ICH Guidelines: strong recommendation against routine platelet transfusion.',
+      'No subsequent RCT has been mounted to challenge the harm signal. PATCH is the definitive trial.',
+      'Open-label PROBE design; outcome adjudication was masked. The harm direction is unlikely to be a treatment-arm assessment bias because mortality (a hard outcome) moved in the same direction.',
+    ],
+    bedsidePearl: 'Do NOT transfuse platelets routinely for spontaneous antiplatelet-associated ICH. PATCH 2016 showed platelet transfusion DOUBLES the odds of death or dependence at 3 months (adjusted common OR 2.05, P=0.0114). AHA/ASA 2022 Class III: Harm. Exception: bridging to emergent craniotomy, off-trial case-by-case.',
+    bottomLineSummary: 'PATCH randomized 190 adults with spontaneous supratentorial ICH on antiplatelet therapy within 6 hours of onset to platelet transfusion plus standard care vs standard care alone. Platelet transfusion increased the adjusted common odds of death or dependence at 3 months by ~2-fold (aOR 2.05, 95% CI 1.18-3.56, P=0.0114). Mortality 24% vs 17%; serious adverse events 42% vs 30%. The trial established AHA/ASA 2022 Class III: Harm against routine platelet transfusion in antiplatelet-associated ICH. Patients with planned neurosurgical evacuation were excluded — bridging platelet transfusion before craniotomy remains an off-trial decision.',
+    howToInterpret: {
+      proves: 'In adults with spontaneous supratentorial ICH on antiplatelet therapy for at least 7 days, within 6 hours of onset, platelet transfusion within 90 minutes of imaging increases the odds of death or dependence at 3 months compared with standard care.',
+      doesNotProve: 'It does not address platelet transfusion before emergent neurosurgical evacuation (excluded). It does not apply to ICH from anticoagulants or coagulopathies unrelated to antiplatelet therapy. It does not apply to infratentorial hemorrhage. It does not establish the mechanism of harm — hematoma expansion did not differ; thromboembolic and pro-inflammatory hypotheses remain.',
+      cautions: 'Open-label PROBE design; treating clinicians were not blinded to allocation. Outcome adjudication and mRS assessment were masked. Population is older European cohort (median age 74); generalizability to younger or non-European populations is reasonable but unverified. Sample size 190 is modest; effect is statistically significant but the confidence interval is wide (1.18-3.56). No subsequent RCT has been mounted to challenge the result.',
+    },
+    applicability: {
+      populationExclusions: [
+        'Patients with planned emergent neurosurgical evacuation (PATCH excluded this group)',
+        'Infratentorial hemorrhage (cerebellar, brainstem)',
+        'ICH from anticoagulants or coagulopathies unrelated to antiplatelet therapy',
+        'Structural causes (aneurysm, AVM, tumor, hemorrhagic transformation of infarct)',
+        'GCS below 8 at randomization',
+      ],
+      geography: 'Conducted at 60 hospitals in the Netherlands, UK, and France. Generalizable to Western health systems with similar antiplatelet prescribing patterns.',
+    },
+    limitations: [
+      'Open-label PROBE design. Treating clinicians not blinded; outcome adjudication and mRS assessment were masked. Hard outcomes (mortality) moved in the same direction as the masked primary, supporting the result.',
+      'Modest sample size (N=190). Effect significant but confidence interval wide (aOR 1.18-3.56).',
+      'Excluded patients with planned neurosurgical evacuation — PATCH does not speak to bridging platelet transfusion before craniotomy.',
+      'European centers only; younger and non-European populations not represented.',
+      'Mechanism of harm not established. Hematoma expansion did not differ; thromboembolic and inflammatory hypotheses remain hypothesis-generating.',
+      'No subsequent RCT has been mounted to confirm or challenge the harm signal.',
+    ],
+    harmSignal: 'Platelet transfusion increased the adjusted common odds of death or dependence at 3 months 2-fold (aOR 2.05, 95% CI 1.18-3.56, P=0.0114).',
+    legend: {
+      finding: 'Platelet transfusion in antiplatelet-associated ICH worsens 3-month outcome; AHA/ASA 2022 Class III Harm.',
+      bottomLineTag: 'Harm',
+      keyStat: 'aOR 2.05 (1.18-3.56)',
+    },
+    conclusion: 'PATCH was the first randomized trial to test routine platelet transfusion in spontaneous antiplatelet-associated ICH and produced a clear HARM signal: adjusted common odds of death or dependence at 3 months doubled in the transfusion arm (aOR 2.05, 95% CI 1.18-3.56, P=0.0114). Mortality 24% vs 17% and serious adverse events 42% vs 30% moved in the same direction. The trial established AHA/ASA 2022 Class III: Harm, Level B-R against routine platelet transfusion in this population (Greenberg SM et al., Stroke 2022 §5.2.4). ESO 2022 strongly recommends against routine use. The mechanism of harm is uncertain (hematoma expansion did not differ; thromboembolic and inflammatory hypotheses remain). PATCH excluded patients with planned neurosurgical evacuation, so bridging transfusion before emergent craniotomy remains an off-trial case-by-case decision. No subsequent RCT has been mounted to challenge the result; PATCH is the definitive evidence.',
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // ANNEXA-4 (2019) — Andexanet alfa for FXa-inhibitor major bleeding.
+  // NEJM 2019;380(14):1326-1335. Single-arm prospective cohort study
+  // supporting FDA accelerated approval (May 2018). 64% intracranial
+  // bleeding. Hemostatic efficacy 82%; anti-FXa reduction 92%. Subsequent
+  // RCT specifically in ICH = ANNEXA-I (Connolly NEJM 2024). Evidence
+  // packet: docs/evidence-packets/annexa-4-2019-2026-05-21.md
+  // ─────────────────────────────────────────────────────────────────────────
+  'annexa-4-trial': {
+    id: 'annexa-4-trial',
+    claimId: 'annexa-4-fxa-reversal-2019',
+    title: 'ANNEXA-4',
+    subtitle: 'Andexanet Alfa for FXa-Inhibitor-Associated Major Bleeding (Single-Arm Cohort)',
+    category: 'Neuro Trials',
+    trialResult: 'POSITIVE',
+    pmid: '30730782',
+    doi: '10.1056/NEJMoa1814051',
+    primaryDesign: 'single-arm-registry',
+    primaryResult: 'safety-threshold-met',
+    listCategory: 'acute',
+    listDescription: 'Single-arm cohort of 352 patients with acute major bleeding on FXa inhibitors (64% intracranial). Andexanet reduced anti-FXa activity by 92%; 82% achieved excellent or good hemostasis at 12 h. Supported FDA accelerated approval.',
+    source: 'Connolly SJ, et al. for the ANNEXA-4 Investigators (NEJM 2019;380:1326-1335)',
+    inclusionCriteria: [
+      'Adults with acute major bleeding requiring urgent reversal',
+      'Most recent dose of apixaban, rivaroxaban, edoxaban, or enoxaparin within 18 hours before andexanet bolus',
+      'For intracranial bleeding: acceptable functional status (modified Rankin Scale at most 3 before the event)',
+      'Hemodynamic and clinical stability sufficient to receive treatment',
+    ],
+    exclusionCriteria: [
+      'Expected survival less than 1 month',
+      'Planned major surgery within 12 hours',
+      'Recent (within 2 weeks) thrombotic event',
+      'Severe coagulopathy unrelated to FXa-inhibitor use',
+    ],
+    intervention: {
+      treatment: 'Andexanet alfa bolus (low-dose or high-dose per FDA-label algorithm based on FXa inhibitor type, amount, and timing of last dose) over 15-30 minutes followed by 2-hour continuous infusion. No randomized comparator.',
+      control: 'None — single-arm prospective cohort design.',
+    },
+    stats: {
+      sampleSize: {
+        value: '352',
+        label: 'Enrolled (254 in efficacy population)',
+        info: 'Total 352 enrolled across 63 centers in North America and Europe (April 2015 to May 2018). Efficacy analysis restricted to 254 patients with confirmed major bleeding and anti-FXa activity at baseline above the pre-specified threshold for evaluable response.',
+      },
+      primaryEndpoint: {
+        value: 'Anti-FXa reduction + hemostasis at 12 h',
+        label: 'coprimary (descriptive)',
+        info: 'Coprimary endpoints: percent change in anti-FXa activity from baseline to nadir (end of bolus); rate of excellent or good hemostatic efficacy at 12 h after infusion end. No comparator arm; descriptive thresholds only.',
+      },
+      pValue: {
+        value: 'N/A',
+        label: 'No comparator',
+        info: 'Single-arm design — no p-value for the primary outcome. Anti-FXa reduction reported with 95% CIs.',
+      },
+      effectSize: {
+        value: '92% anti-FXa drop',
+        label: '82% hemostasis at 12 h',
+        info: 'Median anti-FXa activity fell 92% with andexanet (95% CI 91-93% for apixaban; 88-94% for rivaroxaban). Excellent or good hemostatic efficacy at 12 h in 204/249 (82%).',
+      },
+    },
+    trialDesign: {
+      type: [
+        'Single-arm, open-label, prospective cohort study (no comparator arm)',
+        'Conducted to support FDA accelerated approval (granted May 2018)',
+        '63 centers across North America and Europe',
+        'Adjudicated hemostatic efficacy (excellent/good/poor/none) at 12 h after infusion end',
+      ],
+      timeline: 'Enrolled April 2015 to May 2018; 30-day follow-up',
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 82,
+        label: 'Excellent or good hemostatic efficacy at 12 h',
+        name: 'Andexanet Alfa (single arm)',
+      },
+      control: {
+        percentage: 0,
+        label: 'No comparator arm',
+        name: 'N/A',
+      },
+    },
+    safetyProfile: {
+      mortality: {
+        evt: 14,
+        control: 0,
+        label: '30-day mortality (single arm)',
+        tooltip: '30-day mortality 49 of 352 (14%) in the andexanet cohort. No comparator arm; this is a descriptive event rate in an elderly population with major bleeding (mean age 77).',
+      },
+      adverseEvents: {
+        evt: 10,
+        control: 0,
+        label: 'Any thrombotic event within 30 days (single arm)',
+        tooltip: '34 of 352 (10%) patients had a thrombotic event within 30 days. Causality cannot be inferred from a single-arm design; subsequent randomized ANNEXA-I (Connolly NEJM 2024) quantified the ischemic-stroke excess vs usual care.',
+        color: 'warning',
+      },
+    },
+    safetyData: 'In the single-arm cohort, 30-day mortality was 49/352 (14%) and any thrombotic event occurred in 34/352 (10%). Because there is no comparator arm, neither rate can be attributed causally to andexanet. The subsequent randomized ANNEXA-I trial (Connolly et al., NEJM 2024;390:1745-1755) confirmed a thrombotic-event excess vs usual care (10.3% vs 5.6%, P=0.048), driven primarily by ischemic stroke (6.5% vs 1.5%; NNH approximately 20), establishing the safety-trade-off signal that ANNEXA-4 could only describe.',
+    clinicalContext: 'ANNEXA-4 was the prospective cohort study designed to support FDA accelerated approval of andexanet alfa (granted May 2018). It is observational by design — no comparator, no randomization — and cannot establish efficacy in the strict sense. Its contributions were (1) confirming substantial and reproducible anti-FXa reduction (~92% from baseline) with the FDA-label dosing algorithm, (2) describing 82% excellent/good hemostatic efficacy at 12 h, and (3) characterizing the safety profile in 352 patients with predominantly intracranial bleeding (64%). The AHA/ASA 2022 ICH Guideline (Greenberg SM et al., Stroke 2022 §5.2.2) cited ANNEXA-4 as the evidence base for Class IIa, Level B-NR andexanet alfa in FXa-inhibitor-associated ICH. The subsequent ANNEXA-I randomized trial (Connolly SJ et al., NEJM 2024;390:1745-1755; PMID 38804514) provided the confirmatory randomized framework specifically in ICH and quantified the ischemic-stroke trade-off that ANNEXA-4 could only describe.',
+    keyMessage: 'ANNEXA-4 is a single-arm observational cohort, not an RCT. It established hemostatic activity (anti-FXa drop ~92%, hemostatic efficacy 82% at 12 h) and supported FDA approval but cannot establish efficacy or attribute thrombotic events causally. The subsequent randomized ANNEXA-I (NEJM 2024) is the trial that quantified the efficacy-vs-thrombotic-stroke trade-off in ICH specifically.',
+    pearls: [
+      'ANNEXA-4 is a single-arm prospective cohort study, not an RCT. There is no comparator and no inferential efficacy claim is possible.',
+      'Sample: 352 enrolled, 254 in efficacy population. Mean age 77. Predominantly intracranial bleeding (64%) and gastrointestinal bleeding (26%).',
+      'Anti-FXa activity reduction: median 92% for apixaban (149.7 to 11.1 ng/mL, 95% CI 91-93%) and 92% for rivaroxaban (211.8 to 14.2 ng/mL, 95% CI 88-94%).',
+      'Excellent or good hemostatic efficacy at 12 h after infusion end: 204/249 (82%) of evaluable patients.',
+      '30-day mortality: 49/352 (14%). Thrombotic events: 34/352 (10%). Causality not attributable from single-arm design.',
+      'Supported FDA accelerated approval of andexanet alfa (Andexxa) in May 2018.',
+      'AHA/ASA 2022 ICH Guideline §5.2.2: andexanet alfa Class IIa, Level B-NR for FXa-inhibitor-associated ICH, citing ANNEXA-4. 4F-PCC also acceptable (Class IIb, Level C-LD).',
+      'Subsequent RCT specifically in ICH: ANNEXA-I (Connolly SJ et al., NEJM 2024;390:1745-1755; PMID 38804514). ANNEXA-I confirmed hemostatic efficacy AND quantified an ischemic-stroke excess (6.5% vs 1.5%, NNH ~20) absent from the single-arm ANNEXA-4 dataset.',
+      'Cost ~US$23,000-$50,000 per high-dose course. 4F-PCC ~US$3,000-5,000. Comparative cost-effectiveness unresolved.',
+      'Sponsored by Portola Pharmaceuticals (now part of Alexion AstraZeneca Rare Disease). Sponsor provided andexanet free of charge.',
+    ],
+    bedsidePearl: 'For acute major bleeding on apixaban, rivaroxaban, edoxaban, or enoxaparin within 18 h of last dose, andexanet alfa achieved 92% anti-FXa reduction and 82% excellent/good hemostasis at 12 h in 352 patients (ANNEXA-4). AHA/ASA 2022 Class IIa, Level B-NR for FXa-inhibitor-associated ICH. Single-arm cohort — efficacy was randomized-confirmed in ICH only by the later ANNEXA-I (NEJM 2024), which also quantified the ischemic-stroke trade-off.',
+    bottomLineSummary: 'ANNEXA-4 was the single-arm prospective cohort study of 352 patients with acute major bleeding within 18 h of an FXa-inhibitor dose that supported FDA accelerated approval of andexanet alfa in May 2018. Bleeding was 64% intracranial and 26% gastrointestinal. Anti-FXa activity fell a median of 92% with andexanet (95% CI 91-93% apixaban, 88-94% rivaroxaban). Excellent or good hemostatic efficacy at 12 h in 204/249 (82%). 30-day mortality 14%, thrombotic events 10% — causality not inferable from single-arm design. AHA/ASA 2022 ICH §5.2.2 graded andexanet Class IIa, Level B-NR on this evidence. The subsequent randomized ANNEXA-I (NEJM 2024) in ICH specifically confirmed hemostatic efficacy AND quantified an ischemic-stroke excess (6.5% vs 1.5%, NNH ~20).',
+    howToInterpret: {
+      proves: 'In adults with acute major bleeding within 18 h of an FXa-inhibitor dose, andexanet alfa achieves substantial and reproducible reduction in anti-FXa activity (~92%) and is associated with excellent or good hemostatic efficacy at 12 h in approximately 82% of evaluable patients.',
+      doesNotProve: 'It does not prove efficacy vs any comparator (no control arm). It does not attribute the 14% 30-day mortality or 10% thrombotic-event rate causally to andexanet. It does not address whether andexanet is preferable to 4F-PCC. It does not establish functional or survival benefit. It does not apply to bleeding more than 18 h after last FXa-inhibitor dose.',
+      cautions: 'Single-arm design cannot establish efficacy. Adjudication of hemostatic efficacy was open-label. The 10% thrombotic-event rate is high and raised concern at publication; the subsequent ANNEXA-I RCT quantified this as a ~5 percentage-point ischemic-stroke excess vs usual care (NNH ~20). Cost is substantially higher than 4F-PCC; comparative cost-effectiveness unresolved.',
+    },
+    applicability: {
+      populationExclusions: [
+        'Patients more than 18 hours from last FXa-inhibitor dose (not represented)',
+        'Patients with expected survival less than 1 month',
+        'Planned major surgery within 12 hours',
+        'Recent (within 2 weeks) thrombotic event',
+        'Pre-event mRS above 3 (in the ICH subset)',
+      ],
+      geography: 'Conducted at 63 centers in North America and Europe (April 2015 to May 2018). Generalizable to Western emergency departments with andexanet availability.',
+      doseSpecific: 'FDA-label dose algorithm: low-dose (400 mg bolus + 4 mg/min infusion) if last apixaban dose was ≤5 mg or last rivaroxaban dose was ≤10 mg AND more than 8 hours prior, otherwise high-dose (800 mg bolus + 8 mg/min infusion). Each vial contains 500 mg mannitol — relevant for fluid and osmotic load.',
+    },
+    limitations: [
+      'Single-arm, open-label, observational design. No randomized comparator. Efficacy cannot be established in the strict statistical sense.',
+      'Adjudication of hemostatic efficacy was open-label.',
+      '10% thrombotic event rate raised concern at publication; ANNEXA-I RCT subsequently quantified the ischemic-stroke trade-off vs usual care.',
+      'No head-to-head comparison with 4F-PCC. Observational comparative-effectiveness studies suggest similar hematoma outcomes with 4F-PCC at substantially lower cost; no RCT.',
+      'Industry-sponsored by Portola Pharmaceuticals; sponsor provided andexanet free of charge.',
+      'Efficacy population (254) is smaller than enrolled (352) due to pre-specified evaluability criteria; potential for selection bias in the efficacy estimate.',
+      'Does not address cost-effectiveness. Andexanet ~US$23,000-50,000 per course; 4F-PCC ~US$3,000-5,000.',
+    ],
+    legend: {
+      finding: 'Single-arm cohort: andexanet reduced anti-FXa by 92% with 82% hemostatic efficacy in FXa-inhibitor major bleeding.',
+      bottomLineTag: 'FDA approval cohort',
+      keyStat: '82% hemostasis at 12 h',
+    },
+    conclusion: 'ANNEXA-4 was the single-arm prospective cohort study of 352 patients with acute major bleeding within 18 h of an FXa-inhibitor dose that underwrote FDA accelerated approval of andexanet alfa in May 2018. It established substantial and reproducible anti-FXa reduction (~92%) and described excellent or good hemostatic efficacy at 12 h in 82% of evaluable patients. The 14% 30-day mortality and 10% thrombotic-event rate were observed but cannot be attributed causally because there is no comparator. AHA/ASA 2022 ICH Guideline §5.2.2 cited ANNEXA-4 as the evidence base for Class IIa, Level B-NR andexanet alfa in FXa-inhibitor-associated ICH. The randomized confirmatory trial specifically in ICH is ANNEXA-I (Connolly SJ et al., NEJM 2024;390:1745-1755), which confirmed hemostatic efficacy vs usual care AND quantified the ischemic-stroke trade-off (6.5% vs 1.5%, NNH ~20). Comparative cost-effectiveness vs 4F-PCC remains unresolved as of mid-2026.',
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Sarode 2013 — 4F-PCC (Kcentra/Beriplex) vs FFP for VKA reversal in
+  // major bleeding. Circulation 2013;128(11):1234-1243. Phase IIIb
+  // open-label NI RCT. Hemostatic efficacy NI established; INR target
+  // superior. Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA
+  // 2022 Class I, Level A for 4F-PCC > FFP in VKA-associated ICH. ICH-
+  // specific RCT confirmation = INCH (Steiner Lancet Neurol 2016; PDF
+  // pending V supply). Evidence packet:
+  // docs/evidence-packets/sarode-2013-2026-05-21.md
+  // ─────────────────────────────────────────────────────────────────────────
+  'sarode-2013-trial': {
+    id: 'sarode-2013-trial',
+    claimId: 'sarode-4fpcc-vka-reversal-2013',
+    title: 'Sarode 2013',
+    subtitle: '4-Factor PCC vs FFP for VKA Reversal in Major Bleeding',
+    category: 'Neuro Trials',
+    trialResult: 'POSITIVE',
+    pmid: '23935011',
+    doi: '10.1161/CIRCULATIONAHA.113.002283',
+    primaryDesign: 'noninferiority',
+    primaryResult: 'noninferiority-established',
+    secondaryDesign: 'binary-superiority',
+    secondaryResult: 'met',
+    resultSubtype: 'non-inferiority',
+    listCategory: 'acute',
+    listDescription: 'Phase IIIb open-label RCT in 202 VKA-treated adults with major bleeding. 4F-PCC noninferior to FFP for hemostatic efficacy (+7.1 pp, 95% CI -5.8 to +19.9) and superior for INR target time (+52.6 pp, 95% CI 39.4-65.9). FDA approval of Kcentra.',
+    source: 'Sarode R, Milling TJ Jr, Refaai MA, et al. (Circulation 2013;128:1234-1243)',
+    inclusionCriteria: [
+      'Adults on vitamin K antagonist (warfarin or acenocoumarol)',
+      'Acute major bleeding requiring rapid INR reversal',
+      'Baseline INR at least 2.0',
+      'Able to receive 4F-PCC or FFP within 5 hours of clinical presentation',
+    ],
+    exclusionCriteria: [
+      'Use of any other coagulation product (FFP, PCC, recombinant FVIIa) within 7 days',
+      'History of thromboembolic event within 3 months',
+      'Severe peripheral vascular, cardiac, or cerebrovascular event within 3 months',
+      'DIC or known severe coagulopathy unrelated to VKA',
+      'Expected survival less than 24 hours',
+    ],
+    intervention: {
+      treatment: '4-factor PCC (Kcentra / Beriplex P/N — contains factors II, VII, IX, X plus proteins C and S) at weight- and INR-based dose (25 IU/kg if INR 2-<4; 35 IU/kg if INR 4-6; 50 IU/kg if INR >6) plus vitamin K 5-10 mg IV',
+      control: 'Fresh frozen plasma 10-15 mL/kg IV (typically 800-1500 mL) plus vitamin K 5-10 mg IV',
+    },
+    stats: {
+      sampleSize: {
+        value: '202',
+        label: 'ITT Efficacy Population (4F-PCC 98 / Plasma 104)',
+        info: '212 randomized; 202 in ITT efficacy population (98 4F-PCC, 104 FFP). 36 sites in North America and Europe.',
+      },
+      primaryEndpoint: {
+        value: 'Coprimary: hemostasis at 24 h + INR ≤1.3 at 0.5 h',
+        label: 'Noninferiority on hemostasis; superiority on INR',
+        info: 'Coprimary noninferiority on 24-h hemostatic efficacy (margin -10 percentage points on lower bound of 95% CI); sequential superiority on rapid INR reduction (INR ≤1.3 at 30 minutes after end of infusion).',
+      },
+      pValue: {
+        value: 'NI met / <0.001',
+        label: 'Hemostasis NI / INR target sup',
+        highlight: true,
+        info: 'Hemostatic efficacy NI established: difference +7.1 pp, 95% CI -5.8 to +19.9; lower bound -5.8 above -10 pp NI margin. INR target P<0.001 (superiority): difference +52.6 pp, 95% CI 39.4 to 65.9.',
+      },
+      effectSize: {
+        value: '+7.1 pp hemostasis',
+        label: '+52.6 pp INR target (sup)',
+        highlight: true,
+        info: 'Hemostatic efficacy 72.4% (4F-PCC) vs 65.4% (FFP); difference +7.1 pp (95% CI -5.8 to +19.9). INR ≤1.3 at 30 min: 62.2% vs 9.6%; difference +52.6 pp (95% CI 39.4-65.9).',
+      },
+    },
+    trialDesign: {
+      type: [
+        'Phase IIIb, multicenter, open-label, noninferiority RCT with prospective randomization',
+        '1:1 randomization, stratified by baseline INR and bleeding type',
+        'Coprimary endpoints: noninferiority on 24-h hemostatic efficacy + superiority on rapid INR reduction',
+        'NI margin -10 percentage points on lower bound of 95% CI',
+        'Independent endpoint adjudication committee blinded to treatment',
+      ],
+      timeline: 'Enrolled 2008 to 2012; assessment at 24 hours and through day 45',
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 72.4,
+        label: 'Hemostatic efficacy at 24 h (effective)',
+        name: '4F-PCC (Kcentra)',
+      },
+      control: {
+        percentage: 65.4,
+        label: 'Hemostatic efficacy at 24 h (effective)',
+        name: 'Fresh Frozen Plasma',
+      },
+    },
+    safetyProfile: {
+      mortality: {
+        evt: 5.1,
+        control: 4.8,
+        label: '45-day all-cause mortality',
+        tooltip: 'Mortality through day 45: 5 of 98 (5.1%) 4F-PCC vs 5 of 104 (4.8%) FFP. Comparable; trial not powered to detect mortality differences.',
+      },
+      adverseEvents: {
+        evt: 6.8,
+        control: 6.4,
+        label: 'Thromboembolic events through day 45',
+        tooltip: 'Any thromboembolic event: 7 of 103 (6.8%) 4F-PCC vs 7 of 109 (6.4%) FFP in the safety population. No signal of excess thrombosis with 4F-PCC.',
+      },
+      majorBleeding: {
+        evt: 2.9,
+        control: 11.9,
+        label: 'Fluid overload through day 45',
+        tooltip: 'Fluid overload / volume-related adverse event: 3 of 103 (2.9%) 4F-PCC vs 13 of 109 (11.9%) FFP — favors 4F-PCC. Median infusion volume 99.4 mL 4F-PCC vs 813.5 mL FFP (an order-of-magnitude difference, the operational reason 4F-PCC is preferred).',
+        color: 'success',
+      },
+    },
+    safetyData: 'Mortality (5.1% vs 4.8%) and thromboembolic events (6.8% vs 6.4%) were comparable between arms — a key safety finding because the concern with 4F-PCC has historically been thrombosis. Fluid overload was substantially less common with 4F-PCC (2.9% vs 11.9%) — clinically meaningful because the median infusion volume was 99.4 mL with 4F-PCC vs 813.5 mL with FFP, an order-of-magnitude difference that drives volume-related complications in elderly patients with cardiac disease. The trial population was elderly (mean age 70) with frequent comorbidities; the volume advantage is one of the main reasons 4F-PCC is preferred in modern AHA/ASA Class I guidance.',
+    clinicalContext: 'Before Sarode 2013, FFP was the standard reversal for VKA-associated major bleeding despite long infusion times, large volumes, and slow INR correction. Sarode 2013 was the phase IIIb pivotal trial that established 4F-PCC (Kcentra in the US, Beriplex P/N in Europe) as noninferior to FFP for hemostatic efficacy AND superior for rapid INR reduction (62.2% vs 9.6% achieving INR ≤1.3 at 30 minutes). It supported FDA approval of Kcentra in April 2013. The AHA/ASA 2022 ICH Guideline (Greenberg SM et al., Stroke 2022 §5.2.1) graded 4F-PCC over FFP as Class I, Level A for VKA-associated ICH, citing Sarode 2013 and INCH 2016. The population in Sarode 2013 was GENERAL major bleeding (GI 38%, intracranial ~14%, visible ~13%) — not ICH-specific. The ICH-specific RCT confirmation is INCH (Steiner T et al., Lancet Neurol 2016;15:566-573), which was halted early at interim analysis for INR reversal benefit favoring 4F-PCC. Together, Sarode 2013 and INCH form the evidence base for current AHA/ASA Class I, Level A 4F-PCC preference in VKA-associated ICH.',
+    keyMessage: '4F-PCC 25-50 IU/kg IV plus vitamin K 10 mg IV is preferred over FFP for VKA-associated major bleeding (and ICH specifically). Sarode 2013 established noninferiority on hemostatic efficacy (+7.1 pp, 95% CI -5.8 to +19.9; margin -10 pp) and superiority on rapid INR reduction (+52.6 pp, 95% CI 39.4-65.9). Underwrites AHA/ASA 2022 Class I, Level A for VKA-associated ICH.',
+    pearls: [
+      'Sarode 2013 is a NONINFERIORITY trial. The primary hemostatic-efficacy comparison is interpreted against the prespecified -10 percentage-point margin, not against a p-value. NNT is not appropriate.',
+      'Hemostatic efficacy at 24 h: 72.4% (4F-PCC) vs 65.4% (FFP). Difference +7.1 pp (95% CI -5.8 to +19.9). Lower bound -5.8 is above the -10 pp NI margin — NI established.',
+      'INR ≤1.3 at 0.5 h post-infusion: 62.2% (4F-PCC) vs 9.6% (FFP). Difference +52.6 pp (95% CI 39.4-65.9). Superiority established for rapid INR reduction.',
+      'Both arms received vitamin K 5-10 mg IV. 4F-PCC alone without vitamin K leads to INR rebound at 12-24 h — never give one without the other.',
+      'Median infusion volume: 99.4 mL (4F-PCC) vs 813.5 mL (FFP). Fluid overload 2.9% vs 11.9%. The volume difference is the operational reason 4F-PCC is preferred in elderly cardiac patients.',
+      'Mortality (5.1% vs 4.8%) and thromboembolic events (6.8% vs 6.4%) comparable — the historical concern with 4F-PCC was thrombosis; the trial does not show a thrombotic excess.',
+      'Population was GENERAL major bleeding (GI 38%, intracranial ~14%, visible ~13%). Not ICH-specific. The ICH-specific RCT is INCH (Steiner Lancet Neurol 2016), which was halted early for INR reversal benefit favoring 4F-PCC.',
+      'AHA/ASA 2022 ICH Guideline §5.2.1: 4F-PCC > FFP for VKA-associated ICH — Class I, Level A. Cites Sarode 2013 and INCH 2016.',
+      'ESO 2022 ICH Guidelines: strong recommendation for 4F-PCC over FFP in VKA-associated ICH.',
+      'Underwrote FDA approval of Kcentra (April 2013), the first 4F-PCC approved in the US.',
+      'Dosing is INR-stratified: 25 IU/kg if INR 2-<4; 35 IU/kg if INR 4-6; 50 IU/kg if INR >6 (per Kcentra label and the Sarode protocol).',
+      'Re-check INR at 30 minutes post-infusion. Re-dose 4F-PCC if INR remains >1.4 and bleeding ongoing. Always co-administer vitamin K 10 mg IV.',
+    ],
+    bedsidePearl: 'For VKA-associated major bleeding (including ICH), give 4F-PCC 25-50 IU/kg IV (INR-stratified) plus vitamin K 10 mg IV. Goal INR <1.4 within 30 minutes. Sarode 2013 established NI on hemostasis (+7.1 pp, 95% CI -5.8 to +19.9) and superiority on INR target (62.2% vs 9.6% at 30 min). AHA/ASA 2022 Class I, Level A. FFP only if 4F-PCC unavailable.',
+    bottomLineSummary: 'Sarode 2013 was the phase IIIb open-label noninferiority RCT that established 4-factor PCC (Kcentra/Beriplex P/N) as noninferior to fresh frozen plasma for hemostatic efficacy at 24 h AND superior for rapid INR reduction in 202 VKA-treated adults with acute major bleeding. Hemostatic efficacy 72.4% vs 65.4% (+7.1 pp, 95% CI -5.8 to +19.9; NI margin -10 pp). INR ≤1.3 at 30 min: 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4-65.9). Mortality and thromboembolic events comparable; fluid overload less with 4F-PCC (2.9% vs 11.9%); median infusion volume 99 mL vs 814 mL. Population was general major bleeding (GI, intracranial, visible). Underwrote FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class I, Level A for 4F-PCC > FFP in VKA-associated ICH. ICH-specific confirmation: INCH 2016 (Steiner Lancet Neurol).',
+    howToInterpret: {
+      proves: 'In adults on VKA with acute major bleeding and INR ≥2.0, 4-factor PCC (with vitamin K) is noninferior to fresh frozen plasma (with vitamin K) for 24-h hemostatic efficacy and superior for achieving INR ≤1.3 within 30 minutes of infusion end. Fluid burden is approximately 8-fold lower with 4F-PCC. Mortality and thromboembolic events are comparable.',
+      doesNotProve: 'It does not isolate ICH-specific efficacy — the population was general major bleeding (GI 38%, intracranial ~14%, visible ~13%). The ICH-specific RCT is INCH 2016. It does not prove superiority on hemostatic efficacy — only NI. It does not address DOAC reversal (FXa inhibitors require andexanet or 4F-PCC at separate doses; dabigatran requires idarucizumab). It does not address patients with baseline INR below 2.0 or unrelated coagulopathies.',
+      cautions: 'Open-label design — treating clinicians knew the arm. Adjudication of hemostatic efficacy was blinded. NI margin (-10 pp) is wide; the upper bound of the CI for the hemostasis difference was +19.9 pp — the result is consistent with anything from a small disadvantage to a large advantage for 4F-PCC. The point estimate (+7.1 pp) favors 4F-PCC numerically but the trial was not powered for hemostatic superiority. Always co-administer vitamin K 10 mg IV — without vitamin K, INR rebound at 12-24 h is expected. Industry-sponsored (CSL Behring); sponsor provided study product and funded data analysis.',
+    },
+    applicability: {
+      populationExclusions: [
+        'Patients not on vitamin K antagonists (e.g. patients on direct oral anticoagulants — DOACs require different reversal strategies)',
+        'Patients with baseline INR below 2.0',
+        'Recent (within 3 months) thromboembolic event',
+        'Recent (within 3 months) severe peripheral vascular, cardiac, or cerebrovascular event',
+        'DIC or coagulopathy unrelated to VKA',
+        'Patients who already received another coagulation product within 7 days',
+      ],
+      geography: '36 sites in North America and Europe. Generalizable to Western health systems with 4F-PCC availability.',
+      doseSpecific: 'Dose is INR-stratified per the Kcentra label and the Sarode protocol: 25 IU/kg if INR 2-<4; 35 IU/kg if INR 4-6; 50 IU/kg if INR >6. Maximum single dose 5000 IU. Vitamin K 5-10 mg IV must be co-administered to prevent INR rebound at 12-24 h.',
+    },
+    limitations: [
+      'Open-label design. Treating clinicians not blinded; outcome adjudication was blinded.',
+      'NI margin (-10 percentage points) is wide. Result is consistent with a range of true effects.',
+      'Population is general major bleeding (GI 38%, intracranial ~14%, visible ~13%) — not ICH-specific. The ICH-specific RCT is INCH 2016 (Steiner Lancet Neurol).',
+      'Sample size 202 in ITT efficacy population. Trial not powered to detect mortality differences.',
+      'Industry-sponsored by CSL Behring. Sponsor provided study product and funded data analysis.',
+      'Coprimary endpoints — multiplicity managed by sequential hierarchical testing (NI then superiority); appropriate but increases analytic complexity.',
+      'Does not address DOAC reversal — FXa inhibitors require andexanet (or 4F-PCC at higher doses); dabigatran requires idarucizumab.',
+      '45-day follow-up; longer-term outcomes (e.g. functional recovery in the intracranial subset) not assessed.',
+    ],
+    legend: {
+      finding: '4F-PCC noninferior to FFP on hemostasis, superior on rapid INR reduction; FDA approval of Kcentra.',
+      bottomLineTag: 'Non-inferior',
+      keyStat: '+7.1 pp (-5.8 to +19.9)',
+    },
+    conclusion: 'Sarode 2013 was the phase IIIb open-label noninferiority RCT that established 4-factor PCC (Kcentra/Beriplex P/N) as the preferred reversal agent over fresh frozen plasma for vitamin K antagonist-associated major bleeding. Among 202 adults randomized to 4F-PCC vs FFP (both with vitamin K 5-10 mg IV), 24-h hemostatic efficacy was 72.4% vs 65.4% (+7.1 pp, 95% CI -5.8 to +19.9; lower bound above -10 pp NI margin — NI established), and INR ≤1.3 at 30 minutes post-infusion was 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4-65.9 — superiority). Mortality and thromboembolic events were comparable; fluid overload was substantially less common with 4F-PCC (2.9% vs 11.9%); median infusion volume 99 mL vs 814 mL. The trial supported FDA approval of Kcentra in April 2013 and is one of the foundational trials underwriting the AHA/ASA 2022 ICH Guideline §5.2.1 Class I, Level A recommendation for 4F-PCC over FFP in VKA-associated ICH. The population was general major bleeding rather than ICH-specific — ICH confirmation comes from INCH (Steiner T et al., Lancet Neurol 2016;15:566-573), halted early at interim for INR reversal benefit favoring 4F-PCC. Together, Sarode 2013 and INCH 2016 form the evidence base for the current standard of care in warfarin-associated ICH.',
+  },
 };

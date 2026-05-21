@@ -358,20 +358,23 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     ],
   },
   {
-    // Starter question — only ANNEXA-I in the catalog so far. Expansion
-    // queued on V's PDF queue: ANNEXA-4 (Connolly NEJM 2019, FXa broad),
-    // REVERSE-AD (Pollack NEJM 2017, dabigatran), INCH (Steiner Lancet Neurol
-    // 2016, 4F-PCC vs FFP warfarin RCT), Sarode 2013 (Circulation, 4F-PCC vs
-    // FFP general), and PATCH (Baharoglu Lancet 2016, antiplatelet-ICH —
-    // showed HARM, critical boundary). When those land, trialIds expands and
-    // trialCount bumps accordingly.
+    // Expanded 2026-05-21: added Sarode 2013 (warfarin reversal foundation),
+    // PATCH 2016 (antiplatelet-ICH HARM boundary), and ANNEXA-4 2019 (FDA-
+    // approval single-arm cohort for andexanet) alongside the original
+    // ANNEXA-I 2024 (FXa-inhibitor ICH RCT). Still pending V's paywalled
+    // PDFs: REVERSE-AD (Pollack NEJM 2017, dabigatran/idarucizumab) and
+    // INCH (Steiner Lancet Neurol 2016, 4F-PCC vs FFP ICH-specific RCT).
+    // When those land, trialIds expands to 6 and trialCount bumps accordingly.
     id: 'ich-anticoagulation-reversal',
     text: 'How do I reverse anticoagulation in ICH?',
     icon: 'pill',
     meta: 'FXa, dabigatran, warfarin, and antiplatelet ICH — each requires a different reversal strategy',
-    trialCount: 1,
+    trialCount: 4,
     trialIds: [
-      'annexa-i-trial',  // ANNEXA-I 2024 — andexanet for FXa-inhibitor ICH; primary met, thrombotic-event safety counterbalance
+      'sarode-2013-trial',  // Sarode 2013 — 4F-PCC vs FFP NI RCT in VKA major bleeding; underwrites AHA/ASA Class I, Level A for VKA-ICH reversal
+      'patch-trial',        // PATCH 2016 — platelet transfusion HARM in antiplatelet-ICH; defines AHA/ASA Class III boundary
+      'annexa-4-trial',     // ANNEXA-4 2019 — single-arm cohort behind FDA andexanet approval (FXa broad, 64% intracranial)
+      'annexa-i-trial',     // ANNEXA-I 2024 — andexanet RCT specifically in ICH; primary met, ischemic-stroke trade-off quantified
     ],
   },
   {

@@ -436,4 +436,87 @@ export const CITATION_REGISTRY: CitationRegistry = {
     review_window_months: 24,
     quoted_text: 'Acute CRAO is a medical emergency, and immediate triage to an emergency department capable of advanced stroke care is necessary. … Treatment with intravenous tissue plasminogen activator within 4.5 hours of symptom onset is suggested and may be considered for patients with disabling visual deficits who present early in the disease course and meet criteria for thrombolysis.',
   },
+
+  // ─── PATCH (2016) — antiplatelet-ICH platelet-transfusion HARM trial ─────
+  // Lancet 2016;387(10038):2605-2613. Baharoglu MI et al. PROBE design RCT
+  // showing platelet transfusion INCREASES odds of death/dependence at 3
+  // months (adjusted common OR 2.05, 95% CI 1.18-3.56, P=0.0114). The trial
+  // that established AHA/ASA 2022 Class III: Harm against routine platelet
+  // transfusion in antiplatelet-associated ICH. 36-month review window per
+  // §13.7 (landmark trial). Verified against PubMed PMID 27178479 on
+  // 2026-05-21. See docs/evidence-packets/patch-2016-2026-05-21.md.
+  'baharoglu-patch-2016': {
+    id: 'baharoglu-patch-2016',
+    source: 'trial',
+    title: 'Platelet transfusion versus standard care after acute stroke due to spontaneous cerebral haemorrhage associated with antiplatelet therapy (PATCH): a randomised, open-label, phase 3 trial',
+    year: 2016,
+    url: 'https://doi.org/10.1016/S0140-6736(16)30392-0',
+    pmid: '27178479',
+    last_reviewed: '2026-05-21',
+    review_window_months: 36,
+    quoted_text: 'The odds of death or dependence at 3 months were higher in the platelet transfusion group than in the standard care group (adjusted common odds ratio 2.05, 95% CI 1.18-3.56; p=0.0114). 40 (42%) participants who received platelets had a serious adverse event during their hospital stay, as did 28 (29%) who received standard care. 23 (24%) participants assigned to platelet transfusion and 16 (17%) assigned to standard care died during follow-up. Platelet transfusion seems inferior to standard care for people taking antiplatelet therapy before intracerebral haemorrhage. Platelet transfusion cannot be recommended for this indication in clinical practice.',
+  },
+
+  // ─── ANNEXA-4 (2019) — single-arm cohort behind FDA andexanet approval ───
+  // NEJM 2019;380(14):1326-1335. Connolly SJ et al. Open-label single-arm
+  // study of andexanet alfa in 352 patients with acute major bleeding on FXa
+  // inhibitors (64% intracranial). Established hemostatic activity (82%
+  // excellent/good at 12 h) and 92% anti-FXa reduction; supported FDA
+  // accelerated approval. Subsequently confirmed in RCT by ANNEXA-I (2024).
+  // 36-month review window per §13.7. Verified against PubMed PMID 30730782
+  // and PMC6699827 on 2026-05-21. See
+  // docs/evidence-packets/annexa-4-2019-2026-05-21.md.
+  'connolly-annexa-4-2019': {
+    id: 'connolly-annexa-4-2019',
+    source: 'trial',
+    title: 'Full Study Report of Andexanet Alfa for Bleeding Associated with Factor Xa Inhibitors',
+    year: 2019,
+    url: 'https://doi.org/10.1056/NEJMoa1814051',
+    pmid: '30730782',
+    last_reviewed: '2026-05-21',
+    review_window_months: 36,
+    quoted_text: 'A total of 352 patients were enrolled. The mean age of the patients was 77 years; most of the patients had substantial cardiovascular disease. Bleeding was predominantly intracranial (in 227 patients [64%]) or gastrointestinal (in 90 patients [26%]). In patients who had received apixaban, the median anti-factor Xa activity decreased from 149.7 ng per milliliter at baseline to 11.1 ng per milliliter after the andexanet bolus (92% reduction; 95% confidence interval [CI], 91 to 93); in patients who had received rivaroxaban, the median value decreased from 211.8 ng per milliliter to 14.2 ng per milliliter (92% reduction; 95% CI, 88 to 94). Excellent or good hemostasis occurred in 204 of 249 patients (82%) who could be evaluated. Within 30 days, death occurred in 49 patients (14%) and a thrombotic event in 34 (10%).',
+  },
+
+  // ─── Sarode 2013 — 4F-PCC vs FFP for VKA reversal in major bleeding ──────
+  // Circulation 2013;128(11):1234-1243. Sarode R, Milling TJ Jr, Refaai MA
+  // et al. Phase IIIb open-label noninferiority RCT (Kcentra/Beriplex vs
+  // FFP) in 202 VKA-treated patients with major bleeding. Hemostatic
+  // efficacy NI established (+7.1 pp, 95% CI -5.8 to +19.9; margin -10 pp).
+  // INR <=1.3 at 30 min superior (+52.6 pp, 95% CI 39.4-65.9). Underwrites
+  // FDA approval of Kcentra (April 2013) and AHA/ASA 2022 Class I, Level A
+  // for 4F-PCC > FFP in VKA-associated ICH. 36-month review window per
+  // §13.7. Verified against PubMed PMID 23935011 on 2026-05-21. See
+  // docs/evidence-packets/sarode-2013-2026-05-21.md.
+  'sarode-4fpcc-2013': {
+    id: 'sarode-4fpcc-2013',
+    source: 'trial',
+    title: 'Efficacy and safety of a 4-factor prothrombin complex concentrate in patients on vitamin K antagonists presenting with major bleeding: a randomized, plasma-controlled, phase IIIb study',
+    year: 2013,
+    url: 'https://doi.org/10.1161/CIRCULATIONAHA.113.002283',
+    pmid: '23935011',
+    last_reviewed: '2026-05-21',
+    review_window_months: 36,
+    quoted_text: 'In the intention-to-treat efficacy population (4F-PCC n=98; plasma n=104), hemostatic efficacy was effective in 72.4% of subjects in the 4F-PCC group compared with 65.4% in the plasma group (difference, 7.1%; 95% confidence interval, -5.8 to 19.9). The primary end point of rapid INR reduction was achieved in significantly more subjects in the 4F-PCC group (62.2%) than in the plasma group (9.6%; difference, 52.6%; 95% confidence interval, 39.4 to 65.9). The safety profile (adverse events, serious adverse events, thromboembolic events, and deaths) was similar between groups; thromboembolic event rate was 7.8% with 4F-PCC and 6.4% with plasma. 4F-PCC is non-inferior to plasma for effective hemostasis and superior for rapid INR reduction in patients with major bleeding during vitamin K antagonist therapy.',
+  },
+
+  // ─── AHA/ASA 2022 ICH Guideline anchors for the reversal chain ───────────
+  // Greenberg SM et al., Stroke 2022;53(7):e282-e361. Three sections cited
+  // by the reversal-chain trial entries:
+  //   §5.2.1 — 4F-PCC > FFP for VKA-associated ICH (Class I, Level A)
+  //   §5.2.2 — andexanet alfa for FXa-inhibitor ICH (Class IIa, Level B-NR)
+  //   §5.2.4 — platelet transfusion in antiplatelet-ICH is HARMFUL (Class III: Harm, Level B-R)
+  // 24-month review window per §13.7 (current management guideline).
+  'aha-asa-ich-2022-reversal': {
+    id: 'aha-asa-ich-2022-reversal',
+    source: 'guideline',
+    title: '2022 Guideline for the Management of Patients With Spontaneous Intracerebral Hemorrhage — Anticoagulation and Antiplatelet Reversal',
+    year: 2022,
+    section: '5.2 — Reversal of Anticoagulant and Antiplatelet Agents',
+    url: 'https://www.ahajournals.org/doi/10.1161/STR.0000000000000407',
+    pmid: '35579034',
+    last_reviewed: '2026-05-21',
+    review_window_months: 24,
+    quoted_text: 'In patients with VKA-associated ICH with an elevated INR, 4-factor PCC may be preferred over FFP to improve moderate hemostatic correction and possibly clinical outcomes (Class 1, Level A). In patients with rivaroxaban-, apixaban-, or edoxaban-associated ICH, andexanet alfa can be useful for reversal (Class 2a, Level B-NR). In patients with ICH and a history of antiplatelet use, platelet transfusions should not be administered because they may worsen outcomes (Class 3: Harm, Level B-R).',
+  },
 };
