@@ -35,6 +35,13 @@ export interface TrialQuestion {
    * IDs must resolve in TRIAL_DATA / findTrialById — verified on 2026-05-01.
    */
   trialIds: string[];
+  /**
+   * Up to 3 clinically-adjacent question IDs for cross-navigation.
+   * Capped at 3 to keep the "Related questions" rail tight.
+   * Cluster map: docs/audits/link-graph-audit-2026-05-21.md §3.2.
+   * IDs must resolve in TRIAL_QUESTIONS — non-clinical wiring (taxonomy).
+   */
+  relatedQuestions?: string[];
 }
 
 export const TRIAL_QUESTIONS: TrialQuestion[] = [
@@ -61,6 +68,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'trace-iii-trial',          // TRACE-III 2024 — late-window TNK 4.5-24 h when EVT unavailable
       'raise-trial',              // RAISE 2024 — reteplase superior to alteplase (agent-choice dimension)
     ],
+    relatedQuestions: ['tnk-vs-alteplase', 'late-window-selection', 'minor-stroke-choice'],
   },
   {
     id: 'lvo-evt',
@@ -85,6 +93,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'escape-mevo-trial',        // ESCAPE-MeVO 2024 — extends LVO question into M2/M3, ACA, PCA territory
       'distal-trial',             // DISTAL 2024 — distal occlusion boundary (negative end of EVT)
     ],
+    relatedQuestions: ['large-core-evt', 'late-window-selection', 'direct-vs-bridging'],
   },
   {
     id: 'anticoagulation',
@@ -102,6 +111,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'optimas-trial',  // OPTIMAS 2024 — optimal DOAC timing after AF stroke
       'elan-study',     // ELAN 2023 — early vs later anticoag for AF stroke
     ],
+    relatedQuestions: ['ich-anticoagulation-reversal', 'pfo-closure-cryptogenic'],
   },
   {
     id: 'hemicraniectomy',
@@ -116,6 +126,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'destiny-ii-trial',  // DESTINY-II 2014 — hemicraniectomy in patients >60 years (age-ceiling)
       'charm-trial',       // CHARM 2024 — glibenclamide for malignant edema prevention (adjunct, same population)
     ],
+    relatedQuestions: ['ich-surgery'],
   },
   {
     id: 'bp-control',
@@ -132,6 +143,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'optimal-bp-trial',  // OPTIMAL-BP 2022 — conventional vs intensive BP after EVT
       'interact4-trial',   // INTERACT4 2023 — prehospital BP reduction before stroke type known
     ],
+    relatedQuestions: ['post-evt-bp-target', 'msu-dispatch'],
   },
   {
     id: 'dapt',
@@ -149,6 +161,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'aramis-trial',    // ARAMIS 2023 — DAPT noninferior to alteplase in minor non-disabling stroke ≤4.5 h
       'inspires-trial',  // INSPIRES 2024 — DAPT for atherosclerotic minor stroke/TIA ≤72 h
     ],
+    relatedQuestions: ['minor-stroke-choice', 'tpa-timing'],
   },
   {
     id: 'basilar-evt',
@@ -162,6 +175,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'attention-trial',  // ATTENTION 2022 — basilar EVT 0–12h (positive, China)
       'baoche-trial',     // BAOCHE 2022 — basilar EVT 6–24h (positive, stopped early; mid-trial primary amendment)
     ],
+    relatedQuestions: ['lvo-evt', 'late-window-selection'],
   },
   {
     id: 'ich-surgery',
@@ -175,6 +189,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'mistie-iii-trial', // MISTIE III 2019 — minimally invasive catheter + tPA (neutral on functional outcome)
       'enrich-trial',     // ENRICH 2024 — minimally invasive parafascicular surgery, lobar + anterior BG (positive; Bayesian)
     ],
+    relatedQuestions: ['ich-anticoagulation-reversal', 'hemicraniectomy'],
   },
   {
     id: 'msu-dispatch',
@@ -188,6 +203,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'best-msu-trial',    // BEST-MSU 2021 — US, alternating-week cluster, utility-weighted mRS
       'interact4-trial',   // INTERACT4 2023 — prehospital BP lowering (same operational paradigm)
     ],
+    relatedQuestions: ['bp-control', 'tpa-timing'],
   },
   {
     id: 'icas-stenting',
@@ -201,6 +217,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       // TODO (V review): add VISSIT (Zaidat 2015 JAMA — Vitesse balloon-expandable, confirmed harm direction)
       // and CASSISS (Gao 2022 JAMA — Chinese RCT, no significant benefit at 1y) when those entries land.
     ],
+    relatedQuestions: ['asymptomatic-carotid', 'lvo-evt'],
   },
   {
     id: 'tnk-vs-alteplase',
@@ -222,6 +239,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'trace-iii-trial',          // TRACE-III 2024 — late-window TNK 4.5-24 h for ICA/MCA when EVT unavailable
       'raise-trial',              // RAISE 2024 — reteplase superior to alteplase (expands agent-choice dimension)
     ],
+    relatedQuestions: ['tpa-timing', 'late-window-selection', 'minor-stroke-choice'],
   },
   {
     id: 'direct-vs-bridging',
@@ -238,6 +256,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'swift-direct-trial',    // SWIFT DIRECT 2022 — Europe, NI failed
       'direct-safe-trial',     // DIRECT-SAFE 2022 — multinational, NI failed
     ],
+    relatedQuestions: ['lvo-evt', 'tnk-vs-alteplase'],
   },
   // ─── Tier 4 #21: new questions per docs/research/2026-05-19-trial-audit/03 Part B ───
   {
@@ -253,6 +272,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'angel-aspect-trial',       // ANGEL-ASPECT 2023 — large-core (China)
       'tension-trial',            // TENSION 2023 — large-core (ASPECTS 3-5), unrestricted
     ],
+    relatedQuestions: ['lvo-evt', 'late-window-selection', 'mevo-distal-evt'],
   },
   {
     id: 'late-window-selection',
@@ -270,6 +290,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'select2-trial',            // SELECT2 2023 — non-contrast CT large-core
       'angel-aspect-trial',       // ANGEL-ASPECT 2023 — non-contrast CT large-core
     ],
+    relatedQuestions: ['lvo-evt', 'large-core-evt', 'tpa-timing'],
   },
   {
     id: 'aspiration-vs-stentriever',
@@ -282,6 +303,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'compass-trial',  // COMPASS 2019 — US RCT, aspiration noninferior on functional outcome
       'aster2-trial',   // ASTER2 2021 — combined-technique vs stent retriever (no functional benefit)
     ],
+    relatedQuestions: ['lvo-evt', 'evt-adjunct-pharmacotherapy'],
   },
   {
     id: 'evt-adjunct-pharmacotherapy',
@@ -294,6 +316,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'choice-trial',      // CHOICE 2022 — adjunctive IA alteplase after successful EVT
       'rescue-bt-trial',   // RESCUE BT 2022 — periprocedural tirofiban (signal in non-large-artery atherosclerosis)
     ],
+    relatedQuestions: ['lvo-evt', 'aspiration-vs-stentriever'],
   },
   {
     id: 'minor-stroke-choice',
@@ -308,6 +331,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'aramis-trial',    // ARAMIS 2023 — DAPT noninferior to alteplase in minor non-disabling stroke
       'inspires-trial',  // INSPIRES 2024 — DAPT for atherosclerotic minor stroke/TIA ≤72 h
     ],
+    relatedQuestions: ['dapt', 'tpa-timing', 'tnk-vs-alteplase'],
   },
   {
     id: 'mevo-distal-evt',
@@ -319,6 +343,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'escape-mevo-trial',  // ESCAPE-MeVO 2024 — M2/M3, ACA, PCA EVT (primary not met)
       'distal-trial',       // DISTAL 2024 — distal occlusion EVT (primary not met)
     ],
+    relatedQuestions: ['lvo-evt', 'large-core-evt'],
   },
   {
     id: 'post-evt-bp-target',
@@ -332,6 +357,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'best-ii-trial',     // BEST-II 2022 — three-arm dose-finding futility post-EVT
       'optimal-bp-trial',  // OPTIMAL-BP 2022 — intensive BP harm signal post-EVT (stopped early)
     ],
+    relatedQuestions: ['bp-control', 'lvo-evt'],
   },
   // ─── Tier 2 batch additions (2026-05-21) — group recently-shipped Tier 2 trials ──
   {
@@ -345,6 +371,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'respect-trial',  // RESPECT long-term 2017 — broader PFO inclusion; HR 0.55, NNT 42
       'reduce-trial',   // REDUCE 2017 — clean antiplatelet comparator; HR 0.23, NNT 28; largest AF signal
     ],
+    relatedQuestions: ['anticoagulation', 'asymptomatic-carotid'],
   },
   {
     id: 'asymptomatic-carotid',
@@ -356,6 +383,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'crest-trial',    // CREST 2010 — CAS vs CEA, mixed sym/asym, no overall composite difference but signal split
       'crest-2-trial',  // CREST-2 2025 — vs intensive medical management: stenting met (P=0.02), CEA did not (P=0.24)
     ],
+    relatedQuestions: ['icas-stenting', 'pfo-closure-cryptogenic'],
   },
   {
     // Expanded 2026-05-21: added Sarode 2013 (warfarin reversal foundation),
@@ -376,6 +404,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'annexa-4-trial',     // ANNEXA-4 2019 — single-arm cohort behind FDA andexanet approval (FXa broad, 64% intracranial)
       'annexa-i-trial',     // ANNEXA-I 2024 — andexanet RCT specifically in ICH; primary met, ischemic-stroke trade-off quantified
     ],
+    relatedQuestions: ['ich-surgery', 'anticoagulation'],
   },
   {
     id: 'crao-management',
@@ -387,5 +416,6 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'eagle-trial',   // EAGLE 2010 — intra-arterial tPA, halted for harm
       'theia-trial',   // THEIA 2025 — IV alteplase vs aspirin, NEUTRAL/underpowered (N=70); directionally favors alteplase
     ],
+    relatedQuestions: ['tpa-timing', 'tnk-vs-alteplase'],
   },
 ];

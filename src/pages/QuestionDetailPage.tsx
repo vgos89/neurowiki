@@ -229,6 +229,51 @@ export default function QuestionDetailPage() {
           </div>
         )}
 
+        {/* ── Related questions rail ───────────────────────────────────────
+            Renders up to 3 clinically-adjacent questions per
+            relatedQuestions[] in trial-questions.ts. Wired 2026-05-21 per
+            link-graph audit §3.2 (taxonomy crosslinks, non-clinical). */}
+        {question.relatedQuestions && question.relatedQuestions.length > 0 && (
+          <div className="mt-10 pt-6 border-t border-slate-100">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-400 mb-3">
+              Related questions
+            </p>
+            <div className="grid gap-2">
+              {question.relatedQuestions
+                .map((relatedId) => TRIAL_QUESTIONS.find((q) => q.id === relatedId))
+                .filter((q): q is NonNullable<typeof q> => Boolean(q))
+                .map((related) => (
+                  <Link
+                    key={related.id}
+                    to={`/trials/q/${related.id}`}
+                    className="flex items-center justify-between rounded-lg border border-slate-100 hover:border-slate-200 hover:bg-slate-50 transition-colors px-4 py-3 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[14px] font-semibold text-slate-900 truncate">
+                        {related.text}
+                      </p>
+                      {related.meta && (
+                        <p className="text-[12px] text-slate-500 truncate mt-0.5">
+                          {related.meta}
+                        </p>
+                      )}
+                    </div>
+                    <svg
+                      className="w-4 h-4 text-slate-300 shrink-0 ml-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      aria-hidden="true"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                ))}
+            </div>
+          </div>
+        )}
+
         {/* ── Footer ─────────────────────────────────────────────────────── */}
         <div className="mt-10 pt-6 border-t border-slate-100 text-center">
           <p className="text-sm text-slate-400">
