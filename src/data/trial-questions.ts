@@ -333,4 +333,28 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
       'optimal-bp-trial',  // OPTIMAL-BP 2022 — intensive BP harm signal post-EVT (stopped early)
     ],
   },
+  // ─── Tier 2 batch additions (2026-05-21) — group recently-shipped Tier 2 trials ──
+  {
+    id: 'pfo-closure-cryptogenic',
+    text: 'PFO closure for cryptogenic stroke?',
+    icon: 'brain',
+    meta: 'three NEJM 2017 trials resolved a decade of ambiguity; AF excess is the trade-off',
+    trialCount: 3,
+    trialIds: [
+      'close-trial',    // CLOSE 2017 — required atrial septal aneurysm or large shunt; NNT 20 over 5y
+      'respect-trial',  // RESPECT long-term 2017 — broader PFO inclusion; HR 0.55, NNT 42
+      'reduce-trial',   // REDUCE 2017 — clean antiplatelet comparator; HR 0.23, NNT 28; largest AF signal
+    ],
+  },
+  {
+    id: 'asymptomatic-carotid',
+    text: 'Asymptomatic carotid stenosis: revascularize or medical?',
+    icon: 'brain',
+    meta: 'CREST opened the question; CREST-2 against modern medical management closed it differentially',
+    trialCount: 2,
+    trialIds: [
+      'crest-trial',    // CREST 2010 — CAS vs CEA, mixed sym/asym, no overall composite difference but signal split
+      'crest-2-trial',  // CREST-2 2025 — vs intensive medical management: stenting met (P=0.02), CEA did not (P=0.24)
+    ],
+  },
 ];

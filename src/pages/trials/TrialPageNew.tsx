@@ -2264,6 +2264,7 @@ const TrialPageNew: React.FC = () => {
               <Link to="/calculators/nihss" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">NIHSS Calculator</Link>
             </div>
           </div>
+          <TrialChainTimeline trialId="escape-mevo-trial" />
         </div>
         {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
           <BottomLineDrawer trialName="ESCAPE-MeVO" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
@@ -4084,6 +4085,7 @@ const TrialPageNew: React.FC = () => {
               <Link to="/trials/escape-mevo-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">ESCAPE-MeVO</Link>
             </div>
           </div>
+          <TrialChainTimeline trialId="distal-trial" />
         </div>
         {tm.bottomLineSummary && tm.bedsidePearl && (
           <BottomLineDrawer
@@ -8484,6 +8486,12 @@ const TrialPageNew: React.FC = () => {
                 </p>
               </div>
             )}
+
+            {/* Trial-chain timeline footer — renders null for any trial
+                without chainMembership, so it's safe on every fallback-
+                render trial. Lights up Phase 2 chains (pfo-closure,
+                carotid, evt-mevo) without per-trial wiring. */}
+            {trialId && <TrialChainTimeline trialId={trialId} />}
           </div>
 
           {/* Dark Sidebar */}

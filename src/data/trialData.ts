@@ -4513,6 +4513,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     trialResult: 'NEGATIVE',
     primaryDesign: 'ordinal-shift',
     primaryResult: 'not-met',
+    chainMembership: [{ chainId: 'evt-mevo', role: 'cohort-member' }],
     applicability: {
       populationExclusions: [
         'Does NOT support routine EVT for distal medium vessel occlusions',
@@ -4671,6 +4672,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     // with a score of 0 or 1." See docs/reviews/clinical-PR-escape-mevo-2026-05-20.md.
     primaryDesign: 'binary-superiority',
     primaryResult: 'not-met',
+    chainMembership: [{ chainId: 'evt-mevo', role: 'cohort-member' }],
     applicability: {
       populationExclusions: [
         'Does NOT support routine EVT for broad medium/distal vessel occlusion populations',
@@ -7845,6 +7847,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     trialResult: 'NEUTRAL',
     primaryDesign: 'binary-superiority',
     primaryResult: 'not-met',
+    chainMembership: [{ chainId: 'carotid', role: 'predecessor' }],
     harmSignal: 'Periprocedural stroke higher with CAS (4.1% vs 2.3%, HR 1.79); periprocedural MI higher with CEA (2.3% vs 1.1%, HR 0.50); cranial nerve palsy almost exclusively with CEA (4.7% vs 0.3%, HR 0.07).',
     applicability: {
       populationExclusions: [
@@ -11690,6 +11693,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     pmid: '41269206',
     doi: '10.1056/NEJMoa2508800',
     primaryDesign: 'binary-superiority',
+    chainMembership: [{ chainId: 'carotid', role: 'successor' }],
     primaryResult: 'met',
     listCategory: 'carotid',
     listDescription: 'Two parallel RCTs in asymptomatic ≥70% carotid stenosis. Stenting beat modern intensive medical management (2.8% vs 6.0%, P=0.02, NNT 31). Endarterectomy did not (3.7% vs 5.3%, P=0.24).',
@@ -11863,6 +11867,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1056/NEJMoa1705915',
     clinicalTrialsId: 'NCT00562289',
     source: 'Mas JL et al. (NEJM 2017;377:1011-1021)',
+    chainMembership: [{ chainId: 'pfo-closure', role: 'cohort-member' }],
     listCategory: 'antiplatelets',
     listDescription: 'Cryptogenic stroke <60y with PFO + ASA or large shunt: closure abolished recurrent stroke (0% vs 6.0%, HR 0.03, NNT 20 over 5y). AF excess.',
     primaryDesign: 'binary-superiority',
@@ -11975,6 +11980,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1056/NEJMoa1610057',
     clinicalTrialsId: 'NCT00465270',
     source: 'Saver JL et al. (NEJM 2017;377:1022-1032)',
+    chainMembership: [{ chainId: 'pfo-closure', role: 'cohort-member' }],
     listCategory: 'antiplatelets',
     listDescription: 'Cryptogenic stroke 18–60y with PFO. 5.9-year follow-up of Amplatzer Occluder vs medical therapy: recurrent ischemic stroke 3.6% vs 5.8% (HR 0.55, P=0.046, NNT 42). VTE excess.',
     primaryDesign: 'binary-superiority',
@@ -12089,6 +12095,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     doi: '10.1056/NEJMoa1707404',
     clinicalTrialsId: 'NCT00738894',
     source: 'Søndergaard L et al. (NEJM 2017;377:1033-1042)',
+    chainMembership: [{ chainId: 'pfo-closure', role: 'cohort-member' }],
     listCategory: 'antiplatelets',
     listDescription: 'Cryptogenic stroke 18–59y with PFO. Gore HELEX/Cardioform closure + antiplatelet vs antiplatelet alone: clinical stroke 1.4% vs 5.4% (HR 0.23, P=0.002, NNT ~28). AF excess 6.6% vs 0.4%.',
     primaryDesign: 'binary-superiority',
