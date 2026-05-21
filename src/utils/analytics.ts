@@ -201,6 +201,93 @@ export const trackDisclaimerAcknowledged = () => {
   }
 };
 
+// =============================================================================
+// AI-traffic detection — added 2026-05-21
+// Measures clinicians arriving from AI tools (ChatGPT, Perplexity, Claude,
+// Gemini, etc.) vs organic / direct / referral. Sets a session-level GA4
+// custom dimension so every subsequent event carries the traffic-source tag.
+//
+// IMPORTANT: AI CRAWLERS (Googlebot-Extended, OAI-SearchBot, ClaudeBot, etc.)
+// do not execute JavaScript and will never fire GA4 events. This signal
+// captures REAL BROWSER sessions whose user-agent or referrer indicates an
+// AI origin — i.e., humans who clicked a NeuroWiki link from inside an AI tool.
+//
+// GA4 setup required (manual, done once in the GA4 Admin UI):
+//   Custom Dimensions → Event scope:
+//     - name: traffic_source_type   param: traffic_source_type
+//     - name: ai_agent              param: ai_agent
+// =============================================================================
+
+const AI_UA_PATTERNS: Array<{ pattern: RegExp; label: string }> = [
+  { pattern: /ChatGPT-User/i,      label: 'chatgpt-user' },
+  { pattern: /OAI-SearchBot/i,     label: 'oai-searchbot' },
+  { pattern: /PerplexityBot/i,     label: 'perplexitybot' },
+  { pattern: /ClaudeBot/i,         label: 'claudebot' },
+  { pattern: /anthropic-ai/i,      label: 'anthropic-ai' },
+  { pattern: /Google-Extended/i,   label: 'google-extended' },
+  { pattern: /Bytespider/i,        label: 'bytespider' },
+  { pattern: /cohere-ai/i,         label: 'cohere-ai' },
+  { pattern: /Meta-ExternalAgent/i, label: 'meta-externalagent' },
+  { pattern: /DuckAssistBot/i,     label: 'duckassistbot' },
+  { pattern: /YouBot/i,            label: 'youbot' },
+];
+
+const AI_REFERRER_DOMAINS: Array<{ domain: string; label: string }> = [
+  { domain: 'chat.openai.com',    label: 'chatgpt' },
+  { domain: 'chatgpt.com',        label: 'chatgpt' },
+  { domain: 'perplexity.ai',      label: 'perplexity' },
+  { domain: 'claude.ai',          label: 'claude' },
+  { domain: 'gemini.google.com',  label: 'gemini' },
+  { domain: 'you.com',            label: 'you' },
+  { domain: 'copilot.microsoft.com', label: 'copilot' },
+];
+
+export type AiTrafficSignal =
+  | { type: 'ai_crawler'; agent: string }
+  | { type: 'ai_referral'; agent: string }
+  | { type: 'none'; agent: '' };
+
+/**
+ * Detect whether the current page-load originated from an AI tool — either as
+ * a crawler with an AI user-agent, or as a real browser session with an AI
+ * referrer. Returns { type: 'none', agent: '' } when neither match.
+ */
+export function detectAiTrafficSignal(): AiTrafficSignal {
+  if (typeof window === 'undefined') return { type: 'none', agent: '' };
+  const ua = navigator.userAgent || '';
+  for (const { pattern, label } of AI_UA_PATTERNS) {
+    if (pattern.test(ua)) return { type: 'ai_crawler', agent: label };
+  }
+  const ref = document.referrer || '';
+  if (ref) {
+    for (const { domain, label } of AI_REFERRER_DOMAINS) {
+      if (ref.includes(domain)) return { type: 'ai_referral', agent: label };
+    }
+  }
+  return { type: 'none', agent: '' };
+}
+
+/**
+ * If the current session has an AI signal, fire a one-shot event and set
+ * session-level dimensions so every subsequent GA4 event carries the tag.
+ * Safe to call multiple times — gtag('set', ...) is idempotent and the
+ * one-shot event is gated on the signal being non-none.
+ */
+export function reportAiTrafficToGA(): void {
+  const signal = detectAiTrafficSignal();
+  if (signal.type === 'none') return;
+  if (typeof window !== 'undefined' && (window as any).gtag) {
+    (window as any).gtag('event', 'ai_traffic_detected', {
+      traffic_source_type: signal.type,
+      ai_agent: signal.agent,
+    });
+    (window as any).gtag('set', {
+      traffic_source_type: signal.type,
+      ai_agent: signal.agent,
+    });
+  }
+}
+
 export const CONSENT_STORAGE_KEY = 'neurowiki-analytics-consent';
 
 export const loadGA = (): void => {

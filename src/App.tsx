@@ -6,7 +6,7 @@ import { PublishGate } from './components/PublishGate';
 import { TrialModalProvider, useTrialModal } from './contexts/TrialModalContext';
 import Seo from './components/Seo';
 import { STATIC_ROUTE_DEFINITIONS, type StaticRouteKey } from './config/routeManifest';
-import { CONSENT_STORAGE_KEY, loadGA } from './utils/analytics';
+import { CONSENT_STORAGE_KEY, loadGA, reportAiTrafficToGA } from './utils/analytics';
 import { getStorageItem } from './utils/storage';
 
 const DisclaimerModal = lazy(() => import('./components/DisclaimerModal'));
@@ -148,6 +148,9 @@ const App: React.FC = () => {
     const consent = getStorageItem(CONSENT_STORAGE_KEY);
     if (consent === 'accepted') {
       loadGA();
+      // Fire AI-traffic detection after gtag is wired so the session-level
+      // custom dimension is set before the first page_view event.
+      reportAiTrafficToGA();
     } else if (consent === null) {
       setShowConsentBanner(true);
     }

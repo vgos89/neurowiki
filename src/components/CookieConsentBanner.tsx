@@ -1,6 +1,6 @@
 import React from 'react';
 import { setStorageItem } from '../utils/storage';
-import { loadGA, CONSENT_STORAGE_KEY } from '../utils/analytics';
+import { loadGA, reportAiTrafficToGA, CONSENT_STORAGE_KEY } from '../utils/analytics';
 
 interface Props {
   onConsent: () => void;
@@ -10,6 +10,9 @@ const CookieConsentBanner: React.FC<Props> = ({ onConsent }) => {
   const accept = () => {
     setStorageItem(CONSENT_STORAGE_KEY, 'accepted');
     loadGA();
+    // First-time consent → fire AI-traffic detection so this session is
+    // tagged before the next page_view event.
+    reportAiTrafficToGA();
     onConsent();
   };
 
