@@ -291,4 +291,25 @@ export const CITATION_REGISTRY: CitationRegistry = {
     review_window_months: 36,
     quoted_text: 'Among patients with intracerebral hemorrhage who were receiving factor Xa inhibitors, andexanet resulted in better control of hematoma expansion than usual care but was associated with thrombotic events, including ischemic stroke.',
   },
+
+  // ─── 2026 trial: CREST-2 — revascularization vs modern intensive medical management
+  //     for asymptomatic high-grade carotid stenosis (two parallel RCTs) ───────────
+  // Brott TG et al., NEJM 2026. Two parallel observer-blinded RCTs at 155 sites;
+  // stenting trial primary met (P=0.02, ARD 3.2 pp, NNT 31), endarterectomy trial
+  // not met (P=0.24). Closes the asymptomatic-carotid question against modern
+  // intensive medical management (SBP <130, LDL <70, PCSK9 access). Verbatim
+  // quote from NEJM PDF read by medical-scientist on 2026-05-20 (V supplied full
+  // text). 36-month review window per §13.7 (landmark trial — defines the modern
+  // asymptomatic-carotid management paradigm).
+  'brott-crest-2-2025': {
+    id: 'brott-crest-2-2025',
+    source: 'trial',
+    title: 'Medical Management and Revascularization for Asymptomatic Carotid Stenosis',
+    year: 2026,
+    url: 'https://www.nejm.org/doi/10.1056/NEJMoa2508800',
+    pmid: '41269206',
+    last_reviewed: '2026-05-20',
+    review_window_months: 36,
+    quoted_text: 'Among patients with high-grade stenosis without recent symptoms, the addition of stenting led to a lower risk of a composite of perioperative stroke or death or ipsilateral stroke within 4 years than intensive medical management alone. Carotid endarterectomy did not lead to a significant benefit.',
+  },
 };

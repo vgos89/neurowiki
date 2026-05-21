@@ -11667,4 +11667,169 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     conclusion: 'ANNEXA-I was the first randomized trial to test an FXa-inhibitor antidote (andexanet alfa) against usual care in patients with acute intracerebral hemorrhage on apixaban, rivaroxaban, or edoxaban within 15 hours of their last dose. The DSMB halted the trial at the pre-specified interim analysis (452 of 900 planned patients) after the composite hemostatic-efficacy endpoint was met (67.0% vs 53.1%, adjusted difference +13.4 percentage points, 95% CI 4.6-22.2, P=0.003; NNT 8 for the surrogate). The composite was driven primarily by hematoma-volume control. Anti-FXa activity fell by a median of 94.5% with andexanet vs 26.9% with usual care. The hemostatic benefit was offset by a significant increase in thrombotic events (10.3% vs 5.6%, P=0.048), driven by a near-four-fold increase in ischemic stroke (6.5% vs 1.5%; NNH approximately 20). Exploratory mRS 0-3 at 30 days did not differ (28.0% vs 31.0%) and 30-day mortality did not differ (27.8% vs 25.5%, P=0.51). The trial confirms hemostatic activity, clarifies the ischemic-stroke trade-off, and supports the AHA/ASA 2022 ICH guideline Class IIa, Level B recommendation for FXa-inhibitor reversal. It does not establish superiority over 4F-PCC (which 85.5% of usual-care patients received), does not address cost-effectiveness, and does not demonstrate functional or survival benefit.',
   },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // CREST-2 (2026) — Carotid Revascularization and Medical Management for
+  // Asymptomatic Carotid Stenosis. Two parallel observer-blinded RCTs:
+  // stenting trial (CAS vs intensive medical management) AND endarterectomy
+  // trial (CEA vs intensive medical management) in asymptomatic ≥70%
+  // extracranial carotid stenosis. Stenting trial primary met (P=0.02, ARD
+  // 3.2 pp, NNT 31). Endarterectomy trial primary not met (P=0.24).
+  // Closes the asymptomatic-carotid question against modern intensive
+  // medical management (SBP <130 mm Hg, LDL <70 mg/dL with PCSK9 access,
+  // antithrombotic optimization). Evidence packet:
+  // docs/evidence-packets/crest-2-2026-05-20.md
+  // ─────────────────────────────────────────────────────────────────────────
+  'crest-2-trial': {
+    id: 'crest-2-trial',
+    claimId: 'crest-2-asymptomatic-2025',
+    title: 'CREST-2 Trials',
+    subtitle: 'Stenting and Endarterectomy vs Intensive Medical Management for Asymptomatic Carotid Stenosis',
+    category: 'Neuro Trials',
+    trialResult: 'POSITIVE',
+    pmid: '41269206',
+    doi: '10.1056/NEJMoa2508800',
+    primaryDesign: 'binary-superiority',
+    primaryResult: 'met',
+    listCategory: 'carotid',
+    listDescription: 'Two parallel RCTs in asymptomatic ≥70% carotid stenosis. Stenting beat modern intensive medical management (2.8% vs 6.0%, P=0.02, NNT 31). Endarterectomy did not (3.7% vs 5.3%, P=0.24).',
+    source: 'Brott TG, et al. for the CREST-2 Investigators (NEJM 2026;394:219-231)',
+    clinicalTrialsId: 'NCT02089217',
+    inclusionCriteria: [
+      'Age 35 years or older',
+      '≥70% stenosis of the index extracranial carotid artery by Doppler ultrasonography (peak systolic velocity ≥230 cm/s plus a confirmatory criterion), CTA, MRA, or catheter angiography',
+      'No stroke, TIA, or amaurosis fugax in the carotid territory within 180 days before randomization',
+      'Eligible for both intensive medical management and the assigned revascularization (stenting trial OR endarterectomy trial — site-determined)',
+      'Anatomy suitable for the assigned revascularization procedure',
+    ],
+    exclusionCriteria: [
+      'Previous disabling stroke',
+      'Unstable angina',
+      'Atrial fibrillation prompting anticoagulation',
+      'Recent (within 180 days) symptoms attributable to the index carotid artery',
+    ],
+    intervention: {
+      treatment: 'Carotid-artery stenting OR carotid endarterectomy, each added to intensive medical management (parallel trials)',
+      control: 'Intensive medical management alone (target SBP <130 mm Hg, target LDL <70 mg/dL with alirocumab access, antithrombotic therapy, lifestyle coaching)',
+    },
+    stats: {
+      sampleSize: {
+        value: '2,485',
+        label: 'Randomized Patients (1,245 stenting + 1,240 endarterectomy)',
+      },
+      primaryEndpoint: {
+        value: '4-yr Composite',
+        label: 'Periprocedural Stroke/Death + Ipsilateral Stroke',
+      },
+      pValue: {
+        value: '0.02 / 0.24',
+        label: 'Stenting / Endarterectomy',
+        highlight: true,
+      },
+      effectSize: {
+        value: 'ARD 3.2 pp / 1.6 pp',
+        label: 'Stenting (sig) / Endarterectomy (NS)',
+        highlight: true,
+      },
+      absoluteReduction: {
+        value: '3.2 pp (0.6–5.9)',
+        label: 'Stenting arm primary ARD (95% CI)',
+        highlight: true,
+      },
+    },
+    trialDesign: {
+      type: [
+        'Two parallel, multicenter, observer-blinded randomized controlled trials',
+        '1:1 allocation in each trial',
+        'Intention-to-treat analysis; pre-specified interim analysis with alpha adjustment to 0.047',
+        '155 sites across Australia, Canada, Israel, Spain, and the United States',
+      ],
+      timeline: 'Enrolled December 2014 to early 2024; follow-up through July 2025',
+    },
+    efficacyResults: {
+      treatment: {
+        percentage: 2.8,
+        label: '4-yr primary composite (stenting arm)',
+        name: 'CAS + Intensive Medical Mgmt',
+      },
+      control: {
+        percentage: 6.0,
+        label: '4-yr primary composite (medical-therapy arm of stenting trial)',
+        name: 'Intensive Medical Mgmt Alone',
+      },
+    },
+    calculations: {
+      nnt: 31,
+      nntExplanation: 'In the stenting trial: 31 patients with asymptomatic ≥70% carotid stenosis need stenting (plus intensive medical management) for 4 years to prevent one periprocedural stroke or death or postprocedural ipsilateral ischemic stroke compared with intensive medical management alone. NNT is reported by the authors in the Discussion (NEJM 2026 p.225). The endarterectomy trial primary was not met; NNT is not appropriate for the CEA arm.',
+    },
+    safetyProfile: {
+      mortality: {
+        evt: 7.8,
+        control: 11.0,
+        label: 'All-cause death by 4 years (stenting trial)',
+        tooltip: 'Stenting trial: 48 of 616 (7.8%) deaths in stenting group vs 69 of 629 (11.0%) in medical-therapy group across 4 years of follow-up. Endarterectomy trial: 54 of 617 (8.8%) CEA vs 60 of 623 (9.6%) medical-therapy. Trial not powered to detect mortality differences. Source: Brott TG et al., NEJM 2026, Discussion p.225.',
+        color: 'success',
+      },
+      adverseEvents: {
+        evt: 1.3,
+        control: 0.0,
+        label: 'Periprocedural stroke/death (days 0–44, stenting trial)',
+        tooltip: 'Stenting trial periprocedural events: 8 of 616 stenting (1.3%, 95% CI 0.6–2.5 — 7 strokes, 1 death) vs 0 of 629 medical-therapy (0.0%, 95% CI 0.0–0.6). Endarterectomy trial periprocedural events: 9 of 617 CEA (1.5%, 95% CI 0.7–2.8) vs 3 of 623 medical-therapy (0.5%, 95% CI 0.1–1.4). Source: Brott TG et al., NEJM 2026, Table 2 p.228.',
+        color: 'warning',
+      },
+    },
+    safetyData: 'Periprocedural (day 0 to 44) safety. Stenting trial: 0 strokes or deaths in 629 medical-therapy patients vs 7 strokes and 1 death in 616 stenting patients (1.3%, 95% CI 0.6–2.5). Endarterectomy trial: 3 strokes in 623 medical-therapy patients (0.5%, 95% CI 0.1–1.4) vs 9 strokes in 617 endarterectomy patients (1.5%, 95% CI 0.7–2.8). The periprocedural difference of −1.3 pp (stenting trial, 95% CI −2.2 to 0.4) and −1.0 pp (endarterectomy trial, 95% CI −2.1 to 0.1) reflects the front-loaded harm of revascularization. The trade-off favors stenting at 4 years because postprocedural ipsilateral ischemic stroke is markedly lower with revascularization (stenting: 0.4%/y vs 1.7%/y in medical-therapy, RR 4.07; endarterectomy: 0.5%/y vs 1.3%/y, RR 2.38). The endarterectomy 4-year net benefit did not reach statistical significance. Serious adverse events through 4 years were dominated by repeat carotid revascularization: 4.7% stenting vs 18.8% medical-therapy (stenting trial); 7.1% CEA vs 21.0% medical-therapy (endarterectomy trial), reflecting medical-therapy patients undergoing late revascularization for new symptoms, stenosis progression, or preference. Source: Brott TG et al., NEJM 2026, p.225 and Table 2.',
+    clinicalContext: 'CREST-2 was designed to settle whether revascularization (carotid-artery stenting or carotid endarterectomy) adds benefit beyond modern intensive medical management for asymptomatic ≥70% extracranial carotid stenosis. The landmark trials that established CEA for asymptomatic stenosis (ACAS 1995, ACST 2004/2010) used 1990s and early-2000s medical management — aspirin monotherapy, less stringent BP targets, low-potency statins. In the years since, intensive medical management has evolved: SBP target <130 mm Hg, LDL <70 mg/dL with PCSK9 inhibitor availability, dual antiplatelet selection per stroke etiology, glucose and weight optimization. CREST-2 ran two parallel observer-blinded RCTs in 2,485 asymptomatic patients with ≥70% stenosis, comparing each revascularization modality plus intensive medical management against intensive medical management alone. The stenting trial demonstrated a significant reduction in the 4-year composite of periprocedural stroke/death plus postprocedural ipsilateral ischemic stroke (6.0% vs 2.8%, P=0.02; NNT 31). The endarterectomy trial showed a numerically smaller difference (5.3% vs 3.7%) that did not reach statistical significance (P=0.24). The medical-therapy arms achieved annual primary-outcome rates of 1.6%/y (stenting trial) and 1.4%/y (endarterectomy trial) — substantially lower than the 3.6% per year assumed in the sample-size calculation, reflecting the efficacy of modern medical management.',
+    keyMessage: 'Asymptomatic carotid stenosis is no longer a near-automatic indication for revascularization. CREST-2 shows the stenting arm beat modern intensive medical management at 4 years (2.8% vs 6.0%, NNT 31) but the endarterectomy arm did not reach statistical significance (3.7% vs 5.3%, P=0.24). The medical-therapy arms achieved annual primary-outcome rates near 1.5%/y — far lower than the ACAS-era medical comparators — confirming that modern medical management has narrowed the revascularization advantage.',
+    pearls: [
+      'CREST-2 is two parallel RCTs, not one — read each primary separately. Stenting trial: P=0.02, ARD 3.2 pp, NNT 31. Endarterectomy trial: P=0.24, ARD 1.6 pp, not met.',
+      'The medical-therapy comparator was intensive: target SBP <130 mm Hg (lowered from <140 in 2018 after the AHA hypertension guideline), LDL <70 mg/dL with alirocumab access after 2018, antithrombotic therapy, and protocol-driven coaching.',
+      'Periprocedural harm is front-loaded. Days 0–44: 0 events in the stenting-trial medical arm vs 1.3% in CAS; 0.5% in the endarterectomy-trial medical arm vs 1.5% in CEA. The 4-year net favors stenting because postprocedural ipsilateral stroke is much lower with revascularization.',
+      'Postprocedural ipsilateral stroke rates: 0.4%/y stenting vs 1.7%/y medical (stenting trial, RR 4.07); 0.5%/y endarterectomy vs 1.3%/y medical (endarterectomy trial, RR 2.38).',
+      'Operator certification was rigorous: interventionists submitted preceding 12 months of CAS cases plus 3–25 nonurgent procedural reports; surgeons submitted preceding 50 consecutive CEA cases with documented <3% periprocedural stroke/death rate. Real-world generalizability is constrained.',
+      'Transcarotid revascularization (TCAR) was not enrolled — adoption increased mid-trial but the technique is not represented.',
+      'CREST-2 supersedes ACAS (1995) and ACST (2004/2010) as the primary evidence base for asymptomatic carotid management because it tested revascularization against modern medical therapy rather than 1990s aspirin-and-low-dose-statin care.',
+    ],
+    limitations: [
+      'Two parallel trials, not one — primary endpoints must be read separately. Authors note in Discussion (NEJM p.228) that the endarterectomy-trial result could shift with as few as 7 fewer CEA events or 6 more medical-therapy events; the absolute event count is small.',
+      'Patients and treating physicians were not blinded to revascularization assignment; outcome adjudication was blinded (observer-blinded design).',
+      'Operators were rigorously credentialed (surgeons: ≥50 consecutive cases with <3% periprocedural stroke/death; interventionists: certified per validated process). Community-practice generalizability is limited.',
+      'Medical-management practices evolved during enrollment (lower SBP target from 2018; widespread PCSK9 inhibitor and other lipid-lowering agent adoption); this drift may narrow any incremental revascularization benefit going forward.',
+      'Transcarotid revascularization (TCAR) was not part of the trial; ~10% relevant procedures were not captured because TCAR uptake increased after half of patients had been randomized.',
+      'Crossover from medical-therapy to revascularization: 17% in the stenting trial and 18% in the endarterectomy trial (mostly for new carotid symptoms, stenosis progression, or patient preference). Crossover analyses showed similar results to ITT.',
+      'Causality of postprocedural strokes after revascularization is uncertain — some strokes may not be causally linked to the procedure.',
+      'Trial population was predominantly White (88–93%); ~6% Black, ~4–5% Hispanic. Subgroup analyses by sex, age, hypertension, diabetes, and CHA₂DS₂-VASc score were exploratory and not adjusted for multiplicity.',
+      'Subgroup results were "consistent across subgroups" per the Discussion, but CIs were not adjusted for multiplicity and cannot be used to infer definitive treatment effects.',
+      'Doppler-based stenosis grading (peak systolic velocity ≥230 cm/s) was the primary entry method; CTA, MRA, or catheter angiography permitted as alternatives. Stenosis classification varies across modalities.',
+      'Sample-size calculation assumed a 4-year medical-therapy event rate of 3.6%; actual rates were ~5–6%, but the assumption error did not change the trial conclusions.',
+      'Funded by NIH/NINDS and CMS; Regeneron donated alirocumab after 2018 (no payments to investigators).',
+    ],
+    howToInterpret: {
+      proves: 'In patients with asymptomatic ≥70% extracranial carotid stenosis without recent (within 180 days) symptoms, the addition of carotid-artery stenting to modern intensive medical management lowers the 4-year risk of periprocedural stroke/death plus postprocedural ipsilateral ischemic stroke compared with intensive medical management alone (2.8% vs 6.0%, ARD 3.2 pp, P=0.02; NNT 31 over 4 years). Annual postprocedural ipsilateral ischemic stroke rates were 0.4%/y after stenting vs 1.7%/y on medical therapy alone. Intensive medical management as deployed in CREST-2 — SBP <130 mm Hg, LDL <70 mg/dL with PCSK9 access, antithrombotic therapy, lifestyle coaching — produces a low background event rate (~1.4–1.6%/y) substantially below the rates seen in 1990s asymptomatic-carotid trials.',
+      doesNotProve: 'It does not prove that carotid endarterectomy reduces the 4-year primary composite — the endarterectomy trial showed a non-significant difference (5.3% medical vs 3.7% CEA, P=0.24). It does not prove superiority of stenting over endarterectomy; the two trials had separate medical-therapy comparators and were not designed for direct head-to-head comparison (CREST 2010 already addressed CAS-vs-CEA). It does not apply to symptomatic carotid stenosis (recent stroke, TIA, or amaurosis fugax within 180 days were excluded). It does not apply to patients with previous disabling stroke, unstable angina, or atrial fibrillation requiring anticoagulation. It does not establish benefit for transcarotid revascularization (TCAR), which was not enrolled. It does not establish how community-practice operators (without the strict CREST-2 credentialing) would perform. It does not address cost-effectiveness, durability beyond 4 years, or differential benefit by stenosis severity above 70%.',
+      cautions: 'Periprocedural harm is front-loaded — CAS and CEA both incur a small but real day-0-to-44 stroke/death cost (1.3% CAS, 1.5% CEA) that must be weighed against the slow postprocedural divergence. The endarterectomy-trial result hinges on a small number of events: as few as 7 fewer CEA events or 6 more medical-therapy events would push it into significance per the published tipping-point analysis. Operators were certified to a standard substantially above typical community practice; do not assume real-world periprocedural rates will match trial rates. Medical-therapy practices changed during enrollment (2018 SBP target reduction, broader PCSK9 inhibitor use) — any future incremental revascularization benefit may attenuate further. Subgroup analyses were exploratory and should not direct treatment. Most asymptomatic carotid stenosis is now managed medically in 2026 practice; CREST-2 supports a default of intensive medical management with shared decision-making about adding stenting in selected patients who accept the periprocedural risk for the postprocedural reduction.',
+    },
+    educationalContext: 'CREST-2 closes a question the 1990s and 2000s asymptomatic-carotid trials could not answer. ACAS (1995, NEJM) randomized 1,662 asymptomatic patients with ≥60% stenosis to CEA vs medical therapy (aspirin only, no statin requirement); 5-year ipsilateral stroke was 5.1% CEA vs 11.0% medical (ARR 5.9 pp). ACST (Lancet 2004; 10-year Lancet 2010) confirmed CEA benefit in the European population. ACT-1 (2016) showed CAS noninferior to CEA in asymptomatic patients but did not address whether either beat modern medical care. SPACE-2 attempted the modern question but enrolled <16% of its target and could not power a comparison. CREST 2010 (Brott TG et al., NEJM 2010, DOI 10.1056/NEJMoa0912321) was a CAS-vs-CEA head-to-head in mixed symptomatic and asymptomatic patients; periprocedural stroke was higher with CAS (4.1% vs 2.3%) and MI higher with CEA (2.3% vs 1.1%). CREST-2 — designed by the same investigator group — was funded by NIH/NINDS in 2014 specifically to compare each revascularization modality against intensive medical management as it is practiced today. The result: CAS beats modern intensive medical management for the 4-year composite (NNT 31); CEA shows a numerically smaller, non-significant difference. The medical-therapy arms achieved annual primary-outcome rates of ~1.5%/y — a benchmark substantially below historical comparators and now the standard against which any future asymptomatic-carotid intervention must be measured.',
+    clinicalApplication: 'For most patients with asymptomatic ≥70% extracranial carotid stenosis in 2026 and beyond, intensive medical management is the default — SBP <130 mm Hg, LDL <70 mg/dL with PCSK9 inhibitor escalation if needed, antithrombotic therapy, lifestyle coaching, structured follow-up. Annual primary-event rates on this regimen are approximately 1.4–1.6%/y. Adding carotid-artery stenting reduces the 4-year primary composite (NNT 31) but at the cost of a 1.3% periprocedural stroke/death rate; shared decision-making with patients who accept the procedural risk and have favorable anatomy is reasonable. Adding carotid endarterectomy did not reach statistical significance in CREST-2 (P=0.24); routine CEA for asymptomatic stenosis on intensive medical management is no longer supported by RCT-level evidence in this population. Patient selection considerations: high-volume operator availability, individual procedural risk, anatomic suitability, and life expectancy (the 4-year horizon matters most for patients with ≥5-year expected survival). For symptomatic stenosis (stroke, TIA, or amaurosis fugax within 180 days), CREST-2 does not apply — separate evidence supports revascularization. For patients with previous disabling stroke, AF requiring anticoagulation, or other CREST-2 exclusions, individualize. Post-CREST-2 AHA/ASA and SVS guideline updates were pending as of trial publication; cite the trial directly until guidelines incorporate it.',
+    applicability: {
+      populationExclusions: [
+        'Symptomatic carotid stenosis (stroke, TIA, or amaurosis fugax in the carotid territory within 180 days) — CREST-2 explicitly excluded these patients; separate trials govern symptomatic management.',
+        'Previous disabling stroke',
+        'Unstable angina',
+        'Atrial fibrillation requiring anticoagulation',
+        'Anatomic features unsuitable for the assigned revascularization (assessed at site)',
+      ],
+      doseSpecific: 'Intensive medical management protocol: SBP target <130 mm Hg (lowered from <140 mm Hg in 2018 after the 2017 AHA/ACC hypertension guideline), LDL <70 mg/dL with PCSK9 inhibitor (alirocumab) available no-cost after 2018, single or dual antiplatelet therapy per site protocol (DAPT for CAS: aspirin 325 mg + clopidogrel 75 mg twice daily starting 48h pre-procedure, then aspirin 75–325 mg daily + clopidogrel 75 mg daily for 30 days), structured glucose/weight/smoking/activity coaching, telephone health-coaching support.',
+      geography: 'Trial enrolled at 155 sites in Australia, Canada, Israel, Spain, and the United States. Site selection required documented operator volume and outcomes; community-practice generalizability is constrained. Asymptomatic-carotid management practices vary internationally (more revascularization-aggressive in the US, more medical-therapy-default in much of Europe).',
+      imagingSelection: 'Stenosis assessed by Doppler ultrasonography (peak systolic velocity ≥230 cm/s plus a confirmatory criterion) as the primary entry; CTA, MRA, or catheter angiography permitted. ≥50% contralateral stenosis was permitted (present in 34–37% of patients).',
+    },
+    legend: {
+      finding: 'Stenting beat modern intensive medical management for asymptomatic ≥70% carotid stenosis (NNT 31). Endarterectomy did not.',
+      bottomLineTag: 'NNT 31 / NS CEA',
+      keyStat: 'CAS 2.8% vs 6.0% (P=0.02)',
+    },
+    bedsidePearl: 'CREST-2 is two parallel trials in asymptomatic ≥70% carotid stenosis. Stenting beat modern intensive medical management at 4 years (2.8% vs 6.0%, NNT 31). Endarterectomy did not reach significance (3.7% vs 5.3%, P=0.24). Intensive medical management is the modern default; revascularization is now a shared-decision conversation.',
+    bottomLineSummary: 'In asymptomatic ≥70% carotid stenosis, CREST-2 ran two parallel RCTs against modern intensive medical management (SBP <130, LDL <70, antithrombotic, coaching). Carotid-artery stenting reduced 4-year periprocedural stroke/death plus postprocedural ipsilateral stroke from 6.0% to 2.8% (ARD 3.2 pp, P=0.02, NNT 31). Carotid endarterectomy showed 3.7% vs 5.3% (P=0.24, not met).',
+    conclusion: 'CREST-2 is the definitive trial of revascularization against modern intensive medical management for asymptomatic high-grade extracranial carotid stenosis. Two parallel observer-blinded RCTs at 155 sites randomized 2,485 patients without recent carotid-territory symptoms to either stenting plus intensive medical management vs intensive medical management alone (N=1,245) or endarterectomy plus intensive medical management vs intensive medical management alone (N=1,240). The intensive medical management protocol was identical across all four arms: SBP <130 mm Hg, LDL <70 mg/dL with alirocumab access after 2018, antithrombotic therapy, and structured lifestyle coaching. The stenting trial primary 4-year composite (periprocedural stroke/death plus postprocedural ipsilateral ischemic stroke) was 6.0% (95% CI 3.8–8.3) on medical therapy alone vs 2.8% (95% CI 1.5–4.3) with stenting (ARD 3.2 pp, 95% CI 0.6–5.9, P=0.02; relative risk 2.13, 95% CI 1.15–4.39); authors reported NNT 31. The endarterectomy trial primary was 5.3% (95% CI 3.3–7.4) vs 3.7% (95% CI 2.1–5.5) (ARD 1.6 pp, 95% CI −1.1 to 4.3, P=0.24); the primary was not met. Periprocedural events (days 0–44) were 0/629 medical vs 8/616 stenting (1.3%), and 3/623 medical vs 9/617 endarterectomy (1.5%) — confirming front-loaded procedural harm. Postprocedural annual ipsilateral ischemic stroke rates were 0.4%/y stenting vs 1.7%/y medical (RR 4.07) and 0.5%/y endarterectomy vs 1.3%/y medical (RR 2.38). The medical-therapy arms achieved annual primary-event rates of ~1.5%/y — substantially below 1990s asymptomatic-carotid trials — confirming that modern medical management has narrowed the revascularization advantage. CREST-2 supports a default of intensive medical management for asymptomatic ≥70% carotid stenosis, with stenting reserved for selected patients who accept the periprocedural risk for the postprocedural ipsilateral-stroke reduction. The trial does not establish endarterectomy benefit in this population and does not apply to symptomatic stenosis, previous disabling stroke, or patients with anatomy unsuitable for revascularization. Operator credentialing (surgeons: ≥50 consecutive CEA cases with <3% periprocedural stroke/death; interventionists: certified per validated process) constrains real-world generalizability. Transcarotid revascularization was not enrolled.',
+  },
 };

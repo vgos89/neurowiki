@@ -364,6 +364,14 @@ const manualTrials: Omit<TrialItem, 'year'>[] = [
     isPlaceholder: false,
     description: 'CAS vs CEA in average-risk carotid stenosis. No primary 4-yr difference; CAS↑stroke, CEA↑MI/cranial nerve palsy; age-dependent.',
   }),
+  // CREST-2: two parallel RCTs of revascularization vs modern intensive medical
+  // management in asymptomatic ≥70% carotid stenosis. listCategory in trialData.ts
+  // is 'carotid' (not a TrialCategoryKey); mapped to 'surgical-interventions' here
+  // following the CREST 2010 precedent.
+  buildTrial('crest-2-trial', 'CREST-2', 'surgical-interventions', '10.1056/NEJMoa2508800', {
+    isPlaceholder: false,
+    description: 'Asymptomatic ≥70% carotid stenosis. Stenting beat modern intensive medical management (2.8% vs 6.0%, NNT 31). Endarterectomy did not (3.7% vs 5.3%, P=0.24).',
+  }),
 ];
 
 const legacyTrialCategories: Record<string, TrialCategoryKey> = {
