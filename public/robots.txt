@@ -30,6 +30,27 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
+# Additional AI crawlers (added 2026-05-21) — already allowed via `*`,
+# listed explicitly so citation engines that check for named allow-rules
+# get an unambiguous signal.
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
 # Sitemap location
 Sitemap: https://neurowiki.ai/sitemap.xml
 
