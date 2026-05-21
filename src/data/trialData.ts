@@ -1167,7 +1167,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       cautions: 'Pragmatic Dutch trial with heterogeneous device use including older first-generation devices in some patients; modern stent-retriever and aspiration platforms produce higher reperfusion rates. About 89% received IV alteplase. ASPECTS was not required for enrollment, so a small fraction of patients had low ASPECTS and may not represent current selection. Open-label design with blinded outcome assessment.',
     },
     /* claimId: mr-clean-bedside-pearl | source: Berkhemer NEJM 2015 */
-    bedsidePearl: 'When CTA confirms a proximal anterior circulation occlusion within 6 hours and the patient was independent before the stroke, MR CLEAN is consistent with proceeding to thrombectomy without waiting for IV alteplase to finish, in line with current AHA/ASA practice. The absolute gain in functional independence was 13.5 percentage points (NNT about 7).',
+    bedsidePearl: 'When CTA confirms a proximal anterior circulation occlusion within 6 hours and the patient was independent before the stroke, MR CLEAN is consistent with proceeding to thrombectomy without waiting for IV alteplase to finish, in line with current AHA/ASA practice. The absolute gain in functional independence was 13.5 percentage points (NNT about 7, derived from the secondary mRS 0-2 outcome; the protocol-defined primary was the ordinal mRS shift).',
     bottomLineSummary: 'MR CLEAN was the first modern positive thrombectomy trial. In anterior circulation LVO treated within 6 hours, adding intra-arterial therapy to usual care raised functional independence from 19.1% to 32.6% and shifted the entire mRS distribution toward better outcomes.',
     ordinalStats: {
       commonOR: 1.67,
@@ -1178,7 +1178,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     legend: {
       finding: 'First positive EVT trial. Thrombectomy benefit in proximal LVO.',
       bottomLineTag: '+13 / 100',
-      keyStat: 'NNT 7',
+      keyStat: 'NNT 7 (mRS 0–2 secondary)',
     },
   },
   'escape-trial': {
@@ -1310,7 +1310,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     legend: {
       finding: 'Small-core LVO thrombectomy raised independence to 53% vs 29%; mortality cut from 19% to 10%.',
       bottomLineTag: '+24 / 100',
-      keyStat: 'NNT 4.2',
+      keyStat: 'NNT 4.2 (mRS 0–2 secondary)',
     },
   },
   'revascat-trial': {
@@ -1424,7 +1424,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       cautions: 'Modest sample size (n=206) and registry-embedded design at 4 Spanish centers. Most patients had ICA or M1 occlusion; M2 occlusions were not the focus. Mortality was not reduced (18.4% vs 15.5%). The trial was stopped early after positive interim analyses in the other 2015 trials, which can inflate effect estimates.',
     },
     /* claimId: revascat-bedside-pearl | source: Jovin NEJM 2015 */
-    bedsidePearl: 'For an anterior circulation LVO patient between 4.5 and 8 hours from onset, especially when alteplase is contraindicated or has failed, REVASCAT supports proceeding to Solitaire thrombectomy provided ASPECTS is 7 or higher on CT. The functional independence gain is about 15 percentage points (NNT about 7).',
+    bedsidePearl: 'For an anterior circulation LVO patient between 4.5 and 8 hours from onset, especially when alteplase is contraindicated or has failed, REVASCAT supports proceeding to Solitaire thrombectomy provided ASPECTS is 7 or higher on CT. The functional independence gain is about 15 percentage points (NNT about 7, derived from the secondary mRS 0-2 outcome; the protocol-defined primary was the ordinal mRS shift).',
     bottomLineSummary: 'REVASCAT showed that Solitaire stent-retriever thrombectomy improved 90-day functional outcome in anterior circulation LVO treated within 8 hours, including in patients ineligible for or refractory to IV alteplase. The mRS distribution shifted toward better outcomes despite no mortality reduction.',
     ordinalStats: {
       commonOR: 1.7,
@@ -1644,7 +1644,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What do the numbers mean clinically?',
-        answer: 'Functional independence (mRS 0 to 2) was 60% with stent retriever plus alteplase versus 35% with alteplase alone, a 25 percentage point absolute gain (NNT of 4). The mRS shift analysis was significant at P less than 0.001.',
+        answer: 'Functional independence (mRS 0 to 2) was 60% with stent retriever plus alteplase versus 35% with alteplase alone, a 25 percentage point absolute gain (NNT of 4, derived from the secondary mRS 0-2 outcome). The protocol-defined primary was the ordinal mRS shift, which was significant at P less than 0.001.',
       },
       {
         question: 'What is the key limitation to keep in mind?',
@@ -1658,7 +1658,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       cautions: 'Stopped early after 196 of 833 planned patients, increasing the risk of overestimating treatment effect. Industry-sponsored. Imaging eligibility criteria changed mid-trial from RAPID core to ASPECTS, limiting consistency. The high reperfusion rate (88% TICI 2b/3) and median imaging-to-puncture time of 57 minutes reflect highly experienced centers.',
     },
     /* claimId: swift-prime-bedside-pearl | source: Saver NEJM 2015 */
-    bedsidePearl: 'For an alteplase-eligible LVO patient inside 6 hours with a small infarct core, SWIFT PRIME supports proceeding to Solitaire thrombectomy without delay. The primary mRS shift was significant and the functional independence gap was the largest of any 2015 trial that used a uniform device protocol (60% vs 35%, NNT of 4).',
+    bedsidePearl: 'For an alteplase-eligible LVO patient inside 6 hours with a small infarct core, SWIFT PRIME supports proceeding to Solitaire thrombectomy without delay. The primary mRS shift was significant and the functional independence gap was the largest of any 2015 trial that used a uniform device protocol (60% vs 35%, NNT of 4 from the secondary mRS 0-2 outcome).',
     bottomLineSummary: 'SWIFT PRIME showed that adding Solitaire stent-retriever thrombectomy to IV alteplase in anterior circulation LVO patients within 6 hours of onset shifted the entire mRS distribution toward better outcomes and raised functional independence from 35% to 60%. The trial was stopped early for efficacy.',
     ordinalStats: {
       commonOR: 2.75,
