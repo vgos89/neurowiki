@@ -978,6 +978,22 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-22 — Phase 1A GuidelineSummaryCard pilot + §4.8 backfill + composition ADR — Class C-clinical + Class E-clinical (commit 00199fb)
+  - Backfilled real AHA/ASA 2026 §4.8 (Antiplatelet — DAPT for minor noncardioembolic AIS) citation in registry — closes the gap clinical-reviewer flagged as C5 informational follow-up. Verbatim text from page e62 of source PDF.
+  - New ADR-2026-05-22-guideline-summary-card-composition.md locks in claim-level multi-section composition (option a from arch-citation-aha-2026-4.9 review). No schema change; existing ClaimEntry.citation_ids:string[] already supports it.
+  - Phase 1A pilot: new <GuidelineSummaryCard> component on /trials/q/anticoagulation. Renders verbatim §4.9 recommendation text + COR badge + source link from CITATION_REGISTRY. Single-citation case validates rendering layer. 22 other questions retain "Curated answer in progress" banner until Phase 2 authors their summaries.
+  - QA: tsc clean · build green (165/165 prerender) · claims hook clean · chains 5/5 · routes 43.
+- [x] 2026-05-22 — Citation correctness: AHA/ASA 2026 early-DOAC ID §4.8 → §4.9 — Class E-clinical (commit db4aac7)
+  - Direct PDF read (V supplied source) confirmed early-DOAC-in-AF recommendation lives in §4.9 (Anticoagulants), not §4.8 (which is Antiplatelet Treatment). Citation ID renamed; verbatim text from page e68 replaces placeholder; ELAN pathway soft label hardened at 4 occurrences (result card, accordion, EMR copy text).
+  - Architect review docs/reviews/arch-citation-aha-2026-4.9-2026-05-22.md (approve-with-conditions, no blockers). Clinical review docs/reviews/clinical-PR-citation-aha-2026-4.9-2026-05-22.md (approve-with-conditions, 4 conditions C1-C4 all addressed in diff: AIS gate preserved, registry title updated, LOE held back per Option B precedent, EMR copy text updated).
+  - LOE deliberately omitted from on-screen prose pending separate LOE-column verification from PDF.
+- [x] 2026-05-22 — Sleep Onset LKW picker iPhone glitch fix + free-text time entry — Class C (commit c3d2ecc)
+  - Added ManualTimeInput to each of the two Sleep Onset drum rows (parity with the Specific Time tab's typed-time box). Bedtime and wake-time now accept "11:25 PM" or "23:25" with drums + AM/PM toggle staying in sync.
+  - iPhone glitch fixes on ScrollCol: overscroll-behavior: contain + touch-action pan-y so a fling in one drum cannot bleed momentum into adjacent drums or modal body; cancel in-flight snap timer on touchstart so a re-grab during snap doesn't fight the user.
+  - Bumped Sleep Onset drum itemH 44→48 to clear iOS Safari's effective 44pt tap target inside the scrollable modal body.
+  - Moved sleep-onset validation error out of the scrolling body so the iOS soft keyboard for the new typed inputs cannot push it off-screen.
+- [x] 2026-05-22 — NIHSS anticoag chip row: add "None" option — Class B (commit 93ff0d3)
+  - Added 'none' to Anticoag union + ANTICOAG_LABELS in PatientContextPanel and NihssCalculator. Mutual-exclusion semantics: picking None clears DOAC/Warfarin/Antiplatelet; picking any positive clears None.
 - [x] 2026-05-13 — L5.6 CalculatorShell extraction — Class D (Phase 1: 3f1bdc5 · Phase 2: 4b61105 · Phase 3: 5572551)
   - All 9 spec-v1.1 calculators migrated onto shared shell: Abcd2, Aspect, Boston, GCS, HAS-BLED, Heidelberg, ICH, NIHSS, RoPE.
   - New shared infrastructure (8 files, +593 lines): Chevron, BackArrow, CalculatorDrawer (owns portal + State A/B/C + animation classes + stateBTappable + justCompleted), CalculatorToast (z-[60] portal), CalculatorHeader (ReactNode scoreDisplay slot, secondaryRow slot, scoreAriaLabel per architect C3), CalculatorFooter (citation + disclaimer + optional related slot), useDrawerState (discriminated-union input: binary | partial-complete, returns state/drawerOpen/reset/toast/showToast), severityTokens (interface + shared shadow constants + getInlineSeverityColor utility).
