@@ -1,0 +1,3379 @@
+{
+  "fetchedAt": "2026-05-22T13:48:08.651Z",
+  "propertyId": "367909578",
+  "dateRange": {
+    "startDate": "2026-04-24",
+    "endDate": "today",
+    "days": 28
+  },
+  "topPages": [
+    {
+      "dimensionValues": [
+        {
+          "value": "/",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "268",
+          "oneValue": "value"
+        },
+        {
+          "value": "58",
+          "oneValue": "value"
+        },
+        {
+          "value": "155",
+          "oneValue": "value"
+        },
+        {
+          "value": "78",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.50322580645161286",
+          "oneValue": "value"
+        },
+        {
+          "value": "1493",
+          "oneValue": "value"
+        },
+        {
+          "value": "212.17342076774193",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/extend-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "80",
+          "oneValue": "value"
+        },
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "23",
+          "oneValue": "value"
+        },
+        {
+          "value": "11",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.47826086956521741",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "536.400818",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "68",
+          "oneValue": "value"
+        },
+        {
+          "value": "11",
+          "oneValue": "value"
+        },
+        {
+          "value": "35",
+          "oneValue": "value"
+        },
+        {
+          "value": "27",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.77142857142857146",
+          "oneValue": "value"
+        },
+        {
+          "value": "609",
+          "oneValue": "value"
+        },
+        {
+          "value": "233.59742285714287",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/nihss",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "54",
+          "oneValue": "value"
+        },
+        {
+          "value": "19",
+          "oneValue": "value"
+        },
+        {
+          "value": "47",
+          "oneValue": "value"
+        },
+        {
+          "value": "29",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.61702127659574468",
+          "oneValue": "value"
+        },
+        {
+          "value": "1230",
+          "oneValue": "value"
+        },
+        {
+          "value": "214.69581736170213",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "50",
+          "oneValue": "value"
+        },
+        {
+          "value": "9",
+          "oneValue": "value"
+        },
+        {
+          "value": "31",
+          "oneValue": "value"
+        },
+        {
+          "value": "27",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.87096774193548387",
+          "oneValue": "value"
+        },
+        {
+          "value": "712",
+          "oneValue": "value"
+        },
+        {
+          "value": "184.5723824516129",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/late-window-ivt",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "24",
+          "oneValue": "value"
+        },
+        {
+          "value": "7",
+          "oneValue": "value"
+        },
+        {
+          "value": "13",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.30769230769230771",
+          "oneValue": "value"
+        },
+        {
+          "value": "217",
+          "oneValue": "value"
+        },
+        {
+          "value": "201.71497946153846",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "18",
+          "oneValue": "value"
+        },
+        {
+          "value": "8",
+          "oneValue": "value"
+        },
+        {
+          "value": "15",
+          "oneValue": "value"
+        },
+        {
+          "value": "15",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "73",
+          "oneValue": "value"
+        },
+        {
+          "value": "45.623127866666664",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/my-cases",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "17",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "9",
+          "oneValue": "value"
+        },
+        {
+          "value": "9",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "133",
+          "oneValue": "value"
+        },
+        {
+          "value": "40.711174111111106",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/guide",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "16",
+          "oneValue": "value"
+        },
+        {
+          "value": "6",
+          "oneValue": "value"
+        },
+        {
+          "value": "9",
+          "oneValue": "value"
+        },
+        {
+          "value": "9",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "55",
+          "oneValue": "value"
+        },
+        {
+          "value": "8.2574494444444433",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/ims-iii-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "16",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.75",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "263.4004765",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/right-2-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "11",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.8",
+          "oneValue": "value"
+        },
+        {
+          "value": "7",
+          "oneValue": "value"
+        },
+        {
+          "value": "247.1857896",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/evt",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "10",
+          "oneValue": "value"
+        },
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "10",
+          "oneValue": "value"
+        },
+        {
+          "value": "7",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.7",
+          "oneValue": "value"
+        },
+        {
+          "value": "140",
+          "oneValue": "value"
+        },
+        {
+          "value": "263.0977381",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/q/anticoagulation",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "9",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "28",
+          "oneValue": "value"
+        },
+        {
+          "value": "1628.219547",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/skip-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "9",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "14",
+          "oneValue": "value"
+        },
+        {
+          "value": "1672.910363",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/guide/iv-tpa",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "8",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "562.8244005",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/stroke-code",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "8",
+          "oneValue": "value"
+        },
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "8",
+          "oneValue": "value"
+        },
+        {
+          "value": "6",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.75",
+          "oneValue": "value"
+        },
+        {
+          "value": "25",
+          "oneValue": "value"
+        },
+        {
+          "value": "5.99034975",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/import",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "6",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "67",
+          "oneValue": "value"
+        },
+        {
+          "value": "171.60489066666665",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/boston-criteria-caa",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "6",
+          "oneValue": "value"
+        },
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.83333333333333337",
+          "oneValue": "value"
+        },
+        {
+          "value": "65",
+          "oneValue": "value"
+        },
+        {
+          "value": "11.019117999999999",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/q/tpa-timing",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "9",
+          "oneValue": "value"
+        },
+        {
+          "value": "288.3972146",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/privacy",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "21",
+          "oneValue": "value"
+        },
+        {
+          "value": "157.43859433333333",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/terms",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "49",
+          "oneValue": "value"
+        },
+        {
+          "value": "314.26739433333336",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/q/lvo-evt",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "56",
+          "oneValue": "value"
+        },
+        {
+          "value": "60.464558",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/glasgow-coma-scale",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "11",
+          "oneValue": "value"
+        },
+        {
+          "value": "70.664826333333338",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/elan-pathway",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "637",
+          "oneValue": "value"
+        },
+        {
+          "value": "826.262835",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/late-window-ivt",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "6",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5",
+          "oneValue": "value"
+        },
+        {
+          "value": "1127",
+          "oneValue": "value"
+        },
+        {
+          "value": "202.06370883333332",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/se-pathway",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/defuse-3-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "58.44239833333333",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/q/bp-control",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "47",
+          "oneValue": "value"
+        },
+        {
+          "value": "186.311435",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/q/large-core-evt",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "13",
+          "oneValue": "value"
+        },
+        {
+          "value": "14.809577",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/sammpris-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.66666666666666663",
+          "oneValue": "value"
+        },
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "335.705324",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/accessibility",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "3.009965",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/aspects-score",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.66666666666666663",
+          "oneValue": "value"
+        },
+        {
+          "value": "59",
+          "oneValue": "value"
+        },
+        {
+          "value": "552.16961466666669",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/ich-score",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/se-pathway",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "5.2615835",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/guide/aha-2026-guideline",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "21.062321",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/gca-pathway",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "197",
+          "oneValue": "value"
+        },
+        {
+          "value": "69.278592666666668",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/migraine-pathway",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.7143255",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/interact4-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "20",
+          "oneValue": "value"
+        },
+        {
+          "value": "38.579562",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/mistie-iii-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "355.084181",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/mr-clean-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "14.620537",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/q/basilar-evt",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.7909125",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/heidelberg-bleeding-classification",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "7",
+          "oneValue": "value"
+        },
+        {
+          "value": "7.399414",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/rope-score",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5",
+          "oneValue": "value"
+        },
+        {
+          "value": "83",
+          "oneValue": "value"
+        },
+        {
+          "value": "569.8277565",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/stroke-code",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5",
+          "oneValue": "value"
+        },
+        {
+          "value": "454",
+          "oneValue": "value"
+        },
+        {
+          "value": "259.9822565",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/guide/seizure-workup",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "21.254363",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/guide/status-epilepticus",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "968.94955",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways-code",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "5.015292",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/basics-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "66.206778",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/best-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "6.566491",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/charisma-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "5.396245",
+          "oneValue": "value"
+        }
+      ]
+    }
+  ],
+  "landingPages": [
+    {
+      "dimensionValues": [
+        {
+          "value": "/",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "125",
+          "oneValue": "value"
+        },
+        {
+          "value": "52",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.416",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.584",
+          "oneValue": "value"
+        },
+        {
+          "value": "304.73984598399994",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "(not set)",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "24",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.041666666666666664",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.95833333333333337",
+          "oneValue": "value"
+        },
+        {
+          "value": "48.196351416666666",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/nihss",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "22",
+          "oneValue": "value"
+        },
+        {
+          "value": "11",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5",
+          "oneValue": "value"
+        },
+        {
+          "value": "600.30386559090914",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/extend-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "18",
+          "oneValue": "value"
+        },
+        {
+          "value": "7",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.3888888888888889",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.61111111111111116",
+          "oneValue": "value"
+        },
+        {
+          "value": "568.2026365555555",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "15",
+          "oneValue": "value"
+        },
+        {
+          "value": "9",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.6",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.4",
+          "oneValue": "value"
+        },
+        {
+          "value": "808.3149422",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/late-window-ivt",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "12",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.25",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.75",
+          "oneValue": "value"
+        },
+        {
+          "value": "37.39666283333333",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "10",
+          "oneValue": "value"
+        },
+        {
+          "value": "8",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.8",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.2",
+          "oneValue": "value"
+        },
+        {
+          "value": "135.3552678",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/evt",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5",
+          "oneValue": "value"
+        },
+        {
+          "value": "1147.18442175",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/my-cases",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "636.82397366666669",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/stroke-code",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.33333333333333331",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.66666666666666663",
+          "oneValue": "value"
+        },
+        {
+          "value": "6.2834136666666671",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/right-2-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "411.976316",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/late-window-ivt",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5302915",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/privacy",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "1428.3006965",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/ims-iii-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5",
+          "oneValue": "value"
+        },
+        {
+          "value": "1114.8810445000001",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/sammpris-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5",
+          "oneValue": "value"
+        },
+        {
+          "value": "1445.927126",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "114.221828",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/boston-criteria-caa",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/se-pathway",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "937.968813",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/calculators/stroke-code",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/guide",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "1112.625309",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/guide/iv-tpa",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "3735.002067",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/gca-pathway",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "1051.998897",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/migraine-pathway",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1.428651",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/pathways/se-pathway",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "/trials/direct-safe-trial",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1.644738",
+          "oneValue": "value"
+        }
+      ]
+    }
+  ],
+  "sessionsBySource": [
+    {
+      "dimensionValues": [
+        {
+          "value": "(direct)",
+          "oneValue": "value"
+        },
+        {
+          "value": "(none)",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "138",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.36956521739130432",
+          "oneValue": "value"
+        },
+        {
+          "value": "51",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "google",
+          "oneValue": "value"
+        },
+        {
+          "value": "organic",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "115",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5130434782608696",
+          "oneValue": "value"
+        },
+        {
+          "value": "59",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "bing",
+          "oneValue": "value"
+        },
+        {
+          "value": "organic",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "(not set)",
+          "oneValue": "value"
+        },
+        {
+          "value": "(not set)",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "cn.bing.com",
+          "oneValue": "value"
+        },
+        {
+          "value": "referral",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.5",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "github.com",
+          "oneValue": "value"
+        },
+        {
+          "value": "referral",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "dimensionValues": [
+        {
+          "value": "page_view",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "765",
+          "oneValue": "value"
+        },
+        {
+          "value": "10.625",
+          "oneValue": "value"
+        },
+        {
+          "value": "74",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "session_start",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "265",
+          "oneValue": "value"
+        },
+        {
+          "value": "3.6301369863013697",
+          "oneValue": "value"
+        },
+        {
+          "value": "75",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "user_engagement",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "177",
+          "oneValue": "value"
+        },
+        {
+          "value": "4.7837837837837842",
+          "oneValue": "value"
+        },
+        {
+          "value": "38",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "first_visit",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "73",
+          "oneValue": "value"
+        },
+        {
+          "value": "1.0895522388059702",
+          "oneValue": "value"
+        },
+        {
+          "value": "67",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "calculator_copied",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "14",
+          "oneValue": "value"
+        },
+        {
+          "value": "2.8",
+          "oneValue": "value"
+        },
+        {
+          "value": "5",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "calculator_used",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "11",
+          "oneValue": "value"
+        },
+        {
+          "value": "2.75",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "trial_card_clicked",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "9",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "disclaimer_acknowledged",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "4",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "calculator_shared",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "3",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "search",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    }
+  ],
+  "deviceSplit": [
+    {
+      "dimensionValues": [
+        {
+          "value": "desktop",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "158",
+          "oneValue": "value"
+        },
+        {
+          "value": "45",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.45569620253164556",
+          "oneValue": "value"
+        },
+        {
+          "value": "4094",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "mobile",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "106",
+          "oneValue": "value"
+        },
+        {
+          "value": "30",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.41509433962264153",
+          "oneValue": "value"
+        },
+        {
+          "value": "3669",
+          "oneValue": "value"
+        }
+      ]
+    }
+  ],
+  "newVsReturning": [
+    {
+      "dimensionValues": [
+        {
+          "value": "returning",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "157",
+          "oneValue": "value"
+        },
+        {
+          "value": "27",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.54140127388535031",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "new",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "67",
+          "oneValue": "value"
+        },
+        {
+          "value": "67",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.40298507462686567",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "(not set)",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "36",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    }
+  ],
+  "countries": [
+    {
+      "dimensionValues": [
+        {
+          "value": "United States",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "249",
+          "oneValue": "value"
+        },
+        {
+          "value": "62",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.44578313253012047",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "China",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "6",
+          "oneValue": "value"
+        },
+        {
+          "value": "6",
+          "oneValue": "value"
+        },
+        {
+          "value": "0.16666666666666666",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "Poland",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "2",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "Germany",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "Iceland",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    },
+    {
+      "dimensionValues": [
+        {
+          "value": "India",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "1",
+          "oneValue": "value"
+        },
+        {
+          "value": "0",
+          "oneValue": "value"
+        }
+      ]
+    }
+  ],
+  "aiTrafficByType": [
+    {
+      "dimensionValues": [
+        {
+          "value": "(not set)",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "260",
+          "oneValue": "value"
+        },
+        {
+          "value": "1323",
+          "oneValue": "value"
+        }
+      ]
+    }
+  ],
+  "aiTrafficByAgent": [
+    {
+      "dimensionValues": [
+        {
+          "value": "(not set)",
+          "oneValue": "value"
+        }
+      ],
+      "metricValues": [
+        {
+          "value": "260",
+          "oneValue": "value"
+        },
+        {
+          "value": "1323",
+          "oneValue": "value"
+        }
+      ]
+    }
+  ]
+}
