@@ -352,6 +352,7 @@ const NihssCalculator: React.FC = () => {
     //    a complete documentation block even when some fields weren't
     //    captured during the exam.
     const ANTICOAG_LABELS: Record<Anticoag, string> = {
+      none: 'None',
       doac: 'DOAC',
       warfarin: 'Warfarin',
       antiplatelet: 'Antiplatelet',

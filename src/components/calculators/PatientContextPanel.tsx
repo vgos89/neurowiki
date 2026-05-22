@@ -20,7 +20,7 @@ import { LKWTimePicker } from '../article/stroke/LKWTimePicker';
  *   - CALCULATOR_SPEC.md §2.4: ≥44×44 touch targets
  */
 
-export type Anticoag = 'doac' | 'warfarin' | 'antiplatelet';
+export type Anticoag = 'none' | 'doac' | 'warfarin' | 'antiplatelet';
 
 export interface PatientContextValues {
   /** Last known well — undefined if not set, null if explicitly Unknown / wake-up. */
@@ -47,6 +47,7 @@ interface PatientContextPanelProps {
 }
 
 const ANTICOAG_LABELS: Record<Anticoag, string> = {
+  none: 'None',
   doac: 'DOAC',
   warfarin: 'Warfarin',
   antiplatelet: 'Antiplatelet',
@@ -68,8 +69,20 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({ values
 
   const toggleAnticoag = (key: Anticoag) => {
     const next = new Set(values.anticoag);
-    if (next.has(key)) next.delete(key);
-    else next.add(key);
+    if (next.has(key)) {
+      next.delete(key);
+    } else {
+      // 'None' is mutually exclusive with positive selections — picking
+      // None clears DOAC/Warfarin/Antiplatelet; picking any positive
+      // clears None. Lets clinicians record the explicit negative
+      // ("not on anything") for EMR documentation.
+      if (key === 'none') {
+        next.clear();
+      } else {
+        next.delete('none');
+      }
+      next.add(key);
+    }
     onChange({ ...values, anticoag: next });
   };
 
@@ -171,7 +184,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({ values
           <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 flex-wrap">
             <label className="text-xs font-medium text-slate-600 flex-shrink-0">Anti-coag/Antiplatelet</label>
             <div className="flex items-center gap-1.5 flex-wrap">
-              {(['doac', 'warfarin', 'antiplatelet'] as const).map((key) => {
+              {(['none', 'doac', 'warfarin', 'antiplatelet'] as const).map((key) => {
                 const selected = values.anticoag.has(key);
                 return (
                   <button
