@@ -165,6 +165,25 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'AHA/ASA 2026 §4.9 (Anticoagulants) — COR 2a recommendation that early oral anticoagulation is reasonable in carefully selected (eg, milder severity) patients with AIS and atrial fibrillation; efficacy for early recurrence prevention not established. Operationalized via ELAN trial timing bins. ELAN (NEJM 2023) showed risk difference −1.18 (95% CI −2.84 to 0.47), numerical but not statistically significant. OPTIMAS (Lancet 2024) and TIMING (Stroke 2022) confirmed noninferiority.',
   },
 
+  // ─── Phase 1A pilot — GuidelineSummaryCard on /trials/q/anticoagulation ─────
+  // First instance of the new <GuidelineSummaryCard> composition pattern
+  // (ADR-2026-05-22-guideline-summary-card-composition). Surfaces the same
+  // §4.9 recommendation as `early-doac-af-stroke-recommendation` above, but
+  // on a different page (trial-question page rather than ELAN pathway page)
+  // — distinct claim ID because it is a distinct rendering surface.
+  // Single-citation case validates the rendering layer before Phase 2 expands
+  // to multi-citation cards.
+  'anticoagulation-guideline-summary': {
+    id: 'anticoagulation-guideline-summary',
+    citation_ids: ['aha-asa-2026-4.9'],
+    // Surface = data field on the guidelineSummariesByQuestion record.
+    // The GuidelineSummaryCard component reads the claim ID from that data
+    // and renders dynamically; the canonical claim-binding surface is the
+    // data file, not the (templated) JSX attribute.
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/anticoagulation. Surfaces AHA/ASA 2026 §4.9 (Anticoagulants) — early oral anticoagulation reasonable in carefully selected (eg, milder severity) AIS patients with AF (COR 2a). Linked trials below the card: ELAN, OPTIMAS, TIMING.',
+  },
+
   // ─── CREST (2010) — carotid revascularization head-to-head (CAS vs CEA) ──
   'crest-cas-vs-cea-superiority-not-met-2010': {
     id: 'crest-cas-vs-cea-superiority-not-met-2010',

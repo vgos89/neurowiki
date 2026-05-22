@@ -22,6 +22,8 @@ import { TRIAL_QUESTIONS } from '../data/trial-questions';
 import { findTrialById, type TrialItem } from '../data/trialListData';
 import { TRIAL_DATA } from '../data/trialData'; // Phase 6B: legend deferred; lazy route imports directly
 import { TrialLegendCard } from '../components/trials/TrialLegendCard';
+import { GuidelineSummaryCard } from '../components/trials/GuidelineSummaryCard';
+import { getGuidelineSummaryForQuestion } from '../data/guidelineSummariesByQuestion';
 import { useFavorites } from '../hooks/useFavorites';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -175,27 +177,44 @@ export default function QuestionDetailPage() {
         </p>
       </div>
 
-      {/* ── Status banner ──────────────────────────────────────────────────── */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 mt-5">
-        <div
-          className="rounded-lg px-4 py-3.5"
-          style={{
-            background: 'var(--cobalt-soft)',
-            borderLeft: '3px solid var(--color-neuro-500)',
-          }}
-        >
-          <p
-            className="text-[10px] font-semibold uppercase tracking-[0.08em] mb-1"
-            style={{ color: 'var(--color-neuro-500)' }}
-          >
-            Clinical Synthesis
-          </p>
-          <p className="text-sm text-slate-700 leading-relaxed">
-            Curated answer in progress. The trials below are the evidence base.
-            Open any card to read the full study.
-          </p>
-        </div>
-      </div>
+      {/* ── Guideline summary card (Phase 1A) ──────────────────────────────
+          Renders the AHA/ASA 2026 (or equivalent) recommendation(s) relevant
+          to this question. Pilot wired only for `anticoagulation`; falls
+          back to the "Curated answer in progress" banner for questions that
+          do not yet have a registered summary claim.
+          ADR-2026-05-22-guideline-summary-card-composition.md */}
+      {(() => {
+        const summary = getGuidelineSummaryForQuestion(question.id);
+        if (summary) {
+          return (
+            <div className="max-w-3xl mx-auto px-4 sm:px-6 mt-5">
+              <GuidelineSummaryCard claimId={summary.claimId} />
+            </div>
+          );
+        }
+        return (
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 mt-5">
+            <div
+              className="rounded-lg px-4 py-3.5"
+              style={{
+                background: 'var(--cobalt-soft)',
+                borderLeft: '3px solid var(--color-neuro-500)',
+              }}
+            >
+              <p
+                className="text-[10px] font-semibold uppercase tracking-[0.08em] mb-1"
+                style={{ color: 'var(--color-neuro-500)' }}
+              >
+                Clinical Synthesis
+              </p>
+              <p className="text-sm text-slate-700 leading-relaxed">
+                Curated answer in progress. The trials below are the evidence base.
+                Open any card to read the full study.
+              </p>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* ── Trial list ─────────────────────────────────────────────────────── */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 mt-8 pb-24">

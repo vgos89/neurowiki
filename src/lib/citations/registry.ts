@@ -292,6 +292,40 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'In carefully selected (eg, milder severity) patients with AIS with atrial fibrillation, a strategy of early oral anticoagulation poststroke is low risk and is reasonable compared with a strategy of delayed anticoagulation, although the efficacy of early anticoagulation for prevention of early recurrent stroke is not established. (COR 2a.)',
   },
 
+  // ─── AHA/ASA 2026 §4.8 — early DAPT for minor noncardioembolic AIS / high-risk TIA ─
+  // Prabhakaran et al. 2026 Guideline for the Early Management of Patients With
+  // Acute Ischemic Stroke. Stroke. 2026. DOI: 10.1161/STR.0000000000000513.
+  // PMID: 41582814.
+  //
+  // BACK-FILL 2026-05-22 — when the prior `aha-asa-2026-4.8` ID was renamed to
+  // `aha-asa-2026-4.9` (the correct section for early anticoagulation in AF),
+  // the real §4.8 recommendation (Antiplatelet Treatment / DAPT for minor
+  // stroke) was left UNREGISTERED. Both the architect (§17.1 C5 follow-up)
+  // and clinical reviewer (§17.2 C5 informational) flagged this. This entry
+  // closes that gap.
+  //
+  // COR 1, LOE A confirmed from the §4.8 recommendation table on page e62 of
+  // the source PDF (V supplied 2026-05-22; verbatim text mirrored in
+  // src/data/aha2026StrokeGuideline.ts antiplateletRecommendations.daptForMinorAIS[0]).
+  // Loading-dose / duration detail lives in the supportive text page e64.
+  //
+  // Source trials: CHANCE (n=5,170, 24h, NNT 28), POINT (n=4,881, 12h,
+  // NNT 67), INSPIRES (n=6,100, 72h, NNT 53). CHANCE-2 and THALES address
+  // adjacent populations (CYP2C19 carriers, broader NIHSS) at lower COR.
+  //
+  // 6-month review window per §13.7 (current clinical guideline).
+  'aha-asa-2026-4.8': {
+    id: 'aha-asa-2026-4.8',
+    source: 'guideline',
+    title: '2026 AHA/ASA Guideline — §4.8 (Antiplatelet Treatment — DAPT for minor noncardioembolic AIS or high-risk TIA)',
+    year: 2026,
+    section: '§4.8 Antiplatelet Treatment',
+    url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
+    pmid: '41582814',
+    last_reviewed: '2026-05-22',
+    quoted_text: 'In patients with minor (NIHSS score ≤3) noncardioembolic AIS or high-risk TIA (ABCD² score ≥4) who did not receive IVT, DAPT (aspirin and clopidogrel with loading dose of clopidogrel) should be initiated early (within 24 hours after symptom onset) and continued for 21 days, followed by single antiplatelet therapy (SAPT) to reduce the 90-day risk of recurrent ischemic stroke. (COR 1, LOE A.)',
+  },
+
   // ─── 2018 trial: foundational TNK-vs-alteplase comparison in the LVO-EVT pathway ─
   // Campbell BCV et al., NEJM 2018. Established TNK 0.25 mg/kg as the IVT agent
   // of first choice for EVT-eligible LVO patients within 4.5h. Verbatim quote
