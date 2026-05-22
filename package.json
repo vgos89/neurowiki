@@ -70,40 +70,27 @@
     ],
     "skipThirdPartyRequests": true,
     "renderAfterTime": 1500,
+    "inlineCss": false,
+    "minifyHtml": {
+      "collapseWhitespace": false,
+      "removeComments": false
+    },
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
     "include": [
       "/",
       "/calculators",
+      "/pathways",
+      "/guide",
+      "/trials",
       "/calculators/nihss",
-      "/calculators/evt-pathway",
-      "/calculators/late-window-ivt",
-      "/calculators/elan-pathway",
-      "/calculators/se-pathway",
       "/calculators/aspects-score",
       "/calculators/ich-score",
-      "/calculators/abcd2-score",
       "/calculators/glasgow-coma-scale",
-      "/calculators/has-bled-score",
-      "/calculators/rope-score",
-      "/calculators/heidelberg-bleeding-classification",
-      "/calculators/boston-criteria-caa",
-      "/guide",
-      "/guide/iv-tpa",
-      "/guide/stroke-basics",
-      "/guide/thrombectomy",
-      "/guide/ich-management",
-      "/guide/status-epilepticus",
-      "/guide/gbs",
-      "/guide/myasthenia-gravis",
-      "/trials",
-      "/trials/dawn-trial",
-      "/trials/defuse-3-trial",
-      "/trials/wake-up-trial",
-      "/trials/extend-trial",
-      "/trials/elan-study",
-      "/trials/original-trial",
-      "/trials/select2-trial",
-      "/trials/ninds-trial",
-      "/trials/angel-aspect-trial"
+      "/calculators/abcd2-score",
+      "/calculators/has-bled-score"
     ]
   }
 }
