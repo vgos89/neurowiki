@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Check,
   RotateCcw, Copy, Activity, Zap,
@@ -967,7 +968,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                           />
                         </div>
                         {bCtpMismatch !== null && (
-                          <PathwayLearningPearl title="EXTEND Trial" content="Ma et al., NEJM 2019. Alteplase 4.5–9h with RAPID-selected mismatch (core < 70 mL; mismatch > 10 mL, ratio > 1.2). mRS 0–1 at 90 days: 35.4% vs 29.5%; adjusted RR 1.44 (95% CI 1.01–2.06; P=0.04). NNT ≈ 17 from absolute risk reduction." />
+                          <PathwayLearningPearl title="EXTEND Trial" content="Ma et al., NEJM 2019. Alteplase 4.5–9h with RAPID-selected mismatch (core < 70 mL; mismatch > 10 mL, ratio > 1.2). mRS 0–1 at 90 days: 35.4% vs 29.5%; adjusted RR 1.44 (95% CI 1.01–2.06; P=0.04). NNT ≈ 17 from absolute risk reduction. EXTEND was stopped early after WAKE-UP published; effect size (NNT ≈17) may be overestimated." />
                         )}
                       </div>
                     )}
@@ -1229,6 +1230,18 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                   </div>
                   <div className="text-sm text-slate-700 mt-1 leading-relaxed">{result.details}</div>
                 </div>
+
+                {/* F1 — standard contraindication verification callout (clinical-reviewer approved 2026-05-22).
+                    Appears on all Eligible verdicts (Paths A, B, C). Proximate to verdict — not buried in NextStepsCard. */}
+                {result.eligible && (
+                  <div className="flex items-start gap-2.5 mt-5 px-3 py-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs">
+                    <AlertTriangle size={14} className="shrink-0 mt-0.5" aria-hidden="true" />
+                    <span>
+                      Late-window selection criteria met. Standard IV thrombolysis contraindications (BP &gt;185/110, INR &gt;1.7, platelets &lt;100k, DOAC within window, recent surgery/ICH, active bleeding) must still be verified before administration — see{' '}
+                      <Link to="/guide/iv-tpa" className="font-semibold underline underline-offset-2 hover:text-amber-900">IV tPA exclusions</Link>.
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Dosing — only when eligible */}
@@ -1354,6 +1367,45 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
             label: "Review the trials behind late-window IVT",
             description: "WAKE-UP, EXTEND, TIMELESS, TRACE-3 evidence summaries",
             to: "/trials/q/late-window-selection"
+          },
+        ]}
+      />
+
+      {/* Trials NextStepsCard — V directive 2026-05-22: surface trial links for further reading.
+          Option A chosen: separate card keeps clinical-continuation CTA (above) clean and the
+          trial set distinct. 6 trials — all route targets exist in /trials/*. */}
+      <NextStepsCard
+        heading="Trials informing this pathway"
+        items={[
+          {
+            label: "WAKE-UP",
+            description: "DWI-FLAIR mismatch in unknown-onset stroke",
+            to: "/trials/wake-up-trial"
+          },
+          {
+            label: "EXTEND",
+            description: "Perfusion-selected 4.5–9h IV alteplase",
+            to: "/trials/extend-trial"
+          },
+          {
+            label: "TIMELESS",
+            description: "Late-window tenecteplase with EVT (neutral)",
+            to: "/trials/timeless-trial"
+          },
+          {
+            label: "TRACE-III",
+            description: "Late-window tenecteplase without EVT",
+            to: "/trials/trace-iii-trial"
+          },
+          {
+            label: "EXTEND-IA TNK",
+            description: "TNK 0.25 mg/kg vs alteplase before thrombectomy",
+            to: "/trials/extend-ia-tnk-trial"
+          },
+          {
+            label: "THAWS",
+            description: "Alteplase in wake-up stroke",
+            to: "/trials/thaws-trial"
           },
         ]}
       />
