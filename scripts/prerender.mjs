@@ -134,32 +134,52 @@ function resolveChromePath() {
 }
 
 // ── Vite preview subprocess ────────────────────────────────────────────────
+const PREVIEW_STARTUP_TIMEOUT_MS = 30_000;
 async function startPreviewServer() {
   log(`Starting vite preview on port ${PORT}...`);
+  // Use the locally-installed vite binary directly instead of `npx vite`.
+  // On Vercel build runners, `npx` resolution adds 5-15s of overhead which
+  // pushed past the previous 10s timeout. Direct binary path skips that.
+  const viteBin = join(ROOT, 'node_modules/.bin/vite');
   const proc = spawn(
-    'npx',
-    ['vite', 'preview', '--port', String(PORT), '--strictPort'],
+    viteBin,
+    ['preview', '--port', String(PORT), '--strictPort'],
     { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] }
   );
 
   await new Promise((res, rej) => {
     const timeout = setTimeout(
-      () => rej(new Error('vite preview did not start in 10s')),
-      10_000
+      () => {
+        rej(
+          new Error(
+            `vite preview did not print "Local:" within ${PREVIEW_STARTUP_TIMEOUT_MS / 1000}s. ` +
+              `Last seen output above (stdout + stderr).`
+          )
+        );
+      },
+      PREVIEW_STARTUP_TIMEOUT_MS
     );
     proc.stdout.on('data', (chunk) => {
       const text = chunk.toString();
-      debug('preview stdout:', text.trim());
+      // Always log stdout — silent failures on Vercel are the #1 debug hazard.
+      console.log('[preview stdout]', text.trim());
       if (text.includes('Local:') || text.includes(`localhost:${PORT}`)) {
         clearTimeout(timeout);
         res();
       }
     });
-    proc.stderr.on('data', (chunk) =>
-      debug('preview stderr:', chunk.toString().trim())
-    );
+    proc.stderr.on('data', (chunk) => {
+      // Always log stderr — same reason. Without this, any vite preview
+      // error message is lost and we just see the timeout.
+      console.error('[preview stderr]', chunk.toString().trim());
+    });
     proc.on('exit', (code) => {
-      if (code !== 0) rej(new Error(`vite preview exited with code ${code}`));
+      if (code !== 0 && code !== null) {
+        rej(new Error(`vite preview exited with code ${code} before becoming ready`));
+      }
+    });
+    proc.on('error', (err) => {
+      rej(new Error(`vite preview failed to spawn: ${err.message}`));
     });
   });
 
