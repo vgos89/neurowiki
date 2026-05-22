@@ -151,17 +151,18 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'Quick-pearl mirror of ENCHANTED2/MT: SBP <120 mmHg post-EVT increased major disability.',
   },
 
-  // ─── ELAN pathway — early DOAC after AF-related ischemic stroke ─────────────
+  // ─── ELAN pathway — early oral anticoagulation after AF-related ischemic stroke ─
   // Surface type: static JSX — tagged with data-claim="early-doac-af-stroke-recommendation"
   // on the result card (step 4) and the accordion guideline box in ElanPathway.tsx.
-  // LOE assertion intentionally absent (Option B per V 2026-05-22; see F8 in
-  // docs/reviews/clinical-PR-pathway-elan-2026-05-22.md). Re-harden when
-  // evidence-verifier unblocks AHA/ASA 2026 §4.8 verbatim text.
+  // Source confirmed 2026-05-22: AHA/ASA 2026 §4.9 Anticoagulants (NOT §4.8 —
+  // §4.8 is Antiplatelet Treatment). COR 2a confirmed; LOE deliberately omitted
+  // pending separate verification of the LOE column from the source PDF.
+  // See docs/reviews/clinical-PR-citation-aha-2026-4.9-2026-05-22.md.
   'early-doac-af-stroke-recommendation': {
     id: 'early-doac-af-stroke-recommendation',
-    citation_ids: ['aha-asa-2026-4.8'],
+    citation_ids: ['aha-asa-2026-4.9'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'AHA/ASA 2026 §4.8 recommendation for earlier DOAC initiation after AF-related ischemic stroke, operationalized via ELAN trial timing bins. ELAN (NEJM 2023) showed directional OR 0.70 (estimation trial, no formal NI conclusion). OPTIMAS (Lancet 2024) and TIMING (Stroke 2022) subsequently confirmed noninferiority. LOE pending evidence-verifier access to §4.8.',
+    description: 'AHA/ASA 2026 §4.9 (Anticoagulants) — COR 2a recommendation that early oral anticoagulation is reasonable in carefully selected (eg, milder severity) patients with AIS and atrial fibrillation; efficacy for early recurrence prevention not established. Operationalized via ELAN trial timing bins. ELAN (NEJM 2023) showed risk difference −1.18 (95% CI −2.84 to 0.47), numerical but not statistically significant. OPTIMAS (Lancet 2024) and TIMING (Stroke 2022) confirmed noninferiority.',
   },
 
   // ─── CREST (2010) — carotid revascularization head-to-head (CAS vs CEA) ──
