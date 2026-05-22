@@ -312,9 +312,17 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
 
   return (
     <>
-      {/* ── Emergency FAB — bottom LEFT ── */}
+      {/* ── Emergency FAB — bottom LEFT ──
+            Position offset clears the MobileBottomNav (60px) + iPhone home
+            indicator (~34px safe-area-inset). Mobile UX audit 2026-05-21
+            MUST-FIX: prior `bottom-24` left only 2px clearance above home
+            indicator on iPhone 14/15, creating accidental-tap risk on the
+            Emergency button (opens tPA reversal protocol). */}
       {hasEmergency && (
-        <div className="fixed bottom-24 md:bottom-20 left-4 z-[60]">
+        <div
+          className="fixed md:bottom-20 left-4 z-[60]"
+          style={{ bottom: 'calc(96px + env(safe-area-inset-bottom, 0px))' }}
+        >
           <div className="relative flex flex-col items-start gap-2">
             {/* Emergency thought bubble */}
             {showEmergencyThought && !emergencyOpen && (
@@ -376,7 +384,10 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
       )}
 
       {/* ── Clock FAB — bottom RIGHT ── */}
-      <div className="fixed bottom-36 md:bottom-20 right-4 z-[60]">
+      <div
+        className="fixed md:bottom-20 right-4 z-[60]"
+        style={{ bottom: 'calc(144px + env(safe-area-inset-bottom, 0px))' }}
+      >
         <div className="relative">
         {/* Clock thought bubble */}
         {showClockThought && !isExpanded && (

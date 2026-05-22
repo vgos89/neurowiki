@@ -51,7 +51,7 @@ export const DiscreteFAQ: React.FC<DiscreteFAQProps> = ({
     >
       <details className="group">
         <summary
-          className="flex items-center justify-between cursor-pointer list-none text-[13px] font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors min-h-[44px] py-2 -my-2 -mx-1 px-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500"
+          className="flex items-center justify-between cursor-pointer list-none text-[13px] font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors min-h-[44px] py-2 px-3 -mx-1 rounded-md bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500"
         >
           <span>{label}</span>
           <svg

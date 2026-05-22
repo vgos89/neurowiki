@@ -1,6 +1,6 @@
 // HOME_SPEC §1.7 — Trending trials section
 // HOME_SPEC §1.7.4 — daily-seeded selection (from useTrending hook)
-// HOME_SPEC §1.7.6 — "View all 79 trials →" link
+// HOME_SPEC §1.7.6 — "View all 101 trials →" link (count refreshed 2026-05-21)
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTrending } from '../../hooks/useTrending';

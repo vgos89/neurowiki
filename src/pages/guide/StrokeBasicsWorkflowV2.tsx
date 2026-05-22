@@ -312,8 +312,10 @@ const MainContent: React.FC = () => {
           }}
         />
 
-        {/* Sticky header + tab bar wrapper */}
-        <div className="sticky top-16 z-20 bg-white">
+        {/* Sticky header + tab bar wrapper.
+            top-[60px] matches MobileHeader height exactly (was top-16 = 64px,
+            creating a 4px visual seam on scroll). Mobile UX audit 2026-05-21. */}
+        <div className="sticky top-[60px] z-20 bg-white">
           <div className="border-b border-slate-100">
             <div className="flex items-center justify-between px-4 py-3">
               <div className="flex items-center gap-3">

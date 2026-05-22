@@ -368,9 +368,13 @@ details > summary::-webkit-details-marker {
   .drawer-discovery-chevron { animation: none; }
 }
 
-/* Drawer content spacers — reserve room in scroll flow (§1.3) */
-.drawer-spacer-collapsed { height: 80px; }
-.drawer-spacer-expanded  { height: 380px; }
+/* Drawer content spacers — reserve room in scroll flow (§1.3).
+   2026-05-21 mobile UX audit: 80px - 60px drawer - 34px iPhone home
+   indicator = -14px clearance, clipping the DiscreteFAQ accordion at
+   the bottom of NIHSS / ASPECTS / GCS / ICH / ABCD2 / RoPE calc pages.
+   Bumped to 104px + env(safe-area-inset-bottom) to restore real clearance. */
+.drawer-spacer-collapsed { height: calc(104px + env(safe-area-inset-bottom, 0px)); }
+.drawer-spacer-expanded  { height: calc(380px + env(safe-area-inset-bottom, 0px)); }
 
 /* ─── Desktop drawer fixes ───────────────────────────────────────────────── */
 

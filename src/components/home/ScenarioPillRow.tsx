@@ -17,8 +17,10 @@ export const ScenarioPillRow: React.FC<Props> = ({
 }) => {
   const isAllActive = activeId === null;
 
+  // py-2.5 brings tap height to ≥44px per design-tokens skill (was py-1.5
+  // ~32px, below threshold). Mobile UX audit MUST-FIX 2026-05-21.
   const pillBaseClasses =
-    'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] border transition-colors flex-shrink-0';
+    'inline-flex items-center gap-1.5 px-3 py-2.5 rounded-full text-[13px] border transition-colors flex-shrink-0';
   const inactiveClasses =
     'bg-white border-slate-200 text-slate-600 font-medium hover:bg-slate-50';
   const activeClasses =
