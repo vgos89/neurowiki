@@ -159,18 +159,29 @@ async function startPreviewServer() {
       },
       PREVIEW_STARTUP_TIMEOUT_MS
     );
+    // Accumulate stdout across chunks. Node stream `data` events are NOT
+    // line-buffered — Vite's "Local: http://localhost:4173/" output gets
+    // split across multiple chunks (ANSI color codes amplify this). Earlier
+    // version checked per-chunk and never matched because the substring
+    // was split mid-token across events. Accumulate, then check the running
+    // buffer.
+    let stdoutBuffer = '';
     proc.stdout.on('data', (chunk) => {
       const text = chunk.toString();
-      // Always log stdout — silent failures on Vercel are the #1 debug hazard.
       console.log('[preview stdout]', text.trim());
-      if (text.includes('Local:') || text.includes(`localhost:${PORT}`)) {
+      stdoutBuffer += text;
+      if (
+        stdoutBuffer.includes('Local:') ||
+        stdoutBuffer.includes(`localhost:${PORT}`) ||
+        stdoutBuffer.includes(`http://localhost:${PORT}`)
+      ) {
         clearTimeout(timeout);
         res();
       }
     });
     proc.stderr.on('data', (chunk) => {
-      // Always log stderr — same reason. Without this, any vite preview
-      // error message is lost and we just see the timeout.
+      // Always log stderr — silent failures on build runners are the #1
+      // debug hazard and never worth the noise tradeoff.
       console.error('[preview stderr]', chunk.toString().trim());
     });
     proc.on('exit', (code) => {
