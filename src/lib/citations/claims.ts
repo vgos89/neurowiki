@@ -151,6 +151,19 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'Quick-pearl mirror of ENCHANTED2/MT: SBP <120 mmHg post-EVT increased major disability.',
   },
 
+  // ─── ELAN pathway — early DOAC after AF-related ischemic stroke ─────────────
+  // Surface type: static JSX — tagged with data-claim="early-doac-af-stroke-recommendation"
+  // on the result card (step 4) and the accordion guideline box in ElanPathway.tsx.
+  // LOE assertion intentionally absent (Option B per V 2026-05-22; see F8 in
+  // docs/reviews/clinical-PR-pathway-elan-2026-05-22.md). Re-harden when
+  // evidence-verifier unblocks AHA/ASA 2026 §4.8 verbatim text.
+  'early-doac-af-stroke-recommendation': {
+    id: 'early-doac-af-stroke-recommendation',
+    citation_ids: ['aha-asa-2026-4.8'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'AHA/ASA 2026 §4.8 recommendation for earlier DOAC initiation after AF-related ischemic stroke, operationalized via ELAN trial timing bins. ELAN (NEJM 2023) showed directional OR 0.70 (estimation trial, no formal NI conclusion). OPTIMAS (Lancet 2024) and TIMING (Stroke 2022) subsequently confirmed noninferiority. LOE pending evidence-verifier access to §4.8.',
+  },
+
   // ─── CREST (2010) — carotid revascularization head-to-head (CAS vs CEA) ──
   'crest-cas-vs-cea-superiority-not-met-2010': {
     id: 'crest-cas-vs-cea-superiority-not-met-2010',

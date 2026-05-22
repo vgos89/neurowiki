@@ -256,6 +256,31 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'Endovascular thrombectomy is recommended for patients with basilar-artery occlusion presenting within 24 hours, with NIHSS ≥10 and PC-ASPECTS ≥6 (Class I, Level A).',
   },
 
+  // ─── AHA/ASA 2026 §4.8 — early DOAC initiation after cardioembolic stroke ─────
+  // Prabhakaran et al. 2026 Guideline for the Early Management of Patients With
+  // Acute Ischemic Stroke. Stroke. 2026. DOI: 10.1161/STR.0000000000000513.
+  // PMID: 41582814.
+  //
+  // PARTIAL REGISTRATION — evidence-verifier could not retrieve §4.8 verbatim
+  // text (paywalled). quoted_text is a placeholder pending V supplying the
+  // verbatim guideline box text. LOE assertion has been deliberately omitted
+  // from the UI (Option B per V directive 2026-05-22; see clinical-PR-pathway-elan-2026-05-22.md F8).
+  // When V pastes §4.8 verbatim text, replace quoted_text and add COR/LOE back to the UI.
+  // Tracked in TASKS.md under "evidence-verifier blocked on AHA/ASA 2026 §4.8".
+  //
+  // 6-month review window per §13.7 (current clinical guideline).
+  'aha-asa-2026-4.8': {
+    id: 'aha-asa-2026-4.8',
+    source: 'guideline',
+    title: '2026 AHA/ASA Guideline — §4.8 (Early DOAC initiation after cardioembolic ischemic stroke)',
+    year: 2026,
+    section: '§4.8',
+    url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
+    pmid: '41582814',
+    last_reviewed: '2026-05-22',
+    quoted_text: '[verification pending — see TASKS.md "evidence-verifier blocked on AHA/ASA 2026 §4.8"]',
+  },
+
   // ─── 2018 trial: foundational TNK-vs-alteplase comparison in the LVO-EVT pathway ─
   // Campbell BCV et al., NEJM 2018. Established TNK 0.25 mg/kg as the IVT agent
   // of first choice for EVT-eligible LVO patients within 4.5h. Verbatim quote

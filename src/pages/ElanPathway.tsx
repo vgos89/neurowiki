@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, AlertTriangle, Check, RotateCcw, Copy, Info, AlertCircle, ChevronRight, Brain, XCircle, Activity, Star, ChevronDown } from 'lucide-react';
+import { ArrowLeft, AlertTriangle, Check, RotateCcw, Copy, Info, ChevronRight, Brain, XCircle, Activity, Star, ChevronDown } from 'lucide-react';
 import { ELAN_CONTENT } from '../data/toolContent';
 import { autoLinkReactNodes } from '../internalLinks/autoLink';
 import { useTrialModal } from '../contexts/TrialModalContext';
@@ -11,8 +10,42 @@ import { useNavigationSource } from '../hooks/useNavigationSource';
 import { scrollMainToTop } from '../utils/mainScroll';
 import { useRecents } from '../hooks/useRecents';
 import { ShareButton } from '../components/calculators/ShareButton';
+import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
 import DiscreteFAQ from '../components/seo/DiscreteFAQ';
 import { getFAQsForPath } from '../seo/schema';
+import NextStepsCard from '../components/seo/NextStepsCard';
+import type { SeverityTokens } from '../lib/calculators/severityTokens';
+
+/* ─── TIER_TOKENS — inlined (5th copy — extraction deferred until PathwayBottomDrawer retires) ─── */
+
+type ElanTier = 'Eligible' | 'Ineligible' | 'Warning' | 'None';
+
+const TIER_TOKENS: Record<Exclude<ElanTier, 'None'>, SeverityTokens> = {
+  Eligible: {
+    borderColor: '#c7d2fe',         // neuro-200
+    headerBg: 'bg-neuro-50',
+    headerHover: 'hover:bg-neuro-100',
+    labelClass: 'text-[10px] font-bold text-neuro-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-neuro-700',
+    chevronClass: 'text-neuro-600',
+  },
+  Ineligible: {
+    borderColor: '#fca5a5',         // red-300
+    headerBg: 'bg-red-50',
+    headerHover: 'hover:bg-red-100',
+    labelClass: 'text-[10px] font-bold text-red-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-red-700',
+    chevronClass: 'text-red-600',
+  },
+  Warning: {
+    borderColor: '#fcd34d',         // amber-300
+    headerBg: 'bg-amber-50',
+    headerHover: 'hover:bg-amber-100',
+    labelClass: 'text-[10px] font-bold text-amber-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-amber-700',
+    chevronClass: 'text-amber-700',
+  },
+};
 
 // ... (KEEP ALL TYPES, INTERFACES, STEPS, LOGIC, COMPONENTS SAME UNTIL RENDER) ...
 type Tri = "yes" | "no" | "unknown";
@@ -24,6 +57,7 @@ type Inputs = {
   hasMechanicalValve: Tri;
   hasPetechialHt: Tri;
   recentReperfusion: Tri;
+  hasUncontrolledHtn: Tri;
   size: StrokeSize;
   onset: string;
 };
@@ -48,7 +82,7 @@ const STEPS = [
 ];
 
 const STEP_FIELDS: Record<number, string[]> = {
-  1: ['isIschemicAfib', 'hasBleed', 'hasMechanicalValve', 'hasPetechialHt', 'recentReperfusion'],
+  1: ['isIschemicAfib', 'hasBleed', 'hasMechanicalValve', 'hasPetechialHt', 'recentReperfusion', 'hasUncontrolledHtn'],
   2: ['size'],
   3: ['onset']
 };
@@ -64,6 +98,9 @@ const calculateElanProtocol = (inputs: Inputs): Result => {
   }
   if (inputs.recentReperfusion === 'yes') {
     warnings.push("Recent IV thrombolysis or endovascular thrombectomy warrants extra caution because high-level evidence for immediate full-dose anticoagulation timing after reperfusion therapy remains limited.");
+  }
+  if (inputs.hasUncontrolledHtn === 'yes') {
+    warnings.push("Sustained SBP >180 or DBP >105 warrants individualized timing — uncontrolled hypertension increases hemorrhagic risk. Consider deferring DOAC initiation until blood pressure is controlled.");
   }
 
   if (!inputs.onset) return { eligible: true, size: inputs.size, earlyText: '-', earlyDates: '-', lateText: '-', lateDates: '-', reasons: [], warnings };
@@ -143,7 +180,7 @@ const ElanPathway: React.FC = () => {
   }, []);
   const [step, setStep] = useState(1);
   const { goBack, getBackLabel } = useNavigationSource();
-  const [inputs, setInputs] = useState<Inputs>({ isIschemicAfib: 'unknown', hasBleed: 'unknown', hasMechanicalValve: 'unknown', hasPetechialHt: 'unknown', recentReperfusion: 'unknown', size: 'unknown', onset: '' });
+  const [inputs, setInputs] = useState<Inputs>({ isIschemicAfib: 'unknown', hasBleed: 'unknown', hasMechanicalValve: 'unknown', hasPetechialHt: 'unknown', recentReperfusion: 'unknown', hasUncontrolledHtn: 'unknown', size: 'unknown', onset: '' });
   const [result, setResult] = useState<Result | null>(null);
   const stepContainerRef = useRef<HTMLDivElement>(null);
   const fieldRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -153,6 +190,7 @@ const ElanPathway: React.FC = () => {
   const [showFavToast, setShowFavToast] = useState(false);
   const [showCopyToast, setShowCopyToast] = useState(false);
   const [showEvidence, setShowEvidence] = useState(false);
+  const [drawerExpanded, setDrawerExpanded] = useState(false);
   const isFav = isFavorite('elan-pathway');
 
   const handleFavToggle = () => {
@@ -167,7 +205,7 @@ const ElanPathway: React.FC = () => {
   // Trial Modal
   const { openTrial } = useTrialModal();
 
-  useEffect(() => { 
+  useEffect(() => {
     const newResult = calculateElanProtocol(inputs);
     setResult(newResult);
     if (newResult && newResult.eligible && inputs.size !== 'unknown') {
@@ -182,13 +220,17 @@ const ElanPathway: React.FC = () => {
     if (currentFields) {
         const idx = currentFields.indexOf(field);
         if (idx >= 0 && idx < currentFields.length - 1) setTimeout(() => fieldRefs.current[currentFields[idx + 1]]?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
-        else if (idx === currentFields.length - 1) setTimeout(() => document.getElementById('elan-action-bar')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300);
     }
   }, [step]);
 
   const handleNext = () => { if (step === 1 && (inputs.isIschemicAfib === 'no' || inputs.hasBleed === 'yes' || inputs.hasMechanicalValve === 'yes')) return; if (step < 4) setStep(step + 1); };
   const handleBack = () => { if (step > 1) setStep(step - 1); };
-  const handleReset = () => { setInputs({ isIschemicAfib: 'unknown', hasBleed: 'unknown', hasMechanicalValve: 'unknown', hasPetechialHt: 'unknown', recentReperfusion: 'unknown', size: 'unknown', onset: '' }); setStep(1); };
+  const handleReset = () => {
+    setInputs({ isIschemicAfib: 'unknown', hasBleed: 'unknown', hasMechanicalValve: 'unknown', hasPetechialHt: 'unknown', recentReperfusion: 'unknown', hasUncontrolledHtn: 'unknown', size: 'unknown', onset: '' });
+    setStep(1);
+    setDrawerExpanded(false);
+  };
+
   const buildEmrText = (): string => {
     if (!result) return '';
     let definition = "";
@@ -197,7 +239,7 @@ const ElanPathway: React.FC = () => {
     else if (result.size === 'moderate') definition = "cortical superficial branch of MCA/ACA/PCA, deep branch MCA, or internal border-zone";
     else if (result.size === 'major') definition = "large territory, ≥2 MCA cortical branches, or brainstem/cerebellum > 1.5 cm";
     const warningText = result.warnings.length ? `\n\nCaution flags:\n- ${result.warnings.join('\n- ')}` : '';
-    return `Post-Stroke DOAC Timing — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\nInfarct size: ${result.size.charAt(0).toUpperCase() + result.size.slice(1)} (${definition}).\n\nEarlier DOAC window (ELAN): ${result.earlyText} (${result.earlyDates}).\nLater comparator window: ${result.lateText} (${result.lateDates}).\n\nDecision based on imaging-defined infarct size, exclusion of major intracranial bleeding, and individualized review of hemorrhagic transformation and reperfusion therapy. AHA/ASA 2026 Class 2a recommendation for earlier DOAC initiation in carefully selected patients.${warningText}\n\nReference: ELAN trial (NEJM 2023), OPTIMAS trial, TIMING trial, AHA/ASA 2026 Guideline.`.trim();
+    return `Post-Stroke DOAC Timing — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\nInfarct size: ${result.size.charAt(0).toUpperCase() + result.size.slice(1)} (${definition}).\n\nEarlier DOAC window (ELAN): ${result.earlyText} (${result.earlyDates}).\nLater comparator window: ${result.lateText} (${result.lateDates}).\n\nDecision based on imaging-defined infarct size, exclusion of major intracranial bleeding, and individualized review of hemorrhagic transformation and reperfusion therapy. AHA/ASA 2026 — early-DOAC recommendation; see guideline §4.8.${warningText}\n\nReference: ELAN trial (NEJM 2023), OPTIMAS trial, TIMING trial (Stroke 2022), AHA/ASA 2026 Guideline.`.trim();
   };
 
   const copySummary = () => {
@@ -208,23 +250,51 @@ const ElanPathway: React.FC = () => {
   };
   const isStep1Invalid = inputs.isIschemicAfib === 'no' || inputs.hasBleed === 'yes' || inputs.hasMechanicalValve === 'yes';
 
+  /* ── Drawer state derivation ── */
+  // State A: no selection yet (steps 1–3 with no complete result)
+  // State B: wizard in progress (step 2–3, partial inputs)
+  // State C: step 4 with a full result
+  const isResultReady = step === 4 && result !== null && result.eligible && result.size !== 'unknown' && result.earlyText !== '-';
+  const isIneligible = step === 4 && result !== null && !result.eligible;
+
+  const drawerState: 'A' | 'B' | 'C' = isResultReady || isIneligible ? 'C' : step > 1 ? 'B' : 'A';
+
+  const drawerTier: ElanTier = (() => {
+    if (isIneligible) return 'Ineligible';
+    if (isResultReady && result && result.warnings.length > 0) return 'Warning';
+    if (isResultReady) return 'Eligible';
+    return 'None';
+  })();
+
+  const drawerTokens: SeverityTokens | null = drawerTier !== 'None' ? TIER_TOKENS[drawerTier] : null;
+
+  const drawerCollapsedStat: string = (() => {
+    if (isIneligible && result) return result.ineligibleReason?.split('.')[0] ?? 'Not eligible';
+    if (isResultReady && result) {
+      const sizeLabel = result.size.charAt(0).toUpperCase() + result.size.slice(1);
+      return `${sizeLabel} stroke · Earlier: ${result.earlyText}`;
+    }
+    if (step >= 2) return 'Complete all steps for timing recommendation';
+    return 'Answer eligibility questions to begin';
+  })();
+
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-32 md:pb-20">
       {/* Header same */}
       <div className="mb-6 flex items-start justify-between">
         <div>
-            <button type="button" onClick={goBack} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-500 mb-6 group cursor-pointer bg-transparent border-0 p-0"><div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 shadow-sm group-hover:shadow-md transition-colors duration-150"><ArrowLeft size={16} /></div> {getBackLabel()}</button>
+            <button type="button" onClick={goBack} className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-neuro-500 mb-6 group cursor-pointer bg-transparent border-0 p-0"><div className="bg-white p-1.5 rounded-md border border-slate-200 mr-2 group-hover:shadow-md transition-colors duration-150"><ArrowLeft size={16} /></div> {getBackLabel()}</button>
             <div className="flex items-center space-x-3 mb-2"><div className="p-2 bg-purple-100 text-purple-700 rounded-lg"><Brain size={24} /></div><h1 className="text-2xl font-black text-slate-900 tracking-tight">Post-Stroke Anticoagulation Timing</h1></div>
-            <p className="text-slate-500 font-medium">Operationalizes the ELAN trial timing framework within the broader AHA/ASA 2026 Class 2a recommendation for earlier DOAC initiation in carefully selected AF-related stroke or TIA.</p>
+            <p className="text-slate-500 font-medium">Operationalizes the ELAN trial timing framework within the broader AHA/ASA 2026 recommendation for earlier DOAC initiation in carefully selected AF-related stroke or TIA.</p>
         </div>
-        <button 
+        <button
             onClick={handleFavToggle}
             className="p-3 rounded-full hover:bg-slate-100 transition-colors"
         >
             <Star size={24} className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'} />
         </button>
       </div>
-      
+
       {/* Progress same... */}
       <div className="flex items-center space-x-2 mb-8 px-1">{STEPS.map((s, idx) => (<div key={s.id} className="flex-1 flex flex-col items-center relative"><div className={`w-full h-1 absolute top-1/2 -translate-y-1/2 -z-10 ${idx === 0 ? 'hidden' : ''} ${step >= s.id ? 'bg-purple-500' : 'bg-slate-200'}`}></div><div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-colors z-10 ${step === s.id ? 'bg-white border-purple-500 text-purple-600' : step > s.id ? 'bg-purple-500 border-purple-500 text-white' : 'bg-slate-100 border-slate-200 text-slate-400'}`}>{step > s.id ? <Check size={14} /> : s.id}</div><span className={`text-xs mt-2 font-bold uppercase tracking-wider ${step === s.id ? 'text-purple-600' : 'text-slate-400'}`}>{s.title}</span></div>))}</div>
 
@@ -280,6 +350,16 @@ const ElanPathway: React.FC = () => {
               </div>
             )}
 
+            {inputs.hasMechanicalValve === 'no' && (
+              <div ref={el => { fieldRefs.current['hasUncontrolledHtn'] = el; }} className="animate-in fade-in slide-in-from-top-2">
+                <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide mt-6">Blood Pressure</h3>
+                <div className="grid grid-cols-1 gap-3">
+                  <SelectionCard title="Uncontrolled BP (sustained SBP >180 or DBP >105)" description="Persistent hypertension despite initial management — consider deferring DOAC until controlled." selected={inputs.hasUncontrolledHtn === 'yes'} onClick={() => updateInput('hasUncontrolledHtn', 'yes')} />
+                  <SelectionCard title="BP acceptable" description="SBP ≤180 and DBP ≤105, or effectively managed." selected={inputs.hasUncontrolledHtn === 'no'} onClick={() => updateInput('hasUncontrolledHtn', 'no')} />
+                </div>
+              </div>
+            )}
+
             {isStep1Invalid && (
               <div className="bg-red-50 border border-red-100 p-4 rounded-xl flex items-start space-x-3 text-red-800 animate-in zoom-in-95">
                 <XCircle className="flex-shrink-0 mt-0.5" size={20} />
@@ -293,25 +373,33 @@ const ElanPathway: React.FC = () => {
         )}
         {step === 2 && (
           <div className="space-y-5 animate-in slide-in-from-right-4 duration-300">
+            {/* Eligibility footnote — pre-stroke mRS (F7) */}
+            <div className="bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 flex items-start space-x-2.5">
+              <Info size={13} className="flex-shrink-0 text-slate-400 mt-0.5" />
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                <span className="font-semibold">Note:</span> ELAN excluded patients with pre-stroke mRS ≥4; apply clinical judgment for patients with severe baseline disability.
+              </p>
+            </div>
             {/* Imaging definitions — scannable mini-cards */}
             <div>
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center"><Info size={13} className="mr-1.5" /> Imaging-Based Size Definitions <span className="ml-2 text-[9px] font-medium text-slate-400 normal-case tracking-normal">· per ELAN trial protocol (Fischer NEJM 2023)</span></h3>
               <div className="space-y-2">
-                <div className="bg-white border-l-4 border-emerald-400 rounded-r-xl px-4 py-3 shadow-sm">
+                <div className="bg-white border-l-4 border-emerald-400 rounded-r-xl px-4 py-3">
                   <span className="text-xs font-black text-emerald-600 uppercase tracking-wider">TIA</span>
                   <p className="text-sm text-slate-700 mt-0.5">Transient ischemic attack or no persistent infarct on follow-up imaging</p>
                 </div>
-                <div className="bg-white border-l-4 border-teal-400 rounded-r-xl px-4 py-3 shadow-sm">
+                <div className="bg-white border-l-4 border-teal-400 rounded-r-xl px-4 py-3">
                   <span className="text-xs font-black text-teal-600 uppercase tracking-wider">Minor</span>
                   <p className="text-sm text-slate-700 mt-0.5">Single infarct ≤ 1.5 cm (any territory)</p>
                 </div>
-                <div className="bg-white border-l-4 border-blue-400 rounded-r-xl px-4 py-3 shadow-sm">
-                  <span className="text-xs font-black text-blue-600 uppercase tracking-wider">Moderate</span>
+                <div className="bg-white border-l-4 border-neuro-400 rounded-r-xl px-4 py-3">
+                  <span className="text-xs font-black text-neuro-600 uppercase tracking-wider">Moderate</span>
                   <p className="text-sm text-slate-700 mt-0.5">Cortical branch of MCA, ACA, or PCA; deep MCA branch; or internal border-zone</p>
                 </div>
-                <div className="bg-white border-l-4 border-purple-400 rounded-r-xl px-4 py-3 shadow-sm">
+                <div className="bg-white border-l-4 border-purple-400 rounded-r-xl px-4 py-3">
                   <span className="text-xs font-black text-purple-600 uppercase tracking-wider">Major</span>
                   <p className="text-sm text-slate-700 mt-0.5">Large territory, ≥2 MCA cortical branches, or brainstem/cerebellum &gt; 1.5 cm</p>
+                  <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">ELAN day 6–7 early-arm timing applies to major stroke. AHA 2026 emphasizes "carefully selected" patients; individualize for very large infarcts.</p>
                 </div>
               </div>
             </div>
@@ -330,7 +418,7 @@ const ElanPathway: React.FC = () => {
         {step === 3 && (
             <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
                 <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">Stroke Onset</h3>
-                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm" ref={el => { fieldRefs.current['onset'] = el; }}>
+                <div className="bg-white p-6 rounded-2xl border border-slate-200" ref={el => { fieldRefs.current['onset'] = el; }}>
                     <div className="flex justify-between items-center mb-4">
                         <label className="block text-base font-bold text-slate-700">Date of Onset</label>
                         {inputs.onset && (
@@ -367,7 +455,10 @@ const ElanPathway: React.FC = () => {
              <div className="space-y-4 animate-in zoom-in-95 duration-300">
 
                 {/* Single consolidated card */}
-                <div className="bg-slate-900 text-white rounded-3xl overflow-hidden shadow-xl">
+                <div
+                  className="bg-slate-900 text-white rounded-3xl overflow-hidden"
+                  data-claim="early-doac-af-stroke-recommendation"
+                >
                     <div className="relative">
                         <div className="absolute top-0 right-0 w-48 h-48 bg-purple-500 rounded-full blur-3xl opacity-20 -mr-12 -mt-12 pointer-events-none"></div>
 
@@ -378,8 +469,8 @@ const ElanPathway: React.FC = () => {
                                 <span>{result.size === 'tia' ? 'TIA' : `${result.size} stroke`}</span>
                             </div>
                             <div className="text-right">
-                                <div className="text-xs font-black text-purple-300 uppercase tracking-wider">COR 2a · LOE A</div>
-                                <div className="text-[10px] text-white/40 font-medium mt-0.5">{result.size === 'major' ? 'ELAN protocol; AHA 2026 COR 2a applies primarily to selected milder-severity patients' : 'ELAN framework within AHA/ASA 2026'}</div>
+                                <div className="text-xs font-black text-purple-300 uppercase tracking-wider">AHA/ASA 2026 — early-DOAC recommendation; see guideline §4.8</div>
+                                <div className="text-[10px] text-white/40 font-medium mt-0.5">{result.size === 'major' ? 'ELAN day 6–7 early-arm timing applies to major stroke. AHA 2026 emphasizes "carefully selected" patients; individualize for very large infarcts.' : 'ELAN framework within AHA/ASA 2026'}</div>
                             </div>
                         </div>
 
@@ -390,7 +481,7 @@ const ElanPathway: React.FC = () => {
                                 <div className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-2">Earlier Strategy</div>
                                 <div className="text-2xl font-black leading-snug">{result.earlyText}</div>
                                 <div className="text-slate-400 text-xs font-medium mt-1">{result.earlyDates}</div>
-                                <div className="text-[10px] text-slate-500 mt-2 leading-relaxed">Noninferior to delayed start in OPTIMAS / TIMING (COR 2a)</div>
+                                <div className="text-[10px] text-slate-500 mt-2 leading-relaxed">Noninferior to delayed start in OPTIMAS / TIMING (AHA/ASA 2026 §4.8)</div>
                             </div>
                             {/* Later strategy */}
                             <div className="px-4 py-5">
@@ -435,7 +526,10 @@ const ElanPathway: React.FC = () => {
                         </div>
 
                         {/* Learn more accordion */}
-                        <div className="relative z-10 border-t border-white/10">
+                        <div
+                          className="relative z-10 border-t border-white/10"
+                          data-claim="early-doac-af-stroke-recommendation"
+                        >
                             <button
                                 onClick={() => setShowEvidence(prev => !prev)}
                                 className="w-full flex items-center justify-between px-5 py-3.5 text-left touch-manipulation active:bg-white/5 transition-colors"
@@ -445,11 +539,11 @@ const ElanPathway: React.FC = () => {
                             </button>
                             {showEvidence && (
                                 <div className="bg-white/5 px-5 pb-5 space-y-3 animate-in slide-in-from-top-2 duration-200">
-                                    {/* Trial summaries */}
+                                    {/* Trial summaries — F2 fix: explicit "estimation trial" framing */}
                                     {[
-                                        { label: 'ELAN Trial', year: 'NEJM 2023', detail: 'Early DOAC used within 48 hours for TIA/minor/moderate events and day 6-7 for major stroke, versus a later comparator strategy. Composite primary outcome RD −1.18 (95% CI −2.84 to 0.47) — numerical reduction, not statistically significant. OPTIMAS and TIMING subsequently confirmed noninferiority cleanly. This tool operationalizes the ELAN timing bins.' },
+                                        { label: 'ELAN Trial', year: 'NEJM 2023', detail: 'Composite primary outcome 2.9% (early) vs 4.1% (late), OR 0.70 (95% CI 0.44–1.14) — directional benefit without formal noninferiority conclusion (ELAN was an estimation trial). OPTIMAS subsequently demonstrated noninferiority cleanly.' },
                                         { label: 'OPTIMAS Trial', year: '2024', detail: 'Early DOAC (≤4 days) noninferior to delayed DOAC (7–14 days) in 3,648 patients with AIS + AF.' },
-                                        { label: 'TIMING Trial', year: '2024', detail: 'Early (≤4 days) vs delayed (5–10 days): 6.9% vs 8.7% primary outcome rate. Noninferior.' },
+                                        { label: 'TIMING Trial', year: 'Stroke 2022', detail: 'Early (≤4 days) vs delayed (5–10 days): 6.9% vs 8.7% primary outcome rate. Noninferior.' },
                                     ].map(t => (
                                         <div key={t.label} className="border-l-2 border-purple-500/50 pl-3">
                                             <div className="flex items-baseline space-x-2">
@@ -459,9 +553,9 @@ const ElanPathway: React.FC = () => {
                                             <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">{t.detail}</p>
                                         </div>
                                     ))}
-                                    {/* Guideline statement */}
+                                    {/* Guideline statement — F8 Option B soft label */}
                                     <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl px-3 py-2.5 mt-1">
-                                        <p className="text-[10px] font-black text-purple-300 uppercase tracking-wider mb-1">AHA/ASA 2026 · COR 2a · LOE A</p>
+                                        <p className="text-[10px] font-black text-purple-300 uppercase tracking-wider mb-1">AHA/ASA 2026 — early-DOAC recommendation; see guideline §4.8</p>
                                         <p className="text-[11px] text-slate-400 leading-relaxed">The guideline gives a broad recommendation that earlier oral anticoagulation is reasonable and low risk in carefully selected patients. The exact day-by-day windows shown here are an ELAN-based operational framework rather than a single mandatory guideline timing table.</p>
                                     </div>
                                 </div>
@@ -470,10 +564,10 @@ const ElanPathway: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Disclaimer + Start Over (mobile) in one row */}
+                {/* Disclaimer */}
                 <div className="flex flex-col items-center space-y-2 pt-1">
                     <p className="text-xs text-slate-400 text-center px-2 leading-relaxed">
-                        {autoLinkReactNodes("Decision support only · ELAN timing framework · OPTIMAS (2024) · TIMING (2024) · AHA/ASA 2026", openTrial)}
+                        {autoLinkReactNodes("Decision support only · ELAN timing framework · OPTIMAS (2024) · TIMING (Stroke 2022) · AHA/ASA 2026", openTrial)}
                     </p>
                     <button onClick={handleReset} className="md:hidden flex items-center text-xs text-slate-400 hover:text-slate-600 font-bold py-2 px-4 rounded-lg transition-colors touch-manipulation min-h-[44px]">
                         <RotateCcw size={12} className="mr-1.5" /> Start Over
@@ -483,26 +577,141 @@ const ElanPathway: React.FC = () => {
         )}
       </div>
 
-      <div id="elan-action-bar" className="mt-8 pt-4 md:border-t border-slate-100 scroll-mt-4 fixed bottom-[4.5rem] md:static left-0 right-0 bg-white/95 backdrop-blur md:bg-transparent p-4 md:p-0 border-t md:border-0 z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none">
-         <div className="max-w-3xl mx-auto flex items-center justify-between gap-4">
-             <button onClick={handleBack} disabled={step === 1} className={`px-6 py-3 border border-slate-200 rounded-xl font-bold transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${step === 1 ? 'opacity-0 pointer-events-none cursor-not-allowed' : 'bg-white text-slate-600 hover:bg-slate-50 hover:border-slate-300'}`}>Back</button>
-             {step === 4 && (<button onClick={handleReset} className="hidden md:flex items-center text-slate-500 hover:text-neuro-500 font-bold px-4 py-2 rounded-lg transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><RotateCcw size={16} className="mr-2" /> Start Over</button>)}
-             {step < 4 ? (<button onClick={handleNext} disabled={step === 1 && isStep1Invalid} className={`flex-1 md:flex-none px-8 py-3 bg-purple-600 text-white rounded-xl font-bold hover:bg-purple-700 shadow-lg shadow-purple-200 transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${(step === 1 && isStep1Invalid) ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}>Next <ChevronRight size={16} className="ml-2" /></button>) : (<div className="flex items-center gap-2"><button onClick={copySummary} className="flex-1 md:flex-none px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><Copy size={16} className="mr-2" /> Copy to EMR</button><ShareButton text={buildEmrText} title="Post-Stroke Anticoagulation" variant="pill" label="Send" onResult={(r) => { if (r === 'shared' || r === 'copied') { setShowCopyToast(true); setTimeout(() => setShowCopyToast(false), 2500); } }} disabled={!result} /></div>)}
-         </div>
-      </div>
-      
+      {/* ── Step navigation bar (steps 1–3): fixed bottom, above tab bar ──
+          Deliberately outside CalculatorDrawer — Back/Next must always be
+          tappable during the wizard; State B drawer is muted and non-interactive.
+          On step 4 (State C) this bar is hidden; copy/share live in the drawer. */}
+      {step < 4 && (
+        <div className="fixed bottom-[4.5rem] md:static left-0 right-0 bg-white/95 backdrop-blur md:bg-transparent p-4 md:p-0 border-t border-slate-100 md:border-0 z-30">
+          <div className="max-w-3xl mx-auto flex items-center justify-between gap-4">
+            <button
+              onClick={handleBack}
+              disabled={step === 1}
+              className={`px-6 py-3 border border-slate-200 rounded-xl font-bold transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${step === 1 ? 'opacity-0 pointer-events-none cursor-not-allowed' : 'bg-white text-slate-600 hover:bg-slate-50 hover:border-slate-300'}`}
+            >
+              Back
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={step === 1 && isStep1Invalid}
+              className={`flex-1 md:flex-none px-8 py-3 bg-purple-600 text-white rounded-xl font-bold hover:bg-purple-700 transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${(step === 1 && isStep1Invalid) ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}
+            >
+              Next <ChevronRight size={16} className="ml-2" />
+            </button>
+          </div>
+        </div>
+      )}
 
+      {/* ── CalculatorDrawer portal — result surface (step 4 / State C only) ── */}
+      <CalculatorDrawer
+        state={drawerState}
+        tokens={drawerTokens}
+        isExpanded={drawerExpanded}
+        onToggle={() => setDrawerExpanded(prev => !prev)}
+        ariaContentId="elan-drawer-content"
+        ariaLabel="ELAN pathway result"
+        stateAText={{ label: 'Step 1 of 4', hint: 'Answer eligibility questions' }}
+        stateBText={{ label: `Step ${step} of 4`, hint: 'Complete all steps for timing' }}
+        collapsedLabel={isIneligible ? 'Not eligible' : 'Timing recommendation'}
+        collapsedStat={drawerCollapsedStat}
+      >
+        {/* DrawerContent — rendered when expanded (State C) */}
+        <div id="elan-drawer-content" className="px-5 pt-4 pb-2 space-y-4">
+          {isIneligible && result && (
+            <div className="bg-red-50 border border-red-100 rounded-xl p-4">
+              <p className="text-sm font-bold text-red-800 mb-1">Not eligible for this pathway</p>
+              <p className="text-sm text-red-700">{result.ineligibleReason}</p>
+            </div>
+          )}
+          {isResultReady && result && (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-neuro-50 border border-neuro-200 rounded-xl px-4 py-3">
+                  <p className="text-[10px] font-black text-neuro-700 uppercase tracking-widest mb-1">Earlier strategy</p>
+                  <p className="text-base font-black text-slate-900">{result.earlyText}</p>
+                  <p className="text-xs text-slate-500 mt-0.5">{result.earlyDates}</p>
+                </div>
+                <div className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Later strategy</p>
+                  <p className="text-base font-bold text-slate-700">{result.lateText}</p>
+                  <p className="text-xs text-slate-500 mt-0.5">{result.lateDates}</p>
+                </div>
+              </div>
+              {result.warnings.length > 0 && (
+                <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+                  <p className="text-[10px] font-black text-amber-700 uppercase tracking-widest mb-2">Caution flags</p>
+                  <div className="space-y-1.5">
+                    {result.warnings.map((w) => (
+                      <div key={w} className="flex items-start gap-2">
+                        <AlertTriangle size={12} className="flex-shrink-0 text-amber-600 mt-0.5" />
+                        <p className="text-xs text-amber-800 leading-relaxed">{w}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+          {/* Action row within drawer */}
+          <div className="flex items-center gap-2 pt-1 pb-1">
+            <button
+              onClick={copySummary}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-neuro-500 hover:bg-neuro-600 text-white rounded-full text-sm font-medium min-h-[44px] transition-colors touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+            >
+              <Copy size={14} /> Copy to EMR
+            </button>
+            <ShareButton
+              text={buildEmrText}
+              title="Post-Stroke Anticoagulation"
+              variant="pill"
+              label="Send"
+              onResult={(r) => {
+                if (r === 'shared' || r === 'copied') { setShowCopyToast(true); setTimeout(() => setShowCopyToast(false), 2500); }
+              }}
+              disabled={!result}
+            />
+            <button
+              onClick={handleReset}
+              className="flex items-center gap-1.5 px-4 py-2.5 border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 rounded-full text-sm font-medium min-h-[44px] transition-colors touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+            >
+              <RotateCcw size={13} /> Start Over
+            </button>
+          </div>
+        </div>
+      </CalculatorDrawer>
+
+      {/* Trials NextStepsCard — surfaces trial links for further reading */}
+      <NextStepsCard
+        heading="Trials informing this pathway"
+        items={[
+          {
+            label: "ELAN — early vs delayed DOAC initiation",
+            description: "NEJM 2023 — estimation trial; directional benefit without formal NI conclusion",
+            to: "/trials/elan-study"
+          },
+          {
+            label: "TIMING — Swedish registry RCT, early DOAC",
+            description: "Stroke 2022 — noninferiority confirmed",
+            to: "/trials/timing-trial"
+          },
+          {
+            label: "OPTIMAS — formal noninferiority for early DOAC",
+            description: "Lancet 2024 — 3,648 patients with AIS + AF",
+            to: "/trials/optimas-trial"
+          },
+        ]}
+      />
 
       {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute. */}
       <DiscreteFAQ items={getFAQsForPath('/pathways/elan-pathway')} />
 
       {showFavToast && (
-        <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60]">
           {isFav ? 'Saved to Favorites' : 'Removed from Favorites'}
         </div>
       )}
       {showCopyToast && (
-        <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60] flex items-center space-x-2">
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-800/90 text-white text-xs font-bold px-4 py-2 rounded-full pointer-events-none animate-in fade-in zoom-in-95 duration-200 z-[60] flex items-center space-x-2">
           <Check size={12} />
           <span>Summary copied to clipboard</span>
         </div>
