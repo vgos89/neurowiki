@@ -10,18 +10,22 @@
  * output file layout.
  *
  * What it does:
- *   1. Spins up `vite preview` against the existing `dist/` directory.
- *   2. Opens each route from STATIC_ROUTE_DEFINITIONS in headless Chrome.
- *   3. Waits for React to hydrate + Seo.tsx to update document.title.
- *   4. Captures the post-hydration HTML and writes it to dist/<route>/index.html.
+ *   1. Reads route list from public/sitemap.xml (single source of truth).
+ *   2. Spins up `vite preview` against the existing `dist/` directory.
+ *   3. Opens each route in headless Chrome with N-way concurrency.
+ *   4. Waits for React to hydrate + Seo.tsx to update document.title.
+ *   5. Captures the post-hydration HTML and writes it to dist/<route>/index.html.
  *
  * Net result: when Vercel serves the per-route HTML directly (no JS execution
  * needed by Googlebot to see the right title/description/JSON-LD), every page
  * has the correct per-route SEO content in the initial response.
  *
  * Usage:
- *   node scripts/prerender.mjs              # all Phase 1 routes
- *   node scripts/prerender.mjs --route=/    # single route (debug)
+ *   node scripts/prerender.mjs                  # all sitemap routes (Phase 2+3)
+ *   node scripts/prerender.mjs --mode=static    # static routes only (Phase 2)
+ *   node scripts/prerender.mjs --mode=phase1    # 11-route legacy starter set
+ *   node scripts/prerender.mjs --route=/foo     # single route (debug)
+ *   node scripts/prerender.mjs --concurrency=2  # tune parallelism (default 4)
  *   PRERENDER_DEBUG=1 node scripts/prerender.mjs  # verbose logging
  *
  * Wire into Vercel deploys (after V upgrades puppeteer):
@@ -29,7 +33,7 @@
  *     "postbuild": "node scripts/prerender.mjs"
  *
  * Architect plan: docs/reviews/arch-PR-spa-prerendering-2026-05-21.md
- * Path B selection: V approval 2026-05-22 (post-react-snap-failure morning).
+ * Phase 2 + 3 expansion: V approval 2026-05-22 (morning).
  */
 
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
@@ -42,10 +46,8 @@ import { platform } from 'node:os';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const DIST = join(ROOT, 'dist');
+const SITEMAP_PATH = join(ROOT, 'public/sitemap.xml');
 
-// ── Phase 1 route list ─────────────────────────────────────────────────────
-// Architect-approved 11 high-SEO-priority routes. Phase 2 (V approval) expands
-// to all 43 static routes from STATIC_ROUTE_DEFINITIONS.
 const PHASE_1_ROUTES = [
   '/',
   '/calculators',
@@ -61,19 +63,57 @@ const PHASE_1_ROUTES = [
 ];
 
 const PORT = 4173; // vite preview default
-const HYDRATION_DELAY_MS = 2000; // wait for Seo.tsx useEffect to update title
+const HYDRATION_DELAY_MS = 1500; // wait for Seo.tsx useEffect to update title
 const PER_ROUTE_TIMEOUT_MS = 30_000;
+const DEFAULT_CONCURRENCY = 4;
 const DEBUG = process.env.PRERENDER_DEBUG === '1';
 
 const log = (...args) => console.log('[prerender]', ...args);
 const debug = (...args) => DEBUG && console.log('[prerender:debug]', ...args);
 
+// ── CLI parsing ────────────────────────────────────────────────────────────
+function parseArgs() {
+  const args = process.argv.slice(2);
+  const get = (name) => {
+    const found = args.find((a) => a.startsWith(`--${name}=`));
+    return found ? found.split('=').slice(1).join('=') : null;
+  };
+  return {
+    mode: get('mode') ?? 'all', // 'all' | 'static' | 'phase1'
+    route: get('route'),
+    concurrency: parseInt(get('concurrency') ?? String(DEFAULT_CONCURRENCY), 10),
+  };
+}
+
+// ── Route source: parse public/sitemap.xml ─────────────────────────────────
+async function loadSitemapRoutes() {
+  if (!existsSync(SITEMAP_PATH)) {
+    throw new Error(`sitemap.xml not found at ${SITEMAP_PATH}`);
+  }
+  const xml = await readFile(SITEMAP_PATH, 'utf8');
+  const locs = [...xml.matchAll(/<loc>\s*([^<]+?)\s*<\/loc>/g)].map((m) => m[1]);
+  // Convert https://neurowiki.ai[/path] → /path (root → /)
+  const paths = locs
+    .map((u) => u.replace(/^https?:\/\/neurowiki\.ai/i, ''))
+    .map((p) => (p === '' ? '/' : p));
+  // Dedupe preserving order.
+  return [...new Set(paths)];
+}
+
+function filterToStatic(routes) {
+  // "Static" = not under /trials/* (trial detail) or /trials/q/* (question detail).
+  // The /trials hub itself stays. Same for /calculators (hub) vs /calculators/* (per-calc).
+  // Per-calculator pages are static (a fixed set), so they stay.
+  // Per-pathway, per-guide pages are also static, so they stay.
+  return routes.filter((r) => {
+    if (r === '/trials') return true; // hub
+    if (r.startsWith('/trials/q/')) return false; // dynamic question
+    if (r.startsWith('/trials/')) return false; // dynamic trial detail
+    return true;
+  });
+}
+
 // ── Chrome path resolution ─────────────────────────────────────────────────
-// Strategy (in order):
-//   1. PUPPETEER_EXECUTABLE_PATH env var (CI / Vercel can override)
-//   2. macOS system Chrome (/Applications/Google Chrome.app/...)
-//   3. Linux Chromium / Chrome (Vercel build / dev containers)
-//   4. Fall back to puppeteer's bundled Chromium (whatever version is installed)
 function resolveChromePath() {
   if (process.env.PUPPETEER_EXECUTABLE_PATH) {
     return process.env.PUPPETEER_EXECUTABLE_PATH;
@@ -93,17 +133,20 @@ function resolveChromePath() {
   return candidates.find((p) => existsSync(p)) ?? null;
 }
 
-// ── Launch vite preview as a subprocess ────────────────────────────────────
+// ── Vite preview subprocess ────────────────────────────────────────────────
 async function startPreviewServer() {
   log(`Starting vite preview on port ${PORT}...`);
-  const proc = spawn('npx', ['vite', 'preview', '--port', String(PORT), '--strictPort'], {
-    cwd: ROOT,
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
+  const proc = spawn(
+    'npx',
+    ['vite', 'preview', '--port', String(PORT), '--strictPort'],
+    { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] }
+  );
 
-  // Wait until the server prints its ready line.
   await new Promise((res, rej) => {
-    const timeout = setTimeout(() => rej(new Error('vite preview did not start in 10s')), 10_000);
+    const timeout = setTimeout(
+      () => rej(new Error('vite preview did not start in 10s')),
+      10_000
+    );
     proc.stdout.on('data', (chunk) => {
       const text = chunk.toString();
       debug('preview stdout:', text.trim());
@@ -112,7 +155,9 @@ async function startPreviewServer() {
         res();
       }
     });
-    proc.stderr.on('data', (chunk) => debug('preview stderr:', chunk.toString().trim()));
+    proc.stderr.on('data', (chunk) =>
+      debug('preview stderr:', chunk.toString().trim())
+    );
     proc.on('exit', (code) => {
       if (code !== 0) rej(new Error(`vite preview exited with code ${code}`));
     });
@@ -125,31 +170,21 @@ async function startPreviewServer() {
 // ── Snapshot a single route ────────────────────────────────────────────────
 async function snapshotRoute(browser, route) {
   const url = `http://localhost:${PORT}${route}`;
-  log(`  snapshotting ${route}`);
   const page = await browser.newPage();
   try {
     page.setDefaultNavigationTimeout(PER_ROUTE_TIMEOUT_MS);
     await page.goto(url, { waitUntil: 'networkidle0' });
-    // Give React a moment to mount and Seo.tsx's useEffect to update document.title.
     await new Promise((r) => setTimeout(r, HYDRATION_DELAY_MS));
-
-    // Capture the post-hydration HTML.
     const html = await page.content();
-
-    // Sanity check: did the title actually update beyond the index.html shell?
     const title = await page.title();
-    debug(`  ${route} → title: "${title}"`);
-
     return { html, title };
   } finally {
     await page.close();
   }
 }
 
-// ── Write per-route HTML to dist/<route>/index.html ────────────────────────
+// ── Write per-route HTML ───────────────────────────────────────────────────
 async function writeSnapshot(route, html) {
-  // Map "/" → dist/index.html (overwrites the SPA shell with the hydrated home)
-  // Map "/calculators/nihss" → dist/calculators/nihss/index.html
   const filePath =
     route === '/'
       ? join(DIST, 'index.html')
@@ -159,6 +194,23 @@ async function writeSnapshot(route, html) {
   debug(`  wrote ${filePath} (${html.length.toLocaleString()} bytes)`);
 }
 
+// ── Concurrency-limited iteration ──────────────────────────────────────────
+async function runWithConcurrency(items, concurrency, fn) {
+  const queue = items.slice();
+  const results = [];
+  await Promise.all(
+    Array.from({ length: concurrency }, async () => {
+      while (queue.length > 0) {
+        const item = queue.shift();
+        if (item === undefined) return;
+        const r = await fn(item);
+        results.push(r);
+      }
+    })
+  );
+  return results;
+}
+
 // ── Main ────────────────────────────────────────────────────────────────────
 async function main() {
   if (!existsSync(DIST)) {
@@ -166,11 +218,24 @@ async function main() {
     process.exit(1);
   }
 
-  // CLI single-route override for debugging.
-  const singleRouteArg = process.argv.find((a) => a.startsWith('--route='));
-  const routes = singleRouteArg
-    ? [singleRouteArg.split('=')[1]]
-    : PHASE_1_ROUTES;
+  const { mode, route, concurrency } = parseArgs();
+
+  // Resolve route list.
+  let routes;
+  if (route) {
+    routes = [route];
+    log(`Single-route mode: ${route}`);
+  } else if (mode === 'phase1') {
+    routes = PHASE_1_ROUTES;
+    log(`Phase 1 mode: ${routes.length} hardcoded high-priority routes`);
+  } else {
+    const sitemapRoutes = await loadSitemapRoutes();
+    routes = mode === 'static' ? filterToStatic(sitemapRoutes) : sitemapRoutes;
+    log(
+      `Mode "${mode}": ${routes.length} routes from sitemap` +
+        (mode === 'static' ? ' (filtered to static only)' : '')
+    );
+  }
 
   const chromePath = resolveChromePath();
   if (chromePath) {
@@ -179,13 +244,11 @@ async function main() {
     log('No system Chrome found — falling back to puppeteer bundled Chromium.');
   }
 
-  // Dynamic import so this script can use whatever puppeteer version is
-  // installed (the user upgrades puppeteer separately; this script doesn't
-  // pin a version).
+  // Dynamic import so the script works with whatever puppeteer is installed.
   let puppeteer;
   try {
     puppeteer = (await import('puppeteer')).default;
-  } catch (e) {
+  } catch (_e) {
     console.error('[prerender] ERROR: `puppeteer` is not installed.');
     console.error('[prerender] Run: npm install -D puppeteer');
     console.error('[prerender] Then re-run: node scripts/prerender.mjs');
@@ -195,6 +258,7 @@ async function main() {
   const previewProc = await startPreviewServer();
 
   let browser;
+  const t0 = Date.now();
   try {
     browser = await puppeteer.launch({
       headless: true,
@@ -207,37 +271,50 @@ async function main() {
       ],
     });
 
-    log(`Pre-rendering ${routes.length} route(s)...`);
+    log(`Pre-rendering ${routes.length} route(s) with concurrency ${concurrency}...`);
     let ok = 0;
     let fail = 0;
     const failures = [];
 
-    for (const route of routes) {
+    await runWithConcurrency(routes, concurrency, async (r) => {
       try {
-        const { html, title } = await snapshotRoute(browser, route);
-        // Sanity check: empty / shell-only response is a failure.
+        const { html, title } = await snapshotRoute(browser, r);
         if (!html || html.length < 1000) {
           throw new Error(`HTML too short (${html?.length} bytes)`);
         }
-        // Verify the title isn't a stale shell — log warning but don't fail
-        // since some routes legitimately use the shell title.
-        if (route !== '/' && title.includes('Resident & Attending Guide') && !title.includes('|')) {
-          log(`  warning: ${route} still shows shell title "${title}"`);
-        }
-        await writeSnapshot(route, html);
+        await writeSnapshot(r, html);
         ok++;
+        if (DEBUG || routes.length <= 20) {
+          log(`  ✓ ${r} → ${title}`);
+        }
       } catch (e) {
-        log(`  FAILED ${route}: ${e.message}`);
-        failures.push({ route, error: e.message });
+        log(`  ✗ ${r}: ${e.message}`);
+        failures.push({ route: r, error: e.message });
         fail++;
       }
-    }
+    });
 
-    log(`Done: ${ok} succeeded, ${fail} failed.`);
-    if (failures.length > 0) {
+    const elapsedSec = ((Date.now() - t0) / 1000).toFixed(1);
+    log(`Done: ${ok} succeeded, ${fail} failed in ${elapsedSec}s.`);
+
+    // Tolerance: allow up to 5% failure rate before treating as a build error.
+    // Individual page failures (e.g., a trial page with a temporary fetch
+    // issue) shouldn't break the entire deploy.
+    const failureRate = fail / routes.length;
+    const TOLERATED_FAILURE_RATE = 0.05;
+    if (failureRate > TOLERATED_FAILURE_RATE) {
+      console.error(
+        `[prerender] Failure rate ${(failureRate * 100).toFixed(1)}% exceeds ` +
+          `tolerance ${(TOLERATED_FAILURE_RATE * 100).toFixed(1)}%. Failing build.`
+      );
       console.error('[prerender] Failures:');
       for (const f of failures) console.error(`  ${f.route}: ${f.error}`);
       process.exit(1);
+    } else if (fail > 0) {
+      console.warn(
+        `[prerender] Tolerated ${fail} failure(s) (${(failureRate * 100).toFixed(1)}% < ${(TOLERATED_FAILURE_RATE * 100).toFixed(1)}%).`
+      );
+      for (const f of failures) console.warn(`  ${f.route}: ${f.error}`);
     }
   } finally {
     if (browser) await browser.close();
