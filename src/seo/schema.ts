@@ -164,6 +164,24 @@ const TRIALS_HUB_SCHEMA = {
 //
 // Source: V approval 2026-05-21 (Option A — single bottom accordion).
 const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
+  '/': [
+    {
+      question: 'What is NeuroWiki?',
+      answer: 'NeuroWiki (also written Neuro Wiki) is a free neurology resident and attending guide. It bundles bedside calculators, clinical pathways, and landmark stroke trial summaries built on AHA/ASA 2026 guidelines.',
+    },
+    {
+      question: 'Who is NeuroWiki for?',
+      answer: 'Neurology residents, fellows, attendings, and other physicians caring for stroke and neurology patients at the bedside.',
+    },
+    {
+      question: 'Is NeuroWiki free to use?',
+      answer: 'Yes. All calculators, pathways, guides, and trial pages are free. No account or sign-up is required.',
+    },
+    {
+      question: 'What does NeuroWiki cover?',
+      answer: 'NIHSS, ICH Score, ASPECTS, GCS, ABCD2, HAS-BLED and other neurology calculators; stroke code, EVT, late-window IVT, status epilepticus, and migraine pathways; 101 landmark stroke trial summaries; and clinical guides for residents.',
+    },
+  ],
   '/calculators/nihss': [
     {
       question: 'What is the NIHSS calculator used for?',
@@ -912,7 +930,32 @@ export function getSchemaForRoute(
   pathname: string,
   meta: { title: string; description: string }
 ): object | null {
-  if (pathname === '/') return ORGANIZATION_SCHEMA;
+  if (pathname === '/') {
+    // Homepage gets Organization + FAQPage in a single @graph so the
+    // homepage FAQs only inject on / (previously they were inlined into
+    // index.html, which embedded a duplicate FAQPage on every route —
+    // GSC flagged this as a "duplicate FAQ" critical error on the GCS
+    // calculator page and likely on every other per-route FAQ page).
+    const homepageFaqs = PAGE_FAQS['/'];
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        { '@context': undefined, ...ORGANIZATION_SCHEMA },
+        ...(homepageFaqs && homepageFaqs.length > 0
+          ? [
+              {
+                '@type': 'FAQPage',
+                mainEntity: homepageFaqs.map((f) => ({
+                  '@type': 'Question',
+                  name: f.question,
+                  acceptedAnswer: { '@type': 'Answer', text: f.answer },
+                })),
+              },
+            ]
+          : []),
+      ],
+    };
+  }
   if (pathname === '/calculators') return CALCULATORS_HUB_SCHEMA;
   if (pathname === '/guide') return GUIDE_HUB_SCHEMA;
   if (pathname === '/trials') return TRIALS_HUB_SCHEMA;
