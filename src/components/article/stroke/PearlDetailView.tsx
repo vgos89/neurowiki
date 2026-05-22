@@ -90,7 +90,7 @@ export const PearlDetailView: React.FC<PearlDetailViewProps> = ({
                   </button>
                   <div className="min-w-0 flex flex-col">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">
-                      {pearl.type === 'trial' ? 'Trial' : 'Deep Learning'}
+                      {pearl.type === 'trial' ? 'Trial' : 'Study mode'}
                     </span>
                     <h2
                       id="pearl-detail-title"

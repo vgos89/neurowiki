@@ -148,14 +148,14 @@ export const DeepLearningModal: React.FC<DeepLearningModalProps> = ({
             ref={closeButtonRef}
             onClick={onClose}
             className="absolute top-2 right-2 min-h-[44px] min-w-[44px] rounded-lg hover:bg-slate-100 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none flex items-center justify-center"
-            aria-label="Close deep learning panel"
+            aria-label="Close study mode panel"
           >
             <X className="w-5 h-5 text-slate-500" aria-hidden="true" />
           </button>
 
           <div className="pr-12">
             <h3 id="dlm-title" className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-              Deep Learning
+              Study mode
             </h3>
             <p className="text-sm font-semibold text-slate-900 mt-1 tracking-[0.01em]">
               {sectionTitle}

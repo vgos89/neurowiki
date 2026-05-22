@@ -74,7 +74,10 @@ export const SectionPearls: React.FC<SectionPearlsProps> = ({
           Clinical Pearls
         </h3>
 
-        {/* Quick vs Deep Toggle */}
+        {/* Quick vs Study Mode toggle. The internal state variable name
+            `isDeepLearning` is preserved for analytics continuity (event
+            `deep_learning_opened` already has ~3mo of historical data); only
+            user-facing labels were renamed to "Study mode" (V call 2026-05-21). */}
         <div className="flex items-center gap-2">
           <span className={`text-xs font-medium transition-colors ${
             !isDeepLearning ? 'text-neuro-700' : 'text-slate-400'
@@ -88,7 +91,7 @@ export const SectionPearls: React.FC<SectionPearlsProps> = ({
             }`}
             role="switch"
             aria-checked={isDeepLearning}
-            aria-label="Toggle between quick and deep learning"
+            aria-label="Toggle between quick and study mode"
           >
             <span
               className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -99,7 +102,7 @@ export const SectionPearls: React.FC<SectionPearlsProps> = ({
           <span className={`text-xs font-medium transition-colors ${
             isDeepLearning ? 'text-neuro-700' : 'text-slate-400'
           }`}>
-            Deep
+            Study
           </span>
         </div>
       </div>
@@ -156,8 +159,8 @@ export const SectionPearls: React.FC<SectionPearlsProps> = ({
       <div className="mt-4 pt-3 border-t border-slate-100">
         <p className="text-xs text-slate-400 text-center">
           {isDeepLearning
-            ? 'Deep Learning Mode: Full content with trials and citations'
-            : 'Quick Learning Mode: Essential clinical pearls for rapid review'}
+            ? 'Study mode: full content with trials and citations'
+            : 'Quick mode: essential clinical pearls for rapid review'}
         </p>
       </div>
     </div>
