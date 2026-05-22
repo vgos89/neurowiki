@@ -18,6 +18,7 @@ import { useRecents } from '../hooks/useRecents';
 import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import DiscreteFAQ from '../components/seo/DiscreteFAQ';
 import { getFAQsForPath } from '../seo/schema';
+import NextStepsCard from '../components/seo/NextStepsCard';
 
 /* ─── Types ─────────────────────────────────────────────────────── */
 
@@ -1331,6 +1332,30 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
           setMinutesSinceWaking(null);
           setLkwPickerOpen(false);
         }}
+      />
+
+      {/* Next steps — contextual navigation after eligibility decision. Surfaces before FAQ so CTA gets visual priority.
+          GA4 baseline: /pathways/late-window-ivt 80% exit rate despite 14.7s avg engagement — clinicians get their
+          answer then leave. This card gives them a natural continuation path. V approval 2026-05-22. */}
+      <NextStepsCard
+        heading="Continue with this patient"
+        items={[
+          {
+            label: "Walk through the IV tPA protocol",
+            description: "Dosing, contraindications, and monitoring for alteplase and tenecteplase",
+            to: "/guide/iv-tpa"
+          },
+          {
+            label: "Check EVT eligibility for this patient",
+            description: "Large-vessel occlusion thrombectomy decision tool",
+            to: "/pathways/evt"
+          },
+          {
+            label: "Review the trials behind late-window IVT",
+            description: "WAKE-UP, EXTEND, TIMELESS, TRACE-3 evidence summaries",
+            to: "/trials/q/late-window-selection"
+          },
+        ]}
       />
 
       {/* Discrete FAQ — V approval 2026-05-21 Option A. Same data feeds JSON-LD FAQPage schema via getSchemaForRoute. */}
