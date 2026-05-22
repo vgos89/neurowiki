@@ -930,6 +930,108 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- TRIALS — Clinical Questions: 16 entries added 2026-05-22.
+       Each has a QUESTION_META block in src/seo/schema.ts (shipped cb0f51b
+       2026-05-21) with title, description, and FAQPage answer. Verified
+       these routes render real content (not generic fallback) before
+       adding to sitemap. -->
+  <url>
+    <loc>https://neurowiki.ai/trials/q/tpa-timing</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/q/lvo-evt</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/q/tnk-vs-alteplase</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/q/direct-vs-bridging</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/q/basilar-evt</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/q/anticoagulation</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/q/dapt</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/q/bp-control</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/q/hemicraniectomy</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/q/ich-surgery</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/q/ich-anticoagulation-reversal</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/q/pfo-closure-cryptogenic</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/q/asymptomatic-carotid</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/q/icas-stenting</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/q/msu-dispatch</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/q/crao-management</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
   <!-- Tier 2 new trial entries shipped 2026-05-20 (audit catch-up) -->
   <url>
     <loc>https://neurowiki.ai/trials/rescue-japan-limit-trial</loc>
