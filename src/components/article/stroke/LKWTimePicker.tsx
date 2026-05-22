@@ -108,8 +108,23 @@ const ScrollCol: React.FC<ScrollColProps> = ({
           // highlight at z-10 even on iOS where the implicit stacking
           // context from the overflow style would otherwise win.
           zIndex: 30,
+          // iPhone Sleep Onset glitch fix (2026-05-22): contain momentum
+          // scrolling inside this drum so a fling on one column does not
+          // bleed into adjacent drums or the modal body. Without this,
+          // Sleep Onset's 4 stacked drums hijack each other's momentum
+          // on iOS Safari.
+          overscrollBehavior: 'contain',
+          touchAction: 'pan-y',
         } as React.CSSProperties}
         onScroll={handleScroll}
+        // Cancel any in-flight snap timer the instant the user re-grabs
+        // this column. Previously the 120ms snap could fire mid-drag of
+        // a second touch, snapping the wheel back under the user's
+        // finger ("keeps auto-snapping to the same time" iPhone report).
+        onTouchStart={() => {
+          clearTimeout(snapTimer.current);
+          isExternal.current = false;
+        }}
         // a11y: keyboard-navigable listbox per WCAG 2.1.1 — previously
         // the drum was scroll-only (mouse/touch) per
         // audit-stroke-code-a11y-2026-05-17.md BLOCKER A-1.
@@ -287,12 +302,17 @@ interface SleepTimeRowProps {
   onMinuteIdx: (n: number) => void;
   periodIdx: number;
   onPeriodIdx: (n: number) => void;
+  /** True when the user typed a 24-hour value via the manual input. */
+  isMilitary: boolean;
+  /** Manual-input parsed-time handler — keeps drums + AM/PM in sync with typed text. */
+  onParsedTime: (p: ParsedTime) => void;
   accentClass: string;
 }
 
 const SleepTimeRow: React.FC<SleepTimeRowProps> = ({
   label, icon, dayOffset, onDayOffset, maxDayOffset,
   hourIdx, onHourIdx, minuteIdx, onMinuteIdx, periodIdx, onPeriodIdx,
+  isMilitary, onParsedTime,
   accentClass,
 }) => {
   const dayLabels = ['Today', 'Yesterday', '2 days ago'];
@@ -303,6 +323,10 @@ const SleepTimeRow: React.FC<SleepTimeRowProps> = ({
   // with the specific-time picker. (V feedback 2026-05-20: Sleep Onset body
   // "looks so AI" — three stacked scroll columns × 2 pickers was the main
   // tell. Replacing the period column tightens the visual.)
+  // 2026-05-22: added ManualTimeInput above the drums so clinicians can
+  // free-text bedtime / wake time (parity with the Specific Time tab).
+  // Also bumped itemH 44→48 to clear iOS Safari's effective 44pt tap
+  // target when stacked drums are inside a scrollable modal body.
 
   return (
     <div className="py-3 px-4">
@@ -320,7 +344,7 @@ const SleepTimeRow: React.FC<SleepTimeRowProps> = ({
             type="button"
             aria-pressed={dayOffset === i}
             onClick={() => onDayOffset(i)}
-            className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
+            className={`min-h-[44px] px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
               dayOffset === i
                 ? 'bg-amber-500 text-white'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -331,14 +355,28 @@ const SleepTimeRow: React.FC<SleepTimeRowProps> = ({
         ))}
       </div>
 
+      {/* Manual time entry (parity with Specific Time tab) — placed above
+          the drums so a clinician who knows the time can type it without
+          fighting iOS scroll momentum. */}
+      <div className="mb-3 -mx-4">
+        <ManualTimeInput
+          hourIdx={hourIdx}
+          minuteIdx={minuteIdx}
+          periodIdx={periodIdx}
+          isMilitary={isMilitary}
+          onParsed={onParsedTime}
+        />
+      </div>
+
       {/* Drum rollers + AM/PM toggle */}
       <div className="flex items-center justify-center gap-3">
-        <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={onHourIdx} itemH={44} colW={56} ariaLabel={`${label} hour`} />
+        <ScrollCol items={hourItems} selectedIdx={hourIdx} onSelect={onHourIdx} itemH={48} colW={56} ariaLabel={`${label} hour`} />
         <span className="text-2xl font-light text-slate-300 -mt-1">:</span>
-        <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={onMinuteIdx} itemH={44} colW={56} ariaLabel={`${label} minute`} />
+        <ScrollCol items={minuteItems} selectedIdx={minuteIdx} onSelect={onMinuteIdx} itemH={48} colW={56} ariaLabel={`${label} minute`} />
         <AmPmToggle
           periodIdx={periodIdx}
           onSelect={onPeriodIdx}
+          hidden={isMilitary}
           size="sm"
           ariaLabel={`${label} AM or PM`}
         />
@@ -624,6 +662,7 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
   const [bdHourIdx, setBdHourIdx] = useState(10);   // index 10 = 11 (1-indexed)
   const [bdMinIdx, setBdMinIdx] = useState(0);
   const [bdPeriodIdx, setBdPeriodIdx] = useState(1); // PM
+  const [bdIsMilitary, setBdIsMilitary] = useState(false);
   // Wake-up: defaults to today, 1h before now (rounded to nearest 5min)
   const getDefaultWakeIdx = () => {
     const n = nowRef.current;
@@ -640,6 +679,31 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
   const [wkHourIdx, setWkHourIdx] = useState(wakeDefaults.hourIdx);
   const [wkMinIdx, setWkMinIdx] = useState(wakeDefaults.minuteIdx);
   const [wkPeriodIdx, setWkPeriodIdx] = useState(wakeDefaults.periodIdx);
+  const [wkIsMilitary, setWkIsMilitary] = useState(false);
+
+  // Parsed-time handlers for the Sleep Onset ManualTimeInputs. Mirror the
+  // Specific Time tab's handleParsedTime — keep drums + AM/PM in sync with
+  // the typed value.
+  const handleBedtimeParsed = (p: ParsedTime) => {
+    setBdHourIdx(p.hourIdx);
+    setBdMinIdx(p.minuteIdx5);
+    if (p.periodIdx !== -1) setBdPeriodIdx(p.periodIdx);
+    setBdIsMilitary(p.isMilitary);
+  };
+  const handleWakeParsed = (p: ParsedTime) => {
+    setWkHourIdx(p.hourIdx);
+    setWkMinIdx(p.minuteIdx5);
+    if (p.periodIdx !== -1) setWkPeriodIdx(p.periodIdx);
+    setWkIsMilitary(p.isMilitary);
+  };
+  // Wheel changes always cancel military mode (wheels are 12-hour) —
+  // mirrors the Specific Time tab. Without this, typing "23:25" then
+  // nudging the hour drum leaves the AM/PM toggle hidden while the
+  // drum shows a 12-hour value, which is incoherent.
+  const setBdHourFromWheel = (i: number) => { setBdHourIdx(i); setBdIsMilitary(false); };
+  const setBdMinFromWheel = (i: number) => { setBdMinIdx(i); setBdIsMilitary(false); };
+  const setWkHourFromWheel = (i: number) => { setWkHourIdx(i); setWkIsMilitary(false); };
+  const setWkMinFromWheel = (i: number) => { setWkMinIdx(i); setWkIsMilitary(false); };
   const [sleepError, setSleepError] = useState<string | null>(null);
   // Future-time guard for specific-time confirm; mirrors sleepError shape.
   const [specificError, setSpecificError] = useState<string | null>(null);
@@ -658,8 +722,10 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
     setMode(defaultMode);
     // Reset sleep onset state
     setBdDayOffset(1); setBdHourIdx(10); setBdMinIdx(0); setBdPeriodIdx(1);
+    setBdIsMilitary(false);
     const wd = getDefaultWakeIdx();
     setWkDayOffset(0); setWkHourIdx(wd.hourIdx); setWkMinIdx(wd.minuteIdx); setWkPeriodIdx(wd.periodIdx);
+    setWkIsMilitary(false);
     setSleepError(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
@@ -851,11 +917,13 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
         onDayOffset={setBdDayOffset}
         maxDayOffset={2}
         hourIdx={bdHourIdx}
-        onHourIdx={setBdHourIdx}
+        onHourIdx={setBdHourFromWheel}
         minuteIdx={bdMinIdx}
-        onMinuteIdx={setBdMinIdx}
+        onMinuteIdx={setBdMinFromWheel}
         periodIdx={bdPeriodIdx}
         onPeriodIdx={setBdPeriodIdx}
+        isMilitary={bdIsMilitary}
+        onParsedTime={handleBedtimeParsed}
         accentClass="text-slate-700"
       />
 
@@ -870,25 +938,15 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
         onDayOffset={setWkDayOffset}
         maxDayOffset={1}
         hourIdx={wkHourIdx}
-        onHourIdx={setWkHourIdx}
+        onHourIdx={setWkHourFromWheel}
         minuteIdx={wkMinIdx}
-        onMinuteIdx={setWkMinIdx}
+        onMinuteIdx={setWkMinFromWheel}
         periodIdx={wkPeriodIdx}
         onPeriodIdx={setWkPeriodIdx}
+        isMilitary={wkIsMilitary}
+        onParsedTime={handleWakeParsed}
         accentClass="text-amber-700"
       />
-
-      {/* Error — role="alert" + aria-live ensures screen readers announce validation errors.
-          Container always rendered (empty when no error) so the live region is already in
-          the DOM when content is injected — prevents browsers that ignore newly-inserted
-          live regions from missing the announcement. */}
-      <p
-        role="alert"
-        aria-live="assertive"
-        className={`mx-4 mb-2 text-xs text-red-600 rounded-lg px-3 py-2 ${sleepError ? 'bg-red-50 border border-red-200' : ''}`}
-      >
-        {sleepError ?? ''}
-      </p>
     </div>
   );
 
@@ -934,6 +992,17 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
             className="contents"
           >
             {sleepBody}
+            {/* Validation error — pinned above the footer (outside the
+                scrolling body) so the iOS soft keyboard for the manual
+                time inputs doesn't push it off-screen. role=alert +
+                aria-live=assertive for screen-reader announcement. */}
+            <p
+              role="alert"
+              aria-live="assertive"
+              className={`mx-4 mb-2 text-xs text-red-600 rounded-lg px-3 py-2 flex-shrink-0 ${sleepError ? 'bg-red-50 border border-red-200' : ''}`}
+            >
+              {sleepError ?? ''}
+            </p>
             <div className="border-t border-slate-100 px-4 py-3 flex items-center justify-between flex-shrink-0 gap-3">
               <button
                 type="button"
