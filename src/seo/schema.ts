@@ -228,6 +228,32 @@ const PAGE_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
       answer: 'Hemorrhagic infarction (HI1, HI2) on the Heidelberg classification is generally not a contraindication to anticoagulation initiation but may prompt a short delay. Parenchymal hemorrhage (PH1, PH2) warrants postponing anticoagulation until imaging stability is confirmed, typically at 7+ days.',
     },
   ],
+  '/calculators/glasgow-coma-scale': [
+    {
+      question: 'What is a normal GCS score?',
+      answer: 'A total Glasgow Coma Scale of 15 is the maximum and indicates full eye-opening, oriented verbal response, and obeys-commands motor response. A GCS of 15 does not exclude neurologic injury — focal deficits, confusion that scores 4 verbal, or subtle motor signs can coexist with a 15, which is why component scores (E, V, M) should always be reported separately, not just the total.',
+    },
+    {
+      question: 'What GCS score indicates coma?',
+      answer: 'Coma is conventionally defined as GCS ≤8 in the original Teasdale-Jennett framework, and this is also the most commonly cited threshold to consider endotracheal intubation for airway protection in head injury. However, the clinical decision to intubate is not driven by GCS alone — gag reflex, secretions, expected trajectory, and the cause of the depressed consciousness all factor in. A GCS of 8 from a reversible cause (postictal, intoxication) is managed differently than a GCS of 8 from intracerebral hemorrhage.',
+    },
+    {
+      question: 'How do you score GCS in an intubated patient?',
+      answer: 'When the patient cannot speak because of an endotracheal tube, the verbal component is recorded as "1T" (1 with a T suffix) or simply not testable. The total is reported with the T notation, e.g., "GCS 7T (E2 V1T M4)". Do not assign a verbal score of 5 because the patient cannot demonstrate it. Many published thresholds (e.g., intubation criteria) were derived in non-intubated patients, so use the component scores rather than the total when comparing to prognostic literature.',
+    },
+    {
+      question: 'What are the GCS severity bands for traumatic brain injury?',
+      answer: 'Per the Brain Trauma Foundation and AANS classification: mild TBI is GCS 13-15, moderate is GCS 9-12, and severe is GCS 3-8. These bands inform imaging decisions, ICU triage, and prognostic discussions but are not rigid management cutoffs. A GCS 13 with anticoagulation, focal deficit, or vomiting still warrants CT and observation; a GCS 8 from a reversible cause may have a much better trajectory than the band implies.',
+    },
+    {
+      question: 'Why report E, V, and M separately instead of just the total?',
+      answer: 'The same total score can come from very different neurologic patterns. A GCS 10 with E4 V1 M5 (alert, aphasic, follows commands) is clinically distinct from a GCS 10 with E2 V3 M5 (drowsy, confused, follows commands) — the first suggests an aphasic stroke, the second a metabolic encephalopathy. Component scores communicate the localization and trajectory that the total obscures. Modern reporting standards (and most trial inclusion criteria) require all three components, not just the sum.',
+    },
+    {
+      question: 'How is pediatric GCS different from adult GCS?',
+      answer: 'The Pediatric Glasgow Coma Scale modifies the verbal and (in some versions) motor components to account for pre-verbal children. Verbal scoring substitutes age-appropriate behaviors: 5 = coos/babbles, 4 = irritable crying, 3 = cries to pain, 2 = moans to pain, 1 = none. Eye and adult motor components are largely unchanged. Use the pediatric scale for children under ~2 years and the standard adult scale for older children; clinical judgment applies in the transitional range.',
+    },
+  ],
   '/calculators/em-billing': [
     {
       question: 'How do I choose between CPT 99205 and 99215?',

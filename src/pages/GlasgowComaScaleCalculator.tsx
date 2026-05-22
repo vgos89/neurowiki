@@ -34,6 +34,8 @@ import { useCaseReload } from '../hooks/useCaseReload';
 import { useRecents } from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import { copyToClipboard } from '../utils/clipboard';
+import DiscreteFAQ from '../components/seo/DiscreteFAQ';
+import { getFAQsForPath } from '../seo/schema';
 import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import {
   GCS_CITATION,
@@ -572,6 +574,11 @@ const GlasgowComaScaleCalculator: React.FC = () => {
           }
           disclaimer="Educational use only."
         />
+
+        {/* Discrete FAQ — Option A. 6 Q&A pairs authored 2026-05-21 from GCS
+            keyword research (Codex SERP audit). Same data feeds JSON-LD
+            FAQPage schema via getSchemaForRoute. Pending clinical-reviewer §17.2. */}
+        <DiscreteFAQ items={getFAQsForPath('/calculators/glasgow-coma-scale')} />
 
         {/* Drawer spacer — prevents content hiding behind drawer §1.3 */}
         <div className={drawerOpen ? 'drawer-spacer-expanded' : 'drawer-spacer-collapsed'} />
