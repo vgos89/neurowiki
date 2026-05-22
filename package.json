@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "postbuild": "node scripts/prerender.mjs",
     "build:analyze": "ANALYZE=true vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
@@ -41,7 +42,7 @@
   },
   "devDependencies": {
     "@google-analytics/data": "^6.0.0",
-    "@sparticuz/chromium": "^138.0.0",
+    "@sparticuz/chromium": "^138.0.2",
     "@tailwindcss/vite": "^4.1.18",
     "@types/node": "^22.14.0",
     "@types/qrcode": "^1.5.6",
