@@ -237,22 +237,68 @@ async function main() {
     );
   }
 
-  const chromePath = resolveChromePath();
-  if (chromePath) {
-    log(`Using Chrome at: ${chromePath}`);
-  } else {
-    log('No system Chrome found — falling back to puppeteer bundled Chromium.');
-  }
+  // ── Browser launch strategy ──────────────────────────────────────────────
+  // Two modes:
+  //   Vercel build  → use @sparticuz/chromium + puppeteer-core. Vercel's
+  //                   stripped Linux build container is missing the system
+  //                   libs (libnss3, libatk1.0-0, libdrm2, etc.) that puppeteer's
+  //                   bundled Chromium needs to start. @sparticuz/chromium
+  //                   ships a self-contained Chromium specifically for AWS
+  //                   Lambda + Vercel build phases.
+  //   Local / other → use puppeteer with system Chrome via executablePath.
+  //                   macOS dev (system Chrome at /Applications) works
+  //                   end-to-end via puppeteer 25's DevTools Protocol.
+  //
+  // Detection: process.env.VERCEL is "1" during Vercel builds.
+  const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL_ENV;
 
-  // Dynamic import so the script works with whatever puppeteer is installed.
   let puppeteer;
-  try {
-    puppeteer = (await import('puppeteer')).default;
-  } catch (_e) {
-    console.error('[prerender] ERROR: `puppeteer` is not installed.');
-    console.error('[prerender] Run: npm install -D puppeteer');
-    console.error('[prerender] Then re-run: node scripts/prerender.mjs');
-    process.exit(1);
+  let launchExecutablePath;
+  let launchArgs;
+  let launchHeadless = true;
+
+  if (isVercel) {
+    log('Vercel environment detected — using @sparticuz/chromium + puppeteer-core.');
+    let chromium;
+    try {
+      chromium = (await import('@sparticuz/chromium')).default;
+    } catch (_e) {
+      console.error('[prerender] ERROR: `@sparticuz/chromium` is not installed (required on Vercel).');
+      console.error('[prerender] Run: npm install -D @sparticuz/chromium puppeteer-core');
+      process.exit(1);
+    }
+    try {
+      puppeteer = (await import('puppeteer-core')).default;
+    } catch (_e) {
+      console.error('[prerender] ERROR: `puppeteer-core` is not installed (required on Vercel).');
+      console.error('[prerender] Run: npm install -D puppeteer-core');
+      process.exit(1);
+    }
+    launchExecutablePath = await chromium.executablePath();
+    launchArgs = chromium.args;
+    launchHeadless = chromium.headless;
+  } else {
+    const chromePath = resolveChromePath();
+    if (chromePath) {
+      log(`Using Chrome at: ${chromePath}`);
+    } else {
+      log('No system Chrome found — falling back to puppeteer bundled Chromium.');
+    }
+    try {
+      puppeteer = (await import('puppeteer')).default;
+    } catch (_e) {
+      console.error('[prerender] ERROR: `puppeteer` is not installed.');
+      console.error('[prerender] Run: npm install -D puppeteer');
+      console.error('[prerender] Then re-run: node scripts/prerender.mjs');
+      process.exit(1);
+    }
+    launchExecutablePath = chromePath ?? undefined;
+    launchArgs = [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-gpu',
+    ];
   }
 
   const previewProc = await startPreviewServer();
@@ -261,14 +307,9 @@ async function main() {
   const t0 = Date.now();
   try {
     browser = await puppeteer.launch({
-      headless: true,
-      executablePath: chromePath ?? undefined,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-gpu',
-      ],
+      headless: launchHeadless,
+      executablePath: launchExecutablePath,
+      args: launchArgs,
     });
 
     log(`Pre-rendering ${routes.length} route(s) with concurrency ${concurrency}...`);

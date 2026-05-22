@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@google-analytics/data": "^6.0.0",
+    "@sparticuz/chromium": "^138.0.0",
     "@tailwindcss/vite": "^4.1.18",
     "@types/node": "^22.14.0",
     "@types/qrcode": "^1.5.6",
@@ -52,6 +53,7 @@
     "jsdom": "^29.1.1",
     "postcss": "^8.5.6",
     "puppeteer": "^25.0.4",
+    "puppeteer-core": "^25.0.4",
     "react-snap": "^1.23.0",
     "rollup-plugin-visualizer": "^6.0.5",
     "tailwindcss": "^4.1.18",
