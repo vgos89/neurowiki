@@ -135,11 +135,12 @@ function resolveChromePath() {
 
 // ── Vite preview subprocess ────────────────────────────────────────────────
 const PREVIEW_STARTUP_TIMEOUT_MS = 30_000;
+const PREVIEW_POLL_INTERVAL_MS = 250;
+
 async function startPreviewServer() {
   log(`Starting vite preview on port ${PORT}...`);
-  // Use the locally-installed vite binary directly instead of `npx vite`.
-  // On Vercel build runners, `npx` resolution adds 5-15s of overhead which
-  // pushed past the previous 10s timeout. Direct binary path skips that.
+  // Use the locally-installed vite binary directly. On Vercel build runners,
+  // `npx vite` resolution adds 5-15s of overhead.
   const viteBin = join(ROOT, 'node_modules/.bin/vite');
   const proc = spawn(
     viteBin,
@@ -147,55 +148,53 @@ async function startPreviewServer() {
     { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] }
   );
 
-  await new Promise((res, rej) => {
-    const timeout = setTimeout(
-      () => {
-        rej(
-          new Error(
-            `vite preview did not print "Local:" within ${PREVIEW_STARTUP_TIMEOUT_MS / 1000}s. ` +
-              `Last seen output above (stdout + stderr).`
-          )
-        );
-      },
-      PREVIEW_STARTUP_TIMEOUT_MS
-    );
-    // Accumulate stdout across chunks. Node stream `data` events are NOT
-    // line-buffered — Vite's "Local: http://localhost:4173/" output gets
-    // split across multiple chunks (ANSI color codes amplify this). Earlier
-    // version checked per-chunk and never matched because the substring
-    // was split mid-token across events. Accumulate, then check the running
-    // buffer.
-    let stdoutBuffer = '';
-    proc.stdout.on('data', (chunk) => {
-      const text = chunk.toString();
-      console.log('[preview stdout]', text.trim());
-      stdoutBuffer += text;
-      if (
-        stdoutBuffer.includes('Local:') ||
-        stdoutBuffer.includes(`localhost:${PORT}`) ||
-        stdoutBuffer.includes(`http://localhost:${PORT}`)
-      ) {
-        clearTimeout(timeout);
-        res();
-      }
-    });
-    proc.stderr.on('data', (chunk) => {
-      // Always log stderr — silent failures on build runners are the #1
-      // debug hazard and never worth the noise tradeoff.
-      console.error('[preview stderr]', chunk.toString().trim());
-    });
-    proc.on('exit', (code) => {
-      if (code !== 0 && code !== null) {
-        rej(new Error(`vite preview exited with code ${code} before becoming ready`));
-      }
-    });
-    proc.on('error', (err) => {
-      rej(new Error(`vite preview failed to spawn: ${err.message}`));
-    });
+  // Passively log stdout/stderr (helpful for diagnosing failures, not used
+  // for ready-detection — prior versions tried to substring-match Vite's
+  // "Local: ..." line, but ANSI color escapes split the substring across
+  // chunks and broke the match. HTTP-polling the port is the only reliable
+  // signal that the server is actually accepting requests).
+  proc.stdout.on('data', (chunk) => {
+    console.log('[preview stdout]', chunk.toString().trim());
+  });
+  proc.stderr.on('data', (chunk) => {
+    console.error('[preview stderr]', chunk.toString().trim());
   });
 
-  log(`vite preview ready at http://localhost:${PORT}`);
-  return proc;
+  let exitedEarly = null;
+  proc.on('exit', (code) => {
+    if (code !== 0 && code !== null) {
+      exitedEarly = code;
+    }
+  });
+  proc.on('error', (err) => {
+    exitedEarly = err.message;
+  });
+
+  // Poll http://localhost:PORT/ until it responds with 2xx/3xx. Vite preview
+  // becomes ready in <500ms locally, ~2-5s on Vercel build runners.
+  const startTime = Date.now();
+  while (Date.now() - startTime < PREVIEW_STARTUP_TIMEOUT_MS) {
+    if (exitedEarly !== null) {
+      throw new Error(`vite preview exited before becoming ready: ${exitedEarly}`);
+    }
+    try {
+      const resp = await fetch(`http://localhost:${PORT}/`, {
+        signal: AbortSignal.timeout(2000),
+      });
+      // 2xx or 304 means the server is up and serving the SPA shell.
+      if (resp.status < 400) {
+        log(`vite preview ready at http://localhost:${PORT} (HTTP ${resp.status})`);
+        return proc;
+      }
+    } catch (_e) {
+      // ECONNREFUSED / AbortError / etc. — server not up yet, keep polling.
+    }
+    await new Promise((r) => setTimeout(r, PREVIEW_POLL_INTERVAL_MS));
+  }
+
+  throw new Error(
+    `vite preview did not respond on port ${PORT} within ${PREVIEW_STARTUP_TIMEOUT_MS / 1000}s — see stdout/stderr above for cause`
+  );
 }
 
 // ── Snapshot a single route ────────────────────────────────────────────────
