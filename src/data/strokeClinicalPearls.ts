@@ -65,10 +65,10 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'treatment-windows-quick',
         title: 'Treatment Windows',
-        content: 'IV thrombolysis: 0–4.5h standard; 4.5–9h with perfusion mismatch (extended IVT pathway in app); wake-up stroke eligible with DWI-FLAIR mismatch. Thrombectomy: 0–24h with imaging selection (perfusion or clinical-core mismatch).',
+        content: 'IV thrombolysis: 0–4.5h standard. 4.5–9h with perfusion mismatch (extended IVT pathway in app). Wake-up stroke eligible with DWI-FLAIR mismatch. Thrombectomy: 0–24h with imaging selection (perfusion or clinical-core mismatch). Large-core eligible per AHA/ASA 2026 §4.7.2: ASPECTS 3–5 COR 1 LOE A (6–24h); ASPECTS 0–2 COR 2a LOE B-R (0–6h, age <80, NIHSS ≥6, prestroke mRS 0–1, no significant mass effect).',
         type: 'pearl',
         section: 'step-1',
-        evidence: 'EXTEND 2019; WAKE-UP 2018; TRACE-III/TIMELESS 2024',
+        evidence: 'EXTEND 2019. WAKE-UP 2018. TRACE-III/TIMELESS 2024. SELECT-2/ANGEL-ASPECT/TENSION 2023. LASTE 2024.',
       },
       {
         id: 'tnk-class-i-quick',
@@ -373,7 +373,7 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
         id: 'large-core-evt-quick',
         claimId: 'large-core-evt-quick-claim',
         title: 'Large-Core EVT. Class I (2026)',
-        content: 'ASPECTS 3–5 EVT is now Class 1, LOE A (SELECT-2, ANGEL-ASPECT, TENSION 2023). LASTE extends to ASPECTS 0–2 (Class 2a, LOE B-R) with a mortality benefit. NCCT-derived ASPECTS is sufficient. Do not delay for CTP.',
+        content: 'ASPECTS 3–5 EVT is now COR 1, LOE A in selected patients (age <80, NIHSS ≥6, prestroke mRS 0–1, no significant mass effect) per AHA/ASA 2026 §4.7.2 (SELECT-2, ANGEL-ASPECT, TENSION 2023). LASTE 2024 extends to ASPECTS 0–2 (COR 2a, LOE B-R) under the same qualifiers within 0–6h. NCCT-derived ASPECTS is sufficient. Do not delay for CTP.',
         type: 'trial',
         section: 'step-2',
         link: '/trials/select-2',

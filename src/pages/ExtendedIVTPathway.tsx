@@ -448,12 +448,23 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
         reason: 'Late-window IVT requires expert stroke-thrombolysis oversight',
         details: 'Late-window IVT from 9 to 24 hours carries a higher symptomatic intracranial hemorrhage risk and should be directed by clinicians with specialized thrombolytic stroke expertise. If that expertise is not available locally, do not endorse IVT at the current site; obtain telestroke support or transfer if feasible.',
       };
-      if (cLvoEvt === false && cLvoBarrier !== null && cExpertise === true) return {
-        eligible: true, status: 'Eligible', variant: 'warning', cor: '2b',
-        path: 'C-LVO', trialsBasis: ['TRACE-III'], showBothAgents: false,
-        reason: 'Path C — 9–24h LVO with no feasible EVT',
-        details: 'IVT with tenecteplase may be considered for acute ischemic stroke caused by an ICA or MCA (M1/M2) occlusion 9 to 24 hours from last known well, including wake-up or unwitnessed stroke with a usable last-known-well time within 24 hours. This requires salvageable penumbra, no feasible rapid EVT pathway, and treatment directed by clinicians with expertise in thrombolytic stroke care.',
-      };
+      if (cLvoEvt === false && cLvoBarrier !== null && cExpertise === true) {
+        // Audit 2026-05-22 BLOCKING extended-ivt-path-c-wake-up-caveat: TRACE-III
+        // enrolled witnessed-onset patients only. Wake-up applicability is an
+        // extrapolation; surface that caveat in the result details rather than
+        // implying TRACE-III directly supports wake-up use.
+        const isWakeUpC = onsetMode === 'wake-up';
+        return {
+          eligible: true, status: 'Eligible', variant: 'warning', cor: '2b',
+          path: 'C-LVO', trialsBasis: ['TRACE-III'], showBothAgents: false,
+          reason: isWakeUpC
+            ? 'Path C — 9–24h LVO with no feasible EVT (wake-up extrapolation)'
+            : 'Path C — 9–24h LVO with no feasible EVT',
+          details: isWakeUpC
+            ? 'IVT with tenecteplase may be considered for acute ischemic stroke caused by an ICA or MCA (M1/M2) occlusion 9 to 24 hours from last known well. Wake-up application is an extrapolation from TRACE-III, which enrolled witnessed-onset patients only; expert oversight and individualized risk discussion are warranted. Requires salvageable penumbra, no feasible rapid EVT pathway, and treatment directed by clinicians with expertise in thrombolytic stroke care.'
+            : 'IVT with tenecteplase may be considered for acute ischemic stroke caused by an ICA or MCA (M1/M2) occlusion 9 to 24 hours from last known well. This requires salvageable penumbra, no feasible rapid EVT pathway, and treatment directed by clinicians with expertise in thrombolytic stroke care.',
+        };
+      }
     }
 
     return null;

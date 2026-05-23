@@ -106,7 +106,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 ### AHA/ASA 2026 AUDIT BLOCKING FOLLOW-UPS — from docs/audits/aha-2026-audit-2026-05-22.md
 
 ### stroke-code-large-core-evt-update — Class E-clinical [from audit 2026-05-22]
-- **Status:** [ ] (open)
+- **Status:** [x] done — treatment-windows-quick + large-core-evt-quick pearls updated with 4-qualifier framing
 - **User-visible goal:** Surface 2026 AHA/ASA §4.7.1 large-core EVT expansion (ASPECTS 3–5 COR 1, ASPECTS 0–2 COR 2a) in the Stroke Code pathway pearls and Step 2 LVO evidence accordion so residents do not miss eligible large-core patients.
 - **Files likely touched:** src/data/strokeClinicalPearls.ts (treatment-windows-quick, lvo-benefit-quick), src/pages/guide/StrokeBasicsWorkflowV2.tsx (lines 548–552 evidence accordion)
 - **Acceptance checks:** Pearl text references ASPECTS 3–5 (COR 1, LOE A 6–24h) and ASPECTS 0–2 (COR 2a, LOE B-R, age <80 + 0–6h + no mass effect). Citation traces to §4.7.1 mirror entries. last_reviewed refreshed. Clinical reviewer §17.2 sign-off.
@@ -160,7 +160,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §2 row 'EXTEND_WINDOW_CHIPS: "Age >80"'
 
 ### extended-ivt-path-c-wake-up-caveat — Class E-clinical [from audit 2026-05-22]
-- **Status:** [ ] (open)
+- **Status:** [x] done — Path C eligible result now branches: wake-up onset surfaces "extrapolation from TRACE-III" caveat in details + reason chip
 - **User-visible goal:** Either restrict Extended IVT Path C-LVO (TRACE-III 9–24h late TNK) to non-wake-up onset modes, or surface an extrapolation caveat for wake-up patients. TRACE-III enrolled witnessed-onset patients; wake-up applicability is an extrapolation.
 - **Files likely touched:** src/pages/ExtendedIVTPathway.tsx (PathStage logic line 129, Path C result rendering line 452)
 - **Acceptance checks:** UI either gates Path C on onsetMode !== 'wake-up' OR shows a "wake-up extrapolation" warning in the result card. last_reviewed refreshed. Clinical reviewer §17.2 sign-off.
