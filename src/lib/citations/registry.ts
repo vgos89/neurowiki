@@ -184,10 +184,15 @@ export const CITATION_REGISTRY: CitationRegistry = {
     source: 'guideline',
     title: '2026 AHA/ASA Guideline — §4.5 (Glycemic management)',
     year: 2026,
-    section: '§4.5',
+    section: '§4.5 Blood Glucose Management',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
-    last_reviewed: '2026-05-19',
-    quoted_text: 'Intensive glucose control to a target of 80–130 mg/dL provides no benefit over standard control (140–180 mg/dL) and increases hypoglycemia risk (Class III: No Benefit, Level A).',
+    last_reviewed: '2026-05-22',
+    // Verbatim from src/data/aha2026StrokeGuideline.ts lines 253–268. Refresh
+    // 2026-05-22 adds the hypoglycemia treat-threshold (row 1) and persistent
+    // hyperglycemia target (row 2) alongside the existing COR 3 No Benefit
+    // intensive-control row. Triggered by audit BLOCKING
+    // stroke-code-glucose-threshold-60 (modal threshold drift from <50 to <60).
+    quoted_text: 'For AIS, hypoglycemia (blood glucose <60 mg/dL) should be treated to avoid complications (COR 1, LOE C-LD). For AIS, it can reasonably be considered to treat persistent hyperglycemia to achieve blood glucose levels in a range of 140–180 mg/dL with close monitoring (COR 2a, LOE C-LD). In hospitalized patients with AIS with hyperglycemia, treatment with IV insulin to achieve blood glucose levels in the range of 80–130 mg/dL should not be used routinely to improve 3-month functional outcomes (COR 3 No Benefit, LOE A).',
   },
   'aha-asa-2026-4.6.2': {
     id: 'aha-asa-2026-4.6.2',

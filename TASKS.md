@@ -115,7 +115,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §1 row "Thrombectomy up to 24h with imaging selection"
 
 ### stroke-code-glucose-threshold-60 — Class E-clinical [from audit 2026-05-22]
-- **Status:** [ ] (open)
+- **Status:** [x] done — same-commit with §4.5 citation quoted_text refresh
 - **User-visible goal:** Update hypoglycemia exclusion threshold in the IVT eligibility modal from <50 mg/dL to <60 mg/dL per AHA/ASA 2026 §4.5 row 1 (COR 1, LOE C-LD).
 - **Files likely touched:** src/components/article/stroke/ThrombolysisEligibilityModal.tsx (HARD_STOP_CHIPS hypoglycemia entry, line 38)
 - **Acceptance checks:** Modal chip reads "Glucose <60" with detail string referencing §4.5. Citation registered. last_reviewed refreshed. Clinical reviewer §17.2 sign-off.

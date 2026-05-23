@@ -35,7 +35,9 @@ const HARD_STOP_CHIPS: Chip[] = [
   { id: 'sah_symptoms',         label: 'Possible SAH',            detail: 'Thunderclap headache or subarachnoid hemorrhage suspected.' },
   { id: 'ic_surgery',           label: 'Brain/spine surgery',     detail: 'Intracranial or intraspinal surgery within the past 3 months.' },
   { id: 'active_bleeding',      label: 'Active bleeding',         detail: 'Active internal bleeding at any site (excludes menses).' },
-  { id: 'hypoglycemia',         label: 'Glucose <50',             detail: 'Treat hypoglycemia first; reassess for tPA if symptoms persist after normoglycemia.' },
+  // AHA/ASA 2026 §4.5 row 1 (COR 1, LOE C-LD): treat hypoglycemia at <60 mg/dL.
+  // Updated from <50 per audit BLOCKING `stroke-code-glucose-threshold-60`.
+  { id: 'hypoglycemia',         label: 'Glucose <60',             detail: 'Treat hypoglycemia (glucose <60 mg/dL) first per AHA/ASA 2026 §4.5; reassess for tPA if symptoms persist after normoglycemia.' },
   { id: 'ct_large_infarct',     label: '>⅓ MCA infarct',          detail: 'Hypodensity >1/3 of the MCA territory on CT.' },
   { id: 'severe_htn',           label: 'BP >185/110',             detail: 'Elevated BP must be controlled to <185/110 before tPA. Treat with labetalol or nicardipine.' },
 ];
@@ -75,7 +77,7 @@ const CONTRA_LABELS: Record<string, string> = {
   sah_symptoms: 'Symptoms suggest subarachnoid hemorrhage',
   ic_surgery: 'Recent intracranial or intraspinal surgery',
   active_bleeding: 'Active internal bleeding',
-  hypoglycemia: 'Blood glucose <50 mg/dL',
+  hypoglycemia: 'Blood glucose <60 mg/dL',
   ct_large_infarct: 'CT: multilobar infarction >1/3 MCA territory',
   severe_htn: 'BP >185/110 mmHg',
   platelets: 'Platelet count <100,000/mm³',
