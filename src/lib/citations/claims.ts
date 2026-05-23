@@ -364,6 +364,49 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'ClinicalSynthesisCard on /trials/q/ich-anticoagulation-reversal. Agent-specific reversal: 4F-PCC + IV vitamin K for VKA, idarucizumab for dabigatran, andexanet alfa (or 4F-PCC) for FXa inhibitors. Explicitly surfaces PATCH (2016) HARM finding — DO NOT transfuse platelets for antiplatelet-associated ICH outside a planned neurosurgical procedure (AHA/ASA 2022 Class III: Harm). Grounded in the 2022 AHA/ASA Spontaneous ICH Guideline §7.3.',
   },
 
+  // ─── Hemicraniectomy clinical synthesis ─────────────────────────────────────
+  'hemicraniectomy-synthesis': {
+    id: 'hemicraniectomy-synthesis',
+    citation_ids: [
+      'aha-asa-2014-hemicraniectomy',
+      'vahedi-decimal-2007',
+      'juttler-destiny-2007',
+      'hofmeijer-hamlet-2009',
+      'vahedi-pooled-decimal-destiny-hamlet-2007',
+      'juttler-destiny-ii-2014',
+    ],
+    surfaces: [DATA_SURFACE],
+    description: 'ClinicalSynthesisCard on /trials/q/hemicraniectomy. Synthesizes the four hemicraniectomy RCTs (DECIMAL, DESTINY, HAMLET 2007–2009 pooled per Vahedi 2007 + DESTINY-II 2014 for the >60 cohort). ≤60-year mortality + mRS-≤3 benefit established; in the >60-year cohort survival benefit is real but concentrated at mRS 4–5, making the decision values-based. Governing source = AHA/ASA 2014 (the 2026 AIS guideline does not address hemicraniectomy).',
+  },
+
+  // ─── ICH surgery clinical synthesis ─────────────────────────────────────────
+  'ich-surgery-synthesis': {
+    id: 'ich-surgery-synthesis',
+    citation_ids: [
+      'aha-asa-2022-ich-surgery',
+      'mendelow-stich-i-2005',
+      'mendelow-stich-ii-2013',
+      'hanley-mistie-iii-2019',
+      'pradilla-enrich-2024',
+    ],
+    surfaces: [DATA_SURFACE],
+    description: 'ClinicalSynthesisCard on /trials/q/ich-surgery. Synthesizes the spontaneous-ICH surgical chain: STICH-I/II (negative for open craniotomy in supratentorial ICH), MISTIE-III (volume reduction without functional benefit), ENRICH 2024 (Bayesian primary met for early minimally invasive parafascicular surgery in 30–80 mL supratentorial ICH; posterior probability 0.981). Cerebellar ICH >3 cm with brainstem compression / hydrocephalus retains separate Class I surgical indication per 2022 AHA/ASA ICH §10. ENRICH is reported as Bayesian posterior per trial-statistics skill; no NNT.',
+  },
+
+  // ─── ICAS stenting clinical synthesis ───────────────────────────────────────
+  'icas-stenting-synthesis': {
+    id: 'icas-stenting-synthesis',
+    citation_ids: [
+      'aha-asa-2021-secondary-prevention-icas',
+      'chimowitz-sammpris-2011',
+      'derdeyn-sammpris-longterm-2014',
+      'alexander-weave-2019',
+      'gao-cassiss-2022',
+    ],
+    surfaces: [DATA_SURFACE],
+    description: 'ClinicalSynthesisCard on /trials/q/icas-stenting. Synthesizes the symptomatic-ICAS evidence chain: SAMMPRIS 2011 + long-term 2014 (Wingspan stenting causes net harm; aggressive medical management is the standard); WEAVE 2019 postmarket registry (lower periprocedural rates under restricted FDA labeling, but single-arm and cannot prove efficacy); CASSISS 2022 (contemporary periprocedural safety improvements but no superiority over modern medical management). Governing source = 2021 AHA/ASA SP §5.5 Intracranial Atherosclerosis.',
+  },
+
   // ─── CRAO management clinical synthesis ─────────────────────────────────────
   'crao-management-synthesis': {
     id: 'crao-management-synthesis',
