@@ -331,6 +331,20 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'GuidelineSummaryCard on /trials/q/post-evt-bp-target. Surfaces AHA/ASA 2026 §4.3 (Blood Pressure Management) with emphasis on the post-EVT recommendations: intensive SBP <140 after successful EVT (mTICI 2b/2c/3) is NOT recommended because it is associated with harm (COR 3: Harm, citing OPTIMAL-BP and ENCHANTED2/MT). Target ≤180/105.',
   },
 
+  'aspiration-vs-stentriever-guideline-summary': {
+    id: 'aspiration-vs-stentriever-guideline-summary',
+    citation_ids: ['aha-asa-2026-4.7.4'],
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/aspiration-vs-stentriever. Surfaces AHA/ASA 2026 §4.7.4 (Endovascular Techniques): stent retrievers, contact aspiration, and combination techniques are all equivalent first-line options to achieve rapid and adequate reperfusion (COR 1, LOE A). Operator choice between techniques is not constrained by the guideline.',
+  },
+
+  'evt-adjunct-pharmacotherapy-guideline-summary': {
+    id: 'evt-adjunct-pharmacotherapy-guideline-summary',
+    citation_ids: ['aha-asa-2026-4.7.4'],
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/evt-adjunct-pharmacotherapy. Surfaces AHA/ASA 2026 §4.7.4 adjunctive pharmacotherapy recommendations: preoperative IV tirofiban before EVT is not useful (COR 3 No Benefit, LOE A per RESCUE-BT). Post-EVT adjunctive intraarterial thrombolytics (urokinase, alteplase, or tenecteplase) after successful TICI 2b+ reperfusion may be reasonable (COR 2b, LOE B-R per CHOICE).',
+  },
+
   'minor-stroke-choice-guideline-summary': {
     id: 'minor-stroke-choice-guideline-summary',
     citation_ids: ['aha-asa-2026-4.6.1', 'aha-asa-2026-4.8'],

@@ -71,6 +71,14 @@ export const GUIDELINE_SUMMARIES_BY_QUESTION: Record<string, { claimId: string }
   'minor-stroke-choice': {
     claimId: 'minor-stroke-choice-guideline-summary',
   },
+
+  // Phase 3 follow-up — last 2 questions wired now that §4.7.4 is registered.
+  'aspiration-vs-stentriever': {
+    claimId: 'aspiration-vs-stentriever-guideline-summary',
+  },
+  'evt-adjunct-pharmacotherapy': {
+    claimId: 'evt-adjunct-pharmacotherapy-guideline-summary',
+  },
 };
 
 export function getGuidelineSummaryForQuestion(

@@ -194,6 +194,25 @@ export const CITATION_REGISTRY: CitationRegistry = {
     // stroke-code-glucose-threshold-60 (modal threshold drift from <50 to <60).
     quoted_text: 'For AIS, hypoglycemia (blood glucose <60 mg/dL) should be treated to avoid complications (COR 1, LOE C-LD). For AIS, it can reasonably be considered to treat persistent hyperglycemia to achieve blood glucose levels in a range of 140–180 mg/dL with close monitoring (COR 2a, LOE C-LD). In hospitalized patients with AIS with hyperglycemia, treatment with IV insulin to achieve blood glucose levels in the range of 80–130 mg/dL should not be used routinely to improve 3-month functional outcomes (COR 3 No Benefit, LOE A).',
   },
+  // ─── AHA/ASA 2026 §4.7.4 — Endovascular Techniques ───────────────────────
+  // Verbatim from the source PDF page e57 (read 2026-05-22). Covers technique
+  // choice (stent retrievers vs contact aspiration vs combination, all
+  // equivalent COR 1 LOE A) and preoperative adjunctive pharmacotherapy
+  // (tirofiban COR 3 No Benefit per RESCUE-BT). Registered 2026-05-23 to
+  // close the last two question-page placeholders.
+  // 6-month review window per §13.7 (current clinical guideline).
+  'aha-asa-2026-4.7.4': {
+    id: 'aha-asa-2026-4.7.4',
+    source: 'guideline',
+    title: '2026 AHA/ASA Guideline — §4.7.4 (Endovascular Techniques)',
+    year: 2026,
+    section: '§4.7.4 Endovascular Techniques',
+    url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
+    pmid: '41582814',
+    last_reviewed: '2026-05-23',
+    quoted_text: 'In patients with AIS due to an LVO, EVT with stent retrievers, contact aspiration, or combination techniques is recommended to achieve rapid and adequate reperfusion (COR 1, LOE A). In the management of patients with AIS in the setting of LVO, preoperative administration of tirofiban before EVT is not useful to improve 90-day functional outcome (COR 3 No Benefit, LOE A based on RESCUE-BT). In patients with AIS who achieve complete or near-complete EVT (modified TICI 2b or greater), the administration of adjunctive intraarterial thrombolytics with urokinase, alteplase, or tenecteplase may be reasonable to improve cerebral reperfusion and 90-day functional outcomes (COR 2b, LOE B-R per CHOICE).',
+  },
+
   // ─── AHA/ASA 2026 §4.6.1 — Thrombolysis Decision-Making ───────────────────
   // Verbatim from src/data/aha2026StrokeGuideline.ts ivtRecommendations.
   // decisionMaking[0–6]. Registered 2026-05-23 for the tpa-timing GuidelineSummaryCard.
