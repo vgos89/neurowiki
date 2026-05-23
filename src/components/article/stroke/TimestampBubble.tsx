@@ -35,10 +35,18 @@ export function parseTimeDigits(raw: string): { hh: number; mm: number; isMilita
   return { hh, mm, isMilitary: hh >= 13 };
 }
 
+// Order is presentation order in the timestamp bubble. New 'Thrombolytic
+// Administered' added 2026-05-23 per V request — captures the tPA / TNK
+// push time, the canonical anchor for the Door-to-Needle (DTN) GWTG /
+// Target: Stroke Phase III quality metric. Placed AFTER 'CT Read Time' to
+// reflect the typical workflow (imaging clears the patient → thrombolytic
+// is administered) and BEFORE 'Neuro IR Contacted' which is the EVT-
+// pathway branch.
 export const STROKE_TIMESTAMP_EVENTS = [
   'Code Activation',
   'Neurology Evaluation',
   'CT Read Time',
+  'Thrombolytic Administered',
   'Neuro IR Contacted',
   'NCC/ICU Sign-out',
 ] as const;
@@ -53,6 +61,7 @@ export const EMPTY_STROKE_TIMESTAMPS: StrokeTimestamps = {
   'Code Activation': null,
   'Neurology Evaluation': null,
   'CT Read Time': null,
+  'Thrombolytic Administered': null,
   'Neuro IR Contacted': null,
   'NCC/ICU Sign-out': null,
 };
@@ -68,6 +77,87 @@ function getElapsed(from: Date, to: Date): string {
   const minutes = totalMinutes % 60;
   if (hours > 0) return `+${hours}h ${minutes}m`;
   return `+${minutes}m`;
+}
+
+/** Minutes elapsed from anchor to stamp. Used to grade against GWTG / Target:
+ *  Stroke Phase III thresholds. Returns null when either timestamp is missing. */
+function getElapsedMinutes(from: Date | null, to: Date | null): number | null {
+  if (!from || !to) return null;
+  return Math.max(0, Math.floor((to.getTime() - from.getTime()) / 60000));
+}
+
+// ── GWTG / Target: Stroke Phase III color-coding thresholds ─────────────────
+// Anchor: Code Activation (proxy for door arrival; see CLAUDE.md notes —
+// Target: Stroke uses ED door arrival as the canonical anchor and a small
+// systematic underestimate of door-to-X is possible for non-prenotified
+// patients). Sources: AHA Target: Stroke Phase III one-pager
+// (heart.org/-/media/Files/Professional/Quality-Improvement/Target-Stroke);
+// Honor Roll Elite Plus criteria (heart.org/target-stroke-honor-roll).
+type GwtgGrade = 'green' | 'amber' | 'red';
+
+interface GwtgTarget {
+  /** Maximum minutes that still qualify as on-target (green). */
+  green: number;
+  /** Maximum minutes that still qualify as acceptable (amber). Anything > amber = red. */
+  amber: number;
+  /** Short metric name shown in tooltip. */
+  metric: string;
+  /** Source attribution shown in tooltip. */
+  source: string;
+}
+
+const GWTG_TARGETS: Partial<Record<EventName, GwtgTarget>> = {
+  'Neurology Evaluation': {
+    green: 10,
+    amber: 15,
+    metric: 'Door-to-stroke-team',
+    source: 'Target: Stroke Phase III',
+  },
+  'CT Read Time': {
+    green: 35,
+    amber: 45,
+    metric: 'Door-to-CT interpretation',
+    source: 'Target: Stroke Phase III',
+  },
+  'Thrombolytic Administered': {
+    green: 30,
+    amber: 45,
+    metric: 'Door-to-Needle (DTN)',
+    source: 'Target: Stroke Honor Roll Elite Plus',
+  },
+  'Neuro IR Contacted': {
+    green: 30,
+    amber: 45,
+    metric: 'IR coordination (process metric)',
+    source: 'Process target — NeuroWiki',
+  },
+  // 'Code Activation' is the anchor and has no grade.
+  // 'NCC/ICU Sign-out' is not a GWTG metric and shows neutral.
+};
+
+function getGwtgGrade(event: EventName, elapsedMinutes: number | null): { grade: GwtgGrade | null; target: GwtgTarget | null } {
+  if (elapsedMinutes === null) return { grade: null, target: null };
+  const target = GWTG_TARGETS[event];
+  if (!target) return { grade: null, target: null };
+  if (elapsedMinutes <= target.green) return { grade: 'green', target };
+  if (elapsedMinutes <= target.amber) return { grade: 'amber', target };
+  return { grade: 'red', target };
+}
+
+/** Tailwind class for the elapsed chip + the on-circle check icon. */
+function gradeToColorClass(grade: GwtgGrade | null): { chip: string; icon: string } {
+  switch (grade) {
+    case 'green':
+      return { chip: 'text-emerald-600', icon: 'text-emerald-500' };
+    case 'amber':
+      return { chip: 'text-amber-600', icon: 'text-amber-500' };
+    case 'red':
+      return { chip: 'text-red-600', icon: 'text-red-500' };
+    default:
+      // No grade (anchor, untracked metric, or no elapsed yet) — keep
+      // historical neutral colors (icon green, chip cobalt).
+      return { chip: 'text-neuro-500', icon: 'text-green-500' };
+  }
 }
 
 interface TimestampBubbleProps {
@@ -418,6 +508,17 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                 const elapsed = stamped && anchorTime && !isFirst
                   ? getElapsed(anchorTime, stamped)
                   : null;
+                // GWTG / Target: Stroke Phase III color grading — only when
+                // both the anchor (Code Activation) and this stamp exist and
+                // the event has a registered target.
+                const elapsedMin = !isFirst
+                  ? getElapsedMinutes(anchorTime ?? null, stamped ?? null)
+                  : null;
+                const { grade, target } = getGwtgGrade(event, elapsedMin);
+                const colors = gradeToColorClass(grade);
+                const gradeTooltip = target
+                  ? `${target.metric} · ${target.source} · target ≤${target.green}m (green), ≤${target.amber}m (amber)`
+                  : undefined;
 
                 const isEditing = editingEvent === event;
                 return (
@@ -502,12 +603,17 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                           </div>
                           {stamped ? (
                             <div className="flex items-center gap-2">
-                              <CheckCircle className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
+                              <CheckCircle className={`w-3.5 h-3.5 ${colors.icon} flex-shrink-0`} />
                               <span className="text-sm font-semibold text-slate-800 tabular-nums">
                                 {formatTime(stamped)}
                               </span>
                               {elapsed && (
-                                <span className="text-xs text-neuro-500 font-medium">{elapsed}</span>
+                                <span
+                                  className={`text-xs font-medium ${colors.chip}`}
+                                  title={gradeTooltip}
+                                >
+                                  {elapsed}
+                                </span>
                               )}
                             </div>
                           ) : (
@@ -562,7 +668,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
             {stampedCount > 0 && (
               <div className="px-4 py-2 bg-slate-50 border-t border-slate-200">
                 <button
-                  onClick={() => setTimestamps({ 'Code Activation': null, 'Neurology Evaluation': null, 'CT Read Time': null, 'Neuro IR Contacted': null, 'NCC/ICU Sign-out': null })}
+                  onClick={() => setTimestamps(EMPTY_STROKE_TIMESTAMPS)}
                   className="text-xs text-slate-400 hover:text-red-400 transition-colors"
                 >
                   Clear all timestamps

@@ -88,6 +88,8 @@ export interface SavedCaseData {
     'Code Activation'?: number | null;
     'Neurology Evaluation'?: number | null;
     'CT Read Time'?: number | null;
+    /** Added 2026-05-23 — tPA / TNK push time, GWTG Door-to-Needle anchor. */
+    'Thrombolytic Administered'?: number | null;
     'Neuro IR Contacted'?: number | null;
     'NCC/ICU Sign-out'?: number | null;
   };

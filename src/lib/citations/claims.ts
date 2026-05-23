@@ -238,6 +238,44 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'ClinicalSynthesisCard on /trials/q/pfo-closure-cryptogenic. Synthesises the 2017 NEJM PFO closure cluster (CLOSE, REDUCE, RESPECT long-term) against the 2021 AHA/ASA Secondary Prevention Guideline Class IIa Level B-R framing for non-lacunar stroke <60 with PFO and no other apparent etiology. Acknowledges the broader pre-2017 landscape (CLOSURE-I 2012, PC trial 2013, original RESPECT 2013, DEFENSE-PFO 2018) and the AF-excess trade-off central to shared decision-making.',
   },
 
+  // ─── Asymptomatic carotid clinical synthesis ────────────────────────────────
+  'asymptomatic-carotid-synthesis': {
+    id: 'asymptomatic-carotid-synthesis',
+    citation_ids: [
+      'crest-brott-2010',
+      'brott-crest-2-2026',
+      'aha-asa-2021-secondary-prevention-carotid',
+    ],
+    surfaces: [DATA_SURFACE],
+    description: 'ClinicalSynthesisCard on /trials/q/asymptomatic-carotid. Synthesises CREST (2010, head-to-head CAS vs CEA, failed superiority) and CREST-2 (NEJM 2026, two parallel RCTs vs modern intensive medical management — stenting separated, endarterectomy did not). Frames the 2021 AHA/ASA Secondary Prevention §5.3 wording as pre-CREST-2 and explicitly notes that the asymptomatic-question evidence base is now anchored on the modern-medical-management comparator.',
+  },
+
+  // ─── ICH anticoagulation reversal clinical synthesis ────────────────────────
+  'ich-anticoagulation-reversal-synthesis': {
+    id: 'ich-anticoagulation-reversal-synthesis',
+    citation_ids: [
+      'connolly-annexa-i-2024',
+      'connolly-annexa-4-2019',
+      'sarode-4fpcc-2013',
+      'baharoglu-patch-2016',
+      'aha-asa-2022-ich-anticoag-reversal',
+    ],
+    surfaces: [DATA_SURFACE],
+    description: 'ClinicalSynthesisCard on /trials/q/ich-anticoagulation-reversal. Agent-specific reversal: 4F-PCC + IV vitamin K for VKA, idarucizumab for dabigatran, andexanet alfa (or 4F-PCC) for FXa inhibitors. Explicitly surfaces PATCH (2016) HARM finding — DO NOT transfuse platelets for antiplatelet-associated ICH outside a planned neurosurgical procedure (AHA/ASA 2022 Class III: Harm). Grounded in the 2022 AHA/ASA Spontaneous ICH Guideline §7.3.',
+  },
+
+  // ─── CRAO management clinical synthesis ─────────────────────────────────────
+  'crao-management-synthesis': {
+    id: 'crao-management-synthesis',
+    citation_ids: [
+      'preterre-theia-2025',
+      'aao-2020-retinal-artery-occlusion',
+      'schumacher-eagle-crao-2010',
+    ],
+    surfaces: [DATA_SURFACE],
+    description: 'ClinicalSynthesisCard on /trials/q/crao-management. THEIA (Lancet Neurology 2025) was underpowered and did not establish IV alteplase efficacy in CRAO (primary not met, P=0.95). EAGLE (Ophthalmology 2010) closed the IA fibrinolysis question (negative + harm). AAO 2020 PPP and AAO/AAN messaging position CRAO as a TIA-equivalent: no proven acute therapy; pursue urgent stroke-pathway workup. Synthesis also surfaces the giant-cell-arteritis branch (ESR/CRP and empirical steroids if suspicion is meaningful).',
+  },
+
   // ─── CREST (2010) — carotid revascularization head-to-head (CAS vs CEA) ──
   'crest-cas-vs-cea-superiority-not-met-2010': {
     id: 'crest-cas-vs-cea-superiority-not-met-2010',

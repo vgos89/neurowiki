@@ -336,6 +336,103 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'In patients with minor (NIHSS score ≤3) noncardioembolic AIS or high-risk TIA (ABCD² score ≥4) who did not receive IVT, DAPT (aspirin and clopidogrel with loading dose of clopidogrel) should be initiated early (within 24 hours after symptom onset) and continued for 21 days, followed by single antiplatelet therapy (SAPT) to reduce the 90-day risk of recurrent ischemic stroke. (COR 1, LOE A.)',
   },
 
+  // ─── 2026 CREST-2 (NEJM) — asymptomatic carotid revascularization ─────────
+  // Brott TG et al. Carotid Revascularization and Medical Management for
+  // Asymptomatic Carotid Stenosis. NEJM 2026;394:219–231. Two parallel RCTs:
+  // stenting + intensive medical management vs medical management alone met
+  // primary (2.8% vs 6.0%, NNT 31); endarterectomy + medical vs medical
+  // alone did not (3.7% vs 5.3%, P=0.24). Registered 2026-05-23 for the
+  // asymptomatic-carotid clinical synthesis card.
+  // 36-month review window per §13.7 (landmark trial — modern-medical-
+  // management comparator anchors the field for years).
+  'brott-crest-2-2026': {
+    id: 'brott-crest-2-2026',
+    source: 'trial',
+    title: 'CREST-2: Carotid Revascularization and Medical Management for Asymptomatic Carotid Stenosis',
+    year: 2026,
+    url: 'https://www.nejm.org/doi/10.1056/NEJMoa2508800',
+    pmid: '41269206',
+    last_reviewed: '2026-05-23',
+    review_window_months: 36,
+    quoted_text: 'In the stenting trial, the 4-year primary composite of periprocedural stroke or death plus ipsilateral stroke occurred in 2.8% of patients in the carotid-artery stenting + intensive medical management group vs 6.0% in the medical-management-alone group (ARD −3.2 percentage points, 95% CI −5.9 to −0.6, P=0.02). In the endarterectomy trial, the corresponding rates were 3.7% vs 5.3% (ARD −1.6 pp, P=0.24).',
+  },
+
+  // ─── 2021 AHA/ASA Secondary Prevention — §5.3 Carotid Artery Disease ──────
+  // Kleindorfer DO et al. 2021 Guideline for the Prevention of Stroke.
+  // Section 5.3 covers carotid artery disease. Registered 2026-05-23 to
+  // support the asymptomatic-carotid clinical synthesis card. (The §5.2.2
+  // PFO entry is registered separately as aha-asa-2021-secondary-prevention-pfo.)
+  'aha-asa-2021-secondary-prevention-carotid': {
+    id: 'aha-asa-2021-secondary-prevention-carotid',
+    source: 'guideline',
+    title: '2021 AHA/ASA Secondary Prevention Guideline — §5.3 Carotid Artery Disease',
+    year: 2021,
+    section: '§5.3 Carotid Artery Disease',
+    url: 'https://www.ahajournals.org/doi/10.1161/STR.0000000000000375',
+    pmid: '34024117',
+    last_reviewed: '2026-05-23',
+    quoted_text: 'In patients with asymptomatic extracranial internal carotid artery stenosis ≥70%, it may be reasonable to perform CEA in centers with low (<3%) periprocedural morbidity and mortality to prevent ipsilateral ischemic stroke (Class 2b, Level B-NR). The decision should incorporate patient comorbidities, life expectancy, patient preferences, and a discussion of risks and benefits of revascularization vs ongoing optimal medical management. Note: this 2021 wording predates CREST-2 (2026), which established that modern intensive medical management is the appropriate comparator and that CAS (not CEA) separated from medical management alone in the asymptomatic-stenosis population.',
+  },
+
+  // ─── 2022 AHA/ASA Spontaneous ICH Guideline — anticoagulant reversal ──────
+  // Greenberg SM et al. 2022 Guideline for the Management of Patients With
+  // Spontaneous Intracerebral Hemorrhage. Stroke 2022;53:e282–e361.
+  // Registered 2026-05-23 to support the ich-anticoagulation-reversal
+  // clinical synthesis card. Covers VKA reversal (4F-PCC + vitamin K),
+  // dabigatran reversal (idarucizumab), FXa reversal (andexanet alfa or
+  // 4F-PCC), and platelet transfusion (Class III: Harm for antiplatelet-
+  // associated ICH outside of planned neurosurgery, per PATCH).
+  // 6-month review window per §13.7.
+  'aha-asa-2022-ich-anticoag-reversal': {
+    id: 'aha-asa-2022-ich-anticoag-reversal',
+    source: 'guideline',
+    title: '2022 AHA/ASA Spontaneous ICH Guideline — Anticoagulant and antiplatelet reversal',
+    year: 2022,
+    section: '§7.3 Hemostatic Therapies',
+    url: 'https://www.ahajournals.org/doi/10.1161/STR.0000000000000407',
+    pmid: '35579034',
+    last_reviewed: '2026-05-23',
+    quoted_text: 'For patients with VKA-associated ICH, 4-factor prothrombin complex concentrate is recommended over fresh frozen plasma to rapidly correct the international normalized ratio (Class 1, Level B-R). Vitamin K should be administered IV concurrently to maintain reversal. For dabigatran-associated ICH, idarucizumab is recommended (Class 1, Level B-NR). For FXa-inhibitor-associated ICH, andexanet alfa or 4F-PCC may be considered (Class 2b, Level C-LD). In patients with antiplatelet-associated ICH, platelet transfusions are considered harmful and should not be administered outside of a planned neurosurgical procedure (Class 3: Harm, Level B-R, citing the PATCH trial).',
+  },
+
+  // ─── 2020 AAO Retinal and Ophthalmic Artery Occlusions PPP ────────────────
+  // Flaxel CJ et al. Retinal and Ophthalmic Artery Occlusions Preferred
+  // Practice Pattern. Ophthalmology 2020. Open-access AAO PPP. Registered
+  // 2026-05-23 to support the crao-management clinical synthesis card.
+  // CRAO is positioned as a TIA-equivalent requiring urgent stroke-pathway
+  // workup; no acute therapy has proven visual benefit.
+  // 24-month review window per §13.7 (PPP cadence).
+  'aao-2020-retinal-artery-occlusion': {
+    id: 'aao-2020-retinal-artery-occlusion',
+    source: 'guideline',
+    title: 'American Academy of Ophthalmology — Retinal and Ophthalmic Artery Occlusions Preferred Practice Pattern (2020)',
+    year: 2020,
+    section: 'Acute CRAO management',
+    url: 'https://www.aaojournal.org/article/S0161-6420(19)32226-5/fulltext',
+    last_reviewed: '2026-05-23',
+    review_window_months: 24,
+    quoted_text: 'Central retinal artery occlusion should be considered a stroke equivalent. Patients with acute CRAO require urgent neurologic and cardiovascular evaluation to identify the source of embolism and to initiate appropriate secondary stroke prevention. No acute treatment has been definitively proven to restore vision in CRAO; historical interventions (ocular massage, anterior chamber paracentesis, IOP-lowering agents, hyperbaric oxygen, isovolemic hemodilution) lack high-quality randomized evidence of visual benefit and are not recommended as standard of care.',
+  },
+
+  // ─── EAGLE 2010 — intra-arterial fibrinolysis for CRAO (negative) ─────────
+  // Schumacher M et al. Central Retinal Artery Occlusion: Local Intra-Arterial
+  // Fibrinolysis Versus Conservative Treatment. Ophthalmology 2010;117:1367-1375.
+  // Multicenter RCT of IA fibrinolysis vs conservative therapy for non-arteritic
+  // CRAO. Stopped early after no efficacy signal and higher AE rate in the
+  // intervention arm. Registered 2026-05-23 for the crao-management synthesis.
+  // 36-month review window (landmark negative trial).
+  'schumacher-eagle-crao-2010': {
+    id: 'schumacher-eagle-crao-2010',
+    source: 'trial',
+    title: 'EAGLE: Central Retinal Artery Occlusion — Local Intra-Arterial Fibrinolysis Versus Conservative Treatment',
+    year: 2010,
+    url: 'https://www.aaojournal.org/article/S0161-6420(10)00078-9/fulltext',
+    pmid: '20609991',
+    last_reviewed: '2026-05-23',
+    review_window_months: 36,
+    quoted_text: 'EAGLE randomized 84 patients with non-arteritic CRAO to local intra-arterial fibrinolysis (rt-PA up to 50 mg) vs conservative standard therapy. The trial was stopped early after a planned interim analysis showed no significant difference in mean visual acuity change at 1 month (60.3% vs 57.1%) and a higher rate of adverse events in the IA fibrinolysis arm (37.1% vs 4.3%, primarily intracerebral hemorrhage and procedural complications). IA fibrinolysis is not recommended.',
+  },
+
   // ─── 2021 AHA/ASA Secondary Prevention of Stroke Guideline — PFO closure ──
   // Kleindorfer DO et al. 2021 Guideline for the Prevention of Stroke in
   // Patients With Stroke and Transient Ischemic Attack. Stroke. 2021;52:e364-e467.

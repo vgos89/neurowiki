@@ -45,6 +45,7 @@ const TIMESTAMP_EVENTS = [
   'Code Activation',
   'Neurology Evaluation',
   'CT Read Time',
+  'Thrombolytic Administered',
   'Neuro IR Contacted',
   'NCC/ICU Sign-out',
 ] as const;
