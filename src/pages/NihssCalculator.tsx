@@ -302,9 +302,22 @@ const NihssCalculator: React.FC = () => {
     // vs Neurology Evaluation 4:42 PM when both should read 4:35 PM).
     if (performedAt === null) {
       const now = new Date();
-      setPerformedAt(now);
       const existingNeuro = strokeTimestamps['Neurology Evaluation'];
-      if (existingNeuro === null || now < existingNeuro) {
+      // "Earlier wins" reconciliation across both fields:
+      //   - If Neuro Eval is already set and earlier than `now` (because
+      //     autoStampNeuroEvalOnFirstInteraction fired on a prior document
+      //     click), adopt that earlier value as performedAt. Leave Neuro
+      //     Eval unchanged.
+      //   - If Neuro Eval is null OR later than `now`, performedAt = now AND
+      //     update Neuro Eval to `now` (the NIHSS-tap event IS the earlier
+      //     value).
+      // Net invariant: performedAt and Neuro Eval are always equal to the
+      // earlier of the two underlying timestamps. V instruction
+      // 'should be the same. or whichever one comes first.'
+      if (existingNeuro !== null && existingNeuro < now) {
+        setPerformedAt(existingNeuro);
+      } else {
+        setPerformedAt(now);
         setStrokeTimestamps((prev) => ({ ...prev, 'Neurology Evaluation': now }));
       }
     }
