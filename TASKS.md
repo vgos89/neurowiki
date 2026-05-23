@@ -1079,6 +1079,26 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-22 — Task B Phase 1A pathway recommendation drawer pilot — Class D (commit 2266981)
+  - New PathwayRecommendationDrawer primitive at src/components/article/stroke/PathwayRecommendationDrawer.tsx (variant-aware, COR badge slot, simpler state than calculator drawer). Available for future pathway migrations.
+  - Extended IVT pathway: retired the inline 'Not Eligible'/'Eligible' result card (the one V flagged in the 2026-05-22 screenshot). Enriched the existing CalculatorDrawer at viewport-bottom to render the full verdict (status + COR badge + reasoning + details + contraindication callout) in its expanded body. Auto-expands on first transition to State C for discoverability.
+  - Pattern proven on one pathway; rolling to ELAN + Stroke Code + EVT pathways is Task B Phase 1B (follow-up).
+- [x] 2026-05-22 — ELAN §4.9 COR chip rebuild — Class C-clinical (commit 7d22260)
+  - Audit BLOCKING elan-cor-chip-rebuild. Replaced 250-char text stuffed in uppercase label slot with proper chip 'AHA/ASA 2026 §4.9 · COR 2a' + verbatim quote at body weight + italic editorial caveat.
+- [x] 2026-05-22 — ECASS-3 3-4.5h exclusion chips retired — Class E-clinical (commit 51536b9)
+  - Follow-up ecass-3-exclusions-modernize. EXTENDED_WINDOW_CHIPS array reduced to empty; render section now informational banner noting AHA/ASA 2026 §4.6.1 harmonization. Valid exclusions (warfarin INR, DOAC, >1/3 MCA) already in HARD_STOP_CHIPS.
+- [x] 2026-05-22 — Stroke Code pearls + Path C wake-up caveat — Class E-clinical (commit 48e4071)
+  - Two BLOCKING items bundled (related surfaces). treatment-windows-quick + large-core-evt-quick pearls now carry 4 mirror qualifiers for ASPECTS 3-5 (COR 1 LOE A 6-24h) and 0-2 (COR 2a LOE B-R 0-6h). Extended IVT Path C eligible result branches on onsetMode: wake-up surfaces 'extrapolation from TRACE-III' caveat.
+- [x] 2026-05-22 — ABCD² DAPT cross-reference — Class E-clinical (commit 4fbc8f6)
+  - Audit BLOCKING. Moderate (4-5) and high (>=6) tier explanations now lead with §4.8 DAPT (COR 1 LOE A; CHANCE/POINT/INSPIRES) instead of just 'consider admission'.
+- [x] 2026-05-22 — Stroke Code antiplatelet 24h soften — Class E-clinical (commit 945f520)
+  - Audit BLOCKING. Step 3 accordion text now surfaces §4.8 row 1 (uncertain first 24h) and row 2 (90-min IV aspirin Harm) as separate graded statements.
+- [x] 2026-05-22 — Age >80 ECASS-3 chip removed — Class E-clinical (commit 86ebe26)
+  - Audit BLOCKING. Age >80 chip + label entry removed from IVT modal. 2026 + IST-3 evidence support IVT benefit in this group.
+- [x] 2026-05-22 — Hypoglycemia threshold 50→60 mg/dL — Class E-clinical (commit bd3399b)
+  - Audit BLOCKING. NINDS-era language updated per §4.5 (COR 1 LOE C-LD). §4.5 citation expanded to verbatim all 3 rows.
+- [x] 2026-05-22 — ASPECTS COR 2a correction — Class E-clinical (commit 270a5a7)
+  - Audit BLOCKING. ASPECTS 0-2 and 3-5 interpretation strings now carry all 4 mirror qualifiers + correct COR/LOE. Calculator no longer paints COR 2a 0-2 EVT as 'exceptional.' Clinical-reviewer approve with all 3 conditions addressed in diff.
 - [x] 2026-05-22 — Phase 1A GuidelineSummaryCard pilot + §4.8 backfill + composition ADR — Class C-clinical + Class E-clinical (commit 00199fb)
   - Backfilled real AHA/ASA 2026 §4.8 (Antiplatelet — DAPT for minor noncardioembolic AIS) citation in registry — closes the gap clinical-reviewer flagged as C5 informational follow-up. Verbatim text from page e62 of source PDF.
   - New ADR-2026-05-22-guideline-summary-card-composition.md locks in claim-level multi-section composition (option a from arch-citation-aha-2026-4.9 review). No schema change; existing ClaimEntry.citation_ids:string[] already supports it.
