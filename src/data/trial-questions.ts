@@ -309,7 +309,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'evt-adjunct-pharmacotherapy',
     text: 'Is neuroprotection or adjunct pharmacotherapy useful during EVT?',
     icon: 'pill',
-    meta: 'pharmacologic adjuncts to EVT — nerinetide, tirofiban, and post-EVT IA fibrinolysis',
+    meta: 'pharmacologic adjuncts to EVT. Nerinetide, tirofiban, and post-EVT IA fibrinolysis',
     trialCount: 3,
     trialIds: [
       'escape-na1-trial',  // ESCAPE-NA1 2020 — nerinetide during EVT (negative)
@@ -320,7 +320,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
   },
   {
     id: 'minor-stroke-choice',
-    text: 'Minor non-disabling stroke — alteplase, DAPT, or aspirin?',
+    text: 'Minor non-disabling stroke. Alteplase, DAPT, or aspirin?',
     icon: 'pill',
     meta: 'the trade-off between thrombolysis benefit, DAPT noninferiority, and aspirin baseline in mild stroke',
     trialCount: 5,
@@ -337,7 +337,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'mevo-distal-evt',
     text: 'Does my MeVO or distal-occlusion patient benefit from EVT?',
     icon: 'target',
-    meta: 'first two RCTs in medium-vessel and distal occlusions — both define the negative end of EVT',
+    meta: 'first two RCTs in medium-vessel and distal occlusions. Both define the negative end of EVT',
     trialCount: 2,
     trialIds: [
       'escape-mevo-trial',  // ESCAPE-MeVO 2024 — M2/M3, ACA, PCA EVT (primary not met)
@@ -349,7 +349,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'post-evt-bp-target',
     text: "What's the post-EVT blood pressure target?",
     icon: 'waveform',
-    meta: 'four RCTs across the post-EVT BP target question — and one harm signal',
+    meta: 'four RCTs across the post-EVT BP target question. And one harm signal',
     trialCount: 4,
     trialIds: [
       'enchanted-trial',   // ENCHANTED 2019 — peri-thrombolysis BP context (peri-EVT framework reference)
@@ -396,7 +396,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'ich-anticoagulation-reversal',
     text: 'How do I reverse anticoagulation in ICH?',
     icon: 'pill',
-    meta: 'FXa, dabigatran, warfarin, and antiplatelet ICH — each requires a different reversal strategy',
+    meta: 'FXa, dabigatran, warfarin, and antiplatelet ICH. Each requires a different reversal strategy',
     trialCount: 4,
     trialIds: [
       'sarode-2013-trial',  // Sarode 2013 — 4F-PCC vs FFP NI RCT in VKA major bleeding; underwrites AHA/ASA Class I, Level A for VKA-ICH reversal
@@ -410,7 +410,7 @@ export const TRIAL_QUESTIONS: TrialQuestion[] = [
     id: 'crao-management',
     text: 'CRAO: thrombolysis or supportive care?',
     icon: 'pill',
-    meta: 'central retinal artery occlusion — narrow ischemia window, first IV alteplase RCT plus the older intra-arterial trial',
+    meta: 'central retinal artery occlusion. Narrow ischemia window, first IV alteplase RCT plus the older intra-arterial trial',
     trialCount: 2,
     trialIds: [
       'eagle-trial',   // EAGLE 2010 — intra-arterial tPA, halted for harm
