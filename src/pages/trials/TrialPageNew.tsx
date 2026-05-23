@@ -8260,6 +8260,351 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── CLOSURE I: 2026-05-23 Archetype A render (PFO closure precursor) ──────
+  // NEJM 2012;366:991-999. Furlan AJ et al. First major PFO closure RCT;
+  // STARFlex device (since withdrawn); primary 2-year composite not met.
+  if (trialId === 'closure-i-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CLOSURE I</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients 18–60 with cryptogenic ischemic stroke or TIA and a PFO, does transcatheter closure with the STARFlex Septal Closure System plus 6 months clopidogrel and 2 years aspirin reduce stroke / TIA / death vs medical therapy alone? First major PFO closure RCT; the STARFlex device has since been withdrawn from the market.
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-xs text-slate-500 mt-0.5">2-year composite: stroke or TIA, 30-day all-cause death, or days 31–730 death from neurologic causes</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={5.5}
+                controlPct={6.8}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Primary composite at 2 years"
+                riskRatio="HR 0.78"
+                ciLow="0.45"
+                ciHigh="1.35"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '909 patients (447 closure / 462 medical therapy) at 87 US + Canadian sites. Enrolled June 2003 to October 2008. 2-year follow-up. STARFlex Septal Closure System (NMT Medical; subsequently withdrawn from market). Published NEJM 2012.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/pfo-closure-cryptogenic" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">PFO closure question</Link>
+              <Link to="/trials/pc-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">PC Trial</Link>
+              <Link to="/trials/respect-original-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">RESPECT (Original 2013)</Link>
+              <Link to="/trials/defense-pfo-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DEFENSE-PFO</Link>
+              <Link to="/trials/close-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">CLOSE</Link>
+              <Link to="/trials/respect-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">RESPECT (long-term)</Link>
+              <Link to="/trials/reduce-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">REDUCE</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="CLOSURE I" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'PFO closure question', href: '/trials/q/pfo-closure-cryptogenic' }, { label: 'PC Trial', href: '/trials/pc-trial' }, { label: 'RESPECT (Original 2013)', href: '/trials/respect-original-trial' }, { label: 'DEFENSE-PFO', href: '/trials/defense-pfo-trial' }, { label: 'CLOSE', href: '/trials/close-trial' }, { label: 'RESPECT (long-term)', href: '/trials/respect-trial' }, { label: 'REDUCE', href: '/trials/reduce-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── PC Trial: 2026-05-23 Archetype A render (PFO closure precursor) ───────
+  // NEJM 2013;368:1083-1091. Meier B et al. Amplatzer PFO Occluder; primary
+  // composite not met (HR 0.63, P=0.34); underpowered (only 18 events).
+  if (trialId === 'pc-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>PC Trial</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients younger than 60 with PFO and prior ischemic stroke, TIA, or peripheral thromboembolic event of presumed paradoxical embolic origin, does percutaneous closure with the Amplatzer PFO Occluder reduce death / nonfatal stroke / TIA / peripheral embolism compared with medical therapy alone? Companion publication to the original RESPECT in the same NEJM 2013 issue.
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-xs text-slate-500 mt-0.5">Composite of death, nonfatal stroke, TIA, or peripheral embolism at mean ~4-year follow-up</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={3.4}
+                controlPct={5.2}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Primary composite at ~4 years"
+                riskRatio="HR 0.63"
+                ciLow="0.24"
+                ciHigh="1.62"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '414 patients (204 closure / 210 medical therapy) at 29 sites in Europe, Canada, Brazil, and Australia. Enrolled February 2000 to February 2009. Mean follow-up 4.1 years (closure) / 4.0 years (medical). Amplatzer PFO Occluder (St. Jude Medical). Underpowered — only 18 primary events accrued. Published NEJM 2013.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/pfo-closure-cryptogenic" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">PFO closure question</Link>
+              <Link to="/trials/closure-i-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">CLOSURE I</Link>
+              <Link to="/trials/respect-original-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">RESPECT (Original 2013)</Link>
+              <Link to="/trials/defense-pfo-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DEFENSE-PFO</Link>
+              <Link to="/trials/close-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">CLOSE</Link>
+              <Link to="/trials/respect-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">RESPECT (long-term)</Link>
+              <Link to="/trials/reduce-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">REDUCE</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="PC Trial" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'PFO closure question', href: '/trials/q/pfo-closure-cryptogenic' }, { label: 'CLOSURE I', href: '/trials/closure-i-trial' }, { label: 'RESPECT (Original 2013)', href: '/trials/respect-original-trial' }, { label: 'DEFENSE-PFO', href: '/trials/defense-pfo-trial' }, { label: 'CLOSE', href: '/trials/close-trial' }, { label: 'RESPECT (long-term)', href: '/trials/respect-trial' }, { label: 'REDUCE', href: '/trials/reduce-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── RESPECT (Original 2013): 2026-05-23 Archetype A render (PFO precursor) ─
+  // NEJM 2013;368:1092-1100. Carroll JD et al. Original primary publication
+  // of the RESPECT trial at median 2.1y — DISTINCT from the 2017 long-term
+  // extension (catalog entry respect-trial). ITT primary NOT MET (HR 0.49,
+  // P=0.08 borderline). The 2017 extended follow-up later converted it.
+  if (trialId === 'respect-original-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>RESPECT (Original 2013)</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              This is the original 2013 RESPECT primary publication, DISTINCT from the 2017 long-term extension. In patients 18–60 with cryptogenic ischemic stroke and a PFO, did transcatheter closure with the Amplatzer PFO Occluder reduce recurrent ischemic stroke or early death vs medical therapy at median 2.1-year follow-up? Note: ITT primary NOT MET (HR 0.49, P=0.08 borderline); per-protocol HR 0.37 (P=0.03); as-treated HR 0.27 (P=0.007). The 2017 extended follow-up (see RESPECT long-term) ultimately converted the result.
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-xs text-slate-500 mt-0.5">Recurrent ischemic stroke or early death at median 2.1-year follow-up (intention-to-treat)</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={1.8}
+                controlPct={3.3}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Recurrent ischemic stroke at 2.1y (ITT)"
+                riskRatio="HR 0.49"
+                ciLow="0.22"
+                ciHigh="1.11"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '980 patients (499 closure / 481 medical therapy) at 69 US + Canadian sites. Enrolled August 2003 to December 2011. Median 2.1-year follow-up. Amplatzer PFO Occluder (St. Jude Medical). Original primary ITT analysis published NEJM 2013;368:1092 — borderline (P=0.08), NOT MET. The 2017 extended follow-up at median 5.9y (catalog entry respect-trial) converted the result (HR 0.55, P=0.046).')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/pfo-closure-cryptogenic" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">PFO closure question</Link>
+              <Link to="/trials/respect-trial" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">RESPECT (long-term, 2017)</Link>
+              <Link to="/trials/closure-i-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">CLOSURE I</Link>
+              <Link to="/trials/pc-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">PC Trial</Link>
+              <Link to="/trials/defense-pfo-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">DEFENSE-PFO</Link>
+              <Link to="/trials/close-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">CLOSE</Link>
+              <Link to="/trials/reduce-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">REDUCE</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="RESPECT (Original 2013)" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'PFO closure question', href: '/trials/q/pfo-closure-cryptogenic' }, { label: 'RESPECT (long-term, 2017)', href: '/trials/respect-trial' }, { label: 'CLOSURE I', href: '/trials/closure-i-trial' }, { label: 'PC Trial', href: '/trials/pc-trial' }, { label: 'DEFENSE-PFO', href: '/trials/defense-pfo-trial' }, { label: 'CLOSE', href: '/trials/close-trial' }, { label: 'REDUCE', href: '/trials/reduce-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── DEFENSE-PFO: 2026-05-23 Archetype A render (PFO post-2017 confirmation) ─
+  // JACC 2018;71:2335-2342. Lee PH et al. Confirmed morphology-enrichment
+  // hypothesis in 120 Korean patients with high-risk PFO anatomy.
+  if (trialId === 'defense-pfo-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>DEFENSE-PFO</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with cryptogenic ischemic stroke and HIGH-RISK PFO anatomy (atrial septal aneurysm, septal hypermobility with phasic excursion ≥10 mm, or PFO size ≥2 mm), does transcatheter PFO closure reduce 2-year stroke / vascular death / TIMI major bleeding compared with medication-only therapy? Confirmed the morphology-enrichment hypothesis operationalized by CLOSE (2017).
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-xs text-slate-500 mt-0.5">2-year composite of stroke, vascular death, or TIMI-defined major bleeding</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={0}
+                controlPct={12.9}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Primary composite at 2 years (KM)"
+                riskRatio="0/60 vs 6/60"
+                ciLow="—"
+                ciHigh="—"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-sm font-semibold text-slate-700">{Math.round(trialMetadata.calculations.nnt as number)}</span>
+                  <span className="text-xs text-slate-500">to prevent one primary endpoint event over 2 years</span>
+                </div>
+              )}
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '120 Korean patients (60 closure / 60 medication-only) at 2 sites (Asan Medical Center, Seoul St Mary\'s Hospital). Enrolled September 2011 to October 2017. 2-year follow-up. High-risk PFO anatomy required (atrial septal aneurysm, septal hypermobility ≥10 mm, or PFO size ≥2 mm). Published JACC 2018.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/pfo-closure-cryptogenic" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">PFO closure question</Link>
+              <Link to="/trials/close-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">CLOSE</Link>
+              <Link to="/trials/respect-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">RESPECT (long-term)</Link>
+              <Link to="/trials/reduce-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">REDUCE</Link>
+              <Link to="/trials/closure-i-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">CLOSURE I</Link>
+              <Link to="/trials/pc-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">PC Trial</Link>
+              <Link to="/trials/respect-original-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">RESPECT (Original 2013)</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="DEFENSE-PFO" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'PFO closure question', href: '/trials/q/pfo-closure-cryptogenic' }, { label: 'CLOSE', href: '/trials/close-trial' }, { label: 'RESPECT (long-term)', href: '/trials/respect-trial' }, { label: 'REDUCE', href: '/trials/reduce-trial' }, { label: 'CLOSURE I', href: '/trials/closure-i-trial' }, { label: 'PC Trial', href: '/trials/pc-trial' }, { label: 'RESPECT (Original 2013)', href: '/trials/respect-original-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
   // ── EXTEND-IA TNK: 2026-05-23 Archetype A rebuild ─────────────────────────
   // NEJM 2018;378(17):1573-1582. Campbell BCV et al. First head-to-head TNK
   // vs alteplase in LVO-EVT-co-treated; established TNK 0.25 mg/kg as the

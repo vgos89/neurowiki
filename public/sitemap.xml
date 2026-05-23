@@ -1076,6 +1076,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://neurowiki.ai/trials/closure-i-trial</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/pc-trial</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/respect-original-trial</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://neurowiki.ai/trials/defense-pfo-trial</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://neurowiki.ai/trials/ist-trial</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>monthly</changefreq>

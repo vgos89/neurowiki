@@ -403,6 +403,32 @@ const manualTrials: Omit<TrialItem, 'year'>[] = [
     description: 'Cryptogenic stroke 18–59y with PFO. Gore HELEX/Cardioform closure + antiplatelet vs antiplatelet alone: clinical stroke 1.4% vs 5.4% (HR 0.23, P=0.002, NNT ~28 over 2y). AF excess 6.6% vs 0.4%.',
   }),
 
+  // ─── PFO closure precursor trials (2012–2018) — added 2026-05-23 ──────────
+  //     CLOSURE-I (2012), PC (2013), original RESPECT (2013), DEFENSE-PFO (2018).
+  //     These four trials frame the 2017 PFO cluster by establishing the
+  //     pre-2017 ambiguity (CLOSURE-I, PC, original RESPECT all missed primary
+  //     ITT) and the post-2017 high-risk-anatomy confirmation (DEFENSE-PFO).
+  //     The 'respect-original-trial' slug is DISTINCT from 'respect-trial'
+  //     (which is the 2017 long-term extension). listCategory in trialData.ts
+  //     is 'antiplatelets'; mapped here to 'secondary-prevention' following
+  //     the CLOSE/RESPECT/REDUCE precedent.
+  buildTrial('closure-i-trial', 'CLOSURE I', 'secondary-prevention', '10.1056/NEJMoa1009639', {
+    isPlaceholder: false,
+    description: 'First major PFO closure RCT (N=909, age 18–60). STARFlex device + antithrombotic vs medical therapy for cryptogenic stroke/TIA. Primary 2-year composite not met (5.5% vs 6.8%, HR 0.78, P=0.37). AF excess 5.7% vs 0.7%. STARFlex since withdrawn; broad inclusion likely diluted any signal.',
+  }),
+  buildTrial('pc-trial', 'PC Trial', 'secondary-prevention', '10.1056/NEJMoa1211716', {
+    isPlaceholder: false,
+    description: 'European RCT (N=414, age <60) of Amplatzer PFO Occluder vs medical therapy after cryptogenic stroke, TIA, or peripheral embolism. Primary composite 3.4% vs 5.2% (HR 0.63, P=0.34). Underpowered — only 18 primary events. Negative.',
+  }),
+  buildTrial('respect-original-trial', 'RESPECT (Original 2013)', 'secondary-prevention', '10.1056/NEJMoa1301440', {
+    isPlaceholder: false,
+    description: 'Original RESPECT primary publication (DISTINCT from the 2017 long-term extension). N=980, age 18–60, cryptogenic stroke + PFO, Amplatzer Occluder. ITT primary NOT MET at median 2.1y (HR 0.49, P=0.08 borderline). Per-protocol HR 0.37 (P=0.03); as-treated HR 0.27 (P=0.007). The 2017 extended follow-up converted the result.',
+  }),
+  buildTrial('defense-pfo-trial', 'DEFENSE-PFO', 'secondary-prevention', '10.1016/j.jacc.2018.02.046', {
+    isPlaceholder: false,
+    description: 'Korean RCT (N=120) of PFO closure vs medical therapy in cryptogenic stroke with HIGH-RISK PFO anatomy (atrial septal aneurysm, hypermobility ≥10 mm, or PFO size ≥2 mm). 2-year primary composite 0% vs 12.9% (log-rank P=0.013); ischemic stroke 0% vs 10.5% (P=0.023). Confirmed morphology-enrichment hypothesis.',
+  }),
+
   // ─── 1997 foundational aspirin-in-AIS pair (IST + CAST) ────────────────────
   //     Lancet 1997;349(9065,9066). Together ~40,000 patients within 48h of
   //     acute ischaemic stroke. listCategory in trialData.ts is 'antiplatelets'

@@ -18,22 +18,34 @@
  */
 
 export const GUIDELINE_SUMMARIES_BY_QUESTION: Record<string, { claimId: string }> = {
-  // Phase 1A pilot
+  // Phase 1A pilot (commit 00199fb)
   anticoagulation: {
     claimId: 'anticoagulation-guideline-summary',
   },
 
-  // Phase 2 candidates (NOT yet wired). When authoring Phase 2, add a
-  // claim entry to claims.ts first, then add the question → claim mapping
-  // here. Candidate questions and the AHA/ASA 2026 sections they map to:
-  //
-  //   tpa-timing                  → §4.6.1 (thrombolysis decision-making)
-  //   tnk-vs-alteplase            → §4.6.2 (thrombolytic agent choice)
-  //   late-window-selection       → §4.6.3 (extended-window IVT)
-  //   lvo-evt                     → §4.7.2 (anterior-circulation EVT)
-  //   basilar-evt                 → §4.7.3 (posterior-circulation EVT)
-  //   dapt                        → §4.8   (DAPT for minor noncardioembolic AIS)
-  //   bp-control                  → §4.3   (BP management)
+  // Phase 2 rollout — 7 questions mapped to the AHA/ASA 2026 section that
+  // directly answers them (commit 2026-05-23).
+  'tpa-timing': {
+    claimId: 'tpa-timing-guideline-summary',
+  },
+  'tnk-vs-alteplase': {
+    claimId: 'tnk-vs-alteplase-guideline-summary',
+  },
+  'late-window-selection': {
+    claimId: 'late-window-selection-guideline-summary',
+  },
+  'lvo-evt': {
+    claimId: 'lvo-evt-guideline-summary',
+  },
+  'basilar-evt': {
+    claimId: 'basilar-evt-guideline-summary',
+  },
+  dapt: {
+    claimId: 'dapt-guideline-summary',
+  },
+  'bp-control': {
+    claimId: 'bp-control-guideline-summary',
+  },
 };
 
 export function getGuidelineSummaryForQuestion(

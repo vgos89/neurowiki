@@ -194,6 +194,21 @@ export const CITATION_REGISTRY: CitationRegistry = {
     // stroke-code-glucose-threshold-60 (modal threshold drift from <50 to <60).
     quoted_text: 'For AIS, hypoglycemia (blood glucose <60 mg/dL) should be treated to avoid complications (COR 1, LOE C-LD). For AIS, it can reasonably be considered to treat persistent hyperglycemia to achieve blood glucose levels in a range of 140–180 mg/dL with close monitoring (COR 2a, LOE C-LD). In hospitalized patients with AIS with hyperglycemia, treatment with IV insulin to achieve blood glucose levels in the range of 80–130 mg/dL should not be used routinely to improve 3-month functional outcomes (COR 3 No Benefit, LOE A).',
   },
+  // ─── AHA/ASA 2026 §4.6.1 — Thrombolysis Decision-Making ───────────────────
+  // Verbatim from src/data/aha2026StrokeGuideline.ts ivtRecommendations.
+  // decisionMaking[0–6]. Registered 2026-05-23 for the tpa-timing GuidelineSummaryCard.
+  'aha-asa-2026-4.6.1': {
+    id: 'aha-asa-2026-4.6.1',
+    source: 'guideline',
+    title: '2026 AHA/ASA Guideline — §4.6.1 (Thrombolysis Decision-Making)',
+    year: 2026,
+    section: '§4.6.1 Thrombolysis Decision-Making',
+    url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
+    pmid: '41582814',
+    last_reviewed: '2026-05-23',
+    quoted_text: 'In adult patients with AIS with disabling deficits (regardless of NIHSS score) and eligible for IVT, faster treatment improves functional outcomes (COR 1, LOE A). In adult patients with AIS eligible for IVT within 4.5 hours of symptom onset, treatment should be initiated as quickly as possible, avoiding potential delays associated with additional multimodal neuroimaging such as CTA/MRA and CT/MR perfusion imaging (COR 1, LOE B-NR). In eligible adult patients with AIS presenting with mild non-disabling stroke deficits within 4.5 hours, IVT should not be used routinely as it has not shown superiority in improving functional outcomes compared to dual antiplatelet treatment (COR 3 No Benefit, LOE B-R).',
+  },
+
   'aha-asa-2026-4.6.2': {
     id: 'aha-asa-2026-4.6.2',
     source: 'guideline',
@@ -560,6 +575,62 @@ export const CITATION_REGISTRY: CitationRegistry = {
     last_reviewed: '2026-05-20',
     review_window_months: 36,
     quoted_text: 'Among patients with a PFO who had had a cryptogenic stroke, the risk of subsequent ischemic stroke was lower among those assigned to PFO closure combined with antiplatelet therapy than among those assigned to antiplatelet therapy alone; however, PFO closure was associated with higher rates of device complications and atrial fibrillation.',
+  },
+
+  // ─── PFO closure precursor trials (2012–2018) — added 2026-05-23 ──────────
+  //     CLOSURE-I (2012), PC trial (2013), original RESPECT (2013), and
+  //     DEFENSE-PFO (2018). These four trials frame the 2017 PFO cluster
+  //     (CLOSE, REDUCE, RESPECT long-term) by establishing the pre-2017
+  //     ambiguity (CLOSURE-I and PC negative; original RESPECT borderline
+  //     P=0.08 at 2.1y) and the post-2017 high-risk-anatomy confirmation
+  //     (DEFENSE-PFO). Verbatim quotes are from PubMed abstracts (open
+  //     access). 36-month review windows per §13.7 (landmark trial
+  //     precedents). NOTE: original RESPECT 2013 (carroll-respect-original)
+  //     is DISTINCT from saver-respect-2017 (long-term extension) above —
+  //     same trial, different publications and analyses.
+  'furlan-closure-i-2012': {
+    id: 'furlan-closure-i-2012',
+    source: 'trial',
+    title: 'Closure or Medical Therapy for Cryptogenic Stroke with Patent Foramen Ovale (CLOSURE I)',
+    year: 2012,
+    url: 'https://www.nejm.org/doi/10.1056/NEJMoa1009639',
+    pmid: '22417252',
+    last_reviewed: '2026-05-23',
+    review_window_months: 36,
+    quoted_text: 'In patients with cryptogenic stroke or TIA who had a patent foramen ovale, closure with a device did not offer a greater benefit than medical therapy alone for the prevention of recurrent stroke or TIA.',
+  },
+  'meier-pc-trial-2013': {
+    id: 'meier-pc-trial-2013',
+    source: 'trial',
+    title: 'Percutaneous Closure of Patent Foramen Ovale in Cryptogenic Embolism (PC Trial)',
+    year: 2013,
+    url: 'https://www.nejm.org/doi/10.1056/NEJMoa1211716',
+    pmid: '23514285',
+    last_reviewed: '2026-05-23',
+    review_window_months: 36,
+    quoted_text: 'Closure of a patent foramen ovale for secondary prevention of cryptogenic embolism did not result in a significant reduction in the risk of recurrent embolic events or death as compared with medical therapy.',
+  },
+  'carroll-respect-original-2013': {
+    id: 'carroll-respect-original-2013',
+    source: 'trial',
+    title: 'Closure of Patent Foramen Ovale versus Medical Therapy after Cryptogenic Stroke (RESPECT — original 2013 primary publication)',
+    year: 2013,
+    url: 'https://www.nejm.org/doi/10.1056/NEJMoa1301440',
+    pmid: '23514286',
+    last_reviewed: '2026-05-23',
+    review_window_months: 36,
+    quoted_text: 'In the primary intention-to-treat analysis, there was no significant benefit associated with closure of a patent foramen ovale in adults who had had a cryptogenic ischemic stroke.',
+  },
+  'lee-defense-pfo-2018': {
+    id: 'lee-defense-pfo-2018',
+    source: 'trial',
+    title: 'Cryptogenic Stroke and High-Risk Patent Foramen Ovale: The DEFENSE-PFO Trial',
+    year: 2018,
+    url: 'https://www.jacc.org/doi/10.1016/j.jacc.2018.02.046',
+    pmid: '29544871',
+    last_reviewed: '2026-05-23',
+    review_window_months: 36,
+    quoted_text: 'PFO closure in patients with high-risk PFO characteristics resulted in a lower rate of the primary endpoint as well as stroke recurrence.',
   },
 
   // ─── IST (International Stroke Trial, 1997) — foundational aspirin RCT ───

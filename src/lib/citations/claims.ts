@@ -238,6 +238,62 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'ClinicalSynthesisCard on /trials/q/pfo-closure-cryptogenic. Synthesises the 2017 NEJM PFO closure cluster (CLOSE, REDUCE, RESPECT long-term) against the 2021 AHA/ASA Secondary Prevention Guideline Class IIa Level B-R framing for non-lacunar stroke <60 with PFO and no other apparent etiology. Acknowledges the broader pre-2017 landscape (CLOSURE-I 2012, PC trial 2013, original RESPECT 2013, DEFENSE-PFO 2018) and the AF-excess trade-off central to shared decision-making.',
   },
 
+  // ─── Phase 2 GuidelineSummaryCard rollout — 7 question-page claims ──────────
+  // Each maps a trial-question slug to the canonical AHA/ASA 2026 section
+  // that directly answers the clinical question. Surface is the data field
+  // on the guidelineSummariesByQuestion record. All single-citation
+  // (validates the rendering layer's same-shape path used by the
+  // anticoagulation pilot in commit 00199fb).
+
+  'tpa-timing-guideline-summary': {
+    id: 'tpa-timing-guideline-summary',
+    citation_ids: ['aha-asa-2026-4.6.1'],
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/tpa-timing. Surfaces AHA/ASA 2026 §4.6.1 (Thrombolysis Decision-Making): faster treatment improves outcomes for disabling deficits; do not delay for advanced imaging; do not routinely treat non-disabling deficits with IVT (DAPT preferred).',
+  },
+
+  'tnk-vs-alteplase-guideline-summary': {
+    id: 'tnk-vs-alteplase-guideline-summary',
+    citation_ids: ['aha-asa-2026-4.6.2'],
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/tnk-vs-alteplase. Surfaces AHA/ASA 2026 §4.6.2 (Choice of Thrombolytic Agent): TNK 0.25 mg/kg and alteplase 0.9 mg/kg are equivalent first-line options within 4.5h (COR 1, LOE A).',
+  },
+
+  'late-window-selection-guideline-summary': {
+    id: 'late-window-selection-guideline-summary',
+    citation_ids: ['aha-asa-2026-4.6.3'],
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/late-window-selection. Surfaces AHA/ASA 2026 §4.6.3 (Extended Time Windows for IV Thrombolysis): IVT reasonable in patients with salvageable penumbra on perfusion imaging who are 4.5–9h from LKW or wake with symptoms within 9h of sleep midpoint (COR 2a, LOE B-R).',
+  },
+
+  'lvo-evt-guideline-summary': {
+    id: 'lvo-evt-guideline-summary',
+    citation_ids: ['aha-asa-2026-4.7.2'],
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/lvo-evt. Surfaces AHA/ASA 2026 §4.7.2 (Endovascular Thrombectomy for Adults): EVT recommended for anterior-circulation proximal LVO 0–6h and 6–24h windows with appropriate imaging selection (COR 1, LOE A); large-core stratum (ASPECTS 3–5, also 0–2 within 6h) carries its own recommendations.',
+  },
+
+  'basilar-evt-guideline-summary': {
+    id: 'basilar-evt-guideline-summary',
+    citation_ids: ['aha-asa-2026-4.7.3'],
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/basilar-evt. Surfaces AHA/ASA 2026 §4.7.3 (Posterior Circulation Stroke): EVT for basilar artery occlusion recommended within 24h in selected patients with baseline mRS 0–1, NIHSS ≥10, and PC-ASPECTS ≥6 (COR 1, LOE A).',
+  },
+
+  'dapt-guideline-summary': {
+    id: 'dapt-guideline-summary',
+    citation_ids: ['aha-asa-2026-4.8'],
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/dapt. Surfaces AHA/ASA 2026 §4.8 (Antiplatelet Treatment): DAPT (aspirin + clopidogrel with loading dose) recommended within 24h for minor noncardioembolic AIS (NIHSS ≤3) or high-risk TIA (ABCD² ≥4) who did not receive IVT, for 21 days followed by SAPT (COR 1, LOE A).',
+  },
+
+  'bp-control-guideline-summary': {
+    id: 'bp-control-guideline-summary',
+    citation_ids: ['aha-asa-2026-4.3'],
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/bp-control. Surfaces AHA/ASA 2026 §4.3 (Blood Pressure Management): pre-IVT target ≤185/110; post-IVT target ≤180/105; intensive SBP reduction (<140) post-IVT and post-EVT not recommended (COR 3 No Benefit / Harm depending on context).',
+  },
+
   // ─── Asymptomatic carotid clinical synthesis ────────────────────────────────
   'asymptomatic-carotid-synthesis': {
     id: 'asymptomatic-carotid-synthesis',
@@ -335,6 +391,36 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     surfaces: [DATA_SURFACE],
     description: 'RESPECT extended follow-up: in 980 patients ages 18–60 with cryptogenic ischemic stroke and TEE-confirmed PFO (no atrial septal aneurysm or shunt-size requirement), PFO closure with the Amplatzer PFO Occluder vs medical therapy (clinician choice of aspirin, warfarin, clopidogrel, or aspirin + dipyridamole) reduced recurrent ischemic stroke over median 5.9-year follow-up: 18/499 (3.6%, 0.58 events per 100 patient-years) vs 28/481 (5.8%, 1.07 per 100 patient-years), HR 0.55 (95% CI 0.31–0.999), P=0.046 by log-rank. Authors reported NNT 42 over 5 years. Effect strongest in recurrent stroke of undetermined cause (HR 0.38, P=0.007) and cryptogenic-only recurrent stroke (HR 0.08, P=0.01). Subgroup heterogeneity favored closure when atrial septal aneurysm was present (HR 0.20 vs 0.86, P interaction=0.04) or shunt was substantial (HR 0.26 vs 0.96, P interaction=0.04). Safety: venous thromboembolism higher in closure arm (PE 0.41 vs 0.11 per 100 patient-years, HR 3.48, P=0.04). Procedure-related serious adverse events 4.2% (atrial fibrillation/flutter 1.4%, device-related thrombosis, residual shunt). Borderline P=0.046 vs group-sequential threshold 0.043 — exploratory long-term analysis. Differential dropout (33% medical vs 21% closure); multiple imputation sensitivity analyses confirmed direction (HR 0.50, P=0.02). Original 2013 RESPECT (Carroll JD et al., NEJM 2013;368:1092–1100) did not meet ITT primary at median 2.1 years; the 5.9-year extended follow-up converted the borderline result and supported FDA approval (October 2016) of the Amplatzer PFO Occluder for cryptogenic stroke recurrence prevention in patients 18–60. Supports AHA/ASA 2021 Class IIa, Level B-R.',
   },
+  // ─── PFO closure precursor trials (2012–2018) — added 2026-05-23 ──────────
+  //     Four trials framing the 2017 PFO cluster: CLOSURE-I (2012, STARFlex,
+  //     negative), PC (2013, Amplatzer, negative), original RESPECT (2013,
+  //     Amplatzer, ITT not met at 2.1y), DEFENSE-PFO (2018, high-risk
+  //     anatomy, halted early for efficacy).
+  'closure-i-pfo-2012': {
+    id: 'closure-i-pfo-2012',
+    citation_ids: ['furlan-closure-i-2012'],
+    surfaces: [DATA_SURFACE],
+    description: 'CLOSURE-I trial: in 909 patients ages 18–60 with cryptogenic stroke or TIA and PFO, transcatheter closure with the STARFlex Septal Closure System (NMT Medical) + 6 months clopidogrel + 2 years aspirin vs medical therapy alone over 2 years. Primary 2-year composite of stroke or TIA, 30-day all-cause death, or days 31–730 death from neurologic causes: 5.5% closure vs 6.8% medical; adjusted HR 0.78 (95% CI 0.45–1.35, P=0.37). Secondary stroke 2.9% vs 3.1% (P=0.79); TIA 3.1% vs 4.1% (P=0.44). Major vascular procedural complications 3.2% with closure; atrial fibrillation 5.7% vs 0.7% (P<0.001). First major PFO closure RCT; primary not met. Negative result widely attributed to device choice (STARFlex now withdrawn) and broad inclusion without morphology enrichment. With the PC trial (2013) and original RESPECT (2013), defined the pre-2017 ambiguity that CLOSE, REDUCE, and RESPECT long-term (2017) ultimately resolved.',
+  },
+  'pc-trial-pfo-2013': {
+    id: 'pc-trial-pfo-2013',
+    citation_ids: ['meier-pc-trial-2013'],
+    surfaces: [DATA_SURFACE],
+    description: 'PC trial: in 414 patients <60 with PFO and prior ischemic stroke, TIA, or peripheral thromboembolic event, percutaneous closure with the Amplatzer PFO Occluder vs medical therapy (antiplatelet or anticoagulant per investigator) over mean ~4 years. Primary composite of death, nonfatal stroke, TIA, or peripheral embolism: 3.4% closure (7/204) vs 5.2% medical (11/210); HR 0.63 (95% CI 0.24–1.62, P=0.34). Nonfatal stroke 0.5% vs 2.4% (HR 0.20, 95% CI 0.02–1.72, P=0.14). TIA 2.5% vs 3.3% (HR 0.71, P=0.56). Primary not met — underpowered: only 18 primary events accrued. Companion publication to original RESPECT in the same NEJM 2013 issue (March 21). With CLOSURE-I (2012) and original RESPECT (2013), defined the pre-2017 ambiguity.',
+  },
+  'respect-original-pfo-2013': {
+    id: 'respect-original-pfo-2013',
+    citation_ids: ['carroll-respect-original-2013'],
+    surfaces: [DATA_SURFACE],
+    description: 'Original RESPECT (2013 primary publication, distinct from saver-respect-2017 long-term extension): in 980 patients ages 18–60 with cryptogenic ischemic stroke and TEE-confirmed PFO, transcatheter closure with the Amplatzer PFO Occluder vs medical therapy (clinician-chosen aspirin, warfarin, clopidogrel, or aspirin + dipyridamole) at median 2.1-year follow-up. Primary endpoint (recurrent nonfatal ischemic stroke, fatal ischemic stroke, or early death after randomization), intention-to-treat: 9 events closure vs 16 events medical; HR 0.49 (95% CI 0.22–1.11, P=0.08) — ITT primary NOT MET. Per-protocol: 6 vs 14, HR 0.37 (95% CI 0.14–0.96, P=0.03). As-treated: 5 vs 16, HR 0.27 (95% CI 0.10–0.75, P=0.007). Serious adverse events 23.0% vs 21.6%; procedure-related serious events 4.2%; atrial fibrillation rate not increased per primary report. The borderline P=0.08 ITT result preserved equipoise and motivated extended follow-up; the 2017 long-term analysis (Saver JL et al., NEJM 2017;377:1022, citation saver-respect-2017) ultimately converted the result at median 5.9y (HR 0.55, P=0.046) and underwrote FDA approval of the Amplatzer PFO Occluder (October 2016).',
+  },
+  'defense-pfo-2018': {
+    id: 'defense-pfo-2018',
+    citation_ids: ['lee-defense-pfo-2018'],
+    surfaces: [DATA_SURFACE],
+    description: 'DEFENSE-PFO trial: in 120 Korean patients (mean age 51.8 years) with cryptogenic ischemic stroke and HIGH-RISK PFO anatomy (atrial septal aneurysm, septal hypermobility with phasic excursion ≥10 mm, or PFO size ≥2 mm), transcatheter PFO closure + antiplatelet/anticoagulant vs medication-only therapy. Primary 2-year composite of stroke, vascular death, or TIMI-defined major bleeding: 0/60 closure vs 6/60 medication-only (2-year event rate 12.9%, log-rank P=0.013). 2-year ischemic stroke rate 0% vs 10.5% (P=0.023). Medication-arm events: ischemic stroke (n=5), cerebral hemorrhage (n=1), TIMI major bleeding (n=2), TIA (n=1). Closure-arm nonfatal procedural complications: atrial fibrillation (n=2), pericardial effusion (n=1), pseudoaneurysm (n=1); all closures technically successful. Enrolled September 2011 to October 2017. Confirms the morphology-enrichment hypothesis from the 2017 cluster: in patients with high-risk PFO anatomy, closure is markedly superior to medical therapy alone. Small sample size (N=120) and Korean-only enrolment limit generalizability; results are concordant with the 2017 NEJM cluster.',
+  },
+
   'reduce-pfo-2017': {
     id: 'reduce-pfo-2017',
     citation_ids: ['sondergaard-reduce-2017'],
