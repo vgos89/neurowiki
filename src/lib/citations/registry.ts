@@ -336,6 +336,35 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'In patients with minor (NIHSS score ≤3) noncardioembolic AIS or high-risk TIA (ABCD² score ≥4) who did not receive IVT, DAPT (aspirin and clopidogrel with loading dose of clopidogrel) should be initiated early (within 24 hours after symptom onset) and continued for 21 days, followed by single antiplatelet therapy (SAPT) to reduce the 90-day risk of recurrent ischemic stroke. (COR 1, LOE A.)',
   },
 
+  // ─── 2021 AHA/ASA Secondary Prevention of Stroke Guideline — PFO closure ──
+  // Kleindorfer DO et al. 2021 Guideline for the Prevention of Stroke in
+  // Patients With Stroke and Transient Ischemic Attack. Stroke. 2021;52:e364-e467.
+  // PMID: 34024117. DOI: 10.1161/STR.0000000000000375.
+  //
+  // Registered 2026-05-23 to support the PFO closure clinical-synthesis card.
+  // The 2021 SP guideline (not the 2026 AIS guideline) is the governing source
+  // for PFO closure recommendations — the 2026 AIS guideline does not address
+  // PFO closure, which is a secondary-prevention question.
+  //
+  // The specific recommendation supporting the PFO closure cluster is the
+  // Class IIa, Level B-R recommendation for non-lacunar ischemic stroke in
+  // patients <60 years of age with PFO and no other apparent etiology.
+  //
+  // 6-month review window per §13.7 (current clinical guideline; aging — a
+  // refresh against any newer secondary-prevention update should be flagged
+  // by clinical-reviewer when the next AHA/ASA SP update publishes).
+  'aha-asa-2021-secondary-prevention-pfo': {
+    id: 'aha-asa-2021-secondary-prevention-pfo',
+    source: 'guideline',
+    title: '2021 AHA/ASA Secondary Prevention Guideline — PFO closure (Section 5.2.2)',
+    year: 2021,
+    section: '§5.2.2 Patent Foramen Ovale',
+    url: 'https://www.ahajournals.org/doi/10.1161/STR.0000000000000375',
+    pmid: '34024117',
+    last_reviewed: '2026-05-23',
+    quoted_text: 'In patients 18 to 60 years of age with a nonlacunar ischemic stroke of undetermined cause despite a thorough evaluation and a PFO, the decision of percutaneous PFO closure should be made jointly by the patient, the cardiologist, and the neurologist, taking into account the probability of a causal role for the PFO. (Class 2a, Level B-R.)',
+  },
+
   // ─── 2018 trial: foundational TNK-vs-alteplase comparison in the LVO-EVT pathway ─
   // Campbell BCV et al., NEJM 2018. Established TNK 0.25 mg/kg as the IVT agent
   // of first choice for EVT-eligible LVO patients within 4.5h. Verbatim quote

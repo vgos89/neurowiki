@@ -24,6 +24,8 @@ import { TRIAL_DATA } from '../data/trialData'; // Phase 6B: legend deferred; la
 import { TrialLegendCard } from '../components/trials/TrialLegendCard';
 import { GuidelineSummaryCard } from '../components/trials/GuidelineSummaryCard';
 import { getGuidelineSummaryForQuestion } from '../data/guidelineSummariesByQuestion';
+import { ClinicalSynthesisCard } from '../components/trials/ClinicalSynthesisCard';
+import { getClinicalSynthesisForQuestion } from '../data/clinicalSynthesesByQuestion';
 import { useFavorites } from '../hooks/useFavorites';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -177,11 +179,17 @@ export default function QuestionDetailPage() {
         </p>
       </div>
 
-      {/* ── Guideline summary card (Phase 1A) ──────────────────────────────
-          Renders the AHA/ASA 2026 (or equivalent) recommendation(s) relevant
-          to this question. Pilot wired only for `anticoagulation`; falls
-          back to the "Curated answer in progress" banner for questions that
-          do not yet have a registered summary claim.
+      {/* ── Guideline summary OR clinical synthesis card ────────────────────
+          Priority order:
+          1. <GuidelineSummaryCard> when an AHA/ASA / equivalent guideline
+             directly answers the question (verbatim COR/LOE text). Pilot:
+             anticoagulation question.
+          2. <ClinicalSynthesisCard> when the question is out of scope for a
+             single guideline (PFO closure, CRAO, etc.) and editorial
+             synthesis is more useful than a verbatim quote. Pilot:
+             pfo-closure-cryptogenic.
+          3. Fallback "Curated answer in progress" banner for questions that
+             have neither yet.
           ADR-2026-05-22-guideline-summary-card-composition.md */}
       {(() => {
         const summary = getGuidelineSummaryForQuestion(question.id);
@@ -189,6 +197,14 @@ export default function QuestionDetailPage() {
           return (
             <div className="max-w-3xl mx-auto px-4 sm:px-6 mt-5">
               <GuidelineSummaryCard claimId={summary.claimId} />
+            </div>
+          );
+        }
+        const synthesis = getClinicalSynthesisForQuestion(question.id);
+        if (synthesis) {
+          return (
+            <div className="max-w-3xl mx-auto px-4 sm:px-6 mt-5">
+              <ClinicalSynthesisCard synthesis={synthesis} />
             </div>
           );
         }

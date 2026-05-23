@@ -212,6 +212,32 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'GuidelineSummaryCard on /trials/q/anticoagulation. Surfaces AHA/ASA 2026 §4.9 (Anticoagulants) — early oral anticoagulation reasonable in carefully selected (eg, milder severity) AIS patients with AF (COR 2a). Linked trials below the card: ELAN, OPTIMAS, TIMING.',
   },
 
+  // ─── PFO closure for cryptogenic stroke — clinical synthesis pilot ─────────
+  // First instance of the <ClinicalSynthesisCard> editorial-prose pattern.
+  // Surfaces a multi-paragraph synthesis on /trials/q/pfo-closure-cryptogenic
+  // since PFO closure is OUT OF SCOPE for the 2026 AIS guideline (it's
+  // governed by the 2021 AHA/ASA Secondary Prevention guideline) — so the
+  // existing <GuidelineSummaryCard> pattern, which renders verbatim 2026 AIS
+  // recommendations, does not apply here.
+  //
+  // Citations (4): three 2017 NEJM trials (CLOSE, REDUCE, RESPECT long-term)
+  // plus the 2021 AHA/ASA Secondary Prevention guideline (Class IIa, Level
+  // B-R for non-lacunar stroke <60 with PFO and no other apparent etiology).
+  // Surface = data field (claimId) on the clinicalSynthesesByQuestion record;
+  // ClinicalSynthesisCard reads the claim ID dynamically. Pattern mirrors
+  // anticoagulation-guideline-summary above.
+  'pfo-closure-cryptogenic-synthesis': {
+    id: 'pfo-closure-cryptogenic-synthesis',
+    citation_ids: [
+      'mas-close-2017',
+      'sondergaard-reduce-2017',
+      'saver-respect-2017',
+      'aha-asa-2021-secondary-prevention-pfo',
+    ],
+    surfaces: [DATA_SURFACE],
+    description: 'ClinicalSynthesisCard on /trials/q/pfo-closure-cryptogenic. Synthesises the 2017 NEJM PFO closure cluster (CLOSE, REDUCE, RESPECT long-term) against the 2021 AHA/ASA Secondary Prevention Guideline Class IIa Level B-R framing for non-lacunar stroke <60 with PFO and no other apparent etiology. Acknowledges the broader pre-2017 landscape (CLOSURE-I 2012, PC trial 2013, original RESPECT 2013, DEFENSE-PFO 2018) and the AF-excess trade-off central to shared decision-making.',
+  },
+
   // ─── CREST (2010) — carotid revascularization head-to-head (CAS vs CEA) ──
   'crest-cas-vs-cea-superiority-not-met-2010': {
     id: 'crest-cas-vs-cea-superiority-not-met-2010',
