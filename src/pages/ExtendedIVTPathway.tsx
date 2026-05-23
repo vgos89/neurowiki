@@ -229,6 +229,10 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
   const [showFavToast, setShowFavToast] = useState(false);
   const [showCopyToast, setShowCopyToast] = useState(false);
   const [drawerExpanded, setDrawerExpanded] = useState(false);
+  // Auto-expand drawer on first transition to a final verdict so clinicians
+  // discover the recommendation surface. Subsequent toggles are user-driven.
+  // Audit 2026-05-22 Task B Phase 1A.
+  const hasAutoExpandedRef = useRef(false);
   const isFav = isFavorite('ivt-extended-pathway');
   const prevSetupRef = useRef(false);
   const prevCriteriaRef = useRef(false);
@@ -633,6 +637,18 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
 
   /* ── Drawer tokens ── */
   const drawerState: 'A' | 'C' = result !== null ? 'C' : 'A';
+
+  // Auto-expand drawer the first time a verdict appears.
+  useEffect(() => {
+    if (drawerState === 'C' && !hasAutoExpandedRef.current) {
+      hasAutoExpandedRef.current = true;
+      setDrawerExpanded(true);
+    }
+    if (drawerState === 'A') {
+      hasAutoExpandedRef.current = false;
+    }
+  }, [drawerState]);
+
   const drawerTokens: SeverityTokens | null = drawerState === 'C'
     ? (result?.variant === 'success'
         ? TIER_TOKENS.Low
@@ -1197,63 +1213,13 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                 Copy to EMR
               </button>
 
-              {/* Result card — EVT-style border-l-[8px] */}
-              <div className={`rounded-2xl border-l-[8px] shadow-md overflow-hidden p-5 md:p-8
-                ${result.variant === 'success' ? 'border-l-emerald-500 bg-emerald-50'
-                : result.variant === 'warning' ? 'border-l-amber-400 bg-amber-50'
-                : result.variant === 'danger'  ? 'border-l-red-500 bg-red-50'
-                : 'border-l-slate-400 bg-slate-50'}`}
-              >
-                <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4
-                  ${result.variant === 'success' ? 'bg-emerald-100 text-emerald-700'
-                  : result.variant === 'warning' ? 'bg-amber-100 text-amber-700'
-                  : result.variant === 'danger'  ? 'bg-red-100 text-red-700'
-                  : 'bg-slate-100 text-slate-600'}`}
-                >
-                  <Activity size={12} /><span>Recommendation</span>
-                </div>
-
-                <div className="mb-6">
-                  <div className={`text-5xl font-black tracking-tight
-                    ${result.variant === 'success' ? 'text-emerald-900'
-                    : result.variant === 'warning' ? 'text-amber-900'
-                    : result.variant === 'danger'  ? 'text-red-900'
-                    : 'text-slate-900'}`}
-                  >
-                    {result.status}
-                  </div>
-                  {result.cor && (
-                    <div className="text-lg font-medium text-slate-600 mt-1">
-                      COR {result.cor} · LOE B-R · 2026 AHA/ASA
-                    </div>
-                  )}
-                </div>
-
-                <div className="pt-6 border-t border-slate-200">
-                  <div className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-2">Reasoning</div>
-                  <div className={`text-lg font-bold
-                    ${result.variant === 'success' ? 'text-emerald-900'
-                    : result.variant === 'warning' ? 'text-amber-900'
-                    : result.variant === 'danger'  ? 'text-red-900'
-                    : 'text-slate-900'}`}
-                  >
-                    {result.reason}
-                  </div>
-                  <div className="text-sm text-slate-700 mt-1 leading-relaxed">{result.details}</div>
-                </div>
-
-                {/* F1 — standard contraindication verification callout (clinical-reviewer approved 2026-05-22).
-                    Appears on all Eligible verdicts (Paths A, B, C). Proximate to verdict — not buried in NextStepsCard. */}
-                {result.eligible && (
-                  <div className="flex items-start gap-2.5 mt-5 px-3 py-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs">
-                    <AlertTriangle size={14} className="shrink-0 mt-0.5" aria-hidden="true" />
-                    <span>
-                      Late-window selection criteria met. Standard IV thrombolysis contraindications (BP &gt;185/110, INR &gt;1.7, platelets &lt;100k, DOAC within window, recent surgery/ICH, active bleeding) must still be verified before administration — see{' '}
-                      <Link to="/guide/iv-tpa" className="font-semibold underline underline-offset-2 hover:text-amber-900">IV tPA exclusions</Link>.
-                    </span>
-                  </div>
-                )}
-              </div>
+              {/* Inline result card retired 2026-05-22 per Task B Phase 1A.
+                  Recommendation now lives in the slide-up CalculatorDrawer
+                  pinned to viewport bottom (auto-expands on first verdict).
+                  Reasoning + details + contraindication callout moved into
+                  the drawer expanded body (search for drawer-content-extivt
+                  below). Dosing block continues to render inline as a
+                  separate section. */}
 
               {/* Dosing — only when eligible */}
               {result.eligible && result.cor && (
@@ -1443,9 +1409,59 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
         }
       >
         {drawerState === 'C' && result && (
-          <div id="extivt-drawer-content" className="space-y-3 px-5 pt-4 pb-3">
-            <div className="text-base font-semibold text-slate-900">{result.reason}</div>
-            <div className="text-sm text-slate-700">{result.details}</div>
+          <div id="extivt-drawer-content" data-drawer="content-extivt" className="px-5 pt-4 pb-4 space-y-4">
+            {/* Verdict + COR badge */}
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest
+                  ${result.variant === 'success' ? 'bg-emerald-100 text-emerald-700'
+                  : result.variant === 'warning' ? 'bg-amber-100 text-amber-700'
+                  : result.variant === 'danger'  ? 'bg-red-100 text-red-700'
+                  : 'bg-slate-100 text-slate-600'}`}
+                >
+                  <Activity size={10} aria-hidden="true" />
+                  Recommendation
+                </span>
+                {result.cor && (
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold text-slate-600 bg-slate-100 border border-slate-200 uppercase tracking-widest">
+                    COR {result.cor} · LOE B-R · 2026 AHA/ASA
+                  </span>
+                )}
+              </div>
+              <div className={`text-2xl font-black tracking-tight
+                ${result.variant === 'success' ? 'text-emerald-900'
+                : result.variant === 'warning' ? 'text-amber-900'
+                : result.variant === 'danger'  ? 'text-red-900'
+                : 'text-slate-900'}`}
+              >
+                {result.status}
+              </div>
+            </div>
+
+            {/* Reasoning + details */}
+            <div className="pt-3 border-t border-slate-100">
+              <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">Reasoning</div>
+              <div className={`text-base font-semibold leading-snug
+                ${result.variant === 'success' ? 'text-emerald-900'
+                : result.variant === 'warning' ? 'text-amber-900'
+                : result.variant === 'danger'  ? 'text-red-900'
+                : 'text-slate-900'}`}
+              >
+                {result.reason}
+              </div>
+              <div className="text-sm text-slate-700 mt-1.5 leading-relaxed">{result.details}</div>
+            </div>
+
+            {/* Contraindication-verification callout (eligible only) */}
+            {result.eligible && (
+              <div className="flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs">
+                <AlertTriangle size={14} className="shrink-0 mt-0.5" aria-hidden="true" />
+                <span>
+                  Late-window selection criteria met. Standard IV thrombolysis contraindications (BP &gt;185/110, INR &gt;1.7, platelets &lt;100k, DOAC within window, recent surgery/ICH, active bleeding) must still be verified before administration — see{' '}
+                  <Link to="/guide/iv-tpa" className="font-semibold underline underline-offset-2 hover:text-amber-900">IV tPA exclusions</Link>.
+                </span>
+              </div>
+            )}
           </div>
         )}
       </CalculatorDrawer>
