@@ -6,7 +6,7 @@
 //   ADR: this deviation is intentional and PM-approved per prompt execution.
 // HUB_SPEC §6 — favourites filter via ?favs=true URL param
 // LAYOUT_SPEC §7.2 — zone: 'reference' applied by Layout shell; no wrapper here
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import CalculatorsHero from '../components/calculators/CalculatorsHero';
 import CategoryPillRow from '../components/calculators/CategoryPillRow';
@@ -32,6 +32,23 @@ export default function Calculators() {
   const favsActive = searchParams.get('favs') === 'true';
 
   const { isFavorite, toggleFavorite } = useFavorites();
+
+  // Collapsed-by-default category accordions, mirroring the trials catalog
+  // pattern. Single Set holds the categories that the user has explicitly
+  // collapsed; combined with the auto-expand rules below, this lets a single
+  // active pill or favourites filter override the default-collapsed state.
+  const [collapsedCategories, setCollapsedCategories] = useState<Set<FnCategory>>(
+    () => new Set(FN_CATEGORIES.map((c) => c.id)),
+  );
+
+  const toggleCategory = (cat: FnCategory) => {
+    setCollapsedCategories((prev) => {
+      const next = new Set(prev);
+      if (next.has(cat)) next.delete(cat);
+      else next.add(cat);
+      return next;
+    });
+  };
 
   // HUB_SPEC §1.4.2 — pill selection updates URL; re-clicking active pill → All
   const handlePillSelect = (id: FnCategory | null) => {
@@ -110,16 +127,26 @@ export default function Calculators() {
             here.
           </p>
         ) : (
-          visibleCategories.map((cat) => (
-            <CategorySection
-              key={cat.id}
-              fnCategory={cat.id}
-              calculators={getCalcsForCategory(cat.id)}
-              isFavourited={isFavorite}
-              onToggleFavourite={toggleFavorite}
-              favsActive={favsActive}
-            />
-          ))
+          visibleCategories.map((cat) => {
+            // Auto-expand when a single pill is active or favourites is on:
+            // user has narrowed scope, so hiding the matching rows would be
+            // hostile. Otherwise honour the per-category collapsed state
+            // (default: all collapsed for a tidy hub).
+            const isCollapsed =
+              !activeCat && !favsActive && collapsedCategories.has(cat.id);
+            return (
+              <CategorySection
+                key={cat.id}
+                fnCategory={cat.id}
+                calculators={getCalcsForCategory(cat.id)}
+                isFavourited={isFavorite}
+                onToggleFavourite={toggleFavorite}
+                favsActive={favsActive}
+                isCollapsed={isCollapsed}
+                onToggle={() => toggleCategory(cat.id)}
+              />
+            );
+          })
         )}
       </div>
     </div>
