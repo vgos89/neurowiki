@@ -178,7 +178,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §4.1 row "NIHSS EMR text omits severity bracket + LVO context"
 
 ### aspects-cor-2a-correction — Class E-clinical [from audit 2026-05-22]
-- **Status:** [ ] (open)
+- **Status:** [x] done — clinical-PR-aspects-cor-2a-correction-2026-05-22.md (approve)
 - **User-visible goal:** Reword ASPECTS 0–2 interpretation from "EVT typically not indicated, exceptional Class IIa" to "EVT may reasonably be considered (COR 2a, LOE B-R) with age <80 + 0–6h + no mass effect; otherwise EVT not routinely indicated." Aligns the calculator with §4.7.1 adults row 4 (LASTE basis).
 - **Files likely touched:** src/pages/AspectScoreCalculator.tsx (getScoreInfo, lines 89–94)
 - **Acceptance checks:** ASPECTS 0–2 interpretation references COR 2a + age <80 + 0–6h + no mass effect. Citation traces to §4.7.1 mirror. last_reviewed refreshed. Clinical reviewer §17.2 sign-off.

@@ -173,6 +173,34 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   // — distinct claim ID because it is a distinct rendering surface.
   // Single-citation case validates the rendering layer before Phase 2 expands
   // to multi-citation cards.
+  // ─── ASPECTS calculator — EVT eligibility for ASPECTS 3–5 and 0–2 strata ─
+  // Surface = data-claim attribute on the ASPECTS interpretation drawer text.
+  // Mapped to AHA/ASA 2026 §4.7.2 (anterior-circulation large-core EVT) plus
+  // the four foundational large-core EVT trials whose evidence underwrote
+  // the 2026 expansion (SELECT2, ANGEL-ASPECT, TENSION, LASTE).
+  //
+  // Per clinical review clinical-PR-aspects-cor-2a-correction-2026-05-22.md,
+  // Condition 2 option (a) — trial citations attached so the "established
+  // benefit" attribution in the 3–5 string is sourced rather than free-floating.
+  'aspects-evt-eligibility-2026': {
+    id: 'aspects-evt-eligibility-2026',
+    citation_ids: [
+      'aha-asa-2026-4.7.2',
+      'select2-trial-2023',
+      'angel-aspect-trial-2023',
+      'tension-trial-2023',
+      'laste-trial-2024',
+    ],
+    // Two surfaces: the ScoreInfo object's claimId field (data) is the
+    // canonical claim-binding site; the rendered <p data-claim="..."> is the
+    // user-visible surface. Scanner regex matches both literal occurrences.
+    surfaces: [
+      { type: 'data', field: 'claimId' },
+      { type: 'jsx', attribute: 'data-claim' },
+    ],
+    description: 'ASPECTS calculator EVT eligibility interpretation for the 3–5 stratum (COR 1, LOE A, 6–24h) and 0–2 stratum (COR 2a, LOE B-R, 0–6h) per AHA/ASA 2026 §4.7.2. Both require age <80, NIHSS ≥6, prestroke mRS 0–1, ASPECTS in range, no significant mass effect, anterior-circulation proximal LVO of ICA or M1. Trial basis: SELECT-2 / ANGEL-ASPECT / TENSION (2023) and LASTE (2024).',
+  },
+
   'anticoagulation-guideline-summary': {
     id: 'anticoagulation-guideline-summary',
     citation_ids: ['aha-asa-2026-4.9'],

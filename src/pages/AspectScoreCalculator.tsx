@@ -55,13 +55,18 @@ const SUBCORTICAL_REGIONS = [
 type RegionId = (typeof CORTICAL_REGIONS)[number]['id'] | (typeof SUBCORTICAL_REGIONS)[number]['id'];
 
 // ── Score interpretation ─────────────────────────────────────────────────────
-// getScoreInfo() return strings are PRESERVED byte-for-byte from pre-rebuild.
-// DO NOT edit these strings — clinical prose is not owned by this file.
+// 3–5 and 0–2 strings updated 2026-05-22 to align with AHA/ASA 2026 §4.7.2.
+// Both strata now carry all four mirror qualifiers (age <80, NIHSS ≥6,
+// prestroke mRS 0–1, no significant mass effect) and the correct COR/LOE.
+// See docs/audits/aha-2026-audit-2026-05-22.md §4.2 + clinical review
+// docs/reviews/clinical-PR-aspects-cor-2a-correction-2026-05-22.md.
 
 interface ScoreInfo {
   label: string;
   evtText: string;
   badgeBg: string;
+  /** When present, the rendered evtText is tagged with this data-claim id. */
+  claimId?: string;
 }
 
 function getScoreInfo(score: number): ScoreInfo {
@@ -82,14 +87,18 @@ function getScoreInfo(score: number): ScoreInfo {
   if (score >= 3) {
     return {
       label: 'Large Core',
-      evtText: 'EVT may benefit — Class I for ASPECTS 3–5 per SELECT-2 / ANGEL-ASPECT trials (AHA/ASA 2026 update). Age <80, no significant mass effect, mRS 0–1 required.',
+      evtText:
+        'EVT recommended (AHA/ASA 2026 §4.7.2, COR 1, LOE A) in selected patients with anterior-circulation proximal LVO (ICA/M1), presenting 6–24 hours from onset, age <80, NIHSS ≥6, prestroke mRS 0–1, ASPECTS 3–5, and no significant mass effect. Supported by SELECT-2, ANGEL-ASPECT, TENSION, and LASTE.',
       badgeBg: 'bg-orange-500',
+      claimId: 'aspects-evt-eligibility-2026',
     };
   }
   return {
     label: 'Extensive Infarct',
-    evtText: 'EVT typically not indicated — ASPECTS 0–2 indicates extensive established infarction. High futile reperfusion risk. Exceptional cases (age <80, no mass effect, Class IIa) require individualized Vascular Neurology / Neurointerventional consultation.',
+    evtText:
+      'EVT can reasonably be considered (AHA/ASA 2026 §4.7.2, COR 2a, LOE B-R) in selected patients with anterior-circulation proximal LVO (ICA/M1) presenting within 6 hours, age <80, NIHSS ≥6, prestroke mRS 0–1, ASPECTS 0–2, and no significant mass effect. Outside these criteria, EVT is not routinely indicated; ASPECTS 0–2 carries a high futile-reperfusion risk in unselected patients. Vascular Neurology / Neurointerventional consultation recommended.',
     badgeBg: 'bg-red-500',
+    claimId: 'aspects-evt-eligibility-2026',
   };
 }
 
@@ -256,9 +265,23 @@ const AspectScoreCalculator: React.FC = () => {
         <p className="text-xl font-semibold text-slate-900 leading-tight">
           ASPECTS {score}/10 — {scoreInfo.label}
         </p>
-        <p className="text-slate-600 leading-relaxed mt-3">
-          {scoreInfo.evtText}
-        </p>
+        {/* Render variant: when the current scoreInfo carries a claimId, emit
+            a literal data-claim="aspects-evt-eligibility-2026" attribute so the
+            pre-commit claim scanner (jsx-surface regex matches literal strings
+            only) picks it up. The ≥6 and ≥8 branches deliberately do not
+            carry the claim — they fall under separate citation coverage. */}
+        {scoreInfo.claimId === 'aspects-evt-eligibility-2026' ? (
+          <p
+            data-claim="aspects-evt-eligibility-2026"
+            className="text-slate-600 leading-relaxed mt-3"
+          >
+            {scoreInfo.evtText}
+          </p>
+        ) : (
+          <p className="text-slate-600 leading-relaxed mt-3">
+            {scoreInfo.evtText}
+          </p>
+        )}
         <div className="mt-5 pt-4 border-t border-slate-100">
           <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">See also</div>
           <p className="text-sm text-slate-600">

@@ -216,8 +216,13 @@ export const CITATION_REGISTRY: CitationRegistry = {
     year: 2026,
     section: '§4.7.2',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
-    last_reviewed: '2026-05-19',
-    quoted_text: 'Endovascular thrombectomy is recommended for patients with anterior-circulation large vessel occlusion and ASPECTS 3–5 within 24 hours of last known well (Class I, Level A). For ASPECTS 0–2 within 6 hours, thrombectomy is reasonable in selected patients (Class IIa, Level B-R).',
+    last_reviewed: '2026-05-22',
+    // Verbatim concatenation of the two large-core anterior-circulation EVT
+    // rows from src/data/aha2026StrokeGuideline.ts lines 453 and 471. Refresh
+    // 2026-05-22 replaces the prior paraphrase (which lacked NIHSS ≥6 and
+    // prestroke mRS 0–1 qualifiers) per audit aha-2026-audit-2026-05-22.md
+    // §4.2 + clinical review clinical-PR-aspects-cor-2a-correction-2026-05-22.md.
+    quoted_text: 'In selected patients with AIS from anterior circulation proximal LVO of the ICA or M1, presenting between 6 and 24 hours from onset, with age <80 years, NIHSS ≥6, prestroke mRS 0–1, ASPECTS 3–5, and without significant mass effect, EVT should be used (COR 1, LOE A). In selected patients with AIS from anterior circulation proximal LVO of the ICA or M1, presenting within 6 hours, with age <80 years, NIHSS ≥6, prestroke mRS 0–1, ASPECTS 0–2, and without significant mass effect, EVT can reasonably be considered (COR 2a, LOE B-R).',
   },
   // ─── 2010 trial: carotid revascularization head-to-head (CAS vs CEA) ─────
   'crest-brott-2010': {
