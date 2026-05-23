@@ -8260,6 +8260,185 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── EXTEND-IA TNK: 2026-05-23 Archetype A rebuild ─────────────────────────
+  // NEJM 2018;378(17):1573-1582. Campbell BCV et al. First head-to-head TNK
+  // vs alteplase in LVO-EVT-co-treated; established TNK 0.25 mg/kg as the
+  // IVT agent of first choice for EVT-eligible LVO within 4.5h. Underlies
+  // AHA/ASA 2026 §4.6.2 COR 1 LOE A.
+  if (trialId === 'extend-ia-tnk-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>EXTEND-IA TNK</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with acute ischemic stroke from an ICA, M1, M2, or basilar occlusion eligible for endovascular thrombectomy within 4.5h of onset, does tenecteplase 0.25 mg/kg single bolus before EVT achieve more substantial reperfusion than alteplase 0.9 mg/kg infusion before EVT?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-xs text-slate-500 mt-0.5">Substantial reperfusion at initial angiographic assessment (surrogate angiographic endpoint)</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={22}
+                controlPct={10}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Substantial reperfusion"
+                riskRatio="aIR 2.2"
+                ciLow="1.1"
+                ciHigh="4.4"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Sequential gatekeeping: noninferiority met first (P=0.002; CI lower bound +2 pp, well above the −2.3 pp margin), then superiority met (P=0.03). NNT ≈ 9 for the angiographic surrogate. mRS 0–2 secondary did not reach significance (64% vs 51%, aOR 1.8, P=0.06); ordinal mRS shift favored TNK (cOR 1.7, P=0.04). 90-day mortality 10% vs 18% (aRR 0.5).
+                </p>
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '202 patients (101 TNK / 101 alteplase, ITT) at 12 Australian + 1 New Zealand sites. PROBE design (open-label, blinded outcome assessment). Enrolled March 2015 to October 2017. Blinded adaptive sample-size re-estimation after 100 patients set final size at 202. CT-perfusion mismatch entry criterion removed by amendment after ~80 patients. Published NEJM 2018.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/tnk-vs-alteplase" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">TNK vs alteplase question</Link>
+              <Link to="/trials/q/direct-vs-bridging" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">Direct vs bridging question</Link>
+              <Link to="/trials/act-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">AcT</Link>
+              <Link to="/trials/trace-2-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">TRACE-2</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="EXTEND-IA TNK" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'TNK vs alteplase question', href: '/trials/q/tnk-vs-alteplase' }, { label: 'AcT', href: '/trials/act-trial' }, { label: 'TRACE-2', href: '/trials/trace-2-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── RESCUE-Japan LIMIT: 2026-05-23 Archetype A rebuild ────────────────────
+  // NEJM 2022;386:1303-1313. Yoshimura S et al. First positive large-core EVT
+  // trial (ASPECTS 3-5). The 4 successor trials (SELECT2 / ANGEL-ASPECT /
+  // TENSION 2023; LASTE 2024) are already rebuilt — this index trial wasn't.
+  if (trialId === 'rescue-japan-limit-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>RESCUE-Japan LIMIT</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with acute ischemic stroke and a large ischemic region (ASPECTS 3–5) within 24 hours of onset, does endovascular therapy plus medical care improve 90-day functional outcome compared with medical care alone? This is the index trial that opened large-core EVT as a treatable population.
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-xs text-slate-500 mt-0.5">mRS 0–3 at 90 days (binary)</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={31.0}
+                controlPct={12.7}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="mRS 0–3 at 90 days"
+                riskRatio="RR 2.43"
+                ciLow="1.35"
+                ciHigh="4.37"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-sm font-semibold text-slate-700">~{Math.round(trialMetadata.calculations.nnt as number)}</span>
+                  <span className="text-xs text-slate-500">to achieve mRS 0–3 at 90 days</span>
+                </div>
+              )}
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '203 patients (101 EVT + medical / 102 medical care alone; 1 EVT consent withdrawal → 100 vs 102 ITT) at 45 hospitals in Japan. Pragmatic open-label RCT with blinded mRS adjudication. Enrolled November 2018 to September 2021. Japanese low-dose alteplase (0.6 mg/kg) used in 28.4% of medical-care arm. Published NEJM 2022.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/large-core-evt" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Large-core EVT question</Link>
+              <Link to="/calculators/aspects-score" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ASPECTS calculator</Link>
+              <Link to="/trials/select2-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">SELECT2</Link>
+              <Link to="/trials/angel-aspect-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ANGEL-ASPECT</Link>
+              <Link to="/trials/tension-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">TENSION</Link>
+              <Link to="/trials/laste-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">LASTE</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="RESCUE-Japan LIMIT" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Large-core EVT question', href: '/trials/q/large-core-evt' }, { label: 'SELECT2', href: '/trials/select2-trial' }, { label: 'LASTE', href: '/trials/laste-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
   // ─────────────────────────────────────────────────────────────────────────
 
   if (!trial) {
