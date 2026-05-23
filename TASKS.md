@@ -124,7 +124,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §1 row "Hypoglycemia <60 mg/dL treat"
 
 ### stroke-code-antiplatelet-24h-soften — Class E-clinical [from audit 2026-05-22]
-- **Status:** [ ] (open)
+- **Status:** [x] done — text reworded; surfaces §4.8 row 1 (COR 2b uncertain) + row 2 (COR 3 Harm 90-min IV aspirin) separately per clinical-reviewer guidance
 - **User-visible goal:** Replace "no antithrombotics × 24h" hard-ban language in Step 3 evidence accordion with §4.8-aligned wording (COR 2b uncertain; IV aspirin within 90 min IVT is COR 3 Harm). Prevents residents from withholding indicated antiplatelet therapy past 24h.
 - **Files likely touched:** src/pages/guide/StrokeBasicsWorkflowV2.tsx (line 666 — "Labs & Treatment Orders" accordion).
 - **Acceptance checks:** Text references §4.8 inSettingOfIVT rows 1 (COR 2b) and 2 (COR 3 Harm). last_reviewed refreshed. Clinical reviewer §17.2 sign-off.

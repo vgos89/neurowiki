@@ -663,7 +663,7 @@ const MainContent: React.FC = () => {
                     </summary>
                     <div className="px-4 pb-4 pt-1">
                       <p className="text-sm text-amber-800 leading-relaxed">
-                        Point-of-care <strong>glucose is the ONLY mandatory lab</strong> before thrombolysis (AHA/ASA 2026). Do not delay tPA for other labs if within 4.5h. Post-thrombolysis: neuro checks, BP &lt;180/105, NPO until swallow passed, no antithrombotics × 24h.
+                        Point-of-care <strong>glucose is the ONLY mandatory lab</strong> before thrombolysis (AHA/ASA 2026). Do not delay tPA for other labs if within 4.5h. Post-thrombolysis: neuro checks, BP &lt;180/105, NPO until swallow passed. <strong>Antiplatelet timing</strong> (AHA/ASA 2026 §4.8): IV aspirin within 90 min of IVT is harmful (COR 3 Harm). Oral antiplatelet within the first 24h after IVT is of uncertain benefit (COR 2b) — consider on a case-by-case basis when there is a concomitant indication; do not treat the 24h mark as an absolute boundary.
                       </p>
                     </div>
                   </details>
