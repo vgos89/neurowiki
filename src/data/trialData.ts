@@ -4992,12 +4992,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'Randomized Patients'
       },
       primaryEndpoint: {
-        value: 'mRS 0-2',
-        label: 'at 90 Days'
+        value: 'mRS shift',
+        label: 'Ordinal distribution at 90 days',
+        info: 'Published primary endpoint was the ordinal distribution of mRS scores at 90 days (Albers GW et al., NEJM 2018;378:708-718). The secondary mRS 0–2 rate (45% vs 17%) is what most readers remember and was reported alongside, but the primary inference test was the ordinal shift. Audit fix 2026-05-23 (Phase 2C / trial-statistician F5: STAT-3).',
       },
       pValue: {
         value: '<0.001',
-        label: 'Statistically Sig.'
+        label: 'Statistically Sig. (ordinal shift)'
       },
       effectSize: {
         value: '28%',

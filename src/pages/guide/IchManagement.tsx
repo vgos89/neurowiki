@@ -8,6 +8,7 @@ import {
   Critical,
   Value,
   Warning,
+  CalcRef,
 } from '../../components/article';
 import { useRecents } from '../../hooks/useRecents';
 
@@ -49,7 +50,7 @@ export default function IchManagement() {
             viewMode={viewMode}
             detail="ABCs. GCS, pupil check. NIHSS or similar. Get last known well. On anticoagulants? Which one, last dose."
           >
-            Stabilize ABCs. Baseline exam (GCS, pupils, focal deficits). <Critical>Anticoagulant history</Critical> — agent and last dose.
+            Stabilize ABCs. Baseline exam (<CalcRef name="GCS" path="/calculators/glasgow-coma-scale">GCS</CalcRef>, pupils, focal deficits). <Critical>Anticoagulant history</Critical> — agent and last dose.
           </Paragraph>
 
           <Section number={2} title="Imaging" />

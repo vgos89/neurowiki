@@ -616,8 +616,16 @@ const StatusEpilepticusPathway: React.FC = () => {
 
               {/* ESETT agent selection — label shortened per D-7; "(ESETT-equivalent)" qualifier lives in option descriptions */}
               <div id="field-stage2-agent" ref={stage2DoseRef}>
-                {/* Dose Result Row — PATHWAY_SPEC §4.8 — placed above agent row (D-6 fix) */}
-                <div className="border-t border-b border-slate-200 px-5 py-3 -mx-5 my-2">
+                {/* Dose Result Row — PATHWAY_SPEC §4.8 — placed above agent row (D-6 fix).
+                    aria-live region (added 2026-05-23) so screen readers announce
+                    the computed agent + dose when inputs update. role=status keeps
+                    the announcement polite (does not interrupt). */}
+                <div
+                  className="border-t border-b border-slate-200 px-5 py-3 -mx-5 my-2"
+                  role="status"
+                  aria-live="polite"
+                  aria-atomic="true"
+                >
                   <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Calculated Dose</div>
                   <div className="flex items-center justify-between gap-3 mt-1">
                     <span className="text-sm text-slate-600">{finalStage2.charAt(0).toUpperCase()}{finalStage2.slice(1)}</span>
