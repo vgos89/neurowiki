@@ -1230,7 +1230,7 @@ const MigrainePathway: React.FC = () => {
           lockedAriaLabel="Step 5 Plan, awaiting Step 4"
         >
           {step === 5 && (
-            <div className="space-y-4">
+            <div className="space-y-4" role="status" aria-live="polite" aria-atomic="true">
               {/* B2: MOH discharge screen (Rizzoli 2024 / ICHD-3 8.2) */}
               <div className="bg-white border border-slate-100 rounded-xl p-4">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">MOH Discharge Screen</p>

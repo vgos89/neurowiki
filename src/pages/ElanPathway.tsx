@@ -452,7 +452,12 @@ const ElanPathway: React.FC = () => {
 
         {/* STEP 4: RESULTS */}
         {step === 4 && result && result.eligible && (
-             <div className="space-y-4 animate-in zoom-in-95 duration-300">
+             <div
+                className="space-y-4 animate-in zoom-in-95 duration-300"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+             >
 
                 {/* Single consolidated card */}
                 <div
