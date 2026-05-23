@@ -59,19 +59,20 @@ const RELATIVE_CHIPS: Chip[] = [
   { id: 'arterial_puncture', label: 'Arterial access <7d',     detail: 'Arterial puncture at non-compressible site within 7 days.' },
 ];
 
-/** 3–4.5h window cautions. Per AHA/ASA 2026 §4.6.1, the legacy ECASS-3
- *  exclusion list has not been re-endorsed — age >80 was removed (IST-3
- *  and subsequent evidence support IVT benefit in this group). The
- *  remaining chips below are kept as cautions pending a separate Class E
- *  review (TASKS entry `ecass-3-exclusions-modernize`). Once that review
- *  lands, this list will either be fully retired or reworded as cautions
- *  rather than exclusions. */
-const EXTENDED_WINDOW_CHIPS: Chip[] = [
-  { id: 'ext_oral_anticoag',    label: 'Any oral anticoagulant', detail: 'Even if INR is normal — excluded from 3–4.5h window.' },
-  { id: 'ext_nihss_over25',     label: 'NIHSS >25',             detail: 'Severe stroke has uncertain benefit in 3–4.5h window.' },
-  { id: 'ext_dm_prior_stroke',  label: 'Diabetes + prior stroke', detail: 'This combination excluded in 3–4.5h window.' },
-  { id: 'ext_large_mca',        label: '>⅓ MCA on imaging',      detail: 'Large ischemic injury on imaging — excluded from 3–4.5h window.' },
-];
+/** 3–4.5h window: retired 2026-05-22 per AHA/ASA 2026 §4.6.1. The legacy
+ *  ECASS-3 exclusion list has not been re-endorsed:
+ *    - Age >80: removed (IST-3 + subsequent evidence support IVT benefit)
+ *    - Oral anticoagulant (warfarin INR >1.7, DOAC <48h): already in
+ *      HARD_STOP_CHIPS — apply at any time window, not 3–4.5h-specific
+ *    - >⅓ MCA hypodensity: already in HARD_STOP_CHIPS — apply at any
+ *      time window, not 3–4.5h-specific
+ *    - NIHSS >25 + Diabetes-with-prior-stroke: not endorsed as exclusions
+ *      in 2026 (severe stroke benefits from IVT; the DM+prior-stroke
+ *      combination has no 2026 evidence supporting categorical exclusion)
+ *  Section now renders a banner only. Array kept for backward compat with
+ *  the extendedContraindications state machinery; intentionally empty.
+ *  Closes TASKS entry `ecass-3-exclusions-modernize`. */
+const EXTENDED_WINDOW_CHIPS: Chip[] = [];
 
 // Full label map for EMR copy text
 const CONTRA_LABELS: Record<string, string> = {
@@ -96,12 +97,13 @@ const CONTRA_LABELS: Record<string, string> = {
   gi_gu_bleed: 'GI/GU hemorrhage within 21 days',
   recent_mi: 'Acute MI within 3 months',
   arterial_puncture: 'Arterial puncture at non-compressible site within 7 days',
-  // 3–4.5h extended window exclusions (age >80 removed 2026-05-22 per
-  // AHA/ASA 2026 §4.6.1 — no longer an exclusion).
-  ext_oral_anticoag:   'Oral anticoagulant use — any (3–4.5h window exclusion)',
-  ext_nihss_over25:    'NIHSS >25 (3–4.5h window exclusion)',
-  ext_dm_prior_stroke: 'Diabetes mellitus with prior stroke (3–4.5h window exclusion)',
-  ext_large_mca:       '>1/3 MCA territory on imaging (3–4.5h window exclusion)',
+  // 3–4.5h extended window exclusions retired 2026-05-22 per AHA/ASA 2026
+  // §4.6.1 (see EXTENDED_WINDOW_CHIPS comment for rationale). EMR labels
+  // kept for backward compat in case historical state references these IDs.
+  ext_oral_anticoag:   'Oral anticoagulant use — any (legacy 3–4.5h exclusion, retired)',
+  ext_nihss_over25:    'NIHSS >25 (legacy 3–4.5h exclusion, retired)',
+  ext_dm_prior_stroke: 'Diabetes mellitus with prior stroke (legacy 3–4.5h exclusion, retired)',
+  ext_large_mca:       '>1/3 MCA territory on imaging (legacy 3–4.5h exclusion, retired)',
 };
 
 // ── Component ─────────────────────────────────────────────────────────────
@@ -396,68 +398,25 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
             </div>
           </section>
 
-          {/* ── 3–4.5h window extras — interactive chips (HIGH-04 fix) ── */}
-          {showExtendedSection ? (
-            <section className="rounded-xl border border-amber-300 bg-amber-50 overflow-hidden">
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-amber-200">
-                <span className="text-xs font-bold uppercase tracking-wider text-amber-700">3–4.5h Window — Additional Exclusions</span>
-                <span className="ml-auto text-[10px] font-semibold text-amber-600 bg-amber-100 border border-amber-200 rounded-full px-2 py-0.5">Active window</span>
-              </div>
-              <div className="px-4 pb-4 pt-3">
-                <p className="text-xs text-amber-700 mb-3">LKW is in the 3–4.5h window. These ALSO exclude the patient — tap if present:</p>
-                <div className="grid grid-cols-2 gap-2">
-                  {EXTENDED_WINDOW_CHIPS.map((chip) => {
-                    const active = !!extendedContraindications[chip.id];
-                    const expanded = expandedChip === chip.id;
-                    return (
-                      <div key={chip.id}>
-                        <div className={`relative flex min-h-[52px] rounded-xl border overflow-hidden transition-colors ${
-                          active ? 'bg-amber-600 border-amber-600' : 'bg-white border-amber-200 hover:border-amber-400 hover:bg-amber-50'
-                        }`}>
-                          <button
-                            type="button"
-                            onClick={() => setExtendedContraindications(prev => ({ ...prev, [chip.id]: !prev[chip.id] }))}
-                            aria-pressed={active}
-                            className="flex-1 px-3 py-2.5 text-sm font-semibold text-left leading-snug focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500"
-                          >
-                            <span className={active ? 'text-white' : 'text-slate-700'}>{chip.label}</span>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setExpandedChip(expanded ? null : chip.id)}
-                            className={`min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500 ${active ? 'text-amber-100 hover:text-white' : 'text-slate-300 hover:text-slate-500'}`}
-                            aria-label={`${expanded ? 'Hide' : 'Show'} details for ${chip.label}`}
-                          >
-                            <Info className="w-3.5 h-3.5" aria-hidden="true" />
-                          </button>
-                        </div>
-                        {expanded && (
-                          <p className="mt-1 text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-2 leading-relaxed">
-                            {chip.detail}
-                          </p>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+          {/* ── 3–4.5h window note (AHA/ASA 2026 §4.6.1 harmonization) ──
+              Legacy ECASS-3 specific exclusions retired 2026-05-22. The
+              exclusions that remain valid in 2026 (warfarin INR >1.7, DOAC
+              <48h, >⅓ MCA hypodensity) are now applied uniformly across
+              both 0–3h and 3–4.5h windows via HARD_STOP_CHIPS above. */}
+          {showExtendedSection && (
+            <section className="rounded-xl border border-amber-200 bg-amber-50 overflow-hidden">
+              <div className="px-4 py-3">
+                <p className="text-xs font-bold uppercase tracking-wider text-amber-700 mb-1">3–4.5h Window — Active</p>
+                <p className="text-xs text-amber-700 leading-relaxed">
+                  LKW is in the 3–4.5h window. AHA/ASA 2026 §4.6.1 has harmonized
+                  this window with the 0–3h window: legacy ECASS-3-specific
+                  exclusions (age &gt;80, NIHSS &gt;25, diabetes with prior stroke)
+                  are no longer endorsed. The exclusions that remain valid at any
+                  window (warfarin INR &gt;1.7, DOAC &lt;48h, &gt;⅓ MCA hypodensity)
+                  are listed in the Absolute contraindications section above.
+                </p>
               </div>
             </section>
-          ) : (
-            <details className="group rounded-xl border border-amber-200 bg-amber-50 overflow-hidden">
-              <summary className="flex items-center gap-2 px-4 py-3 text-xs font-bold uppercase tracking-wider text-amber-700 cursor-pointer hover:bg-amber-100/60 transition-colors list-none">
-                <ChevronDown className="w-3.5 h-3.5 text-amber-500 group-open:rotate-180 transition-transform shrink-0" aria-hidden />
-                3–4.5h Window — Additional Exclusions
-              </summary>
-              <div className="px-4 pb-4 pt-1 space-y-2.5">
-                <p className="text-xs text-amber-700">If treating in the 3–4.5h window, these ALSO exclude the patient:</p>
-                {EXTENDED_WINDOW_CHIPS.map((chip) => (
-                  <div key={chip.id} className="text-sm">
-                    <span className="font-semibold text-amber-900">• {chip.label}</span>
-                    <span className="text-amber-700 ml-1 text-xs">— {chip.detail}</span>
-                  </div>
-                ))}
-              </div>
-            </details>
           )}
 
           {/* ── Notes (collapsed) ── */}

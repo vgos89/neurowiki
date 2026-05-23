@@ -142,7 +142,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §1 row "DAPT (aspirin + clopidogrel × 21 days) for NIHSS ≤3 / ABCD² ≥4 minor AIS"
 
 ### ecass-3-exclusions-modernize — Class E-clinical [follow-up filed 2026-05-22]
-- **Status:** [ ] (open)
+- **Status:** [x] done — EXTENDED_WINDOW_CHIPS retired; section replaced with banner noting AHA/ASA 2026 §4.6.1 harmonization. Remaining valid exclusions (warfarin INR >1.7, DOAC <48h, >⅓ MCA) already covered by HARD_STOP_CHIPS.
 - **User-visible goal:** Full review of remaining 3–4.5h "extended window" chips in IVT eligibility modal (oral anticoagulant, NIHSS >25, DM + prior stroke, >⅓ MCA on imaging) against AHA/ASA 2026 §4.6.1. None of these are explicit exclusions in 2026 — the chip list is legacy ECASS-3 framing. Likely outcome: retire EXTENDED_WINDOW_CHIPS entirely and replace with a single banner noting the 3–4.5h window has harmonized with 0–3h in 2026.
 - **Files likely touched:** src/components/article/stroke/ThrombolysisEligibilityModal.tsx (EXTENDED_WINDOW_CHIPS, lines 61–66)
 - **Acceptance checks:** Each remaining chip either retired or reworded as caution rather than exclusion, with sourcing to §4.6.1 or §4.6.5 (DOAC <48h). aha-asa-2026-4.6.1 citation registered. Clinical reviewer §17.2 sign-off.
