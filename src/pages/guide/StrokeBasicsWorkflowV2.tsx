@@ -11,6 +11,7 @@ import {
   ChevronDown, GraduationCap,
 } from 'lucide-react';
 import { StrokeBasicsLayout } from './StrokeBasicsLayout';
+import { Trial } from '../../components/article';
 import { TimestampBubble } from '../../components/article/stroke/TimestampBubble';
 import { QuickReferenceCard } from '../../components/article/stroke/QuickReferenceCard';
 import type { ClinicalPearlsData } from '../../data/strokeClinicalPearls';
@@ -456,13 +457,13 @@ const MainContent: React.FC = () => {
                   </summary>
                   <div className="px-4 pb-4 pt-1 space-y-3">
                     <p className="text-sm text-blue-800 leading-relaxed">
-                      The &quot;last known well&quot; (LKW) time determines eligibility for time-sensitive reperfusion therapies and is the most important piece of information in acute stroke management. For IV thrombolysis (tPA/TNK), the standard window is <strong>0-4.5 hours</strong>, with extended windows possible up to 9 hours using perfusion imaging (EXTEND trial). For mechanical thrombectomy, treatment is possible <strong>up to 24 hours</strong> with appropriate imaging showing salvageable tissue (DAWN/DEFUSE-3 trials).
+                      The &quot;last known well&quot; (LKW) time determines eligibility for time-sensitive reperfusion therapies and is the most important piece of information in acute stroke management. For IV thrombolysis (tPA/TNK), the standard window is <strong>0-4.5 hours</strong>, with extended windows possible up to 9 hours using perfusion imaging (<Trial name="EXTEND" path="/trials/extend-trial" />). For mechanical thrombectomy, treatment is possible <strong>up to 24 hours</strong> with appropriate imaging showing salvageable tissue (<Trial name="DAWN" path="/trials/dawn-trial" />/<Trial name="DEFUSE-3" path="/trials/defuse-3-trial" /> trials).
                     </p>
                     <p className="text-sm text-blue-800 leading-relaxed">
                       <strong>Time is Brain:</strong> During untreated stroke, 1.9 million neurons die per minute. Every 15-minute delay in treatment reduces the probability of good outcome by 4% (Emberson et al, Lancet 2014).
                     </p>
                     <p className="text-sm text-blue-800 leading-relaxed">
-                      <strong>Wake-Up Strokes:</strong> If the patient woke with symptoms, LKW is when they were last seen normal before sleep, NOT when they woke up. The WAKE-UP trial (2018) showed MRI-guided treatment using DWI-FLAIR mismatch resulted in 53.3% vs 41.8% favorable outcomes.
+                      <strong>Wake-Up Strokes:</strong> If the patient woke with symptoms, LKW is when they were last seen normal before sleep, NOT when they woke up. The <Trial name="WAKE-UP" path="/trials/wake-up-trial" /> trial (2018) showed MRI-guided treatment using DWI-FLAIR mismatch resulted in 53.3% vs 41.8% favorable outcomes.
                     </p>
                     <div className="pt-2 border-t border-blue-200">
                       <p className="text-xs text-blue-700">
