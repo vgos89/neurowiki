@@ -294,8 +294,19 @@ const NihssCalculator: React.FC = () => {
   const handleNihssChange = (id: string, val: number) => {
     // Capture "Performed" timestamp on first input — clinical convention is
     // that NIHSS time = when the exam started, not when the page opened.
+    // 2026-05-23 fix per V: keep performedAt and strokeTimestamps['Neurology
+    // Evaluation'] coherent. They represent the same workflow event (the
+    // neurologist's first NIHSS scoring action). When one is set and the
+    // other is null OR later, propagate the earlier value to both. This
+    // prevents the two from drifting (V example: Exam Performed 4:35 PM
+    // vs Neurology Evaluation 4:42 PM when both should read 4:35 PM).
     if (performedAt === null) {
-      setPerformedAt(new Date());
+      const now = new Date();
+      setPerformedAt(now);
+      const existingNeuro = strokeTimestamps['Neurology Evaluation'];
+      if (existingNeuro === null || now < existingNeuro) {
+        setStrokeTimestamps((prev) => ({ ...prev, 'Neurology Evaluation': now }));
+      }
     }
     setNihssValues((prev) => ({ ...prev, [id]: val }));
     const idx = NIHSS_ITEMS.findIndex((i) => i.id === id);
@@ -761,7 +772,20 @@ const NihssCalculator: React.FC = () => {
             workflow lives in NIHSS standalone). */}
       <TimestampBubble
         value={strokeTimestamps}
-        onChange={setStrokeTimestamps}
+        onChange={(next) => {
+          // Sync Exam Performed (performedAt) with Neurology Evaluation —
+          // they represent the same workflow event (neurologist's first
+          // exam action). When Neuro Eval is set/edited via the bubble and
+          // performedAt is null OR later than the new Neuro Eval value,
+          // pull the earlier value into performedAt. Reverse direction
+          // (NIHSS first tap → set Neuro Eval) is handled in
+          // handleNihssChange. 2026-05-23 fix per V.
+          const nextNeuro = next['Neurology Evaluation'];
+          if (nextNeuro && (performedAt === null || nextNeuro < performedAt)) {
+            setPerformedAt(nextNeuro);
+          }
+          setStrokeTimestamps(next);
+        }}
         autoStampNeuroEvalOnFirstInteraction
       />
 
