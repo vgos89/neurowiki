@@ -469,8 +469,13 @@ const ElanPathway: React.FC = () => {
                                 <span>{result.size === 'tia' ? 'TIA' : `${result.size} stroke`}</span>
                             </div>
                             <div className="text-right">
-                                <div className="text-xs font-black text-purple-300 uppercase tracking-wider">AHA/ASA 2026 §4.9 — COR 2a. Early oral anticoagulation is reasonable in carefully selected (eg, milder severity) patients with AIS and atrial fibrillation. Efficacy for early recurrence prevention not established.</div>
-                                <div className="text-[10px] text-white/40 font-medium mt-0.5">{result.size === 'major' ? 'ELAN day 6–7 early-arm timing applies to major stroke. AHA 2026 emphasizes "carefully selected" patients; individualize for very large infarcts.' : 'ELAN framework within AHA/ASA 2026'}</div>
+                                {/* Short chip: full recommendation text lives in the
+                                    "Why this timing?" accordion below (line ~555 area).
+                                    Audit 2026-05-22 BLOCKING elan-cor-chip-rebuild. */}
+                                <div className="inline-flex items-center gap-1.5 bg-purple-500/15 border border-purple-400/30 px-2.5 py-1 rounded-full text-[10px] font-bold text-purple-200 uppercase tracking-wider">
+                                    AHA/ASA 2026 §4.9 · COR 2a
+                                </div>
+                                <div className="text-[10px] text-white/40 font-medium mt-1">{result.size === 'major' ? 'ELAN day 6–7 early-arm timing applies to major stroke. AHA 2026 emphasizes "carefully selected" patients; individualize for very large infarcts.' : 'ELAN framework within AHA/ASA 2026'}</div>
                             </div>
                         </div>
 
@@ -553,10 +558,24 @@ const ElanPathway: React.FC = () => {
                                             <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">{t.detail}</p>
                                         </div>
                                     ))}
-                                    {/* Guideline statement — F8 Option B soft label */}
-                                    <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl px-3 py-2.5 mt-1">
-                                        <p className="text-[10px] font-black text-purple-300 uppercase tracking-wider mb-1">AHA/ASA 2026 §4.9 — COR 2a. Early oral anticoagulation is reasonable in carefully selected (eg, milder severity) patients with AIS and atrial fibrillation. Efficacy for early recurrence prevention not established.</p>
-                                        <p className="text-[11px] text-slate-400 leading-relaxed">The guideline gives a broad recommendation that earlier oral anticoagulation is reasonable and low risk in carefully selected patients. The exact day-by-day windows shown here are an ELAN-based operational framework rather than a single mandatory guideline timing table.</p>
+                                    {/* Guideline statement — chip header, verbatim quote
+                                        in body. Rebuilt 2026-05-22 per audit BLOCKING
+                                        elan-cor-chip-rebuild (the prior 250-char string
+                                        in an uppercase label slot violated visual
+                                        hierarchy). */}
+                                    <div
+                                        data-claim="early-doac-af-stroke-recommendation"
+                                        className="bg-purple-500/10 border border-purple-500/20 rounded-xl px-3 py-3 mt-1 space-y-2"
+                                    >
+                                        <div className="inline-flex items-center gap-1.5 bg-purple-500/20 border border-purple-400/30 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-purple-200 uppercase tracking-wider">
+                                            AHA/ASA 2026 §4.9 · COR 2a
+                                        </div>
+                                        <p className="text-[12px] text-slate-200 leading-relaxed">
+                                            Early oral anticoagulation is reasonable in carefully selected (eg, milder severity) patients with AIS and atrial fibrillation. Efficacy for early recurrence prevention not established.
+                                        </p>
+                                        <p className="text-[11px] text-slate-400 leading-relaxed italic">
+                                            The guideline gives a broad recommendation that earlier oral anticoagulation is reasonable and low risk in carefully selected patients. The exact day-by-day windows shown here are an ELAN-based operational framework rather than a single mandatory guideline timing table.
+                                        </p>
                                     </div>
                                 </div>
                             )}

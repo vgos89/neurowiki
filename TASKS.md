@@ -169,7 +169,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §2 row "Path C wake-up extension"
 
 ### elan-cor-chip-rebuild — Class C-clinical [from audit 2026-05-22]
-- **Status:** [ ] (open)
+- **Status:** [x] done — top header now short chip "AHA/ASA 2026 §4.9 · COR 2a"; bottom block restructured as chip-header + verbatim quote (12pt body) + italic editorial caveat
 - **User-visible goal:** Convert the 250-character verbatim COR-label string in the ELAN pathway result card into a short chip + accordion. Clinical substance is correct; this is a visual hierarchy fix.
 - **Files likely touched:** src/pages/ElanPathway.tsx (lines 242, 472, 558)
 - **Acceptance checks:** Chip label is "COR 2a, LOE B-R · §4.9". Verbatim quote moved into evidence accordion. last_reviewed refreshed. Clinical reviewer §17.2 sign-off because the quote text is verbatim guideline language.
@@ -178,7 +178,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §3 row '"COR 2a, LOE B-R" label embedded in JSX heading slot'
 
 ### nihss-emr-include-lvo — Class C-clinical [from audit 2026-05-22]
-- **Status:** [ ] (open)
+- **Status:** [ ] (open — deferred: toggle UI placement needs V input. Audit spec calls for default-off toggle; placement (within patient context panel? next to copy button? settings?) is a UX decision. Logic-side is trivial: conditionally append "LVO probability: <label> · RACE <n>/9" to buildText when toggle is on.)
 - **User-visible goal:** Add opt-in to include RACE-derived LVO inference (probability, label, RACE total) in the NIHSS EMR copy text. Drawer already shows it; export currently omits.
 - **Files likely touched:** src/pages/NihssCalculator.tsx (buildText lines 326–409)
 - **Acceptance checks:** EMR text optionally includes "LVO probability: <Low/Moderate/High>, RACE <score>/9". Toggle defaults to off (preserves current behavior per V direction 2026-05-20 about severity bracket omission). last_reviewed refreshed. Clinical reviewer §17.2 sign-off.
