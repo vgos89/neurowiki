@@ -294,6 +294,50 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'GuidelineSummaryCard on /trials/q/bp-control. Surfaces AHA/ASA 2026 §4.3 (Blood Pressure Management): pre-IVT target ≤185/110; post-IVT target ≤180/105; intensive SBP reduction (<140) post-IVT and post-EVT not recommended (COR 3 No Benefit / Harm depending on context).',
   },
 
+  // ─── Phase 3 rollout — 6 more questions wired to AHA/ASA 2026 sections ────
+
+  'msu-dispatch-guideline-summary': {
+    id: 'msu-dispatch-guideline-summary',
+    citation_ids: ['aha-asa-2026-2.5'],
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/msu-dispatch. Surfaces AHA/ASA 2026 §2.5 (Mobile Stroke Units): MSU-delivered IVT improves functional outcomes vs standard EMS (COR 1, LOE B-R); MSU dispatch helps triage EVT-eligible patients to TSC/CSC centers (COR 2a, LOE B-R).',
+  },
+
+  'direct-vs-bridging-guideline-summary': {
+    id: 'direct-vs-bridging-guideline-summary',
+    citation_ids: ['aha-asa-2026-4.7.1'],
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/direct-vs-bridging. Surfaces AHA/ASA 2026 §4.7.1 (EVT Concomitant with IVT): in patients eligible for BOTH, give IVT and do not skip it; do not observe for clinical response before EVT (both COR 1, LOE A). The 2026 guideline closes the "skip IVT to facilitate EVT" question.',
+  },
+
+  'large-core-evt-guideline-summary': {
+    id: 'large-core-evt-guideline-summary',
+    citation_ids: ['aha-asa-2026-4.7.2'],
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/large-core-evt. Surfaces AHA/ASA 2026 §4.7.2 (anterior-circulation EVT, large-core strata): ASPECTS 3–5 EVT recommended 6–24h (COR 1, LOE A); ASPECTS 0–2 EVT can reasonably be considered within 6h in selected patients with age <80, NIHSS ≥6, prestroke mRS 0–1, no significant mass effect (COR 2a, LOE B-R). Same §4.7.2 citation shared with lvo-evt-guideline-summary; this card emphasizes the large-core strata specifically.',
+  },
+
+  'mevo-distal-evt-guideline-summary': {
+    id: 'mevo-distal-evt-guideline-summary',
+    citation_ids: ['aha-asa-2026-4.7.2'],
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/mevo-distal-evt. Surfaces AHA/ASA 2026 §4.7.2: EVT for dominant proximal M2 occlusion presenting within 6h, NIHSS ≥6, prestroke mRS 0–1, ASPECTS ≥6 is reasonable (COR 2a, LOE B-NR); EVT for non-dominant M2, M3, distal occlusions, ACA, PCA is NOT recommended (COR 3: No Benefit, LOE A).',
+  },
+
+  'post-evt-bp-target-guideline-summary': {
+    id: 'post-evt-bp-target-guideline-summary',
+    citation_ids: ['aha-asa-2026-4.3'],
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/post-evt-bp-target. Surfaces AHA/ASA 2026 §4.3 (Blood Pressure Management) with emphasis on the post-EVT recommendations: intensive SBP <140 after successful EVT (mTICI 2b/2c/3) is NOT recommended because it is associated with harm (COR 3: Harm, citing OPTIMAL-BP and ENCHANTED2/MT). Target ≤180/105.',
+  },
+
+  'minor-stroke-choice-guideline-summary': {
+    id: 'minor-stroke-choice-guideline-summary',
+    citation_ids: ['aha-asa-2026-4.6.1', 'aha-asa-2026-4.8'],
+    surfaces: [DATA_SURFACE],
+    description: 'GuidelineSummaryCard on /trials/q/minor-stroke-choice — FIRST multi-citation card in the rollout. Surfaces TWO complementary 2026 recommendations: §4.6.1 Rec 4 (COR 3 No Benefit) — IVT should not be used routinely for non-disabling deficits within 4.5h; AND §4.8 Rec 12 (COR 1, LOE A) — DAPT (clopidogrel + aspirin loading then 21 days) is the preferred alternative for NIHSS ≤3 / ABCD² ≥4. Validates the multi-section composition pattern from ADR-2026-05-22-guideline-summary-card-composition.',
+  },
+
   // ─── Asymptomatic carotid clinical synthesis ────────────────────────────────
   'asymptomatic-carotid-synthesis': {
     id: 'asymptomatic-carotid-synthesis',

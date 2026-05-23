@@ -197,6 +197,41 @@ export const CITATION_REGISTRY: CitationRegistry = {
   // ─── AHA/ASA 2026 §4.6.1 — Thrombolysis Decision-Making ───────────────────
   // Verbatim from src/data/aha2026StrokeGuideline.ts ivtRecommendations.
   // decisionMaking[0–6]. Registered 2026-05-23 for the tpa-timing GuidelineSummaryCard.
+  // ─── AHA/ASA 2026 §2.5 — Mobile Stroke Units ──────────────────────────────
+  // Verbatim from src/data/aha2026StrokeGuideline.ts prehospitalRecommendations.
+  // mobileStrokeUnits[0–1]. Registered 2026-05-23 for the msu-dispatch
+  // GuidelineSummaryCard. New §2 row in the registry; first prehospital
+  // citation registered.
+  'aha-asa-2026-2.5': {
+    id: 'aha-asa-2026-2.5',
+    source: 'guideline',
+    title: '2026 AHA/ASA Guideline — §2.5 (Mobile Stroke Units)',
+    year: 2026,
+    section: '§2.5 Mobile Stroke Units',
+    url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
+    pmid: '41582814',
+    last_reviewed: '2026-05-23',
+    quoted_text: 'For patients with AIS who are eligible for IVT, treatment with IVT on a mobile stroke unit (MSU) should be used because it improves functional outcomes compared with standard EMS transport (COR 1, LOE B-R). In endovascular thrombectomy-eligible patients, MSU dispatch may help triage patients to the appropriate thrombectomy-capable center (COR 2a, LOE B-R).',
+  },
+
+  // ─── AHA/ASA 2026 §4.7.1 — EVT Concomitant with IVT ───────────────────────
+  // Verbatim from src/data/aha2026StrokeGuideline.ts ivtRecommendations.
+  // concomitantWithEVT[0–1]. Registered 2026-05-23 for the direct-vs-bridging
+  // GuidelineSummaryCard. Resolves the long-standing "skip IVT to go to EVT"
+  // question: 2026 explicitly says don't skip, don't observe — give IVT
+  // immediately even when EVT is planned.
+  'aha-asa-2026-4.7.1': {
+    id: 'aha-asa-2026-4.7.1',
+    source: 'guideline',
+    title: '2026 AHA/ASA Guideline — §4.7.1 (EVT Concomitant with IVT)',
+    year: 2026,
+    section: '§4.7.1 EVT Concomitant with IVT',
+    url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
+    pmid: '41582814',
+    last_reviewed: '2026-05-23',
+    quoted_text: 'In patients with AIS eligible for BOTH IVT and EVT, IVT is safe and recommended to improve overall reperfusion efficacy and clinical outcomes. Do NOT skip IVT to facilitate EVT (COR 1, LOE A). In patients with AIS eligible for both IVT and EVT, IVT should be administered as rapidly as possible WITHOUT observation to assess clinical response or delay in initiating EVT (COR 1, LOE A).',
+  },
+
   'aha-asa-2026-4.6.1': {
     id: 'aha-asa-2026-4.6.1',
     source: 'guideline',

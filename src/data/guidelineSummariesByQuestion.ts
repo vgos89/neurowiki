@@ -46,6 +46,31 @@ export const GUIDELINE_SUMMARIES_BY_QUESTION: Record<string, { claimId: string }
   'bp-control': {
     claimId: 'bp-control-guideline-summary',
   },
+
+  // Phase 3 rollout — 6 more questions (commit 2026-05-23). First multi-
+  // citation card lands on minor-stroke-choice (§4.6.1 + §4.8). Skipped
+  // questions that need §4.7.4 (Endovascular Techniques) data which the
+  // structured mirror does not yet contain: aspiration-vs-stentriever,
+  // evt-adjunct-pharmacotherapy. Those wait on a follow-up that populates
+  // §4.7.4 in src/data/aha2026StrokeGuideline.ts first.
+  'msu-dispatch': {
+    claimId: 'msu-dispatch-guideline-summary',
+  },
+  'direct-vs-bridging': {
+    claimId: 'direct-vs-bridging-guideline-summary',
+  },
+  'large-core-evt': {
+    claimId: 'large-core-evt-guideline-summary',
+  },
+  'mevo-distal-evt': {
+    claimId: 'mevo-distal-evt-guideline-summary',
+  },
+  'post-evt-bp-target': {
+    claimId: 'post-evt-bp-target-guideline-summary',
+  },
+  'minor-stroke-choice': {
+    claimId: 'minor-stroke-choice-guideline-summary',
+  },
 };
 
 export function getGuidelineSummaryForQuestion(
