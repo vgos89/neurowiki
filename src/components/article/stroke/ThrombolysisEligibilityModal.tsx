@@ -59,9 +59,14 @@ const RELATIVE_CHIPS: Chip[] = [
   { id: 'arterial_puncture', label: 'Arterial access <7d',     detail: 'Arterial puncture at non-compressible site within 7 days.' },
 ];
 
-/** HIGH-04 fix: make 3–4.5h window items interactive chips that affect eligibility */
+/** 3–4.5h window cautions. Per AHA/ASA 2026 §4.6.1, the legacy ECASS-3
+ *  exclusion list has not been re-endorsed — age >80 was removed (IST-3
+ *  and subsequent evidence support IVT benefit in this group). The
+ *  remaining chips below are kept as cautions pending a separate Class E
+ *  review (TASKS entry `ecass-3-exclusions-modernize`). Once that review
+ *  lands, this list will either be fully retired or reworded as cautions
+ *  rather than exclusions. */
 const EXTENDED_WINDOW_CHIPS: Chip[] = [
-  { id: 'ext_age_over80',       label: 'Age >80',               detail: 'Excluded from 3–4.5h window only (fine in 0–3h window).' },
   { id: 'ext_oral_anticoag',    label: 'Any oral anticoagulant', detail: 'Even if INR is normal — excluded from 3–4.5h window.' },
   { id: 'ext_nihss_over25',     label: 'NIHSS >25',             detail: 'Severe stroke has uncertain benefit in 3–4.5h window.' },
   { id: 'ext_dm_prior_stroke',  label: 'Diabetes + prior stroke', detail: 'This combination excluded in 3–4.5h window.' },
@@ -91,8 +96,8 @@ const CONTRA_LABELS: Record<string, string> = {
   gi_gu_bleed: 'GI/GU hemorrhage within 21 days',
   recent_mi: 'Acute MI within 3 months',
   arterial_puncture: 'Arterial puncture at non-compressible site within 7 days',
-  // 3–4.5h extended window exclusions
-  ext_age_over80:      'Age >80 (3–4.5h window exclusion)',
+  // 3–4.5h extended window exclusions (age >80 removed 2026-05-22 per
+  // AHA/ASA 2026 §4.6.1 — no longer an exclusion).
   ext_oral_anticoag:   'Oral anticoagulant use — any (3–4.5h window exclusion)',
   ext_nihss_over25:    'NIHSS >25 (3–4.5h window exclusion)',
   ext_dm_prior_stroke: 'Diabetes mellitus with prior stroke (3–4.5h window exclusion)',

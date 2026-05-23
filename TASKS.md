@@ -141,8 +141,17 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Rollback plan:** git revert single commit.
 - **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §1 row "DAPT (aspirin + clopidogrel × 21 days) for NIHSS ≤3 / ABCD² ≥4 minor AIS"
 
-### extended-ivt-ecass3-age80-modernize — Class E-clinical [from audit 2026-05-22]
+### ecass-3-exclusions-modernize — Class E-clinical [follow-up filed 2026-05-22]
 - **Status:** [ ] (open)
+- **User-visible goal:** Full review of remaining 3–4.5h "extended window" chips in IVT eligibility modal (oral anticoagulant, NIHSS >25, DM + prior stroke, >⅓ MCA on imaging) against AHA/ASA 2026 §4.6.1. None of these are explicit exclusions in 2026 — the chip list is legacy ECASS-3 framing. Likely outcome: retire EXTENDED_WINDOW_CHIPS entirely and replace with a single banner noting the 3–4.5h window has harmonized with 0–3h in 2026.
+- **Files likely touched:** src/components/article/stroke/ThrombolysisEligibilityModal.tsx (EXTENDED_WINDOW_CHIPS, lines 61–66)
+- **Acceptance checks:** Each remaining chip either retired or reworded as caution rather than exclusion, with sourcing to §4.6.1 or §4.6.5 (DOAC <48h). aha-asa-2026-4.6.1 citation registered. Clinical reviewer §17.2 sign-off.
+- **Clinical impact:** high (each chip currently misclassifies eligible patients)
+- **Rollback plan:** git revert single commit.
+- **Source row:** docs/reviews/clinical-PR-extended-ivt-ecass3-age80-modernize-2026-05-22.md (follow-up); originates from audit 2026-05-22 §2
+
+### extended-ivt-ecass3-age80-modernize — Class E-clinical [from audit 2026-05-22]
+- **Status:** [x] done — age >80 chip + label removed; remaining ECASS-3 chips moved to follow-up `ecass-3-exclusions-modernize` above
 - **User-visible goal:** Remove "Age >80" as a 3–4.5h hard exclusion chip in the IVT eligibility modal per AHA/ASA 2026 §4.6.1 Rec 7 and IST-3 evidence. Age >80 is a relative factor in 2026, not an exclusion. Current text causes incorrect disqualification of eligible elderly patients.
 - **Files likely touched:** src/components/article/stroke/ThrombolysisEligibilityModal.tsx (EXTENDED_WINDOW_CHIPS, line 62)
 - **Acceptance checks:** Chip removed or reworded to "Age >80 — relative factor, treat eligible patients". Other ECASS-3 exclusions reviewed (oral anticoag, NIHSS >25, DM+prior stroke, >1/3 MCA) and either kept with sourcing or modernized. last_reviewed refreshed. Clinical reviewer §17.2 sign-off.
