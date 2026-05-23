@@ -92,10 +92,16 @@ export type ABCD2Severity = ABCD2Risk;
  * Abcd2ScoreCalculator.tsx inline JSX (lines 147–149 of the pre-rebuild file).
  * Not new prose; preserved text.
  */
+// AHA/ASA 2026 §4.8 daptForMinorAIS Rec 1 (COR 1, LOE A): high-risk TIA
+// (ABCD² ≥4) within 24h who do NOT receive IVT should be started on DAPT
+// (clopidogrel + aspirin with loading dose) for 21 days then SAPT.
+// Source trials: CHANCE, POINT, INSPIRES. Added 2026-05-22 per audit
+// BLOCKING abcd2-dapt-cross-reference; the explanations now surface the
+// DAPT recommendation rather than implying observation alone.
 const ABCD2_DRAWER_EXPLANATION: Record<ABCD2Risk, string> = {
-  low: 'Urgent outpatient workup within 48h. All TIA patients need urgent evaluation regardless of score.',
-  moderate: 'Consider admission or same-day/urgent evaluation.',
-  high: 'Admit for workup and stroke prevention.',
+  low: 'Urgent outpatient workup within 48h. All TIA patients need urgent evaluation regardless of score. Single antiplatelet therapy if no contraindication.',
+  moderate: 'High-risk TIA. Start DAPT within 24h × 21 days (clopidogrel + aspirin, loading dose) then SAPT per AHA/ASA 2026 §4.8 (COR 1, LOE A; CHANCE/POINT/INSPIRES). Consider admission or same-day urgent evaluation for workup.',
+  high: 'High-risk TIA. Start DAPT within 24h × 21 days (clopidogrel + aspirin, loading dose) then SAPT per AHA/ASA 2026 §4.8 (COR 1, LOE A; CHANCE/POINT/INSPIRES). Admit for workup and stroke prevention.',
 };
 
 /**

@@ -196,7 +196,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §4.2 row 'Score 0–2 → "EVT typically not indicated"'
 
 ### abcd2-dapt-cross-reference — Class E-clinical [from audit 2026-05-22]
-- **Status:** [ ] (open)
+- **Status:** [x] done — moderate/high tier explanations now surface §4.8 DAPT (COR 1, LOE A); CHANCE/POINT/INSPIRES cited
 - **User-visible goal:** Add §4.8 DAPT cross-reference to ABCD² moderate (4–5) and high (≥6) risk tier explanations. ABCD² ≥4 is the §4.8 daptForMinorAIS Rec 1 trigger (COR 1, LOE A); current explanation says "Consider admission" but does not surface the DAPT recommendation.
 - **Files likely touched:** src/data/abcd2ScoreData.ts (ABCD2_DRAWER_EXPLANATION, lines 95–99)
 - **Acceptance checks:** Moderate/high explanation includes "ABCD² ≥4 → start DAPT within 24h × 21 days (CHANCE/POINT/THALES) per AHA/ASA 2026 §4.8". Citation traces. last_reviewed refreshed. Clinical reviewer §17.2 sign-off.
