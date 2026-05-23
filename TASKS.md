@@ -103,6 +103,98 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 
 ## PENDING
 
+### AHA/ASA 2026 AUDIT BLOCKING FOLLOW-UPS — from docs/audits/aha-2026-audit-2026-05-22.md
+
+### stroke-code-large-core-evt-update — Class E-clinical [from audit 2026-05-22]
+- **Status:** [ ] (open)
+- **User-visible goal:** Surface 2026 AHA/ASA §4.7.1 large-core EVT expansion (ASPECTS 3–5 COR 1, ASPECTS 0–2 COR 2a) in the Stroke Code pathway pearls and Step 2 LVO evidence accordion so residents do not miss eligible large-core patients.
+- **Files likely touched:** src/data/strokeClinicalPearls.ts (treatment-windows-quick, lvo-benefit-quick), src/pages/guide/StrokeBasicsWorkflowV2.tsx (lines 548–552 evidence accordion)
+- **Acceptance checks:** Pearl text references ASPECTS 3–5 (COR 1, LOE A 6–24h) and ASPECTS 0–2 (COR 2a, LOE B-R, age <80 + 0–6h + no mass effect). Citation traces to §4.7.1 mirror entries. last_reviewed refreshed. Clinical reviewer §17.2 sign-off.
+- **Clinical impact:** high
+- **Rollback plan:** git revert single commit.
+- **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §1 row "Thrombectomy up to 24h with imaging selection"
+
+### stroke-code-glucose-threshold-60 — Class E-clinical [from audit 2026-05-22]
+- **Status:** [ ] (open)
+- **User-visible goal:** Update hypoglycemia exclusion threshold in the IVT eligibility modal from <50 mg/dL to <60 mg/dL per AHA/ASA 2026 §4.5 row 1 (COR 1, LOE C-LD).
+- **Files likely touched:** src/components/article/stroke/ThrombolysisEligibilityModal.tsx (HARD_STOP_CHIPS hypoglycemia entry, line 38)
+- **Acceptance checks:** Modal chip reads "Glucose <60" with detail string referencing §4.5. Citation registered. last_reviewed refreshed. Clinical reviewer §17.2 sign-off.
+- **Clinical impact:** high
+- **Rollback plan:** git revert single commit.
+- **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §1 row "Hypoglycemia <60 mg/dL treat"
+
+### stroke-code-antiplatelet-24h-soften — Class E-clinical [from audit 2026-05-22]
+- **Status:** [ ] (open)
+- **User-visible goal:** Replace "no antithrombotics × 24h" hard-ban language in Step 3 evidence accordion with §4.8-aligned wording (COR 2b uncertain; IV aspirin within 90 min IVT is COR 3 Harm). Prevents residents from withholding indicated antiplatelet therapy past 24h.
+- **Files likely touched:** src/pages/guide/StrokeBasicsWorkflowV2.tsx (line 666 — "Labs & Treatment Orders" accordion).
+- **Acceptance checks:** Text references §4.8 inSettingOfIVT rows 1 (COR 2b) and 2 (COR 3 Harm). last_reviewed refreshed. Clinical reviewer §17.2 sign-off.
+- **Clinical impact:** low
+- **Rollback plan:** git revert single commit.
+- **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §1 row 'Antiplatelet within 24h of IVT — "no antithrombotics × 24h"'
+
+### stroke-code-minor-non-disabling-branch — Class E-clinical [from audit 2026-05-22]
+- **Status:** [ ] (open)
+- **User-visible goal:** Add a Step 1 decision branch for non-disabling deficits within 4.5h that routes to DAPT preference per AHA/ASA 2026 §4.6.1 Rec 4 (COR 3 No Benefit for IVT) + §4.8 daptForMinorAIS Rec 1 (COR 1, LOE A). Currently the workflow defaults all 4.5h-eligible patients to IVT consideration.
+- **Files likely touched:** src/components/article/stroke/CodeModeStep1.tsx, src/pages/guide/StrokeBasicsWorkflowV2.tsx (Step 1 wiring)
+- **Acceptance checks:** Workflow exposes a "disabling vs non-disabling" gate. Non-disabling path surfaces DAPT recommendation with §4.8 citation. last_reviewed refreshed. Clinical reviewer §17.2 sign-off.
+- **Clinical impact:** high
+- **Rollback plan:** git revert single commit.
+- **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §1 row "DAPT (aspirin + clopidogrel × 21 days) for NIHSS ≤3 / ABCD² ≥4 minor AIS"
+
+### extended-ivt-ecass3-age80-modernize — Class E-clinical [from audit 2026-05-22]
+- **Status:** [ ] (open)
+- **User-visible goal:** Remove "Age >80" as a 3–4.5h hard exclusion chip in the IVT eligibility modal per AHA/ASA 2026 §4.6.1 Rec 7 and IST-3 evidence. Age >80 is a relative factor in 2026, not an exclusion. Current text causes incorrect disqualification of eligible elderly patients.
+- **Files likely touched:** src/components/article/stroke/ThrombolysisEligibilityModal.tsx (EXTENDED_WINDOW_CHIPS, line 62)
+- **Acceptance checks:** Chip removed or reworded to "Age >80 — relative factor, treat eligible patients". Other ECASS-3 exclusions reviewed (oral anticoag, NIHSS >25, DM+prior stroke, >1/3 MCA) and either kept with sourcing or modernized. last_reviewed refreshed. Clinical reviewer §17.2 sign-off.
+- **Clinical impact:** high
+- **Rollback plan:** git revert single commit.
+- **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §2 row 'EXTEND_WINDOW_CHIPS: "Age >80"'
+
+### extended-ivt-path-c-wake-up-caveat — Class E-clinical [from audit 2026-05-22]
+- **Status:** [ ] (open)
+- **User-visible goal:** Either restrict Extended IVT Path C-LVO (TRACE-III 9–24h late TNK) to non-wake-up onset modes, or surface an extrapolation caveat for wake-up patients. TRACE-III enrolled witnessed-onset patients; wake-up applicability is an extrapolation.
+- **Files likely touched:** src/pages/ExtendedIVTPathway.tsx (PathStage logic line 129, Path C result rendering line 452)
+- **Acceptance checks:** UI either gates Path C on onsetMode !== 'wake-up' OR shows a "wake-up extrapolation" warning in the result card. last_reviewed refreshed. Clinical reviewer §17.2 sign-off.
+- **Clinical impact:** low
+- **Rollback plan:** git revert single commit.
+- **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §2 row "Path C wake-up extension"
+
+### elan-cor-chip-rebuild — Class C-clinical [from audit 2026-05-22]
+- **Status:** [ ] (open)
+- **User-visible goal:** Convert the 250-character verbatim COR-label string in the ELAN pathway result card into a short chip + accordion. Clinical substance is correct; this is a visual hierarchy fix.
+- **Files likely touched:** src/pages/ElanPathway.tsx (lines 242, 472, 558)
+- **Acceptance checks:** Chip label is "COR 2a, LOE B-R · §4.9". Verbatim quote moved into evidence accordion. last_reviewed refreshed. Clinical reviewer §17.2 sign-off because the quote text is verbatim guideline language.
+- **Clinical impact:** low
+- **Rollback plan:** git revert single commit.
+- **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §3 row '"COR 2a, LOE B-R" label embedded in JSX heading slot'
+
+### nihss-emr-include-lvo — Class C-clinical [from audit 2026-05-22]
+- **Status:** [ ] (open)
+- **User-visible goal:** Add opt-in to include RACE-derived LVO inference (probability, label, RACE total) in the NIHSS EMR copy text. Drawer already shows it; export currently omits.
+- **Files likely touched:** src/pages/NihssCalculator.tsx (buildText lines 326–409)
+- **Acceptance checks:** EMR text optionally includes "LVO probability: <Low/Moderate/High>, RACE <score>/9". Toggle defaults to off (preserves current behavior per V direction 2026-05-20 about severity bracket omission). last_reviewed refreshed. Clinical reviewer §17.2 sign-off.
+- **Clinical impact:** low
+- **Rollback plan:** git revert single commit.
+- **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §4.1 row "NIHSS EMR text omits severity bracket + LVO context"
+
+### aspects-cor-2a-correction — Class E-clinical [from audit 2026-05-22]
+- **Status:** [ ] (open)
+- **User-visible goal:** Reword ASPECTS 0–2 interpretation from "EVT typically not indicated, exceptional Class IIa" to "EVT may reasonably be considered (COR 2a, LOE B-R) with age <80 + 0–6h + no mass effect; otherwise EVT not routinely indicated." Aligns the calculator with §4.7.1 adults row 4 (LASTE basis).
+- **Files likely touched:** src/pages/AspectScoreCalculator.tsx (getScoreInfo, lines 89–94)
+- **Acceptance checks:** ASPECTS 0–2 interpretation references COR 2a + age <80 + 0–6h + no mass effect. Citation traces to §4.7.1 mirror. last_reviewed refreshed. Clinical reviewer §17.2 sign-off.
+- **Clinical impact:** high
+- **Rollback plan:** git revert single commit.
+- **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §4.2 row 'Score 0–2 → "EVT typically not indicated"'
+
+### abcd2-dapt-cross-reference — Class E-clinical [from audit 2026-05-22]
+- **Status:** [ ] (open)
+- **User-visible goal:** Add §4.8 DAPT cross-reference to ABCD² moderate (4–5) and high (≥6) risk tier explanations. ABCD² ≥4 is the §4.8 daptForMinorAIS Rec 1 trigger (COR 1, LOE A); current explanation says "Consider admission" but does not surface the DAPT recommendation.
+- **Files likely touched:** src/data/abcd2ScoreData.ts (ABCD2_DRAWER_EXPLANATION, lines 95–99)
+- **Acceptance checks:** Moderate/high explanation includes "ABCD² ≥4 → start DAPT within 24h × 21 days (CHANCE/POINT/THALES) per AHA/ASA 2026 §4.8". Citation traces. last_reviewed refreshed. Clinical reviewer §17.2 sign-off.
+- **Clinical impact:** high
+- **Rollback plan:** git revert single commit.
+- **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §4.4 row "Moderate risk (4–5)"
+
 ### AGENT GOVERNANCE
 
 - [ ] [P2] Implement full task-class-aware clinical edit gate for guard-clinical-edit.mjs
