@@ -9037,6 +9037,260 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── IST: 2026-05-23 Archetype A rebuild ───────────────────────────────────
+  // Lancet 1997;349:1569-1581. Sandercock PAG et al. With CAST, the
+  // foundational RCT evidence for early aspirin within 48h of acute ischaemic
+  // stroke. Open-label factorial 2x2; ~19,435 patients across 36 countries.
+  if (trialId === 'ist-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>IST</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In adults within 48 hours of suspected acute ischaemic stroke, does early aspirin 300 mg/day and/or subcutaneous unfractionated heparin reduce death or dependence? Factorial 2×2 design; aspirin and heparin questions analysed independently. Paired with the parallel double-blind CAST trial in China.
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Aspirin question</p>
+              <p className="text-xs text-slate-500 mt-0.5">14-day death or non-fatal recurrent stroke (aspirin vs avoid)</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={11.3}
+                controlPct={12.4}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="14-day death or non-fatal recurrent stroke"
+                riskRatio="ARD −1.1 pp"
+                ciLow="−2.0"
+                ciHigh="−0.2"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Aspirin saved 11 deaths or non-fatal recurrent strokes per 1,000 at 14 days (2p=0.02). After adjustment for baseline prognosis, 14 fewer dead or dependent per 1,000 at 6 months (2p=0.03). <strong className="text-slate-700">Heparin caveat (often misremembered):</strong> low- and medium-dose subcutaneous heparin showed no net 6-month benefit — early ischaemic-stroke reduction was offset by haemorrhagic-stroke increase (1.2% vs 0.4%, 2p&lt;0.00001). Medium-dose heparin (12,500 IU bd) was harmful at 14 days. IST is the primary RCT evidence against routine therapeutic-intensity heparin in acute ischaemic stroke.
+                </p>
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '19,435 patients at 467 hospitals in 36 countries. Open-label factorial 2×2 (aspirin vs avoid AND/OR heparin vs avoid). Central minimisation-algorithm allocation. 6-month outcome 99.2% complete; 14-day outcome 99.99% complete. Pilot phase Jan 1991 – Feb 1993; main trial March 1993 – May 1996. Pre-specified joint analysis with CAST. Published Lancet 1997.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/cast-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">CAST (double-blind counterpart)</Link>
+              <Link to="/trials/profess-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">PRoFESS (long-term)</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="IST" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'CAST', href: '/trials/cast-trial' }, { label: 'PRoFESS', href: '/trials/profess-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── CAST: 2026-05-23 Archetype A rebuild ──────────────────────────────────
+  // Lancet 1997;349:1641-1649. Double-blind placebo-controlled counterpart to
+  // IST. ~21,106 patients across 413 Chinese hospitals. With IST = ~40,000
+  // patients underwriting AHA/ASA Class I, Level A early aspirin.
+  if (trialId === 'cast-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CAST</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In adults within 48 hours of suspected acute ischaemic stroke, does double-blind placebo-controlled aspirin 160 mg/day for up to 4 weeks reduce in-hospital mortality and disability? The blinded, placebo-controlled counterpart to the open-label IST.
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-xs text-slate-500 mt-0.5">4-week in-hospital mortality</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={3.3}
+                controlPct={3.9}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="4-week in-hospital mortality"
+                riskRatio="ARD −0.6 pp"
+                ciLow="−1.1"
+                ciHigh="−0.1"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  14% proportional mortality reduction; 5.4 fewer in-hospital deaths per 1,000. Combined 4-week death or non-fatal stroke 5.3% vs 5.9% (2p=0.03; 6.8 fewer per 1,000). Dead-or-dependent at discharge directionally favoured aspirin (30.5% vs 31.6%, 2p=0.08; trend only). Pooled with IST (Chen ZM et al., Stroke 2000): in ~40,000 patients early aspirin prevents ~9 deaths or non-fatal recurrent strokes per 1,000 and causes ~2 additional haemorrhagic strokes per 1,000 — net benefit ~7 per 1,000. Basis of AHA/ASA Class I, Level A.
+                </p>
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '21,106 patients at 413 Chinese hospitals. Randomised double-blind placebo-controlled trial; central prepacked calendar-packed envelopes, allocation balanced for every 10 consecutive patients within each hospital. ITT analysis. Pre-specified joint analysis with IST. Enrolled November 1993 to March 1997. Published Lancet 1997.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/ist-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">IST (open-label counterpart)</Link>
+              <Link to="/trials/profess-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">PRoFESS (long-term)</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="CAST" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'IST', href: '/trials/ist-trial' }, { label: 'PRoFESS', href: '/trials/profess-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── PRoFESS: 2026-05-23 Archetype A rebuild ───────────────────────────────
+  // NEJM 2008. Long-term head-to-head of ASA+ERDP vs clopidogrel for recurrent
+  // stroke. Failed noninferiority despite overlapping event curves (upper CI
+  // bound crossed prespecified 1.075 margin). NEUTRAL result.
+  if (trialId === 'profess-trial' && trialMetadata) {
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>PRoFESS</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients within 90 days of non-cardioembolic ischemic stroke, is aspirin + extended-release dipyridamole (Aggrenox) noninferior to clopidogrel monotherapy for preventing recurrent stroke over a mean 2.5-year follow-up?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              Sacco RL et al. (NEJM 2008;359:1238–1251){trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Noninferiority</p>
+              <p className="text-xs text-slate-500 mt-0.5">First recurrence of stroke (any type) over mean 2.5 years; NI margin HR 1.075</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={9.0}
+                controlPct={8.8}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Stroke recurrence over 2.5 years"
+                riskRatio="HR 1.01"
+                ciLow="0.92"
+                ciHigh="1.11"
+                pValue="NI not met"
+                winnerArm="none"
+              />
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Observed HR 1.01 favors neither arm, but the upper 95% CI bound (1.11) crosses the prespecified noninferiority margin (HR 1.075). <strong className="text-slate-700">Noninferiority was not formally established.</strong> Do not interpret this as proof of equivalence — overlapping event curves do not satisfy a failed NI conclusion. Harm signal: ICH 1.4% vs 1.0% favoring clopidogrel (HR 1.42, 95% CI 1.11–1.83). Discontinuation 29.1% vs 22.6% (P&lt;0.001).
+                </p>
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '20,332 patients (ASA-ERDP 10,181 / clopidogrel 10,151) at 695 centers in 35 countries. Double-blind double-dummy noninferiority trial. 2×2 factorial with telmisartan vs placebo. Median 15 days from index event to enrollment. NI margin HR 1.075 (one-sided alpha 0.025). Mean follow-up 2.5 years. Enrolled Sep 2003 to Feb 2008.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/ist-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">IST (foundational aspirin)</Link>
+              <Link to="/trials/cast-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">CAST (foundational aspirin)</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="PRoFESS" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'IST', href: '/trials/ist-trial' }, { label: 'CAST', href: '/trials/cast-trial' }]}
+            citation={'Sacco RL et al. (NEJM 2008;359:1238–1251)'} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
   // ─────────────────────────────────────────────────────────────────────────
 
   if (!trial) {
