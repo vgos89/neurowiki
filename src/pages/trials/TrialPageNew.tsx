@@ -8605,6 +8605,704 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── THEIA: 2026-05-23 Archetype A render (CRAO thrombolysis) ──────────────
+  // Lancet Neurology 2025;24(11):909-919. Préterre et al. First phase 3 RCT
+  // of IV alteplase for non-arteritic CRAO within 4.5h. Primary not met
+  // (66% vs 48%, p=0.95); underpowered at N=70. Safety reassuring.
+  if (trialId === 'theia-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>THEIA</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In adults with acute non-arteritic central retinal artery occlusion (Snellen &lt;20/400) within 4.5h of symptom onset, does IV alteplase 0.9 mg/kg improve visual acuity at 1 month compared with 300 mg oral aspirin? First phase 3 RCT of IV thrombolysis for CRAO.
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-xs text-slate-500 mt-0.5">Visual acuity improvement ≥0.3 LogMAR (~3 Snellen lines / 15 ETDRS letters) at 1 month</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={66}
+                controlPct={48}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Visual acuity ≥0.3 LogMAR gain at 1 month"
+                riskRatio="aOR 1.10"
+                ciLow="0.07"
+                ciHigh="18.39"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Unadjusted risk difference +17.4 pp (95% CI -11.8 to +46.5). Trial was powered for a 30 pp difference; observed aspirin response of 48% (vs assumed 10%) made the trial underpowered for the smaller real difference. p=0.95 reflects no statistical signal — not evidence of no effect.
+                </p>
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '70 patients (35 alteplase / 35 aspirin) at 16 French stroke units. Enrolled June 2018 to October 2023. Phase 3 double-dummy patient- and assessor-blinded RCT. Primary endpoint: visual acuity ≥0.3 LogMAR gain at 1 month. Underpowered per investigators. Published Lancet Neurology November 2025.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/crao-management" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">CRAO management question</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="THEIA" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'CRAO management question', href: '/trials/q/crao-management' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── IST: 2026-05-23 Archetype A render (foundational aspirin RCT) ─────────
+  // Lancet 1997;349:1569-1581. Sandercock et al. Factorial 2x2: aspirin
+  // 300 mg/d and/or SC heparin in 19,435 patients within 48h of AIS.
+  // With CAST, foundational evidence for AHA/ASA Class I, Level A early
+  // aspirin within 24-48h once ICH is excluded.
+  if (trialId === 'ist-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>IST</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients within 48 hours of suspected acute ischaemic stroke, does aspirin 300 mg/day and/or subcutaneous unfractionated heparin reduce death or dependence at 6 months? Factorial 2x2 design enrolling 19,435 patients across 36 countries — one of the largest stroke trials ever conducted.
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome (aspirin comparison)</p>
+              <p className="text-xs text-slate-500 mt-0.5">14-day death or non-fatal recurrent stroke (aspirin 300 mg/day vs avoid aspirin)</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={11.3}
+                controlPct={12.4}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="14-day death or non-fatal recurrent stroke"
+                riskRatio="−11/1000"
+                ciLow="—"
+                ciHigh="—"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Adjusted 6-month death or dependence: 14 fewer per 1000 (2p=0.03 after adjustment for baseline prognosis). Heparin (any dose) showed no net 6-month benefit and increased 14-day haemorrhagic stroke (1.2% vs 0.4%, 2p&lt;0.00001) — IST is the foundational RCT evidence against routine therapeutic-intensity heparin in acute ischaemic stroke.
+                </p>
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '19,435 patients at 467 hospitals in 36 countries. Pilot phase January 1991 to February 1993 (984 patients); main trial March 1993 to May 1996. Factorial 2x2: aspirin (any) vs avoid aspirin; heparin (any dose) vs avoid heparin — analysed independently. Open-label with central minimisation allocation; 6-month outcome blinded in most countries. Prospectively planned for joint analysis with CAST. Published Lancet 1997 May 31.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/dapt" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">DAPT question</Link>
+              <Link to="/trials/cast-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">CAST (parallel blinded trial)</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="IST" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'DAPT question', href: '/trials/q/dapt' }, { label: 'CAST (parallel blinded trial)', href: '/trials/cast-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── CAST: 2026-05-23 Archetype A render (foundational aspirin RCT) ────────
+  // Lancet 1997;349:1641-1649. CAST Collaborative Group. Double-blind
+  // placebo-controlled aspirin 160 mg/d in 21,106 Chinese patients within
+  // 48h of AIS. Parallel to IST; foundational AHA/ASA Class I, Level A.
+  if (trialId === 'cast-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CAST</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients within 48 hours of suspected acute ischaemic stroke, does aspirin 160 mg/day vs matched placebo reduce in-hospital mortality and death or dependence at discharge? Double-blind placebo-controlled trial in 21,106 Chinese patients — the rigorous-blinding counterpart to the open-label IST.
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-xs text-slate-500 mt-0.5">4-week in-hospital mortality (co-primary)</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={3.3}
+                controlPct={3.9}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="4-week in-hospital mortality"
+                riskRatio="−5.4/1000"
+                ciLow="—"
+                ciHigh="—"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Combined 4-week death or non-fatal stroke: 5.3% vs 5.9% (2p=0.03; 6.8 fewer per 1000). Dead-or-dependent at discharge directionally favoured aspirin (30.5% vs 31.6%, 2p=0.08; trend). Small non-significant excess of haemorrhagic stroke (+2/1000) and significant excess of major extracranial bleeding (+2.7/1000, 2p=0.02). Pooled IST+CAST (Chen 2000): ~9/1000 fewer dead-or-restroked vs ~2/1000 excess ICH; net ~7/1000 benefit.
+                </p>
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '21,106 patients at 413 Chinese hospitals. Enrolled November 1993 to March 1997. Double-blind placebo-controlled; central calendar-packed envelopes; allocation balanced per 10 consecutive patients per hospital. In-hospital outcome up to 4 weeks; discharge forms for 97.9% of randomised patients. Pre-specified for parallel analysis with IST. Published Lancet 1997 June 7.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/dapt" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">DAPT question</Link>
+              <Link to="/trials/ist-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">IST (parallel open-label trial)</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="CAST" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'DAPT question', href: '/trials/q/dapt' }, { label: 'IST (parallel open-label trial)', href: '/trials/ist-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── PRoFESS: 2026-05-23 Archetype A render (NI antiplatelet head-to-head) ─
+  // NEJM 2008;359(12):1238-1251. Sacco RL et al. Aspirin+ER-dipyridamole vs
+  // clopidogrel for long-term secondary prevention. NONINFERIORITY trial;
+  // NI NOT established (HR 1.01, 95% CI 0.92-1.11; upper bound crosses
+  // 1.075 margin). No NNT — design + result preclude it.
+  if (trialId === 'profess-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>PRoFESS</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with completed non-cardioembolic ischaemic stroke within 90 days, is aspirin 50 mg/day plus extended-release dipyridamole 400 mg/day noninferior to clopidogrel 75 mg/day for preventing recurrent stroke over a mean 2.5-year follow-up? Noninferiority trial with a prespecified hazard-ratio margin of 1.075.
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              Sacco RL et al. (NEJM 2008;359:1238-1251){' '}·{' '}<a href="https://doi.org/10.1056/NEJMoa0805002" target="_blank" rel="noopener noreferrer" className="hover:underline">doi:10.1056/NEJMoa0805002</a>{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome (noninferiority)</p>
+              <p className="text-xs text-slate-500 mt-0.5">First recurrent stroke (any type) over mean 2.5-year follow-up — NI margin HR 1.075</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={9.0}
+                controlPct={8.8}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Recurrent stroke at 2.5y"
+                riskRatio="HR 1.01"
+                ciLow="0.92"
+                ciHigh="1.11"
+                pValue="NI not est."
+                winnerArm="none"
+              />
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Noninferiority NOT formally established: the upper bound of the 95% CI (1.11) crosses the prespecified NI margin (1.075). Do NOT describe the regimens as "equivalent" or "interchangeable" on PRoFESS evidence alone. ICH was significantly higher with ASA–ERDP (1.4% vs 1.0%, HR 1.42, 95% CI 1.11–1.83); discontinuation 29.1% vs 22.6% (P&lt;0.001), driven mainly by dipyridamole headache.
+                </p>
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '20,332 patients (ASA–ERDP 10,181 / clopidogrel 10,151) at 695 centers in 35 countries. Randomized double-blind double-dummy noninferiority trial; 2×2 factorial with telmisartan vs placebo. Enrolled September 2003 to February 2008. Mean follow-up 2.5 years (range 1.5–4.4). NI margin HR 1.075. Trial ran to prespecified 1,715-event count. Sponsor: Boehringer Ingelheim. Published NEJM 2008.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/dapt" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">DAPT question</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="PRoFESS" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'DAPT question', href: '/trials/q/dapt' }]}
+            citation={trialMetadata.source ?? 'Sacco RL et al. (NEJM 2008;359:1238-1251)'} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── ANNEXA-I: 2026-05-23 Archetype A render (FXa-ICH reversal RCT) ────────
+  // NEJM 2024;390(19):1745-1755. Connolly SJ et al. First RCT of andexanet
+  // alfa in acute ICH on FXa inhibitor. Composite hemostatic primary met
+  // (NNT 8); ischemic stroke harm signal 6.5% vs 1.5% (NNH 20). Stopped
+  // early at DSMB-pre-specified interim. NNT shown alongside NNH context.
+  if (trialId === 'annexa-i-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ANNEXA-I</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In adults with acute intracerebral hemorrhage on apixaban, rivaroxaban, or edoxaban within 15 hours of last dose (hematoma 0.5–60 mL, NIHSS ≤35, GCS ≥7), does andexanet alfa improve a composite hemostatic-efficacy surrogate at 12 hours compared with usual care (85.5% of which was 4F-PCC)? First randomized trial of an FXa-inhibitor antidote specifically in acute ICH.
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-xs text-slate-500 mt-0.5">Composite hemostatic efficacy at 12 h: hematoma volume change ≤35%, NIHSS rise &lt;7, no rescue therapy 3–12 h</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={67.0}
+                controlPct={53.1}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Hemostatic efficacy at 12 h"
+                riskRatio="+13.4 pp"
+                ciLow="4.6"
+                ciHigh="22.2"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-sm font-semibold text-slate-700">{Math.round(trialMetadata.calculations.nnt as number)}</span>
+                  <span className="text-xs text-slate-500">for the composite hemostatic surrogate at 12 h (NOT functional independence or survival)</span>
+                </div>
+              )}
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Composite was driven by hematoma-volume control; NIHSS-change and rescue-therapy components did not differ. Trade-off: ischemic stroke 6.5% vs 1.5% (+5.0 pp, NNH 20); any thrombotic event 10.3% vs 5.6% (P=0.048, NNH 22). No functional benefit (exploratory mRS 0–3 at 30 days: 28.0% vs 31.0%) and no mortality benefit (27.8% vs 25.5%, P=0.51). DSMB-halted early at pre-specified interim — effect size may be overestimated.
+                </p>
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '530 patients in the extended safety population (263 andexanet / 267 usual care). Primary efficacy at pre-specified interim: 452 patients (224 andexanet / 228 usual care). 131 sites in 23 countries. Enrolled June 2019 to May 2023. Multicenter multinational open-label RCT with blinded outcome adjudication. Originally planned for 900 patients; DSMB halted at interim (May 2023) after hemostatic-efficacy threshold P<0.031 crossed. Published NEJM 2024.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/ich-anticoagulation-reversal" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">ICH anticoagulation reversal question</Link>
+              <Link to="/trials/annexa-4-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ANNEXA-4 (single-arm)</Link>
+              <Link to="/trials/sarode-2013-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">Sarode 2013 (4F-PCC vs FFP)</Link>
+              <Link to="/trials/patch-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">PATCH (platelets in ICH)</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="ANNEXA-I" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'ICH anticoagulation reversal question', href: '/trials/q/ich-anticoagulation-reversal' }, { label: 'ANNEXA-4 (single-arm)', href: '/trials/annexa-4-trial' }, { label: 'Sarode 2013 (4F-PCC vs FFP)', href: '/trials/sarode-2013-trial' }, { label: 'PATCH (platelets in ICH)', href: '/trials/patch-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── ANNEXA-4: 2026-05-23 Archetype A render (FDA-approval cohort) ─────────
+  // NEJM 2019;380(14):1326-1335. Connolly SJ et al. Single-arm prospective
+  // cohort, 352 patients with FXa-inhibitor major bleeding (64% intracranial).
+  // Anti-FXa reduction 92%; hemostatic efficacy 82% at 12h. SINGLE ARM — no
+  // NNT, no comparator. Underwrote FDA accelerated approval May 2018.
+  if (trialId === 'annexa-4-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ANNEXA-4</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In adults with acute major bleeding (64% intracranial, 26% gastrointestinal) within 18 hours of an FXa-inhibitor dose (apixaban, rivaroxaban, edoxaban, enoxaparin), does andexanet alfa per the FDA-label algorithm reduce anti-FXa activity and achieve hemostatic efficacy at 12 hours? Single-arm prospective cohort that underwrote FDA accelerated approval in May 2018 — no comparator, no efficacy inference in the strict sense.
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome (descriptive, single arm)</p>
+              <p className="text-xs text-slate-500 mt-0.5">Coprimary: percent change in anti-FXa activity from baseline to nadir; rate of excellent or good hemostatic efficacy at 12 h after infusion end</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={82}
+                controlPct={0}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel="No comparator (single-arm cohort)"
+                endpoint="Excellent or good hemostasis at 12 h"
+                riskRatio="92% anti-FXa drop"
+                ciLow="—"
+                ciHigh="—"
+                pValue="N/A"
+                winnerArm="none"
+              />
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Single-arm observational design — no efficacy inference possible. Anti-FXa fell a median 92% (95% CI 91–93% apixaban; 88–94% rivaroxaban). Hemostatic efficacy 204/249 (82%) at 12 h. 30-day mortality 14%; thrombotic events 10% — neither attributable causally to andexanet. The randomized ICH-specific confirmation is ANNEXA-I (NEJM 2024), which quantified the ischemic-stroke trade-off (NNH ~20) that this single-arm dataset could only describe.
+                </p>
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '352 patients enrolled (254 in efficacy population) at 63 centers in North America and Europe. Enrolled April 2015 to May 2018. Single-arm, open-label, prospective cohort — no randomization, no comparator. Adjudicated hemostatic efficacy (excellent/good/poor/none) at 12 h after infusion end. 30-day follow-up. Supported FDA accelerated approval (granted May 2018). Sponsor: Portola Pharmaceuticals (now Alexion AstraZeneca Rare Disease). Published NEJM 2019.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/ich-anticoagulation-reversal" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">ICH anticoagulation reversal question</Link>
+              <Link to="/trials/annexa-i-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ANNEXA-I (randomized ICH confirmation)</Link>
+              <Link to="/trials/sarode-2013-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">Sarode 2013 (4F-PCC vs FFP)</Link>
+              <Link to="/trials/patch-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">PATCH (platelets in ICH)</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="ANNEXA-4" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'ICH anticoagulation reversal question', href: '/trials/q/ich-anticoagulation-reversal' }, { label: 'ANNEXA-I (randomized ICH confirmation)', href: '/trials/annexa-i-trial' }, { label: 'Sarode 2013 (4F-PCC vs FFP)', href: '/trials/sarode-2013-trial' }, { label: 'PATCH (platelets in ICH)', href: '/trials/patch-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── Sarode 2013: 2026-05-23 Archetype A render (4F-PCC vs FFP NI RCT) ─────
+  // Circulation 2013;128(11):1234-1243. Sarode R et al. Phase IIIb open-label
+  // noninferiority RCT in 202 VKA-treated adults with major bleeding.
+  // NI established on hemostasis; superiority on INR target. NONINFERIORITY
+  // design — no NNT shown.
+  if (trialId === 'sarode-2013-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>Sarode 2013</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In adults on a vitamin K antagonist with acute major bleeding (baseline INR ≥2.0), is 4-factor PCC (Kcentra/Beriplex P/N, INR-stratified dose, plus vitamin K 5–10 mg IV) noninferior to fresh frozen plasma (10–15 mL/kg plus vitamin K) for 24-hour hemostatic efficacy AND superior for rapid INR reduction? Phase IIIb pivotal trial that underwrote FDA approval of Kcentra (April 2013).
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome (noninferiority)</p>
+              <p className="text-xs text-slate-500 mt-0.5">Hemostatic efficacy at 24 h (effective) — NI margin −10 percentage points on lower bound of 95% CI</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={72.4}
+                controlPct={65.4}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="Hemostatic efficacy at 24 h"
+                riskRatio="+7.1 pp"
+                ciLow="-5.8"
+                ciHigh="19.9"
+                pValue="NI met"
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Noninferiority established: lower bound of CI (−5.8 pp) is above the prespecified −10 pp NI margin. Sequential superiority on rapid INR reduction MET: INR ≤1.3 at 30 minutes 62.2% vs 9.6% (+52.6 pp, 95% CI 39.4–65.9, P&lt;0.001). Median infusion volume 99 mL (4F-PCC) vs 814 mL (FFP); fluid overload 2.9% vs 11.9%. Mortality (5.1% vs 4.8%) and thromboembolic events (6.8% vs 6.4%) comparable. Both arms received vitamin K 5–10 mg IV — never give one without the other.
+                </p>
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '202 patients in ITT efficacy population (98 4F-PCC / 104 FFP); 212 randomized. 36 sites in North America and Europe. Enrolled 2008 to 2012. Phase IIIb multicenter open-label noninferiority RCT with prospective randomization stratified by baseline INR and bleeding type. NI margin −10 pp on lower bound of 95% CI; coprimary sequential superiority on rapid INR reduction. Independent blinded endpoint adjudication committee. 45-day follow-up. Sponsor: CSL Behring. Published Circulation 2013.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/ich-anticoagulation-reversal" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">ICH anticoagulation reversal question</Link>
+              <Link to="/trials/annexa-i-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ANNEXA-I (FXa-inhibitor ICH)</Link>
+              <Link to="/trials/annexa-4-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ANNEXA-4 (FXa single-arm)</Link>
+              <Link to="/trials/patch-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">PATCH (platelets in ICH)</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="Sarode 2013" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'ICH anticoagulation reversal question', href: '/trials/q/ich-anticoagulation-reversal' }, { label: 'ANNEXA-I (FXa-inhibitor ICH)', href: '/trials/annexa-i-trial' }, { label: 'ANNEXA-4 (FXa single-arm)', href: '/trials/annexa-4-trial' }, { label: 'PATCH (platelets in ICH)', href: '/trials/patch-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── PATCH: 2026-05-23 Archetype A render (ICH platelet transfusion HARM) ──
+  // Lancet 2016;387(10038):2605-2613. Baharoglu MI et al. Open-label PROBE
+  // RCT in 190 antiplatelet-associated ICH patients. ORDINAL-SHIFT primary;
+  // direction = HARM (aOR 2.05, 95% CI 1.18–3.56, P=0.0114). NO NNT
+  // (ordinal-shift design + HARM direction). AHA/ASA 2022 Class III: Harm.
+  if (trialId === 'patch-trial' && trialMetadata) {
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>PATCH</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In adults with spontaneous supratentorial ICH on antiplatelet therapy for at least 7 days, randomized within 6 hours of onset with GCS ≥8 (no planned surgery), does platelet transfusion within 90 minutes of brain imaging reduce death or dependence at 3 months compared with standard care? Ordinal-shift primary on the full mRS distribution.
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — ORDINAL SHIFT</p>
+              <p className="text-xs text-slate-500 mt-0.5">Shift toward death or dependence on the full mRS distribution at 3 months (ordinal logistic regression). Direction: HARM. NNT is not appropriate for ordinal-shift outcomes.</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={76}
+                controlPct={56}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="mRS 3–6 at 3 months (proxy for ordinal shift; primary was full mRS distribution)"
+                riskRatio="aOR 2.05"
+                ciLow="1.18"
+                ciHigh="3.56"
+                pValue={trialMetadata.stats.pValue.value}
+                winnerArm="control"
+              />
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  HARM trial. The adjusted common odds ratio of 2.05 (95% CI 1.18–3.56, P=0.0114) means platelet transfusion approximately DOUBLED the odds of a worse mRS at 3 months. Mortality 24% vs 17%; serious adverse events 42% vs 30% — same direction as the primary. Hematoma expansion did not differ; mechanism is not simple rebleeding. Trial excluded patients with planned neurosurgical evacuation — does NOT apply to bridging platelet transfusion before craniotomy.
+                </p>
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '190 patients (97 platelet transfusion / 93 standard care) at 60 hospitals in the Netherlands, UK, and France. Enrolled February 2009 to October 2015. Open-label, multicenter, masked-endpoint phase 3 RCT (PROBE design). 1:1 randomization stratified by hospital and antiplatelet type. Ordinal logistic regression on full mRS distribution at 3 months as the primary analysis; outcome adjudication blinded. Published Lancet 2016.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/ich-anticoagulation-reversal" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">ICH anticoagulation reversal question</Link>
+              <Link to="/trials/annexa-i-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ANNEXA-I (FXa-inhibitor ICH)</Link>
+              <Link to="/trials/annexa-4-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">ANNEXA-4 (FXa single-arm)</Link>
+              <Link to="/trials/sarode-2013-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">Sarode 2013 (4F-PCC vs FFP)</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="PATCH" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'ICH anticoagulation reversal question', href: '/trials/q/ich-anticoagulation-reversal' }, { label: 'ANNEXA-I (FXa-inhibitor ICH)', href: '/trials/annexa-i-trial' }, { label: 'ANNEXA-4 (FXa single-arm)', href: '/trials/annexa-4-trial' }, { label: 'Sarode 2013 (4F-PCC vs FFP)', href: '/trials/sarode-2013-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
   // ── EXTEND-IA TNK: 2026-05-23 Archetype A rebuild ─────────────────────────
   // NEJM 2018;378(17):1573-1582. Campbell BCV et al. First head-to-head TNK
   // vs alteplase in LVO-EVT-co-treated; established TNK 0.25 mg/kg as the

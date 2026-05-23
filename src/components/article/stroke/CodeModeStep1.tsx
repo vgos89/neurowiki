@@ -435,6 +435,25 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
           {hasDisablingSymptom && (
             <p className="text-sm font-semibold text-amber-900">→ Consider TNK after discussing risk/benefit with patient and team.</p>
           )}
+          {/* Non-disabling branch — AHA/ASA 2026 §4.6.1 + §4.8. Added
+              2026-05-23 per audit BLOCKING stroke-code-minor-non-disabling-
+              branch. When the clinician has worked through the disabling
+              checklist and found NO disabling symptoms, route to DAPT as
+              the appropriate alternative (COR 1, LOE A vs COR 3 No
+              Benefit for IVT in this stratum). The chip is rendered
+              alongside the existing TNK chip so both forks are visible
+              and the clinician sees the explicit decision rather than
+              defaulting to IVT. */}
+          {!hasDisablingSymptom && nihssScore <= 3 && (
+            <div className="border-t border-amber-200 pt-3 space-y-2">
+              <p className="text-sm font-semibold text-amber-900">
+                → No disabling deficit present? DAPT is the recommended pathway.
+              </p>
+              <p className="text-xs text-amber-700 leading-snug">
+                AHA/ASA 2026 §4.6.1 (COR 3 No Benefit) advises against routine IVT in mild non-disabling deficits within 4.5h. §4.8 (COR 1, LOE A) recommends DAPT (aspirin + clopidogrel × 21 days) within 24h for NIHSS ≤3 noncardioembolic AIS — CHANCE, POINT, INSPIRES.
+              </p>
+            </div>
+          )}
         </div>
       )}
 

@@ -17,6 +17,7 @@ import React, {
 import { Link } from 'react-router-dom';
 import { CalculatorHeader } from '../components/calculators/CalculatorHeader';
 import { CalculatorFooter } from '../components/calculators/CalculatorFooter';
+import { CalculatorTrialEvidence } from '../components/calculators/CalculatorTrialEvidence';
 import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
 import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useDrawerState } from '../hooks/useDrawerState';
@@ -608,6 +609,10 @@ const IchScoreCalculator: React.FC = () => {
           </section>
 
         </div>{/* end space-y-10 */}
+
+        {/* Trials informing thresholds — STRONG-confidence per
+            calculatorTrialMap (V approval 2026-05-21). */}
+        <CalculatorTrialEvidence calculatorId="ich-score" />
 
         {/* Page footer — §1.2 */}
         <CalculatorFooter

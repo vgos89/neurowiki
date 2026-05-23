@@ -25,6 +25,7 @@ import { useNavigationSource } from '../hooks/useNavigationSource';
 import { getCase } from '../lib/cases/store';
 import { CalculatorHeader } from '../components/calculators/CalculatorHeader';
 import { CalculatorFooter } from '../components/calculators/CalculatorFooter';
+import { CalculatorTrialEvidence } from '../components/calculators/CalculatorTrialEvidence';
 import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
 import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useFavorites } from '../hooks/useFavorites';
@@ -745,6 +746,11 @@ const NihssCalculator: React.FC = () => {
             );
           })}
         </div>
+
+        {/* Trials informing thresholds — STRONG-confidence per
+            calculatorTrialMap (V approval 2026-05-21). Renders nothing
+            if confidence is not STRONG. */}
+        <CalculatorTrialEvidence calculatorId="nihss" />
 
         {/* Footer — §1.2 */}
         <CalculatorFooter

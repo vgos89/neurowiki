@@ -1432,6 +1432,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       ciHigh: 2.8,
       direction: 'positive',
     },
+    legend: {
+      finding: 'Solitaire EVT ≤8 h raised independence from 28% to 44% in anterior LVO.',
+      bottomLineTag: '+16 / 100',
+      keyStat: 'cOR 1.7 (1.05–2.8)',
+    },
   },
   'extend-ia-trial': {
     id: 'extend-ia-trial',
@@ -1546,6 +1551,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: extend-ia-bedside-pearl | source: Campbell NEJM 2015 */
     bedsidePearl: 'When CT perfusion shows a small core and a large penumbra in an LVO patient who has just received alteplase, EXTEND-IA supports moving immediately to thrombectomy. The reperfusion gap (100% vs 37%) is the mechanistic anchor for the functional benefit; the mRS gain (71% vs 40%) is the bedside number to quote.',
     bottomLineSummary: 'EXTEND-IA established that adding Solitaire thrombectomy to alteplase in patients with perfusion-imaging mismatch dramatically improves reperfusion and early neurological recovery, with a large secondary gain in 90-day functional independence (71% vs 40%). The trial was stopped early after only 70 patients.',
+    legend: {
+      finding: 'Perfusion-selected EVT after tPA raised independence from 40% to 71%.',
+      bottomLineTag: '+31 / 100',
+      keyStat: 'NNT ~3 (mRS 0–2)',
+    },
   },
   'swift-prime-trial': {
     id: 'swift-prime-trial',
@@ -1667,6 +1677,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       direction: 'positive',
       pValue: 0.001,
     },
+    legend: {
+      finding: 'Solitaire EVT after IV tPA raised independence from 35% to 60% in anterior LVO ≤6 h.',
+      bottomLineTag: '+25 / 100',
+      keyStat: 'cOR 2.75 (1.53–4.95)',
+    },
   },
   'thrace-trial': {
     id: 'thrace-trial',
@@ -1777,6 +1792,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: thrace-bedside-pearl | source: Bracard Lancet Neurol 2016 */
     bedsidePearl: 'For an alteplase-eligible patient with proximal anterior circulation LVO and NIHSS 10 to 25 inside the early window, THRACE supports starting IV alteplase and proceeding to thrombectomy without delay. The 53% versus 42% gain (NNT 9) is consistent with the broader 2015 stent-retriever evidence base.',
     bottomLineSummary: 'THRACE showed that adding mechanical thrombectomy to IV alteplase in proximal anterior circulation LVO patients treated within 5 hours raised functional independence from 42% to 53% at 3 months, without increasing mortality or symptomatic hemorrhage.',
+    legend: {
+      finding: 'Bridging EVT after IV tPA raised independence from 42% to 53% in proximal LVO ≤5 h.',
+      bottomLineTag: 'NNT 9',
+      keyStat: 'OR 1.55 (1.05–2.30)',
+    },
   },
   'direct-mt-trial': {
     id: 'direct-mt-trial',
@@ -1893,6 +1913,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: direct-mt-bedside | source: Yang NEJM 2020 */
     bedsidePearl: 'DIRECT-MT met non-inferiority for direct EVT vs bridging in Chinese centers with short door-to-puncture times. Do not extrapolate to systems where transfer delays make pre-EVT reperfusion (lost from 7.0% to 2.4%) clinically meaningful. Continue IV thrombolysis per AHA/ASA recommendations unless local data and workflow support omission.',
     bottomLineSummary: 'Direct EVT was non-inferior to IV alteplase plus EVT for 90-day mRS shift in Chinese centers with rapid EVT access. The CI just cleared the pre-specified margin. Pre-EVT reperfusion was lower without alteplase. Does not establish superiority and does not generalize to drip-and-ship workflows.',
+    legend: {
+      finding: 'Direct EVT met noninferiority vs bridging in Chinese centers; CI margin narrow.',
+      bottomLineTag: 'Non-inferior',
+      keyStat: 'cOR 1.07 (0.81–1.40)',
+    },
   },
   'devt-trial': {
     id: 'devt-trial',
@@ -2005,6 +2030,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: devt-bedside | source: Zi JAMA 2021 */
     bedsidePearl: 'DEVT met its non-inferiority threshold but at a -10 pp margin and after early stopping. The numerical 7.7 pp benefit favoring direct EVT is not superiority; treat as hypothesis-generating. Continue IV thrombolysis per guidelines unless local data and workflow specifically support omission.',
     bottomLineSummary: 'Direct EVT met non-inferiority vs alteplase plus EVT at a -10 pp margin in 234 Chinese patients with proximal LVO. Trial was stopped early. The wide margin and early stopping mean the numerical advantage for direct EVT cannot be interpreted as superiority. Does not change guideline-recommended bridging therapy.',
+    legend: {
+      finding: 'Direct EVT met NI at a wide −10 pp margin after early stopping.',
+      bottomLineTag: 'Non-inferior',
+      keyStat: '+7.7% (−2.9 to 18.2)',
+    },
   },
   'skip-trial': {
     id: 'skip-trial',
@@ -2116,6 +2146,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'NIHSS less than 6 or greater than 29',
       'Presentation beyond 4.5 hours from last known well',
     ],
+    legend: {
+      finding: 'Direct EVT vs low-dose alteplase + EVT: noninferiority not met; inconclusive.',
+      bottomLineTag: 'NI not met',
+      keyStat: 'OR 1.09 (0.72–1.64)',
+    },
   },
   'mr-clean-no-iv-trial': {
     id: 'mr-clean-no-iv-trial',
@@ -2228,6 +2263,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Pre-stroke mRS greater than 2',
       'Presentation beyond 4.5 hours from symptom onset',
     ],
+    legend: {
+      finding: 'Direct EVT was neither superior nor noninferior to alteplase + EVT in European direct presenters.',
+      bottomLineTag: 'NI not met',
+      keyStat: 'cOR 0.84 (0.62–1.15)',
+    },
   },
   'direct-safe-trial': {
     id: 'direct-safe-trial',
@@ -2338,6 +2378,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Presentation beyond 4.5 hours from symptom onset',
       'NIHSS less than 2',
     ],
+    legend: {
+      finding: 'Direct EVT did not meet NI vs bridging therapy across AU/NZ/China/Vietnam.',
+      bottomLineTag: 'NI not met',
+      keyStat: '−5.1% (−15.4 to 5.3)',
+    },
   },
   'swift-direct-trial': {
     id: 'swift-direct-trial',
@@ -2451,6 +2496,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Transferred from non-EVT center',
       'Pre-stroke mRS greater than 2',
     ],
+    legend: {
+      finding: 'EVT alone failed NI vs bridging; entire CI favored alteplase + EVT.',
+      bottomLineTag: 'NI not met',
+      keyStat: '−7.3% (−14.0 to −0.6)',
+    },
   },
   'laste-trial': {
     id: 'laste-trial',
@@ -2574,6 +2624,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       direction: 'positive',
       pValue: 0.0009, // Published Costalat NEJM 2024 reports P<0.001; store <0.001 so JSX conditional renders correctly
     },
+    legend: {
+      finding: 'Large-core EVT (ASPECTS ≤5) shifted median mRS from 6 to 4 and cut mortality 55%→36%.',
+      bottomLineTag: 'NNT 4 (mRS shift)',
+      keyStat: 'gOR 1.63 (1.29–2.06)',
+    },
   },
   'tension-trial': {
     id: 'tension-trial',
@@ -2691,6 +2746,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       direction: 'positive',
       pValue: 0.0001,
     },
+    legend: {
+      finding: 'Large-core EVT (ASPECTS 3–5) by NCCT shifted median mRS 5→4; mortality 51%→40%.',
+      bottomLineTag: 'Superior',
+      keyStat: 'cOR 2.58 (1.60–4.15)',
+    },
   },
   'compass-trial': {
     id: 'compass-trial',
@@ -2804,6 +2864,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: compass-bedside | source: Turk Lancet 2019 */
     bedsidePearl: 'COMPASS supports operator choice between aspiration-first and stent-retriever-first as initial EVT technique. Lower first-pass reperfusion with aspiration (68.9% vs 76.3%) did not translate to worse 90-day outcomes when rescue devices were available. Choose based on clot characteristics, operator experience, and access anatomy.',
     bottomLineSummary: 'Contact-aspiration as first-line technique was non-inferior to stent-retriever first-line for 90-day functional outcome in anterior circulation LVO. Aspiration produced lower first-pass reperfusion but equivalent clinical outcomes. Supports flexibility in initial technique choice.',
+    legend: {
+      finding: 'Aspiration-first was noninferior to stent-retriever-first for 90-day mRS 0–2.',
+      bottomLineTag: 'Non-inferior',
+      keyStat: '52% vs 50% (Δ+2)',
+    },
   },
   'aster-trial': {
     id: 'aster-trial',
@@ -2915,6 +2980,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: aster-bedside | source: Lapergue JAMA 2017 */
     bedsidePearl: 'ASTER showed no significant difference between aspiration-first and stent-retriever-first for revascularization or 90-day outcomes, but rescue device use was 25.2% in the aspiration arm. Choice of first-line technique is operator-dependent; readiness to switch techniques is part of getting equivalent outcomes.',
     bottomLineSummary: 'No significant difference between contact-aspiration first-line and stent-retriever first-line for end-of-procedure revascularization (85.4% vs 83.1%) or 90-day mRS 0-2 (45.3% vs 50.3%). Rescue stent retriever was used in 25.2% of the aspiration arm. Supports operator choice with readiness to switch.',
+    legend: {
+      finding: 'No significant difference between aspiration-first and stent-retriever-first reperfusion.',
+      bottomLineTag: 'NS',
+      keyStat: '85.4% vs 83.1% (P=0.53)',
+    },
   },
   'aster2-trial': {
     id: 'aster2-trial',
@@ -3026,6 +3096,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: aster2-bedside | source: Lapergue JAMA 2021 */
     bedsidePearl: 'ASTER2 did not show that routine first-pass combined aspiration plus stent retriever improves reperfusion or clinical outcome over stent retriever alone. The 6.6 pp numerical advantage in eTICI 2c-3 came at the cost of longer procedure time and added device burden. Reserve combined technique for rescue or operator-specific indications.',
     bottomLineSummary: 'Routine first-pass combined aspiration plus stent retriever (BADDASS) did not significantly improve near-total reperfusion (64.5% vs 57.9%) or 90-day mRS 0-2 (48.5% vs 49.5%) compared to stent retriever alone. Combined technique took longer. Does not support routine first-pass combination; reserve for rescue.',
+    legend: {
+      finding: 'Routine combined aspiration + stent retriever did not improve near-total reperfusion.',
+      bottomLineTag: 'NS',
+      keyStat: '+6.6% (P=0.17)',
+    },
   },
   'choice-trial': {
     id: 'choice-trial',
@@ -3135,6 +3210,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     /* claimId: choice-bedside-pearl | source: Renu JAMA 2022 */
     bedsidePearl: 'CHOICE is hypothesis-generating, not practice-changing. After successful thrombectomy (eTICI 2b50 or higher), adjunct intra-arterial alteplase improved excellent outcome from 40.4% to 59.0% in 121 patients, but the trial was stopped early during COVID and the lower bound of the 95% CI was 0.3%. Wait for Phase 3 replication before adopting routinely.',
     bottomLineSummary: 'CHOICE was a small Phase 2b trial (N=121) suggesting that adjunct intra-arterial alteplase after successful thrombectomy improves excellent functional outcome (mRS 0 to 1) at 90 days from 40.4% to 59.0%. The trial stopped early during COVID, the confidence interval was wide, and replication is needed before routine use.',
+    legend: {
+      finding: 'Adjunct IA alteplase after successful EVT raised excellent outcome 40%→59% (small phase 2b).',
+      bottomLineTag: '+18 / 100',
+      keyStat: 'aRD 18.4% (0.3–36.4)',
+    },
   },
   'rescue-bt-trial': {
     id: 'rescue-bt-trial',
@@ -3247,6 +3327,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Pre-stroke mRS greater than 2',
       'Presentation beyond 24 hours from last known well',
     ],
+    legend: {
+      finding: 'Pre-EVT IV tirofiban did not improve outcome and raised sICH 9.7% vs 6.4%.',
+      bottomLineTag: 'NS / Harm',
+      keyStat: 'cOR 1.08 (0.87–1.34)',
+    },
   },
   'enchanted-trial': {
     id: 'enchanted-trial',
@@ -3352,6 +3437,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Hemorrhagic stroke on baseline imaging',
       'Pre-stroke mRS 3 or greater',
     ],
+    legend: {
+      finding: 'Intensive post-alteplase BP lowering reduced any-ICH but did not improve 90-day disability.',
+      bottomLineTag: 'NS',
+      keyStat: 'cOR 1.01 (0.87–1.17)',
+    },
   },
   'best-ii-trial': {
     id: 'best-ii-trial',
@@ -3457,6 +3547,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Pre-stroke mRS greater than 2',
       'Unable to maintain assigned BP target',
     ],
+    legend: {
+      finding: 'Phase 2 futility: lower post-EVT BP targets unlikely to succeed in a future superiority trial.',
+      bottomLineTag: 'Futility',
+      keyStat: '14–25% predicted success',
+    },
   },
   'bp-target-trial': {
     id: 'bp-target-trial',
@@ -3562,6 +3657,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Severe comorbidity precluding 24-hour protocol participation',
       'Pre-stroke mRS greater than 2',
     ],
+    legend: {
+      finding: 'Intensive post-EVT BP (SBP 100–129) did not reduce radiographic hemorrhage.',
+      bottomLineTag: 'NS',
+      keyStat: 'aOR 0.96 (0.60–1.51)',
+    },
   },
   'optimal-bp-trial': {
     id: 'optimal-bp-trial',
@@ -3667,6 +3767,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Pre-stroke mRS 3 to 5',
       'Planned hemicraniectomy',
     ],
+    legend: {
+      finding: 'STOPPED FOR HARM: SBP <140 after EVT cut independence 15 pp and raised malignant edema 8×.',
+      bottomLineTag: 'Harm',
+      keyStat: 'aOR 0.56 (0.33–0.96)',
+    },
   },
   'charm-trial': {
     id: 'charm-trial',
@@ -3771,6 +3876,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Planned early hemicraniectomy precluding 72-hour drug administration',
       'Pregnancy',
     ],
+    legend: {
+      finding: 'IV glibenclamide did not improve mRS in large hemispheric infarct; trial underpowered after COVID stop.',
+      bottomLineTag: 'NS',
+      keyStat: 'cOR 1.17 (0.80–1.71)',
+    },
   },
   'escape-na1-trial': {
     id: 'escape-na1-trial',
@@ -3876,6 +3986,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Large intracranial hemorrhage on baseline imaging',
       'Pregnant or breastfeeding',
     ],
+    legend: {
+      finding: 'Nerinetide during EVT did not improve 90-day independence overall.',
+      bottomLineTag: 'NS',
+      keyStat: 'aRR 1.04 (0.96–1.13)',
+    },
   },
   'decimal-trial': {
     id: 'decimal-trial',

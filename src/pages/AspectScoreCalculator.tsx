@@ -23,6 +23,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { CalculatorHeader } from '../components/calculators/CalculatorHeader';
 import { CalculatorFooter } from '../components/calculators/CalculatorFooter';
+import { CalculatorTrialEvidence } from '../components/calculators/CalculatorTrialEvidence';
 import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
 import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useDrawerState } from '../hooks/useDrawerState';
@@ -485,6 +486,10 @@ const AspectScoreCalculator: React.FC = () => {
           </div>
 
         </div>{/* end space-y-10 */}
+
+        {/* Trials informing thresholds — STRONG-confidence per
+            calculatorTrialMap (V approval 2026-05-21). */}
+        <CalculatorTrialEvidence calculatorId="aspects-score" />
 
         {/* Page footer — §1.2 */}
         <CalculatorFooter
