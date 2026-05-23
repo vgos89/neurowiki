@@ -8439,6 +8439,183 @@ const TrialPageNew: React.FC = () => {
     );
   }
 
+  // ── CREST: 2026-05-23 Archetype A rebuild ─────────────────────────────────
+  // NEJM 2010;363:11-23. Brott TG et al. CAS vs CEA head-to-head in
+  // average-risk carotid stenosis. Failed superiority on composite; component
+  // split is the clinically important story (CAS↑stroke, CEA↑MI).
+  if (trialId === 'crest-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CREST</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In patients with symptomatic or asymptomatic carotid stenosis at average surgical risk, does carotid-artery stenting (CAS) with embolic protection differ from carotid endarterectomy (CEA) on the 4-year composite of periprocedural stroke, MI, or death plus ipsilateral stroke?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source ?? 'Brott TG et al. (NEJM 2010;363:11–23)'}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome</p>
+              <p className="text-xs text-slate-500 mt-0.5">4-year composite of periprocedural stroke, MI, death + ipsilateral stroke</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={7.2}
+                controlPct={6.8}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="4-year primary composite"
+                riskRatio="HR 1.11"
+                ciLow="0.81"
+                ciHigh="1.51"
+                pValue="0.51"
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Superiority not demonstrated for either approach on the composite. No prespecified noninferiority margin; failure to reject the null is not proof of equivalence. The clinically meaningful story is the component split: CAS roughly doubles periprocedural stroke (4.1% vs 2.3%, HR 1.79); CEA roughly doubles periprocedural MI (2.3% vs 1.1%, HR 0.50 favoring CAS); cranial-nerve palsy is essentially a CEA-only harm (4.7% vs 0.3%, HR 0.07). Treatment-by-age interaction (P=0.02) crosses over near 70 years.
+                </p>
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '2,502 patients (1,262 CAS / 1,240 CEA, ITT after exclusion of 1 site for data fabrication) at 117 sites (108 US, 9 Canada). Symptomatic 52.7% / asymptomatic 47.3%. Formal operator credentialing / lead-in phase for both arms. Median follow-up 2.5 years (planned 4 years). Enrolled December 2000 to July 2008. Published NEJM 2010.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/asymptomatic-carotid" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Asymptomatic carotid question</Link>
+              <Link to="/trials/crest-2-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">CREST-2</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="CREST" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Asymptomatic carotid question', href: '/trials/q/asymptomatic-carotid' }, { label: 'CREST-2', href: '/trials/crest-2-trial' }]}
+            citation={trialMetadata.source ?? 'Brott TG et al. (NEJM 2010;363:11–23)'} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
+  // ── CREST-2: 2026-05-23 Archetype A rebuild ───────────────────────────────
+  // NEJM 2026;394:219-231. Brott TG et al. Two parallel RCTs vs modern
+  // intensive medical management for asymptomatic carotid stenosis. Stenting
+  // arm met primary (NNT 31); endarterectomy arm did not.
+  if (trialId === 'crest-2-trial' && trialMetadata) {
+    const isPositive = trialMetadata.trialResult === 'POSITIVE';
+    const categoryBadgeLabel = trialMetadata.listCategory
+      ? trialMetadata.listCategory.charAt(0).toUpperCase() + trialMetadata.listCategory.slice(1)
+      : 'Trial';
+    return (
+      <div className="min-h-dvh bg-slate-50 pb-28">
+        <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
+              <ArrowLeft className="w-4 h-4" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CREST-2</span>
+            </button>
+            <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
+          </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div>
+            <h1 className="text-[19px] sm:text-[22px] font-medium tracking-[-0.01em] leading-[1.3]" style={{ color: '#1746A2' }}>
+              {trialMetadata.title}: {trialMetadata.subtitle}
+            </h1>
+            <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
+              In adults with asymptomatic ≥70% carotid stenosis, does revascularization (stenting OR endarterectomy, two parallel trials) added to modern intensive medical management reduce the 4-year composite of periprocedural stroke, MI, or death plus ipsilateral stroke compared with intensive medical management alone?
+            </p>
+            <p className="text-sm text-slate-500 mt-1">
+              {trialMetadata.source}{trialMetadata.doi && (<>{' '}·{' '}<a href={`https://doi.org/${trialMetadata.doi}`} target="_blank" rel="noopener noreferrer" className="hover:underline">doi:{trialMetadata.doi}</a></>)}{' '}· {trialMetadata.stats.sampleSize.value} patients
+            </p>
+          </div>
+          {renderPopulationSection(trialMetadata)}
+          <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Primary Outcome — Stenting Trial</p>
+              <p className="text-xs text-slate-500 mt-0.5">4-year periprocedural stroke/death + ipsilateral stroke (CAS vs medical alone)</p>
+            </div>
+            <div className="p-4">
+              <DeltaBandChart
+                treatmentPct={2.8}
+                controlPct={6.0}
+                treatmentLabel={trialMetadata.efficacyResults.treatment.name}
+                controlLabel={trialMetadata.efficacyResults.control.name}
+                endpoint="4-yr primary composite"
+                riskRatio="ARD −3.2 pp"
+                ciLow="−5.9"
+                ciHigh="−0.6"
+                pValue="0.02"
+                winnerArm={isPositive ? 'treatment' : 'none'}
+              />
+              {trialMetadata.calculations?.nnt != null && !stats.suppressNNT && (
+                <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">NNT</span>
+                  <span className="text-sm font-semibold text-slate-700">{Math.round(trialMetadata.calculations.nnt as number)}</span>
+                  <span className="text-xs text-slate-500">stenting trial; NNT not appropriate for endarterectomy arm (P=0.24)</span>
+                </div>
+              )}
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  <strong className="text-slate-700">Endarterectomy trial (parallel arm):</strong> CEA 3.7% vs medical 5.3% (ARD −1.6 pp, P=0.24). The endarterectomy primary was not met. The two trials must be interpreted separately; the modality split is clinically important.
+                </p>
+              </div>
+            </div>
+          </div>
+          {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
+          {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
+          {renderSafetySection(trialMetadata)}
+          {renderTrialDesign(trialMetadata, '2,485 patients across two parallel randomized trials (1,245 stenting trial / 1,240 endarterectomy trial) at 155 sites in Australia, Canada, Israel, Spain, US. Each trial: 1:1 randomization to revascularization plus intensive medical management vs intensive medical management alone. Observer-blinded outcome adjudication. Pre-specified interim analysis with alpha adjustment to 0.047. Enrolled December 2014 to early 2024; follow-up through July 2025. Published NEJM 2026.')}
+          {trialMetadata.bedsidePearl && (
+            <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#1746A2] mb-2">Bedside Pearl</p>
+              <p className="text-sm text-[#0E2D6B] leading-relaxed">{trialMetadata.bedsidePearl}</p>
+            </div>
+          )}
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">See also</p>
+            <div className="flex flex-wrap gap-2">
+              <Link to="/trials/q/asymptomatic-carotid" className="inline-flex items-center gap-1 text-xs border border-[#1746A2] text-[#1746A2] rounded-full px-3 py-1.5 hover:bg-[#EEF2FF] transition-colors">Asymptomatic carotid question</Link>
+              <Link to="/trials/crest-trial" className="inline-flex items-center gap-1 text-xs border border-slate-300 text-slate-600 rounded-full px-3 py-1.5 hover:bg-slate-50 transition-colors">CREST</Link>
+            </div>
+          </div>
+        </div>
+        {trialMetadata.bottomLineSummary && trialMetadata.bedsidePearl && (
+          <BottomLineDrawer trialName="CREST-2" body={trialMetadata.bottomLineSummary} bedsidePearl={trialMetadata.bedsidePearl}
+            seeAlsoLinks={[{ label: 'Asymptomatic carotid question', href: '/trials/q/asymptomatic-carotid' }, { label: 'CREST', href: '/trials/crest-trial' }]}
+            citation={trialMetadata.source} doi={trialMetadata.doi} trialResult={trialMetadata.trialResult} />
+        )}
+      </div>
+    );
+  }
+
   // ─────────────────────────────────────────────────────────────────────────
 
   if (!trial) {
