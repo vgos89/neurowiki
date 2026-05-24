@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { AlertTriangle, ExternalLink, FlaskConical } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import type { Step1Data } from './CodeModeStep1';
 import type { ThrombolysisEligibilityData } from './ThrombolysisEligibilityModal';
 import { getTNKDose, getTpaDoses, toKg } from '../../../utils/strokeDosing';

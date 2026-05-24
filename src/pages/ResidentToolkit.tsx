@@ -13,7 +13,6 @@ import {
   Shield,
   Heart,
   Stethoscope,
-  Eye,
   AlertCircle,
   TrendingUp,
   Star,

@@ -6,7 +6,7 @@ import { useBackNavigation } from '../../hooks/useBackNavigation';
 import { useModalFocusTrap } from '../../hooks/useModalFocusTrap';
 import { PathwayRailStep } from '../../components/pathways/PathwayRail';
 import {
-  ArrowLeft, ExternalLink, Copy, Brain, Info, AlertTriangle, AlertCircle,
+  ArrowLeft, ExternalLink, Copy, Brain, Info, AlertTriangle,
   InfoIcon, FlaskConical, Eye, FileText as FileTextIcon,
   ChevronDown, GraduationCap,
 } from 'lucide-react';

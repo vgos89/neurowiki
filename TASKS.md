@@ -133,7 +133,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §1 row 'Antiplatelet within 24h of IVT — "no antithrombotics × 24h"'
 
 ### stroke-code-minor-non-disabling-branch — Class E-clinical [from audit 2026-05-22]
-- **Status:** [ ] (open)
+- **Status:** [x] done 2026-05-23 (commit bc29987). CodeModeStep1 disabling-symptoms checklist now surfaces the DAPT alternative when no disabling deficits checked and NIHSS ≤3, citing §4.6.1 (COR 3 No Benefit for IVT) + §4.8 (COR 1 LOE A DAPT × 21d) per CHANCE/POINT/INSPIRES.
 - **User-visible goal:** Add a Step 1 decision branch for non-disabling deficits within 4.5h that routes to DAPT preference per AHA/ASA 2026 §4.6.1 Rec 4 (COR 3 No Benefit for IVT) + §4.8 daptForMinorAIS Rec 1 (COR 1, LOE A). Currently the workflow defaults all 4.5h-eligible patients to IVT consideration.
 - **Files likely touched:** src/components/article/stroke/CodeModeStep1.tsx, src/pages/guide/StrokeBasicsWorkflowV2.tsx (Step 1 wiring)
 - **Acceptance checks:** Workflow exposes a "disabling vs non-disabling" gate. Non-disabling path surfaces DAPT recommendation with §4.8 citation. last_reviewed refreshed. Clinical reviewer §17.2 sign-off.
@@ -178,7 +178,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §3 row '"COR 2a, LOE B-R" label embedded in JSX heading slot'
 
 ### nihss-emr-include-lvo — Class C-clinical [from audit 2026-05-22]
-- **Status:** [ ] (open — deferred: toggle UI placement needs V input. Audit spec calls for default-off toggle; placement (within patient context panel? next to copy button? settings?) is a UX decision. Logic-side is trivial: conditionally append "LVO probability: <label> · RACE <n>/9" to buildText when toggle is on.)
+- **Status:** [x] done 2026-05-23 (commit a2c513d). Default-off checkbox rendered in the portal-drawer footer immediately above the Copy button. When on and raceScore > 0, buildText appends "LVO probability: <label> (RACE n/9, p%)". UX placement decided autonomously per V's "go autonomously" directive (toggle is an EMR-output preference; belongs next to the EMR-output action).
 - **User-visible goal:** Add opt-in to include RACE-derived LVO inference (probability, label, RACE total) in the NIHSS EMR copy text. Drawer already shows it; export currently omits.
 - **Files likely touched:** src/pages/NihssCalculator.tsx (buildText lines 326–409)
 - **Acceptance checks:** EMR text optionally includes "LVO probability: <Low/Moderate/High>, RACE <score>/9". Toggle defaults to off (preserves current behavior per V direction 2026-05-20 about severity bracket omission). last_reviewed refreshed. Clinical reviewer §17.2 sign-off.

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   Check,
   RotateCcw, Copy, Activity, Zap,
-  AlertTriangle, Clock, Star,
+  AlertTriangle, Clock,
 } from 'lucide-react';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { PathwayRailStep } from '../components/pathways/PathwayRail';

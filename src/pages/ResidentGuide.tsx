@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useBackNavigation } from '../hooks/useBackNavigation';
 import ReactMarkdown from 'react-markdown';
-import { ChevronRight, ArrowLeft, ArrowUp, List, ChevronDown, ExternalLink, Stethoscope, FlaskConical, AlertCircle, Zap, Activity, Link as LinkIcon, Calculator, Search } from 'lucide-react';
+import { ChevronRight, ArrowLeft, ArrowUp, List, ChevronDown, ExternalLink, Stethoscope, AlertCircle, Zap, Activity, Link as LinkIcon, Calculator, Search } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { GUIDE_CONTENT } from '../data/guideContent';
 import { processNodesForLinking } from '../internalLinks/autoLink';

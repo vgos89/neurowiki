@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Check, RotateCcw, Copy, Info, AlertCircle, ChevronRight, Activity, Zap, ShieldAlert, Brain } from 'lucide-react';
+import { Check, RotateCcw, Copy, Info, AlertCircle, ChevronRight, Activity, Zap, ShieldAlert, Brain } from 'lucide-react';
 import { PathwayHeader } from '../components/pathways/PathwayHeader';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { EVT_CONTENT } from '../data/toolContent';

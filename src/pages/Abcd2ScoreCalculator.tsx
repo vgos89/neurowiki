@@ -21,7 +21,6 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
-import { Link } from 'react-router-dom';
 import { CalculatorHeader } from '../components/calculators/CalculatorHeader';
 import { CalculatorFooter } from '../components/calculators/CalculatorFooter';
 import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
