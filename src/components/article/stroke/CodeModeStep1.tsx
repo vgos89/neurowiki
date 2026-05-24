@@ -1,7 +1,11 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { ArrowRight, Check, AlertTriangle, XCircle } from 'lucide-react';
-import { LKWTimePicker } from './LKWTimePicker';
 import { getTNKDose, getTpaDoses, toKg } from '../../../utils/strokeDosing';
+import {
+  PatientContextPanel,
+  EMPTY_PATIENT_CONTEXT,
+  type PatientContextValues,
+} from '../../shared/PatientContextPanel';
 
 export interface CodeModeStep1Props {
   onComplete: (data: Step1Data) => void;
@@ -38,25 +42,40 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   onOpenExtendedIVT,
   nihssScoreFromModal,
 }) => {
-  const [lkwHours, setLkwHours] = useState<number>(0);
-  const [lkwUnknown, setLkwUnknown] = useState(false);
+  // Patient context — LKW + BP + Glucose + Anticoag — now lives in a single
+  // shared PatientContextPanel (arch-PR-stroke-code-patient-context.md
+  // 2026-05-24). Anticoag is captured but does not feed the Step 1
+  // completion gate; it surfaces in EMR copy and downstream eligibility.
+  const [patientContext, setPatientContext] = useState<PatientContextValues>({
+    ...EMPTY_PATIENT_CONTEXT,
+  });
+
   const [nihssScore, setNihssScore] = useState<number>(0);
-  const [systolicBP, setSystolicBP] = useState<number>(0);
-  const [diastolicBP, setDiastolicBP] = useState<number>(0);
-  const [glucose, setGlucose] = useState<number>(0);
   const [weightValue, setWeightValue] = useState<number>(0);
   const [weightUnit, setWeightUnit] = useState<'kg' | 'lbs'>('kg');
   const [bpControlled, setBpControlled] = useState(false);
   const [lowGlucoseGuidanceViewed, setLowGlucoseGuidanceViewed] = useState(false);
 
-  const [lkwDate, setLkwDate] = useState<Date>(() => new Date());
-  const [clockPickerOpen, setClockPickerOpen] = useState(false);
+  // Derived from patientContext — see arch review rubric 4 (state locality):
+  // do NOT introduce a second synchronized state for these.
+  const lkwEntered = patientContext.lkw !== undefined;
+  const lkwUnknown = patientContext.lkw === null;
+  const lkwDate = useMemo(
+    () => (patientContext.lkw instanceof Date ? patientContext.lkw : new Date()),
+    [patientContext.lkw],
+  );
+  const systolicBP = useMemo(() => parseInt(patientContext.systolic, 10) || 0, [patientContext.systolic]);
+  const diastolicBP = useMemo(() => parseInt(patientContext.diastolic, 10) || 0, [patientContext.diastolic]);
+  const glucose = useMemo(() => parseInt(patientContext.glucose, 10) || 0, [patientContext.glucose]);
 
-  // lkwEntered disambiguates "not yet entered" (lkwHours=0 by initial useState/useEffect)
-  // from "LKW = right now" (lkwHours≈0, witnessed-now stroke). Without this flag,
-  // `lkwHours > 0` falsely treats a valid same-minute LKW as unentered.
-  // Fixed 2026-05-17 per audit-stroke-code-connectivity-2026-05-17.md HIGH finding.
-  const [lkwEntered, setLkwEntered] = useState(false);
+  // Re-derive lkwHours per render. Wall-clock dependency means the value
+  // refreshes on every state change (good enough for clinician UX; not
+  // worth a setInterval).
+  const lkwHours = useMemo(() => {
+    if (lkwUnknown || !lkwEntered) return 0;
+    const now = new Date();
+    return Math.max(0, (now.getTime() - lkwDate.getTime()) / (1000 * 60 * 60));
+  }, [lkwUnknown, lkwEntered, lkwDate]);
 
   const [disablingSymptoms, setDisablingSymptoms] = useState<Record<string, boolean>>({
     aphasia: false,
@@ -69,12 +88,6 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   useEffect(() => {
     if (nihssScoreFromModal != null) setNihssScore(nihssScoreFromModal);
   }, [nihssScoreFromModal]);
-
-  useEffect(() => {
-    if (lkwUnknown) { setLkwHours(0); return; }
-    const now = new Date();
-    setLkwHours(Math.max(0, (now.getTime() - lkwDate.getTime()) / (1000 * 60 * 60)));
-  }, [lkwDate, lkwUnknown]);
 
   // Shared dosing util — MED-02 (DRY)
   const weightKg = useMemo(
@@ -140,10 +153,6 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   };
 
   const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
-  const _h24 = lkwDate.getHours();
-  const _h12 = _h24 % 12 || 12;
-  const _period = _h24 >= 12 ? 'PM' : 'AM';
-  const lkwTimeDisplay = `${_h12}:${String(lkwDate.getMinutes()).padStart(2, '0')} ${_period}`;
 
   const WindowBadge: React.FC = () => {
     if (!lkwEntered || lkwUnknown) return null;
@@ -172,151 +181,90 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   return (
     <div className="space-y-3 px-1">
 
-      {/* ── LKW Section ── */}
-      <div className="bg-white border border-slate-100 rounded-xl overflow-hidden">
-        <div className="px-4 pt-4 pb-1">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Last Known Well</p>
-          {!lkwUnknown && (
-            <div className="flex items-center justify-between gap-2 mb-2">
-              <button
-                type="button"
-                onClick={() => setClockPickerOpen(true)}
-                aria-label={`Last known well: ${lkwTimeDisplay}. Tap to change.`}
-                className="text-2xl font-semibold text-slate-900 tracking-tight hover:text-neuro-600 transition-colors whitespace-nowrap"
-              >
-                {lkwTimeDisplay}
-              </button>
-              <div className="flex items-center gap-2">
-                <WindowBadge />
-                <button
-                  type="button"
-                  onClick={() => setClockPickerOpen(true)}
-                  className="text-xs text-slate-400 hover:text-slate-600 transition-colors"
-                >
-                  Change
-                </button>
-              </div>
-            </div>
-          )}
-          {lkwEntered && !lkwUnknown && (
-            <p className="text-xs text-slate-400 mb-2">~{lkwHours.toFixed(1)}h ago</p>
-          )}
-          <label className="flex items-center gap-2 cursor-pointer min-h-[44px] mb-3">
+      {/* ── Patient Info (LKW + BP + Glucose + Anticoag) ──
+          Replaces the chunky stacked LKW + Vitals cards with the shared
+          PatientContextPanel chassis (also used by the NIHSS calculator).
+          Per arch-PR-stroke-code-patient-context.md 2026-05-24:
+          - panel renders pure layout
+          - WindowBadge, BP-too-high alert, glucose callouts, and the
+            LKW-Unknown wake-up notice live as siblings BELOW the panel
+            and read from patientContext state (single source of truth)
+          - defaultExpanded=true because for Stroke Code the context is
+            required input (not optional like in the NIHSS calc) */}
+      <PatientContextPanel
+        values={patientContext}
+        onChange={setPatientContext}
+        label="Patient info"
+        defaultExpanded
+      />
+
+      {/* WindowBadge — sibling, reads patientContext.lkw via derived
+          lkwEntered/lkwHours. Renders the same green/amber/rose chip
+          that used to live inside the LKW card. */}
+      {lkwEntered && !lkwUnknown && (
+        <div className="flex items-center justify-between px-1">
+          <span className="text-xs text-slate-400">~{lkwHours.toFixed(1)}h since LKW</span>
+          <WindowBadge />
+        </div>
+      )}
+
+      {/* LKW Unknown — wake-up / unknown-onset notice. Sibling
+          alert, conditional on lkwUnknown. */}
+      {lkwUnknown && (
+        <div className="rounded-xl bg-amber-50 border border-amber-200 px-4 py-3">
+          <p className="text-xs font-semibold text-amber-700 mb-1">Wake-up / unknown onset</p>
+          <p className="text-xs text-amber-600">Consider MRI DWI-FLAIR mismatch for late-window eligibility.</p>
+        </div>
+      )}
+
+      {/* BP Alert — sibling, conditional on bpTooHigh. Carries the
+          treatment guidance + bpControlled checkbox + AHA citation
+          (text preserved verbatim — changing it reclassifies to
+          D-clinical per arch review condition #8). */}
+      {bpTooHigh && (
+        <div className="rounded-xl border border-red-200 bg-red-50 p-3 space-y-2">
+          <p className="text-xs font-bold text-red-800">BP must be &lt;185/110 mmHg before tPA</p>
+          <p className="text-xs text-slate-700">
+            <strong>Labetalol</strong> 10–20 mg IV push, repeat q10–20 min (max 300 mg)
+            &nbsp;·&nbsp;
+            <strong>Nicardipine</strong> 5 mg/hr, ↑2.5 mg/hr q5–15 min (max 15 mg/hr)
+          </p>
+          <p className="text-[10px] text-red-600">AHA/ASA 2026 §4.3 (BP before IV thrombolysis)</p>
+          <label className="flex items-center gap-2 cursor-pointer min-h-[44px]">
             <input
               type="checkbox"
-              checked={lkwUnknown}
-              onChange={(e) => {
-                setLkwUnknown(e.target.checked);
-                if (e.target.checked) {
-                  setLkwHours(0);
-                  setLkwEntered(true);  // "Unknown" is a definitive entry
-                } else {
-                  setLkwEntered(false);  // unchecking returns to "not entered" until picker confirms
-                }
-              }}
-              className="w-4 h-4 rounded border-slate-300 text-red-600 focus:ring-red-500 flex-shrink-0"
+              checked={bpControlled}
+              onChange={(e) => setBpControlled(e.target.checked)}
+              className="w-4 h-4 rounded border-slate-300 text-neuro-600 flex-shrink-0"
             />
-            <span className="text-sm text-slate-500">LKW Unknown</span>
+            <span className="text-xs text-slate-700 font-medium">BP being controlled / treated</span>
           </label>
         </div>
+      )}
 
-        {lkwUnknown && (
-          <div className="px-4 pb-4 bg-amber-50 border-t border-amber-100">
-            <p className="text-xs font-semibold text-amber-700 pt-3 mb-1">Wake-up / unknown onset</p>
-            <p className="text-xs text-amber-600">Consider MRI DWI-FLAIR mismatch for late-window eligibility.</p>
-          </div>
-        )}
-      </div>
-
-      {/* ── Vitals Section ── */}
-      <div className="bg-white border border-slate-100 rounded-xl p-4">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Vitals</p>
-        <div className="grid grid-cols-2 gap-2 mb-3">
-
-          {/* BP Card */}
-          <div className={`p-3 rounded-lg border ${bpTooHigh ? 'bg-red-50 border-red-200' : 'bg-slate-50 border-slate-200'}`}>
-            <p className={`text-[10px] font-semibold uppercase tracking-wide mb-1.5 ${bpTooHigh ? 'text-red-600' : 'text-slate-400'}`}>
-              Blood pressure
-            </p>
-            <div className="flex items-center gap-1">
-              <input
-                type="text" inputMode="numeric" min={0} max={300}
-                value={systolicBP || ''}
-                onChange={(e) => setSystolicBP(parseInt(e.target.value, 10) || 0)}
-                onFocus={(e) => e.target.select()}
-                placeholder="—"
-                className={`w-full min-h-[44px] px-1.5 py-2 rounded-lg border text-lg font-bold text-center bg-white focus:ring-2 focus:ring-neuro-400 focus:outline-none ${bpTooHigh ? 'border-red-200 text-red-700' : 'border-slate-200 text-slate-900'}`}
-              />
-              <span className="text-slate-400 text-sm font-medium flex-shrink-0">/</span>
-              <input
-                type="text" inputMode="numeric" min={0} max={200}
-                value={diastolicBP || ''}
-                onChange={(e) => setDiastolicBP(parseInt(e.target.value, 10) || 0)}
-                onFocus={(e) => e.target.select()}
-                placeholder="—"
-                className={`w-full min-h-[44px] px-1.5 py-2 rounded-lg border text-lg font-bold text-center bg-white focus:ring-2 focus:ring-neuro-400 focus:outline-none ${bpTooHigh ? 'border-red-200 text-red-700' : 'border-slate-200 text-slate-900'}`}
-              />
-            </div>
-            {bpTooHigh && <p className="text-[10px] font-semibold text-red-600 mt-1.5">Above tPA limit</p>}
-          </div>
-
-          {/* Glucose Card */}
-          <div className={`p-3 rounded-lg border ${glucoseLow ? 'bg-amber-50 border-amber-200' : glucoseHigh ? 'bg-red-50 border-red-200' : 'bg-slate-50 border-slate-200'}`}>
-            <p className={`text-[10px] font-semibold uppercase tracking-wide mb-1.5 ${glucoseLow ? 'text-amber-600' : glucoseHigh ? 'text-red-600' : 'text-slate-400'}`}>
-              Glucose
-            </p>
-            <input
-              type="text" inputMode="numeric" min={0} max={600}
-              value={glucose || ''}
-              onChange={(e) => setGlucose(parseInt(e.target.value, 10) || 0)}
-              onFocus={(e) => e.target.select()}
-              placeholder="—"
-              className={`w-full min-h-[44px] px-2 py-2 rounded-lg border text-lg font-bold text-center bg-white focus:ring-2 focus:ring-neuro-400 focus:outline-none ${glucoseLow ? 'border-amber-200 text-amber-700' : glucoseHigh ? 'border-red-200 text-red-700' : 'border-slate-200 text-slate-900'}`}
-            />
-            {glucoseLow && <p className="text-[10px] font-semibold text-amber-600 mt-1.5">Low — treat first</p>}
-            {glucoseHigh && <p className="text-[10px] font-semibold text-red-600 mt-1.5">High</p>}
-            {!glucoseLow && !glucoseHigh && glucose > 0 && <p className="text-[10px] font-semibold text-emerald-600 mt-1.5">Normal</p>}
-          </div>
+      {/* Glucose guidance — sibling, conditional on glucoseLow.
+          Text preserved verbatim per arch review condition #8. */}
+      {glucoseLow && (
+        <div className="rounded-xl px-3 py-2.5 bg-amber-50 border border-amber-200">
+          <button
+            type="button"
+            onClick={() => setLowGlucoseGuidanceViewed(true)}
+            className="text-xs font-semibold text-amber-700 hover:underline text-left"
+          >
+            AHA: treat hypoglycemia, then reassess for tPA →
+          </button>
+          {lowGlucoseGuidanceViewed && (
+            <p className="mt-1.5 text-xs text-amber-800">Give D50 50 mL IV, recheck glucose. If symptoms persist after normoglycemia, reassess for tPA.</p>
+          )}
         </div>
+      )}
 
-        {/* BP Alert */}
-        {bpTooHigh && (
-          <div className="rounded-lg border border-red-200 bg-red-50 p-3 space-y-2 mb-3">
-            <p className="text-xs font-bold text-red-800">BP must be &lt;185/110 mmHg before tPA</p>
-            <p className="text-xs text-slate-700">
-              <strong>Labetalol</strong> 10–20 mg IV push, repeat q10–20 min (max 300 mg)
-              &nbsp;·&nbsp;
-              <strong>Nicardipine</strong> 5 mg/hr, ↑2.5 mg/hr q5–15 min (max 15 mg/hr)
-            </p>
-            <p className="text-[10px] text-red-600">AHA/ASA 2026 §4.3 (BP before IV thrombolysis)</p>
-            <label className="flex items-center gap-2 cursor-pointer min-h-[44px]">
-              <input
-                type="checkbox"
-                checked={bpControlled}
-                onChange={(e) => setBpControlled(e.target.checked)}
-                className="w-4 h-4 rounded border-slate-300 text-neuro-600 flex-shrink-0"
-              />
-              <span className="text-xs text-slate-700 font-medium">BP being controlled / treated</span>
-            </label>
-          </div>
-        )}
-
-        {/* Glucose guidance */}
-        {glucoseLow && (
-          <div className="rounded-lg px-3 py-2.5 bg-amber-50 border border-amber-200 mb-3">
-            <button
-              type="button"
-              onClick={() => setLowGlucoseGuidanceViewed(true)}
-              className="text-xs font-semibold text-amber-700 hover:underline text-left"
-            >
-              AHA: treat hypoglycemia, then reassess for tPA →
-            </button>
-            {lowGlucoseGuidanceViewed && (
-              <p className="mt-1.5 text-xs text-amber-800">Give D50 50 mL IV, recheck glucose. If symptoms persist after normoglycemia, reassess for tPA.</p>
-            )}
-          </div>
-        )}
-      </div>
+      {/* Glucose high — sibling, conditional on glucoseHigh. */}
+      {glucoseHigh && (
+        <div className="rounded-xl px-3 py-2.5 bg-red-50 border border-red-200">
+          <p className="text-xs font-semibold text-red-700">Glucose &gt;400 mg/dL — verify and document; severe hyperglycemia worsens stroke outcomes.</p>
+        </div>
+      )}
 
       {/* ── NIHSS Section ── */}
       <div className="bg-white border border-slate-100 rounded-xl p-4">
@@ -509,17 +457,11 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
         )}
       </div>
 
-      {/* LKW date + time picker — showSleepOnset=true matches Extended IVT
-          pathway behavior; Stroke Code cross-links to Extended IVT for wake-up
-          strokes, so the sleep-onset tab must be available here too. */}
-      <LKWTimePicker
-        isOpen={clockPickerOpen}
-        onClose={() => setClockPickerOpen(false)}
-        onConfirm={(date) => { setLkwDate(date); setLkwEntered(true); }}
-        onUnknown={() => { setLkwUnknown(true); setLkwEntered(true); setClockPickerOpen(false); }}
-        initialDate={lkwDate}
-        showSleepOnset={true}
-      />
+      {/* LKWTimePicker is now owned by the PatientContextPanel above.
+          The Stroke-Code-specific sleep-onset cross-link to Extended IVT
+          pathway is preserved via the "Extended-window IVT" sibling
+          block earlier in this render (triggers on lkwUnknown ||
+          lkwHours > 4.5). */}
     </div>
   );
 };

@@ -42,7 +42,7 @@ import {
   EMPTY_PATIENT_CONTEXT,
   type PatientContextValues,
   type Anticoag,
-} from '../components/calculators/PatientContextPanel';
+} from '../components/shared/PatientContextPanel';
 import { formatClinicalDateTime } from '../utils/clinicalDateTime';
 import type { SavedCaseData } from '../lib/cases/types';
 import {

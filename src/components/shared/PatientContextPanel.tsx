@@ -4,20 +4,28 @@ import { formatClinicalDateShort } from '../../utils/clinicalDateTime';
 import { LKWTimePicker } from '../article/stroke/LKWTimePicker';
 
 /**
- * PatientContextPanel — optional collapsible accordion that captures
- * patient-context data alongside the calculator (LKW, BP, glucose,
- * anticoagulant use). Currently used by the NIHSS calculator; designed
- * to be reusable for any calculator that benefits from this context
- * surfacing in its EMR copy/share output.
+ * PatientContextPanel — collapsible accordion that captures patient-context
+ * data (LKW, BP, glucose, anticoagulant use). Consumed by both calculators
+ * (NIHSS) and pathway pages (Stroke Code Step 1 as of 2026-05-24, with
+ * ELAN / EVT / Status / Migraine to follow).
  *
  * Design: settings-panel style with hairline-divided rows. Each row is
- * label-left + input-right, 44px min tap target, no nested card boxes —
- * keeps the panel visually skinny even when expanded.
+ * label-left + input-right, 44px min tap target, no nested card boxes,
+ * which keeps the panel visually skinny even when expanded.
+ *
+ * Extension point — `extraRows`. Pathways add their own typed rows via
+ * `extraRows: PatientContextRow[]`. The panel owns the row container,
+ * divider, 44px height, and label-left/input-right layout. Consumers
+ * own only the input control. Do not add an anonymous `extraFields`
+ * ReactNode slot here; per arch-PR-stroke-code-patient-context.md the
+ * typed shape is required for visual consistency across the 4+
+ * downstream pathway consumers.
  *
  * Spec references:
  *   - design-tokens skill: rounded-xl container, slate-50/100 hairlines,
  *     canonical eyebrow scale, neuro-* for selected states
  *   - CALCULATOR_SPEC.md §2.4: ≥44×44 touch targets
+ *   - docs/reviews/arch-PR-stroke-code-patient-context.md (2026-05-24)
  */
 
 export type Anticoag = 'none' | 'doac' | 'warfarin' | 'antiplatelet';
@@ -41,9 +49,46 @@ export const EMPTY_PATIENT_CONTEXT: PatientContextValues = {
   anticoag: new Set(),
 };
 
+/**
+ * A pathway-specific row inserted after the standard four. The panel owns
+ * the row container, divider, 44px min-height, and label-left/input-right
+ * layout. The consumer owns only the input control passed via `input`.
+ */
+export interface PatientContextRow {
+  /** Stable React key. */
+  id: string;
+  /** Left-aligned label. Kept short (one-line target). */
+  label: string;
+  /** Right-aligned input control (any ReactNode). */
+  input: React.ReactNode;
+  /** Optional helper text rendered under the row in slate-400 small type. */
+  helpText?: string;
+}
+
 interface PatientContextPanelProps {
   values: PatientContextValues;
   onChange: (next: PatientContextValues) => void;
+  /**
+   * Override the eyebrow label. When set, the panel drops the
+   * "+ ... (optional)" decoration and uses this label in both
+   * collapsed and expanded states. Set this when the context is
+   * required (e.g. Stroke Code Step 1) rather than optional.
+   */
+  label?: string;
+  /**
+   * Initial expansion state. Defaults to false (NIHSS calculator
+   * pattern: optional context that opens on tap). Set to true for
+   * pathways where the context is required input, so the user sees
+   * the fields without having to tap.
+   */
+  defaultExpanded?: boolean;
+  /**
+   * Optional pathway-specific rows rendered after the standard four
+   * (LKW / BP / Glucose / Anticoag) and before the disclaimer footer.
+   * Use this — not an anonymous ReactNode slot — to add new inputs
+   * per pathway (e.g. ELAN anticoagulant timing, EVT LVO context).
+   */
+  extraRows?: PatientContextRow[];
 }
 
 const ANTICOAG_LABELS: Record<Anticoag, string> = {
@@ -53,8 +98,14 @@ const ANTICOAG_LABELS: Record<Anticoag, string> = {
   antiplatelet: 'Antiplatelet',
 };
 
-export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({ values, onChange }) => {
-  const [expanded, setExpanded] = useState(false);
+export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
+  values,
+  onChange,
+  label,
+  defaultExpanded = false,
+  extraRows,
+}) => {
+  const [expanded, setExpanded] = useState(defaultExpanded);
   const [lkwModalOpen, setLkwModalOpen] = useState(false);
 
   const hasAnyValue =
@@ -105,7 +156,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({ values
       >
         <div className="flex flex-col min-w-0">
           <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-            {expanded ? 'Patient context' : '+ Patient context (optional)'}
+            {label ?? (expanded ? 'Patient context' : '+ Patient context (optional)')}
           </span>
           {!expanded && (
             <span className="text-xs text-slate-500 mt-0.5 truncate">
@@ -204,6 +255,22 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({ values
               })}
             </div>
           </div>
+
+          {/* Pathway-specific extra rows — typed slot per
+              arch-PR-stroke-code-patient-context.md. Each row renders in
+              the same chrome as the standard four (min-h-[44px], px-4,
+              label-left + input-right, hairline divider). */}
+          {extraRows?.map((row) => (
+            <div key={row.id} className="px-4 py-2">
+              <div className="min-h-[44px] flex items-center justify-between gap-3">
+                <label className="text-xs font-medium text-slate-600 flex-shrink-0">{row.label}</label>
+                <div className="flex items-center gap-1.5">{row.input}</div>
+              </div>
+              {row.helpText && (
+                <p className="text-[10px] text-slate-400 mt-1">{row.helpText}</p>
+              )}
+            </div>
+          ))}
 
           {/* Disclaimer footer */}
           <div className="px-4 py-2 bg-slate-50/50">
