@@ -65,8 +65,9 @@ export const ExtendedIVTPathwayModal: React.FC<ExtendedIVTPathwayModalProps> = (
         aria-labelledby="extivt-modal-title"
         aria-describedby="extivt-modal-desc"
       >
-        {/* Modal Header */}
-        <div className="sticky top-0 bg-white border-b border-slate-100 z-10">
+        {/* Modal Header — chassis-aligned 2026-05-24: slate-50 tint to
+            match the chassis card header bars used across the pathway. */}
+        <div className="sticky top-0 bg-slate-50 border-b border-slate-100 z-10">
           <div className="flex items-center justify-between h-14 px-5 gap-4">
             <div>
               <p id="extivt-modal-title" className="text-base font-semibold text-slate-900 tracking-tight">

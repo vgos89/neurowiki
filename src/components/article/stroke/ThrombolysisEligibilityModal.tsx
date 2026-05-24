@@ -225,11 +225,13 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
 
   if (!isOpen) return null;
 
+  // Chassis-variant status banner tint (background + border only;
+  // eyebrow text color applied inline below per the chassis palette).
   const statusBg = eligibilityStatus.color === 'emerald'
-    ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+    ? 'bg-emerald-50 border-emerald-100'
     : eligibilityStatus.color === 'red'
-    ? 'bg-red-50 border-red-200 text-red-800'
-    : 'bg-amber-50 border-amber-200 text-amber-800';
+    ? 'bg-red-50 border-red-100'
+    : 'bg-amber-50 border-amber-100';
 
   const statusIcon = eligibilityStatus.color === 'emerald' ? '✓' : eligibilityStatus.color === 'red' ? '✕' : '⚠';
 
@@ -243,8 +245,9 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
         aria-modal="true"
         aria-labelledby="eligibility-modal-title"
       >
-        {/* Header — CLAUDE.md standard pattern */}
-        <div className="flex items-center justify-between h-14 px-4 border-b border-slate-100 flex-shrink-0 bg-white">
+        {/* Header — chassis-aligned 2026-05-24: slate-50 tint for
+            cross-surface coherence with the pathway's chassis cards. */}
+        <div className="flex items-center justify-between h-14 px-4 border-b border-slate-100 flex-shrink-0 bg-slate-50">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="w-7 h-7 rounded-lg bg-neuro-500 flex items-center justify-center shrink-0">
               <Zap className="w-4 h-4 text-white" aria-hidden />
@@ -261,10 +264,20 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
           </button>
         </div>
 
-        {/* Live status banner */}
-        <div className={`flex items-center gap-2 px-4 py-2.5 border-b flex-shrink-0 text-sm font-bold ${statusBg}`}>
-          <span className="font-mono">{statusIcon}</span>
-          <span>{eligibilityStatus.label}</span>
+        {/* Live status banner — chassis-variant 2026-05-24 per V
+            decision #2 + arch condition #1. Documented in PM-spec as
+            the canonical status-banner pattern: min-h-[48px] (vs
+            standard 40px) so it reads as a banner not a section
+            card; icon prominent in the semantic eyebrow color;
+            tinted body that matches the chassis chrome family
+            (not full flood). State signaling preserved via the
+            semantic color of the eyebrow + icon + body tint. */}
+        <div
+          className={`flex items-center gap-2 px-4 border-b flex-shrink-0 min-h-[48px] ${statusBg}`}
+          role="status"
+        >
+          <span className={`font-mono text-base ${eligibilityStatus.color === 'emerald' ? 'text-emerald-700' : eligibilityStatus.color === 'red' ? 'text-red-600' : 'text-amber-700'}`}>{statusIcon}</span>
+          <span className={`text-[10px] font-bold uppercase tracking-widest ${eligibilityStatus.color === 'emerald' ? 'text-emerald-700' : eligibilityStatus.color === 'red' ? 'text-red-600' : 'text-amber-700'}`}>{eligibilityStatus.label}</span>
         </div>
 
         {/* Scrollable content */}

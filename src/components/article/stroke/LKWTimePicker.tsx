@@ -963,8 +963,10 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
         aria-modal="true"
         aria-labelledby="lkw-picker-title"
       >
-        {/* ── Header ── */}
-        <div className="flex items-center justify-between h-14 px-4 border-b border-slate-100 flex-shrink-0">
+        {/* ── Header ── chassis-aligned 2026-05-24: slate-50 tint to
+            match the chassis card / modal header bar pattern used
+            across the pathway. */}
+        <div className="flex items-center justify-between h-14 px-4 bg-slate-50 border-b border-slate-100 flex-shrink-0">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="w-7 h-7 rounded-lg bg-neuro-500 flex items-center justify-center shrink-0">
               <Clock size={14} className="text-white" aria-hidden="true" />
