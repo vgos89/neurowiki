@@ -101,15 +101,21 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
   return (
     <div className="space-y-3 px-1">
 
-      {/* Step 1 summary bar */}
+      {/* Step 1 summary bar — chassis-aligned 2026-05-24 to match the
+          PatientContextPanel collapsed-state visual. Single tinted-slate
+          header bar with the patient summary as the eyebrow content;
+          functions as a read-only recap of Step 1 data. */}
       {step1Data && (
-        <div className="bg-slate-50 border border-slate-100 rounded-lg px-3 py-2">
-          <p className="text-xs text-slate-400">
-            LKW {step1Data.lkwUnknown ? 'Unknown' : `${step1Data.lkwHours?.toFixed(1) ?? 0}h ago`}
-            {' · '}NIHSS {step1Data.nihssScore ?? '—'}
-            {' · '}BP {step1Data.systolicBP}/{step1Data.diastolicBP}
-            {' · '}{weightKg > 0 ? `${weightKg} kg` : 'Weight not set'}
-          </p>
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 flex items-center justify-between gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 flex-shrink-0">From Step 1</span>
+            <span className="text-xs text-slate-500 truncate">
+              LKW {step1Data.lkwUnknown ? 'Unknown' : `${step1Data.lkwHours?.toFixed(1) ?? 0}h ago`}
+              {' · '}NIHSS {step1Data.nihssScore ?? '—'}
+              {' · '}BP {step1Data.systolicBP}/{step1Data.diastolicBP}
+              {' · '}{weightKg > 0 ? `${weightKg} kg` : 'Weight —'}
+            </span>
+          </div>
         </div>
       )}
 
@@ -134,24 +140,27 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
         </div>
       )}
 
-      {/* CT Head Result */}
-      <div className="bg-white border border-slate-100 rounded-xl p-4">
-        <div className="flex items-center justify-between mb-3">
+      {/* CT Head Result — primary input card, chassis-aligned 2026-05-24.
+          Tinted slate header bar (with the Stamp-CT-Time / Stamped chip
+          on the right, mirroring the panel's chevron position) +
+          white body containing the three radio options. */}
+      <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 flex items-center justify-between gap-2 min-h-[40px]">
           <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">CT Head Result</p>
           <button
             type="button"
             onClick={handleStampCtRead}
             disabled={ctReadStamped}
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors focus:outline-none ${
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border transition-colors focus:outline-none ${
               ctReadStamped
-                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 cursor-default'
-                : 'bg-neuro-50 text-neuro-700 border border-neuro-200 hover:bg-neuro-100'
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-200 cursor-default'
+                : 'bg-white text-neuro-700 border-neuro-200 hover:bg-neuro-50'
             }`}
           >
             {ctReadStamped ? '✓ CT Stamped' : 'Stamp CT Time'}
           </button>
         </div>
-        <div role="radiogroup" aria-label="CT Result" className="space-y-2">
+        <div role="radiogroup" aria-label="CT Result" className="px-4 py-3 space-y-2">
           {[
             { value: 'no-bleed', label: 'No acute hemorrhage' },
             { value: 'ich', label: 'ICH detected' },
@@ -252,11 +261,13 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
           );
         })()}
 
-      {/* Treatment Decision */}
+      {/* Treatment Decision — primary input card, chassis-aligned 2026-05-24. */}
       {isNoBleed && (
-        <div className="bg-white border border-slate-100 rounded-xl p-4">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Treatment Decision</p>
-          <div className="space-y-2">
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 min-h-[40px] flex items-center">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Treatment Decision</p>
+          </div>
+          <div className="px-4 py-3 space-y-2">
             {[
               {
                 value: 'tpa',
@@ -307,56 +318,60 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
                 </div>
               </button>
             ))}
+            {weightKg > 0 && !outsideThromboWindow && (
+              <p className="text-[10px] text-slate-400 italic">Reference only — verify against institutional protocol before administration.</p>
+            )}
           </div>
-          {weightKg > 0 && !outsideThromboWindow && (
-            <p className="mt-2 text-[10px] text-slate-400 italic">Reference only — verify against institutional protocol before administration.</p>
-          )}
         </div>
       )}
 
-      {/* CTA & LVO Screening */}
-      <div className="bg-white border border-slate-100 rounded-xl p-4">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">CTA & LVO Screening</p>
-        <label className="flex items-center gap-3 cursor-pointer min-h-[44px]">
-          <input
-            type="checkbox"
-            checked={ctaOrdered}
-            onChange={(e) => setCtaOrdered(e.target.checked)}
-            className="w-5 h-5 rounded border-slate-300 text-neuro-600 focus:ring-neuro-500"
-          />
-          <span className="text-sm font-medium text-slate-700">CTA ordered</span>
-        </label>
-        {ctaOrdered && (
-          <div className="mt-3 space-y-3">
-            <p className="text-xs font-bold uppercase tracking-widest text-slate-400">LVO detected?</p>
-            <div className="flex gap-2">
-              {['yes', 'no', 'pending'].map((val) => (
+      {/* CTA & LVO Screening — primary input card, chassis-aligned 2026-05-24. */}
+      <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 min-h-[40px] flex items-center">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">CTA &amp; LVO Screening</p>
+        </div>
+        <div className="px-4 py-3">
+          <label className="flex items-center gap-3 cursor-pointer min-h-[44px]">
+            <input
+              type="checkbox"
+              checked={ctaOrdered}
+              onChange={(e) => setCtaOrdered(e.target.checked)}
+              className="w-5 h-5 rounded border-slate-300 text-neuro-600 focus:ring-neuro-500"
+            />
+            <span className="text-sm font-medium text-slate-700">CTA ordered</span>
+          </label>
+          {ctaOrdered && (
+            <div className="mt-3 space-y-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">LVO detected?</p>
+              <div className="flex gap-2">
+                {['yes', 'no', 'pending'].map((val) => (
+                  <button
+                    key={val}
+                    type="button"
+                    onClick={() => setLvoPresent(val)}
+                    className={`flex-1 py-2 px-3 rounded-lg border text-xs font-semibold transition-colors capitalize ${
+                      lvoPresent === val
+                        ? 'border-neuro-500 bg-neuro-50 text-neuro-700'
+                        : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+                    }`}
+                  >
+                    {val.charAt(0).toUpperCase() + val.slice(1)}
+                  </button>
+                ))}
+              </div>
+              {lvoPresent === 'yes' && onOpenEVTPathway && (
                 <button
-                  key={val}
                   type="button"
-                  onClick={() => setLvoPresent(val)}
-                  className={`flex-1 py-2 px-3 rounded-lg border text-xs font-semibold transition-colors capitalize ${
-                    lvoPresent === val
-                      ? 'border-neuro-500 bg-neuro-50 text-neuro-700'
-                      : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
-                  }`}
+                  onClick={onOpenEVTPathway}
+                  className="w-full min-h-[44px] py-2.5 bg-neuro-500 hover:bg-neuro-600 text-white font-semibold rounded-full transition-colors flex items-center justify-center gap-2 text-sm"
                 >
-                  {val.charAt(0).toUpperCase() + val.slice(1)}
+                  <AlertTriangle className="w-4 h-4 text-amber-300" aria-hidden />
+                  EVT Pathway
                 </button>
-              ))}
+              )}
             </div>
-            {lvoPresent === 'yes' && onOpenEVTPathway && (
-              <button
-                type="button"
-                onClick={onOpenEVTPathway}
-                className="w-full min-h-[44px] py-2.5 bg-neuro-500 hover:bg-neuro-600 text-white font-semibold rounded-full transition-colors flex items-center justify-center gap-2 text-sm"
-              >
-                <AlertTriangle className="w-4 h-4 text-amber-300" aria-hidden />
-                EVT Pathway
-              </button>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Save CTA */}
