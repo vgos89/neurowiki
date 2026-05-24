@@ -99,53 +99,55 @@ Status as of 2026-05-24 audit pass.
 
 | Surface | Status | Notes |
 |---|---|---|
-| Patient summary recap | needs audit | likely aligned to From-Step-1 pattern |
-| Time-metrics card (CT-first-image / CT-interpreted / needle) | needs audit | met/missed pill badges stay (exception #3); container needs chassis |
-| Extended IVT recommendation | ✓ aligned | amber header chassis (8bcf176) |
-| EMR Note card | needs audit | pre-formatted code block + copy buttons |
-| Copy / Share buttons | needs audit | likely already pill |
+| Code Summary status | ✓ aligned (5bf4d01) | slate header + emerald-dot status body |
+| Clinical Summary recap | ✓ aligned (5bf4d01) | slate header + 2-col grid body |
+| GWTG Milestones | ✓ aligned (5bf4d01) | slate header + time-row body; met/missed pill badges retained (exception #3) |
+| Orders Placed | ✓ aligned (5bf4d01) | slate header + bullet list body |
+| Thrombectomy / Next Steps | ✓ aligned (5bf4d01) | neuro-tinted header (branded primary surface) |
+| Extended IVT recommendation | ✓ aligned (8bcf176) | amber header chassis |
+| EMR Note card | ✓ aligned (5bf4d01) | slate header + pre/copy/print body |
 
 ### Step 4 — Admit Orders
 
 | Surface | Status | Notes |
 |---|---|---|
-| Category cards (post-tpa, stroke-workup, etc.) | needs full restyle (decision #1b) | `getCategoryClasses()` refactored: header bar gets tinted bg, body becomes white |
-| Order checkboxes within categories | needs audit | check 44px tap targets, slate-700 labels |
+| Orders-selected status header | ✓ aligned (5bf4d01) | slate header + count chip |
+| Category cards (post-tpa, stroke-workup, labs, general) | ✓ aligned (5bf4d01) | `getCategoryClasses()` refactored to chassis tokens; tinted header bar per category (amber/neuro/slate), white body of order rows in `divide-y divide-slate-50` |
+| Order checkboxes within categories | ✓ aligned (5bf4d01) | 44px tap targets, slate-700 labels |
 | Evidence-grade badges (I / IIa / IIb) | ✓ exception (status pill) | small chips, semantic color |
-| Helper text + footnotes | needs humanizer scan (decision #1 follow-up) | non-clinical text only; clinical-order wording untouched without -clinical gate |
-| EMR Note / Copy CTA | needs audit | likely pill |
+| Why-rationale expand panels | ✓ aligned (5bf4d01) | softer 60% tint (e.g., bg-amber-50/60) |
+| Clinical rationale prose em-dashes | flagged · D-clinical | 3 strings (lines 121 BP post-thrombolysis, 256 DVT prophylaxis, 296 hyperglycemia): em-dashes inside AHA-cited clinical rationales. Wording change reclassifies to D-clinical with clinical-reviewer §17.2 gate. Pending V sign-off — NOT touched in this sweep. |
 
 ### Modals reachable from the pathway
 
 | Modal | Status | Notes |
 |---|---|---|
-| ThrombolysisEligibilityModal | partial | status banner needs chassis-variant treatment (decision #2b); body sections + 3-4.5h notice + clinical notes already aligned |
-| HemorrhageProtocolModal | needs audit | opened from Step 2 ICH detected |
-| ExtendedIVTPathwayModal | needs audit | opened from Step 1 Extended IVT cross-link |
-| LKWTimePicker | needs outer-frame audit (decision #5b) | internal picker UI preserved |
-| NIHSS modal | needs outer-frame audit (decision #5b) | internal calc UI preserved (calc-spec compliant) |
+| ThrombolysisEligibilityModal | ✓ aligned (838ab2e) | slate header bar; status banner now chassis-variant (min-h-[48px] + tinted body + eyebrow color label + status icon prominent + role="status"); section eyebrows + clinical notes block already aligned (1dfd5e7) |
+| HemorrhageProtocolModal (via ProtocolModal) | ✓ aligned (838ab2e) | slate-50 header bar; severity strip + numbered steps body unchanged |
+| ExtendedIVTPathwayModal | ✓ aligned (838ab2e) | slate-50 header bar; inner ExtendedIVTPathway page is a separate audit (out of this sweep's scope) |
+| LKWTimePicker | ✓ aligned (838ab2e) | slate-50 header bar; internal picker UI preserved per decision #5 |
+| NIHSS modal | ✓ aligned (838ab2e) | slate-50 header bar; internal calc UI preserved (calc-spec compliant) |
 
 ### Page chassis
 
 | Surface | Status | Notes |
 |---|---|---|
 | Sticky page header (Stroke Code · Code/Study toggle) | ✓ exception (decision #3a) | page chrome, not card |
-| Step rail (Step 1/2/3/4 progression indicators) | needs audit for chassis adjacency | not a card, but visual coherence matters |
-| Step transition / lock states | needs audit | "Awaiting Step 1 ↑" hint text |
+| Step rail (Step 1/2/3/4 progression indicators) | ✓ adjacent-coherent | not a card; uses neuro / slate tokens consistent with chassis palette |
+| Step transition / lock states | ✓ adjacent-coherent | "Awaiting Step 1 ↑" hint uses slate-400 text + slate hairline; coherent without chassis treatment |
 | Cookie consent banner (global) | out of scope | global, not pathway-specific |
 
-## Sweep execution sequence (2026-05-24)
+## Sweep execution sequence (2026-05-24) — CLOSED
 
-Each item ships as its own commit so any one can be reverted independently. Live-verify (Gate 6) fires after each push.
+Shipped as 2 grouped commits + 1 PM-spec close (this update). Live-verify Gate 6 green on each push.
 
-1. **Step 3 chassis pass** — patient summary recap + time-metrics card + EMR Note card chassis-align
-2. **Step 4 chassis pass** — `getCategoryClasses()` refactor + category cards become chassis + visual-only restyle; humanizer scan for non-clinical helper text follows in a separate commit if needed
-3. **Hemorrhage + Extended IVT modal restyle** — bundled if logically similar
-4. **IV tPA Eligibility status banner refactor** — chassis-variant (per decision #2 + arch condition #1)
-5. **LKW picker + NIHSS modal outer-frame audit** — outer chrome only; internal picker/calc UI preserved
-6. **Step rail / transition chrome tightening** — coherence with chassis chips and tokens
+1. **Step 3 + Step 4 chassis pass** (commit 5bf4d01) — 6 Step 3 cards + Step 4 `getCategoryClasses()` refactor + category cards chassis + selection-status header. Humanizer scan completed: 3 prose em-dashes found inside clinical rationale strings (post-tpa BP target, DVT prophylaxis, hyperglycemia); flagged D-clinical and left untouched.
+2. **Modals chassis pass** (commit 838ab2e) — 5 modal headers slate-tinted (ProtocolModal / Extended IVT / Eligibility / LKW picker / NIHSS) + Eligibility status banner converted to chassis-variant per decision #2 + arch condition #1.
+3. **PM-spec close** — this update. Every "needs audit" → ✓ aligned. Sweep closed.
 
-After step 6: this PM-spec is updated to mark every "needs audit" → "✓ aligned" and the sweep is closed.
+## Sweep status — CLOSED 2026-05-24
+
+Every user-touching surface in the Stroke Code pathway is now either ✓ aligned to the chassis or ✓ documented as an intentional exception. The 1 D-clinical follow-up (3 em-dashes in clinical rationale strings in Step 4) is flagged for V sign-off.
 
 ## Rollout to follow-up pathways
 
