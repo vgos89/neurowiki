@@ -680,6 +680,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT04915729',
     listCategory: 'thrombolysis',
     listDescription: 'Tenecteplase noninferior to alteplase for AIS within 4.5h; 72.7% vs 70.3% mRS 0–1 (JAMA 2024).',
+    legend: {
+      finding: 'Tenecteplase 0.25 mg/kg noninferior to alteplase within 4.5 h (mRS 0–1 72.7% vs 70.3%).',
+      bottomLineTag: 'NI met',
+      keyStat: 'RR 1.03 (0.97–1.09)',
+    },
   },
 
   'ecass3-trial': {
@@ -1063,6 +1068,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'EAGLE definitively showed that IA tPA for CRAO causes significant harm (37% adverse events including intracranial hemorrhage) with no visual benefit. The procedure is not indicated for CRAO. The current clinical debate is about IV tPA in the very early window (within 4.5 hours), which was not tested in EAGLE. If a CRAO patient presents within hours, the stroke team conversation is about IV tPA eligibility, not IA fibrinolysis.',
     bottomLineSummary: 'Local intra-arterial fibrinolysis for CRAO presenting within 20 hours showed no improvement in visual acuity compared with conservative treatment (primary P=0.69; secondary dichotomized endpoint 57.1% vs 60.0% with clinically meaningful improvement) and caused significantly more adverse events (37.1% vs 4.3%), including procedure-related intracranial hemorrhage. The DSMB stopped the trial at 84 patients for futility and safety. IA tPA is not recommended for CRAO.',
+    legend: {
+      finding: 'IA tPA for CRAO causes harm (37% adverse events incl. ICH) with no visual benefit.',
+      bottomLineTag: 'Harm',
+      keyStat: '−2.9% visual benefit',
+    },
   },
   'mr-clean-trial': {
     id: 'mr-clean-trial',
@@ -4106,6 +4116,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     source: 'Vahedi et al. (Stroke 2007)',
     keyMessage: 'Early hemicraniectomy reduces mortality in malignant MCA infarction. Most survivors remain severely disabled.',
+    legend: {
+      finding: 'Hemicraniectomy within 30 h cuts mortality 52.8 pp in malignant MCA infarction (age <56).',
+      bottomLineTag: '−52.8 pp mortality',
+      keyStat: 'ARR 52.8% mortality',
+    },
   },
   'destiny-trial': {
     id: 'destiny-trial',
@@ -4208,6 +4223,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     source: 'Juttler et al. (Stroke 2007)',
     keyMessage: 'DESTINY reinforced that early hemicraniectomy improves survival in malignant MCA infarction. Most survivors have severe disability.',
+    legend: {
+      finding: 'Decompressive surgery improves survival in malignant MCA infarction (age <61); function not met.',
+      bottomLineTag: '+41 pp survival',
+      keyStat: 'ARR 41% mortality',
+    },
   },
   'hamlet-trial': {
     id: 'hamlet-trial',
@@ -4311,6 +4331,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     source: 'Hofmeijer et al. (Lancet Neurol 2009)',
     keyMessage: 'For malignant hemispheric infarction, timing is critical: hemicraniectomy within 48 hours offers both mortality and functional benefit. After 48 hours, surgery may save life but functional benefit is not established.',
+    legend: {
+      finding: 'Hemicraniectomy up to 96 h cuts mortality 38 pp in malignant MCA infarction; no mRS ≤3 benefit.',
+      bottomLineTag: '−38 pp mortality',
+      keyStat: 'ARR 38% mortality',
+    },
   },
   'destiny-ii-trial': {
     id: 'destiny-ii-trial',
@@ -4414,6 +4439,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     source: 'Juttler et al. (NEJM 2014)',
     keyMessage: 'DESTINY II is positive for preventing death in older patients, but 0% achieved good functional recovery. Surgery shifts the outcome from death to severe disability -- families must decide whether that is consistent with patient values.',
+    legend: {
+      finding: 'Hemicraniectomy in patients 61–82 with malignant MCA infarction improves survival at the cost of severe disability.',
+      bottomLineTag: '+20 pp survival',
+      keyStat: '+20% survival',
+    },
   },
   'timing-trial': {
     id: 'timing-trial',
@@ -4523,6 +4553,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       ],
     },
     keyMessage: 'TIMING supports early NOAC initiation within 4 days after AF-related ischemic stroke. Noninferiority met; superiority not established.',
+    legend: {
+      finding: 'Early DOAC (≤4 d) after AF-related ischemic stroke noninferior to delayed start.',
+      bottomLineTag: 'NI met',
+      keyStat: 'RD −1.79%',
+    },
   },
   'optimas-trial': {
     id: 'optimas-trial',
@@ -4631,6 +4666,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       ],
     },
     keyMessage: 'OPTIMAS provides the most definitive evidence for early DOAC initiation after AF-related stroke. Noninferiority met; superiority not established.',
+    legend: {
+      finding: 'Early DOAC (≤4 d) noninferior to delayed start after AF-related stroke in the largest trial to date.',
+      bottomLineTag: 'NI met',
+      keyStat: 'RD 0.000',
+    },
   },
   'distal-trial': {
     id: 'distal-trial',
@@ -4785,6 +4825,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'DISTAL and ESCAPE-MeVO together provide strong evidence against routine EVT for unselected medium or distal vessel occlusions. The 71.7% reperfusion rate, well below the 85-90% seen in large-vessel trials, reflects the technical challenge of accessing M3-M4 and ACA/PCA segments. Symptomatic ICH was more than doubled with EVT (5.9% vs 2.6%) without mortality benefit. Current evidence does not support routine EVT for MeVO outside of highly selected cases or ongoing trials.',
     bottomLineSummary: 'In 543 patients with medium or distal vessel occlusion (M2-M4, ACA, or PCA) treated within 24 hours, EVT plus best medical treatment did not improve 90-day mRS distribution versus medical treatment alone (cOR 0.90, 95% CI 0.67-1.22, p=0.50). Median mRS was 2.0 in both groups. Symptomatic ICH was more than doubled with EVT (5.9% vs 2.6%). Reperfusion was achieved in only 71.7% of EVT patients. Together with ESCAPE-MeVO, DISTAL argues strongly against routine EVT for unselected medium or distal vessel occlusions.',
+    legend: {
+      finding: 'EVT for medium/distal vessel occlusion did not improve outcome and trended toward harm.',
+      bottomLineTag: 'Neutral',
+      keyStat: 'aOR 0.90',
+    },
   },
   'escape-mevo-trial': {
     id: 'escape-mevo-trial',
@@ -4928,6 +4973,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     bottomLineSummary: 'ESCAPE-MeVO showed that EVT for medium vessel occlusion (M2, M3, ACA, PCA branches) did not improve the rate of excellent functional outcome (mRS 0-1) at 90 days compared with best medical management, and was associated with higher rates of symptomatic hemorrhage and 90-day mortality. Routine EVT for MeVO is not supported by this evidence.',
     listCategory: 'thrombectomy',
     listDescription: 'EVT for medium vessel occlusion (MeVO); no functional benefit, higher sICH and mortality (NEJM 2025).',
+    legend: {
+      finding: 'Routine EVT for medium-vessel occlusion shows no functional benefit and higher sICH (5.4% vs 2.2%).',
+      bottomLineTag: 'No benefit',
+      keyStat: 'aRR 0.95',
+    },
   },
   'defuse-3-trial': {
     id: 'defuse-3-trial',
@@ -5350,6 +5400,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT03876457',
     listCategory: 'thrombectomy',
     listDescription: 'Large core thrombectomy (ASPECTS 3–5, 0–6h and extended window).',
+    legend: {
+      finding: 'EVT for anterior LVO with large ischemic core (ASPECTS 3–5 or core ≥50 mL) within 24 h shifts mRS toward less disability.',
+      bottomLineTag: '+13 pp mRS 0–2',
+      keyStat: 'gOR 1.51',
+    },
   },
   'angel-aspect-trial': {
     id: 'angel-aspect-trial',
@@ -5497,6 +5552,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT04551664',
     listCategory: 'thrombectomy',
     listDescription: 'Large core thrombectomy; China cohort (ASPECTS 3–5 or core ≥70 mL).',
+    legend: {
+      finding: 'EVT improves ordinal mRS shift in broader large-core anterior LVO (ASPECTS 3–5 or core 70–100 mL).',
+      bottomLineTag: 'gOR 1.37',
+      keyStat: 'gOR 1.37 (P=0.004)',
+    },
   },
   'thaws-trial': {
     id: 'thaws-trial',
@@ -5601,6 +5661,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'THAWS tested the Japan-specific 0.6 mg/kg alteplase dose in DWI-FLAIR mismatch wake-up stroke and found no benefit, but the trial was stopped at 44% enrollment, so findings are inconclusive. The correct reference for MRI-guided wake-up stroke treatment is WAKE-UP (alteplase 0.9 mg/kg, mRS 0-1 53.3% vs 41.8%, OR 1.61, P=0.02). Use standard-dose alteplase.',
     bottomLineSummary: 'THAWS found no benefit of low-dose alteplase 0.6 mg/kg vs standard medical treatment in DWI-FLAIR mismatch wake-up stroke (47.1% vs 48.3%, P=0.892), but was stopped at 44% of planned enrollment after WAKE-UP demonstrated efficacy of 0.9 mg/kg. Results are inconclusive due to severe underpowering. The 0.6 mg/kg dose is specific to Japanese practice guidelines.',
+    legend: {
+      finding: 'Japan-specific 0.6 mg/kg alteplase for DWI-FLAIR mismatch wake-up stroke showed no benefit; underpowered.',
+      bottomLineTag: 'Neutral',
+      keyStat: '−1.2% mRS 0–1',
+    },
   },
   'trace-iii-trial': {
     id: 'trace-iii-trial',
@@ -5717,6 +5782,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'TRACE-III is the key trial for late-window IVT when EVT cannot be performed. In perfusion-selected LVO patients 4.5-24 hours from onset without EVT access, tenecteplase 0.25 mg/kg improved mRS 0-1 from 24.2% to 33.0% (NNT 11, P=0.03). This is not a reason to delay EVT when it is available; TIMELESS showed no benefit when EVT was performed.',
     bottomLineSummary: 'TRACE-III showed tenecteplase 0.25 mg/kg improved functional independence at 90 days versus standard medical treatment in perfusion-selected LVO patients treated 4.5-24 hours after stroke onset when EVT was unavailable (33.0% vs 24.2%, relative rate 1.37, P=0.03, NNT 11). sICH was higher (3.0% vs 0.8%). Results apply specifically to EVT-unavailable settings with LVO confirmed on imaging.',
+    legend: {
+      finding: 'IV tenecteplase 4.5–24 h with perfusion mismatch in EVT-ineligible LVO improves mRS 0–1 at 90 d.',
+      bottomLineTag: 'NNT 11',
+      keyStat: '+8.8% mRS 0–1',
+    },
   },
   'wake-up-trial': {
     id: 'wake-up-trial',
@@ -5845,6 +5915,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     bottomLineSummary: 'In wake-up stroke and unknown-onset ischemic stroke selected by DWI-FLAIR mismatch on MRI, IV alteplase improved excellent functional outcome at 90 days compared with placebo. The trial stopped early due to funding constraints rather than a prespecified stopping rule, so estimates are imprecise and the numerical excess in mortality warrants discussion during consent.',
     listCategory: 'thrombolysis',
     listDescription: 'MRI DWI-FLAIR mismatch for thrombolysis in unknown-onset stroke.',
+    legend: {
+      finding: 'Alteplase guided by DWI-FLAIR mismatch in wake-up stroke improves mRS 0–1 at 90 d.',
+      bottomLineTag: 'NNT 9',
+      keyStat: '+11.5% mRS 0–1',
+    },
   },
   // ========== BASILAR ARTERY TRIALS ==========
   'attention-trial': {
@@ -5980,6 +6055,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT04751708',
     listCategory: 'thrombectomy',
     listDescription: 'Basilar artery thrombectomy within 12 hours; China trial.',
+    legend: {
+      finding: 'EVT within 12 h for basilar artery occlusion (NIHSS ≥10) roughly halves mortality and doubles good outcome.',
+      bottomLineTag: 'NNT 4',
+      keyStat: '+23% mRS 0–3',
+    },
   },
   'baoche-trial': {
     id: 'baoche-trial',
@@ -6115,6 +6195,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     clinicalTrialsId: 'NCT02737189',
     listCategory: 'thrombectomy',
     listDescription: 'Basilar EVT 6–24 hours with imaging selection.',
+    legend: {
+      finding: 'EVT 6–24 h for basilar artery occlusion improves mRS 0–3 vs medical therapy.',
+      bottomLineTag: 'NNT 5',
+      keyStat: '+22% mRS 0–3',
+    },
   },
   // ========== ANTIPLATELET & SECONDARY PREVENTION TRIALS ==========
   'chance-trial': {
@@ -6318,6 +6403,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     bottomLineSummary: 'CHANCE showed that clopidogrel plus aspirin started within 24 hours of minor stroke or high-risk TIA reduced 90-day stroke recurrence by 32% (NNT 29) without increasing major hemorrhage. The 21-day dual therapy duration is the guideline standard; AHA/ASA 2026 rates this strategy Class I.',
     listCategory: 'antiplatelets',
     listDescription: 'DAPT (clopidogrel + aspirin) after TIA/minor stroke; NNT=29. AHA 2026 COR 1.',
+    legend: {
+      finding: 'Clopidogrel + aspirin × 21 d after minor stroke or high-risk TIA cuts 90-d stroke vs aspirin alone.',
+      bottomLineTag: 'NNT 29',
+      keyStat: 'ARR 3.5%',
+    },
   },
   'point-trial': {
     id: 'point-trial',
@@ -6442,6 +6532,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     bottomLineSummary: 'POINT confirmed in an international population that clopidogrel plus aspirin reduces major ischemic events after TIA or minor stroke, but also showed significantly increased major hemorrhage with 90-day dual therapy. Together with CHANCE, it established that the optimal DAPT duration is 21 days rather than 90.',
     listCategory: 'antiplatelets',
     listDescription: 'Dual antiplatelet in TIA and minor stroke (Western population); confirms CHANCE but major hemorrhage higher at 90 days.',
+    legend: {
+      finding: 'DAPT (clopidogrel+aspirin) after minor stroke/TIA cuts ischemic events; major bleeding higher (0.9% vs 0.4%).',
+      bottomLineTag: 'NNT 67',
+      keyStat: 'ARR 1.5%',
+    },
   },
   'sammpris-trial': {
     id: 'sammpris-trial',
@@ -6573,6 +6668,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         'Trial population excludes M2/distal occlusions, posterior circulation only, and pre-stroke severe disability',
         'PTAS in this initial-treatment role is AHA/ASA 2021 Class III No Benefit/Harm, LOE B-R; AMM is Class I',
       ],
+    },
+    legend: {
+      finding: 'Wingspan stenting as initial therapy for symptomatic ICAS 70–99% causes harm vs aggressive medical therapy.',
+      bottomLineTag: 'Harm',
+      keyStat: '14.7% vs 5.8% 30-d',
     },
   },
   'weave-trial': {
@@ -6737,6 +6837,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'WEAVE restored Wingspan stenting as a salvage option for highly selected patients who fail optimal medical therapy for intracranial atherosclerotic disease. The criteria are strict: 70 to 99% symptomatic stenosis, 2 or more strokes in territory despite optimal medications, mRS 3 or less, more than 8 days from last stroke, and experienced operator. The 2.6% periprocedural event rate met the FDA benchmark under these conditions. For most patients with intracranial atherosclerotic disease, optimal medical therapy (high-intensity statin plus dual antiplatelet therapy) remains first-line.',
     bottomLineSummary: 'In 152 consecutive patients with symptomatic intracranial atherosclerotic stenosis undergoing Wingspan stenting under strict on-label criteria at experienced centers, the 72-hour periprocedural stroke or death rate was 2.6% (4 events; 95% CI 0.7 to 6.6%), meeting the FDA pre-specified safety benchmark of below 4%. WEAVE does not assess efficacy versus medical therapy; it provides regulatory safety evidence for stenting in a highly selected, refractory population only.',
+    legend: {
+      finding: 'Wingspan stenting met FDA safety threshold (2.6% periprocedural stroke/death) in highly selected ICAS failures.',
+      bottomLineTag: 'Safety met',
+      keyStat: '2.6% (target <4%)',
+    },
   },
   'socrates-trial': {
     id: 'socrates-trial',
@@ -6853,6 +6958,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'SOCRATES showed ticagrelor monotherapy did not beat aspirin alone (P=0.07). The relevant question at the bedside is now DAPT composition: CHANCE/POINT established clopidogrel plus aspirin reduces early recurrence by roughly 30%; THALES showed ticagrelor plus aspirin works similarly but bleeds more. In patients with known or suspected CYP2C19 loss-of-function, ticagrelor-based DAPT may be considered, though direct head-to-head DAPT comparison data are limited.',
     bottomLineSummary: 'In acute non-cardioembolic minor ischemic stroke or high-risk TIA, ticagrelor monotherapy was not superior to aspirin monotherapy for the 90-day composite of stroke, MI, or death (HR 0.89, 95% CI 0.78 to 1.01, P=0.07). Major bleeding was similar between arms. The result supports aspirin as the appropriate monotherapy comparator and does not justify substituting ticagrelor for aspirin outside of a DAPT regimen.',
+    legend: {
+      finding: 'Ticagrelor monotherapy did not beat aspirin for stroke/MI/death after minor stroke/TIA (P=0.07).',
+      bottomLineTag: 'NS',
+      keyStat: 'ARR 0.8% (NS)',
+    },
   },
   'sps3-trial': {
     id: 'sps3-trial',
@@ -6978,6 +7088,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'SPS3 is a HARM signal trial: long-term DAPT in lacunar stroke increases mortality and bleeding with no stroke reduction. This is the opposite of CHANCE/POINT, which show short-term DAPT benefit in acute presentations. The practical rule: DAPT is for the first 21 days after TIA or minor stroke, not for chronic secondary prevention in lacunar disease. Aspirin monotherapy remains the long-term standard in this population.',
     bottomLineSummary: 'In patients with MRI-confirmed symptomatic lacunar infarction, long-term DAPT (aspirin 325 mg plus clopidogrel 75 mg) was stopped early because DAPT did not reduce recurrent stroke (HR 0.92, P=0.48) and significantly increased all-cause mortality (HR 1.52, P=0.004) and major bleeding. Aspirin monotherapy remains the standard of long-term secondary prevention in established lacunar stroke. Short-duration DAPT immediately following TIA or minor stroke is a separate evidence base and is not contraindicated by SPS3.',
+    legend: {
+      finding: 'Long-term DAPT (clopidogrel+aspirin) in lacunar stroke increases mortality and bleeding with no stroke reduction.',
+      bottomLineTag: 'Harm',
+      keyStat: 'No benefit; ↑bleed',
+    },
   },
   'sparcl-trial': {
     id: 'sparcl-trial',
@@ -7088,6 +7203,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'SPARCL established atorvastatin 80 mg as a standard in secondary stroke prevention, but the hemorrhagic stroke signal (HR 1.66) is real and matters. The net benefit is favorable in ischemic stroke patients, but in a patient with prior hemorrhagic stroke, you are adding a drug that independently increases hemorrhagic stroke by 66% without clear ischemic benefit in that subgroup. In hemorrhagic stroke, statin use post-discharge is a shared decision, not a reflex.',
     bottomLineSummary: 'In patients with recent ischemic stroke or TIA and LDL 100 to 190 mg/dL without known coronary heart disease, atorvastatin 80 mg reduced recurrent stroke by 16% relative (NNT=53 over 4.9 years) but significantly increased hemorrhagic stroke risk (HR 1.66, 2.3% vs 1.4%). High-intensity statin therapy is now standard secondary prevention for ischemic stroke; caution is warranted in patients with prior hemorrhagic stroke.',
+    legend: {
+      finding: 'Atorvastatin 80 mg after non-cardioembolic stroke/TIA reduces recurrent stroke; hemorrhagic-stroke signal HR 1.66.',
+      bottomLineTag: 'NNT 53',
+      keyStat: 'ARR 1.9%',
+    },
   },
   'elan-study': {
     id: 'elan-study',
@@ -7220,6 +7340,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       ],
     },
     doi: '10.1056/NEJMoa2303048',
+    legend: {
+      finding: 'Early DOAC start after AF-related stroke is non-inferior with reassuring safety (sICH 0.2% both arms).',
+      bottomLineTag: 'NI met',
+      keyStat: 'RD −1.18%',
+    },
   },
 
   // ─── THALES TRIAL ─────────────────────────────────────────────────────────
@@ -7395,6 +7520,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'THALES is statistically positive (P=0.02) but the guideline verdict is COR 3 (No Benefit) because the NNT of 91 and a 5x increase in severe bleeding make it clinically inferior to clopidogrel DAPT (CHANCE NNT=28, similar safety). In practice: use aspirin plus clopidogrel for 21 days in most patients with TIA or minor stroke. Reserve ticagrelor-based DAPT for confirmed CYP2C19 poor metabolizers (CHANCE-2, COR 2b), where clopidogrel is pharmacologically inadequate.',
     bottomLineSummary: 'Ticagrelor plus aspirin for 30 days statistically reduced composite stroke or death versus aspirin alone after minor stroke or TIA (HR 0.83, P=0.02, NNT=91), but severe hemorrhage was 5x higher (0.5% vs 0.1%). AHA/ASA 2026 guidelines rate ticagrelor DAPT COR 3: No Benefit for the general population given unfavorable risk-benefit versus clopidogrel-based DAPT. Clopidogrel plus aspirin remains the preferred DAPT regimen; ticagrelor is considered only in confirmed CYP2C19 poor metabolizers (COR 2b).',
+    legend: {
+      finding: 'Ticagrelor+aspirin × 30 d cuts stroke/death after minor stroke/TIA but increases severe bleeding 5×.',
+      bottomLineTag: 'NNT 91',
+      keyStat: 'ARR 1.1%',
+    },
   },
 
   // ─── INSPIRES TRIAL ───────────────────────────────────────────────────────
@@ -7581,6 +7711,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     listCategory: 'antiplatelets',
     listDescription: 'DAPT for atherosclerotic minor stroke/TIA within 72 hours. NNT=53. AHA 2026 COR 2a.',
+    legend: {
+      finding: 'Late-window DAPT (24–72 h) after atherosclerotic minor stroke/TIA cuts recurrent stroke.',
+      bottomLineTag: 'NNT 53',
+      keyStat: 'ARR 1.9%',
+    },
   },
 
   // ─── CHANCE-2 TRIAL ───────────────────────────────────────────────────────
@@ -7768,6 +7903,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     listCategory: 'antiplatelets',
     listDescription: 'Ticagrelor vs clopidogrel DAPT in CYP2C19 loss-of-function carriers. NNT=63. AHA 2026 COR 2b.',
+    legend: {
+      finding: 'Ticagrelor + aspirin in CYP2C19 loss-of-function carriers cuts 90-d stroke vs clopidogrel + aspirin.',
+      bottomLineTag: 'NNT 63',
+      keyStat: 'ARR 1.6%',
+    },
   },
 
   // ─── PRoFESS TRIAL ────────────────────────────────────────────────────────
@@ -7967,6 +8107,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     bottomLineSummary: 'PRoFESS is the head-to-head trial of two long-term monotherapies after non-cardioembolic ischemic stroke. Stroke recurrence rates were similar in both arms (9.0% ASA–ERDP vs 8.8% clopidogrel, HR 1.01, 95% CI 0.92–1.11), but the upper bound of the confidence interval crossed the prespecified noninferiority margin of 1.075, so noninferiority was not formally established. Intracranial hemorrhage was significantly higher with ASA–ERDP (HR 1.42) and discontinuation was higher (29.1% vs 22.6%). PRoFESS does not test short-course DAPT — that scenario is covered by CHANCE and POINT.',
     listCategory: 'antiplatelets',
     listDescription: 'ASA + ER-dipyridamole vs clopidogrel monotherapy after stroke. NI margin not met; ICH higher with ASA–ERDP.',
+    legend: {
+      finding: 'Aspirin+ER-dipyridamole and clopidogrel monotherapy are equivalent for long-term secondary stroke prevention.',
+      bottomLineTag: 'Equivalent',
+      keyStat: '9.0% vs 8.8%',
+    },
   },
 
   // ─── CREST TRIAL ──────────────────────────────────────────────────────────
@@ -8178,6 +8323,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     bottomLineSummary: 'CREST is the largest North American head-to-head trial of carotid stenting and endarterectomy in average-surgical-risk symptomatic and asymptomatic patients. The 4-year primary composite of periprocedural stroke, MI, or death plus 4-year ipsilateral stroke showed no significant difference (7.2% CAS vs 6.8% CEA, HR 1.11, 95% CI 0.81–1.51, P=0.51) — superiority was not demonstrated for either approach. The clinical decision rests on the periprocedural component split: CAS roughly doubles stroke, CEA roughly doubles MI, and CEA accounts for nearly all cranial nerve palsy. Treatment effect varies by age (interaction P=0.02) with a crossover near 70 years. CREST does not address either approach versus intensive medical management — that question is the subject of CREST-2.',
     listCategory: 'carotid',
     listDescription: 'CAS vs CEA in average-risk carotid stenosis. No primary 4-yr difference; CAS↑stroke, CEA↑MI/cranial nerve palsy; age-dependent.',
+    legend: {
+      finding: 'Carotid stenting and endarterectomy yield equivalent composite stroke/MI/death in average-risk patients.',
+      bottomLineTag: 'Equivalent',
+      keyStat: '7.2% vs 6.8%',
+    },
   },
 
   // ─── ENRICH TRIAL ─────────────────────────────────────────────────────────
@@ -8359,6 +8509,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     listCategory: 'acute',
     listDescription: 'First positive randomized minimally-invasive surgical ICH trial; 30-day mortality 9.3% vs 18.0% (Bayesian P>0.98). NEJM 2024.',
+    legend: {
+      finding: 'Minimally invasive parafascicular surgery for lobar ICH 30–80 mL improves utility-weighted mRS at 180 d.',
+      bottomLineTag: 'NNT 12',
+      keyStat: '0.458 vs 0.374',
+    },
   },
   'b-proud-trial': {
     id: 'b-proud-trial',
@@ -8499,6 +8654,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       ],
     },
     // Note: canonical safetyProfile is at top of entry (same values, more precise tooltips)
+    legend: {
+      finding: 'MSU dispatch in urban EMS shifts ordinal mRS toward less disability vs conventional ambulance.',
+      bottomLineTag: 'cOR 0.71',
+      keyStat: 'cOR 0.71 (less mRS)',
+    },
   },
   'best-msu-trial': {
     id: 'best-msu-trial',
@@ -8608,6 +8768,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'BEST-MSU showed that prehospital MSU care saved 36 minutes and improved outcomes in tPA-eligible patients (NNT 13). The mechanism is faster treatment, not better treatment. For hospitals without MSU access, the equivalent message is: every minute saved on door-to-needle time translates to measurable benefit.',
     bottomLineSummary: 'In a quasi-experimental alternating-week study from Houston, mobile stroke unit care reduced onset-to-treatment time by 36 minutes and improved excellent functional outcome at 90 days in tPA-eligible patients (53.5% vs 45.5%, AOR 2.14, P<0.001). The benefit is time-mediated; the non-randomized design limits causal certainty.',
+    legend: {
+      finding: 'Prehospital MSU care saves 36 min and improves outcomes in tPA-eligible stroke.',
+      bottomLineTag: 'NNT 13',
+      keyStat: 'uw-mRS OR 2.14',
+    },
   },
   'interact4-trial': {
     id: 'interact4-trial',
@@ -8734,7 +8899,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'Death within 90 days',
         tooltip: 'Overall 90-day mortality was essentially identical between groups.'
       }
-    }
+    },
+    legend: {
+      finding: 'Prehospital BP lowering in undifferentiated stroke helps hemorrhagic and hurts ischemic patients (net null).',
+      bottomLineTag: 'Neutral',
+      keyStat: 'OR 1.00',
+    },
   },
   'mr-asap-trial': {
     id: 'mr-asap-trial',
@@ -8824,6 +8994,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ordinalStats: { commonOR: 0.97, ciLow: 0.65, ciHigh: 1.47, direction: 'neutral' as const },
     bedsidePearl: 'MR ASAP and RIGHT-2 together make the strongest case against prehospital GTN for undifferentiated stroke: no functional benefit in either trial, and an early harm signal in ICH patients treated before imaging. Early 7-day mortality was numerically higher with GTN in the ICH subgroup. Do not administer prehospital nitrates for presumed stroke before CT excludes hemorrhage.',
     bottomLineSummary: 'In ambulance-treated patients with presumed stroke within 3 hours of onset, prehospital transdermal glyceryl trinitrate did not improve 90-day mRS distribution (cOR 0.97, 95% CI 0.65-1.47 in target population). The trial was stopped after 380 randomizations due to a safety signal in ICH patients: early 7-day mortality was numerically higher with GTN in this subgroup. mRS 0-2 at 90 days was 51% vs 49% in the target population.',
+    legend: {
+      finding: 'Prehospital transdermal GTN for undifferentiated stroke shows no functional benefit.',
+      bottomLineTag: 'No benefit',
+      keyStat: 'OR 0.92',
+    },
   },
   'racecat-trial': {
     id: 'racecat-trial',
@@ -8911,6 +9086,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ordinalStats: { commonOR: 1.03, ciLow: 0.82, ciHigh: 1.29, direction: 'positive' as const },
     bedsidePearl: 'RACECAT shows that in a real nonurban stroke network, bypassing the nearest center to speed thrombectomy did not improve population-level outcomes. The thrombectomy gains were offset by IVT delays and overtriage of non-LVO patients. This is a strong argument against a universal mothership (CSC-direct) protocol in nonurban systems. Triage algorithms should account for LVO prevalence, transfer times, and IVT eligibility window for your specific system.',
     bottomLineSummary: 'In a cluster-randomized nonurban Catalan stroke network, direct transport to a thrombectomy-capable CSC did not improve 90-day mRS distribution in ischemic stroke or TIA compared with nearest local stroke center first (adjusted cOR 1.03, 95% CI 0.82-1.29). More patients in the CSC-direct group underwent thrombectomy (48.8% vs 39.4%) but fewer received IVT (47.5% vs 60.4%). Mortality at 90 days was identical at approximately 27%. The trial was stopped early for futility.',
+    legend: {
+      finding: 'Bypassing the nearest center to speed thrombectomy did not improve population-level outcomes.',
+      bottomLineTag: 'Neutral',
+      keyStat: 'OR 1.03',
+    },
   },
   'right-2-trial': {
     id: 'right-2-trial',
@@ -8997,6 +9177,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     bedsidePearl: 'In ultra-acute presumed stroke, transdermal GTN shows no functional benefit and a safety signal in intracerebral hemorrhage patients treated before imaging. The trial\'s main contribution is feasibility: UK paramedics can randomize and treat stroke patients in the ambulance. For blood pressure management in suspected stroke before imaging, RIGHT-2 argues against routine prehospital intervention.',
     /* claimId: right-2.bottom-line | source: RIGHT-2 Investigators, Lancet 2019 */
     bottomLineSummary: 'In the RIGHT-2 trial, transdermal glyceryl trinitrate started by paramedics within 4 hours of presumed stroke did not improve 90-day mRS distribution in patients with confirmed stroke or TIA (cohort 1, N=852; adjusted common OR for poor outcome 1.25, 95% CI 0.97 to 1.60, p=0.083). The full ITT result was similarly null (cohort 2, N=1149; OR 1.04, 95% CI 0.84 to 1.29, p=0.69). Safety signals including symptomatic hypotension and larger hematoma with GTN in ICH patients reinforce the case against prehospital nitrates before imaging.',
+    legend: {
+      finding: 'Ultra-acute transdermal GTN for presumed stroke shows no benefit and a harm signal in ICH.',
+      bottomLineTag: 'No benefit',
+      keyStat: 'OR 1.25',
+    },
   },
   'triage-stroke-trial': {
     id: 'triage-stroke-trial',
@@ -9079,6 +9264,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ordinalStats: { commonOR: 1.42, ciLow: 0.72, ciHigh: 2.82, direction: 'positive' as const, pValue: 0.31 },
     bedsidePearl: 'TRIAGE-STROKE was stopped early (N=171 of planned 424) and cannot provide definitive guidance on bypass strategy. The mechanistic signal is informative: CSC-first shortened onset-to-groin time by 35 minutes; PSC-first shortened onset-to-needle time by 30 minutes. The net clinical effect is system dependent and this underpowered trial should not be used alone to mandate a bypass protocol.',
     bottomLineSummary: 'In IVT-eligible patients with suspected LVO within 4 hours of onset, direct routing to a CSC versus PSC-first transport did not significantly improve 90-day functional outcome in the acute ischemic stroke population (ordinal OR 1.42, 95% CI 0.72-2.82, p=0.31). The trial was stopped early at 171 of a planned 424 patients. Direct CSC routing shortened onset-to-groin time by 35 minutes; PSC-first shortened onset-to-needle time by 30 minutes.',
+    legend: {
+      finding: 'TRIAGE-STROKE stopped early; cannot provide definitive guidance on bypass strategy.',
+      bottomLineTag: 'Inconclusive',
+      keyStat: 'OR 1.42',
+    },
   },
   'act-trial': {
     id: 'act-trial',
@@ -9190,6 +9380,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'AcT confirmed tenecteplase 0.25 mg/kg as a practical replacement for alteplase in routine IVT (NI met, RD +2.1 pp). The workflow advantage is the single-bolus administration versus a bolus-plus-infusion for alteplase. Symptomatic ICH rates were similar (3.4% vs 3.2%). Together with TRACE-2 and ATTEST-2, AcT supports the 2026 guideline endorsement of tenecteplase.',
     bottomLineSummary: 'AcT showed non-inferiority of tenecteplase 0.25 mg/kg to alteplase 0.9 mg/kg for excellent 90-day outcome in routine Canadian stroke practice (36.9% vs 34.8%, RD +2.1 pp, 95% CI −1.4 to +5.6). The single-bolus advantage is validated without sacrificing efficacy or safety.',
+    legend: {
+      finding: 'Tenecteplase 0.25 mg/kg non-inferior to alteplase in routine IVT within 4.5 h.',
+      bottomLineTag: 'NI met',
+      keyStat: 'RD +2.1%',
+    },
   },
   'aramis-trial': {
     id: 'aramis-trial',
@@ -9303,6 +9498,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'ARAMIS showed DAPT is non-inferior to alteplase for minor nondisabling stroke (NNT context: both arms excellent, 93.8% vs 91.4%). The key bedside application: for clearly minor, nondisabling deficits within 4.5 hours, DAPT is a reasonable alternative that avoids the 0.9% sICH risk of alteplase. Do not apply to disabling stroke.',
     bottomLineSummary: 'In patients with minor nondisabling acute ischemic stroke, DAPT was non-inferior to IV alteplase for excellent 90-day outcome (93.8% vs 91.4%, RD +2.4 pp, NI P<0.001), with lower sICH (0.3% vs 0.9%). ARAMIS supports DAPT as an alternative to thrombolysis for clearly nondisabling deficits but does not displace alteplase for disabling stroke.',
+    legend: {
+      finding: 'DAPT non-inferior to alteplase for minor nondisabling stroke at 90 d (93.8% vs 91.4%).',
+      bottomLineTag: 'NI met',
+      keyStat: 'RD +2.3%',
+    },
   },
   'attest-2-trial': {
     id: 'attest-2-trial',
@@ -9387,6 +9587,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ordinalStats: { commonOR: 1.07, ciLow: 0.90, ciHigh: 1.27, direction: 'positive' as const },
     bedsidePearl: 'ATTEST-2 is the largest UK trial confirming that tenecteplase 0.25 mg/kg is noninferior to alteplase 0.9 mg/kg for standard-window IVT (NI p<0.0001). The single-bolus dosing advantage is now validated across three major trials (AcT, TRACE-2, ATTEST-2). Symptomatic ICH and mortality were identical in both arms. For centers transitioning to tenecteplase, ATTEST-2 provides reassurance that this is a direct substitution, not a clinical downgrade.',
     bottomLineSummary: 'In 1777 treated patients across 39 UK stroke centres, tenecteplase 0.25 mg/kg was noninferior to alteplase 0.9 mg/kg for 90-day mRS distribution (adjusted OR 1.07, 95% CI 0.90-1.27; NI p<0.0001). Superiority was not demonstrated. mRS 0-1 was achieved in 44% vs 42%. Mortality was approximately 8% in both groups. Together with AcT and TRACE-2, ATTEST-2 firmly establishes tenecteplase 0.25 mg/kg as a noninferior replacement for alteplase in standard-window IVT.',
+    legend: {
+      finding: 'Tenecteplase 0.25 mg/kg noninferior to alteplase in standard-window IVT (UK).',
+      bottomLineTag: 'NI met',
+      keyStat: 'OR 1.07',
+    },
   },
   'nor-test-trial': {
     id: 'nor-test-trial',
@@ -9497,6 +9702,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'NOR-TEST tested tenecteplase 0.4 mg/kg in predominantly mild stroke and found no benefit, but the case mix was too mild to show it even if it existed. The 0.4 mg/kg dose is not used in current practice; guideline-endorsed dose is 0.25 mg/kg. NOR-TEST is historically important context for NOR-TEST 2 Part A (harm signal at 0.4 mg/kg in moderate-severe stroke).',
     bottomLineSummary: 'NOR-TEST found tenecteplase 0.4 mg/kg was not superior to alteplase for mRS 0-1 at 3 months in a predominantly mild-stroke cohort (64% vs 63%, OR 1.08, P=0.52). The mild case mix limits interpretability, and the 0.4 mg/kg dose was subsequently shown harmful in moderate-severe stroke in NOR-TEST 2 Part A.',
+    legend: {
+      finding: 'Tenecteplase 0.4 mg/kg in predominantly mild stroke shows no benefit; cohort too mild to detect.',
+      bottomLineTag: 'NS',
+      keyStat: 'OR 1.08 (NS)',
+    },
   },
   'nor-test-2-part-a-trial': {
     id: 'nor-test-2-part-a-trial',
@@ -9616,6 +9826,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'NOR-TEST 2 Part A is a clear harm signal: tenecteplase 0.4 mg/kg in moderate-severe stroke caused 6× more sICH and 3× more deaths than alteplase. The 0.4 mg/kg dose is not used in practice. Current guidelines endorse tenecteplase 0.25 mg/kg as a safe alternative based on entirely separate trials (AcT, TRACE-2). Do not conflate the doses.',
     bottomLineSummary: 'NOR-TEST 2 Part A was stopped early for harm after tenecteplase 0.4 mg/kg showed substantially worse outcomes than alteplase in moderate-severe stroke: mRS 0-1 32% vs 51%, sICH 6% vs 1%, and mortality 16% vs 5%. The 0.4 mg/kg dose is contraindicated. This trial does not affect the safety profile of tenecteplase 0.25 mg/kg.',
+    legend: {
+      finding: 'Tenecteplase 0.4 mg/kg in moderate-severe stroke caused 6× more sICH and 3× more deaths vs alteplase.',
+      bottomLineTag: 'Harm',
+      keyStat: 'OR 0.45 mRS 0–1',
+    },
   },
   'prisms-trial': {
     id: 'prisms-trial',
@@ -9735,6 +9950,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'PRISMS tested alteplase vs aspirin in minor nondisabling stroke and found no functional benefit with a 3.2% sICH rate vs 0% for aspirin. The trial was underpowered (stopped at 33%), so findings are inconclusive rather than definitively negative. In clinical practice: for clearly nondisabling minor stroke, shared decision-making about thrombolysis is appropriate, with aspirin or DAPT as reasonable alternatives.',
     bottomLineSummary: 'PRISMS found no functional benefit of alteplase over aspirin in minor nondisabling stroke (78.2% vs 81.5%, adjusted RD −1.1%, NS) and a 3.2% sICH rate versus 0% for aspirin. The trial was stopped at 33% enrollment and results are inconclusive for the primary endpoint. The sICH signal supports caution about routine thrombolysis for clearly nondisabling deficits.',
+    legend: {
+      finding: 'Alteplase vs aspirin in minor nondisabling stroke shows no functional benefit and sICH 3.2% vs 0%.',
+      bottomLineTag: 'No benefit',
+      keyStat: 'RD −1.1%',
+    },
   },
   'prost-trial': {
     id: 'prost-trial',
@@ -9846,6 +10066,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'PROST showed rhPro-UK was non-inferior to alteplase with dramatically lower systemic bleeding (25.8% vs 42.2%). For patients at high risk of systemic complications (active GI ulcer, recent surgery, coagulopathy), rhPro-UK may offer a meaningful safety advantage if approved in your setting. Confirmed and expanded in PROST-2.',
     bottomLineSummary: 'PROST demonstrated non-inferiority of rhPro-UK to alteplase for excellent 90-day outcome in acute ischemic stroke within 4.5 hours (65.2% vs 64.3%, RD +0.89 pp). Systemic bleeding was significantly lower with rhPro-UK (25.8% vs 42.2%). Results confirmed and expanded in PROST-2 (N=1552).',
+    legend: {
+      finding: 'rhPro-UK non-inferior to alteplase with much lower systemic bleeding (25.8% vs 42.2%).',
+      bottomLineTag: 'NI met',
+      keyStat: 'RD +0.9%',
+    },
   },
   'prost-2-trial': {
     id: 'prost-2-trial',
@@ -9964,6 +10189,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'PROST-2 confirmed prourokinase as non-inferior to alteplase with better safety: sICH 0.3% vs 1.3% and major bleeding 0.5% vs 2.1%. It is currently available only in China. For clinicians in systems where prourokinase is approved, PROST-2 supports it as a first-line IVT alternative. Particularly when minimizing bleeding is a priority.',
     bottomLineSummary: 'PROST-2 demonstrated non-inferiority of prourokinase to alteplase for excellent 90-day outcome in EVT-ineligible stroke patients (72.0% vs 68.7%, RR 1.04, NI P<0.0001), with significantly lower sICH (0.3% vs 1.3%) and major bleeding (0.5% vs 2.1%). Results confirm and extend PROST, but are currently applicable only in China where prourokinase is approved.',
+    legend: {
+      finding: 'Prourokinase non-inferior to alteplase with lower sICH (0.3% vs 1.3%) and major bleeding (0.5% vs 2.1%).',
+      bottomLineTag: 'NI met',
+      keyStat: 'RR 1.04',
+    },
   },
   'raise-trial': {
     id: 'raise-trial',
@@ -10082,6 +10312,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'RAISE is the first RCT showing a thrombolytic (reteplase) superior to alteplase for stroke (79.5% vs 70.4%, NNT 11, P=0.002). However, any-ICH was higher (7.7% vs 4.9%) and adverse events were higher (91.6%). Reteplase is not guideline-endorsed for stroke outside of select regions. Watch for replication trials and guideline updates.',
     bottomLineSummary: 'RAISE demonstrated reteplase double-bolus was superior to alteplase for mRS 0-1 at 90 days in Chinese stroke patients within 4.5 hours (79.5% vs 70.4%, RR 1.13, P=0.002). Any intracranial hemorrhage was higher with reteplase (7.7% vs 4.9%). RAISE is provocative but requires independent replication before guideline adoption.',
+    legend: {
+      finding: 'Reteplase superior to alteplase for mRS 0–1 at 90 d (79.5% vs 70.4%; P=0.002).',
+      bottomLineTag: 'NNT 11',
+      keyStat: 'RR 1.13',
+    },
   },
   'taste-trial': {
     id: 'taste-trial',
@@ -10192,6 +10427,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'TASTE supports tenecteplase in perfusion-selected early-window stroke (per-protocol NI met, ITT borderline). This does not change practice. Tenecteplase is already endorsed based on larger, cleaner trials (AcT, TRACE-2). TASTE is relevant for centers considering perfusion-CT-guided patient selection for thrombolysis, where it confirms feasibility.',
     bottomLineSummary: 'TASTE demonstrated non-inferiority of tenecteplase 0.25 mg/kg to alteplase in the per-protocol analysis (57% vs 55% mRS 0-1, SRD 0.05, NI p=0.01) in perfusion-selected early-window stroke, but the ITT result was borderline. Stopped early at 680 of 832 patients. Adds to the tenecteplase evidence base without changing current practice.',
+    legend: {
+      finding: 'Tenecteplase in perfusion-selected early-window stroke met per-protocol NI; ITT borderline.',
+      bottomLineTag: 'NI (PP)',
+      keyStat: 'RD +3%',
+    },
   },
   'timeless-trial': {
     id: 'timeless-trial',
@@ -10281,6 +10521,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ordinalStats: { commonOR: 1.13, ciLow: 0.82, ciHigh: 1.57, direction: 'positive' as const, pValue: 0.45 },
     bedsidePearl: 'TIMELESS is not evidence against late-window IVT in all settings. It is specifically negative for bridging tenecteplase before thrombectomy in the 4.5-24 hour window (77% of patients underwent EVT). The contrast is TRACE-III: in perfusion-selected LVO patients without EVT access, late-window tenecteplase improved mRS 0-1 from 24.2% to 33.0% (NNT 11). The rule is: late-window IVT may help when EVT is unavailable; it adds nothing as a bridge when EVT is being performed.',
     bottomLineSummary: 'In perfusion-selected LVO patients treated 4.5-24 hours after stroke onset, tenecteplase 0.25 mg/kg before planned thrombectomy (77% of patients) did not improve 90-day mRS distribution (adjusted cOR 1.13, 95% CI 0.82-1.57, p=0.45). Functional independence occurred in 46.0% vs 42.4%. Symptomatic ICH was 2.0% vs 2.2%. TIMELESS and TRACE-III together define the role of late-window IVT: benefit only when EVT is unavailable.',
+    legend: {
+      finding: 'IV tenecteplase 4.5–24 h with perfusion mismatch did not improve mRS shift; not a verdict against late IVT broadly.',
+      bottomLineTag: 'Neutral',
+      keyStat: 'OR 1.13',
+    },
   },
   'trace-2-trial': {
     id: 'trace-2-trial',
@@ -10392,6 +10637,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     },
     bedsidePearl: 'TRACE-2 is a major validation of tenecteplase 0.25 mg/kg for standard-window IVT in EVT-ineligible patients (NI confirmed, RR 1.07, sICH 2% each). Together with AcT and ATTEST-2, TRACE-2 provides the evidence base for the 2026 guideline endorsement of tenecteplase as an acceptable alternative to alteplase. Single-bolus administration simplifies door-to-needle workflows.',
     bottomLineSummary: 'TRACE-2 confirmed non-inferiority of tenecteplase 0.25 mg/kg to alteplase 0.9 mg/kg for mRS 0-1 at 90 days in EVT-ineligible stroke patients (62% vs 58%, RR 1.07, 95% CI 0.98-1.16, NI P confirmed). Safety was similar (sICH 2% each). TRACE-2 is a key pillar of the tenecteplase evidence base alongside AcT and ATTEST-2.',
+    legend: {
+      finding: 'Tenecteplase 0.25 mg/kg non-inferior to alteplase in EVT-ineligible standard-window stroke (sICH 2% both arms).',
+      bottomLineTag: 'NI met',
+      keyStat: 'RR 1.07',
+    },
   },
   'twist-trial': {
     id: 'twist-trial',
@@ -10479,6 +10729,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ordinalStats: { commonOR: 1.18, ciLow: 0.88, ciHigh: 1.58, direction: 'positive' as const, pValue: 0.27 },
     bedsidePearl: 'TWIST is a negative trial for non-contrast CT-only selection of wake-up stroke for tenecteplase. Numerically more patients achieved mRS 0-1 with tenecteplase (45% vs 38%) but the ordinal shift was not significant. The take-home is imaging-specific: NCCT alone cannot reliably select patients likely to benefit. MRI DWI-FLAIR mismatch (WAKE-UP trial) or CTP penumbra remain the evidence-based selection strategies where available.',
     bottomLineSummary: 'In wake-up stroke patients selected by non-contrast CT (ASPECTS 4 or higher), tenecteplase 0.25 mg/kg within 4.5 hours of awakening did not significantly improve 90-day mRS distribution compared with no thrombolysis (adjusted OR 1.18, 95% CI 0.88-1.58, p=0.27). mRS 0-1 was achieved in 45% vs 38% (exploratory). Symptomatic ICH was 2% vs 1%. TWIST does not support non-contrast CT as the sole imaging modality for wake-up stroke thrombolytic selection.',
+    legend: {
+      finding: 'Non-contrast CT-only selection of wake-up stroke for tenecteplase failed to show benefit.',
+      bottomLineTag: 'Neutral',
+      keyStat: 'OR 1.18',
+    },
   },
 
   // ── W7.0 Predecessor Stubs — EVT 2015 chain (canary batch, §7c) ──────────
@@ -10552,6 +10807,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Endovascular treatment not achievable within 7 hours of onset',
       'Severe pre-stroke disability',
     ],
+    legend: {
+      finding: 'IMS-III stopped early for futility; IV tPA + endovascular therapy did not beat IV tPA alone (pre-modern EVT).',
+      bottomLineTag: 'Neutral',
+      keyStat: 'RR 1.05',
+    },
   },
 
   'synthesis-expansion-trial': {
@@ -10624,6 +10884,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Large established infarct on baseline CT',
       'Severe pre-stroke disability',
     ],
+    legend: {
+      finding: 'Endovascular therapy alone (no IV tPA, ≤6 h) did not improve mRS 0–1 vs IV tPA (pre-stent-retriever era).',
+      bottomLineTag: 'Neutral',
+      keyStat: 'OR 0.71',
+    },
   },
 
   'mr-rescue-trial': {
@@ -10696,6 +10961,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Unable to undergo MRI or CT perfusion',
       'Posterior circulation stroke',
     ],
+    legend: {
+      finding: 'Mechanical embolectomy (MERCI/Penumbra) vs standard care ≤8 h showed no benefit; pre-stent-retriever, no penumbra selection effect.',
+      bottomLineTag: 'Neutral',
+      keyStat: '3.9 vs 3.9 mRS',
+    },
   },
 
   // ── W7.0 Predecessor Stubs — Batch 2 ─────────────────────────────────────
@@ -10774,6 +11044,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Pre-stroke severe disability (mRS 3 or greater)',
       'Life expectancy less than 90 days',
     ],
+    legend: {
+      finding: 'First RCT of basilar EVT, stopped early; crossover and slow enrollment limit conclusions.',
+      bottomLineTag: 'Inconclusive',
+      keyStat: 'OR 1.74',
+    },
   },
 
   'basics-trial': {
@@ -10847,6 +11122,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Pre-stroke severe disability (mRS 3 or greater)',
       'Contraindication to antiplatelet or antithrombotic therapy',
     ],
+    legend: {
+      finding: 'EVT ≤6 h for basilar artery occlusion vs medical care did not significantly improve mRS 0–3.',
+      bottomLineTag: 'Neutral',
+      keyStat: 'RR 1.18',
+    },
   },
 
   // ── Sub-batch 2: Antiplatelet chain ────────────────────────────────────────
@@ -10920,6 +11200,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Use of warfarin or other anticoagulation',
       'Severe renal or hepatic impairment',
     ],
+    legend: {
+      finding: 'Adding aspirin to clopidogrel after recent stroke/TIA showed no benefit and increased life-threatening bleeding.',
+      bottomLineTag: 'Harm signal',
+      keyStat: 'RR 0.94',
+    },
   },
 
   'charisma-trial': {
@@ -10991,6 +11276,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Severe renal impairment (creatinine above 2.0 mg/dL)',
       'Life expectancy less than 2 years',
     ],
+    legend: {
+      finding: 'Aspirin+clopidogrel vs aspirin alone in stable CV disease/risk factors showed no benefit with more bleeding.',
+      bottomLineTag: 'No benefit',
+      keyStat: 'RR 0.93',
+    },
   },
 
   // ── Sub-batch 3: ICH surgical chain ────────────────────────────────────────
@@ -11064,6 +11354,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Definitive surgical or definitive conservative indication (no equipoise)',
       'Significant pre-stroke disability',
     ],
+    legend: {
+      finding: 'Early surgery vs conservative care for supratentorial ICH showed no overall functional benefit.',
+      bottomLineTag: 'Neutral',
+      keyStat: 'OR 0.89',
+    },
   },
 
   'stich-ii-trial': {
@@ -11138,6 +11433,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'GCS 3 or 4 (catastrophic presentation)',
       'Significant pre-stroke disability',
     ],
+    legend: {
+      finding: 'Early surgery in superficial lobar ICH (no IVH) did not significantly improve outcomes.',
+      bottomLineTag: 'Neutral',
+      keyStat: 'OR 0.86',
+    },
   },
 
   'mistie-iii-trial': {
@@ -11210,6 +11510,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Intraventricular hemorrhage causing obstructive hydrocephalus requiring immediate intervention',
       'INR above 1.5 or platelets below 100,000 at enrollment',
     ],
+    legend: {
+      finding: 'Catheter-based clot lysis for ICH ≥30 mL did not improve mRS 0–3 at 1 year vs standard care.',
+      bottomLineTag: 'Neutral',
+      keyStat: 'OR 1.20',
+    },
   },
   // ========== LARGE-CORE EVT INDEX TRIAL (2022) ==========
   // Placed near ANGEL-ASPECT, SELECT2, TENSION, LASTE per V intent
