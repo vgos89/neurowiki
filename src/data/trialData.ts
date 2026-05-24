@@ -496,7 +496,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       effectSize: {
         value: '15.4%',
         label: 'Absolute Increase'
-      }
+      },
+      absoluteReduction: {
+        value: '15.4 pp',
+        label: 'Global OR 1.7 (95% CI 1.2–2.6)',
+        info: 'Part 2 mRS 0–1 favorable outcome: 42.6% (tPA) vs 27.2% (placebo). 1995 NEJM publication reports the global favorable-outcome odds ratio (OR 1.7, 95% CI 1.2–2.6, P=0.008) across the four assessment scales; a frequentist 95% CI for the dichotomous mRS 0–1 absolute risk difference itself is not published in the primary paper, so the OR CI is shown alongside the point-estimate ARD.',
+        highlight: true,
+      },
     },
     trialDesign: {
       type: [
@@ -3131,8 +3137,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       effectSize: {
         value: '+18.4%',
-        label: 'Adjusted Risk Difference'
-      }
+        label: 'Adjusted Risk Difference, 95% CI 0.3 to 36.4'
+      },
+      absoluteReduction: {
+        value: '+18.4 pp (95% CI 0.3 to 36.4)',
+        label: 'Adjusted absolute difference in mRS 0–1 at 90 days',
+        info: 'Phase 2b CHOICE (Renu A et al., JAMA 2022;327:826-835): intra-arterial alteplase after successful EVT (eTICI 2b50–3) increased mRS 0–1 at 90 days. Adjusted absolute difference 18.4 percentage points (95% CI 0.3 to 36.4, P=0.047). The CI lower bound is close to zero. Trial was stopped early at planned interim due to COVID-19 enrollment challenges, and the question is being re-tested in larger trials (POST-UK, CHOICE-2).',
+        highlight: true,
+      },
     },
     trialDesign: {
       type: [
@@ -5001,9 +5013,15 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         label: 'Statistically Sig. (ordinal shift)'
       },
       effectSize: {
-        value: '28%',
-        label: 'Absolute Increase'
-      }
+        value: 'cOR 2.77',
+        label: 'Ordinal shift, 95% CI 1.63–4.70'
+      },
+      absoluteReduction: {
+        value: '28 pp [verification pending]',
+        label: 'Secondary mRS 0–2: 45% vs 17%',
+        info: 'Primary endpoint was the ordinal mRS shift (common OR 2.77, 95% CI 1.63–4.70, P<0.001). The 28 percentage-point absolute difference is from the SECONDARY mRS 0–2 dichotomization (45% vs 17%); the Albers 2018 NEJM publication does not report a frequentist 95% CI for this secondary ARD in the abstract. CI verification from the full text is pending V supply.',
+        highlight: true,
+      },
     },
     trialDesign: {
       type: [
@@ -5134,12 +5152,18 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       pValue: {
         value: '>99.9%',
-        label: 'Superiority'
+        label: 'Bayesian posterior P(sup)'
       },
       effectSize: {
-        value: '36%',
-        label: 'Absolute Increase'
-      }
+        value: 'P(sup) >0.999',
+        label: 'Utility-weighted mRS (Bayesian primary)'
+      },
+      absoluteReduction: {
+        value: '36 pp (95% CI 24–47)',
+        label: 'Coprimary mRS 0–2: 49% vs 13%',
+        info: 'Unadjusted absolute difference in functional independence (mRS 0–2) at 90 days: 36 pp (95% CI 24–47). Adjusted difference 33 pp (95% CI 24–44). This is the mRS 0–2 binary coprimary; the trial primary is utility-weighted mRS analyzed by Bayesian methods (posterior P(superiority) >0.999), reported separately. Per trial-statistics skill, NNT for the Bayesian primary is not valid; the displayed NNT 2.8 derives from this mRS 0–2 secondary and is shown with explicit Bayesian-design annotation.',
+        highlight: true,
+      },
     },
     trialDesign: {
       type: [

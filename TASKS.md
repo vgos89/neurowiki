@@ -864,7 +864,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 4E — Standardize `<CalcDisclaimer />` across remaining calculator pages — Class C
 - **Priority:** P2
-- **Status:** planned
+- **Status:** [x] satisfied 2026-05-23 by the existing shared `CalculatorFooter` component (src/components/calculators/CalculatorFooter.tsx). Each calculator passes a context-specific `disclaimer` prop to the shared footer — RoPE, Heidelberg, Boston Criteria all verified to have disclaimer text in place. The audit was written before CalculatorFooter existed; the intent of Phase 4E ("shared component, no duplication, all 3 calculators carry disclaimer") is met by the current pattern. No additional CalcDisclaimer primitive needed; per-calculator disclaimer text is intentionally bespoke because clinical context differs (CAA, hemorrhagic transformation, PFO).
 - **User-visible goal:** ROPE Score, Heidelberg Bleeding, Boston Criteria CAA calculators all have footer disclaimers (NIHSS covered in Phase 4B)
 - **Non-goals:** no clinical content changes; no scoring changes
 - **Owner agents:** content-writer (copy) → ui-architect (shared `<CalcDisclaimer />` component if not created in 4B)
@@ -1051,7 +1051,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 8D — SEO metadata: fix titles, descriptions, sitemap — Class C
 - **Priority:** P2
-- **Status:** planned
+- **Status:** [x] satisfied 2026-05-23 — re-audited routeManifest + sitemap. All 43 routeManifest entries pass spec §7.1 (0 titles >60 chars, 0 descriptions >160 chars, 0 duplicate titles). All 11 calculator URLs in sitemap resolve to live manifest paths (no orphan redirect targets). Sitemap URL count: 168, all static URLs cross-check against the manifest. The original 2026-05-13 audit findings were addressed across the SEO sessions of 2026-05-14 through 2026-05-21.
 - **User-visible goal:** Trial/calculator pages display correctly-lengthed SEO titles and descriptions in search results; sitemap URLs resolve (no 404s for crawlers)
 - **Non-goals:** no structured data authoring in this task; no clinical content changes
 - **Owner agents:** seo-specialist

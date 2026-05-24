@@ -509,6 +509,30 @@ const NihssCalculator: React.FC = () => {
           ))}
         </div>
 
+        {/* Severity interpretation — clinical prose tagged for claim registry.
+            Source: AHA/ASA 2026 §4.6.1 (Thrombolysis Decision-Making) and
+            §4.7.2 (EVT). Bands match nihssScoring (Adams 1999 conventions). */}
+        <div
+          data-claim="nihss-severity-interpretation-2026"
+          className="text-xs text-slate-600 space-y-3 mb-4 pt-3 border-t border-slate-100"
+        >
+          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            What this severity means
+          </div>
+          <p>
+            <span className="font-semibold text-emerald-700">Minor (1–4).</span> Subtle deficit. The IVT decision turns on whether the deficit is disabling for that patient, not on the NIHSS number. Per AHA/ASA 2026 §4.6.1, IVT is not recommended for clearly non-disabling deficits within 4.5 h. DAPT (clopidogrel + aspirin × 21 days) is the preferred alternative for NIHSS ≤3 or high-risk TIA per §4.8.
+          </p>
+          <p>
+            <span className="font-semibold text-amber-700">Moderate (5–15).</span> Disabling deficit. IVT is clearly indicated within 4.5 h absent contraindications. NIHSS ≥6 with cortical signs raises LVO probability and triggers urgent vascular imaging (CTA head and neck) for EVT triage per §4.7.2.
+          </p>
+          <p>
+            <span className="font-semibold text-red-600">Moderate to severe (16–20).</span> Typical proximal LVO range. Expedite CTA, mobilize the EVT pathway, and confirm prestroke mRS 0–1 and ASPECTS ≥6 for standard early-window selection. Post-IVT BP target ≤180/105.
+          </p>
+          <p>
+            <span className="font-semibold text-red-700">Severe (≥21).</span> Large-territory infarct risk. Reassess core size (ASPECTS), age, and prestroke function before EVT; large-core EVT (ASPECTS 3–5) remains supported per §4.7.2 in selected patients. Symptomatic hemorrhage risk after IVT is elevated; document the IVT discussion when proceeding.
+          </p>
+        </div>
+
         {/* LVO probability divider */}
         <div className="pt-3 border-t border-slate-100 mb-3">
           <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
