@@ -788,6 +788,44 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'Among patients with intracerebral hemorrhage who were receiving factor Xa inhibitors, andexanet resulted in better control of hematoma expansion than usual care but was associated with thrombotic events, including ischemic stroke.',
   },
 
+  // ─── 2024 FDA safety communication: Andexxa (andexanet alfa) risk-benefit ─
+  // Following FDA Cellular, Tissue, and Gene Therapies Advisory Committee
+  // review of the full ANNEXA-I dataset (Nov 2024), FDA concluded that the
+  // serious risks (total thromboembolic events 14.6% vs 6.9%; thrombosis-
+  // related death at day 30 2.5% vs 0.9%) outweighed the hemostatic benefit
+  // observed in the published interim. FDA communicated this position to
+  // AstraZeneca, which submitted a voluntary BLA withdrawal. 6-month review
+  // window per §13.7 (active regulatory matter; status may evolve).
+  'fda-andexxa-safety-2024': {
+    id: 'fda-andexxa-safety-2024',
+    source: 'guideline',
+    title: 'Update on the Safety of Andexxa by AstraZeneca: FDA Safety Communication',
+    year: 2024,
+    section: 'Risk-benefit conclusion',
+    url: 'https://www.fda.gov/safety/medical-product-safety-information/update-safety-andexxa-astrazeneca-fda-safety-communication',
+    last_reviewed: '2026-05-24',
+    review_window_months: 6,
+    quoted_text: 'Since approval, the FDA has received postmarketing safety data on thromboembolic events, including serious and fatal outcomes, in patients treated with Andexxa. Based on available data, the serious risks including the increase in thromboembolic events are such that the FDA considers the risks of the product to outweigh its benefits. When the full data from ANNEXA-I were reviewed by the FDA Cellular, Tissue, and Gene Therapies Advisory Committee in November 2024, an increased incidence of thrombosis (14.6% versus 6.9%) and thrombosis-related deaths at Day 30 (2.5% versus 0.9%) was observed in the Andexxa arm compared with the usual care arm.',
+  },
+
+  // ─── 2025 AstraZeneca voluntary US market withdrawal of Andexxa ──────────
+  // Following the FDA safety communication (fda-andexxa-safety-2024),
+  // AstraZeneca confirmed end of US commercial sales effective December 22,
+  // 2025. As of that date, andexanet alfa is no longer available to US
+  // prescribers; 4F-PCC is the default FXa-inhibitor reversal in the US.
+  // 12-month review window per §13.7 (regulatory status; may change if a
+  // successor product enters the US market or if reintroduction is filed).
+  'astrazeneca-andexxa-withdrawal-2025': {
+    id: 'astrazeneca-andexxa-withdrawal-2025',
+    source: 'guideline',
+    title: 'Andexxa: AstraZeneca voluntary withdrawal from US market, effective December 22, 2025',
+    year: 2025,
+    url: 'https://www.tctmd.com/news/andexanet-alfa-pulled-us-market',
+    last_reviewed: '2026-05-24',
+    review_window_months: 12,
+    quoted_text: 'AstraZeneca confirmed that it will end U.S. commercial sales of Andexxa (andexanet alfa) on December 22, 2025, following the FDA safety communication and submission of a request to voluntarily withdraw the BLA for commercial reasons.',
+  },
+
   // ─── 2026 trial: CREST-2 — revascularization vs modern intensive medical management
   //     for asymptomatic high-grade carotid stenosis (two parallel RCTs) ───────────
   // Brott TG et al., NEJM 2026. Two parallel observer-blinded RCTs at 155 sites;

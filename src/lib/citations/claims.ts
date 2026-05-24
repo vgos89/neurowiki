@@ -373,9 +373,11 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
       'sarode-4fpcc-2013',
       'baharoglu-patch-2016',
       'aha-asa-2022-ich-anticoag-reversal',
+      'fda-andexxa-safety-2024',
+      'astrazeneca-andexxa-withdrawal-2025',
     ],
     surfaces: [DATA_SURFACE],
-    description: 'ClinicalSynthesisCard on /trials/q/ich-anticoagulation-reversal. Agent-specific reversal: 4F-PCC + IV vitamin K for VKA, idarucizumab for dabigatran, andexanet alfa (or 4F-PCC) for FXa inhibitors. Explicitly surfaces PATCH (2016) HARM finding — DO NOT transfuse platelets for antiplatelet-associated ICH outside a planned neurosurgical procedure (AHA/ASA 2022 Class III: Harm). Grounded in the 2022 AHA/ASA Spontaneous ICH Guideline §7.3.',
+    description: 'ClinicalSynthesisCard on /trials/q/ich-anticoagulation-reversal. Agent-specific reversal: 4F-PCC + IV vitamin K for VKA, idarucizumab for dabigatran, 4F-PCC 50 U/kg for FXa inhibitors (default since Dec 22 2025 US withdrawal of andexanet alfa per FDA risk-benefit conclusion). Explicitly surfaces PATCH (2016) HARM finding — DO NOT transfuse platelets for antiplatelet-associated ICH outside a planned neurosurgical procedure (AHA/ASA 2022 Class III: Harm). Grounded in 2022 AHA/ASA Spontaneous ICH Guideline §7.3; updated 2026-05-24 to incorporate FDA Nov-2024 advisory committee finding (full ANNEXA-I dataset: total thromboembolic events 14.6% vs 6.9%, thrombosis-related deaths at day 30 2.5% vs 0.9%) and AstraZeneca voluntary BLA withdrawal effective 2025-12-22.',
   },
 
   // ─── Hemicraniectomy clinical synthesis ─────────────────────────────────────
