@@ -422,6 +422,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   },
 
   // ─── CRAO management clinical synthesis ─────────────────────────────────────
+
   'crao-management-synthesis': {
     id: 'crao-management-synthesis',
     citation_ids: [

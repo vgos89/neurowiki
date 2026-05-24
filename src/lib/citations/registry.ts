@@ -687,6 +687,42 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'EAGLE randomized 84 patients with non-arteritic CRAO to local intra-arterial fibrinolysis (rt-PA up to 50 mg) vs conservative standard therapy. The trial was stopped early after a planned interim analysis showed no significant difference in mean visual acuity change at 1 month (60.3% vs 57.1%) and a higher rate of adverse events in the IA fibrinolysis arm (37.1% vs 4.3%, primarily intracerebral hemorrhage and procedural complications). IA fibrinolysis is not recommended.',
   },
 
+  // ─── CHARM 2024 — IV glibenclamide for large hemispheric infarct ──────────
+  // Sheth KN et al. IV Glibenclamide for Cerebral Edema After Large Hemispheric
+  // Stroke (CHARM). Lancet Neurology 2024. Phase 3 RCT in 535 patients with
+  // large hemispheric infarction (ASPECTS 1-5 or DWI core 80-300 mL, age
+  // 18-70). Primary mRS ordinal shift not met (cOR 1.17, 95% CI 0.80-1.71,
+  // P=0.42). Stopped early for COVID-19 operational disruptions at ~71% of
+  // planned enrollment; substantially underpowered. Hypoglycemia 6% vs 2%.
+  // Registered 2026-05-24 to support the hemicraniectomy clinical-synthesis
+  // card. 36-month review window per §13.7 (landmark negative trial).
+  'sheth-charm-2024': {
+    id: 'sheth-charm-2024',
+    source: 'trial',
+    title: 'CHARM: IV Glibenclamide for Cerebral Edema After Large Hemispheric Stroke',
+    year: 2024,
+    url: 'https://www.thelancet.com/journals/laneur/article/PIIS1474-4422(24)00407-3/abstract',
+    last_reviewed: '2026-05-24',
+    review_window_months: 36,
+    quoted_text: 'In 535 patients with large hemispheric infarction (ASPECTS 1-5 or DWI core 80-300 mL, age 18-70), IV glibenclamide 8.6 mg over 72 hours did not improve 90-day mRS ordinal shift compared with placebo (cOR 1.17, 95% CI 0.80-1.71, P=0.42). Mortality was numerically higher with glibenclamide; hypoglycemia 6% vs 2%. Trial stopped early at ~71% of planned enrollment due to COVID-19 operational disruptions.',
+  },
+
+  // ─── 2026 AHA/ASA §6.3 — Supratentorial Infarction Surgical Management ────
+  // Verbatim from src/data/aha2026StrokeGuideline.ts
+  // acuteComplicationsRecommendations.brainSwelling[0-1]. Registered
+  // 2026-05-24 for the hemicraniectomy clinical-synthesis card.
+  'aha-asa-2026-6.3': {
+    id: 'aha-asa-2026-6.3',
+    source: 'guideline',
+    title: '2026 AHA/ASA Guideline — §6.3 (Supratentorial Infarction — Surgical Management)',
+    year: 2026,
+    section: '§6.3 Supratentorial Infarction (Surgical Management)',
+    url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
+    pmid: '41582814',
+    last_reviewed: '2026-05-24',
+    quoted_text: 'In patients with AIS and malignant cerebral edema who are candidates for surgical intervention, early decompressive hemicraniectomy should be used to reduce mortality and improve functional outcomes in patients ≤60 years of age (COR 1, LOE B-R). In patients with AIS and malignant cerebral edema, decompressive hemicraniectomy may be considered in patients >60 years of age, with individualized decision-making regarding functional outcomes (COR 2a, LOE B-R).',
+  },
+
   // ─── 2021 AHA/ASA Secondary Prevention of Stroke Guideline — PFO closure ──
   // Kleindorfer DO et al. 2021 Guideline for the Prevention of Stroke in
   // Patients With Stroke and Transient Ischemic Attack. Stroke. 2021;52:e364-e467.
