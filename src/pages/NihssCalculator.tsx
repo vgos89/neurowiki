@@ -133,6 +133,12 @@ const NihssCalculator: React.FC = () => {
   // same case row (preserves createdAt, bumps updatedAt). Cleared on Reset.
   const [currentCaseId, setCurrentCaseId] = useState<string | null>(null);
 
+  // Default-off toggle (audit BLOCKING nihss-emr-include-lvo, spec-compliant).
+  // When on, buildText appends an extra line with the RACE-derived LVO label
+  // + RACE score. Placed next to the Copy button so it's discoverable at the
+  // moment of export. 2026-05-23.
+  const [includeLvoInEmr, setIncludeLvoInEmr] = useState(false);
+
   const nihssHeaderRef = useRef<HTMLDivElement>(null);
   const wasCompleteRef = useRef(false);
 
@@ -426,6 +432,13 @@ const NihssCalculator: React.FC = () => {
 
     const header = `NIHSS: ${total}`;
     const blocks: string[] = [header, contextLines.join('\n')];
+    // Optional LVO line — default off, opt-in via the toggle near the Copy
+    // button. Surfaces the RACE-derived LVO label + RACE score so EMR text
+    // carries the same context the in-app drawer shows. Only meaningful
+    // when scoring has produced a RACE score above 0.
+    if (includeLvoInEmr && lvoData.raceScore > 0) {
+      blocks.push(`LVO probability: ${lvoData.label} (RACE ${lvoData.raceScore}/9, ${lvoData.probability}%)`);
+    }
     if (stampLines.length > 0) {
       blocks.push(`Timestamps:\n${stampLines.join('\n')}`);
     }
@@ -559,6 +572,27 @@ const NihssCalculator: React.FC = () => {
         {/* Copy shortcut — the Save Case action moved to the sticky
             header (bookmark icon between Reset and Copy) so every
             calculator surfaces it in the same place. */}
+        {/* Include LVO toggle — opt-in, default off. When on, the copy text
+            carries one extra line ("LVO probability: <Label> (RACE n/9, p%)").
+            Surfaced next to the Copy button so it is discoverable at the
+            moment of export. Audit BLOCKING nihss-emr-include-lvo
+            (2026-05-23). */}
+        {lvoData.raceScore > 0 && (
+          <label className="mt-3 mb-1 flex items-center justify-between gap-3 cursor-pointer rounded-lg border border-slate-100 px-3 py-2 hover:bg-slate-50 transition-colors">
+            <span className="text-xs text-slate-600 leading-snug">
+              Include LVO probability in EMR copy
+              <span className="block text-[11px] text-slate-400 mt-0.5">RACE {lvoData.raceScore}/9, {lvoData.label} ({lvoData.probability}%)</span>
+            </span>
+            <input
+              type="checkbox"
+              checked={includeLvoInEmr}
+              onChange={(e) => setIncludeLvoInEmr(e.target.checked)}
+              className="w-4 h-4 rounded border-slate-300 text-neuro-600 focus-visible:ring-2 focus-visible:ring-neuro-500 flex-shrink-0"
+              aria-label="Include LVO probability in EMR copy text"
+            />
+          </label>
+        )}
+
         <button
           type="button"
           onClick={() => { copyNihss(); setDrawerOpen(false); }}

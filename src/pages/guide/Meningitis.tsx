@@ -8,6 +8,7 @@ import {
   Critical,
   Value,
   Warning,
+  CalcRef,
 } from '../../components/article';
 import { useRecents } from '../../hooks/useRecents';
 import DiscreteFAQ from '../../components/seo/DiscreteFAQ';
@@ -60,7 +61,7 @@ export default function Meningitis() {
             viewMode={viewMode}
             detail="Image first if: focal deficit, papilledema, GCS &lt;10, immunocompromised, seizure, known mass. Otherwise LP can come first. If you image and it delays abx &gt;1 h, give abx before the scan."
           >
-            CT before LP if: focal deficit, papilledema, GCS <Value>&lt;10</Value>, immunocompromised, seizure, known mass. Otherwise LP first. If imaging delays antibiotics &gt;1 h, give antibiotics before the scan.
+            CT before LP if: focal deficit, papilledema, <CalcRef name="GCS" path="/calculators/glasgow-coma-scale">GCS</CalcRef> <Value>&lt;10</Value>, immunocompromised, seizure, known mass. Otherwise LP first. If imaging delays antibiotics &gt;1 h, give antibiotics before the scan.
           </Paragraph>
 
           <Section number={3} title="LP and CSF" />
