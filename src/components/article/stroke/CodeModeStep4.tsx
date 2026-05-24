@@ -312,46 +312,55 @@ const ORDERS: Order[] = [
 
 const getCategoryClasses = (category: string) => {
   // Categories are organizational groupings, not severity states.
-  // All four use neutral slate or cobalt-soft neuro tokens per design-tokens skill.
-  // post-tpa keeps an amber accent to signal "time-sensitive monitoring" — amber is
-  // the canonical "consider / advisory" severity token (vs red which implies harm).
+  // Chassis-aligned 2026-05-24: each category gets a tinted header bar
+  // (semantic background + deeper eyebrow text color) over a white body
+  // matching the rest of the Stroke Code pathway. Token contract is the
+  // single source of truth for category color mapping; do not inline.
   if (category === 'post-tpa') {
     return {
-      bg: 'bg-amber-50',
-      border: 'border-amber-200',
-      text: 'text-amber-900',
-      textLight: 'text-amber-700',
+      headerBg: 'bg-amber-50',
+      headerBorder: 'border-amber-100',
+      eyebrow: 'text-amber-700',
+      meta: 'text-amber-600',
       icon: 'text-amber-600',
-      checkbox: 'text-neuro-600 focus:ring-neuro-500'
+      checkbox: 'text-neuro-600 focus:ring-neuro-500',
+      rationaleBg: 'bg-amber-50/60',
+      rationaleBorder: 'border-amber-100'
     };
   }
   if (category === 'stroke-workup') {
     return {
-      bg: 'bg-neuro-50',
-      border: 'border-neuro-100',
-      text: 'text-neuro-900',
-      textLight: 'text-neuro-700',
+      headerBg: 'bg-neuro-50',
+      headerBorder: 'border-neuro-100',
+      eyebrow: 'text-neuro-700',
+      meta: 'text-neuro-600',
       icon: 'text-neuro-600',
-      checkbox: 'text-neuro-600 focus:ring-neuro-500'
+      checkbox: 'text-neuro-600 focus:ring-neuro-500',
+      rationaleBg: 'bg-neuro-50/60',
+      rationaleBorder: 'border-neuro-100'
     };
   }
   if (category === 'labs') {
     return {
-      bg: 'bg-slate-50',
-      border: 'border-slate-100',
-      text: 'text-slate-900',
-      textLight: 'text-slate-600',
+      headerBg: 'bg-slate-50',
+      headerBorder: 'border-slate-100',
+      eyebrow: 'text-slate-400',
+      meta: 'text-slate-500',
       icon: 'text-slate-500',
-      checkbox: 'text-neuro-600 focus:ring-neuro-500'
+      checkbox: 'text-neuro-600 focus:ring-neuro-500',
+      rationaleBg: 'bg-slate-50',
+      rationaleBorder: 'border-slate-100'
     };
   }
   return {
-    bg: 'bg-neuro-50',
-    border: 'border-neuro-100',
-    text: 'text-neuro-900',
-    textLight: 'text-neuro-700',
+    headerBg: 'bg-neuro-50',
+    headerBorder: 'border-neuro-100',
+    eyebrow: 'text-neuro-700',
+    meta: 'text-neuro-600',
     icon: 'text-neuro-600',
-    checkbox: 'text-neuro-600 focus:ring-neuro-500'
+    checkbox: 'text-neuro-600 focus:ring-neuro-500',
+    rationaleBg: 'bg-neuro-50/60',
+    rationaleBorder: 'border-neuro-100'
   };
 };
 
@@ -469,43 +478,46 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
   (CodeModeStep4 as unknown as { _generateNote?: () => string })._generateNote = generateEMRNote;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between mb-2">
-        <p className="text-sm text-slate-600">
-          {selectedOrders.length} of {displayOrders.length} orders selected
-        </p>
+    <div className="space-y-3">
+
+      {/* Selection status — chassis chrome 2026-05-24 */}
+      <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 flex items-center justify-between gap-2 min-h-[40px]">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Orders Selected</p>
+          <span className="text-xs font-semibold text-slate-500">
+            {selectedOrders.length} of {displayOrders.length}
+          </span>
+        </div>
       </div>
 
-      <div className="space-y-4">
+      {/* Category cards — each follows the chassis pattern: tinted
+          header bar (semantic per category) + white body of order rows. */}
+      <div className="space-y-3">
         {Object.entries(groupedOrders).map(([category, orders]) => {
           const classes = getCategoryClasses(category);
           const label = getCategoryLabel(category);
           const selectedCount = orders.filter(o => selectedOrders.includes(o.id)).length;
 
           return (
-            <div key={category} className="rounded-xl border border-slate-100 overflow-hidden">
-              <div className={`px-4 py-3 ${classes.bg} ${classes.border} border-b`}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <CategoryIcon category={category} className={`w-5 h-5 ${classes.icon}`} />
-                    <div>
-                      <h4 className={`font-bold text-sm ${classes.text}`}>{label}</h4>
-                      <p className={`text-xs ${classes.textLight} mt-0.5`}>
-                        {selectedCount}/{orders.length} selected
-                      </p>
-                    </div>
-                  </div>
+            <div key={category} className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+              <div className={`px-4 py-2 ${classes.headerBg} border-b ${classes.headerBorder} min-h-[40px] flex items-center justify-between gap-2`}>
+                <div className="flex items-center gap-2 min-w-0">
+                  <CategoryIcon category={category} className={`w-4 h-4 ${classes.icon} flex-shrink-0`} />
+                  <p className={`text-[10px] font-bold uppercase tracking-widest ${classes.eyebrow} truncate`}>{label}</p>
                 </div>
+                <span className={`text-xs font-semibold ${classes.meta} flex-shrink-0`}>
+                  {selectedCount}/{orders.length}
+                </span>
               </div>
 
-              <div className="divide-y divide-slate-100">
+              <div className="divide-y divide-slate-50">
                 {orders.map((order) => {
                   const isSelected = selectedOrders.includes(order.id);
                   const isExpanded = expandedRationale === order.id;
 
                   return (
-                    <div key={order.id} className="bg-white">
-                      <div className="px-4 py-2.5 hover:bg-slate-50">
+                    <div key={order.id}>
+                      <div className="px-4 py-2.5 hover:bg-slate-50/60 transition-colors">
                         <div className="flex items-start gap-2.5">
                           <input
                             id={`order-${order.id}`}
@@ -540,7 +552,7 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
                       </div>
 
                       {isExpanded && (
-                        <div id={`rationale-${order.id}`} className={`px-4 py-3 ${classes.bg} border-t ${classes.border}`}>
+                        <div id={`rationale-${order.id}`} className={`px-4 py-3 ${classes.rationaleBg} border-t ${classes.rationaleBorder}`}>
                           <div className="flex items-center gap-1.5 mb-1.5">
                             <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${getEvidenceBadgeStyle(order.evidenceClass)}`}>
                               {order.evidence}

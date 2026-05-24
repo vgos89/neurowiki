@@ -226,25 +226,27 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
   return (
     <div className="space-y-3 px-1">
 
-      {/* Header status */}
-      <div className="bg-white border border-slate-100 rounded-xl p-4">
-        <div className="flex items-center justify-between mb-1">
+      {/* Header status — chassis-aligned 2026-05-24 */}
+      <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 flex items-center justify-between gap-2 min-h-[40px]">
           <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Code Summary</p>
           {totalDurationMin != null && (
             <span className="text-xs font-semibold text-slate-500">{totalDurationMin} min from door</span>
           )}
         </div>
-        <div className="flex items-center gap-2 mt-2">
+        <div className="px-4 py-3 flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0" />
           <p className="text-sm font-semibold text-slate-900">Code complete — ready to document</p>
         </div>
       </div>
 
-      {/* Clinical summary */}
+      {/* Clinical summary — chassis-aligned 2026-05-24 */}
       {hasStep1 && (
-        <div className="bg-white border border-slate-100 rounded-xl p-4">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Clinical Summary</p>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 min-h-[40px] flex items-center">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Clinical Summary</p>
+          </div>
+          <div className="px-4 py-3 grid grid-cols-2 gap-x-4 gap-y-2">
             <div>
               <p className="text-[10px] text-slate-400 uppercase tracking-wide">LKW</p>
               <p className="text-sm font-medium text-slate-900">
@@ -285,11 +287,15 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
         </div>
       )}
 
-      {/* Milestones */}
+      {/* Milestones — chassis-aligned 2026-05-24. Time-metric pill badges
+          (Met / Missed) intentionally kept on their existing flooded
+          treatment per PM-spec exception #3 (status pill class). */}
       {(doorToCTMin != null || doorToNeedleMin != null || doorToGroinMin != null || milestones?.ctOrderedTime || milestones?.ctInterpretedTime) && (
-        <div className="bg-white border border-slate-100 rounded-xl p-4">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">GWTG Milestones</p>
-          <div className="space-y-2">
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 min-h-[40px] flex items-center">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">GWTG Milestones</p>
+          </div>
+          <div className="px-4 py-3 space-y-2">
             {milestones?.ctOrderedTime && doorToCTOrderedMin != null && (
               <div className="flex items-center justify-between">
                 <span className="text-sm text-slate-600">CT ordered</span>
@@ -342,11 +348,13 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
         </div>
       )}
 
-      {/* Orders */}
+      {/* Orders Placed — chassis-aligned 2026-05-24 */}
       {step4Orders?.length > 0 && (
-        <div className="bg-white border border-slate-100 rounded-xl p-4">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Orders Placed</p>
-          <ul className="space-y-1.5">
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 min-h-[40px] flex items-center">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Orders Placed</p>
+          </div>
+          <ul className="px-4 py-3 space-y-1.5">
             {step4Orders.map((order, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
                 <span className="text-slate-300 mt-0.5">•</span>
@@ -357,11 +365,17 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
         </div>
       )}
 
-      {/* Thrombectomy recommendation */}
+      {/* Thrombectomy / Next Steps — chassis-aligned 2026-05-24 with
+          neuro-tinted header bar (this is the branded / primary
+          recommendation surface per PM-spec). */}
       {thrombectomyRecommendation && (
-        <div className="bg-white border border-neuro-100 rounded-xl p-4">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Thrombectomy / Next Steps</p>
-          <p className="text-sm text-neuro-800 whitespace-pre-wrap">{thrombectomyRecommendation}</p>
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-neuro-50 border-b border-neuro-100 min-h-[40px] flex items-center">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-700">Thrombectomy / Next Steps</p>
+          </div>
+          <div className="px-4 py-3">
+            <p className="text-sm text-slate-700 whitespace-pre-wrap">{thrombectomyRecommendation}</p>
+          </div>
         </div>
       )}
 
@@ -381,12 +395,15 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
         </div>
       )}
 
-      {/* EMR Note */}
-      <div className="bg-white border border-slate-100 rounded-xl p-4">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">EMR Note</p>
-        <pre className="text-xs font-mono text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100 overflow-x-auto max-h-48 overflow-y-auto whitespace-pre-wrap mb-3">
-          {generateEMRNote()}
-        </pre>
+      {/* EMR Note — chassis-aligned 2026-05-24 */}
+      <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+        <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 min-h-[40px] flex items-center">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">EMR Note</p>
+        </div>
+        <div className="px-4 py-3">
+          <pre className="text-xs font-mono text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100 overflow-x-auto max-h-48 overflow-y-auto whitespace-pre-wrap mb-3">
+            {generateEMRNote()}
+          </pre>
         <div className="flex gap-2">
           <button
             type="button"
@@ -420,6 +437,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
             <Printer className="w-4 h-4" />
             Print
           </button>
+        </div>
         </div>
       </div>
 
