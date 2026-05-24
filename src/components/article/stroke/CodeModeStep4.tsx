@@ -118,7 +118,7 @@ const ORDERS: Order[] = [
     label: 'Strict BP control: maintain <180/105 mmHg × 24 hours',
     category: 'post-tpa',
     evidence: 'Class I, Level B',
-    rationale: 'Elevated BP post-thrombolysis increases hemorrhagic transformation risk 3-fold. Target <180/105 mmHg for first 24h (AHA 2026 §4.3 #7, COR 1 LOE B-R). Use IV labetalol, nicardipine, or clevidipine for precise control. Intensive SBP <140 mmHg post-IVT is NOT recommended (COR 3: No Benefit, LOE B-R per §4.3 #8) — no functional benefit per ENCHANTED. For successfully recanalized anterior LVO post-EVT, intensive SBP <140 mmHg for 72h is HARMFUL (COR 3: Harm, LOE A per §4.3 #10).',
+    rationale: 'Elevated BP post-thrombolysis increases hemorrhagic transformation risk 3-fold. Target <180/105 mmHg for first 24h (AHA 2026 §4.3 #7, COR 1 LOE B-R). Use IV labetalol, nicardipine, or clevidipine for precise control. Intensive SBP <140 mmHg post-IVT is NOT recommended (COR 3: No Benefit, LOE B-R per §4.3 #8); ENCHANTED found no functional benefit. For successfully recanalized anterior LVO post-EVT, intensive SBP <140 mmHg for 72h is HARMFUL (COR 3: Harm, LOE A per §4.3 #10).',
     defaultSelected: true,
     evidenceClass: 'I',
     evidenceLevel: 'B'
@@ -253,7 +253,7 @@ const ORDERS: Order[] = [
     label: 'DVT prophylaxis: SCDs bilaterally (no pharmacologic × 24h)',
     category: 'general',
     evidence: 'Class I, Level A',
-    rationale: 'DVT occurs in 10% of immobilized stroke patients without prophylaxis. CLOTS-3 trial: intermittent pneumatic compression (IPC) reduced DVT from 12.1% to 8.5% (ARR 3.6 percentage points, ~30% relative reduction) — safe immediately post-tPA (AHA 2026 §5.4 #1, COR 1 LOE B-R). Start pharmacologic prophylaxis (heparin SQ) after 24h if no hemorrhage on CT (§5.4 #2, COR 2a LOE B-R).',
+    rationale: 'DVT occurs in 10% of immobilized stroke patients without prophylaxis. CLOTS-3 trial: intermittent pneumatic compression (IPC) reduced DVT from 12.1% to 8.5% (ARR 3.6 percentage points, ~30% relative reduction); IPC is safe immediately post-tPA (AHA 2026 §5.4 #1, COR 1 LOE B-R). Start pharmacologic prophylaxis (heparin SQ) after 24h if no hemorrhage on CT (§5.4 #2, COR 2a LOE B-R).',
     defaultSelected: true,
     evidenceClass: 'I',
     evidenceLevel: 'A'
@@ -293,7 +293,7 @@ const ORDERS: Order[] = [
     label: 'Glycemic control: target 140–180 mg/dL',
     category: 'general',
     evidence: 'COR 2a, LOE C-LD (AHA 2026 §4.5 #2)',
-    rationale: 'Per AHA 2026 §4.5: treat hyperglycemia by maintaining glucose 140–180 mg/dL (COR 2a, LOE C-LD). Treat hypoglycemia <60 mg/dL (§4.5 #1, COR 1 LOE C-LD). Do NOT target 80–130 mg/dL with IV insulin — COR 3: No Benefit, LOE A (SHINE trial). Top Take-Home #9: intensive glucose control to 80–130 mg/dL is not recommended and increases severe hypoglycemia risk.',
+    rationale: 'Per AHA 2026 §4.5: treat hyperglycemia by maintaining glucose 140–180 mg/dL (COR 2a, LOE C-LD). Treat hypoglycemia <60 mg/dL (§4.5 #1, COR 1 LOE C-LD). Do NOT target 80–130 mg/dL with IV insulin (COR 3: No Benefit, LOE A per the SHINE trial). Top Take-Home #9: intensive glucose control to 80–130 mg/dL is not recommended and increases severe hypoglycemia risk.',
     defaultSelected: true,
     evidenceClass: 'IIa',
     evidenceLevel: 'C'
