@@ -5,6 +5,7 @@ import {
   PatientContextPanel,
   EMPTY_PATIENT_CONTEXT,
   type PatientContextValues,
+  type PatientContextRow,
 } from '../../shared/PatientContextPanel';
 
 export interface CodeModeStep1Props {
@@ -178,24 +179,106 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
     );
   };
 
+  // NIHSS + Weight as panel extra-rows. Per V request 2026-05-24:
+  // these no longer warrant their own chunky cards; they live inline in
+  // the Patient Info dropdown alongside LKW/BP/Glucose/Anticoag. The
+  // tPA/TNK dose-display chips are lifted OUT of the Weight card to
+  // a sibling block below the panel (only renders when weightKg > 0).
+  const nihssSeverity =
+    nihssScore <= 4 ? 'Minor'
+    : nihssScore <= 10 ? 'Moderate'
+    : nihssScore <= 20 ? 'Moderate-severe'
+    : 'Severe';
+  const nihssLvoProb =
+    nihssScore >= 10 ? '≥50%'
+    : nihssScore >= 6 ? '~35%'
+    : '<20%';
+
+  const extraRows: PatientContextRow[] = [
+    {
+      id: 'nihss',
+      label: 'NIHSS',
+      input: (
+        <>
+          <input
+            type="text"
+            inputMode="numeric"
+            min={0}
+            max={42}
+            value={nihssScore || ''}
+            onChange={(e) => setNihssScore(clamp(parseInt(e.target.value, 10) || 0, 0, 42))}
+            onFocus={(e) => e.target.select()}
+            placeholder="—"
+            aria-label="NIHSS score"
+            className="w-12 text-right text-sm font-semibold text-slate-900 bg-transparent border-b border-slate-200 focus:border-neuro-500 focus:outline-none px-1 py-1 placeholder:text-slate-300"
+          />
+          <button
+            type="button"
+            onClick={onOpenNIHSS}
+            className="min-h-[44px] py-1.5 px-3 -my-1 text-xs font-semibold rounded-full border border-neuro-200 bg-neuro-50 text-neuro-700 hover:bg-neuro-100 transition-colors"
+          >
+            Calc
+          </button>
+        </>
+      ),
+      helpText: nihssScore > 0
+        ? `${nihssSeverity} · LVO probability ${nihssLvoProb}`
+        : 'Tap Calc to score',
+    },
+    {
+      id: 'weight',
+      label: 'Weight',
+      input: (
+        <>
+          <input
+            type="text"
+            inputMode="decimal"
+            min={0}
+            value={weightValue || ''}
+            onChange={(e) => setWeightValue(parseFloat(e.target.value) || 0)}
+            onFocus={(e) => e.target.select()}
+            placeholder="—"
+            aria-label="Weight"
+            className="w-16 text-right text-sm text-slate-900 bg-transparent border-b border-slate-200 focus:border-neuro-500 focus:outline-none px-1 py-1 placeholder:text-slate-300"
+          />
+          <select
+            value={weightUnit}
+            onChange={(e) => setWeightUnit(e.target.value as 'kg' | 'lbs')}
+            aria-label="Weight unit"
+            className="text-xs font-medium text-slate-600 bg-transparent border-b border-slate-200 focus:border-neuro-500 focus:outline-none py-1 px-1"
+          >
+            <option value="kg">kg</option>
+            <option value="lbs">lbs</option>
+          </select>
+        </>
+      ),
+    },
+  ];
+
   return (
     <div className="space-y-3 px-1">
 
-      {/* ── Patient Info (LKW + BP + Glucose + Anticoag) ──
-          Replaces the chunky stacked LKW + Vitals cards with the shared
-          PatientContextPanel chassis (also used by the NIHSS calculator).
-          Per arch-PR-stroke-code-patient-context.md 2026-05-24:
+      {/* ── Patient Info (LKW + BP + Glucose + Anticoag + NIHSS + Weight) ──
+          Replaces the chunky stacked cards (LKW + Vitals + NIHSS +
+          Weight) with the shared PatientContextPanel chassis. Per
+          arch-PR-stroke-code-patient-context.md 2026-05-24 and V
+          follow-up 2026-05-24:
           - panel renders pure layout
-          - WindowBadge, BP-too-high alert, glucose callouts, and the
-            LKW-Unknown wake-up notice live as siblings BELOW the panel
-            and read from patientContext state (single source of truth)
+          - WindowBadge, BP-too-high alert, glucose callouts, the
+            LKW-Unknown wake-up notice, and the computed-dosing card
+            live as siblings BELOW the panel and read from
+            patientContext / extraRow state (single source of truth)
           - defaultExpanded=true because for Stroke Code the context is
-            required input (not optional like in the NIHSS calc) */}
+            required input (not optional like in the NIHSS calc)
+          - NIHSS and Weight are extraRows so they share the same 44px
+            row chrome as LKW/BP/Glucose/Anticoag instead of their own
+            chunky cards (V request 2026-05-24) */}
       <PatientContextPanel
         values={patientContext}
         onChange={setPatientContext}
         label="Patient info"
         defaultExpanded
+        extraRows={extraRows}
       />
 
       {/* WindowBadge — sibling, reads patientContext.lkw via derived
@@ -286,77 +369,20 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
         </div>
       )}
 
-      {/* ── NIHSS Section ── */}
-      <div className="bg-white border border-slate-100 rounded-xl p-4">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">NIHSS</p>
-        <div className="flex items-center gap-3">
-          <div className="flex-shrink-0">
-            <span className="text-4xl font-semibold text-slate-900 tabular-nums">
-              {nihssScore > 0 ? nihssScore : '—'}
-            </span>
+      {/* Computed Dosing — sibling block, renders only when weightKg > 0.
+          Lifted out of the old Weight & Dosing card per V request
+          2026-05-24 so that Weight itself can be a 44px inline row in
+          the Patient Info dropdown. The tPA/TNK chips keep their
+          neuro/emerald color treatment because dose values are
+          high-stakes information the clinician needs to read at a
+          glance. "Reference only" footer text preserved verbatim per
+          arch review condition #8. */}
+      {weightKg > 0 && (
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-slate-50 border-b border-slate-100">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Computed Dosing</p>
           </div>
-          <div className="flex-1 min-w-0">
-            {nihssScore > 0 && (
-              <>
-                <p className="text-sm font-semibold text-slate-900">
-                  {nihssScore <= 4 ? 'Minor' : nihssScore <= 10 ? 'Moderate' : nihssScore <= 20 ? 'Moderate-severe' : 'Severe'}
-                </p>
-                <p className="text-xs text-slate-400">
-                  LVO probability {nihssScore >= 10 ? '≥50%' : nihssScore >= 6 ? '~35%' : '<20%'}
-                </p>
-              </>
-            )}
-            {nihssScore === 0 && (
-              <p className="text-xs text-slate-400">Tap Calc to score</p>
-            )}
-          </div>
-          <div className="flex items-center gap-1.5 flex-shrink-0">
-            <input
-              type="text" inputMode="numeric" min={0} max={42}
-              value={nihssScore || ''}
-              onChange={(e) => setNihssScore(clamp(parseInt(e.target.value, 10) || 0, 0, 42))}
-              onFocus={(e) => e.target.select()}
-              placeholder="—"
-              className="w-12 min-h-[44px] px-1 py-2 rounded-lg border border-slate-200 text-slate-900 text-sm font-bold text-center bg-white focus:ring-2 focus:ring-neuro-400 focus:outline-none"
-            />
-            <button
-              type="button"
-              onClick={onOpenNIHSS}
-              className="min-h-[44px] px-3 py-2 text-xs font-semibold text-neuro-600 rounded-lg border border-neuro-200 bg-neuro-50 hover:bg-neuro-100 transition-colors"
-            >
-              Calc
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Weight + Dosing Section ── */}
-      <div className="bg-white border border-slate-100 rounded-xl p-4">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Weight & Dosing</p>
-        <div className="flex items-center gap-2 mb-3">
-          <input
-            type="text" inputMode="decimal" min={0}
-            value={weightValue || ''}
-            onChange={(e) => setWeightValue(parseFloat(e.target.value) || 0)}
-            onFocus={(e) => e.target.select()}
-            placeholder="—"
-            className="w-24 min-h-[44px] px-2 py-2 rounded-lg border border-slate-200 text-slate-900 text-xl font-semibold text-center bg-white focus:ring-2 focus:ring-neuro-400 focus:outline-none"
-          />
-          <select
-            value={weightUnit}
-            onChange={(e) => setWeightUnit(e.target.value as 'kg' | 'lbs')}
-            className="min-h-[44px] px-2 py-2 rounded-lg border border-slate-200 text-slate-700 text-xs font-medium bg-white"
-          >
-            <option value="kg">kg</option>
-            <option value="lbs">lbs</option>
-          </select>
-          {weightKg > 0 && (
-            <span className="text-xs text-slate-400 ml-1">— tap to edit</span>
-          )}
-        </div>
-
-        {weightKg > 0 && (
-          <>
+          <div className="px-4 py-3 space-y-2">
             <div className="grid grid-cols-2 gap-2">
               <div className="p-3 rounded-lg bg-neuro-50 border border-neuro-100">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-1">tPA</p>
@@ -369,10 +395,10 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
                 <p className="text-[10px] text-emerald-500">Single bolus</p>
               </div>
             </div>
-            <p className="text-[10px] text-slate-400 italic mt-1">Reference only — verify against institutional protocol before administration.</p>
-          </>
-        )}
-      </div>
+            <p className="text-[10px] text-slate-400 italic">Reference only — verify against institutional protocol before administration.</p>
+          </div>
+        </div>
+      )}
 
       {/* ── Disabling symptoms ── */}
       {showDisablingSymptomsChecklist && (
