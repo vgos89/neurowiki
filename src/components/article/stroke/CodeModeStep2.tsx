@@ -113,15 +113,24 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
         </div>
       )}
 
-      {/* BP alert — only when BP high and treatment selected */}
+      {/* BP alert — only when BP high and treatment selected.
+          Restyled 2026-05-24 to mirror PatientContextPanel chassis
+          (white card + tinted eyebrow + slate-700 body). Clinical text
+          preserved verbatim per arch-PR-stroke-code-patient-context.md
+          condition #8. */}
       {step1Data && (step1Data.systolicBP > 185 || step1Data.diastolicBP > 110) && (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
-        <div className="rounded-xl p-3 border border-red-200 bg-red-50">
-          <p className="text-xs font-bold text-red-800 mb-1">Pre-thrombolysis BP &gt;185/110 — treat before giving tPA/TNK (AHA)</p>
-          <p className="text-xs text-slate-700">
-            <strong>Labetalol</strong> 10–20 mg IV push, repeat q10–20 min (max 300 mg)
-            {' · '}
-            <strong>Nicardipine</strong> 5 mg/hr, ↑2.5 mg/hr q5–15 min (max 15 mg/hr)
-          </p>
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-red-50 border-b border-red-100">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-red-600">Pre-Thrombolysis BP Control</p>
+          </div>
+          <div className="px-4 py-3 space-y-2">
+            <p className="text-xs font-semibold text-slate-900">BP &gt;185/110 — treat before giving tPA/TNK (AHA)</p>
+            <p className="text-xs text-slate-700">
+              <strong>Labetalol</strong> 10–20 mg IV push, repeat q10–20 min (max 300 mg)
+              {' · '}
+              <strong>Nicardipine</strong> 5 mg/hr, ↑2.5 mg/hr q5–15 min (max 15 mg/hr)
+            </p>
+          </div>
         </div>
       )}
 
@@ -182,52 +191,66 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
 
       {/* ICH — show protocol button */}
       {isICH && (
-        <div className="rounded-xl p-3 border border-red-200 bg-red-50">
-          <p className="text-xs font-bold text-red-800 mb-2">ICH detected — do not give thrombolytics</p>
-          <button
-            type="button"
-            onClick={onIchSelected}
-            className="text-xs font-semibold text-red-700 underline"
-          >
-            View hemorrhage protocol →
-          </button>
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-red-50 border-b border-red-100">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-red-600">ICH Detected</p>
+          </div>
+          <div className="px-4 py-3 space-y-2">
+            <p className="text-xs font-semibold text-slate-900">Do not give thrombolytics.</p>
+            <button
+              type="button"
+              onClick={onIchSelected}
+              className="text-xs font-semibold text-red-700 hover:underline text-left"
+            >
+              View hemorrhage protocol →
+            </button>
+          </div>
         </div>
       )}
 
       {/* Eligibility not checked warning */}
       {isNoBleed && !eligibilityResult && (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
-        <div className="rounded-xl p-3 border border-amber-200 bg-amber-50">
-          <p className="text-xs font-semibold text-amber-900 mb-2">Eligibility not checked — screen for contraindications before giving.</p>
-          {onOpenEligibility && (
-            <button
-              type="button"
-              onClick={onOpenEligibility}
-              className="text-xs font-bold text-amber-700 underline"
-            >
-              Open tPA Eligibility Checklist →
-            </button>
-          )}
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-amber-50 border-b border-amber-100">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Eligibility Not Checked</p>
+          </div>
+          <div className="px-4 py-3 space-y-2">
+            <p className="text-xs text-slate-700">Screen for contraindications before giving.</p>
+            {onOpenEligibility && (
+              <button
+                type="button"
+                onClick={onOpenEligibility}
+                className="text-xs font-semibold text-amber-700 hover:underline text-left"
+              >
+                Open tPA Eligibility Checklist →
+              </button>
+            )}
+          </div>
         </div>
       )}
 
       {/* Eligibility contraindication warning */}
       {isNoBleed && eligibilityResult &&
         (eligibilityResult.eligibilityStatus === 'absolute-contraindication' || eligibilityResult.eligibilityStatus === 'relative-contraindication') &&
-        (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
-        <div className={`rounded-lg p-3 border ${
-          eligibilityResult.eligibilityStatus === 'absolute-contraindication'
-            ? 'border-red-200 bg-red-50'
-            : 'border-amber-200 bg-amber-50'
-        }`}>
-          <p className={`text-xs font-bold ${
-            eligibilityResult.eligibilityStatus === 'absolute-contraindication' ? 'text-red-900' : 'text-amber-900'
-          }`}>
-            {eligibilityResult.eligibilityStatus === 'absolute-contraindication'
-              ? 'Do not give tPA/TNK — major exclusion(s) identified.'
-              : 'Discuss risk vs benefits before proceeding (AHA).'}
-          </p>
-        </div>
-      )}
+        (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (() => {
+          const isAbsolute = eligibilityResult.eligibilityStatus === 'absolute-contraindication';
+          return (
+            <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+              <div className={`px-4 py-2 border-b ${isAbsolute ? 'bg-red-50 border-red-100' : 'bg-amber-50 border-amber-100'}`}>
+                <p className={`text-[10px] font-bold uppercase tracking-widest ${isAbsolute ? 'text-red-600' : 'text-amber-700'}`}>
+                  {isAbsolute ? 'Absolute Contraindication' : 'Relative Contraindication'}
+                </p>
+              </div>
+              <div className="px-4 py-3">
+                <p className="text-xs text-slate-700">
+                  {isAbsolute
+                    ? 'Do not give tPA/TNK — major exclusion(s) identified.'
+                    : 'Discuss risk vs benefits before proceeding (AHA).'}
+                </p>
+              </div>
+            </div>
+          );
+        })()}
 
       {/* Treatment Decision */}
       {isNoBleed && (

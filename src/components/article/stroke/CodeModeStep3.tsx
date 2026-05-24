@@ -366,11 +366,18 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
       )}
 
       {/* Extended IVT recommendation — captured when clinician completed
-          the Extended IVT modal from inside Stroke Code (added 2026-05-17). */}
+          the Extended IVT modal from inside Stroke Code (added 2026-05-17).
+          Chassis-aligned 2026-05-24 to mirror the alert pattern used
+          across Steps 1 and 2 (white card + tinted eyebrow header bar
+          + slate body). */}
       {extendedIvtRecommendation && (
-        <div className="bg-white border border-amber-200 rounded-xl p-4">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700 mb-2">Extended IVT / Late Window</p>
-          <p className="text-sm text-amber-900 whitespace-pre-wrap">{extendedIvtRecommendation}</p>
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-amber-50 border-b border-amber-100">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Extended IVT / Late Window</p>
+          </div>
+          <div className="px-4 py-3">
+            <p className="text-sm text-slate-700 whitespace-pre-wrap">{extendedIvtRecommendation}</p>
+          </div>
         </div>
       )}
 
