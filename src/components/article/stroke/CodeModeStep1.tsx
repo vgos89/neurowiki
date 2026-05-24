@@ -208,61 +208,81 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
         </div>
       )}
 
-      {/* LKW Unknown — wake-up / unknown-onset notice. Sibling
-          alert, conditional on lkwUnknown. */}
+      {/* Sibling alert blocks — all four use the same chassis as the
+          PatientContextPanel above: rounded-xl white card with a tinted
+          eyebrow header and a white body. Semantic color (amber/red)
+          telegraphs severity without flooding the whole card. Clinical
+          text preserved verbatim per arch review condition #8. */}
+
+      {/* LKW Unknown — wake-up / unknown-onset notice. */}
       {lkwUnknown && (
-        <div className="rounded-xl bg-amber-50 border border-amber-200 px-4 py-3">
-          <p className="text-xs font-semibold text-amber-700 mb-1">Wake-up / unknown onset</p>
-          <p className="text-xs text-amber-600">Consider MRI DWI-FLAIR mismatch for late-window eligibility.</p>
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-amber-50 border-b border-amber-100">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Wake-up / Unknown Onset</p>
+          </div>
+          <div className="px-4 py-3">
+            <p className="text-xs text-slate-700">Consider MRI DWI-FLAIR mismatch for late-window eligibility.</p>
+          </div>
         </div>
       )}
 
-      {/* BP Alert — sibling, conditional on bpTooHigh. Carries the
-          treatment guidance + bpControlled checkbox + AHA citation
-          (text preserved verbatim — changing it reclassifies to
-          D-clinical per arch review condition #8). */}
+      {/* BP-above-tPA-limit alert + treatment guidance + controlled checkbox + AHA citation. */}
       {bpTooHigh && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-3 space-y-2">
-          <p className="text-xs font-bold text-red-800">BP must be &lt;185/110 mmHg before tPA</p>
-          <p className="text-xs text-slate-700">
-            <strong>Labetalol</strong> 10–20 mg IV push, repeat q10–20 min (max 300 mg)
-            &nbsp;·&nbsp;
-            <strong>Nicardipine</strong> 5 mg/hr, ↑2.5 mg/hr q5–15 min (max 15 mg/hr)
-          </p>
-          <p className="text-[10px] text-red-600">AHA/ASA 2026 §4.3 (BP before IV thrombolysis)</p>
-          <label className="flex items-center gap-2 cursor-pointer min-h-[44px]">
-            <input
-              type="checkbox"
-              checked={bpControlled}
-              onChange={(e) => setBpControlled(e.target.checked)}
-              className="w-4 h-4 rounded border-slate-300 text-neuro-600 flex-shrink-0"
-            />
-            <span className="text-xs text-slate-700 font-medium">BP being controlled / treated</span>
-          </label>
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-red-50 border-b border-red-100">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-red-600">BP Above tPA Limit</p>
+          </div>
+          <div className="px-4 py-3 space-y-2">
+            <p className="text-xs font-semibold text-slate-900">BP must be &lt;185/110 mmHg before tPA</p>
+            <p className="text-xs text-slate-700">
+              <strong>Labetalol</strong> 10–20 mg IV push, repeat q10–20 min (max 300 mg)
+              &nbsp;·&nbsp;
+              <strong>Nicardipine</strong> 5 mg/hr, ↑2.5 mg/hr q5–15 min (max 15 mg/hr)
+            </p>
+            <p className="text-[10px] text-slate-400">AHA/ASA 2026 §4.3 (BP before IV thrombolysis)</p>
+            <label className="flex items-center gap-2 cursor-pointer min-h-[44px]">
+              <input
+                type="checkbox"
+                checked={bpControlled}
+                onChange={(e) => setBpControlled(e.target.checked)}
+                className="w-4 h-4 rounded border-slate-300 text-neuro-600 flex-shrink-0"
+              />
+              <span className="text-xs text-slate-700 font-medium">BP being controlled / treated</span>
+            </label>
+          </div>
         </div>
       )}
 
-      {/* Glucose guidance — sibling, conditional on glucoseLow.
-          Text preserved verbatim per arch review condition #8. */}
+      {/* Hypoglycemia alert with progressive disclosure for the D50 treatment text. */}
       {glucoseLow && (
-        <div className="rounded-xl px-3 py-2.5 bg-amber-50 border border-amber-200">
-          <button
-            type="button"
-            onClick={() => setLowGlucoseGuidanceViewed(true)}
-            className="text-xs font-semibold text-amber-700 hover:underline text-left"
-          >
-            AHA: treat hypoglycemia, then reassess for tPA →
-          </button>
-          {lowGlucoseGuidanceViewed && (
-            <p className="mt-1.5 text-xs text-amber-800">Give D50 50 mL IV, recheck glucose. If symptoms persist after normoglycemia, reassess for tPA.</p>
-          )}
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-amber-50 border-b border-amber-100">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Hypoglycemia</p>
+          </div>
+          <div className="px-4 py-3">
+            <button
+              type="button"
+              onClick={() => setLowGlucoseGuidanceViewed(true)}
+              className="text-xs font-semibold text-amber-700 hover:underline text-left"
+            >
+              AHA: treat hypoglycemia, then reassess for tPA →
+            </button>
+            {lowGlucoseGuidanceViewed && (
+              <p className="mt-1.5 text-xs text-slate-700">Give D50 50 mL IV, recheck glucose. If symptoms persist after normoglycemia, reassess for tPA.</p>
+            )}
+          </div>
         </div>
       )}
 
-      {/* Glucose high — sibling, conditional on glucoseHigh. */}
+      {/* Severe hyperglycemia notice. */}
       {glucoseHigh && (
-        <div className="rounded-xl px-3 py-2.5 bg-red-50 border border-red-200">
-          <p className="text-xs font-semibold text-red-700">Glucose &gt;400 mg/dL — verify and document; severe hyperglycemia worsens stroke outcomes.</p>
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-red-50 border-b border-red-100">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-red-600">Severe Hyperglycemia</p>
+          </div>
+          <div className="px-4 py-3">
+            <p className="text-xs text-slate-700">Glucose &gt;400 mg/dL. Verify and document; severe hyperglycemia worsens stroke outcomes.</p>
+          </div>
         </div>
       )}
 

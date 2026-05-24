@@ -39,6 +39,14 @@ export interface PatientContextValues {
   glucose: string;
   /** Multi-select of anticoagulant classes. */
   anticoag: Set<Anticoag>;
+  /**
+   * Last administered anticoagulant dose. Surfaces conditionally when
+   * `anticoag` includes 'doac' or 'warfarin'. Clinically meaningful for
+   * reversal decisions (ANNEXA-I 15h-from-last-dose, half-life-of-DOAC
+   * calculations) and for EMR documentation. `undefined` = not entered,
+   * `null` = explicitly unknown.
+   */
+  lastAnticoagDose?: Date | null;
 }
 
 export const EMPTY_PATIENT_CONTEXT: PatientContextValues = {
@@ -47,6 +55,7 @@ export const EMPTY_PATIENT_CONTEXT: PatientContextValues = {
   diastolic: '',
   glucose: '',
   anticoag: new Set(),
+  lastAnticoagDose: undefined,
 };
 
 /**
@@ -107,12 +116,26 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
 }) => {
   const [expanded, setExpanded] = useState(defaultExpanded);
   const [lkwModalOpen, setLkwModalOpen] = useState(false);
+  const [doseModalOpen, setDoseModalOpen] = useState(false);
+
+  // Conditional row: last anticoagulant dose surfaces only for
+  // reversible anticoagulants (DOAC + warfarin). Antiplatelets do not
+  // have meaningful "last dose" timing for acute decisions; 'none' is
+  // by definition no dose.
+  const showLastDoseRow = values.anticoag.has('doac') || values.anticoag.has('warfarin');
+  const lastDoseDisplay =
+    values.lastAnticoagDose === undefined || values.lastAnticoagDose === null
+      ? values.lastAnticoagDose === null
+        ? 'Unknown'
+        : 'Add'
+      : formatClinicalDateShort(values.lastAnticoagDose);
 
   const hasAnyValue =
     values.lkw !== undefined ||
     values.systolic !== '' ||
     values.diastolic !== '' ||
     values.glucose !== '' ||
+    values.lastAnticoagDose !== undefined ||
     values.anticoag.size > 0;
 
   // Header eyebrow shows summary chips if any value is set + collapsed
@@ -256,6 +279,25 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             </div>
           </div>
 
+          {/* Last anticoagulant dose row — conditional. Surfaces only
+              when the clinician has marked DOAC or warfarin on the row
+              above. Clinically meaningful for reversal decisions and EMR
+              documentation; antiplatelets and 'none' do not trigger it. */}
+          {showLastDoseRow && (
+            <button
+              type="button"
+              onClick={() => setDoseModalOpen(true)}
+              className="w-full min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 hover:bg-slate-50 transition-colors text-left"
+              aria-haspopup="dialog"
+            >
+              <span className="text-xs font-medium text-slate-600 flex-shrink-0">Last dose</span>
+              <span className="flex items-center gap-1">
+                <span className={`text-sm ${values.lastAnticoagDose === undefined ? 'text-slate-400' : 'text-slate-900'}`}>{lastDoseDisplay}</span>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400" aria-hidden />
+              </span>
+            </button>
+          )}
+
           {/* Pathway-specific extra rows — typed slot per
               arch-PR-stroke-code-patient-context.md. Each row renders in
               the same chrome as the standard four (min-h-[44px], px-4,
@@ -296,6 +338,25 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
         initialDate={values.lkw instanceof Date ? values.lkw : undefined}
         showSleepOnset={true}
       />
+
+      {/* Last-dose modal — second LKWTimePicker instance reused for
+          the anticoagulant last-dose timestamp. Sleep-onset tab is
+          hidden because last-DOAC-dose timing is unambiguous (the
+          patient or family supplies the actual time). */}
+      <LKWTimePicker
+        isOpen={doseModalOpen}
+        onClose={() => setDoseModalOpen(false)}
+        onConfirm={(date) => {
+          onChange({ ...values, lastAnticoagDose: date });
+          setDoseModalOpen(false);
+        }}
+        onUnknown={() => {
+          onChange({ ...values, lastAnticoagDose: null });
+          setDoseModalOpen(false);
+        }}
+        initialDate={values.lastAnticoagDose instanceof Date ? values.lastAnticoagDose : undefined}
+        showSleepOnset={false}
+      />
     </div>
   );
 };
@@ -320,5 +381,7 @@ function buildSummaryChips(values: PatientContextValues): string {
     const names = Array.from(values.anticoag).map((k) => ANTICOAG_LABELS[k]).join('+');
     chips.push(names);
   }
+  if (values.lastAnticoagDose === null) chips.push('dose: unknown');
+  else if (values.lastAnticoagDose instanceof Date) chips.push('dose set');
   return chips.join(' · ');
 }

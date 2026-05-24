@@ -187,6 +187,12 @@ const NihssCalculator: React.FC = () => {
             diastolic: pc.diastolic ?? '',
             glucose: pc.glucose ?? '',
             anticoag: new Set((pc.anticoag ?? []) as Anticoag[]),
+            lastAnticoagDose:
+              typeof pc.lastAnticoagDose === 'number'
+                ? new Date(pc.lastAnticoagDose)
+                : pc.lastAnticoagDose === null
+                ? null
+                : undefined,
           });
         }
         // Restore stroke timestamps — only in absolute mode. Relative-mode
@@ -406,7 +412,16 @@ const NihssCalculator: React.FC = () => {
       patientContext.anticoag.size > 0
         ? `Anti-Coag/Antiplatelet: ${Array.from(patientContext.anticoag).map((k) => ANTICOAG_LABELS[k]).join(', ')}`
         : `Anti-Coag/Antiplatelet: None`,
-    ];
+      // Last anticoagulant dose surfaces only when DOAC or warfarin is
+      // selected and a value has been entered. Antiplatelets/none never
+      // print a dose line.
+      (patientContext.anticoag.has('doac') || patientContext.anticoag.has('warfarin')) &&
+      patientContext.lastAnticoagDose !== undefined
+        ? patientContext.lastAnticoagDose === null
+          ? 'Last anticoag dose: Unknown'
+          : `Last anticoag dose: ${formatClinicalDateTime(patientContext.lastAnticoagDose)}`
+        : null,
+    ].filter((line): line is string => line !== null);
 
     // ── Stroke timestamps block — only emit stamps that have actually been
     //    recorded. Empty stamps are silently omitted (V direction 2026-05-19:
@@ -711,6 +726,10 @@ const NihssCalculator: React.FC = () => {
                 anticoag: patientContext.anticoag.size > 0
                   ? Array.from(patientContext.anticoag)
                   : undefined,
+                lastAnticoagDose:
+                  patientContext.lastAnticoagDose instanceof Date
+                    ? patientContext.lastAnticoagDose.getTime()
+                    : patientContext.lastAnticoagDose,
               },
               strokeTimestamps: hasAnyStamp ? stamps : undefined,
               strokeTimestampsMode: hasAnyStamp

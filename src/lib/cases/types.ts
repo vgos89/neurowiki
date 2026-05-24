@@ -68,6 +68,8 @@ export interface SavedCaseData {
     glucose?: string;
     /** Serialized as array because Set isn't JSON-friendly. */
     anticoag?: string[];
+    /** Last anticoagulant dose (DOAC / warfarin) — Unix ms; null = unknown. */
+    lastAnticoagDose?: number | null;
   };
 
   /** Stroke timestamps. Two storage modes:
