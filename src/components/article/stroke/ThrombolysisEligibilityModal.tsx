@@ -278,7 +278,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
 
           {/* ── Hard stops ── */}
           <section>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-red-500 mb-2">Hard Stops — Absolute</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-red-600 mb-2">Hard Stops · Absolute</p>
             <div className="grid grid-cols-2 gap-2">
               {HARD_STOP_CHIPS.map((chip) => {
                 const active = !!absoluteContraindications[chip.id];
@@ -320,7 +320,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
 
           {/* ── Bleeding / Labs ── */}
           <section>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-red-400 mb-2">Bleeding / Labs</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-red-600 mb-2">Bleeding / Labs</p>
             <div className="grid grid-cols-2 gap-2">
               {BLEEDING_LAB_CHIPS.map((chip) => {
                 const active = !!absoluteContraindications[chip.id];
@@ -360,7 +360,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
 
           {/* ── Relative / Consider ── */}
           <section>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-amber-600 mb-2">Consider — Relative</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700 mb-2">Consider · Relative</p>
             <div className="grid grid-cols-2 gap-2">
               {RELATIVE_CHIPS.map((chip) => {
                 const active = !!relativeContraindications[chip.id];
@@ -404,10 +404,12 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
               <48h, >⅓ MCA hypodensity) are now applied uniformly across
               both 0–3h and 3–4.5h windows via HARD_STOP_CHIPS above. */}
           {showExtendedSection && (
-            <section className="rounded-xl border border-amber-200 bg-amber-50 overflow-hidden">
+            <section className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+              <div className="px-4 py-2 bg-amber-50 border-b border-amber-100">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">3–4.5h Window · Active</p>
+              </div>
               <div className="px-4 py-3">
-                <p className="text-xs font-bold uppercase tracking-wider text-amber-700 mb-1">3–4.5h Window — Active</p>
-                <p className="text-xs text-amber-700 leading-relaxed">
+                <p className="text-xs text-slate-700 leading-relaxed">
                   LKW is in the 3–4.5h window. AHA/ASA 2026 §4.6.1 has harmonized
                   this window with the 0–3h window: legacy ECASS-3-specific
                   exclusions (age &gt;80, NIHSS &gt;25, diabetes with prior stroke)
@@ -420,8 +422,8 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
           )}
 
           {/* ── Notes (collapsed) ── */}
-          <details className="group rounded-xl border border-slate-200 overflow-hidden">
-            <summary className="flex items-center gap-2 px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 cursor-pointer hover:bg-slate-50 transition-colors list-none">
+          <details className="group rounded-xl bg-white border border-slate-100 overflow-hidden">
+            <summary className="flex items-center gap-2 px-4 py-2 bg-slate-50 border-b border-slate-100 text-[10px] font-bold uppercase tracking-widest text-slate-400 cursor-pointer hover:bg-slate-100 transition-colors list-none min-h-[40px]">
               <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-open:rotate-180 transition-transform shrink-0" aria-hidden />
               Clinical Notes (optional)
             </summary>

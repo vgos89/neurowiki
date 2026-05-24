@@ -400,84 +400,85 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
         </div>
       )}
 
-      {/* ── Disabling symptoms ── */}
+      {/* ── Disabling symptoms — chassis-aligned 2026-05-24 ──
+          Tinted amber header + white body. Clinical wording (AHA §4.6.1
+          + §4.8 citation, CHANCE/POINT/INSPIRES list, "Consider TNK"
+          line, "DAPT is the recommended pathway" line) preserved
+          verbatim per arch review condition #8. Non-disabling branch
+          context unchanged from 2026-05-23 implementation. */}
       {showDisablingSymptomsChecklist && (
-        <div className="rounded-xl p-4 bg-amber-50 border border-amber-200 space-y-3">
-          <div>
-            <p className="text-sm font-bold text-amber-900">Low NIHSS — assess for disabling symptoms (AHA)</p>
-            <p className="text-xs text-amber-700 mt-0.5">Check any that are present. If so, consider TNK after discussing risk/benefit.</p>
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-amber-50 border-b border-amber-100">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Low NIHSS · Assess for Disabling Symptoms (AHA)</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
-            {[
-              { key: 'aphasia', label: 'Aphasia' },
-              { key: 'hemianopia', label: 'Hemianopia' },
-              { key: 'truncalAtaxia', label: 'Truncal ataxia (walk the patient)' },
-              { key: 'dysphagia', label: 'Dysphagia' },
-              { key: 'handWeakness', label: 'Hand weakness affecting livelihood' },
-            ].map(({ key, label }) => (
-              <label key={key} className="flex items-center gap-2 cursor-pointer min-h-[44px] py-0.5">
-                <input
-                  type="checkbox"
-                  checked={disablingSymptoms[key as keyof typeof disablingSymptoms] || false}
-                  onChange={(e) => setDisablingSymptoms(prev => ({ ...prev, [key]: e.target.checked }))}
-                  className="w-4 h-4 rounded border-slate-300 text-neuro-600 flex-shrink-0"
-                />
-                <span className="text-sm text-slate-700">{label}</span>
-              </label>
-            ))}
-          </div>
-          {hasDisablingSymptom && (
-            <p className="text-sm font-semibold text-amber-900">→ Consider TNK after discussing risk/benefit with patient and team.</p>
-          )}
-          {/* Non-disabling branch — AHA/ASA 2026 §4.6.1 + §4.8. Added
-              2026-05-23 per audit BLOCKING stroke-code-minor-non-disabling-
-              branch. When the clinician has worked through the disabling
-              checklist and found NO disabling symptoms, route to DAPT as
-              the appropriate alternative (COR 1, LOE A vs COR 3 No
-              Benefit for IVT in this stratum). The chip is rendered
-              alongside the existing TNK chip so both forks are visible
-              and the clinician sees the explicit decision rather than
-              defaulting to IVT. */}
-          {!hasDisablingSymptom && nihssScore <= 3 && (
-            <div className="border-t border-amber-200 pt-3 space-y-2">
-              <p className="text-sm font-semibold text-amber-900">
-                → No disabling deficit present? DAPT is the recommended pathway.
-              </p>
-              <p className="text-xs text-amber-700 leading-snug">
-                AHA/ASA 2026 §4.6.1 (COR 3 No Benefit) advises against routine IVT in mild non-disabling deficits within 4.5h. §4.8 (COR 1, LOE A) recommends DAPT (aspirin + clopidogrel × 21 days) within 24h for NIHSS ≤3 noncardioembolic AIS — CHANCE, POINT, INSPIRES.
-              </p>
+          <div className="px-4 py-3 space-y-3">
+            <p className="text-xs text-slate-700">Check any that are present. If so, consider TNK after discussing risk/benefit.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
+              {[
+                { key: 'aphasia', label: 'Aphasia' },
+                { key: 'hemianopia', label: 'Hemianopia' },
+                { key: 'truncalAtaxia', label: 'Truncal ataxia (walk the patient)' },
+                { key: 'dysphagia', label: 'Dysphagia' },
+                { key: 'handWeakness', label: 'Hand weakness affecting livelihood' },
+              ].map(({ key, label }) => (
+                <label key={key} className="flex items-center gap-2 cursor-pointer min-h-[44px] py-0.5">
+                  <input
+                    type="checkbox"
+                    checked={disablingSymptoms[key as keyof typeof disablingSymptoms] || false}
+                    onChange={(e) => setDisablingSymptoms(prev => ({ ...prev, [key]: e.target.checked }))}
+                    className="w-4 h-4 rounded border-slate-300 text-neuro-600 flex-shrink-0"
+                  />
+                  <span className="text-sm text-slate-700">{label}</span>
+                </label>
+              ))}
             </div>
-          )}
+            {hasDisablingSymptom && (
+              <p className="text-sm font-semibold text-slate-900">→ Consider TNK after discussing risk/benefit with patient and team.</p>
+            )}
+            {!hasDisablingSymptom && nihssScore <= 3 && (
+              <div className="border-t border-slate-100 pt-3 space-y-2">
+                <p className="text-sm font-semibold text-slate-900">
+                  → No disabling deficit present? DAPT is the recommended pathway.
+                </p>
+                <p className="text-xs text-slate-600 leading-snug">
+                  AHA/ASA 2026 §4.6.1 (COR 3 No Benefit) advises against routine IVT in mild non-disabling deficits within 4.5h. §4.8 (COR 1, LOE A) recommends DAPT (aspirin + clopidogrel × 21 days) within 24h for NIHSS ≤3 noncardioembolic AIS — CHANCE, POINT, INSPIRES.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       )}
 
-      {/* ── Extended IVT cross-link ──
-          Surfaces when LKW is past the standard 4.5h tPA window OR is unknown
-          (potential wake-up stroke). Routes clinician to the dedicated Extended
-          IVT pathway, which carries the WAKE-UP / EXTEND / TRACE-III decision
-          trees for 4.5h–9h windows and the DWI-FLAIR mismatch path. Added
-          2026-05-17 per V direction. */}
+      {/* ── Extended IVT cross-link — chassis-aligned 2026-05-24 ──
+          Surfaces when LKW is past the standard 4.5h tPA window OR is
+          unknown (potential wake-up stroke). Routes the clinician to
+          the dedicated Extended IVT pathway, which carries the WAKE-UP
+          / EXTEND / TRACE-III decision trees for 4.5h–9h windows and
+          the DWI-FLAIR mismatch path. Added 2026-05-17 per V direction;
+          chassis-aligned per V follow-up 2026-05-24. */}
       {lkwEntered && (lkwUnknown || lkwHours > 4.5) && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700 mb-1">
-            Extended-window IVT
-          </p>
-          <p className="text-sm text-slate-700 mb-3 leading-snug">
-            {lkwUnknown
-              ? 'LKW unknown — if patient woke with symptoms, they may qualify for thrombolysis using DWI-FLAIR mismatch criteria.'
-              : lkwHours <= 24
-              ? `LKW is ${lkwHours.toFixed(1)}h ago — past the standard 4.5h window. Patient may qualify for extended-window thrombolysis (4.5h–9h) or late-window options (9h–24h).`
-              : `LKW is ${lkwHours.toFixed(1)}h ago — beyond standard thrombolysis windows. Confirm late-window options against current AHA/ASA guidance.`}
-          </p>
-          <button
-            type="button"
-            onClick={() => onOpenExtendedIVT?.()}
-            disabled={!onOpenExtendedIVT}
-            className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 bg-neuro-500 hover:bg-neuro-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
-          >
-            Open Extended IVT Pathway
-            <ArrowRight size={16} aria-hidden="true" />
-          </button>
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+          <div className="px-4 py-2 bg-amber-50 border-b border-amber-100">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Extended-Window IVT</p>
+          </div>
+          <div className="px-4 py-3 space-y-3">
+            <p className="text-sm text-slate-700 leading-snug">
+              {lkwUnknown
+                ? 'LKW unknown — if patient woke with symptoms, they may qualify for thrombolysis using DWI-FLAIR mismatch criteria.'
+                : lkwHours <= 24
+                ? `LKW is ${lkwHours.toFixed(1)}h ago — past the standard 4.5h window. Patient may qualify for extended-window thrombolysis (4.5h–9h) or late-window options (9h–24h).`
+                : `LKW is ${lkwHours.toFixed(1)}h ago — beyond standard thrombolysis windows. Confirm late-window options against current AHA/ASA guidance.`}
+            </p>
+            <button
+              type="button"
+              onClick={() => onOpenExtendedIVT?.()}
+              disabled={!onOpenExtendedIVT}
+              className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 bg-neuro-500 hover:bg-neuro-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+            >
+              Open Extended IVT Pathway
+              <ArrowRight size={16} aria-hidden="true" />
+            </button>
+          </div>
         </div>
       )}
 
