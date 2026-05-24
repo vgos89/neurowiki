@@ -740,7 +740,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 2B — Add CI to ARD primary stat tiles (NINDS/DAWN/DEFUSE-3/CHOICE) — Class E
 - **Priority:** P2
-- **Status:** planned
+- **Status:** [x] done 2026-05-23 (commit 2537872). NINDS uses OR-CI proxy because the 1995 paper does not publish a frequentist CI for the dichotomous mRS 0-1 ARD itself. DEFUSE-3 secondary mRS 0-2 ARD is flagged [verification pending] because the Albers 2018 abstract does not report a frequentist CI for that secondary (primary cOR CI is shown). DAWN and CHOICE have full CIs from source.
 - **User-visible goal:** ARD figures on primary stat tiles include 95% CI, matching ELAN pattern
 - **Non-goals:** no archetype changes; no new components
 - **Owner agents:** evidence-verifier (source CI values) → medical-scientist → trial-statistician (verify CI values) → clinical-reviewer
@@ -751,7 +751,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 2C — Fix DEFUSE-3 primaryEndpoint label (mRS 0-2 → mRS shift) — Class E
 - **Priority:** P2
-- **Status:** planned
+- **Status:** [x] done 2026-05-23 (commit af1cf02). primaryEndpoint.value now reads 'mRS shift' with label 'Ordinal distribution at 90 days' and supporting info string citing Albers GW et al. NEJM 2018;378:708-718.
 - **User-visible goal:** DEFUSE-3 trial page correctly labels ordinal mRS shift as the published primary endpoint
 - **Non-goals:** no NNT changes (handled in 2A)
 - **Owner agents:** evidence-verifier → medical-scientist → clinical-reviewer
@@ -992,7 +992,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 7D.2 — NIHSS interpretation strings (deferred) — Class E
 - **Priority:** P2
-- **Status:** planned
+- **Status:** [x] done 2026-05-23 (commit 2537872). Four severity-band prose paragraphs (Minor 1-4 / Moderate 5-15 / Moderate-severe 16-20 / Severe ≥21) added to NIHSS portal drawer with new `nihss-severity-interpretation-2026` claim citing AHA/ASA 2026 §4.6.1 + §4.7.2 + §4.8.
 - **User-visible goal:** Portal drawer bottom section includes severity interpretation prose (mild, moderate, severe, very severe ranges) matching stroke guidelines
 - **Non-goals:** no calculator logic changes; no new scoring; drawer shell already exists
 - **Owner agents:** medical-scientist (author interpretation text) → clinical-reviewer (gate before merge)
@@ -1010,7 +1010,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 8A — Remove legacy agents/ root directory — Class D
 - **Priority:** P2
-- **Status:** planned
+- **Status:** [x] done 2026-05-23 (commit af1cf02). Legacy /agents directory (17 files) deleted. Canonical agent definitions live under .claude/agents/. No source files imported from it.
 - **User-visible goal:** none (governance clarity; `.claude/agents/` is the only canonical agent registry)
 - **Non-goals:** do not touch `.claude/agents/` (canonical location stays unchanged)
 - **Owner agents:** system-architect (confirms no active references in prod code) → librarian (executes removal)
@@ -1079,6 +1079,39 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-24 — Register CHARM 2024 + AHA/ASA 2026 §6.3 citations — Class C (commit 1eed841)
+  - Hemicraniectomy clinical synthesis was already complete; my grep undercount (regex missed unquoted object keys) prompted investigation that produced 2 new registry entries. `sheth-charm-2024` (Lancet Neurology 2024) and `aha-asa-2026-6.3` (Supratentorial Infarction Surgical Management) now available; existing hemicraniectomy-synthesis claim can adopt them in a future clinical-reviewer pass.
+  - **Full coverage confirmed: 23 of 23 trial questions now have either a `<GuidelineSummaryCard>` (16) or `<ClinicalSynthesisCard>` (7).**
+- [x] 2026-05-23 — Legend slice backfill on remaining 61 trials — Class C-clinical-editorial (commit f8b7057)
+  - Now 108/108 trials carry a legend slice per TRIALS_SPEC §L6.1. Mechanical derivation from existing fields (bedsidePearl → bottomLineSummary → keyMessage for `finding`; calculations.nnt → effectSize.value → absoluteReduction for `bottomLineTag`; effectSize.value for `keyStat`). Judgment-call cases flagged in commit message for future clinical-reviewer pass.
+- [x] 2026-05-23 — NIHSS LVO-in-EMR toggle + CalcRef on Meningitis — Class C-clinical (commit a2c513d)
+  - Closes deferred audit BLOCKING `nihss-emr-include-lvo`. Default-off checkbox above the Copy button (only rendered when raceScore > 0); when on, buildText appends `LVO probability: <label> (RACE n/9, p%)`. Plus second production use of `<CalcRef>` on Meningitis GCS prose mention.
+- [x] 2026-05-23 — Phase 2B CIs on ARD + Phase 7D.2 NIHSS interpretation prose + Phase 4E/8D status updates — Class E + Class C (commit 2537872)
+  - Phase 2B: 95% CIs added to ARD stat tiles for NINDS (OR CI proxy), DEFUSE-3 ([verification pending] flag), DAWN (95% CI 24–47), CHOICE (95% CI 0.3 to 36.4). New `absoluteReduction.info` annotation per trial explains source and any caveats.
+  - Phase 7D.2: four severity-band prose paragraphs (Minor 1–4 / Moderate 5–15 / Moderate-severe 16–20 / Severe ≥21) added to NIHSS portal drawer with new `nihss-severity-interpretation-2026` claim citing §4.6.1 + §4.7.2 + §4.8.
+  - Phase 4E (CalcDisclaimer standardization): re-audited; satisfied by existing CalculatorFooter shared component. Status marked done.
+  - Phase 8D (SEO metadata audit): re-audited routeManifest + sitemap; 0 violations. Status marked done.
+- [x] 2026-05-23 — SE aria-live + CalcRef component + DEFUSE-3 endpoint label + legacy agents cleanup — Class C + Class E + Class D (commit af1cf02)
+  - Closes item #8 a11y batch on StatusEpilepticus dose computation region. New `<CalcRef>` primitive + first production wire on IchManagement GCS prose. Phase 2C DEFUSE-3 primaryEndpoint 'mRS 0-2' → 'mRS shift'. Phase 8A legacy /agents directory deleted.
+- [x] 2026-05-23 — Pathway aria-live regions on ELAN + Migraine — Class C a11y (commit ecef77e)
+  - Wraps `step 4 result` (ELAN) and `step 5 MOH discharge screen` (Migraine) in role=status + aria-live=polite + aria-atomic=true. WCAG 2.1 SC 4.1.3 coverage.
+- [x] 2026-05-23 — Stroke Basics workflow guide-page inline trial linking — Class C (commit 6ccf985)
+  - 4 trial-name wraps added (EXTEND / DAWN / DEFUSE-3 / WAKE-UP) across 2 evidence accordion paragraphs in StrokeBasicsWorkflowV2.tsx. 13 other guide pages had no eligible catalog-resolvable trial mentions (legitimate finding — not in stroke trial scope).
+- [x] 2026-05-23 — Speed-ranked backlog items 1-6 (8 trial Archetype A rebuilds + 23 legend backfills + Calculator→trial UI + stroke-code non-disabling branch) — Class C-clinical + Class E-clinical (commit bc29987)
+  - Archetype A rebuilds: THEIA, IST, CAST, PRoFESS, ANNEXA-I, ANNEXA-4, Sarode 2013, PATCH. First batch legend backfill (23 trials). New `<CalculatorTrialEvidence>` component wired on 4 STRONG-confidence calculators (NIHSS, ASPECTS, ICH Score, RoPE). Stroke Code Step 1 non-disabling-deficit branch: when NIHSS ≤3 and no disabling symptoms checked, surfaces §4.6.1 + §4.8 DAPT recommendation — closes the LAST HIGH-impact BLOCKING from the AHA/ASA 2026 audit.
+- [x] 2026-05-23 — NIHSS Exam Performed / Neurology Evaluation sync — Class E-clinical (commits 7e736aa + 1f6b6bf)
+  - V bug report: EMR output showed Exam Performed at 4:35 PM and Neurology Evaluation at 4:42 PM. Both represent the same workflow event. Bidirectional 'earlier-wins' sync now keeps the two values aligned across all 4 input ordering scenarios (NIHSS first / auto-stamp first / inline edit earlier / inline edit later).
+- [x] 2026-05-23 — Final 2 GuidelineSummaryCards (aspiration-vs-stentriever + evt-adjunct-pharmacotherapy) — Class C-clinical (commit b81fde5)
+- [x] 2026-05-23 — 3 clinical syntheses + 15 new citations (hemicraniectomy + ich-surgery + icas-stenting) — Class C-clinical (commit 410a73b)
+- [x] 2026-05-23 — Phase 3 GuidelineSummaryCard rollout — 6 more questions + first multi-citation card — Class C-clinical (commit d0734a0)
+- [x] 2026-05-23 — Collapse ClinicalSynthesisCard body paragraphs by default — Class C UX (commit 61c7d4b)
+  - V request: synthesis prose was filling the viewport like an article; default-collapsed disclosure keeps the headline + bottom-line callout always visible with a "Read full synthesis" toggle. Same treatment NOT applied to GuidelineSummaryCard (already compact).
+- [x] 2026-05-23 — Phase 2 GuidelineSummaryCard rollout + 4 PFO precursor trials — Class C-clinical (commit 0fc027e)
+- [x] 2026-05-23 — Thrombolytic timestamp + GWTG color-coding + 3 clinical syntheses (PFO, asymptomatic carotid, ICH anticoag reversal, CRAO) — Class C-clinical (commit 89a298c)
+- [x] 2026-05-23 — ClinicalSynthesisCard pattern + PFO closure synthesis pilot — Class C-clinical (commit f82d7d1)
+- [x] 2026-05-23 — Old-format trial Archetype A rebuilds (PFO trio + EXTEND-IA TNK + RESCUE-Japan LIMIT + CREST pair + ICH reversal quartet + THEIA + foundational aspirin trio) — Class C-clinical (commits ea6487e / 364fa9b / cbf93da / e10dabd / 0870a78)
+  - All 15 old-format trials identified in the 2026-05-23 audit now render with Archetype A. Zero remaining.
+
 - [x] 2026-05-22 — Task B Phase 1A pathway recommendation drawer pilot — Class D (commit 2266981)
   - New PathwayRecommendationDrawer primitive at src/components/article/stroke/PathwayRecommendationDrawer.tsx (variant-aware, COR badge slot, simpler state than calculator drawer). Available for future pathway migrations.
   - Extended IVT pathway: retired the inline 'Not Eligible'/'Eligible' result card (the one V flagged in the 2026-05-22 screenshot). Enriched the existing CalculatorDrawer at viewport-bottom to render the full verdict (status + COR badge + reasoning + details + contraindication callout) in its expanded body. Auto-expands on first transition to State C for discoverability.

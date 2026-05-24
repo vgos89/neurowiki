@@ -383,14 +383,16 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     id: 'hemicraniectomy-synthesis',
     citation_ids: [
       'aha-asa-2014-hemicraniectomy',
+      'aha-asa-2026-6.3',
       'vahedi-decimal-2007',
       'juttler-destiny-2007',
       'hofmeijer-hamlet-2009',
       'vahedi-pooled-decimal-destiny-hamlet-2007',
       'juttler-destiny-ii-2014',
+      'sheth-charm-2024',
     ],
     surfaces: [DATA_SURFACE],
-    description: 'ClinicalSynthesisCard on /trials/q/hemicraniectomy. Synthesizes the four hemicraniectomy RCTs (DECIMAL, DESTINY, HAMLET 2007–2009 pooled per Vahedi 2007 + DESTINY-II 2014 for the >60 cohort). ≤60-year mortality + mRS-≤3 benefit established; in the >60-year cohort survival benefit is real but concentrated at mRS 4–5, making the decision values-based. Governing source = AHA/ASA 2014 (the 2026 AIS guideline does not address hemicraniectomy).',
+    description: 'ClinicalSynthesisCard on /trials/q/hemicraniectomy. Synthesizes the four hemicraniectomy RCTs (DECIMAL, DESTINY, HAMLET 2007–2009 pooled per Vahedi 2007 + DESTINY-II 2014 for the >60 cohort) + AHA/ASA 2026 §6.3 (COR 1 LOE B-R for age ≤60; COR 2a LOE B-R individualized for age >60) + CHARM 2024 (negative IV glibenclamide adjunct for edema prevention, underpowered after COVID early-stop). ≤60-year mortality + mRS-≤3 benefit established; in the >60-year cohort survival benefit is real but concentrated at mRS 4–5, making the decision values-based.',
   },
 
   // ─── ICH surgery clinical synthesis ─────────────────────────────────────────
