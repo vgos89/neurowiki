@@ -1,6 +1,7 @@
 ---
 name: humanizer
 description: Plain-language writing style guide and AI-fingerprint checklist for NeuroWiki content. Load on all content-writer tasks before sign-off. Removes AI-generated writing patterns and enforces clinical voice.
+disable-model-invocation: true
 ---
 
 # Humanizer Skill

@@ -1,6 +1,10 @@
 ---
 name: routing
 description: NeuroWiki routing conventions — routes defined in src/App.tsx (NOT router.tsx), route manifest at src/config/routeManifest.ts, lazy import pattern, check:routes validator, current route count. Load when adding routes, new pages, or investigating navigation issues.
+paths:
+  - src/App.tsx
+  - src/config/routeManifest.ts
+  - src/pages/**
 ---
 
 # Routing Conventions — NeuroWiki

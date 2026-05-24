@@ -575,6 +575,8 @@ Naming: `arch-PR<#>-<slug>.md` and `clinical-PR<#>-<slug>.md`. Location: always 
 - **Class E:** medical-scientist produces the claim + evidence; specialists execute; clinical-reviewer gates pre- and post-execution.
 - **Parallel fan-out must be justified in the plan.** Default is serial.
 - **Hooks run on critical paths only** — pre-commit, pre-push — not on every file edit.
+- **Tightly-coupled tasks run serial.** Writer/reviewer of the same artifact, refactor + tests of the same module, author + audit of the same content — these are *not* parallel candidates. Anthropic's own multi-agent guidance (May 2026) confirms: parallel only when subtasks operate on disjoint files and produce independently-summarizable outputs. Otherwise coordination overhead exceeds parallelism gain and pollutes context.
+- **Writer/Reviewer pattern — fresh context for review.** When reviewing artifacts produced earlier in the same session (architect review of a Class D refactor, clinical-reviewer pass on medical-scientist output, accessibility audit on UI just shipped), invoke the reviewer as a subagent in a *fresh context*, not in the same orchestrator turn that authored the work. Anthropic's evidence: a fresh-context reviewer is not biased toward defending code it just wrote, and catches edge cases the author missed. This was already implicit in our medical-scientist → clinical-reviewer flow; codifying it here as the standard for all Class D/E review steps.
 
 ---
 

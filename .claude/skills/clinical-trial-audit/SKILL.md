@@ -1,6 +1,12 @@
 ---
 name: clinical-trial-audit
 description: Verification workflow for trial DOI/PMID, endpoint accuracy, display archetypes, and NNT validity. Load when verifying or editing trial data entries in trialData.ts, trialCatalogMeta.ts, or trial legend fields.
+paths:
+  - src/data/trialData.ts
+  - src/data/trialCatalogMeta.ts
+  - src/data/trialListData.ts
+  - src/data/trial-questions.ts
+  - src/pages/trials/**
 ---
 
 # Clinical Trial Audit Skill

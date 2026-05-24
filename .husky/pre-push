@@ -1,0 +1,8 @@
+set -e
+# Gate 6 — Post-push live route verify. Runs after `git push`, waits for Vercel
+# to deploy, then fetches a small set of production routes and confirms each
+# returned 200 with the right title. Catches "deployed but broken" regressions
+# that tsc + build + claims + routes cannot see.
+#
+# Skip with: SKIP_LIVE_VERIFY=1 git push   — or   git push --no-verify
+node scripts/live-verify.mjs
