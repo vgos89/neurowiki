@@ -406,3 +406,45 @@ details > summary::-webkit-details-marker {
     bottom: calc(var(--drawer-floor-height, 0px) + 2rem);
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────
+   prefers-reduced-motion guards on Tailwind animation utilities
+   (UX audit 2026-05-24 H-21).
+
+   The codebase uses tailwindcss-animate's `animate-in`, `fade-in`,
+   `zoom-in-95`, `slide-in-from-*`, and Tailwind's built-in
+   `transition-transform` + `rotate-180` patterns extensively for
+   modal entry, accordion expansion, chevron rotation, and toast
+   appearance. None of these utilities respect prefers-reduced-motion
+   out of the box; users with vestibular sensitivity see every
+   motion as authored.
+
+   Bespoke @keyframes in this file (chevron-bounce, install-overlay-in,
+   drawer-pulse, discovery-chevron) already carry per-rule
+   prefers-reduced-motion: reduce guards. This block extends the
+   coverage to the Tailwind utility surface in a single place rather
+   than auditing every component file.
+
+   Behavior under reduce: animations + transitions cleared to a
+   single-frame snap; opacity/transform start states are reset so
+   the element appears in its final position without motion.
+───────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  /* tailwindcss-animate entry animations */
+  .animate-in,
+  .animate-out,
+  [class*="animate-in"],
+  [class*="animate-out"] {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  /* Tailwind transition-transform on chevrons, accordions, etc. */
+  .transition-transform,
+  .transition-colors,
+  .transition-all,
+  .transition,
+  .transition-opacity {
+    transition: none !important;
+  }
+}

@@ -173,7 +173,14 @@ export const PathwayRailStep: React.FC<PathwayRailStepProps> = ({
   return (
     <div
       className="relative"
-      {...(isLocked && lockedAriaLabel ? { 'aria-label': lockedAriaLabel } : {})}
+      // H-19 fix (UX audit 2026-05-24): locked rail step is focusable so
+      // keyboard users can land on it and hear the lockedAriaLabel
+      // ("Awaiting Step N ↑") via screen reader. Without tabIndex={0}
+      // the locked div has no role in the accessibility tree and the
+      // aria-label is silently ignored by most screen readers.
+      {...(isLocked && lockedAriaLabel
+        ? { 'aria-label': lockedAriaLabel, role: 'region' as const, tabIndex: 0 }
+        : {})}
       {...(isActive ? { 'aria-current': 'step' as React.AriaAttributes['aria-current'] } : {})}
     >
       {/* Vertical rail — continuous line at x=10, split above/below the node.

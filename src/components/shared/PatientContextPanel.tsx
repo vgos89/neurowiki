@@ -203,15 +203,25 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
         </div>
         {!lockExpanded && (
           <ChevronDown
-            className={`w-4 h-4 text-slate-400 flex-shrink-0 transition-transform ${expanded ? 'rotate-180' : ''}`}
+            className={`w-4 h-4 text-slate-400 flex-shrink-0 motion-safe:transition-transform ${expanded ? 'rotate-180' : ''}`}
             aria-hidden
           />
         )}
       </button>
 
-      {/* Expanded body */}
-      {expanded && (
-        <div id="patient-context-body" className="divide-y divide-slate-50">
+      {/* Expanded body — H-18 fix (UX audit 2026-05-24): always rendered
+          and toggled via the `hidden` attribute rather than conditional
+          mount/unmount. This guarantees that the `aria-controls` target
+          referenced by the header button exists in the DOM at all times,
+          per ARIA 1.2 spec. Hidden-attribute is equivalent to display:
+          none and is honored by assistive tech as truly hidden. */}
+      <div
+        id="patient-context-body"
+        className="divide-y divide-slate-50"
+        hidden={!expanded}
+      >
+        {expanded && (
+          <>
           {/* LKW row — tap opens the canonical LKWTimePicker modal (same
               component as Stroke Code Step 1 + Extended IVT pathway).
               M-13 fix: explicit aria-label so screen readers don't read
@@ -339,8 +349,9 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
           <div className="px-4 py-2 bg-slate-50/50">
             <p className="text-[10px] text-slate-400 italic">Reference only. Verify against patient chart.</p>
           </div>
-        </div>
-      )}
+          </>
+        )}
+      </div>
 
       {/* LKW modal — canonical LKWTimePicker (portal). Same component used
           by Stroke Code Step 1 and Extended IVT pathway. showSleepOnset
