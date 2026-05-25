@@ -213,12 +213,15 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
       {expanded && (
         <div id="patient-context-body" className="divide-y divide-slate-50">
           {/* LKW row — tap opens the canonical LKWTimePicker modal (same
-              component as Stroke Code Step 1 + Extended IVT pathway). */}
+              component as Stroke Code Step 1 + Extended IVT pathway).
+              M-13 fix: explicit aria-label so screen readers don't read
+              the concatenation "Last known well Add" awkwardly. */}
           <button
             type="button"
             onClick={() => setLkwModalOpen(true)}
-            className="w-full min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 hover:bg-slate-50 transition-colors text-left"
+            className="w-full min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 hover:bg-slate-50 transition-colors text-left focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
             aria-haspopup="dialog"
+            aria-label={`Set last known well time — currently ${lkwDisplay}`}
           >
             <span className="text-xs font-medium text-slate-600 flex-shrink-0">Last known well</span>
             <span className="flex items-center gap-1">
@@ -270,10 +273,12 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             </div>
           </div>
 
-          {/* Anti-coag/Antiplatelet row */}
+          {/* Anti-coag/Antiplatelet row — M-11 fix: role="group" on the
+              chip container gives screen reader users the context that
+              the four chips form a single anticoagulant selection group. */}
           <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 flex-wrap">
-            <label className="text-xs font-medium text-slate-600 flex-shrink-0">Anti-coag/Antiplatelet</label>
-            <div className="flex items-center gap-1.5 flex-wrap">
+            <span id="anticoag-label" className="text-xs font-medium text-slate-600 flex-shrink-0">Anti-coag/Antiplatelet</span>
+            <div className="flex items-center gap-1.5 flex-wrap" role="group" aria-labelledby="anticoag-label">
               {(['none', 'doac', 'warfarin', 'antiplatelet'] as const).map((key) => {
                 const selected = values.anticoag.has(key);
                 return (
@@ -281,7 +286,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                     key={key}
                     type="button"
                     onClick={() => toggleAnticoag(key)}
-                    className={`min-h-[44px] py-1.5 px-3 -my-1 text-xs font-semibold rounded-full border transition-colors ${
+                    className={`min-h-[44px] py-1.5 px-3 -my-1 text-xs font-semibold rounded-full border transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
                       selected
                         ? 'bg-neuro-50 border-neuro-200 text-neuro-700'
                         : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300'

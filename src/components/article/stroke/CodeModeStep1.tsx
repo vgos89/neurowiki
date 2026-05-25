@@ -251,7 +251,8 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
           <button
             type="button"
             onClick={onOpenNIHSS}
-            className="min-h-[44px] py-1.5 px-3 -my-1 text-xs font-semibold rounded-full border border-neuro-200 bg-neuro-50 text-neuro-700 hover:bg-neuro-100 transition-colors"
+            className="min-h-[44px] py-1.5 px-3 -my-1 text-xs font-semibold rounded-full border border-neuro-200 bg-neuro-50 text-neuro-700 hover:bg-neuro-100 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+            aria-label="Open NIHSS calculator"
           >
             Calc
           </button>
@@ -334,9 +335,11 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
           telegraphs severity without flooding the whole card. Clinical
           text preserved verbatim per arch review condition #8. */}
 
-      {/* LKW Unknown — wake-up / unknown-onset notice. */}
+      {/* LKW Unknown — wake-up / unknown-onset notice.
+          BL-4 fix: role="alert" so screen readers announce when the
+          state changes (e.g., clinician toggles LKW Unknown checkbox). */}
       {lkwUnknown && (
-        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden" role="alert">
           <div className="px-4 py-2 bg-amber-50 border-b border-amber-100">
             <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Wake-up / Unknown Onset</p>
           </div>
@@ -348,9 +351,9 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
 
       {/* BP-above-tPA-limit alert + treatment guidance + controlled checkbox + AHA citation. */}
       {bpTooHigh && (
-        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden" role="alert">
           <div className="px-4 py-2 bg-red-50 border-b border-red-100">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-red-600">BP Above tPA Limit</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-red-700">BP Above tPA Limit</p>
           </div>
           <div className="px-4 py-3 space-y-2">
             <p className="text-xs font-semibold text-slate-900">BP must be &lt;185/110 mmHg before tPA</p>
@@ -359,7 +362,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
               &nbsp;·&nbsp;
               <strong>Nicardipine</strong> 5 mg/hr, ↑2.5 mg/hr q5–15 min (max 15 mg/hr)
             </p>
-            <p className="text-[10px] text-slate-400">AHA/ASA 2026 §4.3 (BP before IV thrombolysis)</p>
+            <p className="text-[10px] text-slate-500">AHA/ASA 2026 §4.3 (BP before IV thrombolysis)</p>
             <label className="flex items-center gap-2 cursor-pointer min-h-[44px]">
               <input
                 type="checkbox"
@@ -375,7 +378,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
 
       {/* Hypoglycemia alert with progressive disclosure for the D50 treatment text. */}
       {glucoseLow && (
-        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden" role="alert">
           <div className="px-4 py-2 bg-amber-50 border-b border-amber-100">
             <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Hypoglycemia</p>
           </div>
@@ -396,9 +399,9 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
 
       {/* Severe hyperglycemia notice. */}
       {glucoseHigh && (
-        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden" role="alert">
           <div className="px-4 py-2 bg-red-50 border-b border-red-100">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-red-600">Severe Hyperglycemia</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-red-700">Severe Hyperglycemia</p>
           </div>
           <div className="px-4 py-3">
             <p className="text-xs text-slate-700">Glucose &gt;400 mg/dL. Verify and document; severe hyperglycemia worsens stroke outcomes.</p>
@@ -456,26 +459,31 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
             <span className="text-[10px] font-bold uppercase tracking-wider text-white bg-amber-600 rounded-full px-2 py-0.5 flex-shrink-0">Decision</span>
           </div>
           <div className="px-4 py-3 space-y-3">
-            <p className="text-xs text-slate-700">Check any that are present. If so, consider TNK after discussing risk/benefit.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
-              {[
-                { key: 'aphasia', label: 'Aphasia' },
-                { key: 'hemianopia', label: 'Hemianopia' },
-                { key: 'truncalAtaxia', label: 'Truncal ataxia (walk the patient)' },
-                { key: 'dysphagia', label: 'Dysphagia' },
-                { key: 'handWeakness', label: 'Hand weakness affecting livelihood' },
-              ].map(({ key, label }) => (
-                <label key={key} className="flex items-center gap-2 cursor-pointer min-h-[44px] py-0.5">
-                  <input
-                    type="checkbox"
-                    checked={disablingSymptoms[key as keyof typeof disablingSymptoms] || false}
-                    onChange={(e) => setDisablingSymptoms(prev => ({ ...prev, [key]: e.target.checked }))}
-                    className="w-4 h-4 rounded border-slate-300 text-neuro-600 flex-shrink-0"
-                  />
-                  <span className="text-sm text-slate-700">{label}</span>
-                </label>
-              ))}
-            </div>
+            {/* M-10 fix (UX audit 2026-05-24): fieldset + legend gives
+                screen readers the group context they need before
+                reading each individual checkbox. */}
+            <fieldset>
+              <legend className="text-xs text-slate-700 mb-1">Check any disabling symptom present. If so, consider TNK after discussing risk/benefit.</legend>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
+                {[
+                  { key: 'aphasia', label: 'Aphasia' },
+                  { key: 'hemianopia', label: 'Hemianopia' },
+                  { key: 'truncalAtaxia', label: 'Truncal ataxia (walk the patient)' },
+                  { key: 'dysphagia', label: 'Dysphagia' },
+                  { key: 'handWeakness', label: 'Hand weakness affecting livelihood' },
+                ].map(({ key, label }) => (
+                  <label key={key} className="flex items-center gap-2 cursor-pointer min-h-[44px] py-0.5">
+                    <input
+                      type="checkbox"
+                      checked={disablingSymptoms[key as keyof typeof disablingSymptoms] || false}
+                      onChange={(e) => setDisablingSymptoms(prev => ({ ...prev, [key]: e.target.checked }))}
+                      className="w-4 h-4 rounded border-slate-300 text-neuro-600 flex-shrink-0"
+                    />
+                    <span className="text-sm text-slate-700">{label}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
             {hasDisablingSymptom && (
               <p className="text-sm font-semibold text-slate-900">→ Consider TNK after discussing risk/benefit with patient and team.</p>
             )}

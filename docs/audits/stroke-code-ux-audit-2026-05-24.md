@@ -164,6 +164,19 @@ NeuroWiki Stroke Code is a *documentation + decision-support* tool. Pulsara is a
 
 ---
 
+## Sweep status — CLOSED 2026-05-24
+
+All four waves shipped today. Each commit was a single-revert rollback boundary; Gate 6 live-verify green on every push.
+
+| Wave | Commit | Scope |
+|---|---|---|
+| 1 — Patient safety + drop-offs | 206ee42 | BL-1 (CTA double-fire) · BL-2 (terminal Code-Documented state) · H-1 (back-edit Edit-pill affordance) |
+| 2 — Visual + structural UX | 9e66ef4 | H-2 H-3 H-4 H-5 H-6 H-7 H-8 H-9 H-10 H-11 H-12 + M-1 L-1 L-3 |
+| 3 — Mobile + touch targets | 5995692 | BL-6 BL-7 BL-8 H-13 H-14 H-17 M-4 M-7 L-4 — every top-of-viewport interaction now 44px+ |
+| 4 — WCAG 2.1 AA | (this commit) | BL-3 BL-4 H-1-modal H-20 M-8 M-9 M-10 M-11 M-12 M-13 — role="alert" + fieldset + role="group" + section h3 + focus management on step transitions + contrast nudges |
+
+Remaining items left for future waves (BL-5, H-18, H-19, H-21, M-2 M-3 M-5 M-6 M-14 M-15 M-16, L-2 L-5 L-6 L-8 L-9, plus the Wave-5 product-roadmap items): explicit on the audit; not closing without separate execution.
+
 ## Part 4 — Proposed execution sequence (subject to your priority calls)
 
 **Wave 1 — Patient safety + drop-off cliffs (1 commit, Class C):**

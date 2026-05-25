@@ -275,9 +275,11 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
         <div
           className={`flex items-center gap-2 px-4 border-b flex-shrink-0 min-h-[48px] ${statusBg}`}
           role="status"
+          aria-live="polite"
+          aria-atomic="true"
         >
-          <span className={`font-mono text-base ${eligibilityStatus.color === 'emerald' ? 'text-emerald-700' : eligibilityStatus.color === 'red' ? 'text-red-600' : 'text-amber-700'}`}>{statusIcon}</span>
-          <span className={`text-[10px] font-bold uppercase tracking-widest ${eligibilityStatus.color === 'emerald' ? 'text-emerald-700' : eligibilityStatus.color === 'red' ? 'text-red-600' : 'text-amber-700'}`}>{eligibilityStatus.label}</span>
+          <span className={`font-mono text-base ${eligibilityStatus.color === 'emerald' ? 'text-emerald-700' : eligibilityStatus.color === 'red' ? 'text-red-700' : 'text-amber-700'}`} aria-hidden="true">{statusIcon}</span>
+          <span className={`text-[10px] font-bold uppercase tracking-widest ${eligibilityStatus.color === 'emerald' ? 'text-emerald-700' : eligibilityStatus.color === 'red' ? 'text-red-700' : 'text-amber-700'}`}>{eligibilityStatus.label}</span>
         </div>
 
         {/* Scrollable content */}
@@ -291,7 +293,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
 
           {/* ── Hard stops ── */}
           <section>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-red-600 mb-2">Hard Stops · Absolute</p>
+            <h3 className="text-[10px] font-bold uppercase tracking-widest text-red-700 mb-2">Hard Stops · Absolute</h3>
             <div className="grid grid-cols-2 gap-2">
               {HARD_STOP_CHIPS.map((chip) => {
                 const active = !!absoluteContraindications[chip.id];
@@ -333,7 +335,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
 
           {/* ── Bleeding / Labs ── */}
           <section>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-red-600 mb-2">Bleeding / Labs</p>
+            <h3 className="text-[10px] font-bold uppercase tracking-widest text-red-700 mb-2">Bleeding / Labs</h3>
             <div className="grid grid-cols-2 gap-2">
               {BLEEDING_LAB_CHIPS.map((chip) => {
                 const active = !!absoluteContraindications[chip.id];
@@ -373,7 +375,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
 
           {/* ── Relative / Consider ── */}
           <section>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700 mb-2">Consider · Relative</p>
+            <h3 className="text-[10px] font-bold uppercase tracking-widest text-amber-700 mb-2">Consider · Relative</h3>
             <div className="grid grid-cols-2 gap-2">
               {RELATIVE_CHIPS.map((chip) => {
                 const active = !!relativeContraindications[chip.id];

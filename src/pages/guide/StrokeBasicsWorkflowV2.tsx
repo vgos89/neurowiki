@@ -268,7 +268,25 @@ const MainContent: React.FC = () => {
     setStep4OrdersRaw(o);
     buildPersist({ step4Orders: o });
   };
-  const setActiveCard = (id: number) => { setActiveCardRaw(id); buildPersist({ activeCard: id }); };
+  // BL-3 fix (UX audit 2026-05-24): when the active step changes, move
+  // focus to the first focusable element inside the new step's content
+  // panel so keyboard + screen-reader users aren't orphaned on the
+  // now-unmounted Save & Continue button.
+  const setActiveCard = (id: number) => {
+    setActiveCardRaw(id);
+    buildPersist({ activeCard: id });
+    // Defer one tick so the new step has mounted before we focus it.
+    requestAnimationFrame(() => {
+      const panel = document.querySelector<HTMLElement>(`[data-step-content="${id}"]`);
+      if (!panel) return;
+      const firstFocusable = panel.querySelector<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (firstFocusable) {
+        firstFocusable.focus({ preventScroll: false });
+      }
+    });
+  };
   const setEligibilityResult: React.Dispatch<React.SetStateAction<ThrombolysisEligibilityData | null>> = (action) => {
     setEligibilityResultRaw(prev => {
       const next = typeof action === 'function' ? action(prev) : action;
@@ -439,7 +457,7 @@ const MainContent: React.FC = () => {
                 </span>
               </button>
             ) : (
-            <div>
+            <div data-step-content="1">
               {workflowMode === 'study' && (
                 <StudyPearlsButton count={pearls['step-1']?.deep?.length || 0} onClick={() => setStep1ModalOpen(true)} />
               )}
@@ -530,7 +548,7 @@ const MainContent: React.FC = () => {
                 </span>
               </button>
             ) : activeCard === 2 ? (
-            <div>
+            <div data-step-content="2">
               {workflowMode === 'study' && (
                 <StudyPearlsButton count={pearls['step-2']?.deep?.length || 0} onClick={() => setStep2ModalOpen(true)} />
               )}
@@ -631,7 +649,7 @@ const MainContent: React.FC = () => {
                 </span>
               </button>
             ) : activeCard === 3 ? (
-            <div>
+            <div data-step-content="3">
               {workflowMode === 'study' && (
                 <StudyPearlsButton
                   count={(pearls['step-3']?.deep?.length || 0) + (pearls['step-4']?.deep?.length || 0) + (pearls['step-5']?.deep?.length || 0)}
