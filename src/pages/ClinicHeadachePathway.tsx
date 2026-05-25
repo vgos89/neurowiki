@@ -198,7 +198,7 @@ const ClinicHeadachePathway: React.FC = () => {
   };
 
   // ── MIDAS score helper ────────────────────────────────────────────────────────
-  const MidasInput = ({ label, value, onChange }: { label: string; value: number; onChange: (v: number) => void }) => (
+  const MidasInput = ({ label, value, onChange }: { label: React.ReactNode; value: number; onChange: (v: number) => void }) => (
     <div className="flex items-center justify-between py-2 border-b border-slate-100 last:border-b-0">
       <span className="text-sm text-slate-700 flex-1 pr-4">{label}</span>
       <div className="flex items-center gap-2">
@@ -229,7 +229,7 @@ const ClinicHeadachePathway: React.FC = () => {
         name: comorbidities.depression ? 'Metoprolol' : 'Propranolol',
         dose: comorbidities.depression ? '50–200 mg/day' : '40–160 mg/day',
         class: 'Beta-blocker',
-        note: 'Level A preventive. First-line for HTN co-management.' + (comorbidities.htn ? ' Dual benefit for hypertension.' : ''),
+        note: 'Level A preventive. First-line for HTN co-management.' + (comorbidities.htn ? ' Treats both migraine and hypertension.' : ''),
         caution: comorbidities.depression ? 'Propranolol may worsen depression — prefer metoprolol.' : undefined,
       });
     }
@@ -240,7 +240,7 @@ const ClinicHeadachePathway: React.FC = () => {
         name: 'Amitriptyline',
         dose: '10–75 mg at bedtime',
         class: 'TCA',
-        note: 'Level B preventive. Particularly useful with insomnia, depression, or anxiety co-morbidity.' +
+        note: 'Level B preventive. Best choice when insomnia, depression, or anxiety is present.' +
           (comorbidities.insomnia || comorbidities.depression || comorbidities.anxiety ? ' Matches patient comorbidities.' : ''),
         caution: comorbidities.cvRisk ? 'Use with caution in cardiovascular disease — QT prolongation risk.' : undefined,
       });
@@ -388,8 +388,29 @@ const ClinicHeadachePathway: React.FC = () => {
   const getStep3Summary = () => preventiveIndicated ? 'Preventive indicated' : 'Preventive not indicated';
   const getStep4Summary = () => cgrpFirstLine ? 'CGRP pathway indicated' : priorTrials === 'one-failed' ? '1 conventional trial failed' : 'Start conventional preventive';
 
+  // ── InfoTooltip — ? bubble for clinical term explanations ─────────────────────
+  const InfoTooltip = ({ text }: { text: string }) => {
+    const [open, setOpen] = React.useState(false);
+    return (
+      <span className="relative inline-block ml-1 align-middle">
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); setOpen(v => !v); }}
+          className="w-4 h-4 rounded-full bg-slate-200 text-slate-500 text-[10px] font-bold inline-flex items-center justify-center hover:bg-neuro-100 hover:text-neuro-700 transition-colors leading-none"
+          aria-label="More information"
+        >?</button>
+        {open && (
+          <span className="absolute left-0 top-5 z-30 w-64 bg-white border border-slate-200 rounded-xl shadow-xl p-3 text-xs text-slate-700 font-normal block" role="tooltip">
+            {text}
+            <button type="button" onClick={() => setOpen(false)} className="absolute top-2 right-2 text-slate-400 hover:text-slate-600 text-xs font-bold">✕</button>
+          </span>
+        )}
+      </span>
+    );
+  };
+
   // ── ComorbidityToggle component ───────────────────────────────────────────────
-  const ComorbidityToggle = ({ label, value, field }: { label: string; value: boolean; field: keyof ComorbidityState }) => (
+  const ComorbidityToggle = ({ label, value, field }: { label: React.ReactNode; value: boolean; field: keyof ComorbidityState }) => (
     <button
       type="button"
       onClick={() => toggleComorbidity(field)}
@@ -473,11 +494,11 @@ const ClinicHeadachePathway: React.FC = () => {
                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">MIDAS Disability Score</p>
                 <p className="text-xs text-slate-500 mb-3">Days lost (≥50% reduced productivity) in the past 3 months.</p>
                 <div className="space-y-1">
-                  <MidasInput label="Missed work / school (full days)" value={midasScores.q1} onChange={v => setMidasScores(p => ({ ...p, q1: v }))} />
-                  <MidasInput label="Reduced work / school productivity (days)" value={midasScores.q2} onChange={v => setMidasScores(p => ({ ...p, q2: v }))} />
-                  <MidasInput label="Missed household chores (days)" value={midasScores.q3} onChange={v => setMidasScores(p => ({ ...p, q3: v }))} />
-                  <MidasInput label="Reduced household productivity (days)" value={midasScores.q4} onChange={v => setMidasScores(p => ({ ...p, q4: v }))} />
-                  <MidasInput label="Missed social / leisure activities (days)" value={midasScores.q5} onChange={v => setMidasScores(p => ({ ...p, q5: v }))} />
+                  <MidasInput label={<>Missed work / school — full days<InfoTooltip text="Full days when you could not attend work or school entirely because of your headache. Do not count days you attended but worked less effectively." /></>} value={midasScores.q1} onChange={v => setMidasScores(p => ({ ...p, q1: v }))} />
+                  <MidasInput label={<>Reduced work / school productivity (days)<InfoTooltip text="Days when you went to work or school but your effectiveness dropped by 50% or more because of your headache." /></>} value={midasScores.q2} onChange={v => setMidasScores(p => ({ ...p, q2: v }))} />
+                  <MidasInput label={<>Missed household tasks — full days<InfoTooltip text="Full days when you were unable to do any household work (cooking, cleaning, childcare) because of your headache." /></>} value={midasScores.q3} onChange={v => setMidasScores(p => ({ ...p, q3: v }))} />
+                  <MidasInput label={<>Reduced household productivity (days)<InfoTooltip text="Days when household effectiveness dropped by 50% or more because of your headache." /></>} value={midasScores.q4} onChange={v => setMidasScores(p => ({ ...p, q4: v }))} />
+                  <MidasInput label={<>Missed social / leisure activities (days)<InfoTooltip text="Entire social events, sports, family gatherings, or leisure activities that you skipped completely because of your headache." /></>} value={midasScores.q5} onChange={v => setMidasScores(p => ({ ...p, q5: v }))} />
                 </div>
                 {midasTotal > 0 && (
                   <div className="mt-3 bg-neuro-50 rounded-lg p-3 border border-neuro-100 flex justify-between items-center">
@@ -507,7 +528,7 @@ const ClinicHeadachePathway: React.FC = () => {
               title="Why frequency is the first question"
               visible={headacheFreq !== null}
               content={
-                <span>Headache frequency is the single most discriminating variable for preventive therapy decisions. The AHS 2021 threshold of ≥4 days/month with disability OR ≥6 days/month regardless of disability captures the majority of patients who benefit from preventives. Asking frequency first lets us pre-stratify before asking about disability (MIDAS), reducing cognitive load per Cowan's 4±1 model.</span>
+                <span>Headache frequency drives the preventive therapy decision more than any other factor. The AHS 2021 threshold — ≥4 days/month with disability OR ≥6 days/month regardless of disability — captures most patients who benefit from preventives. Knowing frequency first lets us pre-stratify before asking about disability (MIDAS), so those questions stay focused.</span>
               }
             />
 
@@ -552,8 +573,8 @@ const ClinicHeadachePathway: React.FC = () => {
                   { value: 'migraine-without-aura', label: 'Migraine without aura', sub: 'Unilateral, pulsating, moderate–severe, with photo/phonophobia or nausea. ICHD-3 1.1.' },
                   { value: 'migraine-with-aura', label: 'Migraine with aura', sub: 'Preceding reversible neurological symptoms. ICHD-3 1.2. Associated with higher stroke risk with estrogen-containing OCP.' },
                   { value: 'tension', label: 'Tension-type headache', sub: 'Bilateral, pressing/tightening, mild–moderate, no vomiting. Review if chronic (≥15 days/month).' },
-                  { value: 'cluster-refer', label: 'Cluster / TAC pattern → Refer Neurology', sub: 'Severe unilateral periorbital, autonomic features, restlessness. Specific protocol required — not this pathway.' },
-                  { value: 'hemicrania-refer', label: 'Hemicrania continua pattern → Refer Neurology', sub: 'Continuous unilateral headache with autonomic features. Absolute indomethacin response is diagnostic.' },
+                  { value: 'cluster-refer', label: 'Cluster / TAC pattern', sub: 'Severe unilateral periorbital, autonomic features, restlessness, 15–180 min attacks. See acute + preventive protocol below.' },
+                  { value: 'hemicrania-refer', label: 'Hemicrania continua', sub: 'Continuous unilateral headache with autonomic features. Absolute indomethacin response is diagnostic — see titration protocol below.' },
                   { value: 'new-daily-workup', label: 'New daily persistent headache → Workup needed', sub: 'Sudden onset persistent headache. Requires imaging before preventive management.' },
                 ] as { value: HeadacheType; label: string; sub: string }[]).map(opt => (
                   <button
@@ -586,17 +607,61 @@ const ClinicHeadachePathway: React.FC = () => {
               )}
             </div>
 
-            {/* Terminal routing cards */}
+            {/* Non-migraine phenotype inline protocols */}
             {headacheType === 'cluster-refer' && (
               <div className="bg-amber-50 border border-amber-300 rounded-xl p-4">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-1">Cluster / TAC — Route to Neurology</p>
-                <p className="text-xs text-amber-800">Cluster headache requires a specific cluster pathway. Refer to a headache specialist or neurology clinic. This outpatient migraine pathway does not apply. See Burish 2024 Continuum for cluster management principles.</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-1">Cluster Headache — Acute &amp; Preventive Protocol</p>
+                <p className="text-xs text-amber-800 mb-3">Burish 2024 Continuum; AHS Grade A first-line triad. This outpatient pathway covers the full preventive plan. Acute management may be initiated in clinic or ED.</p>
+                <div className="space-y-2">
+                  <div className="bg-white p-3 rounded-lg border border-amber-200">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Acute (per-attack)</p>
+                    <div className="space-y-1.5">
+                      <div className="flex items-start gap-2">
+                        <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold flex-shrink-0 mt-0.5">Level A</span>
+                        <span className="text-xs text-slate-700">Oxygen 100% 12–15 L/min via NRB mask × 15 min — prescribe home O₂ for active cluster periods.</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold flex-shrink-0 mt-0.5">Level A</span>
+                        <span className="text-xs text-slate-700">Sumatriptan 6 mg SC or 20 mg nasal (triptan contraindications apply). Max 2 doses/24 h.</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold flex-shrink-0 mt-0.5">Level A</span>
+                        <span className="text-xs text-slate-700">Zolmitriptan nasal 5–10 mg — alternative to sumatriptan SC.</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-amber-200">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Bridging (while starting preventive)</p>
+                    <div className="text-xs text-slate-700">
+                      <div>• Ipsilateral GON block with corticosteroid — AHS Grade A for transitional relief.</div>
+                      <div className="mt-1">• Prednisone 100 mg/day × 5 days then taper −20 mg q3 days.</div>
+                    </div>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-amber-200">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Preventive (start immediately)</p>
+                    <div className="text-xs text-slate-700 space-y-1">
+                      <div><span className="font-semibold">Verapamil</span> 80 mg TID → titrate to 360 mg/day. Obtain baseline ECG; recheck after each dose increase (PR prolongation risk). Burish 2024.</div>
+                      <div><span className="font-semibold">Lithium</span> 300 mg BID–TID — second-line; requires serum level monitoring.</div>
+                      <div><span className="font-semibold">Topiramate</span> 100–200 mg/day — third-line; avoid in WOCBP.</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
             {headacheType === 'hemicrania-refer' && (
               <div className="bg-amber-50 border border-amber-300 rounded-xl p-4">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-1">Hemicrania Continua — Indomethacin Trial</p>
-                <p className="text-xs text-amber-800">Absolute response to indomethacin is diagnostic. Start indomethacin 25 mg TID → titrate to 75–150 mg/day with PPI. Refer to neurology if no response within 2–4 weeks. Goadsby 2024 Continuum.</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-1">Hemicrania Continua — Diagnostic Indomethacin Protocol</p>
+                <p className="text-xs text-amber-800 mb-3">Goadsby 2024 Continuum. Absolute response to indomethacin is diagnostic — no response rules out HC.</p>
+                <div className="bg-white p-3 rounded-lg border border-amber-200">
+                  <div className="font-semibold text-slate-900 text-sm mb-2">Indomethacin titration (always with PPI)</div>
+                  <div className="text-xs text-slate-700 space-y-1">
+                    <div>• Week 1: 25 mg TID (75 mg/day)</div>
+                    <div>• Week 2: 50 mg TID (150 mg/day) — if incomplete response</div>
+                    <div>• Week 3: 75 mg TID (225 mg/day) — if still incomplete</div>
+                    <div className="font-semibold text-amber-700 mt-1.5">Complete response within 1–2 weeks = diagnostic. Maintain at lowest effective dose. GI protection is mandatory.</div>
+                    <div className="mt-1.5 text-slate-500">No response after 2 weeks at 75 mg TID: reconsider diagnosis. Consider neuroimaging if not yet obtained.</div>
+                  </div>
+                </div>
               </div>
             )}
             {headacheType === 'new-daily-workup' && (
@@ -609,7 +674,7 @@ const ClinicHeadachePathway: React.FC = () => {
             {hasAura && (
               <div className="bg-neuro-50 border border-neuro-200 rounded-xl p-3">
                 <p className="text-xs text-neuro-800 font-semibold mb-1">Migraine with aura — clinical notes</p>
-                <p className="text-xs text-neuro-700">Avoid combined estrogen–progestin contraceptives (increased stroke risk). IV magnesium may have additional benefit acutely. Consider carbamazepine if sensory aura is severe. Ensure adequate acute treatment is optimized (gepants are safe, triptans permitted unless other CVD contraindication).</p>
+                <p className="text-xs text-neuro-700">Avoid combined estrogen–progestin contraceptives (increased stroke risk). IV magnesium may have additional benefit acutely. Consider carbamazepine if sensory aura is severe. Confirm acute treatment is optimized (gepants are safe; triptans permitted unless other CVD contraindication exists).</p>
               </div>
             )}
 
@@ -750,7 +815,7 @@ const ClinicHeadachePathway: React.FC = () => {
                 <ComorbidityToggle label="Depression" value={comorbidities.depression} field="depression" />
                 <ComorbidityToggle label="Insomnia" value={comorbidities.insomnia} field="insomnia" />
                 <ComorbidityToggle label="Pregnancy" value={comorbidities.pregnancy} field="pregnancy" />
-                <ComorbidityToggle label="WOCBP" value={comorbidities.women_of_childbearing_potential} field="women_of_childbearing_potential" />
+                <ComorbidityToggle label={<>WOCBP<InfoTooltip text="Women of Childbearing Potential. Topiramate and valproate cause serious birth defects — both are excluded when this is active." /></>} value={comorbidities.women_of_childbearing_potential} field="women_of_childbearing_potential" />
                 <ComorbidityToggle label="Epilepsy" value={comorbidities.epilepsy} field="epilepsy" />
                 <ComorbidityToggle label="Liver disease" value={comorbidities.hepatic} field="hepatic" />
                 <ComorbidityToggle label="CV disease" value={comorbidities.cvRisk} field="cvRisk" />
@@ -764,8 +829,8 @@ const ClinicHeadachePathway: React.FC = () => {
               <div className="space-y-2">
                 {([
                   { value: 'none', label: 'No prior preventive trials', sub: 'Start with conventional first-line agent.' },
-                  { value: 'one-failed', label: '1 adequate trial failed', sub: '≥2 months at therapeutic dose, inadequate response or intolerable side effects.' },
-                  { value: 'two-or-more-failed', label: '≥2 adequate trials failed', sub: 'CGRP pathway (mAb or gepant) indicated per AHS 2021 Consensus.' },
+                  { value: 'one-failed', label: '1 adequate trial failed', sub: 'Adequate trial = ≥2 months at therapeutic dose with inadequate response or intolerable side effects.' },
+                  { value: 'two-or-more-failed', label: '≥2 adequate trials failed', sub: 'CGRP pathway (mAb or gepant) indicated per AHS 2021 Consensus. Each trial must have been ≥2 months at therapeutic dose.' },
                 ] as { value: PriorTrialStatus; label: string; sub: string }[]).map(opt => (
                   <button
                     key={opt.value}
@@ -789,8 +854,8 @@ const ClinicHeadachePathway: React.FC = () => {
                 data-claim="clinic-headache-cgrp-escalation"
                 className="bg-neuro-50 border border-neuro-300 rounded-xl p-4 animate-in slide-in-from-bottom-2"
               >
-                <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-600 mb-2">CGRP Pathway — Indicated</p>
-                <p className="text-xs text-neuro-800 mb-3">≥2 conventional preventive trials failed. CGRP monoclonal antibody or gepant is recommended per AHS 2021 Consensus (Ailani et al., Headache 2021;61:1021–1039).</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-600 mb-2">CGRP<span className="normal-case"><InfoTooltip text="Calcitonin Gene-Related Peptide — the neuropeptide central to migraine pathophysiology. Anti-CGRP therapies block this pathway to prevent attacks." /></span> Pathway — Indicated</p>
+                <p className="text-xs text-neuro-800 mb-3">≥2 conventional preventive trials failed. CGRP monoclonal antibody<InfoTooltip text="Monoclonal Antibody (mAb) — a precision injectable biologic given monthly or quarterly. Targets either the CGRP ligand or its receptor to prevent attacks." /> or gepant is recommended per AHS 2021 Consensus (Ailani et al., Headache 2021;61:1021–1039).</p>
                 <div className="space-y-2">
                   {getCgrpAgents().map(agent => (
                     <div key={agent.name} className="bg-white rounded-lg p-3 border border-neuro-100">
@@ -810,7 +875,7 @@ const ClinicHeadachePathway: React.FC = () => {
                   title="CGRP mAbs vs. gepants — which to choose?"
                   visible={true}
                   content={
-                    <span>mAbs (erenumab, fremanezumab, galcanezumab, eptinezumab) are typically first choice after conventional failure — monthly or quarterly dosing, strong evidence. Gepants (atogepant, rimegepant) are oral daily/every-other-day options; favoured when injections are refused or when there is concern for MOH (gepants do not cause MOH). Consider insurance and patient preference. AHS 2021 Consensus.</span>
+                    <span>mAbs (erenumab, fremanezumab, galcanezumab, eptinezumab) are typically first choice after conventional failure — monthly or quarterly dosing, strong evidence base. Gepants (atogepant, rimegepant) are oral daily/every-other-day options; preferred when injections are declined or when MOH is a concern (gepants do not cause MOH). Consider insurance and patient preference. AHS 2021 Consensus.</span>
                   }
                 />
               </div>
@@ -893,7 +958,7 @@ const ClinicHeadachePathway: React.FC = () => {
                 data-claim="clinic-headache-moh-gepant-safe"
                 className="bg-amber-50 border border-amber-300 rounded-xl p-4"
               >
-                <p className="text-[10px] font-bold uppercase tracking-widest text-amber-600 mb-1">MOH Risk — {acuteDaysPerMonth} acute medication days/month</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-amber-600 mb-1">MOH<span className="normal-case"><InfoTooltip text="Medication Overuse Headache — using acute medications too frequently paradoxically worsens headache. Threshold: triptans or opioids ≥10 days/month; NSAIDs ≥15 days/month." /></span> Risk — {acuteDaysPerMonth} acute medication days/month</p>
                 <p className="text-xs text-amber-900 mb-2">Patient is using acute medications ≥10 days/month — MOH threshold reached for triptans and opioids (≥10 days), or ≥15 days for NSAIDs. Rizzoli 2024.</p>
                 <div className="bg-white border border-amber-200 rounded-lg p-3">
                   <p className="text-xs font-bold text-neuro-700 mb-1">Switch to gepant for acute use — gepants do NOT cause MOH</p>

@@ -199,12 +199,12 @@ const MigrainePathway: React.FC = () => {
     weightLow: false
   });
 
-  // Treatment Selection
+  // Treatment Selection — no pre-fills (clinician makes active choices)
   const [cocktail, setCocktail] = useState<CocktailState>({
-      benadryl: true,
-      antiemetic: 'prochlorperazine',
-      ketorolac: '30',
-      dexamethasone: '10'
+      benadryl: false,
+      antiemetic: null,
+      ketorolac: null,
+      dexamethasone: null,
   });
 
   const [hasAura, setHasAura] = useState(false);
@@ -356,7 +356,7 @@ const MigrainePathway: React.FC = () => {
     setRedFlags({ thunderclap: false, fever: false, focalDeficit: false, ams: false, papilledema: false, pregnancyNew: false, immunocompromised: false });
     setCareSetting(null);
     setSafety({ pregnant: false, renal: 'normal', cvRisk: false, htn: false, hepatic: false, basilar: false, triptan24h: false, dm: false, strokeHistory: false, age65: false, weightLow: false });
-    setCocktail({ benadryl: true, antiemetic: 'prochlorperazine', ketorolac: '30', dexamethasone: '10' });
+    setCocktail({ benadryl: false, antiemetic: null, ketorolac: null, dexamethasone: null });
     setFirstLineAddOns({ sumatriptan: false, magnesium: null, valproate: null, gonb: false, sonb: false });
     setHasAura(false);
     setResponseImproved(null);
@@ -369,6 +369,33 @@ const MigrainePathway: React.FC = () => {
   const generateSummary = () => {
       const lines: string[] = [];
       const contraindications: string[] = [];
+
+      // Non-migraine phenotype summaries
+      if (differential.clusterPhenotype) {
+          lines.push("CLUSTER HEADACHE PROTOCOL (Burish 2024, AHS Grade A):");
+          lines.push("- Oxygen 100% 12–15 L/min via NRB × 15 min (AHS Grade A)");
+          lines.push("- Sumatriptan 6 mg SC (AHS Grade A)");
+          lines.push("- Zolmitriptan nasal 5–10 mg (AHS Grade A)");
+          lines.push("  Bridge: GON block + corticosteroid (AHS Grade A) OR prednisone 100 mg/day × 5d taper");
+          lines.push("  Preventive: verapamil 360 mg/day TID + ECG monitoring");
+          return `Cluster Headache Protocol — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\n\n${lines.join('\n')}`;
+      }
+      if (differential.trigeminalNeuralgia) {
+          lines.push("TRIGEMINAL NEURALGIA PROTOCOL (Nahas 2024):");
+          lines.push("- First-line: carbamazepine 300–800 mg/day (Level A, FDA-approved)");
+          lines.push("- Alternative: oxcarbazepine 600–1200 mg/day (Level B)");
+          lines.push("- Acute exacerbation: IV fosphenytoin 15–20 mg PE/kg OR IV lidocaine 1.5–2 mg/kg over 10–20 min");
+          lines.push("- Avoid opioids.");
+          return `Trigeminal Neuralgia Protocol — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\n\n${lines.join('\n')}`;
+      }
+      if (differential.indomethacinResponsive) {
+          lines.push("INDOMETHACIN-RESPONSIVE HEADACHE (PH / HC) PROTOCOL (Goadsby 2024):");
+          lines.push("- Indomethacin 25 mg TID × 3d → 50 mg TID × 3d → 75 mg TID (max 225 mg/day)");
+          lines.push("- Always co-prescribe PPI for GI protection");
+          lines.push("- Complete response = diagnostic of PH or HC");
+          lines.push("  PH: episodic attacks 2–30 min, ≥5/day. HC: continuous unilateral headache.");
+          return `Indomethacin-Responsive Protocol — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\n\n${lines.join('\n')}`;
+      }
 
       // Collect Constraints
       ['ketorolac', 'dexamethasone', 'sumatriptan', 'valproate', 'magnesium'].forEach(drug => {
@@ -417,7 +444,7 @@ const MigrainePathway: React.FC = () => {
       if (differential.statusMigrainosus) {
           lines.push("\nSTATUS MIGRAINOSUS (≥72 h, Burch 2024 / ICHD-3):");
           lines.push("- Inpatient admission for repetitive DHE + metoclopramide IV q8h is reasonable");
-          lines.push("- Robblee 2025: DHE Level U — needs better quality ED-specific studies");
+          lines.push("- Robblee 2025: DHE Level U — ED-specific data limited");
       }
 
       let text = `Migraine cocktail — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}\n\n${lines.join('\n')}`;
@@ -464,8 +491,9 @@ const MigrainePathway: React.FC = () => {
     return 'No red flags — clear';
   };
   const getStep2Summary = () => {
-    if (differential.clusterPhenotype) return 'Cluster — route out';
-    if (differential.trigeminalNeuralgia) return 'TN — route out';
+    if (differential.clusterPhenotype) return 'Cluster — see protocol';
+    if (differential.trigeminalNeuralgia) return 'TN — see protocol';
+    if (differential.indomethacinResponsive) return 'Indomethacin-responsive — protocol';
     if (careSetting === 'adequate') return 'Adequate — discharge';
     if (careSetting === 'incomplete') return 'Incomplete response — cocktail';
     if (careSetting === 'vomiting') return 'Severe N/V — cocktail';
@@ -483,7 +511,8 @@ const MigrainePathway: React.FC = () => {
   // State A: pre-decision. State B: cocktail-assembly underway. State C: post-cocktail/plan ready.
   const hasAnyDrug = !!(cocktail.antiemetic || cocktail.ketorolac || cocktail.dexamethasone || cocktail.benadryl);
   const drawerState: 'A' | 'B' | 'C' =
-    step >= 4 ? 'C'
+    (differential.clusterPhenotype || differential.trigeminalNeuralgia || differential.indomethacinResponsive) && step >= 5 ? 'C'
+    : step >= 4 ? 'C'
     : (step === 3 && hasAnyDrug) ? 'B'
     : 'A';
 
@@ -697,58 +726,112 @@ const MigrainePathway: React.FC = () => {
                 </div>
               </div>
 
-              {/* B1: Cluster terminal card */}
+              {/* B1: Cluster inline protocol */}
               {differential.clusterPhenotype && (
                 <div className="bg-amber-50 border border-amber-300 rounded-xl p-4">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-1">Cluster Headache — Distinct Acute Protocol</p>
-                  <p className="text-xs text-amber-800 mb-3">Burish 2024 Table 6-3. AHS Grade A first-line triad. Migraine cocktail not indicated.</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-1">Cluster Headache — Acute &amp; Preventive Protocol</p>
+                  <p className="text-xs text-amber-800 mb-3">Burish 2024 Table 6-3. AHS Grade A first-line triad. Migraine cocktail not indicated for cluster.</p>
                   <div className="space-y-2">
                     <div className="bg-white p-3 rounded-lg border border-amber-200">
-                      <div className="font-semibold text-slate-900 text-sm">Oxygen 6–12 L/min via non-rebreather mask (NRB) × 15 min</div>
-                      <div className="text-xs text-slate-500 mt-1">AHS Grade A first-line. Per Burish 2024 p.401, 15 L/min may be more effective in some patients. Use the 6–12 L/min range as the starting standard.</div>
-                    </div>
-                    <div className="bg-white p-3 rounded-lg border border-amber-200">
-                      <div className="font-semibold text-slate-900 text-sm">Sumatriptan 6 mg SC</div>
-                      <div className="text-xs text-slate-500 mt-1">AHS Grade A. Same triptan-class contraindications as migraine (CV, HTN, stroke history; pregnancy warning).</div>
-                    </div>
-                    <div className="bg-white p-3 rounded-lg border border-amber-200">
-                      <div className="font-semibold text-slate-900 text-sm">Zolmitriptan nasal 5–10 mg</div>
-                      <div className="text-xs text-slate-500 mt-1">AHS Grade A. Same triptan-class contraindications.</div>
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <div className="font-semibold text-slate-900 text-sm">Oxygen 100% 12–15 L/min via NRB mask × 15 min</div>
+                        <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold flex-shrink-0">Level A</span>
+                      </div>
+                      <div className="text-xs text-slate-500 mt-1">AHS Grade A first-line. Higher flow rates (15 L/min) may be more effective — use NRB, not nasal cannula.</div>
                     </div>
                     <div className="bg-white p-3 rounded-lg border border-amber-200">
                       <div className="flex items-center gap-2 mb-0.5">
-                        <div className="font-semibold text-slate-900 text-sm">Bridge / preventive (outpatient)</div>
-                        <span className="text-[10px] font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">AHS Grade A</span>
+                        <div className="font-semibold text-slate-900 text-sm">Sumatriptan 6 mg SC</div>
+                        <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold flex-shrink-0">Level A</span>
                       </div>
-                      <div className="text-xs text-slate-500 mt-1">Bridge: prednisone 100 mg/day × 5 days then taper −20 mg q3d; OR ipsilateral GON block with corticosteroid (AHS Grade A bridging). Preventive: verapamil 360 mg/day TID with ECG monitoring.</div>
+                      <div className="text-xs text-slate-500 mt-1">AHS Grade A. Same triptan-class contraindications apply (CV risk, uncontrolled HTN, stroke history, basilar migraine).</div>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg border border-amber-200">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <div className="font-semibold text-slate-900 text-sm">Zolmitriptan nasal 5–10 mg</div>
+                        <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold flex-shrink-0">Level A</span>
+                      </div>
+                      <div className="text-xs text-slate-500 mt-1">AHS Grade A. Alternative to sumatriptan SC when SC route unavailable.</div>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg border border-amber-200">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <div className="font-semibold text-slate-900 text-sm">Bridging therapy</div>
+                        <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold flex-shrink-0">AHS Grade A</span>
+                      </div>
+                      <div className="text-xs text-slate-500 mt-1">Ipsilateral GON block with corticosteroid (AHS Grade A). OR prednisone 100 mg/day × 5 days then taper −20 mg q3 days. Start simultaneously with preventive.</div>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg border border-amber-200">
+                      <div className="font-semibold text-slate-900 text-sm mb-0.5">Preventive: verapamil 360 mg/day (TID dosing)</div>
+                      <div className="text-xs text-slate-500">Obtain baseline ECG and recheck after each dose titration (PR prolongation risk). Start at 80 mg TID, titrate to 360 mg/day. Burish 2024 p.402.</div>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* B4: TN terminal card */}
+              {/* B4: TN inline protocol */}
               {differential.trigeminalNeuralgia && (
                 <div className="bg-amber-50 border border-amber-300 rounded-xl p-4">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-1">Trigeminal Neuralgia — Route Out</p>
-                  <p className="text-xs text-amber-800 mb-3">Nahas 2024 Table 10-2. Migraine cocktail not indicated.</p>
-                  <div className="bg-white p-3 rounded-lg border border-amber-200 space-y-2">
-                    <div className="text-sm text-slate-900"><span className="font-bold">First-line:</span> carbamazepine 300–800 mg/day (only FDA-approved).</div>
-                    <div className="text-sm text-slate-900"><span className="font-bold">Alternative:</span> oxcarbazepine 600–1200 mg/day.</div>
-                    <div className="text-sm text-slate-900"><span className="font-bold">Acute exacerbations:</span> IV fosphenytoin or IV lidocaine.</div>
-                    <div className="text-sm text-red-700 font-bold">Avoid opioids.</div>
-                    <div className="text-xs text-slate-500 mt-1">Refer to outpatient neurology.</div>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-1">Trigeminal Neuralgia — Acute &amp; Long-term Protocol</p>
+                  <p className="text-xs text-amber-800 mb-3">Nahas 2024 Table 10-2. Migraine cocktail not indicated for TN.</p>
+                  <div className="space-y-2">
+                    <div className="bg-white p-3 rounded-lg border border-amber-200">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <div className="font-semibold text-slate-900 text-sm">Carbamazepine 300–800 mg/day</div>
+                        <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold flex-shrink-0">Level A</span>
+                      </div>
+                      <div className="text-xs text-slate-500 mt-1">Only FDA-approved agent for TN. Start low (100 mg BID), titrate q3 days. Monitor CBC and LFTs. Nahas 2024.</div>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg border border-amber-200">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <div className="font-semibold text-slate-900 text-sm">Oxcarbazepine 600–1200 mg/day</div>
+                        <span className="text-[10px] bg-neuro-100 text-neuro-700 px-1.5 py-0.5 rounded font-bold flex-shrink-0">Level B</span>
+                      </div>
+                      <div className="text-xs text-slate-500 mt-1">Better tolerated than carbamazepine. Risk of hyponatremia — monitor electrolytes. Nahas 2024.</div>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg border border-amber-200">
+                      <div className="font-semibold text-slate-900 text-sm mb-0.5">Acute exacerbation rescue</div>
+                      <div className="text-xs text-slate-500">IV fosphenytoin 15–20 mg PE/kg OR IV lidocaine 1.5–2 mg/kg over 10–20 min (for pain crises when oral intake is not possible). Nahas 2024 p.298.</div>
+                    </div>
+                    <div className="bg-red-50 p-3 rounded-lg border border-red-200">
+                      <div className="text-xs font-bold text-red-700">Avoid opioids — not effective and accelerate central sensitization in TN.</div>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg border border-amber-200">
+                      <div className="font-semibold text-slate-900 text-sm mb-0.5">Refractory TN</div>
+                      <div className="text-xs text-slate-500">If 2 adequate medication trials fail: microvascular decompression (MVD), stereotactic radiosurgery, or percutaneous rhizotomy — surgical decision individualized by patient anatomy and comorbidities. Nahas 2024.</div>
+                    </div>
                   </div>
                 </div>
               )}
 
-              {/* B3: Indomethacin advisory */}
+              {/* B3: Indomethacin-responsive inline protocol */}
               {differential.indomethacinResponsive && (
                 <div className="bg-amber-50 border border-amber-300 rounded-xl p-4">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-1">Indomethacin-Responsive — Advisory</p>
-                  <p className="text-xs text-amber-800 mb-2">Consider paroxysmal hemicrania or hemicrania continua per Goadsby 2024. Migraine cocktail may still be appropriate acutely; flag for neurology follow-up.</p>
-                  <div className="bg-white p-3 rounded-lg border border-amber-200 text-sm text-slate-900">
-                    <div className="font-semibold mb-1">Outpatient indomethacin trial (with PPI)</div>
-                    <div className="text-xs text-slate-600">25 mg TID → 50 mg TID → 75 mg TID. Adult dose 150–225 mg/day total with PPI.</div>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-1">Indomethacin-Responsive — Diagnostic &amp; Treatment Protocol</p>
+                  <p className="text-xs text-amber-800 mb-3">Goadsby 2024 Continuum. An absolute response to indomethacin confirms the diagnosis. Migraine cocktail may be given acutely while indomethacin is initiated.</p>
+                  <div className="space-y-2">
+                    <div className="bg-white p-3 rounded-lg border border-amber-200">
+                      <div className="font-semibold text-slate-900 text-sm mb-1">Differentiate the phenotype</div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="bg-amber-50 rounded p-2">
+                          <div className="text-xs font-bold text-slate-700">Paroxysmal Hemicrania (PH)</div>
+                          <div className="text-xs text-slate-500 mt-0.5">Short episodic attacks (2–30 min), side-locked, ≥5/day. Autonomic features. Absolute indo response.</div>
+                        </div>
+                        <div className="bg-amber-50 rounded p-2">
+                          <div className="text-xs font-bold text-slate-700">Hemicrania Continua (HC)</div>
+                          <div className="text-xs text-slate-500 mt-0.5">Continuous unilateral headache, fluctuating severity, autonomic features. Absolute indo response.</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg border border-amber-200">
+                      <div className="font-semibold text-slate-900 text-sm mb-1">Indomethacin titration (with PPI)</div>
+                      <div className="text-xs text-slate-600 space-y-0.5">
+                        <div>• Start: 25 mg TID × 3 days</div>
+                        <div>• If partial response: 50 mg TID × 3 days</div>
+                        <div>• If still partial: 75 mg TID (max 225 mg/day)</div>
+                        <div className="font-semibold text-amber-700 mt-1">Always co-prescribe a PPI — GI protection required.</div>
+                        <div className="text-slate-500 mt-1">Complete response = diagnostic. Maintain at lowest effective dose. Goadsby 2024.</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -757,7 +840,7 @@ const MigrainePathway: React.FC = () => {
               {differential.statusMigrainosus && (
                 <div className="bg-amber-50 border border-amber-300 rounded-xl p-4">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-1">Status Migrainosus — Admit Advisory</p>
-                  <p className="text-xs text-amber-800">Burch 2024 p.358–360 (ICHD-3): debilitating migraine ≥72 h. Inpatient admission for repetitive DHE + metoclopramide IV q8h is reasonable. Robblee 2025: DHE Level U — needs better quality ED-specific studies. The cocktail below remains valid first-line.</p>
+                  <p className="text-xs text-amber-800">Burch 2024 p.358–360 (ICHD-3): debilitating migraine ≥72 h. Inpatient admission for repetitive DHE + metoclopramide IV q8h is reasonable. Robblee 2025: DHE Level U — ED-specific data limited. Start the migraine cocktail — it remains appropriate.</p>
                 </div>
               )}
 
@@ -798,7 +881,9 @@ const MigrainePathway: React.FC = () => {
               <div className="flex justify-between items-center pt-2">
                 <button onClick={() => setStep(1)} className="text-slate-400 hover:text-slate-600 font-semibold px-2 min-h-[44px]">Back</button>
                 {(differential.clusterPhenotype || differential.trigeminalNeuralgia) ? (
-                  <div className="text-amber-700 font-semibold text-sm">Terminal route-out — see protocol above.</div>
+                  <button onClick={() => setStep(5)} className="px-6 py-3 bg-amber-600 text-white font-bold rounded-xl shadow-lg hover:bg-amber-700 transition-all flex items-center min-h-[44px]">
+                    Continue to Plan <Chevron direction="right" className="ml-2" />
+                  </button>
                 ) : careSetting === 'adequate' ? (
                   <div className="text-emerald-600 font-semibold text-sm">Discharge / Outpatient Management.</div>
                 ) : (
@@ -887,27 +972,41 @@ const MigrainePathway: React.FC = () => {
               {safety.pregnant && (
                 <div className="bg-pink-50 border border-pink-200 rounded-xl p-4 text-xs text-pink-900">
                   <div className="font-bold mb-1">Pregnancy — Burch 2024 Table 3-5</div>
-                  <p>First-line: acetaminophen 1000 mg PO, diphenhydramine 25–50 mg PO/IV, metoclopramide 10 mg IV (Level B + safe in pregnancy). First line for rescue: sumatriptan (warning, not exclusion). Second-line: ondansetron, prednisone rescue, prochlorperazine. Always avoid: ergots/DHE, valproate (teratogenic), gepants, lasmiditan.</p>
+                  <p>First-line: acetaminophen 1000 mg PO, diphenhydramine 25–50 mg PO/IV, metoclopramide 10 mg IV (Level B; safe in pregnancy). Rescue option: sumatriptan (use with caution; discuss with obstetrics). Second-line: ondansetron, prednisone rescue, prochlorperazine. Always avoid: ergots/DHE, valproate (teratogenic), gepants, lasmiditan.</p>
                 </div>
               )}
+
+              {/* Opioid Must-NOT-Offer warning — shown before any drug choices */}
+              <div data-claim="migraine-opioid-must-not-offer" className="bg-red-50 border border-red-300 rounded-xl p-4 flex gap-3">
+                <ShieldAlert size={18} className="text-red-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="text-xs font-black uppercase tracking-widest text-red-700 mb-1">Opioids / Tramadol — Level A Must NOT Offer</div>
+                  <p className="text-xs text-red-800">Hydromorphone, morphine, oxycodone, and tramadol are not indicated for acute migraine. They worsen headache chronification, increase MOH risk, and work less well than the migraine cocktail. AHS 2025 (Robblee et al.): Level A Must NOT Offer.</p>
+                </div>
+              </div>
 
               {/* First-Line Cocktail */}
               <div ref={cocktailRef} className="bg-white border border-slate-100 rounded-xl p-4">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">First-Line Cocktail</p>
 
-                {/* A: Diphenhydramine toggle */}
+                {/* A: Diphenhydramine toggle — pre-medication for antiemetic EPS prevention */}
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Pre-medication</p>
                 <button
                   onClick={() => setCocktail({...cocktail, benadryl: !cocktail.benadryl})}
-                  className="w-full flex items-center justify-between p-3 rounded-xl border border-slate-200 transition-all active:scale-[0.99] touch-manipulation text-left mb-2 min-h-[44px]"
+                  className="w-full flex items-center justify-between p-3 rounded-xl border border-slate-200 transition-all active:scale-[0.99] touch-manipulation text-left mb-3 min-h-[44px]"
                 >
                   <div>
-                    <div className="font-semibold text-slate-900 text-sm">Diphenhydramine 25/50 mg PO/IV ×1</div>
-                    <div className="text-[11px] text-neuro-600 font-medium mt-0.5">Prevents akathisia from antiemetics.</div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-slate-900 text-sm">Diphenhydramine 25/50 mg PO/IV ×1</span>
+                      <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold flex-shrink-0">Level A</span>
+                    </div>
+                    <div className="text-[11px] text-slate-500 font-medium mt-0.5">Prevents akathisia (extrapyramidal side effects — restlessness) from dopamine-antagonist antiemetics.</div>
                   </div>
                   <div className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 ${cocktail.benadryl ? 'bg-neuro-600 border-neuro-600' : 'bg-white border-slate-300'}`}>
                     {cocktail.benadryl && <Check size={13} className="text-white" />}
                   </div>
                 </button>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Antiemetic &amp; Analgesic</p>
 
                 {/* B: Antiemetic — PathwayCategoryRow */}
                 <div ref={antiemeticRef}>
@@ -958,7 +1057,7 @@ const MigrainePathway: React.FC = () => {
                       label="Dexamethasone"
                       options={[
                         { value: '8', label: '8 mg IV ×1', description: 'Robblee 2025: Level C (May Offer) for acute pain; Level B (Should Offer) for preventing 24–72 h headache recurrence. Single dose.' },
-                        { value: '10', label: '10 mg IV ×1', description: 'Robblee 2025: Level B for recurrence prevention — this is the primary indication. Level C for acute pain reduction only. Burch 2024 reference dose.' },
+                        { value: '10', label: '10 mg IV ×1', description: 'Robblee 2025: Level B for recurrence prevention — the primary reason to use dexamethasone in migraine. Level C for acute pain only. Burch 2024 reference dose.' },
                         { value: '16', label: '16 mg IV ×1', description: 'Higher end of Robblee Table 2 range. Level C for acute pain; Level B for recurrence prevention. Single dose.' },
                       ] as CategoryOption[]}
                       value={cocktail.dexamethasone}
@@ -969,9 +1068,9 @@ const MigrainePathway: React.FC = () => {
                 </div>
               </div>
 
-              {/* First-Line Add-Ons */}
+              {/* Add-Ons */}
               <div ref={addonsRef} className="bg-white border border-slate-100 rounded-xl p-4">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">First-Line Add-Ons</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Adjunct Agents</p>
                 <div className="space-y-1">
 
                   {/* Sumatriptan — 3-way render: disabled / warning / selectable */}
@@ -987,8 +1086,11 @@ const MigrainePathway: React.FC = () => {
                         className="w-full flex items-center justify-between py-3 transition-all touch-manipulation text-left min-h-[44px]"
                       >
                         <div>
-                          <span className="text-sm font-medium text-slate-900">Sumatriptan 6 mg SC</span>
-                          <div className="text-xs text-slate-500 mt-0.5">Fastest onset triptan. Avoid in CAD/Stroke/HTN/Basilar migraine.</div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium text-slate-900">Sumatriptan 6 mg SC</span>
+                            <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold flex-shrink-0">Level A</span>
+                          </div>
+                          <div className="text-xs text-slate-500 mt-0.5">Fastest-onset triptan. Rescue option when cocktail alone is insufficient. Avoid in CAD/Stroke/HTN/Basilar migraine.</div>
                           {checkEligibility('sumatriptan').warning && (
                             <div className="text-xs text-amber-700 font-bold mt-0.5">{checkEligibility('sumatriptan').warning}</div>
                           )}
@@ -1000,16 +1102,23 @@ const MigrainePathway: React.FC = () => {
                     )}
                   </div>
 
-                  {/* GONB — PathwayCategoryRow style for yes/no */}
+                  {/* ── Nerve Blocks ──────────────────────────────────── */}
+                  <div className="pt-3 pb-1">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Nerve Blocks</p>
+                  </div>
+
+                  {/* GONB */}
                   <div className="border-b border-slate-100">
                     <button
                       onClick={() => setFirstLineAddOns({...firstLineAddOns, gonb: !firstLineAddOns.gonb})}
                       className="w-full flex items-center justify-between py-3 transition-all touch-manipulation text-left min-h-[44px]"
                     >
                       <div>
-                        <span className="text-sm font-medium text-slate-900">Greater Occipital Nerve Block (GONB)</span>
-                        <div className="text-xs text-slate-500 mt-0.5">0.5–3 mL of 0.5% bupivacaine OR 1% lidocaine, ipsilateral to pain side.</div>
-                        <div className="text-[11px] text-neuro-700 font-bold mt-0.5">Robblee 2025 Level A — Must Offer.</div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-slate-900">Greater Occipital Nerve Block (GONB)</span>
+                          <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold flex-shrink-0">Level A</span>
+                        </div>
+                        <div className="text-xs text-slate-500 mt-0.5">0.5–3 mL of 0.5% bupivacaine OR 1% lidocaine, ipsilateral to pain side. Robblee 2025 — Must Offer.</div>
                         {safety.pregnant && firstLineAddOns.gonb && (
                           <div className="text-xs text-amber-700 font-bold mt-0.5">Pregnancy — lidocaine preferred over bupivacaine (Burch 2024 Table 3-5).</div>
                         )}
@@ -1020,7 +1129,7 @@ const MigrainePathway: React.FC = () => {
                     </button>
                   </div>
 
-                  {/* SONB — Level B, after GONB */}
+                  {/* SONB */}
                   <div className="border-b border-slate-100">
                     <button
                       data-claim="migraine-sonb-level-b"
@@ -1028,14 +1137,21 @@ const MigrainePathway: React.FC = () => {
                       className="w-full flex items-center justify-between py-3 transition-all touch-manipulation text-left min-h-[44px]"
                     >
                       <div>
-                        <span className="text-sm font-medium text-slate-900">Supraorbital Nerve Block (SONB)</span>
-                        <div className="text-xs text-slate-500 mt-0.5">1–2 mL of 0.5% bupivacaine OR 1% lidocaine at the supraorbital notch bilaterally.</div>
-                        <div className="text-[11px] text-neuro-700 font-bold mt-0.5">Robblee 2025 Level B — Should Offer.</div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-slate-900">Supraorbital Nerve Block (SONB)</span>
+                          <span className="text-[10px] bg-neuro-100 text-neuro-700 px-1.5 py-0.5 rounded font-bold flex-shrink-0">Level B</span>
+                        </div>
+                        <div className="text-xs text-slate-500 mt-0.5">1–2 mL of 0.5% bupivacaine OR 1% lidocaine at supraorbital notch bilaterally. Robblee 2025 — Should Offer.</div>
                       </div>
                       <div className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 ${firstLineAddOns.sonb ? 'bg-neuro-600 border-neuro-600' : 'bg-white border-slate-300'}`}>
                         {firstLineAddOns.sonb && <Check size={13} className="text-white" />}
                       </div>
                     </button>
+                  </div>
+
+                  {/* ── Additional adjuncts ───────────────────────────── */}
+                  <div className="pt-3 pb-1">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-0">Additional adjuncts</p>
                   </div>
 
                   {/* Magnesium — PathwayCategoryRow for dose (includes "Skip" deselect) */}
@@ -1105,21 +1221,12 @@ const MigrainePathway: React.FC = () => {
                 </div>
               </div>
 
-              {/* Opioid Must-NOT-Offer warning */}
-              <div data-claim="migraine-opioid-must-not-offer" className="bg-red-50 border border-red-300 rounded-xl p-4 flex gap-3">
-                <ShieldAlert size={18} className="text-red-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <div className="text-xs font-black uppercase tracking-widest text-red-700 mb-1">Opioids / Tramadol — Level A Must NOT Offer</div>
-                  <p className="text-xs text-red-800">Hydromorphone, morphine, oxycodone, and tramadol are not indicated for acute migraine. Opioids worsen headache chronification, increase medication-overuse headache (MOH) risk, and show inferior efficacy vs. dopamine antagonists. AHS 2025 (Robblee et al.): Level A Must NOT Offer.</p>
-                </div>
-              </div>
-
               {/* Learning pearl — shown after antiemetic is selected */}
               <PathwayLearningPearl
                 title="Why prochlorperazine first?"
                 visible={cocktail.antiemetic !== null}
                 content={
-                  <span>Prochlorperazine blocks D2 receptors in the chemoreceptor trigger zone and has direct antimigraine properties beyond antiemesis. Robblee 2025 assigns it Level A (Must Offer) — higher evidence grade than metoclopramide (Level B) or ondansetron (Level U). Premedicate with diphenhydramine 25–50 mg to reduce akathisia risk (EPS). Metoclopramide is appropriate if prochlorperazine is unavailable or contraindicated.</span>
+                  <span>Prochlorperazine blocks D2 receptors in the chemoreceptor trigger zone and has direct antimigraine properties beyond antiemesis. Robblee 2025 assigns it Level A (Must Offer) — higher evidence grade than metoclopramide (Level B) or ondansetron (Level U for analgesia). Premedicate with diphenhydramine 25–50 mg to prevent akathisia — an uncomfortable restlessness from dopamine-antagonist side effects. Metoclopramide is appropriate if prochlorperazine is unavailable or contraindicated.</span>
                 }
               />
 
@@ -1252,7 +1359,7 @@ const MigrainePathway: React.FC = () => {
                       >
                         <div>
                           <span className="font-medium text-sm text-slate-900">DHE IV — Admit Trigger</span>
-                          <div className="text-xs text-slate-500 mt-0.5">Inpatient status-migrainosus protocol (Burch 2024 p.360): DHE 0.5–1 mg IV + metoclopramide IV q8h. Robblee 2025: Level U — needs better quality ED-specific studies.</div>
+                          <div className="text-xs text-slate-500 mt-0.5">Inpatient status-migrainosus protocol (Burch 2024 p.360): DHE 0.5–1 mg IV + metoclopramide IV q8h. Robblee 2025: Level U — ED-specific data limited.</div>
                         </div>
                         <div className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 ${secondLine.dheAdmit ? 'bg-amber-500 border-amber-500' : 'bg-white border-amber-300'}`}>
                           {secondLine.dheAdmit && <Check size={13} className="text-white" />}
@@ -1284,7 +1391,7 @@ const MigrainePathway: React.FC = () => {
           title="PLAN"
           iconKey="decision"
           nodeState={step === 5 ? 'active' : step > 5 ? 'completed' : 'locked'}
-          segmentAboveTraversed={isStep4Complete && step > 4}
+          segmentAboveTraversed={(isStep4Complete && step > 4) || ((differential.clusterPhenotype || differential.trigeminalNeuralgia || differential.indomethacinResponsive) && step >= 5)}
           lockedAriaLabel="Step 5 Plan, awaiting Step 4"
         >
           {step === 5 && (
