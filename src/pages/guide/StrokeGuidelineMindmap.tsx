@@ -1,6 +1,8 @@
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useRecents } from '../../hooks/useRecents';
 import { Link } from 'react-router-dom';
+import { CorBadge } from '../../components/ui/CorBadge';
+import { LoeBadge } from '../../components/ui/LoeBadge';
 import {
   ArrowLeft,
   ChevronRight,
@@ -298,6 +300,26 @@ function SVGNode({
 
 // ─── Detail Panel ─────────────────────────────────────────────────────────────
 
+function mindmapCorToCorValue(cor: string): 'I' | '2a' | '2b' | '3' | '3-harm' | null {
+  if (cor === '1') return 'I';
+  if (cor === '2a') return '2a';
+  if (cor === '2b') return '2b';
+  if (cor === '3: Harm') return '3-harm';
+  if (cor.startsWith('3')) return '3';
+  return null;
+}
+
+function mindmapLoeToLoeValue(loe: string): 'A' | 'B-R' | 'B-NR' | 'C-LD' | 'C-EO' | 'B' | 'C' | null {
+  if (loe === 'A') return 'A';
+  if (loe === 'B-R') return 'B-R';
+  if (loe === 'B-NR') return 'B-NR';
+  if (loe === 'C-LD') return 'C-LD';
+  if (loe === 'C-EO') return 'C-EO';
+  if (loe === 'B') return 'B';
+  if (loe === 'C') return 'C';
+  return null;
+}
+
 function CORBadge({ cor }: { cor: string }) {
   if (cor === '★') {
     return (
@@ -306,21 +328,28 @@ function CORBadge({ cor }: { cor: string }) {
       </span>
     );
   }
-  return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold whitespace-nowrap ${corClass(cor)}`}>
-      {corLabel(cor)}
-    </span>
-  );
+  const mapped = mindmapCorToCorValue(cor);
+  if (!mapped) {
+    return (
+      <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold whitespace-nowrap ${corClass(cor)}`}>
+        {corLabel(cor)}
+      </span>
+    );
+  }
+  return <CorBadge cor={mapped} />;
 }
 
 function LOEBadge({ loe }: { loe: string }) {
-  // Key 2026 Updates use numbers as message indices — don't show as "LOE N"
   if (/^\d+$/.test(loe)) return null;
-  return (
-    <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200 whitespace-nowrap">
-      LOE {loe}
-    </span>
-  );
+  const mapped = mindmapLoeToLoeValue(loe);
+  if (!mapped) {
+    return (
+      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200 whitespace-nowrap">
+        LOE {loe}
+      </span>
+    );
+  }
+  return <LoeBadge loe={mapped} />;
 }
 
 function DetailPanel({

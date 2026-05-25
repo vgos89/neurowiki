@@ -27,6 +27,7 @@
 import React from 'react';
 import { CLAIM_REGISTRY } from '../../lib/citations/claims';
 import { CITATION_REGISTRY } from '../../lib/citations/registry';
+import { CorBadge } from '../ui/CorBadge';
 
 interface GuidelineSummaryCardProps {
   /** Claim ID from CLAIM_REGISTRY. Resolves to one or more citations. */
@@ -95,7 +96,7 @@ export const GuidelineSummaryCard: React.FC<GuidelineSummaryCardProps> = ({ clai
                 >
                   {c.section ?? c.title.split(' — ')[0]}
                 </span>
-                {cor && <CorBadge cor={cor} />}
+                {cor && <LocalCorBadge cor={cor} />}
                 {loe && (
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
                     LOE {loe}
@@ -141,32 +142,24 @@ export const GuidelineSummaryCard: React.FC<GuidelineSummaryCardProps> = ({ clai
   );
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// COR badge — colored pill matching AHA/ASA convention.
-// ─────────────────────────────────────────────────────────────────────────────
-
-interface CorBadgeProps {
-  cor: string;
+function rawCorToCorValue(cor: string): 'I' | '2a' | '2b' | '3' | '3-harm' | null {
+  const normalized = cor.toLowerCase().replace(/\s+/g, '');
+  if (normalized === '1') return 'I';
+  if (normalized === '2a') return '2a';
+  if (normalized === '2b') return '2b';
+  if (normalized.startsWith('3:harm') || normalized.startsWith('3-harm')) return '3-harm';
+  if (normalized.startsWith('3')) return '3';
+  return null;
 }
 
-const CorBadge: React.FC<CorBadgeProps> = ({ cor }) => {
-  // Color map matches AHA/ASA recommendation-table convention used elsewhere
-  // in NeuroWiki (e.g., EVT recommendation tables on TrialPageNew).
-  let className =
-    'inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest ';
-
-  const normalized = cor.toLowerCase().replace(/\s+/g, '');
-  if (normalized === '1') {
-    className += 'bg-emerald-50 text-emerald-700 border border-emerald-200';
-  } else if (normalized === '2a') {
-    className += 'bg-amber-50 text-amber-700 border border-amber-200';
-  } else if (normalized === '2b') {
-    className += 'bg-orange-50 text-orange-700 border border-orange-200';
-  } else if (normalized.startsWith('3')) {
-    className += 'bg-red-50 text-red-700 border border-red-200';
-  } else {
-    className += 'bg-slate-50 text-slate-600 border border-slate-200';
+const LocalCorBadge: React.FC<{ cor: string }> = ({ cor }) => {
+  const mapped = rawCorToCorValue(cor);
+  if (!mapped) {
+    return (
+      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-slate-50 text-slate-600 border border-slate-200">
+        COR {cor}
+      </span>
+    );
   }
-
-  return <span className={className}>COR {cor}</span>;
+  return <CorBadge cor={mapped} />;
 };
