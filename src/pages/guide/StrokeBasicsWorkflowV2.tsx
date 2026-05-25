@@ -369,9 +369,14 @@ const MainContent: React.FC = () => {
               content panel below. Step navigation now uses rail-node click. */}
         </div>
 
-        {/* Clinical Context Bar — outside sticky, scrolls away */}
+        {/* Clinical Context Bar — H-11 fix (UX audit 2026-05-24):
+            sticky so the window-state badge and patient summary stay
+            in view as the user scrolls through Step 2 / Step 3.
+            Window state is the single most important fact governing
+            every downstream decision; off-screen was a real cognitive
+            load problem. */}
         {step1DataLive && (
-          <div className="mx-3 sm:mx-6 mb-3 px-4 py-2.5 rounded-xl bg-white border border-slate-100 flex flex-wrap items-center gap-x-4 gap-y-1.5" role="status" aria-label="Clinical context summary">
+          <div className="sticky top-0 z-30 mx-3 sm:mx-6 mb-3 px-4 py-2.5 rounded-xl bg-white border border-slate-100 shadow-sm flex flex-wrap items-center gap-x-4 gap-y-1.5" role="status" aria-label="Clinical context summary">
             <div className="flex items-center gap-1.5" aria-label={`NIHSS: ${step1DataLive.nihssScore}`}>
               <span className="text-xs font-bold uppercase tracking-wide text-slate-400" aria-hidden="true">NIHSS</span>
               <span className="text-base font-mono font-bold text-slate-900" aria-hidden="true">{step1DataLive.nihssScore}</span>
@@ -642,20 +647,13 @@ const MainContent: React.FC = () => {
                 </Suspense>
               ) : (
                 <div className="space-y-6">
-                  <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <h3 className="text-base font-bold text-slate-900 mb-1">Labs &amp; Treatment Orders</h3>
-                    <p className="text-xs text-slate-500 mb-4">Point-of-care glucose is the only mandatory lab before tPA. Select remaining orders for post-code handoff. (AHA/ASA 2026)</p>
-                    <Suspense fallback={<div className="p-4 text-slate-500 animate-pulse">Loading orders…</div>}>
-                      <CodeModeStep4
-                        step2Data={step2Data || { ctResult: 'no-bleed', treatmentGiven: 'none' }}
-                        onComplete={(orders) => setStep4Orders(orders)}
-                        onCopySuccess={() => {
-                          setToastMessage('Orders copied to clipboard');
-                          setTimeout(() => setToastMessage(null), 2500);
-                        }}
-                      />
-                    </Suspense>
-                  </section>
+                  {/* H-6 fix (UX audit 2026-05-24): Summary BEFORE Orders.
+                      Previously the orders checklist scrolled first and
+                      forced the resident past 20+ rows before reaching
+                      the Copy-to-EMR action. Summary first means the
+                      primary deliverable (full EMR note + copy button)
+                      is the first thing on the page. Orders sit below
+                      as the secondary deliverable. */}
                   <Suspense fallback={<div className="p-6 text-slate-500 animate-pulse">Loading summary…</div>}>
                     <CodeModeStep3
                       step1Data={step1DataLive || DEFAULT_STEP1_DATA}
@@ -671,6 +669,21 @@ const MainContent: React.FC = () => {
                       }}
                     />
                   </Suspense>
+                  <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <h3 className="text-base font-bold text-slate-900 mb-1">Labs &amp; Treatment Orders</h3>
+                    <p className="text-xs text-slate-500 mb-4">Point-of-care glucose is the only mandatory lab before tPA. Select remaining orders for post-code handoff. (AHA/ASA 2026)</p>
+                    <Suspense fallback={<div className="p-4 text-slate-500 animate-pulse">Loading orders…</div>}>
+                      <CodeModeStep4
+                        step2Data={step2Data || { ctResult: 'no-bleed', treatmentGiven: 'none' }}
+                        onComplete={(orders) => setStep4Orders(orders)}
+                        onCopySuccess={() => {
+                          setToastMessage('Orders copied to clipboard');
+                          setTimeout(() => setToastMessage(null), 2500);
+                        }}
+                        embedded
+                      />
+                    </Suspense>
+                  </section>
 
                   {/* BL-2 fix (UX audit 2026-05-24) — terminal "Code
                       Documented" state. Appears once Step 4 orders are

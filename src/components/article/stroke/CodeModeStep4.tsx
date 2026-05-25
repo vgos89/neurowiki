@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Droplets, Pill, FlaskConical, HeartPulse, ChevronDown, ChevronUp, Copy, Check } from 'lucide-react';
 import { ShareButton } from '../../calculators/ShareButton';
 // Treatment Orders - AHA-based categories with evidence/rationale (v2)
@@ -16,6 +16,13 @@ interface CodeModeStep4Props {
   onComplete: (selectedOrders: string[]) => void;
   /** Called after orders note is successfully copied to clipboard (for toast) */
   onCopySuccess?: () => void;
+  /** When true (used inside Stroke Code rail Step 3), the footer Copy
+   *  to EMR / Send buttons are hidden because CodeModeStep3 already
+   *  surfaces a unified copy of the full summary including orders.
+   *  Save Orders is also hidden; onComplete fires automatically on
+   *  every selection change. Closes UX-audit H-10 (duplicate Copy to
+   *  EMR) and L-2 (button hierarchy unclear). */
+  embedded?: boolean;
 }
 
 interface Order {
@@ -382,7 +389,7 @@ const getEvidenceBadgeStyle = (evidenceClass?: string) => {
   }
 };
 
-export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onComplete, onCopySuccess }) => {
+export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onComplete, onCopySuccess, embedded = false }) => {
   const treatmentGiven = step2Data.treatmentGiven === 'tnk' || step2Data.treatmentGiven === 'tpa';
 
   const displayOrders = ORDERS.filter(order => {
@@ -396,6 +403,18 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
   const [expandedRationale, setExpandedRationale] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
+  // Embedded mode: surface the default-selected orders to the parent
+  // on mount so step4Orders reflects current state without the
+  // resident having to tap Save Orders explicitly.
+  const didInitEmbedded = useRef(false);
+  useEffect(() => {
+    if (embedded && !didInitEmbedded.current) {
+      didInitEmbedded.current = true;
+      const labels = displayOrders.filter(o => selectedOrders.includes(o.id)).map(o => o.label);
+      onComplete(labels);
+    }
+  }, [embedded, displayOrders, selectedOrders, onComplete]);
+
   const groupedOrders = displayOrders.reduce((acc, order) => {
     if (!acc[order.category]) acc[order.category] = [];
     acc[order.category].push(order);
@@ -403,9 +422,17 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
   }, {} as Record<string, Order[]>);
 
   const toggleOrder = (orderId: string) => {
-    setSelectedOrders(prev =>
-      prev.includes(orderId) ? prev.filter(id => id !== orderId) : [...prev, orderId]
-    );
+    setSelectedOrders(prev => {
+      const next = prev.includes(orderId) ? prev.filter(id => id !== orderId) : [...prev, orderId];
+      // Embedded mode (Stroke Code rail Step 3): auto-fire onComplete
+      // so the parent's step4Orders state stays current without an
+      // explicit Save Orders button. UX-audit H-10 fix.
+      if (embedded) {
+        const labels = displayOrders.filter(o => next.includes(o.id)).map(o => o.label);
+        onComplete(labels);
+      }
+      return next;
+    });
   };
 
   const getCategoryLabel = (category: string) => {
@@ -572,6 +599,10 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
         })}
       </div>
 
+      {/* Footer Copy / Send / Save row — hidden in embedded mode
+          (Stroke Code rail Step 3) because CodeModeStep3 surfaces a
+          unified copy of the full code summary including orders. */}
+      {!embedded && (
       <div className="flex items-center justify-between pt-4 border-t border-slate-200">
         <button
           type="button"
@@ -605,6 +636,7 @@ export const CodeModeStep4: React.FC<CodeModeStep4Props> = ({ step2Data, onCompl
           <span>Save Orders</span>
         </button>
       </div>
+      )}
     </div>
   );
 };

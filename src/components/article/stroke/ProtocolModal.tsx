@@ -124,8 +124,12 @@ export function ProtocolModal({
 
   if (!isOpen) return null;
 
-  const severityBorder = severity.tone === 'red' ? 'border-red-400' : 'border-amber-400';
-  const severityText = severity.tone === 'red' ? 'text-red-600' : 'text-amber-600';
+  // H-12 fix (UX audit 2026-05-24): severity zone uses the chassis
+  // tinted-header pattern rather than a left-border accent strip.
+  // Consistent with the alert chassis used across Steps 1/2/3.
+  const severityHeaderBg = severity.tone === 'red' ? 'bg-red-50' : 'bg-amber-50';
+  const severityHeaderBorder = severity.tone === 'red' ? 'border-red-100' : 'border-amber-100';
+  const severityEyebrow = severity.tone === 'red' ? 'text-red-700' : 'text-amber-700';
 
   const titleId = `${id}-modal-title`;
   const descId = `${id}-modal-desc`;
@@ -171,11 +175,15 @@ export function ProtocolModal({
 
         {/* Scrollable body */}
         <div className="flex-1 overflow-y-auto px-6 py-6">
-          <div className={`border-l-2 ${severityBorder} pl-4 mb-6`}>
-            <p className={`text-[10px] font-bold ${severityText} uppercase tracking-widest`}>
-              {severity.eyebrow}
-            </p>
-            <p className="text-sm text-slate-600 mt-0.5">{severity.description}</p>
+          <div className="rounded-xl bg-white border border-slate-100 overflow-hidden mb-6">
+            <div className={`px-4 py-2 ${severityHeaderBg} border-b ${severityHeaderBorder} min-h-[40px] flex items-center`}>
+              <p className={`text-[10px] font-bold ${severityEyebrow} uppercase tracking-widest`}>
+                {severity.eyebrow}
+              </p>
+            </div>
+            <div className="px-4 py-3">
+              <p className="text-sm text-slate-700">{severity.description}</p>
+            </div>
           </div>
           <div className="space-y-5">
             {steps.map((step, i) => (

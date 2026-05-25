@@ -123,8 +123,12 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
           Restyled 2026-05-24 to mirror PatientContextPanel chassis
           (white card + tinted eyebrow + slate-700 body). Clinical text
           preserved verbatim per arch-PR-stroke-code-patient-context.md
-          condition #8. */}
-      {step1Data && (step1Data.systolicBP > 185 || step1Data.diastolicBP > 110) && (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && (
+          condition #8.
+          H-8 fix (UX audit 2026-05-24): suppress when the clinician
+          already acknowledged BP control on Step 1 (bpControlled
+          checkbox). Reduces repeated treatment instructions reading
+          as new info. */}
+      {step1Data && (step1Data.systolicBP > 185 || step1Data.diastolicBP > 110) && (treatmentGiven === 'tpa' || treatmentGiven === 'tnk') && !step1Data.bpControlled && (
         <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
           <div className="px-4 py-2 bg-red-50 border-b border-red-100">
             <p className="text-[10px] font-bold uppercase tracking-widest text-red-600">Pre-Thrombolysis BP Control</p>
@@ -325,7 +329,11 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
         </div>
       )}
 
-      {/* CTA & LVO Screening — primary input card, chassis-aligned 2026-05-24. */}
+      {/* CTA & LVO Screening — primary input card, chassis-aligned 2026-05-24.
+          H-3 fix (UX audit 2026-05-24): hidden until a CT result is
+          selected. Clinicians should not be able to record LVO/CTA
+          decisions before they have read the CT scan. */}
+      {ctResult !== '' && (
       <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
         <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 min-h-[40px] flex items-center">
           <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">CTA &amp; LVO Screening</p>
@@ -373,6 +381,7 @@ export const CodeModeStep2: React.FC<CodeModeStep2Props> = ({
           )}
         </div>
       </div>
+      )}
 
       {/* Save CTA */}
       <button

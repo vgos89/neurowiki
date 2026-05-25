@@ -92,6 +92,14 @@ interface PatientContextPanelProps {
    */
   defaultExpanded?: boolean;
   /**
+   * When true, the panel cannot be collapsed — the header is no
+   * longer a toggle, it becomes a static label. Use this when the
+   * context is required input that must remain visible throughout
+   * (e.g. Stroke Code Step 1). Closes UX-audit finding H-4: an
+   * accidental tap on the header used to collapse mid-entry.
+   */
+  lockExpanded?: boolean;
+  /**
    * Optional pathway-specific rows rendered after the standard four
    * (LKW / BP / Glucose / Anticoag) and before the disclaimer footer.
    * Use this — not an anonymous ReactNode slot — to add new inputs
@@ -112,9 +120,10 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
   onChange,
   label,
   defaultExpanded = false,
+  lockExpanded = false,
   extraRows,
 }) => {
-  const [expanded, setExpanded] = useState(defaultExpanded);
+  const [expanded, setExpanded] = useState(lockExpanded || defaultExpanded);
   const [lkwModalOpen, setLkwModalOpen] = useState(false);
   const [doseModalOpen, setDoseModalOpen] = useState(false);
 
@@ -169,13 +178,18 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
 
   return (
     <div className="bg-white border border-slate-100 rounded-xl overflow-hidden">
-      {/* Header row — always visible, tap toggles expansion */}
+      {/* Header row — toggles expansion unless lockExpanded=true,
+          in which case it's a static label. Locked variant is used
+          by Stroke Code Step 1 where the context is required input
+          and an accidental tap to collapse mid-entry would be a
+          UX regression (H-4 from 2026-05-24 UX audit). */}
       <button
         type="button"
-        onClick={() => setExpanded((v) => !v)}
-        className="w-full min-h-[44px] flex items-center justify-between px-4 py-2.5 bg-slate-50 hover:bg-slate-100 transition-colors text-left"
-        aria-expanded={expanded}
-        aria-controls="patient-context-body"
+        onClick={lockExpanded ? undefined : () => setExpanded((v) => !v)}
+        disabled={lockExpanded}
+        className={`w-full min-h-[44px] flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-100 text-left ${lockExpanded ? 'cursor-default' : 'hover:bg-slate-100 transition-colors cursor-pointer'}`}
+        aria-expanded={lockExpanded ? undefined : expanded}
+        aria-controls={lockExpanded ? undefined : 'patient-context-body'}
       >
         <div className="flex flex-col min-w-0">
           <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
@@ -187,10 +201,12 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             </span>
           )}
         </div>
-        <ChevronDown
-          className={`w-4 h-4 text-slate-400 flex-shrink-0 transition-transform ${expanded ? 'rotate-180' : ''}`}
-          aria-hidden
-        />
+        {!lockExpanded && (
+          <ChevronDown
+            className={`w-4 h-4 text-slate-400 flex-shrink-0 transition-transform ${expanded ? 'rotate-180' : ''}`}
+            aria-hidden
+          />
+        )}
       </button>
 
       {/* Expanded body */}
@@ -374,7 +390,9 @@ function sanitizeNumeric(input: string, maxDigits: number): string {
 function buildSummaryChips(values: PatientContextValues): string {
   const chips: string[] = [];
   if (values.lkw === null) chips.push('LKW: unknown');
-  else if (values.lkw instanceof Date) chips.push(`LKW set`);
+  // L-3 fix (UX audit 2026-05-24): show the actual LKW time, not the
+  // useless "LKW set" placeholder, in the collapsed-state summary chip.
+  else if (values.lkw instanceof Date) chips.push(`LKW ${formatClinicalDateShort(values.lkw)}`);
   if (values.systolic && values.diastolic) chips.push(`BP ${values.systolic}/${values.diastolic}`);
   if (values.glucose) chips.push(`Glu ${values.glucose}`);
   if (values.anticoag.size > 0) {

@@ -127,13 +127,22 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   const glucoseLow = glucose > 0 && glucose < 50;
   const glucoseHigh = glucose > 400;
 
+  // H-2 fix (UX audit 2026-05-24): weight is only required when a
+  // thrombolytic dose will actually be computed. DAPT-path patients
+  // (NIHSS ≤3 + within tPA window + no disabling symptoms checked)
+  // are headed to aspirin+clopidogrel, not tPA/TNK — forcing a
+  // weight entry is meaningless data tax. Same logic for outside-
+  // thrombolytic-window patients (already accommodated).
+  const onDaptPath = withinTPAWindow && nihssScore >= 1 && nihssScore <= 3 && !hasDisablingSymptom;
+  const weightRequired = !outsideThromboWindow && !onDaptPath;
+
   const isComplete =
     lkwEntered &&
     nihssScore > 0 &&
     systolicBP > 0 &&
     diastolicBP > 0 &&
     glucose > 0 &&
-    (outsideThromboWindow || weightValue > 0) &&
+    (!weightRequired || weightValue > 0) &&
     (!bpTooHigh || bpControlled || lkwUnknown);
 
   const missingFields: string[] = [];
@@ -141,7 +150,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   if (nihssScore <= 0) missingFields.push('NIHSS');
   if (systolicBP <= 0 || diastolicBP <= 0) missingFields.push('BP');
   if (glucose <= 0) missingFields.push('Glucose');
-  if (weightValue <= 0 && !outsideThromboWindow) missingFields.push('Weight');
+  if (weightValue <= 0 && weightRequired) missingFields.push('Weight');
 
   const handleComplete = () => {
     if (!isComplete) return;
@@ -167,13 +176,30 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
 
   const WindowBadge: React.FC = () => {
     if (!lkwEntered || lkwUnknown) return null;
-    if (lkwHours <= 4.5)
+    if (lkwHours <= 4.5) {
+      // M-1 fix (UX audit 2026-05-24): show a countdown when the
+      // remaining tPA window is < 30 min so the resident does not
+      // lose time in EMR and cross the boundary unnoticed.
+      const minutesLeft = Math.max(0, Math.round((4.5 - lkwHours) * 60));
+      const isLastHalfHour = minutesLeft <= 30;
       return (
-        <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-2.5 py-0.5">
-          <Check size={14} aria-hidden="true" />
-          Within 4.5h
+        <span
+          className={`inline-flex items-center gap-1 text-xs font-semibold rounded-full px-2.5 py-0.5 border ${
+            isLastHalfHour
+              ? 'text-amber-700 bg-amber-50 border-amber-200'
+              : 'text-emerald-700 bg-emerald-50 border-emerald-200'
+          }`}
+          aria-label={isLastHalfHour ? `Only ${minutesLeft} minutes left in tPA window` : `Within 4.5 hour tPA window`}
+        >
+          {isLastHalfHour ? (
+            <AlertTriangle size={14} aria-hidden="true" />
+          ) : (
+            <Check size={14} aria-hidden="true" />
+          )}
+          {isLastHalfHour ? `${minutesLeft} min left` : 'Within 4.5h'}
         </span>
       );
+    }
     if (lkwHours <= 9)
       return (
         <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-0.5">
@@ -288,6 +314,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
         onChange={setPatientContext}
         label="Patient info"
         defaultExpanded
+        lockExpanded
         extraRows={extraRows}
       />
 
@@ -415,11 +442,18 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
           + §4.8 citation, CHANCE/POINT/INSPIRES list, "Consider TNK"
           line, "DAPT is the recommended pathway" line) preserved
           verbatim per arch review condition #8. Non-disabling branch
-          context unchanged from 2026-05-23 implementation. */}
+          context unchanged from 2026-05-23 implementation.
+          UX-audit H-7 fix: AlertTriangle icon + "Decision Required"
+          badge in the header bar to telegraph that this is a required
+          clinical decision, not an info alert. */}
       {showDisablingSymptomsChecklist && (
-        <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
-          <div className="px-4 py-2 bg-amber-50 border-b border-amber-100">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Low NIHSS · Assess for Disabling Symptoms (AHA)</p>
+        <div className="rounded-xl bg-white border border-amber-200 overflow-hidden ring-1 ring-amber-100">
+          <div className="px-4 py-2 bg-amber-50 border-b border-amber-100 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <AlertTriangle className="w-4 h-4 text-amber-700 flex-shrink-0" aria-hidden="true" />
+              <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700 truncate">Low NIHSS · Assess for Disabling Symptoms (AHA)</p>
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-white bg-amber-600 rounded-full px-2 py-0.5 flex-shrink-0">Decision</span>
           </div>
           <div className="px-4 py-3 space-y-3">
             <p className="text-xs text-slate-700">Check any that are present. If so, consider TNK after discussing risk/benefit.</p>
