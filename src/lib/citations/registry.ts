@@ -1109,4 +1109,57 @@ export const CITATION_REGISTRY: CitationRegistry = {
     review_window_months: 24,
     quoted_text: 'In patients with VKA-associated ICH with an elevated INR, 4-factor PCC may be preferred over FFP to improve moderate hemostatic correction and possibly clinical outcomes (Class 1, Level A). In patients with rivaroxaban-, apixaban-, or edoxaban-associated ICH, andexanet alfa can be useful for reversal (Class 2a, Level B-NR). In patients with ICH and a history of antiplatelet use, platelet transfusions should not be administered because they may worsen outcomes (Class 3: Harm, Level B-R).',
   },
+
+  // ─── 2026 ACC/AHA Multisociety Dyslipidemia Guideline — §4.2.6 ──────────────
+  // Blumenthal RS, Morris PB, Gaudino M, et al. Circulation 2026;153:e1154–e1276.
+  // DOI: 10.1161/CIR.0000000000001423. Published April 28, 2026.
+  // §4.2.6 governs secondary ASCVD prevention. Ischemic stroke is explicitly
+  // listed as a major ASCVD event in Figure 10 (p e1210) and restated verbatim
+  // in the §4.2.6 table footnote (p e1208). PMID pending PubMed indexing.
+  // 6-month review window per §13.7 (current clinical guideline).
+  // Registered 2026-05-24 for the SPARCL pearl LDL-C target refresh (Wave 1).
+  'acc-aha-dyslipidemia-2026-4.2.6-vhr': {
+    id: 'acc-aha-dyslipidemia-2026-4.2.6-vhr',
+    source: 'guideline',
+    title: '2026 ACC/AHA Multisociety Cholesterol Guideline — §4.2.6 Recommendation #5 (Very-High-Risk ASCVD: ezetimibe/PCSK9 escalation to LDL-C <55 mg/dL)',
+    year: 2026,
+    section: '§4.2.6 Recommendation #5, p e1208',
+    url: 'https://doi.org/10.1161/CIR.0000000000001423',
+    last_reviewed: '2026-05-24',
+    review_window_months: 6,
+    quoted_text: 'In adults with clinical ASCVD who are at very high risk and on maximally tolerated statin therapy, ezetimibe and/or a PCSK9 mAb should be added (selected based on the degree of LDL-C lowering needed and patient preference) to achieve a goal of LDL-C <55 mg/dL (1.4 mmol/L) and non–HDL-C <85 mg/dL (2.2 mmol/L) to reduce risk of ASCVD events.',
+  },
+  'acc-aha-dyslipidemia-2026-4.2.6-not-vhr': {
+    id: 'acc-aha-dyslipidemia-2026-4.2.6-not-vhr',
+    source: 'guideline',
+    title: '2026 ACC/AHA Multisociety Cholesterol Guideline — §4.2.6 Recommendation #1 (Non-VHR Clinical ASCVD: high-intensity statin + LDL-C <70 mg/dL)',
+    year: 2026,
+    section: '§4.2.6 Recommendation #1, p e1208',
+    url: 'https://doi.org/10.1161/CIR.0000000000001423',
+    last_reviewed: '2026-05-24',
+    review_window_months: 6,
+    quoted_text: 'In adults with clinical ASCVD who are not at very high risk (Figure 10), high-intensity statin therapy should be initiated to achieve a ≥50% reduction in LDL-C and a goal of LDL-C <70 mg/dL (1.8 mmol/L) and non–HDL-C <100 mg/dL to reduce the risk of recurrent events.',
+  },
+  'acc-aha-dyslipidemia-2026-4.2.6-pcsk9-seq': {
+    id: 'acc-aha-dyslipidemia-2026-4.2.6-pcsk9-seq',
+    source: 'guideline',
+    title: '2026 ACC/AHA Multisociety Cholesterol Guideline — §4.2.6 Synopsis (PCSK9 sequencing change vs 2018: ezetimibe no longer required to precede PCSK9 mAb)',
+    year: 2026,
+    section: '§4.2.6 Synopsis, p e1208',
+    url: 'https://doi.org/10.1161/CIR.0000000000001423',
+    last_reviewed: '2026-05-24',
+    review_window_months: 6,
+    quoted_text: "Since the '2018 Guideline for the Management of Blood Cholesterol' was published, extended safety data for PCSK9 mAb have been reported, and the cost has decreased substantially. Accordingly, the revised recommendations no longer require that ezetimibe be added to statin therapy prior to initiating a PCSK9 mAb, and consideration of therapy may be based on the degree of LDL-C required and patient preference.",
+  },
+  'acc-aha-dyslipidemia-2026-fig10': {
+    id: 'acc-aha-dyslipidemia-2026-fig10',
+    source: 'guideline',
+    title: '2026 ACC/AHA Multisociety Cholesterol Guideline — Figure 10 / §4.2.6 footnote (very-high-risk ASCVD definition; ischemic stroke is a major ASCVD event)',
+    year: 2026,
+    section: '§4.2.6 Table footnote, p e1208 (reflecting Figure 10, p e1210)',
+    url: 'https://doi.org/10.1161/CIR.0000000000001423',
+    last_reviewed: '2026-05-24',
+    review_window_months: 6,
+    quoted_text: 'The majority of patients with clinical ASCVD are likely to be at very high risk. Very high risk includes a history of multiple major ASCVD events (ACS within past 12 months, history of MI [other than ACS above] history of ischemic stroke, symptomatic PAD) or 1 major ASCVD event and multiple high-risk conditions (age >65 years of age, coronary artery revascularization, current smoker, diabetes, history of HF, hypertension, LDL-C >100 mg/dL despite maximally tolerated statin + ezetimibe).',
+  },
 };

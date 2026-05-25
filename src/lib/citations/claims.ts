@@ -609,6 +609,21 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'NIHSS portal drawer severity-band clinical interpretation. Minor (1–4): IVT pivots on disabling vs non-disabling deficit per §4.6.1 COR 3 No Benefit for non-disabling; DAPT × 21d per §4.8 COR 1 LOE A. Moderate (5–15): disabling deficit; IVT within 4.5h indicated; NIHSS ≥6 + cortical signs triggers CTA per §4.7.2. Moderate-to-severe (16–20): typical proximal LVO range; expedite EVT pathway per §4.7.2; post-IVT BP ≤180/105. Severe (≥21): large-territory infarct risk; reassess ASPECTS, age, prestroke mRS before EVT; sICH risk elevated.',
   },
 
+  // ─── 2026 ACC/AHA Dyslipidemia §4.2.6 — secondary prevention after stroke ────
+  // Registered 2026-05-24 for the SPARCL pearl LDL-C target refresh (Wave 1).
+  // Only `dyslipidemia-2026-stroke-ldlc-55` is surfaced on the pearl in Wave 1;
+  // the other three back claims rendered in prose or queued for Wave 2 wiring.
+  'dyslipidemia-2026-stroke-ldlc-55': {
+    id: 'dyslipidemia-2026-stroke-ldlc-55',
+    citation_ids: ['acc-aha-dyslipidemia-2026-4.2.6-vhr'],
+    surfaces: [DATA_SURFACE],
+    description: '2026 ACC/AHA §4.2.6 Rec #5 (COR 1, LOE A): in clinical ASCVD patients at very high risk on maximally tolerated statin, add ezetimibe and/or a PCSK9 mAb to achieve LDL-C <55 mg/dL (1.4 mmol/L) and non-HDL-C <85 mg/dL. Prior ischemic stroke qualifies as a major ASCVD event per Figure 10; VHR = ≥2 major events OR 1 major + ≥2 high-risk conditions.',
+  },
+  // dyslipidemia-2026-stroke-ldlc-70-not-vhr, dyslipidemia-2026-pcsk9-escalation,
+  // and dyslipidemia-2026-stroke-major-ascvd are registered in Wave 2 when their
+  // surfaces are built (secondary-prevention workflow page / SPARCL trial page).
+  // Citations for all four claims are already in registry.ts.
+
   'theia-crao-alteplase-2025': {
     id: 'theia-crao-alteplase-2025',
     citation_ids: ['preterre-theia-2025', 'mac-grory-aha-nanos-crao-2021'],
