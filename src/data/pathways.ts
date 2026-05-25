@@ -105,11 +105,20 @@ export const PATHWAYS: PathwayEntry[] = [
   // If a validated GCA decision rule is published in the future, re-add here.
   {
     id: 'migraine-pathway',
-    name: 'Migraine Pathway',
-    description: 'ED and inpatient acute headache management.',
+    name: 'ED Migraine Pathway',
+    description: 'Emergency department acute migraine — cocktail, nerve blocks, refractory rescue.',
     scenario: 'severe-headache',
     path: '/pathways/migraine-pathway',
     stepCount: 5,        // Safety Screen / Care Setting / Acute TX / Response / Plan
+    rowCategory: 'prevention',
+  },
+  {
+    id: 'headache-clinic',
+    name: 'Clinic Headache Pathway',
+    description: 'Outpatient migraine preventive selection, CGRP escalation, and MOH prevention.',
+    scenario: 'severe-headache',
+    path: '/pathways/headache-clinic',
+    stepCount: 6,        // Profile / Phenotype / Preventive Need / Selection / Acute Opt / Plan
     rowCategory: 'prevention',
   },
 ];
