@@ -53,6 +53,15 @@ export const PATHWAY_SCENARIOS: PathwayScenarioMeta[] = [
 export const PATHWAYS: PathwayEntry[] = [
   // ── Acute stroke ─────────────────────────────────────────────────────────────
   {
+    id: 'post-stroke-lipid',
+    name: 'Post-Stroke Lipid Management',
+    description: 'LDL-C targets and escalation sequence after ischaemic stroke or ICH. 2026 ACC/AHA.',
+    scenario: 'acute-stroke',
+    path: '/guide/post-stroke-lipid-management',
+    stepCount: 3,        // Regimen / Escalation / Plan (ischaemic arm)
+    rowCategory: 'prevention',
+  },
+  {
     id: 'elan-pathway',
     name: 'ELAN Pathway',
     description: 'DOAC timing after ischemic stroke with atrial fibrillation.',
