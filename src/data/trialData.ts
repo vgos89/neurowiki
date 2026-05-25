@@ -170,6 +170,8 @@ export interface TrialMetadata {
   howToInterpret?: { proves: string; doesNotProve: string; cautions: string };
   /** Single plain-text string shown in the bedside pearl block. No em dashes. */
   bedsidePearl?: string;
+  /** Claim ID for the bedsidePearl content. Scanned by check-claims.ts (Phase 1 bedsidePearl surface). */
+  bedsidePearlClaimId?: string;
   /** 1-2 sentence plain-language summary for the bottom-line drawer body. No em dashes. */
   bottomLineSummary?: string;
   /** Archetype identifier for the new trial page layout. 'A' = DeltaBand; 'B' = GrottaBar; 'G' = BenchmarkThreshold. Omitted = legacy layout. */
@@ -7202,6 +7204,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       cautions: 'Hemorrhagic stroke was significantly increased (HR 1.66, P=0.02). In patients with prior hemorrhagic stroke, this risk-benefit calculation shifts materially; most guideline bodies consider prior ICH a relative contraindication to high-intensity statin therapy. Liver enzyme elevations were more common in the atorvastatin group.',
     },
     bedsidePearl: 'SPARCL established atorvastatin 80 mg as a standard in secondary stroke prevention, but the hemorrhagic stroke signal (HR 1.66) is real and matters. The net benefit is favorable in ischemic stroke patients, but in a patient with prior hemorrhagic stroke, you are adding a drug that independently increases hemorrhagic stroke by 66% without clear ischemic benefit in that subgroup. In hemorrhagic stroke, statin use post-discharge is a shared decision, not a reflex.',
+    bedsidePearlClaimId: 'dyslipidemia-2026-stroke-ldlc-55',
     bottomLineSummary: 'In patients with recent ischemic stroke or TIA and LDL 100 to 190 mg/dL without known coronary heart disease, atorvastatin 80 mg reduced recurrent stroke by 16% relative (NNT=53 over 4.9 years) but significantly increased hemorrhagic stroke risk (HR 1.66, 2.3% vs 1.4%). High-intensity statin therapy is now standard secondary prevention for ischemic stroke; caution is warranted in patients with prior hemorrhagic stroke.',
     legend: {
       finding: 'Atorvastatin 80 mg after non-cardioembolic stroke/TIA reduces recurrent stroke; hemorrhagic-stroke signal HR 1.66.',

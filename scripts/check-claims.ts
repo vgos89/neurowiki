@@ -53,9 +53,10 @@ const REG_FILE    = path.resolve(ROOT, cli['registry-file'] ?? 'src/lib/citation
 
 const ID = '[a-z0-9][a-z0-9._-]*';
 const PHASE1: Record<string, RegExp> = {
-  jsx:      new RegExp(`\\bdata-claim=["'](${ID})["']`, 'g'),
-  data:     new RegExp(`\\bclaimId\\s*:\\s*["'](${ID})["']`, 'g'),
-  computed: new RegExp(`\\bclaim\\s*\\(\\s*["'][^"']*["']\\s*,\\s*["'](${ID})["']\\s*\\)`, 'g'),
+  jsx:          new RegExp(`\\bdata-claim=["'](${ID})["']`, 'g'),
+  data:         new RegExp(`\\bclaimId\\s*:\\s*["'](${ID})["']`, 'g'),
+  computed:     new RegExp(`\\bclaim\\s*\\(\\s*["'][^"']*["']\\s*,\\s*["'](${ID})["']\\s*\\)`, 'g'),
+  bedsidePearl: new RegExp(`\\bbedsidePearlClaimId\\s*:\\s*["'](${ID})["']`, 'g'),
 };
 
 // ── TS module loader ───────────────────────────────────────────────────────

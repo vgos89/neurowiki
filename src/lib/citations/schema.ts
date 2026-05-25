@@ -67,11 +67,12 @@ export interface Citation {
  * Phase 2 surfaces (roadmap): computed, markdown, json
  */
 export type ClaimSurface =
-  | { type: 'jsx';      attribute: 'data-claim' }       // Static JSX: data-claim="claim-id" on element
-  | { type: 'data';     field: 'claimId' }              // src/data/*.ts: adjacent claimId string field
-  | { type: 'computed'; helper: 'claim' }               // Computed string: claim(text, "claim-id") helper
-  | { type: 'markdown'; marker: '<!-- @claim:' }        // Markdown: HTML comment before clinical paragraph
-  | { type: 'json';     field: 'claim_id' };            // JSON content: claim_id field beside text field
+  | { type: 'jsx';          attribute: 'data-claim' }       // Static JSX: data-claim="claim-id" on element
+  | { type: 'data';         field: 'claimId' }              // src/data/*.ts: adjacent claimId string field
+  | { type: 'computed';     helper: 'claim' }               // Computed string: claim(text, "claim-id") helper
+  | { type: 'markdown';     marker: '<!-- @claim:' }        // Markdown: HTML comment before clinical paragraph
+  | { type: 'json';         field: 'claim_id' }             // JSON content: claim_id field beside text field
+  | { type: 'bedsidePearl'; field: 'bedsidePearlClaimId' }; // src/data/trialData.ts: bedsidePearlClaimId field
 
 /**
  * A registered clinical claim mapping claim text to its citations and surfaces.

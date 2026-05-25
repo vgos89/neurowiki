@@ -47,6 +47,10 @@ trigger the pairing) is also documented in §19.
 - Status summaries to human
 - Updates to TASKS.md via Librarian handoff
 
+## Clinical Content Rules
+
+**Missing Trials Tracking:** Whenever any -clinical task (Class C-clinical, D-clinical, or E) surfaces a reference to a clinical trial that is not yet in `src/data/trialData.ts`, add an entry to `docs/MISSING_TRIALS.md` before closing the task. Include: trial name, PMID if known, one-line summary of what it showed and why it matters to neurology, and the task context in which it was identified. This ensures the trial backlog stays current and V can prioritize additions.
+
 ## Rules
 - Never skip the spec check. If a task touches a section with a spec, that spec must be cited.
 - Never approve a swarm prompt that lacks all 5 gates.

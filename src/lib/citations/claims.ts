@@ -26,6 +26,10 @@ import type { ClaimRegistry } from './schema';
 // field on the ClinicalPearl object in src/data/strokeClinicalPearls.ts.
 const DATA_SURFACE = { type: 'data' as const, field: 'claimId' as const };
 
+// Trial-page bedsidePearl content uses a dedicated field so the scanner
+// can distinguish trial-page claims from strokeClinicalPearls claims.
+const BEDSIDE_PEARL_SURFACE = { type: 'bedsidePearl' as const, field: 'bedsidePearlClaimId' as const };
+
 export const CLAIM_REGISTRY: ClaimRegistry = {
   // ─── 2022 index large-core EVT trial (Japan) ─────────────────────────────
   'rescue-japan-limit-evt-large-core-2022': {
@@ -616,7 +620,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   'dyslipidemia-2026-stroke-ldlc-55': {
     id: 'dyslipidemia-2026-stroke-ldlc-55',
     citation_ids: ['acc-aha-dyslipidemia-2026-4.2.6-vhr'],
-    surfaces: [DATA_SURFACE],
+    surfaces: [DATA_SURFACE, BEDSIDE_PEARL_SURFACE],
     description: '2026 ACC/AHA §4.2.6 Rec #5 (COR 1, LOE A): in clinical ASCVD patients at very high risk on maximally tolerated statin, add ezetimibe and/or a PCSK9 mAb to achieve LDL-C <55 mg/dL (1.4 mmol/L) and non-HDL-C <85 mg/dL. Prior ischemic stroke qualifies as a major ASCVD event per Figure 10; VHR = ≥2 major events OR 1 major + ≥2 high-risk conditions.',
   },
   // dyslipidemia-2026-stroke-ldlc-70-not-vhr, dyslipidemia-2026-pcsk9-escalation,
