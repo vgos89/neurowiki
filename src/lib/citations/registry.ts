@@ -1163,6 +1163,69 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'The majority of patients with clinical ASCVD are likely to be at very high risk. Very high risk includes a history of multiple major ASCVD events (ACS within past 12 months, history of MI [other than ACS above] history of ischemic stroke, symptomatic PAD) or 1 major ASCVD event and multiple high-risk conditions (age >65 years of age, coronary artery revascularization, current smoker, diabetes, history of HF, hypertension, LDL-C >100 mg/dL despite maximally tolerated statin + ezetimibe).',
   },
 
+  // ─── 2026 ACC/AHA Dyslipidemia §4.2.6 — Wave 2 (bempedoic acid, inclisiran, ICH arm) ──
+
+  'acc-aha-dyslipidemia-2026-4.2.6-addon-not-vhr': {
+    id: 'acc-aha-dyslipidemia-2026-4.2.6-addon-not-vhr',
+    source: 'guideline',
+    title: '2026 ACC/AHA Dyslipidemia Guideline — §4.2.6 Recommendation #2 (Non-VHR: ezetimibe/PCSK9 mAb/bempedoic acid add-on to LDL-C <70 mg/dL)',
+    year: 2026,
+    section: '§4.2.6 Recommendation #2, p e1208',
+    url: 'https://doi.org/10.1161/CIR.0000000000001423',
+    last_reviewed: '2026-05-25',
+    review_window_months: 6,
+    quoted_text: 'In adults with clinical ASCVD who are not at very high risk and on maximally tolerated statin therapy, it is reasonable to add ezetimibe, a PCSK9 mAb, or bempedoic acid (selection depending on degree of LDL-C lowering needed and patient preference) to achieve a goal of LDL-C <70 mg/dL (1.8 mmol/L) and non–HDL-C <100 mg/dL to reduce the risk of ASCVD events.',
+  },
+
+  'acc-aha-dyslipidemia-2026-4.2.6-bempedoic-vhr': {
+    id: 'acc-aha-dyslipidemia-2026-4.2.6-bempedoic-vhr',
+    source: 'guideline',
+    title: '2026 ACC/AHA Dyslipidemia Guideline — §4.2.6 Recommendation #6 (VHR: bempedoic acid add-on to LDL-C <55 mg/dL, COR 2a)',
+    year: 2026,
+    section: '§4.2.6 Recommendation #6, p e1208',
+    url: 'https://doi.org/10.1161/CIR.0000000000001423',
+    last_reviewed: '2026-05-25',
+    review_window_months: 6,
+    quoted_text: 'In adults with clinical ASCVD who are at very high risk and on maximally tolerated statin therapy, it is reasonable to add bempedoic acid, with or without ezetimibe and/or PCSK9 mAb, to reach an LDL-C goal <55 mg/dL (1.4 mmol/L) and non–HDL-C <85 mg/dL (2.2 mmol/L) to reduce the risk of ASCVD events.',
+  },
+
+  'acc-aha-dyslipidemia-2026-4.2.6-inclisiran': {
+    id: 'acc-aha-dyslipidemia-2026-4.2.6-inclisiran',
+    source: 'guideline',
+    title: '2026 ACC/AHA Dyslipidemia Guideline — §4.2.6 Recommendation #7 (VHR: inclisiran for PCSK9 mAb-intolerant, COR 2a; no completed CVOT)',
+    year: 2026,
+    section: '§4.2.6 Recommendation #7, p e1208',
+    url: 'https://doi.org/10.1161/CIR.0000000000001423',
+    last_reviewed: '2026-05-25',
+    review_window_months: 6,
+    quoted_text: 'In adults with clinical ASCVD who are at very high risk and on maximally tolerated statin therapy with or without ezetimibe, it is reasonable to add inclisiran in those unable to tolerate evolocumab or alirocumab or have a strong preference for less frequent dosing to achieve an LDL-C goal <55 mg/dL (1.4 mmol/L) and non–HDL-C <85 mg/dL (2.2 mmol/L).',
+  },
+
+  'aha-asa-ich-2022-statin': {
+    id: 'aha-asa-ich-2022-statin',
+    source: 'guideline',
+    title: '2022 AHA/ASA Guideline for Spontaneous Intracerebral Hemorrhage — Statin Therapy (COR 2b, LOE B-NR)',
+    year: 2022,
+    section: 'Cardiovascular Prevention',
+    url: 'https://doi.org/10.1161/STR.0000000000000407',
+    last_reviewed: '2026-05-25',
+    review_window_months: 6,
+    quoted_text: 'In patients with spontaneous ICH and an established indication for statin pharmacotherapy, the risks and benefits of statin therapy on ICH outcomes and recurrence relative to overall prevention of cardiovascular events are uncertain.',
+  },
+
+  'teoh-2019-statin-stroke-ich': {
+    id: 'teoh-2019-statin-stroke-ich',
+    source: 'review',
+    title: 'Statin Therapy and Hemorrhagic Stroke Risk in Stroke Survivors — Meta-Analysis (Teoh et al., Ther Adv Neurol Disord 2019)',
+    year: 2019,
+    section: 'Ther Adv Neurol Disord 2019;12',
+    url: 'https://journals.sagepub.com/doi/10.1177/1756286419864830',
+    pmid: '31384308',
+    last_reviewed: '2026-05-25',
+    review_window_months: 36,
+    quoted_text: '17 randomized controlled trials (n=11,576) of statin therapy in stroke survivors: statin therapy was associated with a significant increase in ICH risk (RR 1.42, 95% CI 1.07–1.87) and a significant reduction in ischemic stroke risk (RR 0.85, 95% CI 0.75–0.95). Trial sequential analysis indicated the ICH evidence was conclusive.',
+  },
+
   // ─── Headache / Migraine citations ─────────────────────────────────────────
 
   'robblee-ahs-2025': {

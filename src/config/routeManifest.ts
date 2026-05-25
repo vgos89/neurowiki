@@ -55,7 +55,8 @@ export type StaticRouteKey =
   | 'accessibility'
   | 'my-cases'
   | 'import-cases'
-  | 'my-favorites';
+  | 'my-favorites'
+  | 'post-stroke-lipid';
 
 export interface RouteDefinition {
   key: StaticRouteKey;
@@ -682,6 +683,22 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
       title: 'Weakness Workup — Upper vs Lower Motor Neuron | NeuroWiki',
       description: 'Systematic weakness evaluation: UMN vs LMN localization, neuromuscular junction, myopathy workup, MRC grading, diagnostic algorithm.',
       keywords: 'weakness workup neurology, upper motor neuron lower motor neuron, UMN LMN weakness, neuromuscular junction weakness, myopathy evaluation, weakness localization neurology, MRC grading weakness',
+    },
+  },
+  {
+    key: 'post-stroke-lipid',
+    path: '/guide/post-stroke-lipid-management',
+    publishGate: true,
+    published: true,
+    includeInSitemap: true,
+    zone: 'reading',
+    bottomNavTab: 'guide',
+    railItem: 'guide',
+    meta: {
+      title: 'Post-Stroke Lipid Management — LDL-C Targets & Escalation | NeuroWiki',
+      description: 'Adaptive lipid management pathway after ischaemic stroke or ICH. VHR vs standard ASCVD targets, ezetimibe and PCSK9 mAb escalation, bempedoic acid, inclisiran, and ICH statin decision. 2026 ACC/AHA.',
+      keywords: 'post-stroke lipid management, LDL-C target after stroke, PCSK9 inhibitor stroke, ezetimibe after stroke, statin after ICH, bempedoic acid stroke, very high ASCVD risk, secondary prevention stroke lipids, 2026 ACC AHA dyslipidemia guideline stroke',
+      image: DEFAULT_IMAGE,
     },
   },
   {

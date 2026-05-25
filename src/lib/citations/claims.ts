@@ -614,19 +614,56 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   },
 
   // ─── 2026 ACC/AHA Dyslipidemia §4.2.6 — secondary prevention after stroke ────
-  // Registered 2026-05-24 for the SPARCL pearl LDL-C target refresh (Wave 1).
-  // Only `dyslipidemia-2026-stroke-ldlc-55` is surfaced on the pearl in Wave 1;
-  // the other three back claims rendered in prose or queued for Wave 2 wiring.
+  // Wave 1 (2026-05-24): SPARCL pearl + bedsidePearl surface on trialData.ts.
+  // Wave 2 (2026-05-25): Post-Stroke Lipid Management Pathway JSX surfaces.
   'dyslipidemia-2026-stroke-ldlc-55': {
     id: 'dyslipidemia-2026-stroke-ldlc-55',
     citation_ids: ['acc-aha-dyslipidemia-2026-4.2.6-vhr'],
-    surfaces: [DATA_SURFACE, BEDSIDE_PEARL_SURFACE],
+    surfaces: [DATA_SURFACE, BEDSIDE_PEARL_SURFACE, { type: 'jsx', attribute: 'data-claim' }],
     description: '2026 ACC/AHA §4.2.6 Rec #5 (COR 1, LOE A): in clinical ASCVD patients at very high risk on maximally tolerated statin, add ezetimibe and/or a PCSK9 mAb to achieve LDL-C <55 mg/dL (1.4 mmol/L) and non-HDL-C <85 mg/dL. Prior ischemic stroke qualifies as a major ASCVD event per Figure 10; VHR = ≥2 major events OR 1 major + ≥2 high-risk conditions.',
   },
-  // dyslipidemia-2026-stroke-ldlc-70-not-vhr, dyslipidemia-2026-pcsk9-escalation,
-  // and dyslipidemia-2026-stroke-major-ascvd are registered in Wave 2 when their
-  // surfaces are built (secondary-prevention workflow page / SPARCL trial page).
-  // Citations for all four claims are already in registry.ts.
+
+  'dyslipidemia-2026-stroke-ldlc-70-not-vhr': {
+    id: 'dyslipidemia-2026-stroke-ldlc-70-not-vhr',
+    citation_ids: ['acc-aha-dyslipidemia-2026-4.2.6-not-vhr'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: '2026 ACC/AHA §4.2.6 Rec #1 (COR 1, LOE A): in clinical ASCVD not at very high risk, high-intensity statin to achieve ≥50% LDL-C reduction and goal <70 mg/dL (1.8 mmol/L) and non-HDL-C <100 mg/dL.',
+  },
+
+  'dyslipidemia-2026-pcsk9-escalation': {
+    id: 'dyslipidemia-2026-pcsk9-escalation',
+    citation_ids: ['acc-aha-dyslipidemia-2026-4.2.6-pcsk9-seq'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: '2026 ACC/AHA §4.2.6 Synopsis: the 2026 guideline no longer requires ezetimibe to be added to statin therapy prior to initiating a PCSK9 mAb. Ezetimibe and PCSK9 mAbs are now co-equal add-on options after maximally tolerated statin.',
+  },
+
+  'dyslipidemia-2026-stroke-major-ascvd': {
+    id: 'dyslipidemia-2026-stroke-major-ascvd',
+    citation_ids: ['acc-aha-dyslipidemia-2026-fig10'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: '2026 ACC/AHA Figure 10: history of ischemic stroke is listed as a major ASCVD event. A patient with prior ischemic stroke has ≥1 major ASCVD event and therefore qualifies for the ASCVD secondary prevention pathway. VHR status requires ≥2 major ASCVD events OR 1 event + ≥2 high-risk conditions.',
+  },
+
+  'dyslipidemia-2026-bempedoic-vhr': {
+    id: 'dyslipidemia-2026-bempedoic-vhr',
+    citation_ids: ['acc-aha-dyslipidemia-2026-4.2.6-bempedoic-vhr'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: '2026 ACC/AHA §4.2.6 Rec #6 (COR 2a, LOE B-R): in VHR ASCVD on maximally tolerated statin, it is reasonable to add bempedoic acid (with or without ezetimibe and/or PCSK9 mAb) to reach LDL-C <55 mg/dL. Bempedoic acid is the final escalation step per Figure 11 (after PCSK9 mAb failure/intolerance). Does not cause myopathy; suitable for statin-intolerant patients.',
+  },
+
+  'dyslipidemia-2026-inclisiran-vhr': {
+    id: 'dyslipidemia-2026-inclisiran-vhr',
+    citation_ids: ['acc-aha-dyslipidemia-2026-4.2.6-inclisiran'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: '2026 ACC/AHA §4.2.6 Rec #7 (COR 2a, LOE B-R): in VHR ASCVD on maximally tolerated statin ± ezetimibe, inclisiran is reasonable for those unable to tolerate evolocumab/alirocumab or preferring twice-yearly dosing. IMPORTANT: inclisiran has no completed cardiovascular outcomes trial; it is considered second-line PCSK9i after evolocumab/alirocumab.',
+  },
+
+  'dyslipidemia-2026-ich-statin-uncertain': {
+    id: 'dyslipidemia-2026-ich-statin-uncertain',
+    citation_ids: ['aha-asa-ich-2022-statin', 'teoh-2019-statin-stroke-ich'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: '2022 AHA/ASA ICH Guideline (COR 2b, LOE B-NR): in patients with spontaneous ICH and an established statin indication, the risks and benefits are uncertain. Teoh 2019 meta-analysis (17 RCTs, n=11,576): statins in stroke survivors increased ICH risk (RR 1.42, 95% CI 1.07–1.87). Decisions should be individualised to ICH aetiology (lobar/CAA = higher recurrence risk) and strength of cardiovascular indication.',
+  },
 
   'theia-crao-alteplase-2025': {
     id: 'theia-crao-alteplase-2025',

@@ -52,6 +52,7 @@ const ClinicHeadachePathway = lazy(() => import('./pages/ClinicHeadachePathway')
 const ExtendedIVTPathway = lazy(() => import('./pages/ExtendedIVTPathway'));
 const EmBillingCalculator = lazy(() => import('./pages/EmBillingCalculator'));
 const StrokeGuidelineMindmap = lazy(() => import('./pages/guide/StrokeGuidelineMindmap'));
+const PostStrokeLipidManagement = lazy(() => import('./pages/guide/PostStrokeLipidManagement'));
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
 const TermsPage = lazy(() => import('./pages/TermsPage'));
 const AccessibilityPage = lazy(() => import('./pages/AccessibilityPage'));
@@ -117,6 +118,7 @@ const ROUTE_COMPONENTS: Record<StaticRouteKey, React.ReactNode> = {
   'headache-workup': <HeadacheWorkup />,
   vertigo: <Vertigo />,
   'weakness-workup': <WeaknessWorkup />,
+  'post-stroke-lipid': <PostStrokeLipidManagement />,
   'trials-hub': <TrialsPage />,
   // Legal / compliance pages — Phase 4D
   privacy: <PrivacyPage />,
