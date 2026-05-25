@@ -8,7 +8,7 @@ import { PathwayRailStep } from '../../components/pathways/PathwayRail';
 import {
   ArrowLeft, ExternalLink, Copy, Brain, Info, AlertTriangle,
   InfoIcon, FlaskConical, Eye, FileText as FileTextIcon,
-  ChevronDown, GraduationCap,
+  ChevronDown, GraduationCap, Pencil, CheckCircle2, RefreshCw,
 } from 'lucide-react';
 import { StrokeBasicsLayout } from './StrokeBasicsLayout';
 import { Trial } from '../../components/article';
@@ -421,11 +421,17 @@ const MainContent: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setActiveCard(1)}
-                className="w-full text-left px-4 py-3 border-l-2 border-neuro-500 bg-neuro-50 rounded-r-lg min-h-[44px] flex items-center justify-between gap-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors hover:bg-neuro-100"
+                className="w-full text-left px-4 py-3 border border-neuro-200 bg-neuro-50 rounded-xl min-h-[44px] flex items-center justify-between gap-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors hover:bg-neuro-100"
                 aria-label="Edit Vitals step"
               >
-                <span className="text-sm font-semibold text-neuro-700">Vitals saved</span>
-                <span className="text-xs text-neuro-700 opacity-75">NIHSS {step1Data.nihssScore} · BP {step1Data.systolicBP}/{step1Data.diastolicBP} · Glucose {step1Data.glucose} · LKW {step1Data.lkwUnknown ? 'Unknown' : `${liveLkwHours.toFixed(1)}h ago`}</span>
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-semibold text-neuro-700">Vitals saved</span>
+                  <span className="block text-xs text-slate-600 mt-0.5 truncate">NIHSS {step1Data.nihssScore} · BP {step1Data.systolicBP}/{step1Data.diastolicBP} · Glucose {step1Data.glucose} · LKW {step1Data.lkwUnknown ? 'Unknown' : `${liveLkwHours.toFixed(1)}h ago`}</span>
+                </div>
+                <span className="inline-flex items-center gap-1 text-xs font-semibold text-neuro-700 bg-white border border-neuro-200 rounded-full px-2.5 py-1 flex-shrink-0">
+                  <Pencil className="w-3 h-3" aria-hidden="true" />
+                  Edit
+                </span>
               </button>
             ) : (
             <div>
@@ -447,6 +453,7 @@ const MainContent: React.FC = () => {
                 onOpenEligibility={() => setEligibilityModalOpen(true)}
                 onOpenExtendedIVT={() => setExtendedIvtModalOpen(true)}
                 nihssScoreFromModal={nihssFromModal}
+                eligibilityChecked={eligibilityCheckedByUser}
               />
               {workflowMode === 'study' && (
                 <details className="mt-4 group rounded-lg border border-blue-200 bg-blue-50 overflow-hidden">
@@ -505,11 +512,17 @@ const MainContent: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setActiveCard(2)}
-                className="w-full text-left px-4 py-3 border-l-2 border-neuro-500 bg-neuro-50 rounded-r-lg min-h-[44px] flex items-center justify-between gap-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors hover:bg-neuro-100"
+                className="w-full text-left px-4 py-3 border border-neuro-200 bg-neuro-50 rounded-xl min-h-[44px] flex items-center justify-between gap-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors hover:bg-neuro-100"
                 aria-label="Edit Imaging step"
               >
-                <span className="text-sm font-semibold text-neuro-700">Imaging recorded</span>
-                <span className="text-xs text-neuro-700 opacity-75">CT: {step2Data.ctResult === 'bleed' ? 'Bleed' : 'No bleed'} · Tx: {step2Data.treatmentGiven}</span>
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-semibold text-neuro-700">Imaging recorded</span>
+                  <span className="block text-xs text-slate-600 mt-0.5 truncate">CT: {step2Data.ctResult === 'bleed' ? 'Bleed' : 'No bleed'} · Tx: {step2Data.treatmentGiven}</span>
+                </div>
+                <span className="inline-flex items-center gap-1 text-xs font-semibold text-neuro-700 bg-white border border-neuro-200 rounded-full px-2.5 py-1 flex-shrink-0">
+                  <Pencil className="w-3 h-3" aria-hidden="true" />
+                  Edit
+                </span>
               </button>
             ) : activeCard === 2 ? (
             <div>
@@ -600,11 +613,17 @@ const MainContent: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setActiveCard(3)}
-                className="w-full text-left px-4 py-3 border-l-2 border-neuro-500 bg-neuro-50 rounded-r-lg min-h-[44px] flex items-center justify-between gap-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors hover:bg-neuro-100"
+                className="w-full text-left px-4 py-3 border border-neuro-200 bg-neuro-50 rounded-xl min-h-[44px] flex items-center justify-between gap-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors hover:bg-neuro-100"
                 aria-label="Edit Summary step"
               >
-                <span className="text-sm font-semibold text-neuro-700">Summary complete</span>
-                <span className="text-xs text-neuro-700 opacity-75">{step4Orders.length} orders selected</span>
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-semibold text-neuro-700">Summary complete</span>
+                  <span className="block text-xs text-slate-600 mt-0.5 truncate">{step4Orders.length} orders selected</span>
+                </div>
+                <span className="inline-flex items-center gap-1 text-xs font-semibold text-neuro-700 bg-white border border-neuro-200 rounded-full px-2.5 py-1 flex-shrink-0">
+                  <Pencil className="w-3 h-3" aria-hidden="true" />
+                  Edit
+                </span>
               </button>
             ) : activeCard === 3 ? (
             <div>
@@ -652,6 +671,40 @@ const MainContent: React.FC = () => {
                       }}
                     />
                   </Suspense>
+
+                  {/* BL-2 fix (UX audit 2026-05-24) — terminal "Code
+                      Documented" state. Appears once Step 4 orders are
+                      saved (step4Orders.length > 0). Closes the drop-off
+                      cliff: previously there was no signal that the
+                      code was complete or any action to start a fresh
+                      one for the next admit. */}
+                  {step4Orders.length > 0 && (
+                    <div className="rounded-xl bg-white border border-slate-100 overflow-hidden">
+                      <div className="px-4 py-2 bg-emerald-50 border-b border-emerald-100 min-h-[40px] flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-700 flex-shrink-0" aria-hidden="true" />
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-700">Code Documented</p>
+                      </div>
+                      <div className="px-4 py-3 space-y-3">
+                        <p className="text-sm text-slate-700">
+                          This stroke code is fully documented. Copy the summary to your EMR, or start a new code for the next patient.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (window.confirm('Start a new stroke code? This will clear all saved data from the current session.')) {
+                              sessionStorage.removeItem(SESSION_KEY);
+                              window.location.reload();
+                            }
+                          }}
+                          className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 bg-neuro-500 hover:bg-neuro-600 text-white text-sm font-semibold rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-neuro-700 focus-visible:outline-none"
+                          aria-label="Start a new stroke code (clears current session)"
+                        >
+                          <RefreshCw className="w-4 h-4" aria-hidden="true" />
+                          Start New Code
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
               {workflowMode === 'study' && (

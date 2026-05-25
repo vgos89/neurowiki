@@ -18,6 +18,15 @@ export interface CodeModeStep1Props {
    *  the modal state. */
   onOpenExtendedIVT?: () => void;
   nihssScoreFromModal?: number | null;
+  /** Whether the IV tPA eligibility checklist has been completed.
+   *  Parent (StrokeBasicsWorkflowV2) sets this to true after the
+   *  user clicks "Save & Return" inside the eligibility modal.
+   *  When in the tPA window, Save & Continue is gated on this:
+   *  the CTA shows "Check tPA Eligibility" first (opens modal only,
+   *  no Step 1 save) and only transforms to "Save & Continue" once
+   *  the checklist has been completed. Closes the BL-1 patient-
+   *  safety gap from the 2026-05-24 UX audit. */
+  eligibilityChecked?: boolean;
 }
 
 export interface Step1Data {
@@ -42,6 +51,7 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   onOpenEligibility,
   onOpenExtendedIVT,
   nihssScoreFromModal,
+  eligibilityChecked = false,
 }) => {
   // Patient context — LKW + BP + Glucose + Anticoag — now lives in a single
   // shared PatientContextPanel (arch-PR-stroke-code-patient-context.md
@@ -482,24 +492,38 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
         </div>
       )}
 
-      {/* ── CTA ── */}
+      {/* ── CTA — BL-1 fix (UX audit 2026-05-24) ──
+          When in the tPA window the eligibility check must be the
+          gate before advance, not a side-effect of advance. Click on
+          "Check tPA Eligibility" opens the modal only — it does NOT
+          save Step 1 or advance to Step 2. Once the eligibility
+          modal completes (user taps Save & Return inside), parent
+          flips `eligibilityChecked` to true and this CTA transforms
+          to "Save & Continue". Outside the tPA window, the eligibility
+          step is irrelevant so we go straight to Save & Continue. */}
       <div className="space-y-2">
-        {withinTPAWindow && isComplete && onOpenEligibility ? (
+        {withinTPAWindow && isComplete && onOpenEligibility && !eligibilityChecked ? (
           <button
             type="button"
-            onClick={() => { handleComplete(); onOpenEligibility(); }}
-            className="w-full min-h-[52px] py-3.5 bg-neuro-500 hover:bg-neuro-600 text-white font-semibold rounded-xl transition-all text-sm"
+            onClick={() => onOpenEligibility()}
+            className="w-full min-h-[52px] py-3.5 bg-neuro-500 hover:bg-neuro-600 text-white font-semibold rounded-xl transition-all text-sm focus-visible:ring-2 focus-visible:ring-neuro-700 focus-visible:outline-none"
+            aria-label="Check tPA eligibility"
           >
-            Check tPA Eligibility →
+            Check tPA Eligibility <span aria-hidden="true">→</span>
           </button>
         ) : (
           <button
             type="button"
             onClick={handleComplete}
             disabled={!isComplete}
-            className="w-full min-h-[52px] py-3.5 bg-neuro-500 hover:bg-neuro-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all text-sm"
+            className="w-full min-h-[52px] py-3.5 bg-neuro-500 hover:bg-neuro-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all text-sm focus-visible:ring-2 focus-visible:ring-neuro-700 focus-visible:outline-none"
+            aria-label={isComplete ? 'Save and continue to Step 2' : `Still needed: ${missingFields.join(', ')}`}
           >
-            {isComplete ? 'Save & Continue →' : `Still needed: ${missingFields.join(' · ')}`}
+            {isComplete ? (
+              <>Save &amp; Continue <span aria-hidden="true">→</span></>
+            ) : (
+              `Still needed: ${missingFields.join(' · ')}`
+            )}
           </button>
         )}
       </div>
