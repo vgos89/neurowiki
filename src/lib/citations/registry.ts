@@ -1162,4 +1162,103 @@ export const CITATION_REGISTRY: CitationRegistry = {
     review_window_months: 6,
     quoted_text: 'The majority of patients with clinical ASCVD are likely to be at very high risk. Very high risk includes a history of multiple major ASCVD events (ACS within past 12 months, history of MI [other than ACS above] history of ischemic stroke, symptomatic PAD) or 1 major ASCVD event and multiple high-risk conditions (age >65 years of age, coronary artery revascularization, current smoker, diabetes, history of HF, hypertension, LDL-C >100 mg/dL despite maximally tolerated statin + ezetimibe).',
   },
+
+  // ─── Headache / Migraine citations ─────────────────────────────────────────
+
+  'robblee-ahs-2025': {
+    id: 'robblee-ahs-2025',
+    source: 'guideline',
+    title: 'AHS Consensus Statement — Acute Treatment of Migraine in Adults (Robblee et al., Headache 2026;66:53–76)',
+    year: 2025,
+    section: 'Full guideline; published online 2025, print Headache 2026;66:53–76',
+    url: 'https://doi.org/10.1111/head.70016',
+    last_reviewed: '2026-05-25',
+    review_window_months: 6,
+    quoted_text: 'Level A: Prochlorperazine (Must Offer), GONB (Must Offer), Lasmiditan (Must Offer — no driving 8 h), Dihydroergotamine (Must Offer), Opioids/Tramadol (Must NOT Offer). Level B: Metoclopramide, Ketorolac, Diphenhydramine, SONB, Dexamethasone (recurrence prevention). Level C: Dexamethasone (acute pain). Level U: Magnesium (IV; insufficient evidence; may benefit aura/photophobia subgroup).',
+  },
+
+  'ailani-ahs-2021': {
+    id: 'ailani-ahs-2021',
+    source: 'guideline',
+    title: 'AHS Consensus Statement — CGRP Pathway and Migraine Prevention (Ailani et al., Headache 2021;61:1021–1039)',
+    year: 2021,
+    section: 'Full consensus statement',
+    url: 'https://doi.org/10.1111/head.14153',
+    pmid: '34128230',
+    last_reviewed: '2026-05-25',
+    review_window_months: 6,
+    quoted_text: 'Preventive therapy threshold: ≥4 migraine days/month with disability, or ≥6 migraine days/month regardless of disability, or prior failure of ≥2 adequate preventive trials. Gepants (atogepant, rimegepant) do not cause medication-overuse headache (MOH) and are preferred for patients with MOH or at high MOH risk. CGRP mAbs: erenumab, fremanezumab, galcanezumab, eptinezumab — first-line for patients meeting preventive threshold. Escalation to calcitonin gene-related peptide (CGRP) mAb recommended after failure of ≥2 conventional preventive trials.',
+  },
+
+  'burch-2024-continuum-acute': {
+    id: 'burch-2024-continuum-acute',
+    source: 'review',
+    title: 'Acute Treatment of Migraine (Burch, Continuum 2024;30(2):316–366)',
+    year: 2024,
+    section: 'Continuum 2024;30(2):316–366',
+    url: 'https://doi.org/10.1212/CON.0000000000001411',
+    last_reviewed: '2026-05-25',
+    review_window_months: 12,
+    quoted_text: 'Stepwise acute treatment: NSAIDs and triptans remain first-line. Gepants (rimegepant, ubrogepant) and ditans (lasmiditan) are established second-line options without triptan contraindications applying. IV DHE remains highly effective for refractory ED migraine. Combination therapy (antiemetic + analgesic ± DHE) outperforms monotherapy in refractory presentations.',
+  },
+
+  'burish-2024-continuum-cluster': {
+    id: 'burish-2024-continuum-cluster',
+    source: 'review',
+    title: 'Cluster Headache, SUNCT, and SUNA (Burish, Continuum 2024;30(2):396–416)',
+    year: 2024,
+    section: 'Continuum 2024;30(2):396–416',
+    url: 'https://doi.org/10.1212/CON.0000000000001412',
+    last_reviewed: '2026-05-25',
+    review_window_months: 12,
+    quoted_text: 'Cluster headache acute treatment: high-flow O₂ 100% (12–15 L/min via non-rebreather, 15–20 min) and SC sumatriptan 6 mg are Level A. Greater occipital nerve (GON) block with corticosteroid is effective bridging therapy (AHS Grade A) during cluster bouts. Transitional therapy with suboccipital steroid injection recommended at bout onset. Verapamil is first-line prophylaxis. SUNCT/SUNA: lamotrigine first-line prevention; carbamazepine second-line.',
+  },
+
+  'nahas-2024-continuum-cranial-neuralgias': {
+    id: 'nahas-2024-continuum-cranial-neuralgias',
+    source: 'review',
+    title: 'Cranial Neuralgias (Nahas & Sanguinetti, Continuum 2024;30(2):510–536)',
+    year: 2024,
+    section: 'Continuum 2024;30(2):510–536',
+    url: 'https://doi.org/10.1212/CON.0000000000001414',
+    last_reviewed: '2026-05-25',
+    review_window_months: 12,
+    quoted_text: 'Trigeminal neuralgia (TN): carbamazepine (Level A) or oxcarbazepine (Level B) first-line. For refractory TN in acute exacerbation: IV fosphenytoin or IV lidocaine (short-term stabilisation). NVAF TN variant: phenytoin/carbamazepine. Occipital neuralgia: greater and/or lesser GON blocks first-line. Glossopharyngeal neuralgia: carbamazepine; airway protection mandatory if swallowing affected.',
+  },
+
+  'rizzoli-2024-continuum-moh': {
+    id: 'rizzoli-2024-continuum-moh',
+    source: 'review',
+    title: 'Medication-Overuse Headache (Rizzoli, Continuum 2024;30(2):379–390)',
+    year: 2024,
+    section: 'Continuum 2024;30(2):379–390',
+    url: 'https://doi.org/10.1212/CON.0000000000001413',
+    last_reviewed: '2026-05-25',
+    review_window_months: 12,
+    quoted_text: 'Medication-overuse headache (MOH) defined as headache on ≥15 days/month for >3 months with overuse of acute treatments. Triptans and ergotamines cause MOH at >10 days/month use; NSAIDs at >15 days/month. Gepants (ubrogepant, rimegepant, atogepant) do not cause MOH per current evidence and are preferred in MOH-risk patients. Withdrawal is mainstay treatment; abrupt for triptans, gradual for opioids/barbiturates.',
+  },
+
+  'goadsby-2024-continuum-indomethacin': {
+    id: 'goadsby-2024-continuum-indomethacin',
+    source: 'review',
+    title: 'Indomethacin-Responsive Headache Disorders (Goadsby & Cittadini, Continuum 2024;30(2):437–450)',
+    year: 2024,
+    section: 'Continuum 2024;30(2):437–450',
+    url: 'https://doi.org/10.1212/CON.0000000000001415',
+    last_reviewed: '2026-05-25',
+    review_window_months: 12,
+    quoted_text: 'Hemicrania continua and paroxysmal hemicrania: absolute indomethacin response is diagnostic. Indomethacin 25 mg TID, titrate to 75–150 mg/day. Indomethacin response failure should prompt re-evaluation of diagnosis. SUNHA responds to indomethacin in subset. Consider PPI co-prescription to reduce GI adverse effects.',
+  },
+
+  'lipton-2024-continuum-preventive': {
+    id: 'lipton-2024-continuum-preventive',
+    source: 'review',
+    title: 'Preventive Treatment of Migraine (Lipton & Silberstein, Continuum 2024;30(2):367–378)',
+    year: 2024,
+    section: 'Continuum 2024;30(2):367–378',
+    url: 'https://doi.org/10.1212/CON.0000000000001410',
+    last_reviewed: '2026-05-25',
+    review_window_months: 12,
+    quoted_text: 'Preventive treatment indicated when ≥4 migraine days/month with disability OR ≥6 migraine days/month regardless of disability OR acute medications used ≥10 days/month. CGRP pathway therapies (mAbs and gepants) are first-line for patients who have failed or cannot tolerate conventional preventives. Conventional preventives: topiramate, valproate (avoid in women of childbearing potential), propranolol, metoprolol, amitriptyline, venlafaxine. OnabotulinumtoxinA approved for chronic migraine only.',
+  },
 };

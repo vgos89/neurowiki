@@ -30,6 +30,7 @@ export type StaticRouteKey =
   | 'pathways-late-ivt'
   | 'pathways-se'
   | 'pathways-migraine'
+  | 'pathways-headache-clinic'
   | 'pathways-stroke-code'
   | 'guide-hub'
   | 'aha-2026-guideline'
@@ -362,6 +363,21 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
       title: 'Acute Migraine Pathway — ED & Inpatient | NeuroWiki',
       description: 'Acute migraine management pathway for emergency department and inpatient settings. Migraine cocktail, abortive therapy, and refractory headache protocols.',
       keywords: 'acute migraine treatment protocol, migraine cocktail ED, inpatient migraine management, refractory migraine treatment, acute headache pathway, migraine abortive therapy',
+    },
+  },
+  {
+    key: 'pathways-headache-clinic',
+    path: '/pathways/headache-clinic',
+    publishGate: true,
+    published: true,
+    includeInSitemap: true,
+    zone: 'reading',
+    bottomNavTab: 'pathways',
+    railItem: 'pathways',
+    meta: {
+      title: 'Clinic Headache Pathway — Outpatient Migraine Preventive | NeuroWiki',
+      description: 'Outpatient migraine management pathway. MIDAS-driven preventive threshold, comorbidity-guided agent selection, CGRP mAb escalation, and MOH prevention.',
+      keywords: 'outpatient migraine pathway, migraine preventive therapy, CGRP mAb selection, MIDAS score, medication overuse headache, migraine clinic pathway',
     },
   },
   {

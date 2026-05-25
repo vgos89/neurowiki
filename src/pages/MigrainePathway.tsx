@@ -61,6 +61,7 @@ interface AddOnsState {
     magnesium: MagDose;
     valproate: ValproateDose;
     gonb: boolean;
+    sonb: boolean;
 }
 
 interface SecondLineState {
@@ -206,11 +207,14 @@ const MigrainePathway: React.FC = () => {
       dexamethasone: '10'
   });
 
+  const [hasAura, setHasAura] = useState(false);
+
   const [firstLineAddOns, setFirstLineAddOns] = useState<AddOnsState>({
       sumatriptan: false,
       magnesium: null,
       valproate: null,
-      gonb: false
+      gonb: false,
+      sonb: false,
   });
 
   const [responseImproved, setResponseImproved] = useState<boolean | null>(null);
@@ -353,7 +357,8 @@ const MigrainePathway: React.FC = () => {
     setCareSetting(null);
     setSafety({ pregnant: false, renal: 'normal', cvRisk: false, htn: false, hepatic: false, basilar: false, triptan24h: false, dm: false, strokeHistory: false, age65: false, weightLow: false });
     setCocktail({ benadryl: true, antiemetic: 'prochlorperazine', ketorolac: '30', dexamethasone: '10' });
-    setFirstLineAddOns({ sumatriptan: false, magnesium: null, valproate: null, gonb: false });
+    setFirstLineAddOns({ sumatriptan: false, magnesium: null, valproate: null, gonb: false, sonb: false });
+    setHasAura(false);
     setResponseImproved(null);
     setSecondLine({ magnesium: null, valproate: null, chlorpromazine: null, gonbRescue: false, dheAdmit: false });
     setDifferential({ clusterPhenotype: false, indomethacinResponsive: false, trigeminalNeuralgia: false, statusMigrainosus: false });
@@ -385,6 +390,7 @@ const MigrainePathway: React.FC = () => {
       if (firstLineAddOns.magnesium) lines.push(`- Magnesium Sulfate ${firstLineAddOns.magnesium} g IV x1`);
       if (firstLineAddOns.valproate) lines.push(`- Valproate ${firstLineAddOns.valproate} mg IV over 15m x1 (Repeat 500mg q8h PRN, Max 3 doses)`);
       if (firstLineAddOns.gonb) lines.push("- Greater Occipital Nerve Block (GONB): 0.5–3 mL of 0.5% bupivacaine OR 1% lidocaine, ipsilateral to pain side");
+      if (firstLineAddOns.sonb) lines.push("- Supraorbital Nerve Block (SONB): 1–2 mL of 0.5% bupivacaine OR 1% lidocaine at supraorbital notch bilaterally");
 
       if (responseImproved === false) {
           lines.push("\nSECOND-LINE (Refractory > 2h):");
@@ -710,8 +716,11 @@ const MigrainePathway: React.FC = () => {
                       <div className="text-xs text-slate-500 mt-1">AHS Grade A. Same triptan-class contraindications.</div>
                     </div>
                     <div className="bg-white p-3 rounded-lg border border-amber-200">
-                      <div className="font-semibold text-slate-900 text-sm">Bridge / preventive (outpatient)</div>
-                      <div className="text-xs text-slate-500 mt-1">Bridge: prednisone 100 mg/day × 5 days then taper −20 mg q3d; OR ipsilateral GON injection with steroid. Preventive: verapamil 360 mg/day TID with ECG monitoring.</div>
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <div className="font-semibold text-slate-900 text-sm">Bridge / preventive (outpatient)</div>
+                        <span className="text-[10px] font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">AHS Grade A</span>
+                      </div>
+                      <div className="text-xs text-slate-500 mt-1">Bridge: prednisone 100 mg/day × 5 days then taper −20 mg q3d; OR ipsilateral GON block with corticosteroid (AHS Grade A bridging). Preventive: verapamil 360 mg/day TID with ECG monitoring.</div>
                     </div>
                   </div>
                 </div>
@@ -938,7 +947,7 @@ const MigrainePathway: React.FC = () => {
                 </div>
 
                 {/* D: Dexamethasone — PathwayCategoryRow (disabled when contraindicated) */}
-                <div ref={dexamethasoneRef} className={checkEligibility('dexamethasone').disabled ? 'opacity-50' : ''}>
+                <div ref={dexamethasoneRef} data-claim="migraine-dex-recurrence-level-b-pain-level-c" className={checkEligibility('dexamethasone').disabled ? 'opacity-50' : ''}>
                   {checkEligibility('dexamethasone').disabled ? (
                     <div className="py-3 border-b border-slate-100 flex items-center justify-between min-h-[44px]">
                       <span className="text-sm font-medium text-slate-500">Dexamethasone</span>
@@ -948,9 +957,9 @@ const MigrainePathway: React.FC = () => {
                     <PathwayCategoryRow
                       label="Dexamethasone"
                       options={[
-                        { value: '8', label: '8 mg IV ×1', description: 'Robblee 2025 Level B range. Single dose.' },
-                        { value: '10', label: '10 mg IV ×1', description: 'Robblee 2025 Level B — Should Offer for recurrence prevention. Burch 2024 reference dose.' },
-                        { value: '16', label: '16 mg IV ×1', description: 'Higher end of Robblee Table 2 range. Single dose.' },
+                        { value: '8', label: '8 mg IV ×1', description: 'Robblee 2025: Level C (May Offer) for acute pain; Level B (Should Offer) for preventing 24–72 h headache recurrence. Single dose.' },
+                        { value: '10', label: '10 mg IV ×1', description: 'Robblee 2025: Level B for recurrence prevention — this is the primary indication. Level C for acute pain reduction only. Burch 2024 reference dose.' },
+                        { value: '16', label: '16 mg IV ×1', description: 'Higher end of Robblee Table 2 range. Level C for acute pain; Level B for recurrence prevention. Single dose.' },
                       ] as CategoryOption[]}
                       value={cocktail.dexamethasone}
                       onChange={(v) => setCocktail({...cocktail, dexamethasone: v as DexDose})}
@@ -1011,6 +1020,24 @@ const MigrainePathway: React.FC = () => {
                     </button>
                   </div>
 
+                  {/* SONB — Level B, after GONB */}
+                  <div className="border-b border-slate-100">
+                    <button
+                      data-claim="migraine-sonb-level-b"
+                      onClick={() => setFirstLineAddOns({...firstLineAddOns, sonb: !firstLineAddOns.sonb})}
+                      className="w-full flex items-center justify-between py-3 transition-all touch-manipulation text-left min-h-[44px]"
+                    >
+                      <div>
+                        <span className="text-sm font-medium text-slate-900">Supraorbital Nerve Block (SONB)</span>
+                        <div className="text-xs text-slate-500 mt-0.5">1–2 mL of 0.5% bupivacaine OR 1% lidocaine at the supraorbital notch bilaterally.</div>
+                        <div className="text-[11px] text-neuro-700 font-bold mt-0.5">Robblee 2025 Level B — Should Offer.</div>
+                      </div>
+                      <div className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 ${firstLineAddOns.sonb ? 'bg-neuro-600 border-neuro-600' : 'bg-white border-slate-300'}`}>
+                        {firstLineAddOns.sonb && <Check size={13} className="text-white" />}
+                      </div>
+                    </button>
+                  </div>
+
                   {/* Magnesium — PathwayCategoryRow for dose (includes "Skip" deselect) */}
                   <div className={checkEligibility('magnesium').disabled ? 'opacity-50' : ''}>
                     {checkEligibility('magnesium').disabled ? (
@@ -1019,16 +1046,38 @@ const MigrainePathway: React.FC = () => {
                         <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">{checkEligibility('magnesium').reason}</span>
                       </div>
                     ) : (
-                      <PathwayCategoryRow
-                        label="Magnesium Sulfate IV"
-                        options={[
-                          { value: '1', label: '1 g IV ×1', description: 'Beneficial for aura/photophobia.' + (checkEligibility('magnesium').warning ? ' ' + checkEligibility('magnesium').warning : '') },
-                          { value: '2', label: '2 g IV ×1', description: 'Standard rescue dose.' + (checkEligibility('magnesium').warning ? ' ' + checkEligibility('magnesium').warning : '') },
-                          { value: 'skip', label: 'Skip (not indicated)', description: 'Omit magnesium from cocktail.' },
-                        ] as CategoryOption[]}
-                        value={firstLineAddOns.magnesium}
-                        onChange={(v) => setFirstLineAddOns({...firstLineAddOns, magnesium: v === 'skip' ? null : v as MagDose})}
-                      />
+                      <>
+                        {/* Aura toggle — gates magnesium recommendation */}
+                        <div className="flex items-center justify-between py-2 px-1">
+                          <span className="text-xs text-slate-500">Migraine with aura present?</span>
+                          <button
+                            type="button"
+                            onClick={() => setHasAura(v => !v)}
+                            className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all touch-manipulation ${hasAura ? 'bg-neuro-100 text-neuro-800 border-neuro-300' : 'bg-white text-slate-500 border-slate-200'}`}
+                          >
+                            {hasAura ? 'Yes — aura' : 'No aura'}
+                          </button>
+                        </div>
+                        <PathwayCategoryRow
+                          label="Magnesium Sulfate IV"
+                          options={[
+                            {
+                              value: '1',
+                              label: '1 g IV ×1',
+                              description: (hasAura ? 'Subgroup data suggests benefit with aura/photophobia. ' : 'Level U — insufficient evidence in non-aura migraine. May still offer. ') + (checkEligibility('magnesium').warning ? checkEligibility('magnesium').warning : ''),
+                            },
+                            {
+                              value: '2',
+                              label: '2 g IV ×1',
+                              description: (hasAura ? 'Preferred rescue dose when aura present. ' : 'Level U — insufficient evidence in non-aura migraine. May still offer. ') + (checkEligibility('magnesium').warning ? checkEligibility('magnesium').warning : ''),
+                            },
+                            { value: 'skip', label: 'Skip (not indicated)', description: 'Omit magnesium from cocktail.' },
+                          ] as CategoryOption[]}
+                          value={firstLineAddOns.magnesium}
+                          onChange={(v) => setFirstLineAddOns({...firstLineAddOns, magnesium: v === 'skip' ? null : v as MagDose})}
+                        />
+                        <div data-claim="migraine-magnesium-level-u-aura" className="text-[11px] text-slate-400 px-1 pb-1">Robblee 2025 Level U — insufficient evidence as routine add-on; sub-group benefit with aura/photophobia.</div>
+                      </>
                     )}
                   </div>
 
@@ -1053,6 +1102,15 @@ const MigrainePathway: React.FC = () => {
                       />
                     )}
                   </div>
+                </div>
+              </div>
+
+              {/* Opioid Must-NOT-Offer warning */}
+              <div data-claim="migraine-opioid-must-not-offer" className="bg-red-50 border border-red-300 rounded-xl p-4 flex gap-3">
+                <ShieldAlert size={18} className="text-red-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="text-xs font-black uppercase tracking-widest text-red-700 mb-1">Opioids / Tramadol — Level A Must NOT Offer</div>
+                  <p className="text-xs text-red-800">Hydromorphone, morphine, oxycodone, and tramadol are not indicated for acute migraine. Opioids worsen headache chronification, increase medication-overuse headache (MOH) risk, and show inferior efficacy vs. dopamine antagonists. AHS 2025 (Robblee et al.): Level A Must NOT Offer.</p>
                 </div>
               </div>
 
@@ -1261,9 +1319,13 @@ const MigrainePathway: React.FC = () => {
                 </div>
 
                 {mohScreen.headacheDaysHigh && mohScreen.acuteMedOveruse && (
-                  <div className="mt-3 bg-amber-50 border border-amber-300 rounded-lg p-4">
-                    <div className="font-bold text-amber-900 text-sm mb-1">MOH screen positive</div>
+                  <div className="mt-3 bg-amber-50 border border-amber-300 rounded-lg p-4 space-y-2">
+                    <div className="font-bold text-amber-900 text-sm">MOH screen positive</div>
                     <p className="text-xs text-amber-900">Counseling required: withdraw overused agent, initiate preventive therapy, outpatient headache follow-up within 2 weeks. Bridge options: naproxen 550 mg BID × 2–4 wks; prednisone taper; anti-CGRP mAb. Reference: Rizzoli 2024 Continuum 30(2):379–390.</p>
+                    <div data-claim="clinic-headache-moh-gepant-safe" className="bg-white border border-amber-200 rounded-lg p-3">
+                      <div className="text-xs font-bold text-neuro-700 mb-1">Gepants do NOT cause MOH</div>
+                      <p className="text-xs text-slate-700">Atogepant, rimegepant, and ubrogepant have no established MOH threshold. Gepants are preferred acute and preventive agents for patients with established MOH or at high MOH risk. AHS 2021 Consensus (Ailani et al.); Rizzoli 2024.</p>
+                    </div>
                   </div>
                 )}
               </div>

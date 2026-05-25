@@ -634,4 +634,55 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     surfaces: [DATA_SURFACE],
     description: 'THEIA trial: first phase 3 randomised controlled trial of intravenous alteplase 0.9 mg/kg vs oral aspirin 300 mg for acute non-arteritic central retinal artery occlusion (CRAO) within 4.5 hours of severe monocular vision loss (Snellen <20/400). N=70 randomised (35 per arm) across 16 French stroke units, June 2018–October 2023. Double-dummy patient- and assessor-blinded; treating staff open-label. Primary endpoint of visual acuity improvement of at least 0.3 LogMAR at 1 month: 19/29 (66%) alteplase vs 13/27 (48%) aspirin; unadjusted risk difference +17.4 pp (95% CI -11.8 to +46.5); adjusted OR 1.10 (95% CI 0.07–18.39); p=0.95. Trial explicitly underpowered: sized for a 30 pp difference (40% alteplase vs assumed 10% aspirin); observed aspirin response was 48%, making the real difference too small to detect at N=70. Safety strongly reassuring: zero symptomatic intracranial haemorrhages and zero major extracranial bleeds related to study treatment in either arm; one asymptomatic 15 mm parietal haematoma incidentally detected on day 1 CT in the alteplase arm. Functional reading vision (≤0.5 LogMAR / Snellen 20/63) achieved in only 14% alteplase vs 7% aspirin patients — low durable recovery in both arms consistent with the hypothesis that retinal ischaemic tolerance may be much shorter than 4.5h (potentially as little as 15 minutes for complete CRAO per Tobalem 2018). Mean onset-to-treatment 232 min; only 11% treated within 3.0h. Aspirin chosen as comparator (not placebo) because at least one-third of CRAO patients have concomitant cerebral ischaemia on DWI MRI. Conducted in French stroke units with mature ophthalmology-stroke integration; ophthalmologist-confirmed CRAO diagnosis required. Trial does not change the existing AHA / NANOS 2021 Scientific Statement on CRAO management (Mac Grory et al., Stroke 2021;52:e282-e294) which suggests IV alteplase "may be considered" for patients with disabling visual deficits meeting criteria. THEIA fails to demonstrate but does not refute efficacy; the planned individual-patient-data meta-analysis combining THEIA + TenCRAOS (NCT04526951) + REVISION (NCT04965038), both still recruiting at the time of THEIA publication, is the path to level 1 evidence. The predecessor CRAO trial EAGLE (Schumacher 2010) tested intra-arterial fibrinolysis with windows up to 20 hours and showed no efficacy with 37% adverse events — THEIA tests a fundamentally different intervention (IV vs IA) within a much earlier and narrower window with substantially better safety. Clinical implications: CRAO belongs in the stroke pathway (triage to ED, stroke code activation, funduscopy, GCA screening, brain imaging, ophthalmology co-management); IV alteplase 0.9 mg/kg within 4.5h is safe; aspirin should not be withheld; secondary-prevention workup follows the standard ischaemic stroke pathway because CRAO is a marker of systemic cerebrovascular and cardiovascular disease.',
   },
+
+  // ─── Headache / Migraine claims ────────────────────────────────────────────
+
+  'migraine-sonb-level-b': {
+    id: 'migraine-sonb-level-b',
+    citation_ids: ['robblee-ahs-2025'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Supraorbital nerve block (SONB) is Level B (Should Offer) for acute migraine in the ED per AHS 2025 consensus statement. Technique: inject 1–2 mL local anaesthetic (0.5% bupivacaine or 1% lidocaine) at the supraorbital notch bilaterally.',
+  },
+
+  'migraine-opioid-must-not-offer': {
+    id: 'migraine-opioid-must-not-offer',
+    citation_ids: ['robblee-ahs-2025'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Opioids (including hydromorphone) and tramadol are Level A Must NOT Offer for acute migraine treatment per AHS 2025 consensus. Opioids worsen headache chronification, increase MOH risk, and have inferior efficacy vs dopamine antagonists. Not indicated as first- or second-line ED migraine treatment.',
+  },
+
+  'migraine-dex-recurrence-level-b-pain-level-c': {
+    id: 'migraine-dex-recurrence-level-b-pain-level-c',
+    citation_ids: ['robblee-ahs-2025'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Dexamethasone for acute migraine: Level B (Should Offer) for recurrence prevention (reduces 24–72h headache recurrence by ~25–30%), but only Level C (May Offer) for acute pain reduction. Add-on to primary treatment; not used as monotherapy. Dose: 10 mg IV for recurrence prevention.',
+  },
+
+  'migraine-magnesium-level-u-aura': {
+    id: 'migraine-magnesium-level-u-aura',
+    citation_ids: ['robblee-ahs-2025'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'IV magnesium sulfate for acute migraine is Level U (Insufficient Evidence) per AHS 2025. Sub-group evidence suggests possible benefit in migraine with aura and photophobia. Dose: 1–2 g IV over 15 min. Not recommended as routine first-line; may be offered when aura is present or prominent photophobia.',
+  },
+
+  'clinic-headache-preventive-threshold': {
+    id: 'clinic-headache-preventive-threshold',
+    citation_ids: ['ailani-ahs-2021', 'lipton-2024-continuum-preventive'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Preventive migraine therapy threshold (AHS 2021 + Lipton 2024 Continuum): ≥4 migraine days/month with significant disability (MIDAS Grade II–IV) OR ≥6 migraine days/month regardless of disability OR acute medication use ≥10 days/month (MOH risk). Meeting any single criterion qualifies for preventive therapy discussion.',
+  },
+
+  'clinic-headache-cgrp-escalation': {
+    id: 'clinic-headache-cgrp-escalation',
+    citation_ids: ['ailani-ahs-2021'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'CGRP mAb escalation per AHS 2021 Consensus: indicated after failure of ≥2 adequate trials of conventional preventive agents (each ≥2 months at therapeutic dose). CGRP mAbs are also reasonable first-line when conventional agents are contraindicated or poorly tolerated. Options: erenumab 70–140 mg SC monthly, fremanezumab 225 mg SC monthly or 675 mg SC quarterly, galcanezumab 240 mg SC loading then 120 mg SC monthly, eptinezumab 100–300 mg IV quarterly.',
+  },
+
+  'clinic-headache-moh-gepant-safe': {
+    id: 'clinic-headache-moh-gepant-safe',
+    citation_ids: ['ailani-ahs-2021', 'rizzoli-2024-continuum-moh'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Gepants (ubrogepant, rimegepant, atogepant) do not cause medication-overuse headache (MOH) per current evidence (AHS 2021; Rizzoli Continuum 2024). Gepants are preferred acute and preventive agents in patients with established MOH or high MOH risk (acute use ≥10 days/month). Unlike triptans (MOH threshold ≥10 days/month) and NSAIDs (≥15 days/month), no MOH threshold has been established for gepants.',
+  },
 };
