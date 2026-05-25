@@ -5,7 +5,7 @@
  */
 
 
-const BASE_URL = 'https://neurowiki.ai';
+const BASE_URL = 'https://www.neurowiki.ai';
 
 // Build-time date injected via vite.config.ts `define`. Replaces previous
 // hardcoded '2026-02-18' which staled on every release. Fresh on each

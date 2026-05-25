@@ -16,14 +16,14 @@ const JSON_LD_SCRIPT_ID = 'neurowiki-json-ld';
 // brief at docs/og-image-brief.md. The query suffix forces iMessage /
 // Twitter / Slack / LinkedIn / Facebook to refetch instead of serving
 // the cached prior image.
-const DEFAULT_OG_IMAGE = 'https://neurowiki.ai/og-image.png?v=4';
+const DEFAULT_OG_IMAGE = 'https://www.neurowiki.ai/og-image.png?v=4';
 
 const Seo: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
     const meta = getRouteMeta(location.pathname);
-    const domain = 'https://neurowiki.ai';
+    const domain = 'https://www.neurowiki.ai';
     const canonicalUrl = `${domain}${location.pathname === '/' ? '' : location.pathname}`;
     const isStaging = window.location.hostname.endsWith('.pages.dev');
 

@@ -70,7 +70,7 @@ export interface RouteDefinition {
 
 // v=3 bump (2026-05-19): new OG image generated via Nano Banana from
 // docs/og-image-brief.md. Query suffix forces social platforms to refetch.
-const DEFAULT_IMAGE = 'https://neurowiki.ai/og-image.png?v=4';
+const DEFAULT_IMAGE = 'https://www.neurowiki.ai/og-image.png?v=4';
 
 export const DEFAULT_META: MetaData = {
   title: 'Neuro Wiki: Neurology Resident & Attending Guide',
