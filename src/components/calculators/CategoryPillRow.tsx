@@ -11,8 +11,11 @@ interface Props {
 }
 
 export const CategoryPillRow: React.FC<Props> = ({ activeCategory, onSelect }) => {
+  // py-2 + min-h-[44px] meets the WCAG 2.5.5 / Apple HIG 44pt floor.
+  // Previously py-1.5 → effective ~32px height (UX-audit 2026-05-24
+  // mobile-target sweep on non-pathway surfaces).
   const pillBase =
-    'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] border transition-colors flex-shrink-0';
+    'inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-full text-[13px] border transition-colors flex-shrink-0 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none';
   const inactive = 'bg-white border-slate-200 text-slate-600 font-medium hover:bg-slate-50';
   const active = 'bg-neuro-500 border-neuro-500 text-white font-semibold';
 

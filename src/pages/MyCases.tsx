@@ -276,14 +276,14 @@ const CaseRow: React.FC<CaseRowProps> = ({
           <button
             type="button"
             onClick={onConfirmDelete}
-            className="min-h-[36px] px-3 py-1.5 rounded-full bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold transition-colors"
+            className="min-h-[44px] px-3 py-2 rounded-full bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:outline-none"
           >
             Delete
           </button>
           <button
             type="button"
             onClick={onCancelDelete}
-            className="min-h-[36px] px-3 py-1.5 text-xs font-medium text-slate-500 hover:text-slate-700"
+            className="min-h-[44px] px-3 py-2 text-xs font-medium text-slate-500 hover:text-slate-700 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none rounded-full"
           >
             Cancel
           </button>

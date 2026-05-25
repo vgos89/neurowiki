@@ -12,9 +12,14 @@
 // Active state (amber fill) applies in both modes — on /trials it
 // reflects the ?favs filter; on /favorites it reflects that the user
 // is currently viewing the favorites surface.
+//
+// Count badge: when the user has >0 starred items AND is not on the
+// /favorites page, a small numeric badge sits on the top-right of
+// the star to telegraph "you have N pinned items" at a glance.
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useFavoritesFilter } from '../../hooks/useFavoritesFilter';
+import { useFavorites } from '../../hooks/useFavorites';
 
 interface Props { className?: string; }
 
@@ -24,11 +29,14 @@ export const FavouritesStarButton: React.FC<Props> = ({ className = '' }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { isActive: isFilterActive, toggle: toggleFilter } = useFavoritesFilter();
+  const { favorites } = useFavorites();
 
   const isOnFavoritesPage = location.pathname === '/favorites';
   const isOnFilterableRoute = FILTERABLE_ROUTES.has(location.pathname);
 
   const isActive = isFilterActive || isOnFavoritesPage;
+  const count = favorites.length;
+  const showBadge = count > 0 && !isOnFavoritesPage;
 
   const handleClick = () => {
     if (isOnFilterableRoute) {
@@ -45,7 +53,11 @@ export const FavouritesStarButton: React.FC<Props> = ({ className = '' }) => {
 
   const ariaLabel = isOnFilterableRoute
     ? (isFilterActive ? 'Show all trials' : 'Show only favorite trials')
-    : (isOnFavoritesPage ? 'Close favorites' : 'View my favorites');
+    : (isOnFavoritesPage
+        ? 'Close favorites'
+        : count > 0
+          ? `View my favorites (${count} starred)`
+          : 'View my favorites');
 
   return (
     <button
@@ -53,7 +65,7 @@ export const FavouritesStarButton: React.FC<Props> = ({ className = '' }) => {
       onClick={handleClick}
       aria-pressed={isActive}
       aria-label={ariaLabel}
-      className={`min-h-[44px] min-w-[44px] rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${isActive ? 'text-amber-400' : 'text-slate-400'} ${className}`}
+      className={`relative min-h-[44px] min-w-[44px] rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${isActive ? 'text-amber-400' : 'text-slate-400'} ${className}`}
     >
       <svg
         className="w-5 h-5"
@@ -64,6 +76,14 @@ export const FavouritesStarButton: React.FC<Props> = ({ className = '' }) => {
       >
         <polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2"/>
       </svg>
+      {showBadge && (
+        <span
+          className="absolute top-1.5 right-1.5 min-w-[16px] h-4 px-1 rounded-full bg-amber-500 text-white text-[10px] font-bold leading-none flex items-center justify-center pointer-events-none"
+          aria-hidden="true"
+        >
+          {count > 99 ? '99+' : count}
+        </span>
+      )}
     </button>
   );
 };
