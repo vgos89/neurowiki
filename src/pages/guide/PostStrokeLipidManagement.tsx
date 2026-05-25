@@ -136,7 +136,7 @@ const PostStrokeLipidManagement: React.FC = () => {
   const handleFavToggle = () => { toggleFavorite('post-stroke-lipid'); };
 
   const handleCopy = () => {
-    const summary = `Post-Stroke Lipid Management — NeuroWiki\nTarget: ${riskTier === 'vhr' ? '<55' : '<70'} mg/dL (${riskTier === 'vhr' ? 'VHR' : 'standard ASCVD'})`;
+    const summary = `Post-Stroke Lipid Management | NeuroWiki\nTarget: ${riskTier === 'vhr' ? '<55' : '<70'} mg/dL (${riskTier === 'vhr' ? 'VHR' : 'standard ASCVD'})`;
     navigator.clipboard?.writeText(summary).catch(() => {});
     setCopyConfirm(true);
     setTimeout(() => setCopyConfirm(false), 2000);
@@ -273,7 +273,7 @@ const PostStrokeLipidManagement: React.FC = () => {
             {/* Q1: Stroke type */}
             <Card>
               <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">
-                Step 1 of 2 — Stroke type
+                Step 1 of 2: Stroke type
               </p>
               <p className="text-[15px] font-semibold text-slate-900 mb-4">
                 What type of stroke does this patient have?
@@ -307,7 +307,7 @@ const PostStrokeLipidManagement: React.FC = () => {
             {strokeType === 'ischemic' && (
               <Card>
                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">
-                  Step 2 of 2 — ASCVD risk tier
+                  Step 2 of 2: ASCVD risk tier
                 </p>
                 <p className="text-[15px] font-semibold text-slate-900 mb-1">
                   Is this patient at very high ASCVD risk?
@@ -355,7 +355,7 @@ const PostStrokeLipidManagement: React.FC = () => {
             {(strokeType === 'ischemic' && riskTier) && (
               <Card>
                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">
-                  Optional — current LDL-C
+                  Optional: current LDL-C
                 </p>
                 <p className="text-[14px] text-slate-700 mb-3">
                   Enter the most recent fasting LDL-C to see a projected value after each add-on.
@@ -429,7 +429,7 @@ const PostStrokeLipidManagement: React.FC = () => {
 
             <Card>
               <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">
-                Step 1 — Current statin regimen
+                Step 1: Current statin regimen
               </p>
               <p className="text-[15px] font-semibold text-slate-900 mb-4">
                 What is the patient currently taking?
@@ -525,7 +525,7 @@ const PostStrokeLipidManagement: React.FC = () => {
             {rec.action === 'optimize-statin' && (
               <Card>
                 <div data-claim={rec.claimId}>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-600 mb-2">Recommended — First</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-600 mb-2">First step</p>
                   <p className="text-[16px] font-bold text-slate-900">Initiate or escalate to high-intensity statin</p>
                   <p className="text-[13px] text-slate-600 mt-2 leading-relaxed">
                     Atorvastatin 40–80 mg or rosuvastatin 20–40 mg daily. High-intensity statin achieves ≥50% LDL-C reduction. Re-check LDL-C at 4–12 weeks to assess response and plan next escalation step.
@@ -594,7 +594,7 @@ const PostStrokeLipidManagement: React.FC = () => {
                   >
                     <div data-claim="dyslipidemia-2026-pcsk9-escalation">
                       <p className="font-medium text-slate-800 text-[13px]">2026 sequencing update</p>
-                      <p>The 2026 ACC/AHA guideline no longer requires ezetimibe to be trialled before a PCSK9 mAb. Ezetimibe and PCSK9 mAbs are now co-equal options — the choice between them depends on the degree of LDL-C lowering needed and patient preference. When ezetimibe alone will achieve the target (as computed above), it remains the preferred first add-on due to oral dosing, lower cost, and proven MACE benefit (IMPROVE-IT).</p>
+                      <p>The 2026 ACC/AHA guideline no longer requires ezetimibe before a PCSK9 mAb. Both are COR 1, LOE A options. The choice depends on the degree of LDL-C lowering needed and patient preference. When ezetimibe alone reaches the target (shown above), it is the preferred first add-on: oral, cheaper, and with proven MACE benefit in IMPROVE-IT.</p>
                     </div>
                     <p className="mt-2 text-slate-500 text-[12px]">IMPROVE-IT (Cannon et al., NEJM 2015): ezetimibe + simvastatin reduced LDL-C from ~69 to ~54 mg/dL and reduced MACE (HR 0.936, NNT ~50 over 7 years) in post-ACS patients.</p>
                   </EvidenceToggle>
@@ -635,7 +635,7 @@ const PostStrokeLipidManagement: React.FC = () => {
                     onToggle={() => toggleEvidence('ev-pcsk9')}
                   >
                     <div data-claim="dyslipidemia-2026-pcsk9-escalation">
-                      <p>The 2026 ACC/AHA guideline revised Recommendation #5: ezetimibe and/or PCSK9 mAbs should be added to maximally tolerated statin. Ezetimibe is no longer required before starting a PCSK9 mAb — both are COR 1, LOE A. FOURIER (evolocumab, N=27,564) and ODYSSEY OUTCOMES (alirocumab, N=18,924) showed ~50–55% LDL-C reduction and significant MACE reduction. No increased haemorrhagic stroke risk was observed in either trial.</p>
+                      <p>The 2026 ACC/AHA guideline revised Recommendation #5: ezetimibe and/or PCSK9 mAbs should be added to maximally tolerated statin. Ezetimibe is no longer required before a PCSK9 mAb. Both are COR 1, LOE A. FOURIER (evolocumab, N=27,564) and ODYSSEY OUTCOMES (alirocumab, N=18,924) showed 50–55% LDL-C reduction and significant MACE reduction. Neither trial showed increased haemorrhagic stroke risk.</p>
                     </div>
                   </EvidenceToggle>
                 </div>
@@ -646,7 +646,7 @@ const PostStrokeLipidManagement: React.FC = () => {
             {rec.action === 'add-both' && (
               <Card>
                 <div data-claim={rec.claimId}>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-600 mb-2">Recommended — combination escalation</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-600 mb-2">Combination escalation</p>
                   <p className="text-[16px] font-bold text-slate-900">Add ezetimibe + PCSK9 mAb</p>
                   {ldlC !== null && rec.projectedLdl !== null && (
                     <div className="mt-3 rounded-lg bg-emerald-50 border border-emerald-100 px-3 py-2 flex items-center justify-between">
@@ -679,7 +679,7 @@ const PostStrokeLipidManagement: React.FC = () => {
                     <p className="text-[10px] font-bold uppercase tracking-widest text-amber-600 mb-2">Statin intolerance pathway</p>
                     <p className="text-[15px] font-semibold text-slate-900">Non-statin LDL-C lowering required</p>
                     <p className="text-[13px] text-slate-600 mt-2 leading-relaxed">
-                      When high-intensity statin is not tolerated, the 2026 ACC/AHA guideline recommends the "maximally tolerated statin" concept — even a low-dose statin on alternate days provides meaningful LDL-C reduction and should be continued if tolerated.
+                      When high-intensity statin is not tolerated, continue the lowest tolerable dose. The 2026 ACC/AHA guideline uses the term "maximally tolerated statin." Even a low-dose statin on alternate days reduces LDL-C meaningfully and should be kept if the patient can take it.
                     </p>
                   </div>
                 </Card>
@@ -712,7 +712,7 @@ const PostStrokeLipidManagement: React.FC = () => {
                         <p className="text-[13px] font-semibold text-slate-700">4. Inclisiran (if PCSK9 mAb not tolerated)</p>
                         <div className="flex gap-1"><CorBadge cor="2a" /><LoeBadge loe="B-R" /></div>
                       </div>
-                      <p className="text-[12px] text-slate-600">~50% LDL-C reduction. Twice-yearly subcutaneous injection. Second-line PCSK9i — no completed cardiovascular outcomes trial.</p>
+                      <p className="text-[12px] text-slate-600">~50% LDL-C reduction. Twice-yearly subcutaneous injection. No completed cardiovascular outcomes trial as of 2026 (ORION-4 ongoing). Use only when PCSK9 mAb is not tolerated.</p>
                     </div>
                   </div>
                 </Card>
@@ -724,7 +724,7 @@ const PostStrokeLipidManagement: React.FC = () => {
               <Card>
                 <div data-claim="dyslipidemia-2026-bempedoic-vhr">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">If still not at target after ezetimibe + PCSK9 mAb</p>
-                  <p className="text-[14px] font-semibold text-slate-800">Bempedoic acid 180 mg — COR 2a, LOE B-R</p>
+                  <p className="text-[14px] font-semibold text-slate-800">Bempedoic acid 180 mg (COR 2a, LOE B-R)</p>
                   <p className="text-[12px] text-slate-600 mt-1">May be added after ezetimibe ± PCSK9 mAb per §4.2.6 Rec #6 ("with or without ezetimibe and/or PCSK9 mAb"). Provides an additional ~20% LDL-C reduction. Does not cause myopathy.</p>
                 </div>
               </Card>
@@ -766,7 +766,7 @@ const PostStrokeLipidManagement: React.FC = () => {
 
             {/* Lp(a) flag */}
             <Card>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Lp(a) — check once</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Lp(a): check once</p>
               <p className="text-[13px] text-slate-700 leading-relaxed">
                 Measure Lp(a) at least once for ASCVD risk assessment (2026 ACC/AHA §3.4, COR 1, LOE B-NR). Lp(a) ≥70 mg/dL is a high-risk condition that may support VHR reclassification. Statins and ezetimibe do not meaningfully lower Lp(a). PCSK9 mAbs provide modest Lp(a) reduction (~20%) and are indicated at this risk level.
               </p>
@@ -786,16 +786,16 @@ const PostStrokeLipidManagement: React.FC = () => {
               </div>
               {lpaElevated && (
                 <div className="mt-3 rounded-lg bg-amber-50 border border-amber-200 p-3">
-                  <p className="text-[12px] font-semibold text-amber-800">Lp(a) ≥70 mg/dL — PCSK9 mAb strongly preferred</p>
-                  <p className="text-[12px] text-amber-700 mt-1">Elevated Lp(a) is an independent ASCVD risk driver not addressed by statins or ezetimibe. PCSK9 mAbs reduce Lp(a) by ~20% and are the preferred escalation agent. Reclassify as VHR if not already. RNA-targeted Lp(a)-lowering agents (olpasiran, pelacarsen) are investigational — do not recommend.</p>
+                  <p className="text-[12px] font-semibold text-amber-800">Lp(a) ≥70 mg/dL: PCSK9 mAb preferred</p>
+                  <p className="text-[12px] text-amber-700 mt-1">Lp(a) is an independent ASCVD risk factor. Statins and ezetimibe do not lower it. PCSK9 mAbs reduce Lp(a) by ~20% and are the preferred add-on at this level. Reclassify as VHR if the patient does not already meet criteria. RNA-targeting agents (olpasiran, pelacarsen) are investigational; do not use outside a trial.</p>
                 </div>
               )}
             </Card>
 
             {/* SPARCL pearl */}
             <PathwayLearningPearl
-              title="SPARCL — Secondary stroke prevention"
-              content="Atorvastatin 80 mg reduced recurrent stroke by 16% relative (NNT 53 over 4.9 years) but increased haemorrhagic stroke risk (HR 1.66, 95% CI 1.08–2.55). In ischaemic stroke patients, the net benefit is strongly positive. In patients with prior haemorrhagic stroke, statin use is a shared decision — see the ICH arm of this pathway."
+              title="SPARCL: Secondary stroke prevention"
+              content="Atorvastatin 80 mg reduced recurrent stroke by 16% relative (NNT 53 over 4.9 years) but increased haemorrhagic stroke risk (HR 1.66, 95% CI 1.08–2.55). In ischaemic stroke patients, the net benefit is strongly positive. In patients with prior haemorrhagic stroke, statin use requires an explicit risk-benefit discussion. See the ICH arm of this pathway."
             />
           </div>
         )}
@@ -812,8 +812,8 @@ const PostStrokeLipidManagement: React.FC = () => {
               <div className="flex items-start gap-2.5">
                 <AlertTriangle size={16} className="text-red-500 shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-[12px] font-bold text-red-700 uppercase tracking-widest">Intracerebral haemorrhage — different clinical context</p>
-                  <p className="text-[13px] text-slate-700 mt-1">The standard ischaemic stroke escalation pathway does not apply. Statin risk-benefit is uncertain after ICH; management is individualised.</p>
+                  <p className="text-[12px] font-bold text-red-700 uppercase tracking-widest">Intracerebral haemorrhage: different clinical context</p>
+                  <p className="text-[13px] text-slate-700 mt-1">The ischaemic stroke escalation sequence does not apply here. Statin risk-benefit is uncertain after ICH. Management is individual to each patient.</p>
                 </div>
               </div>
             </div>
@@ -849,7 +849,7 @@ const PostStrokeLipidManagement: React.FC = () => {
                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">2022 AHA/ASA ICH Guideline</p>
                 <p className="text-[14px] font-semibold text-slate-900 mb-2">Statin risk–benefit is uncertain after ICH</p>
                 <p className="text-[13px] text-slate-700 leading-relaxed">
-                  The 2022 AHA/ASA guideline states: the risks and benefits of statin therapy after spontaneous ICH "are uncertain." This is a deliberate equivocal recommendation — neither mandating continuation nor prohibition.
+                  The 2022 AHA/ASA guideline states: the risks and benefits of statin therapy after spontaneous ICH "are uncertain." This is a deliberate COR 2b recommendation. It does not mandate continuation or discontinuation.
                 </p>
                 <div className="flex items-center gap-2 mt-3">
                   <CorBadge cor="2b" /><LoeBadge loe="B-NR" />
@@ -863,7 +863,7 @@ const PostStrokeLipidManagement: React.FC = () => {
                 >
                   <p><strong className="text-slate-800">Meta-analysis (Teoh 2019, 17 RCTs, n=11,576):</strong> statins in stroke survivors increased ICH risk (RR 1.42, 95% CI 1.07–1.87) while reducing ischaemic stroke (RR 0.85). Trial sequential analysis indicated the ICH signal was conclusive in this population.</p>
                   <p className="mt-2"><strong className="text-slate-800">SPARCL post-hoc:</strong> patients with prior haemorrhagic stroke had a &gt;5-fold increased risk of ICH recurrence on atorvastatin 80 mg vs placebo (7/45 vs 2/48). The overall ischaemic stroke population had a favourable net benefit; the haemorrhagic subgroup did not.</p>
-                  <p className="mt-2"><strong className="text-slate-800">PCSK9 inhibitor data:</strong> no increased haemorrhagic stroke risk in FOURIER (evolocumab, n=27,564) or ODYSSEY OUTCOMES (alirocumab, n=18,924), including at LDL-C &lt;25 mg/dL. However, neither trial enrolled ICH survivors — extrapolation is indirect.</p>
+                  <p className="mt-2"><strong className="text-slate-800">PCSK9 inhibitor data:</strong> no increased haemorrhagic stroke risk in FOURIER (evolocumab, n=27,564) or ODYSSEY OUTCOMES (alirocumab, n=18,924), including at LDL-C &lt;25 mg/dL. Neither trial enrolled ICH survivors; the data cannot be directly applied to this population.</p>
                 </EvidenceToggle>
               </div>
             </Card>
@@ -872,22 +872,22 @@ const PostStrokeLipidManagement: React.FC = () => {
             {ichLocation && (
               <Card>
                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">
-                  Decision framework — {ichLocation === 'lobar' ? 'lobar / probable CAA' : 'deep / hypertensive'}
+                  {ichLocation === 'lobar' ? 'Lobar / probable CAA' : 'Deep / hypertensive'}: decision framework
                 </p>
                 {ichLocation === 'lobar' ? (
                   <div className="space-y-3">
                     <div className="rounded-lg bg-red-50 border border-red-100 p-3">
-                      <p className="text-[13px] font-semibold text-red-800">Higher caution — shared decision required</p>
+                      <p className="text-[13px] font-semibold text-red-800">Higher caution: shared decision required</p>
                       <p className="text-[12px] text-red-700 mt-1 leading-relaxed">Lobar haemorrhage suggests probable CAA. ICH recurrence risk is higher than deep ICH. The SPARCL signal is most relevant in this group. If a cardiovascular indication exists: discuss risk-benefit explicitly. Document the conversation. Consider avoiding high-intensity statin; if lipid-lowering is needed, PCSK9 mAb may be a safer option (no observed ICH signal) though direct post-ICH evidence is lacking.</p>
                     </div>
                     <div className="rounded-lg bg-slate-50 border border-slate-200 p-3">
-                      <p className="text-[12px] text-slate-700"><strong>If lipid-lowering is indicated:</strong> ezetimibe or PCSK9 mAb are alternatives that avoid the statin-specific mechanism. Do not present PCSK9 inhibitors as "proven safe after ICH" — direct evidence is absent.</p>
+                      <p className="text-[12px] text-slate-700"><strong>If lipid-lowering is indicated:</strong> ezetimibe or a PCSK9 mAb avoid the statin-specific mechanism. Do not present PCSK9 inhibitors as proven safe after ICH. Direct evidence in ICH survivors is absent.</p>
                     </div>
                   </div>
                 ) : (
                   <div className="space-y-3">
                     <div className="rounded-lg bg-amber-50 border border-amber-100 p-3">
-                      <p className="text-[13px] font-semibold text-amber-800">Lower recurrence risk — individualised decision</p>
+                      <p className="text-[13px] font-semibold text-amber-800">Lower recurrence risk: individualised decision</p>
                       <p className="text-[12px] text-amber-700 mt-1 leading-relaxed">Deep / hypertensive ICH carries lower recurrence risk than lobar. If the patient has a strong ASCVD indication (prior ACS, high CV burden), the benefit of lipid-lowering may outweigh the haemorrhagic risk. This requires an explicit risk-benefit discussion with the patient.</p>
                     </div>
                     <div className="rounded-lg bg-slate-50 border border-slate-200 p-3">
@@ -902,7 +902,7 @@ const PostStrokeLipidManagement: React.FC = () => {
             <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
               <p className="text-[13px] font-semibold text-amber-800 mb-1">Mandatory review acknowledgement</p>
               <p className="text-[12px] text-amber-700 leading-relaxed">
-                This patient had a haemorrhagic stroke. Lipid management decisions should be made with explicit risk-benefit discussion documented in the chart. The 2022 AHA/ASA guideline does not provide a blanket recommendation — clinician judgement is required.
+                This patient had a haemorrhagic stroke. Lipid management decisions require an explicit risk-benefit discussion documented in the chart. The 2022 AHA/ASA guideline does not mandate a specific course of action. Clinician judgement is required.
               </p>
             </div>
           </div>
