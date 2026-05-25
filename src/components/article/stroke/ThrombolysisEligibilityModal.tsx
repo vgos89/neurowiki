@@ -453,13 +453,14 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
 
         </div>
 
-        {/* Footer */}
-        <div className="px-4 py-3 border-t border-slate-100 bg-white flex items-center justify-between gap-3 flex-shrink-0">
+        {/* Footer — H-17 fix: switched flex-wrap so the 5-control row
+            does not clip at 375px. Touch targets all 44px+. */}
+        <div className="px-4 py-3 border-t border-slate-100 bg-white flex items-center justify-between gap-3 flex-shrink-0 flex-wrap">
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={handleCopyToEMR}
-              className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 border border-slate-200 hover:bg-slate-50 rounded-xl transition-colors"
+              className="min-h-[44px] flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 border border-slate-200 hover:bg-slate-50 rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
             >
               {copiedToClipboard ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               {copiedToClipboard ? 'Copied!' : 'Copy to EMR'}
@@ -476,7 +477,7 @@ export const ThrombolysisEligibilityModal: React.FC<ThrombolysisEligibilityModal
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 hover:bg-slate-50 rounded-xl transition-colors"
+              className="min-h-[44px] px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 hover:bg-slate-50 rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
             >
               {onComplete ? 'Cancel' : 'Close'}
             </button>

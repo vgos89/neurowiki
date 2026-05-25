@@ -227,9 +227,9 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
           type="button"
           onClick={onPrevMonth}
           aria-label="Previous month"
-          className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
+          className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
         >
-          <ChevronLeft className="w-4 h-4 text-slate-500" aria-hidden="true" />
+          <ChevronLeft className="w-5 h-5 text-slate-500" aria-hidden="true" />
         </button>
         <span className="text-sm font-bold text-slate-800 flex items-center gap-1">
           {MONTHS[viewMonth]} {viewYear}
@@ -241,9 +241,9 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
           disabled={!canNextMonth}
           aria-label="Next month"
           aria-disabled={!canNextMonth}
-          className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors disabled:opacity-30 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
         >
-          <ChevronRight className="w-4 h-4 text-slate-500" aria-hidden="true" />
+          <ChevronRight className="w-5 h-5 text-slate-500" aria-hidden="true" />
         </button>
       </div>
 
@@ -270,7 +270,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
               aria-pressed={sel}
               aria-label={`${day} ${MONTHS[viewMonth]} ${viewYear}${future ? ', unavailable' : ''}${sel ? ', selected' : ''}`}
               onClick={() => onSelectDay(day)}
-              className={`w-8 h-8 mx-auto flex items-center justify-center text-sm rounded-full font-medium transition-colors
+              className={`min-h-[44px] min-w-[44px] mx-auto flex items-center justify-center text-sm rounded-full font-medium transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none
                 ${sel ? 'bg-neuro-500 text-white font-bold' : ''}
                 ${!sel && tod ? 'ring-2 ring-neuro-400 text-neuro-600 font-bold' : ''}
                 ${!sel && !tod && !future ? 'text-slate-700 hover:bg-neuro-50 hover:text-neuro-700' : ''}
@@ -730,6 +730,18 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
+  // M-7 fix (UX audit 2026-05-24): body-scroll lock so the background
+  // doesn't scroll behind the picker on iOS. Mirrors the pattern in
+  // ExtendedIVTPathwayModal / ThrombolysisEligibilityModal.
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
+
   // Future-time enforcement moved to handleConfirm (line ~745) per V
   // feedback 2026-05-20: the previous live scroll-snap clamp here was
   // auto-correcting the wheels back to "now" whenever a user scrolled
@@ -974,11 +986,12 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
             <span id="lkw-picker-title" className="text-sm font-bold text-slate-900 truncate">Last Known Well</span>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-slate-100 transition-colors shrink-0 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+            className="min-h-[44px] min-w-[44px] rounded-lg hover:bg-slate-100 transition-colors shrink-0 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none flex items-center justify-center"
             aria-label="Close"
           >
-            <X className="w-4 h-4 text-slate-500" />
+            <X className="w-5 h-5 text-slate-500" />
           </button>
         </div>
 
