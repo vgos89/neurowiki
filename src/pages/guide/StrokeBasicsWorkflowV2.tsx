@@ -8,8 +8,9 @@ import { PathwayRailStep } from '../../components/pathways/PathwayRail';
 import {
   ArrowLeft, ExternalLink, Copy, Brain, Info, AlertTriangle,
   InfoIcon, FlaskConical, Eye, FileText as FileTextIcon,
-  ChevronDown, GraduationCap, Pencil, CheckCircle2, RefreshCw,
+  ChevronDown, GraduationCap, Pencil, CheckCircle2, RefreshCw, Star,
 } from 'lucide-react';
+import { useFavorites } from '../../hooks/useFavorites';
 import { StrokeBasicsLayout } from './StrokeBasicsLayout';
 import { Trial } from '../../components/article';
 import { TimestampBubble } from '../../components/article/stroke/TimestampBubble';
@@ -149,6 +150,31 @@ function computeLkwHours(d: Step1Data | null): number {
 }
 
 // ── Study pearls button ───────────────────────────────────────────────────────
+
+// Stroke Code pathway favorite-star. ID 'stroke-code' resolves via
+// favoritesRegistry to the /pathways/stroke-code route, so starring
+// from here makes it appear in /favorites alongside the other 5
+// pathways that already have star affordances.
+const StrokeCodeFavStar: React.FC = () => {
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const isFav = isFavorite('stroke-code');
+  return (
+    <button
+      type="button"
+      onClick={() => toggleFavorite('stroke-code')}
+      className="flex items-center justify-center min-h-[44px] min-w-[44px] rounded-lg hover:bg-slate-100 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+      aria-pressed={isFav}
+      aria-label={isFav ? 'Remove Stroke Code from favorites' : 'Add Stroke Code to favorites'}
+    >
+      <Star
+        className={`w-5 h-5 ${isFav ? 'text-amber-400' : 'text-slate-400'}`}
+        fill={isFav ? 'currentColor' : 'none'}
+        strokeWidth={1.6}
+        aria-hidden
+      />
+    </button>
+  );
+};
 
 const StudyPearlsButton: React.FC<{ count: number; onClick: () => void }> = ({ count, onClick }) =>
   count > 0 ? (
@@ -347,6 +373,7 @@ const MainContent: React.FC = () => {
                   <ArrowLeft className="w-5 h-5 text-slate-500" />
                 </button>
                 <h1 className="text-lg font-semibold text-slate-900 tracking-tight">Stroke Code</h1>
+                <StrokeCodeFavStar />
               </div>
               {/* Code/Study toggle — closes audit-stroke-code-a11y-2026-05-17.md
                   H5 (aria-checked on plain type="button" with no role). Now uses

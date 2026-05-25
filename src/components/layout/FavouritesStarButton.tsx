@@ -1,21 +1,59 @@
-// LAYOUT_SPEC §1.3.2
+// LAYOUT_SPEC §1.3.2 + 2026-05-24 My Favorites feature.
 // Shared between mobile header and desktop top bar.
-// Inactive: text-slate-400, fill=none, stroke-width=1.6
-// Active: text-amber-400, fill=currentColor, stroke=currentColor
+//
+// Behavior:
+//   - On filterable routes (currently /trials), the star toggles the
+//     existing ?favs=true URL filter that scopes the page to favorited
+//     items only. Preserves the prior contract.
+//   - On every other route, the star navigates the user to /favorites,
+//     the dedicated My Favorites page that aggregates starred
+//     calculators / pathways / trials in one categorized list.
+//
+// Active state (amber fill) applies in both modes — on /trials it
+// reflects the ?favs filter; on /favorites it reflects that the user
+// is currently viewing the favorites surface.
 import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useFavoritesFilter } from '../../hooks/useFavoritesFilter';
 
 interface Props { className?: string; }
 
+const FILTERABLE_ROUTES = new Set(['/trials']);
+
 export const FavouritesStarButton: React.FC<Props> = ({ className = '' }) => {
-  const { isActive, toggle } = useFavoritesFilter();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { isActive: isFilterActive, toggle: toggleFilter } = useFavoritesFilter();
+
+  const isOnFavoritesPage = location.pathname === '/favorites';
+  const isOnFilterableRoute = FILTERABLE_ROUTES.has(location.pathname);
+
+  const isActive = isFilterActive || isOnFavoritesPage;
+
+  const handleClick = () => {
+    if (isOnFilterableRoute) {
+      // Preserve existing TrialsPage filter behavior.
+      toggleFilter();
+    } else if (isOnFavoritesPage) {
+      // Already on /favorites — go back one step in history if possible.
+      navigate(-1);
+    } else {
+      // Default: open the My Favorites page.
+      navigate('/favorites');
+    }
+  };
+
+  const ariaLabel = isOnFilterableRoute
+    ? (isFilterActive ? 'Show all trials' : 'Show only favorite trials')
+    : (isOnFavoritesPage ? 'Close favorites' : 'View my favorites');
+
   return (
     <button
       type="button"
-      onClick={toggle}
+      onClick={handleClick}
       aria-pressed={isActive}
-      aria-label={isActive ? 'Show all' : 'Show only favourites'}
-      className={`w-9 h-9 rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors ${isActive ? 'text-amber-400' : 'text-slate-400'} ${className}`}
+      aria-label={ariaLabel}
+      className={`min-h-[44px] min-w-[44px] rounded-full flex items-center justify-center hover:bg-slate-50 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${isActive ? 'text-amber-400' : 'text-slate-400'} ${className}`}
     >
       <svg
         className="w-5 h-5"

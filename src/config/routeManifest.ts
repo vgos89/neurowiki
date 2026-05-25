@@ -53,7 +53,8 @@ export type StaticRouteKey =
   | 'terms'
   | 'accessibility'
   | 'my-cases'
-  | 'import-cases';
+  | 'import-cases'
+  | 'my-favorites';
 
 export interface RouteDefinition {
   key: StaticRouteKey;
@@ -750,6 +751,22 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
     meta: {
       title: 'Import Cases · NeuroWiki',
       description: 'Receive a case transfer from another device using a 6-digit code and 4-digit PIN.',
+      keywords: '',
+      image: DEFAULT_IMAGE,
+    },
+  },
+  {
+    key: 'my-favorites',
+    path: '/favorites',
+    publishGate: false,
+    published: true,
+    includeInSitemap: false, // user-specific surface; not crawlable
+    zone: 'reference',
+    bottomNavTab: null,
+    railItem: null,
+    meta: {
+      title: 'My Favorites · NeuroWiki',
+      description: 'Calculators, pathways, and trials you have starred for quick access. Stored on this device.',
       keywords: '',
       image: DEFAULT_IMAGE,
     },

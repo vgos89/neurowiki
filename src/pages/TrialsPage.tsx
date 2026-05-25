@@ -20,6 +20,7 @@ import { Toggle, type ToggleOption } from '../components/ui/Toggle';
 import { Chip } from '../components/ui/Chip';
 import { TrialLegendCard } from '../components/trials/TrialLegendCard';
 import { TRIAL_QUESTIONS, type QuestionIconKey } from '../data/trial-questions';
+import { quickFindStatic } from '../lib/favoritesRegistry';
 
 // ── View toggle options ─────────────────────────────────────────────────────
 const TOGGLE_OPTIONS: [ToggleOption, ToggleOption] = [
@@ -433,6 +434,56 @@ export default function TrialsPage() {
           Year
         </button>
       </div>
+
+      {/* Other matches (calculators / pathways) — when a clinician
+          searches for something like "NIHSS" on /trials, the local
+          search filters trials only. The global ⌘K overlay already
+          surfaces calculators and pathways, but most users don't
+          discover that. This inline block fills the gap: if the
+          query matches any calculator/pathway in favoritesRegistry's
+          static set, render them above the trial results with a
+          discoverable header pointing to the global search. Added
+          2026-05-24 per V feedback ("calculators not showing up
+          when i type NIHSS"). */}
+      {searchQuery.trim().length >= 2 && (() => {
+        const otherMatches = quickFindStatic(searchQuery, 6);
+        if (otherMatches.length === 0) return null;
+        return (
+          <div className="mx-5 mt-4 mb-0 rounded-xl bg-white border border-slate-100 overflow-hidden">
+            <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 flex items-center justify-between gap-2 min-h-[40px]">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                Other matches for &ldquo;{searchQuery}&rdquo;
+              </p>
+              <span className="text-[10px] text-slate-400">{otherMatches.length}</span>
+            </div>
+            <ul className="divide-y divide-slate-50">
+              {otherMatches.map((entry) => (
+                <li key={entry.id}>
+                  <Link
+                    to={entry.path}
+                    className="flex items-center justify-between gap-3 px-4 py-2.5 min-h-[44px] hover:bg-slate-50 transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-neuro-500 focus-visible:outline-none"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-slate-900 truncate">{entry.title}</p>
+                      {entry.eyebrow && (
+                        <p className="text-xs text-slate-500 truncate mt-0.5">{entry.eyebrow}</p>
+                      )}
+                    </div>
+                    <span className="text-[10px] font-medium text-slate-400 bg-slate-50 border border-slate-200 rounded px-1.5 py-0.5 flex-shrink-0 capitalize">
+                      {entry.kind}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="px-4 py-2 border-t border-slate-100 bg-slate-50">
+              <p className="text-[10px] text-slate-500">
+                Tip: press <kbd className="px-1 py-0.5 bg-white border border-slate-200 rounded text-[10px] font-medium">⌘K</kbd> anywhere for the global search overlay.
+              </p>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Favorites banner */}
       {showFavoritesOnly && (
