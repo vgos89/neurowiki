@@ -92,9 +92,16 @@ async function loadSitemapRoutes() {
   }
   const xml = await readFile(SITEMAP_PATH, 'utf8');
   const locs = [...xml.matchAll(/<loc>\s*([^<]+?)\s*<\/loc>/g)].map((m) => m[1]);
-  // Convert https://neurowiki.ai[/path] → /path (root → /)
+  // Convert https://[www.]neurowiki.ai[/path] → /path (root → /).
+  // The regex was previously `/^https?:\/\/neurowiki\.ai/i` which did
+  // not match the www. subdomain. Sitemap now emits the canonical
+  // www-prefixed URL, so without (?:www\.)? the prefix survived and
+  // page.goto(`http://localhost:4173` + `https://www.neurowiki.ai/...`)
+  // produced an invalid concatenated URL — every route failed with
+  // "Protocol error (Page.navigate): Cannot navigate to invalid URL"
+  // and the postbuild gate aborted the Vercel deploy.
   const paths = locs
-    .map((u) => u.replace(/^https?:\/\/neurowiki\.ai/i, ''))
+    .map((u) => u.replace(/^https?:\/\/(?:www\.)?neurowiki\.ai/i, ''))
     .map((p) => (p === '' ? '/' : p));
   // Dedupe preserving order.
   return [...new Set(paths)];
