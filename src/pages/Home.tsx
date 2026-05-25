@@ -13,6 +13,7 @@ import ScenarioSection from '../components/home/ScenarioSection';
 import ShowMoreToggle from '../components/home/ShowMoreToggle';
 import RecentlyViewed from '../components/home/RecentlyViewed';
 import TrendingTrials from '../components/home/TrendingTrials';
+import FavoritesPreview from '../components/home/FavoritesPreview';
 import { SCENARIOS, VISIBLE_BEFORE_FOLD } from '../data/scenarios';
 import { useShowMore } from '../hooks/useShowMore';
 import { useScenarioExpansion } from '../hooks/useScenarioExpansion';
@@ -116,6 +117,7 @@ const Home: React.FC = () => {
         />
       )}
 
+      {isAllView && <FavoritesPreview />}
       {isAllView && recents.length > 0 && <RecentlyViewed recents={recents} />}
 
       {isAllView && <TrendingTrials />}
