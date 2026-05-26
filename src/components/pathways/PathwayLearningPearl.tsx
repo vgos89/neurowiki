@@ -25,6 +25,18 @@ export interface PathwayLearningPearlProps {
   visible?: boolean;
   /** data-claim attribute for JSX-phase claim tagging (CLAUDE.md §13.4). */
   claimId?: string;
+  /**
+   * When true, the pearl only renders if Teach mode is on. Used by
+   * ClinicHeadachePathway for "Learn this pattern" pedagogy pearls that
+   * are educational, not clinical, and should be hidden in tool mode.
+   * Default false (existing callers unaffected).
+   */
+  teachOnly?: boolean;
+  /**
+   * Current Teach mode state. Only consulted when teachOnly is true.
+   * Read from useTeachMode() at the page level and prop-drilled.
+   */
+  teachMode?: boolean;
 }
 
 export const PathwayLearningPearl: React.FC<PathwayLearningPearlProps> = ({
@@ -32,8 +44,11 @@ export const PathwayLearningPearl: React.FC<PathwayLearningPearlProps> = ({
   content,
   visible = true,
   claimId,
+  teachOnly = false,
+  teachMode = false,
 }) => {
   if (!visible) return null;
+  if (teachOnly && !teachMode) return null;
 
   return (
     <details
