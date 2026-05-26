@@ -626,16 +626,65 @@ const ClinicHeadachePathway: React.FC = () => {
                 ))}
               </div>
 
-              {/* Headache phenotype claim placeholders. The full ICHD-3 criteria + TTH management
-                  content blocks are pending; these sr-only tags satisfy the claims hook so the
-                  evidence is registered and traceable. Replace with visible content blocks per phenotype. */}
-              <span data-claim="clinic-headache-ichd3-migraine-criteria" className="sr-only">ICHD-3 migraine criteria placeholder.</span>
-              <span data-claim="clinic-headache-ichd3-cluster-criteria" className="sr-only">ICHD-3 cluster criteria placeholder.</span>
-              <span data-claim="clinic-headache-ichd3-hemicrania-criteria" className="sr-only">ICHD-3 hemicrania continua criteria placeholder.</span>
-              <span data-claim="clinic-headache-ichd3-tension-criteria" className="sr-only">ICHD-3 tension-type headache criteria placeholder.</span>
-              <span data-claim="clinic-headache-ichd3-ndph-criteria" className="sr-only">ICHD-3 NDPH criteria placeholder.</span>
-              <span data-claim="clinic-headache-tension-acute-management" className="sr-only">TTH acute management placeholder.</span>
-              <span data-claim="clinic-headache-tension-preventive" className="sr-only">TTH preventive management placeholder.</span>
+              {/* ICHD-3 criteria card. Shown once a phenotype is chosen.
+                  Source: ICHD-3 2018 (Cephalalgia 2018;38:1-211, PMID 29368949). */}
+              {(headacheType === 'migraine-without-aura' || headacheType === 'migraine-with-aura') && (
+                <div data-claim="clinic-headache-ichd3-migraine-criteria" className="mt-3 bg-slate-50 border border-slate-200 rounded-xl p-3">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">ICHD-3 1.1 / 1.2 Migraine criteria</p>
+                  <div className="text-xs text-slate-700 space-y-1">
+                    <div>A. ≥5 attacks fulfilling B–D (≥2 if migraine with aura).</div>
+                    <div>B. Attack duration 4 to 72 hours (untreated or unsuccessfully treated).</div>
+                    <div>C. ≥2 of: unilateral location; pulsating quality; moderate or severe intensity; aggravated by routine physical activity.</div>
+                    <div>D. ≥1 of: nausea and/or vomiting; photophobia AND phonophobia.</div>
+                    <div className="text-slate-500 mt-1.5">With aura (1.2): fully reversible visual, sensory, speech, motor, brainstem, or retinal symptoms spreading over ≥5 min, lasting 5 to 60 min, followed by headache within 60 min.</div>
+                  </div>
+                </div>
+              )}
+              {headacheType === 'tension' && (
+                <div data-claim="clinic-headache-ichd3-tension-criteria" className="mt-3 bg-slate-50 border border-slate-200 rounded-xl p-3">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">ICHD-3 2.2 / 2.3 Tension-type headache criteria</p>
+                  <div className="text-xs text-slate-700 space-y-1">
+                    <div>A. Frequent episodic TTH (2.2): 1 to 14 headache days/month for &gt;3 months. Chronic TTH (2.3): ≥15 days/month for &gt;3 months.</div>
+                    <div>B. Attack duration 30 minutes to 7 days.</div>
+                    <div>C. ≥2 of: bilateral location; pressing or tightening (non-pulsating); mild to moderate intensity; NOT aggravated by routine physical activity.</div>
+                    <div>D. No nausea or vomiting; ≤1 of photophobia or phonophobia.</div>
+                    <div className="text-slate-500 mt-1.5">Chronic TTH (2.3) allows mild nausea OR photophobia OR phonophobia, but not moderate or severe nausea/vomiting.</div>
+                  </div>
+                </div>
+              )}
+              {headacheType === 'cluster-refer' && (
+                <div data-claim="clinic-headache-ichd3-cluster-criteria" className="mt-3 bg-slate-50 border border-slate-200 rounded-xl p-3">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">ICHD-3 3.1 Cluster headache criteria</p>
+                  <div className="text-xs text-slate-700 space-y-1">
+                    <div>A. ≥5 attacks fulfilling B–D.</div>
+                    <div>B. Severe or very severe unilateral orbital, supraorbital, and/or temporal pain lasting 15 to 180 minutes (untreated).</div>
+                    <div>C. Either or both of: ipsilateral cranial autonomic features (conjunctival injection, lacrimation, nasal congestion, rhinorrhoea, eyelid oedema, forehead/facial sweating, miosis, ptosis); restlessness or agitation.</div>
+                    <div>D. Attack frequency 1 every other day to 8/day during active bouts.</div>
+                  </div>
+                </div>
+              )}
+              {headacheType === 'hemicrania-refer' && (
+                <div data-claim="clinic-headache-ichd3-hemicrania-criteria" className="mt-3 bg-slate-50 border border-slate-200 rounded-xl p-3">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">ICHD-3 3.4 Hemicrania continua criteria</p>
+                  <div className="text-xs text-slate-700 space-y-1">
+                    <div>A. Continuous strictly unilateral headache &gt;3 months with exacerbations of moderate or greater intensity.</div>
+                    <div>B. Either or both during exacerbations: ipsilateral cranial autonomic features; restlessness or aggravation by movement.</div>
+                    <div>C. Absolute response to therapeutic-dose indomethacin is required for diagnosis.</div>
+                    <div className="text-amber-700 font-semibold mt-1.5">Indomethacin non-response rules out hemicrania continua. See indomethacin titration protocol below.</div>
+                  </div>
+                </div>
+              )}
+              {headacheType === 'new-daily-workup' && (
+                <div data-claim="clinic-headache-ichd3-ndph-criteria" className="mt-3 bg-slate-50 border border-slate-200 rounded-xl p-3">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">ICHD-3 3.3 New daily persistent headache criteria</p>
+                  <div className="text-xs text-slate-700 space-y-1">
+                    <div>A. Persistent headache present &gt;3 months.</div>
+                    <div>B. Distinct and clearly-remembered onset, becoming continuous and unremitting within 24 hours.</div>
+                    <div>C. Not better accounted for by another ICHD-3 diagnosis.</div>
+                    <div className="text-slate-500 mt-1.5">The defining feature is the patient pinpointing the exact moment the headache began and reporting it has never resolved since.</div>
+                  </div>
+                </div>
+              )}
 
               {/* Aura toggle — shown when migraine selected */}
               {(headacheType === 'migraine-without-aura' || headacheType === 'migraine-with-aura') && (
@@ -758,6 +807,103 @@ const ClinicHeadachePathway: React.FC = () => {
 
         {step === 3 && (headacheType === 'migraine-without-aura' || headacheType === 'migraine-with-aura' || headacheType === 'tension') && (
           <div className="space-y-3" id="field-preventive-need">
+
+            {/* ── Tension-type headache: acute + preventive content ───────────
+                Source: Scher Continuum 2024 (TTH acute and preventive review),
+                AHS 2021 (shared MOH threshold). Surfaces claims
+                clinic-headache-tension-acute-management and
+                clinic-headache-tension-preventive. */}
+            {headacheType === 'tension' && (
+              <>
+                <div data-claim="clinic-headache-tension-acute-management" className="bg-white border border-slate-200 rounded-xl p-4">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">TTH acute treatment</p>
+                  <div className="space-y-2">
+                    <div className="bg-slate-50 rounded-lg p-2.5">
+                      <div className="flex items-start gap-2">
+                        <EvidenceBadge level="A" />
+                        <div className="text-xs text-slate-700">
+                          <div className="font-semibold">Ibuprofen 400 to 600 mg PO</div>
+                          <div className="text-slate-500">First-line. NSAID of choice in non-pregnant adults without renal or GI contraindication.</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-slate-50 rounded-lg p-2.5">
+                      <div className="flex items-start gap-2">
+                        <EvidenceBadge level="A" />
+                        <div className="text-xs text-slate-700">
+                          <div className="font-semibold">Aspirin 500 to 1000 mg PO</div>
+                          <div className="text-slate-500">Alternative NSAID when ibuprofen is not preferred.</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-slate-50 rounded-lg p-2.5">
+                      <div className="flex items-start gap-2">
+                        <EvidenceBadge level="A" />
+                        <div className="text-xs text-slate-700">
+                          <div className="font-semibold">Acetaminophen 1000 mg PO</div>
+                          <div className="text-slate-500">Preferred in pregnancy or when NSAIDs are contraindicated.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-3 bg-red-50 border border-red-200 rounded-lg p-2.5">
+                    <p className="text-xs text-red-800 font-semibold mb-1">Avoid</p>
+                    <p className="text-xs text-red-700">Opioids and butalbital-containing combinations. Both carry MOH and dependence risk and are not first-line for TTH.</p>
+                  </div>
+                  <div className="mt-2 bg-amber-50 border border-amber-200 rounded-lg p-2.5">
+                    <p className="text-xs text-amber-800 font-semibold mb-1">Medication-overuse limits</p>
+                    <p className="text-xs text-amber-700">Simple analgesics ≤15 days/month. Triptans, opioids, and combination analgesics ≤10 days/month. Acute days above either threshold for &gt;3 months meet ICHD-3 8.2 medication-overuse headache criteria.</p>
+                  </div>
+                </div>
+
+                <div data-claim="clinic-headache-tension-preventive" className="bg-white border border-slate-200 rounded-xl p-4">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">TTH preventive treatment</p>
+                  <p className="text-xs text-slate-600 mb-3">Indicated for chronic TTH (≥15 days/month) or high-frequency episodic TTH with functional impact.</p>
+                  <div className="space-y-2">
+                    <div className="bg-slate-50 rounded-lg p-2.5">
+                      <div className="flex items-start gap-2">
+                        <EvidenceBadge level="B" />
+                        <div className="text-xs text-slate-700">
+                          <div className="font-semibold">Amitriptyline 10 to 75 mg at bedtime</div>
+                          <div className="text-slate-500">First-line. Start 10 mg, titrate by 10 to 25 mg every 1 to 2 weeks. AAN Level B.</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-slate-50 rounded-lg p-2.5">
+                      <div className="flex items-start gap-2">
+                        <EvidenceBadge level="B" />
+                        <div className="text-xs text-slate-700">
+                          <div className="font-semibold">Venlafaxine 75 to 150 mg/day</div>
+                          <div className="text-slate-500">Second-line. Preferred when depression or anxiety are comorbid.</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-slate-50 rounded-lg p-2.5">
+                      <div className="flex items-start gap-2">
+                        <EvidenceBadge level="B" />
+                        <div className="text-xs text-slate-700">
+                          <div className="font-semibold">Mirtazapine 15 to 30 mg at bedtime</div>
+                          <div className="text-slate-500">Second-line. Use when sleep disturbance or anxiety predominate.</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-slate-50 rounded-lg p-2.5">
+                      <div className="flex items-start gap-2">
+                        <EvidenceBadge level="C" />
+                        <div className="text-xs text-slate-700">
+                          <div className="font-semibold">Topiramate</div>
+                          <div className="text-slate-500">Third-line. Less evidence for TTH than for migraine.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-3 bg-neuro-50 border border-neuro-200 rounded-lg p-2.5">
+                    <p className="text-xs text-neuro-800 font-semibold mb-1">Non-pharmacological (AAN Level A)</p>
+                    <p className="text-xs text-neuro-700">Stress management, biofeedback, and physical therapy have Level A evidence in TTH and should be offered alongside pharmacotherapy. Beta-blockers have insufficient evidence specifically for TTH and are not recommended.</p>
+                  </div>
+                </div>
+              </>
+            )}
 
             {/* Threshold card */}
             <div
