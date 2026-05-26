@@ -13,7 +13,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { AlertTriangle, Info } from 'lucide-react';
-import { PathwayHeader } from '../components/pathways/PathwayHeader';
+import { CalculatorHeader } from '../components/calculators/CalculatorHeader';
 import { useFavorites } from '../hooks/useFavorites';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useRecents } from '../hooks/useRecents';
@@ -207,35 +207,39 @@ interface InputState {
 interface ValidationResult {
   inputs: PceInputs | null;
   warnings: string[];
-  blockers: string[];
+  missing: string[];
+  outOfRange: string[];
 }
 
 function validate(state: InputState): ValidationResult {
   const warnings: string[] = [];
-  const blockers: string[] = [];
+  const missing: string[] = [];
+  const outOfRange: string[] = [];
 
   const age = parseFloat(state.age);
   const tc = parseFloat(state.totalCholesterol);
   const hdl = parseFloat(state.hdlCholesterol);
   const sbp = parseFloat(state.systolicBp);
 
-  if (!state.age || isNaN(age)) blockers.push('Age');
-  else if (age < 40 || age > 79) blockers.push('Age 40-79');
+  if (!state.age || isNaN(age)) missing.push('Age');
+  else if (age < 40 || age > 79) outOfRange.push(`Age ${age} is outside the PCE validated range of 40-79. The calculator does not produce a valid result outside this range.`);
 
-  if (!state.sex) blockers.push('Sex');
-  if (!state.race) blockers.push('Race');
-  if (!state.totalCholesterol || isNaN(tc)) blockers.push('Total cholesterol');
+  if (!state.sex) missing.push('Sex');
+  if (!state.race) missing.push('Race');
+  if (!state.totalCholesterol || isNaN(tc)) missing.push('Total cholesterol');
   else if (tc < 130 || tc > 320) warnings.push('Total cholesterol outside PCE derivation range (130-320 mg/dL)');
-  if (!state.hdlCholesterol || isNaN(hdl)) blockers.push('HDL-C');
+  if (!state.hdlCholesterol || isNaN(hdl)) missing.push('HDL-C');
   else if (hdl < 20 || hdl > 100) warnings.push('HDL-C outside PCE derivation range (20-100 mg/dL)');
-  if (!state.systolicBp || isNaN(sbp)) blockers.push('Systolic BP');
+  if (!state.systolicBp || isNaN(sbp)) missing.push('Systolic BP');
   else if (sbp < 90 || sbp > 200) warnings.push('SBP outside PCE derivation range (90-200 mmHg)');
 
-  if (!state.bpTreated) blockers.push('BP treatment status');
-  if (!state.diabetes) blockers.push('Diabetes');
-  if (!state.smoker) blockers.push('Smoker status');
+  if (!state.bpTreated) missing.push('BP treatment status');
+  if (!state.diabetes) missing.push('Diabetes');
+  if (!state.smoker) missing.push('Smoker status');
 
-  if (blockers.length > 0) return { inputs: null, warnings, blockers };
+  if (missing.length > 0 || outOfRange.length > 0) {
+    return { inputs: null, warnings, missing, outOfRange };
+  }
 
   return {
     inputs: {
@@ -244,7 +248,8 @@ function validate(state: InputState): ValidationResult {
       bpTreated: state.bpTreated!, diabetes: state.diabetes!, smoker: state.smoker!,
     },
     warnings,
-    blockers: [],
+    missing: [],
+    outOfRange: [],
   };
 }
 
@@ -305,14 +310,19 @@ const AscvdRiskCalculator: React.FC = () => {
 
   return (
     <div className="min-h-dvh bg-slate-50 pb-24">
-      <PathwayHeader
-        pathwayLabel="ASCVD 10-year Risk"
+      <CalculatorHeader
+        name="ASCVD 10-year Risk"
+        scoreDisplay={
+          result !== null
+            ? <span className="text-[20px] font-bold text-slate-900">{result.toFixed(1)}<span className="text-slate-500 text-[14px]">%</span></span>
+            : <span className="text-[20px] font-bold text-slate-400">—</span>
+        }
+        scoreAriaLabel={result !== null ? `10-year ASCVD risk ${result.toFixed(1)} percent` : '10-year ASCVD risk not yet computed'}
         onBack={handleBack}
-        isFav={isFav}
-        onFavToggle={() => toggleFavorite('ascvd-risk')}
         onReset={handleReset}
         onCopy={handleCopy}
-        copyConfirm={copyConfirm}
+        onFavToggle={() => toggleFavorite('ascvd-risk')}
+        isFav={isFav}
       />
 
       <div className="max-w-xl mx-auto px-4 pt-4 space-y-4">
@@ -457,9 +467,35 @@ const AscvdRiskCalculator: React.FC = () => {
           </div>
         )}
 
-        {result === null && validation.blockers.length > 0 && (
-          <div className="rounded-xl border border-slate-200 bg-white p-3 text-[12px] text-slate-600">
-            Fill all inputs to see the 10-year ASCVD risk. Missing: {validation.blockers.join(', ')}.
+        {result === null && validation.outOfRange.length > 0 && (
+          <div className="rounded-xl border-2 border-amber-300 bg-amber-50 p-4" style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.10)' }}>
+            <div className="flex items-start gap-2.5">
+              <AlertTriangle size={18} className="text-amber-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-[13px] font-bold uppercase tracking-widest text-amber-700">Outside PCE validated range</p>
+                <ul className="text-[13px] text-amber-900 mt-2 space-y-1.5 leading-relaxed">
+                  {validation.outOfRange.map((m, i) => <li key={i}>{m}</li>)}
+                </ul>
+                <p className="text-[12px] text-amber-700 mt-2">
+                  In patients &lt;40 the PCE underestimates lifetime risk; in patients &gt;79 it overestimates. For patients outside this range, decide on statin therapy using clinical judgement and risk-enhancing factors.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {result === null && validation.outOfRange.length === 0 && validation.missing.length > 0 && (
+          <div className="rounded-xl border-2 border-neuro-300 bg-neuro-50 p-4" style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.10)' }}>
+            <div className="flex items-start gap-2.5">
+              <Info size={18} className="text-neuro-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-[13px] font-bold uppercase tracking-widest text-neuro-700">More inputs needed</p>
+                <p className="text-[13px] text-slate-700 mt-1">Fill the remaining fields to see the 10-year ASCVD risk and interpretation.</p>
+                <ul className="text-[12px] text-slate-700 mt-2 space-y-0.5">
+                  {validation.missing.map((m, i) => <li key={i}>• {m}</li>)}
+                </ul>
+              </div>
+            </div>
           </div>
         )}
 
