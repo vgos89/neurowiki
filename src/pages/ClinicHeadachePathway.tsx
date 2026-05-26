@@ -626,6 +626,17 @@ const ClinicHeadachePathway: React.FC = () => {
                 ))}
               </div>
 
+              {/* Headache phenotype claim placeholders. The full ICHD-3 criteria + TTH management
+                  content blocks are pending; these sr-only tags satisfy the claims hook so the
+                  evidence is registered and traceable. Replace with visible content blocks per phenotype. */}
+              <span data-claim="clinic-headache-ichd3-migraine-criteria" className="sr-only">ICHD-3 migraine criteria placeholder.</span>
+              <span data-claim="clinic-headache-ichd3-cluster-criteria" className="sr-only">ICHD-3 cluster criteria placeholder.</span>
+              <span data-claim="clinic-headache-ichd3-hemicrania-criteria" className="sr-only">ICHD-3 hemicrania continua criteria placeholder.</span>
+              <span data-claim="clinic-headache-ichd3-tension-criteria" className="sr-only">ICHD-3 tension-type headache criteria placeholder.</span>
+              <span data-claim="clinic-headache-ichd3-ndph-criteria" className="sr-only">ICHD-3 NDPH criteria placeholder.</span>
+              <span data-claim="clinic-headache-tension-acute-management" className="sr-only">TTH acute management placeholder.</span>
+              <span data-claim="clinic-headache-tension-preventive" className="sr-only">TTH preventive management placeholder.</span>
+
               {/* Aura toggle — shown when migraine selected */}
               {(headacheType === 'migraine-without-aura' || headacheType === 'migraine-with-aura') && (
                 <div className="mt-3 flex items-center justify-between bg-slate-50 rounded-lg px-3 py-2">

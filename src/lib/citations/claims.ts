@@ -665,6 +665,19 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: '2022 AHA/ASA ICH Guideline (COR 2b, LOE B-NR): in patients with spontaneous ICH and an established statin indication, the risks and benefits are uncertain. Teoh 2019 meta-analysis (17 RCTs, n=11,576): statins in stroke survivors increased ICH risk (RR 1.42, 95% CI 1.07–1.87). Decisions should be individualised to ICH aetiology (lobar/CAA = higher recurrence risk) and strength of cardiovascular indication.',
   },
 
+  'ascvd-pce-formula-2013': {
+    id: 'ascvd-pce-formula-2013',
+    citation_ids: ['goff-2014-pce-pooled-cohort-equations'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Pooled Cohort Equations (Goff 2014) estimate 10-year ASCVD risk in adults 40-79 without prior clinical ASCVD using sex- and race-specific coefficients for ln(age), ln(total cholesterol), ln(HDL-C), ln(SBP) with separate coefficients for treated vs untreated BP, current smoking, and diabetes. Formula: risk = 1 - S₀^exp(Σ(β·x) - mean).',
+  },
+  'ascvd-risk-tiers-2019': {
+    id: 'ascvd-risk-tiers-2019',
+    citation_ids: ['arnett-2019-prevention-risk-tiers'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: '2019 ACC/AHA Primary Prevention Guideline risk tiers: low <5%, borderline 5-7.5%, intermediate 7.5-20%, high ≥20%. Statin recommended at intermediate or high risk (COR 1, LOE A). PCE does not apply to patients with established ASCVD.',
+  },
+
   'theia-crao-alteplase-2025': {
     id: 'theia-crao-alteplase-2025',
     citation_ids: ['preterre-theia-2025', 'mac-grory-aha-nanos-crao-2021'],
@@ -721,5 +734,59 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     citation_ids: ['ailani-ahs-2021', 'rizzoli-2024-continuum-moh'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
     description: 'Gepants (ubrogepant, rimegepant, atogepant) do not cause medication-overuse headache (MOH) per current evidence (AHS 2021; Rizzoli Continuum 2024). Gepants are preferred acute and preventive agents in patients with established MOH or high MOH risk (acute use ≥10 days/month). Unlike triptans (MOH threshold ≥10 days/month) and NSAIDs (≥15 days/month), no MOH threshold has been established for gepants.',
+  },
+
+  // ─── ICHD-3 phenotype classifier — Clinic Headache Pathway ────────────────
+  // Six diagnostic-criteria claims, one per phenotype displayed by the
+  // classifier result card. Surface: static JSX with data-claim attribute
+  // on each per-phenotype criteria checklist. All anchor to ichd3-2018.
+
+  'clinic-headache-ichd3-migraine-criteria': {
+    id: 'clinic-headache-ichd3-migraine-criteria',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'ICHD-3 1.1 Migraine without aura (Cephalalgia 2018;38:1-211, PMID 29368949): ≥5 attacks; 4-72 h duration; ≥2 of (unilateral / pulsating / moderate-severe / aggravated by activity); plus nausea/vomiting OR photophobia+phonophobia. ICHD-3 1.2 Migraine with aura adds ≥2 attacks with fully reversible aura (visual, sensory, speech, motor, brainstem, or retinal) spreading gradually over ≥5 min, lasting 5-60 min, followed by headache within 60 min.',
+  },
+
+  'clinic-headache-ichd3-cluster-criteria': {
+    id: 'clinic-headache-ichd3-cluster-criteria',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'ICHD-3 3.1 Cluster headache: ≥5 attacks of severe/very severe unilateral orbital/supraorbital/temporal pain lasting 15-180 min untreated; with ipsilateral cranial autonomic features (conjunctival injection, lacrimation, nasal congestion, rhinorrhoea, eyelid oedema, forehead/facial sweating, miosis, ptosis) AND/OR restlessness or agitation. Attack frequency 1 every other day to 8/day during active bouts.',
+  },
+
+  'clinic-headache-ichd3-hemicrania-criteria': {
+    id: 'clinic-headache-ichd3-hemicrania-criteria',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'ICHD-3 3.4 Hemicrania continua: continuous strictly unilateral headache present >3 months with exacerbations of moderate or greater intensity; ipsilateral cranial autonomic features AND/OR restlessness/aggravation by movement; ABSOLUTE response to therapeutic-dose indomethacin is required for diagnosis. Indomethacin non-response rules out HC.',
+  },
+
+  'clinic-headache-ichd3-tension-criteria': {
+    id: 'clinic-headache-ichd3-tension-criteria',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'ICHD-3 2.2 Frequent episodic TTH: 1-14 headache days/month for >3 months; 30 min-7 days duration; ≥2 of (bilateral / pressing-tightening / mild-moderate / NOT aggravated by routine activity); no nausea or vomiting; ≤1 of photophobia or phonophobia. ICHD-3 2.3 Chronic TTH: ≥15 days/month for >3 months with the same B-D features (allows mild nausea OR photophobia OR phonophobia, but not moderate-severe nausea or vomiting).',
+  },
+
+  'clinic-headache-ichd3-ndph-criteria': {
+    id: 'clinic-headache-ichd3-ndph-criteria',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'ICHD-3 3.3 New daily persistent headache (NDPH): distinct and clearly-remembered onset of headache becoming continuous and unremitting within 24 h; present >3 months; not better accounted for by another ICHD-3 diagnosis. The defining feature is the patient pinpointing the moment the headache began and it never resolving since.',
+  },
+
+  'clinic-headache-tension-acute-management': {
+    id: 'clinic-headache-tension-acute-management',
+    citation_ids: ['scher-tth-2024-continuum'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'TTH acute management (Scher Continuum 2024): ibuprofen 400-600 mg PO first-line; aspirin 500-1000 mg PO alternative; acetaminophen 1000 mg PO preferred in pregnancy or NSAID contraindication. Avoid opioids and butalbital combinations (MOH and dependence risk). Limit acute medication to ≤10 days/month for triptans/opioids and ≤15 days/month for simple analgesics to avoid medication-overuse headache.',
+  },
+
+  'clinic-headache-tension-preventive': {
+    id: 'clinic-headache-tension-preventive',
+    citation_ids: ['scher-tth-2024-continuum', 'ailani-ahs-2021'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'TTH preventive management (Scher Continuum 2024 + AHS 2021 for shared MOH threshold): preventive indicated for chronic TTH (≥15 days/month) or high-frequency episodic TTH with functional impact. First-line: amitriptyline 10-75 mg at bedtime (AAN Level B). Second-line: venlafaxine 75-150 mg/day if depression/anxiety comorbid; mirtazapine 15-30 mg at bedtime for sleep + anxiety. Third-line: topiramate (less evidence for TTH than migraine). Combined non-pharmacologic approach (stress management + biofeedback + physical therapy) has Level A evidence and should be offered alongside pharmacotherapy. Beta-blockers have insufficient evidence specifically for TTH.',
   },
 };

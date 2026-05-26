@@ -1324,4 +1324,68 @@ export const CITATION_REGISTRY: CitationRegistry = {
     review_window_months: 12,
     quoted_text: 'Preventive treatment indicated when ≥4 migraine days/month with disability OR ≥6 migraine days/month regardless of disability OR acute medications used ≥10 days/month. CGRP pathway therapies (mAbs and gepants) are first-line for patients who have failed or cannot tolerate conventional preventives. Conventional preventives: topiramate, valproate (avoid in women of childbearing potential), propranolol, metoprolol, amitriptyline, venlafaxine. OnabotulinumtoxinA approved for chronic migraine only.',
   },
+
+  // ─── ICHD-3 (2018) — International Classification of Headache Disorders, 3rd edition ──
+  // Headache Classification Committee of the International Headache Society.
+  // Cephalalgia 2018;38(1):1-211. PMID: 29368949. Sections cited by the
+  // ICHD-3 phenotype classifier: 1.1 (Migraine without aura), 1.2 (Migraine
+  // with aura), 2.2 (Frequent episodic tension-type headache), 2.3 (Chronic
+  // tension-type headache), 3.1 (Cluster headache), 3.3 (New daily
+  // persistent headache), 3.4 (Hemicrania continua). Open-access on
+  // ichd-3.org. 24-month review window per §13.7 (classification cadence —
+  // ICHD-4 anticipated 2026-2027; refresh on publication).
+  // Registered 2026-05-25 for the Clinic Headache Pathway phenotype classifier.
+  'ichd3-2018': {
+    id: 'ichd3-2018',
+    source: 'guideline',
+    title: 'Headache Classification Committee of the International Headache Society (IHS). The International Classification of Headache Disorders, 3rd edition',
+    year: 2018,
+    section: '1.1, 1.2, 2.2, 2.3, 3.1, 3.3, 3.4',
+    url: 'https://ichd-3.org',
+    pmid: '29368949',
+    last_reviewed: '2026-05-25',
+    review_window_months: 24,
+    quoted_text: '1.1 Migraine without aura — At least five attacks fulfilling criteria B-D: B) Headache attacks lasting 4-72 hours (untreated or unsuccessfully treated). C) Headache has at least two of the following four characteristics: 1) unilateral location, 2) pulsating quality, 3) moderate or severe pain intensity, 4) aggravation by or causing avoidance of routine physical activity. D) During headache at least one of the following: 1) nausea and/or vomiting, 2) photophobia and phonophobia. E) Not better accounted for by another ICHD-3 diagnosis. 1.2 Migraine with aura — At least two attacks fulfilling criteria B and C: B) One or more of the following fully reversible aura symptoms: visual, sensory, speech and/or language, motor, brainstem, retinal. C) At least three of the following six characteristics: 1) at least one aura symptom spreads gradually over ≥5 minutes, 2) two or more aura symptoms occur in succession, 3) each individual aura symptom lasts 5-60 minutes, 4) at least one aura symptom is unilateral, 5) at least one aura symptom is positive, 6) the aura is accompanied, or followed within 60 minutes, by headache. 2.2 Frequent episodic tension-type headache — At least 10 episodes of headache occurring on 1-14 days per month on average for >3 months (≥12 and <180 days per year) fulfilling criteria B-D: B) Lasting 30 minutes to 7 days. C) At least two of the following four: 1) bilateral location, 2) pressing or tightening (non-pulsating) quality, 3) mild or moderate intensity, 4) not aggravated by routine physical activity. D) Both of the following: 1) no nausea or vomiting, 2) no more than one of photophobia or phonophobia. 2.3 Chronic tension-type headache — Headache occurring on ≥15 days per month on average for >3 months (≥180 days per year), fulfilling criteria B-D of 2.2 with the additional allowance of mild nausea OR photophobia OR phonophobia (but no moderate-to-severe nausea and no vomiting). 3.1 Cluster headache — At least five attacks fulfilling criteria B-D: B) Severe or very severe unilateral orbital, supraorbital and/or temporal pain lasting 15-180 minutes (when untreated). C) Either or both of: 1) at least one ipsilateral cranial autonomic symptom (conjunctival injection and/or lacrimation, nasal congestion and/or rhinorrhoea, eyelid oedema, forehead and facial sweating, miosis and/or ptosis); 2) a sense of restlessness or agitation. D) Attacks have a frequency from 1 every other day to 8 per day. 3.3 New daily persistent headache (NDPH) — Persistent headache fulfilling criteria B and C: B) Distinct and clearly-remembered onset, with pain becoming continuous and unremitting within 24 hours. C) Present for >3 months. 3.4 Hemicrania continua — Unilateral headache fulfilling criteria B-D: B) Present for >3 months, with exacerbations of moderate or greater intensity. C) Either or both of: 1) at least one ipsilateral cranial autonomic symptom, 2) a sense of restlessness or aggravation of the pain by movement. D) Responds absolutely to therapeutic doses of indomethacin.',
+  },
+
+  // ─── Scher 2024 — Tension-Type Headache (Continuum review) ────────────────
+  // Continuum (Minneap Minn). Continuum review summarising current TTH
+  // management. Open-access summary; full text behind LWW paywall. 12-month
+  // review window per §13.7 (Continuum cadence). Registered 2026-05-25 for
+  // the Clinic Headache Pathway TTH management protocol.
+  // ── ASCVD Pooled Cohort Equations (PCE) — 2013 ACC/AHA risk calculator ─────
+  'goff-2014-pce-pooled-cohort-equations': {
+    id: 'goff-2014-pce-pooled-cohort-equations',
+    source: 'guideline',
+    title: '2013 ACC/AHA Guideline on the Assessment of Cardiovascular Risk (Goff et al. — Pooled Cohort Equations)',
+    year: 2014,
+    section: 'Appendix 7, Tables A and B (sex- and race-specific coefficients)',
+    pmid: '24222018',
+    url: 'https://doi.org/10.1161/01.cir.0000437741.48606.98',
+    last_reviewed: '2026-05-25',
+    review_window_months: 24,
+    quoted_text: 'The Pooled Cohort Equations estimate 10-year ASCVD risk (nonfatal MI, CHD death, or fatal/nonfatal stroke) in non-Hispanic White and African American adults aged 40-79 without prior clinical ASCVD and with LDL-C 70-189 mg/dL. Inputs: age, sex, race, total cholesterol, HDL-C, systolic BP, BP treatment status, diabetes, current smoker. Formula: 10-year risk = 1 - S₀(10)^exp(Σ(βᵢ·xᵢ) - mean), where S₀(10), the mean, and coefficients are sex- and race-specific (Appendix 7, Tables A and B). The equations were derived from the Atherosclerosis Risk in Communities (ARIC), Cardiovascular Health Study, CARDIA, and Framingham Original/Offspring cohorts. The PCE may overestimate risk in contemporary cohorts; clinical judgement should accompany risk-tier interpretation.',
+  },
+  'arnett-2019-prevention-risk-tiers': {
+    id: 'arnett-2019-prevention-risk-tiers',
+    source: 'guideline',
+    title: '2019 ACC/AHA Guideline on the Primary Prevention of Cardiovascular Disease (Arnett et al.)',
+    year: 2019,
+    section: '§4.1 Risk Assessment and §4.2 risk thresholds',
+    pmid: '30879355',
+    url: 'https://doi.org/10.1161/CIR.0000000000000678',
+    last_reviewed: '2026-05-25',
+    review_window_months: 24,
+    quoted_text: '10-year ASCVD risk tiers for primary prevention: Low risk <5%; Borderline 5% to <7.5%; Intermediate 7.5% to <20%; High ≥20%. At borderline risk, risk-enhancing factors may favour statin initiation. At intermediate risk, statin therapy is recommended (COR 1, LOE A) and risk-enhancing factors plus coronary artery calcium scoring refine the decision. At high risk, high-intensity statin is recommended. The PCE applies to adults aged 40-79 without prior clinical ASCVD; it does not apply to patients with established ASCVD, who fall under the secondary prevention pathway.',
+  },
+  'scher-tth-2024-continuum': {
+    id: 'scher-tth-2024-continuum',
+    source: 'review',
+    title: 'Tension-Type Headache (Continuum 2024 review of TTH acute and preventive management)',
+    year: 2024,
+    url: 'https://journals.lww.com/continuum',
+    last_reviewed: '2026-05-25',
+    review_window_months: 12,
+    quoted_text: 'Acute treatment of tension-type headache: simple analgesics — ibuprofen 400-600 mg PO or aspirin 500-1000 mg PO are first-line; acetaminophen 1000 mg PO is preferred in pregnancy or when NSAIDs are contraindicated. Opioids and butalbital-containing combinations should be avoided because of MOH and dependence risk. Acute medication days should be limited to ≤10/month (triptans, opioids) or ≤15/month (simple analgesics) to avoid medication-overuse headache. Preventive treatment is indicated for chronic TTH (≥15 days/month) or high-frequency episodic TTH with functional impact. First-line preventive: amitriptyline 10-75 mg at bedtime (AAN evidence Level B). Second-line: venlafaxine 75-150 mg/day, particularly when depression or anxiety is comorbid; mirtazapine 15-30 mg at bedtime for sleep disturbance and anxiety. Third-line: topiramate, with less evidence for TTH than for migraine. Non-pharmacologic combined approach (stress management, biofeedback, physical therapy) has Level A evidence and should be offered alongside pharmacotherapy. Beta-blockers have insufficient evidence specifically for TTH.',
+  },
 };

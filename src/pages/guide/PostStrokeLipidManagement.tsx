@@ -385,6 +385,23 @@ const PostStrokeLipidManagement: React.FC = () => {
               </Card>
             )}
 
+            {/* Cross-link to ASCVD risk calculator (primary prevention reference) */}
+            {strokeType === 'ischemic' && (
+              <a
+                href="/calculators/ascvd-risk"
+                className="block rounded-xl border border-slate-200 bg-white px-4 py-3 hover:border-neuro-300 hover:bg-neuro-50/40 transition-all min-h-[56px]"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Reference tool</p>
+                    <p className="text-[13px] font-semibold text-slate-800 mt-0.5">Open ASCVD 10-year Risk calculator</p>
+                    <p className="text-[11px] text-slate-500 mt-0.5">Pooled Cohort Equations. Note: this patient already has clinical ASCVD (prior stroke); use for context only.</p>
+                  </div>
+                  <span className="text-neuro-600 text-[16px] shrink-0">↗</span>
+                </div>
+              </a>
+            )}
+
             {/* Continue button */}
             {entryComplete && (
               <button

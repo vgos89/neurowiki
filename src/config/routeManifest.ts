@@ -14,6 +14,7 @@ export type StaticRouteKey =
   | 'home'
   | 'calculators'
   | 'aspect-score'
+  | 'ascvd-risk'
   | 'nihss'
   | 'ich-score'
   | 'abcd2-score'
@@ -122,6 +123,22 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
       title: 'ASPECTS Score — Alberta Stroke Program Early CT | NeuroWiki',
       description: 'Free ASPECTS calculator for MCA stroke. Score 10 CT regions (M1–M6, Caudate, Lentiform, Internal Capsule, Insular Ribbon). EVT eligibility per AHA/ASA 2026.',
       keywords: 'ASPECTS score calculator, Alberta Stroke Program Early CT Score, ASPECTS thrombectomy eligibility, ASPECTS score stroke, MCA territory infarct, large core stroke EVT',
+    },
+  },
+  {
+    key: 'ascvd-risk',
+    path: '/calculators/ascvd-risk',
+    publishGate: true,
+    published: true,
+    includeInSitemap: true,
+    comingSoonMessage: 'ASCVD 10-year Risk calculator',
+    zone: 'reading',
+    bottomNavTab: 'calculators',
+    railItem: 'calculators',
+    meta: {
+      title: 'ASCVD 10-year Risk Calculator (Pooled Cohort Equations) | NeuroWiki',
+      description: 'ACC/AHA Pooled Cohort Equations for 10-year ASCVD risk. Inputs: age, sex, race, total cholesterol, HDL-C, SBP, BP treatment, diabetes, smoker. Risk tiers and statin recommendation per 2019 ACC/AHA Primary Prevention Guideline.',
+      keywords: 'ASCVD risk calculator, Pooled Cohort Equations, 10-year ASCVD risk, primary prevention statin calculator, ACC AHA cardiovascular risk, Goff 2014 PCE, Arnett 2019 prevention guideline, ASCVD risk score',
     },
   },
   {

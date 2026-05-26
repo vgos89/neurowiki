@@ -36,6 +36,7 @@ const GlasgowComaScaleCalculator = lazy(() => import('./pages/GlasgowComaScaleCa
 const HeidelbergBleedingCalculator = lazy(() => import('./pages/HeidelbergBleedingCalculator'));
 const BostonCriteriaCaaCalculator = lazy(() => import('./pages/BostonCriteriaCaaCalculator'));
 const AspectScoreCalculator = lazy(() => import('./pages/AspectScoreCalculator'));
+const AscvdRiskCalculator = lazy(() => import('./pages/AscvdRiskCalculator'));
 const ResidentGuide = lazy(() => import('./pages/ResidentGuide'));
 const Guide = lazy(() => import('./pages/Guide'));
 const TrialsPage = lazy(() => import('./pages/TrialsPage'));
@@ -83,6 +84,7 @@ const ROUTE_COMPONENTS: Record<StaticRouteKey, React.ReactNode> = {
   home: <Home />,
   calculators: <Calculators />,
   'aspect-score': <AspectScoreCalculator />,
+  'ascvd-risk': <AscvdRiskCalculator />,
   nihss: <NihssCalculator />,
   'ich-score': <IchScoreCalculator />,
   'abcd2-score': <Abcd2ScoreCalculator />,
