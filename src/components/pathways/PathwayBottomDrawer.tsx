@@ -44,6 +44,27 @@ export interface PathwayBottomDrawerProps {
    * the calculator drawer's default.
    */
   collapsedLabel?: string;
+  /**
+   * Optional explicit state override. Backward-compatible: when omitted,
+   * state derives from tier (None → A, otherwise → C). Used by adaptive
+   * pathways (e.g. ClinicHeadache) that need to surface State B mid-flow
+   * with custom drawer content (e.g. a live differential bar).
+   * Added 2026-05-25 per architect arch-headache-adaptive-interview-2026-05-25.
+   */
+  state?: 'A' | 'B' | 'C';
+  /**
+   * Optional custom drawer body. When provided, replaces the hardcoded
+   * reasons/notes/summary panel with caller-supplied content. Lets adaptive
+   * pathway pages render a DifferentialBar in State B and a phenotype
+   * decision card in State C without bypassing this wrapper.
+   */
+  customContent?: React.ReactNode;
+  /**
+   * Optional State B text (label + hint) shown when state === 'B' and
+   * customContent is not provided. Defaults to a neutral "in progress"
+   * message.
+   */
+  stateBText?: { label: string; hint: string };
 }
 
 /**
@@ -95,13 +116,18 @@ export const PathwayBottomDrawer: React.FC<PathwayBottomDrawerProps> = ({
   notes,
   expandedSummary,
   collapsedLabel = 'Interpretation',
+  state,
+  customContent,
+  stateBText,
 }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
 
-  // State A (no result) is handled by the parent passing tier='None' AND
-  // empty action. State C (tappable) requires tokens. Fall back to slate.
+  // Resolve state: explicit prop wins; otherwise derive from tier
+  // (backward-compatible: None → A, anything else → C).
+  const resolvedState: 'A' | 'B' | 'C' = state ?? (tier === 'None' ? 'A' : 'C');
+
   const tokens: SeverityTokens | null =
-    tier === 'None' ? null : TIER_TOKENS[tier];
+    resolvedState === 'A' ? null : TIER_TOKENS[tier === 'None' ? 'Negative' : tier];
 
   // Collapsed stat string: "<tierLabel> · <action>"
   const labelText = tierLabel ?? (tier === 'None' ? '—' : tier);
@@ -109,27 +135,27 @@ export const PathwayBottomDrawer: React.FC<PathwayBottomDrawerProps> = ({
     ? `${labelText} · ${action}`
     : labelText;
 
-  // CalculatorDrawer takes care of portal, positioning, shadows, chevron,
-  // and the State A / B / C anatomy. We hand it tokens + the collapsed
-  // stat + the expanded DrawerContent.
   return (
     <CalculatorDrawer
-      state={tier === 'None' ? 'A' : 'C'}
+      state={resolvedState}
       tokens={tokens}
       isExpanded={isExpanded}
       onToggle={() => setIsExpanded((open) => !open)}
       ariaContentId={`${pathwayName.toLowerCase()}-pathway-drawer-content`}
       ariaLabel={`${pathwayName} interpretation drawer`}
       stateAText={{ label: 'Waiting for inputs', hint: pathwayName }}
+      stateBText={stateBText}
       collapsedLabel={collapsedLabel}
       collapsedStat={collapsedStat}
     >
-      <PathwayDrawerContent
-        pathwayName={pathwayName}
-        reasons={reasons}
-        notes={notes}
-        expandedSummary={expandedSummary}
-      />
+      {customContent ?? (
+        <PathwayDrawerContent
+          pathwayName={pathwayName}
+          reasons={reasons}
+          notes={notes}
+          expandedSummary={expandedSummary}
+        />
+      )}
     </CalculatorDrawer>
   );
 };
