@@ -60,6 +60,14 @@ export const CALCULATORS: CalculatorEntry[] = [
     scoreRange: { min: '0', max: '7' },
   },
   {
+    id: 'ascvd-risk',
+    name: 'ASCVD 10-Year Risk',
+    description: 'ACC/AHA Pooled Cohort Equations — 10-year atherosclerotic CV event risk.',
+    fnCategory: 'risk',
+    path: '/calculators/ascvd-risk',
+    scoreRange: { min: '0%', max: '≥20%' },
+  },
+  {
     id: 'chads-vasc',
     name: 'CHA₂DS₂-VASc',
     description: 'Annual stroke risk in non-valvular AFib; guides anticoagulation decision.',
