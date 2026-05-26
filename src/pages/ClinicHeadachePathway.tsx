@@ -1,67 +1,93 @@
 /**
- * Clinic Headache Pathway — outpatient feature picker + ICHD-3 mapper.
+ * Clinic Headache Pathway — adaptive single-question interview.
  *
- * Redesign 2026-05-25 (Phase 3 cutover) per CLAUDE.md §19. Replaces the
- * prior 6-step PathwayRail (MIDAS → phenotype radio → preventive → agent
- * → acute → plan) with a single-screen ICHD-3 feature picker that maps
- * user-selected features against ICHD-3 2018 criteria in real time.
+ * Rewritten 2026-05-25 (Phase 3 of 3, Class D-clinical) to replace the
+ * prior flat chip-picker with an adaptive single-question flow that walks
+ * the user through ICHD-3 differential by asking one question at a time
+ * and surfacing the result via PathwayBottomDrawer.
  *
- * Output language never says "diagnosis." Full match: "Features consistent
- * with X (ICHD-3 §X.X)." One criterion short: "Features consistent with
- * Probable X (ICHD-3 §X.5)." Multi-phenotype overlap is surfaced explicitly
- * per ICHD-3 General Principles. Red flags (SNNOOP10) short-circuit to a
- * workup card and suppress phenotype matching.
+ * Architecture:
+ *   - HEADACHE_QUESTIONS (src/data/clinicHeadacheQuestions.ts) — decision tree
+ *   - evaluateHeadachePhenotypes (src/data/clinicHeadacheData.ts) — pure mapper
+ *   - QuestionScreen, DifferentialBar, PhenotypePickerSheet — UI primitives
+ *   - PathwayBottomDrawer (state + customContent) — interpretation surface
  *
- * Teach mode (default off, useTeachMode hook, localStorage-backed) layers
- * pedagogy on demand without slowing clinical use.
+ * State machine (FlowState):
+ *   - intro: pre-flow; drawer State A
+ *   - question(id): mid-flow; drawer State B with DifferentialBar
+ *   - workup: red-flag short-circuit; drawer State C red
+ *   - result(phenotypeId): phenotype reached; drawer State C tier-coloured
+ *   - power-user-pick: phenotype-select sheet open over current content
  *
- * Sources (all in src/lib/citations/registry.ts):
- *   ichd3-2018 · scher-tth-2024-continuum · goadsby-2024-continuum-indomethacin
- *   lipton-2024-continuum-preventive · ailani-ahs-2021
- *   rizzoli-2024-continuum-moh · burish-2024-continuum-cluster
- *   do-snnoop10-2019
- *
- * Rollback: revert this commit. Old ClinicHeadachePathway.tsx is restored
- * intact. Data module (Phase 1) and components (Phase 2) stay; they are
- * not consumed by anyone else and revert is no-op for the rest of the app.
+ * Claim IDs preserved from the prior cutover:
+ *   - clinic-headache-ichd3-{migraine,tension,cluster,hemicrania,ndph}-criteria
+ *     (rendered in State C decision card per phenotype)
+ *   - clinic-headache-pitfall-mig-vs-tth (rendered in mapper when both surface)
+ *   - clinic-headache-{preventive-threshold,cgrp-escalation,moh-gepant-safe}
+ *     (rendered in State C for migraine phenotypes)
+ *   - clinic-headache-tension-{acute-management,preventive}
+ *     (rendered in State C for TTH phenotypes)
  */
 
-import React, { useEffect, useMemo, useState } from 'react';
-import { AlertTriangle, BookOpen, Info } from 'lucide-react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { ChevronLeft, Lightbulb, RotateCcw } from 'lucide-react';
 import { PathwayHeader } from '../components/pathways/PathwayHeader';
-import { ChipGroup } from '../components/pathways/ChipGroup';
-import { MapperPanel, type MapperMatch } from '../components/pathways/MapperPanel';
-import { PitfallNotice } from '../components/pathways/PitfallNotice';
-import { PathwayLearningPearl } from '../components/pathways/PathwayLearningPearl';
-import { useTeachMode } from '../hooks/useTeachMode';
+import { PathwayBottomDrawer } from '../components/pathways/PathwayBottomDrawer';
+import { QuestionScreen } from '../components/pathways/QuestionScreen';
+import { DifferentialBar } from '../components/pathways/DifferentialBar';
+import { PhenotypePickerSheet } from '../components/pathways/PhenotypePickerSheet';
 import { useFavorites } from '../hooks/useFavorites';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useRecents } from '../hooks/useRecents';
+import { useTeachMode } from '../hooks/useTeachMode';
 import {
-  HEADACHE_CHIP_GROUPS,
-  HEADACHE_PHENOTYPES,
-  anyRedFlagActive,
+  HEADACHE_QUESTIONS,
+  POWER_USER_PHENOTYPES,
+  START_QUESTION_ID,
+  chipsForAnswer,
+  getQuestion,
+  nextNode,
+  type Answer,
+  type QuestionId,
+} from '../data/clinicHeadacheQuestions';
+import {
   evaluateHeadachePhenotypes,
-  getPhenotype,
+  HEADACHE_PHENOTYPES,
   type ChipId,
   type PhenotypeId,
+  type PhenotypeMatch,
 } from '../data/clinicHeadacheData';
 
-// ─── Evidence badge (preserved from prior design) ─────────────────────────
+// ─── State machine ────────────────────────────────────────────────────────
 
-const EvidenceBadge: React.FC<{ level: 'A' | 'B' | 'C' | 'U' }> = ({ level }) => {
-  const tokens = {
-    A: 'bg-emerald-100 text-emerald-800',
-    B: 'bg-amber-100 text-amber-800',
-    C: 'bg-slate-100 text-slate-700',
-    U: 'bg-slate-100 text-slate-500',
-  }[level];
-  return (
-    <span className={`inline-flex items-center justify-center text-[10px] font-bold rounded px-1.5 py-0.5 ${tokens} shrink-0`}>
-      {level}
-    </span>
-  );
-};
+type FlowState =
+  | { type: 'intro' }
+  | { type: 'question'; id: QuestionId }
+  | { type: 'workup' }
+  | { type: 'result'; phenotypeId: PhenotypeId };
+
+interface HistoryEntry {
+  questionId: QuestionId;
+  answerIds: string[];
+  chipsAdded: ChipId[];
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────
+
+function topMatch(matches: PhenotypeMatch[]): PhenotypeMatch | undefined {
+  return matches[0];
+}
+
+function tierFromMatch(match: PhenotypeMatch | undefined): 'Low' | 'Intermediate' | 'High' | 'None' {
+  if (!match) return 'None';
+  if (match.matchStrength === 'full') return 'Low';
+  if (match.matchStrength === 'probable') return 'Intermediate';
+  return 'High';
+}
+
+// Per-phenotype management blocks are rendered as JSX with literal
+// data-claim attributes per phenotype (claim coverage is checked statically
+// by scripts/check-claims.ts). See PhenotypeManagement below.
 
 // ─── Component ────────────────────────────────────────────────────────────
 
@@ -69,431 +95,644 @@ const ClinicHeadachePathway: React.FC = () => {
   const { recordView } = useRecents();
   const { handleBack } = useNavigationSource();
   const { isFavorite, toggleFavorite } = useFavorites();
-  const [teachMode, toggleTeach] = useTeachMode();
-  const [selectedChips, setSelectedChips] = useState<Set<ChipId>>(new Set());
-  const [copyConfirm, setCopyConfirm] = useState(false);
   const isFav = isFavorite('headache-clinic');
+  const [teachMode, toggleTeachMode] = useTeachMode();
+  const topRef = useRef<HTMLDivElement>(null);
+
+  // FlowState + chip accumulator + answer history (for back navigation)
+  const [flow, setFlow] = useState<FlowState>({ type: 'intro' });
+  const [selectedChips, setSelectedChips] = useState<Set<ChipId>>(new Set());
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  // Track multi-check answer selections for the current question
+  const [pendingAnswers, setPendingAnswers] = useState<string[]>([]);
+  const [pendingChips, setPendingChips] = useState<ChipId[]>([]);
+  const [powerUserOpen, setPowerUserOpen] = useState(false);
 
   useEffect(() => {
     recordView({
       type: 'pathway',
       id: 'headache-clinic',
       title: 'Clinic Headache Pathway',
-      subtitle: 'ICHD-3 feature picker · live phenotype mapper',
+      subtitle: 'Adaptive ICHD-3 interview',
       category: 'severe-headache',
-      trail: 'Outpatient',
+      trail: 'Adaptive',
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ── Chip selection handlers ────────────────────────────────────────────
-  const setChip = (chipId: string, nowSelected: boolean) => {
+  // ── Derived: phenotype matches ───────────────────────────────────────────
+  const matches = useMemo(() => evaluateHeadachePhenotypes(selectedChips), [selectedChips]);
+
+  // Differential percentages for the State B bar
+  const differentialItems = useMemo(() => {
+    return matches
+      .filter(m => m.matchStrength !== 'partial' || m.criteriaMet >= 1)
+      .slice(0, 4)
+      .map(m => ({
+        id: m.phenotypeId,
+        name: m.name,
+        section: m.ichd3Section,
+        percent: Math.round((m.criteriaMet / m.criteriaTotal) * 100),
+      }));
+  }, [matches]);
+
+  // Pitfall: migraine + TTH both present
+  const showMigTthPitfall = useMemo(() => {
+    const ids = new Set(matches.map(m => m.phenotypeId));
+    return (ids.has('migraine-without-aura') || ids.has('migraine-with-aura')) &&
+           (ids.has('episodic-tth') || ids.has('chronic-tth'));
+  }, [matches]);
+
+  // ── Handlers ─────────────────────────────────────────────────────────────
+  const handleStart = () => {
+    setFlow({ type: 'question', id: START_QUESTION_ID });
+    setPendingAnswers([]);
+    setPendingChips([]);
+  };
+
+  const handleReset = () => {
+    setFlow({ type: 'intro' });
+    setSelectedChips(new Set());
+    setHistory([]);
+    setPendingAnswers([]);
+    setPendingChips([]);
+    setPowerUserOpen(false);
+    topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleBackStep = () => {
+    if (history.length === 0) {
+      // Back to intro
+      setFlow({ type: 'intro' });
+      setPendingAnswers([]);
+      setPendingChips([]);
+      return;
+    }
+    const last = history[history.length - 1];
+    // Remove chips that were added by the last step
     setSelectedChips(prev => {
       const next = new Set(prev);
-      if (nowSelected) next.add(chipId as ChipId);
-      else next.delete(chipId as ChipId);
+      for (const chip of last.chipsAdded) next.delete(chip);
       return next;
     });
+    setHistory(prev => prev.slice(0, -1));
+    setFlow({ type: 'question', id: last.questionId });
+    setPendingAnswers([]);
+    setPendingChips([]);
   };
 
-  // ── Derived state ──────────────────────────────────────────────────────
-  const hasRedFlags = useMemo(() => anyRedFlagActive(selectedChips), [selectedChips]);
-  const matches = useMemo(
-    () => (hasRedFlags ? [] : evaluateHeadachePhenotypes(selectedChips)),
-    [selectedChips, hasRedFlags]
-  );
+  const handleAnswer = (answerId: string) => {
+    if (flow.type !== 'question') return;
+    const question = getQuestion(flow.id);
+    if (!question) return;
+    const answer = question.answers.find(a => a.id === answerId) as Answer | undefined;
+    if (!answer) return;
 
-  // Top 3 candidates
-  const topMatches: MapperMatch[] = useMemo(
-    () => matches.slice(0, 3).map(m => ({
-      phenotypeId: m.phenotypeId,
-      name: m.name,
-      section: m.ichd3Section,
-      matchStrength: m.matchStrength === 'none' ? 'partial' : m.matchStrength,
-      criteriaMet: m.criteriaMet,
-      criteriaTotal: m.criteriaTotal,
-      metCriteria: m.metCriteria,
-      missingCriteria: m.missingCriteria,
-      isAppendix: m.isAppendix,
-    })),
-    [matches]
-  );
-
-  // Pitfall surfacing — migraine + TTH both consistent triggers overlap warning
-  const pitfallNodes: React.ReactNode[] = useMemo(() => {
-    const nodes: React.ReactNode[] = [];
-    const migraine = matches.find(m => m.phenotypeId === 'migraine-without-aura');
-    const tth = matches.find(m => m.phenotypeId === 'episodic-tth' || m.phenotypeId === 'chronic-tth');
-    if (migraine && tth && migraine.matchStrength !== 'partial' && tth.matchStrength !== 'partial') {
-      nodes.push(
-        <PitfallNotice key="mig-tth-overlap" title="Migraine and TTH overlap" claimId="clinic-headache-pitfall-mig-vs-tth">
-          Migraine 1.1 D requires nausea or vomiting, or the photophobia+phonophobia pair. TTH 2.2 D excludes nausea and vomiting and allows at most one of photophobia or phonophobia. Patients can carry both phenotypes per ICHD-3 General Principles, treated as separate diagnoses.
-        </PitfallNotice>
-      );
-    }
-    // Hemicrania prompt when continuous unilateral + autonomic features without trial
-    if (
-      selectedChips.has('dur-continuous') &&
-      selectedChips.has('loc-unilateral') &&
-      (selectedChips.has('sym-autonomic-ipsilateral') || selectedChips.has('sym-restlessness')) &&
-      !selectedChips.has('indo-tried-complete') &&
-      !selectedChips.has('indo-tried-no-response')
-    ) {
-      nodes.push(
-        <PitfallNotice key="hc-prompt" title="Consider indomethacin trial">
-          Continuous strictly unilateral headache with autonomic features may be hemicrania continua (ICHD-3 3.4). Absolute response to therapeutic indomethacin is definitional — without a trial, the phenotype cannot be assigned. Goadsby Continuum 2024 protocol: 25 mg TID for 1 week, escalate to 50 mg TID (150 mg/day, cited upper bound) if incomplete, with PPI cover.
-        </PitfallNotice>
-      );
-    }
-    return nodes;
-  }, [matches, selectedChips]);
-
-  // Teach pearls per phenotype. claimId values are literal strings (not
-  // interpolated) so the check-claims scanner finds them in source.
-  const buildPearl = (id: PhenotypeId, claimId: string | undefined): React.ReactNode => {
-    const p = getPhenotype(id);
-    if (!p || !p.teachPearl) return null;
-    return (
-      <PathwayLearningPearl
-        title="Learn this pattern"
-        teachOnly
-        teachMode={teachMode}
-        claimId={claimId}
-        content={
-          <div className="space-y-2">
-            <p>{p.teachPearl}</p>
-            {p.pitfalls && p.pitfalls.length > 0 && (
-              <ul className="list-disc pl-4 space-y-1">
-                {p.pitfalls.map((pf, i) => <li key={i} className="text-[12px] text-slate-700">{pf}</li>)}
-              </ul>
-            )}
-          </div>
+    if (question.type === 'multi-check') {
+      // Determine if this is a "commit" answer (leadsTo !== current question)
+      const isCommit = answer.leadsTo !== flow.id;
+      if (isCommit) {
+        // Commit: apply pending chips + the commit answer's own chips
+        const allChips = [...pendingChips, ...answer.selects];
+        const newSet = new Set(selectedChips);
+        for (const c of allChips) newSet.add(c);
+        setSelectedChips(newSet);
+        setHistory(h => [...h, { questionId: flow.id, answerIds: [...pendingAnswers, answer.id], chipsAdded: allChips }]);
+        setPendingAnswers([]);
+        setPendingChips([]);
+        advance(answer);
+      } else {
+        // Toggle this answer in the pending set
+        if (pendingAnswers.includes(answer.id)) {
+          setPendingAnswers(prev => prev.filter(id => id !== answer.id));
+          setPendingChips(prev => prev.filter(c => !answer.selects.includes(c)));
+        } else {
+          setPendingAnswers(prev => [...prev, answer.id]);
+          setPendingChips(prev => [...prev, ...answer.selects]);
         }
-      />
-    );
+      }
+    } else {
+      // single-choice — commit immediately
+      const chipsAdded = answer.selects;
+      const newSet = new Set(selectedChips);
+      for (const c of chipsAdded) newSet.add(c);
+      setSelectedChips(newSet);
+      setHistory(h => [...h, { questionId: flow.id, answerIds: [answer.id], chipsAdded }]);
+      advance(answer);
+    }
   };
 
-  const pearlsByPhenotype: Record<string, React.ReactNode> = useMemo(() => ({
-    'migraine-without-aura': buildPearl('migraine-without-aura', 'clinic-headache-ichd3-migraine-criteria'),
-    'migraine-with-aura': buildPearl('migraine-with-aura', 'clinic-headache-ichd3-migraine-criteria'),
-    'episodic-tth': buildPearl('episodic-tth', 'clinic-headache-ichd3-tension-criteria'),
-    'chronic-tth': buildPearl('chronic-tth', 'clinic-headache-ichd3-tension-criteria'),
-    'cluster-headache': buildPearl('cluster-headache', 'clinic-headache-ichd3-cluster-criteria'),
-    'hemicrania-continua': buildPearl('hemicrania-continua', 'clinic-headache-ichd3-hemicrania-criteria'),
-    'ndph': buildPearl('ndph', 'clinic-headache-ichd3-ndph-criteria'),
-    'vestibular-migraine': buildPearl('vestibular-migraine', undefined),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [teachMode]);
-
-
-  // ── Header actions ─────────────────────────────────────────────────────
-  const handleReset = () => {
-    setSelectedChips(new Set());
-    window.scrollTo(0, 0);
+  const advance = (answer: Answer) => {
+    const next = answer.leadsTo;
+    if (next === 'evaluate') {
+      const top = topMatch(evaluateHeadachePhenotypes(new Set([...selectedChips, ...answer.selects, ...pendingChips])));
+      if (top) setFlow({ type: 'result', phenotypeId: top.phenotypeId });
+      else setFlow({ type: 'workup' });
+    } else if (next === 'workup') {
+      setFlow({ type: 'workup' });
+    } else {
+      setFlow({ type: 'question', id: next as QuestionId });
+      setPendingAnswers([]);
+      setPendingChips([]);
+    }
   };
 
-  const handleCopy = () => {
-    const top = matches[0];
-    const summary = top
-      ? `Clinic Headache Pathway | NeuroWiki\nFeatures consistent with ${top.name} (${top.ichd3Section}, ${top.matchStrength} match)`
-      : 'Clinic Headache Pathway | NeuroWiki';
-    navigator.clipboard?.writeText(summary).catch(() => {});
-    setCopyConfirm(true);
-    setTimeout(() => setCopyConfirm(false), 2000);
+  const handlePowerUserPick = (phenotypeId: string) => {
+    setPowerUserOpen(false);
+    setFlow({ type: 'result', phenotypeId: phenotypeId as PhenotypeId });
   };
 
-  // ── Render ─────────────────────────────────────────────────────────────
+  // ── Drawer content per FlowState ─────────────────────────────────────────
+  const drawerState: 'A' | 'B' | 'C' =
+    flow.type === 'intro' ? 'A'
+    : flow.type === 'question' ? 'B'
+    : 'C';
+
+  const drawerTier: 'Low' | 'Intermediate' | 'High' | 'None' =
+    flow.type === 'workup' ? 'High'
+    : flow.type === 'result' ? tierFromMatch(topMatch(matches)) || 'Low'
+    : 'None';
+
+  const drawerCollapsedAction = (() => {
+    if (flow.type === 'intro') return '';
+    if (flow.type === 'question') {
+      if (differentialItems.length === 0) return 'Answer the first question to see candidates';
+      return differentialItems.slice(0, 2).map(d => `${d.name} ${d.percent}%`).join(' · ');
+    }
+    if (flow.type === 'workup') return 'Secondary headache workup required';
+    if (flow.type === 'result') {
+      const m = matches.find(x => x.phenotypeId === flow.phenotypeId);
+      if (m) return `${m.matchStrength === 'full' ? 'Consistent with' : m.matchStrength === 'probable' ? 'Probable' : 'Partial'} ${m.name}`;
+      const p = HEADACHE_PHENOTYPES.find(x => x.id === flow.phenotypeId);
+      return p ? `Consistent with ${p.name}` : '';
+    }
+    return '';
+  })();
+
+  // ── Drawer custom content per FlowState ──────────────────────────────────
+  const drawerCustomContent: React.ReactNode = (() => {
+    if (flow.type === 'intro') return null;
+    if (flow.type === 'question') {
+      return (
+        <div className="bg-white px-5 py-4 max-h-[40dvh] overflow-y-auto border-t border-slate-100">
+          <DifferentialBar items={differentialItems} />
+          {showMigTthPitfall && (
+            <div
+              data-claim="clinic-headache-pitfall-mig-vs-tth"
+              role="note"
+              aria-label="Pitfall: migraine vs TTH overlap"
+              className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3"
+            >
+              <p className="text-[11px] font-bold uppercase tracking-widest text-amber-700 mb-1">Pitfall — migraine vs TTH overlap</p>
+              <p className="text-[12px] text-amber-900 leading-relaxed">
+                Migraine (1.1 D) requires nausea/vomiting OR the photophobia+phonophobia pair. TTH (2.2 D) excludes nausea/vomiting and allows at most one of photo/phono. Mild migraine and TTH look similar; the pairing or any nausea tips toward migraine.
+              </p>
+            </div>
+          )}
+        </div>
+      );
+    }
+    if (flow.type === 'workup') return <WorkupCard chips={selectedChips} />;
+    if (flow.type === 'result') {
+      const m = matches.find(x => x.phenotypeId === flow.phenotypeId);
+      return <ResultCard match={m} phenotypeId={flow.phenotypeId} teachMode={teachMode} />;
+    }
+    return null;
+  })();
+
+  // ── Render ───────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-dvh bg-slate-50 pb-24">
+    <div className="min-h-dvh bg-slate-50 pb-32" ref={topRef}>
       <PathwayHeader
-        pathwayLabel="Clinic Headache Pathway"
+        pathwayLabel="Clinic Headache"
         onBack={handleBack}
         isFav={isFav}
         onFavToggle={() => toggleFavorite('headache-clinic')}
         onReset={handleReset}
-        onCopy={handleCopy}
-        copyConfirm={copyConfirm}
+        onCopy={() => { /* no-op for v1; could copy plan summary */ }}
       />
 
-      <main className="max-w-2xl mx-auto px-4 pt-4 space-y-4">
+      <div className="max-w-xl mx-auto px-4 pt-4 space-y-4">
 
-        {/* Hidden scanner anchors — each ICHD-3 criteria claim must appear
-            as a literal data-claim attribute in source for the pre-commit
-            scanner. The claims surface visibly via PathwayLearningPearl in
-            the Mapper panel (Teach mode) where claimId is also passed
-            through, but only when the corresponding phenotype is currently
-            in the matches array. These hidden anchors guarantee the literal
-            tag is present for static analysis. */}
-        <div hidden aria-hidden="true">
-          <span data-claim="clinic-headache-ichd3-migraine-criteria" />
-          <span data-claim="clinic-headache-ichd3-tension-criteria" />
-          <span data-claim="clinic-headache-ichd3-cluster-criteria" />
-          <span data-claim="clinic-headache-ichd3-hemicrania-criteria" />
-          <span data-claim="clinic-headache-ichd3-ndph-criteria" />
-          <span data-claim="clinic-headache-pitfall-mig-vs-tth" />
+        {/* Disclaimer + Teach toggle */}
+        <div className="rounded-xl border border-neuro-200 bg-neuro-50 p-3">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex-1">
+              <p className="text-[13px] font-semibold text-neuro-800">Adaptive ICHD-3 interview</p>
+              <p className="text-[12px] text-slate-700 leading-relaxed mt-1">
+                The tool maps your inputs against ICHD-3 criteria to suggest the most consistent phenotype. It does not diagnose. Patient history of recurrent attacks and clinical judgement remain primary.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={toggleTeachMode}
+              aria-pressed={teachMode}
+              className={`
+                flex items-center gap-1.5 rounded-full px-3 py-2 text-[12px] font-semibold
+                transition-all touch-manipulation min-h-[44px] flex-shrink-0
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500
+                ${teachMode
+                  ? 'bg-neuro-600 text-white hover:bg-neuro-700'
+                  : 'bg-white text-neuro-700 border border-neuro-300 hover:bg-neuro-50'}
+              `}
+            >
+              <Lightbulb size={13} aria-hidden="true" />
+              Teach {teachMode ? 'on' : 'off'}
+            </button>
+          </div>
         </div>
 
-        {/* Disclaimer banner */}
-        <section className="rounded-xl border border-neuro-200 bg-neuro-50 p-3">
-          <div className="flex items-start gap-2.5">
-            <Info size={16} className="text-neuro-600 shrink-0 mt-0.5" aria-hidden="true" />
-            <div>
-              <p className="text-[13px] font-semibold text-neuro-800">This tool is only as accurate as the features you enter.</p>
-              <p className="text-[12px] text-slate-700 mt-1 leading-relaxed">
-                It maps your inputs against ICHD-3 criteria to suggest the most consistent phenotype. Patient history of recurrent attacks, clinical judgement, and exam remain primary. The tool does not diagnose. Teach mode shows the ICHD-3 logic behind every question.
+        {/* Intro */}
+        {flow.type === 'intro' && (
+          <div className="space-y-3">
+            <div className="rounded-xl bg-white border border-slate-100 p-5" style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.10)' }}>
+              <p className="text-[15px] font-semibold text-slate-900">Start the interview</p>
+              <p className="text-[13px] text-slate-600 leading-relaxed mt-2">
+                One question at a time. The candidate phenotypes update at the bottom as you answer. ~4-6 taps for most patients.
               </p>
+              <button
+                type="button"
+                onClick={handleStart}
+                className="
+                  mt-4 w-full rounded-xl bg-neuro-600 hover:bg-neuro-700 text-white font-semibold
+                  px-4 py-3 text-[14px] min-h-[56px] touch-manipulation
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500
+                "
+              >
+                Begin →
+              </button>
+              <button
+                type="button"
+                onClick={() => setPowerUserOpen(true)}
+                className="
+                  mt-3 w-full text-center text-[12px] text-neuro-600 hover:text-neuro-700 hover:underline
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500 rounded
+                  min-h-[44px]
+                "
+              >
+                I already know the diagnosis →
+              </button>
             </div>
           </div>
-        </section>
-
-        {/* Teach mode toggle */}
-        <section className="rounded-xl border border-slate-200 bg-white p-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <BookOpen size={16} className="text-slate-500 shrink-0" aria-hidden="true" />
-            <div>
-              <p className="text-[13px] font-semibold text-slate-900">Teach mode</p>
-              <p className="text-[11px] text-slate-500">{teachMode ? 'On: showing ICHD-3 reasoning, pitfalls, and learn pearls.' : 'Off: clean tool view. Toggle on to see the why behind each question.'}</p>
-            </div>
-          </div>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={teachMode}
-            onClick={toggleTeach}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500 ${teachMode ? 'bg-neuro-600' : 'bg-slate-300'}`}
-          >
-            <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${teachMode ? 'translate-x-6' : 'translate-x-1'}`} />
-          </button>
-        </section>
-
-        {/* Feature picker */}
-        <section aria-label="Feature picker" className="space-y-3">
-          {HEADACHE_CHIP_GROUPS.map(group => (
-            <ChipGroup
-              key={group.id}
-              groupId={group.id}
-              label={group.label}
-              eyebrow={group.eyebrow}
-              chips={group.chips}
-              selected={selectedChips as Set<string>}
-              onChange={setChip}
-              defaultCollapsed={group.defaultCollapsed}
-              teachMode={teachMode}
-            />
-          ))}
-        </section>
-
-        {/* Red-flag short circuit */}
-        {hasRedFlags && (
-          <section role="alert" aria-labelledby="red-flag-heading" className="rounded-xl border-2 border-red-300 bg-red-50 p-4 space-y-2" style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.10)' }}>
-            <div className="flex items-start gap-2.5">
-              <AlertTriangle size={20} className="text-red-600 shrink-0 mt-0.5" aria-hidden="true" />
-              <div>
-                <h2 id="red-flag-heading" className="text-[15px] font-bold text-red-800">Red flag present: workup required</h2>
-                <p className="text-[12px] text-red-700 mt-1 leading-relaxed">
-                  One or more SNNOOP10 features are flagged (Do et al. Neurology 2019). Do not assign a primary-headache phenotype before secondary-cause evaluation.
-                </p>
-              </div>
-            </div>
-            <div className="rounded-lg bg-white border border-red-200 p-3 mt-2">
-              <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-1">Recommended workup</p>
-              <ul className="text-[12px] text-slate-700 space-y-1 list-disc pl-4">
-                <li>Targeted history and neurological exam directed at the specific red flag(s).</li>
-                <li>Neuroimaging: MRI brain with and without contrast, MRV when venous sinus thrombosis is in scope (positional headache, postpartum, papilloedema).</li>
-                <li>Same-day or next-day labs as indicated: CBC, ESR/CRP for age &gt;50 first headache (GCA), pregnancy test in WOCBP, HIV testing when immune pathology suspected.</li>
-                <li>LP after imaging if subarachnoid haemorrhage or meningitis is suspected and imaging is negative or non-diagnostic.</li>
-                <li>Specialist referral (neurology, neurosurgery, ophthalmology) per the specific red flag.</li>
-              </ul>
-            </div>
-          </section>
         )}
 
-        {/* Mapper panel */}
-        {!hasRedFlags && (
-          <MapperPanel
-            matches={topMatches}
-            pearlsByPhenotype={pearlsByPhenotype}
-            pitfalls={pitfallNodes.length > 0 ? <>{pitfallNodes}</> : undefined}
-            teachMode={teachMode}
-          />
-        )}
-
-        {/* Multi-diagnosis note when ≥2 full matches */}
-        {!hasRedFlags && matches.filter(m => m.matchStrength === 'full').length >= 2 && (
-          <section className="rounded-xl border border-slate-200 bg-white p-3">
-            <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-1">Multiple phenotypes consistent</p>
-            <p className="text-[12px] text-slate-700 leading-relaxed">
-              Per ICHD-3 General Principles, patients commonly carry more than one primary headache disorder. Each consistent phenotype should be considered separately. Treat each based on its own acute and preventive evidence.
-            </p>
-          </section>
-        )}
-
-        {/* ─── Management section (preserves prior claim-tagged content) ─── */}
-        {!hasRedFlags && (
-          <section aria-label="Management options" className="space-y-3 pt-2">
-            <header>
-              <h2 className="text-[16px] font-bold text-slate-900">Management options</h2>
-              <p className="text-[12px] text-slate-500 mt-0.5">Evidence-based options below correspond to the candidate phenotypes above. Use clinical judgement to match the patient.</p>
-            </header>
-
-            {/* Preventive threshold panel */}
-            <div data-claim="clinic-headache-preventive-threshold" className="rounded-xl border border-slate-100 bg-white p-4" style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.06)' }}>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">AHS / AAN preventive threshold</p>
-              <ul className="text-[13px] text-slate-700 space-y-1 list-disc pl-4">
-                <li>≥4 headache days/month with significant disability (MIDAS Grade II–IV).</li>
-                <li>≥6 headache days/month regardless of disability.</li>
-                <li>Acute medications used ≥10 days/month (MOH risk threshold).</li>
-              </ul>
-              <p className="text-[11px] text-slate-400 mt-2">AHS 2021 Consensus (Ailani et al., Headache 2021;61:1021-1039) + Lipton Continuum 2024.</p>
-            </div>
-
-            {/* Migraine preventive options */}
-            <div data-claim="clinic-headache-cgrp-escalation" className="rounded-xl border border-slate-100 bg-white p-4" style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.06)' }}>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Migraine preventive options</p>
-              <div className="space-y-2">
-                <div className="rounded-lg bg-slate-50 p-3">
-                  <p className="text-[12px] font-semibold text-slate-900 mb-1">Conventional first-line (try at least 2 before CGRP escalation)</p>
-                  <ul className="text-[12px] text-slate-700 space-y-0.5 list-disc pl-4">
-                    <li>Topiramate 25-100 mg/day (avoid in WOCBP, urolithiasis history).</li>
-                    <li>Propranolol 40-160 mg/day or metoprolol 50-200 mg/day (avoid in asthma, depression).</li>
-                    <li>Amitriptyline 10-75 mg at bedtime (useful with comorbid anxiety, insomnia).</li>
-                    <li>Venlafaxine 75-150 mg/day (useful with comorbid depression).</li>
-                    <li>Valproate 500-1000 mg/day (avoid in WOCBP, hepatic disease).</li>
-                  </ul>
-                </div>
-                <div className="rounded-lg bg-neuro-50 border border-neuro-100 p-3">
-                  <p className="text-[12px] font-semibold text-neuro-800 mb-1">CGRP-pathway escalation (after ≥2 conventional failures or first-line if contraindicated)</p>
-                  <ul className="text-[12px] text-slate-700 space-y-0.5 list-disc pl-4">
-                    <li>CGRP mAbs: erenumab 70-140 mg SC monthly, fremanezumab 225 mg monthly or 675 mg quarterly, galcanezumab 240 mg loading then 120 mg monthly, eptinezumab 100-300 mg IV quarterly.</li>
-                    <li>Gepants for prevention: atogepant 10-60 mg daily, rimegepant 75 mg every other day.</li>
-                  </ul>
-                  <p className="text-[11px] text-neuro-700 mt-2">AHS 2021 Consensus (Ailani et al.); Lipton Continuum 2024.</p>
-                </div>
-              </div>
-            </div>
-
-            {/* TTH acute */}
-            <div data-claim="clinic-headache-tension-acute-management" className="rounded-xl border border-slate-100 bg-white p-4" style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.06)' }}>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Tension-type headache: acute treatment</p>
-              <div className="space-y-2">
-                <div className="bg-slate-50 rounded-lg p-2.5 flex items-start gap-2">
-                  <EvidenceBadge level="A" />
-                  <div className="text-[12px] text-slate-700"><span className="font-semibold">Ibuprofen 400 to 600 mg PO</span> — first-line in non-pregnant adults without NSAID contraindication.</div>
-                </div>
-                <div className="bg-slate-50 rounded-lg p-2.5 flex items-start gap-2">
-                  <EvidenceBadge level="A" />
-                  <div className="text-[12px] text-slate-700"><span className="font-semibold">Aspirin 500 to 1000 mg PO</span> — NSAID alternative.</div>
-                </div>
-                <div className="bg-slate-50 rounded-lg p-2.5 flex items-start gap-2">
-                  <EvidenceBadge level="A" />
-                  <div className="text-[12px] text-slate-700"><span className="font-semibold">Acetaminophen 1000 mg PO</span> — preferred in pregnancy or NSAID contraindication.</div>
-                </div>
-              </div>
-              <div className="mt-3 rounded-lg bg-red-50 border border-red-200 p-2.5">
-                <p className="text-[12px] font-semibold text-red-800 mb-0.5">Avoid</p>
-                <p className="text-[12px] text-red-700">Opioids and butalbital-containing combinations. Both carry MOH and dependence risk.</p>
-              </div>
-              <div className="mt-2 rounded-lg bg-amber-50 border border-amber-200 p-2.5">
-                <p className="text-[12px] font-semibold text-amber-800 mb-0.5">Medication-overuse limits</p>
-                <p className="text-[12px] text-amber-700">Simple analgesics ≤15 days/month. Triptans, opioids, combination analgesics ≤10 days/month. Above either threshold for &gt;3 months meets ICHD-3 8.2 MOH.</p>
-              </div>
-            </div>
-
-            {/* TTH preventive */}
-            <div data-claim="clinic-headache-tension-preventive" className="rounded-xl border border-slate-100 bg-white p-4" style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.06)' }}>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Tension-type headache: preventive treatment</p>
-              <p className="text-[12px] text-slate-600 mb-3">For chronic TTH (≥15 days/month) or high-frequency episodic TTH with functional impact.</p>
-              <div className="space-y-2">
-                <div className="bg-slate-50 rounded-lg p-2.5 flex items-start gap-2">
-                  <EvidenceBadge level="B" />
-                  <div className="text-[12px] text-slate-700"><span className="font-semibold">Amitriptyline 10 to 75 mg at bedtime</span> — first-line. Start 10 mg, titrate by 10 to 25 mg every 1 to 2 weeks (AAN Level B).</div>
-                </div>
-                <div className="bg-slate-50 rounded-lg p-2.5 flex items-start gap-2">
-                  <EvidenceBadge level="B" />
-                  <div className="text-[12px] text-slate-700"><span className="font-semibold">Venlafaxine 75 to 150 mg/day</span> — second-line; preferred with comorbid depression or anxiety.</div>
-                </div>
-                <div className="bg-slate-50 rounded-lg p-2.5 flex items-start gap-2">
-                  <EvidenceBadge level="B" />
-                  <div className="text-[12px] text-slate-700"><span className="font-semibold">Mirtazapine 15 to 30 mg at bedtime</span> — second-line when sleep disturbance or anxiety predominate.</div>
-                </div>
-                <div className="bg-slate-50 rounded-lg p-2.5 flex items-start gap-2">
-                  <EvidenceBadge level="C" />
-                  <div className="text-[12px] text-slate-700"><span className="font-semibold">Topiramate</span> — third-line. Less evidence for TTH than migraine.</div>
-                </div>
-              </div>
-              <div className="mt-3 rounded-lg bg-neuro-50 border border-neuro-200 p-2.5">
-                <p className="text-[12px] font-semibold text-neuro-800 mb-0.5">Non-pharmacological (AAN Level A)</p>
-                <p className="text-[12px] text-neuro-700">Stress management, biofeedback, physical therapy. Offer alongside pharmacotherapy.</p>
-              </div>
-            </div>
-
-            {/* MOH gepant safety */}
-            <div data-claim="clinic-headache-moh-gepant-safe" className="rounded-xl border border-slate-100 bg-white p-4" style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.06)' }}>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Medication-overuse headache (MOH): the gepant exception</p>
-              <p className="text-[12px] text-slate-700 leading-relaxed">
-                Triptans, opioids, and combination analgesics taken ≥10 days/month for &gt;3 months drive MOH. NSAIDs ≥15 days/month do the same. Gepants (ubrogepant, rimegepant, atogepant) do not cause MOH per current evidence and are the preferred acute option in patients at MOH risk or with established MOH.
-              </p>
-              <p className="text-[11px] text-slate-400 mt-2">Rizzoli Continuum 2024 + AHS 2021 Consensus.</p>
-            </div>
-
-            {/* Cluster headache acute + preventive */}
-            <div className="rounded-xl border border-slate-100 bg-white p-4" style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.06)' }}>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Cluster headache: acute + preventive protocol</p>
-              <p className="text-[12px] text-slate-600 mb-3">Per Burish Continuum 2024 and AHS Grade A first-line triad.</p>
-              <div className="space-y-2">
-                <div className="rounded-lg bg-slate-50 p-2.5">
-                  <p className="text-[12px] font-semibold text-slate-900 mb-1">Acute (per-attack)</p>
-                  <ul className="text-[12px] text-slate-700 space-y-0.5 list-disc pl-4">
-                    <li>Oxygen 100% 12-15 L/min via non-rebreather mask × 15 minutes (Grade A). Prescribe home O₂ for active bouts.</li>
-                    <li>Sumatriptan 6 mg SC or 20 mg nasal — max 2 doses/24 h (Grade A).</li>
-                    <li>Zolmitriptan nasal 5-10 mg as triptan alternative (Grade A).</li>
-                  </ul>
-                </div>
-                <div className="rounded-lg bg-slate-50 p-2.5">
-                  <p className="text-[12px] font-semibold text-slate-900 mb-1">Bridging (while starting preventive)</p>
-                  <ul className="text-[12px] text-slate-700 space-y-0.5 list-disc pl-4">
-                    <li>Ipsilateral greater occipital nerve (GON) block with corticosteroid — Grade A.</li>
-                    <li>Prednisone 100 mg/day × 5 days then taper 20 mg every 3 days.</li>
-                  </ul>
-                </div>
-                <div className="rounded-lg bg-slate-50 p-2.5">
-                  <p className="text-[12px] font-semibold text-slate-900 mb-1">Preventive (start immediately)</p>
-                  <ul className="text-[12px] text-slate-700 space-y-0.5 list-disc pl-4">
-                    <li><span className="font-semibold">Verapamil 80 mg TID</span>, titrate to 360 mg/day. Baseline ECG, repeat after each escalation (PR prolongation risk).</li>
-                    <li>Lithium 300 mg BID-TID — second-line; requires serum level monitoring.</li>
-                    <li>Topiramate 100-200 mg/day — third-line; avoid in WOCBP.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Hemicrania indomethacin protocol */}
-            <div className="rounded-xl border border-slate-100 bg-white p-4" style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.06)' }}>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Hemicrania continua: indomethacin trial</p>
-              <p className="text-[12px] text-slate-600 mb-2">Goadsby Continuum 2024 (cited dose range 75 to 150 mg/day). Absolute response confirms the phenotype; no response rules it out.</p>
-              <ul className="text-[12px] text-slate-700 space-y-0.5 list-disc pl-4">
-                <li>Week 1: 25 mg TID (75 mg/day) with PPI cover.</li>
-                <li>Week 2: 50 mg TID (150 mg/day) if incomplete response.</li>
-                <li>Complete response within 1 to 2 weeks confirms the hemicrania continua phenotype. Maintain at lowest effective dose with ongoing PPI.</li>
-                <li>No response after 2 weeks at 50 mg TID: reconsider the working phenotype and pursue alternative workup.</li>
-              </ul>
-            </div>
-
-            {teachMode && (
-              <PathwayLearningPearl
-                title="Why ICHD-3 separates these phenotypes"
-                teachOnly
+        {/* Question screen */}
+        {flow.type === 'question' && (() => {
+          const q = getQuestion(flow.id);
+          if (!q) return null;
+          // For multi-check, show pending selections. For single-choice, empty selection (auto-advances).
+          const selectedForUI = q.type === 'multi-check' ? pendingAnswers : [];
+          return (
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={handleBackStep}
+                className="
+                  inline-flex items-center gap-1 text-[12px] text-slate-500 hover:text-slate-700
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500 rounded
+                  min-h-[44px] px-1
+                "
+              >
+                <ChevronLeft size={14} aria-hidden="true" />
+                Back
+              </button>
+              <QuestionScreen
+                questionId={q.id}
+                prompt={q.prompt}
+                type={q.type}
+                answers={q.answers}
+                selectedAnswerIds={selectedForUI}
+                onAnswer={handleAnswer}
                 teachMode={teachMode}
-                content={
-                  <p className="text-[12px] leading-relaxed">
-                    ICHD-3's phenotype boundaries reflect distinct treatment responses, not just descriptive convenience. Triptans help migraine and cluster but not TTH. Indomethacin is uniquely effective in hemicrania continua and paroxysmal hemicrania. Preventive thresholds and agents diverge between migraine and TTH. Knowing the phenotype changes what you offer.
-                  </p>
-                }
+                helpText={q.helpText}
+                ichd3Section={q.ichd3Section}
+                onPowerUserExit={() => setPowerUserOpen(true)}
               />
-            )}
-          </section>
+            </div>
+          );
+        })()}
+
+        {/* Workup / result rendered inside the drawer customContent — page area shows a brief recap */}
+        {(flow.type === 'workup' || flow.type === 'result') && (
+          <div className="rounded-xl bg-white border border-slate-100 p-4" style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.06)' }}>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Interview complete</p>
+            <p className="text-[14px] text-slate-700 leading-relaxed">
+              {flow.type === 'workup'
+                ? 'A red flag was identified. Tap the drawer below for the recommended workup.'
+                : 'A candidate phenotype was reached. Tap the drawer below for management.'}
+            </p>
+            <div className="mt-3 flex gap-2">
+              <button
+                type="button"
+                onClick={handleBackStep}
+                className="
+                  flex-1 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50
+                  px-3 py-2 text-[13px] font-medium min-h-[44px] touch-manipulation
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500
+                "
+              >
+                <ChevronLeft size={14} className="inline-block" aria-hidden="true" /> Edit answers
+              </button>
+              <button
+                type="button"
+                onClick={handleReset}
+                className="
+                  flex-1 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50
+                  px-3 py-2 text-[13px] font-medium min-h-[44px] touch-manipulation
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500
+                "
+              >
+                <RotateCcw size={13} className="inline-block mr-1" aria-hidden="true" /> Start over
+              </button>
+            </div>
+          </div>
         )}
-      </main>
+
+      </div>
+
+      {/* Drawer */}
+      <PathwayBottomDrawer
+        pathwayName="Headache"
+        tier={drawerTier}
+        action={drawerCollapsedAction}
+        state={drawerState}
+        customContent={drawerCustomContent}
+        stateBText={{ label: 'Mapping…', hint: `${selectedChips.size} feature${selectedChips.size === 1 ? '' : 's'} entered` }}
+      />
+
+      {/* Power-user phenotype picker */}
+      <PhenotypePickerSheet
+        open={powerUserOpen}
+        options={POWER_USER_PHENOTYPES.map(p => ({ id: p.id, label: p.label, section: p.section }))}
+        onPick={handlePowerUserPick}
+        onClose={() => setPowerUserOpen(false)}
+      />
+    </div>
+  );
+};
+
+// ─── Workup card ──────────────────────────────────────────────────────────
+
+const WorkupCard: React.FC<{ chips: Set<ChipId> }> = ({ chips }) => {
+  const flagDescriptions: { chip: ChipId; label: string; workup: string }[] = [
+    { chip: 'rf-onset-sudden', label: 'Thunderclap onset', workup: 'Non-contrast CT head urgently. If negative within 6 h of onset, may rule out SAH; otherwise LP for xanthochromia. CTA brain for aneurysm.' },
+    { chip: 'rf-neuro-deficit', label: 'Focal neurologic deficit', workup: 'Urgent MRI brain with contrast or non-contrast CT if MRI not available. EEG if seizure suspected.' },
+    { chip: 'rf-systemic', label: 'Systemic features (fever, weight loss)', workup: 'CBC, ESR, CRP, blood cultures if febrile. LP after imaging if meningitis suspected.' },
+    { chip: 'rf-older-age-onset', label: 'First-ever headache after age 50', workup: 'MRI brain with contrast. ESR + CRP to evaluate giant cell arteritis; temporal artery biopsy if clinical suspicion high.' },
+    { chip: 'rf-pregnancy', label: 'Pregnancy or postpartum', workup: 'MRI brain (avoid contrast unless essential). MRV for venous sinus thrombosis. Consider PRES, pre-eclampsia/eclampsia, RCVS.' },
+    { chip: 'rf-posttraumatic', label: 'Posttraumatic onset', workup: 'CT head non-contrast. MRI with susceptibility-weighted imaging for microbleeds if subacute. Vestibular and concussion evaluation.' },
+    { chip: 'rf-papilloedema', label: 'Papilloedema', workup: 'MRI brain with MRV (rule out venous sinus thrombosis, mass, IIH). LP with opening pressure after imaging.' },
+    { chip: 'rf-valsalva', label: 'Triggered by Valsalva', workup: 'MRI brain to evaluate posterior fossa lesions (Chiari malformation, tumour, colloid cyst).' },
+    { chip: 'rf-positional', label: 'Positional', workup: 'MRI brain with and without contrast to evaluate intracranial hypotension (dural enhancement) or hypertension.' },
+    { chip: 'rf-pattern-change', label: 'Recent pattern change', workup: 'MRI brain with contrast. Re-evaluate ICHD-3 phenotype after imaging; consider secondary cause.' },
+    { chip: 'rf-immune-pathology', label: 'Immunosuppression / HIV / cancer history', workup: 'MRI brain with contrast (rule out opportunistic infection, metastasis). LP with cytology if neoplastic meningitis suspected.' },
+    { chip: 'rf-painkiller-overuse', label: 'Painkiller overuse', workup: 'Detailed analgesic history. Plan medication withdrawal alongside preventive initiation (ICHD-3 §8.2).' },
+  ];
+  const activeFlags = flagDescriptions.filter(f => chips.has(f.chip));
+  return (
+    <div className="bg-white px-5 py-4 max-h-[60dvh] overflow-y-auto border-t border-slate-100">
+      <p className="text-[11px] font-bold uppercase tracking-widest text-red-700">Secondary-headache workup</p>
+      <p className="text-[14px] font-semibold text-slate-900 mt-1">Do not assign a primary-headache phenotype until workup is complete.</p>
+      <p className="text-[12px] text-slate-600 leading-relaxed mt-2">
+        Per SNNOOP10 (Do et al. Neurology 2019), any red flag warrants secondary-cause evaluation before primary-headache classification.
+      </p>
+      {chips.has('rf-painkiller-overuse') && activeFlags.length === 1 && (
+        <p className="text-[12px] text-amber-800 bg-amber-50 border border-amber-200 rounded-lg p-2.5 mt-2 leading-relaxed">
+          <span className="font-semibold">Note on painkiller overuse:</span> medication-overuse headache (ICHD-3 §8.2) is a primary-headache complication, not a secondary cause. Imaging is not first-line. Plan medication withdrawal alongside preventive initiation.
+        </p>
+      )}
+      <ul className="mt-4 space-y-3">
+        {activeFlags.map(f => (
+          <li key={f.chip} className="border-l-2 border-red-300 pl-3">
+            <p className="text-[13px] font-semibold text-slate-900">{f.label}</p>
+            <p className="text-[12px] text-slate-700 leading-relaxed mt-0.5">{f.workup}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+// ─── Result card ──────────────────────────────────────────────────────────
+
+// Small renderer used by every phenotype's criteria-met/missing block. The
+// data-claim attribute is wired by the per-phenotype outer component below,
+// so each claim ID appears as a literal in JSX for the static scanner.
+const CriteriaList: React.FC<{ match: PhenotypeMatch; teachMode: boolean }> = ({ match, teachMode }) => (
+  <div className="rounded-lg bg-slate-50 border border-slate-100 p-3">
+    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">ICHD-3 criteria</p>
+    {match.metCriteria.length > 0 && (
+      <ul className="space-y-1 mb-2">
+        {match.metCriteria.map(c => (
+          <li key={c.id} className="text-[12px] text-emerald-700 flex items-start gap-1.5">
+            <span aria-hidden="true">✓</span>
+            <span>{c.label}</span>
+          </li>
+        ))}
+      </ul>
+    )}
+    {match.missingCriteria.length > 0 && (
+      <ul className="space-y-1">
+        {match.missingCriteria.map(c => (
+          <li key={c.id} className="text-[12px] text-slate-600 flex items-start gap-1.5">
+            <span aria-hidden="true">○</span>
+            <div>
+              <span>Still needed: {c.label}</span>
+              {teachMode && <p className="text-[11px] text-slate-500 mt-0.5">{c.description}</p>}
+            </div>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+);
+
+const Bullet: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <li className="text-[13px] text-slate-700 leading-relaxed flex items-start gap-2">
+    <span className="text-slate-400 mt-0.5" aria-hidden="true">·</span>
+    <span>{children}</span>
+  </li>
+);
+
+const SectionHeading: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">{children}</p>
+);
+
+const ResultCard: React.FC<{ match: PhenotypeMatch | undefined; phenotypeId: PhenotypeId; teachMode: boolean }> = ({ match, phenotypeId, teachMode }) => {
+  const phenotype = HEADACHE_PHENOTYPES.find(p => p.id === phenotypeId);
+  if (!phenotype) return null;
+  const matchHeadline = match
+    ? match.matchStrength === 'full'
+      ? `Features consistent with ${phenotype.name}`
+      : match.matchStrength === 'probable'
+        ? `Features consistent with Probable ${phenotype.name}`
+        : `Partial match for ${phenotype.name}`
+    : `Reviewing ${phenotype.name}`;
+
+  return (
+    <div className="bg-white px-5 py-4 max-h-[60dvh] overflow-y-auto border-t border-slate-100">
+      <p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">{phenotype.ichd3Section}{phenotype.isAppendix ? ' · appendix entity' : ''}</p>
+      <p className="text-[17px] font-semibold text-slate-900 leading-snug mt-0.5">{matchHeadline}</p>
+      <p className="text-[12px] text-slate-600 mt-2 leading-relaxed">
+        Confirm pattern across multiple attacks and review the patient's history before treating. This tool maps features against criteria; the diagnosis remains a clinical judgement.
+      </p>
+
+      {/* Per-phenotype management — literal data-claim per phenotype */}
+      {(phenotypeId === 'migraine-without-aura' || phenotypeId === 'migraine-with-aura') && (
+        <>
+          {match && (
+            <div data-claim="clinic-headache-ichd3-migraine-criteria" className="mt-4">
+              <CriteriaList match={match} teachMode={teachMode} />
+            </div>
+          )}
+          <div data-claim="clinic-headache-moh-gepant-safe" className="mt-4">
+            <SectionHeading>Acute treatment</SectionHeading>
+            <ul className="mt-2 space-y-1.5">
+              {phenotypeId === 'migraine-without-aura' ? (
+                <>
+                  <Bullet>Triptan (sumatriptan 50–100 mg PO at onset) first-line if no CVD contraindication.</Bullet>
+                  <Bullet>NSAID (ibuprofen 600 mg or naproxen 500 mg) for milder attacks.</Bullet>
+                  <Bullet>Gepant (ubrogepant, rimegepant) when triptans are contraindicated or in MOH risk (Rizzoli 2024).</Bullet>
+                  <Bullet>Add antiemetic if nausea is prominent.</Bullet>
+                </>
+              ) : (
+                <>
+                  <Bullet>NSAID at aura onset; triptan once headache phase begins.</Bullet>
+                  <Bullet>Gepant or lasmiditan when triptans are contraindicated.</Bullet>
+                </>
+              )}
+            </ul>
+          </div>
+          <div data-claim="clinic-headache-preventive-threshold" className="mt-4">
+            <SectionHeading>Preventive threshold</SectionHeading>
+            <ul className="mt-2 space-y-1.5">
+              <Bullet>≥4 days/month with disability OR ≥6 days/month regardless OR acute use ≥10 days/month (AHS 2021).</Bullet>
+              <Bullet>First-line: propranolol or topiramate.</Bullet>
+              <Bullet>Comorbid anxiety/depression: amitriptyline or venlafaxine.</Bullet>
+            </ul>
+          </div>
+          <div data-claim="clinic-headache-cgrp-escalation" className="mt-4">
+            <SectionHeading>CGRP escalation</SectionHeading>
+            <ul className="mt-2 space-y-1.5">
+              <Bullet>After ≥2 conventional preventive failures, escalate to CGRP mAb (erenumab, fremanezumab, galcanezumab, eptinezumab).</Bullet>
+              <Bullet>Gepants (atogepant, rimegepant) are oral CGRP options without MOH risk.</Bullet>
+            </ul>
+          </div>
+        </>
+      )}
+
+      {(phenotypeId === 'episodic-tth' || phenotypeId === 'chronic-tth') && (
+        <>
+          {match && (
+            <div data-claim="clinic-headache-ichd3-tension-criteria" className="mt-4">
+              <CriteriaList match={match} teachMode={teachMode} />
+            </div>
+          )}
+          <div data-claim="clinic-headache-tension-acute-management" className="mt-4">
+            <SectionHeading>Acute treatment</SectionHeading>
+            <ul className="mt-2 space-y-1.5">
+              <Bullet>Ibuprofen 400–600 mg PO first-line (Scher Continuum 2024).</Bullet>
+              <Bullet>Aspirin 500–1000 mg PO alternative.</Bullet>
+              <Bullet>Acetaminophen 1000 mg PO in pregnancy or NSAID contraindication.</Bullet>
+              <Bullet>Avoid opioids and butalbital combinations (MOH and dependence risk).</Bullet>
+              <Bullet>Limit acute medication to ≤15 days/month for simple analgesics, ≤10 days/month for triptans/opioids.</Bullet>
+            </ul>
+          </div>
+          {phenotypeId === 'chronic-tth' && (
+            <div data-claim="clinic-headache-tension-preventive" className="mt-4">
+              <SectionHeading>Preventive treatment</SectionHeading>
+              <ul className="mt-2 space-y-1.5">
+                <Bullet>Amitriptyline 10–75 mg at bedtime first-line (AAN Level B).</Bullet>
+                <Bullet>Venlafaxine 75–150 mg/day if depression or anxiety is comorbid.</Bullet>
+                <Bullet>Mirtazapine 15–30 mg at bedtime for sleep + anxiety.</Bullet>
+                <Bullet>Topiramate third-line (less evidence for TTH than migraine).</Bullet>
+                <Bullet>Combined non-pharmacologic approach (stress management + biofeedback + physical therapy) has Level A evidence.</Bullet>
+              </ul>
+            </div>
+          )}
+        </>
+      )}
+
+      {phenotypeId === 'cluster-headache' && (
+        <>
+          {match && (
+            <div data-claim="clinic-headache-ichd3-cluster-criteria" className="mt-4">
+              <CriteriaList match={match} teachMode={teachMode} />
+            </div>
+          )}
+          <div data-claim="clinic-headache-cluster-acute-management" className="mt-4">
+            <SectionHeading>Acute treatment</SectionHeading>
+            <ul className="mt-2 space-y-1.5">
+              <Bullet>High-flow O₂ 12–15 L/min via non-rebreather, 15 min (Burish 2024, AHS Grade A).</Bullet>
+              <Bullet>Sumatriptan 6 mg SC or 20 mg nasal (Burish 2024, AHS Grade A).</Bullet>
+              <Bullet>Bridging: ipsilateral GON block with corticosteroid; prednisone 100 mg/day × 5 d then taper.</Bullet>
+            </ul>
+          </div>
+          <div data-claim="clinic-headache-cluster-preventive" className="mt-4">
+            <SectionHeading>Preventive treatment</SectionHeading>
+            <ul className="mt-2 space-y-1.5">
+              <Bullet>Verapamil 80 mg TID, titrate to 360 mg/day. Baseline ECG; recheck after each dose change (PR prolongation).</Bullet>
+              <Bullet>Lithium 300 mg BID–TID second-line; requires serum-level monitoring.</Bullet>
+              <Bullet>Topiramate 100–200 mg/day third-line; avoid in WOCBP without contraception.</Bullet>
+            </ul>
+          </div>
+        </>
+      )}
+
+      {phenotypeId === 'hemicrania-continua' && (
+        <>
+          {match && (
+            <div data-claim="clinic-headache-ichd3-hemicrania-criteria" className="mt-4">
+              <CriteriaList match={match} teachMode={teachMode} />
+            </div>
+          )}
+          <div data-claim="clinic-headache-hc-indomethacin-protocol" className="mt-4">
+            <SectionHeading>Indomethacin protocol (Goadsby Continuum 2024)</SectionHeading>
+            <ul className="mt-2 space-y-1.5">
+              <Bullet>Indomethacin 25 mg TID week 1; 50 mg TID week 2 if incomplete (max 150 mg/day per Goadsby 2024 quoted text).</Bullet>
+              <Bullet>Co-prescribe PPI for GI protection.</Bullet>
+              <Bullet>Complete response within 1–2 weeks confirms the hemicrania continua phenotype. Maintain at lowest effective dose.</Bullet>
+            </ul>
+          </div>
+        </>
+      )}
+
+      {phenotypeId === 'ndph' && (
+        <>
+          {match && (
+            <div data-claim="clinic-headache-ichd3-ndph-criteria" className="mt-4">
+              <CriteriaList match={match} teachMode={teachMode} />
+            </div>
+          )}
+          <div className="mt-4">
+            <SectionHeading>Management</SectionHeading>
+            <ul className="mt-2 space-y-1.5">
+              <Bullet>NDPH is a diagnosis of exclusion — secondary-cause workup should be complete before treating.</Bullet>
+              <Bullet>Treat the most prominent phenotype (migraine-like or TTH-like) the headache resembles.</Bullet>
+              <Bullet>Counselling about uncertain prognosis is part of the plan.</Bullet>
+            </ul>
+          </div>
+        </>
+      )}
+
+      {phenotypeId === 'vestibular-migraine' && match && (
+        <div className="mt-4 rounded-lg bg-slate-50 border border-slate-100 p-3">
+          <p className="text-[12px] text-slate-700 leading-relaxed">
+            Vestibular migraine lives in the ICHD-3 appendix (A1.6.5) as research criteria. Treat per the migraine phenotype most closely matching the patient's other features.
+          </p>
+          <div className="mt-3">
+            <CriteriaList match={match} teachMode={teachMode} />
+          </div>
+        </div>
+      )}
+
+      {/* Teach pearl */}
+      {teachMode && phenotype.teachPearl && (
+        <div className="mt-4 rounded-lg bg-neuro-50 border border-neuro-100 p-3">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-neuro-700 mb-1">Learn this pattern</p>
+          <p className="text-[12px] text-slate-700 leading-relaxed">{phenotype.teachPearl}</p>
+        </div>
+      )}
     </div>
   );
 };

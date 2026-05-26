@@ -799,4 +799,24 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
     description: 'Migraine 1.1 D requires nausea or vomiting, or the photophobia+phonophobia pair. TTH 2.2 D excludes nausea and vomiting and allows at most one of photophobia or phonophobia. Patients commonly carry both phenotypes per ICHD-3 General Principles, treated as separate diagnoses.',
   },
+
+  // ─── Cluster + HC management surfaces (clinical-reviewer §17.2 condition 2) ──
+  'clinic-headache-cluster-acute-management': {
+    id: 'clinic-headache-cluster-acute-management',
+    citation_ids: ['burish-2024-continuum-cluster'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Cluster headache acute treatment (Burish Continuum 2024, AHS Grade A): high-flow O₂ 100% 12-15 L/min via non-rebreather × 15-20 min; sumatriptan 6 mg SC or 20 mg nasal. Greater occipital nerve block with corticosteroid is effective bridging therapy at bout onset; prednisone 100 mg/day × 5 days then taper as transitional therapy.',
+  },
+  'clinic-headache-cluster-preventive': {
+    id: 'clinic-headache-cluster-preventive',
+    citation_ids: ['burish-2024-continuum-cluster'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Cluster headache preventive treatment (Burish Continuum 2024): verapamil 80 mg TID first-line, titrate to 360 mg/day with baseline ECG and recheck after each dose change for PR prolongation. Lithium 300 mg BID-TID second-line; serum-level monitoring required. Topiramate 100-200 mg/day third-line; avoid in WOCBP without contraception.',
+  },
+  'clinic-headache-hc-indomethacin-protocol': {
+    id: 'clinic-headache-hc-indomethacin-protocol',
+    citation_ids: ['goadsby-2024-continuum-indomethacin'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Hemicrania continua indomethacin protocol (Goadsby Continuum 2024): indomethacin 25 mg TID week 1; titrate to 50 mg TID (150 mg/day) week 2 if incomplete response; max 150 mg/day per quoted text. PPI co-prescription mandatory for GI protection. Complete response within 1-2 weeks confirms the hemicrania continua phenotype; maintain at lowest effective dose. Indomethacin non-response rules out 3.4 HC and warrants diagnostic reconsideration.',
+  },
 };
