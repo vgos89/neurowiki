@@ -1289,6 +1289,25 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'Trigeminal neuralgia (TN): carbamazepine (Level A) or oxcarbazepine (Level B) first-line. For refractory TN in acute exacerbation: IV fosphenytoin or IV lidocaine (short-term stabilisation). NVAF TN variant: phenytoin/carbamazepine. Occipital neuralgia: greater and/or lesser GON blocks first-line. Glossopharyngeal neuralgia: carbamazepine; airway protection mandatory if swallowing affected.',
   },
 
+  // ─── Do 2019 — SNNOOP10 red flags for headache (Neurology) ───────────────
+  // Do TP, Remmers A, Schytz HW, et al. Red and orange flags for secondary
+  // headaches in clinical practice: SNNOOP10 list. Neurology 2019;92:134-144.
+  // PMID 30587518. AHS-endorsed expansion of SNOOP4. 24-month review window per §13.7
+  // (red-flag framework is stable). Registered 2026-05-25 for the Clinic
+  // Headache Pathway red-flag short-circuit logic.
+  'do-snnoop10-2019': {
+    id: 'do-snnoop10-2019',
+    source: 'guideline',
+    title: 'Red and orange flags for secondary headaches in clinical practice: SNNOOP10 list (Do et al., Neurology 2019;92:134-144)',
+    year: 2019,
+    section: 'SNNOOP10 framework',
+    pmid: '30587518',
+    url: 'https://doi.org/10.1212/WNL.0000000000006697',
+    last_reviewed: '2026-05-25',
+    review_window_months: 24,
+    quoted_text: 'SNNOOP10 red-flag mnemonic for secondary headaches: S — Systemic symptoms (fever, weight loss); N — Neoplasm in history; N — Neurologic deficit (focal, altered mental status, seizures); O — Onset sudden or abrupt (thunderclap); O — Older age (new headache after age 50); P — Pattern change or recent onset of new headache; P — Positional headache; P — Precipitated by sneezing, coughing, or exercise; P — Papilloedema; P — Progressive headache or atypical presentation; P — Pregnancy or puerperium; P — Painful eye with autonomic features; P — Posttraumatic onset of headache; P — Pathology of the immune system (e.g., HIV); P — Painkiller overuse or new drug at onset of headache. Any flag should prompt evaluation for a secondary cause before assigning a primary-headache phenotype.',
+  },
+
   'rizzoli-2024-continuum-moh': {
     id: 'rizzoli-2024-continuum-moh',
     source: 'review',
