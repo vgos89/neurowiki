@@ -380,7 +380,7 @@ const AscvdRiskCalculator: React.FC = () => {
         scoreDisplay={
           result !== null
             ? <span className="text-[20px] font-bold text-slate-900">{result.toFixed(1)}<span className="text-slate-500 text-[14px]">%</span></span>
-            : <span className="text-[20px] font-bold text-slate-400">—</span>
+            : <span className="text-[20px] font-bold text-slate-400">–</span>
         }
         scoreAriaLabel={result !== null ? `10-year ASCVD risk ${result.toFixed(1)} percent` : '10-year ASCVD risk not yet computed'}
         onBack={handleBack}
@@ -541,7 +541,7 @@ const AscvdRiskCalculator: React.FC = () => {
           result !== null && tierMeta
             ? `${tierMeta.label} · ${result.toFixed(1)}%`
             : ageOutOfRange
-              ? 'Age out of PCE range — no result'
+              ? 'Age out of PCE range, no result'
               : 'Complete'
         }
       >
