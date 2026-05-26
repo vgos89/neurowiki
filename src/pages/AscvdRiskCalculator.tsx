@@ -14,9 +14,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { AlertTriangle, Info } from 'lucide-react';
 import { CalculatorHeader } from '../components/calculators/CalculatorHeader';
+import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
+import { useDrawerState } from '../hooks/useDrawerState';
 import { useFavorites } from '../hooks/useFavorites';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useRecents } from '../hooks/useRecents';
+import type { SeverityTokens } from '../lib/calculators/severityTokens';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -155,38 +158,78 @@ function tierOf(riskPct: number): RiskTier {
   return 'high';
 }
 
-const TIER_META: Record<RiskTier, { label: string; band: string; cardBg: string; chipBg: string; chipText: string; recommendation: string }> = {
+interface TierMeta {
+  label: string;
+  band: string;
+  headlineColor: string;
+  recommendation: string;
+  explanation: string;
+}
+
+const TIER_META: Record<RiskTier, TierMeta> = {
   low: {
     label: 'Low risk',
     band: '<5%',
-    cardBg: 'bg-emerald-50 border-emerald-200',
-    chipBg: 'bg-emerald-100',
-    chipText: 'text-emerald-700',
-    recommendation: 'Lifestyle intervention. Statin not recommended on risk basis alone. Re-assess every 4-6 years.',
+    headlineColor: 'text-emerald-700',
+    recommendation: 'Lifestyle intervention. Statin not recommended on risk basis alone.',
+    explanation: 'For adults 40-79 without prior clinical ASCVD, a 10-year risk under 5% does not meet the threshold for primary-prevention statin therapy. Focus on diet, exercise, weight, smoking cessation, and BP control. Re-assess every 4 to 6 years.',
   },
   borderline: {
     label: 'Borderline risk',
     band: '5% to <7.5%',
-    cardBg: 'bg-amber-50 border-amber-200',
-    chipBg: 'bg-amber-100',
-    chipText: 'text-amber-700',
-    recommendation: 'Lifestyle intervention. Statin may be reasonable if risk-enhancing factors are present (family history of premature ASCVD, persistent LDL-C ≥160, metabolic syndrome, CKD, chronic inflammatory disease, Lp(a) ≥50 mg/dL, ApoB ≥130, ABI <0.9).',
+    headlineColor: 'text-amber-700',
+    recommendation: 'Lifestyle intervention. Statin reasonable if risk-enhancing factors are present.',
+    explanation: 'In the borderline range, the statin decision depends on risk-enhancing factors. Consider treatment if any are present: family history of premature ASCVD, persistent LDL-C ≥160 mg/dL, metabolic syndrome, CKD, chronic inflammatory disease, Lp(a) ≥50 mg/dL, ApoB ≥130 mg/dL, ABI <0.9, history of pre-eclampsia, or early menopause.',
   },
   intermediate: {
     label: 'Intermediate risk',
     band: '7.5% to <20%',
-    cardBg: 'bg-amber-50 border-amber-200',
-    chipBg: 'bg-amber-200',
-    chipText: 'text-amber-800',
-    recommendation: 'Moderate-intensity statin recommended (COR 1, LOE A). If decision is uncertain, consider coronary artery calcium scoring to refine. High-intensity statin if risk-enhancers present.',
+    headlineColor: 'text-amber-700',
+    recommendation: 'Moderate-intensity statin recommended (COR 1, LOE A).',
+    explanation: 'Initiate moderate-intensity statin (atorvastatin 10 to 20 mg or rosuvastatin 5 to 10 mg). If the decision is uncertain, coronary artery calcium scoring can refine the call: CAC = 0 supports deferral in selected patients; CAC ≥100 or ≥75th percentile favours treatment. Use high-intensity statin if risk-enhancing factors are also present.',
   },
   high: {
     label: 'High risk',
     band: '≥20%',
-    cardBg: 'bg-red-50 border-red-200',
-    chipBg: 'bg-red-100',
-    chipText: 'text-red-700',
-    recommendation: 'High-intensity statin recommended (COR 1, LOE A). Target ≥50% LDL-C reduction. Optimise BP, smoking cessation, glycaemic control.',
+    headlineColor: 'text-red-700',
+    recommendation: 'High-intensity statin recommended (COR 1, LOE A). Target ≥50% LDL-C reduction.',
+    explanation: 'Initiate high-intensity statin (atorvastatin 40 to 80 mg or rosuvastatin 20 to 40 mg) targeting ≥50% LDL-C reduction. Optimise blood pressure to <130/80 mmHg, support smoking cessation, and address glycaemic control if diabetic. Re-check LDL-C at 4 to 12 weeks after initiation.',
+  },
+};
+
+// Drawer severity tokens — CALCULATOR_SPEC.md §6 mapping
+const SEVERITY_TOKENS: Record<RiskTier, SeverityTokens> = {
+  low: {
+    borderColor: '#e2e8f0',
+    headerBg: 'bg-white',
+    headerHover: 'hover:bg-slate-50',
+    labelClass: 'text-[10px] font-bold text-slate-400 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-slate-900',
+    chevronClass: 'text-slate-400',
+  },
+  borderline: {
+    borderColor: '#fde68a',
+    headerBg: 'bg-amber-50',
+    headerHover: 'hover:bg-amber-100',
+    labelClass: 'text-[10px] font-bold text-amber-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-amber-700',
+    chevronClass: 'text-amber-700',
+  },
+  intermediate: {
+    borderColor: '#fed7aa',
+    headerBg: 'bg-amber-50',
+    headerHover: 'hover:bg-amber-100',
+    labelClass: 'text-[10px] font-bold text-amber-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-amber-700',
+    chevronClass: 'text-amber-700',
+  },
+  high: {
+    borderColor: '#fecaca',
+    headerBg: 'bg-red-50',
+    headerHover: 'hover:bg-red-100',
+    labelClass: 'text-[10px] font-bold text-red-700 uppercase tracking-widest',
+    statClass: 'text-sm font-medium text-red-700',
+    chevronClass: 'text-red-600',
   },
 };
 
@@ -287,6 +330,27 @@ const AscvdRiskCalculator: React.FC = () => {
   );
   const tier = result !== null ? tierOf(result) : null;
   const tierMeta = tier ? TIER_META[tier] : null;
+  const tokens = tier ? SEVERITY_TOKENS[tier] : null;
+
+  // Inline age-range detection — fires as soon as user types an out-of-range value
+  const ageNum = parseFloat(state.age);
+  const ageEntered = state.age !== '' && !isNaN(ageNum);
+  const ageOutOfRange = ageEntered && (ageNum < 40 || ageNum > 79);
+
+  // Drawer state per CALCULATOR_SPEC.md §5: A (no inputs), B (partial), C (complete + valid)
+  const totalRequired = 9; // age, sex, race, TC, HDL, SBP, bpTreated, diabetes, smoker
+  const selectedCount =
+    (state.age && !isNaN(ageNum) ? 1 : 0) +
+    (state.sex ? 1 : 0) +
+    (state.race ? 1 : 0) +
+    (state.totalCholesterol && !isNaN(parseFloat(state.totalCholesterol)) ? 1 : 0) +
+    (state.hdlCholesterol && !isNaN(parseFloat(state.hdlCholesterol)) ? 1 : 0) +
+    (state.systolicBp && !isNaN(parseFloat(state.systolicBp)) ? 1 : 0) +
+    (state.bpTreated ? 1 : 0) +
+    (state.diabetes ? 1 : 0) +
+    (state.smoker ? 1 : 0);
+  const { state: drawerState, drawerOpen, setDrawerOpen, reset: resetDrawer } =
+    useDrawerState({ mode: 'partial-complete', selectedCount, totalRequired });
 
   const handleReset = () => {
     setState({
@@ -294,6 +358,7 @@ const AscvdRiskCalculator: React.FC = () => {
       totalCholesterol: '', hdlCholesterol: '', systolicBp: '',
       bpTreated: null, diabetes: null, smoker: null,
     });
+    resetDrawer();
     window.scrollTo(0, 0);
   };
 
@@ -349,8 +414,22 @@ const AscvdRiskCalculator: React.FC = () => {
             type="number" min="40" max="79" placeholder="e.g. 62"
             value={state.age}
             onChange={e => setField('age', e.target.value)}
-            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-[15px] font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-neuro-500 focus:border-transparent"
+            aria-invalid={ageOutOfRange}
+            aria-describedby={ageOutOfRange ? 'age-out-of-range' : undefined}
+            className={`w-full rounded-xl border bg-white px-4 py-3 text-[15px] font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:border-transparent ${
+              ageOutOfRange
+                ? 'border-amber-400 focus:ring-amber-400'
+                : 'border-slate-200 focus:ring-neuro-500'
+            }`}
           />
+          {ageOutOfRange && (
+            <div id="age-out-of-range" role="alert" className="mt-2 rounded-lg bg-amber-50 border border-amber-300 p-2.5 flex items-start gap-2">
+              <AlertTriangle size={14} className="text-amber-600 shrink-0 mt-0.5" />
+              <div className="text-[12px] text-amber-900 leading-relaxed">
+                <span className="font-semibold">Age {ageNum} is outside the PCE validated range (40-79).</span> The calculator cannot produce a valid 10-year ASCVD risk for this patient. {ageNum < 40 ? 'In adults <40, the PCE underestimates lifetime risk; consider risk-enhancing factors.' : 'In adults >79, the PCE overestimates risk; the statin decision rests on clinical judgement.'}
+              </div>
+            </div>
+          )}
 
           <label className="block text-[13px] font-medium text-slate-700 mt-3 mb-1">Sex</label>
           <div className="grid grid-cols-2 gap-2">
@@ -433,72 +512,6 @@ const AscvdRiskCalculator: React.FC = () => {
           </div>
         </div>
 
-        {/* Result */}
-        {result !== null && tierMeta && tier && (
-          <div data-claim="ascvd-pce-formula-2013" className={`rounded-xl border-2 p-4 ${tierMeta.cardBg}`} style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.10)' }}>
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">10-year ASCVD risk</p>
-                <p className="text-[36px] font-bold text-slate-900 leading-none mt-1">{result.toFixed(1)}<span className="text-[20px] text-slate-500">%</span></p>
-                <div className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 mt-2 ${tierMeta.chipBg}`}>
-                  <span className={`text-[11px] font-bold uppercase tracking-widest ${tierMeta.chipText}`}>{tierMeta.label}</span>
-                  <span className={`text-[11px] ${tierMeta.chipText} opacity-70`}>{tierMeta.band}</span>
-                </div>
-              </div>
-            </div>
-            <p data-claim="ascvd-risk-tiers-2019" className="text-[13px] text-slate-700 mt-3 leading-relaxed">
-              {tierMeta.recommendation}
-            </p>
-            <p className="text-[11px] text-slate-500 mt-3">Goff 2014 (PCE formula). Risk tiers per Arnett 2019.</p>
-
-            {validation.warnings.length > 0 && (
-              <div className="mt-3 rounded-lg bg-white/60 border border-slate-200 p-2.5">
-                <div className="flex items-start gap-2">
-                  <AlertTriangle size={13} className="text-amber-600 shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-[11px] font-bold uppercase tracking-widest text-amber-700">Outside derivation range</p>
-                    <ul className="text-[12px] text-slate-700 mt-1 space-y-0.5">
-                      {validation.warnings.map((w, i) => <li key={i}>{w}</li>)}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {result === null && validation.outOfRange.length > 0 && (
-          <div className="rounded-xl border-2 border-amber-300 bg-amber-50 p-4" style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.10)' }}>
-            <div className="flex items-start gap-2.5">
-              <AlertTriangle size={18} className="text-amber-600 shrink-0 mt-0.5" />
-              <div>
-                <p className="text-[13px] font-bold uppercase tracking-widest text-amber-700">Outside PCE validated range</p>
-                <ul className="text-[13px] text-amber-900 mt-2 space-y-1.5 leading-relaxed">
-                  {validation.outOfRange.map((m, i) => <li key={i}>{m}</li>)}
-                </ul>
-                <p className="text-[12px] text-amber-700 mt-2">
-                  In patients &lt;40 the PCE underestimates lifetime risk; in patients &gt;79 it overestimates. For patients outside this range, decide on statin therapy using clinical judgement and risk-enhancing factors.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {result === null && validation.outOfRange.length === 0 && validation.missing.length > 0 && (
-          <div className="rounded-xl border-2 border-neuro-300 bg-neuro-50 p-4" style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.10)' }}>
-            <div className="flex items-start gap-2.5">
-              <Info size={18} className="text-neuro-600 shrink-0 mt-0.5" />
-              <div>
-                <p className="text-[13px] font-bold uppercase tracking-widest text-neuro-700">More inputs needed</p>
-                <p className="text-[13px] text-slate-700 mt-1">Fill the remaining fields to see the 10-year ASCVD risk and interpretation.</p>
-                <ul className="text-[12px] text-slate-700 mt-2 space-y-0.5">
-                  {validation.missing.map((m, i) => <li key={i}>• {m}</li>)}
-                </ul>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Limitations */}
         <div className="bg-white border border-slate-100 rounded-xl p-4" style={{ boxShadow: '0 4px 16px rgba(15,23,42,0.10)' }}>
           <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Limitations</p>
@@ -511,7 +524,74 @@ const AscvdRiskCalculator: React.FC = () => {
           </ul>
         </div>
 
+        {/* Drawer spacer — prevents content hiding behind drawer per CALCULATOR_SPEC §1.3 */}
+        <div className={drawerOpen ? 'drawer-spacer-expanded' : 'drawer-spacer-collapsed'} />
       </div>
+
+      {/* ── Drawer portal — fixed above mobile bottom nav, CALCULATOR_SPEC §1.3 ── */}
+      <CalculatorDrawer
+        state={drawerState}
+        tokens={tokens}
+        isExpanded={drawerOpen}
+        onToggle={() => setDrawerOpen(open => !open)}
+        ariaContentId="ascvd-drawer-content"
+        stateAText={{ label: '0 of 9 entered', hint: 'Fill the form to see risk' }}
+        stateBText={{ label: `${selectedCount} of 9 entered`, hint: `${totalRequired - selectedCount} more to complete` }}
+        collapsedStat={
+          result !== null && tierMeta
+            ? `${tierMeta.label} · ${result.toFixed(1)}%`
+            : ageOutOfRange
+              ? 'Age out of PCE range — no result'
+              : 'Complete'
+        }
+      >
+        {result !== null && tierMeta && tier && (
+          <div id="ascvd-drawer-content" role="region" aria-label="ASCVD risk interpretation" className="max-h-[60dvh] overflow-y-auto">
+            <div className="px-5 pt-4 pb-6">
+              {/* Headline */}
+              <p data-claim="ascvd-pce-formula-2013" className={`text-xl font-semibold leading-tight ${tierMeta.headlineColor}`}>
+                10-year ASCVD risk {result.toFixed(1)}%: {tierMeta.label.toLowerCase()}
+              </p>
+              <p className="text-sm text-slate-500 mt-1">{tierMeta.band} (Arnett 2019)</p>
+
+              {/* Recommendation */}
+              <p data-claim="ascvd-risk-tiers-2019" className="text-slate-800 font-medium leading-relaxed mt-4">
+                {tierMeta.recommendation}
+              </p>
+
+              {/* Explanation */}
+              <p className="text-slate-600 leading-relaxed mt-3 text-sm">
+                {tierMeta.explanation}
+              </p>
+
+              {/* Derivation-range warnings */}
+              {validation.warnings.length > 0 && (
+                <div className="mt-4 rounded-lg bg-amber-50 border border-amber-200 p-3">
+                  <div className="flex items-start gap-2">
+                    <AlertTriangle size={14} className="text-amber-600 shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-[11px] font-bold uppercase tracking-widest text-amber-700">Outside derivation range</p>
+                      <ul className="text-[12px] text-slate-700 mt-1 space-y-0.5">
+                        {validation.warnings.map((w, i) => <li key={i}>{w}</li>)}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Citation + disclaimer */}
+              <div className="mt-5 pt-4 border-t border-slate-100">
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Goff DC Jr et al. 2013 ACC/AHA Guideline on the Assessment of Cardiovascular Risk. Circulation 2014;129(Suppl 2):S49-S73. Risk-tier thresholds: Arnett DK et al. 2019 ACC/AHA Primary Prevention Guideline. Circulation 2019;140:e596-e646.
+                </p>
+                <p className="mt-3 text-xs text-slate-400 leading-relaxed">
+                  Educational use only. Not a substitute for clinical judgment.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+      </CalculatorDrawer>
     </div>
   );
 };
