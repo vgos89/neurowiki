@@ -385,7 +385,14 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       { id: 'ctth-A', label: '≥15 headache days/month for >3 months', description: 'ICHD-3 2.3 A — headache on ≥15 days/month, pattern ≥3 months.', evaluate: s => has(s, 'freq-ge-15-per-month') && has(s, 'pattern-ge-3-months'), contributingChips: ['freq-ge-15-per-month', 'pattern-ge-3-months'] },
       { id: 'ctth-B', label: 'Hours to continuous, or unremitting', description: 'ICHD-3 2.3 B — attack duration hours to days, or unremitting.', evaluate: s => has(s, 'dur-30min-to-7days') || has(s, 'dur-gt-72-hours') || has(s, 'dur-continuous'), contributingChips: ['dur-30min-to-7days', 'dur-gt-72-hours', 'dur-continuous'] },
       { id: 'ctth-C', label: '≥2 of: bilateral, pressing/tightening, mild-moderate, NOT aggravated', description: 'ICHD-3 2.3 C — same as 2.2 C.', evaluate: s => TTH_C_CHARACTER(s) >= 2, contributingChips: ['loc-bilateral', 'qual-pressing-tightening', 'sev-mild', 'sev-moderate', 'act-not-aggravated'] },
-      { id: 'ctth-D', label: 'No moderate/severe nausea, no vomiting', description: 'ICHD-3 2.3 D — exclude moderate/severe nausea and vomiting; allow mild nausea OR ≤1 of photo/phono.', evaluate: s => !has(s, 'sym-vomiting'), contributingChips: ['sym-vomiting', 'sym-nausea'] },
+      // ctth-D limitation: ICHD-3 2.3 D allows mild nausea OR ≤1 of photo/phono
+      // but excludes moderate-severe nausea and vomiting. The chip vocabulary
+      // does not distinguish mild from moderate-severe nausea, so the evaluator
+      // approximates by excluding vomiting only. The displayed criterion text
+      // surfaces the full requirement so clinicians see the rule they need to
+      // apply with their patient context. Acknowledged at clinical-reviewer
+      // 2026-05-25 (Condition 2). To tighten: add sym-nausea-mild + sym-nausea-severe chips.
+      { id: 'ctth-D', label: 'No moderate/severe nausea, no vomiting (allow mild nausea OR ≤1 of photo/phono)', description: 'ICHD-3 2.3 D — exclude moderate/severe nausea and vomiting; allow mild nausea OR no more than one of photophobia or phonophobia. The chip picker does not distinguish nausea severity; confirm with the patient that nausea (if any) is mild before applying this criterion.', evaluate: s => !has(s, 'sym-vomiting'), contributingChips: ['sym-vomiting', 'sym-nausea'] },
     ],
   },
 
@@ -435,7 +442,11 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       'NDPH is defined by the patient being able to pinpoint the moment the headache began and it never resolving since. Onset to continuous and unremitting must occur within 24 hours, and the pattern must persist >3 months. NDPH is a diagnosis of exclusion — workup for secondary causes is mandatory.',
     criteria: [
       { id: 'ndph-A', label: 'Persistent headache >3 months', description: 'ICHD-3 3.3 A — persistent headache, >3 months.', evaluate: s => has(s, 'dur-continuous') && has(s, 'pattern-ge-3-months'), contributingChips: ['dur-continuous', 'pattern-ge-3-months'] },
-      { id: 'ndph-B', label: 'Distinct, clearly-remembered onset; continuous within 24 hours', description: 'ICHD-3 3.3 B — distinct and clearly-remembered onset, becoming continuous and unremitting within 24 hours.', evaluate: s => has(s, 'onset-new-within-3-months') || has(s, 'onset-single-sudden'), contributingChips: ['onset-new-within-3-months', 'onset-single-sudden'] },
+      // ndph-B: the "within 24 hours" temporal constraint is preserved in
+      // the displayed criterion text but cannot be enforced through chip
+      // selection alone (chip vocabulary captures pattern onset window in
+      // months, not hours). Clinical confirmation with patient required.
+      { id: 'ndph-B', label: 'Distinct, clearly-remembered onset; becomes continuous and unremitting within 24 hours', description: 'ICHD-3 3.3 B — distinct and clearly-remembered onset, with pain becoming continuous and unremitting within 24 hours. Confirm with patient that they can pinpoint the exact day or hour of onset.', evaluate: s => has(s, 'onset-new-within-3-months') || has(s, 'onset-single-sudden'), contributingChips: ['onset-new-within-3-months', 'onset-single-sudden'] },
     ],
   },
 
@@ -527,10 +538,17 @@ export function evaluateHeadachePhenotypes(selected: Set<ChipId>): PhenotypeMatc
     });
   }
 
-  // Probable-X exclusion: if X is full match, suppress probable-X (currently
-  // we have no separate "probable-X" phenotype entries — Probable framework is
-  // encoded by matchStrength: 'probable' on the same phenotype. So this is
-  // already handled by construction.)
+  // ICHD-3 X.5 exclusion clause: "Probable [phenotype]" requires "does not
+  // fulfil criteria for another ICHD-3 disorder." If ANY phenotype is a full
+  // match, suppress all probable matches — a patient with one fulfilled
+  // primary headache cannot also carry a Probable diagnosis (clinical-
+  // reviewer 2026-05-25 Condition 4).
+  const hasFullMatch = matches.some(m => m.matchStrength === 'full');
+  if (hasFullMatch) {
+    for (let i = matches.length - 1; i >= 0; i--) {
+      if (matches[i].matchStrength === 'probable') matches.splice(i, 1);
+    }
+  }
 
   // Sort: full > probable > partial; then by criteriaMet/Total ratio
   matches.sort((a, b) => {

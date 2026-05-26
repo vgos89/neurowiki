@@ -212,31 +212,33 @@ describe('evaluateHeadachePhenotypes', () => {
     });
   });
 
-  describe('multi-phenotype handling (General Principles)', () => {
-    it('can return migraine AND TTH simultaneously when both fulfilled', () => {
-      // Patient with classic migraine episodes AND separate frequent
-      // tension-pattern days — common real-world combination.
+  describe('multi-phenotype handling (General Principles + X.5 exclusion)', () => {
+    it('suppresses probable matches when any full match exists (X.5 exclusion)', () => {
+      // Per ICHD-3 X.5: a Probable diagnosis requires "does not fulfil criteria
+      // for another ICHD-3 disorder." When migraine is a full match, probable
+      // matches for any other phenotype must be suppressed.
       const matches = evaluateHeadachePhenotypes(select(
-        // Migraine criteria
-        'attacks-gt-10',
-        'dur-4-to-72-hours',
-        'loc-unilateral',
-        'qual-pulsating',
-        'sym-nausea',
-        // TTH criteria
-        'freq-5-14-per-month',
-        'pattern-ge-3-months',
-        'dur-30min-to-7days',
-        'qual-pressing-tightening',
-        'sev-mild',
-        'act-not-aggravated',
+        // Migraine full match
+        'attacks-gt-10', 'dur-4-to-72-hours', 'loc-unilateral', 'qual-pulsating', 'sym-nausea',
+        // Partial TTH ingredients (would be probable without nausea)
+        'freq-5-14-per-month', 'pattern-ge-3-months', 'dur-30min-to-7days',
+        'qual-pressing-tightening', 'sev-mild', 'act-not-aggravated',
       ));
-      const migraine = matches.find(m => m.phenotypeId === 'migraine-without-aura');
-      const tth = matches.find(m => m.phenotypeId === 'episodic-tth');
-      expect(migraine?.matchStrength).toBe('full');
-      // TTH won't be full because criterion D will likely block (nausea selected).
-      // But the test confirms multi-phenotype results coexist in output.
-      expect(tth).toBeDefined();
+      expect(matches.find(m => m.phenotypeId === 'migraine-without-aura')?.matchStrength).toBe('full');
+      // No probable matches should remain
+      expect(matches.filter(m => m.matchStrength === 'probable').length).toBe(0);
+    });
+
+    it('partial matches are kept even when a full match exists (information only)', () => {
+      // Partial matches (≥1 criterion met but more than one short) are not
+      // Probable per ICHD-3 X.5 and remain visible as information.
+      const matches = evaluateHeadachePhenotypes(select(
+        'attacks-gt-10', 'dur-4-to-72-hours', 'loc-unilateral', 'qual-pulsating', 'sym-nausea',
+      ));
+      expect(matches.find(m => m.phenotypeId === 'migraine-without-aura')?.matchStrength).toBe('full');
+      // Partial matches may or may not exist depending on which other
+      // phenotypes find a contributing chip; just confirm no probables.
+      expect(matches.filter(m => m.matchStrength === 'probable').length).toBe(0);
     });
   });
 

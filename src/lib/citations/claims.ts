@@ -789,4 +789,14 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
     description: 'TTH preventive management (Scher Continuum 2024 + AHS 2021 for shared MOH threshold): preventive indicated for chronic TTH (≥15 days/month) or high-frequency episodic TTH with functional impact. First-line: amitriptyline 10-75 mg at bedtime (AAN Level B). Second-line: venlafaxine 75-150 mg/day if depression/anxiety comorbid; mirtazapine 15-30 mg at bedtime for sleep + anxiety. Third-line: topiramate (less evidence for TTH than migraine). Combined non-pharmacologic approach (stress management + biofeedback + physical therapy) has Level A evidence and should be offered alongside pharmacotherapy. Beta-blockers have insufficient evidence specifically for TTH.',
   },
+
+  // ─── Pitfall: migraine vs TTH overlap discriminator ────────────────────────
+  // Surfaced in MapperPanel when both migraine and TTH return non-partial
+  // matches. Wording is a paraphrase of ICHD-3 1.1 D vs 2.2 D criteria text.
+  'clinic-headache-pitfall-mig-vs-tth': {
+    id: 'clinic-headache-pitfall-mig-vs-tth',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Migraine 1.1 D requires nausea or vomiting, or the photophobia+phonophobia pair. TTH 2.2 D excludes nausea and vomiting and allows at most one of photophobia or phonophobia. Patients commonly carry both phenotypes per ICHD-3 General Principles, treated as separate diagnoses.',
+  },
 };
