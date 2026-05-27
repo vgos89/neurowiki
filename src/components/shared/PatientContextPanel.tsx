@@ -147,12 +147,23 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
   const [lkwModalOpen, setLkwModalOpen] = useState(false);
   const [doseModalOpen, setDoseModalOpen] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [interimText, setInterimText] = useState('');
   const [speechSupported] = useState(() =>
     typeof window !== 'undefined' &&
     ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)
   );
   const recognitionRef = useRef<InstanceType<SpeechRecognitionCtor> | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Refs so onresult always sees fresh values without stale closure.
+  const onChangeRef = useRef(onChange);
+  const valuesRef = useRef(values);
+  useEffect(() => { onChangeRef.current = onChange; }, [onChange]);
+  useEffect(() => { valuesRef.current = values; }, [values]);
+
+  // Per-session accumulator — grows only within a single listening session.
+  // Reset to '' each time the mic is activated.
+  const sessionTextRef = useRef('');
 
   const autoResize = useCallback(() => {
     const el = textareaRef.current;
@@ -166,6 +177,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
   const toggleSpeech = useCallback(() => {
     if (isListening) {
       recognitionRef.current?.stop();
+      setInterimText('');
       return;
     }
     const bw = window as BrowserWindow;
@@ -173,26 +185,50 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
     if (!SR) return;
     const rec = new SR();
     rec.continuous = true;
-    rec.interimResults = false;
+    rec.interimResults = true;   // real-time word-by-word display
     rec.lang = 'en-US';
+
+    // Snapshot existing text at the moment the session starts.
+    // All finalized phrases are appended to this — never re-read
+    // from values (which would be stale after the first result).
+    const baseText = valuesRef.current.preExistingDeficits;
+    sessionTextRef.current = '';
+
     rec.onresult = (e) => {
-      const transcript = Array.from(e.results)
-        .slice(e.resultIndex)
-        .map((r) => r[0].transcript)
-        .join(' ');
-      onChange({
-        ...values,
-        preExistingDeficits: values.preExistingDeficits
-          ? `${values.preExistingDeficits} ${transcript}`
-          : transcript,
-      });
+      let interimAccum = '';
+      let newFinal = '';
+
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const text = e.results[i][0].transcript;
+        if (e.results[i].isFinal) {
+          newFinal += text;
+        } else {
+          interimAccum += text;
+        }
+      }
+
+      // Append finalized phrases to the session accumulator
+      if (newFinal.trim()) {
+        const corrected = applyMedicalCorrections(newFinal.trim());
+        sessionTextRef.current = sessionTextRef.current
+          ? `${sessionTextRef.current} ${corrected}`
+          : corrected;
+        const combined = baseText
+          ? `${baseText} ${sessionTextRef.current}`
+          : sessionTextRef.current;
+        onChangeRef.current({ ...valuesRef.current, preExistingDeficits: combined });
+      }
+
+      // Interim text shown live below the textarea — clears on next final
+      setInterimText(interimAccum);
     };
-    rec.onerror = () => setIsListening(false);
-    rec.onend = () => setIsListening(false);
+
+    rec.onerror = () => { setIsListening(false); setInterimText(''); };
+    rec.onend   = () => { setIsListening(false); setInterimText(''); };
     recognitionRef.current = rec;
     rec.start();
     setIsListening(true);
-  }, [isListening, values, onChange]);
+  }, [isListening]);
 
   // Conditional row: last anticoagulant dose surfaces only for
   // reversible anticoagulants (DOAC + warfarin). Antiplatelets do not
@@ -448,6 +484,17 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
               placeholder="e.g. right arm weakness from prior stroke, aphasia at baseline…"
               className="w-full resize-none overflow-hidden text-sm text-slate-900 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:border-neuro-500 focus:outline-none placeholder:text-slate-300 leading-snug"
             />
+            {/* Live interim transcript — appears word-by-word as the user
+                speaks, disappears when the phrase is finalized and locked
+                into the textarea. Grey italic matches iOS/Android dictation
+                UX. Only visible while mic is active and browser is
+                mid-phrase. */}
+            {isListening && interimText && (
+              <p className="mt-1 px-1 text-xs text-slate-400 italic leading-snug">
+                {interimText}
+                <span className="inline-block w-1.5 h-3 bg-slate-300 ml-0.5 animate-pulse rounded-sm align-middle" aria-hidden />
+              </p>
+            )}
           </div>
 
           {/* Pathway-specific extra rows — typed slot per
@@ -521,6 +568,49 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
 function sanitizeNumeric(input: string, maxDigits: number): string {
   const digits = input.replace(/[^0-9]/g, '');
   return digits.slice(0, maxDigits);
+}
+
+/**
+ * Lightweight medical term autocorrection for voice dictation.
+ * Speech engines commonly mishear neurological terms. This runs on each
+ * finalized phrase and silently fixes the most frequent errors.
+ * Case-insensitive match; preserves original capitalisation of surrounding text.
+ */
+// Simple string-to-string corrections only — keeps the type clean and avoids
+// the string|function union complexity. Function-based replacements are
+// handled inline in applyMedicalCorrections where needed.
+const MEDICAL_CORRECTIONS: [RegExp, string][] = [
+  // Neurological conditions — common speech-engine mishearings
+  [/\baph?asia\b/gi, 'aphasia'],
+  [/\bdys?arth?ria\b/gi, 'dysarthria'],
+  [/\bhemi(paresis|plegia)\b/gi, 'hemi$1'],
+  [/\bhemipar[ae]sis\b/gi, 'hemiparesis'],
+  [/\batax[ei]a\b/gi, 'ataxia'],
+  [/\bnys?tagm?us\b/gi, 'nystagmus'],
+  [/\bdysph?agia\b/gi, 'dysphagia'],
+  [/\bdiplo?pia\b/gi, 'diplopia'],
+  [/\baniso?coria\b/gi, 'anisocoria'],
+  [/\bpapill?ede?ma\b/gi, 'papilledema'],
+  [/\bpare?sthes[ei]a\b/gi, 'paresthesia'],
+  [/\banosog?nos[ei]a\b/gi, 'anosognosia'],
+  [/\bapraxi?a\b/gi, 'apraxia'],
+  [/\bhemi?anop[si]a\b/gi, 'hemianopia'],
+  [/\bquadrant?anop[si]a\b/gi, 'quadrantanopia'],
+  // Common dictation mishearings
+  [/\bwrite (arm|leg|hand|foot|side)\b/gi, 'right $1'],
+  [/\bdrif?t\b/gi, 'drift'],
+  [/\bbasel?ine\b/gi, 'baseline'],
+  [/\bpre ?exist/gi, 'pre-exist'],
+];
+
+function applyMedicalCorrections(text: string): string {
+  let result = text;
+  for (const [pattern, replacement] of MEDICAL_CORRECTIONS) {
+    // TypeScript: replacement may be string or function — cast to any to allow both
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    result = result.replace(pattern, replacement as any);
+  }
+  return result;
 }
 
 /** Build a 1-line summary chip string for the collapsed eyebrow. */
