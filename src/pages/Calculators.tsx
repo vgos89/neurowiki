@@ -100,8 +100,10 @@ export default function Calculators() {
     if (favsActive) {
       list = list.filter((c) => isFavorite(c.id));
     }
-    // HUB_SPEC §5 — alphabetical by name
-    return [...list].sort((a, b) => a.name.localeCompare(b.name));
+    // HUB_SPEC §5 — alphabetical by name (case-insensitive so mRS sorts with M, not after Z)
+    return [...list].sort((a, b) =>
+      a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+    );
   }
 
   // Global empty state — favourites active, no results in any visible section
