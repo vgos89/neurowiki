@@ -661,8 +661,142 @@ const ClinicHeadachePathway: React.FC = () => {
         {step4Complete && topMatch && !redFlagActive && (
           <section aria-labelledby="management-heading" className="mt-8 space-y-4">
             <h2 id="management-heading" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-              Management
+              Result
             </h2>
+
+            {/* ── Result headline card ───────────────────────────────────────
+                Phase 3b: surfaces the matched phenotype + match strength +
+                criteria-met percentage prominently at the top of the result.
+                Addresses V feedback (2026-05-25): "Probable diagnosis language
+                is missing" + "tier system showing percentage of which
+                diagnosis the selection meets". */}
+            {(() => {
+              const isChronicMigraineProbable = topMatch.phenotypeId === 'chronic-migraine' && topMatch.matchStrength === 'probable';
+              const prefix = topMatch.matchStrength === 'full' ? 'Features consistent with'
+                : isChronicMigraineProbable ? 'Partial match for'
+                : topMatch.matchStrength === 'probable' ? 'Features consistent with Probable'
+                : 'Partial match for';
+              const percent = Math.round((topMatch.criteriaMet / topMatch.criteriaTotal) * 100);
+              const tierClass = topMatch.matchStrength === 'full'
+                ? 'border-emerald-300 bg-emerald-50'
+                : topMatch.matchStrength === 'probable'
+                  ? 'border-amber-300 bg-amber-50'
+                  : 'border-slate-200 bg-slate-50';
+              const barColor = topMatch.matchStrength === 'full'
+                ? 'bg-emerald-500'
+                : topMatch.matchStrength === 'probable'
+                  ? 'bg-amber-500'
+                  : 'bg-slate-400';
+              const labelColor = topMatch.matchStrength === 'full'
+                ? 'text-emerald-700'
+                : topMatch.matchStrength === 'probable'
+                  ? 'text-amber-700'
+                  : 'text-slate-600';
+              return (
+                <div className={`rounded-xl border-2 ${tierClass} p-4`}>
+                  <p className={`text-[10px] font-bold uppercase tracking-widest ${labelColor} mb-1`}>
+                    {prefix}
+                  </p>
+                  <p className="text-[18px] font-semibold text-slate-900 leading-tight">
+                    {topMatch.name}
+                  </p>
+                  <p className="text-[12px] text-slate-500 mt-0.5">
+                    {topMatch.displaySection}
+                    {topMatch.isAppendix && <span className="italic"> · appendix entity</span>}
+                  </p>
+
+                  <div className="mt-4">
+                    <div className="flex items-baseline justify-between mb-1.5">
+                      <p className="text-[11px] font-medium text-slate-600">
+                        Criteria met
+                      </p>
+                      <p className={`text-[14px] font-bold tabular-nums ${labelColor}`}>
+                        {topMatch.criteriaMet} of {topMatch.criteriaTotal} <span className="text-slate-500 font-normal">· {percent}%</span>
+                      </p>
+                    </div>
+                    <div
+                      role="progressbar"
+                      aria-valuenow={percent}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-label={`${topMatch.name} criteria met: ${percent} percent`}
+                      className="h-2 bg-white rounded-full overflow-hidden border border-slate-200"
+                    >
+                      <div
+                        className={`h-full ${barColor} transition-all duration-300 motion-reduce:transition-none`}
+                        style={{ width: `${Math.max(2, percent)}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  <p className="text-[11px] text-slate-500 mt-3 leading-relaxed">
+                    Confirm pattern across multiple attacks and review the patient&apos;s history before treating. This tool maps features against ICHD-3 criteria; the diagnosis remains a clinical judgement.
+                  </p>
+                </div>
+              );
+            })()}
+
+            {/* ── Differential tier ribbon ─────────────────────────────────
+                Phase 3b: shows ALL phenotypes the user's selections
+                materially matched, ranked by criteria-met percentage.
+                Implements V's "tier system... percentage of which diagnosis
+                the selection meets" request. */}
+            {matches.length > 1 && (
+              <div className="rounded-xl border border-slate-100 bg-white p-4" role="region" aria-label="Differential ranking">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">
+                  Differential ranking
+                </p>
+                <ul className="space-y-2.5">
+                  {matches.slice(0, 5).map((m) => {
+                    const p = Math.round((m.criteriaMet / m.criteriaTotal) * 100);
+                    const isChronicMigraineProb = m.phenotypeId === 'chronic-migraine' && m.matchStrength === 'probable';
+                    const tag = m.matchStrength === 'full' ? 'Consistent'
+                      : isChronicMigraineProb ? 'Partial'
+                      : m.matchStrength === 'probable' ? 'Probable'
+                      : 'Partial';
+                    const tagColor = m.matchStrength === 'full' ? 'text-emerald-700 bg-emerald-50'
+                      : m.matchStrength === 'probable' && !isChronicMigraineProb ? 'text-amber-700 bg-amber-50'
+                      : 'text-slate-600 bg-slate-100';
+                    const barColor = m.matchStrength === 'full' ? 'bg-emerald-500'
+                      : m.matchStrength === 'probable' && !isChronicMigraineProb ? 'bg-amber-500'
+                      : 'bg-slate-400';
+                    return (
+                      <li key={m.phenotypeId} className="flex items-center gap-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-baseline justify-between gap-2 mb-1">
+                            <p className="text-[13px] text-slate-800 truncate">
+                              <span className={`text-[10px] font-bold uppercase tracking-widest rounded-full px-2 py-0.5 mr-2 ${tagColor}`}>{tag}</span>
+                              {m.name}
+                            </p>
+                            <p className="text-[12px] font-semibold tabular-nums text-slate-700 flex-shrink-0">
+                              {p}%
+                            </p>
+                          </div>
+                          <div
+                            role="progressbar"
+                            aria-valuenow={p}
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                            className="h-1.5 bg-slate-100 rounded-full overflow-hidden"
+                          >
+                            <div
+                              className={`h-full ${barColor} transition-all duration-300 motion-reduce:transition-none`}
+                              style={{ width: `${Math.max(2, p)}%` }}
+                            />
+                          </div>
+                          <p className="text-[10px] text-slate-400 mt-0.5">
+                            {m.criteriaMet} of {m.criteriaTotal} criteria · {m.displaySection}
+                          </p>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <p className="text-[11px] text-slate-500 mt-3 leading-relaxed">
+                  Higher percentages indicate stronger criterion fulfilment. ICHD-3 General Principles allow more than one primary headache code per patient — phenotypes labelled &quot;Consistent&quot; or &quot;Probable&quot; should each be considered as part of the patient&apos;s diagnosis.
+                </p>
+              </div>
+            )}
 
             {/* Multi-diagnosis banner — surfaces when ≥2 phenotypes are
                 full or probable matches. Per architect Phase 2 §17.1 + ICHD-3
