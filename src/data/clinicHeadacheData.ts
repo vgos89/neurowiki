@@ -137,10 +137,25 @@ export interface PhenotypeMatch {
   phenotypeId: PhenotypeId;
   name: string;
   ichd3Section: string;
+  /**
+   * Section reference for the user-facing label. When matchStrength is
+   * 'probable', this is the §X.5 reference (e.g. ICHD-3 §1.5 Probable
+   * migraine) per the ICHD-3 Probable framework. Otherwise the phenotype's
+   * parent ichd3Section. Architect-recommended Phase 2 relabel (2026-05-25).
+   */
+  displaySection: string;
   matchStrength: 'full' | 'probable' | 'partial' | 'none';
   criteriaMet: number;
   criteriaTotal: number;
-  metCriteria: { id: string; label: string }[];
+  /**
+   * Met-criteria detail with `contributingChipLabels` — the labels of the
+   * chips the user selected that satisfied this criterion. Enables the
+   * drawer + management cards to surface "Criterion C ✓ — unilateral,
+   * pulsating, severe" instead of bare criterion labels (V usability
+   * request 2026-05-25, item 4: 'indicate how you came to that diagnosis
+   * based on the selections that the user made').
+   */
+  metCriteria: { id: string; label: string; contributingChipLabels: string[] }[];
   missingCriteria: { id: string; label: string; description: string }[];
   isAppendix?: boolean;
 }
@@ -570,6 +585,36 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
   },
 ];
 
+// ─── ICHD-3 X.5 Probable framework — section reference map ────────────────
+// When matchStrength is 'probable', the user-facing badge reads "Probable
+// Migraine · ICHD-3 §1.5" instead of the parent §1.1. Added 2026-05-25.
+//
+// SCOPE — IMPORTANT: ICHD-3 §1.5 Probable migraine covers only §1.5.1
+// (Probable migraine without aura) and §1.5.2 (Probable migraine with aura).
+// There is NO §1.5.3 Probable chronic migraine — §1.3 Chronic migraine has
+// no probable counterpart in ICHD-3. Do NOT add `chronic-migraine` to this
+// map (clinical-reviewer §17.2 Phase 2 Condition 1, 2026-05-25). A patient
+// who meets only 2-of-3 §1.3 criteria falls through to the §1.3 parent
+// section label and the page renders the headline as "Partial match for
+// Chronic migraine" rather than "Probable Chronic migraine" (which is an
+// ICHD-3 entity that does not exist).
+//
+// §2.4 Probable TTH covers 2.4.1 / 2.4.2 / 2.4.3 (one per episodic/chronic TTH).
+// §3.5 Probable TAC covers 3.5.1 (Probable cluster), 3.5.2 (Probable
+// paroxysmal hemicrania), 3.5.3 (Probable SUNCT/SUNA), 3.5.4 (Probable
+// hemicrania continua) — all four chapter-3 entities have §3.5 counterparts.
+const PROBABLE_SECTION_FOR: Partial<Record<PhenotypeId, string>> = {
+  'migraine-without-aura': 'ICHD-3 §1.5 Probable migraine',
+  'migraine-with-aura': 'ICHD-3 §1.5 Probable migraine',
+  // chronic-migraine intentionally omitted — see scope comment above.
+  'episodic-tth': 'ICHD-3 §2.4 Probable tension-type headache',
+  'chronic-tth': 'ICHD-3 §2.4 Probable tension-type headache',
+  'cluster-headache': 'ICHD-3 §3.5 Probable trigeminal autonomic cephalalgia',
+  'paroxysmal-hemicrania': 'ICHD-3 §3.5 Probable trigeminal autonomic cephalalgia',
+  'sunct-suna': 'ICHD-3 §3.5 Probable trigeminal autonomic cephalalgia',
+  'hemicrania-continua': 'ICHD-3 §3.5 Probable trigeminal autonomic cephalalgia',
+};
+
 // ─── Pure evaluator ───────────────────────────────────────────────────────
 
 /**
@@ -623,12 +668,21 @@ export function evaluateHeadachePhenotypes(selected: Set<ChipId>): PhenotypeMatc
     for (const id of allContributingChips) if (selected.has(id)) { hasPositiveEvidence = true; break; }
     if (!hasPositiveEvidence) continue;
 
-    const met: { id: string; label: string }[] = [];
+    const met: { id: string; label: string; contributingChipLabels: string[] }[] = [];
     const missing: { id: string; label: string; description: string }[] = [];
 
     for (const criterion of phenotype.criteria) {
-      if (criterion.evaluate(selected)) met.push({ id: criterion.id, label: criterion.label });
-      else missing.push({ id: criterion.id, label: criterion.label, description: criterion.description });
+      if (criterion.evaluate(selected)) {
+        // Resolve the contributing chip ids that are actually selected to
+        // their human-readable labels. Lets the page render the audit trail
+        // 'you selected unilateral, pulsating, severe' per met criterion.
+        const contributingChipLabels = criterion.contributingChips
+          .filter(chipId => selected.has(chipId))
+          .map(chipId => getChip(chipId)?.label ?? chipId);
+        met.push({ id: criterion.id, label: criterion.label, contributingChipLabels });
+      } else {
+        missing.push({ id: criterion.id, label: criterion.label, description: criterion.description });
+      }
     }
 
     const total = phenotype.criteria.length;
@@ -645,6 +699,13 @@ export function evaluateHeadachePhenotypes(selected: Set<ChipId>): PhenotypeMatc
       phenotypeId: phenotype.id,
       name: phenotype.name,
       ichd3Section: phenotype.ichd3Section,
+      // ICHD-3 X.5 framework: probable matches get the §X.5 section reference
+      // rather than the parent. §1.5 Probable migraine covers 1.1/1.2/1.3
+      // probable variants; §2.4 Probable TTH covers 2.2/2.3; §3.5 Probable
+      // trigeminal autonomic cephalalgia covers 3.1/3.2/3.3/3.4.
+      displaySection: strength === 'probable'
+        ? PROBABLE_SECTION_FOR[phenotype.id] ?? phenotype.ichd3Section
+        : phenotype.ichd3Section,
       matchStrength: strength,
       criteriaMet: metCount,
       criteriaTotal: total,

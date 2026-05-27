@@ -501,3 +501,85 @@ describe('Section-label corrections (2026-05-25)', () => {
     expect(vm?.ichd3Section).toContain('§A1.6.6');
   });
 });
+
+describe('Phase 2 — Probable §X.5 framework + selection→criterion mapping', () => {
+  it('Probable migraine displaySection points to §1.5 (full migraine match without aura)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-gt-10',
+      'dur-4-to-72-hours',
+      'loc-unilateral',
+      'qual-pulsating',
+      // No criterion D chip — should be one short → probable
+    ));
+    const m = matches.find(x => x.phenotypeId === 'migraine-without-aura');
+    expect(m?.matchStrength).toBe('probable');
+    expect(m?.displaySection).toContain('§1.5');
+  });
+
+  it('Probable TTH displaySection points to §2.4', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-gt-10',
+      'freq-5-14-per-month',
+      'pattern-ge-3-months',
+      'loc-bilateral',
+      'qual-pressing-tightening',
+      'sev-mild',
+      'act-not-aggravated',
+      // Missing duration chip → one short → probable
+    ));
+    const m = matches.find(x => x.phenotypeId === 'episodic-tth');
+    expect(m?.matchStrength).toBe('probable');
+    expect(m?.displaySection).toContain('§2.4');
+  });
+
+  it('Chronic migraine PROBABLE does NOT map to §1.5 — ICHD-3 has no §1.5.3', () => {
+    // ICHD-3 §1.5 covers 1.5.1 (Probable migraine without aura) and 1.5.2
+    // (Probable migraine with aura) only. §1.3 has no probable counterpart.
+    // The displaySection should fall through to the parent §1.3 label.
+    const matches = evaluateHeadachePhenotypes(select(
+      'freq-ge-15-per-month',
+      'pattern-ge-3-months',
+      'attacks-gt-10',
+      // Missing migraine-features-ge-8 + triptan-response — should be one short → probable
+    ));
+    const m = matches.find(x => x.phenotypeId === 'chronic-migraine');
+    expect(m?.matchStrength).toBe('probable');
+    // displaySection must NOT contain §1.5 — falls through to §1.3
+    expect(m?.displaySection).not.toContain('§1.5');
+    expect(m?.displaySection).toContain('§1.3');
+  });
+
+  it('Full match metCriteria carry contributingChipLabels for the audit trail', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-gt-10',
+      'dur-4-to-72-hours',
+      'loc-unilateral',
+      'qual-pulsating',
+      'sym-nausea-mild',
+    ));
+    const m = matches.find(x => x.phenotypeId === 'migraine-without-aura');
+    expect(m?.matchStrength).toBe('full');
+    const cMet = m?.metCriteria.find(c => c.id === 'mig-C');
+    expect(cMet?.contributingChipLabels.length).toBeGreaterThan(0);
+    expect(cMet?.contributingChipLabels.some(l => l.toLowerCase().includes('unilateral'))).toBe(true);
+    expect(cMet?.contributingChipLabels.some(l => l.toLowerCase().includes('pulsating') || l.toLowerCase().includes('throbbing'))).toBe(true);
+  });
+
+  it('§2.3 Note 1 — chronic-migraine full match strips chronic-TTH from matches before banner reads it', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      // Chronic migraine full match
+      'freq-ge-15-per-month',
+      'pattern-ge-3-months',
+      'attacks-gt-10',
+      'migraine-features-ge-8-per-month',
+      // + TTH-fulfilling features
+      'loc-bilateral',
+      'qual-pressing-tightening',
+      'sev-mild',
+      'act-not-aggravated',
+      'dur-30min-to-7days',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'chronic-migraine')?.matchStrength).toBe('full');
+    expect(matches.find(m => m.phenotypeId === 'chronic-tth')).toBeUndefined();
+  });
+});

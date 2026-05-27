@@ -356,17 +356,36 @@ const ClinicHeadachePathway: React.FC = () => {
       topMatch.matchStrength === 'full' ? 'Low'
       : topMatch.matchStrength === 'probable' ? 'Intermediate'
       : 'High';
+    // §1.3 Chronic migraine has no ICHD-3 §1.5 Probable counterpart (clinical-
+    // reviewer §17.2 Phase 2 Condition 1). When chronic-migraine is matchStrength
+    // 'probable', render the headline as "Partial match" wording instead of
+    // "Probable" — the §1.5 entity does not exist in ICHD-3 for §1.3 patients.
+    const isChronicMigraineProbable =
+      topMatch.phenotypeId === 'chronic-migraine' && topMatch.matchStrength === 'probable';
     const headline =
       topMatch.matchStrength === 'full' ? `Features consistent with ${topMatch.name}`
+      : isChronicMigraineProbable ? `Partial match for ${topMatch.name}`
       : topMatch.matchStrength === 'probable' ? `Features consistent with Probable ${topMatch.name}`
       : `Partial match for ${topMatch.name}`;
 
     return {
       drawerTier: tier,
       drawerTierLabel: topMatch.name,
-      drawerAction: topMatch.ichd3Section,
+      // Phase 2 relabel: probable matches use §X.5 reference, not parent §X.
+      // EXCEPT chronic-migraine probable, where §1.5 does not cover §1.3 and
+      // displaySection correctly falls back to "§1.3" via the ?? operator.
+      drawerAction: topMatch.displaySection,
       drawerSummary: `${headline}. ${phenotype?.teachPearl?.split('. ')[0] ?? ''}. Confirm pattern across multiple attacks; the diagnosis remains a clinical judgement.`,
-      drawerReasons: topMatch.metCriteria.map((c) => ({ label: c.label })),
+      // Phase 2 selection→criterion mapping: surface "Criterion C met — your
+      // selections: unilateral, pulsating, severe" so the clinician sees the
+      // audit trail from selection to match. "Your selections:" rather than
+      // "selected:" disambiguates user-input from guideline-named features
+      // (clinical-reviewer §17.2 Phase 2 Condition 3).
+      drawerReasons: topMatch.metCriteria.map((c) => ({
+        label: c.contributingChipLabels.length > 0
+          ? `${c.label} — your selections: ${c.contributingChipLabels.join(', ')}`
+          : c.label,
+      })),
       drawerNotes: managementNotesForPhenotype(topMatch.phenotypeId),
     };
   }, [redFlagActive, step4Complete, topMatch, state.redFlags]);
@@ -633,12 +652,63 @@ const ClinicHeadachePathway: React.FC = () => {
 
         {/* Phenotype management content — surfaces when step 4 complete.
             Each block carries the literal data-claim attribute per
-            clinical-reviewer preservation map. */}
+            clinical-reviewer preservation map.
+            Phase 2: multi-diagnosis banner above the management content
+            when more than one phenotype is consistent with the selections.
+            ICHD-3 General Principles allow multiple primary headache codes
+            per patient (Note 2: "Each different type ... must be separately
+            diagnosed and coded"). */}
         {step4Complete && topMatch && !redFlagActive && (
           <section aria-labelledby="management-heading" className="mt-8 space-y-4">
             <h2 id="management-heading" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
               Management
             </h2>
+
+            {/* Multi-diagnosis banner — surfaces when ≥2 phenotypes are
+                full or probable matches. Per architect Phase 2 §17.1 + ICHD-3
+                General Principles. Drawer keeps top match; this banner names
+                the additional consistent phenotypes so the clinician knows
+                they may need to treat both. */}
+            {(() => {
+              const significantMatches = matches.filter(
+                (m) => m.matchStrength === 'full' || m.matchStrength === 'probable',
+              );
+              if (significantMatches.length <= 1) return null;
+              const additional = significantMatches.slice(1);
+              return (
+                <div className="rounded-xl border border-neuro-200 bg-neuro-50 p-3" role="note" aria-label="Multiple phenotypes consistent">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-neuro-700 mb-1">
+                    Multiple phenotypes consistent
+                  </p>
+                  <p className="text-[12px] text-slate-700 leading-relaxed mb-2">
+                    ICHD-3 General Principles require that each headache type the patient meets criteria for is separately diagnosed and coded. The drawer below shows management for the top match. The patient also meets criteria for the following additional phenotype{additional.length === 1 ? '' : 's'}:
+                  </p>
+                  <ul className="space-y-1">
+                    {additional.map((m) => {
+                      // Same chronic-migraine probable scope fix as the top-match
+                      // headline (clinical-reviewer §17.2 Phase 2 Condition 1).
+                      const isChronicMigraineProbable = m.phenotypeId === 'chronic-migraine' && m.matchStrength === 'probable';
+                      const prefix = m.matchStrength === 'full' ? 'Features consistent with '
+                        : isChronicMigraineProbable ? 'Partial match for '
+                        : 'Features consistent with Probable ';
+                      return (
+                        <li key={m.phenotypeId} className="text-[12px] text-slate-800 flex items-start gap-2">
+                          <span aria-hidden="true" className="text-neuro-600 mt-0.5">·</span>
+                          <span>
+                            <span className="font-semibold">{prefix}{m.name}</span>
+                            <span className="text-slate-500"> · {m.displaySection}</span>
+                            {m.isAppendix && <span className="text-slate-500 italic"> · appendix entity</span>}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
+                    Treat each phenotype that meets criteria separately. Acute and preventive plans may overlap.
+                  </p>
+                </div>
+              );
+            })()}
 
             {(topMatch.phenotypeId === 'migraine-without-aura' || topMatch.phenotypeId === 'migraine-with-aura') && (
               <>
@@ -912,11 +982,19 @@ const Row: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value
 const CriteriaList: React.FC<{ match: PhenotypeMatch }> = ({ match }) => (
   <div className="px-4 py-3">
     {match.metCriteria.length > 0 && (
-      <ul className="space-y-1 mb-2">
+      <ul className="space-y-2 mb-2">
         {match.metCriteria.map((c) => (
           <li key={c.id} className="text-[13px] text-emerald-700 flex items-start gap-2">
             <span aria-hidden="true" className="mt-0.5">✓</span>
-            <span>{c.label}</span>
+            <div className="flex-1 min-w-0">
+              <span>{c.label}</span>
+              {c.contributingChipLabels.length > 0 && (
+                <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+                  Based on your selection:{' '}
+                  <span className="text-slate-700">{c.contributingChipLabels.join(', ')}</span>
+                </p>
+              )}
+            </div>
           </li>
         ))}
       </ul>
