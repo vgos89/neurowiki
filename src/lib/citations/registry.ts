@@ -1659,4 +1659,42 @@ export const CITATION_REGISTRY: CitationRegistry = {
     review_window_months: 36,
     quoted_text: 'Oral atogepant once daily was effective in reducing the number of migraine days and headache days over a period of 12 weeks. Gepants (rimegepant, ubrogepant, atogepant) do not cause MOH per the ACHIEVE / ADVANCE / ELEVATE program data and are preferred in MOH-risk patients. ADVANCE trial, n=910.',
   },
+
+  // ─── mRS Calculator — added 2026-05-27 ────────────────────────────────────
+
+  'van-swieten-mrs-1988': {
+    id: 'van-swieten-mrs-1988',
+    source: 'review',
+    title: 'Interobserver agreement for the assessment of handicap in stroke patients',
+    year: 1988,
+    pmid: '3363593',
+    url: 'https://doi.org/10.1161/01.STR.19.5.604',
+    last_reviewed: '2026-05-27',
+    review_window_months: 36,
+    quoted_text: 'The modified Rankin Scale 0–5 grades (plus grade 6 for death) were defined and interobserver agreement assessed. Kappa for adjacent-grade agreement was 0.56–0.72 across assessor pairs. Grade 0: no symptoms; grade 1: no significant disability despite symptoms; grade 2: slight disability; grade 3: moderate disability; grade 4: moderately severe disability; grade 5: severe disability (bedridden, incontinent).',
+  },
+
+  'wilson-mrs-structured-interview-2002': {
+    id: 'wilson-mrs-structured-interview-2002',
+    source: 'review',
+    title: 'Improving the assessment of outcomes in stroke: use of a structured interview to assign grades on the modified Rankin Scale',
+    year: 2002,
+    pmid: '12215594',
+    url: 'https://doi.org/10.1161/01.STR.0000027455.23591.D6',
+    last_reviewed: '2026-05-27',
+    review_window_months: 36,
+    quoted_text: 'A structured interview questionnaire (sIQ) for the modified Rankin Scale improved inter-rater reliability (kappa 0.73 with sIQ vs 0.52 without; P<0.001). The sIQ uses a cascade of functional questions covering walking, personal care, daily activities, and symptom presence to guide raters to a consistent mRS grade.',
+  },
+
+  'quinn-mrs-simplified-2009': {
+    id: 'quinn-mrs-simplified-2009',
+    source: 'review',
+    title: 'Variability in Modified Rankin Scoring Across a Large Cohort of International Observers',
+    year: 2009,
+    pmid: '19628806',
+    url: 'https://doi.org/10.1161/STROKEAHA.109.557645',
+    last_reviewed: '2026-05-27',
+    review_window_months: 36,
+    quoted_text: 'Across 861 international observers, substantial variability in mRS assignment from vignettes was found (kappa 0.46). Structured questionnaire use and training significantly reduced variability. Supports routine use of structured assessment tools over gestalt mRS assignment at the bedside.',
+  },
 };

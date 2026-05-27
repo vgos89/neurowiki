@@ -409,19 +409,31 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
                 Pre-existing deficits
               </label>
               {speechSupported && (
-                <button
-                  type="button"
-                  onClick={toggleSpeech}
-                  className={`flex-shrink-0 p-1.5 rounded-full border transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
-                    isListening
-                      ? 'bg-red-50 border-red-200 text-red-500 animate-pulse'
-                      : 'bg-white border-slate-200 text-slate-400 hover:border-slate-300'
-                  }`}
-                  aria-label={isListening ? 'Stop dictation' : 'Start dictation'}
-                  aria-pressed={isListening}
-                >
-                  {isListening ? <MicOff className="w-3.5 h-3.5" aria-hidden /> : <Mic className="w-3.5 h-3.5" aria-hidden />}
-                </button>
+                /* Relative wrapper so the ping ring is positioned behind the button */
+                <span className="relative flex-shrink-0 flex items-center justify-center">
+                  {/* Outward ping ring — only rendered while listening */}
+                  {isListening && (
+                    <span
+                      className="absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-60 animate-ping"
+                      aria-hidden
+                    />
+                  )}
+                  <button
+                    type="button"
+                    onClick={toggleSpeech}
+                    className={`relative p-2 rounded-full border-2 transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
+                      isListening
+                        ? 'bg-red-500 border-red-500 text-white shadow-md'
+                        : 'bg-white border-slate-200 text-slate-400 hover:border-slate-300'
+                    }`}
+                    aria-label={isListening ? 'Stop dictation' : 'Start dictation'}
+                    aria-pressed={isListening}
+                  >
+                    {isListening
+                      ? <MicOff className="w-4 h-4" aria-hidden />
+                      : <Mic className="w-4 h-4" aria-hidden />}
+                  </button>
+                </span>
               )}
             </div>
             <textarea

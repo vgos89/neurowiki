@@ -43,6 +43,14 @@ export const CALCULATORS: CalculatorEntry[] = [
     scoreRange: { min: '0', max: '6' },
   },
   {
+    id: 'mrs',
+    name: 'mRS',
+    description: 'Modified Rankin Scale — pre-stroke baseline and outcome disability in 7 grades.',
+    fnCategory: 'severity',
+    path: '/calculators/mrs',
+    scoreRange: { min: '0', max: '6' },
+  },
+  {
     id: 'nihss',
     name: 'NIHSS',
     description: '15-item stroke severity exam validated for IVT/EVT decisions.',

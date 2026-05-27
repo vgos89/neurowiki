@@ -24,6 +24,7 @@ const Wiki = lazy(() => import('./pages/Wiki'));
 const Calculators = lazy(() => import('./pages/Calculators'));
 const Pathways = lazy(() => import('./pages/Pathways'));
 const NihssCalculator = lazy(() => import('./pages/NihssCalculator'));
+const MrsCalculator = lazy(() => import('./pages/MrsCalculator'));
 const MyCases = lazy(() => import('./pages/MyCases'));
 const ImportCases = lazy(() => import('./pages/ImportCases'));
 const MyFavorites = lazy(() => import('./pages/MyFavorites'));
@@ -86,6 +87,7 @@ const ROUTE_COMPONENTS: Record<StaticRouteKey, React.ReactNode> = {
   'aspect-score': <AspectScoreCalculator />,
   'ascvd-risk': <AscvdRiskCalculator />,
   nihss: <NihssCalculator />,
+  mrs: <MrsCalculator />,
   'ich-score': <IchScoreCalculator />,
   'abcd2-score': <Abcd2ScoreCalculator />,
   'has-bled-score': <HasBledScoreCalculator />,

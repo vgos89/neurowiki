@@ -885,4 +885,27 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
     description: 'SUNCT/SUNA preventive treatment — primary evidence: D\'Andrea Neurology 2001 (lamotrigine 125-200 mg/day; complete remission in 3 of 5 + ~80% reduction in remaining 2; no adverse effects). Cohen Brain 2006 prospective cohort (n=52) confirms lamotrigine as most consistently effective preventive in the cohort. Standard protocol: lamotrigine first-line, titrate slowly to avoid rash. Carbamazepine is second-line. Refer to a headache specialist; very-short-attack TACs are uncommon and often misdiagnosed as trigeminal neuralgia. Burish Continuum 2024 retained as secondary review.',
   },
+
+  // ─── mRS Calculator — added 2026-05-27 ────────────────────────────────────
+
+  'mrs-grade-definitions': {
+    id: 'mrs-grade-definitions',
+    citation_ids: ['van-swieten-mrs-1988', 'wilson-mrs-structured-interview-2002'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'mRS 0–6 grade definitions as displayed in the scale-reference section of the mRS calculator drawer. Grade text matches van Swieten 1988 (the standard modification). Wilson 2002 structured-interview is cited as the source of the guided-interview logic. Grade 6 (dead) is the commonly accepted extension of the 0–5 scale.',
+  },
+
+  'mrs-prestroke-evt-eligibility': {
+    id: 'mrs-prestroke-evt-eligibility',
+    citation_ids: ['aha-asa-2026-4.7.2', 'aha-asa-2026-4.6.1'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Pre-stroke mRS eligibility interpretation in the mRS calculator drawer: mRS 0–1 = standard EVT/IVT eligibility criterion (AHA/ASA 2026 §4.7.2 COR 1 LOE A for EVT standard window; §4.6.1 for IVT within 4.5h). mRS 2 = borderline/relative contraindication — most landmark trials (DAWN, DEFUSE-3, SELECT-2) excluded prestroke mRS ≥2. mRS 3–5 = high baseline disability, not guideline-supported for routine acute intervention.',
+  },
+
+  'mrs-outcome-context': {
+    id: 'mrs-outcome-context',
+    citation_ids: ['van-swieten-mrs-1988', 'aha-asa-2026-4.7.2'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Current/outcome context interpretation in the mRS calculator drawer: mRS 0–2 at 90 days = "good outcome" threshold used as primary endpoint in NINDS tPA trial, DAWN, DEFUSE-3, SELECT-2, and most acute stroke RCTs. mRS 3 = dependent but ambulatory; below good-outcome threshold. mRS 4–5 = poor functional outcome range.',
+  },
 };

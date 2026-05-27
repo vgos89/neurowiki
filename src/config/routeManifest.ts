@@ -16,6 +16,7 @@ export type StaticRouteKey =
   | 'aspect-score'
   | 'ascvd-risk'
   | 'nihss'
+  | 'mrs'
   | 'ich-score'
   | 'abcd2-score'
   | 'has-bled-score'
@@ -155,6 +156,23 @@ export const STATIC_ROUTE_DEFINITIONS: RouteDefinition[] = [
       title: 'NIHSS Calculator — NIH Stroke Scale Online | NeuroWiki',
       description: 'Free NIHSS calculator for stroke severity assessment. Step-by-step NIH Stroke Scale scoring with LVO probability estimate and clinical interpretation.',
       keywords: 'NIHSS calculator, NIH stroke scale, stroke severity calculator, stroke assessment tool, LVO probability, neurology calculator online',
+      image: DEFAULT_IMAGE,
+    },
+  },
+  {
+    key: 'mrs',
+    path: '/calculators/mrs',
+    publishGate: true,
+    published: true,
+    includeInSitemap: true,
+    comingSoonMessage: 'mRS calculator',
+    zone: 'reading',
+    bottomNavTab: 'calculators',
+    railItem: 'calculators',
+    meta: {
+      title: 'mRS Calculator — Modified Rankin Scale | NeuroWiki',
+      description: 'Free modified Rankin Scale (mRS) calculator with direct and guided structured-interview modes. Pre-stroke baseline for EVT/IVT eligibility and 90-day outcome tracking.',
+      keywords: 'mRS calculator, modified Rankin Scale, mRS score, prestroke mRS, stroke disability scale, mRS 0-6, stroke functional outcome',
       image: DEFAULT_IMAGE,
     },
   },
