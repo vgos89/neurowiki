@@ -2,22 +2,22 @@
  * mRS Calculator — modified Rankin Scale
  * Archetype 1 variant (single-selection) with 4-state persistent bottom drawer.
  *
- * Spec citations:
- *   §1.1 Sticky header · §1.2 Main content · §1.3 Drawer anatomy
- *   §2.1–2.5 Option rows · §5 Drawer state machine · §6 Severity tokens
+ * Design: matches CALCULATOR_SPEC.md option-row anatomy (§2.1–2.5).
+ *   Rows:    divide-y divide-slate-200 · selected-option · items-baseline justify-between
+ *   Sublabel: nested span pattern (CHA₂DS₂-VASc §4 reference)
+ *   Keyboard: roving tabindex per §2.4 (GCS / ICH Score pattern)
  *
  * Two scoring modes:
- *   Direct — tap to select from 7 grade cards (default; fastest at the bedside)
- *   Guided — 4-question structured-interview cascade for family history
+ *   Direct  — 7 radio rows, one tap (default; fastest at the bedside)
+ *   Guided  — 4-question YES/NO interview (for collateral / family history)
  *
- * Two contexts:
- *   Pre-stroke — captures baseline for EVT/IVT eligibility triage
- *   Current    — captures post-stroke or clinic functional status
+ * Context toggle (in header scoreDisplay):
+ *   Pre-stroke — baseline function for EVT / IVT eligibility
+ *   Current    — post-stroke or clinic functional status
  *
  * Medical sources:
- *   van Swieten JC et al. Stroke. 1988;19(5):604–607 (scale modification)
+ *   van Swieten JC et al. Stroke. 1988;19(5):604–607 (grade definitions)
  *   Wilson JL et al. Stroke. 2002;33(9):2243–2246 (structured interview)
- *   Quinn TJ et al. Stroke. 2009;40(10):3467–3469 (simplified assessment)
  */
 
 import React, {
@@ -27,103 +27,95 @@ import React, {
   useRef,
 } from 'react';
 import { Link } from 'react-router-dom';
-import { CalculatorHeader } from '../components/calculators/CalculatorHeader';
-import { CalculatorFooter } from '../components/calculators/CalculatorFooter';
-import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
-import { CalculatorToast } from '../components/calculators/CalculatorToast';
-import { useDrawerState } from '../hooks/useDrawerState';
-import { useNavigationSource } from '../hooks/useNavigationSource';
-import { useFavorites } from '../hooks/useFavorites';
-import { useRecents } from '../hooks/useRecents';
+import { CalculatorHeader }       from '../components/calculators/CalculatorHeader';
+import { CalculatorFooter }       from '../components/calculators/CalculatorFooter';
+import { CalculatorDrawer }       from '../components/calculators/CalculatorDrawer';
+import { CalculatorToast }        from '../components/calculators/CalculatorToast';
+import { useDrawerState }         from '../hooks/useDrawerState';
+import { useNavigationSource }    from '../hooks/useNavigationSource';
+import { useFavorites }           from '../hooks/useFavorites';
+import { useRecents }             from '../hooks/useRecents';
 import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
-import { useCaseReload } from '../hooks/useCaseReload';
-import { copyToClipboard } from '../utils/clipboard';
-import type { SeverityTokens } from '../lib/calculators/severityTokens';
+import { useCaseReload }          from '../hooks/useCaseReload';
+import { copyToClipboard }        from '../utils/clipboard';
+import type { SeverityTokens }    from '../lib/calculators/severityTokens';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type MRSGrade  = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+type MRSGrade   = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 type MRSContext = 'pre-stroke' | 'current';
-type MRSMode   = 'direct' | 'guided';
+type MRSMode    = 'direct' | 'guided';
 
-// ─── Grade definitions ────────────────────────────────────────────────────────
+// ─── Grade data (van Swieten 1988 wording) ────────────────────────────────────
 
 interface GradeData {
   grade:      MRSGrade;
-  label:      string;   // Short display label
-  definition: string;   // One-sentence description (matches van Swieten 1988)
-  example:    string;   // Concrete clinical example for quick orientation
+  label:      string;   // Primary display label
+  sublabel:   string;   // Clarifying one-liner below the label
 }
 
 const MRS_GRADES: GradeData[] = [
   {
-    grade:      0,
-    label:      'No symptoms',
-    definition: 'No disability whatsoever',
-    example:    'Fully active — no symptoms from any prior neurological event',
+    grade:    0,
+    label:    'No symptoms',
+    sublabel: 'No disability — fully active as before',
   },
   {
-    grade:      1,
-    label:      'No significant disability',
-    definition: 'Symptoms but carries out all usual duties and activities',
-    example:    'Notices mild weakness or speech change; still works, drives, exercises',
+    grade:    1,
+    label:    'No significant disability',
+    sublabel: 'Symptoms present but carries out all usual duties and activities',
   },
   {
-    grade:      2,
-    label:      'Slight disability',
-    definition: 'Unable to carry out all previous activities; independent in own affairs',
-    example:    'Gave up driving or a sport; manages all personal care and daily errands alone',
+    grade:    2,
+    label:    'Slight disability',
+    sublabel: 'Unable to carry out all previous activities; independent in daily affairs',
   },
   {
-    grade:      3,
-    label:      'Moderate disability',
-    definition: 'Requires some help; able to walk without assistance',
-    example:    'Needs help with shopping or cooking; walks with cane or independently',
+    grade:    3,
+    label:    'Moderate disability',
+    sublabel: 'Requires some help; able to walk without physical assistance',
   },
   {
-    grade:      4,
-    label:      'Moderately severe disability',
-    definition: 'Unable to walk without assistance; unable to attend to own bodily needs',
-    example:    'Uses walker or wheelchair; needs help with dressing, bathing, or toileting',
+    grade:    4,
+    label:    'Moderately severe disability',
+    sublabel: 'Unable to walk without assistance; unable to attend to own bodily needs',
   },
   {
-    grade:      5,
-    label:      'Severe disability',
-    definition: 'Bedridden, incontinent, requires constant nursing care',
-    example:    'Bed- or chair-bound; fully dependent for all basic needs',
+    grade:    5,
+    label:    'Severe disability',
+    sublabel: 'Bedridden, incontinent, requires constant nursing care',
   },
   {
-    grade:      6,
-    label:      'Dead',
-    definition: 'Deceased',
-    example:    '',
+    grade:    6,
+    label:    'Dead',
+    sublabel: 'Deceased',
   },
 ];
 
 // ─── Guided interview ─────────────────────────────────────────────────────────
-// 4-question decision cascade derived from Wilson et al. 2002 structured interview.
-// Typical completion: 3 questions. Maximum: 4 questions.
+// Decision cascade derived from Wilson et al. 2002 structured interview.
+// Resolves in 3–4 YES/NO answers. Phrased for pre-stroke or current context.
 
 type InterviewStep = 'walk' | 'bedridden' | 'daily-help' | 'activities' | 'symptoms';
 
-interface InterviewQuestion {
-  id:         InterviewStep;
-  preStroke:  string;  // Phrased as past tense for pre-stroke context
-  current:    string;  // Phrased as present tense for current context
-  hint:       string;  // Clarifying note shown below the question
+interface Question {
+  id:        InterviewStep;
+  preStroke: string;
+  current:   string;
+  hint:      string;
 }
 
-const INTERVIEW_QUESTIONS: Record<InterviewStep, InterviewQuestion> = {
+const QUESTIONS: Record<InterviewStep, Question> = {
   walk: {
     id:        'walk',
     preStroke: 'Could they walk without physical help from another person?',
     current:   'Can they walk without physical help from another person?',
-    hint:      'Using a cane, walker, or brace counts as YES — physical assistance from a person is the threshold',
+    hint:      'Using a cane, walker, or brace counts as YES — needing another person counts as NO',
   },
   bedridden: {
     id:        'bedridden',
-    preStroke: 'Were they mostly bed- or chair-bound and dependent on others for all care?',
-    current:   'Are they mostly bed- or chair-bound and dependent on others for all care?',
+    preStroke: 'Were they mostly bed- or chair-bound, fully dependent on others for all care?',
+    current:   'Are they mostly bed- or chair-bound, fully dependent on others for all care?',
     hint:      'Typically includes incontinence and need for constant nursing attention',
   },
   'daily-help': {
@@ -146,8 +138,7 @@ const INTERVIEW_QUESTIONS: Record<InterviewStep, InterviewQuestion> = {
   },
 };
 
-// Transition table: yes path → next step or final grade; no path → next step or final grade
-// Numeric value = final mRS grade; string = next InterviewStep
+// YES → next step or final grade; NO → next step or final grade
 const TRANSITIONS: Record<InterviewStep, { yes: InterviewStep | MRSGrade; no: InterviewStep | MRSGrade }> = {
   walk:          { yes: 'daily-help', no: 'bedridden' },
   bedridden:     { yes: 5,           no: 4            },
@@ -156,31 +147,18 @@ const TRANSITIONS: Record<InterviewStep, { yes: InterviewStep | MRSGrade; no: In
   symptoms:      { yes: 1,           no: 0            },
 };
 
-// ─── Visual tokens ────────────────────────────────────────────────────────────
+// ─── Severity tokens — CALCULATOR_SPEC.md §6 ─────────────────────────────────
 
-/** Bottom-drawer severity tokens — CALCULATOR_SPEC.md §6 */
 const GRADE_TOKENS: Record<MRSGrade, SeverityTokens> = {
-  0: { borderColor: '#e2e8f0', headerBg: 'bg-white',      headerHover: 'hover:bg-slate-50',   labelClass: 'text-[10px] font-bold text-slate-400 uppercase tracking-widest',   statClass: 'text-sm font-medium text-slate-700',   chevronClass: 'text-slate-400'   },
-  1: { borderColor: '#a7f3d0', headerBg: 'bg-emerald-50', headerHover: 'hover:bg-emerald-100',labelClass: 'text-[10px] font-bold text-emerald-700 uppercase tracking-widest', statClass: 'text-sm font-medium text-emerald-700', chevronClass: 'text-emerald-600' },
-  2: { borderColor: '#bae6fd', headerBg: 'bg-sky-50',     headerHover: 'hover:bg-sky-100',    labelClass: 'text-[10px] font-bold text-sky-700 uppercase tracking-widest',     statClass: 'text-sm font-medium text-sky-700',     chevronClass: 'text-sky-600'     },
-  3: { borderColor: '#fed7aa', headerBg: 'bg-amber-50',   headerHover: 'hover:bg-amber-100',  labelClass: 'text-[10px] font-bold text-amber-700 uppercase tracking-widest',   statClass: 'text-sm font-medium text-amber-700',   chevronClass: 'text-amber-600'   },
-  4: { borderColor: '#fecaca', headerBg: 'bg-red-50',     headerHover: 'hover:bg-red-100',    labelClass: 'text-[10px] font-bold text-red-600 uppercase tracking-widest',     statClass: 'text-sm font-medium text-red-600',     chevronClass: 'text-red-500'     },
-  5: { borderColor: '#fecaca', headerBg: 'bg-red-50',     headerHover: 'hover:bg-red-100',    labelClass: 'text-[10px] font-bold text-red-700 uppercase tracking-widest',     statClass: 'text-sm font-medium text-red-700',     chevronClass: 'text-red-600'     },
-  6: { borderColor: '#e2e8f0', headerBg: 'bg-slate-100',  headerHover: 'hover:bg-slate-200',  labelClass: 'text-[10px] font-bold text-slate-500 uppercase tracking-widest',   statClass: 'text-sm font-medium text-slate-600',   chevronClass: 'text-slate-500'   },
+  0: { borderColor: '#e2e8f0', headerBg: 'bg-white',      headerHover: 'hover:bg-slate-50',    labelClass: 'text-[10px] font-bold text-slate-400 uppercase tracking-widest',   statClass: 'text-sm font-medium text-slate-700',   chevronClass: 'text-slate-400'   },
+  1: { borderColor: '#a7f3d0', headerBg: 'bg-emerald-50', headerHover: 'hover:bg-emerald-100', labelClass: 'text-[10px] font-bold text-emerald-700 uppercase tracking-widest', statClass: 'text-sm font-medium text-emerald-700', chevronClass: 'text-emerald-600' },
+  2: { borderColor: '#bae6fd', headerBg: 'bg-sky-50',     headerHover: 'hover:bg-sky-100',     labelClass: 'text-[10px] font-bold text-sky-700 uppercase tracking-widest',     statClass: 'text-sm font-medium text-sky-700',     chevronClass: 'text-sky-600'     },
+  3: { borderColor: '#fed7aa', headerBg: 'bg-amber-50',   headerHover: 'hover:bg-amber-100',   labelClass: 'text-[10px] font-bold text-amber-700 uppercase tracking-widest',   statClass: 'text-sm font-medium text-amber-700',   chevronClass: 'text-amber-600'   },
+  4: { borderColor: '#fecaca', headerBg: 'bg-red-50',     headerHover: 'hover:bg-red-100',     labelClass: 'text-[10px] font-bold text-red-600 uppercase tracking-widest',     statClass: 'text-sm font-medium text-red-600',     chevronClass: 'text-red-500'     },
+  5: { borderColor: '#fecaca', headerBg: 'bg-red-50',     headerHover: 'hover:bg-red-100',     labelClass: 'text-[10px] font-bold text-red-700 uppercase tracking-widest',     statClass: 'text-sm font-medium text-red-700',     chevronClass: 'text-red-600'     },
+  6: { borderColor: '#e2e8f0', headerBg: 'bg-slate-100',  headerHover: 'hover:bg-slate-200',   labelClass: 'text-[10px] font-bold text-slate-500 uppercase tracking-widest',   statClass: 'text-sm font-medium text-slate-600',   chevronClass: 'text-slate-500'   },
 };
 
-/** Badge (circle) classes per grade */
-const GRADE_BADGE: Record<MRSGrade, string> = {
-  0: 'bg-slate-100  text-slate-600',
-  1: 'bg-emerald-100 text-emerald-700',
-  2: 'bg-sky-100    text-sky-700',
-  3: 'bg-amber-100  text-amber-700',
-  4: 'bg-red-100    text-red-600',
-  5: 'bg-red-200    text-red-700',
-  6: 'bg-slate-200  text-slate-600',
-};
-
-/** Text color per grade */
 const GRADE_TEXT: Record<MRSGrade, string> = {
   0: 'text-slate-700',
   1: 'text-emerald-700',
@@ -191,25 +169,47 @@ const GRADE_TEXT: Record<MRSGrade, string> = {
   6: 'text-slate-600',
 };
 
+// ─── Keyboard helper (roving tabindex — CALCULATOR_SPEC.md §2.4) ──────────────
+
+function makeKeyHandler(
+  groupRef: React.RefObject<HTMLDivElement | null>,
+  total: number,
+  currentIdx: number,
+  selectFn: (idx: number) => void,
+) {
+  return (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (!['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(e.key)) return;
+    e.preventDefault();
+    const next =
+      e.key === 'ArrowDown' || e.key === 'ArrowRight'
+        ? (currentIdx + 1) % total
+        : (currentIdx - 1 + total) % total;
+    selectFn(next);
+    groupRef.current?.querySelectorAll<HTMLButtonElement>('button')[next]?.focus();
+  };
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 const MrsCalculator: React.FC = () => {
 
   // ── State ──────────────────────────────────────────────────────────────────
-  const [grade,         setGrade]         = useState<MRSGrade | null>(null);
-  const [context,       setContext]       = useState<MRSContext>('pre-stroke');
-  const [mode,          setMode]          = useState<MRSMode>('direct');
-  const [interviewStep, setInterviewStep] = useState<InterviewStep>('walk');
-  const [justCompleted, setJustCompleted] = useState(false);
-  const [currentCaseId, setCurrentCaseId] = useState<string | null>(null);
+  const [grade,          setGrade]          = useState<MRSGrade | null>(null);
+  const [context,        setContext]        = useState<MRSContext>('pre-stroke');
+  const [mode,           setMode]           = useState<MRSMode>('direct');
+  const [interviewStep,  setInterviewStep]  = useState<InterviewStep>('walk');
+  const [justCompleted,  setJustCompleted]  = useState(false);
+  const [currentCaseId,  setCurrentCaseId]  = useState<string | null>(null);
 
   const wasCompleteRef = useRef(false);
+  const gradeGroupRef  = useRef<HTMLDivElement>(null);   // direct mode radiogroup
+  const yesNoGroupRef  = useRef<HTMLDivElement>(null);   // guided mode YES/NO group
 
   // ── Hooks ──────────────────────────────────────────────────────────────────
-  const { handleBack }                     = useNavigationSource();
-  const { toggleFavorite, isFavorite }     = useFavorites();
-  const { recordView }                     = useRecents();
-  const { trackResult, resetTracking }     = useCalculatorAnalytics('mrs');
+  const { handleBack }                 = useNavigationSource();
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const { recordView }                 = useRecents();
+  const { trackResult, resetTracking } = useCalculatorAnalytics('mrs');
 
   useEffect(() => {
     recordView({
@@ -223,7 +223,6 @@ const MrsCalculator: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Publish drawer floor height so FeedbackButton lifts above the drawer.
   useEffect(() => {
     document.documentElement.style.setProperty('--drawer-floor-height', '52px');
     return () => {
@@ -239,7 +238,7 @@ const MrsCalculator: React.FC = () => {
 
   const isFav = isFavorite('mrs');
 
-  // ── Discovery animation — fires once per completion ────────────────────────
+  // ── Discovery animation ────────────────────────────────────────────────────
   useEffect(() => {
     if (isComplete && !wasCompleteRef.current) {
       wasCompleteRef.current = true;
@@ -253,24 +252,27 @@ const MrsCalculator: React.FC = () => {
     }
   }, [isComplete]);
 
-  // ── Handlers ───────────────────────────────────────────────────────────────
+  // ── Grade selection ────────────────────────────────────────────────────────
   const handleGradeSelect = useCallback((g: MRSGrade) => {
     setGrade(g);
-    if (mode === 'guided') {
-      // In guided mode open the drawer immediately on result
-      setTimeout(() => setDrawerOpen(true), 50);
-    }
-  }, [mode, setDrawerOpen]);
+  }, []);
 
+  // ── Interview answer ───────────────────────────────────────────────────────
   const handleInterviewAnswer = useCallback((answer: boolean) => {
-    const { yes, no } = TRANSITIONS[interviewStep];
-    const next = answer ? yes : no;
+    const next = answer ? TRANSITIONS[interviewStep].yes : TRANSITIONS[interviewStep].no;
     if (typeof next === 'number') {
+      // Interview resolved — set grade; guided mode shows the radio list in its resolved state
       handleGradeSelect(next as MRSGrade);
     } else {
       setInterviewStep(next);
     }
   }, [interviewStep, handleGradeSelect]);
+
+  const restartInterview = useCallback(() => {
+    setGrade(null);
+    setInterviewStep('walk');
+    resetDrawer();
+  }, [resetDrawer]);
 
   const switchMode = useCallback((newMode: MRSMode) => {
     setMode(newMode);
@@ -279,19 +281,12 @@ const MrsCalculator: React.FC = () => {
     resetDrawer();
   }, [resetDrawer]);
 
-  const switchContext = useCallback((newCtx: MRSContext) => {
-    setContext(newCtx);
-    // Keep the grade — just re-interpret it
-  }, []);
-
+  // ── Handlers ───────────────────────────────────────────────────────────────
   const buildEmrText = useCallback(() => {
     if (grade === null) return 'mRS: Not yet selected.';
     const g   = MRS_GRADES[grade];
     const ctx = context === 'pre-stroke' ? 'Pre-stroke mRS' : 'mRS';
-    return [
-      `${ctx}: ${grade} — ${g.label}`,
-      g.definition + '.',
-    ].join('\n');
+    return [`${ctx}: ${grade} — ${g.label}`, g.sublabel + '.'].join('\n');
   }, [grade, context]);
 
   const handleCopy = useCallback(() => {
@@ -315,7 +310,6 @@ const MrsCalculator: React.FC = () => {
     showToast(isNowFav ? 'Saved to favorites' : 'Removed from favorites');
   }, [toggleFavorite, showToast]);
 
-  // Restore from saved case
   useCaseReload({
     payloadKey: 'mrs',
     restore: (payload) => {
@@ -326,9 +320,47 @@ const MrsCalculator: React.FC = () => {
     onSuccess: (initials) => showToast(`Opened ${initials} from My Cases`, 2500),
   });
 
-  // ── Derived display tokens ─────────────────────────────────────────────────
+  // ── Tokens ─────────────────────────────────────────────────────────────────
   const tokens    = grade !== null ? GRADE_TOKENS[grade] : null;
   const gradeData = grade !== null ? MRS_GRADES[grade]   : null;
+
+  // ── Header score display ───────────────────────────────────────────────────
+  // Context toggle lives here (matches NIHSS rapid/detailed toggle placement).
+  const renderScoreDisplay = () => (
+    <>
+      {/* Grade number */}
+      <span className={`text-2xl font-semibold tabular-nums leading-none ${grade !== null ? GRADE_TEXT[grade] : 'text-slate-900'}`}>
+        {grade !== null ? grade : '—'}
+      </span>
+      <span className="text-slate-400 text-sm leading-none">/ 6</span>
+
+      {/* Pre-stroke / Current context toggle */}
+      <div className="flex items-center gap-0.5 bg-slate-100 rounded-full p-0.5 ml-1">
+        <button
+          type="button"
+          onClick={() => setContext('pre-stroke')}
+          className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-colors ${
+            context === 'pre-stroke'
+              ? 'bg-white text-slate-900 shadow-sm'
+              : 'text-slate-500 hover:text-slate-900'
+          }`}
+        >
+          Pre-stroke
+        </button>
+        <button
+          type="button"
+          onClick={() => setContext('current')}
+          className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-colors ${
+            context === 'current'
+              ? 'bg-white text-slate-900 shadow-sm'
+              : 'text-slate-500 hover:text-slate-900'
+          }`}
+        >
+          Current
+        </button>
+      </div>
+    </>
+  );
 
   // ── Drawer content ─────────────────────────────────────────────────────────
   const DrawerContent: React.FC = () => {
@@ -336,7 +368,6 @@ const MrsCalculator: React.FC = () => {
 
     const isPrestroke = context === 'pre-stroke';
 
-    /** Clinical interpretation block — tagged for claim registry */
     const renderInterpretation = () => {
       if (grade === 6) return null;
 
@@ -346,41 +377,33 @@ const MrsCalculator: React.FC = () => {
       if (isPrestroke) {
         if (grade <= 1) {
           headline = 'Standard EVT and IVT eligibility';
-          body     =
-            'Prestroke mRS 0–1 satisfies the baseline-function criterion for EVT across standard and extended time-windows, and for IVT within 4.5 h, per AHA/ASA 2026. No baseline-disability exclusion applies at this grade.';
+          body     = 'Prestroke mRS 0–1 satisfies the baseline-function criterion for EVT in standard and extended windows, and for IVT within 4.5 h, per AHA/ASA 2026. No baseline-disability exclusion applies.';
         } else if (grade === 2) {
-          headline = 'Borderline — clinical judgment required';
-          body     =
-            'Most landmark EVT trials (DAWN, DEFUSE-3, SELECT-2, ANGEL-ASPECT) used prestroke mRS 0–1 as an inclusion criterion. Prestroke mRS 2 is a relative contraindication; individual institutions and guidelines vary. Document the discussion if proceeding.';
+          headline = 'Borderline — document the discussion';
+          body     = 'Most landmark EVT trials (DAWN, DEFUSE-3, SELECT-2) used prestroke mRS 0–1 as an inclusion criterion. Prestroke mRS 2 is a relative contraindication. Individualize and document if proceeding.';
         } else {
           headline = 'High baseline disability — goals-of-care discussion';
-          body     =
-            'Standard EVT and IVT trials excluded prestroke mRS ≥2 as routine care. At mRS 3–5, a goals-of-care and expected-outcome discussion with the patient and family is appropriate before committing to acute intervention.';
+          body     = 'Standard EVT and IVT trials excluded prestroke mRS ≥2 as routine care. At mRS 3–5, a goals-of-care discussion with the patient and family is appropriate before committing to acute intervention.';
         }
       } else {
-        // Current / outcome context
         if (grade <= 2) {
           headline = '"Good outcome" — functional independence';
-          body     =
-            'mRS 0–2 is the standard "good outcome" definition in acute stroke RCTs (NINDS tPA, DAWN, DEFUSE-3, SELECT-2). At 90 days, mRS ≤2 represents independent function.';
+          body     = 'mRS 0–2 is the standard "good outcome" in most acute stroke RCTs (NINDS, DAWN, DEFUSE-3, SELECT-2). At 90 days, mRS ≤2 represents independent function.';
         } else if (grade === 3) {
           headline = 'Dependent for some activities; ambulatory';
-          body     =
-            'mRS 3 falls below the mRS 0–2 "good outcome" threshold used in most stroke trials, but the patient retains independent ambulation. Relevant to rehabilitation goal-setting and trajectory discussions.';
+          body     = 'mRS 3 falls below the mRS 0–2 "good outcome" threshold used in most stroke trials, but the patient retains independent ambulation. Relevant for rehabilitation goal-setting and trajectory discussions.';
         } else {
           headline = 'Dependent — poor functional outcome range';
-          body     =
-            'mRS 4–5 corresponds to the "poor outcome" range used in stroke trial endpoint analyses. Rehabilitation ceiling and long-term care planning discussions are relevant at this stage.';
+          body     = 'mRS 4–5 corresponds to the "poor outcome" range in stroke trial endpoint analyses. Rehabilitation ceiling and long-term care planning discussions are relevant at this stage.';
         }
       }
 
-      // Two separate elements with static data-claim attributes so the
-      // pre-commit scanner can locate both tags via literal string match.
+      // Static data-claim tags — two separate elements so the scanner finds them
       if (isPrestroke) {
         return (
           <div
             data-claim="mrs-prestroke-evt-eligibility"
-            className="pt-4 border-t border-slate-100 mt-4"
+            className="mt-4 pt-4 border-t border-slate-100"
           >
             <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
               Pre-stroke eligibility
@@ -393,7 +416,7 @@ const MrsCalculator: React.FC = () => {
       return (
         <div
           data-claim="mrs-outcome-context"
-          className="pt-4 border-t border-slate-100 mt-4"
+          className="mt-4 pt-4 border-t border-slate-100"
         >
           <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
             Outcome context
@@ -414,20 +437,17 @@ const MrsCalculator: React.FC = () => {
         <div className="px-5 pt-4 pb-6">
 
           {/* Grade headline */}
-          <div className="flex items-center gap-3 mb-1">
-            <span className={`w-9 h-9 flex items-center justify-center rounded-full text-base font-bold flex-shrink-0 ${GRADE_BADGE[grade]}`}>
-              {grade}
-            </span>
-            <p className={`text-lg font-semibold leading-tight ${GRADE_TEXT[grade]}`}>
-              {gradeData.label}
-            </p>
-          </div>
-          <p className="text-sm text-slate-500 mb-4 ml-12">{gradeData.definition}</p>
+          <p className={`text-xl font-semibold leading-tight ${GRADE_TEXT[grade]}`}>
+            {gradeData.label}
+          </p>
+          <p className="text-slate-600 leading-relaxed mt-1 text-sm">
+            {gradeData.sublabel}
+          </p>
 
           {/* Clinical interpretation */}
           {renderInterpretation()}
 
-          {/* Full scale reference — data-claim for registry */}
+          {/* Full scale reference */}
           <div
             data-claim="mrs-grade-definitions"
             className="mt-5 pt-4 border-t border-slate-100"
@@ -435,28 +455,28 @@ const MrsCalculator: React.FC = () => {
             <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
               Scale reference
             </div>
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {MRS_GRADES.map(({ grade: g, label }) => (
                 <button
                   key={g}
                   type="button"
                   onClick={() => setGrade(g)}
-                  className={`w-full flex items-center gap-3 py-1.5 px-2 rounded-lg text-left transition-colors ${
-                    g === grade ? 'bg-slate-100' : 'hover:bg-slate-50'
+                  className={`w-full flex items-baseline justify-between gap-3 py-1.5 px-2 rounded text-left transition-colors text-sm ${
+                    g === grade
+                      ? 'bg-slate-100 font-semibold text-slate-900'
+                      : 'text-slate-500 hover:bg-slate-50'
                   }`}
                 >
-                  <span className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold flex-shrink-0 ${GRADE_BADGE[g]}`}>
-                    {g}
-                  </span>
-                  <span className={`text-sm ${g === grade ? 'font-semibold text-slate-900' : 'text-slate-500'}`}>
-                    {label}
-                  </span>
+                  <span>{label}</span>
+                  <span className={`text-xs font-medium tabular-nums flex-shrink-0 ${
+                    g === grade ? 'text-slate-600' : 'text-slate-400'
+                  }`}>{g}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Copy button */}
+          {/* Copy */}
           <button
             type="button"
             onClick={() => { handleCopy(); setDrawerOpen(false); }}
@@ -485,59 +505,19 @@ const MrsCalculator: React.FC = () => {
     );
   };
 
-  // ── Guided interview question display ──────────────────────────────────────
-  const currentQuestion = INTERVIEW_QUESTIONS[interviewStep];
-  const questionText    = context === 'pre-stroke'
-    ? currentQuestion.preStroke
-    : currentQuestion.current;
-
-  // ── Collapsed drawer stat ──────────────────────────────────────────────────
-  const collapsedStat = grade !== null
-    ? `mRS ${grade} — ${MRS_GRADES[grade].label}`
-    : '';
-
-  // ── Header score badge ─────────────────────────────────────────────────────
-  const renderHeaderBadge = () => {
-    if (grade === null) {
-      return (
-        <>
-          <span className="text-2xl font-semibold text-slate-900 tabular-nums leading-none">—</span>
-          <span className="text-slate-400 text-sm leading-none">/ 6</span>
-        </>
-      );
-    }
-    return (
-      <>
-        <span className={`text-2xl font-semibold tabular-nums leading-none ${GRADE_TEXT[grade]}`}>
-          {grade}
-        </span>
-        <span className="text-slate-400 text-sm leading-none">/ 6</span>
-        {grade <= 1 && (
-          <span className={`text-xs font-medium ml-1.5 ${context === 'pre-stroke' ? 'text-emerald-700' : 'text-emerald-700'}`}>
-            {context === 'pre-stroke' ? 'EVT eligible' : 'Good outcome'}
-          </span>
-        )}
-        {grade === 2 && context === 'pre-stroke' && (
-          <span className="text-xs font-medium text-sky-700 ml-1.5">Borderline</span>
-        )}
-        {grade >= 3 && grade < 6 && (
-          <span className={`text-xs font-medium ml-1.5 ${grade >= 4 ? 'text-red-600' : 'text-amber-700'}`}>
-            {grade >= 4 ? 'Dependent' : 'Mod. disability'}
-          </span>
-        )}
-      </>
-    );
-  };
+  // ── Current guided-mode question ───────────────────────────────────────────
+  const currentQ  = QUESTIONS[interviewStep];
+  const qText     = context === 'pre-stroke' ? currentQ.preStroke : currentQ.current;
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <>
       <h1 className="sr-only">mRS Calculator — modified Rankin Scale for Stroke Disability</h1>
 
-      {/* ── Sticky header — §1.1 ──────────────────────────────────────────── */}
+      {/* ── Sticky header ─────────────────────────────────────────────────── */}
       <CalculatorHeader
         name="modified Rankin Scale"
-        scoreDisplay={renderHeaderBadge()}
+        scoreDisplay={renderScoreDisplay()}
         scoreAriaLabel={
           grade !== null
             ? `mRS ${grade} — ${MRS_GRADES[grade].label}`
@@ -574,40 +554,17 @@ const MrsCalculator: React.FC = () => {
         }}
       />
 
-      {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}
+      {/* ── Main scrollable content ───────────────────────────────────────── */}
       <main className="max-w-2xl mx-auto px-5 pt-6 pb-4">
 
-        {/* ── Context + Mode toggles ──────────────────────────────────────── */}
-        <div className="flex items-center justify-between gap-3 mb-4">
-
-          {/* Context: Pre-stroke / Current */}
-          <div className="flex items-center gap-0.5 bg-slate-100 rounded-full p-0.5">
-            <button
-              type="button"
-              onClick={() => switchContext('pre-stroke')}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                context === 'pre-stroke'
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-900'
-              }`}
-            >
-              Pre-stroke
-            </button>
-            <button
-              type="button"
-              onClick={() => switchContext('current')}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                context === 'current'
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-900'
-              }`}
-            >
-              Current
-            </button>
-          </div>
-
-          {/* Mode: Direct / Guided */}
-          <div className="flex items-center gap-0.5 bg-slate-100 rounded-full p-0.5">
+        {/* ── Mode switch — above the radiogroup ─────────────────────────── */}
+        <div className="flex items-center justify-between mb-5">
+          <p className="text-xs text-slate-400 leading-relaxed max-w-[220px]">
+            {context === 'pre-stroke'
+              ? 'Baseline before the current event'
+              : 'Current or recent functional status'}
+          </p>
+          <div className="flex items-center gap-0.5 bg-slate-100 rounded-full p-0.5 flex-shrink-0">
             <button
               type="button"
               onClick={() => switchMode('direct')}
@@ -633,59 +590,48 @@ const MrsCalculator: React.FC = () => {
           </div>
         </div>
 
-        {/* Context label */}
-        <p className="text-xs text-slate-400 mb-5 leading-relaxed">
-          {context === 'pre-stroke'
-            ? 'Capturing function before the current event — used for EVT and IVT eligibility triage.'
-            : 'Capturing current or recent function — for outcome tracking or clinic follow-up.'}
-          {mode === 'guided' && (
-            <span className="ml-1 text-slate-400">Answer YES / NO to reach a grade.</span>
-          )}
-        </p>
-
-        {/* ── DIRECT MODE: 7-grade radio list ──────────────────────────────── */}
+        {/* ── DIRECT MODE: 7-grade radio rows ──────────────────────────────── */}
         {mode === 'direct' && (
           <section aria-label="mRS grade selection">
             <div
               role="radiogroup"
               aria-label="Modified Rankin Scale — select a grade"
+              ref={gradeGroupRef}
               className="divide-y divide-slate-200"
             >
-              {MRS_GRADES.map((g) => {
+              {MRS_GRADES.map((g, idx) => {
                 const isSelected = grade === g.grade;
+                const tabIdx     = grade !== null ? (isSelected ? 0 : -1) : (idx === 0 ? 0 : -1);
                 return (
                   <button
                     key={g.grade}
                     type="button"
                     role="radio"
                     aria-checked={isSelected}
+                    tabIndex={tabIdx}
                     onClick={() => handleGradeSelect(g.grade)}
+                    onKeyDown={makeKeyHandler(
+                      gradeGroupRef, MRS_GRADES.length, idx,
+                      (i) => handleGradeSelect(MRS_GRADES[i].grade),
+                    )}
                     className={
                       isSelected
-                        ? 'selected-option w-full flex items-start gap-3 py-3.5 pl-4 pr-3 text-left rounded-lg'
-                        : 'w-full flex items-start gap-3 py-3.5 px-3 text-left hover:bg-slate-50/60 rounded-lg transition-colors'
+                        ? 'selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg'
+                        : 'w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors'
                     }
                   >
-                    {/* Grade badge */}
-                    <span className={`mt-0.5 w-7 h-7 flex items-center justify-center rounded-full text-xs font-bold flex-shrink-0 ${
-                      isSelected ? GRADE_BADGE[g.grade] : 'bg-slate-100 text-slate-500'
-                    }`}>
-                      {g.grade}
-                    </span>
-
-                    {/* Label + definition + example */}
-                    <span className="flex-1 min-w-0">
-                      <span className={`block text-sm font-semibold ${isSelected ? GRADE_TEXT[g.grade] : 'text-slate-900'}`}>
+                    {/* Label + sublabel */}
+                    <span className="flex-1 min-w-0 pr-3">
+                      <span className={isSelected ? 'block font-semibold' : 'block font-medium text-slate-900'}>
                         {g.label}
                       </span>
-                      <span className="block text-xs text-slate-500 mt-0.5 leading-snug">
-                        {g.definition}
+                      <span className={`block text-xs mt-0.5 leading-snug ${isSelected ? 'opacity-75' : 'text-slate-400'}`}>
+                        {g.sublabel}
                       </span>
-                      {g.example && (
-                        <span className="block text-[11px] text-slate-400 mt-0.5 leading-snug italic">
-                          {g.example}
-                        </span>
-                      )}
+                    </span>
+                    {/* Grade number — right side */}
+                    <span className={isSelected ? 'text-sm font-medium opacity-75 flex-shrink-0' : 'text-sm text-slate-400 flex-shrink-0'}>
+                      {g.grade}
                     </span>
                   </button>
                 );
@@ -694,89 +640,126 @@ const MrsCalculator: React.FC = () => {
           </section>
         )}
 
-        {/* ── GUIDED MODE: interview not yet complete ───────────────────────── */}
+        {/* ── GUIDED MODE: interview in progress ────────────────────────────── */}
         {mode === 'guided' && grade === null && (
-          <section aria-label="Guided mRS structured interview">
-            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+          <section aria-labelledby="mrs-interview-label">
+            {/* Question — section header pattern */}
+            <h2
+              id="mrs-interview-label"
+              className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2"
+            >
+              {context === 'pre-stroke' ? 'Before this event' : 'Currently'}
+            </h2>
+            <p className="text-sm font-medium text-slate-800 leading-snug mb-2">
+              {qText}
+            </p>
+            <p className="text-xs text-slate-400 mb-4 leading-relaxed">
+              {currentQ.hint}
+            </p>
 
-              {/* Question */}
-              <div className="px-5 pt-5 pb-5">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2.5">
-                  {context === 'pre-stroke' ? 'Before this event' : 'Currently'}
-                </p>
-                <p className="text-base font-semibold text-slate-900 leading-snug">
-                  {questionText}
-                </p>
-                {currentQuestion.hint && (
-                  <p className="text-xs text-slate-400 mt-2.5 leading-relaxed">
-                    {currentQuestion.hint}
-                  </p>
-                )}
-              </div>
-
-              {/* YES / NO tap targets */}
-              <div className="grid grid-cols-2 border-t border-slate-200 divide-x divide-slate-200">
+            {/* YES / NO as standard radio rows */}
+            <div
+              role="radiogroup"
+              aria-labelledby="mrs-interview-label"
+              ref={yesNoGroupRef}
+              className="divide-y divide-slate-200"
+            >
+              {([
+                { answer: true,  label: 'Yes' },
+                { answer: false, label: 'No'  },
+              ] as const).map(({ answer, label }, idx) => (
                 <button
+                  key={label}
                   type="button"
-                  onClick={() => handleInterviewAnswer(false)}
-                  className="py-4 text-sm font-semibold text-slate-600 hover:bg-slate-50 active:bg-slate-100 transition-colors min-h-[56px]"
+                  role="radio"
+                  aria-checked={false}
+                  tabIndex={idx === 0 ? 0 : -1}
+                  onClick={() => handleInterviewAnswer(answer)}
+                  onKeyDown={(e) => {
+                    if (!['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(e.key)) return;
+                    e.preventDefault();
+                    const next = idx === 0 ? 1 : 0;
+                    yesNoGroupRef.current?.querySelectorAll<HTMLButtonElement>('button')[next]?.focus();
+                  }}
+                  className="w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors"
                 >
-                  No
+                  <span className="font-medium text-slate-900">{label}</span>
                 </button>
-                <button
-                  type="button"
-                  onClick={() => handleInterviewAnswer(true)}
-                  className="py-4 text-sm font-semibold text-neuro-600 hover:bg-neuro-50 active:bg-neuro-100 transition-colors min-h-[56px]"
-                >
-                  Yes
-                </button>
-              </div>
+              ))}
             </div>
 
-            {/* Restart only visible after first answer */}
+            {/* Restart — only visible after first answer */}
             {interviewStep !== 'walk' && (
               <button
                 type="button"
-                onClick={() => setInterviewStep('walk')}
+                onClick={restartInterview}
                 className="mt-3 text-xs text-slate-400 hover:text-slate-600 underline-offset-2 hover:underline transition-colors"
               >
-                ← Restart interview
+                ← Restart
               </button>
             )}
           </section>
         )}
 
-        {/* ── GUIDED MODE: result card ──────────────────────────────────────── */}
+        {/* ── GUIDED MODE: interview resolved — show grade list selected ─────── */}
         {mode === 'guided' && grade !== null && (
           <section aria-label="Interview result">
+            {/* Grade list with resolved grade highlighted — same rows as direct */}
             <div
-              className="rounded-2xl border p-5 bg-white"
-              style={{ borderColor: GRADE_TOKENS[grade].borderColor }}
+              role="radiogroup"
+              aria-label="Modified Rankin Scale — grade resolved by interview"
+              ref={gradeGroupRef}
+              className="divide-y divide-slate-200"
             >
-              <div className="flex items-center gap-3">
-                <span className={`w-11 h-11 flex items-center justify-center rounded-full text-lg font-bold flex-shrink-0 ${GRADE_BADGE[grade]}`}>
-                  {grade}
-                </span>
-                <div>
-                  <p className={`font-semibold ${GRADE_TEXT[grade]}`}>{MRS_GRADES[grade].label}</p>
-                  <p className="text-xs text-slate-500 mt-0.5">{MRS_GRADES[grade].definition}</p>
-                </div>
-              </div>
-              <p className="text-xs text-slate-400 mt-3 italic leading-snug">
-                {MRS_GRADES[grade].example}
-              </p>
-              <button
-                type="button"
-                onClick={() => { setGrade(null); setInterviewStep('walk'); resetDrawer(); }}
-                className="mt-4 text-xs text-slate-400 hover:text-slate-600 underline-offset-2 hover:underline transition-colors"
-              >
-                ← Retake interview
-              </button>
+              {MRS_GRADES.map((g, idx) => {
+                const isSelected = grade === g.grade;
+                const tabIdx     = isSelected ? 0 : -1;
+                return (
+                  <button
+                    key={g.grade}
+                    type="button"
+                    role="radio"
+                    aria-checked={isSelected}
+                    tabIndex={tabIdx}
+                    onClick={() => handleGradeSelect(g.grade)}
+                    onKeyDown={makeKeyHandler(
+                      gradeGroupRef, MRS_GRADES.length, idx,
+                      (i) => handleGradeSelect(MRS_GRADES[i].grade),
+                    )}
+                    className={
+                      isSelected
+                        ? 'selected-option w-full flex items-baseline justify-between py-3.5 pl-4 pr-3 text-left rounded-lg'
+                        : 'w-full flex items-baseline justify-between py-3.5 text-left hover:bg-slate-50/60 px-3 rounded-lg transition-colors'
+                    }
+                  >
+                    <span className="flex-1 min-w-0 pr-3">
+                      <span className={isSelected ? 'block font-semibold' : 'block font-medium text-slate-900'}>
+                        {g.label}
+                      </span>
+                      <span className={`block text-xs mt-0.5 leading-snug ${isSelected ? 'opacity-75' : 'text-slate-400'}`}>
+                        {g.sublabel}
+                      </span>
+                    </span>
+                    <span className={isSelected ? 'text-sm font-medium opacity-75 flex-shrink-0' : 'text-sm text-slate-400 flex-shrink-0'}>
+                      {g.grade}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
+
+            {/* Retake link */}
+            <button
+              type="button"
+              onClick={restartInterview}
+              className="mt-3 text-xs text-slate-400 hover:text-slate-600 underline-offset-2 hover:underline transition-colors"
+            >
+              ← Retake interview
+            </button>
           </section>
         )}
 
-        {/* ── Footer — citation + disclaimer ───────────────────────────────── */}
+        {/* ── Footer ───────────────────────────────────────────────────────── */}
         <CalculatorFooter
           citation={
             <>
@@ -788,8 +771,7 @@ const MrsCalculator: React.FC = () => {
               {' · '}
               <cite>
                 Wilson JL, Hareendran A, Grant M, et al.
-                Improving the assessment of outcomes in stroke: use of a structured interview
-                to assign grades on the modified Rankin Scale.{' '}
+                Improving the assessment of outcomes in stroke.{' '}
                 <em>Stroke</em>. 2002;33(9):2243–2246.
               </cite>
             </>
@@ -797,12 +779,10 @@ const MrsCalculator: React.FC = () => {
           disclaimer="Educational use only. Not a substitute for clinical judgment."
         />
 
-        {/* Spacer prevents content hiding behind the drawer */}
         <div className={drawerOpen ? 'drawer-spacer-expanded' : 'drawer-spacer-collapsed'} aria-hidden="true" />
-
       </main>
 
-      {/* ── Bottom drawer — fixed above mobile nav §1.3 ───────────────────── */}
+      {/* ── Bottom drawer ─────────────────────────────────────────────────── */}
       <CalculatorDrawer
         state={drawerState}
         tokens={tokens}
@@ -811,13 +791,12 @@ const MrsCalculator: React.FC = () => {
         ariaContentId="mrs-drawer-content"
         stateAText={{ label: 'No grade selected', hint: 'Tap a grade above' }}
         stateBText={{ label: '—', hint: '' }}
-        collapsedStat={collapsedStat}
+        collapsedStat={grade !== null ? `mRS ${grade} — ${MRS_GRADES[grade].label}` : ''}
         justCompleted={justCompleted}
       >
         <DrawerContent />
       </CalculatorDrawer>
 
-      {/* ── Toast notification ─────────────────────────────────────────────── */}
       <CalculatorToast message={toast} />
     </>
   );
