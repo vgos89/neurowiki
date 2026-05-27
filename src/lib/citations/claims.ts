@@ -30,6 +30,18 @@ const DATA_SURFACE = { type: 'data' as const, field: 'claimId' as const };
 // can distinguish trial-page claims from strokeClinicalPearls claims.
 const BEDSIDE_PEARL_SURFACE = { type: 'bedsidePearl' as const, field: 'bedsidePearlClaimId' as const };
 
+// ─── citation_ids ordering convention (architect §17.1 2026-05-25) ───────
+// Within each claim's citation_ids array, list citations in this order:
+//   1. Primary trials (RCTs, landmark cohorts) — chronologically within
+//   2. Guidelines (AHA / AAN / EFNS / AHS / ESO) — newest first
+//   3. Review articles (Continuum, NEJM Reviews) — as secondary references
+// Rationale: clinicians should see the primary evidence first; the review
+// articles remain in the array as secondary context. Per V direction
+// 2026-05-25: "you can't reference Continuum, that's a review article;
+// reference the trial within the continuum articles where you get that
+// information." Continuum reviews retained but demoted.
+// ─────────────────────────────────────────────────────────────────────────
+
 export const CLAIM_REGISTRY: ClaimRegistry = {
   // ─── 2022 index large-core EVT trial (Japan) ─────────────────────────────
   'rescue-japan-limit-evt-large-core-2022': {
@@ -731,9 +743,9 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
 
   'clinic-headache-moh-gepant-safe': {
     id: 'clinic-headache-moh-gepant-safe',
-    citation_ids: ['ailani-ahs-2021', 'rizzoli-2024-continuum-moh'],
+    citation_ids: ['lipton-rimegepant-acute-2019', 'dodick-ubrogepant-acute-2019', 'ailani-atogepant-advance-2021', 'ailani-ahs-2021', 'rizzoli-2024-continuum-moh'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'Gepants (ubrogepant, rimegepant, atogepant) do not cause medication-overuse headache (MOH) per current evidence (AHS 2021; Rizzoli Continuum 2024). Gepants are preferred acute and preventive agents in patients with established MOH or high MOH risk (acute use ≥10 days/month). Unlike triptans (MOH threshold ≥10 days/month) and NSAIDs (≥15 days/month), no MOH threshold has been established for gepants.',
+    description: 'Gepants (ubrogepant, rimegepant, atogepant) do not cause medication-overuse headache (MOH) — primary evidence: Lipton NEJM 2019 (rimegepant ACHIEVE-I), Dodick NEJM 2019 (ubrogepant ACHIEVE-I), Ailani NEJM 2021 (atogepant ADVANCE; oral preventive without MOH signal). AHS 2021 Consensus Statement codifies "gepants do not cause MOH" as policy. Gepants are preferred acute and preventive agents in patients with established MOH or high MOH risk (acute use ≥10 days/month). Unlike triptans (MOH threshold ≥10 days/month) and NSAIDs (≥15 days/month), no MOH threshold has been established for gepants. Rizzoli Continuum 2024 retained as secondary review.',
   },
 
   // ─── ICHD-3 phenotype classifier — Clinic Headache Pathway ────────────────
@@ -784,16 +796,16 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
 
   'clinic-headache-tension-acute-management': {
     id: 'clinic-headache-tension-acute-management',
-    citation_ids: ['scher-tth-2024-continuum'],
+    citation_ids: ['bendtsen-efns-tth-2010', 'scher-tth-2024-continuum'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'TTH acute management (Scher Continuum 2024): ibuprofen 400-600 mg PO first-line; aspirin 500-1000 mg PO alternative; acetaminophen 1000 mg PO preferred in pregnancy or NSAID contraindication. Avoid opioids and butalbital combinations (MOH and dependence risk). Limit acute medication to ≤10 days/month for triptans/opioids and ≤15 days/month for simple analgesics to avoid medication-overuse headache.',
+    description: 'TTH acute management (EFNS task force, Bendtsen Eur J Neurol 2010): ibuprofen 400-600 mg PO first-line; aspirin 500-1000 mg PO alternative; acetaminophen 1000 mg PO preferred in pregnancy or NSAID contraindication. Avoid opioids and butalbital combinations (MOH and dependence risk per EFNS). Limit acute medication to ≤10 days/month for triptans/opioids and ≤15 days/month for simple analgesics to avoid medication-overuse headache. Scher Continuum 2024 retained as secondary review.',
   },
 
   'clinic-headache-tension-preventive': {
     id: 'clinic-headache-tension-preventive',
-    citation_ids: ['scher-tth-2024-continuum', 'ailani-ahs-2021'],
+    citation_ids: ['bendtsen-amitriptyline-tth-1996', 'bendtsen-efns-tth-2010', 'ailani-ahs-2021', 'scher-tth-2024-continuum'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'TTH preventive management (Scher Continuum 2024 + AHS 2021 for shared MOH threshold): preventive indicated for chronic TTH (≥15 days/month) or high-frequency episodic TTH with functional impact. First-line: amitriptyline 10-75 mg at bedtime (AAN Level B). Second-line: venlafaxine 75-150 mg/day if depression/anxiety comorbid; mirtazapine 15-30 mg at bedtime for sleep + anxiety. Third-line: topiramate (less evidence for TTH than migraine). Combined non-pharmacologic approach (stress management + biofeedback + physical therapy) has Level A evidence and should be offered alongside pharmacotherapy. Beta-blockers have insufficient evidence specifically for TTH.',
+    description: 'TTH preventive management — primary evidence: Bendtsen Jensen Olesen JNNP 1996 (amitriptyline RCT in chronic TTH) + EFNS task-force guideline (Bendtsen Eur J Neurol 2010). Preventive indicated for chronic TTH (≥15 days/month) or high-frequency episodic TTH with functional impact. First-line: amitriptyline 10-75 mg at bedtime (Bendtsen 1996; EFNS class A). Second-line: venlafaxine 75-150 mg/day if depression/anxiety comorbid; mirtazapine 15-30 mg at bedtime for sleep + anxiety (EFNS class B). Third-line: topiramate (less evidence for TTH than migraine). Combined non-pharmacologic approach (stress management + biofeedback + physical therapy) has Level A evidence and should be offered alongside pharmacotherapy. Beta-blockers have insufficient evidence specifically for TTH. AHS 2021 + Scher Continuum 2024 retained as secondary policy + review references.',
   },
 
   // ─── Pitfall: migraine vs TTH overlap discriminator ────────────────────────
@@ -809,21 +821,21 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   // ─── Cluster + HC management surfaces (clinical-reviewer §17.2 condition 2) ──
   'clinic-headache-cluster-acute-management': {
     id: 'clinic-headache-cluster-acute-management',
-    citation_ids: ['burish-2024-continuum-cluster'],
+    citation_ids: ['sumatriptan-cluster-1991', 'cohen-oxygen-cluster-2009', 'burish-2024-continuum-cluster'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'Cluster headache acute treatment (Burish Continuum 2024, AHS Grade A): high-flow O₂ 100% 12-15 L/min via non-rebreather × 15-20 min; sumatriptan 6 mg SC or 20 mg nasal. Greater occipital nerve block with corticosteroid is effective bridging therapy at bout onset; prednisone 100 mg/day × 5 days then taper as transitional therapy.',
+    description: 'Cluster headache acute treatment — primary evidence: Sumatriptan Cluster Headache Study Group NEJM 1991 (SC sumatriptan, pain-free 15 min 46% vs 10% placebo) + Cohen JAMA 2009 (high-flow O₂ pain-free 15 min 78% vs 20% placebo). Standard protocol: high-flow O₂ 100% 12-15 L/min via non-rebreather × 15-20 min; sumatriptan 6 mg SC or 20 mg nasal. Greater occipital nerve block with corticosteroid is effective bridging therapy at bout onset; prednisone 100 mg/day × 5 days then taper as transitional therapy. Burish Continuum 2024 retained as secondary review.',
   },
   'clinic-headache-cluster-preventive': {
     id: 'clinic-headache-cluster-preventive',
-    citation_ids: ['burish-2024-continuum-cluster'],
+    citation_ids: ['bussone-lithium-verapamil-cluster-1990', 'leone-verapamil-cluster-2000', 'burish-2024-continuum-cluster'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'Cluster headache preventive treatment (Burish Continuum 2024): verapamil 80 mg TID first-line, titrate to 360 mg/day with baseline ECG and recheck after each dose change for PR prolongation. Lithium 300 mg BID-TID second-line; serum-level monitoring required. Topiramate 100-200 mg/day third-line; avoid in WOCBP without contraception.',
+    description: 'Cluster headache preventive treatment — primary evidence: Leone Neurology 2000 (verapamil placebo-controlled RCT, significant reduction in attack frequency and abortive consumption) + Bussone Headache 1990 (lithium vs verapamil head-to-head; both effective, verapamil fewer side effects). Standard protocol: verapamil 80 mg TID first-line, titrate to 360 mg/day with baseline ECG and recheck after each dose change for PR prolongation. Lithium 300 mg BID-TID second-line; serum-level monitoring required. Topiramate 100-200 mg/day third-line; avoid in WOCBP without contraception. Burish Continuum 2024 retained as secondary review.',
   },
   'clinic-headache-hc-indomethacin-protocol': {
     id: 'clinic-headache-hc-indomethacin-protocol',
-    citation_ids: ['goadsby-2024-continuum-indomethacin'],
+    citation_ids: ['newman-hc-indomethacin-1994', 'antonaci-indotest-1998', 'goadsby-2024-continuum-indomethacin'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'Hemicrania continua indomethacin protocol (Goadsby Continuum 2024): indomethacin 25 mg TID week 1; titrate to 50 mg TID (150 mg/day) week 2 if incomplete response; max 150 mg/day per quoted text. PPI co-prescription mandatory for GI protection. Complete response within 1-2 weeks confirms the hemicrania continua phenotype; maintain at lowest effective dose. Indomethacin non-response rules out 3.4 HC and warrants diagnostic reconsideration.',
+    description: 'Hemicrania continua indomethacin protocol — primary evidence: Newman Lipton Solomon Neurology 1994 (HC case series; "all forms are characterized by a dramatic and selective response to indomethacin") + Antonaci Headache 1998 (parenteral indomethacin "indotest" diagnostic protocol). Standard titration: indomethacin 25 mg TID week 1; titrate to 50 mg TID (150 mg/day) week 2 if incomplete response; max 150 mg/day per Goadsby Continuum 2024 quoted text. PPI co-prescription mandatory for GI protection. Complete response within 1-2 weeks confirms the hemicrania continua phenotype; maintain at lowest effective dose. Indomethacin non-response rules out 3.4 HC. Goadsby Continuum 2024 retained as secondary review.',
   },
 
   // ─── ICHD-3 §1.3 Chronic migraine — added 2026-05-25 per medsci audit ────
@@ -835,15 +847,15 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   },
   'clinic-headache-chronic-migraine-acute': {
     id: 'clinic-headache-chronic-migraine-acute',
-    citation_ids: ['burch-2024-continuum-acute', 'rizzoli-2024-continuum-moh'],
+    citation_ids: ['lipton-rimegepant-acute-2019', 'dodick-ubrogepant-acute-2019', 'burch-2024-continuum-acute', 'rizzoli-2024-continuum-moh'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'Chronic migraine acute treatment (Burch Continuum 2024): same stepwise framework as episodic migraine — NSAIDs and triptans first-line; gepants (rimegepant, ubrogepant) and ditans (lasmiditan) for triptan contraindications or MOH risk. Gepants do not cause MOH (Rizzoli 2024) and are preferred in chronic patients with high acute-medication days.',
+    description: 'Chronic migraine acute treatment — primary evidence: Lipton NEJM 2019 (rimegepant ACHIEVE-I, pain-free 2h 19.6% vs 12.0% placebo) + Dodick NEJM 2019 (ubrogepant ACHIEVE-I, oral acute therapy without MOH risk). Stepwise framework: NSAIDs and triptans first-line; gepants (rimegepant, ubrogepant) and ditans (lasmiditan) for triptan contraindications or MOH risk. Gepants do not cause MOH per the ACHIEVE program data and are preferred in chronic patients with high acute-medication days. Burch + Rizzoli Continuum 2024 retained as secondary reviews.',
   },
   'clinic-headache-chronic-migraine-preventive': {
     id: 'clinic-headache-chronic-migraine-preventive',
-    citation_ids: ['lipton-2024-continuum-preventive', 'ailani-ahs-2021'],
+    citation_ids: ['aurora-preempt-1-2010', 'diener-preempt-2-2010', 'dodick-preempt-pooled-2010', 'tepper-erenumab-chronic-2017', 'silberstein-fremanezumab-halo-cm-2017', 'mulleners-conquer-galcanezumab-2020', 'lipton-promise2-eptinezumab-2020', 'silberstein-aan-ahs-migraine-prevention-2012', 'ailani-ahs-2021', 'lipton-2024-continuum-preventive'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'Chronic migraine preventive treatment (Lipton Continuum 2024 + AHS 2021): onabotulinumtoxinA is approved for chronic migraine only (per Lipton 2024 quoted text). CGRP mAbs (erenumab, fremanezumab, galcanezumab, eptinezumab) are first-line per AHS 2021 for patients meeting the preventive threshold; escalation after ≥2 conventional preventive failures (topiramate, valproate avoiding WOCBP, propranolol/metoprolol, amitriptyline, venlafaxine).',
+    description: 'Chronic migraine preventive treatment — primary evidence: PREEMPT 1+2 (Aurora + Diener Cephalalgia 2010, pooled Dodick Headache 2010) for onabotulinumtoxinA — FDA chronic-migraine indication anchor. CGRP mAbs each have a chronic-migraine pivotal trial: erenumab (Tepper Lancet Neurol 2017), fremanezumab (Silberstein HALO-CM NEJM 2017), galcanezumab in 2-4-failure migraine (Mulleners CONQUER Lancet Neurol 2020), eptinezumab (Lipton PROMISE-2 Neurology 2020). AHS 2021 + AAN-AHS 2012 (Silberstein/Holland; episodic migraine prevention guideline — applies to the shared oral preventive ladder: topiramate, valproate avoiding WOCBP, propranolol/metoprolol, amitriptyline, venlafaxine). Lipton Continuum 2024 retained as secondary review. CAVEAT: PREEMPT 1 did not meet its primary endpoint; FDA indication rests on the pooled PREEMPT 1+2 analysis.',
   },
 
   // ─── ICHD-3 §3.2 Paroxysmal hemicrania — added 2026-05-25 ────────────────
@@ -855,9 +867,9 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   },
   'clinic-headache-ph-indomethacin-protocol': {
     id: 'clinic-headache-ph-indomethacin-protocol',
-    citation_ids: ['goadsby-2024-continuum-indomethacin'],
+    citation_ids: ['antonaci-indotest-1998', 'goadsby-2024-continuum-indomethacin'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'Paroxysmal hemicrania indomethacin protocol (Goadsby Continuum 2024 — quoted_text names "Hemicrania continua and paroxysmal hemicrania: absolute indomethacin response is diagnostic"): indomethacin 25 mg TID, titrate to 75-150 mg/day. PPI co-prescription mandatory for GI protection. Complete response within 1-2 weeks confirms the paroxysmal hemicrania phenotype; maintain at lowest effective dose. Indomethacin non-response rules out 3.2 PH.',
+    description: 'Paroxysmal hemicrania indomethacin protocol — primary evidence: Antonaci Headache 1998 (parenteral indomethacin "indotest" diagnostic protocol; 50 mg IM gives clear-cut diagnostic answer). Standard titration: indomethacin 25 mg TID, titrate to 75-150 mg/day per ICHD-3 §3.2 E. PPI co-prescription mandatory for GI protection. Complete response within 1-2 weeks confirms the paroxysmal hemicrania phenotype; maintain at lowest effective dose. Indomethacin non-response rules out 3.2 PH. Goadsby Continuum 2024 retained as secondary review (quoted_text covers both PH and HC).',
   },
 
   // ─── ICHD-3 §3.3 SUNCT/SUNA — added 2026-05-25 ───────────────────────────
@@ -869,11 +881,8 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   },
   'clinic-headache-sunct-lamotrigine': {
     id: 'clinic-headache-sunct-lamotrigine',
-    citation_ids: ['burish-2024-continuum-cluster'],
+    citation_ids: ['dandrea-lamotrigine-sunct-2001', 'cohen-sunct-suna-2006', 'burish-2024-continuum-cluster'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    // Per clinical-reviewer §17.2 Condition 2: map to burish-2024-continuum-cluster
-    // ONLY (its quoted_text covers SUNCT/SUNA lamotrigine first-line verbatim).
-    // Do not also map to nahas-2024-continuum-cranial-neuralgias (fabrication risk).
-    description: 'SUNCT/SUNA preventive treatment (Burish Continuum 2024 — quoted_text names "SUNCT/SUNA: lamotrigine first-line prevention; carbamazepine second-line"): lamotrigine is first-line preventive for SUNCT and SUNA; titrate slowly to avoid rash. Carbamazepine is second-line. Refer to a headache specialist; very-short-attack TACs are uncommon and often misdiagnosed as trigeminal neuralgia.',
+    description: 'SUNCT/SUNA preventive treatment — primary evidence: D\'Andrea Neurology 2001 (lamotrigine 125-200 mg/day; complete remission in 3 of 5 + ~80% reduction in remaining 2; no adverse effects). Cohen Brain 2006 prospective cohort (n=52) confirms lamotrigine as most consistently effective preventive in the cohort. Standard protocol: lamotrigine first-line, titrate slowly to avoid rash. Carbamazepine is second-line. Refer to a headache specialist; very-short-attack TACs are uncommon and often misdiagnosed as trigeminal neuralgia. Burish Continuum 2024 retained as secondary review.',
   },
 };
