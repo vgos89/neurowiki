@@ -766,14 +766,20 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     id: 'clinic-headache-ichd3-tension-criteria',
     citation_ids: ['ichd3-2018'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'ICHD-3 2.2 Frequent episodic TTH: 1-14 headache days/month for >3 months; 30 min-7 days duration; ≥2 of (bilateral / pressing-tightening / mild-moderate / NOT aggravated by routine activity); no nausea or vomiting; ≤1 of photophobia or phonophobia. ICHD-3 2.3 Chronic TTH: ≥15 days/month for >3 months with the same B-D features (allows mild nausea OR photophobia OR phonophobia, but not moderate-severe nausea or vomiting).',
+    // Description updated 2026-05-25 per clinical-reviewer §17.2 Condition 6:
+    // verbatim §2.3 D is "Both of the following: 1) no more than one of photophobia,
+    // phonophobia or mild nausea; 2) neither moderate or severe nausea nor vomiting."
+    description: 'ICHD-3 2.2 Frequent episodic TTH: 1-14 headache days/month for >3 months; 30 min-7 days duration; ≥2 of (bilateral / pressing-tightening / mild-moderate / NOT aggravated by routine activity); no nausea or vomiting; ≤1 of photophobia or phonophobia. ICHD-3 2.3 Chronic TTH: ≥15 days/month for >3 months with the same B-D features, but with §2.3 D verbatim: (1) no more than ONE of photophobia, phonophobia, OR mild nausea (combined ≤1 pool); (2) neither moderate or severe nausea nor vomiting.',
   },
 
   'clinic-headache-ichd3-ndph-criteria': {
     id: 'clinic-headache-ichd3-ndph-criteria',
     citation_ids: ['ichd3-2018'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'ICHD-3 3.3 New daily persistent headache (NDPH): distinct and clearly-remembered onset of headache becoming continuous and unremitting within 24 h; present >3 months; not better accounted for by another ICHD-3 diagnosis. The defining feature is the patient pinpointing the moment the headache began and it never resolving since.',
+    // Section relabel 2026-05-25: ICHD-3 places NDPH at §4.10 (Other primary
+    // headache disorders), NOT §3.3 (which is SUNCT/SUNA). Claim ID kept stable;
+    // surface text updated to reflect the correct ICHD-3 chapter.
+    description: 'ICHD-3 4.10 New daily persistent headache (NDPH): distinct and clearly-remembered onset of headache becoming continuous and unremitting within 24 h; present >3 months; not better accounted for by another ICHD-3 diagnosis. The defining feature is the patient pinpointing the moment the headache began and it never resolving since.',
   },
 
   'clinic-headache-tension-acute-management': {
@@ -818,5 +824,56 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     citation_ids: ['goadsby-2024-continuum-indomethacin'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
     description: 'Hemicrania continua indomethacin protocol (Goadsby Continuum 2024): indomethacin 25 mg TID week 1; titrate to 50 mg TID (150 mg/day) week 2 if incomplete response; max 150 mg/day per quoted text. PPI co-prescription mandatory for GI protection. Complete response within 1-2 weeks confirms the hemicrania continua phenotype; maintain at lowest effective dose. Indomethacin non-response rules out 3.4 HC and warrants diagnostic reconsideration.',
+  },
+
+  // ─── ICHD-3 §1.3 Chronic migraine — added 2026-05-25 per medsci audit ────
+  'clinic-headache-ichd3-chronic-migraine-criteria': {
+    id: 'clinic-headache-ichd3-chronic-migraine-criteria',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'ICHD-3 1.3 Chronic migraine: headache (TTH-like and/or migraine-like) on ≥15 days/month for >3 months (A), in a patient with ≥5 prior attacks fulfilling 1.1 or 1.2 criteria (B), on ≥8 days/month fulfilling C.1 migraine criteria C and D, C.2 migraine-with-aura criteria B and C, or C.3 believed by the patient to be migraine at onset and relieved by a triptan or ergot derivative (C). §2.3 Note 1: code 1.3 in preference to 2.3 Chronic TTH when both criteria sets are met.',
+  },
+  'clinic-headache-chronic-migraine-acute': {
+    id: 'clinic-headache-chronic-migraine-acute',
+    citation_ids: ['burch-2024-continuum-acute', 'rizzoli-2024-continuum-moh'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Chronic migraine acute treatment (Burch Continuum 2024): same stepwise framework as episodic migraine — NSAIDs and triptans first-line; gepants (rimegepant, ubrogepant) and ditans (lasmiditan) for triptan contraindications or MOH risk. Gepants do not cause MOH (Rizzoli 2024) and are preferred in chronic patients with high acute-medication days.',
+  },
+  'clinic-headache-chronic-migraine-preventive': {
+    id: 'clinic-headache-chronic-migraine-preventive',
+    citation_ids: ['lipton-2024-continuum-preventive', 'ailani-ahs-2021'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Chronic migraine preventive treatment (Lipton Continuum 2024 + AHS 2021): onabotulinumtoxinA is approved for chronic migraine only (per Lipton 2024 quoted text). CGRP mAbs (erenumab, fremanezumab, galcanezumab, eptinezumab) are first-line per AHS 2021 for patients meeting the preventive threshold; escalation after ≥2 conventional preventive failures (topiramate, valproate avoiding WOCBP, propranolol/metoprolol, amitriptyline, venlafaxine).',
+  },
+
+  // ─── ICHD-3 §3.2 Paroxysmal hemicrania — added 2026-05-25 ────────────────
+  'clinic-headache-ichd3-paroxysmal-criteria': {
+    id: 'clinic-headache-ichd3-paroxysmal-criteria',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'ICHD-3 3.2 Paroxysmal hemicrania: ≥20 attacks (A); severe unilateral orbital/supraorbital/temporal pain lasting 2-30 min (B); either or both ipsilateral cranial autonomic symptoms OR restlessness/agitation (C); >5 attacks/day for more than half the time when active (D); prevented absolutely by therapeutic-dose indomethacin (E, definitional).',
+  },
+  'clinic-headache-ph-indomethacin-protocol': {
+    id: 'clinic-headache-ph-indomethacin-protocol',
+    citation_ids: ['goadsby-2024-continuum-indomethacin'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Paroxysmal hemicrania indomethacin protocol (Goadsby Continuum 2024 — quoted_text names "Hemicrania continua and paroxysmal hemicrania: absolute indomethacin response is diagnostic"): indomethacin 25 mg TID, titrate to 75-150 mg/day. PPI co-prescription mandatory for GI protection. Complete response within 1-2 weeks confirms the paroxysmal hemicrania phenotype; maintain at lowest effective dose. Indomethacin non-response rules out 3.2 PH.',
+  },
+
+  // ─── ICHD-3 §3.3 SUNCT/SUNA — added 2026-05-25 ───────────────────────────
+  'clinic-headache-ichd3-sunct-criteria': {
+    id: 'clinic-headache-ichd3-sunct-criteria',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'ICHD-3 3.3 Short-lasting unilateral neuralgiform headache attacks: ≥20 attacks (A); moderate or severe unilateral trigeminal-distribution pain lasting 1-600 seconds (B); ≥1 ipsilateral cranial autonomic symptom (C); attack frequency ≥1/day for more than half the time when active (D). Subtypes 3.3.1 SUNCT (both conjunctival injection + lacrimation) and 3.3.2 SUNA (one or neither) are deferred from this Phase 1 implementation.',
+  },
+  'clinic-headache-sunct-lamotrigine': {
+    id: 'clinic-headache-sunct-lamotrigine',
+    citation_ids: ['burish-2024-continuum-cluster'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    // Per clinical-reviewer §17.2 Condition 2: map to burish-2024-continuum-cluster
+    // ONLY (its quoted_text covers SUNCT/SUNA lamotrigine first-line verbatim).
+    // Do not also map to nahas-2024-continuum-cranial-neuralgias (fabrication risk).
+    description: 'SUNCT/SUNA preventive treatment (Burish Continuum 2024 — quoted_text names "SUNCT/SUNA: lamotrigine first-line prevention; carbamazepine second-line"): lamotrigine is first-line preventive for SUNCT and SUNA; titrate slowly to avoid rash. Carbamazepine is second-line. Refer to a headache specialist; very-short-attack TACs are uncommon and often misdiagnosed as trigeminal neuralgia.',
   },
 };

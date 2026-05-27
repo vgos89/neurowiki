@@ -108,7 +108,8 @@ const AGGRAVATED_OPTIONS = [
 ];
 
 const ASSOCIATED_OPTIONS = [
-  { value: 'sym-nausea', label: 'Nausea' },
+  { value: 'sym-nausea-mild', label: 'Mild nausea', description: 'Allowed by 2.3 Chronic TTH D in the ≤1 pool with photo/phono' },
+  { value: 'sym-nausea-moderate-severe', label: 'Moderate or severe nausea', description: 'Excludes both 2.2 and 2.3 TTH' },
   { value: 'sym-vomiting', label: 'Vomiting' },
   { value: 'sym-photophobia', label: 'Bothered by light' },
   { value: 'sym-phonophobia', label: 'Bothered by sound' },
@@ -732,10 +733,62 @@ const ClinicHeadachePathway: React.FC = () => {
 
             {topMatch.phenotypeId === 'ndph' && (
               <div data-claim="clinic-headache-ichd3-ndph-criteria" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                <SectionHeader>ICHD-3 §3.3 criteria</SectionHeader>
+                <SectionHeader>ICHD-3 §4.10 criteria</SectionHeader>
                 <CriteriaList match={topMatch} />
                 <Row label="Management" value="NDPH is a diagnosis of exclusion; complete secondary-cause workup before treating. Treat per the phenotype the headache most resembles." />
               </div>
+            )}
+
+            {topMatch.phenotypeId === 'chronic-migraine' && (
+              <>
+                <div data-claim="clinic-headache-ichd3-chronic-migraine-criteria" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
+                  <SectionHeader>ICHD-3 §1.3 criteria</SectionHeader>
+                  <CriteriaList match={topMatch} />
+                </div>
+                <div data-claim="clinic-headache-chronic-migraine-acute" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
+                  <SectionHeader>Acute treatment</SectionHeader>
+                  <Row label="First-line" value="NSAID or triptan at onset, same stepwise framework as episodic migraine (Burch Continuum 2024)" />
+                  <Row label="MOH risk" value="Gepant (rimegepant, ubrogepant) preferred when acute-medication days are high; gepants do not cause MOH (Rizzoli 2024)" />
+                  <Row label="Refractory" value="Combination therapy (antiemetic + analgesic ± DHE); IV DHE for refractory ED migraine" />
+                </div>
+                <div data-claim="clinic-headache-chronic-migraine-preventive" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
+                  <SectionHeader>Preventive treatment</SectionHeader>
+                  <Row label="OnabotulinumtoxinA" value="Approved for chronic migraine only (per Lipton 2024). Standard PREEMPT-aligned dosing per AHS." />
+                  <Row label="CGRP mAb" value="Erenumab, fremanezumab, galcanezumab, or eptinezumab; first-line for chronic migraine per AHS 2021" />
+                  <Row label="Conventional preventives" value="Topiramate, valproate (avoid in WOCBP), propranolol/metoprolol, amitriptyline, venlafaxine. Escalate to CGRP mAb after ≥2 failures." />
+                </div>
+              </>
+            )}
+
+            {topMatch.phenotypeId === 'paroxysmal-hemicrania' && (
+              <>
+                <div data-claim="clinic-headache-ichd3-paroxysmal-criteria" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
+                  <SectionHeader>ICHD-3 §3.2 criteria</SectionHeader>
+                  <CriteriaList match={topMatch} />
+                </div>
+                <div data-claim="clinic-headache-ph-indomethacin-protocol" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
+                  <SectionHeader>Indomethacin protocol (Goadsby Continuum 2024)</SectionHeader>
+                  <Row label="Week 1" value="Indomethacin 25 mg TID" />
+                  <Row label="Titration" value="Increase to 75 to 150 mg/day if incomplete response (max 150 mg/day per Goadsby 2024 quoted text)" />
+                  <Row label="GI protection" value="PPI co-prescription is mandatory" />
+                  <Row label="Diagnostic confirmation" value="Complete response within 1 to 2 weeks confirms the paroxysmal hemicrania phenotype" />
+                </div>
+              </>
+            )}
+
+            {topMatch.phenotypeId === 'sunct-suna' && (
+              <>
+                <div data-claim="clinic-headache-ichd3-sunct-criteria" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
+                  <SectionHeader>ICHD-3 §3.3 criteria</SectionHeader>
+                  <CriteriaList match={topMatch} />
+                </div>
+                <div data-claim="clinic-headache-sunct-lamotrigine" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
+                  <SectionHeader>Preventive treatment (Burish Continuum 2024)</SectionHeader>
+                  <Row label="First-line" value="Lamotrigine, titrated slowly to reduce rash risk" />
+                  <Row label="Second-line" value="Carbamazepine" />
+                  <Row label="Referral" value="Refer to a headache specialist; SUNCT/SUNA is uncommon and often misdiagnosed as trigeminal neuralgia" />
+                </div>
+              </>
             )}
           </section>
         )}
@@ -821,11 +874,17 @@ function managementNotesForPhenotype(phenotypeId: string): string[] {
     case 'migraine-without-aura':
     case 'migraine-with-aura':
       return ['Acute: triptan or NSAID at onset, gepant when triptans contraindicated. Preventive when ≥4 days/month with disability or ≥6 days/month regardless. CGRP mAb after 2 conventional failures.'];
+    case 'chronic-migraine':
+      return ['OnabotulinumtoxinA is approved for chronic migraine only. CGRP mAbs are first-line per AHS 2021. Escalate from conventional preventives after 2 failures.'];
     case 'episodic-tth':
     case 'chronic-tth':
       return ['Acute: ibuprofen 400 to 600 mg first-line; avoid opioids and butalbital. Chronic TTH preventive: amitriptyline at bedtime, AAN Level B.'];
     case 'cluster-headache':
       return ['Acute: high-flow O₂ 12 to 15 L/min, 15 minutes; sumatriptan 6 mg SC. Verapamil 80 mg TID preventive; baseline and serial ECG.'];
+    case 'paroxysmal-hemicrania':
+      return ['Indomethacin 25 mg TID titrating to 75 to 150 mg/day. PPI co-prescription mandatory. Absolute response confirms phenotype.'];
+    case 'sunct-suna':
+      return ['Lamotrigine first-line preventive, carbamazepine second-line. Refer to headache specialist; uncommon and often misdiagnosed as trigeminal neuralgia.'];
     case 'hemicrania-continua':
       return ['Indomethacin 25 mg TID titrating to 50 mg TID. PPI co-prescription mandatory. Absolute response confirms phenotype.'];
     case 'ndph':

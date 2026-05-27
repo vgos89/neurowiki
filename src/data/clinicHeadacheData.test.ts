@@ -31,7 +31,7 @@ describe('evaluateHeadachePhenotypes', () => {
         'dur-4-to-72-hours',
         'loc-unilateral',
         'qual-pulsating',
-        'sym-nausea',
+        'sym-nausea-mild',
       ));
       const migraine = matches.find(m => m.phenotypeId === 'migraine-without-aura');
       expect(migraine?.matchStrength).toBe('full');
@@ -68,7 +68,7 @@ describe('evaluateHeadachePhenotypes', () => {
         'dur-4-to-72-hours',
         'loc-unilateral',
         'qual-pulsating',
-        'sym-nausea',
+        'sym-nausea-mild',
       ));
       const migraine = matches.find(m => m.phenotypeId === 'migraine-without-aura');
       expect(migraine?.matchStrength).toBe('probable');
@@ -83,7 +83,7 @@ describe('evaluateHeadachePhenotypes', () => {
         'loc-unilateral',
         'sev-moderate',
         'sev-severe',
-        'sym-nausea',
+        'sym-nausea-mild',
       ));
       expect(matches.find(m => m.phenotypeId === 'migraine-without-aura')?.matchStrength).toBe('full');
     });
@@ -115,7 +115,7 @@ describe('evaluateHeadachePhenotypes', () => {
         'qual-pressing-tightening',
         'sev-mild',
         'act-not-aggravated',
-        'sym-nausea',
+        'sym-nausea-mild',
       ));
       const tth = matches.find(m => m.phenotypeId === 'episodic-tth');
       expect(tth?.matchStrength).toBe('probable');
@@ -204,7 +204,7 @@ describe('evaluateHeadachePhenotypes', () => {
         'dur-continuous',
         'loc-unilateral',
         'qual-pulsating',
-        'sym-nausea',
+        'sym-nausea-mild',
       ));
       for (const id of episodicIds) {
         expect(matches.find(m => m.phenotypeId === id), `episodic ${id} should be suppressed`).toBeUndefined();
@@ -219,7 +219,7 @@ describe('evaluateHeadachePhenotypes', () => {
       // matches for any other phenotype must be suppressed.
       const matches = evaluateHeadachePhenotypes(select(
         // Migraine full match
-        'attacks-gt-10', 'dur-4-to-72-hours', 'loc-unilateral', 'qual-pulsating', 'sym-nausea',
+        'attacks-gt-10', 'dur-4-to-72-hours', 'loc-unilateral', 'qual-pulsating', 'sym-nausea-mild',
         // Partial TTH ingredients (would be probable without nausea)
         'freq-5-14-per-month', 'pattern-ge-3-months', 'dur-30min-to-7days',
         'qual-pressing-tightening', 'sev-mild', 'act-not-aggravated',
@@ -233,7 +233,7 @@ describe('evaluateHeadachePhenotypes', () => {
       // Partial matches (≥1 criterion met but more than one short) are not
       // Probable per ICHD-3 X.5 and remain visible as information.
       const matches = evaluateHeadachePhenotypes(select(
-        'attacks-gt-10', 'dur-4-to-72-hours', 'loc-unilateral', 'qual-pulsating', 'sym-nausea',
+        'attacks-gt-10', 'dur-4-to-72-hours', 'loc-unilateral', 'qual-pulsating', 'sym-nausea-mild',
       ));
       expect(matches.find(m => m.phenotypeId === 'migraine-without-aura')?.matchStrength).toBe('full');
       // Partial matches may or may not exist depending on which other
@@ -260,7 +260,7 @@ describe('evaluateHeadachePhenotypes', () => {
         'dur-4-to-72-hours',
         'loc-unilateral',
         'qual-pulsating',
-        'sym-nausea',
+        'sym-nausea-mild',
         // Partial TTH ingredients
         'loc-bilateral',
         'qual-pressing-tightening',
@@ -311,5 +311,193 @@ describe('data integrity', () => {
     for (const id of RED_FLAG_CHIPS) {
       expect(redGroupIds.has(id), `red flag ${id} not in red-flags group`).toBe(true);
     }
+  });
+});
+
+// ─── New phenotypes added 2026-05-25 per medsci ICHD-3 audit ──────────────
+
+describe('1.3 Chronic migraine', () => {
+  it('full match: ≥15 days/month + ≥3 months + ≥5 prior attacks + ≥8 migraine-feature days', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'freq-ge-15-per-month',
+      'pattern-ge-3-months',
+      'attacks-gt-10',
+      'migraine-features-ge-8-per-month',
+    ));
+    const cm = matches.find(m => m.phenotypeId === 'chronic-migraine');
+    expect(cm?.matchStrength).toBe('full');
+  });
+
+  it('full match using triptan-responsive disjunction in criterion C', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'freq-ge-15-per-month',
+      'pattern-ge-3-months',
+      'attacks-gt-10',
+      'triptan-response-positive',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'chronic-migraine')?.matchStrength).toBe('full');
+  });
+
+  it('suppresses 2.3 Chronic TTH when 1.3 Chronic migraine is a full match (ICHD-3 §2.3 Note 1)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'freq-ge-15-per-month',
+      'pattern-ge-3-months',
+      'attacks-gt-10',
+      'migraine-features-ge-8-per-month',
+      'loc-bilateral',
+      'qual-pressing-tightening',
+      'sev-mild',
+      'act-not-aggravated',
+      'dur-30min-to-7days',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'chronic-migraine')?.matchStrength).toBe('full');
+    expect(matches.find(m => m.phenotypeId === 'chronic-tth')).toBeUndefined();
+  });
+});
+
+describe('3.2 Paroxysmal hemicrania', () => {
+  it('full match: ≥20 attacks + severe unilateral orbital 2-30 min + autonomic + >5/day + indomethacin complete', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-ge-20',
+      'loc-unilateral',
+      'loc-orbital-temporal',
+      'sev-severe',
+      'dur-2-to-30-min',
+      'sym-autonomic-ipsilateral',
+      'freq-gt-5-per-day',
+      'indo-tried-complete',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'paroxysmal-hemicrania')?.matchStrength).toBe('full');
+  });
+
+  it('is hidden until indomethacin complete response is entered', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-ge-20',
+      'loc-unilateral',
+      'loc-orbital-temporal',
+      'sev-severe',
+      'dur-2-to-30-min',
+      'sym-autonomic-ipsilateral',
+      'freq-gt-5-per-day',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'paroxysmal-hemicrania')).toBeUndefined();
+  });
+});
+
+describe('3.3 SUNCT/SUNA', () => {
+  it('full match: ≥20 attacks + moderate-severe unilateral 1-600 sec + autonomic + ≥1/day', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-ge-20',
+      'loc-unilateral',
+      'sev-severe',
+      'dur-1-to-600-sec',
+      'sym-autonomic-ipsilateral',
+      'freq-ge-1-per-day',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'sunct-suna')?.matchStrength).toBe('full');
+  });
+});
+
+describe('§2.3 D chronic-TTH nausea-severity fix', () => {
+  it('Chronic TTH probable when moderate-severe nausea is selected (criterion D fails)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'freq-ge-15-per-month',
+      'pattern-ge-3-months',
+      'dur-30min-to-7days',
+      'loc-bilateral',
+      'qual-pressing-tightening',
+      'sev-mild',
+      'act-not-aggravated',
+      'sym-nausea-moderate-severe',
+    ));
+    const ctth = matches.find(m => m.phenotypeId === 'chronic-tth');
+    expect(ctth?.matchStrength).toBe('probable');
+    expect(ctth?.missingCriteria.map(c => c.id)).toContain('ctth-D');
+  });
+
+  it('Chronic TTH full match allows mild nausea ALONE in the ≤1 pool', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'freq-ge-15-per-month',
+      'pattern-ge-3-months',
+      'dur-30min-to-7days',
+      'loc-bilateral',
+      'qual-pressing-tightening',
+      'sev-mild',
+      'act-not-aggravated',
+      'sym-nausea-mild',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'chronic-tth')?.matchStrength).toBe('full');
+  });
+
+  it('Chronic TTH FAILS criterion D when mild nausea + photophobia are both selected (≤1 pool exceeded)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'freq-ge-15-per-month',
+      'pattern-ge-3-months',
+      'dur-30min-to-7days',
+      'loc-bilateral',
+      'qual-pressing-tightening',
+      'sev-mild',
+      'act-not-aggravated',
+      'sym-nausea-mild',
+      'sym-photophobia',
+    ));
+    const ctth = matches.find(m => m.phenotypeId === 'chronic-tth');
+    expect(ctth?.matchStrength).toBe('probable');
+    expect(ctth?.missingCriteria.map(c => c.id)).toContain('ctth-D');
+  });
+});
+
+describe('Suppression rules (architect §17.1 Condition 3)', () => {
+  it('episodic phenotypes (1.1, 1.2, 2.2, 3.1) ARE suppressed on dur-continuous', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-gt-10',
+      'dur-continuous',
+      'loc-unilateral',
+      'qual-pulsating',
+      'sym-nausea-mild',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'migraine-without-aura')).toBeUndefined();
+    expect(matches.find(m => m.phenotypeId === 'episodic-tth')).toBeUndefined();
+    expect(matches.find(m => m.phenotypeId === 'cluster-headache')).toBeUndefined();
+  });
+
+  it('continuous-pattern phenotypes (1.3, 3.4, 4.10) are NOT suppressed on dur-continuous', () => {
+    const cmMatches = evaluateHeadachePhenotypes(select(
+      'freq-ge-15-per-month',
+      'pattern-ge-3-months',
+      'attacks-gt-10',
+      'migraine-features-ge-8-per-month',
+      'dur-continuous',
+    ));
+    expect(cmMatches.find(m => m.phenotypeId === 'chronic-migraine')?.matchStrength).toBe('full');
+
+    const ndphMatches = evaluateHeadachePhenotypes(select(
+      'dur-continuous',
+      'pattern-ge-3-months',
+      'onset-new-within-3-months',
+    ));
+    expect(ndphMatches.find(m => m.phenotypeId === 'ndph')).toBeDefined();
+
+    const hcMatches = evaluateHeadachePhenotypes(select(
+      'loc-unilateral',
+      'dur-continuous',
+      'pattern-ge-3-months',
+      'sev-moderate',
+      'sym-autonomic-ipsilateral',
+      'indo-tried-complete',
+    ));
+    expect(hcMatches.find(m => m.phenotypeId === 'hemicrania-continua')?.matchStrength).toBe('full');
+  });
+});
+
+describe('Section-label corrections (2026-05-25)', () => {
+  it('NDPH ichd3Section is §4.10 (NOT §3.3)', () => {
+    const ndph = HEADACHE_PHENOTYPES.find(p => p.id === 'ndph');
+    expect(ndph?.ichd3Section).toContain('§4.10');
+  });
+
+  it('Vestibular migraine ichd3Section is §A1.6.6 (NOT §A1.6.5)', () => {
+    const vm = HEADACHE_PHENOTYPES.find(p => p.id === 'vestibular-migraine');
+    expect(vm?.ichd3Section).toContain('§A1.6.6');
   });
 });

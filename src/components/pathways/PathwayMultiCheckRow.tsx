@@ -89,22 +89,62 @@ export const PathwayMultiCheckRow: React.FC<PathwayMultiCheckRowProps> = ({
   const summaryText = summary(values, explicitlyNone);
   const hasAnyValue = values.size > 0 || explicitlyNone;
 
-  // Completed state — cobalt left bar, neuro-50 bg, still tappable
+  // Completed state — cobalt left bar, neuro-50 bg, still tappable + reopenable
+  // (V usability fix 2026-05-25: previously the completed-state button returned
+  // early without rendering the accordion body, so tapping a completed row had
+  // no visible effect).
   if (stepCompleted && hasAnyValue) {
     return (
-      <button
-        type="button"
-        onClick={handleToggle}
-        className="w-full text-left px-4 py-3 border-l-2 border-neuro-500 bg-neuro-50 rounded-r-lg min-h-[44px] flex items-center justify-between gap-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors"
-      >
-        <span className="text-sm font-semibold text-neuro-700">{label}</span>
-        <span className="text-sm text-neuro-700 opacity-75 truncate">{summaryText}</span>
-      </button>
+      <div className="scroll-mt-20 border-b border-slate-100 last:border-b-0">
+        <button
+          type="button"
+          onClick={handleToggle}
+          aria-expanded={isOpen}
+          className="w-full text-left px-4 py-3 border-l-2 border-neuro-500 bg-neuro-50 rounded-r-lg min-h-[44px] flex items-center justify-between gap-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors"
+        >
+          <span className="text-sm font-semibold text-neuro-700">{label}</span>
+          <span className="flex items-center gap-1.5 flex-shrink-0">
+            <span className="text-sm text-neuro-700 opacity-75 truncate">{summaryText}</span>
+            <ChevronDown className={`text-neuro-600 motion-safe:transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+          </span>
+        </button>
+        {isOpen && (
+          <div className="px-1 pb-3 pt-1 space-y-1" role="group" aria-label={label}>
+            {options.map((opt) => {
+              const selected = values.has(opt.value);
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  aria-pressed={selected}
+                  onClick={() => toggleValue(opt.value)}
+                  className={`w-full text-left rounded-lg px-3 py-2 min-h-[44px] flex flex-col items-start gap-0.5 transition-colors touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500 ${selected ? 'border-l-2 border-neuro-500 bg-neuro-50/40 pl-[10px]' : 'hover:bg-slate-50'}`}
+                >
+                  <span className={`text-sm ${selected ? 'text-neuro-700 font-medium' : 'text-slate-700'}`}>{opt.label}</span>
+                  {opt.description && (
+                    <span className="text-[11px] text-slate-500 leading-relaxed">{opt.description}</span>
+                  )}
+                </button>
+              );
+            })}
+            {onMarkNone && (
+              <button
+                type="button"
+                onClick={() => { onChange(new Set()); onMarkNone(); }}
+                className={`w-full text-left rounded-lg px-3 py-2 min-h-[44px] flex items-center justify-between border-t border-slate-100 mt-2 pt-3 transition-colors touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500 ${explicitlyNone ? 'bg-emerald-50/40 border-l-2 border-emerald-500 pl-[10px]' : 'hover:bg-slate-50'}`}
+              >
+                <span className={`text-sm font-medium ${explicitlyNone ? 'text-emerald-700' : 'text-slate-700'}`}>None of the above</span>
+                {explicitlyNone && <span className="text-[11px] text-emerald-700">Selected</span>}
+              </button>
+            )}
+          </div>
+        )}
+      </div>
     );
   }
 
   return (
-    <div className="border-b border-slate-100 last:border-b-0">
+    <div className="border-b border-slate-100 last:border-b-0 scroll-mt-20">
       <button
         type="button"
         onClick={handleToggle}

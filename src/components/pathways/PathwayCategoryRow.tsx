@@ -87,22 +87,54 @@ export const PathwayCategoryRow: React.FC<PathwayCategoryRowProps> = ({
 
   if (locked) return null;
 
-  // Completed state — cobalt left bar, neuro-50 bg, still tappable
+  // Completed state — cobalt left bar, neuro-50 bg, still tappable.
+  // Render the accordion body conditionally inside the completed branch too
+  // so the user can reopen + revise a completed row (V usability fix 2026-05-25).
   if (stepCompleted && selectedOption) {
     return (
-      <button
-        type="button"
-        onClick={handleToggle}
-        className="w-full text-left px-4 py-3 border-l-2 border-neuro-500 bg-neuro-50 rounded-r-lg min-h-[44px] flex items-center justify-between gap-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors"
-      >
-        <span className="text-sm font-semibold text-neuro-700">{label}</span>
-        <span className="text-sm text-neuro-700 opacity-75 truncate">{selectedOption.label}</span>
-      </button>
+      <div className="scroll-mt-20 border-b border-slate-100 last:border-b-0">
+        <button
+          type="button"
+          onClick={handleToggle}
+          aria-expanded={isOpen}
+          className="w-full text-left px-4 py-3 border-l-2 border-neuro-500 bg-neuro-50 rounded-r-lg min-h-[44px] flex items-center justify-between gap-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors"
+        >
+          <span className="text-sm font-semibold text-neuro-700">{label}</span>
+          <span className="flex items-center gap-1.5 flex-shrink-0">
+            <span className="text-sm text-neuro-700 opacity-75 truncate">{selectedOption.label}</span>
+            <ChevronDown className={`text-neuro-600 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+          </span>
+        </button>
+        {isOpen && (
+          <div className="pb-2 pt-1 space-y-0.5 animate-in slide-in-from-top-1 duration-150">
+            {options.map((option) => {
+              const isSelected = option.value === value;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => handleSelect(option.value)}
+                  className={`w-full flex flex-col items-start text-left rounded-lg min-h-[44px] px-3 py-2.5 gap-0.5 transition-colors duration-100 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation ${isSelected ? 'border-l-2 border-neuro-500 bg-neuro-50' : 'hover:bg-slate-50 border-l-2 border-transparent'}`}
+                >
+                  <span className={`text-sm font-medium leading-snug ${isSelected ? 'text-neuro-800' : 'text-slate-700'}`}>
+                    {option.label}
+                  </span>
+                  {option.description && (
+                    <span className={`text-[11px] leading-snug ${isSelected ? 'text-neuro-600' : 'text-slate-400'}`}>
+                      {option.description}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
     );
   }
 
   return (
-    <div className="border-b border-slate-100 last:border-b-0">
+    <div className="border-b border-slate-100 last:border-b-0 scroll-mt-20">
       {/* Collapsed row trigger */}
       <button
         type="button"
