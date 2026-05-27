@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║  Clinic Headache Pathway — Frame 6 of 6                                    ║
+  ║  Cascade-clear demonstration                                                ║
+  ║  Step 1 "Red flags" changed: "Thunderclap onset" NOW selected              ║
+  ║  Cascade-clear notice appears below the Red flags row.                     ║
+  ║  Steps 2, 3, 4 re-locked to "Awaiting Step N ↑"                           ║
+  ║  Rail below Step 1 returns to slate-200.                                   ║
+  ║  Drawer State C — "high" tier (red-500 chrome) showing workup              ║
+  ║  recommendation for Thunderclap onset: CT-then-LP + CTA brain.             ║
+  ╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clinic Headache Pathway — Frame 6 · Cascade-clear (Thunderclap onset)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --color-neuro-50:  #EEF2FF;
+    --color-neuro-100: #C7D7FA;
+    --color-neuro-200: #A5B4FC;
+    --color-neuro-500: #1746A2;
+    --color-neuro-600: #123988;
+    --color-neuro-700: #0E2D6B;
+    --color-neuro-900: #06143D;
+    --nav-rail-width: 0px;
+    --tab-bar-height: 0px;
+  }
+  .bg-neuro-50  { background-color: var(--color-neuro-50); }
+  .bg-neuro-500 { background-color: var(--color-neuro-500); }
+  .bg-neuro-600 { background-color: var(--color-neuro-600); }
+  .hover\:bg-neuro-600:hover { background-color: var(--color-neuro-600); }
+  .text-neuro-600 { color: var(--color-neuro-600); }
+  .text-neuro-700 { color: var(--color-neuro-700); }
+  .border-neuro-500 { border-color: var(--color-neuro-500); }
+  .divider-hair { border-top: 1px solid #e2e8f0; }
+
+  /* Cascade-clear notice (§3.6 anatomy — verbatim from EVT reference) */
+  .cascade-notice {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    color: #475569;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  .cat-row-completed {
+    width: 100%; display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 12px 14px 14px;
+    border-left: 2px solid var(--color-neuro-500); border-radius: 8px;
+    background-color: var(--color-neuro-50); cursor: pointer;
+  }
+  .cat-row-completed-label { font-weight: 600; color: var(--color-neuro-700); font-size: 0.9375rem; }
+  .cat-row-completed-value { font-size: 0.875rem; color: var(--color-neuro-700); opacity: 0.75; }
+
+  .cat-row {
+    width: 100%; display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 12px; text-align: left; cursor: pointer; border-radius: 8px;
+    transition: background-color 0.12s;
+  }
+  .cat-row:hover { background-color: rgba(248, 250, 252, 0.6); }
+  .cat-row-label { font-weight: 500; color: #0f172a; font-size: 0.9375rem; }
+  .cat-row-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .cat-row-value-unset { font-size: 0.875rem; color: #94a3b8; font-style: italic; }
+  .cat-row-chevron { width: 16px; height: 16px; color: #94a3b8; flex-shrink: 0; }
+
+  @keyframes drawer-pulse {
+    0%   { box-shadow: 0 -4px 20px rgba(239, 68, 68, 0); }
+    50%  { box-shadow: 0 -6px 24px rgba(239, 68, 68, 0.25); }
+    100% { box-shadow: 0 -4px 20px rgba(239, 68, 68, 0); }
+  }
+  .drawer-just-available { animation: drawer-pulse 1.6s ease-out 1; }
+  .drawer-expanded { box-shadow: 0 -4px 24px rgba(15, 23, 42, 0.12); }
+
+  body { background: #f1f5f9; }
+  .mockup-frame { max-width: 440px; margin: 0 auto; background: white; min-height: 100vh; position: relative; overflow: hidden; }
+
+  /* Step 1 rail reverted to slate (cascade-clear) — no cobalt rail below changed step */
+  .rail-slate { border-left: 1px solid #e2e8f0; padding-left: 21px; margin-left: 14px; }
+
+  .node-active  { width: 12px; height: 12px; border-radius: 9999px; border: 2px solid var(--color-neuro-500); background: white; margin-left: -20px; margin-bottom: 6px; flex-shrink: 0; }
+  .node-locked  { width: 10px; height: 10px; border-radius: 9999px; border: 1px solid #cbd5e1; background: white; margin-left: -20px; margin-bottom: 6px; flex-shrink: 0; }
+
+  .eyebrow-locked { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(148, 163, 184, 0.5); margin-bottom: 8px; }
+  .eyebrow-active { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #94a3b8; margin-bottom: 12px; }
+
+  .drawer-spacer-expanded { height: 360px; }
+  .archetype-banner { background: #0f172a; color: white; padding: 1rem 1.5rem; }
+
+  .frame-annotation {
+    background: #fefce8; border: 1px solid #fde68a; border-radius: 8px;
+    padding: 12px 16px; font-size: 0.8125rem; color: #78350f; line-height: 1.5;
+    margin: 0 20px 16px 20px; max-width: 440px; margin-left: auto; margin-right: auto;
+  }
+</style>
+</head>
+<body class="text-slate-900 antialiased">
+
+<div class="archetype-banner">
+  <div class="max-w-5xl mx-auto">
+    <div class="font-bold text-base mb-1">Clinic Headache Pathway — Frame 6 of 6</div>
+    <div class="text-slate-300 text-xs leading-relaxed">
+      Cascade-clear demonstration. Step 1 "Red flags" changed: "Thunderclap onset" now selected.
+      Cascade-clear notice below the row. Steps 2–4 re-locked. Rail reverts to slate.
+      Drawer State C — High tier (red chrome): CT-then-LP + CTA brain workup.
+    </div>
+  </div>
+</div>
+
+<!-- Frame annotation -->
+<div class="frame-annotation max-w-5xl">
+  <strong>What this frame demonstrates:</strong> The clinician returned to Step 1 and selected "Thunderclap onset" from the Red flags accordion. The pathway immediately fires cascade-clear: Steps 2–4 body re-lock to italic placeholders; the rail below Step 1 reverts to slate-200 (shown with a 250 ms color fade at runtime). The transient notice pill below the changed row names the cleared steps and offers Undo. The drawer simultaneously updates to State C High tier — the thunderclap flag is a standalone secondary headache workup trigger that routes directly to a result without needing Steps 2–4.
+</div>
+
+<div class="text-xs text-slate-400 uppercase tracking-widest pl-5 pb-2 max-w-5xl mx-auto">
+  Frame 6 · Cascade-clear — Thunderclap onset added, Steps 2–4 re-locked, Drawer High tier
+</div>
+
+<div class="mockup-frame">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="px-5 py-4">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">PATHWAY</div>
+            <div class="text-[15px] font-semibold text-slate-900 leading-tight tracking-tight mt-0.5">Clinic Headache</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-0.5 flex-shrink-0">
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Favorite">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </button>
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Reset">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+          <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">Copy</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="px-5 pt-6 pb-4">
+    <div class="rail-wrapper">
+
+      <!--
+        STEP 1 — mid-edit: user selected "Thunderclap onset" from the Red flags accordion.
+        The node reverts to active (hollow cobalt ring) because the step's summary
+        has changed and downstream steps are now invalidated.
+        The rail below Step 1 reverts to rail-slate (250ms fade at runtime).
+      -->
+      <div class="flex items-center" style="margin-left:14px;">
+        <div class="node-active"></div>
+        <div class="eyebrow-active ml-3">STEP 1 · TRIAGE</div>
+      </div>
+
+      <!-- Step 1 uses rail-slate — cascade has cleared the cobalt traversal -->
+      <div class="rail-slate mb-1">
+
+        <!--
+          Red flags row: now shows "Thunderclap onset" (the changed value).
+          Rendered as a cat-row-completed because the selection was committed.
+          The 2px cobalt left bar signals the completed-but-re-opened state —
+          user can still see the current value and tap to re-open the accordion.
+        -->
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">Red flags</span>
+          <span class="cat-row-completed-value">Thunderclap onset</span>
+        </div>
+
+        <!--
+          CASCADE-CLEAR NOTICE — per §3.6 anatomy and EVT reference Frame 6.
+          Inline pill, not a toast or modal.
+          Prefix: "Pattern, Character, and Associated cleared" (Steps 2, 3, 4).
+          Naming convention per §3.6: "Step 1 change clears Steps 2, 3, 4
+          → prefix is 'Clinical, Imaging, and Result cleared'" — adapted for
+          headache pathway step labels: PATTERN / CHARACTER / ASSOCIATED.
+          Undo: restores "None present" (prior upstream) + re-populates all
+          downstream completed state (held in memory until notice auto-dismisses).
+        -->
+        <div class="cascade-notice">
+          <!-- Small counter-clockwise arrow icon (undo cascade semantic) -->
+          <svg style="width:12px;height:12px;color:#94a3b8;flex-shrink:0;" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4v5h5"></path>
+            <path d="M20 11A8 8 0 1 1 5 9"></path>
+          </svg>
+          <span>
+            <strong style="font-weight:500;color:#334155;">Pattern, Character, and Associated cleared</strong> — re-confirm.
+          </span>
+          <!--
+            Undo button: restores prior Red flags value ("None present")
+            AND all downstream answers from in-memory snapshot. One tap,
+            no confirmation. Rail re-cobalts downstream (250ms). Notice dismissed.
+          -->
+          <button
+            type="button"
+            style="margin-left:8px;padding:2px 8px;margin-top:-2px;margin-bottom:-2px;background:white;border:1px solid #cbd5e1;border-radius:9999px;font-size:0.75rem;color:#334155;cursor:pointer;white-space:nowrap;"
+            aria-label="Undo: restore No red flags present and downstream answers"
+          >Undo</button>
+        </div>
+
+        <!--
+          No branch chip here — Step 1 no longer in a clean "complete" state.
+          The chip that previously read "No red flags present" was cleared when
+          the Red flags value changed. A new chip ("Thunderclap onset — workup")
+          will appear only after the user re-confirms or advances.
+          In this frame the pathway routes to the High tier result immediately
+          because any single SNNOOP10 flag present is a hard secondary-headache
+          short-circuit per the spec (§5 workup routing).
+        -->
+      </div>
+
+      <!-- STEP 2 — re-locked -->
+      <div class="flex items-center mt-4" style="margin-left:14px;">
+        <div class="node-locked"></div>
+        <div class="eyebrow-locked ml-3">STEP 2 · PATTERN</div>
+      </div>
+      <div class="rail-slate">
+        <p class="text-sm italic text-slate-400">Awaiting Step 1 ↑</p>
+      </div>
+
+      <!-- STEP 3 — re-locked -->
+      <div class="flex items-center mt-4" style="margin-left:14px;">
+        <div class="node-locked"></div>
+        <div class="eyebrow-locked ml-3">STEP 3 · CHARACTER</div>
+      </div>
+      <div class="rail-slate">
+        <p class="text-sm italic text-slate-400">Awaiting Step 2 ↑</p>
+      </div>
+
+      <!-- STEP 4 — re-locked -->
+      <div class="flex items-center mt-4" style="margin-left:14px;">
+        <div class="node-locked"></div>
+        <div class="eyebrow-locked ml-3">STEP 4 · ASSOCIATED</div>
+      </div>
+      <div class="rail-slate pb-6">
+        <p class="text-sm italic text-slate-400">Awaiting Step 3 ↑</p>
+      </div>
+
+    </div><!-- /rail-wrapper -->
+
+    <!-- PAGE FOOTER -->
+    <footer class="mt-4 pt-5 border-t border-slate-100">
+      <p class="text-xs text-slate-400 leading-relaxed">
+        Mitsikostas DD et al. SNNOOP10. <em>J Headache Pain.</em> 2017;18:104.
+        <a href="#" class="text-neuro-600 hover:underline ml-0.5">View source</a>
+      </p>
+      <p class="mt-1 text-xs text-slate-400">
+        Edlow JA et al. <em>JAMA.</em> 2015;314(12):1243–1252. Thunderclap headache evaluation.
+      </p>
+      <p class="mt-2 text-xs text-slate-400">Educational use only. Not a substitute for clinical judgment.</p>
+    </footer>
+  </main>
+
+  <div class="drawer-spacer-expanded"></div>
+
+  <!--
+    DRAWER State C — High tier (secondary headache workup triggered by Thunderclap onset).
+    Tier: "high" per §6 token table.
+    Chrome: bg-red-50 header, border-top #fecaca, text-red-700 eyebrow + stat + chevron.
+    collapsedStat: "Thunderclap onset · Secondary workup"
+    Drawer EXPANDED — shows workup recommendation specific to the Thunderclap flag.
+
+    Workup for thunderclap onset per SNNOOP10 / AHS / Edlow 2015:
+      - Non-contrast CT head (within 6 h of onset)
+      - If CT negative: LP for xanthochromia (> 2 h after onset)
+      - CTA brain (if CT negative and LP equivocal, or if clinical suspicion for CVT/RCVS)
+  -->
+  <div class="absolute bottom-0 left-0 right-0 bg-white drawer-expanded drawer-just-available"
+       style="border-top: 1px solid #fecaca; left: var(--nav-rail-width, 0px); bottom: calc(var(--tab-bar-height, 0px) + env(safe-area-inset-bottom, 0px));">
+
+    <!-- Collapsed handle (tappable to collapse) -->
+    <button class="w-full flex items-center justify-between px-5 py-3 bg-red-50 hover:bg-red-100 transition-colors">
+      <div class="flex items-center gap-3">
+        <div class="text-[10px] font-bold text-red-700 uppercase tracking-widest">Interpretation</div>
+        <div class="text-sm font-medium text-red-700">Thunderclap onset · Secondary workup</div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-600"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <!-- Expanded content -->
+    <div class="px-5 py-5 max-h-[60vh] overflow-y-auto">
+
+      <!-- Headline -->
+      <p class="text-slate-900 text-xl leading-tight font-semibold">Secondary headache — urgent workup required.</p>
+      <p class="text-slate-600 leading-relaxed mt-2 text-sm">
+        Thunderclap onset (peak severity within seconds) is a SNNOOP10 red flag that mandates exclusion of subarachnoid haemorrhage and other secondary causes before a primary headache diagnosis is considered. Phenotyping cannot proceed until secondary cause is excluded.
+      </p>
+
+      <!-- Section: Workup algorithm -->
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Recommended workup — Thunderclap headache</div>
+        <ol class="space-y-3 text-sm text-slate-700">
+          <li class="leading-snug">
+            <span class="font-semibold text-slate-900">1. Non-contrast CT head</span>
+            <span class="block text-xs text-slate-500 mt-0.5">Sensitivity ~98% for SAH within 6 h of onset. Obtain immediately.</span>
+          </li>
+          <li class="leading-snug">
+            <span class="font-semibold text-slate-900">2. Lumbar puncture (if CT negative)</span>
+            <span class="block text-xs text-slate-500 mt-0.5">Obtain &gt;2 h after onset. Xanthochromia (visual or spectrophotometric) or RBC count &gt;2000/μL indicates SAH.</span>
+          </li>
+          <li class="leading-snug">
+            <span class="font-semibold text-slate-900">3. CTA brain (with or after CT/LP)</span>
+            <span class="block text-xs text-slate-500 mt-0.5">Evaluate for intracranial aneurysm, RCVS, CVT, arterial dissection. Obtain if CT or LP positive, or if high clinical suspicion persists despite negative initial workup.</span>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Section: Assessment summary -->
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Assessment summary</div>
+        <dl class="space-y-2 text-sm">
+          <div class="flex justify-between"><dt class="text-slate-500">Flag present</dt><dd class="text-slate-900 font-medium">Thunderclap onset</dd></div>
+          <div class="flex justify-between"><dt class="text-slate-500">Immediate concern</dt><dd class="text-red-700 font-medium">SAH until proven otherwise</dd></div>
+          <div class="flex justify-between"><dt class="text-slate-500">Phenotyping</dt><dd class="text-slate-500">Deferred — secondary cause must be excluded first</dd></div>
+        </dl>
+      </div>
+
+      <!-- Section: See also -->
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">See also</div>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          <a href="#" class="text-neuro-600 hover:underline">SAH Calculator</a>
+          <span class="text-slate-300 mx-2">·</span>
+          <a href="#" class="text-neuro-600 hover:underline">Ottawa SAH Rule</a>
+          <span class="text-slate-300 mx-2">·</span>
+          <a href="#" class="text-neuro-600 hover:underline">RCVS Reference</a>
+        </p>
+      </div>
+
+      <!-- Section: Citations footer -->
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <p class="text-xs text-slate-400 leading-relaxed">
+          1. Mitsikostas DD et al. SNNOOP10 list for secondary headaches. <em>J Headache Pain.</em> 2017;18:104.
+        </p>
+        <p class="mt-1 text-xs text-slate-400 leading-relaxed">
+          2. Edlow JA, Caplan LR. Avoiding pitfalls in the diagnosis of subarachnoid hemorrhage. <em>N Engl J Med.</em> 2000;342:29–36.
+        </p>
+        <p class="mt-1 text-xs text-slate-400 leading-relaxed">
+          3. Perry JJ et al. Sensitivity of computed tomography for patients with SAH. <em>BMJ.</em> 2011;343:d4277.
+        </p>
+        <p class="mt-2 text-xs text-slate-400">Educational use only. Not a substitute for clinical judgment.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /mockup-frame -->
+
+<div class="h-16"></div>
+
+<!--
+  @design-prototyper — Frame 6 notes
+  States covered: Step 1 mid-edit (changed Red flags value → Thunderclap onset),
+    cascade-clear notice inline (slate-50 pill, slate-200 border, CCW arrow icon,
+    bold prefix "Pattern, Character, and Associated cleared", Undo button),
+    Steps 2–4 re-locked (node-locked + italic Awaiting Step N ↑),
+    rail below Step 1 reverted to rail-slate,
+    Drawer State C High tier (red-50 header, red-200 border, text-red-700),
+    drawer expanded showing CT-then-LP + CTA workup.
+
+  Cascade-clear naming:
+    Step 1 change clears Steps 2, 3, 4. Per §3.6 naming rules adapted to headache labels:
+    "Pattern, Character, and Associated cleared — re-confirm."
+    (EVT reference uses "Clinical, Imaging, and Result" — headache uses PATTERN / CHARACTER / ASSOCIATED.)
+
+  Drawer routing decision:
+    Thunderclap onset is a hard short-circuit flag — the drawer routes immediately to
+    secondary headache workup without requiring Steps 2–4 to be answered. This is the
+    correct clinical behavior (SNNOOP10 flags preempt phenotyping). The drawer State C High
+    fires as soon as the flag is selected, even mid-step.
+
+  Token verification:
+    All neuro-* hex values copied verbatim from EVT reference :root.
+    High tier drawer: bg-red-50, border-top #fecaca, text-red-700 — per PATHWAY_SPEC §6 table.
+-->
+</body>
+</html>

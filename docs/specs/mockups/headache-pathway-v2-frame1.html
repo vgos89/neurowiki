@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║  Clinic Headache Pathway — Frame 1 of 6                                    ║
+  ║  Step 1 TRIAGE active · Red flags accordion open · Drawer State A          ║
+  ║  Canonical pattern: pathway-evt-reference.html (Round 6)                   ║
+  ║  Spec: docs/specs/PATHWAY_SPEC.md §1–§5                                    ║
+  ╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clinic Headache Pathway — Frame 1 · Triage (active)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --color-neuro-50:  #EEF2FF;
+    --color-neuro-100: #C7D7FA;
+    --color-neuro-200: #A5B4FC;
+    --color-neuro-500: #1746A2;
+    --color-neuro-600: #123988;
+    --color-neuro-700: #0E2D6B;
+    --color-neuro-900: #06143D;
+    --nav-rail-width: 0px;
+    --tab-bar-height: 0px;
+  }
+
+  .bg-neuro-50  { background-color: var(--color-neuro-50); }
+  .bg-neuro-500 { background-color: var(--color-neuro-500); }
+  .bg-neuro-600 { background-color: var(--color-neuro-600); }
+  .hover\:bg-neuro-600:hover { background-color: var(--color-neuro-600); }
+  .text-neuro-600 { color: var(--color-neuro-600); }
+  .text-neuro-700 { color: var(--color-neuro-700); }
+  .border-neuro-500 { border-color: var(--color-neuro-500); }
+
+  .divider-hair { border-top: 1px solid #e2e8f0; }
+
+  /* ─── Category-row system ──────────────────────────────────────────────── */
+  .cat-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 12px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.12s;
+  }
+  .cat-row:hover { background-color: rgba(248, 250, 252, 0.6); }
+  .cat-row-label { font-weight: 500; color: #0f172a; font-size: 0.9375rem; }
+  .cat-row-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .cat-row-value { font-size: 0.875rem; color: #64748b; }
+  .cat-row-value-unset { font-size: 0.875rem; color: #94a3b8; font-style: italic; }
+  .cat-row-chevron {
+    width: 16px; height: 16px;
+    color: #94a3b8;
+    transition: transform 0.18s ease;
+    flex-shrink: 0;
+  }
+  .cat-row-open .cat-row-chevron { transform: rotate(180deg); }
+
+  .cat-accordion { padding: 4px 12px 10px 12px; }
+
+  /* Two-line stacked option button (§3.7.1) */
+  .cat-option-btn {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 12px 12px 16px;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.12s;
+    min-height: 44px;
+    position: relative;
+    margin-bottom: 4px;
+    gap: 2px;
+  }
+  .cat-option-btn:hover { background-color: rgba(248, 250, 252, 0.6); }
+  .cat-option-label { font-size: 14px; color: #334155; font-weight: 500; line-height: 1.35; display: block; width: 100%; }
+  .cat-option-desc  { font-size: 11px; color: #64748b; line-height: 1.4; display: block; width: 100%; }
+
+  /* Selected option: 2px cobalt left bar */
+  .cat-option-selected {
+    border-left: 2px solid var(--color-neuro-500);
+    padding-left: 14px;
+  }
+  .cat-option-selected .cat-option-label { color: var(--color-neuro-700); font-weight: 500; }
+
+  /* Completed-step row */
+  .cat-row-completed {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 12px 14px 14px;
+    border-left: 2px solid var(--color-neuro-500);
+    border-radius: 8px;
+    background-color: var(--color-neuro-50);
+    cursor: pointer;
+  }
+  .cat-row-completed-label { font-weight: 600; color: var(--color-neuro-700); font-size: 0.9375rem; }
+  .cat-row-completed-value { font-size: 0.875rem; color: var(--color-neuro-700); opacity: 0.75; }
+
+  /* Branch chip */
+  .branch-chip {
+    display: inline-block;
+    font-size: 11px;
+    color: #475569;
+    background: #f8fafc;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    line-height: 1.5;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    transition: background-color 0.12s, box-shadow 0.12s, color 0.12s;
+  }
+  .branch-chip:hover {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    box-shadow: 0 0 0 1px var(--color-neuro-200);
+  }
+  .branch-chip:focus-visible { outline: 2px solid var(--color-neuro-500); outline-offset: 2px; }
+
+  /* Cascade-clear notice */
+  .cascade-notice {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    color: #475569;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  /* Drawer animations */
+  @keyframes chevron-bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30%           { transform: translateY(-3px); }
+  }
+  .drawer-chevron-hint { animation: chevron-bounce 2.4s ease-in-out infinite; }
+  .drawer-collapsed { box-shadow: 0 -2px 12px rgba(15, 23, 42, 0.08); }
+  .drawer-expanded  { box-shadow: 0 -4px 24px rgba(15, 23, 42, 0.12); }
+
+  /* Page chrome */
+  body { background: #f1f5f9; }
+  .mockup-frame {
+    max-width: 440px;
+    margin: 0 auto;
+    background: white;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Rail system */
+  .rail-cobalt {
+    border-left: 2px solid var(--color-neuro-500);
+    padding-left: 20px;
+    margin-left: 14px;
+  }
+  .rail-slate {
+    border-left: 1px solid #e2e8f0;
+    padding-left: 21px;
+    margin-left: 14px;
+  }
+
+  /* Step nodes */
+  .node-completed {
+    width: 12px; height: 12px;
+    border-radius: 9999px;
+    background-color: var(--color-neuro-500);
+    margin-left: -20px; margin-bottom: 6px;
+    flex-shrink: 0;
+  }
+  .node-active {
+    width: 12px; height: 12px;
+    border-radius: 9999px;
+    border: 2px solid var(--color-neuro-500);
+    background: white;
+    margin-left: -20px; margin-bottom: 6px;
+    flex-shrink: 0;
+  }
+  .node-locked {
+    width: 10px; height: 10px;
+    border-radius: 9999px;
+    border: 1px solid #cbd5e1;
+    background: white;
+    margin-left: -20px; margin-bottom: 6px;
+    flex-shrink: 0;
+  }
+
+  .eyebrow-locked {
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: rgba(148, 163, 184, 0.5);
+    margin-bottom: 8px;
+  }
+  .eyebrow-active {
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: #94a3b8;
+    margin-bottom: 12px;
+  }
+
+  .drawer-spacer-collapsed { height: 80px; }
+  .drawer-spacer-expanded  { height: 380px; }
+
+  .archetype-banner {
+    background: #0f172a; color: white;
+    padding: 1rem 1.5rem;
+  }
+</style>
+</head>
+<body class="text-slate-900 antialiased">
+
+<!-- PAGE HEADER BANNER -->
+<div class="archetype-banner">
+  <div class="max-w-5xl mx-auto">
+    <div class="font-bold text-base mb-1">Clinic Headache Pathway — Frame 1 of 6</div>
+    <div class="text-slate-300 text-xs leading-relaxed">
+      Step 1 TRIAGE active. Red flags accordion open showing all 12 SNNOOP10 flags (none selected).
+      Steps 2–4 locked. Drawer State A — muted slate bar.
+    </div>
+  </div>
+</div>
+
+<div class="text-xs text-slate-400 uppercase tracking-widest pl-5 pt-6 pb-2 max-w-5xl mx-auto">
+  Frame 1 · State A · Step 1 active — Red flags accordion open, Steps 2–4 locked
+</div>
+
+<div class="mockup-frame">
+
+  <!-- HEADER — §2 canonical back-arrow SVG, PATHWAY eyebrow, Clinic Headache name -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="px-5 py-4">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">PATHWAY</div>
+            <div class="text-[15px] font-semibold text-slate-900 leading-tight tracking-tight mt-0.5">Clinic Headache</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-0.5 flex-shrink-0">
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Favorite">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </button>
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Reset">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+          <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">Copy</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BODY — vertical rail + step blocks -->
+  <main class="px-5 pt-6 pb-4">
+    <div class="rail-wrapper">
+
+      <!-- STEP 1 — active (hollow cobalt ring) -->
+      <div class="flex items-center" style="margin-left:14px;">
+        <div class="node-active"></div>
+        <div class="eyebrow-active ml-3">STEP 1 · TRIAGE</div>
+      </div>
+
+      <!-- Step 1 content — slate rail (no completed step above) -->
+      <div class="rail-slate mb-1">
+
+        <!--
+          Category row: "Red flags" — OPEN (accordion expanded).
+          Chevron rotated 180°. None of the 12 flags selected.
+          The 12 SNNOOP10 flags (Mitsikostas 2017 / IHS Teaching Module):
+            1. Systemic illness / fever
+            2. Neoplasm history
+            3. Neurological deficit / consciousness change
+            4. Onset sudden (thunderclap)
+            5. Older age (new headache >50y)
+            6. Pattern change or recent onset
+            7. Positional aggravation (orthostatic)
+            8. Precipitated by exertion or Valsalva
+            9. Progressive headache / papilloedema
+           10. Pregnancy or postpartum
+           11. Painful eye with autonomic features
+           12. Post-traumatic onset
+        -->
+        <button type="button" class="cat-row cat-row-open w-full">
+          <span class="cat-row-label">Red flags</span>
+          <span class="cat-row-right">
+            <span class="cat-row-value-unset">Select all present…</span>
+            <svg class="cat-row-chevron" style="transform:rotate(180deg);" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 8 10 12 14 8"></polyline></svg>
+          </span>
+        </button>
+
+        <!-- Inline accordion — 12 SNNOOP10 flags, none selected -->
+        <div class="cat-accordion">
+
+          <!-- Flag 1 -->
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Systemic illness or fever</span>
+            <span class="cat-option-desc">new headache with systemic infection, immune suppression, or malignancy</span>
+          </button>
+
+          <!-- Flag 2 -->
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Neoplasm history</span>
+            <span class="cat-option-desc">personal history of cancer, especially CNS or systemically metastatic</span>
+          </button>
+
+          <!-- Flag 3 -->
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Neurological deficit or consciousness change</span>
+            <span class="cat-option-desc">focal deficit, confusion, papilloedema, or altered mental status</span>
+          </button>
+
+          <!-- Flag 4 -->
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Onset sudden — thunderclap</span>
+            <span class="cat-option-desc">peak severity within seconds; worst headache of life</span>
+          </button>
+
+          <!-- Flag 5 -->
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Older age: new headache after 50</span>
+            <span class="cat-option-desc">new or changed headache pattern in patient over 50 years old</span>
+          </button>
+
+          <!-- Flag 6 -->
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Pattern change or recent onset</span>
+            <span class="cat-option-desc">escalating frequency, new pattern, or first-ever onset within weeks</span>
+          </button>
+
+          <!-- Flag 7 -->
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Positional aggravation</span>
+            <span class="cat-option-desc">orthostatic: worse when upright, better when lying flat — or vice versa</span>
+          </button>
+
+          <!-- Flag 8 -->
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Precipitated by exertion or Valsalva</span>
+            <span class="cat-option-desc">cough, strain, sneeze, coitus, or other Valsalva maneuver</span>
+          </button>
+
+          <!-- Flag 9 -->
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Progressive headache with papilloedema</span>
+            <span class="cat-option-desc">worsening course; papilloedema on fundoscopy</span>
+          </button>
+
+          <!-- Flag 10 -->
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Pregnancy or postpartum</span>
+            <span class="cat-option-desc">any stage of pregnancy or within 6 weeks of delivery</span>
+          </button>
+
+          <!-- Flag 11 -->
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Painful eye with autonomic features</span>
+            <span class="cat-option-desc">orbital pain, red eye, ptosis, lacrimation — suspect angle-closure or Horner</span>
+          </button>
+
+          <!-- Flag 12 -->
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Post-traumatic onset</span>
+            <span class="cat-option-desc">new headache following head injury, concussion, or whiplash</span>
+          </button>
+
+        </div>
+        <!-- No branch chip — Step 1 not yet complete -->
+      </div>
+
+      <!-- STEP 2 — locked -->
+      <div class="flex items-center mt-4" style="margin-left:14px;">
+        <div class="node-locked"></div>
+        <div class="eyebrow-locked ml-3">STEP 2 · PATTERN</div>
+      </div>
+      <div class="rail-slate">
+        <p class="text-sm italic text-slate-400">Awaiting Step 1 ↑</p>
+      </div>
+
+      <!-- STEP 3 — locked -->
+      <div class="flex items-center mt-4" style="margin-left:14px;">
+        <div class="node-locked"></div>
+        <div class="eyebrow-locked ml-3">STEP 3 · CHARACTER</div>
+      </div>
+      <div class="rail-slate">
+        <p class="text-sm italic text-slate-400">Awaiting Step 2 ↑</p>
+      </div>
+
+      <!-- STEP 4 — locked -->
+      <div class="flex items-center mt-4" style="margin-left:14px;">
+        <div class="node-locked"></div>
+        <div class="eyebrow-locked ml-3">STEP 4 · ASSOCIATED</div>
+      </div>
+      <div class="rail-slate pb-6">
+        <p class="text-sm italic text-slate-400">Awaiting Step 3 ↑</p>
+      </div>
+
+    </div><!-- /rail-wrapper -->
+
+    <!-- PAGE FOOTER — citation + disclaimer (§1 row 5) -->
+    <footer class="mt-4 pt-5 border-t border-slate-100">
+      <p class="text-xs text-slate-400 leading-relaxed">
+        Mitsikostas DD et al. SNNOOP10 list. <em>J Headache Pain.</em> 2017;18:104.
+        <a href="#" class="text-neuro-600 hover:underline ml-0.5">View source</a>
+      </p>
+      <p class="mt-1 text-xs text-slate-400">
+        Headache Classification Committee of the IHS. ICHD-3.
+        <em>Cephalalgia.</em> 2018;38(1):1–211.
+      </p>
+      <p class="mt-2 text-xs text-slate-400">Educational use only. Not a substitute for clinical judgment.</p>
+    </footer>
+  </main>
+
+  <div class="drawer-spacer-collapsed"></div>
+
+  <!-- DRAWER State A — muted non-interactive bar -->
+  <div class="absolute bottom-0 left-0 right-0 bg-slate-100 drawer-collapsed" aria-hidden="true"
+       style="left: var(--nav-rail-width, 0px); bottom: calc(var(--tab-bar-height, 0px) + env(safe-area-inset-bottom, 0px));">
+    <div class="px-5 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Interpretation</div>
+        <div class="text-sm text-slate-500">Waiting for inputs · Headache</div>
+      </div>
+      <div class="text-xs text-slate-400">Appears when complete</div>
+    </div>
+  </div>
+
+</div><!-- /mockup-frame -->
+
+<div class="h-16"></div>
+
+<!--
+  @design-prototyper — Frame 1 notes
+  States covered: Step 1 active (hollow cobalt node), expanded accordion (Red flags open),
+    all 12 SNNOOP10 options visible as two-line stacked cat-option-btn (none selected),
+    Steps 2–4 locked (slate ring + italic placeholder), Drawer State A.
+  Tokens: all from EVT reference :root verbatim. No approximations.
+  Decisions:
+    - "Red flags" row uses "Select all present…" unset label to signal multi-check intent
+      (the accordion supports selecting 0-to-many flags before advancing).
+    - Option row anatomy: cat-option-btn (flex-column, §3.7.1 two-line stacked) rather than
+      the older cat-option (flex-row with baseline alignment) — matches the v1.4 standard.
+    - SNNOOP10 labels and descriptions sourced from Mitsikostas 2017 Table 1 / IHS Teaching
+      Module. Short primary label + explanatory secondary line exactly per §3.7.1 intent.
+    - Step labels: TRIAGE / PATTERN / CHARACTER / ASSOCIATED (headache-specific, §3.8 pattern).
+-->
+</body>
+</html>

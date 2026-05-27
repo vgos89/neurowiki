@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║  Clinic Headache Pathway — Frame 3 of 6                                    ║
+  ║  Steps 1–2 complete · Branch chips visible · Step 3 CHARACTER active       ║
+  ║  Location (Unilateral selected) + Quality (Pulsating selected) open         ║
+  ║  Severity + Aggravated by activity resting · Step 4 locked                 ║
+  ║  Drawer State B — "Mapping… Migraine 60% · TTH 35%"                        ║
+  ╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clinic Headache Pathway — Frame 3 · Character (active)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --color-neuro-50:  #EEF2FF;
+    --color-neuro-100: #C7D7FA;
+    --color-neuro-200: #A5B4FC;
+    --color-neuro-500: #1746A2;
+    --color-neuro-600: #123988;
+    --color-neuro-700: #0E2D6B;
+    --color-neuro-900: #06143D;
+    --nav-rail-width: 0px;
+    --tab-bar-height: 0px;
+  }
+  .bg-neuro-50  { background-color: var(--color-neuro-50); }
+  .bg-neuro-500 { background-color: var(--color-neuro-500); }
+  .bg-neuro-600 { background-color: var(--color-neuro-600); }
+  .hover\:bg-neuro-600:hover { background-color: var(--color-neuro-600); }
+  .text-neuro-600 { color: var(--color-neuro-600); }
+  .text-neuro-700 { color: var(--color-neuro-700); }
+  .border-neuro-500 { border-color: var(--color-neuro-500); }
+  .divider-hair { border-top: 1px solid #e2e8f0; }
+
+  .cat-row { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 14px 12px; text-align: left; cursor: pointer; border-radius: 8px; transition: background-color 0.12s; }
+  .cat-row:hover { background-color: rgba(248, 250, 252, 0.6); }
+  .cat-row-label { font-weight: 500; color: #0f172a; font-size: 0.9375rem; }
+  .cat-row-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .cat-row-value { font-size: 0.875rem; color: #64748b; }
+  .cat-row-value-unset { font-size: 0.875rem; color: #94a3b8; font-style: italic; }
+  .cat-row-chevron { width: 16px; height: 16px; color: #94a3b8; transition: transform 0.18s ease; flex-shrink: 0; }
+  .cat-row-open .cat-row-chevron { transform: rotate(180deg); }
+
+  .cat-accordion { padding: 4px 12px 10px 12px; }
+
+  .cat-option-btn { width: 100%; display: flex; flex-direction: column; align-items: flex-start; padding: 12px 12px 12px 16px; text-align: left; background: none; border: none; cursor: pointer; border-radius: 8px; transition: background-color 0.12s; min-height: 44px; position: relative; margin-bottom: 4px; gap: 2px; }
+  .cat-option-btn:hover { background-color: rgba(248, 250, 252, 0.6); }
+  .cat-option-label { font-size: 14px; color: #334155; font-weight: 500; line-height: 1.35; display: block; width: 100%; }
+  .cat-option-desc  { font-size: 11px; color: #64748b; line-height: 1.4; display: block; width: 100%; }
+  .cat-option-selected { border-left: 2px solid var(--color-neuro-500); padding-left: 14px; }
+  .cat-option-selected .cat-option-label { color: var(--color-neuro-700); font-weight: 500; }
+
+  .cat-row-completed { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 14px 12px 14px 14px; border-left: 2px solid var(--color-neuro-500); border-radius: 8px; background-color: var(--color-neuro-50); cursor: pointer; }
+  .cat-row-completed-label { font-weight: 600; color: var(--color-neuro-700); font-size: 0.9375rem; }
+  .cat-row-completed-value { font-size: 0.875rem; color: var(--color-neuro-700); opacity: 0.75; }
+
+  .branch-chip { display: inline-block; font-size: 11px; color: #475569; background: #f8fafc; padding: 2px 8px; border-radius: 9999px; margin-top: 8px; margin-bottom: 16px; line-height: 1.5; cursor: pointer; border: none; outline: none; transition: background-color 0.12s, box-shadow 0.12s, color 0.12s; }
+  .branch-chip:hover { background-color: #f1f5f9; color: #0f172a; box-shadow: 0 0 0 1px var(--color-neuro-200); }
+  .branch-chip:focus-visible { outline: 2px solid var(--color-neuro-500); outline-offset: 2px; }
+
+  @keyframes chevron-bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-3px); } }
+  .drawer-chevron-hint { animation: chevron-bounce 2.4s ease-in-out infinite; }
+  .drawer-collapsed { box-shadow: 0 -2px 12px rgba(15, 23, 42, 0.08); }
+
+  body { background: #f1f5f9; }
+  .mockup-frame { max-width: 440px; margin: 0 auto; background: white; min-height: 100vh; position: relative; overflow: hidden; }
+
+  .rail-cobalt { border-left: 2px solid var(--color-neuro-500); padding-left: 20px; margin-left: 14px; }
+  .rail-slate  { border-left: 1px solid #e2e8f0; padding-left: 21px; margin-left: 14px; }
+
+  .node-completed { width: 12px; height: 12px; border-radius: 9999px; background-color: var(--color-neuro-500); margin-left: -20px; margin-bottom: 6px; flex-shrink: 0; }
+  .node-active    { width: 12px; height: 12px; border-radius: 9999px; border: 2px solid var(--color-neuro-500); background: white; margin-left: -20px; margin-bottom: 6px; flex-shrink: 0; }
+  .node-locked    { width: 10px; height: 10px; border-radius: 9999px; border: 1px solid #cbd5e1; background: white; margin-left: -20px; margin-bottom: 6px; flex-shrink: 0; }
+
+  .eyebrow-locked { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(148, 163, 184, 0.5); margin-bottom: 8px; }
+  .eyebrow-active { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #94a3b8; margin-bottom: 12px; }
+
+  .drawer-spacer-collapsed { height: 80px; }
+  .archetype-banner { background: #0f172a; color: white; padding: 1rem 1.5rem; }
+</style>
+</head>
+<body class="text-slate-900 antialiased">
+
+<div class="archetype-banner">
+  <div class="max-w-5xl mx-auto">
+    <div class="font-bold text-base mb-1">Clinic Headache Pathway — Frame 3 of 6</div>
+    <div class="text-slate-300 text-xs leading-relaxed">
+      Steps 1–2 complete. Branch chips for both. Step 3 CHARACTER active: Location (Unilateral selected),
+      Quality (Pulsating selected), Severity and Aggravated resting. Step 4 locked. Drawer State B.
+    </div>
+  </div>
+</div>
+
+<div class="text-xs text-slate-400 uppercase tracking-widest pl-5 pt-6 pb-2 max-w-5xl mx-auto">
+  Frame 3 · State B · Steps 1–2 complete, Step 3 CHARACTER active (partial), Step 4 locked
+</div>
+
+<div class="mockup-frame">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="px-5 py-4">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="p-1.5 -m-1.5 text-slate-500 hover:text-slate-900 transition-colors" aria-label="Back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">PATHWAY</div>
+            <div class="text-[15px] font-semibold text-slate-900 leading-tight tracking-tight mt-0.5">Clinic Headache</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-0.5 flex-shrink-0">
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Favorite">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </button>
+          <button class="p-2 rounded-full hover:bg-slate-50 transition-colors" aria-label="Reset">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+          <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors">Copy</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="px-5 pt-6 pb-4">
+    <div class="rail-wrapper">
+
+      <!-- STEP 1 — completed -->
+      <div class="flex items-center" style="margin-left:14px;">
+        <div class="node-completed"></div>
+        <div class="eyebrow-active ml-3">STEP 1 · TRIAGE</div>
+      </div>
+      <div class="rail-cobalt">
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">Red flags</span>
+          <span class="cat-row-completed-value">None present</span>
+        </div>
+        <div class="p-3 -m-3" style="display:inline-block;">
+          <button type="button" class="branch-chip" aria-label="Edit: No red flags present">No red flags present</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 — completed -->
+      <div class="flex items-center mt-2" style="margin-left:14px;">
+        <div class="node-completed"></div>
+        <div class="eyebrow-active ml-3">STEP 2 · PATTERN</div>
+      </div>
+      <div class="rail-cobalt">
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">Pattern</span>
+          <span class="cat-row-completed-value">Episodic</span>
+        </div>
+        <div class="divider-hair"></div>
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">Duration per attack</span>
+          <span class="cat-row-completed-value">4–72 h</span>
+        </div>
+        <div class="divider-hair"></div>
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">Frequency per month</span>
+          <span class="cat-row-completed-value">5–14 days</span>
+        </div>
+        <div class="divider-hair"></div>
+        <div class="cat-row-completed">
+          <span class="cat-row-completed-label">Pattern duration ≥3 months</span>
+          <span class="cat-row-completed-value">Yes</span>
+        </div>
+        <div class="p-3 -m-3" style="display:inline-block;">
+          <button type="button" class="branch-chip" aria-label="Edit: Episodic, 4–72 h, 5–14 days/month">Episodic · 4–72 h · 5–14 days/month</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 — active (hollow cobalt ring) -->
+      <div class="flex items-center mt-2" style="margin-left:14px;">
+        <div class="node-active"></div>
+        <div class="eyebrow-active ml-3">STEP 3 · CHARACTER</div>
+      </div>
+
+      <!-- Slate rail — Step 3 categories (partial fill) -->
+      <div class="rail-slate">
+
+        <!-- Row 1: Location — OPEN, Unilateral SELECTED (cobalt bar) -->
+        <button type="button" class="cat-row cat-row-open w-full">
+          <span class="cat-row-label">Location</span>
+          <span class="cat-row-right">
+            <span class="cat-row-value">Unilateral</span>
+            <svg class="cat-row-chevron" style="transform:rotate(180deg);" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 8 10 12 14 8"></polyline></svg>
+          </span>
+        </button>
+        <div class="cat-accordion">
+          <button type="button" class="cat-option-btn cat-option-selected w-full">
+            <span class="cat-option-label">Unilateral</span>
+            <span class="cat-option-desc">one-sided; may alternate sides between or during attacks</span>
+          </button>
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Bilateral</span>
+            <span class="cat-option-desc">both sides; typical of tension-type headache</span>
+          </button>
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Orbital / periorbital</span>
+            <span class="cat-option-desc">around or behind one eye; consider cluster or SUNCT</span>
+          </button>
+        </div>
+        <div class="divider-hair"></div>
+
+        <!-- Row 2: Quality — OPEN, Pulsating SELECTED (cobalt bar) -->
+        <button type="button" class="cat-row cat-row-open w-full">
+          <span class="cat-row-label">Quality</span>
+          <span class="cat-row-right">
+            <span class="cat-row-value">Pulsating</span>
+            <svg class="cat-row-chevron" style="transform:rotate(180deg);" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 8 10 12 14 8"></polyline></svg>
+          </span>
+        </button>
+        <div class="cat-accordion">
+          <button type="button" class="cat-option-btn cat-option-selected w-full">
+            <span class="cat-option-label">Pulsating / throbbing</span>
+            <span class="cat-option-desc">beats with pulse; ICHD-3 criterion C for migraine</span>
+          </button>
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Pressing / tightening</span>
+            <span class="cat-option-desc">band-like, non-pulsating; typical of tension-type headache</span>
+          </button>
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Stabbing / jabbing</span>
+            <span class="cat-option-desc">brief sharp stabs; consider primary stabbing headache</span>
+          </button>
+          <button type="button" class="cat-option-btn w-full">
+            <span class="cat-option-label">Explosive / tearing</span>
+            <span class="cat-option-desc">thunderclap quality — if truly sudden onset, flag as red flag</span>
+          </button>
+        </div>
+        <div class="divider-hair"></div>
+
+        <!-- Row 3: Severity — resting, unselected -->
+        <button type="button" class="cat-row w-full">
+          <span class="cat-row-label">Severity</span>
+          <span class="cat-row-right">
+            <span class="cat-row-value-unset">Select…</span>
+            <svg class="cat-row-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 8 10 12 14 8"></polyline></svg>
+          </span>
+        </button>
+        <div class="divider-hair"></div>
+
+        <!-- Row 4: Aggravated by activity — resting, unselected -->
+        <button type="button" class="cat-row w-full">
+          <span class="cat-row-label">Aggravated by routine activity</span>
+          <span class="cat-row-right">
+            <span class="cat-row-value-unset">Select…</span>
+            <svg class="cat-row-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 8 10 12 14 8"></polyline></svg>
+          </span>
+        </button>
+
+        <!-- No chip — Step 3 not yet complete -->
+      </div>
+
+      <!-- STEP 4 — locked -->
+      <div class="flex items-center mt-4" style="margin-left:14px;">
+        <div class="node-locked"></div>
+        <div class="eyebrow-locked ml-3">STEP 4 · ASSOCIATED</div>
+      </div>
+      <div class="rail-slate pb-6">
+        <p class="text-sm italic text-slate-400">Awaiting Step 3 ↑</p>
+      </div>
+
+    </div><!-- /rail-wrapper -->
+
+    <!-- PAGE FOOTER -->
+    <footer class="mt-4 pt-5 border-t border-slate-100">
+      <p class="text-xs text-slate-400 leading-relaxed">
+        Headache Classification Committee of the IHS. ICHD-3. <em>Cephalalgia.</em> 2018;38(1):1–211.
+        <a href="#" class="text-neuro-600 hover:underline ml-0.5">View source</a>
+      </p>
+      <p class="mt-2 text-xs text-slate-400">Educational use only. Not a substitute for clinical judgment.</p>
+    </footer>
+  </main>
+
+  <div class="drawer-spacer-collapsed"></div>
+
+  <!--
+    DRAWER State B — partial inputs, muted bar.
+    Probability distribution after Steps 1–2 complete and Location + Quality answered.
+    Migraine climbs to ~60% (episodic + unilateral + pulsating),
+    TTH still possible at ~35% (not yet excluded).
+  -->
+  <div class="absolute bottom-0 left-0 right-0 bg-slate-100 drawer-collapsed" aria-hidden="true"
+       style="left: var(--nav-rail-width, 0px); bottom: calc(var(--tab-bar-height, 0px) + env(safe-area-inset-bottom, 0px));">
+    <div class="px-5 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Interpretation</div>
+        <div class="text-sm text-slate-500">Mapping… Migraine 60% · TTH 35%</div>
+      </div>
+      <div class="text-xs text-slate-400">Appears when complete</div>
+    </div>
+  </div>
+
+</div><!-- /mockup-frame -->
+
+<div class="h-16"></div>
+</body>
+</html>
