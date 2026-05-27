@@ -132,6 +132,9 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
     } else {
       contextLines.push(`Anti-Coag/Antiplatelet: None`);
     }
+    if (pc.preExistingDeficits) {
+      contextLines.push(`Pre-existing deficits: ${pc.preExistingDeficits}`);
+    }
   }
   if (contextLines.length > 0) blocks.push(contextLines.join('\n'));
 

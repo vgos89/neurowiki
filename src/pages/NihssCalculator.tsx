@@ -193,6 +193,7 @@ const NihssCalculator: React.FC = () => {
                 : pc.lastAnticoagDose === null
                 ? null
                 : undefined,
+            preExistingDeficits: pc.preExistingDeficits ?? '',
           });
         }
         // Restore stroke timestamps — only in absolute mode. Relative-mode
@@ -420,6 +421,9 @@ const NihssCalculator: React.FC = () => {
         ? patientContext.lastAnticoagDose === null
           ? 'Last anticoag dose: Unknown'
           : `Last anticoag dose: ${formatClinicalDateTime(patientContext.lastAnticoagDose)}`
+        : null,
+      patientContext.preExistingDeficits
+        ? `Pre-existing deficits: ${patientContext.preExistingDeficits}`
         : null,
     ].filter((line): line is string => line !== null);
 
@@ -730,6 +734,7 @@ const NihssCalculator: React.FC = () => {
                   patientContext.lastAnticoagDose instanceof Date
                     ? patientContext.lastAnticoagDose.getTime()
                     : patientContext.lastAnticoagDose,
+                preExistingDeficits: patientContext.preExistingDeficits || undefined,
               },
               strokeTimestamps: hasAnyStamp ? stamps : undefined,
               strokeTimestampsMode: hasAnyStamp

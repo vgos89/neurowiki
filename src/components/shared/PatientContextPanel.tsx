@@ -1,5 +1,22 @@
-import React, { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { ChevronDown, Mic, MicOff } from 'lucide-react';
+
+// Web Speech API — not yet in lib.dom.d.ts for all runtimes. Narrow cast here
+// rather than adding a global augmentation that would spill into other files.
+type SpeechRecognitionCtor = new () => {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((e: { results: SpeechRecognitionResultList; resultIndex: number }) => void) | null;
+  onerror: (() => void) | null;
+  onend: (() => void) | null;
+  start(): void;
+  stop(): void;
+};
+type BrowserWindow = Window & {
+  SpeechRecognition?: SpeechRecognitionCtor;
+  webkitSpeechRecognition?: SpeechRecognitionCtor;
+};
 import { formatClinicalDateShort } from '../../utils/clinicalDateTime';
 import { LKWTimePicker } from '../article/stroke/LKWTimePicker';
 
@@ -47,6 +64,8 @@ export interface PatientContextValues {
    * `null` = explicitly unknown.
    */
   lastAnticoagDose?: Date | null;
+  /** Free-text documentation of pre-existing neurological deficits, entered by nursing staff. */
+  preExistingDeficits: string;
 }
 
 export const EMPTY_PATIENT_CONTEXT: PatientContextValues = {
@@ -56,6 +75,7 @@ export const EMPTY_PATIENT_CONTEXT: PatientContextValues = {
   glucose: '',
   anticoag: new Set(),
   lastAnticoagDose: undefined,
+  preExistingDeficits: '',
 };
 
 /**
@@ -126,6 +146,53 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
   const [expanded, setExpanded] = useState(lockExpanded || defaultExpanded);
   const [lkwModalOpen, setLkwModalOpen] = useState(false);
   const [doseModalOpen, setDoseModalOpen] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [speechSupported] = useState(() =>
+    typeof window !== 'undefined' &&
+    ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)
+  );
+  const recognitionRef = useRef<InstanceType<SpeechRecognitionCtor> | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const autoResize = useCallback(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${el.scrollHeight}px`;
+  }, []);
+
+  useEffect(() => { autoResize(); }, [values.preExistingDeficits, autoResize]);
+
+  const toggleSpeech = useCallback(() => {
+    if (isListening) {
+      recognitionRef.current?.stop();
+      return;
+    }
+    const bw = window as BrowserWindow;
+    const SR = bw.webkitSpeechRecognition ?? bw.SpeechRecognition;
+    if (!SR) return;
+    const rec = new SR();
+    rec.continuous = true;
+    rec.interimResults = false;
+    rec.lang = 'en-US';
+    rec.onresult = (e) => {
+      const transcript = Array.from(e.results)
+        .slice(e.resultIndex)
+        .map((r) => r[0].transcript)
+        .join(' ');
+      onChange({
+        ...values,
+        preExistingDeficits: values.preExistingDeficits
+          ? `${values.preExistingDeficits} ${transcript}`
+          : transcript,
+      });
+    };
+    rec.onerror = () => setIsListening(false);
+    rec.onend = () => setIsListening(false);
+    recognitionRef.current = rec;
+    rec.start();
+    setIsListening(true);
+  }, [isListening, values, onChange]);
 
   // Conditional row: last anticoagulant dose surfaces only for
   // reversible anticoagulants (DOAC + warfarin). Antiplatelets do not
@@ -145,7 +212,8 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
     values.diastolic !== '' ||
     values.glucose !== '' ||
     values.lastAnticoagDose !== undefined ||
-    values.anticoag.size > 0;
+    values.anticoag.size > 0 ||
+    values.preExistingDeficits !== '';
 
   // Header eyebrow shows summary chips if any value is set + collapsed
   const summaryChips = !expanded && hasAnyValue ? buildSummaryChips(values) : null;
@@ -329,6 +397,47 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             </button>
           )}
 
+          {/* Pre-existing deficits — free-text nursing documentation.
+              Single-line textarea that auto-expands with content.
+              Mic button triggers Web Speech API when supported by device. */}
+          <div className="px-4 py-2.5">
+            <div className="flex items-start justify-between gap-2 mb-1.5">
+              <label
+                htmlFor="pre-existing-deficits"
+                className="text-xs font-medium text-slate-600 flex-shrink-0 pt-1"
+              >
+                Pre-existing deficits
+              </label>
+              {speechSupported && (
+                <button
+                  type="button"
+                  onClick={toggleSpeech}
+                  className={`flex-shrink-0 p-1.5 rounded-full border transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
+                    isListening
+                      ? 'bg-red-50 border-red-200 text-red-500 animate-pulse'
+                      : 'bg-white border-slate-200 text-slate-400 hover:border-slate-300'
+                  }`}
+                  aria-label={isListening ? 'Stop dictation' : 'Start dictation'}
+                  aria-pressed={isListening}
+                >
+                  {isListening ? <MicOff className="w-3.5 h-3.5" aria-hidden /> : <Mic className="w-3.5 h-3.5" aria-hidden />}
+                </button>
+              )}
+            </div>
+            <textarea
+              id="pre-existing-deficits"
+              ref={textareaRef}
+              rows={1}
+              value={values.preExistingDeficits}
+              onChange={(e) => {
+                onChange({ ...values, preExistingDeficits: e.target.value });
+                autoResize();
+              }}
+              placeholder="e.g. right arm weakness from prior stroke, aphasia at baseline…"
+              className="w-full resize-none overflow-hidden text-sm text-slate-900 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:border-neuro-500 focus:outline-none placeholder:text-slate-300 leading-snug"
+            />
+          </div>
+
           {/* Pathway-specific extra rows — typed slot per
               arch-PR-stroke-code-patient-context.md. Each row renders in
               the same chrome as the standard four (min-h-[44px], px-4,
@@ -417,5 +526,6 @@ function buildSummaryChips(values: PatientContextValues): string {
   }
   if (values.lastAnticoagDose === null) chips.push('dose: unknown');
   else if (values.lastAnticoagDose instanceof Date) chips.push('dose set');
+  if (values.preExistingDeficits) chips.push('deficits noted');
   return chips.join(' · ');
 }

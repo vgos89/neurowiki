@@ -70,6 +70,8 @@ export interface SavedCaseData {
     anticoag?: string[];
     /** Last anticoagulant dose (DOAC / warfarin) — Unix ms; null = unknown. */
     lastAnticoagDose?: number | null;
+    /** Free-text nursing documentation of pre-existing neurological deficits. */
+    preExistingDeficits?: string;
   };
 
   /** Stroke timestamps. Two storage modes:
