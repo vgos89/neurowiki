@@ -152,7 +152,7 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
             </button>
 
             <div className="min-w-0">
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate">
                 {name}
               </div>
 

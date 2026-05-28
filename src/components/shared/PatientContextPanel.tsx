@@ -382,6 +382,34 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             </div>
           </div>
 
+          {/* BP threshold alert — AHA/ASA 2019 Table 5: SBP >185 or DBP >110
+              is a contraindication to IV thrombolysis. Alert fires on OR-logic
+              (matching the guideline's OR-logic exclusion criterion). Scoped to
+              pre-treatment context only — PatientContextPanel is an initial-
+              assessment surface, not a post-bolus monitoring surface.
+              data-claim: bp-ivt-threshold-185-110 */}
+          {(() => {
+            const sys = parseInt(values.systolic, 10);
+            const dia = parseInt(values.diastolic, 10);
+            const elevated =
+              (values.systolic !== '' && !isNaN(sys) && sys >= 185) ||
+              (values.diastolic !== '' && !isNaN(dia) && dia >= 110);
+            if (!elevated) return null;
+            return (
+              <div
+                data-claim="bp-ivt-threshold-185-110"
+                className="mx-4 mb-1 flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2"
+                role="status"
+                aria-live="polite"
+              >
+                <span className="text-amber-500 flex-shrink-0 mt-0.5" aria-hidden="true">⚠</span>
+                <p className="text-xs text-amber-800 leading-snug">
+                  BP above tPA/TNK threshold — lower to ≤185/110 before treatment
+                </p>
+              </div>
+            );
+          })()}
+
           {/* Glucose row */}
           <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3">
             <label className="text-xs font-medium text-slate-600 flex-shrink-0">Glucose</label>

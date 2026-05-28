@@ -1697,4 +1697,26 @@ export const CITATION_REGISTRY: CitationRegistry = {
     review_window_months: 36,
     quoted_text: 'Across 861 international observers, substantial variability in mRS assignment from vignettes was found (kappa 0.46). Structured questionnaire use and training significantly reduced variability. Supports routine use of structured assessment tools over gestalt mRS assignment at the bedside.',
   },
+
+  // ─── IVT blood-pressure eligibility threshold ────────────────────────────
+  // Primary source for the ≤185/110 mmHg pre-treatment BP gate for IV
+  // thrombolysis (tPA and TNK). The threshold originates in the NINDS protocol
+  // and has remained unchanged through AHA/ASA 2013 → 2018 → 2019 → 2026.
+  // Using the 2019 update (PMID 31662037) because it contains the verbatim
+  // Table 5 eligibility-criteria text. The 2026 AHA/ASA guideline preserves
+  // the threshold without modification.
+  // review_window_months: 36 — foundational eligibility criterion, cross-
+  // version stable; still check at each AHA/ASA focused-update cycle.
+  // Clinical-reviewer approval: docs/reviews/clinical-PR-bp-alert.md (2026-05-27).
+  'aha-asa-ivt-bp-threshold': {
+    id: 'aha-asa-ivt-bp-threshold',
+    source: 'guideline',
+    title: '2019 AHA/ASA Guidelines for Early Management of Acute Ischemic Stroke — Table 5 (IV rtPA Eligibility)',
+    year: 2019,
+    pmid: '31662037',
+    url: 'https://doi.org/10.1161/STR.0000000000000211',
+    last_reviewed: '2026-05-27',
+    review_window_months: 36,
+    quoted_text: 'Blood pressure that cannot be controlled (e.g., >185/110 mm Hg). Treatment recommendation: lower blood pressure carefully so that the systolic blood pressure is ≤185 mm Hg and diastolic blood pressure is ≤110 mm Hg before starting IV rtPA.',
+  },
 };

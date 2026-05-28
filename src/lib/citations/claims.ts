@@ -908,4 +908,14 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
     description: 'Current/outcome context interpretation in the mRS calculator drawer: mRS 0–2 at 90 days = "good outcome" threshold used as primary endpoint in NINDS tPA trial, DAWN, DEFUSE-3, SELECT-2, and most acute stroke RCTs. mRS 3 = dependent but ambulatory; below good-outcome threshold. mRS 4–5 = poor functional outcome range.',
   },
+
+  // ─── PatientContextPanel — BP tPA/TNK threshold alert ───────────────────
+  // Alert chip below BP row when SBP ≥185 or DBP ≥110. Pre-treatment gate.
+  // Clinical-reviewer approved: docs/reviews/clinical-PR-bp-alert.md (2026-05-27).
+  'bp-ivt-threshold-185-110': {
+    id: 'bp-ivt-threshold-185-110',
+    citation_ids: ['aha-asa-ivt-bp-threshold', 'aha-asa-2026-4.6.1', 'aha-asa-2026-4.6.2'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Inline BP alert in PatientContextPanel: when SBP ≥185 OR DBP ≥110, surfaces "BP above tPA/TNK threshold — lower to ≤185/110 before treatment". Threshold per AHA/ASA 2019 Table 5 (PMID 31662037), confirmed unchanged in 2026 guideline. Applies to both alteplase and tenecteplase. Alert scoped to pre-treatment context only (PatientContextPanel is an initial-assessment surface).',
+  },
 };
