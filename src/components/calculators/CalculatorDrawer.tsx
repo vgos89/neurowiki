@@ -56,6 +56,14 @@ export interface CalculatorDrawerProps {
   /** State C collapsed stat text (e.g. "Moderate · 2-day risk 4.1%"). */
   collapsedStat: string;
   /**
+   * When true, applies the severity tokens (headerBg + statClass) to the
+   * collapsed bar as well as the expanded bar. Used by NIHSS so the bar
+   * shifts color (green → amber → orange → red) as the clinician scores
+   * items, drawing their eye to the result. Off by default so other
+   * calculators are unaffected.
+   */
+  colorCollapsed?: boolean;
+  /**
    * When true, applies `drawer-discovery-chevron` animation (NIHSS only).
    * Ignored when isExpanded is true.
    */
@@ -77,6 +85,7 @@ export const CalculatorDrawer: React.FC<CalculatorDrawerProps> = ({
   collapsedLabel = 'Interpretation',
   collapsedStat,
   justCompleted = false,
+  colorCollapsed = false,
   children,
 }) => {
   // State A: muted bar, non-interactive
@@ -169,19 +178,21 @@ export const CalculatorDrawer: React.FC<CalculatorDrawerProps> = ({
         className={`w-full flex items-center justify-between px-5 py-3.5 transition-colors ${
           isExpanded
             ? `${tokens.headerBg} ${tokens.headerHover}`
-            : 'bg-white hover:bg-slate-50'
+            : colorCollapsed
+              ? `${tokens.headerBg} hover:brightness-95`
+              : 'bg-white hover:bg-slate-50'
         }`}
       >
         <div className="flex items-center gap-3">
           <div className={
-            isExpanded
+            isExpanded || colorCollapsed
               ? tokens.labelClass
               : 'text-[10px] font-bold text-slate-400 uppercase tracking-widest'
           }>
             {collapsedLabel}
           </div>
           <div className={
-            isExpanded ? tokens.statClass : 'text-sm font-medium text-slate-900'
+            isExpanded || colorCollapsed ? tokens.statClass : 'text-sm font-medium text-slate-900'
           }>
             {collapsedStat}
           </div>

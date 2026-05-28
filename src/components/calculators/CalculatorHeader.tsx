@@ -35,8 +35,8 @@ export interface CalculatorHeaderProps {
   onBack: () => void;
   /** Reset handler. */
   onReset: () => void;
-  /** Copy handler. */
-  onCopy: () => void;
+  /** Copy handler. Optional — when omitted the Copy button is hidden. */
+  onCopy?: () => void;
   /** Optional Send-to text (string or lazy builder) for the share pill.
    *  When provided, a Send button appears next to Copy. On mobile it
    *  opens the native share sheet; on desktop it falls back to clipboard.
@@ -117,7 +117,7 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
     import('../../utils/analytics').then(({ trackCalculatorCopied }) => {
       trackCalculatorCopied(name);
     }).catch(() => { /* analytics is best-effort; never block UX */ });
-    onCopy();
+    onCopy?.();
   }, [name, onCopy]);
 
   const handleShareResult = React.useCallback(
@@ -210,13 +210,15 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
               </button>
             )}
 
-            <button
-              type="button"
-              onClick={handleCopy}
-              className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px] flex items-center"
-            >
-              Copy
-            </button>
+            {onCopy && (
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px] flex items-center"
+              >
+                Copy
+              </button>
+            )}
             {shareText && (
               <ShareButton
                 text={shareText}

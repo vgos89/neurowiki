@@ -20,7 +20,6 @@
  */
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Bookmark } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { getCase } from '../lib/cases/store';
@@ -29,8 +28,6 @@ import { CalculatorFooter } from '../components/calculators/CalculatorFooter';
 import { CalculatorTrialEvidence } from '../components/calculators/CalculatorTrialEvidence';
 import { CalculatorDrawer } from '../components/calculators/CalculatorDrawer';
 import { CalculatorToast } from '../components/calculators/CalculatorToast';
-import { ShareButton } from '../components/calculators/ShareButton';
-import { SaveCaseModal } from '../components/cases/SaveCaseModal';
 import { useFavorites } from '../hooks/useFavorites';
 import { useRecents } from '../hooks/useRecents';
 import { useDrawerState } from '../hooks/useDrawerState';
@@ -135,10 +132,6 @@ const NihssCalculator: React.FC = () => {
   // Set after the first successful save so subsequent saves overwrite the
   // same case row (preserves createdAt, bumps updatedAt). Cleared on Reset.
   const [currentCaseId, setCurrentCaseId] = useState<string | null>(null);
-
-  // Controls SaveCaseModal open state — lifted to page level after header
-  // redesign moved Save + Send into the secondaryRow (2026-05-27).
-  const [saveCaseModalOpen, setSaveCaseModalOpen] = useState(false);
 
   // Default-off toggle (audit BLOCKING nihss-emr-include-lvo, spec-compliant).
   // When on, buildText appends an extra line with the RACE-derived LVO label
@@ -646,150 +639,102 @@ const NihssCalculator: React.FC = () => {
         name="NIH Stroke Scale"
         headerRef={nihssHeaderRef}
         scoreDisplay={
-          <>
-            <span
-              className={`text-2xl font-bold tabular-nums leading-none ${SEVERITY_COLOR[severity]}`}
+          <div className="flex items-center gap-0.5 bg-slate-100 rounded-full p-0.5 mt-1">
+            <button
+              type="button"
+              onClick={() => setNihssMode('rapid')}
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                nihssMode === 'rapid'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-900'
+              }`}
             >
-              {total > 0 ? total : <span className="text-slate-300">—</span>}
-            </span>
-            {total > 0 && (
-              <span className="text-xs font-medium text-slate-400">/ 42</span>
-            )}
-          </>
-        }
-        scoreAriaLabel={`NIH Stroke Scale — total score ${total}, ${SEVERITY_LABEL[severity]}. ${nihssMode} mode.`}
-        secondaryRow={
-          <div className="flex items-center justify-between w-full">
-            {/* Left: Rapid / Detailed toggle */}
-            <div className="flex items-center gap-0.5 bg-slate-100 rounded-full p-0.5">
-              <button
-                type="button"
-                onClick={() => setNihssMode('rapid')}
-                className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                  nihssMode === 'rapid'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-              >
-                Rapid
-              </button>
-              <button
-                type="button"
-                onClick={() => setNihssMode('detailed')}
-                className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                  nihssMode === 'detailed'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-              >
-                Detailed
-              </button>
-            </div>
-            {/* Right: Save + Send */}
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => setSaveCaseModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-slate-600 hover:text-neuro-700 hover:bg-neuro-50 border border-slate-200 hover:border-neuro-200 transition-colors min-h-[36px]"
-                aria-label="Save case"
-              >
-                <Bookmark size={14} aria-hidden="true" />
-                <span>Save</span>
-              </button>
-              <ShareButton
-                text={buildText}
-                title="NIHSS"
-                onResult={(r) => {
-                  if (r === 'shared') showToast('Sent');
-                  else if (r === 'copied') showToast('Copied to clipboard');
-                }}
-                variant="pill"
-                label="Send"
-              />
-            </div>
+              Rapid
+            </button>
+            <button
+              type="button"
+              onClick={() => setNihssMode('detailed')}
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                nihssMode === 'detailed'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              Detailed
+            </button>
           </div>
         }
-        onBack={handleBack}
-        onReset={handleReset}
-        onCopy={copyNihss}
-        onFavToggle={handleFavToggle}
-        isFav={isFav}
-      />
-
-      {/* Save Case modal — moved from CalculatorHeader after header redesign
-          (Save + Send now live in the secondaryRow). 2026-05-27. */}
-      <SaveCaseModal
-        isOpen={saveCaseModalOpen}
-        onClose={() => setSaveCaseModalOpen(false)}
-        source={{ type: 'calculator', id: 'nihss', title: 'NIHSS' }}
-        buildData={({ saveAbsoluteTimestamps }): SavedCaseData => {
-          // Stroke timestamps — convert based on opt-in. Default = relative
-          // (HIPAA-friendly offsets from the earliest stamp). Opt-in =
-          // absolute Unix ms (clinician needs door-to-needle timing).
-          // Compliance-legal Finding 6 option (c), 2026-05-19.
-          const stamps: SavedCaseData['strokeTimestamps'] = {};
-          const filledEntries = STROKE_TIMESTAMP_EVENTS
-            .map((event) => [event, strokeTimestamps[event]] as const)
-            .filter((e): e is readonly [StrokeTimestampEvent, Date] => e[1] instanceof Date);
-          const hasAnyStamp = filledEntries.length > 0;
-          if (hasAnyStamp) {
-            if (saveAbsoluteTimestamps) {
-              for (const [event, d] of filledEntries) {
-                stamps[event] = d.getTime();
-              }
-            } else {
-              // Anchor = earliest stamp. All offsets are non-negative ms.
-              const anchorMs = Math.min(...filledEntries.map(([, d]) => d.getTime()));
-              for (const [event, d] of filledEntries) {
-                stamps[event] = d.getTime() - anchorMs;
+        scoreAriaLabel={`NIH Stroke Scale. ${nihssMode} mode.`}
+        saveCase={{
+          source: { type: 'calculator', id: 'nihss', title: 'NIHSS' },
+          buildData: ({ saveAbsoluteTimestamps }): SavedCaseData => {
+            const stamps: SavedCaseData['strokeTimestamps'] = {};
+            const filledEntries = STROKE_TIMESTAMP_EVENTS
+              .map((event) => [event, strokeTimestamps[event]] as const)
+              .filter((e): e is readonly [StrokeTimestampEvent, Date] => e[1] instanceof Date);
+            const hasAnyStamp = filledEntries.length > 0;
+            if (hasAnyStamp) {
+              if (saveAbsoluteTimestamps) {
+                for (const [event, d] of filledEntries) {
+                  stamps[event] = d.getTime();
+                }
+              } else {
+                const anchorMs = Math.min(...filledEntries.map(([, d]) => d.getTime()));
+                for (const [event, d] of filledEntries) {
+                  stamps[event] = d.getTime() - anchorMs;
+                }
               }
             }
-          }
-          // Patient context — under default (relative) mode, LKW absolute
-          // time-of-day is also identifying. Strip to day-only? V's design
-          // call is to keep LKW absolute because LKW is needed for tPA
-          // window decisions and is typically already documented in the
-          // chart; the marginal HIPAA exposure is acceptable per Finding 6
-          // option (c) scope (stroke timestamps only).
-          return {
-            nihss: {
-              score: total,
-              values: nihssValues,
-              mode: nihssMode,
-              severity: SEVERITY_LABEL[severity],
-              performedAt: performedAt ? performedAt.getTime() : undefined,
-            },
-            patientContext: {
-              lkw: patientContext.lkw instanceof Date
-                ? patientContext.lkw.getTime()
-                : patientContext.lkw,
-              systolic: patientContext.systolic || undefined,
-              diastolic: patientContext.diastolic || undefined,
-              glucose: patientContext.glucose || undefined,
-              anticoag: patientContext.anticoag.size > 0
-                ? Array.from(patientContext.anticoag)
+            return {
+              nihss: {
+                score: total,
+                values: nihssValues,
+                mode: nihssMode,
+                severity: SEVERITY_LABEL[severity],
+                performedAt: performedAt ? performedAt.getTime() : undefined,
+              },
+              patientContext: {
+                lkw: patientContext.lkw instanceof Date
+                  ? patientContext.lkw.getTime()
+                  : patientContext.lkw,
+                systolic: patientContext.systolic || undefined,
+                diastolic: patientContext.diastolic || undefined,
+                glucose: patientContext.glucose || undefined,
+                anticoag: patientContext.anticoag.size > 0
+                  ? Array.from(patientContext.anticoag)
+                  : undefined,
+                lastAnticoagDose:
+                  patientContext.lastAnticoagDose instanceof Date
+                    ? patientContext.lastAnticoagDose.getTime()
+                    : patientContext.lastAnticoagDose,
+                preExistingDeficits: patientContext.preExistingDeficits || undefined,
+              },
+              strokeTimestamps: hasAnyStamp ? stamps : undefined,
+              strokeTimestampsMode: hasAnyStamp
+                ? (saveAbsoluteTimestamps ? 'absolute' : 'relative')
                 : undefined,
-              lastAnticoagDose:
-                patientContext.lastAnticoagDose instanceof Date
-                  ? patientContext.lastAnticoagDose.getTime()
-                  : patientContext.lastAnticoagDose,
-              preExistingDeficits: patientContext.preExistingDeficits || undefined,
-            },
-            strokeTimestamps: hasAnyStamp ? stamps : undefined,
-            strokeTimestampsMode: hasAnyStamp
-              ? (saveAbsoluteTimestamps ? 'absolute' : 'relative')
-              : undefined,
-          };
+            };
+          },
+          existingCaseId: currentCaseId ?? undefined,
+          onSaved: (id) => {
+            setCurrentCaseId(id);
+            showToast(currentCaseId ? 'Case updated' : 'Case saved', 2000);
+          },
+          hasStrokeTimestamps: true,
+          hasFilledStrokeTimestamps: STROKE_TIMESTAMP_EVENTS.some(
+            (event) => strokeTimestamps[event] instanceof Date
+          ),
         }}
-        existingCaseId={currentCaseId ?? undefined}
-        onSaved={(id) => {
-          setCurrentCaseId(id);
-          showToast(currentCaseId ? 'Case updated' : 'Case saved', 2000);
+        shareText={buildText}
+        shareTitle="NIHSS"
+        onShareResult={(r) => {
+          if (r === 'shared') showToast('Sent');
+          else if (r === 'copied') showToast('Copied to clipboard');
         }}
-        hasStrokeTimestamps={true}
-        hasFilledStrokeTimestamps={STROKE_TIMESTAMP_EVENTS.some(
-          (event) => strokeTimestamps[event] instanceof Date
-        )}
+        onBack={handleBack}
+        onReset={handleReset}
+        onFavToggle={handleFavToggle}
+        isFav={isFav}
       />
 
       {/* ── Main scrollable content — §1.2 ───────────────────────────────── */}
@@ -903,6 +848,7 @@ const NihssCalculator: React.FC = () => {
         stateBText={{ label: `${answeredCount} of ${totalItems} selected`, hint: `${totalItems - answeredCount} more to complete` }}
         collapsedStat={`${SEVERITY_LABEL[severity]} · NIHSS ${total}`}
         justCompleted={justCompleted}
+        colorCollapsed={total > 0}
       >
         <DrawerContent />
       </CalculatorDrawer>
