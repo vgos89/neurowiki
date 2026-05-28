@@ -113,6 +113,20 @@ export interface Criterion {
   description: string;
   evaluate: (selected: Set<ChipId>) => boolean;
   contributingChips: ChipId[];
+  /**
+   * Definitional criterion — ICHD-3 treats this as gating, not contributory.
+   * When `true`, a failed evaluate() on this criterion DROPS the phenotype
+   * from `evaluateHeadachePhenotypes` results entirely (no full / probable /
+   * partial surfacing). Without the criterion satisfied, the diagnosis cannot
+   * hold even probabilistically.
+   *
+   * Added 2026-05-27 to fix V-reported false-positive: vestibular migraine
+   * surfaced at 50% on phonophobia alone (no vertigo). Root cause was equal-
+   * weighting gating criteria with contributory criteria. See
+   * `docs/reviews/clinical-headache-definitional-criteria-2026-05-27.md` for
+   * the per-criterion semantic-validity rationale.
+   */
+  definitional?: true;
 }
 
 export interface Phenotype {
@@ -125,6 +139,15 @@ export interface Phenotype {
    * phenotype does not surface in results until the gate chip is selected.
    * Hemicrania continua + paroxysmal hemicrania both gate on
    * `indo-tried-complete` per ICHD-3 §3.4 D / §3.2 E (definitional).
+   *
+   * NOTE on overlap with `Criterion.definitional` (architect §17.1
+   * follow-up 1, 2026-05-27): `hiddenUntilTrial.gateChip` is semantically
+   * "the gate chip is a definitional criterion of this phenotype." HC's hc-D
+   * and PH's ph-E are both `hiddenUntilTrial.gateChip` AND tagged
+   * `definitional: true`. Both checks are idempotent — failed definitional
+   * drops the phenotype; missing gate chip also drops it. A future refactor
+   * may unify these into a single mechanism. Do NOT add a fifth phenotype-
+   * suppression mechanism without considering unification first.
    */
   hiddenUntilTrial?: { gateChip: ChipId };
   suppressIfContinuous?: boolean;
@@ -389,10 +412,13 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       'Bilateral pressing headache can still be migraine if it carries nausea or the photo+phono pair. Do not exclude migraine on bilateral location alone.',
     ],
     criteria: [
+      // mig-A intentionally NOT definitional: ICHD-3 §1.5 Probable migraine
+      // explicitly covers patients with <5 attacks. Flagging mig-A definitional
+      // would block the §1.5 pathway (clinical-reviewer §17.2 2026-05-27).
       { id: 'mig-A', label: 'At least 5 lifetime attacks', description: 'ICHD-3 1.1 A — diagnosis requires ≥5 attacks fulfilling B–D.', evaluate: s => has(s, 'attacks-5-to-10') || has(s, 'attacks-gt-10'), contributingChips: ['attacks-5-to-10', 'attacks-gt-10'] },
-      { id: 'mig-B', label: 'Duration 4 to 72 hours (untreated)', description: 'ICHD-3 1.1 B — duration 4–72 h untreated or unsuccessfully treated.', evaluate: s => has(s, 'dur-4-to-72-hours'), contributingChips: ['dur-4-to-72-hours'] },
+      { id: 'mig-B', label: 'Duration 4 to 72 hours (untreated)', description: 'ICHD-3 1.1 B — duration 4–72 h untreated or unsuccessfully treated.', evaluate: s => has(s, 'dur-4-to-72-hours'), contributingChips: ['dur-4-to-72-hours'], definitional: true },
       { id: 'mig-C', label: '≥2 of: unilateral, pulsating, moderate/severe, aggravated by activity', description: 'ICHD-3 1.1 C — ≥2 of 4 character features.', evaluate: s => migraineCharacterCount(s) >= 2, contributingChips: MIGRAINE_C_CHARACTER },
-      { id: 'mig-D', label: 'Nausea/vomiting OR (photophobia AND phonophobia)', description: 'ICHD-3 1.1 D — ≥1 of: nausea and/or vomiting; photophobia AND phonophobia together.', evaluate: s => has(s, 'sym-nausea-mild') || has(s, 'sym-nausea-moderate-severe') || has(s, 'sym-vomiting') || (has(s, 'sym-photophobia') && has(s, 'sym-phonophobia')), contributingChips: ['sym-nausea-mild', 'sym-nausea-moderate-severe', 'sym-vomiting', 'sym-photophobia', 'sym-phonophobia'] },
+      { id: 'mig-D', label: 'Nausea/vomiting OR (photophobia AND phonophobia)', description: 'ICHD-3 1.1 D — ≥1 of: nausea and/or vomiting; photophobia AND phonophobia together.', evaluate: s => has(s, 'sym-nausea-mild') || has(s, 'sym-nausea-moderate-severe') || has(s, 'sym-vomiting') || (has(s, 'sym-photophobia') && has(s, 'sym-phonophobia')), contributingChips: ['sym-nausea-mild', 'sym-nausea-moderate-severe', 'sym-vomiting', 'sym-photophobia', 'sym-phonophobia'], definitional: true },
     ],
   },
 
@@ -409,7 +435,7 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
     ],
     criteria: [
       { id: 'aura-A', label: 'At least 2 attacks fulfilling B and C', description: 'ICHD-3 1.2 A — ≥2 attacks of aura.', evaluate: s => has(s, 'attacks-5-to-10') || has(s, 'attacks-gt-10') || has(s, 'attacks-lt-5'), contributingChips: ['attacks-lt-5', 'attacks-5-to-10', 'attacks-gt-10'] },
-      { id: 'aura-B', label: '≥1 fully reversible aura symptom (visual, sensory, speech, motor, brainstem, or retinal)', description: 'ICHD-3 1.2 B — one or more fully reversible aura symptoms.', evaluate: s => hasAny(s, ['aura-visual', 'aura-sensory', 'aura-speech', 'aura-motor', 'aura-brainstem', 'aura-retinal']) && has(s, 'aura-fully-reversible'), contributingChips: ['aura-visual', 'aura-sensory', 'aura-speech', 'aura-motor', 'aura-brainstem', 'aura-retinal', 'aura-fully-reversible'] },
+      { id: 'aura-B', label: '≥1 fully reversible aura symptom (visual, sensory, speech, motor, brainstem, or retinal)', description: 'ICHD-3 1.2 B — one or more fully reversible aura symptoms.', evaluate: s => hasAny(s, ['aura-visual', 'aura-sensory', 'aura-speech', 'aura-motor', 'aura-brainstem', 'aura-retinal']) && has(s, 'aura-fully-reversible'), contributingChips: ['aura-visual', 'aura-sensory', 'aura-speech', 'aura-motor', 'aura-brainstem', 'aura-retinal', 'aura-fully-reversible'], definitional: true },
       { id: 'aura-C', label: '≥3 of 6 aura characteristics', description: 'ICHD-3 1.2 C — at least 3 of: spreading ≥5 min, ≥2 symptoms in succession, each 5–60 min, unilateral, positive features, headache within 60 min.', evaluate: s => auraCharacteristicCount(s) >= 3, contributingChips: ['aura-spread-ge-5min', 'aura-multi-symptoms-succession', 'aura-each-5-to-60min', 'aura-positive-symptoms', 'aura-headache-within-60min', 'loc-unilateral'] },
     ],
   },
@@ -426,9 +452,15 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
     ],
     criteria: [
       { id: 'tth-A', label: '≥10 episodes on 1–14 days/month for >3 months', description: 'ICHD-3 2.2 A — ≥10 episodes on 1–14 days/month, pattern ≥3 months.', evaluate: s => (has(s, 'attacks-gt-10')) && (has(s, 'freq-1-4-per-month') || has(s, 'freq-5-14-per-month')) && has(s, 'pattern-ge-3-months'), contributingChips: ['attacks-gt-10', 'freq-1-4-per-month', 'freq-5-14-per-month', 'pattern-ge-3-months'] },
-      { id: 'tth-B', label: 'Duration 30 minutes to 7 days', description: 'ICHD-3 2.2 B — attack duration 30 min to 7 days.', evaluate: s => has(s, 'dur-30min-to-7days'), contributingChips: ['dur-30min-to-7days'] },
+      { id: 'tth-B', label: 'Duration 30 minutes to 7 days', description: 'ICHD-3 2.2 B — attack duration 30 min to 7 days.', evaluate: s => has(s, 'dur-30min-to-7days'), contributingChips: ['dur-30min-to-7days'], definitional: true },
       { id: 'tth-C', label: '≥2 of: bilateral, pressing/tightening, mild-moderate, NOT aggravated', description: 'ICHD-3 2.2 C — ≥2 of 4 character features.', evaluate: s => TTH_C_CHARACTER(s) >= 2, contributingChips: ['loc-bilateral', 'qual-pressing-tightening', 'sev-mild', 'sev-moderate', 'act-not-aggravated'] },
-      { id: 'tth-D', label: 'No nausea/vomiting; ≤1 of photophobia or phonophobia', description: 'ICHD-3 2.2 D — exclude nausea/vomiting and allow at most one of photo/phono.', evaluate: s => !has(s, 'sym-nausea-mild') && !has(s, 'sym-nausea-moderate-severe') && !has(s, 'sym-vomiting') && countOf(s, ['sym-photophobia', 'sym-phonophobia']) <= 1, contributingChips: ['sym-nausea-mild', 'sym-nausea-moderate-severe', 'sym-vomiting', 'sym-photophobia', 'sym-phonophobia'] },
+      // tth-D is a pure exclusion (no positive chips required). Flagging
+      // definitional with all-negative contributing chips would short-circuit
+      // empty input. The `hasPositiveEvidence` gate in the evaluator already
+      // prevents that path from triggering, but tth-D fires `true` on empty
+      // input — that's correct behavior (no symptoms = exclusion satisfied)
+      // and definitional flag is safe.
+      { id: 'tth-D', label: 'No nausea/vomiting; ≤1 of photophobia or phonophobia', description: 'ICHD-3 2.2 D — exclude nausea/vomiting and allow at most one of photo/phono.', evaluate: s => !has(s, 'sym-nausea-mild') && !has(s, 'sym-nausea-moderate-severe') && !has(s, 'sym-vomiting') && countOf(s, ['sym-photophobia', 'sym-phonophobia']) <= 1, contributingChips: ['sym-nausea-mild', 'sym-nausea-moderate-severe', 'sym-vomiting', 'sym-photophobia', 'sym-phonophobia'], definitional: true },
     ],
   },
 
@@ -440,14 +472,14 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
     teachPearl:
       'Chronic TTH is the chronic counterpart to 2.2 — ≥15 days/month, pattern ≥3 months, with the same B–D character features. Chronic TTH allows mild nausea OR a single photo/phono symptom but not moderate-severe nausea or vomiting.',
     criteria: [
-      { id: 'ctth-A', label: '≥15 headache days/month for >3 months', description: 'ICHD-3 2.3 A — headache on ≥15 days/month, pattern ≥3 months.', evaluate: s => has(s, 'freq-ge-15-per-month') && has(s, 'pattern-ge-3-months'), contributingChips: ['freq-ge-15-per-month', 'pattern-ge-3-months'] },
-      { id: 'ctth-B', label: 'Hours to continuous, or unremitting', description: 'ICHD-3 2.3 B — attack duration hours to days, or unremitting.', evaluate: s => has(s, 'dur-30min-to-7days') || has(s, 'dur-gt-72-hours') || has(s, 'dur-continuous'), contributingChips: ['dur-30min-to-7days', 'dur-gt-72-hours', 'dur-continuous'] },
+      { id: 'ctth-A', label: '≥15 headache days/month for >3 months', description: 'ICHD-3 2.3 A — headache on ≥15 days/month, pattern ≥3 months.', evaluate: s => has(s, 'freq-ge-15-per-month') && has(s, 'pattern-ge-3-months'), contributingChips: ['freq-ge-15-per-month', 'pattern-ge-3-months'], definitional: true },
+      { id: 'ctth-B', label: 'Hours to continuous, or unremitting', description: 'ICHD-3 2.3 B — attack duration hours to days, or unremitting.', evaluate: s => has(s, 'dur-30min-to-7days') || has(s, 'dur-gt-72-hours') || has(s, 'dur-continuous'), contributingChips: ['dur-30min-to-7days', 'dur-gt-72-hours', 'dur-continuous'], definitional: true },
       { id: 'ctth-C', label: '≥2 of: bilateral, pressing/tightening, mild-moderate, NOT aggravated', description: 'ICHD-3 2.3 C — same as 2.2 C.', evaluate: s => TTH_C_CHARACTER(s) >= 2, contributingChips: ['loc-bilateral', 'qual-pressing-tightening', 'sev-mild', 'sev-moderate', 'act-not-aggravated'] },
       // ctth-D — verbatim ICHD-3 §2.3 D fix (clinical-reviewer 2026-05-25 §17.2 Condition 5):
       // "Both of the following: 1) no more than one of photophobia, phonophobia or mild nausea;
       // 2) neither moderate or severe nausea nor vomiting."
       // The ≤1 pool combines mild nausea + photo + phono, NOT separately.
-      { id: 'ctth-D', label: '≤1 of {mild nausea, photophobia, phonophobia}; no moderate/severe nausea; no vomiting', description: 'ICHD-3 2.3 D — both: (1) no more than one of photophobia, phonophobia or mild nausea; (2) neither moderate or severe nausea nor vomiting.', evaluate: s => !has(s, 'sym-nausea-moderate-severe') && !has(s, 'sym-vomiting') && countOf(s, ['sym-nausea-mild', 'sym-photophobia', 'sym-phonophobia']) <= 1, contributingChips: ['sym-nausea-mild', 'sym-nausea-moderate-severe', 'sym-vomiting', 'sym-photophobia', 'sym-phonophobia'] },
+      { id: 'ctth-D', label: '≤1 of {mild nausea, photophobia, phonophobia}; no moderate/severe nausea; no vomiting', description: 'ICHD-3 2.3 D — both: (1) no more than one of photophobia, phonophobia or mild nausea; (2) neither moderate or severe nausea nor vomiting.', evaluate: s => !has(s, 'sym-nausea-moderate-severe') && !has(s, 'sym-vomiting') && countOf(s, ['sym-nausea-mild', 'sym-photophobia', 'sym-phonophobia']) <= 1, contributingChips: ['sym-nausea-mild', 'sym-nausea-moderate-severe', 'sym-vomiting', 'sym-photophobia', 'sym-phonophobia'], definitional: true },
     ],
   },
 
@@ -464,8 +496,16 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
     ],
     criteria: [
       { id: 'cluster-A', label: 'At least 5 attacks', description: 'ICHD-3 3.1 A — ≥5 attacks fulfilling B–D.', evaluate: s => has(s, 'attacks-5-to-10') || has(s, 'attacks-gt-10'), contributingChips: ['attacks-5-to-10', 'attacks-gt-10'] },
-      { id: 'cluster-B', label: 'Severe/very severe unilateral orbital, supraorbital, or temporal pain lasting 15–180 minutes', description: 'ICHD-3 3.1 B — severe-very severe unilateral orbital/supraorbital/temporal, 15–180 min untreated.', evaluate: s => has(s, 'loc-unilateral') && has(s, 'loc-orbital-temporal') && (has(s, 'sev-severe') || has(s, 'sev-very-severe')) && has(s, 'dur-15-to-180-min'), contributingChips: ['loc-unilateral', 'loc-orbital-temporal', 'sev-severe', 'sev-very-severe', 'dur-15-to-180-min'] },
-      { id: 'cluster-C', label: 'Ipsilateral autonomic features OR restlessness/agitation', description: 'ICHD-3 3.1 C — either or both of ipsilateral cranial autonomic symptoms; restlessness/agitation.', evaluate: s => has(s, 'sym-autonomic-ipsilateral') || has(s, 'sym-restlessness'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-restlessness'] },
+      { id: 'cluster-B', label: 'Severe/very severe unilateral orbital, supraorbital, or temporal pain lasting 15–180 minutes', description: 'ICHD-3 3.1 B — severe-very severe unilateral orbital/supraorbital/temporal, 15–180 min untreated.', evaluate: s => has(s, 'loc-unilateral') && has(s, 'loc-orbital-temporal') && (has(s, 'sev-severe') || has(s, 'sev-very-severe')) && has(s, 'dur-15-to-180-min'), contributingChips: ['loc-unilateral', 'loc-orbital-temporal', 'sev-severe', 'sev-very-severe', 'dur-15-to-180-min'], definitional: true },
+      { id: 'cluster-C', label: 'Ipsilateral autonomic features OR restlessness/agitation', description: 'ICHD-3 3.1 C — either or both of ipsilateral cranial autonomic symptoms; restlessness/agitation.', evaluate: s => has(s, 'sym-autonomic-ipsilateral') || has(s, 'sym-restlessness'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-restlessness'], definitional: true },
+      // cluster-D (frequency criterion) is a hard ICHD-3 §3.1 D criterion but
+      // is INTENTIONALLY NOT flagged definitional in this evaluator. Rationale
+      // (clinical-reviewer §17.2 Condition 2, 2026-05-27): clinic encounters
+      // commonly occur between bouts when the patient is pain-free; bout-
+      // frequency cannot be surfaced via chips at such encounters. Flagging D
+      // definitional would block diagnosis at a between-bouts visit where the
+      // history is clear. Clinician must verify cluster-D from history before
+      // confirming the diagnosis at confirmation stage.
       { id: 'cluster-D', label: 'Frequency 1 every other day to 8/day during bouts', description: 'ICHD-3 3.1 D — frequency 1 every other day to 8/day during active periods.', evaluate: s => has(s, 'freq-cluster-bout'), contributingChips: ['freq-cluster-bout'] },
     ],
   },
@@ -481,10 +521,12 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
     teachPearl:
       'Hemicrania continua is a continuous, strictly unilateral headache with exacerbations, ipsilateral autonomic features or restlessness, and ABSOLUTE response to therapeutic indomethacin. The indomethacin response is the diagnostic test — without it, the diagnosis cannot be made (Goadsby Continuum 2024).',
     criteria: [
-      { id: 'hc-A', label: 'Continuous strictly unilateral headache present >3 months', description: 'ICHD-3 3.4 A — unilateral continuous headache, >3 months.', evaluate: s => has(s, 'loc-unilateral') && has(s, 'dur-continuous') && has(s, 'pattern-ge-3-months'), contributingChips: ['loc-unilateral', 'dur-continuous', 'pattern-ge-3-months'] },
+      { id: 'hc-A', label: 'Continuous strictly unilateral headache present >3 months', description: 'ICHD-3 3.4 A — unilateral continuous headache, >3 months.', evaluate: s => has(s, 'loc-unilateral') && has(s, 'dur-continuous') && has(s, 'pattern-ge-3-months'), contributingChips: ['loc-unilateral', 'dur-continuous', 'pattern-ge-3-months'], definitional: true },
       { id: 'hc-B', label: 'Exacerbations of moderate or greater intensity', description: 'ICHD-3 3.4 B — exacerbations of moderate or greater intensity.', evaluate: s => has(s, 'sev-moderate') || has(s, 'sev-severe'), contributingChips: ['sev-moderate', 'sev-severe'] },
-      { id: 'hc-C', label: 'Ipsilateral autonomic features OR restlessness/movement aggravation', description: 'ICHD-3 3.4 C — ipsilateral cranial autonomic symptoms and/or restlessness or aggravation by movement.', evaluate: s => has(s, 'sym-autonomic-ipsilateral') || has(s, 'sym-restlessness'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-restlessness'] },
-      { id: 'hc-D', label: 'Absolute response to therapeutic-dose indomethacin', description: 'ICHD-3 3.4 D — definitional. Complete indomethacin response is required.', evaluate: s => has(s, 'indo-tried-complete'), contributingChips: ['indo-tried-complete'] },
+      { id: 'hc-C', label: 'Ipsilateral autonomic features OR restlessness/movement aggravation', description: 'ICHD-3 3.4 C — ipsilateral cranial autonomic symptoms and/or restlessness or aggravation by movement.', evaluate: s => has(s, 'sym-autonomic-ipsilateral') || has(s, 'sym-restlessness'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-restlessness'], definitional: true },
+      // hc-D: definitional AND already enforced via hiddenUntilTrial gate.
+      // Both checks are idempotent (architect §17.1 follow-up 2, 2026-05-27).
+      { id: 'hc-D', label: 'Absolute response to therapeutic-dose indomethacin', description: 'ICHD-3 3.4 D — definitional. Complete indomethacin response is required.', evaluate: s => has(s, 'indo-tried-complete'), contributingChips: ['indo-tried-complete'], definitional: true },
     ],
   },
 
@@ -499,12 +541,17 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
     teachPearl:
       'NDPH is defined by the patient being able to pinpoint the moment the headache began and it never resolving since. Onset to continuous and unremitting must occur within 24 hours, and the pattern must persist >3 months. NDPH is a diagnosis of exclusion — workup for secondary causes is mandatory.',
     criteria: [
-      { id: 'ndph-A', label: 'Persistent headache >3 months', description: 'ICHD-3 3.3 A — persistent headache, >3 months.', evaluate: s => has(s, 'dur-continuous') && has(s, 'pattern-ge-3-months'), contributingChips: ['dur-continuous', 'pattern-ge-3-months'] },
+      { id: 'ndph-A', label: 'Persistent headache >3 months', description: 'ICHD-3 4.10 A — persistent headache, >3 months.', evaluate: s => has(s, 'dur-continuous') && has(s, 'pattern-ge-3-months'), contributingChips: ['dur-continuous', 'pattern-ge-3-months'], definitional: true },
       // ndph-B: the "within 24 hours" temporal constraint is preserved in
       // the displayed criterion text but cannot be enforced through chip
       // selection alone (chip vocabulary captures pattern onset window in
       // months, not hours). Clinical confirmation with patient required.
-      { id: 'ndph-B', label: 'Distinct, clearly-remembered onset; becomes continuous and unremitting within 24 hours', description: 'ICHD-3 3.3 B — distinct and clearly-remembered onset, with pain becoming continuous and unremitting within 24 hours. Confirm with patient that they can pinpoint the exact day or hour of onset.', evaluate: s => has(s, 'onset-new-within-3-months') || has(s, 'onset-single-sudden'), contributingChips: ['onset-new-within-3-months', 'onset-single-sudden'] },
+      //
+      // 2026-05-27 fix (clinical-reviewer §17.2): `onset-single-sudden` is
+      // thunderclap territory (SNNOOP10), NOT NDPH onset. ICHD-3 §4.10 B
+      // requires a *transition to continuous* within 24 h, not a single
+      // sudden attack. Chip dropped from the evaluator disjunction.
+      { id: 'ndph-B', label: 'Distinct, clearly-remembered onset; becomes continuous and unremitting within 24 hours', description: 'ICHD-3 4.10 B — distinct and clearly-remembered onset, with pain becoming continuous and unremitting within 24 hours. Confirm with patient that they can pinpoint the exact day or hour of onset.', evaluate: s => has(s, 'onset-new-within-3-months'), contributingChips: ['onset-new-within-3-months'], definitional: true },
     ],
   },
 
@@ -521,7 +568,10 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
     teachPearl:
       'Vestibular migraine lives in the ICHD-3 appendix as research criteria, not main classification. Diagnostic features: ≥5 vertigo episodes of moderate or severe intensity lasting 5 minutes to 72 hours, current or past history of 1.1/1.2 migraine, and ≥1 migraine feature (headache, photophobia/phonophobia, visual aura) during at least half of the vertigo episodes. The Bárány Society / IHS joint criteria are widely used clinically despite appendix status.',
     criteria: [
-      { id: 'vm-A', label: 'Vertigo episodes with migrainous symptoms', description: 'Appendix A1.6.6 — vertigo episodes accompanied by migraine features (photophobia, phonophobia, visual aura, headache).', evaluate: s => has(s, 'vest-vertigo-migrainous'), contributingChips: ['vest-vertigo-migrainous'] },
+      // vm-A: definitional. Closes V-reported bug (2026-05-27) where
+      // vestibular migraine surfaced at 50% on phonophobia alone (no
+      // vertigo). Without vertigo episodes, A1.6.6 cannot hold.
+      { id: 'vm-A', label: 'Vertigo episodes with migrainous symptoms', description: 'Appendix A1.6.6 — vertigo episodes accompanied by migraine features (photophobia, phonophobia, visual aura, headache).', evaluate: s => has(s, 'vest-vertigo-migrainous'), contributingChips: ['vest-vertigo-migrainous'], definitional: true },
       { id: 'vm-B', label: 'Migrainous features (photophobia/phonophobia, visual aura)', description: 'Appendix A1.6.6 — at least one migrainous feature during episodes.', evaluate: s => has(s, 'sym-photophobia') || has(s, 'sym-phonophobia') || has(s, 'aura-visual'), contributingChips: ['sym-photophobia', 'sym-phonophobia', 'aura-visual'] },
     ],
   },
@@ -541,9 +591,13 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       'Do not confuse Chronic migraine (≥8 migraine-feature days/month + ≥15 headache days) with Chronic TTH (≥15 days, no migraine features). The triptan-response disjunction in criterion C catches treatment-responsive days that the patient may not self-identify as migraine.',
     ],
     criteria: [
-      { id: 'cm-A', label: 'Headache on ≥15 days/month for >3 months', description: 'ICHD-3 1.3 A — headache (tension-type-like and/or migraine-like) on ≥15 days/month, for >3 months.', evaluate: s => has(s, 'freq-ge-15-per-month') && has(s, 'pattern-ge-3-months'), contributingChips: ['freq-ge-15-per-month', 'pattern-ge-3-months'] },
-      { id: 'cm-B', label: '≥5 prior attacks fulfilling 1.1 or 1.2 criteria', description: 'ICHD-3 1.3 B — patient has had at least five attacks fulfilling criteria for 1.1 Migraine without aura or 1.2 Migraine with aura.', evaluate: s => has(s, 'attacks-5-to-10') || has(s, 'attacks-gt-10'), contributingChips: ['attacks-5-to-10', 'attacks-gt-10'] },
-      { id: 'cm-C', label: '≥8 days/month meet migraine criteria OR triptan-responsive', description: 'ICHD-3 1.3 C — on ≥8 days/month for >3 months, fulfilling either: C.1 criteria C and D for 1.1 Migraine without aura, C.2 criteria B and C for 1.2 Migraine with aura, or C.3 believed by the patient to be migraine at onset and relieved by a triptan or ergot derivative.', evaluate: s => has(s, 'migraine-features-ge-8-per-month') || has(s, 'triptan-response-positive'), contributingChips: ['migraine-features-ge-8-per-month', 'triptan-response-positive'] },
+      { id: 'cm-A', label: 'Headache on ≥15 days/month for >3 months', description: 'ICHD-3 1.3 A — headache (tension-type-like and/or migraine-like) on ≥15 days/month, for >3 months.', evaluate: s => has(s, 'freq-ge-15-per-month') && has(s, 'pattern-ge-3-months'), contributingChips: ['freq-ge-15-per-month', 'pattern-ge-3-months'], definitional: true },
+      // cm-B definitional per clinical-reviewer §17.2 Condition 1
+      // (2026-05-27): ICHD-3 1.3 B is a "must have had" gate. Test asserts
+      // cm-A (chronicity) implies cm-B (lifetime attack count) in chip
+      // vocabulary so flagging definitional does not produce false negatives.
+      { id: 'cm-B', label: '≥5 prior attacks fulfilling 1.1 or 1.2 criteria', description: 'ICHD-3 1.3 B — patient has had at least five attacks fulfilling criteria for 1.1 Migraine without aura or 1.2 Migraine with aura.', evaluate: s => has(s, 'attacks-5-to-10') || has(s, 'attacks-gt-10'), contributingChips: ['attacks-5-to-10', 'attacks-gt-10'], definitional: true },
+      { id: 'cm-C', label: '≥8 days/month meet migraine criteria OR triptan-responsive', description: 'ICHD-3 1.3 C — on ≥8 days/month for >3 months, fulfilling either: C.1 criteria C and D for 1.1 Migraine without aura, C.2 criteria B and C for 1.2 Migraine with aura, or C.3 believed by the patient to be migraine at onset and relieved by a triptan or ergot derivative.', evaluate: s => has(s, 'migraine-features-ge-8-per-month') || has(s, 'triptan-response-positive'), contributingChips: ['migraine-features-ge-8-per-month', 'triptan-response-positive'], definitional: true },
     ],
   },
 
@@ -560,10 +614,16 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       'Paroxysmal hemicrania attacks are severe unilateral orbital/supraorbital/temporal pain 2–30 min, ≥5/day for more than half the time, with ipsilateral autonomic features or restlessness, and absolute response to indomethacin. Same indomethacin protocol as hemicrania continua: 25 mg TID titrating to 50 mg TID (max 150 mg/day per Goadsby Continuum 2024).',
     criteria: [
       { id: 'ph-A', label: '≥20 attacks fulfilling B–E', description: 'ICHD-3 3.2 A — at least 20 attacks fulfilling criteria B–E.', evaluate: s => has(s, 'attacks-ge-20'), contributingChips: ['attacks-ge-20'] },
-      { id: 'ph-B', label: 'Severe unilateral orbital/supraorbital/temporal pain, 2–30 minutes', description: 'ICHD-3 3.2 B — severe unilateral orbital, supraorbital, and/or temporal pain lasting 2–30 minutes.', evaluate: s => has(s, 'loc-unilateral') && has(s, 'loc-orbital-temporal') && (has(s, 'sev-severe') || has(s, 'sev-very-severe')) && has(s, 'dur-2-to-30-min'), contributingChips: ['loc-unilateral', 'loc-orbital-temporal', 'sev-severe', 'sev-very-severe', 'dur-2-to-30-min'] },
-      { id: 'ph-C', label: 'Ipsilateral autonomic features OR restlessness', description: 'ICHD-3 3.2 C — either or both of ipsilateral cranial autonomic symptoms; restlessness or agitation.', evaluate: s => has(s, 'sym-autonomic-ipsilateral') || has(s, 'sym-restlessness'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-restlessness'] },
+      { id: 'ph-B', label: 'Severe unilateral orbital/supraorbital/temporal pain, 2–30 minutes', description: 'ICHD-3 3.2 B — severe unilateral orbital, supraorbital, and/or temporal pain lasting 2–30 minutes.', evaluate: s => has(s, 'loc-unilateral') && has(s, 'loc-orbital-temporal') && (has(s, 'sev-severe') || has(s, 'sev-very-severe')) && has(s, 'dur-2-to-30-min'), contributingChips: ['loc-unilateral', 'loc-orbital-temporal', 'sev-severe', 'sev-very-severe', 'dur-2-to-30-min'], definitional: true },
+      { id: 'ph-C', label: 'Ipsilateral autonomic features OR restlessness', description: 'ICHD-3 3.2 C — either or both of ipsilateral cranial autonomic symptoms; restlessness or agitation.', evaluate: s => has(s, 'sym-autonomic-ipsilateral') || has(s, 'sym-restlessness'), contributingChips: ['sym-autonomic-ipsilateral', 'sym-restlessness'], definitional: true },
+      // ph-D (frequency criterion) is a hard ICHD-3 §3.2 D criterion but is
+      // INTENTIONALLY NOT flagged definitional (clinical-reviewer §17.2
+      // Condition 2, 2026-05-27): same rationale as cluster-D — clinic
+      // encounters between bouts cannot surface bout-frequency via chips.
+      // Clinician must verify ph-D from history before confirming diagnosis.
       { id: 'ph-D', label: '>5 attacks per day for more than half the time', description: 'ICHD-3 3.2 D — attack frequency >5/day for more than half of the time when the disorder is active.', evaluate: s => has(s, 'freq-gt-5-per-day'), contributingChips: ['freq-gt-5-per-day'] },
-      { id: 'ph-E', label: 'Absolute response to therapeutic-dose indomethacin', description: 'ICHD-3 3.2 E — definitional. Prevented absolutely by therapeutic doses of indomethacin.', evaluate: s => has(s, 'indo-tried-complete'), contributingChips: ['indo-tried-complete'] },
+      // ph-E: definitional AND already enforced via hiddenUntilTrial gate.
+      { id: 'ph-E', label: 'Absolute response to therapeutic-dose indomethacin', description: 'ICHD-3 3.2 E — definitional. Prevented absolutely by therapeutic doses of indomethacin.', evaluate: s => has(s, 'indo-tried-complete'), contributingChips: ['indo-tried-complete'], definitional: true },
     ],
   },
 
@@ -578,8 +638,8 @@ export const HEADACHE_PHENOTYPES: Phenotype[] = [
       'SUNCT and SUNA are very-short-attack TACs (1–600 seconds). SUNCT (3.3.1) requires both conjunctival injection and lacrimation; SUNA (3.3.2) requires one or neither of those plus other cranial autonomic features. First-line preventive is lamotrigine (Burish Continuum 2024); carbamazepine is second-line.',
     criteria: [
       { id: 'sunct-A', label: '≥20 attacks fulfilling B–D', description: 'ICHD-3 3.3 A — at least 20 attacks fulfilling criteria B–D.', evaluate: s => has(s, 'attacks-ge-20'), contributingChips: ['attacks-ge-20'] },
-      { id: 'sunct-B', label: 'Moderate–severe unilateral trigeminal-distribution pain, 1–600 seconds', description: 'ICHD-3 3.3 B — moderate or severe unilateral head pain, with orbital, supraorbital, temporal and/or other trigeminal-distribution location, lasting 1–600 seconds.', evaluate: s => has(s, 'loc-unilateral') && (has(s, 'sev-moderate') || has(s, 'sev-severe') || has(s, 'sev-very-severe')) && has(s, 'dur-1-to-600-sec'), contributingChips: ['loc-unilateral', 'sev-moderate', 'sev-severe', 'sev-very-severe', 'dur-1-to-600-sec'] },
-      { id: 'sunct-C', label: '≥1 ipsilateral cranial autonomic feature', description: 'ICHD-3 3.3 C — accompanied by at least one ipsilateral cranial autonomic symptom (conjunctival injection, lacrimation, nasal congestion, rhinorrhoea, eyelid oedema, forehead/facial sweating, miosis, ptosis).', evaluate: s => has(s, 'sym-autonomic-ipsilateral'), contributingChips: ['sym-autonomic-ipsilateral'] },
+      { id: 'sunct-B', label: 'Moderate–severe unilateral trigeminal-distribution pain, 1–600 seconds', description: 'ICHD-3 3.3 B — moderate or severe unilateral head pain, with orbital, supraorbital, temporal and/or other trigeminal-distribution location, lasting 1–600 seconds.', evaluate: s => has(s, 'loc-unilateral') && (has(s, 'sev-moderate') || has(s, 'sev-severe') || has(s, 'sev-very-severe')) && has(s, 'dur-1-to-600-sec'), contributingChips: ['loc-unilateral', 'sev-moderate', 'sev-severe', 'sev-very-severe', 'dur-1-to-600-sec'], definitional: true },
+      { id: 'sunct-C', label: '≥1 ipsilateral cranial autonomic feature', description: 'ICHD-3 3.3 C — accompanied by at least one ipsilateral cranial autonomic symptom (conjunctival injection, lacrimation, nasal congestion, rhinorrhoea, eyelid oedema, forehead/facial sweating, miosis, ptosis).', evaluate: s => has(s, 'sym-autonomic-ipsilateral'), contributingChips: ['sym-autonomic-ipsilateral'], definitional: true },
       { id: 'sunct-D', label: '≥1 attack per day during the active period', description: 'ICHD-3 3.3 D — attack frequency at least one per day for more than half the time when the disorder is active.', evaluate: s => has(s, 'freq-ge-1-per-day'), contributingChips: ['freq-ge-1-per-day'] },
     ],
   },
@@ -667,6 +727,20 @@ export function evaluateHeadachePhenotypes(selected: Set<ChipId>): PhenotypeMatc
     let hasPositiveEvidence = false;
     for (const id of allContributingChips) if (selected.has(id)) { hasPositiveEvidence = true; break; }
     if (!hasPositiveEvidence) continue;
+
+    // Definitional gate (2026-05-27): if ANY criterion tagged `definitional`
+    // evaluates to false, drop the phenotype from results entirely. ICHD-3
+    // treats these as phenotype-defining; without them the diagnosis cannot
+    // hold even probabilistically. See Criterion.definitional jsdoc and
+    // docs/reviews/clinical-headache-definitional-criteria-2026-05-27.md.
+    let definitionalFailed = false;
+    for (const criterion of phenotype.criteria) {
+      if (criterion.definitional && !criterion.evaluate(selected)) {
+        definitionalFailed = true;
+        break;
+      }
+    }
+    if (definitionalFailed) continue;
 
     const met: { id: string; label: string; contributingChipLabels: string[] }[] = [];
     const missing: { id: string; label: string; description: string }[] = [];

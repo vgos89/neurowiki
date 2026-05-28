@@ -107,6 +107,16 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 
 ## PENDING
 
+### vestibular-migraine-a1-6-6-full-criteria-expansion — Class E-clinical [from clinical-headache-definitional-criteria-2026-05-27 §17.2 Condition 3]
+- **Status:** blocked:awaiting-source-retrieval
+- **User-visible goal:** Expand ICHD-3 Appendix §A1.6.6 Vestibular migraine encoding from the current 2-criterion approximation (vm-A, vm-B) to the full Bárány Society / IHS criteria (Lempert et al. J Vestib Res 2012): 5 criteria including ≥5 vertigo episodes of moderate-severe intensity 5 min–72 h, history of 1.1 or 1.2 migraine, ≥1 migraine feature during ≥50% of vertigo episodes, and not-better-accounted-for clause. Required for diagnostic fidelity of the appendix entity beyond the V-reported phonophobia false-positive bug already closed 2026-05-27.
+- **Files likely touched:** src/data/clinicHeadacheData.ts (vestibular-migraine phenotype criteria + new chip vocabulary for vertigo episode count/intensity/duration + history-of-migraine), src/data/clinicHeadacheData.test.ts (full A–D coverage), src/lib/citations/registry.ts (Lempert 2012 citation).
+- **Acceptance checks:** Verbatim Lempert 2012 / ICHD-3 §A1.6.6 text in quoted_text; PMID + DOI registered; vm-A through vm-D all flagged definitional; ≥50%-of-episodes temporal qualifier surfaced as confirmation prompt (chip-enforced where possible); regression tests for each definitional gate; clinical-reviewer §17.2 sign-off.
+- **Clinical impact:** low (deferred expansion, not a new safety issue — V-reported false-positive is already closed)
+- **Rollback plan:** git revert single commit.
+- **Source review:** docs/reviews/clinical-headache-definitional-criteria-2026-05-27.md (Condition 3)
+- **Blocker:** Lempert et al. J Vestib Res 2012 full-text retrieval (PubMed MCP `lookup_article_by_citation` + `get_full_text_article`).
+
 ### AHA/ASA 2026 AUDIT BLOCKING FOLLOW-UPS — from docs/audits/aha-2026-audit-2026-05-22.md
 
 ### stroke-code-large-core-evt-update — Class E-clinical [from audit 2026-05-22]

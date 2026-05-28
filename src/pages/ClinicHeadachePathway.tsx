@@ -658,6 +658,40 @@ const ClinicHeadachePathway: React.FC = () => {
             ICHD-3 General Principles allow multiple primary headache codes
             per patient (Note 2: "Each different type ... must be separately
             diagnosed and coded"). */}
+        {/* Empty-matches fallback (2026-05-27): when step 4 is complete and
+            no red flag is active but the evaluator returns zero phenotypes
+            (every primary phenotype failed a definitional ICHD-3 criterion),
+            surface a neutral "no clean match" headline. Wording is
+            intentionally neutral per clinical-reviewer §17.2 (does NOT direct
+            the clinician to secondary workup — the red-flag chip group
+            already surfaces its own SNNOOP10 short-circuit). */}
+        {step4Complete && !topMatch && !redFlagActive && (
+          <section aria-labelledby="no-match-heading" className="mt-8 space-y-4">
+            <h2 id="no-match-heading" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              Result
+            </h2>
+            <div className="rounded-xl border-2 border-slate-200 bg-slate-50 p-4">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-600 mb-1">
+                No clean ICHD-3 match
+              </p>
+              <p className="text-[18px] font-semibold text-slate-900 leading-tight">
+                Selections do not fit a primary headache phenotype
+              </p>
+              <p className="text-[12px] text-slate-500 mt-1">
+                Every primary phenotype has at least one phenotype-defining
+                ICHD-3 criterion that the current selections do not satisfy.
+              </p>
+              <p className="text-[11px] text-slate-600 mt-3 leading-relaxed">
+                Consider an atypical primary phenotype, a secondary cause, or
+                re-checking the attack-duration, frequency, and associated-
+                symptom selections. The diagnosis remains a clinical
+                judgement; this tool maps features against ICHD-3 criteria
+                only.
+              </p>
+            </div>
+          </section>
+        )}
+
         {step4Complete && topMatch && !redFlagActive && (
           <section aria-labelledby="management-heading" className="mt-8 space-y-4">
             <h2 id="management-heading" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
