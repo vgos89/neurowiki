@@ -47,6 +47,9 @@ import { LKWTimePicker } from '../article/stroke/LKWTimePicker';
 
 export type Anticoag = 'none' | 'doac' | 'warfarin' | 'antiplatelet';
 
+/** 0–6 modified Rankin Scale grade. */
+export type MRSGrade = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
 export interface PatientContextValues {
   /** Last known well — undefined if not set, null if explicitly Unknown / wake-up. */
   lkw: Date | null | undefined;
@@ -64,6 +67,13 @@ export interface PatientContextValues {
    * `null` = explicitly unknown.
    */
   lastAnticoagDose?: Date | null;
+  /**
+   * Pre-stroke modified Rankin Scale grade (0–6). Records the patient's
+   * functional baseline before the current event. Used for EVT eligibility
+   * assessment (mRS 0–1 vs ≥2) and outcome comparison. `undefined` = not yet
+   * recorded.
+   */
+  prestrokeMrs?: MRSGrade;
   /** Free-text documentation of pre-existing neurological deficits, entered by nursing staff. */
   preExistingDeficits: string;
 }
@@ -75,6 +85,7 @@ export const EMPTY_PATIENT_CONTEXT: PatientContextValues = {
   glucose: '',
   anticoag: new Set(),
   lastAnticoagDose: undefined,
+  prestrokeMrs: undefined,
   preExistingDeficits: '',
 };
 
@@ -249,6 +260,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
     values.glucose !== '' ||
     values.lastAnticoagDose !== undefined ||
     values.anticoag.size > 0 ||
+    values.prestrokeMrs !== undefined ||
     values.preExistingDeficits !== '';
 
   // Header eyebrow shows summary chips if any value is set + collapsed
@@ -301,7 +313,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
           </span>
           {!expanded && (
             <span className="text-xs text-slate-500 mt-0.5 truncate">
-              {summaryChips ?? 'tap to add LKW · BP · glucose · anticoag'}
+              {summaryChips ?? 'tap to add LKW · BP · glucose · anticoag · mRS'}
             </span>
           )}
         </div>
@@ -432,6 +444,47 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
               </span>
             </button>
           )}
+
+          {/* Pre-stroke mRS — 7 compact number chips (0–6).
+              No modal, no drawer — tap to select inline.
+              Clinically: records functional baseline before the event for
+              EVT eligibility (mRS 0–1 independent vs ≥2 dependent) and
+              outcome comparison post-treatment. */}
+          <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3">
+            <span id="prestroke-mrs-label" className="text-xs font-medium text-slate-600 flex-shrink-0">
+              Pre-stroke mRS
+            </span>
+            <div
+              role="group"
+              aria-labelledby="prestroke-mrs-label"
+              className="flex items-center gap-1"
+            >
+              {([0, 1, 2, 3, 4, 5, 6] as MRSGrade[]).map((grade) => {
+                const selected = values.prestrokeMrs === grade;
+                return (
+                  <button
+                    key={grade}
+                    type="button"
+                    onClick={() =>
+                      onChange({
+                        ...values,
+                        prestrokeMrs: selected ? undefined : grade,
+                      })
+                    }
+                    className={`w-8 h-8 flex items-center justify-center rounded-full text-xs font-semibold border transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
+                      selected
+                        ? 'bg-neuro-50 border-neuro-200 text-neuro-700'
+                        : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300'
+                    }`}
+                    aria-pressed={selected}
+                    aria-label={`Pre-stroke mRS ${grade}`}
+                  >
+                    {grade}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
           {/* Pre-existing deficits — free-text nursing documentation.
               Single-line textarea that auto-expands with content.
@@ -628,6 +681,7 @@ function buildSummaryChips(values: PatientContextValues): string {
   }
   if (values.lastAnticoagDose === null) chips.push('dose: unknown');
   else if (values.lastAnticoagDose instanceof Date) chips.push('dose set');
+  if (values.prestrokeMrs !== undefined) chips.push(`mRS ${values.prestrokeMrs}`);
   if (values.preExistingDeficits) chips.push('deficits noted');
   return chips.join(' · ');
 }
