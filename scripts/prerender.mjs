@@ -60,6 +60,7 @@ const PHASE_1_ROUTES = [
   '/calculators/glasgow-coma-scale',
   '/calculators/abcd2-score',
   '/calculators/has-bled-score',
+  '/calculators/mrs',
 ];
 
 const PORT = 4173; // vite preview default

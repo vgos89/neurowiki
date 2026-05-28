@@ -127,6 +127,13 @@
   </url>
 
   <url>
+    <loc>https://www.neurowiki.ai/calculators/mrs</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
     <loc>https://www.neurowiki.ai/calculators/rope-score</loc>
     <lastmod>2026-02-18</lastmod>
     <changefreq>monthly</changefreq>
