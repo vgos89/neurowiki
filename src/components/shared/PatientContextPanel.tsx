@@ -177,6 +177,10 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
   // Per-session accumulator — grows only within a single listening session.
   // Reset to '' each time the mic is activated.
   const sessionTextRef = useRef('');
+  // Highest result index already committed as final. Guards against browsers
+  // (Chrome on mobile) that fire resultIndex=0 on every event, causing the
+  // loop to re-walk already-finalized results and duplicate them.
+  const lastFinalIndexRef = useRef(-1);
 
   const autoResize = useCallback(() => {
     const el = textareaRef.current;
@@ -206,6 +210,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
     // from values (which would be stale after the first result).
     const baseText = valuesRef.current.preExistingDeficits;
     sessionTextRef.current = '';
+    lastFinalIndexRef.current = -1;
 
     rec.onresult = (e) => {
       let interimAccum = '';
@@ -214,6 +219,10 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
       for (let i = e.resultIndex; i < e.results.length; i++) {
         const text = e.results[i][0].transcript;
         if (e.results[i].isFinal) {
+          // Skip results already committed — guards against browsers that
+          // fire resultIndex=0 on every event and cause re-processing.
+          if (i <= lastFinalIndexRef.current) continue;
+          lastFinalIndexRef.current = i;
           newFinal += text;
         } else {
           interimAccum += text;
