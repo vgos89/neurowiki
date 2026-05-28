@@ -305,12 +305,18 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
         type="button"
         onClick={lockExpanded ? undefined : () => setExpanded((v) => !v)}
         disabled={lockExpanded}
-        className={`w-full min-h-[44px] flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-100 text-left ${lockExpanded ? 'cursor-default' : 'hover:bg-slate-100 transition-colors cursor-pointer'}`}
+        className={`w-full min-h-[44px] flex items-center justify-between px-4 py-2.5 border-b text-left transition-colors ${
+          lockExpanded
+            ? 'bg-slate-50 border-slate-100 cursor-default'
+            : expanded
+              ? 'bg-neuro-50 border-neuro-100 hover:bg-neuro-100 cursor-pointer'
+              : 'bg-slate-50 border-slate-100 hover:bg-slate-100 cursor-pointer'
+        }`}
         aria-expanded={lockExpanded ? undefined : expanded}
         aria-controls={lockExpanded ? undefined : 'patient-context-body'}
       >
         <div className="flex flex-col min-w-0">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+          <span className={`text-[10px] font-bold uppercase tracking-widest ${expanded && !lockExpanded ? 'text-neuro-500' : 'text-slate-400'}`}>
             {label ?? (expanded ? 'Patient context' : '+ Patient context (optional)')}
           </span>
           {!expanded && (
@@ -321,7 +327,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
         </div>
         {!lockExpanded && (
           <ChevronDown
-            className={`w-4 h-4 text-slate-400 flex-shrink-0 motion-safe:transition-transform ${expanded ? 'rotate-180' : ''}`}
+            className={`w-4 h-4 flex-shrink-0 motion-safe:transition-transform ${expanded ? 'rotate-180 text-neuro-500' : 'text-slate-400'}`}
             aria-hidden
           />
         )}
