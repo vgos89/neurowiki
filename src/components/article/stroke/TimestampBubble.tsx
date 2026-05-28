@@ -217,6 +217,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
   const [hasBeenOpened, setHasBeenOpened] = useState(false);
   const [emergencyOpen, setEmergencyOpen] = useState(false);
   const [internalTimestamps, setInternalTimestamps] = useState<StrokeTimestamps>({ ...EMPTY_STROKE_TIMESTAMPS });
+  const [openPopoverEvent, setOpenPopoverEvent] = useState<EventName | null>(null);
   // Per-row inline edit state — when set, that row shows a manual time input.
   const [editingEvent, setEditingEvent] = useState<EventName | null>(null);
   const [editValue, setEditValue] = useState<string>('');       // digits only
@@ -520,6 +521,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                   ? `${target.metric} · ${target.source} · target ≤${target.green}m (green), ≤${target.amber}m (amber)`
                   : undefined;
 
+                const hasTarget = !!target;
                 const isEditing = editingEvent === event;
                 return (
                   <div key={event} className="px-4 py-3">
@@ -603,14 +605,29 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                           </div>
                           {stamped ? (
                             <div className="flex items-center gap-2">
-                              <CheckCircle className={`w-3.5 h-3.5 ${colors.icon} flex-shrink-0`} />
+                              {stamped && hasTarget ? (
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setOpenPopoverEvent(prev => prev === event ? null : event);
+                                  }}
+                                  className="flex-shrink-0 rounded-full focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+                                  aria-label={`Learn about ${target!.metric} target`}
+                                  aria-expanded={openPopoverEvent === event}
+                                  aria-haspopup="true"
+                                >
+                                  <CheckCircle className={`w-3.5 h-3.5 ${colors.icon}`} />
+                                </button>
+                              ) : (
+                                <CheckCircle className={`w-3.5 h-3.5 ${colors.icon} flex-shrink-0`} />
+                              )}
                               <span className="text-sm font-semibold text-slate-800 tabular-nums">
                                 {formatTime(stamped)}
                               </span>
                               {elapsed && (
                                 <span
                                   className={`text-xs font-medium ${colors.chip}`}
-                                  title={gradeTooltip}
                                 >
                                   {elapsed}
                                 </span>
@@ -657,6 +674,15 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                             </button>
                           </div>
                         )}
+                      </div>
+                    )}
+                    {openPopoverEvent === event && target && (
+                      <div className="mt-2 rounded-lg bg-slate-50 border border-slate-200 px-3 py-2.5 text-xs text-slate-700 leading-relaxed">
+                        <p className="font-semibold text-slate-800 mb-0.5">{target.metric}</p>
+                        <p>
+                          On target: under {target.green} min. Acceptable: under {target.amber} min.
+                        </p>
+                        <p className="text-slate-400 mt-1">{target.source}</p>
                       </div>
                     )}
                   </div>

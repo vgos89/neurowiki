@@ -19,6 +19,7 @@ type BrowserWindow = Window & {
 };
 import { formatClinicalDateShort } from '../../utils/clinicalDateTime';
 import { LKWTimePicker } from '../article/stroke/LKWTimePicker';
+import { MrsPickerModal } from '../calculators/MrsPickerModal';
 
 /**
  * PatientContextPanel — collapsible accordion that captures patient-context
@@ -157,6 +158,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
   const [expanded, setExpanded] = useState(lockExpanded || defaultExpanded);
   const [lkwModalOpen, setLkwModalOpen] = useState(false);
   const [doseModalOpen, setDoseModalOpen] = useState(false);
+  const [mrsModalOpen, setMrsModalOpen] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [interimText, setInterimText] = useState('');
   const [speechSupported] = useState(() =>
@@ -479,9 +481,15 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
               EVT eligibility (mRS 0–1 independent vs ≥2 dependent) and
               outcome comparison post-treatment. */}
           <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3">
-            <span id="prestroke-mrs-label" className="text-xs font-medium text-slate-600 flex-shrink-0">
+            <button
+              id="prestroke-mrs-label"
+              type="button"
+              onClick={() => setMrsModalOpen(true)}
+              className="text-xs font-medium text-slate-600 flex-shrink-0 flex items-center gap-1 hover:text-neuro-600 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none rounded"
+            >
               Pre-stroke mRS
-            </span>
+              <span className="text-[10px] text-slate-400 font-normal">(full scale)</span>
+            </button>
             <div
               role="group"
               aria-labelledby="prestroke-mrs-label"
@@ -601,6 +609,16 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
           </>
         )}
       </div>
+
+      <MrsPickerModal
+        isOpen={mrsModalOpen}
+        onClose={() => setMrsModalOpen(false)}
+        value={values.prestrokeMrs}
+        onChange={(grade) => {
+          onChange({ ...values, prestrokeMrs: grade });
+          setMrsModalOpen(false);
+        }}
+      />
 
       {/* LKW modal — canonical LKWTimePicker (portal). Same component used
           by Stroke Code Step 1 and Extended IVT pathway. showSleepOnset
