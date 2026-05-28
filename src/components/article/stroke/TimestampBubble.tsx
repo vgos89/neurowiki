@@ -612,7 +612,7 @@ export const TimestampBubble: React.FC<TimestampBubbleProps> = ({
                                     e.stopPropagation();
                                     setOpenPopoverEvent(prev => prev === event ? null : event);
                                   }}
-                                  className="flex-shrink-0 rounded-full focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+                                  className="flex-shrink-0 rounded-full cursor-pointer hover:ring-2 hover:ring-current hover:ring-offset-1 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none transition-shadow"
                                   aria-label={`Learn about ${target!.metric} target`}
                                   aria-expanded={openPopoverEvent === event}
                                   aria-haspopup="true"
