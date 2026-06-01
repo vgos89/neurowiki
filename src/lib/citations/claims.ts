@@ -909,6 +909,28 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'Current/outcome context interpretation in the mRS calculator drawer: mRS 0–2 at 90 days = "good outcome" threshold used as primary endpoint in NINDS tPA trial, DAWN, DEFUSE-3, SELECT-2, and most acute stroke RCTs. mRS 3 = dependent but ambulatory; below good-outcome threshold. mRS 4–5 = poor functional outcome range.',
   },
 
+  // ─── NIHSS minor-stroke disabling-features checklist ────────────────────
+  // Phase 7D.3 (2026-06-01). Renders inside the NIHSS drawer when total 1–4.
+  // Surface: data-claim attribute on the parent <div> in DrawerContent
+  // (src/pages/NihssCalculator.tsx). Pre-execution clinical review:
+  // docs/reviews/clinical-PR-nihss-low-score-checklist.md.
+  //
+  // Any-Yes verdict: AHA/ASA 2026 §4.6.1 Rec 3 (COR 1, LOE A) — IVT
+  //   recommended for disabling deficits regardless of NIHSS when eligible.
+  // All-No verdict: AHA/ASA 2026 §4.6.1 Rec 4 (COR 3 No Benefit, LOE B-R) +
+  //   PRISMS 2018 (alteplase vs aspirin, n=313 stopped early, no functional
+  //   benefit, sICH 3.2% vs 0%) + §4.8 Rec 12 (DAPT COR 1, LOE A).
+  'nihss-minor-disabling-check': {
+    id: 'nihss-minor-disabling-check',
+    citation_ids: [
+      'aha-asa-2026-4.6.1',
+      'aha-asa-2026-4.8',
+      'prisms-trial-2018',
+    ],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'NIHSS drawer disabling-features checklist for minor stroke (total 1–4). Verdict Any-Yes: IVT recommended for disabling deficits regardless of NIHSS (COR 1, LOE A per §4.6.1). Verdict All-No: IVT not recommended for mild non-disabling stroke (COR 3 No Benefit, LOE B-R per §4.6.1); PRISMS showed no functional benefit and sICH 3.2% vs 0% (Khatri, JAMA 2018); DAPT preferred per §4.8 (COR 1, LOE A).',
+  },
+
   // ─── PatientContextPanel — BP tPA/TNK threshold alert ───────────────────
   // Alert chip below BP row when SBP ≥185 or DBP ≥110. Pre-treatment gate.
   // Clinical-reviewer approved: docs/reviews/clinical-PR-bp-alert.md (2026-05-27).

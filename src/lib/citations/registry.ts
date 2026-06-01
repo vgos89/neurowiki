@@ -1698,6 +1698,27 @@ export const CITATION_REGISTRY: CitationRegistry = {
     quoted_text: 'Across 861 international observers, substantial variability in mRS assignment from vignettes was found (kappa 0.46). Structured questionnaire use and training significantly reduced variability. Supports routine use of structured assessment tools over gestalt mRS assignment at the bedside.',
   },
 
+  // ─── PRISMS (2018) — alteplase vs aspirin for minor non-disabling ischemic stroke ─
+  // Khatri P et al., JAMA 2018;320(2):156–166. PMID 29998337.
+  // Administratively stopped after Genentech withdrew support; n=313 of 948
+  // planned (underpowered). Primary: favorable outcome (mRS 0–2 at 90 days).
+  // mRS 0–1 78.2% alteplase vs 81.5% aspirin (nonsignificant). sICH 3.2% vs 0%.
+  // Review window 36 months (landmark trial, stable result).
+  // Supporting evidence for the NIHSS minor-stroke disabling-features checklist
+  // "All No" verdict text. Pre-execution clinical review:
+  // docs/reviews/clinical-PR-nihss-low-score-checklist.md.
+  'prisms-trial-2018': {
+    id: 'prisms-trial-2018',
+    source: 'trial',
+    title: 'Alteplase versus Aspirin in Acute Stroke with Minimal Symptoms — The PRISMS Randomized Clinical Trial',
+    year: 2018,
+    url: 'https://jamanetwork.com/journals/jama/fullarticle/2687304',
+    pmid: '29998337',
+    last_reviewed: '2026-06-01',
+    review_window_months: 36,
+    quoted_text: 'Among patients with minor stroke with nondisabling deficits and an NIHSS score of 0 to 5, treatment with alteplase compared with aspirin did not result in better clinical outcomes at 90 days and increased the risk of symptomatic intracranial hemorrhage.',
+  },
+
   // ─── IVT blood-pressure eligibility threshold ────────────────────────────
   // Primary source for the ≤185/110 mmHg pre-treatment BP gate for IV
   // thrombolysis (tPA and TNK). The threshold originates in the NINDS protocol

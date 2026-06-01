@@ -100,6 +100,31 @@ const SEVERITY_HEADER_BG: Record<NIHSSSeverity, string> = {
   'severe':           'bg-red-50',
 };
 
+// ─── Disabling-features checklist — minor stroke (NIHSS 1–4) ─────────────────
+// Six items the clinician checks at the bedside. Any "yes" → IVT indicated per
+// AHA/ASA 2026 §4.6.1 regardless of NIHSS. No items → confirmed non-disabling →
+// IVT not recommended per §4.6.1 COR 3 No Benefit (PRISMS 2018).
+// Approved text (humanizer-clean, em-dash-free): 2026-06-01.
+
+const DISABLING_CHECK_ITEMS = [
+  'Dysphagia or swallowing difficulty',
+  'Gait disturbance: unable to walk safely without assistance',
+  'Arm or hand weakness affecting a hand the patient relies on for work or daily activities (either hand)',
+  'Speech impairment: slurred speech or word-finding difficulty',
+  'Persistent visual field loss (monocular or hemianopic) affecting reading, driving, or work',
+  "Any other symptom the patient or clinician judges disabling for the patient's work, self-care, or daily activities",
+] as const;
+
+// Short labels used in the EMR copy/share output when items are checked.
+const DISABLING_CHECK_SHORT = [
+  'dysphagia',
+  'gait disturbance',
+  'hand/arm weakness',
+  'speech impairment',
+  'visual field loss',
+  'other disabling symptom',
+] as const;
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 const NihssCalculator: React.FC = () => {
@@ -108,6 +133,12 @@ const NihssCalculator: React.FC = () => {
   const [userMode] = useState<'resident' | 'attending'>('resident');
   const [activePearl, setActivePearl] = useState<string | null>(null);
   const [justCompleted, setJustCompleted] = useState(false);
+
+  // Disabling-features check state — minor stroke (NIHSS 1–4).
+  // disablingChecks: Set of item indices (0–5) the clinician marked as present.
+  // confirmedNoDisabling: true when clinician tapped "None of the above apply".
+  const [disablingChecks, setDisablingChecks] = useState<Set<number>>(new Set());
+  const [confirmedNoDisabling, setConfirmedNoDisabling] = useState(false);
 
   // Auto-captured "Performed" timestamp — set on first NIHSS item input.
   // Reset clears this back to null along with the rest of the calculator state.
@@ -271,6 +302,11 @@ const NihssCalculator: React.FC = () => {
   const totalItems = NIHSS_ITEMS.length;
   const isComplete = answeredCount === totalItems;
   const severity = getNihssSeverity(total);
+
+  // Disabling-features verdict — drives checklist UI and EMR copy line.
+  const hasAnyDisabling = disablingChecks.size > 0;
+  const disablingVerdict: 'yes' | 'no' | 'unanswered' =
+    hasAnyDisabling ? 'yes' : confirmedNoDisabling ? 'no' : 'unanswered';
 
   const { state: drawerState, drawerOpen, setDrawerOpen, reset, toast, showToast } = useDrawerState({
     mode: 'partial-complete',
@@ -451,6 +487,25 @@ const NihssCalculator: React.FC = () => {
 
     const header = `NIHSS: ${total}`;
     const blocks: string[] = [header, contextLines.join('\n')];
+
+    // Disabling features line — only emitted when total is in the minor range
+    // (1–4) and the clinician has made an explicit assessment.
+    if (total >= 1 && total <= 4) {
+      if (hasAnyDisabling) {
+        const checkedLabels = [...disablingChecks]
+          .sort((a, b) => a - b)
+          .map((idx) => DISABLING_CHECK_SHORT[idx])
+          .join(', ');
+        blocks.push(
+          `Disabling features: present (${checkedLabels}) — IVT indicated per AHA/ASA 2026 §4.6.1 (Class I, Level A)`,
+        );
+      } else if (confirmedNoDisabling) {
+        blocks.push(
+          'Disabling features: none identified — IVT not recommended per AHA/ASA 2026 §4.6.1 (Class 3 No Benefit)',
+        );
+      }
+    }
+
     // Optional LVO line — default off, opt-in via the toggle near the Copy
     // button. Surfaces the RACE-derived LVO label + RACE score so EMR text
     // carries the same context the in-app drawer shows. Only meaningful
@@ -482,6 +537,8 @@ const NihssCalculator: React.FC = () => {
     setPerformedAt(null);
     setPatientContext({ ...EMPTY_PATIENT_CONTEXT, anticoag: new Set() });
     setStrokeTimestamps({ ...EMPTY_STROKE_TIMESTAMPS });
+    setDisablingChecks(new Set());
+    setConfirmedNoDisabling(false);
     // New patient / new exam → next save should create a fresh row.
     setCurrentCaseId(null);
     reset();
@@ -564,6 +621,84 @@ const NihssCalculator: React.FC = () => {
             <span className="font-semibold text-red-700">Severe (≥21).</span> Large-territory infarct risk. Reassess core size (ASPECTS), age, and prestroke function before EVT; large-core EVT (ASPECTS 3–5) remains supported per §4.7.2 in selected patients. Symptomatic hemorrhage risk after IVT is elevated; document the IVT discussion when proceeding.
           </p>
         </div>
+
+        {/* Disabling features checklist — minor stroke only (total 1–4).
+            Shows inline in the drawer so the clinician can check off items
+            before copying. Three verdict states drive the banner text.
+            data-claim tags the clinical content for the claim registry.
+            Approved text: docs/reviews/clinical-PR-nihss-low-score-checklist.md */}
+        {total >= 1 && total <= 4 && (
+          <div
+            data-claim="nihss-minor-disabling-check"
+            className="pt-3 border-t border-slate-100 mb-4"
+          >
+            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
+              Disabling features
+            </div>
+
+            {/* Verdict banner */}
+            <div className={`rounded-lg px-3 py-2.5 mb-3 text-xs leading-relaxed ${
+              disablingVerdict === 'yes'
+                ? 'bg-emerald-50 text-emerald-800'
+                : disablingVerdict === 'no'
+                  ? 'bg-amber-50 text-amber-800'
+                  : 'bg-slate-50 text-slate-500'
+            }`}>
+              {disablingVerdict === 'yes' && (
+                'Disabling features present. Per AHA/ASA 2026, IVT is recommended for disabling deficits regardless of NIHSS, provided the time window and eligibility criteria are met (Class I, Level A).'
+              )}
+              {disablingVerdict === 'no' && (
+                'No disabling features identified. AHA/ASA 2026 does not recommend IVT routinely for mild non-disabling stroke (Class 3 No Benefit, Level B-R). PRISMS trial (alteplase vs aspirin, stopped early, n=313) showed no functional benefit and higher sICH (3.2% vs 0%). Clinical judgment may still favor IVT in selected patients.'
+              )}
+              {disablingVerdict === 'unanswered' && (
+                'Minor stroke. Check for disabling features below.'
+              )}
+            </div>
+
+            {/* Checklist items */}
+            <div className="space-y-1">
+              {DISABLING_CHECK_ITEMS.map((item, idx) => (
+                <label
+                  key={idx}
+                  className="flex items-start gap-3 cursor-pointer rounded-lg px-2.5 py-2 hover:bg-slate-50 transition-colors"
+                >
+                  <input
+                    type="checkbox"
+                    checked={disablingChecks.has(idx)}
+                    onChange={(e) => {
+                      setDisablingChecks((prev) => {
+                        const next = new Set(prev);
+                        if (e.target.checked) {
+                          next.add(idx);
+                        } else {
+                          next.delete(idx);
+                        }
+                        return next;
+                      });
+                      if (e.target.checked) setConfirmedNoDisabling(false);
+                    }}
+                    className="mt-0.5 w-4 h-4 rounded border-slate-300 text-neuro-600 focus-visible:ring-2 focus-visible:ring-neuro-500 flex-shrink-0"
+                    aria-label={item}
+                  />
+                  <span className="text-xs text-slate-700 leading-snug">{item}</span>
+                </label>
+              ))}
+            </div>
+
+            {/* "None of the above apply" — visible only while nothing is checked
+                and the clinician hasn't yet confirmed. Tapping advances to the
+                All-No verdict. */}
+            {!hasAnyDisabling && !confirmedNoDisabling && (
+              <button
+                type="button"
+                onClick={() => setConfirmedNoDisabling(true)}
+                className="mt-2 text-xs text-slate-400 hover:text-slate-600 transition-colors underline-offset-2 hover:underline"
+              >
+                None of the above apply
+              </button>
+            )}
+          </div>
+        )}
 
         {/* LVO probability divider */}
         <div className="pt-3 border-t border-slate-100 mb-3">
