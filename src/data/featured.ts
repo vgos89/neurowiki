@@ -14,12 +14,12 @@ export type FeaturedItem = {
 
 export const FEATURED: FeaturedItem[] = [
   {
-    id: 'stroke-code',
-    type: 'pathway',
-    name: 'Stroke Code',
-    description: 'Acute ischemic stroke workflow. LKW, vitals, imaging, orders.',
-    categoryColor: '#dc2626',
-    href: '/pathways/stroke-code',
+    id: 'nihss',
+    type: 'calculator',
+    name: 'NIHSS',
+    description: '15-item stroke severity exam. Range 0–42.',
+    categoryColor: '#1746A2',
+    href: '/calculators/nihss',
   },
   {
     id: 'evt-pathway',
@@ -38,12 +38,12 @@ export const FEATURED: FeaturedItem[] = [
     href: '/pathways/late-window-ivt',
   },
   {
-    id: 'nihss',
-    type: 'calculator',
-    name: 'NIHSS',
-    description: '15-item stroke severity exam. Range 0–42.',
-    categoryColor: '#1746A2',
-    href: '/calculators/nihss',
+    id: 'stroke-code',
+    type: 'pathway',
+    name: 'Stroke Code',
+    description: 'Acute ischemic stroke workflow. LKW, vitals, imaging, orders.',
+    categoryColor: '#dc2626',
+    href: '/pathways/stroke-code',
   },
 ];
 
