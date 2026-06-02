@@ -106,7 +106,7 @@ export default function IvTpa() {
 
           <Paragraph
             viewMode={viewMode}
-            detail="For DOACs: get last dose time. If within 48h, need normal TT/anti-Xa or specific reversal before tPA. Idarucizumab for dabigatran; andexanet for Xa inhibitors."
+            detail="For DOACs: get last dose time. If within 48h, need normal TT/anti-Xa or specific reversal before tPA. Idarucizumab for dabigatran. For Xa inhibitors, no specific reversal agent is available in the US (andexanet alfa withdrawn Dec 22, 2025); tPA is contraindicated unless a normal anti-Xa level confirms absence of drug effect."
           >
             <strong>Anticoagulants:</strong> Therapeutic LMWH within 24h. DOAC within 48h unless normal thrombin time/anti-Xa confirmed.
           </Paragraph>

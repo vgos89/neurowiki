@@ -61,8 +61,8 @@ export default function IchManagement() {
 
           <Section number={3} title="Anticoagulation Reversal" />
 
-          <Paragraph viewMode={viewMode} detail="Warfarin: 4-factor PCC 25-50 units/kg IV + Vitamin K 10 mg IV (goal INR <1.4). If PCC unavailable, FFP. Dabigatran: idarucizumab 5 g IV. Xa inhibitors: andexanet or PCC. 2022 AHA/ASA ICH, Class I, Level B.">
-            <strong>Warfarin:</strong> 4-factor <Term detail="prothrombin complex concentrate">PCC</Term> 25-50 units/kg IV + Vitamin K 10 mg IV (goal INR &lt;1.4). If PCC unavailable, FFP 10-15 mL/kg. <strong>Dabigatran:</strong> <Term detail="idarucizumab">idarucizumab</Term> 5 g IV. <strong>Xa inhibitors:</strong> <Term detail="andexanet alfa">andexanet</Term> alfa or 4-factor PCC. Do not wait for labs when the history is clear. (2022 AHA/ASA ICH, Class I, Level B.)
+          <Paragraph viewMode={viewMode} detail="Warfarin: 4-factor PCC 25-50 units/kg IV + Vitamin K 10 mg IV (goal INR <1.4). If PCC unavailable, FFP. Dabigatran: idarucizumab 5 g IV. Xa inhibitors: 4-factor PCC 50 units/kg IV; andexanet alfa was withdrawn from the US market (commercial sales ended Dec 22, 2025). 2022 AHA/ASA ICH, Class I, Level B.">
+            <strong>Warfarin:</strong> 4-factor <Term detail="prothrombin complex concentrate">PCC</Term> 25-50 units/kg IV + Vitamin K 10 mg IV (goal INR &lt;1.4). If PCC unavailable, FFP 10-15 mL/kg. <strong>Dabigatran:</strong> <Term detail="idarucizumab">idarucizumab</Term> 5 g IV. <strong>Xa inhibitors:</strong> 4-factor PCC 50 units/kg IV. <Term detail="andexanet alfa">Andexanet</Term> alfa was withdrawn from the US market (commercial sales ended Dec 22, 2025). Do not wait for labs when the history is clear. (2022 AHA/ASA ICH, Class I, Level B.)
           </Paragraph>
 
           <Section number={4} title="Blood Pressure" />

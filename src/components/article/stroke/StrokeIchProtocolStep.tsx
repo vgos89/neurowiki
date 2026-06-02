@@ -10,7 +10,7 @@ import React from 'react';
 export const ICH_PROTOCOL_ITEMS = [
   { title: 'Immediate assessment', detail: 'ABCs, GCS, pupils, NIHSS. Anticoagulant history — agent and last dose.', evidence: 'Class I, Level C' },
   { title: 'Imaging', detail: 'NCCT: location, volume (ABC/2), IVH, midline shift. CTA if vascular etiology possible.', evidence: 'Class I, Level A' },
-  { title: 'Anticoagulation reversal', detail: 'Warfarin: 4-factor PCC 25-50 units/kg IV + Vitamin K 10 mg IV (goal INR <1.4). FFP if PCC unavailable. Dabigatran: idarucizumab 5 g IV. Xa inhibitors: andexanet alfa or 4-factor PCC.', evidence: 'AHA/ASA 2022 ICH, Section 6.2, Class I, Level B' },
+  { title: 'Anticoagulation reversal', claimId: 'fxa-reversal-4fpcc-andexanet-withdrawn', detail: 'Warfarin: 4-factor PCC 25-50 units/kg IV + Vitamin K 10 mg IV (goal INR <1.4). FFP if PCC unavailable. Dabigatran: idarucizumab 5 g IV. Xa inhibitors (apixaban, rivaroxaban, edoxaban): 4-factor PCC 50 units/kg IV — andexanet alfa was withdrawn from the US market (commercial sales ended Dec 22, 2025).', evidence: 'AHA/ASA 2022 ICH, Section 6.2, Class I, Level B' },
   { title: 'Blood pressure', detail: 'SBP <140 mmHg within 1 hour when feasible. Nicardipine or labetalol. Avoid SBP <110 mmHg; avoid rapid drop (>90 mmHg in 1 h).', evidence: 'AHA/ASA 2022 ICH, Section 5.1, Class I, Level A; INTERACT2, ATACH-2' },
   { title: 'ICP and herniation', detail: 'HOB 30°. Hyperosmolar (mannitol or 3% saline). Hyperventilation as bridge only. EVD if hydrocephalus from IVH.', evidence: 'Class I, Level C' },
   { title: 'ICU and complications', detail: 'Seizure: benzos then AED. DVT prophylaxis when stable (24–48 h). Glucose 140–180. Fever: treat.', evidence: 'Class I, Level B' },

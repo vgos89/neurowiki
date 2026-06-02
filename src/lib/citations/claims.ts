@@ -396,6 +396,28 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'ClinicalSynthesisCard on /trials/q/ich-anticoagulation-reversal. Agent-specific reversal: 4F-PCC + IV vitamin K for VKA, idarucizumab for dabigatran, 4F-PCC 50 U/kg for FXa inhibitors (default since Dec 22 2025 US withdrawal of andexanet alfa per FDA risk-benefit conclusion). Explicitly surfaces PATCH (2016) HARM finding — DO NOT transfuse platelets for antiplatelet-associated ICH outside a planned neurosurgical procedure (AHA/ASA 2022 Class III: Harm). Grounded in 2022 AHA/ASA Spontaneous ICH Guideline §7.3; updated 2026-05-24 to incorporate FDA Nov-2024 advisory committee finding (full ANNEXA-I dataset: total thromboembolic events 14.6% vs 6.9%, thrombosis-related deaths at day 30 2.5% vs 0.9%) and AstraZeneca voluntary BLA withdrawal effective 2025-12-22.',
   },
 
+  // ─── FXa-inhibitor ICH reversal — bedside surfaces (andexanet US withdrawal) ─
+  // Sibling to the synthesis claim above, scoped to the short bedside
+  // recommendation strings in the ICH/hemorrhage protocols and pearls
+  // (StrokeIchProtocolStep, CodeModeStep4, HemorrhageProtocol, two
+  // strokeClinicalPearls entries). These surfaces now lead with 4F-PCC and
+  // note that andexanet alfa was withdrawn from the US market (commercial
+  // sales ended 2025-12-22 per FDA risk-benefit conclusion + AstraZeneca
+  // voluntary withdrawal). Data surface only — the two guide-page
+  // <Paragraph> surfaces (IchManagement, IvTpa) carry the same corrected
+  // text but cannot hold a scannable tag because <Paragraph> does not
+  // accept/spread data-claim; see clinical review note for PR.
+  'fxa-reversal-4fpcc-andexanet-withdrawn': {
+    id: 'fxa-reversal-4fpcc-andexanet-withdrawn',
+    citation_ids: [
+      'aha-asa-2022-ich-anticoag-reversal',
+      'fda-andexxa-safety-2024',
+      'astrazeneca-andexxa-withdrawal-2025',
+    ],
+    surfaces: [DATA_SURFACE],
+    description: 'Bedside FXa-inhibitor ICH reversal recommendation across the ICH/hemorrhage protocol data objects and quick pearls. Leads with 4-factor PCC 50 U/kg IV and notes andexanet alfa was withdrawn from the US market (US commercial sales ended 2025-12-22 per FDA risk-benefit conclusion + AstraZeneca voluntary withdrawal). Warfarin (4F-PCC + IV vitamin K) and dabigatran (idarucizumab 5 g IV) recommendations unchanged. Grounded in 2022 AHA/ASA Spontaneous ICH Guideline §7.3 reversal framework. Tagged surfaces: StrokeIchProtocolStep ICH_PROTOCOL_ITEMS reversal item, CodeModeStep4 stat-ct-decline order, HemorrhageProtocol STEPS reversal item, strokeClinicalPearls hemorrhage-management-quick and hemorrhage-reversal-protocol.',
+  },
+
   // ─── Hemicraniectomy clinical synthesis ─────────────────────────────────────
   'hemicraniectomy-synthesis': {
     id: 'hemicraniectomy-synthesis',

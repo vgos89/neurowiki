@@ -10,7 +10,7 @@ const STEPS = [
   { title: 'Repeat CT Head', detail: 'CT head in 6h to assess progression' },
   { title: 'Strict BP Control', detail: 'SBP <140 mmHg within 1 hour when feasible. Avoid SBP <110 mmHg. Nicardipine or labetalol.' },
   { title: 'Platelets', detail: 'Not routinely recommended (2022 guidelines). Reserve for severe thrombocytopenia or emergency surgery.' },
-  { title: 'Anticoagulation reversal', detail: 'Warfarin: 4-factor PCC 25-50 units/kg IV + Vitamin K 10 mg IV (goal INR <1.4). If PCC unavailable: FFP. Dabigatran: idarucizumab 5 g IV. Xa inhibitors: andexanet or PCC.' },
+  { title: 'Anticoagulation reversal', claimId: 'fxa-reversal-4fpcc-andexanet-withdrawn', detail: 'Warfarin: 4-factor PCC 25-50 units/kg IV + Vitamin K 10 mg IV (goal INR <1.4). If PCC unavailable: FFP. Dabigatran: idarucizumab 5 g IV. Xa inhibitors: 4-factor PCC 50 units/kg IV (andexanet alfa withdrawn from US market Dec 22, 2025).' },
 ];
 
 export const HemorrhageProtocol: React.FC<HemorrhageProtocolProps> = ({ isLearningMode = false }) => {

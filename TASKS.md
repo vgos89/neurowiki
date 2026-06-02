@@ -219,7 +219,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §4.4 row "Moderate risk (4–5)"
 
 ### andexxa-us-market-withdrawal-currency — Class E-clinical [filed 2026-06-02]
-- **Status:** [ ] open — P1 (clinical-safety currency). NEEDS V SIGN-OFF before any content change.
+- **Status:** [x] DONE 2026-06-02 — V approved the sweep. Bedside FXa-inhibitor ICH-reversal surfaces corrected: 7 spots across 6 files now lead with 4F-PCC 50 U/kg and note andexanet's US withdrawal (sales ended Dec 22, 2025). New claim `fxa-reversal-4fpcc-andexanet-withdrawn`; both withdrawal citations refreshed to 2026-06-02. ANNEXA-I trial entry contextualized (not deleted). Evidence packet → medical-scientist → clinical-reviewer (APPROVE, docs/reviews/clinical-PR-fxa-andexanet-withdrawal-bedside-2026-06-02.md). Question-synthesis surface was already correct from a prior session. Follow-up filed below (scanner coverage for <Paragraph> guide prose).
 - **Trigger:** During W8 citation verification, FDA safety communication (`fda-andexxa-safety-2024`, URL resolves — FDA blocks the fetch bot UA but WebSearch confirms the page is live) reports the FDA judged Andexxa's (andexanet alfa) risks to outweigh benefits; AstraZeneca is voluntarily withdrawing the US BLA and ENDED US commercial sales on 2026-12-22 [sic — Dec 22, 2025]. As of today the product is not commercially available in the US.
 - **User-visible goal:** Any NeuroWiki surface recommending Andexxa for factor-Xa-inhibitor reversal in ICH must reflect current US availability and the FDA risk-benefit determination, so a clinician is not directed to an unavailable/withdrawn agent at the bedside.
 - **Investigation needed:** grep ICH/anticoagulation-reversal surfaces (guide pages, trialData ANNEXA-I entry, pearls) for "andexanet"/"Andexxa"; determine which recommend it and with what framing. Confirm exact US-sales-end date against the FDA page (the search summary said "December 22, 2025").
@@ -227,6 +227,12 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Route:** evidence-verifier → medical-scientist → clinical-reviewer (Class E-clinical, full §17.2 gate). NOT to be edited as part of any prose/punctuation batch.
 - **Clinical impact:** high
 - **Rollback plan:** git revert single commit.
+
+### scanner-paragraph-surface-support — Class C [filed 2026-06-02, from clinical review]
+- **Status:** [ ] open — P2. Non-blocking follow-up from clinical-PR-fxa-andexanet-withdrawal-bedside-2026-06-02.md.
+- **Goal:** The guide-page `<Paragraph>` component does not accept/spread a `data-claim` attribute, so clinical prose authored inside `<Paragraph detail=…>` (e.g. the corrected FXa-reversal text in IchManagement.tsx and the pre-tPA contraindication text in IvTpa.tsx) cannot carry a scannable claim tag. The text is correct and the claim is declared, but a future edit to those sentences will not trip the pre-commit claim scanner — a silent-drift risk on contraindication/reversal copy.
+- **Action:** data-architect to extend the scanner (CLAUDE.md §13.3/§13.4) with a Phase-3 composition-site handler so `<Paragraph detail=>` clinical prose becomes taggable. Then retro-tag the two guide surfaces.
+- **Clinical impact:** none now (text correct); prevents future undetected drift.
 
 ### AGENT GOVERNANCE
 

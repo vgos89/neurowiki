@@ -34,6 +34,8 @@ interface Order {
   defaultSelected?: boolean;
   evidenceClass?: 'I' | 'IIa' | 'IIb' | 'III';
   evidenceLevel?: 'A' | 'B' | 'C';
+  /** W5.2 citation-registry tag (scanner Phase 1 'data' surface). */
+  claimId?: string;
 }
 
 const ORDERS: Order[] = [
@@ -185,7 +187,8 @@ const ORDERS: Order[] = [
     label: 'STAT CT head for any acute neurological decline',
     category: 'post-tpa',
     evidence: 'Class I, Level A',
-    rationale: 'Symptomatic ICH presents with sudden worsening (≥4 NIHSS points), severe headache, vomiting, or decreased consciousness. Requires immediate CT, neurosurgery consult, and reversal per AHA 2026 Table 5: cryoprecipitate ≥10 U IV over 10–30 min (target fibrinogen ≥150 mg/dL); tranexamic acid (TXA) 1000 mg IV over 10 min OR ε-aminocaproic acid 4–5 g over 1 h as alternative. For non-tPA anticoagulation reversal: 4-factor PCC + vitamin K (warfarin), idarucizumab (dabigatran), andexanet or PCC (Xa inhibitors).',
+    claimId: 'fxa-reversal-4fpcc-andexanet-withdrawn',
+    rationale: 'Symptomatic ICH presents with sudden worsening (≥4 NIHSS points), severe headache, vomiting, or decreased consciousness. Requires immediate CT, neurosurgery consult, and reversal per AHA 2026 Table 5: cryoprecipitate ≥10 U IV over 10–30 min (target fibrinogen ≥150 mg/dL); tranexamic acid (TXA) 1000 mg IV over 10 min OR ε-aminocaproic acid 4–5 g over 1 h as alternative. For non-tPA anticoagulation reversal: 4-factor PCC + vitamin K (warfarin), idarucizumab (dabigatran), 4-factor PCC 50 units/kg for Xa inhibitors (andexanet alfa withdrawn from US market Dec 22, 2025).',
     defaultSelected: true,
     evidenceClass: 'I',
     evidenceLevel: 'A'

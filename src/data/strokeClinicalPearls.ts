@@ -1082,9 +1082,10 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'hemorrhage-management-quick',
         title: 'Hemorrhage Protocol',
-        content: 'Stop tPA immediately. STAT CT. Cryoprecipitate 10 units IV (raises fibrinogen ~50 mg/dL, target >150). TXA is part of the AHA/ASA 2026 Table 5 reversal bundle for post-thrombolysis sICH; TXA is NOT recommended for spontaneous ICH (TICH-2; Class III, Level A per 2022 ICH). BP target <140 mmHg within 1 h; avoid SBP <110. Reverse anticoagulation if applicable (4-factor PCC + vitamin K for warfarin; idarucizumab for dabigatran; andexanet or PCC for Xa inhibitors). Platelet transfusion not routinely recommended (2022). Neurosurgery consult STAT.',
+        content: 'Stop tPA immediately. STAT CT. Cryoprecipitate 10 units IV (raises fibrinogen ~50 mg/dL, target >150). TXA is part of the AHA/ASA 2026 Table 5 reversal bundle for post-thrombolysis sICH; TXA is NOT recommended for spontaneous ICH (TICH-2; Class III, Level A per 2022 ICH). BP target <140 mmHg within 1 h; avoid SBP <110. Reverse anticoagulation if applicable (4-factor PCC + vitamin K for warfarin; idarucizumab for dabigatran; 4-factor PCC 50 units/kg for Xa inhibitors — andexanet alfa withdrawn from US market Dec 22, 2025). Platelet transfusion not routinely recommended (2022). Neurosurgery consult STAT.',
         type: 'pearl',
         section: 'step-6',
+        claimId: 'fxa-reversal-4fpcc-andexanet-withdrawn',
       },
     ],
     deep: [
@@ -1120,12 +1121,13 @@ export const STROKE_CLINICAL_PEARLS: ClinicalPearlsData = {
       {
         id: 'hemorrhage-reversal-protocol',
         title: 'Coagulopathy Reversal Protocol',
-        content: 'STEP 1: Stop the tPA infusion. STEP 2: Cryoprecipitate 10 units IV push to replace fibrinogen; target >150 mg/dL and recheck q30min until you hit it. STEP 3: Do not give TXA routinely. TICH-2 showed no benefit and a signal for thromboembolic harm (Class III, Level A; AHA/ASA 2022 ICH). STEP 4: Do not transfuse platelets routinely; PATCH 2016 showed worse outcomes in spontaneous ICH on antiplatelets. Reserve for severe thrombocytopenia or emergency surgery. STEP 5: Reverse the anticoagulant. Warfarin: 4-factor PCC 25–50 units/kg IV plus vitamin K 10 mg IV, goal INR <1.4; use FFP only if PCC is unavailable. Dabigatran: idarucizumab 5 g IV. Apixaban/rivaroxaban: andexanet alfa, or 4-factor PCC if andexanet is unavailable.',
+        content: 'STEP 1: Stop the tPA infusion. STEP 2: Cryoprecipitate 10 units IV push to replace fibrinogen; target >150 mg/dL and recheck q30min until you hit it. STEP 3: Do not give TXA routinely. TICH-2 showed no benefit and a signal for thromboembolic harm (Class III, Level A; AHA/ASA 2022 ICH). STEP 4: Do not transfuse platelets routinely; PATCH 2016 showed worse outcomes in spontaneous ICH on antiplatelets. Reserve for severe thrombocytopenia or emergency surgery. STEP 5: Reverse the anticoagulant. Warfarin: 4-factor PCC 25–50 units/kg IV plus vitamin K 10 mg IV, goal INR <1.4; use FFP only if PCC is unavailable. Dabigatran: idarucizumab 5 g IV. Apixaban/rivaroxaban/edoxaban: 4-factor PCC 50 units/kg IV is the default in the US — andexanet alfa was withdrawn from the US market (commercial sales ended Dec 22, 2025) after the FDA concluded its thromboembolic risks outweighed its benefits.',
         type: 'pearl',
         section: 'step-6',
         evidence: 'AHA/ASA 2022 ICH Guidelines, Sections 5.1, 6.2; TICH-2 2018',
         evidenceClass: 'I',
         evidenceLevel: 'C',
+        claimId: 'fxa-reversal-4fpcc-andexanet-withdrawn',
       },
       {
         id: 'tich2-trial',
