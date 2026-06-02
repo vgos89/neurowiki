@@ -218,6 +218,16 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Rollback plan:** git revert single commit.
 - **Source row:** docs/audits/aha-2026-audit-2026-05-22.md §4.4 row "Moderate risk (4–5)"
 
+### andexxa-us-market-withdrawal-currency — Class E-clinical [filed 2026-06-02]
+- **Status:** [ ] open — P1 (clinical-safety currency). NEEDS V SIGN-OFF before any content change.
+- **Trigger:** During W8 citation verification, FDA safety communication (`fda-andexxa-safety-2024`, URL resolves — FDA blocks the fetch bot UA but WebSearch confirms the page is live) reports the FDA judged Andexxa's (andexanet alfa) risks to outweigh benefits; AstraZeneca is voluntarily withdrawing the US BLA and ENDED US commercial sales on 2026-12-22 [sic — Dec 22, 2025]. As of today the product is not commercially available in the US.
+- **User-visible goal:** Any NeuroWiki surface recommending Andexxa for factor-Xa-inhibitor reversal in ICH must reflect current US availability and the FDA risk-benefit determination, so a clinician is not directed to an unavailable/withdrawn agent at the bedside.
+- **Investigation needed:** grep ICH/anticoagulation-reversal surfaces (guide pages, trialData ANNEXA-I entry, pearls) for "andexanet"/"Andexxa"; determine which recommend it and with what framing. Confirm exact US-sales-end date against the FDA page (the search summary said "December 22, 2025").
+- **Files likely touched:** src/pages/guide/ (ICH / reversal pages) · src/data/trialData.ts (ANNEXA-I) · src/data/strokeClinicalPearls.ts · src/lib/citations/registry.ts (refresh `fda-andexxa-safety-2024` last_reviewed)
+- **Route:** evidence-verifier → medical-scientist → clinical-reviewer (Class E-clinical, full §17.2 gate). NOT to be edited as part of any prose/punctuation batch.
+- **Clinical impact:** high
+- **Rollback plan:** git revert single commit.
+
 ### AGENT GOVERNANCE
 
 - [ ] [P2] Implement full task-class-aware clinical edit gate for guard-clinical-edit.mjs
@@ -588,7 +598,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Rollback plan:** per-trial revert; existing legacy layout is the fallback
 
 #### W8.2.0 — WCAG 2.5.3 back-button canary fix — Class B
-- **Status:** planned — P2, L5
+- **Status:** planned — P2, L5 · CONFIRMED REAL 2026-06-02. ~60 archetype-branch back buttons in TrialPageNew.tsx carry `aria-label="Back to Neuro Trials"` while the visible label is a trial abbreviation — a genuine WCAG 2.5.3 "Label in Name" mismatch. Larger than a Class B canary; recommend a focused accessibility-specialist pass over all branches (align aria-label to visible text or drop the redundant aria-label). The catalog-fallback button (L397) is already compliant.
 - **User-visible goal:** TrialPageNew canary back buttons (60+ trial page branches) resolve WCAG 2.5.3 "Target Size (Enhanced)" issue: visible trial name label conflicts with aria-label mismatch on small viewports.
 - **Context:** Back button back-navigation swarm (W8.1) fixed the hook and integrated pattern; canary TrialPageNew branches now have touch targets in both label (trial name) and aria-label. On 375px viewport, the visible text may be truncated or wrapped while aria-label remains unchanged. Audit detects mismatch (visible vs announced text). Fix: align label rendering or aria-label content, test at 375px.
 - **Non-goals:** no clinical content changes; no hook changes; presentation only
@@ -601,17 +611,17 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Source:** docs/audits/2026-language-audit.md
 - **User-visible goal:** Clinical prose in trialData.ts is free of em dashes and double hyphens in user-facing fields (bedsidePearl, howToInterpret, howToReadChart, bottomLineSummary).
 - **Sub-tasks (pattern-level, not per-trial):**
-  - [ ] W8.3.1 — Batch 5C/5D `--` cleanup (decimal, destiny, hamlet, destiny-ii, timing, optimas): Fix ~15 double-hyphen instances in doesNotProve, cautions, bedsidePearl, howToReadChart. Structural pattern: "The primary endpoint -- mRS [X] -- was not statistically significant." Restructure or replace with colon/period. Class C-clinical (prose only, no threshold/logic changes).
-  - [ ] W8.3.2 — Antiplatelet section `--` cleanup (eagle, escape-na1, socrates, sps3, sparcl): Fix ~9 double-hyphen instances in bedsidePearl and doesNotProve. Class C-clinical.
-  - [ ] W8.3.3 — TRACE-III / THAWS `—` cleanup: Fix 6 true em-dash instances across bedsidePearl, doesNotProve, cautions in these two trials. Highest schema severity (explicit "No em dashes" rule in TrialMetadata comments). Class C-clinical.
-  - [ ] W8.3.4 — pearls[] and listDescription `—` sweep: Lower severity. Fix em dashes in pearls[] arrays and listDescription fields across all trials. Class B (display strings, no clinical meaning change).
+  - [x] W8.3.1 — Batch 5C/5D `--` cleanup (decimal, destiny, hamlet, destiny-ii, timing, optimas): DONE 2026-06-02. Replaced double-hyphen instances in doesNotProve, cautions, bedsidePearl, keyMessage with meaning-preserving punctuation (comma/semicolon/period). Reclassified as Class B (punctuation only, provably no meaning change; each replacement uniqueness-asserted before write). Verified 0 prose `--` remain.
+  - [x] W8.3.2 — Antiplatelet section `--` cleanup (eagle, escape-na1, socrates, sps3, sparcl): DONE 2026-06-02. Same Class B punctuation pass. Combined with W8.3.1 into a single 21-replacement commit on src/data/trialData.ts.
+  - [ ] W8.3.3 — TRACE-III / THAWS `—` cleanup: Fix true em-dash instances across bedsidePearl, doesNotProve, cautions in these two trials. Highest schema severity (explicit "No em dashes" rule in TrialMetadata comments). Class C-clinical. NOTE 2026-06-02: deferred to a focused em-dash sweep — larger/more delicate than the "easy" ranking implied. trialData.ts still holds ~122 em-dashes; many are en-dashes (CIs, page ranges) that MUST NOT be touched, so this needs careful field-scoped handling, not a blanket replace.
+  - [ ] W8.3.4 — pearls[] and listDescription `—` sweep: Lower severity. Fix em dashes in pearls[] arrays and listDescription fields across all trials. Class B (display strings, no clinical meaning change). Deferred alongside W8.3.3.
 - **Non-goals:** "essentially" phrasing is borderline; defer to PM; no structural rewriting
 - **Acceptance checks:** grep for `—` and `--` in bedsidePearl, doesNotProve, cautions, howToReadChart, bottomLineSummary returns zero results
 - **Clinical impact:** low (prose only, no threshold or interpretation changes)
 - **Rollback plan:** n/a (prose changes; revert if any meaning change is detected post-review)
 
 #### W8.4 — Add years to trial navigation surfaces — Class C
-- **Status:** planned
+- **Status:** largely DONE 2026-06-02 — year already renders in TrialLegendCard (L73-75) and the TrialPageNew catalog header (L408), both guarded `year > 0`. Remaining work: (a) backfill the `year:` field for the 14 of 89 trials in trialListData.ts that lack it, and (b) decide whether question-detail trialId chips should show year. Neither is a quick edit; keep open as a small follow-up, not part of the trivial batch.
 - **User-visible goal:** Trial cards, listing rows, and navigation chips show the trial year so residents can orient to the evidence timeline without opening each page.
 - **Investigation needed:** Audit which surfaces are missing the year field: TrialLegendCard, TrialsPage listing rows, question-detail trialId chips, trials-referenced-in pathway pages. The `catalogTrial?.year` field is already used in the legacy fallback header (TrialPageNew.tsx line 6722) — check if it propagates to listing and nav surfaces.
 - **Files likely touched:** src/components/trials/TrialLegendCard.tsx · src/pages/TrialsPage.tsx (or equivalent listing page) · src/data/trialListData.ts (check if year is present for all 89 trials)
@@ -638,13 +648,13 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ### Future Refactors
 - Skill-build tasks for other neurology domains as they are needed: seizure-guidelines, headache-guidelines, dementia-guidelines, etc. Build on demand, not preemptively.
 - [ ] Migrate humanizer as a standalone skill — either from Anthropic's environment skill at /mnt/skills/user/humanizer or authored fresh by extracting content-writer's internal humanizer checklist (lines 319–417 of content-writer.md). Once the skill file exists at .claude/skills/humanizer.md, add it to the frontmatter of medical-scientist and content-writer.
-- [ ] Archive /agents/dormant/compliance-legal.md and /agents/dormant/performance-optimizer.md to /agents/legacy/ once W3.6 completes and .claude/agents/ + .claude/skills/ are the canonical sources. Keep legacy copies untouched until then for rollback safety.
-- [ ] Update .claude/agents/seo-specialist.md line references from routeMeta.ts → routeManifest.ts (content drift inherited from legacy source; canonical file is src/routeManifest.ts per commit 2a53994).
-- [ ] Audit .claude/skills/performance.md for Next.js-specific code examples (next.config.js, next/font/google, pages/ router structure). Replace with Vite + React Router 7 equivalents where the pattern is transferable, or flag as non-applicable. Substantive performance knowledge (Core Web Vitals, code splitting, caching) applies regardless.
-- [ ] Fix stray 'ç' character on line ~111 of .claude/skills/performance.md ("**Impact:**ç" → "**Impact:**") inherited from legacy source typo.
+- [x] Archive /agents/dormant/compliance-legal.md and /agents/dormant/performance-optimizer.md — VERIFIED CLOSED 2026-06-02: legacy agent files no longer exist; only empty, untracked `agents/active/` and `agents/dormant/` dirs remain (0 tracked files). Canonical briefs live in .claude/agents/.
+- [x] Update .claude/agents/seo-specialist.md routeMeta.ts → routeManifest.ts — VERIFIED CLOSED 2026-06-02: 0 occurrences of `routeMeta` in seo-specialist.md; already references routeManifest.ts throughout.
+- [x] Audit .claude/skills/performance/SKILL.md for Next.js-specific examples — VERIFIED CLOSED 2026-06-02: 0 occurrences of next.config / next/font / next.js in the skill.
+- [x] Fix stray 'ç' character in performance skill — VERIFIED CLOSED 2026-06-02: 0 occurrences of `ç` in .claude/skills/performance/SKILL.md.
 - [ ] Evaluate whether .claude/agents/accessibility-specialist.md should be split — ARIA patterns and code examples may belong in .claude/skills/accessibility.md, with the agent file reduced to role + activation triggers + decision rubric. Evaluate after W3.5 when the full agent roster is in place.
-- [ ] Audit .claude/agents/mobile-first-developer.md for non-design-system Tailwind colors (blue-*, gray-*, etc.) inherited from legacy source. Replace with neuro-* tokens per CALCULATOR_SPEC. Also update @performance-optimizer handoff reference to .claude/skills/performance.md skill-load pattern.
-- [ ] Archive /agents/active/ and /agents/dormant/ to /agents/legacy/ once all 17 agent briefs are confirmed stable in .claude/agents/
+- [x] Audit .claude/agents/mobile-first-developer.md for non-design-system Tailwind colors — VERIFIED CLOSED 2026-06-02: 0 raw `blue-*`/`gray-*` colors remain; the only neutrals present are `slate-*` (the sanctioned neuro neutral palette, used inside an illustrative code example). No action needed.
+- [x] Archive /agents/active/ and /agents/dormant/ — VERIFIED CLOSED 2026-06-02: only empty untracked dirs remain (see first item above); all 17 briefs canonical in .claude/agents/.
 - [ ] CLAUDE.md §13.3 references data-architect agent that does not exist in .claude/agents/. Decide when Wave 5 citation scanner work begins: create data-architect agent file, or reassign scanner ownership to system-architect or calculator-engineer. Update §13.3 accordingly.
 
 ---
