@@ -770,11 +770,15 @@ const NihssCalculator: React.FC = () => {
       <h1 className="sr-only">NIHSS Calculator — NIH Stroke Scale Online</h1>
 
       {/* ── Sticky header — CALCULATOR_SPEC.md §1.1 + §3.1 ──────────────── */}
+      {/* scoreDisplay omitted — NIHSS score lives in the interpretation bar at
+          the bottom, not the sticky header. Rapid/Detailed toggle goes to the
+          secondaryRow so the primary row stays within budget at 375px. */}
       <CalculatorHeader
         name="NIH Stroke Scale"
         headerRef={nihssHeaderRef}
-        scoreDisplay={
-          <div className="flex items-center gap-0.5 bg-slate-100 rounded-full p-0.5 mt-1">
+        scoreAriaLabel={`NIH Stroke Scale. ${nihssMode} mode.`}
+        secondaryRow={
+          <div className="flex items-center gap-0.5 bg-slate-100 rounded-full p-0.5">
             <button
               type="button"
               onClick={() => setNihssMode('rapid')}
@@ -799,7 +803,7 @@ const NihssCalculator: React.FC = () => {
             </button>
           </div>
         }
-        scoreAriaLabel={`NIH Stroke Scale. ${nihssMode} mode.`}
+        onCopy={copyNihss}
         saveCase={{
           source: { type: 'calculator', id: 'nihss', title: 'NIHSS' },
           buildData: ({ saveAbsoluteTimestamps }): SavedCaseData => {

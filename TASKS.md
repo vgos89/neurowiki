@@ -1,7 +1,7 @@
 # TASKS.md — NeuroWiki Task Ledger
 
 ## ACTIVE
-(none)
+(none — post-flight update session)
 
 ### W5.1 — Citation schema foundation — Class D
 - **Status:** done — commit 8bf8cc8 (2026-04-17)
@@ -1093,6 +1093,15 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-05-28 — Pre-stroke mRS chips + NIHSS header redesign + BP tPA alert + timestamp popovers + mRS picker modal + sitemap fix — Class C + C-clinical (commits e49dd06, 222a66c, 1b85817, b94357f)
+  - Pre-stroke mRS inline chips (7 number circles 0–6) added to PatientContextPanel; new MRSGrade type + prestrokeMrs field on PatientContextValues. 
+  - NIHSS header redesign: fixed crowded header; truncated name div; moved Rapid/Detailed toggle + Save + Send to secondaryRow; restored NIHSS total in scoreDisplay.
+  - BP tPA threshold alert: amber inline chip when SBP ≥185 OR DBP ≥110. Citation aha-asa-ivt-bp-threshold (PMID 31662037) registered; claim bp-ivt-threshold-185-110 in claims.ts. Clinical review artifact at docs/reviews/clinical-PR-bp-alert.md (approve).
+  - Timestamp popovers on 4 GWTG-tracked events (Door-to-CT, Door-to-Needle, Door-to-Puncture, Groin-to-Reperfusion) with clickable CheckCircle icons expanding inline popovers (metric name, threshold windows, source).
+  - mRS picker modal: new MrsPickerModal.tsx component; "Pre-stroke mRS" label in PatientContextPanel opens bottom-sheet with full 7-grade list; bidirectional sync with inline chips.
+  - Sitemap fix: /calculators/mrs was missing from public/sitemap.xml; added entry + PHASE_1_ROUTES entry. Now 170 routes prerender.
+  - All surfaces use plain-language copy per humanizer rule (no em-dashes).
+  - Gate 6 live-verify: PASS on all 4 changed route components post-deploy.
 - [x] 2026-05-24 — My Favorites page + smarter TrialsPage search + stroke-code favoritable — Class C (commit pending)
   - New /favorites route with categorized Calculators / Pathways / Trials sections. Reads useFavorites localStorage, resolves IDs via new src/lib/favoritesRegistry.ts (single source of truth mapping calc/pathway IDs to title+path; trials resolved via findTrialById). Empty state with quick links to /calculators, /pathways, /trials. FavouritesStarButton now navigates to /favorites on non-/trials routes; on /trials it preserves the existing ?favs filter behavior. Stroke Code pathway now has its own favorite star in the sticky header (previously the only pathway without one). TrialsPage local search gains an "Other matches" block that surfaces calculator/pathway matches inline (closes V "calculators not showing up when I type NIHSS" feedback — the global ⌘K overlay does return them, but the local /trials search wasn't surfacing them). Route count 43→44.
 - [x] 2026-05-24 — Prerender deploy fix (www. subdomain) + UX-audit Wave 4 WCAG 2.1 AA — Class C (commits 34df248 + 4626b16)

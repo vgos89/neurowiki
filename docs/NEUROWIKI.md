@@ -132,6 +132,16 @@ All clinical content must be traceable to a named guideline with year. No conten
 - `logo-lockup.png` — horizontal wordmark (icon + "NeuroWiki" text)
 - Inline SVG logo mark used in Layout.tsx (desktop sidebar + mobile header) — brain+circuit mark, cobalt background `#1746A2`, white paths
 
+## Recent Work (2026-05-28)
+
+**Calculator + Pathway UI enhancements:**
+- **Pre-stroke mRS chips:** PatientContextPanel now displays 7 compact number circles (mRS 0–6) for selection. Type: `MRSGrade` (union of 0–6). State tracked via `PatientContextValues.prestrokeMrs`. Enables quick mRS entry alongside other patient context fields (BP, glucose, NIHSS).
+- **NIHSS header redesign:** Fixed crowded header layout — truncated patient-name div, moved Rapid/Detailed mode toggle + Save + Send buttons to secondaryRow, restored total score display prominence in scoreDisplay area. Improves mobile usability on small viewports.
+- **BP tPA threshold alert:** PatientContextPanel emits amber inline chip when SBP ≥185 OR DBP ≥110. Citation: aha-asa-ivt-bp-threshold (PMID 31662037) registered in citations/registry.ts. Clinical review approved (docs/reviews/clinical-PR-bp-alert.md).
+- **Timestamp popovers:** 4 GWTG event timestamps (Door-to-CT, Door-to-Needle, Door-to-Puncture, Groin-to-Reperfusion) now have clickable CheckCircle icons that expand inline popovers showing metric name, threshold windows (green/amber/red), and source citation.
+- **mRS picker modal:** New `MrsPickerModal.tsx` primitive — bottom-sheet modal listing full 7-grade mRS scale with descriptions. Opens from "Pre-stroke mRS" label in PatientContextPanel. Bidirectional sync with inline chips via `setPrestrokeMrs`.
+- **Sitemap fix:** /calculators/mrs was missing from public/sitemap.xml (never prerendered on Vercel — served as CSR). Now in sitemap + PHASE_1_ROUTES. Prerender coverage: 170 routes.
+
 ## Recent Work (2026-05-17)
 - **EMR-text doctor-tone rewrite:** 10 calculators + 5 pathway pages + 6 modals rewritten per approved voice standard (docs/reviews/emr-text-standard-2026-05-17.md). NIHSS exception: all 15 items preserved as numbered list. No clinical thresholds or interpretation logic changed across 9 implementation commits (f8b8a2f, 5a5fca7, f87eea1).
 - **Share Button primitive:** New `ShareButton` component + `shareOrCopy` utility deployed across 21 surfaces (CalculatorHeader × 10 + PathwayHeader × 5 + Stroke Code result sections × 6). Enables native share sheet on mobile + copy fallback.
@@ -199,9 +209,12 @@ All clinical content must be traceable to a named guideline with year. No conten
 - Architects: arch-pattern-a-fix-tier-1-2.md, arch-pattern-a-fix-tier-4.md, arch-pattern-a-fix-tier-5.md
 - Clinical reviewers: clinical-pattern-a-fix-tier-4.md, clinical-pattern-a-fix-tier-5.md (both approve-with-conditions resolved)
 
-## Current State (as of 2026-05-16)
+## Current State (as of 2026-05-28)
 
-**Pattern A post-ship fixes landed** — all three pathways now on spec-mandated CalculatorDrawer; PathwayCocktailSummary new primitive shipped; all primitive render bugs fixed.
+**Patient Context Panel modernization complete** — pre-stroke mRS chips, BP alert, NIHSS header redesign, timestamp popovers, mRS picker modal all live.
+**Sitemap prerender coverage:** 170 routes (all clinical surfaces pre-rendered on Vercel deploy).
+
+**Pattern A post-ship fixes landed** (2026-05-16) — all three pathways now on spec-mandated CalculatorDrawer; PathwayCocktailSummary new primitive shipped; all primitive render bugs fixed.
 
 **Layer 1 — Foundation:** COMPLETE
 **Layer 2 — Stroke Pathway:** COMPLETE (all steps, modals, header, tabs shipped)

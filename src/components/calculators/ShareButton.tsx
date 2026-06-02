@@ -74,17 +74,19 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
     );
   }
 
-  // 'pill' variant — matches the Copy button styling from CalculatorHeader
+  // 'pill' variant — icon-only on mobile (< 640px), icon + label on sm+ (tablet/desktop).
+  // Matches the responsive treatment of Copy and Save in CalculatorHeader so the
+  // right cluster stays within budget at 375px.
   return (
     <button
       type="button"
       onClick={handleClick}
       disabled={disabled || busy}
       aria-label={`${label} this note`}
-      className={`ml-1.5 bg-white border border-neuro-200 hover:bg-neuro-50 text-neuro-700 px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px] inline-flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed ${className}`}
+      className={`p-2 sm:ml-1.5 sm:px-4 bg-white border border-neuro-200 hover:bg-neuro-50 text-neuro-700 rounded-full text-sm font-medium transition-colors min-h-[44px] min-w-[44px] sm:min-w-0 flex items-center justify-center sm:gap-1.5 sm:py-2 disabled:opacity-40 disabled:cursor-not-allowed ${className}`}
     >
       <Share2 size={15} aria-hidden="true" />
-      {label}
+      <span className="hidden sm:inline">{label}</span>
     </button>
   );
 };

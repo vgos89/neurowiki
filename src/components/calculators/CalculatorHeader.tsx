@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, RefreshCw, Bookmark } from 'lucide-react';
+import { Star, RefreshCw, Bookmark, Copy } from 'lucide-react';
 import { BackArrow } from './BackArrow';
 import { ShareButton } from './ShareButton';
 import { SaveCaseModal } from '../cases/SaveCaseModal';
@@ -25,8 +25,10 @@ import type { SavedCase, SavedCaseData } from '../../lib/cases/types';
 export interface CalculatorHeaderProps {
   /** Calculator name label (e.g. "ABCD² Score", "ASPECTS Score"). */
   name: string;
-  /** Visual score render: number, string, em-dash, plus any inline severity badge. */
-  scoreDisplay: React.ReactNode;
+  /** Visual score render: number, string, em-dash, plus any inline severity badge.
+   *  Optional — omit for calculators that surface the score only in the drawer bar
+   *  (e.g. NIHSS, where the interpretation bar is the score surface). */
+  scoreDisplay?: React.ReactNode;
   /** Screen-reader description of the current score state. */
   scoreAriaLabel: string;
   /** Optional secondary row (NIHSS LVO + mode toggle). Renders inside the same sticky header. */
@@ -156,14 +158,17 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
                 {name}
               </div>
 
-              <div
-                className="flex items-baseline gap-1.5 mt-0.5"
-                aria-live="polite"
-                aria-atomic="true"
-                aria-label={scoreAriaLabel}
-              >
-                {scoreDisplay}
-              </div>
+              {/* scoreDisplay is optional — NIHSS omits it; score lives in the drawer bar */}
+              {scoreDisplay && (
+                <div
+                  className="flex items-baseline gap-1.5 mt-0.5"
+                  aria-live="polite"
+                  aria-atomic="true"
+                  aria-label={scoreAriaLabel}
+                >
+                  {scoreDisplay}
+                </div>
+              )}
             </div>
           </div>
 
@@ -198,25 +203,32 @@ export const CalculatorHeader: React.FC<CalculatorHeaderProps> = ({
                 2026-05-20: bookmark icon alone isn't obvious enough to
                 suggest the save-pathway feature.)
                 Visible only when the consumer passes a saveCase prop. */}
+            {/* Save Case — icon-only on mobile (< 640px), icon + "Save" label on sm+ (tablet/desktop).
+                Keeps the right cluster within budget on 375px phones while staying
+                discoverable on wider screens. */}
             {saveCase && (
               <button
                 type="button"
                 onClick={() => setSaveCaseOpen(true)}
-                className="ml-1 inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium text-slate-600 hover:text-neuro-700 hover:bg-neuro-50 transition-colors min-h-[44px]"
+                className="p-2 sm:ml-1 sm:px-3 rounded-full text-slate-600 hover:text-neuro-700 hover:bg-neuro-50 transition-colors min-h-[44px] min-w-[44px] sm:min-w-0 flex items-center justify-center sm:gap-1.5 sm:py-2 sm:text-sm sm:font-medium"
                 aria-label="Save case"
               >
                 <Bookmark size={16} aria-hidden="true" />
-                <span>Save</span>
+                <span className="hidden sm:inline text-sm font-medium">Save</span>
               </button>
             )}
 
+            {/* Copy — icon-only on mobile, icon + "Copy" label on sm+.
+                bg-neuro-500 is the primary action colour across all calculators. */}
             {onCopy && (
               <button
                 type="button"
                 onClick={handleCopy}
-                className="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px] flex items-center"
+                className="p-2 sm:ml-1.5 sm:px-4 bg-neuro-500 hover:bg-neuro-600 text-white rounded-full text-sm font-medium transition-colors min-h-[44px] min-w-[44px] sm:min-w-0 flex items-center justify-center sm:gap-1.5 sm:py-2"
+                aria-label="Copy to clipboard"
               >
-                Copy
+                <Copy size={17} aria-hidden="true" />
+                <span className="hidden sm:inline">Copy</span>
               </button>
             )}
             {shareText && (
