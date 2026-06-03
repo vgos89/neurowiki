@@ -1,4 +1,3 @@
-import React from 'react';
 
 /**
  * TrialTitleHeading — the page-level <h1> shared by every trial archetype page.

@@ -8,7 +8,6 @@
  * from 2022 AHA/ASA Guideline for Management of Patients With
  * Spontaneous ICH (INTERACT2, ATACH-2).
  */
-import React from 'react';
 import { ProtocolModal, type ProtocolStep } from './ProtocolModal';
 import { ICH_PROTOCOL_ITEMS } from './StrokeIchProtocolStep';
 

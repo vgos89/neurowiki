@@ -1,7 +1,6 @@
 // PATHWAY_SPEC §1.5 — Scenario section for Pathways hub
 // Trail slot: "<N> steps" with N bolded per HUB_SPEC §1.6.4.
 // Empty-state: shown only when favsActive is true and the list is empty.
-import React from 'react';
 import ToolRowCard from '../hub/ToolRowCard';
 import type { PathwayEntry, PathwayScenarioMeta } from '../../data/pathways';
 

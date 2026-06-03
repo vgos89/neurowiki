@@ -1,7 +1,10 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { LINK_REGISTRY, LinkItem, TRIAL_MODAL_PATTERNS } from './registry';
+import {
+  Link } from 'react-router-dom';
+import { LINK_REGISTRY,
+  TRIAL_MODAL_PATTERNS,
+} from './registry';
 
 // Sort by alias length descending to match longest phrases first (e.g. "DAWN trial" before "DAWN")
 const SORTED_ITEMS = LINK_REGISTRY.flatMap(item => 

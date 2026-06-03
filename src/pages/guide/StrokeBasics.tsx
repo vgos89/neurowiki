@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import StrokeBasicsWorkflowV2 from './StrokeBasicsWorkflowV2';
 import { useRecents } from '../../hooks/useRecents';
 

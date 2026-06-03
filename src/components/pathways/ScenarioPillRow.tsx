@@ -2,7 +2,6 @@
 // URL param: ?scenario= (matches Home's ?scenario= vocabulary per HUB_SPEC §1.4.2 note)
 // Re-clicking the active pill resets to All (null).
 // Visual contract: explicit Tailwind matching Home ScenarioPillRow / CategoryPillRow (no shared abstraction).
-import React from 'react';
 import { PATHWAY_SCENARIOS } from '../../data/pathways';
 import type { PathwayScenarioId } from '../../data/pathways';
 

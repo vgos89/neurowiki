@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ArrowLeft, AlertTriangle, Check, RotateCcw, Copy, Info, ChevronRight, Brain, XCircle, Activity, Star, ChevronDown } from 'lucide-react';
-import { ELAN_CONTENT } from '../data/toolContent';
 import { autoLinkReactNodes } from '../internalLinks/autoLink';
 import { useTrialModal } from '../contexts/TrialModalContext';
 import { useFavorites } from '../hooks/useFavorites';

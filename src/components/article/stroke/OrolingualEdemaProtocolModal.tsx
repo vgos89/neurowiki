@@ -6,7 +6,6 @@
  * references) preserved byte-for-byte from the prior implementation
  * — verbatim from AHA/ASA 2026, Table 6; Refs 53–54.
  */
-import React from 'react';
 import { ProtocolModal, type ProtocolStep } from './ProtocolModal';
 
 const STEPS: ProtocolStep[] = [

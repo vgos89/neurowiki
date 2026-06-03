@@ -6,7 +6,7 @@
 //   ADR: this deviation is intentional and PM-approved per prompt execution.
 // HUB_SPEC §6 — favourites filter via ?favs=true URL param
 // LAYOUT_SPEC §7.2 — zone: 'reference' applied by Layout shell; no wrapper here
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import CalculatorsHero from '../components/calculators/CalculatorsHero';
 import CategoryPillRow from '../components/calculators/CategoryPillRow';

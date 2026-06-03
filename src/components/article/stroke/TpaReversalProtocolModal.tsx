@@ -7,7 +7,6 @@
  * — verbatim from AHA/ASA 2026 Acute Ischemic Stroke Guideline,
  * Table 5.
  */
-import React from 'react';
 import { ProtocolModal, type ProtocolStep } from './ProtocolModal';
 
 const STEPS: ProtocolStep[] = [

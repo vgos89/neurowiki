@@ -18,7 +18,7 @@
  * A11y: <aside aria-label="Related trials">; each card is a <Link>.
  */
 
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { TRIAL_DATA } from '../../data/trialData';
 import { TRIAL_QUESTIONS } from '../../data/trial-questions';

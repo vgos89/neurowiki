@@ -3,7 +3,7 @@
 // ?area= URL param drives active pill (null = All).
 // ?favs=true URL param drives favourites filter via useFavorites.
 // Replaces ResidentToolkit.tsx as the /guide route component.
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import GuideHero from '../components/guide/GuideHero';
 import GuideFeaturedStrip from '../components/guide/GuideFeaturedStrip';

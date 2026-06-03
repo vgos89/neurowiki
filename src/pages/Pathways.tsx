@@ -6,7 +6,7 @@
 // Spec deviation note: Prompt 5e §1 specified 5 pills (including ICH); implemented 4
 // pills per HUB_SPEC v1.3 §1.4.1 + hub-reference.html which both predate the prompt
 // and reflect the actual route data (no /pathways/ich-* routes exist). CLAUDE.md §3.
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import PathwaysHero from '../components/pathways/PathwaysHero';
 import ScenarioPillRow from '../components/pathways/ScenarioPillRow';

@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
+import {
+  useEffect } from 'react';
 import {
   ArticleLayout,
   Section,
-  SubSection,
   Paragraph,
   Term,
-  Critical,
-  Value,
 } from '../../components/article';
 import { useRecents } from '../../hooks/useRecents';
 

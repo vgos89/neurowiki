@@ -1,6 +1,5 @@
 // PATHWAY_SPEC §1.1 — Pathways hub hero
 // Mirrors CalculatorsHero pattern exactly: eyebrow · count headline · lede.
-import React from 'react';
 import { PATHWAYS } from '../../data/pathways';
 
 export default function PathwaysHero() {
