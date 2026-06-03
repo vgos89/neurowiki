@@ -457,9 +457,8 @@ const TrialPageNew: React.FC = () => {
               type="button"
               onClick={handleBack}
               className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0"
-              aria-label="Back to Neuro Trials"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               {/* ADR-005 Decision 4: sticky header name — 13px bold slate-800, tracking 0.02em */}
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>
                 EXTEND
@@ -927,8 +926,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>WAKE-UP</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -1010,8 +1009,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ECASS III</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -1093,8 +1092,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>NINDS</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -1176,8 +1175,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>INSPIRES</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -1260,8 +1259,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CHANCE-2</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -1344,8 +1343,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ATTENTION</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -1428,8 +1427,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>BAOCHE</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -1517,8 +1516,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>SAMMPRIS</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -1597,8 +1596,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ORIGINAL</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -1678,8 +1677,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>DEFUSE-3</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -1766,8 +1765,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>DAWN</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -1854,8 +1853,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>SELECT2</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -1942,8 +1941,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ANGEL-ASPECT</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -2030,8 +2029,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ENRICH</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -2115,8 +2114,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>B_PROUD</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -2209,8 +2208,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ESCAPE-MeVO</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -2286,8 +2285,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ELAN</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -2362,8 +2361,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CHANCE</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -2446,8 +2445,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>POINT</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -2530,8 +2529,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>SOCRATES</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -2607,8 +2606,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>SPS3</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -2683,8 +2682,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>SPARCL</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -2766,8 +2765,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>THALES</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -2850,8 +2849,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>EAGLE</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -2931,8 +2930,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>BEST-MSU</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -3018,8 +3017,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>AcT</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -3094,8 +3093,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ARAMIS</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -3169,8 +3168,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>NOR-TEST</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -3245,8 +3244,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>NOR-TEST 2</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -3326,8 +3325,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>PRISMS</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -3401,8 +3400,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>PROST</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -3476,8 +3475,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>PROST-2</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -3551,8 +3550,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>RAISE</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -3626,8 +3625,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>TASTE</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -3702,8 +3701,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>THAWS</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -3778,8 +3777,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>TRACE-2</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -3854,8 +3853,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>TRACE-III</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -3939,8 +3938,8 @@ const TrialPageNew: React.FC = () => {
         {/* Section 1: Sticky header */}
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>INTERACT4</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -4034,8 +4033,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>DISTAL</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -4112,8 +4111,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>MR ASAP</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -4187,8 +4186,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>RACECAT</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -4262,8 +4261,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>TRIAGE-STROKE</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -4337,8 +4336,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ATTEST-2</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -4414,8 +4413,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>TIMELESS</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -4489,8 +4488,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>TWIST</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -4568,8 +4567,8 @@ const TrialPageNew: React.FC = () => {
         {/* Sticky header */}
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>RIGHT-2</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -4722,9 +4721,8 @@ const TrialPageNew: React.FC = () => {
               type="button"
               onClick={handleBack}
               className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0"
-              aria-label="Back to Neuro Trials"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>
                 WEAVE
               </span>
@@ -4893,8 +4891,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>MR CLEAN</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -4982,8 +4980,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ESCAPE</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -5071,8 +5069,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>REVASCAT</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -5160,8 +5158,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>EXTEND-IA</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -5246,8 +5244,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>SWIFT PRIME</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -5335,8 +5333,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>THRACE</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -5425,8 +5423,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>LASTE</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -5548,8 +5546,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>TENSION</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -5671,8 +5669,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CHOICE</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -5759,8 +5757,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>DIRECT-MT</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -5847,8 +5845,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>DEVT</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -5934,8 +5932,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>COMPASS</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -6021,8 +6019,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ASTER</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -6109,8 +6107,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ASTER2</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -6196,8 +6194,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>SKIP</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -6281,8 +6279,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>MR CLEAN-NO IV</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -6389,8 +6387,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>DIRECT-SAFE</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -6474,8 +6472,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>SWIFT DIRECT</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -6559,8 +6557,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>RESCUE BT</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -6661,8 +6659,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>BP-TARGET</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -6742,8 +6740,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>BEST-II</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -6828,8 +6826,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>OPTIMAL-BP</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -6913,8 +6911,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ENCHANTED</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -7006,8 +7004,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ESCAPE-NA1</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -7085,8 +7083,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CHARM</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -7175,8 +7173,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>DECIMAL</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -7260,8 +7258,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>DESTINY</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -7345,8 +7343,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>HAMLET</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -7430,8 +7428,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>DESTINY II</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -7519,8 +7517,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>TIMING</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -7605,8 +7603,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>OPTIMAS</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -7702,8 +7700,8 @@ const TrialPageNew: React.FC = () => {
         {/* Sticky header */}
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>{shortName}</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadge}</span>
@@ -8011,8 +8009,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CLOSE</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -8098,8 +8096,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>RESPECT</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -8185,8 +8183,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>REDUCE</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -8272,8 +8270,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CLOSURE I</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -8356,8 +8354,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>PC Trial</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -8442,8 +8440,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>RESPECT (Original 2013)</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -8526,8 +8524,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>DEFENSE-PFO</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -8618,8 +8616,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>THEIA</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -8703,8 +8701,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>IST</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -8788,8 +8786,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CAST</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -8874,8 +8872,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>PRoFESS</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -8959,8 +8957,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ANNEXA-I</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -9054,8 +9052,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ANNEXA-4</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -9142,8 +9140,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>Sarode 2013</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -9229,8 +9227,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>PATCH</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -9317,8 +9315,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>EXTEND-IA TNK</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -9404,8 +9402,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>RESCUE-Japan LIMIT</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -9495,8 +9493,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CREST</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -9580,8 +9578,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CREST-2</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -9672,8 +9670,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>THEIA</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -9756,8 +9754,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ANNEXA-I</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -9841,8 +9839,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>ANNEXA-4</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -9925,8 +9923,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>Sarode 2013</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -10008,8 +10006,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>PATCH</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-red-50 text-red-700 border border-red-200 rounded-full font-semibold">Harm</span>
@@ -10093,8 +10091,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>IST</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -10178,8 +10176,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>CAST</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -10262,8 +10260,8 @@ const TrialPageNew: React.FC = () => {
       <div className="min-h-dvh bg-slate-50 pb-28">
         <div className="bg-white border-b border-slate-100 sticky top-0 z-40">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0" aria-label="Back to Neuro Trials">
-              <ArrowLeft className="w-4 h-4" />
+            <button type="button" onClick={handleBack} className="inline-flex items-center gap-2 text-slate-500 hover:text-[#1746A2] transition-colors cursor-pointer bg-transparent border-0">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b', letterSpacing: '0.02em' }}>PRoFESS</span>
             </button>
             <span className="text-xs px-2.5 py-0.5 bg-[#EEF2FF] text-[#1746A2] rounded-full font-semibold">{categoryBadgeLabel}</span>
@@ -10351,7 +10349,7 @@ const TrialPageNew: React.FC = () => {
             onClick={handleBack}
             className="mt-4 inline-flex items-center gap-2 text-blue-600 hover:underline cursor-pointer bg-transparent border-0 p-0"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             Back to Trials
           </button>
         </div>
@@ -10369,7 +10367,7 @@ const TrialPageNew: React.FC = () => {
             onClick={handleBack}
             className="inline-flex items-center gap-2 text-slate-500 hover:text-neuro-600 mb-4 transition-colors text-sm font-medium cursor-pointer bg-transparent border-0 p-0"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             <span>Back to Neuro Trials</span>
           </button>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">

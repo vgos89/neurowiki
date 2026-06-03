@@ -387,7 +387,7 @@ export interface TrialMetadata {
   };
   // ─────────────────────────────────────────────────────────────────────────
   /** RCT predecessor chain for "what changed" teaching (TRIALS_SPEC v1.2 §7b).
-   *  Mutually exclusive with historicalContext -- a trial should not have both. */
+   *  Mutually exclusive with historicalContext — a trial should not have both. */
   rctChain?: {
     chainName: string;
     chainNarrative: string;
