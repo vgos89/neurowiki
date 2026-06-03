@@ -109,7 +109,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 ## PENDING
 
 ### pathway-a11y-reaudit-fixes — Class C-clinical [from docs/reviews/a11y-reaudit-pathways-2026-06-03.md]
-- **Status:** planned
+- **Status:** [x] done — 9bd39cf. All 9 findings (RH1–RH9) shipped + PathwayHeader favourite-button aria-pressed/aria-hidden propagated to all 6 consumers. RH1/RH4 result-region gaps confirmed real (no pre-existing live region) before wrapping. tsc clean; build 170/170. Clinical-reviewer §17.2 artifact: docs/reviews/clinical-PR-pathway-a11y-reaudit.md (approve — ARIA-only, rendered text byte-identical).
 - **User-visible goal:** Make the clinical-pathway pages and the stroke time-picker fully usable by clinicians on a keyboard or screen reader — results announced aloud when they appear, toggle/checkbox controls correctly labelled, and the favourite control named. 9 genuinely-open high-priority WCAG 2.1 AA findings (RH1–RH9), all small attribute additions (S complexity, 1–5 lines each, no logic changes).
 - **Non-goals:** No layout/visual redesign; no clinical text, threshold, or content changes; no rebuild of the time-picker interaction (its keyboard listbox already shipped — only the residual mobile date-accordion `aria-expanded` remains).
 - **Files likely touched:** src/pages/MigrainePathway.tsx (RH1 result aria-live, RH2 SafetyToggle aria-pressed, RH3 red-flag role="checkbox"/aria-checked), src/pages/ClinicHeadachePathway.tsx (RH4 result aria-live, RH5 progressbar aria-label), src/pages/ElanPathway.tsx (RH6 star aria-label/aria-pressed, lines 289–294), src/pages/StatusEpilepticusPathway.tsx (RH7 weight label htmlFor/id, RH8 Stage 3 dose row aria-live), src/components/article/stroke/LKWTimePicker.tsx (RH9 mobile date-accordion aria-expanded).
