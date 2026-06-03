@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import type { TrialItem, TrialCategoryKey } from '../../data/trialListData';
 import { trackTrialCardClicked } from '../../utils/analytics';
+
+// Long-press-to-favourite (mobile). Touch users can press-and-hold anywhere on
+// the card for 500ms to toggle favourite, as a faster alternative to aiming for
+// the star. Guardrails:
+//   • touch pointers only — mouse/pen don't get a hold-to-favourite gesture
+//   • a >10px move cancels the timer (it's a scroll, not a hold)
+//   • when the hold fires we suppress the card's navigation click
+// The visible star button remains the primary, accessible control — this gesture
+// is purely additive, so screen-reader / keyboard users are unaffected.
+const LONG_PRESS_MS = 500;
+const MOVE_CANCEL_PX = 10;
 
 /**
  * v4 trial card anatomy. trials-legend-reference.html §Stage2/Stage3.
@@ -41,10 +52,67 @@ export function TrialLegendCard({ trial, isFav, onFavToggle }: TrialLegendCardPr
   const hasLine3 = Boolean(tag || stat);
   const location = useLocation();
 
+  // Long-press gesture state. Refs (not state) so updates never re-render.
+  const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pressStart = useRef<{ x: number; y: number } | null>(null);
+  const longPressFired = useRef(false);
+
+  const clearPressTimer = () => {
+    if (pressTimer.current) {
+      clearTimeout(pressTimer.current);
+      pressTimer.current = null;
+    }
+  };
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType !== 'touch') return; // touch only
+    longPressFired.current = false;
+    pressStart.current = { x: e.clientX, y: e.clientY };
+    clearPressTimer();
+    pressTimer.current = setTimeout(() => {
+      longPressFired.current = true;
+      // Synthetic-free toggle: onFavToggle only reads e.preventDefault /
+      // stopPropagation, both no-ops on a non-mouse trigger path. We pass the
+      // pointer event coerced to MouseEvent since the handler signature wants it.
+      onFavToggle(trial.id, e as unknown as React.MouseEvent);
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+        navigator.vibrate?.(15); // brief haptic confirm
+      }
+    }, LONG_PRESS_MS);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!pressStart.current) return;
+    const dx = Math.abs(e.clientX - pressStart.current.x);
+    const dy = Math.abs(e.clientY - pressStart.current.y);
+    if (dx > MOVE_CANCEL_PX || dy > MOVE_CANCEL_PX) clearPressTimer(); // scrolling
+  };
+
+  const handlePointerEnd = () => {
+    clearPressTimer();
+    pressStart.current = null;
+  };
+
+  const handleClick = (e: React.MouseEvent) => {
+    // If the hold already toggled favourite, swallow the navigation click.
+    if (longPressFired.current) {
+      e.preventDefault();
+      e.stopPropagation();
+      longPressFired.current = false;
+      return;
+    }
+    trackTrialCardClicked(trial.id, location.pathname);
+  };
+
   return (
     <Link
       to={trial.path}
-      onClick={() => trackTrialCardClicked(trial.id, location.pathname)}
+      onClick={handleClick}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerEnd}
+      onPointerCancel={handlePointerEnd}
+      onContextMenu={(e) => { if (longPressFired.current) e.preventDefault(); }}
       className={`
  group block relative
  pl-[34px] pr-5 py-3.5
