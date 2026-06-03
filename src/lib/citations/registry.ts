@@ -815,6 +815,14 @@ export const CITATION_REGISTRY: CitationRegistry = {
   // prescribers; 4F-PCC is the default FXa-inhibitor reversal in the US.
   // 12-month review window per §13.7 (regulatory status; may change if a
   // successor product enters the US market or if reintroduction is filed).
+  // Primary-source note (search 2026-06-02): no standalone AstraZeneca press
+  // release announcing the BLA withdrawal / Dec-22-2025 sales-end could be
+  // located on the AZ media newsroom or via web search — AZ handled this as a
+  // commercial-reasons withdrawal without a dedicated release. The authoritative
+  // primary source for the withdrawal is therefore the FDA Safety Communication
+  // (registered as `fda-andexxa-safety-2024`); tctmd is retained here as a dated,
+  // reputable secondary confirming the Dec-22-2025 sales-end date. If AZ later
+  // publishes a primary release, swap `url` and refresh `last_reviewed` per §13.6.
   'astrazeneca-andexxa-withdrawal-2025': {
     id: 'astrazeneca-andexxa-withdrawal-2025',
     source: 'guideline',
