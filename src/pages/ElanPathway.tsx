@@ -288,9 +288,11 @@ const ElanPathway: React.FC = () => {
         </div>
         <button
             onClick={handleFavToggle}
+            aria-pressed={isFav}
+            aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
             className="p-3 rounded-full hover:bg-slate-100 transition-colors"
         >
-            <Star size={24} className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'} />
+            <Star size={24} aria-hidden="true" className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'} />
         </button>
       </div>
 

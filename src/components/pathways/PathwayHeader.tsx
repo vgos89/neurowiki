@@ -115,8 +115,8 @@ export const PathwayHeader: React.FC<PathwayHeaderProps> = ({
         </div>
         {/* Right: Favorite + Reset + Copy */}
         <div className="flex items-center gap-1 shrink-0">
-          <button onClick={onFavToggle} className="p-2 rounded-lg hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}>
-            <Star size={16} className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'} />
+          <button onClick={onFavToggle} aria-pressed={isFav} className="p-2 rounded-lg hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}>
+            <Star size={16} aria-hidden="true" className={isFav ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'} />
           </button>
           <button onClick={onReset} className="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Reset">
             <RotateCcw size={16} />

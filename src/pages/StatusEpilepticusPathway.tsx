@@ -296,10 +296,11 @@ const StatusEpilepticusPathway: React.FC = () => {
             <div className="space-y-1 bg-white border border-slate-100 rounded-xl p-4">
               {/* Weight input */}
               <div id="field-weight" className="pb-3 border-b border-slate-100">
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Patient Weight (kg)</label>
+                <label htmlFor="patient-weight" className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Patient Weight (kg)</label>
                 <div className="flex items-center gap-3">
                   <input
-                    type="text"
+                    id="patient-weight"
+                    type="number"
                     inputMode="decimal"
                     className="w-32 p-3 text-lg bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-neuro-500 outline-none font-bold"
                     value={patient.weight || ''}
@@ -741,9 +742,16 @@ const StatusEpilepticusPathway: React.FC = () => {
                 />
               </div>
 
-              {/* Dose Result Row — PATHWAY_SPEC §4.8 */}
+              {/* Dose Result Row — PATHWAY_SPEC §4.8 — aria-live so screen readers
+                  announce the computed Stage 3 load when the agent updates (RH8,
+                  matches the Stage 2 row above). */}
               {stage3Agent && (
-                <div className="border-t border-b border-slate-200 px-5 py-3 -mx-5 my-2 animate-in zoom-in-95">
+                <div
+                  className="border-t border-b border-slate-200 px-5 py-3 -mx-5 my-2 animate-in zoom-in-95"
+                  role="status"
+                  aria-live="polite"
+                  aria-atomic="true"
+                >
                   <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Calculated Load</div>
                   <div className="flex items-center justify-between gap-3 mt-1">
                     <span className="text-sm text-slate-600">{stage3Agent.charAt(0).toUpperCase()}{stage3Agent.slice(1).replace('_inf', ' Infusion').replace('_', ' ')}</span>

@@ -522,6 +522,7 @@ const MigrainePathway: React.FC = () => {
   const SafetyToggle = ({ label, active, onClick }: { label: string, active: boolean, onClick: () => void }) => (
       <button
         type="button"
+        aria-pressed={active}
         onClick={onClick}
         className={`px-3 py-3 rounded-full text-sm font-semibold border transition-all touch-manipulation ${
             active
@@ -663,12 +664,12 @@ const MigrainePathway: React.FC = () => {
               <div className="bg-red-50 border border-red-100 p-4 rounded-xl flex items-start space-x-3 mb-3">
                 <AlertTriangle className="text-red-600 shrink-0 mt-0.5" size={18} />
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-red-400 mb-1">Red Flags</p>
+                  <p id="redflags-group-label" className="text-[10px] font-bold uppercase tracking-widest text-red-400 mb-1">Red Flags</p>
                   <p className="text-sm text-red-700">Identify high-risk headaches requiring urgent diagnostic workup (CT/CTA/LP/MRI) before symptomatic treatment.</p>
                 </div>
               </div>
 
-              <div id="field-redflags" className="space-y-2">
+              <div id="field-redflags" className="space-y-2" role="group" aria-labelledby="redflags-group-label">
                 {Object.keys(redFlags).map((key) => {
                   const labels: Record<string, string> = {
                     thunderclap: "Thunderclap onset (worst of life, max <1 min)",
@@ -682,6 +683,8 @@ const MigrainePathway: React.FC = () => {
                   return (
                     <button
                       key={key}
+                      role="checkbox"
+                      aria-checked={redFlags[key as keyof RedFlags]}
                       onClick={() => setRedFlags({...redFlags, [key]: !redFlags[key as keyof RedFlags]})}
                       className={`w-full flex items-center justify-between p-4 rounded-xl border cursor-pointer transition-all active:scale-[0.99] touch-manipulation text-left min-h-[44px] ${redFlags[key as keyof RedFlags] ? 'bg-red-100 border-red-300 text-red-900' : 'bg-slate-50 border-slate-200 hover:bg-white'}`}
                     >
@@ -695,7 +698,7 @@ const MigrainePathway: React.FC = () => {
               </div>
 
               {Object.values(redFlags).some(v => v) ? (
-                <div className="mt-4 p-5 bg-red-600 text-white rounded-xl shadow-lg text-center">
+                <div role="alert" className="mt-4 p-5 bg-red-600 text-white rounded-xl shadow-lg text-center">
                   <AlertTriangle size={28} className="mx-auto mb-2" />
                   <h2 className="text-lg font-black mb-1">STOP: Red Flag Headache</h2>
                   <p className="text-sm opacity-90">Do not proceed with migraine pathway until secondary causes (SAH, Meningitis, Mass, Stroke) are excluded.</p>

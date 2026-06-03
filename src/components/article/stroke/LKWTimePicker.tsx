@@ -1106,6 +1106,8 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
                 <button
                   type="button"
                   onClick={() => setDateExpanded(x => !x)}
+                  aria-expanded={dateExpanded}
+                  aria-controls="date-calendar-panel"
                   className="w-full flex items-center justify-between px-4 py-3 hover:bg-slate-50 active:bg-slate-100 transition-colors"
                 >
                   <div className="flex items-center gap-2">
@@ -1113,12 +1115,12 @@ export const LKWTimePicker: React.FC<LKWTimePickerProps> = ({
                     <span className="text-sm font-semibold text-slate-700">{dateLabelShort}</span>
                   </div>
                   {dateExpanded
-                    ? <ChevronUp className="w-4 h-4 text-slate-400" />
-                    : <ChevronDown className="w-4 h-4 text-slate-400" />
+                    ? <ChevronUp aria-hidden="true" className="w-4 h-4 text-slate-400" />
+                    : <ChevronDown aria-hidden="true" className="w-4 h-4 text-slate-400" />
                   }
                 </button>
                 {dateExpanded && (
-                  <div className="px-4 pb-4 overflow-y-auto">
+                  <div id="date-calendar-panel" className="px-4 pb-4 overflow-y-auto">
                     <CalendarGrid {...calendarProps} />
                   </div>
                 )}

@@ -693,7 +693,13 @@ const ClinicHeadachePathway: React.FC = () => {
         )}
 
         {step4Complete && topMatch && !redFlagActive && (
-          <section aria-labelledby="management-heading" className="mt-8 space-y-4">
+          <section
+            aria-labelledby="management-heading"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className="mt-8 space-y-4"
+          >
             <h2 id="management-heading" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
               Result
             </h2>
@@ -811,6 +817,7 @@ const ClinicHeadachePathway: React.FC = () => {
                             aria-valuenow={p}
                             aria-valuemin={0}
                             aria-valuemax={100}
+                            aria-label={`${m.name} criteria match: ${p} percent`}
                             className="h-1.5 bg-slate-100 rounded-full overflow-hidden"
                           >
                             <div
