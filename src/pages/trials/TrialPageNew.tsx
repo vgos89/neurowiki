@@ -929,7 +929,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="WAKE-UP" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute ischemic stroke of unknown onset or on awakening, does IV alteplase improve outcome when DWI-FLAIR mismatch on MRI suggests the stroke is within a treatable time window?
             </p>
@@ -1002,7 +1002,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ECASS III" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute ischemic stroke 3 to 4.5 hours after symptom onset, does IV alteplase 0.9 mg/kg improve functional outcome (mRS 0–1) at 90 days compared with placebo?
             </p>
@@ -1075,7 +1075,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="NINDS" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute ischemic stroke within 3 hours of symptom onset, does IV alteplase 0.9 mg/kg improve neurologic outcome at 90 days compared with placebo?
             </p>
@@ -1148,7 +1148,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="INSPIRES" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with minor ischemic stroke or high-risk TIA of presumed atherosclerotic cause, does 21-day clopidogrel + aspirin started within 24–72 hours reduce 90-day stroke recurrence compared with aspirin monotherapy?
             </p>
@@ -1222,7 +1222,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="CHANCE-2" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In CYP2C19 loss-of-function carriers with minor ischemic stroke (NIHSS ≤3) or high-risk TIA within 24 hours, does ticagrelor + aspirin outperform standard clopidogrel + aspirin for 90-day stroke recurrence?
             </p>
@@ -1296,7 +1296,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ATTENTION" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In acute basilar artery occlusion with NIHSS ≥10 within 12 hours of estimated onset, does endovascular thrombectomy improve mRS 0–3 at 90 days compared with best medical care alone?
             </p>
@@ -1370,7 +1370,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="BAOCHE" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In acute basilar artery occlusion 6–24 hours after last-known-well, does endovascular thrombectomy improve mRS 0–3 at 90 days compared with standard medical care? (Primary outcome was amended mid-trial from mRS 0–4 to mRS 0–3 before unblinding.)
             </p>
@@ -1449,7 +1449,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="SAMMPRIS" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={isHarm ? '#7f1d1d' : '#1e293b'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone={isHarm ? 'harm' : 'neutral'} />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with symptomatic 70–99% intracranial atherosclerotic stenosis within 30 days of qualifying TIA or stroke, does percutaneous transluminal angioplasty + Wingspan stenting plus aggressive medical management reduce 30-day stroke/death compared with aggressive medical management alone? (Stopped early by DSMB for harm + futility.)
             </p>
@@ -1519,7 +1519,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ORIGINAL" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In Chinese patients with acute ischemic stroke within 4.5 hours of onset, is intravenous tenecteplase 0.25 mg/kg noninferior to intravenous alteplase 0.9 mg/kg for mRS 0–1 at 90 days?
             </p>
@@ -1590,7 +1590,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="DEFUSE-3" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In anterior LVO patients 6–16 hours from last known well with RAPID-defined perfusion mismatch, does endovascular thrombectomy improve the mRS distribution at 90 days compared with standard medical therapy?
             </p>
@@ -1668,7 +1668,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="DAWN" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In anterior LVO patients 6–24 hours from last known well with clinical-imaging mismatch (small infarct core + severe deficit), does endovascular thrombectomy with the Trevo device improve disability outcomes compared with standard medical care?
             </p>
@@ -1746,7 +1746,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="SELECT2" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In anterior LVO patients with a large ischemic core (ASPECTS 3–5 or core ≥50 mL) within 24 hours of last known well, does endovascular thrombectomy improve the mRS distribution at 90 days compared with medical management?
             </p>
@@ -1824,7 +1824,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ANGEL-ASPECT" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In Chinese patients with anterior LVO and large ischemic core (ASPECTS 3–5, OR ASPECTS 0–2 with core 70–100 mL), does endovascular thrombectomy improve the mRS distribution at 90 days compared with medical management?
             </p>
@@ -1902,7 +1902,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ENRICH" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with lobar (or anterior basal ganglia) intracerebral hemorrhage of 30–80 mL within 24 hours, does minimally invasive parafascicular surgery improve utility-weighted mRS at 180 days compared with standard medical management?
             </p>
@@ -1977,7 +1977,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="B_PROUD" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In suspected acute ischemic stroke dispatched in Berlin's EMS system, does mobile stroke unit dispatch improve 90-day disability outcomes compared with conventional ambulance alone? (Allocation by MSU availability — not patient-level randomization.)
             </p>
@@ -2061,7 +2061,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ESCAPE-MeVO" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute ischemic stroke from medium vessel occlusion, does endovascular thrombectomy plus best medical therapy improve functional independence at 90 days compared with best medical therapy alone?
             </p>
@@ -2128,7 +2128,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ELAN" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute ischemic stroke and atrial fibrillation, does early DOAC initiation (within 48 hours for minor to moderate stroke) result in fewer recurrent events, hemorrhagic transformations, or deaths at 30 days compared with later initiation using the 1-3-6-12 day rule?
             </p>
@@ -2194,7 +2194,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="CHANCE" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with high-risk TIA or minor ischemic stroke presenting within 24 hours, does dual antiplatelet therapy with clopidogrel plus aspirin reduce recurrent stroke at 90 days compared with aspirin monotherapy?
             </p>
@@ -2268,7 +2268,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="POINT" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with high-risk TIA or minor ischemic stroke presenting within 12 hours, does dual antiplatelet therapy with clopidogrel plus aspirin reduce major ischemic events at 90 days compared with aspirin monotherapy?
             </p>
@@ -2342,7 +2342,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="SOCRATES" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute non-cardioembolic minor ischemic stroke or high-risk TIA, does ticagrelor monotherapy reduce the composite of stroke, MI, or death at 90 days compared with aspirin monotherapy?
             </p>
@@ -2409,7 +2409,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="SPS3" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with MRI-confirmed symptomatic lacunar infarction, does long-term dual antiplatelet therapy (aspirin plus clopidogrel) reduce recurrent stroke compared with aspirin monotherapy?
             </p>
@@ -2475,7 +2475,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="SPARCL" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with recent ischemic stroke or TIA and LDL 100 to 190 mg/dL without known coronary heart disease, does high-intensity atorvastatin (80 mg daily) reduce recurrent stroke compared with placebo?
             </p>
@@ -2548,7 +2548,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="THALES" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute non-cardioembolic minor ischemic stroke or high-risk TIA presenting within 24 hours, does ticagrelor plus aspirin reduce composite stroke or death at 30 days compared with aspirin alone?
             </p>
@@ -2622,7 +2622,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="EAGLE" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with central retinal artery occlusion presenting within 20 hours, does local intra-arterial fibrinolysis via ophthalmic artery microcatheter improve visual acuity compared with conservative standard treatment?
             </p>
@@ -2693,7 +2693,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="BEST-MSU" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={isPositive ? '#1746A2' : '#1e293b'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone={isPositive ? 'positive' : 'neutral'} />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute stroke in the United States, does prehospital mobile stroke unit care (with on-board CT, vascular imaging, and thrombolysis capability) improve excellent 90-day functional outcome (mRS 0-1) in tPA-eligible patients compared with standard EMS transport?
             </p>
@@ -2770,7 +2770,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="AcT" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={isPositive ? '#1746A2' : '#1e293b'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone={isPositive ? 'positive' : 'neutral'} />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In adult patients with disabling acute ischemic stroke within 4.5 hours eligible for standard thrombolysis, is IV tenecteplase 0.25 mg/kg (single bolus) non-inferior to IV alteplase 0.9 mg/kg for excellent functional outcome (mRS 0-1) at 90-120 days?
             </p>
@@ -2836,7 +2836,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ARAMIS" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={isPositive ? '#1746A2' : '#1e293b'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone={isPositive ? 'positive' : 'neutral'} />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with minor nondisabling acute ischemic stroke within 4.5 hours, is dual antiplatelet therapy (clopidogrel plus aspirin) non-inferior to IV alteplase for excellent functional outcome (mRS 0-1) at 90 days?
             </p>
@@ -2901,7 +2901,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="NOR-TEST" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={isPositive ? '#1746A2' : '#1e293b'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone={isPositive ? 'positive' : 'neutral'} />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute ischemic stroke within 4.5 hours eligible for standard thrombolysis, is IV tenecteplase 0.4 mg/kg superior to IV alteplase 0.9 mg/kg for excellent functional outcome (mRS 0-1) at 3 months?
             </p>
@@ -2967,7 +2967,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="NOR-TEST 2" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={isHarm ? '#7f1d1d' : '#1e293b'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone={isHarm ? 'harm' : 'neutral'} />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with moderate-to-severe acute ischemic stroke (NIHSS ≥6) within 4.5 hours, is IV tenecteplase 0.4 mg/kg non-inferior to IV alteplase 0.9 mg/kg for excellent functional outcome (mRS 0-1) at 3 months? (Stopped by DSMB for harm.)
             </p>
@@ -3038,7 +3038,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="PRISMS" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={isPositive ? '#1746A2' : '#1e293b'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone={isPositive ? 'positive' : 'neutral'} />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with minor nondisabling acute ischemic stroke treated within 3 hours, does IV alteplase 0.9 mg/kg improve excellent 90-day functional outcome (mRS 0-1) compared with aspirin monotherapy?
             </p>
@@ -3103,7 +3103,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="PROST" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={isPositive ? '#1746A2' : '#1e293b'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone={isPositive ? 'positive' : 'neutral'} />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute ischemic stroke within 4.5 hours, is intravenous recombinant human prourokinase (rhPro-UK) non-inferior to IV alteplase 0.9 mg/kg for excellent functional outcome (mRS 0-1) at 90 days?
             </p>
@@ -3168,7 +3168,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="PROST-2" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={isPositive ? '#1746A2' : '#1e293b'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone={isPositive ? 'positive' : 'neutral'} />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute ischemic stroke within 4.5 hours who are ineligible for or refusing endovascular thrombectomy, is prourokinase non-inferior to IV alteplase 0.9 mg/kg for excellent functional outcome (mRS 0-1) at 90 days?
             </p>
@@ -3233,7 +3233,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="RAISE" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={isPositive ? '#1746A2' : '#1e293b'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone={isPositive ? 'positive' : 'neutral'} />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute ischemic stroke within 4.5 hours eligible for standard thrombolysis, is IV reteplase (double-bolus 18 mg + 18 mg) superior to IV alteplase 0.9 mg/kg for excellent functional outcome (mRS 0-1) at 90 days?
             </p>
@@ -3298,7 +3298,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="TASTE" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={isPositive ? '#1746A2' : '#1e293b'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone={isPositive ? 'positive' : 'neutral'} />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In perfusion-imaging selected patients with acute ischemic stroke within 4.5 hours not proceeding to EVT, is IV tenecteplase 0.25 mg/kg non-inferior to IV alteplase 0.9 mg/kg for excellent functional outcome (mRS 0-1) at 3 months?
             </p>
@@ -3364,7 +3364,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="THAWS" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={isPositive ? '#1746A2' : '#1e293b'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone={isPositive ? 'positive' : 'neutral'} />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In MRI-selected patients with unknown-onset acute ischemic stroke (DWI-positive, FLAIR-negative), does low-dose IV alteplase 0.6 mg/kg improve excellent 90-day functional outcome (mRS 0-1) compared with standard medical treatment?
             </p>
@@ -3430,7 +3430,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="TRACE-2" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={isPositive ? '#1746A2' : '#1e293b'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone={isPositive ? 'positive' : 'neutral'} />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute ischemic stroke within 4.5 hours who are ineligible for or refusing endovascular thrombectomy, is IV tenecteplase 0.25 mg/kg non-inferior to IV alteplase 0.9 mg/kg for excellent functional outcome (mRS 0-1) at 90 days?
             </p>
@@ -3496,7 +3496,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="TRACE-III" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={isPositive ? '#1746A2' : '#1e293b'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone={isPositive ? 'positive' : 'neutral'} />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with ICA or MCA occlusion presenting 4.5 to 24 hours from last known well (including wake-up and unwitnessed stroke) with salvageable tissue on perfusion imaging and no access to endovascular thrombectomy, does IV tenecteplase 0.25 mg/kg improve excellent functional outcome (mRS 0-1) at 90 days compared with standard medical treatment?
             </p>
@@ -3574,7 +3574,7 @@ const TrialPageNew: React.FC = () => {
 
           {/* Section 2: H1 + question lede + source */}
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with suspected acute stroke and hypertension managed in the ambulance, does initiating intensive IV blood-pressure reduction before imaging diagnosis improve functional outcome at 90 days?
             </p>
@@ -3656,7 +3656,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="DISTAL" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with medium or distal vessel occlusion (M2, M3, M4, ACA, or PCA), does endovascular thrombectomy plus best medical treatment improve 90-day functional outcome compared with best medical treatment alone?
             </p>
@@ -3724,7 +3724,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="MR ASAP" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In ambulance-treated patients with presumed stroke within 3 hours of onset, does prehospital transdermal glyceryl trinitrate improve 90-day functional outcome compared with standard care?
             </p>
@@ -3789,7 +3789,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="RACECAT" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In nonurban patients with suspected large vessel occlusion, does direct transport to a thrombectomy-capable comprehensive stroke center improve 90-day functional outcome compared with initial transport to the nearest local stroke center?
             </p>
@@ -3854,7 +3854,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="TRIAGE-STROKE" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In IVT-eligible patients with suspected LVO stroke within 4 hours of onset, does direct routing to a thrombectomy-capable comprehensive stroke center improve 90-day functional outcome compared with initial transport to the nearest primary stroke center?
             </p>
@@ -3919,7 +3919,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ATTEST-2" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In acute ischemic stroke patients eligible for IV thrombolysis within 4.5 hours, is tenecteplase 0.25 mg/kg noninferior to alteplase 0.9 mg/kg for 90-day functional outcome?
             </p>
@@ -3986,7 +3986,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="TIMELESS" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with LVO and perfusion-imaging evidence of salvageable tissue presenting 4.5 to 24 hours after stroke onset, does tenecteplase 0.25 mg/kg improve 90-day functional outcome compared with placebo?
             </p>
@@ -4051,7 +4051,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="TWIST" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In wake-up stroke patients selected by non-contrast CT alone, does tenecteplase 0.25 mg/kg administered within 4.5 hours of awakening improve 90-day functional outcome compared with no thrombolysis?
             </p>
@@ -4123,7 +4123,7 @@ const TrialPageNew: React.FC = () => {
 
           {/* H1 + question lede + source */}
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with presumed stroke and elevated blood pressure, does transdermal glyceryl trinitrate started by paramedics in the ambulance within 4 hours of symptom onset improve 90-day functional outcome compared with sham?
             </p>
@@ -4434,7 +4434,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="MR CLEAN" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with proximal anterior circulation large-vessel occlusion treatable within 6 hours, does intra-arterial treatment added to usual care improve functional outcome at 90 days compared with usual care alone?
             </p>
@@ -4513,7 +4513,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ESCAPE" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with disabling anterior circulation LVO, small infarct cores, and good collaterals on multiphase CTA, does rapid endovascular thrombectomy added to standard care within 12 hours improve functional outcome at 90 days compared with standard care alone?
             </p>
@@ -4592,7 +4592,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="REVASCAT" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with anterior circulation LVO presenting up to 8 hours from onset who were ineligible for or refractory to IV alteplase, does Solitaire stent-retriever thrombectomy added to medical therapy improve functional outcome at 90 days compared with medical therapy alone?
             </p>
@@ -4671,7 +4671,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="EXTEND-IA" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with anterior circulation LVO and CT-perfusion mismatch who had received IV alteplase, does adding Solitaire FR thrombectomy improve early reperfusion and neurological recovery compared with alteplase alone?
             </p>
@@ -4747,7 +4747,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="SWIFT PRIME" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with anterior circulation LVO who had received IV alteplase within 4.5 hours, does adding Solitaire stent-retriever thrombectomy improve functional outcome at 90 days compared with alteplase alone?
             </p>
@@ -4826,7 +4826,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="THRACE" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In alteplase-eligible patients with proximal anterior circulation LVO and NIHSS 10 to 25 treated within 5 hours, does adding mechanical thrombectomy to IV alteplase improve functional independence at 3 months compared with alteplase alone?
             </p>
@@ -4906,7 +4906,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="LASTE" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with anterior circulation LVO and a large established infarct (ASPECTS 5 or lower, no lower limit on infarct volume) treatable within 6.5 hours, does thrombectomy plus medical care shift the mRS distribution toward better outcomes and reduce mortality compared with medical care alone?
             </p>
@@ -5019,7 +5019,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="TENSION" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with anterior circulation LVO and ASPECTS 3 to 5 selected predominantly by non-contrast CT treated within 12 hours, does endovascular thrombectomy plus medical treatment shift the mRS distribution toward better outcomes at 90 days compared with medical treatment alone?
             </p>
@@ -5132,7 +5132,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="CHOICE" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with large vessel occlusion stroke who achieved successful reperfusion (eTICI 2b50 or higher) after thrombectomy, does adjunct intra-arterial alteplase improve excellent functional outcome (mRS 0 to 1) at 90 days compared with placebo?
             </p>
@@ -5210,7 +5210,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="DIRECT-MT" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In alteplase-eligible patients with anterior circulation LVO presenting within 4.5 hours, is direct endovascular thrombectomy non-inferior to IV alteplase followed by thrombectomy for 90-day functional outcome?
             </p>
@@ -5288,7 +5288,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="DEVT" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In alteplase-eligible patients with proximal anterior circulation LVO presenting within 4.5 hours, is direct endovascular thrombectomy non-inferior to IV alteplase followed by thrombectomy for 90-day functional independence (mRS 0-2)?
             </p>
@@ -5365,7 +5365,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="COMPASS" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with anterior circulation LVO treated within 6 hours, is aspiration first-pass technique non-inferior to stent-retriever first-line for 90-day functional outcome (mRS 0-2)?
             </p>
@@ -5442,7 +5442,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ASTER" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with anterior circulation LVO treated within 6 hours, does first-line contact aspiration produce higher rates of successful revascularization than first-line stent retriever?
             </p>
@@ -5520,7 +5520,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ASTER2" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with anterior circulation LVO treated within 8 hours, does combined first-pass contact aspiration plus stent retriever achieve higher near-total reperfusion (eTICI 2c-3) than stent retriever alone?
             </p>
@@ -5597,7 +5597,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="SKIP" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In Japanese patients with LVO stroke eligible for IV thrombolysis, does mechanical thrombectomy alone produce outcomes non-inferior to low-dose alteplase plus thrombectomy at 90 days?
             </p>
@@ -5672,7 +5672,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="MR CLEAN-NO IV" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients presenting directly to an EVT-capable center who are eligible for both IV alteplase and thrombectomy, does direct EVT produce superior or non-inferior outcomes to alteplase 0.9 mg/kg plus EVT?
             </p>
@@ -5770,7 +5770,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="DIRECT-SAFE" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with LVO stroke eligible for IV thrombolysis across Australia, New Zealand, China, and Vietnam, does direct EVT produce outcomes non-inferior to bridging thrombolysis plus EVT within 4.5 hours?
             </p>
@@ -5845,7 +5845,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="SWIFT DIRECT" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients presenting directly to a comprehensive stroke center within 4.5 hours with anterior circulation proximal LVO, does stent-retriever thrombectomy alone produce outcomes non-inferior to alteplase 0.9 mg/kg plus thrombectomy?
             </p>
@@ -5920,7 +5920,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="RESCUE BT" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute LVO stroke undergoing thrombectomy within 24 hours, does peri-procedural IV tirofiban improve 90-day functional outcome compared with placebo?
             </p>
@@ -6012,7 +6012,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="BP-TARGET" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1e293b'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="neutral" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute LVO stroke who achieved successful recanalization after EVT, does targeting systolic blood pressure 100-129 mm Hg reduce post-reperfusion hemorrhage compared with a standard target of 130-185 mm Hg in the first 24 hours?
             </p>
@@ -6083,7 +6083,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="BEST-II" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1e293b'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="neutral" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               After successful EVT, does targeting a lower systolic blood pressure (SBP less than 140 or less than 160 mm Hg) improve utility-weighted functional outcomes at 90 days compared with permissive control (SBP at or below 180 mm Hg)?
             </p>
@@ -6159,7 +6159,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="OPTIMAL-BP" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={isHarm ? '#7f1d1d' : '#1e293b'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone={isHarm ? 'harm' : 'neutral'} />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with LVO stroke who achieved successful recanalization after EVT, does intensive systolic BP management targeting SBP less than 140 mm Hg improve functional independence at 3 months compared with conventional management targeting SBP 140-180 mm Hg? (Stopped by DSMB for harm.)
             </p>
@@ -6234,7 +6234,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ENCHANTED" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1e293b'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="neutral" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute ischemic stroke eligible for IV alteplase, does intensive SBP lowering (target 130-140 mm Hg for 72 hours) during and after thrombolysis improve 90-day functional outcomes compared with guideline management (SBP below 180 mm Hg)?
             </p>
@@ -6317,7 +6317,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ESCAPE-NA1" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1e293b'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="neutral" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with LVO stroke undergoing EVT within 12 hours with favorable imaging, does a single IV dose of nerinetide improve functional independence (mRS 0-2) at 90 days compared with placebo?
             </p>
@@ -6386,7 +6386,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="CHARM" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1e293b'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="neutral" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with large hemispheric infarction (ASPECTS 1-5 or DWI core 80-300 mL), does IV glibenclamide 8.6 mg over 72 hours improve 90-day functional outcomes compared with placebo?
             </p>
@@ -6466,7 +6466,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="DECIMAL" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1e293b'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="neutral" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients aged 18-55 with malignant MCA infarction, does early decompressive hemicraniectomy plus medical therapy reduce mortality at 6 months compared with medical therapy alone?
             </p>
@@ -6541,7 +6541,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="DESTINY" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1e293b'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="neutral" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients aged 18-60 with malignant MCA infarction, does early decompressive hemicraniectomy reduce mortality and improve functional outcomes compared with conservative management?
             </p>
@@ -6616,7 +6616,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="HAMLET" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1e293b'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="neutral" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients aged 18-60 with space-occupying hemispheric infarction randomized within 96 hours, does decompressive surgery reduce death and improve functional independence compared with best medical treatment?
             </p>
@@ -6691,7 +6691,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="DESTINY II" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1e293b'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="neutral" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients aged 61 or older with malignant MCA infarction, does early decompressive hemicraniectomy within 48 hours improve survival and functional outcome compared with conservative intensive care?
             </p>
@@ -6770,7 +6770,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="TIMING" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1e293b'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="neutral" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute AF-related ischemic stroke, is early NOAC initiation within 4 days non-inferior to delayed initiation (5-10 days) for the composite of recurrent stroke, symptomatic ICH, or death at 90 days?
             </p>
@@ -6846,7 +6846,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="OPTIMAS" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1e293b'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="neutral" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with AF-related acute ischemic stroke, is early DOAC initiation within 4 days non-inferior to delayed initiation (7-14 days) for the composite of recurrent stroke, symptomatic ICH, or systemic embolism at 90 days?
             </p>
@@ -6973,7 +6973,7 @@ const TrialPageNew: React.FC = () => {
 
           {/* H1 + question lede + source */}
           <div>
-            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={tm.title} subtitle={tm.subtitle} tone="positive" />
             {tm.questionLede && (
               <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
                 {tm.questionLede}
@@ -7240,7 +7240,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="CLOSE" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients 16–60 with cryptogenic ischemic stroke and a PFO carrying high-risk morphology (atrial septal aneurysm or large interatrial shunt), does transcatheter PFO closure plus long-term antiplatelet therapy reduce recurrent stroke compared with antiplatelet therapy alone?
             </p>
@@ -7317,7 +7317,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="RESPECT" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients 18–60 with cryptogenic ischemic stroke and a PFO, does transcatheter closure with the Amplatzer Occluder reduce recurrent ischemic stroke compared with medical therapy over extended follow-up? Note: original 2013 primary analysis at 2.1 years missed ITT significance (P=0.08); this is the pre-specified extended-follow-up analysis at median 5.9 years.
             </p>
@@ -7394,7 +7394,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="REDUCE" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients 18–59 with cryptogenic ischemic stroke and a PFO, does transcatheter closure with Gore HELEX or Cardioform plus antiplatelet therapy reduce recurrent clinical stroke compared with antiplatelet therapy alone? Anticoagulation was not permitted in the comparator, giving the cleanest antiplatelet head-to-head of the 2017 PFO trio.
             </p>
@@ -7471,7 +7471,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="CLOSURE I" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients 18–60 with cryptogenic ischemic stroke or TIA and a PFO, does transcatheter closure with the STARFlex Septal Closure System plus 6 months clopidogrel and 2 years aspirin reduce stroke / TIA / death vs medical therapy alone? First major PFO closure RCT; the STARFlex device has since been withdrawn from the market.
             </p>
@@ -7545,7 +7545,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="PC Trial" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients younger than 60 with PFO and prior ischemic stroke, TIA, or peripheral thromboembolic event of presumed paradoxical embolic origin, does percutaneous closure with the Amplatzer PFO Occluder reduce death / nonfatal stroke / TIA / peripheral embolism compared with medical therapy alone? Companion publication to the original RESPECT in the same NEJM 2013 issue.
             </p>
@@ -7621,7 +7621,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="RESPECT (Original 2013)" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               This is the original 2013 RESPECT primary publication, DISTINCT from the 2017 long-term extension. In patients 18–60 with cryptogenic ischemic stroke and a PFO, did transcatheter closure with the Amplatzer PFO Occluder reduce recurrent ischemic stroke or early death vs medical therapy at median 2.1-year follow-up? Note: ITT primary NOT MET (HR 0.49, P=0.08 borderline); per-protocol HR 0.37 (P=0.03); as-treated HR 0.27 (P=0.007). The 2017 extended follow-up (see RESPECT long-term) ultimately converted the result.
             </p>
@@ -7695,7 +7695,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="DEFENSE-PFO" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with cryptogenic ischemic stroke and HIGH-RISK PFO anatomy (atrial septal aneurysm, septal hypermobility with phasic excursion ≥10 mm, or PFO size ≥2 mm), does transcatheter PFO closure reduce 2-year stroke / vascular death / TIMI major bleeding compared with medication-only therapy? Confirmed the morphology-enrichment hypothesis operationalized by CLOSE (2017).
             </p>
@@ -7777,7 +7777,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="THEIA" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In adults with acute non-arteritic central retinal artery occlusion (Snellen &lt;20/400) within 4.5h of symptom onset, does IV alteplase 0.9 mg/kg improve visual acuity at 1 month compared with 300 mg oral aspirin? First phase 3 RCT of IV thrombolysis for CRAO.
             </p>
@@ -7852,7 +7852,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="IST" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients within 48 hours of suspected acute ischaemic stroke, does aspirin 300 mg/day and/or subcutaneous unfractionated heparin reduce death or dependence at 6 months? Factorial 2x2 design enrolling 19,435 patients across 36 countries — one of the largest stroke trials ever conducted.
             </p>
@@ -7927,7 +7927,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="CAST" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients within 48 hours of suspected acute ischaemic stroke, does aspirin 160 mg/day vs matched placebo reduce in-hospital mortality and death or dependence at discharge? Double-blind placebo-controlled trial in 21,106 Chinese patients — the rigorous-blinding counterpart to the open-label IST.
             </p>
@@ -8003,7 +8003,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="PRoFESS" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with completed non-cardioembolic ischaemic stroke within 90 days, is aspirin 50 mg/day plus extended-release dipyridamole 400 mg/day noninferior to clopidogrel 75 mg/day for preventing recurrent stroke over a mean 2.5-year follow-up? Noninferiority trial with a prespecified hazard-ratio margin of 1.075.
             </p>
@@ -8078,7 +8078,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ANNEXA-I" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In adults with acute intracerebral hemorrhage on apixaban, rivaroxaban, or edoxaban within 15 hours of last dose (hematoma 0.5–60 mL, NIHSS ≤35, GCS ≥7), does andexanet alfa improve a composite hemostatic-efficacy surrogate at 12 hours compared with usual care (85.5% of which was 4F-PCC)? First randomized trial of an FXa-inhibitor antidote specifically in acute ICH.
             </p>
@@ -8163,7 +8163,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ANNEXA-4" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In adults with acute major bleeding (64% intracranial, 26% gastrointestinal) within 18 hours of an FXa-inhibitor dose (apixaban, rivaroxaban, edoxaban, enoxaparin), does andexanet alfa per the FDA-label algorithm reduce anti-FXa activity and achieve hemostatic efficacy at 12 hours? Single-arm prospective cohort that underwrote FDA accelerated approval in May 2018 — no comparator, no efficacy inference in the strict sense.
             </p>
@@ -8241,7 +8241,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="Sarode 2013" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In adults on a vitamin K antagonist with acute major bleeding (baseline INR ≥2.0), is 4-factor PCC (Kcentra/Beriplex P/N, INR-stratified dose, plus vitamin K 5–10 mg IV) noninferior to fresh frozen plasma (10–15 mL/kg plus vitamin K) for 24-hour hemostatic efficacy AND superior for rapid INR reduction? Phase IIIb pivotal trial that underwrote FDA approval of Kcentra (April 2013).
             </p>
@@ -8318,7 +8318,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="PATCH" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In adults with spontaneous supratentorial ICH on antiplatelet therapy for at least 7 days, randomized within 6 hours of onset with GCS ≥8 (no planned surgery), does platelet transfusion within 90 minutes of brain imaging reduce death or dependence at 3 months compared with standard care? Ordinal-shift primary on the full mRS distribution.
             </p>
@@ -8396,7 +8396,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="EXTEND-IA TNK" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute ischemic stroke from an ICA, M1, M2, or basilar occlusion eligible for endovascular thrombectomy within 4.5h of onset, does tenecteplase 0.25 mg/kg single bolus before EVT achieve more substantial reperfusion than alteplase 0.9 mg/kg infusion before EVT?
             </p>
@@ -8473,7 +8473,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="RESCUE-Japan LIMIT" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute ischemic stroke and a large ischemic region (ASPECTS 3–5) within 24 hours of onset, does endovascular therapy plus medical care improve 90-day functional outcome compared with medical care alone? This is the index trial that opened large-core EVT as a treatable population.
             </p>
@@ -8554,7 +8554,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="CREST" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with symptomatic or asymptomatic carotid stenosis at average surgical risk, does carotid-artery stenting (CAS) with embolic protection differ from carotid endarterectomy (CEA) on the 4-year composite of periprocedural stroke, MI, or death plus ipsilateral stroke?
             </p>
@@ -8629,7 +8629,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="CREST-2" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In adults with asymptomatic ≥70% carotid stenosis, does revascularization (stenting OR endarterectomy, two parallel trials) added to modern intensive medical management reduce the 4-year composite of periprocedural stroke, MI, or death plus ipsilateral stroke compared with intensive medical management alone?
             </p>
@@ -8711,7 +8711,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="THEIA" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In adults with acute non-arteritic central retinal artery occlusion (CRAO) within 4.5 hours of symptom onset, does IV alteplase 0.9 mg/kg improve visual acuity at 1 month compared with oral aspirin 300 mg?
             </p>
@@ -8785,7 +8785,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ANNEXA-I" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients on a factor-Xa inhibitor presenting with acute intracerebral hemorrhage, does andexanet alfa improve 12-hour hemostatic efficacy (hematoma growth ≤35%, NIHSS rise &lt;7, no rescue therapy) compared with usual care (PCC permitted)?
             </p>
@@ -8860,7 +8860,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="ANNEXA-4" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients with acute major bleeding on a factor-Xa inhibitor, what is the rate of effective hemostasis after andexanet alfa? Single-arm cohort designed to support FDA accelerated approval (granted May 2018); no comparator. Randomized confirmation in ICH = ANNEXA-I (NEJM 2024).
             </p>
@@ -8934,7 +8934,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="Sarode 2013" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In adults on a vitamin-K antagonist with acute major bleeding, is 4-factor prothrombin complex concentrate (Kcentra) noninferior to fresh-frozen plasma on 24-hour hemostatic efficacy and superior on rapid INR reduction?
             </p>
@@ -9015,7 +9015,7 @@ const TrialPageNew: React.FC = () => {
         </div>
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients on antiplatelet therapy presenting with acute spontaneous supratentorial intracerebral hemorrhage, does platelet transfusion within 6 hours improve 3-month functional outcome compared with standard care alone?
             </p>
@@ -9090,7 +9090,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="IST" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In adults within 48 hours of suspected acute ischaemic stroke, does early aspirin 300 mg/day and/or subcutaneous unfractionated heparin reduce death or dependence? Factorial 2×2 design; aspirin and heparin questions analysed independently. Paired with the parallel double-blind CAST trial in China.
             </p>
@@ -9165,7 +9165,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="CAST" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In adults within 48 hours of suspected acute ischaemic stroke, does double-blind placebo-controlled aspirin 160 mg/day for up to 4 weeks reduce in-hospital mortality and disability? The blinded, placebo-controlled counterpart to the open-label IST.
             </p>
@@ -9239,7 +9239,7 @@ const TrialPageNew: React.FC = () => {
         <TrialHeaderBar abbreviation="PRoFESS" categoryBadgeLabel={categoryBadgeLabel} onBack={handleBack} />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 space-y-6">
           <div>
-            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} color={'#1746A2'} />
+            <TrialTitleHeading title={trialMetadata.title} subtitle={trialMetadata.subtitle} tone="positive" />
             <p className="text-[14px] sm:text-[15px] text-slate-600 leading-relaxed mt-2">
               In patients within 90 days of non-cardioembolic ischemic stroke, is aspirin + extended-release dipyridamole (Aggrenox) noninferior to clopidogrel monotherapy for preventing recurrent stroke over a mean 2.5-year follow-up?
             </p>
