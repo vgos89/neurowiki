@@ -624,14 +624,14 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - **Rollback plan:** n/a
 
 #### W8.3 — Language cleanup: em-dash and prose standardization — Class C-clinical
-- **Status:** planned — batch approach recommended
+- **Status:** [x] done — full em-dash sweep applied 2026-06-03 (codemod + clinical sign-off). 97 content lines in src/data/trialData.ts had spaced em-dashes (` — `) replaced with meaning-preserving punctuation (single→semicolon, pair→commas, dense ≥3 lines→commas after individual human review of all 15). 26 remaining em-dash lines are developer code comments (correctly untouched). All 562+ en-dashes in CIs/page-ranges/numeric-ranges preserved (verified: 104 en-dashes balanced on both diff sides, zero net change). tsc clean · build 170/170 · §17.2 artifact docs/reviews/clinical-PR-trialdata-emdash-sweep.md (approve). Subsumes W8.3.3 (TRACE-III/THAWS) and W8.3.4 (pearls[]/listDescription) — the sweep covered every user-facing prose field in the file. Codemod: scripts/codemod-emdash-sweep.mjs (idempotent, --dry-run).
 - **Source:** docs/audits/2026-language-audit.md
 - **User-visible goal:** Clinical prose in trialData.ts is free of em dashes and double hyphens in user-facing fields (bedsidePearl, howToInterpret, howToReadChart, bottomLineSummary).
 - **Sub-tasks (pattern-level, not per-trial):**
   - [x] W8.3.1 — Batch 5C/5D `--` cleanup (decimal, destiny, hamlet, destiny-ii, timing, optimas): DONE 2026-06-02. Replaced double-hyphen instances in doesNotProve, cautions, bedsidePearl, keyMessage with meaning-preserving punctuation (comma/semicolon/period). Reclassified as Class B (punctuation only, provably no meaning change; each replacement uniqueness-asserted before write). Verified 0 prose `--` remain.
   - [x] W8.3.2 — Antiplatelet section `--` cleanup (eagle, escape-na1, socrates, sps3, sparcl): DONE 2026-06-02. Same Class B punctuation pass. Combined with W8.3.1 into a single 21-replacement commit on src/data/trialData.ts.
-  - [ ] W8.3.3 — TRACE-III / THAWS `—` cleanup: Fix true em-dash instances across bedsidePearl, doesNotProve, cautions in these two trials. Highest schema severity (explicit "No em dashes" rule in TrialMetadata comments). Class C-clinical. NOTE 2026-06-02: deferred to a focused em-dash sweep — larger/more delicate than the "easy" ranking implied. trialData.ts still holds ~122 em-dashes; many are en-dashes (CIs, page ranges) that MUST NOT be touched, so this needs careful field-scoped handling, not a blanket replace.
-  - [ ] W8.3.4 — pearls[] and listDescription `—` sweep: Lower severity. Fix em dashes in pearls[] arrays and listDescription fields across all trials. Class B (display strings, no clinical meaning change). Deferred alongside W8.3.3.
+  - [x] W8.3.3 — TRACE-III / THAWS `—` cleanup: DONE 2026-06-03 as part of the full file-wide sweep above (codemod handled every prose field, including these two trials).
+  - [x] W8.3.4 — pearls[] and listDescription `—` sweep: DONE 2026-06-03 as part of the full file-wide sweep above.
 - **Non-goals:** "essentially" phrasing is borderline; defer to PM; no structural rewriting
 - **Acceptance checks:** grep for `—` and `--` in bedsidePearl, doesNotProve, cautions, howToReadChart, bottomLineSummary returns zero results
 - **Clinical impact:** low (prose only, no threshold or interpretation changes)
