@@ -5,6 +5,16 @@
 **Status:** findings only — no code changes
 **Standard:** WCAG 2.1 AA
 
+> **STALENESS NOTE (2026-06-03):** The safety-critical batch (H1, H2, H7) was
+> resolved by a later focus-trap consolidation pass (the `useModalFocusTrap`
+> hook, created 2026-05-17, plus the "B-1"/"B-3" stroke-code a11y fixes) and is
+> marked RESOLVED inline below. Several remaining findings reference files that
+> have since been renamed or removed (e.g. `GCAPathway.tsx` no longer exists at
+> the cited path) and the pathway `aria-live` findings (H3) are now partially
+> addressed. **This document is stale for H3–H6 and the Medium/Low findings — a
+> fresh re-audit is required before acting on them. Do not treat the remaining
+> line numbers as current.**
+
 ---
 
 ## Executive summary
@@ -38,7 +48,10 @@ NeuroWiki's L5.6 shell extraction is a meaningful accessibility win: the shared 
 
 ## Findings — High priority
 
-### H1 — ThrombectomyPathwayModal missing focus trap and aria-labelledby
+### H1 — ThrombectomyPathwayModal missing focus trap and aria-labelledby — ✅ RESOLVED (2026-05-17)
+
+> Fixed: the modal now uses `useModalFocusTrap` and carries `role="dialog" aria-modal="true" aria-labelledby="thrombectomy-modal-title" aria-describedby`. Verified 2026-06-03.
+
 
 - **Surface:** `src/components/article/stroke/ThrombectomyPathwayModal.tsx:44–79`
 - **WCAG criterion:** 2.4.3 Focus Order; 4.1.2 Name, Role, Value
@@ -47,7 +60,10 @@ NeuroWiki's L5.6 shell extraction is a meaningful accessibility win: the shared 
 - **Impact:** Screen reader users are not informed they entered a modal context. Keyboard users may tab out of the overlay into the obscured background. Motor-impaired users relying on keyboard cannot reliably navigate within the modal.
 - **Fix complexity:** M
 
-### H2 — ThrombolysisEligibilityModal chip buttons missing focus-visible ring
+### H2 — ThrombolysisEligibilityModal chip buttons missing focus-visible ring — ✅ RESOLVED (2026-05-17)
+
+> Fixed: all chip body buttons and info-icon buttons now carry `focus-visible:ring-2 focus-visible:ring-neuro-500` (B-3 a11y fix). Verified 2026-06-03.
+
 
 - **Surface:** `src/components/article/stroke/ThrombolysisEligibilityModal.tsx:275–299, 315–330`
 - **WCAG criterion:** 2.4.7 Focus Visible
@@ -92,7 +108,10 @@ NeuroWiki's L5.6 shell extraction is a meaningful accessibility win: the shared 
 - **Impact:** Keyboard users and switch-access users cannot set the LKW time — a core bedside workflow step. This is one of the highest-impact missing interactions in the codebase.
 - **Fix complexity:** L
 
-### H7 — FeedbackModal missing aria-modal and focus trap
+### H7 — FeedbackModal missing aria-modal and focus trap — ✅ RESOLVED (2026-05-17)
+
+> Fixed: the modal now uses `useModalFocusTrap` and carries `role="dialog" aria-modal="true" aria-labelledby="feedback-modal-title"`. Verified 2026-06-03.
+
 
 - **Surface:** `src/components/FeedbackModal.tsx:191–193`
 - **WCAG criterion:** 2.4.3 Focus Order; 4.1.2 Name, Role, Value
