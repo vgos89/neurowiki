@@ -651,7 +651,7 @@ const StatusEpilepticusPathway: React.FC = () => {
               <div className="grid grid-cols-2 gap-3 mt-2">
                 <button
                   type="button"
-                  onClick={() => setStage1Success(true)}
+                  onClick={() => { setStage2Success(true); setStage2ActualAgent(finalStage2); }}
                   className="min-h-[60px] rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold text-sm hover:bg-emerald-100 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors"
                 >
                   Seizure Stopped
