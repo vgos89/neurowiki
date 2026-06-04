@@ -16,6 +16,26 @@ const STEPS = [
 export const HemorrhageProtocol: React.FC<HemorrhageProtocolProps> = ({ isLearningMode = false }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const handlePrint = () => {
+    const lines = STEPS.map(
+      (step, i) => `${i + 1}. ${step.title}\n   ${step.detail}${step.tip ? `\n   Tip: ${step.tip}` : ''}`,
+    ).join('\n\n');
+    const content =
+      `TNK/tPA HEMORRHAGE MANAGEMENT — Emergency Protocol\n\n${lines}\n\n` +
+      `References: AHA/ASA 2022 Guideline for Management of Spontaneous ICH.`;
+    const win = window.open('', '_blank');
+    if (win) {
+      win.document.write(
+        `<pre style="font-family:monospace;white-space:pre-wrap;padding:1rem;">${content
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')}</pre>`,
+      );
+      win.document.close();
+      win.print();
+      win.close();
+    }
+  };
+
   return (
     <div className="bg-red-50 rounded-lg border border-red-200 p-4">
       <button
@@ -62,7 +82,11 @@ export const HemorrhageProtocol: React.FC<HemorrhageProtocolProps> = ({ isLearni
             <a href="https://www.ahajournals.org/doi/10.1161/STR.0000000000000407" target="_blank" rel="noopener noreferrer" className="text-red-600 underline">Full guideline</a>
           </p>
 
-          <button className="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-lg transition-colors flex items-center justify-center gap-2">
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
             <span className="material-icons-outlined text-sm">print</span>
             Print Emergency Protocol
           </button>

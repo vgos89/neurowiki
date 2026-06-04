@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * ICH Protocol step shown when CT demonstrates ICH (bleed).
@@ -22,6 +22,13 @@ interface StrokeIchProtocolStepProps {
 }
 
 export const StrokeIchProtocolStep: React.FC<StrokeIchProtocolStepProps> = ({ onComplete, isLearningMode = false }) => {
+  const [completed, setCompleted] = useState(false);
+
+  const handleComplete = () => {
+    setCompleted(true);
+    onComplete();
+  };
+
   return (
     <div className="space-y-4">
       {isLearningMode && (
@@ -66,12 +73,23 @@ export const StrokeIchProtocolStep: React.FC<StrokeIchProtocolStepProps> = ({ on
           </p>
           <button
             type="button"
-            onClick={onComplete}
-            className="w-full min-h-[44px] py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-2"
+            onClick={handleComplete}
+            disabled={completed}
+            aria-pressed={completed}
+            className={`w-full min-h-[44px] py-3 font-bold rounded-lg transition-colors flex items-center justify-center gap-2 ${
+              completed
+                ? 'bg-emerald-600 text-white cursor-default'
+                : 'bg-red-600 hover:bg-red-700 text-white'
+            }`}
           >
             <span className="material-icons-outlined text-lg">check_circle</span>
-            Mark ICH protocol complete
+            {completed ? 'ICH protocol marked complete' : 'Mark ICH protocol complete'}
           </button>
+          {completed && (
+            <p role="status" className="mt-2 text-center text-xs font-medium text-emerald-700">
+              Marked complete — continue documentation or start a new code.
+            </p>
+          )}
         </div>
       </div>
     </div>

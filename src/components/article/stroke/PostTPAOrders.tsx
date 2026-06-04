@@ -46,6 +46,24 @@ export const PostTPAOrders: React.FC = () => {
 
   const checkedCount = orders.filter(o => o.checked).length;
 
+  const handlePrint = () => {
+    const lines = orders
+      .map(order => `[${order.checked ? 'x' : ' '}] ${order.text}`)
+      .join('\n');
+    const content = `POST-tPA GENERAL ORDERS (${checkedCount}/${orders.length} selected)\n\n${lines}`;
+    const win = window.open('', '_blank');
+    if (win) {
+      win.document.write(
+        `<pre style="font-family:monospace;white-space:pre-wrap;padding:1rem;">${content
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')}</pre>`,
+      );
+      win.document.close();
+      win.print();
+      win.close();
+    }
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
       <button
@@ -114,7 +132,11 @@ export const PostTPAOrders: React.FC = () => {
             >
               Clear All
             </button>
-            <button className="flex-1 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors text-sm flex items-center justify-center gap-2">
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="flex-1 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors text-sm flex items-center justify-center gap-2"
+            >
               <Printer className="w-4 h-4" />
               Print Order Set
             </button>
