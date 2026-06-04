@@ -1124,6 +1124,10 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-06-04 — ASCVD calculator added to sitemap + prerender (indexability fix) — Class C (commit 2583960)
+  - Drift fix: routeManifest had `ascvd-risk` with includeInSitemap:true + published:true + full meta, but the hand-maintained public/sitemap.xml (single source of truth for prerender per scripts/prerender.mjs) never got the entry — same manual step that was done for /calculators/mrs on 2026-05-28 but skipped for ASCVD. Result: the calculator worked client-side but was invisible to Google + AI crawlers (SPA-shell fallback, generic title).
+  - Added the `<url>` entry (priority 0.7, monthly). No page content or metadata authored — the title/description already existed in the manifest; this only exposes the existing page to indexing.
+  - Gates: tsc clean, build 171/171 prerendered (was 170, exit 0), check:claims/chains/routes/card-meta pass. Local prerender confirmed correct title: "ASCVD 10-year Risk Calculator (Pooled Cohort Equations) | NeuroWiki". Gate 6 pre-push live-verify green (homepage + GCS + 2 trials). Live ASCVD title confirmation pending Vercel build completion (171-route prerender deploy was still building/queued at report time; commit 2583960 Vercel status pending).
 - [x] 2026-06-04 — Analytics instrumentation: disclaimer-shown funnel + calculator_used undercount fix — Class C-clinical (commit 70b4720)
   - Origin: GA4 weekly read flagged two gaps — (1) `disclaimer_acknowledged` 6 vs `first_visit` 37 (no "shown" denominator), (2) `calculator_copied` 53 vs `calculator_used` 11 (usage undercounted). Diff drafted by external agent (Codex) per approved analytics plan; verified + gated in-repo per §6 (audit ≠ approval).
   - analytics.ts: added `trackDisclaimerShown()` gtag event. DisclaimerModal.tsx: fires only on modal-open path. NihssCalculator + AscvdRiskCalculator: wired `useCalculatorAnalytics` (`trackResult` on result, `resetTracking` on reset). ASCVD payload rounding (`toFixed(1)`) confined to the event — never feeds displayed score or tier decision.
