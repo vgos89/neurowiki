@@ -31,6 +31,7 @@ import { CalculatorToast } from '../components/calculators/CalculatorToast';
 import { useFavorites } from '../hooks/useFavorites';
 import { useRecents } from '../hooks/useRecents';
 import { useDrawerState } from '../hooks/useDrawerState';
+import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import type { SeverityTokens } from '../lib/calculators/severityTokens';
 import { NIHSS_ITEMS, calculateTotal, getItemWarning, calculateLvoProbability } from '../utils/nihssShortcuts';
 import { getMainScrollElement, scrollWithinMainOrWindow } from '../utils/mainScroll';
@@ -177,6 +178,7 @@ const NihssCalculator: React.FC = () => {
   const { recordView } = useRecents();
   const { handleBack } = useNavigationSource();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { trackResult, resetTracking } = useCalculatorAnalytics('nihss');
 
   // ── Reload from saved case (V audit 2026-05-19: "Can you reload it
   //    into the calculator?"). When the URL carries ?caseId=<id>, fetch
@@ -329,6 +331,7 @@ const NihssCalculator: React.FC = () => {
   useEffect(() => {
     if (isComplete && !wasCompleteRef.current) {
       wasCompleteRef.current = true;
+      trackResult(total);
       setJustCompleted(true);
       const t = setTimeout(() => setJustCompleted(false), 1800);
       return () => clearTimeout(t);
@@ -337,7 +340,7 @@ const NihssCalculator: React.FC = () => {
       wasCompleteRef.current = false;
       setJustCompleted(false);
     }
-  }, [isComplete]);
+  }, [isComplete, total, trackResult]);
 
   // ── Handlers ───────────────────────────────────────────────────────────────
 
@@ -541,6 +544,7 @@ const NihssCalculator: React.FC = () => {
     setConfirmedNoDisabling(false);
     // New patient / new exam → next save should create a fresh row.
     setCurrentCaseId(null);
+    resetTracking();
     reset();
     showToast('Reset', 1500);
   };
@@ -553,6 +557,7 @@ const NihssCalculator: React.FC = () => {
       setPerformedAt(new Date());
     }
     setNihssValues(allZero);
+    trackResult(0);
     setDrawerOpen(true);
   };
 

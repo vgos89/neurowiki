@@ -52,6 +52,9 @@ export const DisclaimerModal: React.FC = () => {
       }
     }
     setIsOpen(true);
+    import('../utils/analytics').then(({ trackDisclaimerShown }) => {
+      trackDisclaimerShown();
+    }).catch(() => { /* best-effort */ });
   }, []);
 
   useEffect(() => {

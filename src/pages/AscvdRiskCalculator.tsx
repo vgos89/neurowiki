@@ -19,6 +19,7 @@ import { useDrawerState } from '../hooks/useDrawerState';
 import { useFavorites } from '../hooks/useFavorites';
 import { useNavigationSource } from '../hooks/useNavigationSource';
 import { useRecents } from '../hooks/useRecents';
+import { useCalculatorAnalytics } from '../hooks/useCalculatorAnalytics';
 import type { SeverityTokens } from '../lib/calculators/severityTokens';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -304,6 +305,7 @@ const AscvdRiskCalculator: React.FC = () => {
   const { isFavorite, toggleFavorite } = useFavorites();
   const isFav = isFavorite('ascvd-risk');
   const [copyConfirm, setCopyConfirm] = useState(false);
+  const { trackResult, resetTracking } = useCalculatorAnalytics('ascvd-risk');
 
   const [state, setState] = useState<InputState>({
     age: '', sex: null, race: null,
@@ -332,6 +334,10 @@ const AscvdRiskCalculator: React.FC = () => {
   const tierMeta = tier ? TIER_META[tier] : null;
   const tokens = tier ? SEVERITY_TOKENS[tier] : null;
 
+  useEffect(() => {
+    if (result !== null) trackResult(Number(result.toFixed(1)));
+  }, [result, trackResult]);
+
   // Inline age-range detection — fires as soon as user types an out-of-range value
   const ageNum = parseFloat(state.age);
   const ageEntered = state.age !== '' && !isNaN(ageNum);
@@ -358,6 +364,7 @@ const AscvdRiskCalculator: React.FC = () => {
       totalCholesterol: '', hdlCholesterol: '', systolicBp: '',
       bpTreated: null, diabetes: null, smoker: null,
     });
+    resetTracking();
     resetDrawer();
     window.scrollTo(0, 0);
   };

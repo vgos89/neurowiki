@@ -201,6 +201,15 @@ export const trackDisclaimerAcknowledged = () => {
   }
 };
 
+/** Fired when the global medical disclaimer modal is displayed to a user. */
+export const trackDisclaimerShown = () => {
+  if (typeof window !== 'undefined' && (window as any).gtag) {
+    (window as any).gtag('event', 'disclaimer_shown', {
+      event_category: 'compliance',
+    });
+  }
+};
+
 // =============================================================================
 // AI-traffic detection — added 2026-05-21
 // Measures clinicians arriving from AI tools (ChatGPT, Perplexity, Claude,
