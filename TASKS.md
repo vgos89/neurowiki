@@ -1122,6 +1122,12 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-06-04 — Analytics instrumentation: disclaimer-shown funnel + calculator_used undercount fix — Class C-clinical (commit 70b4720)
+  - Origin: GA4 weekly read flagged two gaps — (1) `disclaimer_acknowledged` 6 vs `first_visit` 37 (no "shown" denominator), (2) `calculator_copied` 53 vs `calculator_used` 11 (usage undercounted). Diff drafted by external agent (Codex) per approved analytics plan; verified + gated in-repo per §6 (audit ≠ approval).
+  - analytics.ts: added `trackDisclaimerShown()` gtag event. DisclaimerModal.tsx: fires only on modal-open path. NihssCalculator + AscvdRiskCalculator: wired `useCalculatorAnalytics` (`trackResult` on result, `resetTracking` on reset). ASCVD payload rounding (`toFixed(1)`) confined to the event — never feeds displayed score or tier decision.
+  - Analytics-only. No scoring, thresholds, interpretation text, or citations changed. clinical-reviewer: approve (docs/reviews/clinical-analytics-instrumentation-2026-06-04.md); independently confirmed semantic invariance on both calculators.
+  - Gates: tsc clean, build 170/170 (exit 0), check:claims/chains/routes/card-meta pass. Gate 6 live-verify PASS (pre-push hook: homepage + GCS + dawn-trial + tpa-timing). Post-deploy spot-check: /calculators/nihss 200 + correct prerendered title.
+  - Follow-up parked: /calculators/ascvd-risk is a registered client-side route but absent from the sitemap → not prerendered, invisible to search + AI crawlers. Pre-existing SEO gap, unrelated to this change.
 - [x] 2026-06-03 — Unused-import sweep across src/ — Class C (commit dc3a6ad)
   - Removed unused `React` default imports from 30 files (tsconfig uses the automatic JSX runtime, so the namespace import is dead unless referenced) plus unused named imports scoped to their own statement (SubSection/Value/Critical from guide pages, Zap/Stethoscope/LinkIcon, LinkItem from autoLink, ELAN_CONTENT from ElanPathway). Two idempotent codemods added: scripts/codemod-strip-unused-react-import.mjs + scripts/codemod-strip-unused-named-imports.mjs.
   - No clinical content, copy, claim, or citation touched — dead import bindings only; render byte-identical (build prerendered all 170 routes, 0 failed).
