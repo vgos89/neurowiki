@@ -6,12 +6,15 @@
  * header (icon + eyebrow + title), max-w-lg, neuro-500 primary CTA,
  * slate-50 footer, slate-900/60 backdrop, useModalFocusTrap.
  *
- * Re-skinned 2026-05-17 per V direction. The submission logic
- * (Turnstile, /api/feedback POST, success/error states) is byte-for-byte
- * preserved from the prior implementation — only chrome + tokens
- * changed.
+ * Re-skinned 2026-05-17 per V direction.
+ *
+ * 2026-06-03: Cloudflare Turnstile removed (the Cloudflare account was
+ * deleted, so the widget could no longer issue a token, which left the
+ * submit button permanently disabled). Bot protection now lives server-side
+ * in api/feedback.ts (honeypot + same-origin guard); this form contributes
+ * the invisible honeypot field below.
  */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { X } from 'lucide-react';
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 
@@ -32,17 +35,6 @@ const feedbackTypes: { value: FeedbackType; label: string }[] = [
   { value: 'praise', label: 'Praise' },
 ];
 
-declare global {
-  interface Window {
-    turnstile?: {
-      render: (element: HTMLElement, options: Record<string, unknown>) => string;
-      remove: (widgetId?: string) => void;
-    };
-  }
-}
-
-const TURNSTILE_SCRIPT = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-
 export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   isOpen,
   onClose,
@@ -55,9 +47,10 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
-  const turnstileRef = useRef<HTMLDivElement>(null);
-  const widgetIdRef = useRef<string | null>(null);
+  // Honeypot: bound to a hidden, non-tabbable input real users never see.
+  // A non-empty value at submit time signals a bot; the server silently
+  // drops those. Kept in state only so the value rides along in the POST.
+  const [company, setCompany] = useState('');
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -66,88 +59,8 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
 
   const apiUrl = import.meta.env.VITE_FEEDBACK_API_URL || '/api/feedback';
 
-  const doRender = () => {
-    if (!window.turnstile || !turnstileRef.current) return;
-    setTurnstileToken(null);
-    if (widgetIdRef.current) {
-      try {
-        window.turnstile.remove(widgetIdRef.current);
-      } catch (_) { /* noop */ }
-      widgetIdRef.current = null;
-    }
-    const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
-    if (!siteKey) return;
-    widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
-      sitekey: siteKey,
-      callback: (token: string) => setTurnstileToken(token),
-      'error-callback': () => setTurnstileToken(null),
-      appearance: 'interaction-only',
-    });
-  };
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    setTurnstileToken(null);
-    const run = () => {
-      doRender();
-    };
-
-    if (window.turnstile) {
-      run();
-      return () => {
-        if (widgetIdRef.current) {
-          try { window.turnstile?.remove(widgetIdRef.current); } catch (_) { /* noop */ }
-          widgetIdRef.current = null;
-        }
-      };
-    }
-
-    if (document.querySelector(`script[src="${TURNSTILE_SCRIPT}"]`)) {
-      const check = () => {
-        if (window.turnstile) {
-          run();
-          return true;
-        }
-        return false;
-      };
-      if (check()) {
-        return () => {
-          if (widgetIdRef.current) {
-            try { window.turnstile?.remove(widgetIdRef.current); } catch (_) { /* noop */ }
-            widgetIdRef.current = null;
-          }
-        };
-      }
-      const t = setInterval(() => {
-        if (check()) clearInterval(t);
-      }, 50);
-      return () => {
-        clearInterval(t);
-        if (widgetIdRef.current) {
-          try { window.turnstile?.remove(widgetIdRef.current); } catch (_) { /* noop */ }
-          widgetIdRef.current = null;
-        }
-      };
-    }
-
-    const script = document.createElement('script');
-    script.src = TURNSTILE_SCRIPT;
-    script.async = true;
-    document.body.appendChild(script);
-    script.onload = run;
-
-    return () => {
-      if (widgetIdRef.current) {
-        try { window.turnstile?.remove(widgetIdRef.current); } catch (_) { /* noop */ }
-        widgetIdRef.current = null;
-      }
-    };
-  }, [isOpen]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!turnstileToken) return;
     if (!message.trim()) return;
 
     setIsSubmitting(true);
@@ -163,7 +76,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
           pageTitle,
           pageType,
           pagePath,
-          turnstileToken,
+          company,
           timestamp: new Date().toISOString(),
         }),
       });
@@ -176,6 +89,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
         setSubmitStatus('success');
         setMessage('');
         setEmail('');
+        setCompany('');
         setTimeout(() => {
           onClose();
           setSubmitStatus('idle');
@@ -196,6 +110,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
       setSubmitStatus('idle');
       setMessage('');
       setEmail('');
+      setCompany('');
     }
   };
 
@@ -310,7 +225,25 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                 />
               </div>
 
-              <div ref={turnstileRef} className="min-h-[40px] flex items-center justify-center" />
+              {/*
+                Honeypot — invisible to humans, irresistible to naive bots.
+                Positioned off-screen (NOT display:none, which some bots skip)
+                and removed from the a11y tree + tab order so no real user or
+                screen reader ever encounters it. A non-empty value at submit
+                time tells the server this was a bot (silently dropped).
+              */}
+              <div aria-hidden="true" className="absolute -left-[9999px] top-auto h-0 w-0 overflow-hidden" style={{ position: 'absolute' }}>
+                <label htmlFor="feedback-company">Company (leave blank)</label>
+                <input
+                  id="feedback-company"
+                  type="text"
+                  name="company"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
 
               {submitStatus === 'error' && (
                 <div
@@ -327,14 +260,14 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
             <div className="px-6 py-5 bg-slate-50 border-t border-slate-100">
               <button
                 type="submit"
-                disabled={isSubmitting || !turnstileToken}
+                disabled={isSubmitting}
                 className={`w-full py-2.5 rounded-lg text-[14px] font-semibold transition-colors min-h-[44px] focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none focus-visible:ring-offset-2 ${
-                  isSubmitting || !turnstileToken
+                  isSubmitting
                     ? 'bg-slate-200 text-slate-500 cursor-not-allowed'
                     : 'bg-neuro-500 text-white hover:bg-neuro-600 active:bg-neuro-700'
                 }`}
               >
-                {isSubmitting ? 'Sending…' : !turnstileToken ? 'Verifying…' : 'Send Feedback'}
+                {isSubmitting ? 'Sending…' : 'Send Feedback'}
               </button>
             </div>
           </form>
