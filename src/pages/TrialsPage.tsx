@@ -11,11 +11,10 @@ import {
   type TrialItem,
   type TrialCategoryKey,
 } from '../data/trialListData';
-// Phase 6B: trialData.ts no longer in home bundle — lazy routes import it directly.
-import { TRIAL_DATA } from '../data/trialData';
-// Enrich the catalog with legend data for card display and search.
-// Runs once when this lazy chunk loads, not on every render.
-const trialsWithLegend: TrialItem[] = trials.map(t => ({ ...t, legend: TRIAL_DATA[t.id]?.legend }));
+// `trials` already carries each card's legend (attached in trialListData.ts from
+// the lightweight generated projection), so this page no longer imports the
+// ~928 KB trialData.ts chunk. See docs/reviews/arch-PR-trial-card-meta-split.md.
+const trialsWithLegend: TrialItem[] = trials;
 import { Toggle, type ToggleOption } from '../components/ui/Toggle';
 import { Chip } from '../components/ui/Chip';
 import { TrialLegendCard } from '../components/trials/TrialLegendCard';

@@ -19,8 +19,10 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { TRIAL_QUESTIONS } from '../data/trial-questions';
-import { findTrialById, type TrialItem } from '../data/trialListData';
-import { TRIAL_DATA } from '../data/trialData'; // Phase 6B: legend deferred; lazy route imports directly
+import { findTrialById, getTrialCardMeta, type TrialItem, type TrialCardMeta } from '../data/trialListData';
+// Trial-card legend + stub-trial fields come from the lightweight generated
+// projection (getTrialCardMeta), so this page no longer imports the ~928 KB
+// trialData.ts chunk. See docs/reviews/arch-PR-trial-card-meta-split.md.
 import { TrialLegendCard } from '../components/trials/TrialLegendCard';
 import { GuidelineSummaryCard } from '../components/trials/GuidelineSummaryCard';
 import { getGuidelineSummaryForQuestion } from '../data/guidelineSummariesByQuestion';
@@ -106,13 +108,13 @@ export default function QuestionDetailPage() {
   // MISTIE III, etc.) live in TRIAL_DATA but not in trialListData — synthesize
   // a TrialItem for them so they appear in the question's evidence list.
   // Enrich with legend data (Phase 6B: legend no longer in trialListData.ts).
-  function yearFromTrial(metadata: typeof TRIAL_DATA[string]): number {
+  function yearFromTrial(metadata: TrialCardMeta): number {
     // Try source string ("Liu et al. (Lancet Neurol 2020)" → 2020); then
-    // trialDesign.timeline; then 0 as a safe default.
+    // timeline; then 0 as a safe default.
     const src = metadata.source || '';
     const matchSrc = src.match(/\b(19|20)\d{2}\b/);
     if (matchSrc) return parseInt(matchSrc[0], 10);
-    const tl = metadata.trialDesign?.timeline || '';
+    const tl = metadata.timeline || '';
     const matchTl = tl.match(/\b(19|20)\d{2}\b/);
     if (matchTl) return parseInt(matchTl[0], 10);
     return 0;
@@ -122,10 +124,10 @@ export default function QuestionDetailPage() {
     .map((id) => {
       const fromList = findTrialById(id);
       if (fromList) {
-        return { ...fromList, legend: TRIAL_DATA[id]?.legend };
+        return { ...fromList, legend: getTrialCardMeta(id)?.legend };
       }
-      // Fallback for stub trials — synthesize a TrialItem from TRIAL_DATA.
-      const stub = TRIAL_DATA[id];
+      // Fallback for stub trials — synthesize a TrialItem from the projection.
+      const stub = getTrialCardMeta(id);
       if (stub) {
         const name = stub.title.replace(/\s*Trial\s*$/i, '').trim();
         return {

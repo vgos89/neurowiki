@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "tsx scripts/gen-trial-card-meta.ts",
     "build": "vite build",
     "postbuild": "node scripts/prerender.mjs",
     "build:analyze": "ANALYZE=true vite build",
@@ -13,6 +14,8 @@
     "check:routes": "node scripts/validateRouteManifest.mjs",
     "check:claims": "tsx scripts/check-claims.ts",
     "check:chains": "tsx scripts/check-trial-chains.ts",
+    "check:card-meta": "tsx scripts/check-card-meta.ts",
+    "generate:card-meta": "tsx scripts/gen-trial-card-meta.ts",
     "check:humanizer": "node scripts/check-humanizer.mjs",
     "fix:em-dashes": "node scripts/fix-em-dashes.mjs --write",
     "seo:auth-login": "node --env-file=.env.local scripts/seo/auth-login.mjs",

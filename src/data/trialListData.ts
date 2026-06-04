@@ -1,7 +1,21 @@
 import { LEGACY_TRIAL_CATALOG_META } from './trialCatalogMeta';
-// trialData.ts is intentionally NOT imported here (Phase 6B).
-// legend is populated lazily by each lazy route that needs it
-// (TrialsPage, QuestionDetailPage) — keeping it out of the home-page bundle.
+import { TRIAL_CARD_META, type TrialCardMeta } from './trialListData.cardmeta.generated';
+// trialData.ts is intentionally NOT imported here.
+// The trial-card legend + small catalog fields come from the lightweight
+// GENERATED projection trialListData.cardmeta.generated.ts (whitelisted fields
+// only), so TrialsPage and QuestionDetailPage never pull the ~928 KB trialData
+// chunk. The projection is derived from trialData.ts and drift-guarded in
+// pre-commit (scripts/check-card-meta.ts). See
+// docs/reviews/arch-PR-trial-card-meta-split.md.
+
+export type { TrialCardMeta };
+
+/** Lightweight per-trial card metadata projected from trialData.ts.
+ *  Used by QuestionDetailPage to synthesize rows for stub trials (BEST, BASICS,
+ *  STICH I/II, MISTIE III, …) that live in TRIAL_DATA but not in this catalog. */
+export function getTrialCardMeta(id: string): TrialCardMeta | undefined {
+  return TRIAL_CARD_META[id];
+}
 
 export type TrialCategoryKey =
   | 'prehospital-triage'
@@ -595,12 +609,19 @@ const restoredLegacyTrials: TrialItem[] = Object.entries(LEGACY_TRIAL_CATALOG_ME
     };
   });
 
-export const trials: TrialItem[] = [...manualTrials.map(enrichTrial), ...restoredLegacyTrials].sort((a, b) => {
-  const categoryIndex = TRIAL_CATEGORY_IDS.indexOf(a.category) - TRIAL_CATEGORY_IDS.indexOf(b.category);
-  if (categoryIndex !== 0) return categoryIndex;
-  if (b.year !== a.year) return b.year - a.year;
-  return a.name.localeCompare(b.name);
-});
+export const trials: TrialItem[] = [...manualTrials.map(enrichTrial), ...restoredLegacyTrials]
+  // Attach the legend chip from the lightweight generated projection so that
+  // consumers (TrialsPage) get a fully-formed TrialItem without importing trialData.ts.
+  .map((trial) => {
+    const legend = TRIAL_CARD_META[trial.id]?.legend;
+    return legend ? { ...trial, legend } : trial;
+  })
+  .sort((a, b) => {
+    const categoryIndex = TRIAL_CATEGORY_IDS.indexOf(a.category) - TRIAL_CATEGORY_IDS.indexOf(b.category);
+    if (categoryIndex !== 0) return categoryIndex;
+    if (b.year !== a.year) return b.year - a.year;
+    return a.name.localeCompare(b.name);
+  });
 
 export function groupTrialsByCategory(trialsList: TrialItem[]): Record<TrialCategoryKey, TrialItem[]> {
   const groups = {} as Record<TrialCategoryKey, TrialItem[]>;
