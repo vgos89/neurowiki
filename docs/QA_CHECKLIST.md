@@ -126,8 +126,57 @@
 ---
 
 ## 7. Recommended follow-ups (separate, triage required — NOT done here)
-1. **Fix B-1** — wire the ICH "complete" button to a real terminal state, or remove it. (Class C; bleed branch is clinical-adjacent — flag `-clinical` if copy/feedback text is added.)
-2. **Fix B-2 / B-3** — either implement print on the two inline accordions (mirror the modal Print pattern) or remove the dead buttons. (Class C.)
+1. ~~**Fix B-1**~~ — **DONE 2026-06-03 (commit de96423).** ICH "complete" button now toggles a real terminal state + status text.
+2. ~~**Fix B-2 / B-3**~~ — **DONE 2026-06-03 (commit de96423).** Both print buttons wired to handlers that re-emit existing protocol/order text.
 3. **Resolve S-1** — decide backdrop-close behavior for the two pathway modals and make it consistent. (Class B/C.)
 4. **Resolve S-2** — migrate the residual `material-icons-outlined` glyphs in `StrokeIchProtocolStep` + the two accordions to lucide-react, matching the rest of the workflow. (Class B.)
 5. **Cleanup** — remove orphaned `Step1Data.eligibilityChecked`, `_generateNote`, and the unused `isLearningMode` prop. (Class B.)
+
+---
+---
+
+# Part 2 — Connectivity Audit: non-stroke pathways + calculator pages
+
+**Date:** 2026-06-03
+**Scope:** Every interactive control across the surfaces the Part 1 stroke audit did NOT cover — the three non-stroke decision-pathway pages and all 13 medical-calculator pages, plus their shared calculator UI controls.
+**Method:** Static source trace, each file read in full. Three disjoint file sets traced in parallel; every BROKEN/SUSPECT finding re-verified by hand against the source.
+**Nature:** Audit only — no code changed. Findings below are follow-up candidates for separate triage.
+
+## P2.1 Surface map
+- **Non-stroke pathways (3):** `StatusEpilepticusPathway.tsx`, `MigrainePathway.tsx`, `ClinicHeadachePathway.tsx`
+- **Calculators (13):** NIHSS, GCS, ASPECTS, ICH Score, Heidelberg, mRS, ABCD², HAS-BLED, RoPE, Boston-CAA, CHA₂DS₂-VASc, ASCVD, EM Billing
+- **Shared calculator controls:** CalculatorHeader, CalculatorDrawer, CalculatorToast, CalculatorFooter, ShareButton, BackArrow, MrsPickerModal
+
+## P2.2 Findings summary
+| Severity | Count | Where |
+|---|---|---|
+| BROKEN | 4 | ClinicHeadachePathway (3 no-op chips) + StatusEpilepticusPathway (1 wrong-setter) |
+| SUSPECT | 5 | ClinicHeadache (cascade undo, debug strip), Migraine (loose Step-2 gate), ASCVD (Share/Save), shared drawer/modal Escape |
+| ORPHANED | 4 | Migraine InfoTooltip, ASCVD copy-confirm, EM-Billing time-activities |
+
+**All 13 calculators' core scoring/copy/share/reset wiring: CLEAN.** No dead scoring inputs, no broken copy/reset. The calculator findings are peripheral (an unused state var, one page missing the Share/Save props the others have).
+
+## P2.3 BROKEN (control does nothing when used)
+- **P-1 `StatusEpilepticusPathway.tsx:654` — Stage 2 "Seizure Stopped" button calls the WRONG state setter.** It runs `setStage1Success(true)` instead of `setStage2Success(true)`. Effect: clicking the green "seizure stopped" outcome in Stage 2 re-flips the already-resolved Stage 1 result, never records that the second-line agent worked, leaves Stage 2 completion unsatisfied, and the generated EMR note omits the Stage 2 "(Responsive)" line. **Clinical-adjacent — Class C-clinical to fix** (the sibling "Persists — Refractory" button at :661 is correctly wired, so this is a one-word setter swap, but it changes a pathway/EMR output).
+- **P-2 / P-3 / P-4 `ClinicHeadachePathway.tsx:449, :517, :596` — three "branch summary" chips have empty no-op onClick** (`() => {}`). Tapping the collapsed step-summary chip does nothing; a code comment claims the browser handles scroll but no anchor/scroll is attached. Same class of bug as Part 1's B-1. (Class C — the migraine/SE equivalents re-open their step; these three should match.)
+
+## P2.4 SUSPECT (works partially / inconsistently)
+- **P-5 `ClinicHeadachePathway.tsx:1041–1146` — a "Diagnostic (temporary)" debug strip ships to end users.** Marked "V-requested 2026-05-27, REMOVE ONCE TUNING IS COMPLETE." It renders the phenotype-evaluator internals on every completed headache interview. Functionally fine, but it's developer tuning UI visible to clinicians. **Decision needed: is tuning done? If so, remove it.** (Class C-clinical — it's on a clinical pathway page.)
+- **P-6 `ClinicHeadachePathway.tsx:430–438` — cascade "Undo" doesn't undo.** `onUndo` is wired identically to `onDismiss` (`() => setCascade(null)`); it only hides the banner and does NOT restore fields that `clearDownstream` already wiped. The Migraine page does this correctly (snapshot restore) — headache should match. (Class C.)
+- **P-7 `MigrainePathway.tsx:539` — Step-2 completion gate is looser than intended.** The `careSetting !== null` guard is effectively always-true once any branch is touched, so Step 2 can read "complete" without a care setting chosen in the migraine branch. Navigation still works; completion state is just permissive. (Class C-clinical — verify intended.)
+- **P-8 `AscvdRiskCalculator.tsx:385` — Share/Save likely absent.** This page invokes `CalculatorHeader` without the `shareText`/`onShareResult`/save props the other 12 calculators pass, so its header Share/Save actions probably do nothing. (Class C — confirm against CalculatorHeader internals before fixing.)
+- **P-9 (shared) `CalculatorDrawer.tsx:172` + `MrsPickerModal.tsx:31` — no Escape-key / backdrop dismiss.** The drawer closes only via its toggle handle; the mRS picker modal closes via X/backdrop/Done but has no Escape handler or focus trap. Consistent design, not dead wiring, but an accessibility gap. (Class B/C — accessibility-specialist call.)
+
+## P2.5 ORPHANED (defined but never used — dead code, no user impact)
+- **P-10 `MigrainePathway.tsx:146` — `InfoTooltip` component defined but never rendered.**
+- **P-11 `AscvdRiskCalculator.tsx:307` — `copyConfirm`/`setCopyConfirm` set in `handleCopy` but never rendered** (the copy itself still works; only the success indicator is dead).
+- **P-12 `EmBillingCalculator.tsx:2000` — time-activities checkboxes write `state.timeActivities` but no `generate*` output function reads it**, so those selections never reach the copied billing output.
+
+## P2.6 Recommended follow-ups (Part 2 — separate triage)
+1. **Fix P-1** — swap `setStage1Success` → `setStage2Success` on the SE Stage 2 "Seizure Stopped" button. Smallest fix, highest value (corrects a pathway/EMR output). Class C-clinical.
+2. **Fix P-2/P-3/P-4** — wire the three headache branch chips to re-open their step (match migraine/SE), or remove them. Class C.
+3. **Decide P-5** — remove the headache debug strip if tuning is complete. Class C-clinical.
+4. **Fix P-6** — make headache cascade Undo restore fields (snapshot pattern, like migraine). Class C.
+5. **Confirm P-7 / P-8** — tighten migraine Step-2 gate if intended; add Share/Save props to ASCVD if intended. Class C.
+6. **Cleanup P-10/P-11/P-12** — remove dead InfoTooltip + copyConfirm; either wire EM-Billing time-activities into output or remove the checkboxes. Class B.
+7. **Accessibility P-9** — decide Escape/backdrop dismiss for the shared drawer + mRS modal. Class B/C.
