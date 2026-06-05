@@ -41,7 +41,6 @@ import {
   type PhenotypeMatch,
 } from '../data/clinicHeadacheData';
 import { HeadacheResultList } from '../components/pathways/headache/HeadacheResultList';
-import { CriteriaList } from '../components/pathways/headache/CriteriaList';
 
 // ─── Constants ────────────────────────────────────────────────────────────
 
@@ -712,157 +711,6 @@ const ClinicHeadachePathway: React.FC = () => {
             </h2>
 
             <HeadacheResultList matches={matches} />
-
-            {(topMatch.phenotypeId === 'migraine-without-aura' || topMatch.phenotypeId === 'migraine-with-aura') && (
-              <>
-                <div data-claim="clinic-headache-ichd3-migraine-criteria" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>ICHD-3 §1.1 / §1.2 criteria</SectionHeader>
-                  <CriteriaList match={topMatch} />
-                </div>
-                <div data-claim="clinic-headache-moh-gepant-safe" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>Acute treatment</SectionHeader>
-                  <Row label="First-line" value="Sumatriptan 50 to 100 mg PO at onset (if no CVD contraindication)" />
-                  <Row label="NSAID" value="Ibuprofen 600 mg or naproxen 500 mg for milder attacks" />
-                  <Row label="If triptans contraindicated" value="Gepant (ubrogepant, rimegepant) or lasmiditan; no MOH risk with gepants" />
-                  <Row label="Add" value="Antiemetic when nausea is prominent" />
-                </div>
-                <div data-claim="clinic-headache-preventive-threshold" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>Preventive threshold (AHS 2021)</SectionHeader>
-                  <Row label="Indication" value="≥4 days/month with disability, ≥6 days/month regardless, or acute use ≥10 days/month" />
-                  <Row label="First-line" value="Propranolol or topiramate" />
-                  <Row label="Comorbid anxiety or depression" value="Amitriptyline or venlafaxine" />
-                </div>
-                <div data-claim="clinic-headache-cgrp-escalation" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>CGRP escalation</SectionHeader>
-                  <Row label="After 2 failures" value="Erenumab, fremanezumab, galcanezumab, or eptinezumab" />
-                  <Row label="Oral CGRP" value="Atogepant or rimegepant for patients preferring oral therapy or with MOH risk" />
-                </div>
-              </>
-            )}
-
-            {(topMatch.phenotypeId === 'episodic-tth' || topMatch.phenotypeId === 'chronic-tth') && (
-              <>
-                <div data-claim="clinic-headache-ichd3-tension-criteria" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>ICHD-3 §2.2 / §2.3 criteria</SectionHeader>
-                  <CriteriaList match={topMatch} />
-                </div>
-                <div data-claim="clinic-headache-tension-acute-management" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>Acute treatment (Scher Continuum 2024)</SectionHeader>
-                  <Row label="First-line" value="Ibuprofen 400 to 600 mg PO" />
-                  <Row label="Alternative" value="Aspirin 500 to 1000 mg PO" />
-                  <Row label="Pregnancy or NSAID contraindication" value="Acetaminophen 1000 mg PO" />
-                  <Row label="Avoid" value="Opioids and butalbital combinations (MOH and dependence risk)" />
-                  <Row label="MOH limits" value="≤15 days/month simple analgesics; ≤10 days/month triptans or opioids" />
-                </div>
-                {topMatch.phenotypeId === 'chronic-tth' && (
-                  <div data-claim="clinic-headache-tension-preventive" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                    <SectionHeader>Preventive treatment</SectionHeader>
-                    <Row label="First-line" value="Amitriptyline 10 to 75 mg at bedtime (AAN Level B)" />
-                    <Row label="Depression or anxiety comorbid" value="Venlafaxine 75 to 150 mg/day" />
-                    <Row label="Sleep or anxiety predominant" value="Mirtazapine 15 to 30 mg at bedtime" />
-                    <Row label="Third-line" value="Topiramate (less evidence for TTH than migraine)" />
-                    <Row label="Non-pharmacologic (Level A)" value="Stress management, biofeedback, physical therapy" />
-                  </div>
-                )}
-              </>
-            )}
-
-            {topMatch.phenotypeId === 'cluster-headache' && (
-              <>
-                <div data-claim="clinic-headache-ichd3-cluster-criteria" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>ICHD-3 §3.1 criteria</SectionHeader>
-                  <CriteriaList match={topMatch} />
-                </div>
-                <div data-claim="clinic-headache-cluster-acute-management" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>Acute treatment (Burish Continuum 2024)</SectionHeader>
-                  <Row label="High-flow O₂" value="12 to 15 L/min via non-rebreather, 15 minutes (AHS Grade A)" />
-                  <Row label="Triptan" value="Sumatriptan 6 mg SC or 20 mg nasal (AHS Grade A)" />
-                  <Row label="Bridging" value="Ipsilateral GON block with corticosteroid; prednisone 100 mg/day × 5 d then taper" />
-                </div>
-                <div data-claim="clinic-headache-cluster-preventive" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>Preventive treatment</SectionHeader>
-                  <Row label="First-line" value="Verapamil 80 mg TID, titrate to 360 mg/day with baseline and follow-up ECG" />
-                  <Row label="Second-line" value="Lithium 300 mg BID to TID; serum-level monitoring required" />
-                  <Row label="Third-line" value="Topiramate 100 to 200 mg/day; avoid in WOCBP without contraception" />
-                </div>
-              </>
-            )}
-
-            {topMatch.phenotypeId === 'hemicrania-continua' && (
-              <>
-                <div data-claim="clinic-headache-ichd3-hemicrania-criteria" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>ICHD-3 §3.4 criteria</SectionHeader>
-                  <CriteriaList match={topMatch} />
-                </div>
-                <div data-claim="clinic-headache-hc-indomethacin-protocol" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>Indomethacin protocol (Goadsby Continuum 2024)</SectionHeader>
-                  <Row label="Week 1" value="Indomethacin 25 mg TID" />
-                  <Row label="Week 2 if incomplete" value="50 mg TID (150 mg/day, the maximum per quoted text)" />
-                  <Row label="GI protection" value="Co-prescribe PPI; co-prescription is mandatory" />
-                  <Row label="Diagnostic confirmation" value="Complete response within 1 to 2 weeks confirms the hemicrania continua phenotype" />
-                </div>
-              </>
-            )}
-
-            {topMatch.phenotypeId === 'ndph' && (
-              <div data-claim="clinic-headache-ichd3-ndph-criteria" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                <SectionHeader>ICHD-3 §4.10 criteria</SectionHeader>
-                <CriteriaList match={topMatch} />
-                <Row label="Management" value="NDPH is a diagnosis of exclusion; complete secondary-cause workup before treating. Treat per the phenotype the headache most resembles." />
-              </div>
-            )}
-
-            {topMatch.phenotypeId === 'chronic-migraine' && (
-              <>
-                <div data-claim="clinic-headache-ichd3-chronic-migraine-criteria" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>ICHD-3 §1.3 criteria</SectionHeader>
-                  <CriteriaList match={topMatch} />
-                </div>
-                <div data-claim="clinic-headache-chronic-migraine-acute" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>Acute treatment</SectionHeader>
-                  <Row label="First-line" value="NSAID or triptan at onset, same stepwise framework as episodic migraine (Burch Continuum 2024)" />
-                  <Row label="MOH risk" value="Gepant (rimegepant, ubrogepant) preferred when acute-medication days are high; gepants do not cause MOH (Rizzoli 2024)" />
-                  <Row label="Refractory" value="Combination therapy (antiemetic + analgesic ± DHE); IV DHE for refractory ED migraine" />
-                </div>
-                <div data-claim="clinic-headache-chronic-migraine-preventive" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>Preventive treatment</SectionHeader>
-                  <Row label="OnabotulinumtoxinA" value="Approved for chronic migraine only (per Lipton 2024). Standard PREEMPT-aligned dosing per AHS." />
-                  <Row label="CGRP mAb" value="Erenumab, fremanezumab, galcanezumab, or eptinezumab; first-line for chronic migraine per AHS 2021" />
-                  <Row label="Conventional preventives" value="Topiramate, valproate (avoid in WOCBP), propranolol/metoprolol, amitriptyline, venlafaxine. Escalate to CGRP mAb after ≥2 failures." />
-                </div>
-              </>
-            )}
-
-            {topMatch.phenotypeId === 'paroxysmal-hemicrania' && (
-              <>
-                <div data-claim="clinic-headache-ichd3-paroxysmal-criteria" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>ICHD-3 §3.2 criteria</SectionHeader>
-                  <CriteriaList match={topMatch} />
-                </div>
-                <div data-claim="clinic-headache-ph-indomethacin-protocol" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>Indomethacin protocol (Goadsby Continuum 2024)</SectionHeader>
-                  <Row label="Week 1" value="Indomethacin 25 mg TID" />
-                  <Row label="Titration" value="Increase to 75 to 150 mg/day if incomplete response (max 150 mg/day per Goadsby 2024 quoted text)" />
-                  <Row label="GI protection" value="PPI co-prescription is mandatory" />
-                  <Row label="Diagnostic confirmation" value="Complete response within 1 to 2 weeks confirms the paroxysmal hemicrania phenotype" />
-                </div>
-              </>
-            )}
-
-            {topMatch.phenotypeId === 'sunct-suna' && (
-              <>
-                <div data-claim="clinic-headache-ichd3-sunct-criteria" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>ICHD-3 §3.3 criteria</SectionHeader>
-                  <CriteriaList match={topMatch} />
-                </div>
-                <div data-claim="clinic-headache-sunct-lamotrigine" className="bg-white border border-slate-100 rounded-xl divide-y divide-slate-50">
-                  <SectionHeader>Preventive treatment (Burish Continuum 2024)</SectionHeader>
-                  <Row label="First-line" value="Lamotrigine, titrated slowly to reduce rash risk" />
-                  <Row label="Second-line" value="Carbamazepine" />
-                  <Row label="Referral" value="Refer to a headache specialist; SUNCT/SUNA is uncommon and often misdiagnosed as trigeminal neuralgia" />
-                </div>
-              </>
-            )}
           </section>
         )}
 
@@ -966,20 +814,5 @@ function managementNotesForPhenotype(phenotypeId: string): string[] {
       return [];
   }
 }
-
-// ─── Small render helpers (NIHSS PatientContextPanel style) ───────────────
-
-const SectionHeader: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="min-h-[40px] flex items-center px-4 py-2 bg-slate-50 border-b border-slate-100">
-    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{children}</span>
-  </div>
-);
-
-const Row: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value }) => (
-  <div className="min-h-[44px] flex items-start justify-between gap-3 px-4 py-2.5">
-    <span className="text-xs font-medium text-slate-600 flex-shrink-0 max-w-[40%]">{label}</span>
-    <span className="text-sm text-slate-900 text-right flex-1">{value}</span>
-  </div>
-);
 
 export default ClinicHeadachePathway;

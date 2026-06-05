@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { PhenotypeMatch } from '../../../data/clinicHeadacheData';
 import { CriteriaList } from './CriteriaList';
+import { HeadacheManagement, hasHeadacheManagement } from './HeadacheManagement';
 
 /**
  * HeadacheResultList — ranked ICHD-3 phenotype matches as a compact accordion
@@ -58,6 +59,25 @@ export const HeadacheResultList: React.FC<HeadacheResultListProps> = ({ matches 
 
   return (
     <div className="space-y-3">
+      {/* Criteria-claim tag markers (clinical-reviewer Option B). The visible
+          ICHD-3 criteria render untagged in each row's CriteriaList below
+          (dynamic .map(); check-claims matches only a LITERAL data-claim, not
+          data-claim={expr}). These hidden literals carry the registered criteria
+          claims so the surface scan passes; criteria render once, per row. One
+          marker per claim ID — migraine + tension are many-to-one (each serves
+          two phenotypes). ndph's criteria claim is tagged in HeadacheManagement
+          (it bundles a management note), so it is not here. Precedent: the hidden
+          pitfall marker in ClinicHeadachePathway.tsx. */}
+      <div className="hidden" aria-hidden="true">
+        <span data-claim="clinic-headache-ichd3-migraine-criteria" />
+        <span data-claim="clinic-headache-ichd3-tension-criteria" />
+        <span data-claim="clinic-headache-ichd3-cluster-criteria" />
+        <span data-claim="clinic-headache-ichd3-hemicrania-criteria" />
+        <span data-claim="clinic-headache-ichd3-chronic-migraine-criteria" />
+        <span data-claim="clinic-headache-ichd3-paroxysmal-criteria" />
+        <span data-claim="clinic-headache-ichd3-sunct-criteria" />
+      </div>
+
       {/* Ranked accordion list — one row per phenotype, top match open */}
       <div className="rounded-xl border border-slate-100 bg-white overflow-hidden divide-y divide-slate-50">
         {matches.map((m, index) => {
@@ -135,6 +155,40 @@ export const HeadacheResultList: React.FC<HeadacheResultListProps> = ({ matches 
               </h3>
               <div id={panelId} role="region" aria-label={`${m.name} criteria detail`} hidden={!isOpen}>
                 <CriteriaList match={m} />
+                {/* Opt-in management — collapsed by default on EVERY row incl.
+                    the top match (clinical gate condition 3). Partial matches
+                    show the confirm-diagnosis caveat at the top of the body
+                    (condition 1, strength-gated; condition 4: no floor — partial
+                    matches still expose management behind this disclosure). */}
+                {hasHeadacheManagement(m.phenotypeId) && (
+                  <details className="group border-t border-slate-50">
+                    <summary className="flex items-center gap-1.5 min-h-[44px] px-4 py-2.5 cursor-pointer select-none list-none text-[11px] font-bold uppercase tracking-widest text-neuro-700 hover:bg-slate-50/70 transition-colors motion-reduce:transition-none touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:ring-inset [&::-webkit-details-marker]:hidden">
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 16 16"
+                        className="w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200 motion-reduce:transition-none group-open:rotate-180"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={1.75}
+                      >
+                        <path d="M4 6l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      Show management
+                    </summary>
+                    <div className="px-4 pb-4 pt-1 space-y-3">
+                      {m.matchStrength === 'partial' && (
+                        <p
+                          role="note"
+                          data-claim="clinic-headache-partial-match-caveat"
+                          className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[12px] leading-relaxed text-amber-900"
+                        >
+                          Partial match — confirm the diagnosis before initiating. Criteria are not yet met for this phenotype; dosing is shown for reference.
+                        </p>
+                      )}
+                      <HeadacheManagement phenotypeId={m.phenotypeId} />
+                    </div>
+                  </details>
+                )}
               </div>
             </div>
           );

@@ -908,6 +908,21 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     description: 'SUNCT/SUNA preventive treatment — primary evidence: D\'Andrea Neurology 2001 (lamotrigine 125-200 mg/day; complete remission in 3 of 5 + ~80% reduction in remaining 2; no adverse effects). Cohen Brain 2006 prospective cohort (n=52) confirms lamotrigine as most consistently effective preventive in the cohort. Standard protocol: lamotrigine first-line, titrate slowly to avoid rash. Carbamazepine is second-line. Refer to a headache specialist; very-short-attack TACs are uncommon and often misdiagnosed as trigeminal neuralgia. Burish Continuum 2024 retained as secondary review.',
   },
 
+  // ─── Partial-match management caveat — Clinic Headache Pathway ─────────────
+  // Surface: static JSX with data-claim attribute at the top of the management
+  // body on `partial`-strength match rows only (the opt-in "Show management"
+  // expander). Guards against anchoring on a weakly-matched phenotype: states
+  // ICHD-3 criteria are not yet met, directs diagnosis confirmation before
+  // initiating treatment, and frames the displayed dosing as reference-only.
+  // Anchored to ichd3-2018 — the ICHD-3 source the phenotype criteria come from.
+  // Authored + confirmed by medical-scientist; clinical-reviewer gate 2026-06-05.
+  'clinic-headache-partial-match-caveat': {
+    id: 'clinic-headache-partial-match-caveat',
+    citation_ids: ['ichd3-2018'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Partial-match safety caveat rendered at the top of the management body on partial-strength ICHD-3 phenotype rows in the Clinic Headache Pathway: "Partial match — confirm the diagnosis before initiating. Criteria are not yet met for this phenotype; dosing is shown for reference." Anti-anchoring guard for the opt-in Show-management expander — the displayed treatment/dosing is reference-only because the ICHD-3 diagnostic criteria for the phenotype are not fully satisfied. Anchored to ICHD-3 (2018) as the source defining the diagnostic criteria that are not yet met.',
+  },
+
   // ─── mRS Calculator — added 2026-05-27 ────────────────────────────────────
 
   'mrs-grade-definitions': {
