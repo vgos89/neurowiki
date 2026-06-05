@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║  Headache pattern finder — v4 "Live differential narrowing" (RE-SKIN)       ║
+  ║  DESIGN MOCKUP for product-owner review. NOT production code.               ║
+  ║  Three 375px frames stacked: 1 Safety · 2 Question+differential · 3 Result   ║
+  ║                                                                              ║
+  ║  v4 = v3 concept + content, UNCHANGED, re-skinned to NeuroWiki house style:  ║
+  ║   - Icons: lucide-react (CDN), NOT Material Icons (matches the app's 71 files)║
+  ║   - Header: real PathwayHeader anatomy (PathwayHeader.tsx §2 + PATHWAY_SPEC) ║
+  ║   - Cards/borders: single hairline `border-slate-100`, rounded-xl/lg/full    ║
+  ║   - Type: app scale (eyebrow 10px bold caps · question 22px medium · etc.)   ║
+  ║   - Colours: neuro-500 #1746A2 brand + emerald/amber/slate SEVERITY tokens   ║
+  ║                                                                              ║
+  ║  PRESERVED EXACTLY from v3 (concept + content were approved):                ║
+  ║   - NO percentages anywhere → dots + bare "N of M" + band words             ║
+  ║   - Result = top-2 side-by-side, ✓ matched AND ✗ unmatched (✗ quotes pt)     ║
+  ║   - Equal-prominence "doesn't match — reconsider" control on result          ║
+  ║   - Mandatory, permanent dangerous-mimic safety strip on result             ║
+  ║   - Safety screen = read-then-decide (readable list + 2 buttons), no pills   ║
+  ║   - One question per screen · one dominant primary · ≥44px tap targets       ║
+  ║   - "Set aside — needs confirmation" demote-don't-delete tray (both views)    ║
+  ║  Clinical text anchored to ichd3-classifier-spec.md + SNNOOP10 (Mitsikostas) ║
+  ╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Headache pattern finder — v4 flow (mockup)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- lucide-react's underlying icon set, via CDN — these are literally the app's icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  // Inline Tailwind config — neuro-* palette from .claude/skills/design-tokens/SKILL.md
+  // so this file is fully standalone and opens in any browser.
+  // neuro-500 = #1746A2 is the confirmed brand token (owner-approved).
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          neuro: {
+            50:  '#EEF2FF',
+            100: '#E0E7FF',
+            200: '#C7D2FE',
+            300: '#A5B4FC',
+            400: '#818CF8',
+            500: '#1746A2',  // primary brand — cobalt
+            600: '#1239A0',  // hover on primary
+            700: '#0F2D8A',  // focus ring / pressed
+            800: '#0A1F6B',
+            900: '#060E40',
+          },
+        },
+      },
+    },
+  };
+</script>
+<style>
+  /* Page chrome only — the system font stack is Tailwind's default; no custom display font. */
+  body { background: #f1f5f9; } /* slate-100 — the app's light page background */
+
+  /* Phone frame — fixed 375px so the owner sees the true bedside width */
+  .phone {
+    width: 375px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.16), 0 2px 8px rgba(15,23,42,0.08);
+    border: 1px solid #e2e8f0;
+  }
+
+  /* Dot meter — filled vs empty ICHD-3 criteria matched so far. No percentages, ever.
+     On-dot colour tracks the band (emerald / amber / neuro); empty dots are slate-200. */
+  .dot { width: 7px; height: 7px; border-radius: 9999px; display: inline-block; }
+  .dot-off       { background: #e2e8f0; } /* slate-200 */
+  .dot-emerald   { background: #10b981; } /* emerald-500 */
+  .dot-amber     { background: #f59e0b; } /* amber-500 */
+  .dot-neuro     { background: #1746A2; } /* neuro-500 */
+
+  /* Answer card hover/selected affordance — single hairline, no border-2 */
+  .answer { transition: border-color .12s, background-color .12s; }
+  .answer:hover { border-color: #1746A2; background: #f8faff; }
+  .answer-selected { border-color: #1746A2; background: #f8faff; }
+
+  /* Caption above each frame */
+  .frame-caption { max-width: 375px; margin: 0 auto 14px; }
+</style>
+</head>
+<body class="text-slate-900 antialiased">
+
+<!-- ═══════════════ PAGE TITLE ═══════════════ -->
+<div class="max-w-[375px] mx-auto px-1 pt-10 pb-2 text-center">
+  <div class="text-[10px] font-bold uppercase tracking-widest text-slate-400">NeuroWiki · Design mockup — not production</div>
+  <h1 class="text-[19px] font-semibold text-slate-800 mt-1 leading-snug">Headache pattern finder — v4.2 (Frame 1 + Frame 3 re-skin)</h1>
+  <p class="text-[12px] text-slate-500 mt-1 leading-relaxed px-4">Concept: <span class="font-medium text-slate-700">live differential narrowing</span> — the clinician describes one feature at a time and watches the shortlist of likely headache types narrow. The narrowing is the probability display. No percentages.</p>
+</div>
+
+<div class="h-8"></div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- FRAME 1 — SAFETY FIRST (read-then-decide)                                 -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="frame-caption">
+  <div class="flex items-center gap-2 px-1">
+    <span class="flex items-center justify-center w-6 h-6 rounded-full bg-neuro-500 text-white text-[12px] font-bold">1</span>
+    <span class="text-[13px] font-semibold text-slate-700">Frame 1 — Safety</span>
+    <span class="text-[12px] text-slate-400">· read, then decide</span>
+  </div>
+</div>
+
+<div class="phone">
+
+  <!-- ░░░ Real PathwayHeader anatomy (PathwayHeader.tsx §2) ░░░ -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-100 shadow-sm">
+    <div class="flex items-center justify-between h-14 gap-3 px-4">
+      <!-- Left: Back + two-line identifier stack -->
+      <div class="flex items-center gap-2 min-w-0">
+        <button class="p-2 rounded-lg hover:bg-slate-100 transition-colors shrink-0 text-slate-500" aria-label="Back">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="flex flex-col min-w-0">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">PATHWAY</span>
+          <span class="text-[15px] font-semibold text-slate-900 leading-tight tracking-tight mt-0.5 truncate">Headache pattern finder</span>
+        </div>
+      </div>
+      <!-- Right: Favourite + Reset + Copy pill -->
+      <div class="flex items-center gap-1 shrink-0">
+        <button class="p-2 rounded-lg hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Add to favorites">
+          <i data-lucide="star" class="w-4 h-4 text-slate-300"></i>
+        </button>
+        <button class="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Reset">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+        </button>
+        <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px]" aria-label="Copy summary">Copy</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ICHD-3 context — thin caption row under the header (moved OUT of the right cluster) -->
+  <div class="text-[12px] text-slate-500 leading-snug px-4 py-2 border-b border-slate-100 bg-white">
+    <span class="inline-flex items-center rounded-full bg-neuro-50 text-neuro-700 text-[11px] font-semibold px-2 py-0.5 mr-1.5 align-middle">ICHD-3</span>matches features to criteria to narrow the differential. Not a diagnosis.
+  </div>
+
+  <main class="max-w-2xl mx-auto px-5 pt-5 pb-6">
+
+    <!-- Eyebrow + prompt -->
+    <div class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Step 1 of ~6 · Safety check</div>
+    <h2 class="text-[22px] font-medium tracking-[-0.01em] text-slate-900 leading-snug mt-2">Before pattern-matching: any of these red flags?</h2>
+    <p class="text-sm text-slate-600 leading-[1.55] mt-1.5">Read the list. These point to a secondary cause that needs workup before any pattern fits.</p>
+
+    <!-- READABLE list — informational, NOT tap-to-select. SNNOOP10-derived.
+         House danger surface: single PitfallNotice-idiom card (rounded-xl border-amber-200 bg-amber-50
+         + triangle-alert icon + uppercase eyebrow + readable rows inside). One card, not 8 red rows. -->
+    <div class="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-3">
+      <!-- Card header — matches PitfallNotice eyebrow anatomy -->
+      <div class="flex items-start gap-2 pb-2">
+        <i data-lucide="triangle-alert" class="w-[14px] h-[14px] text-amber-600 shrink-0 mt-0.5" aria-hidden="true"></i>
+        <p class="text-[11px] font-bold uppercase tracking-widest text-amber-700">SNNOOP10 warning signs</p>
+      </div>
+      <!-- Readable rows inside the amber card — NOT selectable -->
+      <ul class="space-y-0">
+        <li class="py-2.5 border-b border-amber-200/60">
+          <div class="text-[14px] font-medium text-amber-900 leading-snug">Thunderclap onset</div>
+          <div class="text-[12px] text-amber-800 leading-snug mt-0.5">Peaks in seconds, "worst headache of life"</div>
+        </li>
+        <li class="py-2.5 border-b border-amber-200/60">
+          <div class="text-[14px] font-medium text-amber-900 leading-snug">First headache after 50</div>
+          <div class="text-[12px] text-amber-800 leading-snug mt-0.5">New or changed pattern in an older patient</div>
+        </li>
+        <li class="py-2.5 border-b border-amber-200/60">
+          <div class="text-[14px] font-medium text-amber-900 leading-snug">Focal deficit or seizure</div>
+          <div class="text-[12px] text-amber-800 leading-snug mt-0.5">Weakness, confusion, vision loss, or a fit</div>
+        </li>
+        <li class="py-2.5 border-b border-amber-200/60">
+          <div class="text-[14px] font-medium text-amber-900 leading-snug">Fever or systemic illness</div>
+          <div class="text-[12px] text-amber-800 leading-snug mt-0.5">Neck stiffness, immunosuppression, or cancer</div>
+        </li>
+        <li class="py-2.5 border-b border-amber-200/60">
+          <div class="text-[14px] font-medium text-amber-900 leading-snug">Pregnancy or postpartum</div>
+          <div class="text-[12px] text-amber-800 leading-snug mt-0.5">Any stage, or within 6 weeks of delivery</div>
+        </li>
+        <li class="py-2.5 border-b border-amber-200/60">
+          <div class="text-[14px] font-medium text-amber-900 leading-snug">Papilloedema</div>
+          <div class="text-[12px] text-amber-800 leading-snug mt-0.5">Swollen optic discs on fundoscopy</div>
+        </li>
+        <li class="py-2.5 border-b border-amber-200/60">
+          <div class="text-[14px] font-medium text-amber-900 leading-snug">Triggered by cough or exertion</div>
+          <div class="text-[12px] text-amber-800 leading-snug mt-0.5">Valsalva, straining, or positional change</div>
+        </li>
+        <li class="py-2.5">
+          <div class="text-[14px] font-medium text-amber-900 leading-snug">Painkillers ≥10–15 days/month</div>
+          <div class="text-[12px] text-amber-800 leading-snug mt-0.5">Possible medication-overuse headache</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- TWO buttons — primary dominant, one primary action rule -->
+    <div class="mt-6 space-y-2.5">
+      <button class="w-full bg-neuro-500 hover:bg-neuro-600 text-white text-[15px] font-semibold rounded-xl px-5 min-h-[52px] flex items-center justify-center gap-1.5 transition-colors">
+        None of these, continue
+        <i data-lucide="chevron-right" class="w-[18px] h-[18px]"></i>
+      </button>
+      <button class="w-full bg-white hover:bg-slate-50 text-amber-700 text-sm font-medium rounded-xl px-5 min-h-[48px] flex items-center justify-center gap-2 border border-slate-200 transition-colors">
+        <i data-lucide="triangle-alert" class="w-4 h-4 text-amber-600"></i>
+        One or more present, go to workup
+      </button>
+    </div>
+
+    <p class="text-[11.5px] text-slate-400 leading-relaxed mt-5 text-center px-2">For reading, not selecting. SNNOOP10 warning signs (Mitsikostas 2017).</p>
+  </main>
+</div>
+
+<div class="h-14"></div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- FRAME 2 — QUESTION + LIVE DIFFERENTIAL (the heart of the design)           -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="frame-caption">
+  <div class="flex items-center gap-2 px-1">
+    <span class="flex items-center justify-center w-6 h-6 rounded-full bg-neuro-500 text-white text-[12px] font-bold">2</span>
+    <span class="text-[13px] font-semibold text-slate-700">Frame 2 — Question + live differential</span>
+    <span class="text-[12px] text-slate-400">· the heart of the design</span>
+  </div>
+</div>
+
+<div class="phone">
+
+  <!-- ░░░ Real PathwayHeader anatomy ░░░ -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-100 shadow-sm">
+    <div class="flex items-center justify-between h-14 gap-3 px-4">
+      <div class="flex items-center gap-2 min-w-0">
+        <button class="p-2 rounded-lg hover:bg-slate-100 transition-colors shrink-0 text-slate-500" aria-label="Back">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="flex flex-col min-w-0">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">PATHWAY</span>
+          <span class="text-[15px] font-semibold text-slate-900 leading-tight tracking-tight mt-0.5 truncate">Headache pattern finder</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-1 shrink-0">
+        <button class="p-2 rounded-lg hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Add to favorites">
+          <i data-lucide="star" class="w-4 h-4 text-slate-300"></i>
+        </button>
+        <button class="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Reset">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+        </button>
+        <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px]" aria-label="Copy summary">Copy</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ICHD-3 context caption row -->
+  <div class="text-[12px] text-slate-500 leading-snug px-4 py-2 border-b border-slate-100 bg-white">
+    <span class="inline-flex items-center rounded-full bg-neuro-50 text-neuro-700 text-[11px] font-semibold px-2 py-0.5 mr-1.5 align-middle">ICHD-3</span>matches features to criteria to narrow the differential. Not a diagnosis.
+  </div>
+
+  <main class="max-w-2xl mx-auto px-5 pt-4 pb-3">
+
+    <!-- ░░░ ZONE 1 — LIVE DIFFERENTIAL (compact, persistent, top) ░░░ -->
+    <section class="rounded-xl border border-slate-100 shadow-sm bg-white overflow-hidden">
+      <div class="flex items-center justify-between px-4 pt-3 pb-2">
+        <div class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Differential so far</div>
+        <div class="text-[11px] font-medium uppercase tracking-[0.04em] text-slate-400 flex items-center gap-1 normal-case">
+          <i data-lucide="zap" class="w-3.5 h-3.5 text-slate-400"></i>narrows live
+        </div>
+      </div>
+
+      <!-- Row: Leading (emerald) -->
+      <div class="border-t border-slate-100 px-4 py-2.5 flex items-center justify-between gap-2">
+        <div class="text-sm font-semibold text-slate-900 leading-tight min-w-0">Migraine without aura</div>
+        <div class="flex items-center gap-2.5 shrink-0">
+          <span class="flex items-center gap-[3px]" aria-label="3 of 4 criteria matched">
+            <span class="dot dot-emerald"></span><span class="dot dot-emerald"></span><span class="dot dot-emerald"></span><span class="dot dot-off"></span>
+          </span>
+          <span class="text-[12px] text-slate-500 tabular-nums w-[34px] text-right">3 of 4</span>
+          <span class="inline-flex items-center rounded-full text-emerald-600 bg-emerald-50 border border-emerald-200 text-[10.5px] font-semibold px-2 py-0.5 w-[62px] justify-center">Leading</span>
+        </div>
+      </div>
+
+      <!-- Row: Possible (amber) -->
+      <div class="border-t border-slate-100 px-4 py-2.5 flex items-center justify-between gap-2">
+        <div class="text-sm font-medium text-slate-700 leading-tight min-w-0">Tension-type (episodic)</div>
+        <div class="flex items-center gap-2.5 shrink-0">
+          <span class="flex items-center gap-[3px]" aria-label="2 of 4 criteria matched">
+            <span class="dot dot-amber"></span><span class="dot dot-amber"></span><span class="dot dot-off"></span><span class="dot dot-off"></span>
+          </span>
+          <span class="text-[12px] text-slate-500 tabular-nums w-[34px] text-right">2 of 4</span>
+          <span class="inline-flex items-center rounded-full text-amber-600 bg-amber-50 border border-amber-300 text-[10.5px] font-semibold px-2 py-0.5 w-[62px] justify-center">Possible</span>
+        </div>
+      </div>
+
+      <!-- Row: Less likely (slate) -->
+      <div class="border-t border-slate-100 px-4 py-2.5 flex items-center justify-between gap-2">
+        <div class="text-sm font-medium text-slate-500 leading-tight min-w-0">Cluster headache</div>
+        <div class="flex items-center gap-2.5 shrink-0">
+          <span class="flex items-center gap-[3px]" aria-label="1 of 4 criteria matched">
+            <span class="dot dot-neuro"></span><span class="dot dot-off"></span><span class="dot dot-off"></span><span class="dot dot-off"></span>
+          </span>
+          <span class="text-[12px] text-slate-400 tabular-nums w-[34px] text-right">1 of 4</span>
+          <span class="inline-flex items-center rounded-full text-slate-500 bg-slate-50 border border-slate-200 text-[10.5px] font-semibold px-2 py-0.5 w-[62px] justify-center">Less likely</span>
+        </div>
+      </div>
+
+      <!-- Demote-don't-delete tray (collapsible affordance) -->
+      <button class="w-full border-t border-slate-100 px-4 py-2.5 flex items-center gap-1.5 text-[12px] text-slate-500 hover:text-slate-700 hover:bg-slate-50 transition-colors text-left">
+        <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+        <span><span class="font-medium text-slate-600">2 set aside</span> · need confirmation</span>
+      </button>
+    </section>
+
+    <!-- ░░░ ZONE 2 — THE CURRENT QUESTION (large, main) ░░░ -->
+    <div class="mt-5">
+      <div class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Question 3 of ~6 · Pain quality</div>
+      <h2 class="text-[22px] font-medium tracking-[-0.01em] text-slate-900 leading-snug mt-2">How would the patient describe the pain?</h2>
+
+      <!-- faint Teach-mode pearl (Scenario C hint) -->
+      <div class="mt-2 flex items-start gap-1.5 text-[12px] text-neuro-700/80">
+        <i data-lucide="graduation-cap" class="w-[15px] h-[15px] mt-px text-neuro-400 shrink-0"></i>
+        <span class="leading-snug"><span class="font-semibold">Teach:</span> pulsating points to migraine; pressing to tension-type. Quality alone never decides it.</span>
+      </div>
+
+      <!-- 3 large full-width answer cards -->
+      <div class="mt-4 space-y-2.5">
+        <!-- first shown selected -->
+        <button class="answer answer-selected w-full text-left rounded-lg border border-slate-100 bg-white px-4 min-h-[60px] flex items-center justify-between">
+          <span class="text-[15px] font-medium text-slate-900">Throbbing or pulsating</span>
+          <i data-lucide="circle-check" class="w-5 h-5 text-neuro-500"></i>
+        </button>
+        <button class="answer w-full text-left rounded-lg border border-slate-100 bg-white px-4 min-h-[60px] flex items-center justify-between">
+          <span class="text-[15px] font-medium text-slate-700">Pressing or tightening</span>
+          <i data-lucide="circle" class="w-5 h-5 text-slate-300"></i>
+        </button>
+        <button class="answer w-full text-left rounded-lg border border-slate-100 bg-white px-4 min-h-[60px] flex items-center justify-between">
+          <span class="text-[15px] font-medium text-slate-700">Sharp or stabbing</span>
+          <i data-lucide="circle" class="w-5 h-5 text-slate-300"></i>
+        </button>
+      </div>
+
+      <!-- quiet skip link -->
+      <div class="mt-3 text-center">
+        <button class="text-[13px] text-slate-400 hover:text-slate-600 underline underline-offset-2 min-h-[44px] px-4">Skip (unsure)</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom bar: back · 6-dot progress (3 filled) · always-on See result -->
+  <div class="sticky bottom-0 bg-white/95 backdrop-blur-sm border-t border-slate-100 px-4 py-3 flex items-center justify-between">
+    <button class="p-2 -m-1 text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1 text-[13px] font-medium min-h-[44px]" aria-label="Back">
+      <i data-lucide="chevron-left" class="w-[18px] h-[18px]"></i>
+      Back
+    </button>
+    <div class="flex items-center gap-2" aria-label="Question 3 of 6">
+      <span class="w-2 h-2 rounded-full bg-neuro-500"></span>
+      <span class="w-2 h-2 rounded-full bg-neuro-500"></span>
+      <span class="w-2 h-2 rounded-full bg-neuro-500"></span>
+      <span class="w-2 h-2 rounded-full bg-slate-200"></span>
+      <span class="w-2 h-2 rounded-full bg-slate-200"></span>
+      <span class="w-2 h-2 rounded-full bg-slate-200"></span>
+    </div>
+    <button class="text-[13px] font-semibold text-neuro-600 hover:text-neuro-700 flex items-center gap-0.5 min-h-[44px] px-2 -mr-2">
+      See result
+      <i data-lucide="chevron-right" class="w-4 h-4"></i>
+    </button>
+  </div>
+</div>
+
+<div class="h-14"></div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- FRAME 3 — RESULT (top-2 side by side, honest)                             -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="frame-caption">
+  <div class="flex items-center gap-2 px-1">
+    <span class="flex items-center justify-center w-6 h-6 rounded-full bg-neuro-500 text-white text-[12px] font-bold">3</span>
+    <span class="text-[13px] font-semibold text-slate-700">Frame 3 — Result</span>
+    <span class="text-[12px] text-slate-400">· weigh both, never a verdict</span>
+  </div>
+</div>
+
+<div class="phone">
+
+  <!-- ░░░ Real PathwayHeader anatomy — Result frame shows Favourite ACTIVE ░░░ -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-100 shadow-sm">
+    <div class="flex items-center justify-between h-14 gap-3 px-4">
+      <div class="flex items-center gap-2 min-w-0">
+        <button class="p-2 rounded-lg hover:bg-slate-100 transition-colors shrink-0 text-slate-500" aria-label="Back">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="flex flex-col min-w-0">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">PATHWAY</span>
+          <span class="text-[15px] font-semibold text-slate-900 leading-tight tracking-tight mt-0.5 truncate">Headache pattern finder</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-1 shrink-0">
+        <button class="p-2 rounded-lg hover:bg-slate-100 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Remove from favorites" aria-pressed="true">
+          <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+        </button>
+        <button class="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Reset">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+        </button>
+        <button class="ml-1.5 bg-neuro-500 hover:bg-neuro-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors min-h-[44px]" aria-label="Copy summary">Copy</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ICHD-3 context caption row -->
+  <div class="text-[12px] text-slate-500 leading-snug px-4 py-2 border-b border-slate-100 bg-white">
+    <span class="inline-flex items-center rounded-full bg-neuro-50 text-neuro-700 text-[11px] font-semibold px-2 py-0.5 mr-1.5 align-middle">ICHD-3</span>matches features to criteria to narrow the differential. Not a diagnosis.
+  </div>
+
+  <main class="max-w-2xl mx-auto px-4 pt-4 pb-5">
+
+    <!-- House result panel: ONE flowing white panel (the NeuroWiki result-drawer idiom).
+         No tinted header strip — real calculator drawers (IchScoreCalculator.tsx ~L253,
+         NihssCalculator.tsx ~L574) lead with the interpretation headline directly inside
+         px-5 pt-4 pb-6, white surface throughout. Severity as text-color accent only. -->
+    <div class="rounded-xl border border-slate-100 shadow-sm bg-white overflow-hidden">
+
+      <!-- White body — calculator interpretation tokens throughout (px-5 pt-4 pb-6 per ICH/NIHSS drawers) -->
+      <div class="bg-white px-5 pt-4 pb-6">
+
+        <!-- (1) Eyebrow label — matches NIHSS drawer "What this severity means" label -->
+        <div class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">Differential result · 2 patterns</div>
+
+        <!-- (2) Headline sentence — declarative, ends in a period. Calculator scale: text-xl font-semibold text-slate-900 leading-tight. -->
+        <h2 class="text-xl font-semibold text-slate-900 leading-tight">Two patterns fit the features so far.</h2>
+
+        <!-- (3) Interpretation prose — calculator scale: text-slate-600 leading-relaxed mt-3. -->
+        <p class="text-slate-600 leading-relaxed mt-3">Migraine without aura matches every criterion so far. Tension-type is close, but one feature argues against it.</p>
+
+        <!-- (4) Candidate 1 — leading. The whole candidate is an accordion: the band + meter + count + name
+             row is the always-visible header (the at-a-glance differential); criteria expand below.
+             Open by default — read-then-decide on the actionable pattern without a tap. -->
+        <details open class="group mt-4">
+          <summary class="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-700">Leading</span>
+              <span class="flex items-center gap-[3px]">
+                <span class="dot dot-emerald"></span><span class="dot dot-emerald"></span><span class="dot dot-emerald"></span><span class="dot dot-emerald"></span>
+              </span>
+              <span class="text-xs text-slate-500 font-medium">4 of 4 met</span>
+            </div>
+            <div class="flex items-center justify-between gap-2 mt-1">
+              <span class="text-[15px] font-semibold text-slate-900 leading-snug">Migraine without aura</span>
+              <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0 transition-transform group-open:rotate-180"></i>
+            </div>
+          </summary>
+          <ul class="mt-2 space-y-1.5">
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-[14px] h-[14px] text-emerald-600 mt-px shrink-0"></i>
+              <span class="text-sm text-slate-600 leading-snug">≥5 lifetime attacks <span class="text-slate-400">(you said &gt;10)</span></span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-[14px] h-[14px] text-emerald-600 mt-px shrink-0"></i>
+              <span class="text-sm text-slate-600 leading-snug">Duration 4–72 h</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-[14px] h-[14px] text-emerald-600 mt-px shrink-0"></i>
+              <span class="text-sm text-slate-600 leading-snug">Unilateral, pulsating, severe</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-[14px] h-[14px] text-emerald-600 mt-px shrink-0"></i>
+              <span class="text-sm text-slate-600 leading-snug">Nausea present</span>
+            </li>
+          </ul>
+        </details>
+
+        <div class="mt-4 border-t border-slate-100"></div>
+
+        <!-- (4) Candidate 2 — possible. Same accordion shape. Closed by default; expands to the conflict
+             (red, the reason it is not leading) first, then the 3 matched criteria. -->
+        <details class="group mt-4">
+          <summary class="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-amber-700">Possible</span>
+              <span class="flex items-center gap-[3px]">
+                <span class="dot dot-amber"></span><span class="dot dot-amber"></span><span class="dot dot-amber"></span><span class="dot dot-off"></span>
+              </span>
+              <span class="text-xs text-slate-500 font-medium">3 of 4 met</span>
+            </div>
+            <div class="flex items-center justify-between gap-2 mt-1">
+              <span class="text-[15px] font-semibold text-slate-900 leading-snug">Tension-type (episodic)</span>
+              <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0 transition-transform group-open:rotate-180"></i>
+            </div>
+          </summary>
+
+          <!-- The reason it is not leading — first thing shown on expand -->
+          <div class="flex items-start gap-2 mt-2">
+            <i data-lucide="x" class="w-[14px] h-[14px] text-red-600 mt-px shrink-0"></i>
+            <div>
+              <span class="text-sm text-slate-600 leading-snug">No nausea or vomiting</span>
+              <div class="text-[12px] text-red-600 leading-snug mt-0.5">Conflicts with the nausea you noted.</div>
+            </div>
+          </div>
+
+          <ul class="mt-2 space-y-1.5">
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-[14px] h-[14px] text-emerald-600 mt-px shrink-0"></i>
+              <span class="text-sm text-slate-600 leading-snug">≥10 episodes</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-[14px] h-[14px] text-emerald-600 mt-px shrink-0"></i>
+              <span class="text-sm text-slate-600 leading-snug">Bilateral, pressing</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i data-lucide="check" class="w-[14px] h-[14px] text-emerald-600 mt-px shrink-0"></i>
+              <span class="text-sm text-slate-600 leading-snug">Not aggravated by activity</span>
+            </li>
+          </ul>
+        </details>
+
+        <!-- (5) Demote-don't-delete set-aside tray -->
+        <button class="w-full mt-4 flex items-center gap-2 text-[12px] text-slate-500 hover:text-slate-700 transition-colors text-left">
+          <i data-lucide="chevron-down" class="w-3.5 h-3.5 shrink-0"></i>
+          <span><span class="font-medium text-slate-600">1 more pattern set aside</span> · needs attack duration to confirm</span>
+        </button>
+
+        <!-- (6) Mandatory, non-collapsible dangerous-mimic safety callout — house "Important" left-bar idiom -->
+        <div class="mt-5 pl-3 border-l-2 border-amber-400">
+          <div class="flex items-center gap-1.5">
+            <i data-lucide="triangle-alert" class="w-3.5 h-3.5 text-amber-600 shrink-0"></i>
+            <span class="text-[10px] font-bold text-amber-700 uppercase tracking-widest">Before accepting any pattern</span>
+          </div>
+          <p class="text-sm text-slate-700 leading-relaxed mt-1">Rule out secondary causes first: SAH, GCA, CVT, or mass. ICHD-3 criteria apply only after these are excluded. <a href="#" class="text-neuro-600 font-medium hover:underline whitespace-nowrap">Review red flags →</a></p>
+        </div>
+
+        <!-- (7) See also — unified references (calculator/trial card idiom; replaces the per-candidate links) -->
+        <div class="mt-5 pt-4 border-t border-slate-100">
+          <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">See also</div>
+          <p class="text-sm text-slate-600 leading-relaxed"><a href="#" class="text-neuro-600 hover:underline">Migraine management</a><span class="text-slate-300 mx-2">·</span><a href="#" class="text-neuro-600 hover:underline">Tension-type management</a></p>
+        </div>
+
+        <!-- (8) Source + educational-use footer (matches the calculator evidence-trail footer) -->
+        <div class="mt-5 pt-4 border-t border-slate-100">
+          <p class="text-xs text-slate-400 leading-relaxed">Headache Classification Committee of the IHS. International Classification of Headache Disorders, 3rd edition (ICHD-3). <em>Cephalalgia.</em> 2018. <a href="#" class="text-neuro-600 hover:underline">View criteria</a></p>
+          <p class="mt-2 text-xs text-slate-400 leading-relaxed">Educational use only. This tool narrows the differential; the diagnosis remains a clinical judgement.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- (8) Equal-prominence reconsider — anti-anchoring; full-width action below the panel -->
+    <button class="w-full mt-4 rounded-xl border border-slate-200 bg-white hover:bg-neuro-50 text-neuro-700 text-[13px] font-semibold px-5 min-h-[48px] flex items-center justify-center gap-2 transition-colors">
+      <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+      This doesn't fit? Reconsider.
+    </button>
+
+  </main>
+</div>
+
+<div class="h-20"></div>
+
+<!-- Render lucide icons — copies each `data-lucide` host's class onto the generated <svg> -->
+<script>
+  lucide.createIcons();
+</script>
+
+<!--
+  @ui-architect — Sign-off (v4.2 pass — Frame 1 + Frame 3 re-skin)
+  Mockup file: docs/specs/mockups/headache-pathway-v4-flow.html
+  Frame 2: UNTOUCHED. Byte-identical to v4.1 (lines 211-363 in the original; approved).
+
+  ── FRAME 1 CHANGES ──────────────────────────────────────────────────────────
+
+  What was wrong:
+    The red-flag list was rendered as a plain <ul> with py-3 border-b border-slate-100 rows
+    inside a neutral white panel. This reads as a settings list, not a safety surface. A
+    clinician scanning quickly would see it as administrative copy, not a danger signal.
+
+  Real component matched:
+    PitfallNotice (src/components/pathways/PitfallNotice.tsx):
+      className="rounded-xl border border-amber-200 bg-amber-50 p-3"
+      icon: AlertTriangle size=14 className="text-amber-600"
+      eyebrow: text-[11px] font-bold uppercase tracking-widest text-amber-700
+      body: text-[12px] text-amber-900 leading-relaxed
+
+  Before → After (key classes):
+    Container:
+      BEFORE: bare <ul> with no wrapper card
+      AFTER:  <div class="rounded-xl border border-amber-200 bg-amber-50 p-3">
+
+    Card header:
+      BEFORE: <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">SNNOOP10</span>
+              + hairline <span class="h-px flex-1 bg-slate-100">
+      AFTER:  <i data-lucide="triangle-alert" class="... text-amber-600"> +
+              <p class="text-[11px] font-bold uppercase tracking-widest text-amber-700">
+
+    Row text:
+      BEFORE: text-[15px] font-medium text-slate-900 / text-[12px] text-slate-500
+      AFTER:  text-[14px] font-medium text-amber-900 / text-[12px] text-amber-800
+
+    Row dividers:
+      BEFORE: border-b border-slate-100
+      AFTER:  border-b border-amber-200/60 (tonal to the amber card surface)
+
+  Clinician invariants held:
+    - List remains READ-ONLY. No tap-to-select. No pills.
+    - Exactly 8 rows, copy verbatim.
+    - Exactly 2 buttons below (primary "None of these" + secondary "One or more present").
+    - Primary button stays 52px min-height, dominant neuro-500 fill.
+
+  ── FRAME 3 CHANGES ──────────────────────────────────────────────────────────
+
+  What was wrong:
+    (a) An invented bg-neuro-50 "Interpretation" eyebrow strip with a custom hex border
+        (style="border-bottom: 1px solid #C7D7FA") appeared at the top of the result panel.
+        This tinted strip does not exist in any real NeuroWiki calculator drawer; it was
+        an off-brand invention from v4.1.
+    (b) The inner content wrapper used py-5, not pt-4 pb-6 as the real ICH/NIHSS drawers use.
+    (c) A "divider-hair" class was referenced between the two candidate accordions but had no
+        CSS definition anywhere in the file. It rendered as zero visual output.
+
+  Real components matched:
+    IchScoreCalculator.tsx ~L253: px-5 pt-4 pb-6, leads directly with
+      <p class="text-xl font-semibold text-slate-900 leading-tight">
+    NihssCalculator.tsx ~L574: same pt-4 pb-6 pattern; section label:
+      text-[10px] font-bold text-slate-400 uppercase tracking-widest
+
+  Before → After (key classes):
+    Tinted strip:
+      BEFORE: <div class="px-5 py-3 bg-neuro-50" style="border-bottom: 1px solid #C7D7FA">
+                <div ...>Interpretation</div><div ...>2 patterns · weigh both</div>
+              </div>
+      AFTER:  REMOVED entirely.
+
+    Inner wrapper:
+      BEFORE: <div class="bg-white px-5 py-5">
+      AFTER:  <div class="bg-white px-5 pt-4 pb-6">
+
+    Eyebrow before headline:
+      BEFORE: none (headline was first element after the removed strip)
+      AFTER:  <div class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">
+                Differential result · 2 patterns
+              </div>
+              (matches NIHSS drawer "What this severity means" label pattern)
+
+    Headline:
+      BEFORE: <h2 class="text-slate-900 text-xl leading-tight font-semibold">
+      AFTER:  <h2 class="text-xl font-semibold text-slate-900 leading-tight">
+              (property order normalized to match CALCULATOR_SPEC v1.1 convention)
+
+    Dead divider:
+      BEFORE: <div class="divider-hair mt-4"></div>
+      AFTER:  <div class="mt-4 border-t border-slate-100"></div>
+
+  Clinician invariants held:
+    - No percentages added anywhere.
+    - Top-2 candidates (Leading + Possible) with band words, dot meters, bare "N of M met".
+    - Tension-type CONFLICT line in red ("Conflicts with the nausea you noted.") preserved.
+    - Mandatory, non-collapsible dangerous-mimic safety strip (border-l-2 border-amber-400 +
+      triangle-alert) preserved verbatim.
+    - Management shown as links only (no inline dosing).
+    - Equal-prominence "Reconsider" control below the panel preserved.
+    - "Set aside / needs confirmation" demote tray preserved.
+    - Citation footer preserved verbatim.
+
+  ── INVARIANTS CONFIRMED ─────────────────────────────────────────────────────
+
+  - Frame 2: untouched.
+  - neuro-* color ramp in inline tailwind.config: untouched.
+  - Zero "%" characters added to differential or result UI.
+  - All clinical copy verbatim (no new words, no changed medical text).
+  - Em-dash check: no em-dashes (—) used as sentence punctuation anywhere. En-dashes in
+    numeric ranges (4-72 h, 10-15 days) are medical notation and retained.
+  - All interactive elements remain min-h-[44px].
+
+  Status: ready (mockup for owner review — not a production build).
+-->
+</body>
+</html>

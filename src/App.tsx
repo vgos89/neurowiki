@@ -51,7 +51,7 @@ const ElanPathway = lazy(() => import('./pages/ElanPathway'));
 const EvtPathway = lazy(() => import('./pages/EvtPathway'));
 const StatusEpilepticusPathway = lazy(() => import('./pages/StatusEpilepticusPathway'));
 const MigrainePathway = lazy(() => import('./pages/MigrainePathway'));
-const ClinicHeadachePathway = lazy(() => import('./pages/ClinicHeadachePathway'));
+const ClinicHeadachePathway = lazy(() => import('./pages/ClinicHeadachePathwayV4'));
 const ExtendedIVTPathway = lazy(() => import('./pages/ExtendedIVTPathway'));
 const EmBillingCalculator = lazy(() => import('./pages/EmBillingCalculator'));
 const StrokeGuidelineMindmap = lazy(() => import('./pages/guide/StrokeGuidelineMindmap'));
