@@ -209,17 +209,43 @@ All clinical content must be traceable to a named guideline with year. No conten
 - Architects: arch-pattern-a-fix-tier-1-2.md, arch-pattern-a-fix-tier-4.md, arch-pattern-a-fix-tier-5.md
 - Clinical reviewers: clinical-pattern-a-fix-tier-4.md, clinical-pattern-a-fix-tier-5.md (both approve-with-conditions resolved)
 
-## Current State (as of 2026-05-28)
+## Recent Work (2026-06-05)
+
+**Headache Pathway v4 rebuild — live differential narrowing (commit 5e26727):**
+- **New route:** `/pathways/headache-clinic` (route key `pathways-headache-clinic`) — now using `ClinicHeadachePathwayV4.tsx` (imported in `src/App.tsx` line 54)
+- **New page:** `src/pages/ClinicHeadachePathwayV4.tsx` — 3-phase state machine (safety screen → question flow → ranked result)
+- **New frame components:** 5 new presentational components wired in v4 rebuild
+  - `src/components/pathways/headache/HeadacheSafetyScreen.tsx` — SNNOOP10 read-then-decide gate
+  - `src/components/pathways/headache/HeadacheDifferentialPanel.tsx` — live banding display (Leading/Possible/Less-likely bands with dot-meter progress)
+  - `src/components/pathways/headache/HeadacheQuestion.tsx` — single-question-per-screen flow
+  - `src/components/pathways/headache/HeadacheDotMeter.tsx` — visual progress meter for question completion
+  - `src/components/pathways/headache/HeadacheResultV4.tsx` — result presentation (mounted verbatim: HeadacheManagement + CriteriaList)
+- **New data layer:** 3 React-free clinical-presentation modules (each with test suite)
+  - `src/data/headacheBanding.ts` — maps engine output to (Leading/Possible/Less-likely/Set-aside) bands per threshold
+  - `src/data/headacheQuestions.ts` — question-flow configuration (read sequence, display logic, no-percentage rule)
+  - `src/data/headacheConflict.ts` — runner-up conflict derivation (C1 pattern)
+- **Retired files:**
+  - `src/pages/ClinicHeadachePathway.tsx` (v3 rail-step page — DELETED)
+  - `src/components/pathways/headache/HeadacheResultList.tsx` (v3 result accordion — DELETED, superseded by HeadacheDifferentialPanel + HeadacheResultV4)
+- **Unchanged + still in use:**
+  - `src/data/clinicHeadacheData.ts` (ICHD-3 engine, 84-test suite intact, zero logic changes)
+  - `src/components/pathways/headache/HeadacheManagement.tsx` + `CriteriaList.tsx` (mounted verbatim by HeadacheResultV4)
+- **Architecture note:** `MapperPanel.tsx` is now unused (its only consumer was the deleted HeadacheResultList) — parked as a retirement candidate
+- **Specifications:** Design mockup: `docs/specs/mockups/headache-pathway-v4-flow.html` (approved). Clinical review: `docs/reviews/clinical-headache-v4-postexec.md` (approve-with-conditions, all conditions resolved).
+
+## Current State (as of 2026-06-05)
+
+**Headache Pathway v4 Live** — `/pathways/headache-clinic` now uses the 3-phase "live differential narrowing" model: SNNOOP10 safety screen → ICHD-3 question flow → ranked phenotype results with management behind links. 206 unit tests pass (banding cut-points, question drift-guard, conflict C1 derivation, no-percentage invariants, safety-strip always-on). Mobile-first-developer sign-off complete (375px bottom-bar/tab-bar coexistence per EvtPathway pattern). Clinical pre-gate + post-gate both approve-with-conditions (all conditions resolved, `docs/reviews/clinical-headache-v4-postexec.md`). Architect review approve-with-conditions (`docs/reviews/arch-headache-v4-full-rebuild.md`).
 
 **Patient Context Panel modernization complete** — pre-stroke mRS chips, BP alert, NIHSS header redesign, timestamp popovers, mRS picker modal all live.
-**Sitemap prerender coverage:** 170 routes (all clinical surfaces pre-rendered on Vercel deploy).
+**Sitemap prerender coverage:** 171 routes (all clinical surfaces pre-rendered on Vercel deploy).
 
 **Pattern A post-ship fixes landed** (2026-05-16) — all three pathways now on spec-mandated CalculatorDrawer; PathwayCocktailSummary new primitive shipped; all primitive render bugs fixed.
 
 **Layer 1 — Foundation:** COMPLETE
 **Layer 2 — Stroke Pathway:** COMPLETE (all steps, modals, header, tabs shipped)
 **Layer 3 — Component Library:** SKIPPED BY AGREEMENT (commit history shows this was deferred in favor of section specs)
-**Layer 4 — Pages:** IN PROGRESS — Trials redesign (Waves 6–8) is the active workstream
+**Layer 4 — Pages:** IN PROGRESS — Trials redesign (Waves 6–8) is the active workstream; Headache Pathway v4 LIVE
 **Layer 5 — Polish:** PENDING (W8.0+ language/navigation cleanup)
 
 **Wave 6–8 Trial Redesign Status:**

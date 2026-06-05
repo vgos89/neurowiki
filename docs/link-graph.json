@@ -435,6 +435,123 @@
       "references": [],
       "referencedBy": []
     },
+    "pathway/headache-clinic": {
+      "type": "pathway",
+      "title": "Clinic Headache Pathway — Live Differential Narrowing",
+      "route": "/pathways/headache-clinic",
+      "references": [
+        "data/headache-banding",
+        "data/headache-questions",
+        "data/headache-conflict",
+        "data/clinic-headache-engine",
+        "component/headache-safety-screen",
+        "component/headache-differential-panel",
+        "component/headache-result-v4",
+        "component/pathway-header"
+      ],
+      "referencedBy": []
+    },
+    "data/headache-banding": {
+      "type": "data",
+      "title": "Headache Banding Engine",
+      "file": "src/data/headacheBanding.ts",
+      "references": [
+        "component/headache-differential-panel"
+      ],
+      "referencedBy": [
+        "pathway/headache-clinic"
+      ]
+    },
+    "data/headache-questions": {
+      "type": "data",
+      "title": "Headache Question Flow Configuration",
+      "file": "src/data/headacheQuestions.ts",
+      "references": [
+        "component/headache-question"
+      ],
+      "referencedBy": [
+        "pathway/headache-clinic"
+      ]
+    },
+    "data/headache-conflict": {
+      "type": "data",
+      "title": "Headache Conflict Resolution",
+      "file": "src/data/headacheConflict.ts",
+      "references": [],
+      "referencedBy": [
+        "pathway/headache-clinic"
+      ]
+    },
+    "component/headache-safety-screen": {
+      "type": "component",
+      "title": "HeadacheSafetyScreen Component",
+      "file": "src/components/pathways/headache/HeadacheSafetyScreen.tsx",
+      "references": [],
+      "referencedBy": [
+        "pathway/headache-clinic"
+      ]
+    },
+    "component/headache-question": {
+      "type": "component",
+      "title": "HeadacheQuestion Component",
+      "file": "src/components/pathways/headache/HeadacheQuestion.tsx",
+      "references": [
+        "component/headache-dot-meter"
+      ],
+      "referencedBy": [
+        "pathway/headache-clinic"
+      ]
+    },
+    "component/headache-dot-meter": {
+      "type": "component",
+      "title": "HeadacheDotMeter Component",
+      "file": "src/components/pathways/headache/HeadacheDotMeter.tsx",
+      "references": [],
+      "referencedBy": [
+        "component/headache-question"
+      ]
+    },
+    "component/headache-differential-panel": {
+      "type": "component",
+      "title": "HeadacheDifferentialPanel Component",
+      "file": "src/components/pathways/headache/HeadacheDifferentialPanel.tsx",
+      "references": [
+        "data/headache-banding"
+      ],
+      "referencedBy": [
+        "pathway/headache-clinic"
+      ]
+    },
+    "component/headache-result-v4": {
+      "type": "component",
+      "title": "HeadacheResultV4 Component",
+      "file": "src/components/pathways/headache/HeadacheResultV4.tsx",
+      "references": [
+        "component/headache-management",
+        "component/criteria-list"
+      ],
+      "referencedBy": [
+        "pathway/headache-clinic"
+      ]
+    },
+    "component/headache-management": {
+      "type": "component",
+      "title": "HeadacheManagement Component",
+      "file": "src/components/pathways/headache/HeadacheManagement.tsx",
+      "references": [],
+      "referencedBy": [
+        "component/headache-result-v4"
+      ]
+    },
+    "component/criteria-list": {
+      "type": "component",
+      "title": "CriteriaList Component",
+      "file": "src/components/pathways/headache/CriteriaList.tsx",
+      "references": [],
+      "referencedBy": [
+        "component/headache-result-v4"
+      ]
+    },
     "question/large-core-evt": {
       "type": "question",
       "title": "Should I do EVT for large-core stroke (low ASPECTS)?",
