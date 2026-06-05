@@ -60,7 +60,7 @@ export default function PrivacyPage() {
       </Section>
 
       <Section title="What data we collect">
-        <p>Every category of data collected or stored by NeuroWiki is listed below. Nothing is omitted.</p>
+        <p>Below are the main categories of data NeuroWiki collects or stores. Minor browser-only preferences (such as UI layout state) aren't itemized individually.</p>
 
         <div className="overflow-x-auto mt-4">
           <table className="w-full text-xs border-collapse">
@@ -75,10 +75,10 @@ export default function PrivacyPage() {
             <tbody className="divide-y divide-slate-100">
               {[
                 ['Google Analytics events', 'Google servers', 'Usage analytics: page views, feature use', 'Google default: 26 months'],
-                ['Cookie consent decision', 'Your browser (neurowiki:consent)', 'Controls whether GA loads', 'Until you clear browser storage'],
-                ['Favorite trials', 'Your browser (neurowiki:favs)', 'Saves starred trials between sessions', 'Until you clear browser storage'],
+                ['Cookie consent decision', 'Your browser (neurowiki-analytics-consent)', 'Controls whether GA loads', 'Until you clear browser storage'],
+                ['Favorite trials', 'Your browser (neurowiki:favorites:v1)', 'Saves starred trials between sessions', 'Until you clear browser storage'],
                 ['Recently viewed', 'Your browser (neurowiki:recents:v1)', 'Powers the recents list', 'Until you clear browser storage'],
-                ['Disclaimer acknowledged', 'Your browser (neurowiki:disclaimer:v1)', 'Suppresses the first-visit disclaimer', 'Until you clear browser storage'],
+                ['Disclaimer acknowledged', 'Your browser (neurowiki-disclaimer-accepted)', 'Suppresses the first-visit disclaimer', 'Until you clear browser storage'],
                 ['Feedback submissions', 'Resend (email relay) → operator inbox', 'Delivers your feedback to the team', 'Email provider retention policy'],
                 ['NPI proxy results', 'Not stored (session only)', 'Displays a doctor name from NPI lookup', 'Never written to storage'],
                 ['Saved cases (My Cases)', 'Your browser (IndexedDB on this device)', 'Lets you reopen a calculator result later. Stores initials (2-4 letters), scores, vitals you entered, anti-coag class, and stroke timestamps. Timestamps save as elapsed offsets by default for de-identification; opt-in toggle preserves absolute times for door-to-needle documentation.', 'Until you delete the case or clear browser storage'],
@@ -122,7 +122,7 @@ export default function PrivacyPage() {
         <p>
           A consent banner appears on your first visit. Declining it blocks Google Analytics from
           loading. To revoke consent later, delete the{' '}
-          <code className="bg-slate-100 px-1 rounded text-xs">neurowiki:consent</code>{' '}
+          <code className="bg-slate-100 px-1 rounded text-xs">neurowiki-analytics-consent</code>{' '}
           key from your browser's local storage for neurowiki.ai. In Chrome: DevTools → Application
           → Local Storage → neurowiki.ai. The consent banner re-appears on your next visit.
         </p>
