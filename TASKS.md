@@ -298,7 +298,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 - [ ] [L4] TrialsPage + TrialPageNew visual rebuild
 - [ ] [L4] EmBillingCalculator UX rebuild — guided decision flow
 - [x] [L4] Calculators.tsx rebuild — Prompt 5d (see CONFIRMED CLEAN 2026-05-04)
-- [ ] [L4] ResidentToolkit.tsx rebuild
+- [x] [L4] ResidentToolkit.tsx — DELETED 2026-06-05 (dead code: superseded by Guide.tsx as the /guide route, unreferenced + not in the router or route manifest; confirmed by the design audit and V decision to delete rather than rebuild).
 - [x] [L4] StatusEpilepticusPathway visual rebuild — commits 52c8371 (v3) + bfa5c6d (content)
 - [x] [L4] MigrainePathway visual rebuild — commits 03b55ab (v3) + 77ce4e8 (content + cocktail primitive)
 - [ ] [L4] ExtendedIVTPathway visual rebuild
