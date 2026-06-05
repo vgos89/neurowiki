@@ -341,37 +341,6 @@ export const DisclaimerModal: React.FC = () => {
             </div>
           )}
 
-          {/* Replay affordances — paired links to re-trigger the welcome
-              tour and the install prompt overlay. Both clear the
-              corresponding localStorage flag and reload to home so the
-              auto-launch logic re-fires. */}
-          {typeof window !== 'undefined' && (
-            <div className="mt-3 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
-              {window.localStorage.getItem('neurowiki:tour-complete:v1') === '1' && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    window.localStorage.removeItem('neurowiki:tour-complete:v1');
-                    window.location.assign('/');
-                  }}
-                  className="text-xs text-slate-500 hover:text-neuro-600 underline transition-colors"
-                >
-                  Replay the welcome tour
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={() => {
-                  window.localStorage.removeItem('neurowiki:install-overlay:v2');
-                  window.localStorage.removeItem('neurowiki:install-overlay:v1');
-                  window.location.assign('/');
-                }}
-                className="text-xs text-slate-500 hover:text-neuro-600 underline transition-colors"
-              >
-                Show install prompt
-              </button>
-            </div>
-          )}
         </div>
       </div>
 
