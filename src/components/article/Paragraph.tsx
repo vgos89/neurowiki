@@ -4,14 +4,26 @@ interface ParagraphProps {
   children: React.ReactNode;
   detail?: React.ReactNode;
   viewMode: 'quick' | 'detailed';
+  /**
+   * Optional clinical claim tag (CLAUDE.md §13.4 jsx surface). When set, it is
+   * rendered as a data-claim attribute on the paragraph so the prose is caught
+   * by the pre-commit claim scanner (check-claims.ts). Lets clinical copy
+   * authored inside Paragraph carry a scannable claim tag.
+   */
+  'data-claim'?: string;
 }
 
-export const Paragraph: React.FC<ParagraphProps> = ({ children, detail, viewMode }) => {
+export const Paragraph: React.FC<ParagraphProps> = ({
+  children,
+  detail,
+  viewMode,
+  'data-claim': dataClaim,
+}) => {
   const [manualExpanded, setManualExpanded] = useState(false);
   const isExpanded = viewMode === 'detailed' || manualExpanded;
-  
+
   return (
-    <p className="mb-5 leading-relaxed text-slate-700">
+    <p className="mb-5 leading-relaxed text-slate-700" data-claim={dataClaim}>
       {children}
       {detail && (
         <>
