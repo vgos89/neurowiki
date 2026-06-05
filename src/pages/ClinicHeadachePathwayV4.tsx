@@ -223,7 +223,11 @@ const ClinicHeadachePathwayV4: React.FC = () => {
           indicator on notched iPhones. */}
       {phase === 'questions' && (
         <div className="fixed bottom-[4.5rem] md:static inset-x-0 bg-white/95 backdrop-blur-sm border-t border-slate-100 px-4 py-3 z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none">
-          <div className="max-w-2xl mx-auto flex items-center justify-between pb-[max(0px,env(safe-area-inset-bottom,0px))] md:pb-0">
+          {/* Right inset clears the global feedback bubble (fixed bottom-24 right-4,
+              ~44px icon-only on phones, wider with its label at sm+). The bar is
+              fixed until md, so the inset tracks the bubble width; zero on desktop
+              where the bar reflows into normal flow. */}
+          <div className="max-w-2xl mx-auto flex items-center justify-between pr-14 sm:pr-28 md:pr-0 pb-[max(0px,env(safe-area-inset-bottom,0px))] md:pb-0">
             <button
               type="button"
               onClick={back}
@@ -243,7 +247,7 @@ const ClinicHeadachePathwayV4: React.FC = () => {
             <button
               type="button"
               onClick={() => setPhase('result')}
-              className="text-[13px] font-semibold text-neuro-600 hover:text-neuro-700 flex items-center gap-0.5 min-h-[44px] px-2 -mr-2"
+              className="text-[13px] font-semibold text-neuro-600 hover:text-neuro-700 flex items-center gap-0.5 min-h-[44px] px-2"
             >
               See result
               <ChevronRight className="w-4 h-4" aria-hidden="true" />
