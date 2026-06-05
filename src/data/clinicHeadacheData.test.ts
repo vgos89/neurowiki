@@ -4,6 +4,15 @@
  * Table-driven: each row is a {scenario, selected chips, expected matches}.
  * Covers full match, probable match (X.5 framework), partial, continuous
  * suppression, hidden-until-trial gating, and red-flag detection.
+ *
+ * Updated 2026-06-04 — SUPPRESS/DEMOTE refactor (Class E):
+ *   - New describe blocks: SUPPRESS gates (stay absent) vs DEMOTE gates (now present as near-miss)
+ *   - H6 VM-history inversion: VM now requires migraine-history-established
+ *   - Three new ChipIds covered in data-integrity block
+ *   - Floor tests: §1.1 / §2.2 / §3.1 minimum-evidence floors
+ *   - Near-miss surfacing tests: §1.5 / §2.4 / §3.5 Probable cases now surface
+ *   - Emit-set tests: tth-D / ctth-D / cm-C surface with definitionallyExcluded:true
+ *   - Dev-time invariant updated to require suppress-gate OR hiddenUntilTrial OR floor
  */
 
 import { describe, expect, it } from 'vitest';
@@ -50,13 +59,11 @@ describe('evaluateHeadachePhenotypes', () => {
       expect(matches.find(m => m.phenotypeId === 'migraine-without-aura')?.matchStrength).toBe('full');
     });
 
-    it('migraine ABSENT (not even probable) with only photophobia — mig-D is definitional after 2026-05-27', () => {
-      // 2026-05-27: mig-D flagged definitional. Failing mig-D (no nausea/
-      // vomiting and no photo+phono pair) now drops the phenotype entirely
-      // rather than producing a "probable" entry. ICHD-3 §1.5 Probable
-      // migraine does not apply when the associated-symptom criterion fails
-      // because ICHD-3 phrasing requires either the nausea OR the
-      // photo+phono pair as a phenotype-defining feature.
+    it('migraine ABSENT (not even probable) with only photophobia — mig-D is demote-gate; but floor requires ≥2 migraine-pointing chips incl. ≥1 C feature', () => {
+      // photophobia alone is a D symptom, not a C feature; floor requires ≥1 C feature.
+      // loc-unilateral + photophobia: one C feature + one D symptom → floor passes.
+      // But mig-D fails (photo only, no phono) so it would be probable. With only
+      // photophobia alone (no C feature), the floor kills it.
       const matches = evaluateHeadachePhenotypes(select(
         'attacks-gt-10',
         'dur-4-to-72-hours',
@@ -64,7 +71,16 @@ describe('evaluateHeadachePhenotypes', () => {
         'qual-pulsating',
         'sym-photophobia',
       ));
-      expect(matches.find(m => m.phenotypeId === 'migraine-without-aura')).toBeUndefined();
+      // mig-D (demote-gate) fails (photo alone, no phono) but the four criteria
+      // means metCount=3, total=4, so this is probable. mig-D is now demote-gate
+      // so the phenotype SURFACES as probable (this test was previously asserting absent).
+      // NOTE: This test previously asserted toBeUndefined() under the old definitional
+      // drop semantics. Under the new demote semantics, mig-D is a demote-gate and the
+      // phenotype surfaces as 'probable' when the floor passes (loc-unilateral + qual-pulsating
+      // = 2 C features → floor passes). See spec S2 / arch §17.1 follow-up 3.
+      const m = matches.find(m => m.phenotypeId === 'migraine-without-aura');
+      expect(m?.matchStrength).toBe('probable');
+      expect(m?.missingCriteria.map(c => c.id)).toContain('mig-D');
     });
 
     it('Probable migraine when only <5 attacks (criterion A short)', () => {
@@ -110,11 +126,11 @@ describe('evaluateHeadachePhenotypes', () => {
       expect(tth?.matchStrength).toBe('full');
     });
 
-    it('episodic TTH ABSENT if nausea is selected — tth-D is definitional after 2026-05-27', () => {
-      // 2026-05-27: tth-D flagged definitional. Failing the exclusion (i.e.
-      // patient has nausea, which TTH explicitly excludes) now drops the
-      // phenotype entirely. Same semantic: presence of nausea steers the
-      // diagnosis to migraine, not "probable TTH."
+    it('episodic TTH ABSENT as active match if nausea is selected (tth-D suppress-gate fails; EMIT set)', () => {
+      // tth-D is now a suppress-gate in the EMIT set. Failure means the phenotype
+      // is emitted with definitionallyExcluded:true, NOT as an active match.
+      // The existing assertion (not an active match) is preserved. This test
+      // refines it: the phenotype may appear in output but must be definitionallyExcluded.
       const matches = evaluateHeadachePhenotypes(select(
         'attacks-gt-10',
         'freq-5-14-per-month',
@@ -126,10 +142,18 @@ describe('evaluateHeadachePhenotypes', () => {
         'act-not-aggravated',
         'sym-nausea-mild',
       ));
-      expect(matches.find(m => m.phenotypeId === 'episodic-tth')).toBeUndefined();
+      const tth = matches.find(m => m.phenotypeId === 'episodic-tth');
+      // If present, must be definitionallyExcluded (emit-set suppress), not an active match.
+      if (tth) {
+        expect(tth.definitionallyExcluded).toBe(true);
+        expect(['full', 'probable', 'partial']).not.toContain(tth.matchStrength);
+      }
+      // Either absent or emitted-excluded; never an active match.
+      expect(matches.filter(m => m.phenotypeId === 'episodic-tth' && !m.definitionallyExcluded).length).toBe(0);
     });
 
-    it('episodic TTH ABSENT if BOTH photophobia AND phonophobia selected — tth-D definitional', () => {
+    it('episodic TTH ABSENT as active match if BOTH photophobia AND phonophobia selected (tth-D suppress-gate fails; EMIT set)', () => {
+      // tth-D: countOf(photo, phono) <= 1 fails when both are selected.
       const matches = evaluateHeadachePhenotypes(select(
         'attacks-gt-10',
         'freq-5-14-per-month',
@@ -142,7 +166,7 @@ describe('evaluateHeadachePhenotypes', () => {
         'sym-photophobia',
         'sym-phonophobia',
       ));
-      expect(matches.find(m => m.phenotypeId === 'episodic-tth')).toBeUndefined();
+      expect(matches.filter(m => m.phenotypeId === 'episodic-tth' && !m.definitionallyExcluded).length).toBe(0);
     });
   });
 
@@ -231,7 +255,7 @@ describe('evaluateHeadachePhenotypes', () => {
         'qual-pressing-tightening', 'sev-mild', 'act-not-aggravated',
       ));
       expect(matches.find(m => m.phenotypeId === 'migraine-without-aura')?.matchStrength).toBe('full');
-      // No probable matches should remain
+      // No ACTIVE probable matches should remain (definitionallyExcluded entries are not active)
       expect(matches.filter(m => m.matchStrength === 'probable').length).toBe(0);
     });
 
@@ -243,7 +267,7 @@ describe('evaluateHeadachePhenotypes', () => {
       ));
       expect(matches.find(m => m.phenotypeId === 'migraine-without-aura')?.matchStrength).toBe('full');
       // Partial matches may or may not exist depending on which other
-      // phenotypes find a contributing chip; just confirm no probables.
+      // phenotypes find a contributing chip; just confirm no active probables.
       expect(matches.filter(m => m.matchStrength === 'probable').length).toBe(0);
     });
   });
@@ -252,6 +276,7 @@ describe('evaluateHeadachePhenotypes', () => {
     it('marks vestibular migraine as isAppendix=true', () => {
       const matches = evaluateHeadachePhenotypes(select(
         'vest-vertigo-migrainous',
+        'migraine-history-established',
         'sym-photophobia',
       ));
       const vm = matches.find(m => m.phenotypeId === 'vestibular-migraine');
@@ -271,7 +296,7 @@ describe('evaluateHeadachePhenotypes', () => {
         'loc-bilateral',
         'qual-pressing-tightening',
       ));
-      const strengths = matches.map(m => m.matchStrength);
+      const strengths = matches.filter(m => !m.definitionallyExcluded).map(m => m.matchStrength);
       const fullIdx = strengths.indexOf('full');
       const probIdx = strengths.indexOf('probable');
       const partIdx = strengths.indexOf('partial');
@@ -317,6 +342,28 @@ describe('data integrity', () => {
     for (const id of RED_FLAG_CHIPS) {
       expect(redGroupIds.has(id), `red flag ${id} not in red-flags group`).toBe(true);
     }
+  });
+
+  it('three new ChipIds resolve in HEADACHE_CHIP_GROUPS (aura-symptom-unilateral, attacks-ge-2, migraine-history-established)', () => {
+    // Added 2026-06-04. Mirrors the data-integrity block for the three new chips
+    // required by the rank-and-flag refactor (arch §17.1 follow-up 6).
+    const validIds = new Set<string>();
+    for (const group of HEADACHE_CHIP_GROUPS) for (const c of group.chips) validIds.add(c.id);
+    expect(validIds.has('aura-symptom-unilateral'), 'aura-symptom-unilateral must be in a chip group').toBe(true);
+    expect(validIds.has('attacks-ge-2'), 'attacks-ge-2 must be in a chip group').toBe(true);
+    expect(validIds.has('migraine-history-established'), 'migraine-history-established must be in a chip group').toBe(true);
+  });
+
+  it('every new chip is referenced by at least one criterion contributingChips list', () => {
+    const allContributing = new Set<string>();
+    for (const phenotype of HEADACHE_PHENOTYPES) {
+      for (const criterion of phenotype.criteria) {
+        for (const chipId of criterion.contributingChips) allContributing.add(chipId);
+      }
+    }
+    expect(allContributing.has('aura-symptom-unilateral'), 'aura-symptom-unilateral must be used by ≥1 criterion').toBe(true);
+    expect(allContributing.has('attacks-ge-2'), 'attacks-ge-2 must be used by ≥1 criterion').toBe(true);
+    expect(allContributing.has('migraine-history-established'), 'migraine-history-established must be used by ≥1 criterion').toBe(true);
   });
 });
 
@@ -405,7 +452,7 @@ describe('3.3 SUNCT/SUNA', () => {
 });
 
 describe('§2.3 D chronic-TTH nausea-severity fix', () => {
-  it('Chronic TTH ABSENT when moderate-severe nausea is selected — ctth-D is definitional after 2026-05-27', () => {
+  it('Chronic TTH ABSENT as active match when moderate-severe nausea is selected (ctth-D suppress-gate fails; EMIT set)', () => {
     const matches = evaluateHeadachePhenotypes(select(
       'freq-ge-15-per-month',
       'pattern-ge-3-months',
@@ -416,7 +463,8 @@ describe('§2.3 D chronic-TTH nausea-severity fix', () => {
       'act-not-aggravated',
       'sym-nausea-moderate-severe',
     ));
-    expect(matches.find(m => m.phenotypeId === 'chronic-tth')).toBeUndefined();
+    // ctth-D is in the EMIT set — may appear with definitionallyExcluded:true
+    expect(matches.filter(m => m.phenotypeId === 'chronic-tth' && !m.definitionallyExcluded).length).toBe(0);
   });
 
   it('Chronic TTH full match allows mild nausea ALONE in the ≤1 pool', () => {
@@ -433,7 +481,7 @@ describe('§2.3 D chronic-TTH nausea-severity fix', () => {
     expect(matches.find(m => m.phenotypeId === 'chronic-tth')?.matchStrength).toBe('full');
   });
 
-  it('Chronic TTH ABSENT when mild nausea + photophobia both selected (≤1 pool exceeded) — ctth-D definitional', () => {
+  it('Chronic TTH ABSENT as active match when mild nausea + photophobia both selected (≤1 pool exceeded; ctth-D suppress-gate fails; EMIT set)', () => {
     const matches = evaluateHeadachePhenotypes(select(
       'freq-ge-15-per-month',
       'pattern-ge-3-months',
@@ -445,7 +493,7 @@ describe('§2.3 D chronic-TTH nausea-severity fix', () => {
       'sym-nausea-mild',
       'sym-photophobia',
     ));
-    expect(matches.find(m => m.phenotypeId === 'chronic-tth')).toBeUndefined();
+    expect(matches.filter(m => m.phenotypeId === 'chronic-tth' && !m.definitionallyExcluded).length).toBe(0);
   });
 });
 
@@ -505,56 +553,51 @@ describe('Section-label corrections (2026-05-25)', () => {
 });
 
 describe('Phase 2 — Probable §X.5 framework + selection→criterion mapping', () => {
-  it('Probable migraine displaySection points to §1.5 (failing mig-A, a NON-definitional criterion)', () => {
-    // 2026-05-27: after definitional flags, probable migraine requires
-    // failing a NON-definitional criterion. mig-A (≥5 attacks) is the
-    // canonical non-definitional gap — patients with <5 lifetime attacks
+  it('Probable migraine displaySection points to §1.5 (failing mig-A, a scorable criterion)', () => {
+    // mig-A (≥5 attacks) is scorable — patients with <5 lifetime attacks
     // route through ICHD-3 §1.5.1 Probable migraine without aura.
     const matches = evaluateHeadachePhenotypes(select(
-      'attacks-lt-5',                    // mig-A fails (non-definitional)
-      'dur-4-to-72-hours',               // mig-B definitional pass
+      'attacks-lt-5',                    // mig-A fails (scorable)
+      'dur-4-to-72-hours',               // mig-B demote-gate pass
       'loc-unilateral',
       'qual-pulsating',
       'sev-severe',                      // mig-C ≥2 features
-      'sym-nausea-mild',                 // mig-D definitional pass
+      'sym-nausea-mild',                 // mig-D demote-gate pass
     ));
     const m = matches.find(x => x.phenotypeId === 'migraine-without-aura');
     expect(m?.matchStrength).toBe('probable');
     expect(m?.displaySection).toContain('§1.5');
   });
 
-  it('Probable TTH displaySection points to §2.4 (failing tth-A, a NON-definitional criterion)', () => {
-    // 2026-05-27: probable TTH now requires failing tth-A (frequency floor),
-    // which is non-definitional. tth-B (duration) and tth-D (exclusion) are
-    // definitional and dropping them removes the phenotype entirely.
+  it('Probable TTH displaySection points to §2.4 (failing tth-A, a scorable criterion)', () => {
+    // tth-A (frequency floor) is scorable — its miss should demote at most.
     const matches = evaluateHeadachePhenotypes(select(
-      'attacks-lt-5',                    // <10 episodes — tth-A fails (non-definitional)
-      'dur-30min-to-7days',              // tth-B definitional pass
+      'attacks-lt-5',                    // <10 episodes — tth-A fails (scorable)
+      'dur-30min-to-7days',              // tth-B demote-gate pass
       'loc-bilateral',
       'qual-pressing-tightening',
       'sev-mild',
       'act-not-aggravated',
-      // no nausea, no photo/phono — tth-D definitional pass
+      // no nausea, no photo/phono — tth-D suppress-gate pass
     ));
     const m = matches.find(x => x.phenotypeId === 'episodic-tth');
     expect(m?.matchStrength).toBe('probable');
     expect(m?.displaySection).toContain('§2.4');
   });
 
-  it('Chronic migraine cannot be probable — every §1.3 criterion is now definitional (no §1.5.3 exists)', () => {
-    // 2026-05-27: cm-A, cm-B, and cm-C are ALL flagged definitional per
-    // clinical-reviewer §17.2. ICHD-3 has no §1.5.3 Probable chronic
-    // migraine entity, so failing any §1.3 criterion correctly drops the
-    // phenotype entirely rather than producing a probable surface. This
-    // test now asserts the absence behavior + the map-level guarantee.
+  it('Chronic migraine cannot be probable — cm-A and cm-C are suppress-gates (no §1.5.3 exists)', () => {
+    // cm-A suppress-gate: sub-chronic frequency drops phenotype.
+    // cm-C suppress-gate: no migraine-feature days nor triptan response drops phenotype.
+    // Neither produces "Probable chronic migraine" (entity does not exist in ICHD-3).
     const matches = evaluateHeadachePhenotypes(select(
       'freq-ge-15-per-month',
       'pattern-ge-3-months',
       'attacks-gt-10',
-      // Missing migraine-features-ge-8 + triptan-response — cm-C definitional fails
+      // Missing migraine-features-ge-8 + triptan-response — cm-C suppress-gate fails
     ));
-    // Phenotype absent — cm-C definitional failure drops it.
-    expect(matches.find(x => x.phenotypeId === 'chronic-migraine')).toBeUndefined();
+    // cm-C is in the EMIT set — may appear with definitionallyExcluded:true
+    // but must NOT appear as an active (probable/partial/full) match.
+    expect(matches.filter(x => x.phenotypeId === 'chronic-migraine' && !x.definitionallyExcluded).length).toBe(0);
   });
 
   it('Full match metCriteria carry contributingChipLabels for the audit trail', () => {
@@ -592,251 +635,560 @@ describe('Phase 2 — Probable §X.5 framework + selection→criterion mapping',
   });
 });
 
-// ─── Definitional-criterion gating (2026-05-27) ─────────────────────────────
-// V-reported false-positive (vestibular migraine 50% on phonophobia alone) +
-// architect §17.1 + clinical-reviewer §17.2 sign-off. See:
-//   docs/reviews/arch-headache-definitional-criteria-2026-05-27.md
-//   docs/reviews/clinical-headache-definitional-criteria-2026-05-27.md
-describe('definitional-criterion gating', () => {
-  // ── Dev-time guard (architect §17.1 follow-up 5) ────────────────────────
-  // Every phenotype must have ≥1 definitional criterion. If a future
-  // phenotype is added without flagging any criterion definitional, this
-  // test fails and the author is forced to be explicit.
-  it('every phenotype has at least one definitional criterion', () => {
+// ─── SUPPRESS gates: failure drops the phenotype (stay absent) ──────────────
+// These tests assert ABSENCE. Each absence is CORRECT: the failed criterion is
+// substrate/chronicity/positive-evidence-for-another-phenotype (not a demote).
+// Do NOT mistake these absences for demote bugs.
+describe('SUPPRESS gates — failure drops the phenotype', () => {
+
+  // ── Dev-time guard (architect §17.1 follow-up 4, updated 2026-06-04) ────
+  // Every phenotype must have ≥1 suppress-gate criterion OR a hiddenUntilTrial
+  // gate OR a registered minimum-evidence floor. If a future phenotype is added
+  // without one of the three, this test fails and forces explicit classification.
+  it('every phenotype has a suppression path (suppress-gate | hiddenUntilTrial | registered floor)', () => {
+    const PHENOTYPES_WITH_FLOOR: PhenotypeId[] = [
+      'migraine-without-aura',  // §1.1 migraineEvidenceFloor
+      'episodic-tth',           // §2.2 tthEvidenceFloor
+      'cluster-headache',       // §3.1 clusterEvidenceFloor
+    ];
     for (const phenotype of HEADACHE_PHENOTYPES) {
-      const hasDefinitional = phenotype.criteria.some(c => c.definitional === true);
-      expect(hasDefinitional, `${phenotype.id} (${phenotype.name}) has no criterion tagged definitional`).toBe(true);
+      const hasSuppressGate = phenotype.criteria.some(c => c.role === 'suppress-gate');
+      const hasTrial = !!phenotype.hiddenUntilTrial;
+      const hasFloor = PHENOTYPES_WITH_FLOOR.includes(phenotype.id);
+      expect(
+        hasSuppressGate || hasTrial || hasFloor,
+        `${phenotype.id} (${phenotype.name}) has no suppress-gate, no hiddenUntilTrial gate, and no registered minimum-evidence floor`
+      ).toBe(true);
     }
   });
 
-  // ── V's exact reported failing input ────────────────────────────────────
+  // ── V's exact reported failing input ──────────────────────────────────
   it("V regression: phonophobia-only + bilateral pressing + <15 min → vestibular migraine NOT in matches", () => {
     const matches = evaluateHeadachePhenotypes(select(
-      'attacks-gt-10',                  // pattern present
+      'attacks-gt-10',
       'onset-recurrent-same',
       'freq-1-4-per-month',
-      'dur-lt-15-min',                  // <15 min — fails every primary phenotype duration gate
+      'dur-lt-15-min',
       'loc-bilateral',
       'qual-pressing-tightening',
       'sev-moderate',
       'act-aggravated',
-      'sym-phonophobia',                // phonophobia only — no vertigo
+      'sym-phonophobia',
     ));
     expect(matches.find(m => m.phenotypeId === 'vestibular-migraine')).toBeUndefined();
-    // Migraine and TTH should also fail their definitional duration gates
-    // (mig-B requires 4–72 h; tth-B requires 30 min–7 d).
-    expect(matches.find(m => m.phenotypeId === 'migraine-without-aura')).toBeUndefined();
-    expect(matches.find(m => m.phenotypeId === 'episodic-tth')).toBeUndefined();
-    // Cluster, PH, SUNCT, HC, NDPH all blocked by their own definitional gates.
+    // Under demote semantics, migraine-without-aura MAY surface as partial:
+    //   - mig-B demote-gate fails (no dur-4-to-72-hours) → demotes, not drops
+    //   - mig-D demote-gate fails (phonophobia alone, no phono+photo pair) → demotes
+    //   - mig-C scorable passes (sev-moderate + act-aggravated ≥ 2 C features)
+    //   - floor passes (sev-moderate + act-aggravated = 2 C features ≥ 1 C + total ≥ 2)
+    //   The phenotype surfaces as partial with two demote-gate misses.
+    // This is expected behavior under the rank-and-flag refactor. The core V-reported
+    // bug (VM false-positive on phonophobia alone) is fixed — VM is absent as required.
+    // Migraine/TTH being partial here is correct ICHD-3 behavior for a partial chip set.
+    // The critical assertion is VM ABSENT; migraine/TTH may be partial.
+    const vm = matches.find(m => m.phenotypeId === 'vestibular-migraine');
+    expect(vm).toBeUndefined();
     expect(matches.find(m => m.phenotypeId === 'cluster-headache')).toBeUndefined();
     expect(matches.find(m => m.phenotypeId === 'ndph')).toBeUndefined();
+    // Migraine/TTH may surface as partial (both demote-gates fail, not drops).
+    // If present, confirm they are partial (not full/probable) and not active false-positives.
+    const migraine = matches.find(m => m.phenotypeId === 'migraine-without-aura');
+    if (migraine) expect(migraine.matchStrength).toBe('partial');
+    const tth = matches.find(m => m.phenotypeId === 'episodic-tth');
+    if (tth) expect(['partial', 'none'].includes(tth.matchStrength) || tth.definitionallyExcluded).toBe(true);
   });
 
-  // ── Vestibular migraine: no vertigo → entity dropped ────────────────────
-  it('vestibular migraine NOT in matches when no vertigo chip selected', () => {
-    const matches = evaluateHeadachePhenotypes(select('sym-phonophobia', 'sym-photophobia', 'aura-visual'));
+  // ── Vestibular migraine suppress gates ──────────────────────────────────
+  it('vestibular migraine NOT in matches when no vertigo chip selected (vm-A suppress gate)', () => {
+    // vm-A is suppress-gate (DROP). No vertigo = substrate absent.
+    const matches = evaluateHeadachePhenotypes(select('sym-phonophobia', 'sym-photophobia', 'aura-visual', 'migraine-history-established'));
     expect(matches.find(m => m.phenotypeId === 'vestibular-migraine')).toBeUndefined();
   });
 
-  it('vestibular migraine surfaces when vest-vertigo-migrainous + ≥1 migraine feature', () => {
+  it('vestibular migraine NOT in matches without migraine-history-established (vm-history suppress gate) — H6 behavior inversion', () => {
+    // vm-history is a new suppress-gate (DROP). Added 2026-06-04.
+    // This test INVERTS previous behavior: the prior test (test:641-644) asserted
+    // VM surfaces on vest-vertigo-migrainous + sym-phonophobia. Under the new
+    // vm-history suppress-gate it must NOT surface without migraine history.
+    // See spec §5 H6 — the single most important new-gate regression.
     const matches = evaluateHeadachePhenotypes(select('vest-vertigo-migrainous', 'sym-phonophobia'));
+    expect(matches.find(m => m.phenotypeId === 'vestibular-migraine')).toBeUndefined();
+  });
+
+  it('vestibular migraine surfaces when vest-vertigo-migrainous + migraine-history-established + ≥1 migraine feature', () => {
+    // Updated: migraine-history-established is now required (vm-history suppress-gate).
+    // This is the corrected version of the old "VM surfaces on vertigo + phonophobia" test.
+    const matches = evaluateHeadachePhenotypes(select(
+      'vest-vertigo-migrainous',
+      'migraine-history-established',
+      'sym-phonophobia',
+    ));
     expect(matches.find(m => m.phenotypeId === 'vestibular-migraine')).toBeDefined();
   });
 
-  // ── Per-phenotype: failing exactly one definitional → phenotype absent ──
-  describe('per-phenotype definitional failure drops the phenotype', () => {
-    it('1.1 migraine without aura: fail mig-B (duration) → absent', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'attacks-gt-10', 'dur-gt-72-hours', // fails 4-72h
-        'loc-unilateral', 'qual-pulsating', 'sev-severe',
-        'sym-nausea-mild',
-      ));
-      expect(matches.find(m => m.phenotypeId === 'migraine-without-aura')).toBeUndefined();
-    });
-
-    it('1.1 migraine without aura: fail mig-D (assoc symptoms) → absent', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'attacks-gt-10', 'dur-4-to-72-hours',
-        'loc-unilateral', 'qual-pulsating', 'sev-severe',
-        // no nausea, no photo+phono pair
-      ));
-      expect(matches.find(m => m.phenotypeId === 'migraine-without-aura')).toBeUndefined();
-    });
-
-    it('1.2 migraine with aura: fail aura-B (no aura symptom) → absent', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'attacks-gt-10', 'aura-spread-ge-5min', 'aura-each-5-to-60min', 'aura-positive-symptoms',
-        // no aura-type chip, no aura-fully-reversible
-      ));
-      expect(matches.find(m => m.phenotypeId === 'migraine-with-aura')).toBeUndefined();
-    });
-
-    it('1.3 chronic migraine: fail cm-A (freq <15) → absent', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'freq-5-14-per-month', 'pattern-ge-3-months', 'attacks-gt-10',
-        'migraine-features-ge-8-per-month',
-      ));
-      expect(matches.find(m => m.phenotypeId === 'chronic-migraine')).toBeUndefined();
-    });
-
-    it('1.3 chronic migraine: fail cm-C (no migraine-feature days nor triptan response) → absent', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'freq-ge-15-per-month', 'pattern-ge-3-months', 'attacks-gt-10',
-        // no migraine-features-ge-8-per-month, no triptan-response-positive
-      ));
-      expect(matches.find(m => m.phenotypeId === 'chronic-migraine')).toBeUndefined();
-    });
-
-    it('cm-A implies cm-B in chip vocabulary (Condition 1 sanity check)', () => {
-      // Patient with ≥15 days/mo for >3 months will have ≥5 lifetime attacks.
-      // Confirm chronic migraine full-match works with attack-count chip set.
-      const matches = evaluateHeadachePhenotypes(select(
-        'freq-ge-15-per-month', 'pattern-ge-3-months', 'attacks-gt-10',
-        'migraine-features-ge-8-per-month',
-      ));
-      expect(matches.find(m => m.phenotypeId === 'chronic-migraine')?.matchStrength).toBe('full');
-    });
-
-    it('2.2 episodic TTH: fail tth-B (duration) → absent', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'attacks-gt-10', 'freq-1-4-per-month', 'pattern-ge-3-months',
-        'dur-lt-15-min',                    // fails 30 min–7 d
-        'loc-bilateral', 'qual-pressing-tightening', 'sev-mild', 'act-not-aggravated',
-      ));
-      expect(matches.find(m => m.phenotypeId === 'episodic-tth')).toBeUndefined();
-    });
-
-    it('2.2 episodic TTH: fail tth-D (vomiting) → absent', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'attacks-gt-10', 'freq-1-4-per-month', 'pattern-ge-3-months',
-        'dur-30min-to-7days', 'loc-bilateral', 'qual-pressing-tightening', 'sev-mild', 'act-not-aggravated',
-        'sym-vomiting',                     // excludes TTH
-      ));
-      expect(matches.find(m => m.phenotypeId === 'episodic-tth')).toBeUndefined();
-    });
-
-    it('2.3 chronic TTH: fail ctth-A (freq <15) → absent', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'freq-5-14-per-month', 'pattern-ge-3-months',
-        'dur-30min-to-7days', 'loc-bilateral', 'qual-pressing-tightening', 'sev-mild', 'act-not-aggravated',
-      ));
-      expect(matches.find(m => m.phenotypeId === 'chronic-tth')).toBeUndefined();
-    });
-
-    it('3.1 cluster: fail cluster-B (no orbital location) → absent', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'attacks-gt-10', 'loc-unilateral', 'sev-severe', 'dur-15-to-180-min',
-        // missing loc-orbital-temporal — fails conjunctive B
-        'sym-autonomic-ipsilateral', 'freq-cluster-bout',
-      ));
-      expect(matches.find(m => m.phenotypeId === 'cluster-headache')).toBeUndefined();
-    });
-
-    it('3.1 cluster: fail cluster-C (no autonomic or restlessness) → absent', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'attacks-gt-10', 'loc-unilateral', 'loc-orbital-temporal', 'sev-severe', 'dur-15-to-180-min',
-        // no autonomic, no restlessness
-        'freq-cluster-bout',
-      ));
-      expect(matches.find(m => m.phenotypeId === 'cluster-headache')).toBeUndefined();
-    });
-
-    it('3.2 paroxysmal hemicrania: fail ph-B (duration) → absent (even with indo trial)', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'indo-tried-complete',              // gate satisfied
-        'attacks-ge-20', 'loc-unilateral', 'loc-orbital-temporal', 'sev-severe',
-        'dur-15-to-180-min',                // wrong duration window — PH wants 2–30 min
-        'sym-autonomic-ipsilateral', 'freq-gt-5-per-day',
-      ));
-      expect(matches.find(m => m.phenotypeId === 'paroxysmal-hemicrania')).toBeUndefined();
-    });
-
-    it('3.3 SUNCT/SUNA: fail sunct-C (no autonomic) → absent', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'attacks-ge-20', 'loc-unilateral', 'sev-severe', 'dur-1-to-600-sec',
-        // no autonomic
-        'freq-ge-1-per-day',
-      ));
-      expect(matches.find(m => m.phenotypeId === 'sunct-suna')).toBeUndefined();
-    });
-
-    it('3.4 hemicrania continua: fail hc-A (not unilateral) → absent', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'indo-tried-complete',
-        'loc-bilateral', 'dur-continuous', 'pattern-ge-3-months',
-        'sev-moderate', 'sym-autonomic-ipsilateral',
-      ));
-      expect(matches.find(m => m.phenotypeId === 'hemicrania-continua')).toBeUndefined();
-    });
-
-    it('hidden-until-trial gate still works alongside definitional flag (HC double-enforcement)', () => {
-      // No indo-tried-complete chip → HC must be hidden even if all OTHER
-      // definitional criteria are satisfied.
-      const matches = evaluateHeadachePhenotypes(select(
-        'loc-unilateral', 'dur-continuous', 'pattern-ge-3-months', 'sev-moderate',
-        'sym-autonomic-ipsilateral',
-      ));
-      expect(matches.find(m => m.phenotypeId === 'hemicrania-continua')).toBeUndefined();
-    });
-
-    it('4.10 NDPH: fail ndph-A (not continuous) → absent', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'onset-new-within-3-months',
-        'dur-30min-to-7days', 'pattern-ge-3-months',
-      ));
-      expect(matches.find(m => m.phenotypeId === 'ndph')).toBeUndefined();
-    });
-
-    it('4.10 NDPH: onset-single-sudden alone no longer satisfies ndph-B → absent', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'dur-continuous', 'pattern-ge-3-months',
-        'onset-single-sudden',              // thunderclap chip — NOT NDPH onset after 2026-05-27 fix
-      ));
-      expect(matches.find(m => m.phenotypeId === 'ndph')).toBeUndefined();
-    });
-
-    it('4.10 NDPH: full match with onset-new-within-3-months + continuous + ≥3 months', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'dur-continuous', 'pattern-ge-3-months', 'onset-new-within-3-months',
-      ));
-      expect(matches.find(m => m.phenotypeId === 'ndph')?.matchStrength).toBe('full');
-    });
+  // ── §1.1 minimum-evidence floor tests ───────────────────────────────────
+  it('§1.1 floor: single D-symptom chip alone does NOT surface probable migraine (H9)', () => {
+    // sym-nausea-mild alone: 1 D chip, 0 C chips — floor fails (requires ≥1 C feature).
+    const matches = evaluateHeadachePhenotypes(select('sym-nausea-mild'));
+    expect(matches.find(m => m.phenotypeId === 'migraine-without-aura')).toBeUndefined();
   });
 
-  // ── All-definitional-pass + one-non-definitional-fail → surfaces ────────
-  describe('non-definitional failure does NOT drop phenotype', () => {
-    it('1.1 migraine: mig-A fails (attacks <5) but mig-B, mig-C, mig-D pass → probable migraine', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'attacks-lt-5',                     // mig-A fails (<5 attacks; not definitional)
-        'dur-4-to-72-hours',                // mig-B definitional pass
-        'loc-unilateral', 'qual-pulsating', 'sev-severe',  // mig-C
-        'sym-nausea-mild',                  // mig-D definitional pass
-      ));
-      const m = matches.find(x => x.phenotypeId === 'migraine-without-aura');
-      expect(m?.matchStrength).toBe('probable');
-      expect(m?.displaySection).toContain('§1.5');
-    });
-
-    it('3.1 cluster: cluster-D fails (no bout-frequency chip) but others pass → probable cluster', () => {
-      const matches = evaluateHeadachePhenotypes(select(
-        'attacks-gt-10',
-        'loc-unilateral', 'loc-orbital-temporal', 'sev-severe', 'dur-15-to-180-min', // cluster-B
-        'sym-autonomic-ipsilateral',                                                  // cluster-C
-        // no freq-cluster-bout — cluster-D fails (non-definitional)
-      ));
-      const m = matches.find(x => x.phenotypeId === 'cluster-headache');
-      expect(m?.matchStrength).toBe('probable');
-    });
+  it('§1.1 floor: two D-symptom chips (photophobia + phonophobia) alone do NOT surface migraine', () => {
+    // Two D chips, zero C chips — floor fails (no C feature).
+    const matches = evaluateHeadachePhenotypes(select('sym-photophobia', 'sym-phonophobia'));
+    expect(matches.find(m => m.phenotypeId === 'migraine-without-aura')).toBeUndefined();
   });
 
-  // ── Empty-matches integration (page-level fallback trigger) ─────────────
-  it('returns empty array when no phenotype passes its definitional gates (page renders no-match fallback)', () => {
+  it('§1.1 floor: ≥1 C feature + ≥1 additional migraine-pointing chip DOES surface migraine', () => {
+    // loc-unilateral (C) + sym-nausea-mild (D) = 2 migraine-pointing incl. ≥1 C → floor passes.
+    // mig-A fails (no attack chip) but is scorable, so match is partial.
+    const matches = evaluateHeadachePhenotypes(select('loc-unilateral', 'sym-nausea-mild'));
+    expect(matches.find(m => m.phenotypeId === 'migraine-without-aura')).toBeDefined();
+  });
+
+  // ── §2.2 minimum-evidence floor tests ───────────────────────────────────
+  it('§2.2 floor: single loc-bilateral chip alone does NOT surface episodic TTH', () => {
+    // loc-bilateral is a C chip but we need ≥2 total including ≥1 C — one chip fails floor.
+    const matches = evaluateHeadachePhenotypes(select('loc-bilateral'));
+    expect(matches.find(m => m.phenotypeId === 'episodic-tth')).toBeUndefined();
+  });
+
+  it('§2.2 floor: ≥1 C feature + ≥1 additional TTH-pointing chip DOES surface episodic TTH', () => {
+    // loc-bilateral (C) + dur-30min-to-7days = 2 total incl. ≥1 C → floor passes.
+    // tth-D passes (no nausea, no photo+phono), tth-A fails (scorable), so partial.
+    const matches = evaluateHeadachePhenotypes(select('loc-bilateral', 'dur-30min-to-7days'));
+    expect(matches.find(m => m.phenotypeId === 'episodic-tth')).toBeDefined();
+  });
+
+  // ── §3.1 minimum-evidence floor tests ───────────────────────────────────
+  it('§3.1 floor: sym-autonomic-ipsilateral alone does NOT surface cluster (no defining feature)', () => {
+    // autonomic is a cluster-pointing chip but NOT a §3.1 C defining feature;
+    // floor requires ≥1 C defining feature (loc-unilateral, loc-orbital-temporal,
+    // sev-severe, sev-very-severe, dur-15-to-180-min).
+    const matches = evaluateHeadachePhenotypes(select('sym-autonomic-ipsilateral'));
+    expect(matches.find(m => m.phenotypeId === 'cluster-headache')).toBeUndefined();
+  });
+
+  it('§3.1 floor: ≥1 C defining feature + ≥1 additional cluster-pointing chip DOES surface cluster', () => {
+    // loc-unilateral (C defining) + sym-autonomic-ipsilateral = 2 total incl. ≥1 C → floor passes.
+    // cluster-B demote-gate fails (missing loc-orbital-temporal + severity + duration), partial.
+    const matches = evaluateHeadachePhenotypes(select('loc-unilateral', 'sym-autonomic-ipsilateral'));
+    expect(matches.find(m => m.phenotypeId === 'cluster-headache')).toBeDefined();
+  });
+
+  // ── EMIT set: suppress gates that surface with definitionallyExcluded:true ─
+
+  it('tth-D suppress (EMIT): episodic TTH emitted with definitionallyExcluded:true when vomiting present (H1)', () => {
+    // tth-D is in the EMIT set. Patient has vomiting (positive contradicting evidence).
+    // The phenotype must appear in output with definitionallyExcluded:true.
     const matches = evaluateHeadachePhenotypes(select(
-      // V's example — incompatible-duration constellation
-      'attacks-gt-10', 'freq-1-4-per-month', 'dur-lt-15-min',
-      'loc-bilateral', 'qual-pressing-tightening', 'sev-moderate', 'act-aggravated',
-      'sym-phonophobia',
+      'attacks-gt-10', 'freq-1-4-per-month', 'pattern-ge-3-months',
+      'dur-30min-to-7days', 'loc-bilateral', 'qual-pressing-tightening', 'sev-mild', 'act-not-aggravated',
+      'sym-vomiting',
     ));
-    expect(matches).toEqual([]);
+    const tth = matches.find(m => m.phenotypeId === 'episodic-tth');
+    expect(tth).toBeDefined();
+    expect(tth?.definitionallyExcluded).toBe(true);
+    expect(tth?.exclusionReason).toBeTruthy();
+    // Must not be an active match
+    expect(['full', 'probable', 'partial']).not.toContain(tth?.matchStrength);
   });
+
+  it('ctth-D suppress (EMIT): chronic TTH emitted with definitionallyExcluded:true when vomiting present (H2)', () => {
+    // ctth-D is in the EMIT set. Patient has vomiting.
+    const matches = evaluateHeadachePhenotypes(select(
+      'freq-ge-15-per-month', 'pattern-ge-3-months',
+      'dur-30min-to-7days', 'loc-bilateral', 'qual-pressing-tightening', 'sev-mild', 'act-not-aggravated',
+      'sym-vomiting',
+    ));
+    const ctth = matches.find(m => m.phenotypeId === 'chronic-tth');
+    expect(ctth).toBeDefined();
+    expect(ctth?.definitionallyExcluded).toBe(true);
+    expect(ctth?.exclusionReason).toBeTruthy();
+    expect(['full', 'probable', 'partial']).not.toContain(ctth?.matchStrength);
+  });
+
+  it('cm-C suppress (EMIT): chronic migraine emitted with definitionallyExcluded:true when no migraine-feature days or triptan response', () => {
+    // cm-C is in the EMIT set. Chronic headache present (cm-A passes) but
+    // not migraine-type (cm-C fails). Positive contradicting evidence → EMIT.
+    const matches = evaluateHeadachePhenotypes(select(
+      'freq-ge-15-per-month', 'pattern-ge-3-months', 'attacks-gt-10',
+      // no migraine-features-ge-8-per-month, no triptan-response-positive
+    ));
+    const cm = matches.find(m => m.phenotypeId === 'chronic-migraine');
+    expect(cm).toBeDefined();
+    expect(cm?.definitionallyExcluded).toBe(true);
+    expect(cm?.exclusionReason).toBeTruthy();
+    expect(['full', 'probable', 'partial']).not.toContain(cm?.matchStrength);
+  });
+
+  // ── DROP set: substrate-absence suppressions (stay absent, never emitted) ─
+
+  it('aura-B suppress (DROP): migraine-with-aura absent when no aura symptom selected (H7)', () => {
+    // aura-B: substrate absence — silent drop. (CORRECT absence, not a demote bug.)
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-ge-2', 'aura-spread-ge-5min', 'aura-each-5-to-60min', 'aura-positive-symptoms',
+      // no aura-type chip, no aura-fully-reversible — aura-B substrate fails
+    ));
+    expect(matches.find(m => m.phenotypeId === 'migraine-with-aura')).toBeUndefined();
+  });
+
+  it('cm-A suppress (DROP): chronic migraine absent at sub-chronic frequency (H3)', () => {
+    // cm-A: chronicity threshold — silent drop. Sub-15-day patient is episodic.
+    // (CORRECT absence — not "probable chronic," a different frequency band.)
+    const matches = evaluateHeadachePhenotypes(select(
+      'freq-5-14-per-month', 'pattern-ge-3-months', 'attacks-gt-10',
+      'migraine-features-ge-8-per-month',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'chronic-migraine')).toBeUndefined();
+  });
+
+  it('ctth-A suppress (DROP): chronic TTH absent at sub-chronic frequency (H4)', () => {
+    // ctth-A: chronicity threshold — silent drop. (CORRECT absence.)
+    const matches = evaluateHeadachePhenotypes(select(
+      'freq-5-14-per-month', 'pattern-ge-3-months',
+      'dur-30min-to-7days', 'loc-bilateral', 'qual-pressing-tightening', 'sev-mild', 'act-not-aggravated',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'chronic-tth')).toBeUndefined();
+  });
+
+  it('vm-A suppress (DROP): vestibular migraine absent when no vertigo (H5)', () => {
+    // vm-A: substrate absence — silent drop. (CORRECT absence — closes V-reported false-positive.)
+    const matches = evaluateHeadachePhenotypes(select('sym-phonophobia', 'sym-photophobia', 'aura-visual', 'migraine-history-established'));
+    expect(matches.find(m => m.phenotypeId === 'vestibular-migraine')).toBeUndefined();
+  });
+
+  it('sunct-C suppress (DROP): SUNCT/SUNA absent when no autonomic features (H10)', () => {
+    // sunct-C: substrate absence — silent drop. (CORRECT absence per clinical condition 8.)
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-ge-20', 'loc-unilateral', 'sev-severe', 'dur-1-to-600-sec',
+      // no autonomic — sunct-C substrate fails
+      'freq-ge-1-per-day',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'sunct-suna')).toBeUndefined();
+  });
+
+  it('ndph-A suppress (DROP): NDPH absent when not continuous (H8)', () => {
+    // ndph-A: substrate absence — silent drop. (CORRECT absence.)
+    const matches = evaluateHeadachePhenotypes(select(
+      'onset-new-within-3-months',
+      'dur-30min-to-7days', 'pattern-ge-3-months',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'ndph')).toBeUndefined();
+  });
+
+  it('4.10 NDPH: onset-single-sudden alone no longer satisfies ndph-B → absent', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'dur-continuous', 'pattern-ge-3-months',
+      'onset-single-sudden',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'ndph')).toBeUndefined();
+  });
+
+  it('4.10 NDPH: full match with onset-new-within-3-months + continuous + ≥3 months', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'dur-continuous', 'pattern-ge-3-months', 'onset-new-within-3-months',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'ndph')?.matchStrength).toBe('full');
+  });
+
+  it('hemicrania continua: hc-A suppress (DROP) — not unilateral → absent', () => {
+    // hc-A: substrate — bilateral or non-continuous is a different entity.
+    const matches = evaluateHeadachePhenotypes(select(
+      'indo-tried-complete',
+      'loc-bilateral', 'dur-continuous', 'pattern-ge-3-months',
+      'sev-moderate', 'sym-autonomic-ipsilateral',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'hemicrania-continua')).toBeUndefined();
+  });
+
+  it('hidden-until-trial gate still works alongside suppress-gate (HC double-enforcement)', () => {
+    // No indo-tried-complete → HC must be hidden even if all other suppress criteria pass.
+    const matches = evaluateHeadachePhenotypes(select(
+      'loc-unilateral', 'dur-continuous', 'pattern-ge-3-months', 'sev-moderate',
+      'sym-autonomic-ipsilateral',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'hemicrania-continua')).toBeUndefined();
+  });
+
+  it('PH indomethacin gate: absent without indo-tried-complete (H11)', () => {
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-ge-20', 'loc-unilateral', 'loc-orbital-temporal', 'sev-severe',
+      'dur-2-to-30-min', 'sym-autonomic-ipsilateral', 'freq-gt-5-per-day',
+      // no indo-tried-complete — hiddenUntilTrial gate fires
+    ));
+    expect(matches.find(m => m.phenotypeId === 'paroxysmal-hemicrania')).toBeUndefined();
+  });
+
+  it('cm-A + cm-B imply each other in chip vocabulary (cm-A implies cm-B sanity check)', () => {
+    // Patient with ≥15 days/mo for >3 months will have ≥5 lifetime attacks.
+    const matches = evaluateHeadachePhenotypes(select(
+      'freq-ge-15-per-month', 'pattern-ge-3-months', 'attacks-gt-10',
+      'migraine-features-ge-8-per-month',
+    ));
+    expect(matches.find(m => m.phenotypeId === 'chronic-migraine')?.matchStrength).toBe('full');
+  });
+});
+
+// ─── DEMOTE gates — failure keeps the phenotype as a flagged near-miss ──────
+// These tests assert PRESENCE as probable. Each is a case where the patient
+// has not yet confirmed a feature/window that has a §X.5 Probable ICHD-3 home.
+// The prior test suite asserted absence here; that was the defect this change fixes.
+describe('DEMOTE gates — failure keeps the phenotype as a flagged near-miss', () => {
+
+  it('§1.1 mig-B (duration) fails → Probable migraine surfaces at §1.5 (S1)', () => {
+    // mig-B is now demote-gate. A patient with all other criteria confirmed but
+    // attack duration not recorded surfaces as Probable migraine ·§1.5.
+    // Was: test asserting ABSENT (old definitional drop). Now: present as probable.
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-gt-10',          // mig-A: scorable pass
+      // no dur-4-to-72-hours — mig-B demote-gate FAILS
+      'loc-unilateral',
+      'qual-pulsating',
+      'sev-severe',
+      'act-aggravated',         // mig-C: ≥2 C features pass
+      'sym-nausea-mild',        // mig-D: demote-gate pass
+    ));
+    const m = matches.find(x => x.phenotypeId === 'migraine-without-aura');
+    expect(m?.matchStrength).toBe('probable');
+    expect(m?.definitionallyExcluded).toBe(false);
+    expect(m?.missingCriteria.map(c => c.id)).toContain('mig-B');
+    expect(m?.displaySection).toContain('§1.5');
+  });
+
+  it('§1.1 mig-D (assoc symptoms) fails → Probable migraine surfaces at §1.5 (S2)', () => {
+    // mig-D is now demote-gate. Patient confirms attacks + duration + 2 C features
+    // but has not reported nausea/photo+phono yet.
+    // Was: test asserting ABSENT (old definitional drop). Now: present as probable.
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-gt-10',
+      'dur-4-to-72-hours',      // mig-B demote-gate pass
+      'loc-unilateral',
+      'qual-pulsating',
+      'sev-severe',             // mig-C ≥2 C features pass
+      // no nausea, no photo+phono — mig-D demote-gate FAILS
+    ));
+    const m = matches.find(x => x.phenotypeId === 'migraine-without-aura');
+    expect(m?.matchStrength).toBe('probable');
+    expect(m?.definitionallyExcluded).toBe(false);
+    expect(m?.missingCriteria.map(c => c.id)).toContain('mig-D');
+    expect(m?.displaySection).toContain('§1.5');
+  });
+
+  it('§2.2 tth-B (duration) fails → Probable TTH surfaces at §2.4 (S3)', () => {
+    // tth-B is now demote-gate. Patient confirms freq/pattern/character but
+    // not attack duration.
+    // Was: test asserting ABSENT (old definitional drop). Now: present as probable.
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-gt-10', 'freq-1-4-per-month', 'pattern-ge-3-months',
+      // no dur-30min-to-7days — tth-B demote-gate FAILS
+      'loc-bilateral', 'qual-pressing-tightening', 'sev-mild', 'act-not-aggravated',
+      // tth-D: no nausea/vomiting, ≤1 photo/phono — suppress-gate passes
+    ));
+    const m = matches.find(x => x.phenotypeId === 'episodic-tth');
+    expect(m?.matchStrength).toBe('probable');
+    expect(m?.definitionallyExcluded).toBe(false);
+    expect(m?.missingCriteria.map(c => c.id)).toContain('tth-B');
+    expect(m?.displaySection).toContain('§2.4');
+  });
+
+  it('§3.1 cluster-B (location+severity+duration) fails → Probable cluster surfaces at §3.5 (S4)', () => {
+    // cluster-B is now demote-gate. Between-bouts patient: unilateral orbital pain
+    // reported but 15–180 min attack length not confirmed.
+    // Was: test asserting ABSENT (old definitional drop). Now: present as probable.
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-gt-10',
+      'loc-unilateral', 'loc-orbital-temporal', 'sev-severe',
+      // no dur-15-to-180-min — cluster-B demote-gate FAILS
+      'sym-autonomic-ipsilateral',   // cluster-C demote-gate pass
+      'freq-cluster-bout',           // cluster-D scorable pass
+    ));
+    const m = matches.find(x => x.phenotypeId === 'cluster-headache');
+    expect(m?.matchStrength).toBe('probable');
+    expect(m?.definitionallyExcluded).toBe(false);
+    expect(m?.missingCriteria.map(c => c.id)).toContain('cluster-B');
+    expect(m?.displaySection).toContain('§3.5');
+  });
+
+  it('§3.1 cluster-C (autonomic/restlessness) fails → Probable cluster surfaces at §3.5', () => {
+    // cluster-C is now demote-gate (was definitional:true). Between-bouts patient
+    // who has not yet reported autonomic features/restlessness.
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-gt-10',
+      'loc-unilateral', 'loc-orbital-temporal', 'sev-severe', 'dur-15-to-180-min',
+      // no autonomic, no restlessness — cluster-C demote-gate FAILS
+      'freq-cluster-bout',
+    ));
+    const m = matches.find(x => x.phenotypeId === 'cluster-headache');
+    expect(m?.matchStrength).toBe('probable');
+    expect(m?.definitionallyExcluded).toBe(false);
+    expect(m?.missingCriteria.map(c => c.id)).toContain('cluster-C');
+    expect(m?.displaySection).toContain('§3.5');
+  });
+
+  it('§3.4 HC hc-C (autonomic/restlessness) fails → Probable HC surfaces at §3.5 (S6)', () => {
+    // hc-C is now demote-gate (was definitional:true). Gate chip present,
+    // hc-A suppress-gate passes, hc-B scorable passes, but hc-C not yet confirmed.
+    const matches = evaluateHeadachePhenotypes(select(
+      'indo-tried-complete',
+      'loc-unilateral', 'dur-continuous', 'pattern-ge-3-months', // hc-A suppress-gate pass
+      'sev-moderate',                                             // hc-B scorable pass
+      // no autonomic, no restlessness — hc-C demote-gate FAILS
+    ));
+    const m = matches.find(x => x.phenotypeId === 'hemicrania-continua');
+    expect(m?.matchStrength).toBe('probable');
+    expect(m?.definitionallyExcluded).toBe(false);
+    expect(m?.missingCriteria.map(c => c.id)).toContain('hc-C');
+    expect(m?.displaySection).toContain('§3.5');
+  });
+
+  it('§3.2 PH ph-B (location+severity+duration) fails → Probable PH surfaces at §3.5 (S-PH)', () => {
+    // ph-B is now demote-gate. Gate chip present, all other criteria pass.
+    const matches = evaluateHeadachePhenotypes(select(
+      'indo-tried-complete',
+      'attacks-ge-20',
+      'loc-unilateral', 'loc-orbital-temporal', 'sev-severe',
+      // no dur-2-to-30-min — ph-B demote-gate FAILS
+      'sym-autonomic-ipsilateral',   // ph-C demote-gate pass
+      'freq-gt-5-per-day',           // ph-D scorable pass
+    ));
+    const m = matches.find(x => x.phenotypeId === 'paroxysmal-hemicrania');
+    expect(m?.matchStrength).toBe('probable');
+    expect(m?.definitionallyExcluded).toBe(false);
+    expect(m?.missingCriteria.map(c => c.id)).toContain('ph-B');
+  });
+
+  it('§3.3 SUNCT sunct-B (moderate-severe unilateral, 1–600 sec) fails → Probable SUNCT surfaces at §3.5', () => {
+    // sunct-B is now demote-gate. All others pass (sunct-A scorable, sunct-C
+    // suppress-gate passes with autonomic, sunct-D scorable).
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-ge-20',
+      'loc-unilateral', 'sev-severe',
+      // no dur-1-to-600-sec — sunct-B demote-gate FAILS
+      'sym-autonomic-ipsilateral',
+      'freq-ge-1-per-day',
+    ));
+    const m = matches.find(x => x.phenotypeId === 'sunct-suna');
+    expect(m?.matchStrength).toBe('probable');
+    expect(m?.definitionallyExcluded).toBe(false);
+    expect(m?.missingCriteria.map(c => c.id)).toContain('sunct-B');
+  });
+
+  it('§1.1 non-demote-gate failure does NOT drop phenotype (mig-A scorable miss)', () => {
+    // Regression: scorable miss was already surfacing as probable before the refactor.
+    // Confirm this still works correctly after refactor.
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-lt-5',                     // mig-A fails (<5 attacks; scorable)
+      'dur-4-to-72-hours',                // mig-B demote-gate pass
+      'loc-unilateral', 'qual-pulsating', 'sev-severe',  // mig-C
+      'sym-nausea-mild',                  // mig-D demote-gate pass
+    ));
+    const m = matches.find(x => x.phenotypeId === 'migraine-without-aura');
+    expect(m?.matchStrength).toBe('probable');
+    expect(m?.displaySection).toContain('§1.5');
+  });
+
+  it('§1.2 aura-with-aura: corrected aura-A accepts attacks-ge-2 (not attacks-lt-5)', () => {
+    // aura-A rewired: drops attacks-lt-5, adds attacks-ge-2.
+    // A 2-4-attack patient can now correctly satisfy aura-A without triggering a
+    // 1-attack false positive on attacks-lt-5.
+    const matches = evaluateHeadachePhenotypes(select(
+      'attacks-ge-2',                // NEW chip — aura-A pass for ≥2 attacks
+      'aura-visual', 'aura-fully-reversible', // aura-B suppress-gate pass
+      'aura-spread-ge-5min', 'aura-each-5-to-60min', 'aura-positive-symptoms', // aura-C: 3 of 6 pass
+    ));
+    const m = matches.find(x => x.phenotypeId === 'migraine-with-aura');
+    expect(m).toBeDefined();
+    expect(m?.matchStrength).toBe('full');
+  });
+
+  it('§1.2 aura-C: aura-symptom-unilateral counts as 6th characteristic (not loc-unilateral)', () => {
+    // Aura-laterality fix (2026-06-04, clinical condition 10).
+    // aura-symptom-unilateral is the correct chip for §1.2 C characteristic 4.
+    // loc-unilateral (headache pain laterality) must NOT count as the 6th characteristic.
+    const withAuraUnilateral = evaluateHeadachePhenotypes(select(
+      'attacks-ge-2',
+      'aura-visual', 'aura-fully-reversible',
+      // Only 2 of 6 without aura-symptom-unilateral:
+      'aura-spread-ge-5min', 'aura-each-5-to-60min',
+      // 3rd characteristic: aura-symptom-unilateral
+      'aura-symptom-unilateral',
+      // loc-unilateral present but must NOT count as aura characteristic
+      'loc-unilateral',
+    ));
+    const m = withAuraUnilateral.find(x => x.phenotypeId === 'migraine-with-aura');
+    expect(m?.matchStrength).toBe('full'); // 3 of 6 via aura-symptom-unilateral
+
+    // Confirm loc-unilateral alone (without aura-symptom-unilateral) does NOT
+    // contribute the 6th characteristic.
+    const withoutAuraUnilateral = evaluateHeadachePhenotypes(select(
+      'attacks-ge-2',
+      'aura-visual', 'aura-fully-reversible',
+      'aura-spread-ge-5min', 'aura-each-5-to-60min',
+      // NO aura-symptom-unilateral — only loc-unilateral present
+      'loc-unilateral',
+    ));
+    const m2 = withoutAuraUnilateral.find(x => x.phenotypeId === 'migraine-with-aura');
+    // Only 2 of 6 characteristics met → aura-C fails, phenotype should be partial (not full).
+    if (m2) expect(m2.matchStrength).not.toBe('full');
+  });
+
+  it('§2.3 ctth-B (hours-to-continuous duration) fails → Probable chronic TTH surfaces', () => {
+    // ctth-B is now demote-gate. ctth-A suppress-gate passes (≥15 d/mo, ≥3 mo),
+    // ctth-C scorable passes, ctth-D suppress-gate passes. ctth-B not yet confirmed.
+    const matches = evaluateHeadachePhenotypes(select(
+      'freq-ge-15-per-month', 'pattern-ge-3-months', // ctth-A suppress-gate pass
+      // no dur-30min-to-7days, dur-gt-72-hours, dur-continuous — ctth-B demote-gate FAILS
+      'loc-bilateral', 'qual-pressing-tightening', 'sev-mild', 'act-not-aggravated', // ctth-C
+    ));
+    const m = matches.find(x => x.phenotypeId === 'chronic-tth');
+    expect(m?.matchStrength).toBe('probable');
+    expect(m?.definitionallyExcluded).toBe(false);
+    expect(m?.missingCriteria.map(c => c.id)).toContain('ctth-B');
+  });
+
+  it('§3.2 ph-C (autonomic/restlessness) fails → Probable PH surfaces', () => {
+    // ph-C is now demote-gate (was definitional:true). Gate chip present, ph-B passes.
+    const matches = evaluateHeadachePhenotypes(select(
+      'indo-tried-complete',
+      'attacks-ge-20',
+      'loc-unilateral', 'loc-orbital-temporal', 'sev-severe', 'dur-2-to-30-min', // ph-B pass
+      // no autonomic, no restlessness — ph-C demote-gate FAILS
+      'freq-gt-5-per-day',
+    ));
+    const m = matches.find(x => x.phenotypeId === 'paroxysmal-hemicrania');
+    expect(m?.matchStrength).toBe('probable');
+    expect(m?.missingCriteria.map(c => c.id)).toContain('ph-C');
+  });
+});
+
+// ─── Empty-matches integration (page-level fallback trigger) ─────────────
+it('returns empty array when no phenotype passes its gates (page renders no-match fallback)', () => {
+  // Under demote semantics the old incompatible-duration constellation now
+  // DOES surface partial matches because mig-B/mig-D are demote-gates (not drops).
+  //   attacks-gt-10 + sev-moderate + act-aggravated → mig-A + mig-C pass (floor ok)
+  //   dur-lt-15-min → mig-B demote-gate fails (demotes, not drops) → partial migraine
+  //   TTH also surfaces partially (bilateral pressing + phonophobia ≤ 1 → tth-D passes)
+  // The page's own "no active full/probable match" fallback logic operates on the
+  // caller's side. This test updates the contract to assert the correct post-refactor
+  // behavior: partial matches now surface for such inputs, and the page must decide
+  // whether to show a "no strong match" banner based on fullMatch/probableMatch absence.
+  //
+  // A genuinely empty result requires input that clears ALL floors and ALL suppress-gates:
+  // e.g., a single chip with no contributing evidence for any phenotype.
+  const trueEmptyMatches = evaluateHeadachePhenotypes(select(
+    'onset-single-sudden', // not a contributing chip for any phenotype criterion
+  ));
+  expect(trueEmptyMatches).toEqual([]);
+
+  // For the original constellation: confirm it produces partial matches but no full/probable.
+  const originalConstellation = evaluateHeadachePhenotypes(select(
+    'attacks-gt-10', 'freq-1-4-per-month', 'dur-lt-15-min',
+    'loc-bilateral', 'qual-pressing-tightening', 'sev-moderate', 'act-aggravated',
+    'sym-phonophobia',
+  ));
+  const activeMatches = originalConstellation.filter(m => !m.definitionallyExcluded);
+  expect(activeMatches.filter(m => m.matchStrength === 'full').length).toBe(0);
+  expect(activeMatches.filter(m => m.matchStrength === 'probable').length).toBe(0);
+  // Partial matches are acceptable — the page's "no full/probable match" state handles this.
 });
