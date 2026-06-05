@@ -16,26 +16,20 @@
  *   - Tour not previously completed/dismissed (neurowiki:tour-complete:v1).
  *   - On the home route only (deep-linked first visits aren't ambushed).
  *
- * Replay: `replayOnboardingTour()` clears the flag and returns home so the tour
- * re-triggers.
+ * Replay: the footer "Replay tour" link calls replayTour() (lib/consent), which
+ * clears the flag and returns home so the tour re-triggers.
  */
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { X, Activity, Calculator, BookOpen, Bookmark, Clock, ArrowRight } from 'lucide-react';
+import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import {
   DISCLAIMER_FLAG_KEY,
   DISCLAIMER_ACCEPTED_EVENT,
   TOUR_COMPLETE_KEY,
   TOUR_COMPLETE_EVENT,
 } from '../lib/consent';
-
-/** Public helper for a "Replay tour" affordance. */
-export function replayOnboardingTour(): void {
-  if (typeof window === 'undefined') return;
-  window.localStorage.removeItem(TOUR_COMPLETE_KEY);
-  window.location.assign('/');
-}
 
 interface Slide {
   icon: React.ReactNode;
@@ -82,7 +76,6 @@ export const OnboardingTour: React.FC = () => {
   const [eligible, setEligible] = useState(false);
   const [step, setStep] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
-  const restoreFocusRef = useRef<HTMLElement | null>(null);
 
   // Re-check on route change and when the disclaimer is accepted (the event lets
   // the tour launch the instant the consent bar's Continue is tapped). The tour
@@ -101,14 +94,6 @@ export const OnboardingTour: React.FC = () => {
     return () => window.removeEventListener(DISCLAIMER_ACCEPTED_EVENT, recheck);
   }, [location.pathname]);
 
-  // Move focus into the dialog when it opens (proper modal pattern) and remember
-  // where focus was, so it can be returned on dismiss.
-  useEffect(() => {
-    if (!eligible) return;
-    restoreFocusRef.current = (document.activeElement as HTMLElement) ?? null;
-    cardRef.current?.focus();
-  }, [eligible]);
-
   const slides = SLIDES;
 
   const dismiss = () => {
@@ -118,15 +103,10 @@ export const OnboardingTour: React.FC = () => {
       window.dispatchEvent(new Event(TOUR_COMPLETE_EVENT));
     }
     setEligible(false);
-    // Return focus where it was, or to the main landmark, so keyboard /
-    // screen-reader users aren't dropped to <body> when the dialog unmounts.
-    const prev = restoreFocusRef.current;
-    const target = prev && document.contains(prev) ? prev : document.querySelector('main');
-    if (target instanceof HTMLElement) {
-      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
-      target.focus();
-    }
   };
+
+  // Focus-on-open, focus-return-on-close, Escape, and the Tab-cycle trap.
+  useModalFocusTrap(eligible, dismiss, cardRef, cardRef);
 
   if (!eligible) return null;
 
@@ -140,7 +120,6 @@ export const OnboardingTour: React.FC = () => {
       role="dialog"
       aria-modal="true"
       aria-labelledby="onboarding-tour-title"
-      onKeyDown={(e) => { if (e.key === 'Escape') dismiss(); }}
     >
       {/* Backdrop */}
       <div

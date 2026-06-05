@@ -1,4 +1,5 @@
 // Google Analytics helper functions
+import { getStorageItem } from './storage';
 
 export const GA_MEASUREMENT_ID = 'G-0PD4HYYNTP';
 
@@ -194,20 +195,22 @@ export const trackFeedbackSubmitted = (
 
 /** Fired when the global medical disclaimer modal is acknowledged. */
 export const trackDisclaimerAcknowledged = () => {
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', 'disclaimer_acknowledged', {
-      event_category: 'compliance',
-    });
-  }
+  if (typeof window === 'undefined' || !(window as any).gtag) return;
+  // Self-guard: never emit if analytics was explicitly declined, even if gtag
+  // is somehow present (defense-in-depth against a future GA pre-load).
+  if (getStorageItem(CONSENT_STORAGE_KEY) === 'declined') return;
+  (window as any).gtag('event', 'disclaimer_acknowledged', {
+    event_category: 'compliance',
+  });
 };
 
 /** Fired when the global medical disclaimer modal is displayed to a user. */
 export const trackDisclaimerShown = () => {
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', 'disclaimer_shown', {
-      event_category: 'compliance',
-    });
-  }
+  if (typeof window === 'undefined' || !(window as any).gtag) return;
+  if (getStorageItem(CONSENT_STORAGE_KEY) === 'declined') return;
+  (window as any).gtag('event', 'disclaimer_shown', {
+    event_category: 'compliance',
+  });
 };
 
 // =============================================================================

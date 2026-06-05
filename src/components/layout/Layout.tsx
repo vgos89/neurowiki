@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { MobileHeader } from './MobileHeader';
 import PrivacyChoices from '../PrivacyChoices';
+import { replayTour } from '../../lib/consent';
 import { MobileBottomNav } from './MobileBottomNav';
 import { DesktopRail } from './DesktopRail';
 import { DesktopTopBar } from './DesktopTopBar';
@@ -74,6 +75,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 (required on every page for default-on analytics regions). */}
             <footer className="border-t border-slate-100 mt-8 px-4 py-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-slate-400">
               <PrivacyChoices />
+              <button
+                type="button"
+                onClick={replayTour}
+                className="hover:text-neuro-600 underline underline-offset-2 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none rounded"
+              >
+                Replay tour
+              </button>
               <Link to="/privacy" className="hover:text-neuro-600 underline underline-offset-2 transition-colors">Privacy</Link>
               <Link to="/terms" className="hover:text-neuro-600 underline underline-offset-2 transition-colors">Terms</Link>
             </footer>

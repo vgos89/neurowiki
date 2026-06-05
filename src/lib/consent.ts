@@ -139,6 +139,13 @@ export function setCachedCountry(country: string): void {
   }
 }
 
+/** Clear the tour-complete flag and return home so the onboarding tour re-runs. */
+export function replayTour(): void {
+  if (typeof window === 'undefined') return;
+  window.localStorage.removeItem(TOUR_COMPLETE_KEY);
+  window.location.assign('/');
+}
+
 /**
  * Build the JSON acceptance record. Pure given the two inputs (caller supplies
  * the timestamp + UA so this stays testable and side-effect-free).

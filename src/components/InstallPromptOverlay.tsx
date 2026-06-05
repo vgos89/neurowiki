@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { X, Smartphone, Zap, Download, Bookmark } from 'lucide-react';
 import { usePwaInstall } from '../hooks/usePwaInstall';
 import { InstallActions } from './InstallActions';
+import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import {
   installApplies,
   DISCLAIMER_FLAG_KEY,
@@ -35,7 +36,6 @@ export const InstallPromptOverlay: React.FC = () => {
   const [dismissed, setDismissed] = useState(false);
   const [entered, setEntered] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
-  const restoreFocusRef = useRef<HTMLElement | null>(null);
 
   // Re-check after the tour completes, after disclaimer acceptance, and when the
   // PWA status resolves (Android's beforeinstallprompt is async).
@@ -56,27 +56,22 @@ export const InstallPromptOverlay: React.FC = () => {
     };
   }, [status]);
 
-  // On show: mark shown-once, move focus in, and trigger the entrance transition.
+  // On show: mark shown-once and trigger the entrance transition. (Focus is
+  // handled by useModalFocusTrap below.)
   useEffect(() => {
     if (!eligible) return;
     window.localStorage.setItem(INSTALL_OVERLAY_SHOWN_KEY, '1');
-    restoreFocusRef.current = (document.activeElement as HTMLElement) ?? null;
-    cardRef.current?.focus();
     const id = window.setTimeout(() => setEntered(true), 10);
     return () => window.clearTimeout(id);
   }, [eligible]);
 
-  const close = () => {
-    setDismissed(true);
-    const prev = restoreFocusRef.current;
-    const target = prev && document.contains(prev) ? prev : document.querySelector('main');
-    if (target instanceof HTMLElement) {
-      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
-      target.focus();
-    }
-  };
+  const close = () => setDismissed(true);
 
-  if (!eligible || dismissed) return null;
+  // Focus-on-open, focus-return-on-close, Escape, and the Tab-cycle trap.
+  const isOpen = eligible && !dismissed;
+  useModalFocusTrap(isOpen, close, cardRef, cardRef);
+
+  if (!isOpen) return null;
 
   return (
     <div
@@ -84,7 +79,6 @@ export const InstallPromptOverlay: React.FC = () => {
       role="dialog"
       aria-modal="true"
       aria-labelledby="install-overlay-title"
-      onKeyDown={(e) => { if (e.key === 'Escape') close(); }}
     >
       <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm" aria-hidden="true" onClick={close} />
 
