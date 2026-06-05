@@ -33,6 +33,14 @@ export const DISCLAIMER_VERSION = '3.0';
 export const DISCLAIMER_FLAG_KEY = 'neurowiki:disclaimer:v1';
 export const DISCLAIMER_ACCEPTED_EVENT = 'neurowiki:disclaimer-accepted';
 
+// Onboarding tour completion + the dedicated install pop-up that fires AFTER it
+// (so the two first-run modals never stack). The overlay shown-once key is v3 —
+// bumped from the deleted overlay's v2 so every user gets one shot at the new,
+// correctly-sequenced pop-up.
+export const TOUR_COMPLETE_KEY = 'neurowiki:tour-complete:v1';
+export const TOUR_COMPLETE_EVENT = 'neurowiki:tour-complete';
+export const INSTALL_OVERLAY_SHOWN_KEY = 'neurowiki:install-overlay:v3';
+
 export interface StoredDisclaimer {
   version: string;
   acceptedAt: string;

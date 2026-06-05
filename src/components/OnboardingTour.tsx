@@ -5,11 +5,10 @@
  * some apps do? where it highlights how to click through the app?"
  *
  * A centered carousel walking the clinician through the major surfaces
- * (pathways, calculators, trials, save case, timestamp tracker) plus a final
- * "add to your phone" install slide when the device can install (Android prompt,
- * iOS Safari steps, iOS non-Safari → Open in Safari). The install slide is the
- * single home for the "save to home screen" prompt now that the standalone
- * install overlay is gone.
+ * (pathways, calculators, trials, save case, timestamp tracker). The install
+ * ("add to your phone") prompt is a SEPARATE pop-up (InstallPromptOverlay) that
+ * fires after the tour finishes or is skipped — on dismiss the tour emits
+ * TOUR_COMPLETE_EVENT so the two first-run modals never stack.
  *
  * Trigger gates (all must be true):
  *   - Disclaimer accepted (the `neurowiki:disclaimer:v1` flag, set by the
@@ -23,12 +22,13 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { X, Activity, Calculator, BookOpen, Bookmark, Clock, ArrowRight, Download } from 'lucide-react';
-import { usePwaInstall } from '../hooks/usePwaInstall';
-import { InstallActions } from './InstallActions';
-import { installApplies, DISCLAIMER_FLAG_KEY, DISCLAIMER_ACCEPTED_EVENT } from '../lib/consent';
-
-const TOUR_COMPLETE_KEY = 'neurowiki:tour-complete:v1';
+import { X, Activity, Calculator, BookOpen, Bookmark, Clock, ArrowRight } from 'lucide-react';
+import {
+  DISCLAIMER_FLAG_KEY,
+  DISCLAIMER_ACCEPTED_EVENT,
+  TOUR_COMPLETE_KEY,
+  TOUR_COMPLETE_EVENT,
+} from '../lib/consent';
 
 /** Public helper for a "Replay tour" affordance. */
 export function replayOnboardingTour(): void {
@@ -42,7 +42,6 @@ interface Slide {
   eyebrow: string;
   title: string;
   body: string;
-  isInstall?: boolean;
 }
 
 const SLIDES: Slide[] = [
@@ -78,17 +77,8 @@ const SLIDES: Slide[] = [
   },
 ];
 
-const INSTALL_SLIDE: Slide = {
-  icon: <Download className="w-7 h-7 text-neuro-600" aria-hidden />,
-  eyebrow: 'Install',
-  title: 'Add NeuroWiki to your phone',
-  body: 'Keep it one tap from your home screen — opens instantly, works offline, no browser tabs to dig through at the bedside.',
-  isInstall: true,
-};
-
 export const OnboardingTour: React.FC = () => {
   const location = useLocation();
-  const { status, ready } = usePwaInstall();
   const [eligible, setEligible] = useState(false);
   const [step, setStep] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -119,14 +109,13 @@ export const OnboardingTour: React.FC = () => {
     cardRef.current?.focus();
   }, [eligible]);
 
-  // Append the install slide once the PWA status has settled (`ready`) and the
-  // device can actually install — status drives only the slide, never whether
-  // the tour launches.
-  const slides = ready && installApplies(status) ? [...SLIDES, INSTALL_SLIDE] : SLIDES;
+  const slides = SLIDES;
 
   const dismiss = () => {
     if (typeof window !== 'undefined') {
       window.localStorage.setItem(TOUR_COMPLETE_KEY, '1');
+      // Tell the install pop-up the tour is done so it can take its turn.
+      window.dispatchEvent(new Event(TOUR_COMPLETE_EVENT));
     }
     setEligible(false);
     // Return focus where it was, or to the main landmark, so keyboard /
@@ -194,11 +183,6 @@ export const OnboardingTour: React.FC = () => {
             {slide.title}
           </h2>
           <p className="text-sm text-slate-600 leading-relaxed">{slide.body}</p>
-          {slide.isInstall && (
-            <div className="mt-4 flex flex-col items-center">
-              <InstallActions variant="tour" />
-            </div>
-          )}
         </div>
 
         {/* Progress dots */}
