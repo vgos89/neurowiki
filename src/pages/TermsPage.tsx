@@ -1,4 +1,4 @@
-// Terms of Use — NeuroWiki
+// Terms of Use - NeuroWiki
 // Minimum required clauses per compliance-public-medical skill.
 // Last reviewed: 2026-05-13
 
@@ -29,7 +29,7 @@ export default function TermsPage() {
         </p>
       </div>
 
-      {/* Clinical safety notice — prominent. Rewritten 2026-05-19 per V audit
+      {/* Clinical safety notice, prominent. Rewritten 2026-05-19 per V audit
           to drop AI-fingerprint patterns (negative parallelism "supports X.
           It does not replace X."; rule-of-three "scores, pathways, and dosing";
           vague-formal "any/solely/do not"). Clinical voice instead. */}
@@ -39,7 +39,7 @@ export default function TermsPage() {
         </p>
         <p className="text-sm text-amber-700 leading-relaxed">
           Cross-check scores and dosing against your hospital's protocol and the patient
-          in front of you before acting. Treat this as a starting point — your judgment
+          in front of you before acting. Treat this as a starting point. Your judgment
           closes the loop.
         </p>
       </div>

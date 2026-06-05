@@ -1,6 +1,6 @@
-// Privacy Policy — NeuroWiki
+// Privacy Policy for NeuroWiki
 // Discloses all data collection per compliance-public-medical skill §GDPR/CCPA requirements.
-// Last reviewed: 2026-05-19b — compliance-legal HIPAA review (artifact at
+// Last reviewed: 2026-05-19b. Compliance-legal HIPAA review (artifact at
 // docs/reviews/compliance-hipaa-saved-cases-2026-05-19.md) revised the
 // CE/BA framing, added clinician-actionable HIPAA disclosure for Save Case,
 // described the relative-vs-absolute timestamp storage option, fixed the
@@ -50,8 +50,8 @@ export default function PrivacyPage() {
           <span className="font-medium text-slate-700">not</span> a statement that the data you
           enter cannot be PHI under your own hospital's HIPAA obligations. When you use the
           Save Case feature, you may store clinical context (scores, timestamps, vitals) on
-          this device alongside patient initials. That combination — particularly absolute
-          stroke timestamps paired with initials — may constitute PHI under your hospital's
+          this device alongside patient initials. That combination, particularly absolute
+          stroke timestamps paired with initials, may constitute PHI under your hospital's
           policy. The "Saved cases" section below describes exactly what is stored and how to
           reduce identifiability. You remain responsible for using this tool in a way
           consistent with your institution's rules. If uncertain, check with your hospital's
@@ -76,7 +76,7 @@ export default function PrivacyPage() {
               {[
                 ['Google Analytics events', 'Google servers', 'Usage analytics: page views, feature use', 'Google default: 26 months'],
                 ['Cookie consent decision', 'Your browser (neurowiki:consent)', 'Controls whether GA loads', 'Until you clear browser storage'],
-                ['Favourite trials', 'Your browser (neurowiki:favs)', 'Saves starred trials between sessions', 'Until you clear browser storage'],
+                ['Favorite trials', 'Your browser (neurowiki:favs)', 'Saves starred trials between sessions', 'Until you clear browser storage'],
                 ['Recently viewed', 'Your browser (neurowiki:recents:v1)', 'Powers the recents list', 'Until you clear browser storage'],
                 ['Disclaimer acknowledged', 'Your browser (neurowiki:disclaimer:v1)', 'Suppresses the first-visit disclaimer', 'Until you clear browser storage'],
                 ['Feedback submissions', 'Resend (email relay) → operator inbox', 'Delivers your feedback to the team', 'Email provider retention policy'],
@@ -96,7 +96,7 @@ export default function PrivacyPage() {
         </div>
 
         <p className="mt-3 font-medium text-slate-700">
-          No user accounts. No passwords. No server-side patient data — Saved Cases live only
+          No user accounts. No passwords. No server-side patient data. Saved Cases live only
           on your device, and the Cross-device transfer relay holds nothing but opaque
           ciphertext for at most 15 minutes.
         </p>
@@ -104,7 +104,7 @@ export default function PrivacyPage() {
 
       <Section title="Google Analytics">
         <p>
-          When you consent, Google Analytics 4 loads. IP anonymisation is on. Your full IP
+          When you consent, Google Analytics 4 loads. IP anonymization is on. Your full IP
           address is never sent to Google. To block GA entirely, use the{' '}
           <a
             href="https://tools.google.com/dlpage/gaoptout"
@@ -139,7 +139,7 @@ export default function PrivacyPage() {
       <Section title="Saved cases (My Cases)">
         <p>
           The Save Case feature lets you keep a calculator result on this device for later
-          reference — useful when you're moving between patients on a shift. Cases live in your
+          reference, useful when you're moving between patients on a shift. Cases live in your
           browser's IndexedDB store, on this device only, and are never uploaded to NeuroWiki
           servers (we don't have any user-data servers).
         </p>
@@ -156,16 +156,16 @@ export default function PrivacyPage() {
           <span className="font-medium text-slate-700">How timestamp storage is chosen.</span> The save dialog picks a sensible default based on what you captured. If you stamped at least one stroke-code timestamp during the session, it defaults to keeping wall-clock times so door-to-needle metrics work. If you stamped nothing, it defaults to elapsed offsets like "+12m from anchor" so the saved record can't be tied to a specific time of day. Either way the checkbox is right there before you save.
         </p>
         <p>
-          <span className="font-medium text-slate-700">HIPAA — what this means for you.</span> NeuroWiki is not a Covered Entity or Business Associate under HIPAA, and we never receive Saved Cases on our servers. However, the combination of initials with clinical context (scores, timestamps, vitals) can constitute Protected Health Information under your hospital's own HIPAA obligations, particularly when absolute stroke timestamps are stored. You are responsible for determining whether using Save Case is consistent with your institution's privacy policy. If uncertain, ask your hospital's privacy officer. The elapsed-offsets default exists to reduce that exposure; the absolute-timestamps opt-in exists for cases where quality-metric documentation requires it.
+          <span className="font-medium text-slate-700">HIPAA: what this means for you.</span> NeuroWiki is not a Covered Entity or Business Associate under HIPAA, and we never receive Saved Cases on our servers. However, the combination of initials with clinical context (scores, timestamps, vitals) can constitute Protected Health Information under your hospital's own HIPAA obligations, particularly when absolute stroke timestamps are stored. You are responsible for determining whether using Save Case is consistent with your institution's privacy policy. If uncertain, ask your hospital's privacy officer. The elapsed-offsets default exists to reduce that exposure; the absolute-timestamps opt-in exists for cases where quality-metric documentation requires it.
         </p>
         <p>
-          <span className="font-medium text-slate-700">Legacy notes.</span> Earlier versions of NeuroWiki offered an optional free-text "Note" field at save time. That input was removed in May 2026 because nothing prevented a clinician typing a full name into it — a HIPAA-uncomfortable risk. Saved cases created before the change may still display their note text in the case detail view; new cases will have no note.
+          <span className="font-medium text-slate-700">Legacy notes.</span> Earlier versions of NeuroWiki offered an optional free-text "Note" field at save time. That input was removed in May 2026 because nothing prevented a clinician typing a full name into it, a HIPAA-uncomfortable risk. Saved cases created before the change may still display their note text in the case detail view; new cases will have no note.
         </p>
         <p>
           <span className="font-medium text-slate-700">How to delete:</span> open My Cases
           (bookmark icon on any calculator → Save → row appears at <code className="bg-slate-100 px-1 rounded text-xs">/my-cases</code>),
           tap the trash icon on a row, or tap "Clear all" to wipe everything. You can also clear
-          your browser's site data for neurowiki.ai — this removes all saved cases plus every
+          your browser's site data for neurowiki.ai. This removes all saved cases plus every
           other local-storage item NeuroWiki uses.
         </p>
       </Section>
@@ -175,7 +175,7 @@ export default function PrivacyPage() {
           If you save cases on your phone and want to view them on a desktop browser (or
           vice-versa), the Send feature creates a short-lived encrypted package on a relay
           server. NeuroWiki uses Supabase as the relay. The server only ever holds opaque
-          ciphertext and a couple of public keys — it never sees your initials, scores, or
+          ciphertext and a couple of public keys. It never sees your initials, scores, or
           timestamps in plaintext.
         </p>
         <p>
@@ -187,7 +187,7 @@ export default function PrivacyPage() {
           polls for the blob, decrypts it with its local private key, and deletes the relay
           row. <span className="font-medium text-slate-700">The receiver's private key never
           leaves the receiver's device.</span> Even Supabase or a network interceptor with the
-          code cannot decrypt — they would need to break P-256 elliptic-curve cryptography.
+          code cannot decrypt. They would need to break P-256 elliptic-curve cryptography.
         </p>
         <p>
           <span className="font-medium text-slate-700">How long it sits on the server:</span>{' '}
@@ -205,7 +205,7 @@ export default function PrivacyPage() {
           successful decrypt.
         </p>
         <p>
-          The transfer feature is optional. It only runs when you initiate it — Save Case alone
+          The transfer feature is optional. It only runs when you initiate it. Save Case alone
           never touches a server.
         </p>
       </Section>
@@ -226,16 +226,16 @@ export default function PrivacyPage() {
         </p>
         <ul className="list-disc pl-5 space-y-1.5">
           <li>
-            <span className="font-medium text-slate-700">Google Analytics</span> — IP-anonymised
+            <span className="font-medium text-slate-700">Google Analytics:</span> IP-anonymized
             event data, controlled via the GA opt-out tool above.
           </li>
           <li>
             <span className="font-medium text-slate-700">Cross-device transfer relay
-            (Supabase)</span> — only present when you explicitly initiate a transfer. Encrypted
+            (Supabase):</span> only present when you explicitly initiate a transfer. Encrypted
             blob, ≤15-minute lifetime, deleted on first read or automatic purge.
           </li>
           <li>
-            <span className="font-medium text-slate-700">Feedback emails (Resend)</span> — only
+            <span className="font-medium text-slate-700">Feedback emails (Resend):</span> only
             present when you submit feedback.
           </li>
         </ul>

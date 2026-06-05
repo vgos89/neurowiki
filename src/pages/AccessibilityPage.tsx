@@ -1,4 +1,4 @@
-// Accessibility Statement — NeuroWiki
+// Accessibility Statement - NeuroWiki
 // WCAG 2.1 AA commitment, known implementations, contact for issues.
 // Last reviewed: 2026-05-13
 
@@ -109,11 +109,11 @@ export default function AccessibilityPage() {
       <Section title="Known gaps">
         <p>Two areas are still in progress:</p>
         <ul className="list-disc list-inside space-y-1.5 mt-2 text-slate-500">
-          <li>Chart components (trial result visualisations): text alternatives pending</li>
+          <li>Chart components (trial result visualizations): text alternatives pending</li>
           <li>Complex data tables on trial pages: full header association markup pending</li>
         </ul>
         <p className="mt-3">
-          Report any barrier not listed here and we will prioritise a fix.
+          Report any barrier not listed here and we will prioritize a fix.
         </p>
       </Section>
 
