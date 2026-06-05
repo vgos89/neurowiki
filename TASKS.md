@@ -266,19 +266,18 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Rollback plan:** git revert single commit.
 
 ### scanner-paragraph-surface-support — Class C [filed 2026-06-02, from clinical review]
-- **Status:** [ ] open — P2. Non-blocking follow-up from clinical-PR-fxa-andexanet-withdrawal-bedside-2026-06-02.md.
-- **Goal:** The guide-page `<Paragraph>` component does not accept/spread a `data-claim` attribute, so clinical prose authored inside `<Paragraph detail=…>` (e.g. the corrected FXa-reversal text in IchManagement.tsx and the pre-tPA contraindication text in IvTpa.tsx) cannot carry a scannable claim tag. The text is correct and the claim is declared, but a future edit to those sentences will not trip the pre-commit claim scanner — a silent-drift risk on contraindication/reversal copy.
-- **Action:** data-architect to extend the scanner (CLAUDE.md §13.3/§13.4) with a Phase-3 composition-site handler so `<Paragraph detail=>` clinical prose becomes taggable. Then retro-tag the two guide surfaces.
+- **Status:** [~] partial — P2. Component enablement DONE (commit e72e62a, 2026-06-05): Paragraph now accepts + renders a `data-claim` prop. Finding: the scanner needs NO extension — its `jsx` pattern already matches `data-claim` on any element; the only gap was the component rejecting the prop (tsc error). REMAINING: retro-tag the two surfaces (clinical-reviewer-gated).
+- **Goal:** The guide-page `<Paragraph>` component did not accept/spread a `data-claim` attribute, so clinical prose authored inside `<Paragraph detail=…>` (e.g. the corrected FXa-reversal text in IchManagement.tsx and the pre-tPA contraindication text in IvTpa.tsx) could not carry a scannable claim tag. The text is correct and the claim is declared, but a future edit to those sentences would not trip the pre-commit claim scanner — a silent-drift risk on contraindication/reversal copy.
+- **Action (remaining):** retro-tag IchManagement.tsx (FXa-reversal) + IvTpa.tsx (pre-tPA contraindication) by adding `data-claim="<claim-id>"` to the relevant Paragraph, AND add a matching `jsx` surface to each claim in claims.ts so the scanner's bidirectional Check 2 stays balanced. Route the prose→claim-ID mapping through clinical-reviewer (it is clinical contraindication/reversal copy). No scanner code change needed.
 - **Clinical impact:** none now (text correct); prevents future undetected drift.
 
 ### AGENT GOVERNANCE
 
-- [ ] [P2] Implement full task-class-aware clinical edit gate for guard-clinical-edit.mjs
-  Currently advisory (exits 0 with warning to stderr). Needs TASKS.md ACTIVE section
-  parsing to detect the current task class. Allow Class E/-clinical edits; emit a
-  stronger warning (but still exit 0) for unclassified clinical surface edits.
+- [x] [P2] Implement task-class-aware clinical edit gate for guard-clinical-edit.mjs — DONE commit 63b6228 (2026-06-05).
+  guard-clinical-edit.mjs now walks up from the edited file to find TASKS.md, reads the ## ACTIVE
+  section, and stays silent when a Class E or -clinical task is active; warns (still exit 0) for
+  clinical-surface edits otherwise. Remains advisory (never blocks).
   File: scripts/claude-hooks/guard-clinical-edit.mjs
-  See: agent-governance-modernization-2026 follow-up
 
 ### LAYER 2 — Stroke Pathway (do in order)
 - [x] [L2] Fix stroke pathway page header — commit c379146
@@ -883,7 +882,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 #### Phase 4F — Privacy page data-inventory completeness — Class C
 - **Priority:** P2
-- **Status:** [ ] open (deferred from the 2026-06-04 PrivacyPage key-name fix, commit 7195306)
+- **Status:** [x] done — commit f4cb1e7 (2026-06-05). Table is category-complete (grouped "App preferences and first-run flags" row + restored completeness statement); compliance-legal approve (docs/reviews/compliance-phase4f-privacy-inventory.md).
 - **User-visible goal:** the /privacy "What data we collect" table accurately and completely accounts for every persistent storage key, so the page can again make a truthful exhaustiveness statement (the "Nothing is omitted" line was removed in 7195306 because it was false)
 - **Context:** 7195306 corrected 3 misnamed keys (consent → `neurowiki-analytics-consent`, favorites → `neurowiki:favorites:v1`, disclaimer → `neurowiki-disclaimer-accepted`), fixed the consent-revoke instruction, and dropped the false "Nothing is omitted" claim. Full enumeration deferred to here.
 - **Undisclosed keys to triage + document (localStorage unless noted):** `neurowiki:disclaimer:v1` (first-run flag) · `neurowiki:install-overlay:v1`+`:v2` (install overlay shown-once) · `neurowiki:tour-complete:v1` (onboarding tour) · `neurowiki:install-engagement:v1` (engagement counters) · `neurowiki:session-counted:v1` (sessionStorage) · `neurowiki:em-billing:provider` (⚠️ stores a clinician/provider name — mild PII, confirm disclosure scope) · `neurowiki:home:hasVisited` · `neurowiki:home:showMoreExpanded` · `neurowiki:search:recents` · `neurowiki-sidebar-tools` · `neurowiki-json-ld` · `neurowiki-case-transfer-v1` (local half of cross-device transfer) · BottomLineDrawer sessionStorage hint key · StrokeBasicsWorkflowV2 + EmBillingCalculator sessionStorage `SESSION_KEY`
@@ -1157,6 +1156,12 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-06-05 — Actionable follow-ups batch (Wave 1 + Wave 2 from the pending re-verify) — Class C (commits 5b4fad9, 63b6228, f4cb1e7, e72e62a)
+  - Wave 1 (5b4fad9): focus-trap parity — OnboardingTour + InstallPromptOverlay now use the shared useModalFocusTrap (adds the Tab-cycle trap both lacked); a persistent footer "Replay tour" link wired to consent.replayTour; trackDisclaimerShown/Acknowledged self-guard on consent not being 'declined'. Dead replayOnboardingTour export removed.
+  - Wave 2a (63b6228): guard-clinical-edit.mjs is now task-class-aware — walks up to TASKS.md, reads ## ACTIVE, stays silent when a Class E/-clinical task is active, warns otherwise. Still advisory (exit 0, never blocks).
+  - Wave 2b (f4cb1e7): Phase 4F — Privacy data-inventory now category-complete (grouped "App preferences and first-run flags" row, no PII; restored "every category is listed" statement). compliance-legal approve. Corrected an earlier note: em-billing:provider is a sessionStorage role enum (not PII); case-transfer-v1 + json-ld are not stored keys.
+  - Wave 2c (e72e62a): Paragraph now accepts a data-claim prop so guide prose is scannable. Finding: the scanner needed no change (its jsx pattern is element-agnostic); the gap was the component prop. Retro-tag of IchManagement/IvTpa deferred to a clinical-reviewer-gated follow-up (scanner entry now [~] partial).
+  - Gates: tsc clean, 166/166 tests, check:humanizer PASS (no em-dashes), check:claims/routes/card-meta green. Wave 1 Gate 6 live-verify PASS; Wave 2 verified on push below.
 - [x] 2026-06-05 — Geo-gated analytics consent: opt-in EU/UK/CH/BR, default-on elsewhere — Class D (commit 374ecc3)
   - V follow-up: opt-in-everywhere analytics was tanking GA coverage. Made consent geo-gated. Strict opt-in regions = EU-27 + EEA + UK + Switzerland + Brazil (Brazil per V's decision); default-on (notice + opt-out) for US/India/rest of world; unknown region fails safe to opt-in. Search Console unaffected throughout.
   - Mechanism: /api/geo serverless fn returns the country from Vercel x-vercel-ip-country (Cache-Control no-store; HTML stays CDN-cacheable). consent.ts owns STRICT_COUNTRIES + regionForCountry + analyticsEnabled (single rule, unit-tested). useConsentRegion caches the country so later visits resolve with no fetch and no flash.
