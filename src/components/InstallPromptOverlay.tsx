@@ -11,9 +11,11 @@
  *      neurowiki:disclaimer:v1 set in localStorage.
  *   2. This overlay mounts on the next render, checks: disclaimer
  *      acknowledged AND prompt not previously shown AND device is
- *      installable (Android/Chrome) or iOS Safari (manual).
+ *      installable (Android/Chrome), iOS Safari (manual), or iOS
+ *      non-Safari (Open in Safari + copy-link fallback).
  *   3. User taps "Add to home screen" → programmatic prompt fires
- *      (Android) or IosInstallSheet opens (iOS) → overlay closes.
+ *      (Android), IosInstallSheet opens (iOS Safari), or Safari is
+ *      launched (iOS non-Safari) → overlay closes.
  *   4. User taps "Maybe later" → overlay closes, never re-shows.
  *
  * Dedupe: localStorage key `neurowiki:install-overlay:v1` set as
@@ -31,6 +33,11 @@ import { usePwaInstall } from '../hooks/usePwaInstall';
 import { IosInstallSheet } from './IosInstallSheet';
 
 const DISCLAIMER_KEY = 'neurowiki:disclaimer:v1';
+// Fired by DisclaimerModal the instant a user accepts (and on backfill for
+// users who accepted before the flag existed). Lets this overlay surface
+// immediately without a reload — its own effect only re-runs when `status`
+// changes, which won't happen at the moment of acceptance.
+const DISCLAIMER_ACCEPTED_EVENT = 'neurowiki:disclaimer-accepted';
 // Bumped v1 → v2 on 2026-05-20 per V iPhone user-testing feedback ("I do
 // not see the PWA add to home screen jump out") — early testers
 // permanently dismissed the v1 overlay. Bumping the key forces a single
@@ -38,18 +45,26 @@ const DISCLAIMER_KEY = 'neurowiki:disclaimer:v1';
 const OVERLAY_SHOWN_KEY = 'neurowiki:install-overlay:v2';
 
 export const InstallPromptOverlay: React.FC = () => {
-  const { status, promptInstall } = usePwaInstall();
+  const { status, promptInstall, openInSafari, copyAppLink } = usePwaInstall();
   const [eligible, setEligible] = useState(false);
   const [showIosSheet, setShowIosSheet] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  // Check eligibility on mount + when status resolves.
+  // Check eligibility on mount, when status resolves, and when the disclaimer
+  // is accepted (the event covers the no-reload, just-accepted case).
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const disclaimerAcked = window.localStorage.getItem(DISCLAIMER_KEY) === '1';
-    const alreadyShown = window.localStorage.getItem(OVERLAY_SHOWN_KEY) === '1';
-    const canInstall = status === 'installable' || status === 'ios-manual';
-    setEligible(disclaimerAcked && !alreadyShown && canInstall);
+    const recheck = () => {
+      const disclaimerAcked = window.localStorage.getItem(DISCLAIMER_KEY) === '1';
+      const alreadyShown = window.localStorage.getItem(OVERLAY_SHOWN_KEY) === '1';
+      const canInstall =
+        status === 'installable' || status === 'ios-manual' || status === 'ios-other-browser';
+      setEligible(disclaimerAcked && !alreadyShown && canInstall);
+    };
+    recheck();
+    window.addEventListener(DISCLAIMER_ACCEPTED_EVENT, recheck);
+    return () => window.removeEventListener(DISCLAIMER_ACCEPTED_EVENT, recheck);
   }, [status]);
 
   // Mark shown once we render — never re-prompt even if user does nothing.
@@ -66,6 +81,12 @@ export const InstallPromptOverlay: React.FC = () => {
   }
 
   const handleInstall = async () => {
+    if (status === 'ios-other-browser') {
+      // Try to bounce into Safari; keep the overlay up so the copy-link
+      // fallback stays reachable if the bounce is blocked on older iOS.
+      openInSafari();
+      return;
+    }
     if (status === 'ios-manual') {
       setShowIosSheet(true);
       return;
@@ -73,6 +94,14 @@ export const InstallPromptOverlay: React.FC = () => {
     if (status === 'installable') {
       await promptInstall();
       setDismissed(true);
+    }
+  };
+
+  const handleCopyLink = async () => {
+    const ok = await copyAppLink();
+    if (ok) {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -153,8 +182,32 @@ export const InstallPromptOverlay: React.FC = () => {
             onClick={handleInstall}
             className="w-full min-h-[44px] px-6 py-3 rounded-full text-sm font-semibold bg-neuro-500 text-white hover:bg-neuro-600 active:bg-neuro-700 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:ring-offset-2 focus-visible:outline-none"
           >
-            {status === 'ios-manual' ? 'Show how to add' : 'Add to home screen'}
+            {status === 'ios-other-browser'
+              ? 'Open in Safari'
+              : status === 'ios-manual'
+              ? 'Show how to add'
+              : 'Add to home screen'}
           </button>
+
+          {/* iOS non-Safari: Add to Home Screen is Safari-only, so offer a
+              copy-link fallback for when the Safari bounce is blocked. */}
+          {status === 'ios-other-browser' && (
+            <>
+              <button
+                type="button"
+                onClick={handleCopyLink}
+                className="w-full min-h-[44px] px-6 py-2.5 rounded-full text-sm font-semibold border border-neuro-300 text-neuro-700 hover:bg-neuro-50 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:ring-offset-2 focus-visible:outline-none"
+              >
+                {copied ? 'Link copied' : 'Copy link'}
+              </button>
+              <p className="text-xs text-slate-500 leading-relaxed text-center px-2">
+                On iPhone, Add to Home Screen only works in Safari. Tap{' '}
+                <span className="font-semibold text-slate-700">Open in Safari</span> — or copy the
+                link, paste it into Safari, then tap Share &rarr; Add to Home Screen.
+              </p>
+            </>
+          )}
+
           <button
             type="button"
             onClick={() => setDismissed(true)}

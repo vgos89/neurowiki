@@ -1,11 +1,28 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Smartphone, Download } from 'lucide-react';
+import { Smartphone, Download, Compass } from 'lucide-react';
 import { getStorageItem, setStorageItem } from '../utils/storage';
 import { usePwaInstall } from '../hooks/usePwaInstall';
 import { IosInstallSheet } from './IosInstallSheet';
 
 const DISCLAIMER_STORAGE_KEY = 'neurowiki-disclaimer-accepted';
 const DISCLAIMER_VERSION = '3.0'; // Bumped from 2.0 to force re-acceptance per compliance-legal HIPAA review (2026-05-19): the "no identifiable patient data" claim was revised to "no name, MRN, or DOB" + an honest acknowledgement that clinical context stored via Save Case may constitute PHI under the clinician's hospital's HIPAA policy.
+
+// The JSON acceptance record above lives under DISCLAIMER_STORAGE_KEY. The
+// install overlay (InstallPromptOverlay) and onboarding tour (OnboardingTour)
+// instead gate on this simple '1' flag. We write it on accept AND backfill it
+// on mount for users who accepted before the flag existed — without it, those
+// first-run surfaces silently never appear. The event lets them surface
+// immediately, without waiting for a reload.
+const DISCLAIMER_ACK_FLAG_KEY = 'neurowiki:disclaimer:v1';
+const DISCLAIMER_ACCEPTED_EVENT = 'neurowiki:disclaimer-accepted';
+
+/** Mirror disclaimer acceptance into the first-run flag + notify listeners. */
+function markDisclaimerAckFlag(): void {
+  if (typeof window === 'undefined') return;
+  if (window.localStorage.getItem(DISCLAIMER_ACK_FLAG_KEY) === '1') return;
+  window.localStorage.setItem(DISCLAIMER_ACK_FLAG_KEY, '1');
+  window.dispatchEvent(new Event(DISCLAIMER_ACCEPTED_EVENT));
+}
 
 interface StoredDisclaimer {
   version: string;
@@ -24,16 +41,30 @@ export const DisclaimerModal: React.FC = () => {
 
   // PWA install — surfaced inside the disclaimer modal so first-time
   // visitors are nudged to add the app immediately after they accept terms.
-  const { status, promptInstall } = usePwaInstall();
-  const canShowInstall = status === 'installable' || status === 'ios-manual';
+  const { status, promptInstall, openInSafari, copyAppLink } = usePwaInstall();
+  const [copiedLink, setCopiedLink] = useState(false);
+  const canShowInstall =
+    status === 'installable' || status === 'ios-manual' || status === 'ios-other-browser';
 
   const handleAddApp = async () => {
+    if (status === 'ios-other-browser') {
+      openInSafari();
+      return;
+    }
     if (status === 'ios-manual') {
       setShowIosSheet(true);
       return;
     }
     if (status === 'installable') {
       await promptInstall();
+    }
+  };
+
+  const handleCopyLink = async () => {
+    const ok = await copyAppLink();
+    if (ok) {
+      setCopiedLink(true);
+      window.setTimeout(() => setCopiedLink(false), 2000);
     }
   };
 
@@ -45,6 +76,9 @@ export const DisclaimerModal: React.FC = () => {
         const data: StoredDisclaimer = JSON.parse(stored);
         if (data.version === DISCLAIMER_VERSION) {
           setIsOpen(false);
+          // Backfill the first-run flag for users who accepted before it
+          // existed, so the install overlay + onboarding tour can light up.
+          markDisclaimerAckFlag();
           return;
         }
       } catch {
@@ -115,6 +149,8 @@ export const DisclaimerModal: React.FC = () => {
       userAgent: navigator.userAgent,
     };
     setStorageItem(DISCLAIMER_STORAGE_KEY, JSON.stringify(data));
+    // Light up the first-run install overlay + onboarding tour immediately.
+    markDisclaimerAckFlag();
     // Fire GA4 compliance event. Lazy-import keeps modal bundle small.
     import('../utils/analytics').then(({ trackDisclaimerAcknowledged }) => {
       trackDisclaimerAcknowledged();
@@ -264,16 +300,43 @@ export const DisclaimerModal: React.FC = () => {
                   Add NeuroWiki app to your phone
                 </p>
                 <p className="text-xs text-slate-500 mt-0.5 leading-snug">
-                  Open it instantly from your home screen, even offline.
+                  {status === 'ios-other-browser'
+                    ? 'Add to Home Screen works in Safari on iPhone. Open it there to install.'
+                    : 'Open it instantly from your home screen, even offline.'}
                 </p>
-                <button
-                  type="button"
-                  onClick={handleAddApp}
-                  className="mt-2 min-h-[36px] px-3 py-1.5 rounded-full bg-white border border-neuro-300 hover:bg-neuro-50 text-neuro-700 text-xs font-semibold transition-colors inline-flex items-center gap-1.5"
-                >
-                  <Download className="w-3 h-3" aria-hidden />
-                  Add app
-                </button>
+                {status === 'ios-other-browser' ? (
+                  <>
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handleAddApp}
+                        className="min-h-[36px] px-3 py-1.5 rounded-full bg-neuro-500 hover:bg-neuro-600 text-white text-xs font-semibold transition-colors inline-flex items-center gap-1.5"
+                      >
+                        <Compass className="w-3 h-3" aria-hidden />
+                        Open in Safari
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCopyLink}
+                        className="min-h-[36px] px-3 py-1.5 rounded-full bg-white border border-neuro-300 hover:bg-neuro-50 text-neuro-700 text-xs font-semibold transition-colors inline-flex items-center gap-1.5"
+                      >
+                        {copiedLink ? 'Link copied' : 'Copy link'}
+                      </button>
+                    </div>
+                    <p className="text-[11px] text-slate-400 mt-1.5 leading-snug">
+                      Then in Safari tap Share &rarr; Add to Home Screen.
+                    </p>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleAddApp}
+                    className="mt-2 min-h-[36px] px-3 py-1.5 rounded-full bg-white border border-neuro-300 hover:bg-neuro-50 text-neuro-700 text-xs font-semibold transition-colors inline-flex items-center gap-1.5"
+                  >
+                    <Download className="w-3 h-3" aria-hidden />
+                    Add app
+                  </button>
+                )}
               </div>
             </div>
           )}

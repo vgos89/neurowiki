@@ -27,9 +27,15 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { X, Activity, Calculator, BookOpen, Bookmark, Clock, ArrowRight } from 'lucide-react';
+import { usePwaInstall } from '../hooks/usePwaInstall';
 
 const DISCLAIMER_KEY = 'neurowiki:disclaimer:v1';
 const TOUR_COMPLETE_KEY = 'neurowiki:tour-complete:v1';
+// Mirror of InstallPromptOverlay's keys/event so the tour can sequence behind
+// the install overlay — the two share the disclaimer-ack flag, so without this
+// coordination both would become eligible on the same home load and stack.
+const OVERLAY_SHOWN_KEY = 'neurowiki:install-overlay:v2';
+const DISCLAIMER_ACCEPTED_EVENT = 'neurowiki:disclaimer-accepted';
 
 /** Public helper for the disclaimer modal's "Replay tour" link. */
 export function replayOnboardingTour(): void {
@@ -83,18 +89,41 @@ const SLIDES: Slide[] = [
 
 export const OnboardingTour: React.FC = () => {
   const location = useLocation();
+  const { status, ready } = usePwaInstall();
   const [eligible, setEligible] = useState(false);
   const [step, setStep] = useState(0);
 
-  // Re-check eligibility on each route change. The tour only auto-launches
-  // on the home route; deep-linked first visits won't get ambushed.
+  // Re-check eligibility on route change, when the install status settles, and
+  // when the disclaimer is accepted. The tour only auto-launches on the home
+  // route (deep-linked first visits aren't ambushed) AND only once the install
+  // overlay has had its turn — so the two first-run modals never stack.
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const disclaimerAcked = window.localStorage.getItem(DISCLAIMER_KEY) === '1';
-    const tourDone = window.localStorage.getItem(TOUR_COMPLETE_KEY) === '1';
-    const onHome = location.pathname === '/' || location.pathname === '/home';
-    setEligible(disclaimerAcked && !tourDone && onHome);
-  }, [location.pathname]);
+    const recheck = () => {
+      const disclaimerAcked = window.localStorage.getItem(DISCLAIMER_KEY) === '1';
+      const tourDone = window.localStorage.getItem(TOUR_COMPLETE_KEY) === '1';
+      const onHome = location.pathname === '/' || location.pathname === '/home';
+      if (!disclaimerAcked || tourDone || !onHome) {
+        setEligible(false);
+        return;
+      }
+      // Wait until the PWA install status is settled before judging whether the
+      // overlay applies (Chrome's beforeinstallprompt is async).
+      if (!ready) {
+        setEligible(false);
+        return;
+      }
+      const overlayShown = window.localStorage.getItem(OVERLAY_SHOWN_KEY) === '1';
+      const overlayApplicable =
+        status === 'installable' || status === 'ios-manual' || status === 'ios-other-browser';
+      // Show the tour once the overlay has shown, or when it will never apply
+      // on this device (e.g. desktop, or already installed).
+      setEligible(overlayShown || !overlayApplicable);
+    };
+    recheck();
+    window.addEventListener(DISCLAIMER_ACCEPTED_EVENT, recheck);
+    return () => window.removeEventListener(DISCLAIMER_ACCEPTED_EVENT, recheck);
+  }, [location.pathname, status, ready]);
 
   const dismiss = () => {
     if (typeof window !== 'undefined') {
