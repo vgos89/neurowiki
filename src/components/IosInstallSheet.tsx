@@ -36,7 +36,7 @@ export const IosInstallSheet: React.FC<IosInstallSheetProps> = ({ isOpen, onClos
         {/* Header */}
         <div className="px-5 pt-5 pb-3 flex items-start justify-between gap-3">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">
               Add to phone
             </p>
             <h2 id="ios-install-title" className="text-base font-semibold text-slate-900 tracking-tight">

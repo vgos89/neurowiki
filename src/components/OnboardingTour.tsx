@@ -4,46 +4,36 @@
  * V feedback 2026-05-20: "Can we do tutorials for first time users that
  * some apps do? where it highlights how to click through the app?"
  *
- * Approach: a centered carousel of 5 slides walking the clinician through
- * the major surfaces (pathways, calculators, trials, save case,
- * timestamp tracker). No DOM-anchored spotlight — that pattern is fragile
- * across viewports and the home page is the right place to introduce the
- * navigation in plain language anyway. Each slide has a title, a short
- * description, and a representative icon.
+ * A centered carousel walking the clinician through the major surfaces
+ * (pathways, calculators, trials, save case, timestamp tracker) plus a final
+ * "add to your phone" install slide when the device can install (Android prompt,
+ * iOS Safari steps, iOS non-Safari → Open in Safari). The install slide is the
+ * single home for the "save to home screen" prompt now that the standalone
+ * install overlay is gone.
  *
  * Trigger gates (all must be true):
- *   - Disclaimer modal acknowledged (neurowiki:disclaimer:v1).
- *   - Tour not previously completed or dismissed
- *     (neurowiki:tour-complete:v1).
- *   - On the home route only on first open (so the tour doesn't ambush a
- *     clinician mid-pathway; deep-linked first visits skip it until they
- *     return to home).
+ *   - Disclaimer accepted (the `neurowiki:disclaimer:v1` flag, set by the
+ *     FirstRunConsentBar on Continue / backfilled on mount).
+ *   - Tour not previously completed/dismissed (neurowiki:tour-complete:v1).
+ *   - On the home route only (deep-linked first visits aren't ambushed).
  *
- * Replay: any consumer can call `replayOnboardingTour()` to clear the
- * localStorage flag and force the tour to re-trigger on next home visit.
- * DisclaimerModal exposes a "Replay tour" link.
+ * Replay: `replayOnboardingTour()` clears the flag and returns home so the tour
+ * re-triggers.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { X, Activity, Calculator, BookOpen, Bookmark, Clock, ArrowRight } from 'lucide-react';
+import { X, Activity, Calculator, BookOpen, Bookmark, Clock, ArrowRight, Download } from 'lucide-react';
 import { usePwaInstall } from '../hooks/usePwaInstall';
+import { InstallActions } from './InstallActions';
+import { installApplies, DISCLAIMER_FLAG_KEY, DISCLAIMER_ACCEPTED_EVENT } from '../lib/consent';
 
-const DISCLAIMER_KEY = 'neurowiki:disclaimer:v1';
 const TOUR_COMPLETE_KEY = 'neurowiki:tour-complete:v1';
-// Mirror of InstallPromptOverlay's keys/event so the tour can sequence behind
-// the install overlay — the two share the disclaimer-ack flag, so without this
-// coordination both would become eligible on the same home load and stack.
-const OVERLAY_SHOWN_KEY = 'neurowiki:install-overlay:v2';
-const DISCLAIMER_ACCEPTED_EVENT = 'neurowiki:disclaimer-accepted';
 
-/** Public helper for the disclaimer modal's "Replay tour" link. */
+/** Public helper for a "Replay tour" affordance. */
 export function replayOnboardingTour(): void {
   if (typeof window === 'undefined') return;
   window.localStorage.removeItem(TOUR_COMPLETE_KEY);
-  // Force a re-render path — the cleanest way is to nudge the URL so the
-  // tour component's home-route check re-fires. The disclaimer modal can
-  // also just close itself and the user navigates home; either works.
   window.location.assign('/');
 }
 
@@ -52,6 +42,7 @@ interface Slide {
   eyebrow: string;
   title: string;
   body: string;
+  isInstall?: boolean;
 }
 
 const SLIDES: Slide[] = [
@@ -87,55 +78,72 @@ const SLIDES: Slide[] = [
   },
 ];
 
+const INSTALL_SLIDE: Slide = {
+  icon: <Download className="w-7 h-7 text-neuro-600" aria-hidden />,
+  eyebrow: 'Install',
+  title: 'Add NeuroWiki to your phone',
+  body: 'Keep it one tap from your home screen — opens instantly, works offline, no browser tabs to dig through at the bedside.',
+  isInstall: true,
+};
+
 export const OnboardingTour: React.FC = () => {
   const location = useLocation();
   const { status, ready } = usePwaInstall();
   const [eligible, setEligible] = useState(false);
   const [step, setStep] = useState(0);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const restoreFocusRef = useRef<HTMLElement | null>(null);
 
-  // Re-check eligibility on route change, when the install status settles, and
-  // when the disclaimer is accepted. The tour only auto-launches on the home
-  // route (deep-linked first visits aren't ambushed) AND only once the install
-  // overlay has had its turn — so the two first-run modals never stack.
+  // Re-check on route change and when the disclaimer is accepted (the event lets
+  // the tour launch the instant the consent bar's Continue is tapped). The tour
+  // only auto-launches on home. The install overlay it used to sequence behind
+  // is gone, so there is no overlay handshake any more.
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const recheck = () => {
-      const disclaimerAcked = window.localStorage.getItem(DISCLAIMER_KEY) === '1';
+      const disclaimerAcked = window.localStorage.getItem(DISCLAIMER_FLAG_KEY) === '1';
       const tourDone = window.localStorage.getItem(TOUR_COMPLETE_KEY) === '1';
       const onHome = location.pathname === '/' || location.pathname === '/home';
-      if (!disclaimerAcked || tourDone || !onHome) {
-        setEligible(false);
-        return;
-      }
-      // Wait until the PWA install status is settled before judging whether the
-      // overlay applies (Chrome's beforeinstallprompt is async).
-      if (!ready) {
-        setEligible(false);
-        return;
-      }
-      const overlayShown = window.localStorage.getItem(OVERLAY_SHOWN_KEY) === '1';
-      const overlayApplicable =
-        status === 'installable' || status === 'ios-manual' || status === 'ios-other-browser';
-      // Show the tour once the overlay has shown, or when it will never apply
-      // on this device (e.g. desktop, or already installed).
-      setEligible(overlayShown || !overlayApplicable);
+      setEligible(disclaimerAcked && !tourDone && onHome);
     };
     recheck();
     window.addEventListener(DISCLAIMER_ACCEPTED_EVENT, recheck);
     return () => window.removeEventListener(DISCLAIMER_ACCEPTED_EVENT, recheck);
-  }, [location.pathname, status, ready]);
+  }, [location.pathname]);
+
+  // Move focus into the dialog when it opens (proper modal pattern) and remember
+  // where focus was, so it can be returned on dismiss.
+  useEffect(() => {
+    if (!eligible) return;
+    restoreFocusRef.current = (document.activeElement as HTMLElement) ?? null;
+    cardRef.current?.focus();
+  }, [eligible]);
+
+  // Append the install slide once the PWA status has settled (`ready`) and the
+  // device can actually install — status drives only the slide, never whether
+  // the tour launches.
+  const slides = ready && installApplies(status) ? [...SLIDES, INSTALL_SLIDE] : SLIDES;
 
   const dismiss = () => {
     if (typeof window !== 'undefined') {
       window.localStorage.setItem(TOUR_COMPLETE_KEY, '1');
     }
     setEligible(false);
+    // Return focus where it was, or to the main landmark, so keyboard /
+    // screen-reader users aren't dropped to <body> when the dialog unmounts.
+    const prev = restoreFocusRef.current;
+    const target = prev && document.contains(prev) ? prev : document.querySelector('main');
+    if (target instanceof HTMLElement) {
+      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+      target.focus();
+    }
   };
 
   if (!eligible) return null;
 
-  const slide = SLIDES[step];
-  const isLast = step === SLIDES.length - 1;
+  const safeStep = Math.min(step, slides.length - 1);
+  const slide = slides[safeStep];
+  const isLast = safeStep === slides.length - 1;
 
   return (
     <div
@@ -143,6 +151,7 @@ export const OnboardingTour: React.FC = () => {
       role="dialog"
       aria-modal="true"
       aria-labelledby="onboarding-tour-title"
+      onKeyDown={(e) => { if (e.key === 'Escape') dismiss(); }}
     >
       {/* Backdrop */}
       <div
@@ -153,15 +162,22 @@ export const OnboardingTour: React.FC = () => {
 
       {/* Card */}
       <div
-        className="relative max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden"
+        ref={cardRef}
+        tabIndex={-1}
+        className="relative max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden focus:outline-none"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* SR-only live announcement so step changes are spoken */}
+        <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+          Step {safeStep + 1} of {slides.length}: {slide.title}
+        </div>
+
         {/* Skip button */}
         <button
           type="button"
           onClick={dismiss}
           aria-label="Skip tour"
-          className="absolute top-3 right-3 z-10 inline-flex items-center gap-1 text-xs font-medium text-slate-400 hover:text-slate-700 transition-colors px-2 py-1"
+          className="absolute top-2 right-2 z-10 inline-flex items-center gap-1 min-h-[44px] px-3 py-2 rounded text-xs font-medium text-slate-500 hover:text-slate-700 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
         >
           Skip <X className="w-3.5 h-3.5" aria-hidden />
         </button>
@@ -178,16 +194,21 @@ export const OnboardingTour: React.FC = () => {
             {slide.title}
           </h2>
           <p className="text-sm text-slate-600 leading-relaxed">{slide.body}</p>
+          {slide.isInstall && (
+            <div className="mt-4 flex flex-col items-center">
+              <InstallActions variant="tour" />
+            </div>
+          )}
         </div>
 
         {/* Progress dots */}
-        <div className="px-6 py-3 flex items-center justify-center gap-1.5" aria-label={`Step ${step + 1} of ${SLIDES.length}`}>
-          {SLIDES.map((_, i) => (
+        <div className="px-6 py-3 flex items-center justify-center gap-1.5" aria-label={`Step ${safeStep + 1} of ${slides.length}`}>
+          {slides.map((_, i) => (
             <span
               key={i}
               aria-hidden="true"
               className={`h-1.5 rounded-full transition-all ${
-                i === step ? 'w-6 bg-neuro-500' : i < step ? 'w-1.5 bg-neuro-300' : 'w-1.5 bg-slate-200'
+                i === safeStep ? 'w-6 bg-neuro-500' : i < safeStep ? 'w-1.5 bg-neuro-300' : 'w-1.5 bg-slate-200'
               }`}
             />
           ))}
@@ -198,8 +219,8 @@ export const OnboardingTour: React.FC = () => {
           <button
             type="button"
             onClick={() => setStep((s) => Math.max(0, s - 1))}
-            disabled={step === 0}
-            className="text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
+            disabled={safeStep === 0}
+            className="min-h-[44px] text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors px-3 py-2 rounded disabled:opacity-30 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
           >
             Back
           </button>

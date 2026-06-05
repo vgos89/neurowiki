@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState, useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -9,10 +9,8 @@ import { STATIC_ROUTE_DEFINITIONS, type StaticRouteKey } from './config/routeMan
 import { CONSENT_STORAGE_KEY, loadGA, reportAiTrafficToGA } from './utils/analytics';
 import { getStorageItem } from './utils/storage';
 
-const DisclaimerModal = lazy(() => import('./components/DisclaimerModal'));
-const CookieConsentBanner = lazy(() => import('./components/CookieConsentBanner'));
+const FirstRunConsentBar = lazy(() => import('./components/FirstRunConsentBar'));
 const InstallBubble = lazy(() => import('./components/InstallBubble'));
-const InstallPromptOverlay = lazy(() => import('./components/InstallPromptOverlay'));
 const OnboardingTour = lazy(() => import('./components/OnboardingTour'));
 const GlobalTrialModal = lazy(() =>
   import('./components/GlobalTrialModal').then((m) => ({ default: m.GlobalTrialModal }))
@@ -155,8 +153,6 @@ const TrialModalWrapper: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  const [showConsentBanner, setShowConsentBanner] = useState(false);
-
   useEffect(() => {
     const consent = getStorageItem(CONSENT_STORAGE_KEY);
     if (consent === 'accepted') {
@@ -164,10 +160,8 @@ const App: React.FC = () => {
       // Fire AI-traffic detection after gtag is wired so the session-level
       // custom dimension is set before the first page_view event.
       reportAiTrafficToGA();
-    } else if (consent === null) {
-      setShowConsentBanner(true);
     }
-    // 'declined' → no banner, no GA
+    // 'declined' → no GA. null → FirstRunConsentBar prompts for consent.
   }, []);
 
   return (
@@ -175,12 +169,6 @@ const App: React.FC = () => {
       <TrialModalProvider>
         <ErrorBoundary>
           <Seo />
-          <Suspense fallback={null}>
-            <DisclaimerModal />
-          </Suspense>
-          <Suspense fallback={null}>
-            <InstallPromptOverlay />
-          </Suspense>
           <Suspense fallback={null}>
             <OnboardingTour />
           </Suspense>
@@ -228,11 +216,9 @@ const App: React.FC = () => {
             </Suspense>
           </Layout>
           <TrialModalWrapper />
-          {showConsentBanner && (
-            <Suspense fallback={null}>
-              <CookieConsentBanner onConsent={() => setShowConsentBanner(false)} />
-            </Suspense>
-          )}
+          <Suspense fallback={null}>
+            <FirstRunConsentBar />
+          </Suspense>
         </ErrorBoundary>
       </TrialModalProvider>
     </Router>

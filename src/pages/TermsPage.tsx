@@ -1,6 +1,6 @@
 // Terms of Use - NeuroWiki
 // Minimum required clauses per compliance-public-medical skill.
-// Last reviewed: 2026-05-13
+// Last reviewed: 2026-06-05 (PHI section reconciled with v3.0 disclaimer + Privacy Policy)
 
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -23,7 +23,7 @@ export default function TermsPage() {
       <div className="mb-10">
         <p className="text-xs font-medium text-neuro-500 uppercase tracking-widest mb-2">Legal</p>
         <h1 className="text-2xl font-bold text-slate-900 mb-3">Terms of Use</h1>
-        <p className="text-sm text-slate-500">Last updated: May 13, 2026</p>
+        <p className="text-sm text-slate-500">Last updated: June 5, 2026</p>
         <p className="mt-4 text-sm text-slate-600 leading-relaxed">
           Using NeuroWiki means you accept these terms. They are short.
         </p>
@@ -70,11 +70,18 @@ export default function TermsPage() {
         </p>
       </Section>
 
-      <Section title="No patient data">
+      <Section title="Patient data and PHI">
         <p>
-          Do not enter identifiable patient data into NeuroWiki. This tool is not designed or
-          approved for handling protected health information. Calculator inputs run locally in
-          your browser and are never transmitted.
+          Calculator inputs run locally in your browser and are never transmitted. NeuroWiki does
+          not collect patient names, MRNs, or dates of birth — do not enter those identifiers.
+        </p>
+        <p>
+          The Save Case feature stores patient initials plus the clinical context you enter
+          (scores, vitals, timestamps) on this device only. That combination may constitute
+          protected health information (PHI) under your hospital's HIPAA policy, and you remain
+          responsible for using NeuroWiki in a way consistent with your institution's rules. See
+          the <Link to="/privacy" className="text-neuro-600 underline underline-offset-2">Privacy
+          Policy</Link> for the full data inventory.
         </p>
       </Section>
 
