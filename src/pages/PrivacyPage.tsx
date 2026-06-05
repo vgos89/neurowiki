@@ -60,7 +60,7 @@ export default function PrivacyPage() {
       </Section>
 
       <Section title="What data we collect">
-        <p>Below are the main categories of data NeuroWiki collects or stores. Minor browser-only preferences (such as UI layout state) aren't itemized individually.</p>
+        <p>Every category of data NeuroWiki collects or stores is listed below.</p>
 
         <div className="overflow-x-auto mt-4">
           <table className="w-full text-xs border-collapse">
@@ -78,7 +78,8 @@ export default function PrivacyPage() {
                 ['Cookie consent decision', 'Your browser (neurowiki-analytics-consent)', 'Controls whether GA loads', 'Until you clear browser storage'],
                 ['Favorite trials', 'Your browser (neurowiki:favorites:v1)', 'Saves starred trials between sessions', 'Until you clear browser storage'],
                 ['Recently viewed', 'Your browser (neurowiki:recents:v1)', 'Powers the recents list', 'Until you clear browser storage'],
-                ['Disclaimer acknowledged', 'Your browser (neurowiki-disclaimer-accepted)', 'Suppresses the first-visit disclaimer', 'Until you clear browser storage'],
+                ['Disclaimer acknowledged', 'Your browser (neurowiki-disclaimer-accepted)', 'Suppresses the first-visit consent bar', 'Until you clear browser storage'],
+                ['App preferences and first-run flags', 'Your browser (local and session storage)', 'Remembers UI state, with no identifiers: which first-run prompts you have seen (welcome tour, install), recent searches (terms you typed, stored only on this device), home-page layout, E/M billing role, engagement counts, and your region for the analytics-consent rule', 'Until you clear browser storage'],
                 ['Feedback submissions', 'Resend (email relay) → operator inbox', 'Delivers your feedback to the team', 'Email provider retention policy'],
                 ['NPI proxy results', 'Not stored (session only)', 'Displays a doctor name from NPI lookup', 'Never written to storage'],
                 ['Saved cases (My Cases)', 'Your browser (IndexedDB on this device)', 'Lets you reopen a calculator result later. Stores initials (2-4 letters), scores, vitals you entered, anti-coag class, and stroke timestamps. Timestamps save as elapsed offsets by default for de-identification; opt-in toggle preserves absolute times for door-to-needle documentation.', 'Until you delete the case or clear browser storage'],
