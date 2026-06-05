@@ -2,8 +2,9 @@
 // Wraps every route. Mobile vs desktop chrome rendered via CSS (md: breakpoint).
 // LAYOUT_SPEC §6.3 — composition structure.
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { MobileHeader } from './MobileHeader';
+import PrivacyChoices from '../PrivacyChoices';
 import { MobileBottomNav } from './MobileBottomNav';
 import { DesktopRail } from './DesktopRail';
 import { DesktopTopBar } from './DesktopTopBar';
@@ -68,6 +69,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className={zoneClass || undefined}>
               {children}
             </div>
+
+            {/* Global footer — carries the persistent Privacy choices opt-out
+                (required on every page for default-on analytics regions). */}
+            <footer className="border-t border-slate-100 mt-8 px-4 py-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-slate-400">
+              <PrivacyChoices />
+              <Link to="/privacy" className="hover:text-neuro-600 underline underline-offset-2 transition-colors">Privacy</Link>
+              <Link to="/terms" className="hover:text-neuro-600 underline underline-offset-2 transition-colors">Terms</Link>
+            </footer>
           </main>
 
           {/* Mobile bottom nav — LAYOUT_SPEC §2 (md:hidden) */}

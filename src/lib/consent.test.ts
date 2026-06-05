@@ -1,5 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { isDisclaimerAccepted, installApplies, buildDisclaimerRecord, DISCLAIMER_VERSION } from './consent';
+import {
+  isDisclaimerAccepted,
+  installApplies,
+  buildDisclaimerRecord,
+  DISCLAIMER_VERSION,
+  regionForCountry,
+  analyticsEnabled,
+} from './consent';
 
 describe('isDisclaimerAccepted — no-re-prompt + re-acceptance', () => {
   it('returns false for a missing record (first visit → bar shows)', () => {
@@ -39,6 +46,51 @@ describe('installApplies — install affordance gating', () => {
   it('does NOT apply for desktop/unsupported or already-installed', () => {
     expect(installApplies('unsupported')).toBe(false);
     expect(installApplies('already-installed')).toBe(false);
+  });
+});
+
+describe('regionForCountry — geo-gated consent bucket', () => {
+  it('maps EU / EEA / UK / Switzerland / Brazil to strict (opt-in)', () => {
+    for (const c of ['DE', 'FR', 'IT', 'IE', 'NO', 'IS', 'LI', 'GB', 'CH', 'BR']) {
+      expect(regionForCountry(c)).toBe('strict');
+    }
+  });
+
+  it('maps the US, India, and other countries to default-on', () => {
+    for (const c of ['US', 'IN', 'AU', 'JP', 'SG', 'CA']) {
+      expect(regionForCountry(c)).toBe('default-on');
+    }
+  });
+
+  it('is case-insensitive', () => {
+    expect(regionForCountry('de')).toBe('strict');
+    expect(regionForCountry('us')).toBe('default-on');
+  });
+
+  it('returns unknown for missing country (fail-safe)', () => {
+    expect(regionForCountry(null)).toBe('unknown');
+    expect(regionForCountry(undefined)).toBe('unknown');
+    expect(regionForCountry('')).toBe('unknown');
+  });
+});
+
+describe('analyticsEnabled — consent x region matrix', () => {
+  it("explicit 'accepted' enables analytics in every region", () => {
+    for (const r of ['strict', 'default-on', 'unknown'] as const) {
+      expect(analyticsEnabled('accepted', r)).toBe(true);
+    }
+  });
+
+  it("explicit 'declined' disables analytics in every region", () => {
+    for (const r of ['strict', 'default-on', 'unknown'] as const) {
+      expect(analyticsEnabled('declined', r)).toBe(false);
+    }
+  });
+
+  it('no choice (null): on for default-on, off for strict and unknown', () => {
+    expect(analyticsEnabled(null, 'default-on')).toBe(true);
+    expect(analyticsEnabled(null, 'strict')).toBe(false);
+    expect(analyticsEnabled(null, 'unknown')).toBe(false);
   });
 });
 

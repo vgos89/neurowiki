@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getStorageItem, setStorageItem } from '../utils/storage';
-import { loadGA, reportAiTrafficToGA, CONSENT_STORAGE_KEY } from '../utils/analytics';
+import { loadGA, reportAiTrafficToGA, unloadGA, CONSENT_STORAGE_KEY } from '../utils/analytics';
 import {
   DISCLAIMER_STORAGE_KEY,
   DISCLAIMER_VERSION,
@@ -9,36 +9,30 @@ import {
   buildDisclaimerRecord,
   markDisclaimerAckFlag,
 } from '../lib/consent';
+import { useConsentRegion } from '../hooks/useConsentRegion';
 
 /**
- * FirstRunConsentBar — non-blocking bottom bar that replaces the old blocking
- * DisclaimerModal AND the CookieConsentBanner. A first-time clinician can see
- * and use the site immediately; the bar sits at the bottom until resolved.
+ * FirstRunConsentBar — non-blocking bottom bar that handles the medical
+ * disclaimer acceptance and the analytics-cookie decision.
  *
- * Compliance contract (compliance-legal review 2026-06-05, approve-with-conditions):
- *  - Disclaimer acceptance stays EXPLICIT: required healthcare-professional
- *    checkbox + a Continue button disabled until it is checked. Not implied.
- *  - Analytics consent is UNBUNDLED (GDPR): a separate, pre-unchecked optional
- *    checkbox. Leaving it unchecked = declined; it never blocks Continue.
- *  - Two existing storage keys preserved byte-for-byte so already-accepted users
- *    are never re-prompted (no migration): the versioned JSON record under
- *    `neurowiki-disclaimer-accepted` and `neurowiki-analytics-consent`.
- *  - GA loads only when analytics consent is 'accepted'.
- *  - Required on-surface copy: not-medical-advice statement + "no names/MRN/DOB"
- *    + the HCP affirmation with Terms/disclaimer links. Full disclosure behind
- *    the linked Terms + Privacy pages.
- *  - Accessibility: role="region" (not dialog — non-blocking, no focus trap),
- *    no focus steal on mount, native <label>-wrapped checkboxes, disabled +
- *    aria-disabled Continue button.
- *  - Version bump (DISCLAIMER_VERSION) re-surfaces the disclaimer gate.
+ * Disclaimer acceptance is always an explicit healthcare-professional checkbox +
+ * Continue (compliance-legal, 2026-06-05). Analytics is geo-gated:
+ *   - strict regions (EU/EEA/UK/CH/BR, or unknown as fail-safe): opt-in only.
+ *   - default-on regions (US, India, rest of world): on by default with an
+ *     inline opt-out, plus the persistent footer Privacy choices control.
+ * Region resolves via useConsentRegion; the analytics block waits for it so an
+ * opt-in control never flashes before flipping. The two storage keys are kept
+ * byte-compatible so already-decided users are never re-prompted.
  */
 
 export const FirstRunConsentBar: React.FC = () => {
+  const { region, resolved } = useConsentRegion();
   const [needsDisclaimer, setNeedsDisclaimer] = useState(false);
   const [needsAnalytics, setNeedsAnalytics] = useState(false);
   const [hcpChecked, setHcpChecked] = useState(false);
-  const [analyticsOptIn, setAnalyticsOptIn] = useState(false);
-  const [resolved, setResolved] = useState(false);
+  const [analyticsOptIn, setAnalyticsOptIn] = useState(false); // strict opt-in checkbox
+  const [analyticsOff, setAnalyticsOff] = useState(false); // default-on inline opt-out
+  const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -48,25 +42,23 @@ export const FirstRunConsentBar: React.FC = () => {
     setNeedsAnalytics(!analyticsDecided);
 
     if (accepted) {
-      // Backfill the tour flag for users who accepted before it existed.
       markDisclaimerAckFlag();
     } else {
-      // Best-effort funnel event. No-op unless analytics was already accepted
-      // in a prior session (loadGA is gated on consent in App.tsx).
       import('../utils/analytics')
         .then(({ trackDisclaimerShown }) => trackDisclaimerShown())
         .catch(() => { /* best-effort */ });
     }
   }, []);
 
-  if (resolved || (!needsDisclaimer && !needsAnalytics)) return null;
-
   const acceptAnalytics = () => {
     setStorageItem(CONSENT_STORAGE_KEY, 'accepted');
     loadGA();
     reportAiTrafficToGA();
   };
-  const declineAnalytics = () => setStorageItem(CONSENT_STORAGE_KEY, 'declined');
+  const declineAnalytics = () => {
+    setStorageItem(CONSENT_STORAGE_KEY, 'declined');
+    unloadGA();
+  };
 
   const acceptDisclaimer = () => {
     const record = buildDisclaimerRecord(new Date().toISOString(), navigator.userAgent);
@@ -80,28 +72,74 @@ export const FirstRunConsentBar: React.FC = () => {
   const handleContinue = () => {
     if (!hcpChecked) return;
     acceptDisclaimer();
-    if (needsAnalytics) {
-      analyticsOptIn ? acceptAnalytics() : declineAnalytics();
+    if (needsAnalytics && resolved) {
+      if (region === 'default-on') {
+        // GA is already on by default; persist 'accepted' so the notice stops,
+        // unless the user turned it off inline (already 'declined').
+        if (!analyticsOff) acceptAnalytics();
+      } else if (region === 'strict') {
+        analyticsOptIn ? acceptAnalytics() : declineAnalytics();
+      }
+      // unknown region → leave undecided (off, fail-safe); footer can opt in.
     }
-    setResolved(true);
+    setDismissed(true);
+  };
+
+  const handleTurnOff = () => {
+    declineAnalytics();
+    setAnalyticsOff(true);
   };
 
   const handleAnalyticsOnly = (accept: boolean) => {
     accept ? acceptAnalytics() : declineAnalytics();
-    setResolved(true);
+    setDismissed(true);
   };
+
+  if (dismissed) return null;
+  if (!needsDisclaimer && !needsAnalytics) return null;
+  // Analytics-only bar must wait for the region so it shows the right variant.
+  if (!needsDisclaimer && !resolved) return null;
 
   const wrap =
     'fixed bottom-0 left-0 right-0 z-[60] bg-white border-t border-slate-200 shadow-[0_-4px_20px_rgba(15,23,42,0.08)] px-4 py-3 sm:px-6 safe-area-pb';
 
-  // Analytics-only bar — disclaimer already accepted (current version), only the
-  // cookie decision is outstanding (e.g. user accepted disclaimer pre-analytics).
+  // ---- Analytics-only bar (disclaimer already accepted) --------------------
   if (!needsDisclaimer) {
+    if (region === 'default-on') {
+      return (
+        <div className={wrap} role="region" aria-label="Cookie notice">
+          <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <p className="flex-1 text-sm text-slate-600">
+              NeuroWiki uses anonymous analytics to understand how clinicians use the tool. No patient
+              identifiers are collected.{' '}
+              <Link to="/privacy" className="text-neuro-600 underline underline-offset-2">Privacy Policy</Link>
+            </p>
+            <div className="flex gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => handleAnalyticsOnly(false)}
+                className="min-h-[44px] px-4 py-1.5 text-sm text-slate-600 border border-slate-300 rounded-md hover:bg-slate-50 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:ring-offset-2 focus-visible:outline-none"
+              >
+                Analytics off
+              </button>
+              <button
+                type="button"
+                onClick={() => handleAnalyticsOnly(true)}
+                className="min-h-[44px] px-4 py-1.5 text-sm text-white bg-neuro-600 rounded-md hover:bg-neuro-700 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:ring-offset-2 focus-visible:outline-none"
+              >
+                Got it
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    // strict / unknown → opt-in
     return (
       <div className={wrap} role="region" aria-label="Cookie consent">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-center gap-3">
           <p className="flex-1 text-sm text-slate-600">
-            We use anonymous analytics cookies to understand how clinicians use NeuroWiki and improve the tool.{' '}
+            NeuroWiki can use anonymous analytics to understand how clinicians use the tool and improve it.{' '}
             <Link to="/privacy" className="text-neuro-600 underline underline-offset-2">Privacy Policy</Link>
           </p>
           <div className="flex gap-2 shrink-0">
@@ -125,15 +163,15 @@ export const FirstRunConsentBar: React.FC = () => {
     );
   }
 
-  // Full first-run bar — disclaimer acceptance (required) + optional analytics.
+  // ---- Full first-run bar (disclaimer acceptance required) -----------------
   return (
     <div className={wrap} role="region" aria-label="Terms and cookie consent">
       <div className="max-w-3xl mx-auto">
         <p className="text-[13px] text-slate-600 leading-relaxed">
-          <span className="font-semibold text-slate-800">NeuroWiki is a clinical reference</span> — not a
-          substitute for your clinical judgment, current guidelines, or your institution's protocol.
-          Verify before acting. <span className="font-semibold text-slate-700">Do not enter patient
-          names, MRNs, or dates of birth.</span>{' '}
+          <span className="font-semibold text-slate-800">NeuroWiki is a clinical reference.</span> It does
+          not substitute for your clinical judgment, current guidelines, or your institution's protocol.
+          Verify before acting. <span className="font-semibold text-slate-700">Do not enter patient names,
+          MRNs, or dates of birth.</span>{' '}
           <Link to="/privacy" className="text-neuro-600 underline underline-offset-2">Privacy Policy</Link>
         </p>
 
@@ -153,7 +191,7 @@ export const FirstRunConsentBar: React.FC = () => {
           </span>
         </label>
 
-        {needsAnalytics && (
+        {needsAnalytics && resolved && region !== 'default-on' && (
           <label className="mt-2 flex items-start gap-2.5 cursor-pointer min-h-[44px]">
             <input
               type="checkbox"
@@ -165,6 +203,26 @@ export const FirstRunConsentBar: React.FC = () => {
               Help improve NeuroWiki with anonymous analytics cookies. <span className="text-slate-500">(optional)</span>
             </span>
           </label>
+        )}
+
+        {needsAnalytics && resolved && region === 'default-on' && (
+          <p className="mt-2 text-[12px] text-slate-500 leading-snug">
+            {analyticsOff ? (
+              'Analytics off. You can turn it back on under Privacy choices in the footer.'
+            ) : (
+              <>
+                NeuroWiki uses anonymous analytics to improve the tool. No patient identifiers are
+                collected.{' '}
+                <button
+                  type="button"
+                  onClick={handleTurnOff}
+                  className="text-neuro-600 underline underline-offset-2 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none rounded"
+                >
+                  Turn off
+                </button>
+              </>
+            )}
+          </p>
         )}
 
         <div className="mt-3 flex justify-end">

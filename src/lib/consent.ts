@@ -78,6 +78,67 @@ export function installApplies(status: string): boolean {
   );
 }
 
+// ---------------------------------------------------------------------------
+// Analytics consent region (geo-gated). 'strict' regions require opt-in
+// (GDPR/ePrivacy + equivalents); 'default-on' regions allow analytics by
+// default with an opt-out; 'unknown' is the fail-safe and is treated as strict.
+// ---------------------------------------------------------------------------
+
+export type ConsentRegion = 'strict' | 'default-on' | 'unknown';
+
+// Countries where analytics requires opt-in consent. EU-27 + EEA (IS, LI, NO)
+// + UK + Switzerland + Brazil. ISO 3166-1 alpha-2, uppercase. Hard-coded source
+// of truth per the compliance-legal review (2026-06-05). Update here only.
+export const STRICT_COUNTRIES: ReadonlySet<string> = new Set([
+  // EU-27
+  'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU',
+  'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE',
+  // EEA non-EU
+  'IS', 'LI', 'NO',
+  // UK, Switzerland, Brazil
+  'GB', 'CH', 'BR',
+]);
+
+const GEO_COUNTRY_KEY = 'neurowiki:geo-country';
+
+/** Pure: map an ISO country code to a consent region. */
+export function regionForCountry(country: string | null | undefined): ConsentRegion {
+  if (!country) return 'unknown';
+  return STRICT_COUNTRIES.has(country.toUpperCase()) ? 'strict' : 'default-on';
+}
+
+/**
+ * Pure: is analytics effectively enabled for this stored consent + region?
+ * Explicit 'accepted' is on everywhere; explicit 'declined' is off everywhere.
+ * With no explicit choice (null): on for 'default-on' regions, off for 'strict'
+ * and 'unknown' (the fail-safe).
+ */
+export function analyticsEnabled(consent: string | null, region: ConsentRegion): boolean {
+  if (consent === 'accepted') return true;
+  if (consent === 'declined') return false;
+  return region === 'default-on';
+}
+
+/** Read the cached visitor country (set after the first /api/geo call). */
+export function getCachedCountry(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    return window.localStorage.getItem(GEO_COUNTRY_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/** Cache the visitor country so later visits resolve the region without a fetch. */
+export function setCachedCountry(country: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(GEO_COUNTRY_KEY, country);
+  } catch {
+    /* ignore */
+  }
+}
+
 /**
  * Build the JSON acceptance record. Pure given the two inputs (caller supplies
  * the timestamp + UA so this stays testable and side-effect-free).

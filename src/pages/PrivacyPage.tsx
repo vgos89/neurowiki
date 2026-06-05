@@ -28,7 +28,7 @@ export default function PrivacyPage() {
       <div className="mb-10">
         <p className="text-xs font-medium text-neuro-500 uppercase tracking-widest mb-2">Legal</p>
         <h1 className="text-2xl font-bold text-slate-900 mb-3">Privacy Policy</h1>
-        <p className="text-sm text-slate-500">Last updated: May 19, 2026</p>
+        <p className="text-sm text-slate-500">Last updated: June 5, 2026</p>
         <p className="mt-4 text-sm text-slate-600 leading-relaxed">
           NeuroWiki is a free clinical reference tool. It collects almost nothing. This page
           describes exactly what is collected, where it goes, and how to remove it.
@@ -118,13 +118,21 @@ export default function PrivacyPage() {
         </p>
       </Section>
 
-      <Section title="Cookie consent and how to revoke it">
+      <Section title="Analytics cookies and how to control them">
         <p>
-          A consent banner appears on your first visit. Declining it blocks Google Analytics from
-          loading. To revoke consent later, delete the{' '}
-          <code className="bg-slate-100 px-1 rounded text-xs">neurowiki-analytics-consent</code>{' '}
-          key from your browser's local storage for neurowiki.ai. In Chrome: DevTools → Application
-          → Local Storage → neurowiki.ai. The consent banner re-appears on your next visit.
+          NeuroWiki uses Google Analytics 4 with IP anonymization, and with Google ad signals and ad
+          personalization turned off. Analytics events never include patient names, MRNs, or dates of birth.
+        </p>
+        <p>
+          How consent works depends on your region. Visitors in the EU, the EEA, the UK, Switzerland, and
+          Brazil see an opt-in prompt, and analytics stays off until you accept. Visitors elsewhere have
+          analytics on by default, and collection begins on the first visit. If your region cannot be
+          determined, NeuroWiki defaults to opt-in.
+        </p>
+        <p>
+          You can change your choice at any time. Use the <strong>Privacy choices</strong> link in the
+          footer of any page to turn analytics on or off. Turning it off stops collection right away and
+          is remembered on this device.
         </p>
       </Section>
 
@@ -218,16 +226,17 @@ export default function PrivacyPage() {
         </p>
       </Section>
 
-      <Section title="GDPR: EU residents">
+      <Section title="GDPR and equivalents: EU, EEA, UK, Switzerland, and Brazil">
         <p>
-          EU residents have the right to access, correct, or delete any data held about them.
+          Residents of the EU, the EEA, the UK, Switzerland, and Brazil have the right to access,
+          correct, or delete any data held about them.
           NeuroWiki has no user accounts and stores no per-user records on its own servers.
           The only server-side touch-points are:
         </p>
         <ul className="list-disc pl-5 space-y-1.5">
           <li>
             <span className="font-medium text-slate-700">Google Analytics:</span> IP-anonymized
-            event data, controlled via the GA opt-out tool above.
+            event data, controlled via the Privacy choices link in the footer.
           </li>
           <li>
             <span className="font-medium text-slate-700">Cross-device transfer relay
@@ -246,11 +255,17 @@ export default function PrivacyPage() {
         </p>
       </Section>
 
-      <Section title="CCPA: California residents">
+      <Section title="CCPA and CPRA: California residents">
         <p>
-          NeuroWiki does not sell personal information as defined by the California Consumer Privacy
-          Act. To request deletion of any data associated with you, use the in-app feedback button
-          with the subject "Data deletion request".
+          NeuroWiki does not sell or share personal information for cross-context behavioral
+          advertising, as those terms are defined by the California Consumer Privacy Act and the
+          California Privacy Rights Act. Google Analytics runs with ad signals and ad personalization
+          turned off.
+        </p>
+        <p>
+          To opt out of analytics, use the Privacy choices link in the footer of any page. To request
+          deletion of any data associated with you, use the in-app feedback button with the subject
+          "Data deletion request".
         </p>
       </Section>
 

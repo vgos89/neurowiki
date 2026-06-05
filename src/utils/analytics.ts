@@ -302,6 +302,9 @@ export const CONSENT_STORAGE_KEY = 'neurowiki-analytics-consent';
 export const loadGA = (): void => {
   if (typeof window === 'undefined') return;
   const w = window as any;
+  // Clear any prior in-session opt-out flag so re-opting-in re-enables GA
+  // (the disable flag persists on window even after the script is loaded).
+  w[`ga-disable-${GA_MEASUREMENT_ID}`] = false;
   if (w.__gaLoaded) return;
   w.__gaLoaded = true;
 
@@ -316,10 +319,25 @@ export const loadGA = (): void => {
   w.gtag('config', GA_MEASUREMENT_ID, {
     anonymize_ip: true,
     send_page_view: false,
+    // CPRA: keep GA strictly first-party analytics. No Google ad signals and no
+    // ad personalization, so default-on analytics is not "sharing" for
+    // cross-context behavioral advertising.
+    allow_google_signals: false,
+    allow_ad_personalization_signals: false,
   });
 
   const script = document.createElement('script');
   script.async = true;
   script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
   document.head.appendChild(script);
+};
+
+/**
+ * Immediately stop GA event transmission in the current session (opt-out).
+ * GA4 honors `window['ga-disable-<ID>'] = true` without a reload, so an opt-out
+ * takes effect at once even when GA has already loaded.
+ */
+export const unloadGA = (): void => {
+  if (typeof window === 'undefined') return;
+  (window as any)[`ga-disable-${GA_MEASUREMENT_ID}`] = true;
 };

@@ -8,6 +8,8 @@ import Seo from './components/Seo';
 import { STATIC_ROUTE_DEFINITIONS, type StaticRouteKey } from './config/routeManifest';
 import { CONSENT_STORAGE_KEY, loadGA, reportAiTrafficToGA } from './utils/analytics';
 import { getStorageItem } from './utils/storage';
+import { analyticsEnabled } from './lib/consent';
+import { useConsentRegion } from './hooks/useConsentRegion';
 
 const FirstRunConsentBar = lazy(() => import('./components/FirstRunConsentBar'));
 const InstallBubble = lazy(() => import('./components/InstallBubble'));
@@ -154,16 +156,19 @@ const TrialModalWrapper: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const { region, resolved } = useConsentRegion();
+
+  // Load GA when analytics is effectively enabled for this visitor: explicit
+  // 'accepted' anywhere, or no choice yet in a default-on region. Strict and
+  // unknown regions wait for an explicit opt-in via the consent bar.
   useEffect(() => {
+    if (!resolved) return;
     const consent = getStorageItem(CONSENT_STORAGE_KEY);
-    if (consent === 'accepted') {
+    if (analyticsEnabled(consent, region)) {
       loadGA();
-      // Fire AI-traffic detection after gtag is wired so the session-level
-      // custom dimension is set before the first page_view event.
       reportAiTrafficToGA();
     }
-    // 'declined' → no GA. null → FirstRunConsentBar prompts for consent.
-  }, []);
+  }, [region, resolved]);
 
   return (
     <Router>
