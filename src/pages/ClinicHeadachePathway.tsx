@@ -40,6 +40,8 @@ import {
   type ChipId,
   type PhenotypeMatch,
 } from '../data/clinicHeadacheData';
+import { HeadacheResultList } from '../components/pathways/headache/HeadacheResultList';
+import { CriteriaList } from '../components/pathways/headache/CriteriaList';
 
 // ─── Constants ────────────────────────────────────────────────────────────
 
@@ -670,11 +672,11 @@ const ClinicHeadachePathway: React.FC = () => {
             <h2 id="no-match-heading" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
               Result
             </h2>
-            <div className="rounded-xl border-2 border-slate-200 bg-slate-50 p-4">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
               <p className="text-[10px] font-bold uppercase tracking-widest text-slate-600 mb-1">
                 No clean ICHD-3 match
               </p>
-              <p className="text-[18px] font-semibold text-slate-900 leading-tight">
+              <p className="text-base font-semibold text-slate-900 leading-snug">
                 Selections do not fit a primary headache phenotype
               </p>
               <p className="text-[12px] text-slate-500 mt-1">
@@ -695,195 +697,21 @@ const ClinicHeadachePathway: React.FC = () => {
         {step4Complete && topMatch && !redFlagActive && (
           <section
             aria-labelledby="management-heading"
-            role="status"
-            aria-live="polite"
-            aria-atomic="true"
             className="mt-8 space-y-4"
           >
+            {/* Screen-reader status — announces once when the result appears or
+                re-evaluates. Scoped to this sr-only node (NOT the accordion) so
+                expanding/collapsing a phenotype row does not re-announce the
+                whole result (accessibility review: live-region over-announcement). */}
+            <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+              {`Results: ${matches.length} phenotype${matches.length === 1 ? '' : 's'} listed below.`}
+            </div>
+
             <h2 id="management-heading" className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
               Result
             </h2>
 
-            {/* ── Result headline card ───────────────────────────────────────
-                Phase 3b: surfaces the matched phenotype + match strength +
-                criteria-met percentage prominently at the top of the result.
-                Addresses V feedback (2026-05-25): "Probable diagnosis language
-                is missing" + "tier system showing percentage of which
-                diagnosis the selection meets". */}
-            {(() => {
-              const isChronicMigraineProbable = topMatch.phenotypeId === 'chronic-migraine' && topMatch.matchStrength === 'probable';
-              const prefix = topMatch.matchStrength === 'full' ? 'Features consistent with'
-                : isChronicMigraineProbable ? 'Partial match for'
-                : topMatch.matchStrength === 'probable' ? 'Features consistent with Probable'
-                : 'Partial match for';
-              const percent = Math.round((topMatch.criteriaMet / topMatch.criteriaTotal) * 100);
-              const tierClass = topMatch.matchStrength === 'full'
-                ? 'border-emerald-300 bg-emerald-50'
-                : topMatch.matchStrength === 'probable'
-                  ? 'border-amber-300 bg-amber-50'
-                  : 'border-slate-200 bg-slate-50';
-              const barColor = topMatch.matchStrength === 'full'
-                ? 'bg-emerald-500'
-                : topMatch.matchStrength === 'probable'
-                  ? 'bg-amber-500'
-                  : 'bg-slate-400';
-              const labelColor = topMatch.matchStrength === 'full'
-                ? 'text-emerald-700'
-                : topMatch.matchStrength === 'probable'
-                  ? 'text-amber-700'
-                  : 'text-slate-600';
-              return (
-                <div className={`rounded-xl border-2 ${tierClass} p-4`}>
-                  <p className={`text-[10px] font-bold uppercase tracking-widest ${labelColor} mb-1`}>
-                    {prefix}
-                  </p>
-                  <p className="text-[18px] font-semibold text-slate-900 leading-tight">
-                    {topMatch.name}
-                  </p>
-                  <p className="text-[12px] text-slate-500 mt-0.5">
-                    {topMatch.displaySection}
-                    {topMatch.isAppendix && <span className="italic"> · appendix entity</span>}
-                  </p>
-
-                  <div className="mt-4">
-                    <div className="flex items-baseline justify-between mb-1.5">
-                      <p className="text-[11px] font-medium text-slate-600">
-                        Criteria met
-                      </p>
-                      <p className={`text-[14px] font-bold tabular-nums ${labelColor}`}>
-                        {topMatch.criteriaMet} of {topMatch.criteriaTotal} <span className="text-slate-500 font-normal">· {percent}%</span>
-                      </p>
-                    </div>
-                    <div
-                      role="progressbar"
-                      aria-valuenow={percent}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                      aria-label={`${topMatch.name} criteria met: ${percent} percent`}
-                      className="h-2 bg-white rounded-full overflow-hidden border border-slate-200"
-                    >
-                      <div
-                        className={`h-full ${barColor} transition-all duration-300 motion-reduce:transition-none`}
-                        style={{ width: `${Math.max(2, percent)}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  <p className="text-[11px] text-slate-500 mt-3 leading-relaxed">
-                    Confirm pattern across multiple attacks and review the patient&apos;s history before treating. This tool maps features against ICHD-3 criteria; the diagnosis remains a clinical judgement.
-                  </p>
-                </div>
-              );
-            })()}
-
-            {/* ── Differential tier ribbon ─────────────────────────────────
-                Phase 3b: shows ALL phenotypes the user's selections
-                materially matched, ranked by criteria-met percentage.
-                Implements V's "tier system... percentage of which diagnosis
-                the selection meets" request. */}
-            {matches.length > 1 && (
-              <div className="rounded-xl border border-slate-100 bg-white p-4" role="region" aria-label="Differential ranking">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">
-                  Differential ranking
-                </p>
-                <ul className="space-y-2.5">
-                  {matches.slice(0, 5).map((m) => {
-                    const p = Math.round((m.criteriaMet / m.criteriaTotal) * 100);
-                    const isChronicMigraineProb = m.phenotypeId === 'chronic-migraine' && m.matchStrength === 'probable';
-                    const tag = m.matchStrength === 'full' ? 'Consistent'
-                      : isChronicMigraineProb ? 'Partial'
-                      : m.matchStrength === 'probable' ? 'Probable'
-                      : 'Partial';
-                    const tagColor = m.matchStrength === 'full' ? 'text-emerald-700 bg-emerald-50'
-                      : m.matchStrength === 'probable' && !isChronicMigraineProb ? 'text-amber-700 bg-amber-50'
-                      : 'text-slate-600 bg-slate-100';
-                    const barColor = m.matchStrength === 'full' ? 'bg-emerald-500'
-                      : m.matchStrength === 'probable' && !isChronicMigraineProb ? 'bg-amber-500'
-                      : 'bg-slate-400';
-                    return (
-                      <li key={m.phenotypeId} className="flex items-center gap-3">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-baseline justify-between gap-2 mb-1">
-                            <p className="text-[13px] text-slate-800 truncate">
-                              <span className={`text-[10px] font-bold uppercase tracking-widest rounded-full px-2 py-0.5 mr-2 ${tagColor}`}>{tag}</span>
-                              {m.name}
-                            </p>
-                            <p className="text-[12px] font-semibold tabular-nums text-slate-700 flex-shrink-0">
-                              {p}%
-                            </p>
-                          </div>
-                          <div
-                            role="progressbar"
-                            aria-valuenow={p}
-                            aria-valuemin={0}
-                            aria-valuemax={100}
-                            aria-label={`${m.name} criteria match: ${p} percent`}
-                            className="h-1.5 bg-slate-100 rounded-full overflow-hidden"
-                          >
-                            <div
-                              className={`h-full ${barColor} transition-all duration-300 motion-reduce:transition-none`}
-                              style={{ width: `${Math.max(2, p)}%` }}
-                            />
-                          </div>
-                          <p className="text-[10px] text-slate-400 mt-0.5">
-                            {m.criteriaMet} of {m.criteriaTotal} criteria · {m.displaySection}
-                          </p>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-                <p className="text-[11px] text-slate-500 mt-3 leading-relaxed">
-                  Higher percentages indicate stronger criterion fulfilment. ICHD-3 General Principles allow more than one primary headache code per patient — phenotypes labelled &quot;Consistent&quot; or &quot;Probable&quot; should each be considered as part of the patient&apos;s diagnosis.
-                </p>
-              </div>
-            )}
-
-            {/* Multi-diagnosis banner — surfaces when ≥2 phenotypes are
-                full or probable matches. Per architect Phase 2 §17.1 + ICHD-3
-                General Principles. Drawer keeps top match; this banner names
-                the additional consistent phenotypes so the clinician knows
-                they may need to treat both. */}
-            {(() => {
-              const significantMatches = matches.filter(
-                (m) => m.matchStrength === 'full' || m.matchStrength === 'probable',
-              );
-              if (significantMatches.length <= 1) return null;
-              const additional = significantMatches.slice(1);
-              return (
-                <div className="rounded-xl border border-neuro-200 bg-neuro-50 p-3" role="note" aria-label="Multiple phenotypes consistent">
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-neuro-700 mb-1">
-                    Multiple phenotypes consistent
-                  </p>
-                  <p className="text-[12px] text-slate-700 leading-relaxed mb-2">
-                    ICHD-3 General Principles require that each headache type the patient meets criteria for is separately diagnosed and coded. The drawer below shows management for the top match. The patient also meets criteria for the following additional phenotype{additional.length === 1 ? '' : 's'}:
-                  </p>
-                  <ul className="space-y-1">
-                    {additional.map((m) => {
-                      // Same chronic-migraine probable scope fix as the top-match
-                      // headline (clinical-reviewer §17.2 Phase 2 Condition 1).
-                      const isChronicMigraineProbable = m.phenotypeId === 'chronic-migraine' && m.matchStrength === 'probable';
-                      const prefix = m.matchStrength === 'full' ? 'Features consistent with '
-                        : isChronicMigraineProbable ? 'Partial match for '
-                        : 'Features consistent with Probable ';
-                      return (
-                        <li key={m.phenotypeId} className="text-[12px] text-slate-800 flex items-start gap-2">
-                          <span aria-hidden="true" className="text-neuro-600 mt-0.5">·</span>
-                          <span>
-                            <span className="font-semibold">{prefix}{m.name}</span>
-                            <span className="text-slate-500"> · {m.displaySection}</span>
-                            {m.isAppendix && <span className="text-slate-500 italic"> · appendix entity</span>}
-                          </span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
-                    Treat each phenotype that meets criteria separately. Acute and preventive plans may overlap.
-                  </p>
-                </div>
-              );
-            })()}
+            <HeadacheResultList matches={matches} />
 
             {(topMatch.phenotypeId === 'migraine-without-aura' || topMatch.phenotypeId === 'migraine-with-aura') && (
               <>
@@ -1151,39 +979,6 @@ const Row: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value
   <div className="min-h-[44px] flex items-start justify-between gap-3 px-4 py-2.5">
     <span className="text-xs font-medium text-slate-600 flex-shrink-0 max-w-[40%]">{label}</span>
     <span className="text-sm text-slate-900 text-right flex-1">{value}</span>
-  </div>
-);
-
-const CriteriaList: React.FC<{ match: PhenotypeMatch }> = ({ match }) => (
-  <div className="px-4 py-3">
-    {match.metCriteria.length > 0 && (
-      <ul className="space-y-2 mb-2">
-        {match.metCriteria.map((c) => (
-          <li key={c.id} className="text-[13px] text-emerald-700 flex items-start gap-2">
-            <span aria-hidden="true" className="mt-0.5">✓</span>
-            <div className="flex-1 min-w-0">
-              <span>{c.label}</span>
-              {c.contributingChipLabels.length > 0 && (
-                <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
-                  Based on your selection:{' '}
-                  <span className="text-slate-700">{c.contributingChipLabels.join(', ')}</span>
-                </p>
-              )}
-            </div>
-          </li>
-        ))}
-      </ul>
-    )}
-    {match.missingCriteria.length > 0 && (
-      <ul className="space-y-1">
-        {match.missingCriteria.map((c) => (
-          <li key={c.id} className="text-[13px] text-slate-500 flex items-start gap-2">
-            <span aria-hidden="true" className="mt-0.5">○</span>
-            <span>Still needed: {c.label}</span>
-          </li>
-        ))}
-      </ul>
-    )}
   </div>
 );
 
