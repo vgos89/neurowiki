@@ -880,6 +880,17 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 > Phase 4A–4D are P0. Phase 4E is P2. 4B and 4C can be batched into one PR. 4D should be its own PR. All are non-clinical (no algorithm or threshold changes).
 
+#### Phase 4F — Privacy page data-inventory completeness — Class C
+- **Priority:** P2
+- **Status:** [ ] open (deferred from the 2026-06-04 PrivacyPage key-name fix, commit 7195306)
+- **User-visible goal:** the /privacy "What data we collect" table accurately and completely accounts for every persistent storage key, so the page can again make a truthful exhaustiveness statement (the "Nothing is omitted" line was removed in 7195306 because it was false)
+- **Context:** 7195306 corrected 3 misnamed keys (consent → `neurowiki-analytics-consent`, favorites → `neurowiki:favorites:v1`, disclaimer → `neurowiki-disclaimer-accepted`), fixed the consent-revoke instruction, and dropped the false "Nothing is omitted" claim. Full enumeration deferred to here.
+- **Undisclosed keys to triage + document (localStorage unless noted):** `neurowiki:disclaimer:v1` (first-run flag) · `neurowiki:install-overlay:v1`+`:v2` (install overlay shown-once) · `neurowiki:tour-complete:v1` (onboarding tour) · `neurowiki:install-engagement:v1` (engagement counters) · `neurowiki:session-counted:v1` (sessionStorage) · `neurowiki:em-billing:provider` (⚠️ stores a clinician/provider name — mild PII, confirm disclosure scope) · `neurowiki:home:hasVisited` · `neurowiki:home:showMoreExpanded` · `neurowiki:search:recents` · `neurowiki-sidebar-tools` · `neurowiki-json-ld` · `neurowiki-case-transfer-v1` (local half of cross-device transfer) · BottomLineDrawer sessionStorage hint key · StrokeBasicsWorkflowV2 + EmBillingCalculator sessionStorage `SESSION_KEY`
+- **Owner agents:** compliance-legal (reviewer-first — decide what must be itemized vs. summarized; make the em-billing PII call) → content-writer (table copy)
+- **Files likely touched:** `src/pages/PrivacyPage.tsx`
+- **Acceptance checks:** every persistent key is either listed or honestly covered by a summary clause · em-billing provider-name PII addressed · revoke instructions accurate · tsc clean · build green
+- **Clinical impact:** none
+
 #### Phase 4A — Cookie consent gate before Google Analytics — Class D
 - **Priority:** P0
 - **Status:** [x] merged — commit 6356c59 (2026-05-13)
@@ -1145,6 +1156,10 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-06-04 — Privacy page: correct storage-key names + drop false exhaustiveness claim — Class C (commit 7195306)
+  - Triggered by the PWA fix (37bccf8) follow-up. Audit of the /privacy "What data we collect" table against actual code found it was broadly inaccurate while claiming "Nothing is omitted." Fixed the 3 misnamed keys verified against source: consent `neurowiki:consent` → `neurowiki-analytics-consent` (CONSENT_STORAGE_KEY, analytics.ts), favorites `neurowiki:favs` → `neurowiki:favorites:v1` (useFavorites.ts), disclaimer `neurowiki:disclaimer:v1` → `neurowiki-disclaimer-accepted` (DISCLAIMER_STORAGE_KEY). Also corrected the cookie-consent revoke instruction (named the wrong key). Replaced the false "Nothing is omitted" line with honest non-exhaustive wording.
+  - Scope per V decision (AskUserQuestion: "Fix names + drop the claim"): name corrections + claim removal only; full ~15-key enumeration + em-billing provider-name (mild PII) disclosure deferred to Phase 4F. No clinical content, claim, citation, or scoring touched.
+  - Gates: tsc clean, build 171/171 prerendered (exit 0, /privacy re-rendered), pre-commit hook green (claims/chains/routes/card-meta). Gate 6 pre-push live-verify pending on push.
 - [x] 2026-06-05 — Headache clinic pathway result screen: ranked phenotype accordions — Class D-clinical (commit c885da2)
   - Replaced the three stacked result blocks (large headline card + differential ribbon + multi-diagnosis banner) in src/pages/ClinicHeadachePathway.tsx with a single ranked accordion list: new src/components/pathways/headache/HeadacheResultList.tsx (one accordion per ICHD-3 phenotype, top match open by default, trials/calculator density, 3px neuro-500 accent on the top row) + extracted shared src/components/pathways/headache/CriteriaList.tsx (single source for the accordion and the page's inline treatment cards). Empty-match fallback restyled to match. Engine, chipsFromState, questionnaire (Frames 1–2), red-flag short-circuit, bottom drawer, citation footer, and all data-claim treatment cards left untouched.
   - Verbatim-only: every displayed result string (general disclaimer, differential caption, multi-diagnosis guidance, chronic-migraine-probable section/label exception) relocated byte-for-byte; no clinical wording authored or changed (check:claims green, no claim surface added or removed). Built headache-specific rather than reusing MapperPanel because MapperMatch cannot represent contributingChipLabels (the "Based on your selection" audit trail) or the chronic-migraine exception — named fork + consolidation exit documented in the HeadacheResultList header and ADR docs/adrs/2026-06-05-headache-result-accordions-stage-one.md.
