@@ -384,7 +384,7 @@ const ClinicHeadachePathway: React.FC = () => {
       // (clinical-reviewer §17.2 Phase 2 Condition 3).
       drawerReasons: topMatch.metCriteria.map((c) => ({
         label: c.contributingChipLabels.length > 0
-          ? `${c.label} — your selections: ${c.contributingChipLabels.join(', ')}`
+          ? `${c.label} (your selections: ${c.contributingChipLabels.join(', ')})`
           : c.label,
       })),
       drawerNotes: managementNotesForPhenotype(topMatch.phenotypeId),

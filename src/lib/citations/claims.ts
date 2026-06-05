@@ -920,7 +920,7 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     id: 'clinic-headache-partial-match-caveat',
     citation_ids: ['ichd3-2018'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'Partial-match safety caveat rendered at the top of the management body on partial-strength ICHD-3 phenotype rows in the Clinic Headache Pathway: "Partial match — confirm the diagnosis before initiating. Criteria are not yet met for this phenotype; dosing is shown for reference." Anti-anchoring guard for the opt-in Show-management expander — the displayed treatment/dosing is reference-only because the ICHD-3 diagnostic criteria for the phenotype are not fully satisfied. Anchored to ICHD-3 (2018) as the source defining the diagnostic criteria that are not yet met.',
+    description: 'Partial-match safety caveat rendered at the top of the management body on partial-strength ICHD-3 phenotype rows in the Clinic Headache Pathway: "Partial match: confirm the diagnosis before initiating. Criteria are not yet met for this phenotype; dosing is shown for reference." Anti-anchoring guard for the opt-in Show-management expander. The displayed treatment/dosing is reference-only because the ICHD-3 diagnostic criteria for the phenotype are not fully satisfied. Anchored to ICHD-3 (2018) as the source defining the diagnostic criteria that are not yet met.',
   },
 
   // ─── mRS Calculator — added 2026-05-27 ────────────────────────────────────

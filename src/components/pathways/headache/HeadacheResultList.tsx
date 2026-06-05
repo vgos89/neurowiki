@@ -182,7 +182,7 @@ export const HeadacheResultList: React.FC<HeadacheResultListProps> = ({ matches 
                           data-claim="clinic-headache-partial-match-caveat"
                           className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[12px] leading-relaxed text-amber-900"
                         >
-                          Partial match — confirm the diagnosis before initiating. Criteria are not yet met for this phenotype; dosing is shown for reference.
+                          Partial match: confirm the diagnosis before initiating. Criteria are not yet met for this phenotype; dosing is shown for reference.
                         </p>
                       )}
                       <HeadacheManagement phenotypeId={m.phenotypeId} />
@@ -203,7 +203,7 @@ export const HeadacheResultList: React.FC<HeadacheResultListProps> = ({ matches 
       {/* Differential caption — relocated verbatim; shown when >1 match */}
       {matches.length > 1 && (
         <p className="text-[11px] text-slate-500 leading-relaxed px-1">
-          Higher percentages indicate stronger criterion fulfilment. ICHD-3 General Principles allow more than one primary headache code per patient — phenotypes labelled &quot;Consistent&quot; or &quot;Probable&quot; should each be considered as part of the patient&apos;s diagnosis.
+          Higher percentages indicate stronger criterion fulfilment. ICHD-3 General Principles allow more than one primary headache code per patient. Phenotypes labelled &quot;Consistent&quot; or &quot;Probable&quot; should each be considered as part of the patient&apos;s diagnosis.
         </p>
       )}
 
