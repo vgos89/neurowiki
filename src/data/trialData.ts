@@ -4387,6 +4387,49 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'DESTINY II Trial',
     subtitle: 'Hemicraniectomy in Older Patients With Malignant MCA Stroke',
     category: 'Neuro Trials',
+    // RCT predecessor chain (TRIALS_SPEC §7b). Predecessor facts are sourced from
+    // the already-reviewed hemicraniectomy entries (decimal / destiny / hamlet).
+    rctChain: {
+      chainName: 'Hemicraniectomy proven in younger patients (2007-2009) to the over-60 question (2014)',
+      chainNarrative:
+        'DECIMAL, DESTINY, and HAMLET established that early decompressive hemicraniectomy in malignant middle cerebral artery infarction sharply reduces mortality. Each was a small trial whose functional primary endpoint did not reach significance on its own, but their consistent and large survival benefit, reinforced by a pooled analysis, made surgery standard for selected younger patients. The shared limitation was the age ceiling: all three enrolled only patients up to about 60 years, leaving the question of older patients open. DESTINY II answered it directly by enrolling patients aged 61 to 82. The teaching point is that the age cutoff, not the surgical decision, was the gap the predecessors left, and extending it changes the nature of the outcome rather than the mortality biology.',
+      predecessors: [
+        {
+          trialId: 'decimal-trial',
+          trialName: 'DECIMAL',
+          year: 2007,
+          journal: 'Stroke (Vahedi et al.)',
+          n: 38,
+          designNotes: 'Early decompressive hemicraniectomy plus medical therapy vs medical therapy alone in patients aged 18-55; stopped early at 38 of 70 planned for pooled analysis.',
+          keyResult: '6-month mortality reduced from 78% to 25% (absolute reduction 52.8 points, P=0.001); the primary endpoint mRS 3 or lower at 6 months was not significant (25% vs 5.6%, P=0.18).',
+          whatWasMissing: 'Enrolled only patients up to age 55 and was too small to establish a functional benefit, so the over-60 question stayed open.',
+        },
+        {
+          trialId: 'destiny-trial',
+          trialName: 'DESTINY',
+          year: 2007,
+          journal: 'Stroke (Juttler et al.)',
+          n: 32,
+          designNotes: 'Early hemicraniectomy vs conservative therapy in patients aged 18-60; stopped after pooled European data emerged.',
+          keyResult: '30-day mortality reduced from 53% to 12% (absolute reduction 41 points, P=0.02); the primary endpoint mRS 0-3 at 6 months was not significant (47% vs 27%, P=0.23).',
+          whatWasMissing: 'Capped enrollment at age 60 and the 32-patient sample could not confirm the functional endpoint, leaving older patients unaddressed.',
+        },
+        {
+          trialId: 'hamlet-trial',
+          trialName: 'HAMLET',
+          year: 2009,
+          journal: 'Lancet Neurology (Hofmeijer et al.)',
+          n: 64,
+          designNotes: 'Surgical decompression vs best medical treatment in patients aged 18-60, randomized up to 96 hours after onset.',
+          keyResult: '1-year case fatality reduced from 59% to 22% (absolute reduction 38 points, P=0.002); the primary endpoint mRS 0-3 at 1 year was neutral overall, diluted by patients enrolled after 48 hours.',
+          whatWasMissing: 'Enrolled only up to age 60, and including patients treated beyond 48 hours diluted the functional benefit, so the over-60 question was not addressed.',
+        },
+      ],
+      currentTrialResult:
+        'DESTINY II extended hemicraniectomy to patients aged 61-82 and met its primary endpoint of survival without being bedbound or dead (mRS 0-4) at 6 months: 38% vs 18% (OR 2.91, 95% CI 1.06 to 7.49, P=0.04), with mortality reduced from 70% to 33%. No patient in either arm achieved mRS 0-2.',
+      whatChanged:
+        'Enrollment extended to ages 61-82 rather than capping at about 60. Surgery still prevented death, but no patient in either arm reached functional independence (mRS 0-2), so the benefit in this age group is survival with severe disability rather than recovery. DESTINY II stopped early for enrollment difficulty (112 of 188 planned), so the effect estimate is imprecise.',
+    },
     primaryDesign: 'binary-superiority',
     primaryResult: 'met',
     chainMembership: [{ chainId: 'hemicraniectomy', role: 'successor' }],
@@ -5972,6 +6015,39 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ATTENTION Trial',
     subtitle: 'Basilar Artery EVT',
     category: 'Neuro Trials',
+    // RCT predecessor chain (TRIALS_SPEC §7b). Predecessor facts are sourced from
+    // the already-reviewed basilar-EVT stubs (best-trial / basics-trial).
+    rctChain: {
+      chainName: 'Inconclusive first basilar EVT trials (2020-2021) to definitive benefit (2022)',
+      chainNarrative:
+        'BEST and BASICS were the first randomized trials of thrombectomy for basilar artery occlusion, and both failed to reach statistical significance on the favorable-outcome endpoint. They failed for different reasons. BEST was terminated early after 22 of 65 medical-arm patients crossed over to thrombectomy, which diluted its intention-to-treat analysis toward the null. BASICS reached its full enrollment target of 300 patients but was underpowered against a higher-than-expected baseline severity, so its confidence interval stayed wide and did not exclude a clinically meaningful benefit. ATTENTION and BAOCHE resolved the question by preventing crossover, restricting enrollment to patients in the treatable severity band, and reaching adequate power. The lesson is that trial conduct and statistical power, not the concept of basilar thrombectomy, left the earlier question open.',
+      predecessors: [
+        {
+          trialId: 'best-trial',
+          trialName: 'BEST',
+          year: 2020,
+          journal: 'Lancet Neurology (Liu et al.)',
+          n: 131,
+          designNotes: 'EVT vs best medical management for CTA-confirmed basilar artery occlusion within 8 hours; terminated early at 131 of 240 planned patients.',
+          keyResult: 'mRS 0-3 at 90 days 42% vs 32% (OR 1.74, 95% CI 0.81 to 3.74, P=0.23); not significant by intention-to-treat.',
+          whatWasMissing: 'Stopped early with 22 of 65 medical-arm patients crossing over to EVT, which diluted the intention-to-treat result toward the null.',
+        },
+        {
+          trialId: 'basics-trial',
+          trialName: 'BASICS',
+          year: 2021,
+          journal: 'NEJM (Langezaal et al.)',
+          n: 300,
+          designNotes: 'EVT plus best medical treatment vs best medical treatment alone for basilar artery occlusion within 6 hours, across 11 countries.',
+          keyResult: 'mRS 0-3 at 90 days 44.2% vs 37.7% (rate ratio 1.18, 95% CI 0.92 to 1.50, P=0.19); not significant.',
+          whatWasMissing: 'Reached its enrollment target but was underpowered against higher-than-expected baseline severity, so the confidence interval did not exclude a 50% relative increase in favorable outcome.',
+        },
+      ],
+      currentTrialResult:
+        'ATTENTION doubled the rate of mRS 0-3 at 90 days (46% vs 23%, adjusted RR 2.06, 95% CI 1.46 to 2.91, P<0.001, NNT 4.3) and reduced 90-day mortality (37% vs 55%, adjusted RR 0.66, 95% CI 0.52 to 0.82).',
+      whatChanged:
+        'Crossover prevention, enrollment restricted to NIHSS 10 or higher with PC-ASPECTS 6 or higher, and adequate power, applied to the same 0-12 hour basilar thrombectomy question that BEST and BASICS left unresolved. Stopped early for efficacy, so the effect size may be inflated.',
+    },
     archetypeId: 'A',
     trialResult: 'POSITIVE',
     doi: '10.1056/NEJMoa2206317',
@@ -6252,6 +6328,39 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'CHANCE Trial',
     subtitle: 'Clopidogrel with Aspirin in Acute Minor Stroke or Transient Ischemic Attack',
     category: 'Neuro Trials',
+    // RCT predecessor chain (TRIALS_SPEC §7b). Predecessor facts are sourced from
+    // the already-reviewed antiplatelet stubs (match-trial / charisma-trial).
+    rctChain: {
+      chainName: 'Long-duration dual antiplatelet therapy fails (2004-2006) to short-duration succeeds (2013)',
+      chainNarrative:
+        'MATCH and CHARISMA both tested dual antiplatelet therapy for many months and both found no net benefit with more bleeding, but they tested different comparisons. MATCH added aspirin to clopidogrel for 18 months after stroke or TIA. CHARISMA added clopidogrel to aspirin for a median of 28 months across a broad cardiovascular population. In both, bleeding accumulated over the long exposure while the comparison captured mostly the lower-risk chronic period, so harm outweighed benefit. CHANCE inverted the logic: high-intensity dual therapy for only 21 days, started within 24 hours, targets the brief window when recurrence risk is highest and before bleeding risk accumulates. The lesson is that the duration and timing of dual antiplatelet therapy, not the drug combination itself, determined whether it helped or harmed.',
+      predecessors: [
+        {
+          trialId: 'match-trial',
+          trialName: 'MATCH',
+          year: 2004,
+          journal: 'Lancet (Diener et al.)',
+          n: 7599,
+          designNotes: 'Aspirin added to clopidogrel vs clopidogrel alone for 18 months after recent stroke or TIA with at least one additional vascular risk factor.',
+          keyResult: 'Composite vascular endpoint at 18 months 15.7% vs 16.7% (RR 0.94, 95% CI 0.84 to 1.05, P=0.244); life-threatening bleeding doubled (2.6% vs 1.3%).',
+          whatWasMissing: 'Eighteen-month dual therapy let bleeding accumulate while the comparison spanned mostly the lower-risk chronic period, so net harm emerged with no efficacy gain.',
+        },
+        {
+          trialId: 'charisma-trial',
+          trialName: 'CHARISMA',
+          year: 2006,
+          journal: 'NEJM (Bhatt et al.)',
+          n: 15603,
+          designNotes: 'Clopidogrel added to aspirin vs aspirin alone for a median of 28 months across a broad symptomatic and asymptomatic cardiovascular population.',
+          keyResult: 'MI, stroke, or cardiovascular death at median 28 months 6.8% vs 7.3% (RR 0.93, 95% CI 0.83 to 1.05, P=0.22); moderate bleeding higher (2.1% vs 1.3%).',
+          whatWasMissing: 'A median 28-month exposure in a largely lower-risk mixed-prevention population produced a bleeding excess that erased any benefit, with a harm signal in the asymptomatic subgroup (RR 1.20, 95% CI 0.91 to 1.59, not significant).',
+        },
+      ],
+      currentTrialResult:
+        'CHANCE reduced 90-day stroke recurrence (8.2% vs 11.7%, HR 0.68, 95% CI 0.57 to 0.81, P<0.001, ARR 3.5%, NNT 29) without increasing moderate-to-severe hemorrhage (0.3% in both arms).',
+      whatChanged:
+        'Dual therapy limited to 21 days and started within 24 hours of minor stroke (NIHSS 0-3) or high-risk TIA (ABCD2 4 or higher), targeting the acute high-risk window instead of the chronic period MATCH and CHARISMA treated.',
+    },
     trialResult: 'POSITIVE',
     primaryDesign: 'binary-superiority',
     primaryResult: 'met',
@@ -8382,6 +8491,49 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'ENRICH Trial',
     subtitle: 'Minimally Invasive Surgical Evacuation of Intracerebral Hemorrhage',
     category: 'Neuro Trials',
+    // RCT predecessor chain (TRIALS_SPEC §7b). Predecessor facts are sourced from
+    // the already-reviewed ICH-surgery stubs (stich-i / stich-ii / mistie-iii).
+    rctChain: {
+      chainName: 'Surgical ICH evacuation fails three times (2005-2019) to a positive trial (2024)',
+      chainNarrative:
+        'Three prior randomized trials of evacuating a spontaneous intracerebral hemorrhage all missed their functional endpoints, and they tested different techniques. STICH I randomized early open craniotomy against initial conservative management across all supratentorial locations. STICH II repeated the open-craniotomy test in the superficial lobar subgroup that STICH I had flagged. MISTIE III used an image-guided catheter plus alteplase rather than open surgery, and its pre-specified subgroup showed that the patients whose clot was reduced to 15 mL or less did better. ENRICH succeeded by changing the surgical approach and tightening eligibility: minimally invasive parafascicular surgery reaches the clot through a natural sulcal corridor without crossing cortex, and enrollment was restricted to lobar or anterior basal ganglia hematomas of 30 to 80 mL. The lesson is that surgical technique and patient selection, not the concept of evacuating the hematoma, governed the result.',
+      predecessors: [
+        {
+          trialId: 'stich-i-trial',
+          trialName: 'STICH I',
+          year: 2005,
+          journal: 'Lancet (Mendelow et al.)',
+          n: 1033,
+          designNotes: 'Early open craniotomy vs initial conservative management for spontaneous supratentorial ICH, using an equipoise-based enrollment rule.',
+          keyResult: 'Favorable Glasgow Outcome Scale at 6 months 26% vs 24% (OR 0.89, 95% CI 0.66 to 1.19, P=0.414); no benefit overall.',
+          whatWasMissing: 'Predominant open craniotomy added surgical trauma across heterogeneous locations, and the equipoise rule excluded the clearest candidates in either direction.',
+        },
+        {
+          trialId: 'stich-ii-trial',
+          trialName: 'STICH II',
+          year: 2013,
+          journal: 'Lancet (Mendelow et al.)',
+          n: 601,
+          designNotes: 'Early open craniotomy vs initial conservative management restricted to superficial lobar ICH (10-100 mL, within 1 cm of cortex, no intraventricular hemorrhage).',
+          keyResult: 'Unfavorable outcome at 6 months 59% vs 62% (OR 0.86, 95% CI 0.62 to 1.20, P=0.367); the STICH I lobar signal was not confirmed.',
+          whatWasMissing: 'The dedicated lobar trial still relied on open craniotomy, and the 3 percentage point difference with a wide confidence interval was statistically inconclusive.',
+        },
+        {
+          trialId: 'mistie-iii-trial',
+          trialName: 'MISTIE III',
+          year: 2019,
+          journal: 'Lancet (Hanley et al.)',
+          n: 506,
+          designNotes: 'Image-guided stereotactic catheter plus intermittent alteplase vs standard medical management for supratentorial ICH of 30 mL or larger.',
+          keyResult: 'mRS 0-3 at 1 year 45% vs 41% (adjusted OR 1.20, 95% CI 0.81 to 1.81, P=0.33); a pre-specified subgroup reaching 15 mL or less residual clot did benefit.',
+          whatWasMissing: 'Catheter lysis often left more than 15 mL of residual clot, and the procedure carried infection and rebleeding risk over its prolonged catheter dwell time.',
+        },
+      ],
+      currentTrialResult:
+        'ENRICH is the first randomized supratentorial ICH evacuation trial to meet its primary endpoint: utility-weighted mRS at 180 days 0.458 vs 0.374, difference +0.084 (95% Bayesian credible interval 0.005 to 0.163, posterior probability of superiority 0.981), with 30-day mortality 9.3% vs 18.0% (posterior probability 0.987). Benefit concentrated in lobar ICH; the anterior basal ganglia subgroup was halted for futility.',
+      whatChanged:
+        'A trans-sulcal parafascicular approach that avoids cortical transgression, applied only to lobar or anterior basal ganglia hematomas of 30 to 80 mL within 24 hours, replaced the open craniotomy and catheter-lysis techniques that the prior trials used. Bayesian adaptive design and industry funding by the device manufacturer mean the effect size should be read cautiously.',
+    },
     archetypeId: 'A',
     trialResult: 'POSITIVE',
     primaryDesign: 'bayesian-superiority',
@@ -11016,7 +11168,9 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
 
   // ── W7.0 Predecessor Stubs — Batch 2 ─────────────────────────────────────
   // Sub-batch 1: Basilar EVT chain (§7c) — BEST, BASICS → ATTENTION (2022)
-  // Sub-batch 2: Antiplatelet chain (§7c) — MATCH, CHARISMA → POINT (2018)
+  // Sub-batch 2: Antiplatelet chain (§7c) — MATCH, CHARISMA → CHANCE (2013) rctChain anchor.
+  //   (match/charisma successorTrial fields point to POINT (2018), the later confirmatory
+  //    trial; the rctChain teaches CHANCE as the practice-changing inflection point.)
   // Sub-batch 3: ICH surgical chain (§7c) — STICH I, STICH II, MISTIE III → ENRICH (2024)
 
   'best-trial': {
