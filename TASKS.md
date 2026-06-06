@@ -521,8 +521,8 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 > Gate: W6.9 (wiring historical context into landmark trials) is **blocked** until the relevant stubs below exist.
 > Design note: HistoricalContextSection.tsx (TRIALS_SPEC §7a.4) is Archetype G only. A new RCT predecessor display pattern must be designed before any wiring begins — W6.9 tracks that design task.
 
-### W6.9 — Wire historical context into landmark trials — Class C [UNBLOCKED]
-- **Status:** unblocked (2026-04-28) — all 10 W7.0 predecessor stubs now exist; wiring can begin
+### W6.9 — Wire historical context into landmark trials — Class C-clinical [IN PROGRESS]
+- **Status:** [~] in_progress — EVT 2015 chain wired + rendered + clinical-reviewed (commit 4188237, 2026-06-05). RCTChainSection render is now generic in TrialPageNew (any trial whose entry has an rctChain), so the remaining four chains are data-authoring only, each with its own clinical-reviewer gate. REMAINING: ICH surgery (anchor ENRICH; STICH I/II + MISTIE III), Acute DAPT (anchor CHANCE; MATCH + CHARISMA), Basilar EVT (anchor ATTENTION or BAOCHE; BEST + BASICS), Hemicraniectomy (anchor DESTINY II; DECIMAL/DESTINY/HAMLET). FOLLOW-UP (non-blocking, per docs/reviews/clinical-rct-chain-evt-2015.md): normalize the ims-iii-trial stub 95% CI lower bound to 0.83 across all five fields (listDescription + pearls currently read 0.85; published value is 0.83; the new chain card already uses 0.83).
 - **User-visible goal:** Major trial pages show the "what changed" predecessor chain: failed trials in context, with a brief vertical timeline and teaching blurb
 - **Non-goals:** Archetype G / WEAVE historicalContext is already wired — this is for RCT chains only
 - **Pattern:** RCTChainSection.tsx (src/components/trials/RCTChainSection.tsx) — spec at TRIALS_SPEC §7b (v1.2, 2026-04-27)
