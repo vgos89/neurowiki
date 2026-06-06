@@ -34,6 +34,7 @@ import { TrialTitleHeading } from '../../components/trials/TrialTitleHeading';
 import { TeachingWell } from '../../components/trials/TeachingWell';
 import { BottomLineDrawer } from '../../components/trials/BottomLineDrawer';
 import { HistoricalContextSection } from '../../components/trials/HistoricalContextSection';
+import { RCTChainSection } from '../../components/trials/RCTChainSection';
 import TrialChainTimeline from '../../components/trials/TrialChainTimeline';
 import { RelatedTrialsSidebar } from '../../components/trials/RelatedTrialsSidebar';
 
@@ -4342,6 +4343,19 @@ const TrialPageNew: React.FC = () => {
             <HistoricalContextSection
               rows={trialMetadata.historicalContext.rows}
               caveat="Historical rates come from different patient populations, study designs, era, and operator experience levels. Direct comparison to WEAVE is exploratory. These data provide context only, not a randomized control arm."
+            />
+          )}
+
+          {/* Section 2b: RCT predecessor chain — "what changed" (TRIALS_SPEC §7b).
+              Mutually exclusive with historicalContext. */}
+          {trialMetadata.rctChain && (
+            <RCTChainSection
+              chain={trialMetadata.rctChain}
+              currentTrialName={trialMetadata.title.replace(/\s+Trial$/i, '')}
+              currentTrialYear={
+                Number((trialMetadata.source?.match(/\b(19|20)\d{2}\b/) || [])[0]) ||
+                Math.max(...trialMetadata.rctChain.predecessors.map((p) => p.year)) + 1
+              }
             />
           )}
 

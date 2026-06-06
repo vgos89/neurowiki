@@ -1081,6 +1081,49 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     title: 'MR CLEAN Trial',
     subtitle: 'Intra-arterial Treatment for Anterior Circulation LVO',
     category: 'Neuro Trials',
+    // RCT predecessor chain (TRIALS_SPEC §7b). Predecessor facts are sourced from
+    // the already-reviewed W7.0 stubs (ims-iii / synthesis-expansion / mr-rescue).
+    rctChain: {
+      chainName: 'First-generation thrombectomy (2013) to modern EVT (2015)',
+      chainNarrative:
+        'Three negative thrombectomy trials in 2013 all used first-generation devices (intra-arterial tPA, MERCI, Penumbra) and had slow workflow. Two of them, IMS-III and SYNTHESIS Expansion, also enrolled patients without CT-angiography-confirmed large-vessel occlusion. MR RESCUE did require a confirmed proximal occlusion but still failed, because first-generation devices achieved low reperfusion and penumbral imaging did not identify a responsive subgroup. The lesson is that device generation, reperfusion success, and patient selection, not the concept of thrombectomy, were what failed in 2013.',
+      predecessors: [
+        {
+          trialId: 'ims-iii-trial',
+          trialName: 'IMS-III',
+          year: 2013,
+          journal: 'NEJM (Broderick et al.)',
+          n: 656,
+          designNotes: 'Endovascular therapy (mostly coil-based devices) after IV alteplase; no CTA-confirmed occlusion required.',
+          keyResult: 'mRS 0-2 at 90 days 40.8% vs 38.7% (adjusted RR 1.05, 95% CI 0.83 to 1.30); stopped early for futility.',
+          whatWasMissing: 'Most patients had no confirmed large-vessel occlusion, and older devices achieved low reperfusion.',
+        },
+        {
+          trialId: 'synthesis-expansion-trial',
+          trialName: 'SYNTHESIS Expansion',
+          year: 2013,
+          journal: 'NEJM (Ciccone et al.)',
+          n: 362,
+          designNotes: 'Endovascular therapy alone versus IV alteplase within 6 hours; no CTA requirement.',
+          keyResult: 'mRS 0-1 at 90 days OR 0.71 (95% CI 0.44 to 1.14); no superiority.',
+          whatWasMissing: 'No occlusion confirmation and older devices; endovascular therapy was not consistently faster than IV alteplase.',
+        },
+        {
+          trialId: 'mr-rescue-trial',
+          trialName: 'MR RESCUE',
+          year: 2013,
+          journal: 'NEJM (Kidwell et al.)',
+          n: 118,
+          designNotes: 'Penumbral imaging selection with MERCI or Penumbra devices.',
+          keyResult: 'Mean 90-day mRS 3.9 vs 3.9; no difference, and no benefit from penumbral selection.',
+          whatWasMissing: 'Older MERCI/Penumbra devices with low reperfusion; penumbral imaging did not identify a responsive subgroup.',
+        },
+      ],
+      currentTrialResult:
+        'First modern positive thrombectomy trial: adjusted common OR 1.67 (95% CI 1.21 to 2.30) for the mRS shift, with functional independence (mRS 0-2) 32.6% vs 19.1%.',
+      whatChanged:
+        'Modern stent-retriever devices with high reperfusion and faster door-to-reperfusion workflow, plus CTA-confirmed proximal large-vessel-occlusion selection (the ingredient IMS-III and SYNTHESIS lacked).',
+    },
     primaryDesign: 'ordinal-shift',
     primaryResult: 'met',
     applicability: {
