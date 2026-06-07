@@ -993,6 +993,11 @@ const MigrainePathway: React.FC = () => {
                     ] as CategoryOption[]}
                     value={safety.renal}
                     onChange={(v) => setSafety({...safety, renal: v as RenalStatus})}
+                    /* Intentionally never auto-opens: this is a pre-answered safety
+                       override (defaults to 'normal'), not an unfilled sequential
+                       slot. The clinician expands it on demand to flag impairment;
+                       auto-opening on every Step 3 visit would clutter the Safety
+                       Profile panel. Conscious decision per arch review condition #3. */
                     defaultOpen={false}
                   />
                   <div className="flex flex-wrap gap-2">
@@ -1248,6 +1253,7 @@ const MigrainePathway: React.FC = () => {
                             { value: 'skip', label: 'Skip (not indicated)', description: 'Omit magnesium from cocktail.' },
                           ] as CategoryOption[]}
                           value={firstLineAddOns.magnesium}
+                          defaultOpen={firstLineAddOns.magnesium === null}
                           onChange={(v) => setFirstLineAddOns({...firstLineAddOns, magnesium: v === 'skip' ? null : v as MagDose})}
                         />
                         <div data-claim="migraine-magnesium-level-u-aura" className="text-[11px] text-slate-400 px-1 pb-1">Robblee 2025 Level U: insufficient evidence as routine add-on; sub-group benefit with aura/photophobia.</div>
@@ -1272,6 +1278,7 @@ const MigrainePathway: React.FC = () => {
                           { value: 'skip', label: 'Skip (not indicated)', description: 'Omit valproate from cocktail.' },
                         ] as CategoryOption[]}
                         value={firstLineAddOns.valproate}
+                        defaultOpen={firstLineAddOns.valproate === null}
                         onChange={(v) => setFirstLineAddOns({...firstLineAddOns, valproate: v === 'skip' ? null : v as ValproateDose})}
                       />
                     )}
@@ -1389,6 +1396,7 @@ const MigrainePathway: React.FC = () => {
                           { value: '25', label: '25 mg IV', description: 'Higher dose. Pre-medicate with 500 mL NS; monitor for orthostatic hypotension.' },
                         ] as CategoryOption[]}
                         value={secondLine.chlorpromazine}
+                        defaultOpen={secondLine.chlorpromazine === null}
                         onChange={(v) => setSecondLine({...secondLine, chlorpromazine: v as ChlorpromazineDose})}
                       />
                     )}

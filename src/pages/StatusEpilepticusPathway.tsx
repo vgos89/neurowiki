@@ -737,6 +737,7 @@ const StatusEpilepticusPathway: React.FC = () => {
                     { value: 'lacosamide', label: 'Lacosamide (add-on alongside infusion)', description: `${calculateDose("lacosamide", patient.weight)} · Pre-load ECG required` },
                   ] as CategoryOption[]}
                   value={stage3Agent === 'lacosamide' ? 'lacosamide' : null}
+                  defaultOpen={stage3Agent === null}
                   onChange={(v) => setStage3Agent(v)}
                   stepCompleted={isSection3Complete && activeSection !== 3}
                 />

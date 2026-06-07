@@ -13,7 +13,7 @@
  * a11y: aria-expanded on accordion trigger, keyboard Enter/Space toggles.
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 
 export interface CategoryOption {
   value: string;
@@ -41,7 +41,15 @@ export interface PathwayCategoryRowProps {
    * Locked rows render nothing — the parent PathwayRailStep handles the placeholder.
    */
   locked?: boolean;
-  /** Whether this row is initially open. */
+  /**
+   * Whether this row should be open. The row opens on mount when true AND on
+   * every later false→true transition (auto-advance: the row just became the
+   * next-unfilled slot in its step). It never auto-closes on true→false.
+   *
+   * INVARIANT (caller's responsibility): within a visible step, at most ONE row's
+   * `defaultOpen` may transition true at a time, and it MUST be derived from the
+   * same state that gates the row's mount — never a new reachability condition.
+   */
   defaultOpen?: boolean;
 }
 
@@ -70,6 +78,28 @@ export const PathwayCategoryRow: React.FC<PathwayCategoryRowProps> = ({
   defaultOpen = false,
 }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const prevDefaultOpenRef = useRef(defaultOpen);
+
+  // Auto-advance: when this row becomes the next-unfilled slot (defaultOpen flips
+  // false→true) open it and gently bring it into view. Transition-detected (not a
+  // level check) so it never fights handleSelect's close-on-select and never
+  // re-opens a row the user manually closed; never auto-closes on true→false.
+  useEffect(() => {
+    const prev = prevDefaultOpenRef.current;
+    prevDefaultOpenRef.current = defaultOpen;
+    if (!prev && defaultOpen) {
+      setIsOpen(true);
+      const el = triggerRef.current;
+      if (el) {
+        const reduce =
+          typeof window !== 'undefined' &&
+          typeof window.matchMedia === 'function' &&
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        el.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
+      }
+    }
+  }, [defaultOpen]);
 
   const selectedOption = options.find((o) => o.value === value) ?? null;
 
@@ -137,6 +167,7 @@ export const PathwayCategoryRow: React.FC<PathwayCategoryRowProps> = ({
     <div className="border-b border-slate-100 last:border-b-0 scroll-mt-20">
       {/* Collapsed row trigger */}
       <button
+        ref={triggerRef}
         type="button"
         onClick={handleToggle}
         aria-expanded={isOpen}
@@ -146,9 +177,9 @@ export const PathwayCategoryRow: React.FC<PathwayCategoryRowProps> = ({
         <span className="flex items-center gap-1.5 flex-shrink-0">
           {selectedOption ? (
             <span className="text-sm text-slate-500">{selectedOption.label}</span>
-          ) : (
+          ) : !isOpen ? (
             <span className="text-sm italic text-slate-400">Tap to select</span>
-          )}
+          ) : null}
           <ChevronDown
             className={`transition-transform duration-200 ${
               isOpen ? 'rotate-180' : ''

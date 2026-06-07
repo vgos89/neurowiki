@@ -716,6 +716,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                         { value: 'wake-up', label: 'Sleep Onset (Wake-up Stroke)', description: 'Enter bedtime + wake-up time' },
                       ]}
                       value={onsetMode}
+                      defaultOpen={onsetMode === null}
                       onChange={(val) => {
                         clearCriteriaAnswers();
                         if (val === 'unknown-no-lkw') {
@@ -769,6 +770,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                       { value: 'ctp', label: 'CT Perfusion', description: 'RAPID or equivalent' },
                     ]}
                     value={imagingModality}
+                    defaultOpen={imagingModality === null}
                     onChange={(val) => { clearCriteriaAnswers(); setImagingModality(val as ImagingModality); }}
                   />
                 </div>
@@ -881,6 +883,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                           { value: 'no', label: 'No', description: 'More than 4.5h since recognition' },
                         ]}
                         value={aRecognition === null ? null : aRecognition ? 'yes' : 'no'}
+                        defaultOpen={aRecognition === null}
                         onChange={(val) => setARecognition(val === 'yes')}
                       />
                     </div>
@@ -903,6 +906,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                           { value: 'no', label: 'No — Large lesion', description: 'Large lesion ≥ 1/3 MCA' },
                         ]}
                         value={aDwiSmall === null ? null : aDwiSmall ? 'yes' : 'no'}
+                        defaultOpen={aDwiSmall === null}
                         onChange={(val) => setADwiSmall(val === 'yes')}
                       />
                     </div>
@@ -921,6 +925,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                           { value: 'no', label: 'No — FLAIR positive', description: 'FLAIR shows established infarct' },
                         ]}
                         value={aFlair === null ? null : aFlair ? 'yes' : 'no'}
+                        defaultOpen={aFlair === null}
                         onChange={(val) => setAFlair(val === 'yes')}
                       />
                     </div>
@@ -975,6 +980,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                             { value: 'no', label: 'No — Core ≥ 70 mL', description: 'Large established infarct' },
                           ]}
                           value={bCtpCore === null ? null : bCtpCore ? 'yes' : 'no'}
+                          defaultOpen={bCtpCore === null}
                           onChange={(val) => setBCtpCore(val === 'yes')}
                         />
                       </div>
@@ -991,6 +997,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                               { value: 'no', label: 'No — Mismatch not met', description: 'Insufficient penumbra' },
                             ]}
                             value={bCtpMismatch === null ? null : bCtpMismatch ? 'yes' : 'no'}
+                            defaultOpen={bCtpMismatch === null}
                             onChange={(val) => setBCtpMismatch(val === 'yes')}
                           />
                         </div>
@@ -1016,6 +1023,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                             { value: 'no', label: 'No — No PWI deficit', description: 'No perfusion abnormality' },
                           ]}
                           value={bMriPwi === null ? null : bMriPwi ? 'yes' : 'no'}
+                          defaultOpen={bMriPwi === null}
                           onChange={(val) => setBMriPwi(val === 'yes')}
                         />
                       </div>
@@ -1032,6 +1040,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                               { value: 'no', label: 'No — No mismatch', description: 'No salvageable tissue' },
                             ]}
                             value={bMriMismatch === null ? null : bMriMismatch ? 'yes' : 'no'}
+                            defaultOpen={bMriMismatch === null}
                             onChange={(val) => setBMriMismatch(val === 'yes')}
                           />
                         </div>
@@ -1054,6 +1063,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                           { value: 'no', label: 'No — IVT only', description: 'No LVO or EVT not available' },
                         ]}
                         value={bEvt === null ? null : bEvt ? 'yes' : 'no'}
+                        defaultOpen={bEvt === null}
                         onChange={(val) => setBEvt(val === 'yes')}
                       />
                     </div>
@@ -1088,6 +1098,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                         { value: 'no', label: 'No — No penumbra', description: 'No target mismatch' },
                       ]}
                       value={cPenumbra === null ? null : cPenumbra ? 'yes' : 'no'}
+                      defaultOpen={cPenumbra === null}
                       onChange={(val) => setCPenumbra(val === 'yes')}
                     />
                   </div>
@@ -1108,6 +1119,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                           { value: 'no', label: 'No — Non-LVO', description: 'Late Path C does not apply' },
                         ]}
                         value={cLvo === null ? null : cLvo ? 'yes' : 'no'}
+                        defaultOpen={cLvo === null}
                         onChange={(val) => setCLvo(val === 'yes')}
                       />
                     </div>
@@ -1129,6 +1141,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                             { value: 'no', label: 'No — EVT not possible', description: 'Proceed with extended IVT' },
                           ]}
                           value={cLvoEvt === null ? null : cLvoEvt ? 'yes' : 'no'}
+                          defaultOpen={cLvoEvt === null}
                           onChange={(val) => setCLvoEvt(val === 'yes')}
                         />
                       </div>
@@ -1141,6 +1154,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                             label="EVT barrier"
                             options={EVT_BARRIERS.map(b => ({ value: b.id, label: b.label }))}
                             value={cLvoBarrier}
+                            defaultOpen={cLvoBarrier === null}
                             onChange={(val) => setCLvoBarrier(val as EVTBarrierId)}
                           />
                         </div>
@@ -1158,6 +1172,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
                               { value: 'no', label: 'No — Expertise unavailable', description: 'Do not endorse late IVT at current site' },
                             ]}
                             value={cExpertise === null ? null : cExpertise ? 'yes' : 'no'}
+                            defaultOpen={cExpertise === null}
                             onChange={(val) => setCExpertise(val === 'yes')}
                           />
                         </div>
