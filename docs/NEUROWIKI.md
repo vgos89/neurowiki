@@ -209,6 +209,12 @@ All clinical content must be traceable to a named guideline with year. No conten
 - Architects: arch-pattern-a-fix-tier-1-2.md, arch-pattern-a-fix-tier-4.md, arch-pattern-a-fix-tier-5.md
 - Clinical reviewers: clinical-pattern-a-fix-tier-4.md, clinical-pattern-a-fix-tier-5.md (both approve-with-conditions resolved)
 
+## Recent Work (2026-06-07)
+
+**EVT result/action de-clutter to PM spec:**
+- Decision step result surface consolidated from four competing layouts (floating "Decision Support" card, fixed action bar with legacy button, eligibility drawer, tab bar) to ONE: the drawer's expanded panel (68dvh) holding the verdict + single house-style "Copy to EMR" button + folded clinical content (MeVO risk gated, "Decision Support Only" disclaimer with trial links, 3x 2026 peri-procedural pearls, Clinical Context Summary).
+- File: `src/pages/EvtPathway.tsx` — UI consolidation only. EMR-note logic + verdict logic byte-identical. Drawer pattern established by the Pattern A fix series (2026-05-16) and matches ELAN/ExtendedIVT architecture.
+
 ## Recent Work (2026-06-05)
 
 **Headache Pathway v4 rebuild — live differential narrowing (commit 5e26727):**

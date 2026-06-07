@@ -1715,76 +1715,15 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
           segmentAboveTraversed={isSection2Complete}
           lockedAriaLabel="Step 4 Decision, locked — awaiting completion of Step 3"
         >
-             {result && (<div className="space-y-6 animate-in zoom-in-95 duration-300 bg-white border border-slate-100 rounded-xl p-4">
-                {/* Result is now shown in the CalculatorDrawer (portal, bottom of screen).
-                    Tap the Eligibility drawer handle to expand status + details + assessment summary. */}
-
-                {/* 4. Risk & Evidence Box for MeVO (unchanged) */}
-                {isMevo && (
-                    <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 shadow-sm">
-                        <div className="flex items-center space-x-2 mb-4 text-amber-800">
-                            <ShieldAlert size={20} />
-                            <h3 className="font-bold text-sm uppercase tracking-wide">MeVO / DVO Risk & Evidence</h3>
-                        </div>
-                        <ul className="space-y-3 text-sm text-amber-900">
-                            <li className="flex items-start">
-                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
-                                <span><strong>ESCAPE-MeVO (2025):</strong> No functional benefit at 90d overall. Higher sICH rate and trend toward higher mortality in EVT arm.</span>
-                            </li>
-                            <li className="flex items-start">
-                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
-                                <span><strong>DISTAL (2025):</strong> Neutral primary outcome. Higher sICH in EVT arm (5.9% vs 2.6%). Reperfusion rates were lower than typical LVO trials.</span>
-                            </li>
-                            <li className="flex items-start">
-                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
-                                <span><strong>Synthesis:</strong> Be cautious in older patients, those with mild deficits, or baseline disability. Benefit is most plausible for dominant M2/M3 occlusions with disabling deficits.</span>
-                            </li>
-                        </ul>
-                    </div>
-                )}
-
-                {/* 5. Disclaimer */}
-                <div className="flex items-start space-x-3 bg-slate-50 p-4 rounded-xl border border-slate-100 text-xs text-slate-500 leading-relaxed">
-                    <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
-                    <div>
-                        <strong>Decision Support Only.</strong>
-                        <p className="mt-1">{autoLinkReactNodes("Based on AHA/ASA Guidelines and major trials (DAWN, DEFUSE-3, SELECT2, ESCAPE-MeVO, DISTAL, ATTENTION, BAOCHE). Always verify clinical details.", openTrial)}</p>
-                        <p className="mt-3 pt-3 border-t border-slate-200">
-                             <strong>Clinical Context:</strong> Always discuss with Vascular Neurology and the Neurointerventional/Interventional Neurology team; local protocols and anatomy-specific factors apply.
-                        </p>
-                    </div>
-                </div>
-
-                {/* 6. New 2026 peri-procedural pearls (Class C-clinical patches B4/B5/B6) */}
-                <PathwayLearningPearl
-                  title="Anesthesia choice — GA or procedural sedation"
-                  content="During EVT, either general anesthesia or procedural sedation are recommended (COR 1, LOE B-R) per AHA/ASA 2026 §4.7.4 Rec 3. Local protocol, hemodynamic stability, and airway risk drive the choice — there is no guideline preference between the two strategies in the average patient."
-                />
-                <PathwayLearningPearl
-                  title="Adjunctive intra-arterial thrombolytic after successful EVT (new 2026)"
-                  content="After successful EVT (mTICI 2b/2c/3), adjunctive intra-arterial alteplase, urokinase, or tenecteplase may be reasonable to improve distal reperfusion (COR 2b, LOE B-R) — a new 2026 recommendation per §4.7.4 Rec 8. Decision should be individualized with neurointerventional team based on residual perfusion deficit and bleeding risk."
-                />
-                <PathwayLearningPearl
-                  title="Pre-EVT IV tirofiban — not useful"
-                  content="Pre-EVT IV tirofiban is not useful in patients with acute ischemic stroke from LVO (COR 3: No Benefit, LOE B-R) per AHA/ASA 2026 §4.7.4 Rec 9. Do not give upstream tirofiban as a routine adjunct to thrombectomy."
-                />
-
-                {/* 7. PathwayLearningPearl */}
-                <PathwayLearningPearl
-                  title="Clinical Context Summary"
-                  content={
-                    <ul className="list-disc list-inside space-y-1">
-                      <li><strong>Evidence:</strong> Strong for LVO (Anterior & Basilar), evolving for MeVO / DVO.</li>
-                      <li><strong>Selection:</strong> Imaging guides eligibility, but clinical judgment on disability and risk drives the final call.</li>
-                      <li><strong>Team:</strong> Discuss with vascular neurology and neurointerventional for borderline cases.</li>
-                    </ul>
-                  }
-                />
-             </div>)}
+             {result && (
+               <p className="text-center text-sm text-slate-500 py-3">
+                 Eligibility result ready. Tap the Eligibility bar below to review.
+               </p>
+             )}
         </PathwayRailStep>
       </div>
 
-      <div id="evt-action-bar" className={`mt-8 pt-4 md:border-t border-slate-100 ${isInModal ? 'static' : 'fixed bottom-[4.5rem] md:static'} left-0 right-0 ${isInModal ? 'bg-transparent' : 'bg-white/95 backdrop-blur md:bg-transparent'} border-t md:border-0 ${isInModal ? '' : 'z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none'}`}>
+      <div id="evt-action-bar" className={`mt-8 pt-4 md:border-t border-slate-100 ${isInModal ? 'static' : activeSection === 3 ? 'static' : 'fixed bottom-[4.5rem] md:static'} left-0 right-0 ${isInModal || activeSection === 3 ? 'bg-transparent' : 'bg-white/95 backdrop-blur md:bg-transparent'} ${isInModal || activeSection === 3 ? '' : 'border-t md:border-0'} ${isInModal || activeSection === 3 ? '' : 'z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] md:shadow-none'}`}>
          <div className="max-w-2xl mx-auto flex items-center justify-between gap-4 p-4 pb-[max(1rem,env(safe-area-inset-bottom,1rem))] md:p-0 md:pb-0">
              <button onClick={handleBack} disabled={activeSection === 0} aria-hidden={activeSection === 0} className={`px-4 py-2 border border-slate-200 rounded-full font-medium text-sm transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${activeSection === 0 ? 'opacity-0 pointer-events-none cursor-not-allowed' : 'bg-white text-slate-600 hover:bg-slate-50 hover:border-slate-300'}`}>Back</button>
              {activeSection === 3 && (<button onClick={handleReset} className="hidden md:flex items-center text-slate-500 hover:text-neuro-500 font-medium text-sm px-4 py-2 rounded-full transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><RotateCcw size={16} className="mr-2" /> Start Over</button>)}
@@ -1793,9 +1732,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                  {customActionButton.icon && <span className="mr-2">{customActionButton.icon}</span>}
                  {customActionButton.label}
                </button>
-             ) : (
-               <button onClick={copySummary} className="flex-1 md:flex-none px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 shadow-lg transition-colors duration-150 flex items-center justify-center active:scale-95 transform-gpu min-h-[44px] touch-manipulation focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><Copy size={16} className="mr-2" /> Copy to EMR</button>
-             ))}
+             ) : null)}
          </div>
          {activeSection === 3 && (<div className="md:hidden mt-4 text-center"><button onClick={handleReset} className="text-sm text-slate-400 font-bold flex items-center justify-center w-full p-3 hover:bg-slate-50 rounded-lg transition-colors duration-150 min-h-[44px] touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"><RotateCcw size={14} className="mr-2" /> Start Over</button></div>)}
       </div>
@@ -1889,7 +1826,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
             {result && drawerState === 'C' && (
               <div
                 id="evt-drawer-content"
-                className="bg-white border-t border-slate-100 px-5 py-4 max-h-[45dvh] overflow-y-auto"
+                className="bg-white border-t border-slate-100 px-5 py-4 max-h-[68dvh] overflow-y-auto"
               >
                 {/* Status + criteria name */}
                 <div className="mb-3">
@@ -2000,6 +1937,78 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
                     )}
                   </dl>
                 </div>
+
+                {/* Copy action row — drawer's primary action (matches ELAN/ExtendedIVT pattern) */}
+                <div className="flex items-center gap-2 pt-3 pb-1 border-t border-slate-100 mt-3">
+                  <button
+                    onClick={copySummary}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-neuro-500 hover:bg-neuro-600 text-white rounded-full text-sm font-medium min-h-[44px] transition-colors touch-manipulation active:scale-95 transform-gpu focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+                  >
+                    <Copy size={14} /> Copy to EMR
+                  </button>
+                </div>
+
+                {/* Risk & Evidence Box for MeVO (isMevo-gated, verbatim preservation) */}
+                {isMevo && (
+                    <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 shadow-sm mt-4">
+                        <div className="flex items-center space-x-2 mb-4 text-amber-800">
+                            <ShieldAlert size={20} />
+                            <h3 className="font-bold text-sm uppercase tracking-wide">MeVO / DVO Risk & Evidence</h3>
+                        </div>
+                        <ul className="space-y-3 text-sm text-amber-900">
+                            <li className="flex items-start">
+                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
+                                <span><strong>ESCAPE-MeVO (2025):</strong> No functional benefit at 90d overall. Higher sICH rate and trend toward higher mortality in EVT arm.</span>
+                            </li>
+                            <li className="flex items-start">
+                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
+                                <span><strong>DISTAL (2025):</strong> Neutral primary outcome. Higher sICH in EVT arm (5.9% vs 2.6%). Reperfusion rates were lower than typical LVO trials.</span>
+                            </li>
+                            <li className="flex items-start">
+                                <span className="mr-2 mt-1.5 w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></span>
+                                <span><strong>Synthesis:</strong> Be cautious in older patients, those with mild deficits, or baseline disability. Benefit is most plausible for dominant M2/M3 occlusions with disabling deficits.</span>
+                            </li>
+                        </ul>
+                    </div>
+                )}
+
+                {/* Disclaimer (verbatim preservation) */}
+                <div className="flex items-start space-x-3 bg-slate-50 p-4 rounded-xl border border-slate-100 text-xs text-slate-500 leading-relaxed mt-4">
+                    <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
+                    <div>
+                        <strong>Decision Support Only.</strong>
+                        <p className="mt-1">{autoLinkReactNodes("Based on AHA/ASA Guidelines and major trials (DAWN, DEFUSE-3, SELECT2, ESCAPE-MeVO, DISTAL, ATTENTION, BAOCHE). Always verify clinical details.", openTrial)}</p>
+                        <p className="mt-3 pt-3 border-t border-slate-200">
+                             <strong>Clinical Context:</strong> Always discuss with Vascular Neurology and the Neurointerventional/Interventional Neurology team; local protocols and anatomy-specific factors apply.
+                        </p>
+                    </div>
+                </div>
+
+                {/* 2026 peri-procedural pearls (verbatim preservation) */}
+                <PathwayLearningPearl
+                  title="Anesthesia choice — GA or procedural sedation"
+                  content="During EVT, either general anesthesia or procedural sedation are recommended (COR 1, LOE B-R) per AHA/ASA 2026 §4.7.4 Rec 3. Local protocol, hemodynamic stability, and airway risk drive the choice — there is no guideline preference between the two strategies in the average patient."
+                />
+                <PathwayLearningPearl
+                  title="Adjunctive intra-arterial thrombolytic after successful EVT (new 2026)"
+                  content="After successful EVT (mTICI 2b/2c/3), adjunctive intra-arterial alteplase, urokinase, or tenecteplase may be reasonable to improve distal reperfusion (COR 2b, LOE B-R) — a new 2026 recommendation per §4.7.4 Rec 8. Decision should be individualized with neurointerventional team based on residual perfusion deficit and bleeding risk."
+                />
+                <PathwayLearningPearl
+                  title="Pre-EVT IV tirofiban — not useful"
+                  content="Pre-EVT IV tirofiban is not useful in patients with acute ischemic stroke from LVO (COR 3: No Benefit, LOE B-R) per AHA/ASA 2026 §4.7.4 Rec 9. Do not give upstream tirofiban as a routine adjunct to thrombectomy."
+                />
+
+                {/* Clinical Context Summary pearl (verbatim preservation) */}
+                <PathwayLearningPearl
+                  title="Clinical Context Summary"
+                  content={
+                    <ul className="list-disc list-inside space-y-1">
+                      <li><strong>Evidence:</strong> Strong for LVO (Anterior & Basilar), evolving for MeVO / DVO.</li>
+                      <li><strong>Selection:</strong> Imaging guides eligibility, but clinical judgment on disability and risk drives the final call.</li>
+                      <li><strong>Team:</strong> Discuss with vascular neurology and neurointerventional for borderline cases.</li>
+                    </ul>
+                  }
+                />
               </div>
             )}
           </CalculatorDrawer>
