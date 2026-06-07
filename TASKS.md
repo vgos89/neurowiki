@@ -1155,6 +1155,10 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 ---
 
+### Pathway auto-advance — open the next slot automatically — Class D — DONE commit ad7f44e
+- **Status:** merged
+- **What shipped:** Fixed the "choppy" step-pathway flow (V-reported on EVT + Extended IVT — selecting a value did not open the next slot; multiple identical empty slots gave no "fill this next" cue). Root cause: `PathwayCategoryRow` read `defaultOpen` only at mount (`useState(defaultOpen)`). Now it opens on every `defaultOpen` false→true transition (transition-detected, never fights close-on-select or a manual close), with a reduced-motion-gated `scrollIntoView` on auto-open, and the stale "Tap to select" label dropped while a row is open. Wired `defaultOpen` on the rows that lacked it, each mirroring the row's own value field: ExtendedIVT (15), Migraine (3), SE (1); EVT was already 16/16. Migraine Renal kept closed-by-default (pre-answered safety override, not a sequential slot); two SE rows left as-is (always-defaulted). Interaction-only — no clinical option/threshold/branch/verdict changed (diff is `defaultOpen` props + the primitive effect). Architect approve-with-conditions (docs/reviews/arch-pathway-autoadvance.md). Live regression at 375px: auto-advance works on EVT + ExtendedIVT, manual-close sticks, cascade-clear re-cascades with exactly one row open, EVT unchanged. tsc clean · build green (171 routes) · claims clean · 206 tests. Rollback: one-unit `git revert`.
+
 ### Phase 7E — NIHSS normal exam shortcut + live State B drawer — Class C — DONE commit 9c52fe9
 - **Status:** merged
 - **What shipped:** "Normal exam" shortcut button (sets all 15 items to 0, opens drawer). Live State B drawer — interpretation updates as user scores items before completing all 15. Drawer now shows severity label + running NIHSS total in real time.
