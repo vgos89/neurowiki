@@ -1156,8 +1156,8 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 
 ---
 
-### EVT result/action de-clutter to PM spec — Class D-clinical
-- **Status:** ready_for_merge (uncommitted — commit SHA pending)
+### EVT result/action de-clutter to PM spec — Class D-clinical — DONE commit d59ee42
+- **Status:** merged (commit d59ee42)
 - **User-visible goal:** The EVT Decision step previously stacked four competing result surfaces (floating "Decision Support" card, fixed action bar with legacy black "Copy to EMR" button, eligibility drawer, tab bar). Now collapsed to ONE: the drawer's expanded panel holds the verdict + single house-style "Copy to EMR" button + folded clinical content (MeVO risk box [isMevo-gated], "Decision Support Only" disclaimer with auto-linked trials, three 2026 peri-procedural pearls, Clinical Context Summary).
 - **Non-goals:** EMR-note logic (buildEmrText/copySummary) unchanged; verdict logic unchanged; clinical text relocated byte-for-byte, no new claims authored.
 - **Files:** src/pages/EvtPathway.tsx (UI consolidation). Drawer panel height raised 45dvh → 68dvh; legacy black button removed; action bar de-fixed (static Back + Start Over at decision step); all verdict logic untouched.
@@ -1775,6 +1775,11 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
   - Two UI-testing fixes V reported on the step pathways. (#1) No colour cue for which open slot to fill next: PathwayCategoryRow now tints the open-and-unfilled row (neuro-50 background, neuro-400 left accent, neuro-800 label, neuro-500 chevron) so the focal slot is obvious. (#2) The interpretation/verdict bar at the bottom was easy to miss: the eligibility CalculatorDrawer now auto-expands into the full result panel the moment a real verdict is ready (once per session, resets on cascade-clear), mirroring ExtendedIVT; collapsed bar is tier-coloured via colorCollapsed.
   - Files: src/components/pathways/PathwayCategoryRow.tsx (active affordance), src/pages/EvtPathway.tsx + src/pages/ExtendedIVTPathway.tsx (auto-expand effect + colorCollapsed). Interaction/visual only — no clinical option/threshold/branch/verdict text changed.
   - Gate results: tsc clean · build green · claims clean · full EVT + ExtendedIVT branch audit (every selection path reaches a verdict; no real dead-ends) · live at 375px.
+- [x] 2026-06-07 — EVT result/action de-clutter to PM spec — Class D-clinical (commit d59ee42)
+  - Decision step previously stacked four competing surfaces (floating "Decision Support" card, fixed action bar with legacy black "Copy to EMR", eligibility drawer, tab bar) with three EMR-copy paths. Now consolidated to ONE: the drawer's expanded panel holds the verdict + single house-style "Copy to EMR" button + folded clinical content (MeVO risk box [isMevo-gated], "Decision Support Only" disclaimer with auto-linked trials, 3x 2026 peri-procedural pearls, Clinical Context Summary). Legacy black button removed (redundant 3rd copy path); action bar de-fixed at decision step (static Back + Start Over); drawer panel 45dvh → 68dvh.
+  - File: src/pages/EvtPathway.tsx (UI consolidation only). EMR-note logic (buildEmrText/copySummary) + verdict logic byte-identical; header copy/share unchanged; clinical text relocated byte-for-byte.
+  - Gate results: tsc clean · build 171/171 prerendered · claims hook PASS · mobile-first 375px PASS (drawer expands to 68dvh, copy button reachable, scrolls above tab bar) · architect approve-with-conditions (docs/reviews/arch-evt-declutter.md) · clinical pre-exec approve-with-conditions + post-exec verbatim PASS (docs/reviews/clinical-evt-declutter.md).
+  - Gate 6 live-verify: PASS — /pathways/evt returns 200 on the d59ee42 deploy, title + H1 intact, 4-step pathway renders; homepage 200.
 
 ## POST-MORTEMS
 Regressions that required rollback. Each entry links to a post-mortem
