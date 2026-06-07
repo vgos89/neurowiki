@@ -163,17 +163,24 @@ export const PathwayCategoryRow: React.FC<PathwayCategoryRowProps> = ({
     );
   }
 
+  // Derive active state: open AND still unfilled — the focal slot.
+  const isActive = isOpen && !selectedOption;
+
   return (
-    <div className="border-b border-slate-100 last:border-b-0 scroll-mt-20">
-      {/* Collapsed row trigger */}
+    <div className={`border-b border-slate-100 last:border-b-0 scroll-mt-20 ${isActive ? 'bg-neuro-50 rounded-lg' : ''}`}>
+      {/* Collapsed / expanded row trigger */}
       <button
         ref={triggerRef}
         type="button"
         onClick={handleToggle}
         aria-expanded={isOpen}
-        className="w-full text-left px-0 py-3 min-h-[44px] flex items-center justify-between gap-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors hover:bg-slate-50 rounded-lg"
+        className={`w-full text-left py-3 min-h-[44px] flex items-center justify-between gap-3 focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none active:scale-[0.98] transform-gpu touch-manipulation transition-colors rounded-lg ${
+          isActive
+            ? 'px-3 border-l-2 border-neuro-400 hover:bg-neuro-100'
+            : 'px-0 hover:bg-slate-50'
+        }`}
       >
-        <span className="text-[0.9375rem] font-medium text-slate-900">{label}</span>
+        <span className={`text-[0.9375rem] font-medium ${isActive ? 'text-neuro-800' : 'text-slate-900'}`}>{label}</span>
         <span className="flex items-center gap-1.5 flex-shrink-0">
           {selectedOption ? (
             <span className="text-sm text-slate-500">{selectedOption.label}</span>
@@ -183,7 +190,7 @@ export const PathwayCategoryRow: React.FC<PathwayCategoryRowProps> = ({
           <ChevronDown
             className={`transition-transform duration-200 ${
               isOpen ? 'rotate-180' : ''
-            } ${selectedOption ? 'text-slate-400' : 'text-neuro-300'}`}
+            } ${isActive ? 'text-neuro-500' : selectedOption ? 'text-slate-400' : 'text-neuro-300'}`}
           />
         </span>
       </button>

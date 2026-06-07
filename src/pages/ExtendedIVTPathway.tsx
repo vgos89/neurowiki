@@ -1417,6 +1417,7 @@ const ExtendedIVTPathway: React.FC<ExtendedIVTPathwayProps> = ({
         ariaLabel="Extended IVT eligibility drawer"
         stateAText={{ label: 'Eligibility', hint: 'Complete steps to see verdict' }}
         collapsedLabel="Eligibility"
+        colorCollapsed={drawerState === 'C'}
         collapsedStat={
           drawerState === 'C' && result
             ? `${result.status} · ${result.reason.split('(')[0].trim()}`

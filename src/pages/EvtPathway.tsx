@@ -1023,6 +1023,21 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
   const completedCount = [isSection0Complete, isSection1Complete, isSection2Complete, isSection3Complete].filter(Boolean).length;
   const evidenceBadge = result ? getEvidenceBadge(result) : null;
 
+  // #2 fix — auto-expand the verdict drawer the moment a real decision is ready
+  // (State C with a non-placeholder result), once per session, so the answer
+  // announces itself instead of hiding in the collapsed bottom bar. Mirrors
+  // ExtendedIVTPathway's auto-expand (its lines 643–648). Resets when the verdict
+  // goes away (e.g. cascade-clear) so it re-expands on the next real verdict.
+  const hasAutoExpandedDrawerRef = useRef(false);
+  useEffect(() => {
+    if (isSection3Complete && !hasAutoExpandedDrawerRef.current) {
+      hasAutoExpandedDrawerRef.current = true;
+      setDrawerExpanded(true);
+    } else if (!isSection3Complete) {
+      hasAutoExpandedDrawerRef.current = false;
+    }
+  }, [isSection3Complete]);
+
   const getSummary = (idx: number) => {
     if (idx === 0) {
       if (inputs.occlusionType === 'unknown') return undefined;
@@ -1868,6 +1883,7 @@ const EvtPathway: React.FC<EvtPathwayProps> = ({ onResultChange, hideHeader = fa
             stateAText={{ label: 'Eligibility', hint: 'Complete steps to see verdict' }}
             stateBText={{ label: drawerCollapsedStat, hint: 'Complete imaging to confirm' }}
             stateBTappable={false}
+            colorCollapsed={drawerState === 'C'}
           >
             {/* Expanded drawer content — replaces bespoke Step 4 result card */}
             {result && drawerState === 'C' && (
