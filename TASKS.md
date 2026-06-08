@@ -1,7 +1,15 @@
 # TASKS.md — NeuroWiki Task Ledger
 
 ## ACTIVE
-(none — post-flight update session)
+
+### trial-full-eligibility-and-arm-detail-pilot — Class D-clinical
+- **Status:** ready_for_merge (committed this session; mechanism + 5 pilot trials live)
+- **User-visible goal:** on a trial page the resident can expand the curated inclusion/exclusion summary to the full verbatim eligibility criteria, and open a "Study Arms" accordion showing each arm's agent, dose, route, frequency, duration, co-interventions, and a nuance note. Pilot: DAWN, DEFUSE-3, ECASS III, ESCAPE, NINDS.
+- **Non-goals:** not changing any existing summary criteria, scoring, interpretation, or recommendation text; not modernizing trial criteria (full eligibility is the trial's historical record with provenance, distinct from `ecass-3-exclusions-modernize`); not populating beyond the 5 pilot trials this PR; not migrating the legacy structured arm block off the old `intervention` object (guarded, retired incrementally per ADR).
+- **Files likely touched:** `src/data/trialData.ts` (schema types — DONE; + pilot content); NEW `src/components/trials/EligibilityCriteriaCard.tsx`, `src/components/trials/InterventionArmsAccordion.tsx`; `src/pages/trials/TrialPageNew.tsx` (consolidate orphan population copy → component, wire accordion, guard legacy arm block); `docs/evidence-packets/*`, `docs/adrs/ADR-2026-06-08-trial-eligibility-and-arm-detail.md` (DONE), `docs/reviews/arch-trial-eligibility-arms.md` (DONE) + clinical artifact.
+- **Acceptance checks:** tsc clean; build green; check:claims pass; per-trial NCT verified to resolve to the correct trial before any registry pull (NINDS `NCT00000292` is wrong → publication path + fix); full eligibility + arm detail render behind disclosure on all 5 pilot pages with provenance; trials without the new fields render exactly as today; mobile-first 375px sign-off; accessibility sign-off on the new disclosure (button + aria-expanded + controlled region, keyboard/focus); clinical-reviewer §17.2 approve / approve-with-conditions on the pilot batch; architect §17.1 (DONE — approve-with-conditions).
+- **Clinical impact:** high (eligibility criteria + arm protocols are act-on-able reference content).
+- **Rollback plan:** `git revert <merge commit>` — remove the two components + accordion wiring, drop the `armDetails` guard (legacy arm block renders unconditionally again); new schema fields go unused. No data migration. (ADR §Rollback.)
 
 ### W-HEADACHE-V4 — Clinic Headache "live differential narrowing" rebuild — Class D-clinical (E-clinical surfaces)
 - **Status:** ready_for_merge (committed this session; live route flipped to V4)

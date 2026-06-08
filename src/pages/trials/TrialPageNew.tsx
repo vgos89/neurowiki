@@ -33,6 +33,8 @@ import { TrialHeaderBar } from '../../components/trials/TrialHeaderBar';
 import { TrialTitleHeading } from '../../components/trials/TrialTitleHeading';
 import { TeachingWell } from '../../components/trials/TeachingWell';
 import { BottomLineDrawer } from '../../components/trials/BottomLineDrawer';
+import { EligibilityCriteriaCard } from '../../components/trials/EligibilityCriteriaCard';
+import { InterventionArmsAccordion } from '../../components/trials/InterventionArmsAccordion';
 import { HistoricalContextSection } from '../../components/trials/HistoricalContextSection';
 import { RCTChainSection } from '../../components/trials/RCTChainSection';
 import TrialChainTimeline from '../../components/trials/TrialChainTimeline';
@@ -506,44 +508,10 @@ const TrialPageNew: React.FC = () => {
             </p>
           </div>
 
-          {/* Section 3: Population snapshot — inclusion + exclusion criteria */}
-          {(trialMetadata.inclusionCriteria?.length || trialMetadata.exclusionCriteria?.length) && (
-            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-100">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                  Population
-                </p>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
-                {trialMetadata.inclusionCriteria && (
-                  <div className="p-4">
-                    <p className="text-xs font-semibold text-slate-500 mb-2">Included</p>
-                    <ul className="space-y-1.5">
-                      {trialMetadata.inclusionCriteria.map((c, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs text-slate-700">
-                          <span className="text-emerald-500 flex-shrink-0 mt-0.5" aria-hidden="true">✓</span>
-                          {c}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {trialMetadata.exclusionCriteria && (
-                  <div className="p-4">
-                    <p className="text-xs font-semibold text-slate-500 mb-2">Excluded</p>
-                    <ul className="space-y-1.5">
-                      {trialMetadata.exclusionCriteria.map((c, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs text-slate-700">
-                          <span className="text-red-400 flex-shrink-0 mt-0.5" aria-hidden="true">✕</span>
-                          {c}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+          {/* Section 3: Population snapshot — routed through shared EligibilityCriteriaCard.
+              Orphaned inline copy removed; component handles both curated summary and
+              full-criteria disclosure. */}
+          <EligibilityCriteriaCard tm={trialMetadata} />
 
           {/* Section 4: Primary outcome — Archetype A DeltaBandChart */}
           <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
@@ -824,99 +792,77 @@ const TrialPageNew: React.FC = () => {
   };
 
   // ── Shared population section (Sections 3) ────────────────────────────────
-  const renderPopulationSection = (tm: TrialMetadata) => {
-    if (!tm.inclusionCriteria?.length && !tm.exclusionCriteria?.length) return null;
-    return (
-      <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-100">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Population</p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
-          {tm.inclusionCriteria && (
-            <div className="p-4">
-              <p className="text-xs font-semibold text-slate-500 mb-2">Included</p>
-              <ul className="space-y-1.5">
-                {tm.inclusionCriteria.map((c, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-slate-700">
-                    <span className="text-emerald-500 flex-shrink-0 mt-0.5" aria-hidden="true">✓</span>
-                    {c}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {tm.exclusionCriteria && (
-            <div className="p-4">
-              <p className="text-xs font-semibold text-slate-500 mb-2">Excluded</p>
-              <ul className="space-y-1.5">
-                {tm.exclusionCriteria.map((c, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-slate-700">
-                    <span className="text-red-400 flex-shrink-0 mt-0.5" aria-hidden="true">✕</span>
-                    {c}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
+  // Promoted from inline markup into EligibilityCriteriaCard, which preserves the
+  // curated summary layout and adds a "Show full criteria" disclosure when
+  // tm.fullEligibility is present. All ~120 call sites gain the disclosure automatically.
+  const renderPopulationSection = (tm: TrialMetadata) => (
+    <EligibilityCriteriaCard tm={tm} />
+  );
 
   // ── Shared trial design section (Section 8) ───────────────────────────────
+  // Returns a fragment: the Trial Design card followed by the Study Arms accordion
+  // (rendered only when tm.armDetails is present). This is the single mount point
+  // for InterventionArmsAccordion — no individual archetype call sites need updating.
   const renderTrialDesign = (tm: TrialMetadata, enrollmentDetail?: string) => (
-    <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
-      <div className="px-4 py-3 border-b border-slate-100">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Trial Design</p>
-      </div>
-      <div className="p-4 space-y-3">
-        <div>
-          <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Type</p>
-          <ul className="space-y-0.5">
-            {tm.trialDesign.type.map((t, i) => (
-              <li key={i} className="flex items-start gap-1.5 text-sm text-slate-700">
-                <span className="text-slate-300 flex-shrink-0" aria-hidden="true">·</span>
-                {t}
-              </li>
-            ))}
-          </ul>
+    <>
+      <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+        <div className="px-4 py-3 border-b border-slate-100">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Trial Design</p>
         </div>
-        <div className="flex flex-wrap items-start gap-6">
+        <div className="p-4 space-y-3">
           <div>
-            <p className="text-[10px] uppercase tracking-widest text-slate-400">Timeline</p>
-            <p className="text-sm font-medium text-slate-700">{tm.trialDesign.timeline}</p>
+            <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Type</p>
+            <ul className="space-y-0.5">
+              {tm.trialDesign.type.map((t, i) => (
+                <li key={i} className="flex items-start gap-1.5 text-sm text-slate-700">
+                  <span className="text-slate-300 flex-shrink-0" aria-hidden="true">·</span>
+                  {t}
+                </li>
+              ))}
+            </ul>
           </div>
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-slate-400">N</p>
-            <p className="text-sm font-medium text-slate-700">{tm.stats.sampleSize.value}</p>
+          <div className="flex flex-wrap items-start gap-6">
+            <div>
+              <p className="text-[10px] uppercase tracking-widest text-slate-400">Timeline</p>
+              <p className="text-sm font-medium text-slate-700">{tm.trialDesign.timeline}</p>
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-widest text-slate-400">N</p>
+              <p className="text-sm font-medium text-slate-700">{tm.stats.sampleSize.value}</p>
+            </div>
           </div>
+          {enrollmentDetail && (
+            <div>
+              <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Enrollment</p>
+              <p className="text-sm text-slate-700">{enrollmentDetail}</p>
+            </div>
+          )}
+          {tm.doi && (
+            <div>
+              <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">DOI</p>
+              <a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs text-[#1746A2] hover:underline">
+                {tm.doi}<ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          )}
+          {tm.clinicalTrialsId && (
+            <div>
+              <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">ClinicalTrials.gov</p>
+              <a href={`https://clinicaltrials.gov/study/${tm.clinicalTrialsId}`} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs text-[#1746A2] hover:underline">
+                {tm.clinicalTrialsId}<ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          )}
         </div>
-        {enrollmentDetail && (
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Enrollment</p>
-            <p className="text-sm text-slate-700">{enrollmentDetail}</p>
-          </div>
-        )}
-        {tm.doi && (
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">DOI</p>
-            <a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs text-[#1746A2] hover:underline">
-              {tm.doi}<ExternalLink className="w-3 h-3" />
-            </a>
-          </div>
-        )}
-        {tm.clinicalTrialsId && (
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">ClinicalTrials.gov</p>
-            <a href={`https://clinicaltrials.gov/study/${tm.clinicalTrialsId}`} target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs text-[#1746A2] hover:underline">
-              {tm.clinicalTrialsId}<ExternalLink className="w-3 h-3" />
-            </a>
-          </div>
-        )}
       </div>
-    </div>
+      {/* Study Arms accordion — renders only when tm.armDetails is present.
+          ADR-2026-06-08: armDetails is canonical; legacy arm block is guarded separately. */}
+      {tm.armDetails && tm.armDetails.length > 0 && (
+        <InterventionArmsAccordion tm={tm} />
+      )}
+    </>
   );
 
   // ── WAKE-UP: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ─────────────────
@@ -9905,7 +9851,10 @@ const TrialPageNew: React.FC = () => {
                     )}
                   </>
                 )}
-                {trialMetadata?.intervention && (
+                {/* Legacy structured arm block — suppressed when armDetails is present
+                    (ADR-2026-06-08 §2: no double display; InterventionArmsAccordion is canonical
+                    when armDetails exists). Retained for not-yet-migrated trials. */}
+                {trialMetadata?.intervention && !trialMetadata.armDetails?.length && (
                   <>
                     <div className="pt-4 border-t border-slate-700">
                       <div className="text-slate-400 mb-2">Intervention</div>
