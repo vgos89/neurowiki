@@ -266,9 +266,10 @@ All clinical content must be traceable to a named guideline with year. No conten
 
 ## Active Workstream
 Trial data schema consolidation and secondary-prevention trial population:
-1. Batch 3 Wave 2: data population for 13 secondary-prevention trials using Batch 3 Wave 1 schema fields (estimation-strategy, single-arm-registry, harmSignal)
-2. Wave 4: Architecture extraction (classifyTrial.ts, vocabulary consolidation ADR)
-3. Wave 8.2+: Legacy trial visual redesign (ENRICH, DEFUSE-3/DAWN, NINDS, SELECT2/ANGEL-ASPECT, ATTENTION/BAOCHE, INSPIRES/CHANCE-2, ECASS III, ORIGINAL, SAMMPRIS, B_PROUD)
+1. Trial eligibility + study-arms expansion (post-commit 4fbb914): pilot 5 trials (DAWN, DEFUSE-3, ECASS III, ESCAPE, NINDS) now carry `fullEligibility` (verbatim inclusion/exclusion criteria with provenance) and `armDetails` (per-arm agent/dose/route/frequency/duration/co-interventions) rendered in new EligibilityCriteriaCard and InterventionArmsAccordion components. Remaining ~74 NCT-linked trials are candidates for backfill in future reviewed waves. Schema is stable, components reusable.
+2. Batch 3 Wave 2: data population for 13 secondary-prevention trials using Batch 3 Wave 1 schema fields (estimation-strategy, single-arm-registry, harmSignal)
+3. Wave 4: Architecture extraction (classifyTrial.ts, vocabulary consolidation ADR)
+4. Wave 8.2+: Legacy trial visual redesign (ENRICH, DEFUSE-3/DAWN, NINDS, SELECT2/ANGEL-ASPECT, ATTENTION/BAOCHE, INSPIRES/CHANCE-2, ECASS III, ORIGINAL, SAMMPRIS, B_PROUD)
 
 ## Swarm System (installed 2026-04-16, commits b502fea + db9c6af)
 The project now uses a multi-agent swarm architecture. See ORCHESTRATION.md for the protocol. Agent roster in agents/active/ and agents/dormant/. Every swarm must cite the relevant spec file, pass all 5 gates, and update the link graph before commit.

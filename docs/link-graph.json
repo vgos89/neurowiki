@@ -552,6 +552,24 @@
         "component/headache-result-v4"
       ]
     },
+    "component/eligibility-criteria-card": {
+      "type": "component",
+      "title": "EligibilityCriteriaCard Component",
+      "file": "src/components/trials/EligibilityCriteriaCard.tsx",
+      "references": [],
+      "referencedBy": [
+        "page/trial-page"
+      ]
+    },
+    "component/intervention-arms-accordion": {
+      "type": "component",
+      "title": "InterventionArmsAccordion Component",
+      "file": "src/components/trials/InterventionArmsAccordion.tsx",
+      "references": [],
+      "referencedBy": [
+        "page/trial-page"
+      ]
+    },
     "question/large-core-evt": {
       "type": "question",
       "title": "Should I do EVT for large-core stroke (low ASPECTS)?",

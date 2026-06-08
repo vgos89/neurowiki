@@ -2,14 +2,7 @@
 
 ## ACTIVE
 
-### trial-full-eligibility-and-arm-detail-pilot — Class D-clinical
-- **Status:** ready_for_merge (committed this session; mechanism + 5 pilot trials live)
-- **User-visible goal:** on a trial page the resident can expand the curated inclusion/exclusion summary to the full verbatim eligibility criteria, and open a "Study Arms" accordion showing each arm's agent, dose, route, frequency, duration, co-interventions, and a nuance note. Pilot: DAWN, DEFUSE-3, ECASS III, ESCAPE, NINDS.
-- **Non-goals:** not changing any existing summary criteria, scoring, interpretation, or recommendation text; not modernizing trial criteria (full eligibility is the trial's historical record with provenance, distinct from `ecass-3-exclusions-modernize`); not populating beyond the 5 pilot trials this PR; not migrating the legacy structured arm block off the old `intervention` object (guarded, retired incrementally per ADR).
-- **Files likely touched:** `src/data/trialData.ts` (schema types — DONE; + pilot content); NEW `src/components/trials/EligibilityCriteriaCard.tsx`, `src/components/trials/InterventionArmsAccordion.tsx`; `src/pages/trials/TrialPageNew.tsx` (consolidate orphan population copy → component, wire accordion, guard legacy arm block); `docs/evidence-packets/*`, `docs/adrs/ADR-2026-06-08-trial-eligibility-and-arm-detail.md` (DONE), `docs/reviews/arch-trial-eligibility-arms.md` (DONE) + clinical artifact.
-- **Acceptance checks:** tsc clean; build green; check:claims pass; per-trial NCT verified to resolve to the correct trial before any registry pull (NINDS `NCT00000292` is wrong → publication path + fix); full eligibility + arm detail render behind disclosure on all 5 pilot pages with provenance; trials without the new fields render exactly as today; mobile-first 375px sign-off; accessibility sign-off on the new disclosure (button + aria-expanded + controlled region, keyboard/focus); clinical-reviewer §17.2 approve / approve-with-conditions on the pilot batch; architect §17.1 (DONE — approve-with-conditions).
-- **Clinical impact:** high (eligibility criteria + arm protocols are act-on-able reference content).
-- **Rollback plan:** `git revert <merge commit>` — remove the two components + accordion wiring, drop the `armDetails` guard (legacy arm block renders unconditionally again); new schema fields go unused. No data migration. (ADR §Rollback.)
+(none)
 
 ### W-HEADACHE-V4 — Clinic Headache "live differential narrowing" rebuild — Class D-clinical (E-clinical surfaces)
 - **Status:** ready_for_merge (committed this session; live route flipped to V4)
@@ -154,6 +147,44 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Rollback plan:** git revert single commit.
 - **Source review:** docs/reviews/clinical-headache-definitional-criteria-2026-05-27.md (Condition 3)
 - **Blocker:** Lempert et al. J Vestib Res 2012 full-text retrieval (PubMed MCP `lookup_article_by_citation` + `get_full_text_article`).
+
+### escape-primary-or-reconcile — Class E-clinical [from clinical-trial-eligibility-arms-pilot.md §3 follow-ups]
+- **Status:** [ ] open — L3, P1
+- **User-visible goal:** Reconcile discrepancy in ESCAPE trial's primary outcome effect size. Current data carries `effectSize: 'OR 2.6'` (from trialData.ts). Published literature reports common OR 3.1 (95% CI 2.0–4.7, per HERMES meta-analysis). Assess which source is correct and update data to match published primary trial results if the current entry is a transcription error.
+- **Non-goals:** not changing interpretive text or thresholds; data accuracy fix only.
+- **Files likely touched:** `src/data/trialData.ts` (ESCAPE entry `effectSize` field + supporting stats), possibly `docs/evidence-packets/` if evidence needs re-verification.
+- **Acceptance checks:** Primary outcome OR confirmed from original ESCAPE publication and/or HERMES meta-analysis; discrepancy explained + resolved; data audit trail documented; trial-statistician sign-off; clinical-reviewer §17.2 gate.
+- **Clinical impact:** medium (primary effect size is foundational to trial interpretation).
+- **Rollback plan:** git revert single commit; no schema changes.
+- **Source review:** evidence flagged in docs/reviews/clinical-trial-eligibility-arms-pilot.md §3; Hermes meta-analysis + ESCAPE publication (Goyal et al. N Engl J Med 2015).
+
+### ecass3-cor-class-recheck — Class C-clinical [from clinical-trial-eligibility-arms-pilot.md §3 follow-ups]
+- **Status:** [ ] open — L5, P2
+- **User-visible goal:** Re-verify ECASS III's recommendation class (currently noted COR 2a LOE B-R) against the cited 2026 AHA/ASA guideline at next clinical pass. At the time the note was authored (2026-05), the guideline section was confirmed; verify freshness at next clinical-review gate.
+- **Non-goals:** not changing interpretation or claim text; freshness verification only.
+- **Files likely touched:** `src/data/trialData.ts` (ECASS III `recommendation` or comment field, if present); `src/lib/citations/` (aha-asa-2026 citation `last_reviewed` date).
+- **Acceptance checks:** ECASS III §8c recommendation class (COR 2a LOE B-R) confirmed against published 2026 AHA/ASA guideline text; if the class is outdated, file a new Class E-clinical task for the update; last_reviewed date refreshed if no change needed.
+- **Clinical impact:** low (if confirmed correct, no impact; if wrong, reclassification needed).
+- **Rollback plan:** n/a (verification-only; no code change unless reclassification found).
+- **Source review:** flagged in docs/reviews/clinical-trial-eligibility-arms-pilot.md §3; 2026 AHA/ASA guideline §6 ECASS III entry.
+
+### ninds-eligibility-fulltext-verify — Class C-clinical [from clinical-trial-eligibility-arms-pilot.md §3 follow-ups]
+- **Status:** [ ] open — L5, P2
+- **User-visible goal:** NINDS trial page now carries a new `fullEligibility` field populated from publication narrative (NEJM 1995 Broderick et al., PMID 7477192). This is a "Medium confidence" transcription — verify each criterion item against the full-text publication and reconcile any discrepancies before marking the entry "High confidence" (editorial review complete).
+- **Non-goals:** not changing interpretation or clinical recommendation; data-source verification only.
+- **Files likely touched:** `src/data/trialData.ts` (NINDS entry `fullEligibility` field — re-verify each criterion line against NEJM 1995 full text). May update confidence flag or add an audit note.
+- **Acceptance checks:** Each inclusion/exclusion criterion in `fullEligibility` verified against NEJM 1995 full-text publication at PMID 7477192; any transcription drift corrected; Fugate & Rabinstein Stroke 2014 catalogue (if used as secondary source) compared for consistency; final confidence marked (High/Medium/Low); clinical-reviewer spot-check on final batch.
+- **Clinical impact:** medium (eligibility criteria directly guide patient selection).
+- **Rollback plan:** git revert commit(s); `fullEligibility` field can revert to stub or null.
+- **Source review:** flagged in docs/reviews/clinical-trial-eligibility-arms-pilot.md §3; NINDS was the first trial in the 5-trial pilot, prioritized for verification because it is a foundational historical trial. NEJM 1995 PMID 7477192. Secondary: Fugate & Rabinstein Stroke 2014 catalogue (trial-focused review).
+
+### trial-eligibility-arms-expand-remaining-74-trials — [ ] open — forward-planning note [from trial-full-eligibility-and-arm-detail-pilot commit 4fbb914]
+- **Status:** [ ] open — L5, P2 (forward planning, not in-swarm work)
+- **User-visible goal:** This commit (4fbb914) piloted the `fullEligibility` + `armDetails` schema and component rendering on 5 landmark trials (DAWN, DEFUSE-3, ECASS III, ESCAPE, NINDS). The remaining ~74 NCT-linked trials in the catalog are candidates for the same treatment in future reviewed waves. Schema + components are stable and reusable. Estimate: ~2–3 weeks of editorial + clinical review to backfill the remaining trials in ranked batches (foundational/high-impact first, then secondary prevention).
+- **Non-goals:** not committing to a completion date; noting only that the infrastructure is ready for scaled rollout.
+- **Files:** (future) src/data/trialData.ts (populate `fullEligibility` + `armDetails` on remaining trials); docs/evidence-packets/ (create per-trial source audits as population proceeds).
+- **Clinical impact:** high (eligibility + protocol transparency across the catalog).
+- **Source:** Logged as forward-looking milestone post-commit 4fbb914.
 
 ### headache-clinic-stage-one-screen-build — Class D [unblocked post 6585a71 engine fix]
 - **Status:** [~] in_progress — L4, P1. TWO increments LANDED. (1) Result-presentation (c885da2): ranked phenotype accordion list (`HeadacheResultList` + shared `CriteriaList`) replacing the stacked headline/differential/banner; trials density; top match open; verbatim relocation; a11y fixes. (2) Treatment on-row expander (e8805ef): per-phenotype dosing moved into a collapsed opt-in "Show management" `<details>` on every match row (new `HeadacheManagement`, keyed; 43 Row strings byte-identical); clinical gate ruled show-management-for-ALL-matches (incl. partial), collapsed-by-default, no floor; partial-match confirm-diagnosis caveat (new claim `clinic-headache-partial-match-caveat`); 8 criteria cards deleted (render once in row) with 7 hidden literal claim markers + ndph tagged in management. Architect + pre/post clinical gates all approve; a11y + mobile sign-offs applied; Gate 6 client-side PASS (caveat verified on Cluster 25% partial, Migraine 100% no caveat). REMAINING: Stage Two result-copy only — band words (Leading/Possible/Less likely), non-collapsible SNNOOP10 disclaimer, "considered and set aside" tray consuming `definitionallyExcluded`/`exclusionReason`, citation footer (Class E-clinical).
@@ -1190,6 +1221,8 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-06-08 — Trial full eligibility + study arms accordion pilot (DAWN, DEFUSE-3, ECASS III, ESCAPE, NINDS) — Class D-clinical (commit 4fbb914)
+  - Live verify: PASS — `/trials/dawn-trial`, `/trials/defuse-3-trial`, `/trials/ecass-3-trial`, `/trials/escape-trial`, `/trials/ninds-trial` all render with new EligibilityCriteriaCard + InterventionArmsAccordion components; full eligibility tabs behind "Show full criteria" disclosure; arm details in controlled accordion. NINDS NCT-ID corrected (was `NCT00000292` → publication path). tsc clean; vite build 171/171 prerendered; check:claims/routes pass. Architect approve-with-conditions (all folded); clinical approve; mobile-first approve; a11y approve. All gates green. Post-merge Gate 6 live-verify PASS (site live on prod).
 - [x] 2026-06-05 — Actionable follow-ups batch (Wave 1 + Wave 2 from the pending re-verify) — Class C (commits 5b4fad9, 63b6228, f4cb1e7, e72e62a)
   - Wave 1 (5b4fad9): focus-trap parity — OnboardingTour + InstallPromptOverlay now use the shared useModalFocusTrap (adds the Tab-cycle trap both lacked); a persistent footer "Replay tour" link wired to consent.replayTour; trackDisclaimerShown/Acknowledged self-guard on consent not being 'declined'. Dead replayOnboardingTour export removed.
   - Wave 2a (63b6228): guard-clinical-edit.mjs is now task-class-aware — walks up to TASKS.md, reads ## ACTIVE, stays silent when a Class E/-clinical task is active, warns otherwise. Still advisory (exit 0, never blocks).
