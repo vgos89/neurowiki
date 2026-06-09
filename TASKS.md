@@ -2,10 +2,7 @@
 
 ## ACTIVE
 
-### evt-enrichment-wave — Class C-clinical (back-to-back, per V directive)
-- **Status:** in_progress — 18 of 24 EVT trials enriched (batches 1–3 shipped: b83af5d, d2abd41, + batch 3). Remaining batch 4 (6): ASTER, ASTER2, COMPASS, CHOICE, DISTAL, ESCAPE-MeVO.
-- **Scope:** add `fullEligibility` + `armDetails` (PDF-sourced arms, CT.gov/publication eligibility) to EVT trials. Mechanism (components/schema) already shipped in pilot.
-- **Follow-up filed (from batch-3 clinical review — Class E/`-clinical`, separate gate):** curated `inclusionCriteria` factual error — **MR CLEAN-NO IV** and **RESCUE BT** both say "anterior or posterior circulation" but each trial was **anterior-circulation only** (ICA/M1/M2). New `fullEligibility` is source-correct (anterior-only); curated summaries contradict it. Medium-high severity (a clinician triaging posterior/basilar LVO could misread the curated card). Fix both together via a Class E gate. Lower-severity riders in same cluster: SKIP curated "mRS 0 or 1" vs pub mRS 0–2; RESCUE BT "NIHSS 4+" vs pub range; SELECT2 curated NIHSS-floor omission.
+(none)
 
 ### W-HEADACHE-V4 — Clinic Headache "live differential narrowing" rebuild — Class D-clinical (E-clinical surfaces)
 - **Status:** ready_for_merge (committed this session; live route flipped to V4)
@@ -155,6 +152,39 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Rollback plan:** git revert single commit.
 - **Source review:** docs/reviews/clinical-headache-definitional-criteria-2026-05-27.md (Condition 3)
 - **Blocker:** Lempert et al. J Vestib Res 2012 full-text retrieval (PubMed MCP `lookup_article_by_citation` + `get_full_text_article`).
+
+### evt-curated-circulation-fix — Class E-clinical [from EVT enrichment wave batch 3 clinical review]
+- **Status:** [ ] open — L4, P1 (medium-high severity, separate gate from other cluster items)
+- **User-visible goal:** Fix factual error in curated `inclusionCriteria` on **MR CLEAN-NO IV** and **RESCUE BT** trials. Both cards currently state "anterior or posterior circulation occlusion" but source-verified eligibility (via commit 8bf31e8 `fullEligibility`) shows each trial enrolled **anterior-circulation only** (ICA/M1/M2 occlusion). The new `fullEligibility` is source-correct and live on the page; the curated summary contradicts it. A clinician triaging a posterior/basilar LVO could be misled. Must update both trials' curated `inclusionCriteria` fields to match the full-eligibility source truth, then gate through clinical-reviewer.
+- **Non-goals:** Not changing control arm or other trial fields; not changing the statistical outcome or recommendation. Curated summary sync-to-source only.
+- **Files likely touched:** `src/data/trialData.ts` (MR-CLEAN-NO-IV + RESCUE-BT entries `inclusionCriteria` field; verify `fullEligibility` is intact).
+- **Acceptance checks:** MR CLEAN-NO IV curated text reflects anterior-only enrollment (correct wording sourced from publication); RESCUE BT curated text reflects anterior-only enrollment; clinical-reviewer §17.2 sign-off; tsc clean; build 171/171.
+- **Clinical impact:** high (prevents posterior-circulation misclassification at the bedside).
+- **Rollback plan:** git revert single commit.
+- **Source review:** Wave 3 batch clinical review (docs/reviews/clinical-evt-batch3.md, finding F2); commit 8bf31e8 evidence packet full-eligibility source details.
+
+### evt-curated-summary-cluster — Class C-clinical (low-severity; reconcile multiple curated fields) [from EVT enrichment wave batch 3 clinical review]
+- **Status:** [ ] open — L5, P2 (optional cleanup; no clinical safety impact)
+- **User-visible goal:** Reconcile curated `inclusionCriteria` + other summary fields across 3 trials where the curated text does not match the published source:
+  - **SELECT2:** curated field says "mRS 0 or 1 at baseline" but the publication allows mRS 0–2 (non-disabling deficit at screening). Update field to reflect the broader eligibility.
+  - **RESCUE BT:** curated field says "NIHSS 4+" but the publication specifies NIHSS 0–42 range. Clarify the effective floor (check if 0–3 excluded elsewhere, if registration says "4+", or if this is manuscript vs. protocol drift).
+  - **SELECT2:** curated field omits "NIHSS ≥6" floor that the publication specifies. Add the floor to the curated text.
+- **Non-goals:** Not changing the statistical outcome or recommendation. Not deleting the curated fields (they remain as quick-reference summaries). Clarification + source-alignment only.
+- **Files likely touched:** `src/data/trialData.ts` (SELECT2 + RESCUE BT entries `inclusionCriteria` or equivalent curated field).
+- **Acceptance checks:** Each updated curated text sources to the original publication or trial registration (note source in comment if needed); clinical-reviewer spot-check on accuracy; tsc clean; build 171/171.
+- **Clinical impact:** low (the `fullEligibility` is source-truth and live; curated text is a convenience summary; mismatch is confusing but users can check full eligibility).
+- **Rollback plan:** git revert single commit.
+- **Source review:** Wave 3 batch clinical review (docs/reviews/clinical-evt-batch3.md, findings F3–F5); trial publications.
+
+### compass-registry-vs-conduct — Class C (optional UI annotation) [from EVT enrichment wave batch 2 clinical review]
+- **Status:** [ ] open — L5, P3 (optional; hygiene/documentation only)
+- **User-visible goal:** Surface the benign discrepancy in COMPASS trial: the `fullEligibility` reflects the registered protocol (NIHSS ≥8, ASPECTS <7, negative CTA/MRA), but the actual trial conduct paper may report slightly different thresholds (NIHSS ≥6, ASPECTS >6 based on commit d2abd41 source audit). Both are legitimate (protocol vs conduct); neither is wrong. If the owner wants transparency: optionally add a small UI label/note adjacent to the eligibility section clarifying "registered protocol thresholds shown" or "as-conducted thresholds: <…>", OR document both sets as separate `fullEligibility` branches (unlikely). Low priority; clarification for completeness.
+- **Non-goals:** Not changing the trial result or recommendation. Not a clinical error; both are valid perspectives on the same trial.
+- **Files likely touched:** `src/data/trialData.ts` (COMPASS entry `fullEligibility` comment or optional second rendering branch); optionally docs/NEUROWIKI.md (note about registry vs conduct).
+- **Acceptance checks:** UI label (if added) clearly distinguishes protocol vs conduct; does not confuse users; clinical-reviewer spot-check optional (not a clinical change, annotation only).
+- **Clinical impact:** none (both sources are medically valid; annotation improves clarity).
+- **Rollback plan:** n/a if UI annotation only; git revert if code change.
+- **Source review:** Wave 2 batch clinical review (docs/reviews/clinical-evt-batch2.md, note section); commit d2abd41 evidence packet COMPASS source detail.
 
 ### escape-primary-or-reconcile — Class C-clinical (rescoped: label clarification, not value fix)
 - **Status:** [ ] open — L4, P2 (pending owner sign-off)
@@ -1235,6 +1265,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-06-08 — EVT enrichment wave: `fullEligibility` + `armDetails` on all 24 thrombectomy trials (NINDS, ECASS III, ESCAPE, DEFUSE-3, DAWN, ASTER, ASTER2, COMPASS, CHOICE, DISTAL, ESCAPE-MeVO, MR CLEAN, MR CLEAN-NO IV, RESCUE BT, SELECT2, SWIFT, SWIFT-PRIME, TREVO, TREVO 2, PROST, PROST-2, BEST, NOR-TEST, NOR-TEST 2) — Class C-clinical (commits b83af5d EVT batch 1, d2abd41 EVT batch 2, 8bf31e8 EVT batch 3, 6f3e9d1 EVT batch 4; pilot 4fbb914 + c1146eb). QA all batches: tsc clean · build 171/171 · claims/routes/chains/card-meta pass · Gate 6 live-verify PASS per push · clinical-review approve/approve-with-conditions per batch (docs/reviews/clinical-evt-batch{1-4}.md + clinical-evt-batch1-eagle-ecass3.md). Evidence packets: docs/evidence-packets/2026-06-08-evt-batch{1-4}.md. Post-flight follow-ups: evt-curated-circulation-fix (Class E/`-clinical`, P1, medium-high severity); evt-curated-summary-cluster (Class `-clinical`, P2, low-severity, reconcile curated summaries); compass-registry-vs-conduct (P3, optional UI label); control-arm-appendix-granularity (optional owner decision).
 - [x] 2026-06-08 — Trial arm enrichment from PDFs: `armDetails` on 5 pilot trials (NINDS, ECASS III, ESCAPE, DEFUSE-3, DAWN); Study Arms accordion relocated under Primary Outcome — Class C-clinical (commit c1146eb). QA: tsc clean · build 171/171 · claims/routes/chains/card-meta pass · Gate 6 live-verify PASS · clinical-review approve-with-conditions (docs/reviews/clinical-trial-arm-enrichment-pilot.md). Post-flight follow-ups: escape-primary-or-reconcile (rescoped label-only, pending owner sign-off); ninds-eligibility-fulltext-verify (DONE, confidence Medium→High); trial-control-arm-appendix-granularity (optional deepening, pending owner decision on appendix sourcing).
 - [x] 2026-06-08 — Trial full eligibility + study arms accordion pilot (DAWN, DEFUSE-3, ECASS III, ESCAPE, NINDS) — Class D-clinical (commit 4fbb914)
   - Live verify: PASS — `/trials/dawn-trial`, `/trials/defuse-3-trial`, `/trials/ecass-3-trial`, `/trials/escape-trial`, `/trials/ninds-trial` all render with new EligibilityCriteriaCard + InterventionArmsAccordion components; full eligibility tabs behind "Show full criteria" disclosure; arm details in controlled accordion. NINDS NCT-ID corrected (was `NCT00000292` → publication path). tsc clean; vite build 171/171 prerendered; check:claims/routes pass. Architect approve-with-conditions (all folded); clinical approve; mobile-first approve; a11y approve. All gates green. Post-merge Gate 6 live-verify PASS (site live on prod).
