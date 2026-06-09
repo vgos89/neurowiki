@@ -547,6 +547,9 @@ const TrialPageNew: React.FC = () => {
             </div>
           </div>
 
+          {/* Study Arms — TRIALS_SPEC: directly after Primary Outcome, before howToInterpret */}
+          {renderStudyArms(trialMetadata)}
+
           {/* Section 5: How to read this chart — TeachingWell Q&A */}
           {trialMetadata.howToReadChart && (
             <TeachingWell
@@ -799,70 +802,77 @@ const TrialPageNew: React.FC = () => {
     <EligibilityCriteriaCard tm={tm} />
   );
 
+  // ── Shared study-arms section ─────────────────────────────────────────────
+  // Renders InterventionArmsAccordion when tm.armDetails is present and non-empty.
+  // Mounted AFTER the Primary Outcome card and BEFORE howToInterpret at every
+  // archetype call site. Guard is identical to the old renderTrialDesign guard.
+  // Function declaration (hoisted) so it can be called from archetype blocks that
+  // appear textually before this point (e.g. the first/default layout's Primary
+  // Outcome section). InterventionArmsAccordion is a module import, so no closure
+  // TDZ concern.
+  function renderStudyArms(tm: TrialMetadata) {
+    return tm.armDetails && tm.armDetails.length > 0 ? (
+      <InterventionArmsAccordion tm={tm} />
+    ) : null;
+  }
+
   // ── Shared trial design section (Section 8) ───────────────────────────────
-  // Returns a fragment: the Trial Design card followed by the Study Arms accordion
-  // (rendered only when tm.armDetails is present). This is the single mount point
-  // for InterventionArmsAccordion — no individual archetype call sites need updating.
+  // Returns only the Trial Design card. Study Arms accordion has been extracted
+  // to renderStudyArms() and is now mounted between the Primary Outcome card and
+  // the howToInterpret Teaching Well at every archetype call site.
   const renderTrialDesign = (tm: TrialMetadata, enrollmentDetail?: string) => (
-    <>
-      <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-100">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Trial Design</p>
-        </div>
-        <div className="p-4 space-y-3">
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Type</p>
-            <ul className="space-y-0.5">
-              {tm.trialDesign.type.map((t, i) => (
-                <li key={i} className="flex items-start gap-1.5 text-sm text-slate-700">
-                  <span className="text-slate-300 flex-shrink-0" aria-hidden="true">·</span>
-                  {t}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="flex flex-wrap items-start gap-6">
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-slate-400">Timeline</p>
-              <p className="text-sm font-medium text-slate-700">{tm.trialDesign.timeline}</p>
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-slate-400">N</p>
-              <p className="text-sm font-medium text-slate-700">{tm.stats.sampleSize.value}</p>
-            </div>
-          </div>
-          {enrollmentDetail && (
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Enrollment</p>
-              <p className="text-sm text-slate-700">{enrollmentDetail}</p>
-            </div>
-          )}
-          {tm.doi && (
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">DOI</p>
-              <a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-[#1746A2] hover:underline">
-                {tm.doi}<ExternalLink className="w-3 h-3" />
-              </a>
-            </div>
-          )}
-          {tm.clinicalTrialsId && (
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">ClinicalTrials.gov</p>
-              <a href={`https://clinicaltrials.gov/study/${tm.clinicalTrialsId}`} target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-[#1746A2] hover:underline">
-                {tm.clinicalTrialsId}<ExternalLink className="w-3 h-3" />
-              </a>
-            </div>
-          )}
-        </div>
+    <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+      <div className="px-4 py-3 border-b border-slate-100">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Trial Design</p>
       </div>
-      {/* Study Arms accordion — renders only when tm.armDetails is present.
-          ADR-2026-06-08: armDetails is canonical; legacy arm block is guarded separately. */}
-      {tm.armDetails && tm.armDetails.length > 0 && (
-        <InterventionArmsAccordion tm={tm} />
-      )}
-    </>
+      <div className="p-4 space-y-3">
+        <div>
+          <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Type</p>
+          <ul className="space-y-0.5">
+            {tm.trialDesign.type.map((t, i) => (
+              <li key={i} className="flex items-start gap-1.5 text-sm text-slate-700">
+                <span className="text-slate-300 flex-shrink-0" aria-hidden="true">·</span>
+                {t}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="flex flex-wrap items-start gap-6">
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-slate-400">Timeline</p>
+            <p className="text-sm font-medium text-slate-700">{tm.trialDesign.timeline}</p>
+          </div>
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-slate-400">N</p>
+            <p className="text-sm font-medium text-slate-700">{tm.stats.sampleSize.value}</p>
+          </div>
+        </div>
+        {enrollmentDetail && (
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">Enrollment</p>
+            <p className="text-sm text-slate-700">{enrollmentDetail}</p>
+          </div>
+        )}
+        {tm.doi && (
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">DOI</p>
+            <a href={`https://doi.org/${tm.doi}`} target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-[#1746A2] hover:underline">
+              {tm.doi}<ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        )}
+        {tm.clinicalTrialsId && (
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">ClinicalTrials.gov</p>
+            <a href={`https://clinicaltrials.gov/study/${tm.clinicalTrialsId}`} target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-[#1746A2] hover:underline">
+              {tm.clinicalTrialsId}<ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        )}
+      </div>
+    </div>
   );
 
   // ── WAKE-UP: W6.4 Archetype A rebuild (TRIALS_SPEC v1.0) ─────────────────
@@ -911,6 +921,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -984,6 +995,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -1057,6 +1069,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -1131,6 +1144,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -1205,6 +1219,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -1278,6 +1293,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -1357,6 +1373,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -1429,6 +1446,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -1499,6 +1517,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -1577,6 +1596,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -1655,6 +1675,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -1733,6 +1754,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -1811,6 +1833,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -1887,6 +1910,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -1970,6 +1994,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -2036,6 +2061,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -2104,6 +2130,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -2177,6 +2204,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -2251,6 +2279,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -2318,6 +2347,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -2385,6 +2415,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -2458,6 +2489,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -2531,6 +2563,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -2603,6 +2636,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -2680,6 +2714,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -2745,6 +2780,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -2811,6 +2847,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -2876,6 +2913,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -2947,6 +2985,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -3013,6 +3052,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -3078,6 +3118,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -3143,6 +3184,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -3208,6 +3250,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -3273,6 +3316,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -3339,6 +3383,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -3405,6 +3450,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -3478,6 +3524,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -3557,6 +3604,9 @@ const TrialPageNew: React.FC = () => {
             <SubgroupWell analyses={tm.subgroupAnalyses} caveat={tm.subgroupCaveat} />
           )}
 
+          {/* Study Arms — TRIALS_SPEC: directly after Primary Outcome */}
+          {renderStudyArms(tm)}
+
           {/* Section 6: Trial design */}
           {renderTrialDesign(tm, 'Randomized Mar 2020 to Aug 2023 at 51 hospitals in China. Open-label, blinded endpoint (PROBE design).')}
 
@@ -3629,6 +3679,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           )}
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Randomized December 2021 to July 2024 at 55 sites across 11 countries (predominantly Europe). International, assessor-blinded RCT. Any EVT technique allowed; treated within 24 hours of last known well.')}
@@ -3697,6 +3748,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           )}
+          {renderStudyArms(tm)}
           {renderTrialDesign(tm, 'Randomized April 2018 to February 2021 in the Netherlands. Phase 3, ambulance-based, open-label, blinded-endpoint trial. Stopped after 380 of planned 1200 randomizations due to a safety signal in ICH patients.')}
           {tm.bedsidePearl && (
             <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
@@ -3762,6 +3814,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           )}
+          {renderStudyArms(tm)}
           {renderTrialDesign(tm, 'Population-based cluster-randomized trial in Catalonia, Spain. Enrollment March 2017 to June 2020. Stopped early for futility after interim analysis. Nonurban network with real-world ambulance routing.')}
           {tm.bedsidePearl && (
             <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
@@ -3827,6 +3880,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           )}
+          {renderStudyArms(tm)}
           {renderTrialDesign(tm, 'Randomized September 2018 to May 2022 across Denmark. National, multicenter, assessor-blinded trial. Stopped early at 171 of 424 planned patients. Ambulance-based randomization.')}
           {tm.bedsidePearl && (
             <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
@@ -3892,6 +3946,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           )}
+          {renderStudyArms(tm)}
           {renderTrialDesign(tm, 'Randomized January 2017 to May 2023 at 39 UK stroke centres. Open-label, masked-endpoint (PROBE design). Primary analysis was noninferiority in the treated population.')}
           {tm.bedsidePearl && (
             <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
@@ -3959,6 +4014,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           )}
+          {renderStudyArms(tm)}
           {renderTrialDesign(tm, 'Multicenter, double-blind, placebo-controlled trial. ICA or MCA occlusion with CTP-confirmed salvageable tissue. 4.5-24 hours from onset. Published NEJM 2024. 77% of patients proceeded to EVT.')}
           {tm.bedsidePearl && (
             <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
@@ -4024,6 +4080,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           )}
+          {renderStudyArms(tm)}
           {renderTrialDesign(tm, 'Randomized June 2017 to September 2021 across 10 countries. Investigator-initiated, multicenter, open-label trial. Wake-up stroke or unwitnessed onset; selected by NCCT alone (ASPECTS 4 or higher).')}
           {tm.bedsidePearl && (
             <div style={{ background: '#EEF2FF', borderLeft: '2px solid #1746A2', borderRadius: '0 10px 10px 0', padding: '16px 18px' }}>
@@ -4144,6 +4201,9 @@ const TrialPageNew: React.FC = () => {
               </p>
             </div>
           </div>
+
+          {/* Study Arms — TRIALS_SPEC: directly after Primary Outcome, before howToInterpret */}
+          {renderStudyArms(tm)}
 
           {/* How to interpret teaching well */}
           {tm.howToInterpret && (
@@ -4305,6 +4365,9 @@ const TrialPageNew: React.FC = () => {
             />
           )}
 
+          {/* Study Arms — TRIALS_SPEC: directly after Primary Outcome, before howToInterpret */}
+          {renderStudyArms(trialMetadata)}
+
           {/* Section 5: How to read this chart */}
           {trialMetadata.howToReadChart && (
             <TeachingWell
@@ -4431,6 +4494,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Pragmatic phase 3 RCT enrolling 500 patients across 16 Dutch centers between December 2010 and June 2014 (Berkhemer NEJM 2015).')}
@@ -4510,6 +4574,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'International phase 3 RCT enrolling 316 patients across 22 centers between February 2013 and October 2014 (Goyal NEJM 2015). Stopped early for efficacy.')}
@@ -4589,6 +4654,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Phase 3 RCT embedded in a population-based stroke registry, enrolling 206 patients across 4 Catalan centers between November 2012 and December 2014 (Jovin NEJM 2015). Stopped early after the other 2015 EVT trials reported positive results.')}
@@ -4665,6 +4731,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Investigator-initiated multicenter RCT enrolling 70 patients in Australia and New Zealand between August 2012 and October 2014 (Campbell NEJM 2015). Stopped early for efficacy after 70 of 100 planned patients.')}
@@ -4744,6 +4811,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'International multicenter RCT enrolling 196 patients across 39 centers between December 2012 and November 2014 (Saver NEJM 2015). Stopped early for efficacy at 196 of a planned 833 patients.')}
@@ -4823,6 +4891,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'French multicenter RCT enrolling 414 patients across 26 centers between 2010 and 2015 (Bracard Lancet Neurol 2016).')}
@@ -4937,6 +5006,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'French multicenter RCT enrolling 333 patients across multiple centers (Costalat NEJM 2024). Stopped early after external positive large-core data emerged from ANGEL-ASPECT, SELECT2, and TESLA.')}
@@ -5050,6 +5120,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'European multicenter RCT enrolling 253 patients between 2018 and 2023 (Bendszus Lancet 2023). Stopped early at the first interim analysis for efficacy.')}
@@ -5129,6 +5200,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Phase 2b randomized double-blind placebo-controlled trial enrolling 121 patients across 7 stroke centers in Catalonia between 2018 and 2021 (Renu JAMA 2022). Stopped early during the COVID-19 pandemic.')}
@@ -5206,6 +5278,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Multicenter Chinese noninferiority RCT enrolling 656 patients at 41 tertiary centers (Yang NEJM 2020). Open-label with blinded endpoint assessment.')}
@@ -5284,6 +5357,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Multicenter Chinese noninferiority RCT enrolling 234 patients at 33 stroke centers between 2018 and 2020 (Zi JAMA 2021). Stopped early for efficacy of non-inferiority.')}
@@ -5361,6 +5435,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'Multicenter randomized open-label non-inferiority trial enrolling 270 patients at 15 North American sites (Turk Lancet 2019). Blinded outcome assessment.')}
@@ -5438,6 +5513,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'French multicenter randomized open-label blinded-endpoint (PROBE) trial enrolling 381 patients at 8 comprehensive stroke centers between 2015 and 2016 (Lapergue JAMA 2017).')}
@@ -5516,6 +5592,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, 'French multicenter randomized open-label blinded-endpoint trial enrolling 408 patients at 11 comprehensive stroke centers between 2017 and 2018 (Lapergue JAMA 2021).')}
@@ -5590,6 +5667,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '204 patients at 23 stroke networks across Japan. Open-label randomized non-inferiority trial. Enrolled 2017 to 2019. IV alteplase at Japanese approved dose of 0.6 mg/kg (not the 0.9 mg/kg dose used in European and American trials). Published JAMA 2021.')}
@@ -5688,6 +5766,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '539 patients across European centers. Open-label randomized trial. Enrolled 2017 to 2020. Alteplase dose in bridging arm: 0.9 mg/kg (standard Western dose). Published NEJM 2021.')}
@@ -5763,6 +5842,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '295 patients across Australia, New Zealand, China, and Vietnam. PROBE design (open-label, blinded endpoint assessment). Enrolled 2018 to 2021. Bridging arm allowed alteplase or tenecteplase at national standard doses. Published Lancet 2022.')}
@@ -5838,6 +5918,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '423 patients across European and Canadian comprehensive stroke centers. Open-label randomized non-inferiority trial. Enrolled 2018 to 2021. Stent-retriever technique per protocol. Published Lancet 2022.')}
@@ -5932,6 +6013,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '948 patients at 55 hospitals in China. Double-blind placebo-controlled randomized trial. Enrolled 2018 to 2021. Tirofiban: 10 mcg/kg IV bolus then 0.15 mcg/kg/min for 24 hours. Published JAMA 2022.')}
@@ -6001,6 +6083,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '324 patients at four French academic stroke centers. Open-label randomized controlled trial with blinded endpoint assessment. Intensive BP target (SBP 100-129 mm Hg) achieved within 1 hour and maintained for 24 hours. Published Lancet Neurol 2021.')}
@@ -6076,6 +6159,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '120 patients at three US comprehensive stroke centers. Phase 2 open-label randomized futility trial with three arms. BP targeting initiated within 60 minutes of successful EVT and maintained for 24 hours. Published JAMA 2023.')}
@@ -6152,6 +6236,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '306 patients at 19 South Korean stroke centers. Open-label randomized trial with blinded endpoint assessment. Stopped early by DSMB for safety at 68% of planned enrollment. Intensive BP strategy (SBP &lt;140 mm Hg) maintained for 24 hours. Published JAMA 2023.')}
@@ -6235,6 +6320,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '2196 patients at 110 sites across 15 countries. Open-label trial with blinded endpoint assessment. Intensive SBP target 130-140 mm Hg vs guideline less than 180 mm Hg for 72 hours. Published Lancet 2019.')}
@@ -6306,6 +6392,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '1105 patients at 48 hospitals across 8 countries. Double-blind placebo-controlled randomized trial. Single IV nerinetide dose before or during EVT. Treatment window up to 12 hours with favorable imaging. Published Lancet 2020.')}
@@ -6386,6 +6473,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '535 patients at 143 stroke centers across 21 countries. Phase 3 double-blind placebo-controlled trial. IV glibenclamide 8.6 mg over 72 hours started within 10 hours of onset. Stopped early for COVID-19 operational disruptions. Published Lancet Neurol 2024.')}
@@ -6458,6 +6546,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '38 patients at multiple French centers (planned 70; stopped early for pooled analysis). Sequential design with blinded primary endpoint assessment. Patients aged 18-55 with malignant MCA infarction. Randomization within 24-30 hours of onset. Published Stroke 2007.')}
@@ -6533,6 +6622,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '32 patients at multiple German centers (planned 60; stopped early for pooled analysis). Prospective sequential design. Patients aged 18-60 with malignant MCA infarction. Randomization within 36 hours of onset. Published Stroke 2007.')}
@@ -6608,6 +6698,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '64 patients at multiple Dutch centers. Multicenter open randomized trial. Patients aged 18-60 randomized within 4 days (96 hours) of stroke onset. Primary endpoint mRS 0-3 at 1 year. Published Lancet Neurol 2009.')}
@@ -6687,6 +6778,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '112 patients aged 61-82 at multiple German centers (planned 188; stopped early for enrollment difficulty). Open-label randomized trial with blinded outcome assessment. Surgery within 48 hours of stroke onset. Published NEJM 2014.')}
@@ -6765,6 +6857,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '888 patients randomized via the Swedish Stroke Register. Registry-based open-label randomized noninferiority trial. NOAC started within 4 days (early) or 5-10 days (delayed). Published Circulation 2022.')}
@@ -6841,6 +6934,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(tm)}
           {tm.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={tm.howToReadChart} />}
           {tm.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={tm.howToInterpret} />}
           {renderTrialDesign(tm, '3621 patients at 100 UK hospitals (2019-2024). Multicenter open-label blinded-endpoint phase 4 randomized trial. Early DOAC within 4 days vs delayed 7-14 days. Gatekeeper design: NI tested first, then superiority. Published Lancet 2024.')}
@@ -7236,6 +7330,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -7313,6 +7408,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -7390,6 +7486,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -7460,6 +7557,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -7534,6 +7632,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -7610,6 +7709,7 @@ const TrialPageNew: React.FC = () => {
               />
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -7691,6 +7791,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -7771,6 +7872,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -7846,6 +7948,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -7921,6 +8024,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -7997,6 +8101,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -8079,6 +8184,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -8157,6 +8263,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -8235,6 +8342,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -8312,6 +8420,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -8390,6 +8499,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -8469,6 +8579,7 @@ const TrialPageNew: React.FC = () => {
               )}
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -8548,6 +8659,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -8630,6 +8742,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -8705,6 +8818,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -8779,6 +8893,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -8854,6 +8969,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -8928,6 +9044,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -9009,6 +9126,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -9084,6 +9202,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -9159,6 +9278,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}
@@ -9233,6 +9353,7 @@ const TrialPageNew: React.FC = () => {
               </div>
             </div>
           </div>
+          {renderStudyArms(trialMetadata)}
           {trialMetadata.howToReadChart && <TeachingWell mode="qa" title="How to read this chart" items={trialMetadata.howToReadChart} />}
           {trialMetadata.howToInterpret && <TeachingWell mode="interpret" title="How to interpret this trial" sections={trialMetadata.howToInterpret} />}
           {renderSafetySection(trialMetadata)}

@@ -13,7 +13,7 @@
  *
  * Token rules (design-tokens skill):
  *   - Card: bg-white border border-slate-100 rounded-xl
- *   - Section label: text-[10px] font-bold uppercase tracking-widest text-slate-500
+ *   - Section label: text-[10px] font-bold uppercase tracking-widest text-slate-400 (eyebrow at card header — matches all sibling sections)
  *   - Body text: text-xs text-slate-700 / text-sm text-slate-600 leading-[1.55]
  *   - Muted provenance: text-[11px] text-slate-500 (slate-400 fails 4.5:1 on white)
  *   - No arbitrary values; no gray-* / border-2 / shadow-sm
@@ -81,7 +81,7 @@ export function EligibilityCriteriaCard({ tm }: EligibilityCriteriaCardProps) {
     <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
       {/* Card header */}
       <div className="px-4 py-3 border-b border-slate-100">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
           Population
         </p>
       </div>
