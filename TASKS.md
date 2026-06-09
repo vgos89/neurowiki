@@ -231,7 +231,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Source:** Logged as forward-looking milestone post-commit 4fbb914.
 
 ### trial-enrich-optimas-timing-completion — Class C-clinical [from wave-2 trial enrichment swarm 2026-06-09]
-- **Status:** [ ] open — L5, P2
+- **Status:** [x] done (0603272) — L5, P2
 - **User-visible goal:** OPTIMAS + TIMING trial records exist in the catalog (lines ~5767 and ~5653 in trialData.ts) with stats/results populated but NO curated inclusion/exclusion fields. As a result, the eligibility card on each trial's /trials/ page renders nothing (the EligibilityCriteriaCard has no data to display). Source evidence already extracted during wave-2 swarm: OPTIMAS early ≤4d vs delayed 7–14d, NI margin 2pp; TIMING early ≤4d vs delayed 5–10d, NI margin 3%. Add curated `fullEligibility` + `armDetails` fields to both records so clinicians can see the enrollment criteria and study-arm definitions.
 - **Non-goals:** not changing interpretation or statistics; data entry only.
 - **Files likely touched:** `src/data/trialData.ts` (OPTIMAS + TIMING `fullEligibility` + `armDetails` fields).
@@ -240,7 +240,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Rollback plan:** git revert single commit.
 
 ### trial-enrich-sammpris-eagle — Class C-clinical [from wave-2 trial enrichment swarm 2026-06-09]
-- **Status:** [ ] open — L5, P2
+- **Status:** [x] done (0603272) — L5, P2
 - **User-visible goal:** SAMMPRIS and EAGLE trial records exist in the catalog with results but no curated eligibility fields. Source PDFs were uploaded and processed during wave-2 swarm. SAMMPRIS requires careful application of the uploaded SAMMPRIS CORRECTION.pdf (Lancet correction). Add curated `fullEligibility` + `armDetails` to both so the eligibility cards render. SAMMPRIS enrollment targeted intracranial atherosclerotic disease (ICAS) patients; EAGLE targets central retinal artery occlusion (CRAO).
 - **Non-goals:** not changing interpretation or statistics; curated data entry only.
 - **Files likely touched:** `src/data/trialData.ts` (SAMMPRIS + EAGLE `fullEligibility` + `armDetails` fields).
@@ -249,7 +249,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Rollback plan:** git revert single commit.
 
 ### trial-triage-stroke-curated-fix — Class C-clinical [from wave-2 trial enrichment swarm 2026-06-09]
-- **Status:** [ ] open — L5, P2 (pre-existing error surfaced during wave-2)
+- **Status:** [x] done (0603272) — L5, P2 (pre-existing error surfaced during wave-2)
 - **User-visible goal:** Pre-existing bugs in TRIAGE-STROKE trial record detected during wave-2 enrichment swarm: (1) curated `inclusionCriteria` says "RACE score 5 or higher" but the trial actually used PASS score ≥2 as eligibility criterion; (2) pre-existing prose says "planned 424" but the source states enrollment target was 600. Source-verify both against TRIAGE-STROKE NEJM publication + ClinicalTrials.gov, then correct both the `fullEligibility` field and any associated narrative/summary text.
 - **Non-goals:** not changing interpretation or endpoints; factual accuracy correction only.
 - **Files likely touched:** `src/data/trialData.ts` (TRIAGE-STROKE `fullEligibility` field, possibly `plannedEnrollment` or summary field if present).
@@ -258,7 +258,7 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Rollback plan:** git revert single commit.
 
 ### trial-charm-correction-check — Class C-clinical [from wave-2 trial enrichment swarm 2026-06-09]
-- **Status:** [ ] open — L5, P2
+- **Status:** [x] done (0603272) — L5, P2
 - **User-visible goal:** CHARM trial already has curated `fullEligibility` fields populated. Verify that the December 2024 Lancet Neurology Correction/Errata does not alter the enrollment eligibility wording. If the correction touches eligibility, the `fullEligibility` field must be updated to reflect the corrected criteria. If eligibility is untouched, no change needed; verification only.
 - **Non-goals:** checking whether the correction altered endpoints or interpretation (that's a separate clinical audit). Eligibility verification only.
 - **Files likely touched:** `src/data/trialData.ts` (CHARM `fullEligibility` field, only if Correction alters it).
@@ -1301,6 +1301,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-06-09 — Trial enrichment wave 2 COMPLETE — all 34 uploaded trials now carry `fullEligibility` + `armDetails`. Final batch (0603272): SAMMPRIS, EAGLE, OPTIMAS, TIMING + TRIAGE-STROKE curated corrections. Safety corrections surfaced + fixed across the wave: MR ASAP SBP threshold 120→140, ESCAPE-NA1 arm-note CI 1.14→1.13, TRIAGE-STROKE scale RACE→PASS + planned N 424→600. SAMMPRIS + CHARM published corrections reviewed (neither altered a displayed value). 8 batches total (e7f6ce9..0603272), each clinical-reviewer-gated + Gate-6 green. Full log: docs/reviews/clinical-enrichment-wave2.md. — Class C-clinical
 - [x] 2026-06-08 — EVT enrichment wave: `fullEligibility` + `armDetails` on all 24 thrombectomy trials (NINDS, ECASS III, ESCAPE, DEFUSE-3, DAWN, ASTER, ASTER2, COMPASS, CHOICE, DISTAL, ESCAPE-MeVO, MR CLEAN, MR CLEAN-NO IV, RESCUE BT, SELECT2, SWIFT, SWIFT-PRIME, TREVO, TREVO 2, PROST, PROST-2, BEST, NOR-TEST, NOR-TEST 2) — Class C-clinical (commits b83af5d EVT batch 1, d2abd41 EVT batch 2, 8bf31e8 EVT batch 3, 6f3e9d1 EVT batch 4; pilot 4fbb914 + c1146eb). QA all batches: tsc clean · build 171/171 · claims/routes/chains/card-meta pass · Gate 6 live-verify PASS per push · clinical-review approve/approve-with-conditions per batch (docs/reviews/clinical-evt-batch{1-4}.md + clinical-evt-batch1-eagle-ecass3.md). Evidence packets: docs/evidence-packets/2026-06-08-evt-batch{1-4}.md. Post-flight follow-ups: evt-curated-circulation-fix (Class E/`-clinical`, P1, medium-high severity); evt-curated-summary-cluster (Class `-clinical`, P2, low-severity, reconcile curated summaries); compass-registry-vs-conduct (P3, optional UI label); control-arm-appendix-granularity (optional owner decision).
 - [x] 2026-06-08 — Trial arm enrichment from PDFs: `armDetails` on 5 pilot trials (NINDS, ECASS III, ESCAPE, DEFUSE-3, DAWN); Study Arms accordion relocated under Primary Outcome — Class C-clinical (commit c1146eb). QA: tsc clean · build 171/171 · claims/routes/chains/card-meta pass · Gate 6 live-verify PASS · clinical-review approve-with-conditions (docs/reviews/clinical-trial-arm-enrichment-pilot.md). Post-flight follow-ups: escape-primary-or-reconcile (rescoped label-only, pending owner sign-off); ninds-eligibility-fulltext-verify (DONE, confidence Medium→High); trial-control-arm-appendix-granularity (optional deepening, pending owner decision on appendix sourcing).
 - [x] 2026-06-08 — Trial full eligibility + study arms accordion pilot (DAWN, DEFUSE-3, ECASS III, ESCAPE, NINDS) — Class D-clinical (commit 4fbb914)
