@@ -127,3 +127,18 @@ Additive enrichment of existing trial records with `fullEligibility` + `armDetai
 ## Wave 2 — COMPLETE
 
 All 34 trials from the uploaded set are enriched (32 this session across batches 1–8 + DISTAL/ESCAPE-MeVO from the prior EVT wave). Safety corrections surfaced and fixed during the wave: MR ASAP SBP threshold 120→140; ESCAPE-NA1 arm-note CI 1.14→1.13; TRIAGE-STROKE scale RACE→PASS and planned N 424→600. Both uploaded/published corrections (SAMMPRIS, CHARM) reviewed: neither required a displayed-value change.
+
+---
+
+## Wave 2b — Thrombolysis / tenecteplase cluster (16 trials, 2026-06-09)
+
+**Decision:** approve (no fixes)
+**Reviewer:** clinical-reviewer (model: claude-opus-4-8)
+
+- **Scope:** additive `fullEligibility` + `armDetails` on nor-test, nor-test-2-part-a, attest-2, act, trace-2, trace-iii, raise, extend-ia-tnk, extend, thaws, twist, original, prisms, aramis, prost, elan-study.
+- **Agent + dose verified, no cross-contamination:** TNK 0.4 mg/kg ONLY in the two NOR-TESTs; TNK 0.25 in ATTEST-2 / AcT / TRACE-2 / TRACE-III / EXTEND-IA-TNK / TWIST / ORIGINAL; EXTEND = alteplase 0.9, THAWS = alteplase 0.6 (Japanese); RAISE = reteplase 18+18 mg; PROST = recombinant prourokinase 35 mg.
+- **Comparators verified (trap cases):** TRACE-III vs standard medical management (NOT alteplase; LVO 4.5–24 h late, non-EVT); TWIST vs no thrombolysis; PRISMS vs aspirin; ELAN early vs later DOAC; ARAMIS antiplatelet = intervention / alteplase = comparator (not inverted).
+- **Framing preserved:** NOR-TEST-2A HARM/inferior (no benefit); ELAN estimation (no NNT); RAISE superiority; TRACE-III / EXTEND / EXTEND-IA-TNK positive; AcT / TRACE-2 / ATTEST-2 / ORIGINAL / PROST / ARAMIS non-inferiority; NOR-TEST / THAWS / TWIST neutral; PRISMS terminated, no benefit.
+- **§8 editorial:** not applicable (no new trial entry). **Never-drift / em-dash:** additive only; zero em-dash. **Follow-ups:** none.
+
+Database after this cluster: **77 of 108 trials enriched.**

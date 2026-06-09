@@ -700,6 +700,57 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Treatment >4.5h from symptom onset',
       'Pre-stroke significant disability',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Chinese adults (aged 18 years or older)',
+            'Acute ischemic stroke with a National Institutes of Health Stroke Scale (NIHSS) score of 1 to 25',
+            'Measurable neurologic deficit',
+            'Symptomatic for at least 30 minutes without significant improvement',
+            'Able to receive thrombolytic therapy within 4.5 hours of symptom onset',
+            'Individuals with an NIHSS score of less than 4 were required to have a measurable deficit in motor function score for the arms or legs of at least 1',
+            'Individuals in whom endovascular thrombectomy was planned were eligible',
+            'Noncontrast computed tomography was used at screening to exclude patients presenting with intracranial hemorrhage',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Intracranial hemorrhage on screening noncontrast computed tomography',
+            'Symptomatic for less than 30 minutes or with significant improvement before treatment',
+            'Unable to initiate thrombolytic therapy within 4.5 hours of symptom onset',
+            'NIHSS score outside the 1 to 25 range',
+            'Standard contraindications to intravenous thrombolysis (full exclusion list provided in the trial supplement)',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Meng et al., JAMA 2024',
+      sourceUrl: 'https://doi.org/10.1001/jama.2024.14721',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Tenecteplase 0.25 mg/kg',
+        role: 'intervention',
+        agent: 'Tenecteplase',
+        dose: '0.25 mg/kg (maximum 25 mg)',
+        route: 'Intravenous',
+        frequency: 'Single bolus over 5 to 10 seconds',
+        note: 'Administered within 4.5 hours of ischemic stroke symptom onset.',
+      },
+      {
+        arm: 'Alteplase 0.9 mg/kg',
+        role: 'comparator',
+        agent: 'Alteplase',
+        dose: '0.9 mg/kg (maximum 90 mg)',
+        route: 'Intravenous',
+        frequency: '10% as an initial bolus, remainder as an infusion over 1 hour',
+        note: 'Active comparator. Administered within 4.5 hours of ischemic stroke symptom onset.',
+      },
+    ],
     safetyProfile: {
       sICH: {
         evt: 1.2,
@@ -1122,6 +1173,57 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Platelet count below 100,000',
       'Anticoagulation with INR above 1.7 or direct anticoagulant taken within 48 hours',
       'Any standard contraindication to IV alteplase',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'At least 18 years of age',
+            'Excellent functional status before enrollment (modified Rankin scale score below 2)',
+            'Stroke with a clinical severity score at presentation of 4 to 26 on the National Institutes of Health Stroke Scale (NIHSS)',
+            'Hypoperfused but salvageable regions of brain detected on automated perfusion imaging (CT perfusion or perfusion-diffusion MRI)',
+            'Assigned intervention able to be initiated between 4.5 and 9.0 hours after the onset of stroke, or on awakening with stroke symptoms if within 9 hours from the midpoint of sleep',
+            'Perfusion lesion to ischemic-core mismatch ratio greater than 1.2, absolute mismatch volume greater than 10 mL, and ischemic-core volume less than 70 mL',
+            'Occlusion of a large cerebral vessel was not a prerequisite for inclusion',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Investigator was considering the use of endovascular thrombectomy at the time of enrollment',
+            'Ischemic-core volume of 70 mL or greater on perfusion imaging',
+            'Premorbid modified Rankin scale score of 2 or higher',
+            'NIHSS score below 4 or above 26',
+            'Additional inclusion and exclusion details provided in the trial Supplementary Appendix',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Ma et al., New England Journal of Medicine 2019',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa1813046',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Alteplase 0.9 mg/kg',
+        role: 'intervention',
+        agent: 'Alteplase',
+        dose: '0.9 mg/kg (maximum 90 mg)',
+        route: 'Intravenous',
+        frequency: '10% as a bolus, 90% as an infusion over 1 hour',
+        coInterventions: 'Guideline-based care for acute stroke recommended for all patients.',
+        note: 'Initiated between 4.5 and 9.0 hours after stroke onset, or on awakening with stroke symptoms.',
+      },
+      {
+        arm: 'Placebo',
+        role: 'control',
+        agent: 'Matching placebo',
+        route: 'Intravenous',
+        frequency: '10% as a bolus, 90% as an infusion over 1 hour (matched to alteplase)',
+        coInterventions: 'Guideline-based care for acute stroke recommended for all patients.',
+        note: 'Boehringer Ingelheim provided the alteplase and matching placebo.',
+      },
     ],
     howToReadChart: [
       {
@@ -7405,6 +7507,58 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Contraindication to IV thrombolysis',
       'Severe stroke with NIHSS >25',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Stroke symptoms on awakening or with unknown time of onset',
+            'Presented more than 4.5 hours since last known well and within 4.5 hours after symptom recognition',
+            'Aged 20 years or older',
+            'Premorbid modified Rankin Scale score consistent with eligibility (per trial criteria)',
+            'Met the standard clinical criteria for intravenous thrombolysis in Japan other than a time last-known-well longer than 4.5 hours',
+            'MRI showed mismatch between an abnormal signal on diffusion-weighted imaging and no marked signal change on fluid-attenuated inversion recovery (negative FLAIR pattern) in the corresponding region of the acute stroke',
+            'Patients with clinically acute ischemic stroke and a negative FLAIR pattern who did not display an abnormal signal on DWI were also enrolled',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Mild stroke with NIHSS below 5 (revised to below 2 in August 2015)',
+            'Severe stroke with NIHSS above 25',
+            'Any contraindication for MRI (for example, cardiac pacemaker)',
+            'Planned or anticipated treatment with surgery or endovascular reperfusion strategies',
+            'Pregnant, lactating, or potentially pregnant',
+            'Life expectancy of 6 months or less according to the judgment of an investigator',
+            'On MRI, intracranial hemorrhage or large infarct with Alberta Stroke Program Early CT Score of 4 or less in the middle cerebral artery territory',
+            'Visual lesion volume over 50% of the anterior or posterior cerebral artery territory, more than half of the brain stem, or more than half of the unilateral cerebellar hemisphere',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Koga et al., Stroke 2020',
+      sourceUrl: 'https://doi.org/10.1161/STROKEAHA.119.028127',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Alteplase 0.6 mg/kg',
+        role: 'intervention',
+        agent: 'Alteplase',
+        dose: '0.6 mg/kg (Japanese low-dose)',
+        route: 'Intravenous',
+        frequency: '10% as a bolus, 90% as a 60-minute infusion',
+        coInterventions: 'Antithrombotics generally prohibited in the alteplase group within the initial 25 hours. Urokinase, monteplase, and tenecteplase prohibited during the 90-day study period in both groups.',
+        note: 'Treatment initiated within 4.5 hours of waking up or discovery.',
+      },
+      {
+        arm: 'Standard medical treatment',
+        role: 'control',
+        agent: 'Standard medical treatment (no thrombolysis)',
+        coInterventions: 'Standard treatment using 1 to 3 antithrombotic drugs, including oral aspirin (160 to 300 mg/day), oral clopidogrel (75 mg/day), intravenous argatroban, or intravenous unfractionated heparin, but excluding the combination of argatroban and heparin, per attending physician.',
+        note: 'No placebo was used, mainly due to financial limitation. Open-label design.',
+      },
+    ],
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -7525,6 +7679,52 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Large established infarct core (no mismatch on perfusion imaging)',
       'Contraindication to IV thrombolysis',
       'Prior stroke with significant disability (mRS >1)',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Aged 18 years or older',
+            'Ischemic stroke, including stroke on awakening and unwitnessed stroke, recruited within 4.5 to 24 hours after the time last known to be well',
+            'Prestroke modified Rankin scale score of 0 or 1',
+            'National Institutes of Health Stroke Scale score of 6 to 25',
+            'Occlusion of the intracranial internal carotid artery or the first (M1) or second (M2) segment of the middle cerebral artery on CT angiography or MR angiography',
+            'Salvageable brain tissue on perfusion imaging using iStroke software, defined as ischemic core volume less than 70 mL, a ratio of hypoperfused tissue to ischemic core volume of at least 1.8, and a mismatch volume of at least 15 mL',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Endovascular thrombectomy planned at the time of randomization',
+            'Guideline-based contraindications to thrombolytic agents',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Xiong Y et al., NEJM 2024',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa2402980',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Tenecteplase 0.25 mg/kg',
+        role: 'intervention',
+        agent: 'Tenecteplase',
+        dose: '0.25 mg/kg (max 25 mg)',
+        route: 'IV',
+        frequency: 'Single bolus over 5 to 10 seconds',
+        duration: 'One-time',
+        note: 'Late-window thrombolysis 4.5 to 24 hours after last known well in large-vessel occlusion with salvageable tissue on perfusion imaging, in patients without access to thrombectomy. This is not a bridging-before-EVT trial.',
+      },
+      {
+        arm: 'Standard medical treatment',
+        role: 'control',
+        agent: 'Antiplatelet therapy at investigator discretion',
+        route: 'Per standard care',
+        coInterventions: 'Standard medical treatment conforming to the 2018 Chinese Guidelines for Diagnosis and Treatment of Acute Ischemic Stroke',
+        note: 'No routine thrombolysis or thrombectomy. Rescue thrombectomy after randomization was permitted at the treating clinician discretion if the patient deteriorated and thrombectomy became accessible; fewer than 2% of patients overall underwent rescue thrombectomy.',
+      },
     ],
     howToReadChart: [
       {
@@ -9684,6 +9884,58 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Contraindication to anticoagulation (active bleeding, severe thrombocytopenia)',
       'Mechanical prosthetic heart valve (requires warfarin)',
       'Severe renal impairment precluding DOAC use',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Acute ischemic stroke, defined as evidence of acute cerebral infarction on magnetic resonance imaging (MRI) or computed tomography (CT), or a clinical diagnosis of ischemic stroke with symptoms lasting more than 24 hours, confirmed by an investigator on the basis of a CT or MRI scan that excluded other causes',
+            'Permanent, persistent, or paroxysmal nonvalvular atrial fibrillation, or atrial fibrillation diagnosed during hospitalization for the stroke',
+            'Infarct size classified by the site investigators using a standardized visual rating scheme: minor (an infarct 1.5 cm or smaller), moderate (an infarct in the distribution of a cortical superficial branch of the middle, anterior, or posterior cerebral artery), or major (larger infarcts in those arterial distributions, or a brain-stem or cerebellar infarct larger than 1.5 cm)',
+            'Able to be randomly assigned within 48 hours after a minor or moderate stroke, or within 6 to 24 hours after a major stroke',
+            'Eligible for treatment with a direct oral anticoagulant (DOAC) for secondary prevention',
+            'Written informed consent provided by the participant, next of kin, another legal representative, or an independent physician according to country-specific requirements',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Confluent parenchymal hematoma within the infarcted brain tissue, or intracranial hemorrhage remote from the infarcted tissue (petechial hemorrhage within infarcted tissue was not an exclusion)',
+            'A requirement for therapeutic anticoagulation at stroke onset, with the exception of prophylactic low-molecular-weight heparin for the prevention of venous thromboembolism',
+            'A mechanical prosthetic heart valve or another condition mandating a vitamin K antagonist rather than a DOAC',
+            'Other detailed eligibility criteria specified in the trial protocol',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Fischer U et al., New England Journal of Medicine 2023;388(26):2411-2421',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa2303048',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Early DOAC initiation',
+        role: 'intervention',
+        agent: 'Any direct oral anticoagulant (DOAC) with marketing authorization for the prevention of stroke and systemic embolism in the trial-site country, given at the appropriate dose',
+        dose: 'Appropriate label dose of the chosen DOAC (details of the specific DOACs and doses reported in the trial Supplementary Appendix)',
+        route: 'Oral',
+        frequency: 'Per the standard once-daily or twice-daily schedule of the selected DOAC',
+        duration: 'Continued for secondary prevention; trial follow-up to 90 days',
+        coInterventions: 'Participants in both groups continued to receive stroke care according to local standards. Intravenous thrombolysis or thrombectomy before randomization was permitted.',
+        note: 'Early treatment was defined as initiation of a DOAC within 48 hours after a minor or moderate stroke, and on day 6 or 7 after a major stroke. Definitions verbatim from Fischer NEJM 2023 p.2413 (Trial Treatment). Estimation design: no formal noninferiority or superiority hypothesis was tested; the trial produced a point estimate and confidence interval for the between-group difference. ClinicalTrials.gov NCT03148457.',
+      },
+      {
+        arm: 'Later (guideline-based) DOAC initiation',
+        role: 'control',
+        agent: 'The same range of approved DOACs, started later according to the guideline-based 1-3-6-12 day rule',
+        dose: 'Appropriate label dose of the chosen DOAC (same options as the early group)',
+        route: 'Oral',
+        frequency: 'Per the standard once-daily or twice-daily schedule of the selected DOAC',
+        duration: 'Continued for secondary prevention; trial follow-up to 90 days',
+        coInterventions: 'Stroke care according to local standards in both groups, including thrombolysis or thrombectomy before randomization when used.',
+        note: 'Later treatment was defined as initiation of a DOAC on day 3 or 4 after a minor stroke, on day 6 or 7 after a moderate stroke, and on day 12, 13, or 14 after a major stroke (the imaging-severity-based "1-3-6-12 day rule"). Definitions verbatim from Fischer NEJM 2023 p.2413 (Trial Treatment).',
+      },
     ],
     howToReadChart: [
       {
@@ -12389,6 +12641,53 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Hemorrhagic stroke on baseline imaging',
       'Received tenecteplase or alteplase before enrolment',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Aged 18 years or older',
+            'Diagnosis of ischaemic stroke causing disabling neurological deficit',
+            'Presenting within 4.5 h of symptom onset',
+            'Eligible for thrombolysis according to Canadian guidelines (CSBPR 2018)',
+            'Patients also eligible for endovascular thrombectomy were eligible for enrolment',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Standard contraindications to intravenous thrombolysis as applied under the Canadian Stroke Best Practice Recommendations (CSBPR), for example any source of active haemorrhage or any condition that could increase the risk of major haemorrhage after alteplase administration',
+            'Women known to be pregnant by medical history or investigator examination (could be enrolled only in consultation with an expert stroke physician)',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Menon BK, et al., Lancet 2022',
+      sourceUrl: 'https://doi.org/10.1016/S0140-6736(22)01054-6',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Tenecteplase 0.25 mg/kg',
+        role: 'intervention',
+        agent: 'Tenecteplase',
+        dose: '0.25 mg/kg (max 25 mg)',
+        route: 'IV',
+        frequency: 'Single bolus',
+        duration: 'One-time',
+        coInterventions: 'Post-treatment care and follow-up imaging per local standards guided by CSBPR; endovascular thrombectomy where clinically indicated',
+      },
+      {
+        arm: 'Alteplase 0.9 mg/kg',
+        role: 'control',
+        agent: 'Alteplase',
+        dose: '0.9 mg/kg (max 90 mg)',
+        route: 'IV',
+        frequency: '0.09 mg/kg bolus, then 60-min infusion of the remaining 0.81 mg/kg',
+        duration: '60 minutes',
+        coInterventions: 'Post-treatment care and follow-up imaging per local standards guided by CSBPR; endovascular thrombectomy where clinically indicated',
+      },
+    ],
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -12507,6 +12806,58 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Contraindication to clopidogrel or aspirin',
       'Planned IV alteplase treatment',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Age 18 years or older',
+            'Acute ischemic stroke with a National Institutes of Health Stroke Scale (NIHSS) score of 5 or less',
+            'No more than 1 point on any single-item NIHSS score (such as vision, language, neglect, or single-limb weakness)',
+            'A score of 0 on the consciousness item of the NIHSS at the time of randomization',
+            'Computed tomography or magnetic resonance imaging performed on admission to identify ischemic stroke',
+            'Able to start study treatment within 4.5 hours of stroke symptom onset',
+            'Nondisabling deficit, adjudicated by trained investigators in consultation with the patient and available family based on the patient career and hobbies to judge whether the neurologic deficit would affect activities of daily living and work',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Prestroke disability (modified Rankin Scale score of 2 or higher)',
+            'History of intracerebral hemorrhage',
+            'A definite indication for anticoagulation',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Chen HS et al., JAMA 2023;329(24):2135-2144',
+      sourceUrl: 'https://doi.org/10.1001/jama.2023.7827',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Dual antiplatelet therapy (clopidogrel plus aspirin)',
+        role: 'intervention',
+        agent: 'Clopidogrel plus aspirin (dual antiplatelet therapy, DAPT)',
+        dose: 'Clopidogrel 300 mg loading on day 1, then 75 mg daily for 12 (plus or minus 2) days; aspirin 100 mg on day 1, then 100 mg daily for 12 (plus or minus 2) days',
+        route: 'Oral',
+        frequency: 'Once daily after the day-1 clopidogrel loading dose',
+        duration: 'Short-course DAPT for 12 (plus or minus 2) days, then guideline-based antiplatelet treatment until 90 days',
+        coInterventions: 'After the 12 (plus or minus 2) day DAPT course, single antiplatelet therapy or DAPT was continued per guidelines until 90 days.',
+        note: 'Experimental arm tested for noninferiority to alteplase (n=393 randomized, 369 in full analysis set). Regimen verbatim from Chen JAMA 2023 p.2135 (abstract) and p.2137 (Procedures). The 12-day DAPT duration was based on the CHANCE time-course analysis. Open-label, blinded-endpoint multicenter trial at 38 hospitals in China. ClinicalTrials.gov NCT03661411.',
+      },
+      {
+        arm: 'IV alteplase 0.9 mg/kg',
+        role: 'comparator',
+        agent: 'Alteplase (intravenous recombinant tissue plasminogen activator)',
+        dose: '0.9 mg/kg (maximum 90 mg)',
+        route: 'Intravenous',
+        frequency: '10% as a bolus, then 90% infused over 1 hour',
+        duration: 'About 60 minutes',
+        coInterventions: 'Guideline-based antiplatelet treatment began 24 hours after receipt of alteplase.',
+        note: 'Active comparator representing the guideline standard of care being tested against (n=367 randomized, 350 in full analysis set). Dose and administration verbatim from Chen JAMA 2023 p.2135 (abstract) and p.2136-2137 (Procedures). High crossover (20.4%) was a noted limitation; noninferiority held across full analysis, per-protocol, and as-treated populations.',
+      },
+    ],
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -12610,6 +12961,64 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Prior thrombolysis within 3 months',
       'Significant anticoagulation',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Previously independent (estimated pre-stroke modified Rankin Scale score of 0 to 2)',
+            'Adults aged 18 years or older',
+            'Acute ischaemic stroke presenting within 4.5 h of last known well',
+            'Eligible for intravenous thrombolysis according to national guidelines',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Evidence of intracranial haemorrhage or significant non-stroke intracranial pathology likely to account for clinical presentation or represent a risk of intracerebral haemorrhage (for example a CNS neoplasm) on pre-treatment brain imaging',
+            'Stroke within the previous 14 days',
+            'Thrombolytic therapy within the past 14 days',
+            'Hypodensity on pre-treatment CT scan consistent with recent cerebral ischaemia other than the presenting event',
+            'Systolic blood pressure of more than 185 mm Hg or diastolic blood pressure of more than 110 mm Hg, or intravenous pharmacotherapy (repeated bolus or continuous infusion) necessary to reduce blood pressure to these limits',
+            'Clinical history suggestive of subarachnoid haemorrhage',
+            'Medical conditions representing a high risk of haemorrhage',
+            'Hypoglycaemia (less than 2.8 mmol/L) or hyperglycaemia (more than 22.2 mmol/L)',
+            'Seizure at the onset of symptoms, unless brain imaging identified positive evidence of acute symptomatic brain ischaemia',
+            'Pregnancy',
+            'Inadequate haemostasis, including an International Normalised Ratio of more than 1.3 if on warfarin less than 12 h from the administration of any direct oral anticoagulant',
+            'Use of low molecular weight heparin within 48 h',
+            'Any major medical condition likely to limit survival to day 90',
+            'Anticipated unavailability for day 90 follow-up',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Muir KW, et al., Lancet Neurol 2024',
+      sourceUrl: 'https://doi.org/10.1016/S1474-4422(24)00377-6',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Tenecteplase 0.25 mg/kg',
+        role: 'intervention',
+        agent: 'Tenecteplase',
+        dose: '0.25 mg/kg (max 25 mg)',
+        route: 'IV',
+        frequency: 'Single bolus',
+        duration: 'One-time',
+        coInterventions: 'Endovascular thrombectomy permitted where clinically indicated; local protocols for blood pressure management followed',
+      },
+      {
+        arm: 'Alteplase 0.9 mg/kg',
+        role: 'control',
+        agent: 'Alteplase',
+        dose: '0.9 mg/kg (max 90 mg)',
+        route: 'IV',
+        frequency: '10% as bolus, then 90% over a 1-h infusion',
+        duration: '60 minutes',
+        coInterventions: 'Endovascular thrombectomy permitted where clinically indicated; local protocols for blood pressure management followed',
+      },
+    ],
     mrsDistribution: [
       { arm: 'Tenecteplase 0.25 mg/kg', n: 889, pct: [15, 30, 24, 12, 9, 3, 8] },
       { arm: 'Alteplase 0.9 mg/kg', n: 888, pct: [15, 28, 22, 14, 8, 4, 9] },
@@ -12710,6 +13119,53 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Contraindication to thrombolysis',
       'Hemorrhagic stroke on baseline imaging',
       'Severe stroke (high NIHSS). Enrolled in small numbers',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Suspected acute ischaemic stroke with measurable deficits on the NIHSS',
+            'Admitted within 4.5 h of symptom onset, or within 4.5 h of awakening with symptoms, or eligible for bridging therapy before thrombectomy',
+            'Aged 18 years or older',
+            'Living independently before the stroke',
+            'Judged eligible for intravenous thrombolysis according to Norwegian clinical guidelines',
+            'Patients with symptoms on awakening or unknown onset were included off-label if mismatch between DW-MRI and FLAIR-MRI was detected',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Standard contraindications to intravenous thrombolysis as reflected in current Norwegian guideline recommendations',
+            'Inclusion of patients older than 80 years, with minor neurological deficits at presentation, with a previous history of stroke, and with concomitant diabetes mellitus was allowed',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Logallo N, et al., Lancet Neurol 2017',
+      sourceUrl: 'https://doi.org/10.1016/S1474-4422(17)30253-3',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Tenecteplase 0.4 mg/kg',
+        role: 'intervention',
+        agent: 'Tenecteplase',
+        dose: '0.4 mg/kg (max 40 mg)',
+        route: 'IV',
+        frequency: 'Single bolus',
+        duration: 'One-time',
+        note: 'The 0.4 mg/kg dose tested here is not the contemporary stroke dose. The guideline-endorsed tenecteplase dose is 0.25 mg/kg.',
+      },
+      {
+        arm: 'Alteplase 0.9 mg/kg',
+        role: 'control',
+        agent: 'Alteplase',
+        dose: '0.9 mg/kg (max 90 mg)',
+        route: 'IV',
+        frequency: '10% as initial bolus, then remainder over a 1-h infusion',
+        duration: '60 minutes',
+      },
     ],
     howToReadChart: [
       {
@@ -12835,6 +13291,55 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Contraindication to IV thrombolysis',
       'Hemorrhagic transformation or large established infarct on baseline imaging',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Clinically suspected acute ischaemic stroke',
+            'Aged 18 years or older',
+            'Living independently before the stroke',
+            'Admitted within 4.5 h of stroke onset',
+            'NIHSS score of 6 or more (moderate to severe stroke)',
+            'Eligible for thrombolytic treatment according to Norwegian guidelines, which are similar to the European guidelines',
+            'Patients undergoing thrombectomy were included if they received thrombolysis as a bridging therapy',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'NIHSS score below 6 (mild stroke)',
+            'Standard contraindications to intravenous thrombolysis per Norwegian and European guideline recommendations',
+            'Conditions identified on per-protocol review as disorders other than stroke (stroke mimics), pre-stroke modified Rankin Scale score of 3 or more, or an established large infarct or haemorrhagic transformation on baseline imaging',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Kvistad CE, et al., Lancet Neurol 2022',
+      sourceUrl: 'https://doi.org/10.1016/S1474-4422(22)00124-7',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Tenecteplase 0.4 mg/kg',
+        role: 'intervention',
+        agent: 'Tenecteplase',
+        dose: '0.4 mg/kg (max 40 mg)',
+        route: 'IV',
+        frequency: 'Single bolus',
+        duration: 'One-time',
+        note: 'This 0.4 mg/kg dose in moderate-to-severe stroke was the dose stopped early for harm. Part B continued with a lower dose (0.25 mg/kg). The harm does not apply to the 0.25 mg/kg dose.',
+      },
+      {
+        arm: 'Alteplase 0.9 mg/kg',
+        role: 'control',
+        agent: 'Alteplase',
+        dose: '0.9 mg/kg (max 90 mg)',
+        route: 'IV',
+        frequency: '10% as initial bolus, then remainder over a 1-h infusion',
+        duration: '60 minutes',
+      },
+    ],
     howToReadChart: [
       {
         question: 'What does this chart show?',
@@ -12959,6 +13464,58 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Prior stroke with residual deficits',
       'Contraindication to alteplase or aspirin',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Clinical diagnosis of acute ischemic stroke',
+            'Age 18 years or older',
+            'A National Institutes of Health Stroke Scale (NIHSS) score of 0 to 5',
+            'Deficits judged to be not clearly disabling at presentation (a clearly disabling deficit was operationally defined as a deficit that, if it remained unchanged, would prevent the patient from performing basic activities of daily living such as bathing, ambulating, toileting, hygiene, and eating, or from returning to work; this determination was made by local clinicians in consultation with patients and available family)',
+            'Patients had to be able to walk unassisted (with or without an assistive device)',
+            'Study treatment could be initiated within 3 hours of onset (time from witnessed onset or time last known well if unwitnessed)',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Prestroke disability (modified Rankin Scale score of 2 to 6)',
+            'Dysphagia',
+            'Intracranial hemorrhage on acute neuroimaging',
+            'Other standard contraindications to intravenous alteplase as reflected in the clinical guidelines current during the trial',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Khatri P et al., JAMA 2018;320(2):156-166',
+      sourceUrl: 'https://doi.org/10.1001/jama.2018.8496',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'IV alteplase plus oral placebo',
+        role: 'intervention',
+        agent: 'Alteplase (intravenous recombinant tissue plasminogen activator) with matching oral aspirin placebo',
+        dose: '0.9 mg/kg (standard dose) intravenous alteplase, plus oral aspirin placebo',
+        route: 'Intravenous alteplase plus oral placebo',
+        frequency: 'Standard alteplase dosing (10% bolus, remainder infused over 60 minutes); oral placebo to maintain double-blind double-placebo masking',
+        duration: 'Alteplase infusion over about 60 minutes',
+        coInterventions: 'Double-blind, double-placebo design: placebos were identical in appearance to the active study drugs to preserve masking. Treatment initiated within 3 hours of onset.',
+        note: 'Phase 3b, double-blind, double-placebo trial at 75 US stroke-hospital networks; enrolled 313 of a planned 948 patients before the sponsor (Genentech) terminated the trial for slow enrollment, leaving it underpowered. Design and intervention from Khatri JAMA 2018 p.157 (abstract, Study Intervention). ClinicalTrials.gov NCT02072226.',
+      },
+      {
+        arm: 'Oral aspirin plus intravenous placebo',
+        role: 'control',
+        agent: 'Aspirin with matching intravenous alteplase placebo',
+        dose: 'Aspirin 325 mg orally, plus intravenous placebo',
+        route: 'Oral aspirin plus intravenous placebo',
+        frequency: 'Single oral aspirin 325 mg dose; intravenous placebo administered to match the alteplase infusion schedule',
+        duration: 'Intravenous placebo infusion over about 60 minutes',
+        coInterventions: 'Double-blind, double-placebo design: the intravenous placebo was identical in appearance to active alteplase to preserve masking.',
+        note: 'Control arm. Aspirin 325 mg was the active comparator against standard-dose alteplase. Source: Khatri JAMA 2018 p.157.',
+      },
+    ],
     howToReadChart: [
       {
         question: 'What does this chart show?',
@@ -13074,6 +13631,59 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Hemorrhagic stroke or large established infarct on baseline imaging',
       'Contraindication to IV thrombolysis',
       'Severe hepatic or renal impairment',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Aged 18 to 80 years',
+            'Diagnosed with acute ischemic stroke (AIS)',
+            'Stroke onset within 4.5 hours of symptom onset',
+            'A stroke severity score of 4 to 25 on the National Institutes of Health Stroke Scale (NIHSS)',
+            'Cerebral computed tomography (CT) performed before randomization to exclude patients with intracranial hemorrhage or massive ischemic infarction (defined as hypodensity greater than one-third of the middle cerebral artery territory on CT)',
+            'Written informed consent obtained from the patient or a legal representative before enrollment',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Intracranial hemorrhage or massive ischemic infarction (hypodensity greater than one-third of the middle cerebral artery territory) on baseline CT',
+            'Stroke or myocardial infarction within the previous 3 months',
+            'A history of intracranial hemorrhage',
+            'Planned endovascular treatment',
+            'Other exclusion criteria mainly based on current contraindications to intravenous thrombolysis, determined a priori (full list in the trial protocol)',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Song H et al., JAMA Network Open 2023',
+      sourceUrl: 'https://doi.org/10.1001/jamanetworkopen.2023.25415',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Recombinant human prourokinase (rhPro-UK)',
+        role: 'intervention',
+        agent: 'Recombinant human prourokinase (rhPro-UK), a fibrin-specific plasminogen activator that acts mainly on fibrin at the thrombus site',
+        dose: '35 mg total',
+        route: 'Intravenous',
+        frequency: 'A 15 mg bolus over 3 minutes, then the remaining 20 mg by continuous infusion within 30 minutes',
+        duration: 'About 30 minutes',
+        coInterventions: 'rhPro-UK was the sole thrombolytic in this arm and was not combined with other thrombolytic drugs. Antiplatelet therapy was given when clinically necessary but not within 24 hours of the start of thrombolysis. Except for pulmonary embolism, lower-extremity atrial fibrillation, or deep venous thrombosis, anticoagulants were not used.',
+        note: 'Dose and administration verbatim from Song JAMA Network Open 2023 p.3 (Randomization and Masking). Open-label, alteplase-controlled phase 3 noninferiority trial at 35 centers in China; mITT 663. NI margin was a between-group difference of less than 10 percentage points on mRS 0-1 at 90 days. ChiCTR1800016519; ClinicalTrials.gov NCT03541668.',
+      },
+      {
+        arm: 'Alteplase 0.9 mg/kg',
+        role: 'comparator',
+        agent: 'Alteplase (recombinant tissue plasminogen activator)',
+        dose: '0.9 mg/kg (maximum 90 mg)',
+        route: 'Intravenous',
+        frequency: '10% administered as an intravenous bolus, followed by 90% infused within 1 hour',
+        duration: 'About 60 minutes',
+        coInterventions: 'Alteplase was the sole thrombolytic in this arm. Antiplatelet therapy was given when clinically necessary but not within 24 hours of the start of thrombolysis. Anticoagulants were not used except for pulmonary embolism, lower-extremity atrial fibrillation, or deep venous thrombosis.',
+        note: 'Active comparator and current standard of care. Dose and administration verbatim from Song JAMA Network Open 2023 p.3 (Randomization and Masking).',
+      },
     ],
     howToReadChart: [
       {
@@ -13320,6 +13930,52 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Contraindication to thrombolysis',
       'Hemorrhagic stroke on baseline imaging',
       'Severe hepatic impairment or known bleeding diathesis',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Aged 18 to 80 years',
+            'Able to receive intravenous thrombolysis within 4.5 hours after the time last known to be well',
+            'Excellent functional status before the stroke, defined by a modified Rankin scale score of 1 or less',
+            'Disabling ischemic stroke with a National Institutes of Health Stroke Scale score of 4 to 25',
+            'Eligibility for thrombolysis based on Chinese guideline recommendations, consistent with US and European national guidelines',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Previously undergone or planned to undergo endovascular thrombectomy',
+            'Contraindication to intravenous thrombolysis per standard criteria',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Li S et al., NEJM 2024',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa2400314',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Reteplase double bolus (18 mg + 18 mg)',
+        role: 'intervention',
+        agent: 'Reteplase',
+        dose: '18 mg, then a second 18 mg dose',
+        route: 'IV',
+        frequency: 'Two bolus doses, each over 2 minutes; first immediately after randomization, second 30 minutes later',
+        duration: 'Two boluses 30 minutes apart',
+        note: 'Reteplase is a recombinant plasminogen activator given as a fixed double-bolus regimen. It is approved for stroke only in selected regions and is not approved in the US or EU.',
+      },
+      {
+        arm: 'Alteplase 0.9 mg/kg',
+        role: 'control',
+        agent: 'Alteplase',
+        dose: '0.9 mg/kg (max 90 mg)',
+        route: 'IV',
+        frequency: '10% delivered as a bolus within 1 minute, then remainder infused over 60 minutes',
+        duration: '60 minutes',
+      },
     ],
     howToReadChart: [
       {
@@ -13646,6 +14302,53 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Premorbid disability (mRS >1)',
       'Contraindication to IV thrombolysis',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Adults aged at least 18 years',
+            'Acute ischemic stroke eligible for standard intravenous thrombolytic treatment, able to receive treatment within 4.5 hours of stroke onset',
+            'Ineligible for or refused endovascular thrombectomy',
+            'Modified Rankin scale score of no more than 1 before enrollment',
+            'Disabling ischemic stroke with a National Institutes of Health Stroke Scale score of 5 to 25',
+            'Eligibility for thrombolytic treatment based on the Chinese Stroke Association guidelines, consistent with US and European national guidelines',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Had received or intended to proceed to endovascular thrombectomy',
+            'Contraindication to intravenous thrombolysis per guideline recommendations',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Wang Y et al., Lancet 2023',
+      sourceUrl: 'https://doi.org/10.1016/S0140-6736(22)02600-9',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Tenecteplase 0.25 mg/kg',
+        role: 'intervention',
+        agent: 'Tenecteplase',
+        dose: '0.25 mg/kg (max 25 mg)',
+        route: 'IV',
+        frequency: 'Single bolus',
+        duration: 'One-time',
+        note: 'Standard-window thrombolysis in patients eligible for IV thrombolytic but ineligible for or refusing thrombectomy. Non-inferiority margin was 0.937 for the risk ratio.',
+      },
+      {
+        arm: 'Alteplase 0.9 mg/kg',
+        role: 'control',
+        agent: 'Alteplase',
+        dose: '0.9 mg/kg (max 90 mg)',
+        route: 'IV',
+        frequency: '10% as initial bolus, then remainder over a 1-h infusion',
+        duration: '60 minutes',
+      },
+    ],
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -13751,6 +14454,52 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Known time of symptom onset (wake-up criterion not met)',
       'Early ischemic changes beyond one-third MCA territory on NCCT',
       'Standard thrombolysis contraindications',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Aged 18 years or older',
+            'Acute ischaemic stroke symptoms upon awakening that were not present before sleep',
+            'Limb weakness',
+            'A National Institutes of Health Stroke Scale (NIHSS) score of 3 or higher, or aphasia',
+            'Ability to receive tenecteplase within 4.5 hours of awakening',
+            'A non-contrast CT examination of the head was a prerequisite for inclusion',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Intracranial haemorrhage on acute non-contrast CT',
+            'Infarct comprising hypoattenuation in more than a third of the middle cerebral artery territory on acute non-contrast CT',
+            'Standard contraindications to intravenous thrombolysis (complete list provided in the trial appendix)',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Roaldsen et al., Lancet Neurology 2023',
+      sourceUrl: 'https://doi.org/10.1016/S1474-4422(22)00484-7',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Tenecteplase 0.25 mg/kg',
+        role: 'intervention',
+        agent: 'Tenecteplase',
+        dose: '0.25 mg/kg (maximum 25 mg)',
+        route: 'Intravenous',
+        frequency: 'Single bolus',
+        coInterventions: 'Thrombectomy was allowed in both treatment groups.',
+        note: 'Given within 4.5 hours of awakening. Bodyweight assessed per local routine practice.',
+      },
+      {
+        arm: 'Control (no thrombolysis)',
+        role: 'control',
+        agent: 'No thrombolytic agent',
+        coInterventions: 'Thrombectomy was allowed in both treatment groups.',
+        note: 'Patients did not receive tenecteplase or any other thrombolytic agent.',
+      },
     ],
     mrsDistribution: [
       { arm: 'Tenecteplase', n: 289, pct: [14, 31, 16, 20, 7, 2, 10] },
@@ -14899,6 +15648,55 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     exclusionCriteria: [
       'Severe pre-existing disability (modified Rankin scale greater than 3 before stroke)',
       'Standard IV thrombolysis contraindications (recent surgery, active bleeding, untreated severe hypertension, etc.)',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Ischemic stroke able to receive intravenous thrombolysis within 4.5 hours after symptom onset',
+            'Occlusion of the internal carotid artery, the first segment (M1) or second segment (M2) of the middle cerebral artery, or the basilar artery on CT angiography',
+            'Eligible to undergo endovascular thrombectomy, with arterial puncture able to commence within 6 hours after stroke onset',
+            'No upper age limit',
+            'No restriction on clinical severity as assessed by the NIHSS (range 0 to 42)',
+            'CT-perfusion mismatch for anterior-circulation strokes (hypoperfusion defined by Tmax greater than 6 seconds; ischemic core estimated by cerebral blood flow less than 30% of normal; mismatch ratio greater than 1.2, absolute mismatch volume greater than 10 mL, ischemic core volume less than 70 mL). This entry criterion was removed by protocol amendment on October 12, 2016, after approximately 80 patients had been enrolled.',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Severe preexisting disability, defined as a modified Rankin scale score greater than 3',
+            'Contraindication to intravenous thrombolysis with alteplase per standard criteria',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Campbell BCV et al., NEJM 2018',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa1716405',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Tenecteplase 0.25 mg/kg before thrombectomy',
+        role: 'intervention',
+        agent: 'Tenecteplase',
+        dose: '0.25 mg/kg (max 25 mg)',
+        route: 'IV',
+        frequency: 'Single bolus',
+        duration: 'One-time',
+        coInterventions: 'Followed by standard endovascular thrombectomy',
+        note: 'Bridging thrombolysis given before planned thrombectomy in large-vessel occlusion. Single-bolus administration permits initiation of inter-hospital transfer before a 1-hour infusion would finish. This is the 0.25 mg/kg dose, not the 0.4 mg/kg dose studied separately in EXTEND-IA TNK Part 2.',
+      },
+      {
+        arm: 'Alteplase 0.9 mg/kg before thrombectomy',
+        role: 'control',
+        agent: 'Alteplase',
+        dose: '0.9 mg/kg (max 90 mg)',
+        route: 'IV',
+        frequency: '10% as initial bolus, then remainder over a 1-h infusion',
+        duration: '60 minutes',
+        coInterventions: 'Followed by standard endovascular thrombectomy',
+      },
     ],
     safetyProfile: {
       sICH: {
