@@ -1469,7 +1469,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       effectSize: {
         value: 'OR 2.6',
-        label: 'Better Disability Outcome'
+        label: 'Better Disability Outcome',
+        // DO NOT change 2.6 -> 3.1. 2.6 (95% CI 1.7-3.8) is the UNADJUSTED,
+        // pre-specified PRIMARY common OR (Goyal NEJM 2015 p.1024 + Table 2 p.1025;
+        // SAP p.1022: "The primary analysis was unadjusted"). The adjusted common OR
+        // 3.1 (95% CI 2.0-4.7) is the SECONDARY/sensitivity estimate (Table 2 p.1025)
+        // and is recorded as labeled secondary in howToInterpret/howToReadChart.
+        // Verified in docs/evidence-packets/2026-06-08-trial-pilot-arm-enrichment.md (Task C).
+        info: 'Common OR 2.6 (95% CI 1.7–3.8, P<0.001) is the unadjusted, pre-specified primary analysis (intention-to-treat). The adjusted common OR was 3.1 (95% CI 2.0–4.7), reported as a secondary/sensitivity estimate. Source: Goyal NEJM 2015, primary-outcome text p.1024 and Table 2 p.1025.',
       }
     },
     trialDesign: {
@@ -1599,7 +1606,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       },
       {
         question: 'What do the numbers mean clinically?',
-        answer: 'Functional independence rose from 29.3% to 53.0% with EVT. The common odds ratio of 2.6 (95% CI 1.7 to 3.8) means EVT patients had 2.6 times the odds of being at a better mRS level. Mortality also fell from 19.0% to 10.4%.',
+        answer: 'Functional independence rose from 29.3% to 53.0% with EVT. The common odds ratio of 2.6 (95% CI 1.7 to 3.8), the unadjusted pre-specified primary analysis, means EVT patients had 2.6 times the odds of being at a better mRS level. The adjusted common odds ratio was 3.1 (95% CI 2.0 to 4.7) as a secondary estimate. Mortality also fell from 19.0% to 10.4%.',
       },
       {
         question: 'What is the key limitation to keep in mind?',
@@ -1608,7 +1615,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     howToInterpret: {
       /* claimId: escape-primary-result | source: Goyal NEJM 2015 */
-      proves: 'In patients with small infarct cores (ASPECTS 6 to 10) and moderate-to-good collaterals on multiphase CTA, rapid endovascular thrombectomy added to standard care within 12 hours of onset reduced disability across the full mRS distribution (common OR 2.6, 95% CI 1.7 to 3.8; P less than 0.001), increased functional independence from 29.3% to 53.0%, and reduced 90-day mortality from 19.0% to 10.4%.',
+      proves: 'In patients with small infarct cores (ASPECTS 6 to 10) and moderate-to-good collaterals on multiphase CTA, rapid endovascular thrombectomy added to standard care within 12 hours of onset reduced disability across the full mRS distribution (common OR 2.6, 95% CI 1.7 to 3.8; P less than 0.001 — the unadjusted, pre-specified primary analysis; adjusted common OR 3.1, 95% CI 2.0 to 4.7 as a secondary estimate), increased functional independence from 29.3% to 53.0%, and reduced 90-day mortality from 19.0% to 10.4%.',
       doesNotProve: 'It does not establish benefit in patients excluded by the imaging selection criteria, particularly low ASPECTS or poor collaterals. It does not address EVT beyond 12 hours, which was later tested by DAWN and DEFUSE-3 with perfusion-based selection.',
       cautions: 'ESCAPE was stopped early at 316 of a planned 500 patients after positive interim analysis, which can overestimate effect size. Workflow times in ESCAPE were exceptional (median CT-to-first-reperfusion 84 minutes) and may not be reproducible in less specialized centers. Multiphase CTA collateral assessment requires reader expertise.',
     },
