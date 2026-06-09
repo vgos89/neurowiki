@@ -16,3 +16,18 @@ Additive enrichment of existing trial records with `fullEligibility` + `armDetai
 - **Never-drift:** no recommendation/stat/interpretation text altered (additive only).
 - **Em-dash:** zero in added blocks; en-dash only in numeric ranges.
 - **Follow-ups:** none blocking.
+
+---
+
+## Batch 2 — Antiplatelet / DAPT (CHANCE, CHANCE-2, POINT, INSPIRES, THALES, SOCRATES)
+
+**Decision:** approve
+**Reviewer:** clinical-reviewer (model: claude-opus-4-8) · **Date:** 2026-06-09
+
+- **Scope:** additive `fullEligibility` + `armDetails` on `chance-trial`, `chance-2-trial`, `point-trial`, `inspires-trial`, `thales-trial`, `socrates-trial`. No claim/stat/interpretation changed.
+- **Regimen fidelity (source-verified):** loading doses correct and NOT cross-contaminated — POINT clopidogrel 600 mg vs CHANCE/INSPIRES 300 mg; ticagrelor 180 mg load uniform. DAPT durations correct per trial — CHANCE 21d, POINT 90d, INSPIRES 21d then clopidogrel to 90, THALES 30d, CHANCE-2 21d then ticagrelor to 90, SOCRATES 90d monotherapy. Time windows — POINT within 12 h, INSPIRES 24 to 72 h, others within 24 h. Age gates — POINT ≥18, INSPIRES 35–80, others ≥40; THALES ABCD2 ≥6 distinct.
+- **Arm roles:** CHANCE-2 ticagrelor+ASA = intervention / clopidogrel+ASA = comparator (NOT inverted, explicitly annotated). SOCRATES = ticagrelor vs aspirin monotherapy (NOT framed as DAPT). DAPT trials = combination intervention / aspirin control.
+- **SOCRATES negative status preserved:** no benefit/NNT framing introduced (it was P=0.07, NS).
+- **Never-drift:** no existing stat/interpretation/recommendation altered (additive only).
+- **Em-dash:** zero in added blocks.
+- **Follow-ups:** none blocking.

@@ -7786,6 +7786,86 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Recent major surgery or GI bleeding within 3 months',
       'Contraindication to clopidogrel or aspirin',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: "Eligible patients",
+          items: [
+            "Age 40 years or older",
+            "Diagnosis of an acute minor ischemic stroke or TIA",
+            "Acute minor stroke defined by a score of 3 or less on the NIHSS (range 0 to 42) at the time of randomization",
+            "TIA defined as focal brain ischemia with resolution of symptoms within 24 hours after onset plus a moderate-to-high risk of stroke recurrence (ABCD2 score of 4 or higher at randomization)",
+            "Ability to start the study drug within 24 hours after symptom onset",
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: "Hemorrhage / non-ischemic",
+          items: [
+            "Hemorrhage or other conditions (vascular malformation, tumor, abscess, or other major nonischemic brain disease) on baseline CT or MRI",
+            "Isolated sensory symptoms, isolated visual changes, or isolated dizziness or vertigo without evidence of acute infarction on baseline imaging",
+          ],
+        },
+        {
+          label: "Baseline disability / severity",
+          items: [
+            "A modified Rankin scale score of more than 2 immediately before the index event",
+            "An NIHSS score of 4 or more at randomization",
+          ],
+        },
+        {
+          label: "Anticoagulation / bleeding",
+          items: [
+            "A clear indication for anticoagulation (presumed cardiac source of embolus, such as atrial fibrillation or prosthetic valve)",
+            "Contraindication to clopidogrel or aspirin",
+            "History of intracranial hemorrhage",
+            "Anticipated long-term need for nonstudy antiplatelet drugs or NSAIDs affecting platelet function",
+            "Heparin or oral anticoagulation within 10 days before randomization",
+            "Gastrointestinal bleeding or major surgery within the previous 3 months",
+          ],
+        },
+        {
+          label: "Procedures / prognosis",
+          items: [
+            "Planned or probable revascularization within 3 months",
+            "Planned surgery or intervention requiring cessation of the study drug",
+            "TIA or minor stroke caused by angiography or surgery",
+            "Severe noncardiovascular condition with life expectancy less than 3 months",
+            "Women of childbearing age without reliable contraception and without a negative pregnancy test",
+            "Receiving other investigational drugs or devices",
+          ],
+        },
+      ],
+      source: "publication",
+      sourceLabel: "Wang Y et al., N Engl J Med 2013",
+      sourceUrl: "https://doi.org/10.1056/NEJMoa1215340",
+      retrieved: "2026-06-09",
+    },
+    armDetails: [
+      {
+        arm: "Clopidogrel plus aspirin",
+        role: "intervention",
+        agent: "Clopidogrel plus aspirin",
+        dose: "Clopidogrel 300 mg loading on day 1, then 75 mg daily on days 2 to 90; aspirin 75 mg daily on days 2 to 21, then placebo aspirin on days 22 to 90 (open-label aspirin 75 to 300 mg on day 1)",
+        route: "Oral",
+        frequency: "Once daily",
+        duration: "Clopidogrel days 1 to 90; aspirin (active) days 1 to 21, then clopidogrel alone to day 90",
+        coInterventions: "Open-label aspirin on day 1 (75 to 300 mg) in both groups at physician discretion",
+        note: "Double-blind, double-dummy design",
+      },
+      {
+        arm: "Aspirin alone (placebo plus aspirin)",
+        role: "control",
+        agent: "Aspirin plus placebo clopidogrel",
+        dose: "Placebo clopidogrel days 1 to 90; aspirin 75 mg daily days 2 to 90 (open-label aspirin 75 to 300 mg on day 1)",
+        route: "Oral",
+        frequency: "Once daily",
+        duration: "Aspirin days 1 to 90",
+        coInterventions: "Open-label aspirin on day 1 (75 to 300 mg) in both groups at physician discretion",
+        note: "Placebo clopidogrel days 1 to 90",
+      },
+    ],
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -7914,6 +7994,70 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Indication for anticoagulation (atrial fibrillation)',
       'Recent major surgery or GI bleeding',
       'Contraindication to clopidogrel or aspirin',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: "Eligible patients",
+          items: [
+            "At least 18 years of age",
+            "Randomization within 12 hours after an acute ischemic stroke with an NIHSS score of 3 or less (range 0 to 42)",
+            "Or a high-risk TIA with an ABCD2 score of 4 or more (range 0 to 7)",
+            "Required CT or MRI to rule out intracranial bleeding or other explanatory conditions and detect contraindications",
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: "TIA mimics / prior thrombolysis",
+          items: [
+            "Symptoms limited to isolated numbness, isolated visual changes, or isolated dizziness or vertigo",
+            "Received any thrombolytic therapy within 1 week before the event",
+          ],
+        },
+        {
+          label: "Reperfusion candidacy",
+          items: [
+            "Candidates for thrombolysis, endovascular therapy, or endarterectomy",
+          ],
+        },
+        {
+          label: "Antithrombotic / anticoagulation",
+          items: [
+            "Planned antiplatelet or anticoagulation therapy (including presumed atrial fibrillation or cardiovascular disease where anticoagulation is indicated)",
+            "A contraindication to aspirin or clopidogrel",
+            "Anticipated NSAID use for more than 7 days during the trial",
+          ],
+        },
+      ],
+      source: "publication",
+      sourceLabel: "Johnston SC et al., N Engl J Med 2018",
+      sourceUrl: "https://doi.org/10.1056/NEJMoa1800410",
+      retrieved: "2026-06-09",
+    },
+    armDetails: [
+      {
+        arm: "Clopidogrel plus aspirin",
+        role: "intervention",
+        agent: "Clopidogrel plus aspirin",
+        dose: "Clopidogrel 600 mg loading on day 1, then 75 mg daily on days 2 to 90; plus open-label aspirin 50 to 325 mg daily (162 mg daily for 5 days then 81 mg daily recommended)",
+        route: "Oral",
+        frequency: "Once daily",
+        duration: "Clopidogrel plus aspirin through day 90",
+        coInterventions: "Open-label aspirin 50 to 325 mg daily in both groups, dose at physician discretion (162 mg x5 days then 81 mg recommended)",
+        note: "First dose as soon as possible after randomization; followed 90 days",
+      },
+      {
+        arm: "Aspirin alone (placebo plus aspirin)",
+        role: "control",
+        agent: "Aspirin plus placebo clopidogrel",
+        dose: "Placebo clopidogrel; plus open-label aspirin 50 to 325 mg daily (162 mg daily for 5 days then 81 mg daily recommended)",
+        route: "Oral",
+        frequency: "Once daily",
+        duration: "Through day 90",
+        coInterventions: "Open-label aspirin 50 to 325 mg daily in both groups, dose at physician discretion",
+        note: "Placebo matched clopidogrel appearance and taste",
+      },
     ],
     howToReadChart: [
       {
@@ -8344,6 +8488,87 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Planned carotid revascularization within 90 days',
       'Concomitant antiplatelet therapy other than the study drug',
       'High bleeding risk or active bleeding',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: "Core qualifying event",
+          items: [
+            "At least 40 years of age",
+            "An acute ischemic stroke with an NIHSS score of 5 or lower (range 0 to 42)",
+            "Or a high-risk TIA (ABCD2 score of 4 or higher, or symptomatic intracranial or extracranial arterial stenosis)",
+          ],
+        },
+        {
+          label: "Timing / imaging",
+          items: [
+            "Randomization within 24 hours after symptom onset",
+            "CT or MRI before randomization to rule out intracranial bleeding or other explanatory conditions",
+            "Not considered to have had a cardioembolic stroke",
+            "Had not received IV or intraarterial thrombolysis",
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: "Planned reperfusion / antithrombotic",
+          items: [
+            "Other specific antiplatelet or anticoagulation therapy planned",
+            "Carotid, cerebrovascular, or coronary revascularization planned that would require halting study treatment within 7 days",
+            "IV or intraarterial thrombolysis or thrombectomy within 24 hours before randomization",
+            "Need for strong CYP3A inhibitors or CYP3A substrates with narrow therapeutic indexes",
+            "Need for NSAIDs for more than 7 consecutive days",
+          ],
+        },
+        {
+          label: "Cardioembolic / contraindication",
+          items: [
+            "Hypersensitivity to ticagrelor or aspirin",
+            "A history of atrial fibrillation, ventricular aneurysm, or suspicion of a cardioembolic cause",
+          ],
+        },
+        {
+          label: "Bleeding / comorbidity",
+          items: [
+            "A known bleeding diathesis or coagulation disorder",
+            "A history of symptomatic nontraumatic intracerebral hemorrhage at any time",
+            "Gastrointestinal bleed within the past 6 months",
+            "Major surgery within 30 days",
+            "Severe liver disease",
+            "Renal failure requiring dialysis",
+            "Pregnant or lactating",
+            "Unable to understand or comply with study procedures or follow-up",
+          ],
+        },
+      ],
+      source: "publication",
+      sourceLabel: "Johnston et al., N Engl J Med 2016",
+      sourceUrl: "https://doi.org/10.1056/NEJMoa1603060",
+      retrieved: "2026-06-09",
+    },
+    armDetails: [
+      {
+        arm: "Ticagrelor",
+        role: "intervention",
+        agent: "Ticagrelor (monotherapy) plus aspirin placebo",
+        dose: "Ticagrelor 180 mg loading (two 90-mg tablets) on day 1, then 90 mg twice daily on days 2 to 90, with loading and daily aspirin placebo",
+        route: "Oral",
+        frequency: "Twice daily (about 12-hour intervals)",
+        duration: "90-day treatment period",
+        coInterventions: "Double-dummy (matching aspirin placebo); after 90 days, treatment at investigator discretion, followed an additional 30 days",
+        note: "Monotherapy comparison: ticagrelor alone vs aspirin alone",
+      },
+      {
+        arm: "Aspirin",
+        role: "control",
+        agent: "Aspirin (monotherapy) plus ticagrelor placebo",
+        dose: "Aspirin 300 mg loading (three 100-mg tablets) on day 1, then 100 mg daily on days 2 to 90, with loading and twice-daily ticagrelor placebo",
+        route: "Oral",
+        frequency: "Once daily (with twice-daily ticagrelor placebo)",
+        duration: "90-day treatment period",
+        coInterventions: "Double-dummy (matching ticagrelor placebo); after 90 days, treatment at investigator discretion, followed an additional 30 days",
+        note: "Aspirin monotherapy control",
+      },
     ],
     howToReadChart: [
       {
@@ -8908,6 +9133,80 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Concurrent anticoagulation requirement',
       'Thrombolysis or thrombectomy for the index event',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: "Core qualifying event",
+          items: [
+            "At least 40 years of age",
+            "Mild-to-moderate acute noncardioembolic ischemic stroke with an NIHSS score of 5 or less",
+            "Or a high-risk TIA with an ABCD2 score of 6 or higher, or symptomatic intracranial or extracranial arterial stenosis (>=50% narrowing that could account for the TIA)",
+          ],
+        },
+        {
+          label: "Timing / imaging",
+          items: [
+            "Randomization within 24 hours after symptom onset, or within 24 hours from last known normal for wake-up presentations",
+            "CT or MRI before randomization to rule out hemorrhage or other conditions",
+            "Not undergoing thrombolysis or thrombectomy",
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: "Planned reperfusion / antithrombotic",
+          items: [
+            "Planned IV or intraarterial thrombolysis or thrombectomy within 24 hours before randomization",
+            "Planned anticoagulation or specific antiplatelet therapy other than aspirin",
+            "Planned carotid endarterectomy requiring discontinuation within 3 days",
+          ],
+        },
+        {
+          label: "Cardioembolic / contraindication",
+          items: [
+            "Hypersensitivity to ticagrelor or aspirin",
+            "History of atrial fibrillation or ventricular aneurysm or suspicion of a cardioembolic cause",
+          ],
+        },
+        {
+          label: "Bleeding risk",
+          items: [
+            "A known bleeding diathesis or coagulation disorder",
+            "A history of intracerebral hemorrhage",
+            "Gastrointestinal bleeding within the past 6 months",
+            "Major surgery within 30 days before randomization",
+          ],
+        },
+      ],
+      source: "publication",
+      sourceLabel: "Johnston et al., N Engl J Med 2020",
+      sourceUrl: "https://doi.org/10.1056/NEJMoa1916870",
+      retrieved: "2026-06-09",
+    },
+    armDetails: [
+      {
+        arm: "Ticagrelor plus aspirin",
+        role: "intervention",
+        agent: "Ticagrelor plus aspirin",
+        dose: "Ticagrelor 180 mg loading (two 90-mg tablets) as soon as possible after randomization, then 90 mg twice daily at about 12-hour intervals; aspirin 300 to 325 mg loading recommended (less if aspirin already given), then 75 to 100 mg daily",
+        route: "Oral",
+        frequency: "Ticagrelor twice daily; aspirin once daily",
+        duration: "30-day treatment period",
+        coInterventions: "After 30 days, standard of care at investigator discretion; followed an additional 30 days",
+        note: "Fixed-randomization schedule, balanced blocks, about 1:1",
+      },
+      {
+        arm: "Aspirin (plus ticagrelor placebo)",
+        role: "control",
+        agent: "Aspirin plus matching ticagrelor placebo",
+        dose: "Matching ticagrelor placebo as soon as possible after randomization, then twice daily; aspirin 300 to 325 mg loading recommended (less if aspirin already given), then 75 to 100 mg daily",
+        route: "Oral",
+        frequency: "Placebo twice daily; aspirin once daily",
+        duration: "30-day treatment period",
+        coInterventions: "After 30 days, standard of care at investigator discretion; followed an additional 30 days",
+        note: "Aspirin monotherapy with matching ticagrelor placebo (double-blind control)",
+      },
+    ],
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -8959,6 +9258,79 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Pre-existing disability (mRS ≥2)',
       'ICH history; planned surgery within 90 days',
       'Dual antiplatelet or intensive statin within prior 2 weeks',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: "Core qualifying event",
+          items: [
+            "35 to 80 years of age",
+            "Ischemic stroke with an NIHSS score of 5 or less or a high-risk TIA with an ABCD2 score of 4 or higher within 24 to 72 hours after symptom onset",
+            "Or an ischemic stroke (NIHSS score 4 or 5) within 24 hours after symptom onset",
+            "Presumed atherosclerotic cause (stenosis of an extracranial or intracranial artery ipsilateral to the ischemic field, or multiple infarctions with nonstenotic atherosclerotic plaque ipsilateral to the ischemic field)",
+          ],
+        },
+        {
+          label: "Imaging (at least one)",
+          items: [
+            "At least 50% stenosis of a major intracranial or extracranial artery likely accounting for the presentation and infarction",
+            "Or acute new multiple infarctions on CT or MRI of presumed large-artery atherosclerosis origin, including nonstenotic unstable plaque ipsilateral to the infarction",
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: "Prior / index therapy",
+          items: [
+            "Received thrombolysis or endovascular therapy",
+            "Additional anticoagulant, defibrinogenation, or antiplatelet therapy other than clopidogrel and aspirin after the index event",
+            "Dual antiplatelet therapy or intensive statin within 2 weeks before randomization",
+          ],
+        },
+        {
+          label: "Cause / mechanism",
+          items: [
+            "A presumed cardioembolic TIA or ischemic stroke",
+            "Other determined cause of stroke or TIA (e.g., aortic dissection, vasculitis)",
+          ],
+        },
+        {
+          label: "Disability / bleeding / surgery",
+          items: [
+            "A preexisting modified Rankin scale score of 2 or higher",
+            "A history of intracranial hemorrhage",
+            "Planned surgery or revascularization requiring discontinuation of trial medications within 90 days",
+          ],
+        },
+      ],
+      source: "publication",
+      sourceLabel: "Gao et al., N Engl J Med 2023",
+      sourceUrl: "https://doi.org/10.1056/NEJMoa2309137",
+      retrieved: "2026-06-09",
+    },
+    armDetails: [
+      {
+        arm: "Clopidogrel plus aspirin",
+        role: "intervention",
+        agent: "Clopidogrel plus aspirin",
+        dose: "Clopidogrel 300 mg loading on day 1, then 75 mg daily on days 2 to 90; aspirin 100 to 300 mg on day 1, then 100 mg daily on days 2 to 21, then aspirin placebo on days 22 to 90",
+        route: "Oral",
+        frequency: "Once daily",
+        duration: "Clopidogrel through day 90; aspirin through day 21 (DAPT to day 21, then clopidogrel monotherapy to day 90)",
+        coInterventions: "Standard care per current AHA-ASA and Chinese guidelines; day-1 aspirin dose at physician discretion; first doses within 1 hour after assignment",
+        note: "Antiplatelet component of a 2-by-2 factorial trial (the other factor compared immediate vs delayed intensive statin)",
+      },
+      {
+        arm: "Aspirin (plus clopidogrel placebo)",
+        role: "control",
+        agent: "Aspirin plus matching clopidogrel placebo",
+        dose: "Matching clopidogrel placebo for 90 days; aspirin 100 to 300 mg on day 1, then 100 mg daily on days 2 to 90",
+        route: "Oral",
+        frequency: "Once daily",
+        duration: "90 days",
+        coInterventions: "Standard care per current AHA-ASA and Chinese guidelines; day-1 aspirin dose at physician discretion",
+        note: "Aspirin monotherapy with matching clopidogrel placebo (double-blind control)",
+      },
     ],
     safetyProfile: {
       majorBleeding: {
@@ -9150,6 +9522,77 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'DAPT in prior 72h',
       'Anticoagulation indication (AF, prosthetic valve, endocarditis)',
       'Contraindication to ticagrelor, clopidogrel, or aspirin',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: "Eligible patients",
+          items: [
+            "Carried a CYP2C19 loss-of-function allele (at least one *2 or *3 allele) by point-of-care testing",
+            "40 years of age or older",
+            "An acute nondisabling ischemic stroke with an NIHSS score of 3 or less (range 0 to 42)",
+            "Or a high-risk TIA with an ABCD2 score of 4 or higher (range 0 to 7)",
+            "Could start the trial drug within 24 hours from the time last known normal",
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: "Prior acute treatment",
+          items: [
+            "Received intravenous thrombolytic therapy or mechanical thrombectomy",
+            "Surgery or interventional treatment requiring trial-drug cessation had been scheduled",
+          ],
+        },
+        {
+          label: "Disability / bleeding history",
+          items: [
+            "Moderate-to-severe disability (modified Rankin scale score of 3 to 5)",
+            "A history of intracranial hemorrhage or amyloid angiopathy",
+          ],
+        },
+        {
+          label: "Antithrombotic / anticoagulation",
+          items: [
+            "Dual antiplatelet treatment in the 72 hours before randomization",
+            "Current heparin or oral anticoagulation (presumed cardiac source of embolus, such as atrial fibrillation, prosthetic valve, known or suspected endocarditis)",
+          ],
+        },
+        {
+          label: "Contraindication",
+          items: [
+            "A contraindication to ticagrelor, clopidogrel, or aspirin",
+          ],
+        },
+      ],
+      source: "publication",
+      sourceLabel: "Wang Y et al., N Engl J Med 2021",
+      sourceUrl: "https://doi.org/10.1056/NEJMoa2111749",
+      retrieved: "2026-06-09",
+    },
+    armDetails: [
+      {
+        arm: "Ticagrelor plus aspirin",
+        role: "intervention",
+        agent: "Ticagrelor plus aspirin",
+        dose: "Ticagrelor 180 mg loading on day 1, then 90 mg twice daily on days 2 to 90; aspirin 75 to 300 mg loading then 75 mg daily for 21 days; plus placebo clopidogrel",
+        route: "Oral",
+        frequency: "Ticagrelor twice daily; aspirin once daily",
+        duration: "Ticagrelor days 1 to 90; aspirin days 1 to 21",
+        coInterventions: "Open-label aspirin (75 to 300 mg loading, then 75 mg daily for 21 days) in both groups; after 3 months, standard of care at investigator discretion",
+        note: "Restricted to CYP2C19 loss-of-function carriers; double-blind, double-dummy",
+      },
+      {
+        arm: "Clopidogrel plus aspirin",
+        role: "comparator",
+        agent: "Clopidogrel plus aspirin",
+        dose: "Clopidogrel 300 mg loading on day 1, then 75 mg daily on days 2 to 90; aspirin 75 to 300 mg loading then 75 mg daily for 21 days; plus placebo ticagrelor",
+        route: "Oral",
+        frequency: "Once daily",
+        duration: "Clopidogrel days 1 to 90; aspirin days 1 to 21",
+        coInterventions: "Open-label aspirin (75 to 300 mg loading, then 75 mg daily for 21 days) in both groups; after 3 months, standard of care at investigator discretion",
+        note: "Active comparator (ticagrelor+aspirin is the intervention); double-blind, double-dummy",
+      },
     ],
     safetyProfile: {
       majorBleeding: {
