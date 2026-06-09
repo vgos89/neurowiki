@@ -4926,6 +4926,46 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Hemorrhagic transformation before randomization',
       'Major comorbidities limiting life expectancy',
     ],
+    fullEligibility: {
+      inclusion: [
+        { label: "Age & timing", items: [
+          "Patients between 18 and 55 years of age",
+          "Included within 24 hours of a malignant MCA infarction"
+        ] },
+        { label: "Clinical & imaging (all 3 required)", items: [
+          "A National Institutes of Health Stroke Scale score >=16, including a score >=1 on item 1a (level of consciousness)",
+          "Brain computed tomography ischemic signs involving >50% of the MCA territory",
+          "A diffusion-weighted imaging (DWI) infarct volume >145 cm3"
+        ] }
+      ],
+      exclusion: [
+        { label: "Key exclusions", items: [
+          "Preexisting significant disability defined by a modified Rankin Scale (mRS) score >=2",
+          "A significant contralateral infarction",
+          "A severe secondary hemorrhagic infarction involving >50% of the MCA territory",
+          "Any known coagulopathy (including use of recombinant tissue-type plasminogen activator)",
+          "Life expectancy <3 years",
+          "Any serious illness that could confound treatment assessment",
+          "Pregnancy",
+          "Any magnetic resonance imaging (MRI) contraindication"
+        ] }
+      ],
+      source: "publication",
+      sourceLabel: "Vahedi et al., Stroke 2007",
+      sourceUrl: "https://doi.org/10.1161/STROKEAHA.107.485235",
+      retrieved: "2026-06-09"
+    },
+    armDetails: [
+      { arm: "Decompressive craniectomy plus standard medical therapy", role: "intervention",
+        agent: "Decompressive hemicraniectomy with duraplasty",
+        duration: "Within 30 h of symptom onset; no later than 6 h after randomization. Mean delay 20.5 h (range 7 to 43)",
+        coInterventions: "Standard medical therapy per published guidelines for early management of ischemic stroke, identical to the no-surgery group",
+        note: "Large hemicraniectomy removing a bone flap as large as possible (ipsilateral to the stroke), including temporal, frontal, parietal, and some occipital bones; the dura was opened. Duraplasty was left to the discretion of the neurosurgeon and was performed in 11 of 20 patients. Cranioplasty was not performed before the 6-month visit unless the patient had already reached an mRS <=3." },
+      { arm: "Standard medical therapy alone", role: "control",
+        agent: "Conservative medical management",
+        coInterventions: "Same standard medical therapy protocol applied in both groups",
+        note: "Standard medical therapy based on published guidelines for early management of ischemic stroke. Hypothermia discouraged; continuous invasive ICP monitoring not recommended. Endotracheal intubation recommended for severely increased ICP. Measures to avoid factors exacerbating edema (hyperthermia, hyperglycemia); head of bed elevated at 30 degrees. IV fluid restriction of 500 mL/d with normal saline; IV glucose solutions discouraged. IV mannitol (0.25 to 0.5 g/kg) or furosemide only if condition worsened from edema. IV antihypertensives when systolic BP >220 mm Hg or diastolic BP >120 mm Hg. Prophylactic anticonvulsants at center discretion. No patient in this group underwent decompressive surgery during follow-up." }
+    ],
     pearls: [
       'Small trial stopped early at 38 patients; underpowered for its primary functional endpoint',
       'Primary 6-month mRS less than or equal to 3 was not statistically significant (P=0.18)',
@@ -5032,6 +5072,53 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Signs of herniation before randomization',
       'Bilateral infarcts or brainstem involvement',
       'Major organ failure or terminal illness',
+    ],
+    fullEligibility: {
+      inclusion: [
+        { label: "Age", items: ["Age 18 to 60 years"] },
+        { label: "Clinical", items: [
+          "Clinical signs of infarction of the MCA territory with an NIHSS score >18 for lesions of the nondominant hemisphere and >20 for lesions of the dominant hemisphere",
+          "Decrease in the level of consciousness to a score of >=1 on item 1a of the NIHSS"
+        ] },
+        { label: "Imaging", items: [
+          "Computed tomography-documented unilateral MCA infarction, including at least 2/3 of the territory and including at least part of the basal ganglia, with or without additional ipsilateral infarction of the anterior or posterior cerebral artery"
+        ] },
+        { label: "Timing", items: [
+          "Onset of symptoms >12 and <36 hours before a possible surgical intervention",
+          "Possibility to start treatment/surgery within 6 hours after randomization"
+        ] },
+        { label: "Consent", items: ["Written, informed consent by the patient or legal representative"] }
+      ],
+      exclusion: [
+        { label: "Key exclusions", items: [
+          "Prestroke mRS score >=2",
+          "Prestroke score on the Barthel Index <95",
+          "Score on the Glasgow Coma Scale <6",
+          "Both pupils fixed and dilated",
+          "Any other coincidental brain lesion that might affect outcome",
+          "Space-occupying hemorrhagic transformation of the infarct",
+          "Life expectancy <3 years",
+          "Other serious illness that might affect outcome",
+          "Known coagulopathy or systemic bleeding disorder",
+          "Contraindication for anesthesia",
+          "Pregnancy"
+        ] }
+      ],
+      source: "publication",
+      sourceLabel: "Juttler et al., Stroke 2007",
+      sourceUrl: "https://doi.org/10.1161/STROKEAHA.107.485649",
+      retrieved: "2026-06-09"
+    },
+    armDetails: [
+      { arm: "Surgical plus conservative treatment", role: "intervention",
+        agent: "Decompressive hemicraniectomy with augmented duraplasty",
+        duration: "Onset of symptoms >12 and <36 h before surgery; treatment started within 6 h after randomization. Surgery-arm mean onset-to-treatment 24.4 h (range 13.5 to 36.0)",
+        coInterventions: "Conservative treatment per the shared consensus protocol (osmotherapy, intubation/ventilation, ICP monitoring, sedation, blood-pressure and glucose targets); all patients ventilated and treated in an ICU",
+        note: "Reversed question-mark skin incision based at the ear; removal of a bone flap diameter >12 cm including frontal, parietal, temporal, and parts of the occipital squama; additional temporal bone removed so the floor of the middle cerebral fossa can be explored; dura opened and an augmented dural patch inserted (homologous periost and/or temporal fascia); no resection of infarcted tissue; ICP sensor inserted. Cranioplasty in survivors after 6 to 8 weeks." },
+      { arm: "Conservative treatment alone", role: "control",
+        agent: "Conservative medical management",
+        coInterventions: "Same consensus conservative-treatment protocol in both arms; all patients ventilated and managed in an ICU",
+        note: "Osmotherapy for signs of space-occupying edema: mannitol (0.5 g/kg, 4x/day; max 250 mL), glycerol (10%, 4x/day), or hydroxyethyl starch (6% in 0.9% NaCl, 100 to 250 mL every 8 h; max 750 mL); target serum osmolality 315 to 320 mOsm. Intubation/ventilation for GCS <8 or respiratory insufficiency. Hyperventilation as last resort (target PCO2 28 to 32 mm Hg). Invasive ICP monitoring ipsilaterally. Sedation with propofol; barbiturates discouraged. BP targets: formerly hypertensive 180/100 to 105, formerly normotensive 160 to 180/90 to 100 mm Hg. Normothermia (treat at >37.5 C). Glucose target 80 to 110 mg/dL. Normovolemia, avoiding hyponatremia. DVT prophylaxis with weight-adjusted LMWH. No seizure prophylaxis." }
     ],
     pearls: [
       '30-day survival improved substantially: 88% vs 47% (P=0.02)',
@@ -5140,6 +5227,54 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Bilateral infarcts or posterior fossa involvement',
       'Terminal illness or major organ failure',
       'Hemorrhagic transformation before randomization',
+    ],
+    fullEligibility: {
+      inclusion: [
+        { label: "Demographics", items: ["Age 18–60 years"] },
+        { label: "Clinical", items: [
+          "Diagnosis of acute ischaemic stroke in the territory of the middle cerebral artery, with onset within 96 h of the start of the trial treatment",
+          "Score on the NIHSS of >=16 for right-sided lesions or >=21 for left-sided lesions",
+          "Gradual decrease in consciousness to a score of <=13 on the Glasgow coma scale for right-sided lesions or an eye and motor score of <=9 for left-sided lesions"
+        ] },
+        { label: "Imaging", items: [
+          "Ischaemic changes on CT that affect two-thirds or more of the territory of the middle cerebral artery and the formation of space-occupying oedema; displacement of midline structures on CT was not required"
+        ] },
+        { label: "Timing / consent", items: [
+          "Able to start trial treatment within 3 h of randomisation",
+          "Written, informed consent given by a legal representative of the patient"
+        ] }
+      ],
+      exclusion: [
+        { label: "Imaging / lesion", items: ["Ischaemic stroke of the whole cerebral hemisphere (anterior, middle, and posterior cerebral artery territories)"] },
+        { label: "Neurological / clinical", items: [
+          "Decrease in consciousness partially because of causes other than the formation of oedema, such as metabolic disturbances or medication",
+          "Both pupils fixed and dilated"
+        ] },
+        { label: "Treatment / bleeding", items: [
+          "Alteplase in the 12 h before randomisation",
+          "Known systemic bleeding disorder"
+        ] },
+        { label: "Pre-stroke function", items: ["Prestroke score on the modified Rankin scale of greater than 1 or less than 95 on the Barthel index"] },
+        { label: "Other", items: [
+          "Life expectancy is less than 3 years",
+          "Other serious illness that might confound treatment assessment"
+        ] }
+      ],
+      source: "publication",
+      sourceLabel: "Hofmeijer et al., Lancet Neurology 2009",
+      sourceUrl: "https://doi.org/10.1016/S1474-4422(09)70047-X",
+      retrieved: "2026-06-09"
+    },
+    armDetails: [
+      { arm: "Surgical decompression", role: "intervention",
+        agent: "Decompressive hemicraniectomy", route: "Surgical",
+        duration: "Treatment started within 3 h of randomisation; randomisation within 96 h of stroke onset",
+        note: "Removal of a bone flap of at least 12 cm diameter, including parts of the frontal, parietal, temporal, and occipital squama; more temporal bone removed if needed to assess the floor of the middle cerebral fossa. Dura opened and an augmented dural patch inserted. Infarcted brain tissue not resected. An ICP sensor could be left in situ. Cranioplasty after at least 6 weeks with the stored bone flap or acrylate.",
+        coInterventions: "Most patients admitted to an ICU after craniectomy. Shared ICU recommendations: osmotherapy with mannitol or glycerol to serum osmolality 315–320 mOsm; intubation/ventilation if GCS <=8 or airway compromise; hyperventilation as rescue only (target pCO2 28–32 mm Hg); invasive ICP monitoring; sedation with propofol if needed; BP treatment above 220/120 mm Hg; head elevation to 30 degrees; normothermia, normoglycaemia, normovolaemia." },
+      { arm: "Best medical treatment (control)", role: "control",
+        agent: "Conservative medical management", route: "Intensive care unit or stroke unit",
+        note: "Best medical treatment at the discretion of the treating physician, on an ICU or stroke unit; no decompressive surgery. Drugs to prevent oedema given at the physician's discretion.",
+        coInterventions: "ICU recommendations: osmotherapy (serum osmolality 315–320 mOsm), intubation/ventilation if GCS <=8, hyperventilation as rescue only (pCO2 28–32 mm Hg), ICP monitoring, sedation, BP control above 220/120 mm Hg, head elevation 30 degrees, normothermia/normoglycaemia/normovolaemia. On a stroke unit: osmotherapy, head elevation, normothermia/normoglycaemia/normovolaemia." }
     ],
     pearls: [
       'Primary outcome mRS 0-3 at 1 year was neutral overall; patients randomized after 48 hours diluted the treatment effect',
@@ -5291,6 +5426,48 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Posterior circulation or bilateral infarcts',
       'Hemorrhagic transformation before randomization',
       'Major comorbidities limiting life expectancy',
+    ],
+    fullEligibility: {
+      inclusion: [
+        { label: "Demographics", items: ["61 years of age or older"] },
+        { label: "Clinical", items: [
+          "Clinical symptoms of acute unilateral middle-cerebral-artery infarction with an onset of symptoms less than 48 hours before the initiation of treatment",
+          "Scores higher than 14 (nondominant hemisphere) or higher than 19 (dominant hemisphere) with reduced levels of consciousness on the NIHSS"
+        ] },
+        { label: "Imaging", items: [
+          "Infarction of at least two thirds of the middle-cerebral-artery territory, including the basal ganglia, on brain imaging"
+        ] }
+      ],
+      exclusion: [
+        { label: "Pre-stroke function", items: [
+          "A preexisting score of more than 1 on the modified Rankin scale",
+          "A preexisting score of less than 95 on the Barthel index"
+        ] },
+        { label: "Neurological / clinical", items: [
+          "Absence of pupillary reflexes",
+          "A score of less than 6 on the Glasgow Coma Scale"
+        ] },
+        { label: "Imaging / lesion", items: ["Hemorrhages or other associated brain lesions"] },
+        { label: "Other", items: [
+          "Contraindications to surgery",
+          "An estimated life expectancy of less than 3 years"
+        ] }
+      ],
+      source: "publication",
+      sourceLabel: "Juttler et al., N Engl J Med 2014",
+      sourceUrl: "https://doi.org/10.1056/NEJMoa1311367",
+      retrieved: "2026-06-09"
+    },
+    armDetails: [
+      { arm: "Hemicraniectomy", role: "intervention",
+        agent: "Decompressive hemicraniectomy", route: "Surgical",
+        duration: "Initiated within 48 hours after onset of symptoms and not later than 6 hours after randomization",
+        note: "Large hemicraniectomy with a bone-flap diameter of at least 12 cm, combined with duraplasty. Performed in addition to ICU conservative care.",
+        coInterventions: "Conducted in the ICU with the same conservative protocol available to both groups: basic ICU therapy for stroke; osmotherapy with mannitol, glycerol, or hypertonic hydroxyethyl starch; sedation; intubation and mechanical ventilation; hyperventilation; and buffer solutions." },
+      { arm: "Conservative treatment (control)", role: "control",
+        agent: "Conservative medical management", route: "Intensive care unit",
+        note: "Consensus conservative protocol used by all centers, without decompressive surgery: basic ICU therapy for stroke; osmotherapy with mannitol, glycerol, or hypertonic hydroxyethyl starch; sedation; intubation and mechanical ventilation; hyperventilation; and buffer solutions.",
+        coInterventions: "Same ICU conservative protocol as the surgical group." }
     ],
     pearls: [
       'Primary endpoint (mRS 0-4) was met: 38% vs 18%, OR 2.91, P=0.04',
