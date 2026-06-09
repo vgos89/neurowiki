@@ -4838,7 +4838,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     bottomLineSummary: 'Double-blind RCT of nerinetide in 1105 LVO stroke patients undergoing EVT within 12 hours. Primary endpoint (mRS 0-2 at 90 days) was null: 61.4% vs 59.2%, adjusted RR 1.04, P=0.35. A prespecified interaction showed numerically larger effect in alteplase-free patients (59.3% vs 49.8%), raising a hypothesis about alteplase-nerinetide interaction that requires dedicated confirmation.',
     inclusionCriteria: [
       'Age 18 or older',
-      'Acute ischemic stroke with LVO (anterior or posterior circulation)',
+      'Acute ischemic stroke with anterior-circulation LVO (intracranial ICA or M1)',
       'EVT eligible and planned within 12 hours of last known well',
       'ASPECTS 5 or greater or equivalent favorable perfusion imaging',
       'Pre-stroke mRS 0-1',
