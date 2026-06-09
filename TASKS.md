@@ -230,6 +230,42 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Clinical impact:** high (eligibility + protocol transparency across the catalog).
 - **Source:** Logged as forward-looking milestone post-commit 4fbb914.
 
+### trial-enrich-optimas-timing-completion — Class C-clinical [from wave-2 trial enrichment swarm 2026-06-09]
+- **Status:** [ ] open — L5, P2
+- **User-visible goal:** OPTIMAS + TIMING trial records exist in the catalog (lines ~5767 and ~5653 in trialData.ts) with stats/results populated but NO curated inclusion/exclusion fields. As a result, the eligibility card on each trial's /trials/ page renders nothing (the EligibilityCriteriaCard has no data to display). Source evidence already extracted during wave-2 swarm: OPTIMAS early ≤4d vs delayed 7–14d, NI margin 2pp; TIMING early ≤4d vs delayed 5–10d, NI margin 3%. Add curated `fullEligibility` + `armDetails` fields to both records so clinicians can see the enrollment criteria and study-arm definitions.
+- **Non-goals:** not changing interpretation or statistics; data entry only.
+- **Files likely touched:** `src/data/trialData.ts` (OPTIMAS + TIMING `fullEligibility` + `armDetails` fields).
+- **Acceptance checks:** Both trial detail pages render the EligibilityCriteriaCard with criteria tabs visible; armDetails accordion shows control-arm definitions; tsc clean; build 171/171; claims hook PASS; clinical-reviewer spot-check on curated criteria fidelity to source; Gate 6 live-verify PASS on both trial pages.
+- **Clinical impact:** high (eligibility is load-bearing for resident decision-making; currently hidden).
+- **Rollback plan:** git revert single commit.
+
+### trial-enrich-sammpris-eagle — Class C-clinical [from wave-2 trial enrichment swarm 2026-06-09]
+- **Status:** [ ] open — L5, P2
+- **User-visible goal:** SAMMPRIS and EAGLE trial records exist in the catalog with results but no curated eligibility fields. Source PDFs were uploaded and processed during wave-2 swarm. SAMMPRIS requires careful application of the uploaded SAMMPRIS CORRECTION.pdf (Lancet correction). Add curated `fullEligibility` + `armDetails` to both so the eligibility cards render. SAMMPRIS enrollment targeted intracranial atherosclerotic disease (ICAS) patients; EAGLE targets central retinal artery occlusion (CRAO).
+- **Non-goals:** not changing interpretation or statistics; curated data entry only.
+- **Files likely touched:** `src/data/trialData.ts` (SAMMPRIS + EAGLE `fullEligibility` + `armDetails` fields).
+- **Acceptance checks:** SAMMPRIS criteria sourced with explicit callout to the Correction.pdf; both trial detail pages render EligibilityCriteriaCard + armDetails accordion; tsc clean; build green; claims clean; clinical-reviewer spot-check; Gate 6 live-verify PASS.
+- **Clinical impact:** high (SAMMPRIS is a pivotal trial on ICAS management; currently invisible).
+- **Rollback plan:** git revert single commit.
+
+### trial-triage-stroke-curated-fix — Class C-clinical [from wave-2 trial enrichment swarm 2026-06-09]
+- **Status:** [ ] open — L5, P2 (pre-existing error surfaced during wave-2)
+- **User-visible goal:** Pre-existing bugs in TRIAGE-STROKE trial record detected during wave-2 enrichment swarm: (1) curated `inclusionCriteria` says "RACE score 5 or higher" but the trial actually used PASS score ≥2 as eligibility criterion; (2) pre-existing prose says "planned 424" but the source states enrollment target was 600. Source-verify both against TRIAGE-STROKE NEJM publication + ClinicalTrials.gov, then correct both the `fullEligibility` field and any associated narrative/summary text.
+- **Non-goals:** not changing interpretation or endpoints; factual accuracy correction only.
+- **Files likely touched:** `src/data/trialData.ts` (TRIAGE-STROKE `fullEligibility` field, possibly `plannedEnrollment` or summary field if present).
+- **Acceptance checks:** TRIAGE-STROKE publication + ClinicalTrials.gov audited for actual eligibility criterion (PASS vs RACE); curated text corrected to match source; enrollment target verified + corrected; tsc clean; build green; claims clean; clinical-reviewer sign-off.
+- **Clinical impact:** medium (enrollment target is not load-bearing for clinical decision; inclusion criterion misstatement is a credibility issue for residents relying on NeuroWiki's curation).
+- **Rollback plan:** git revert single commit.
+
+### trial-charm-correction-check — Class C-clinical [from wave-2 trial enrichment swarm 2026-06-09]
+- **Status:** [ ] open — L5, P2
+- **User-visible goal:** CHARM trial already has curated `fullEligibility` fields populated. Verify that the December 2024 Lancet Neurology Correction/Errata does not alter the enrollment eligibility wording. If the correction touches eligibility, the `fullEligibility` field must be updated to reflect the corrected criteria. If eligibility is untouched, no change needed; verification only.
+- **Non-goals:** checking whether the correction altered endpoints or interpretation (that's a separate clinical audit). Eligibility verification only.
+- **Files likely touched:** `src/data/trialData.ts` (CHARM `fullEligibility` field, only if Correction alters it).
+- **Acceptance checks:** CHARM Dec 2024 Lancet Neurology Correction retrieved + reviewed; eligibility section compared to current `fullEligibility` field; if match, no change; if divergence, field updated + clinical-reviewer sign-off; tsc clean; build green.
+- **Clinical impact:** low if correction does not touch eligibility (verification confidence increase); medium if eligibility was altered (correction must reflect in curated data).
+- **Rollback plan:** git revert single commit (if change ships).
+
 ### headache-clinic-stage-one-screen-build — Class D [unblocked post 6585a71 engine fix]
 - **Status:** [~] in_progress — L4, P1. TWO increments LANDED. (1) Result-presentation (c885da2): ranked phenotype accordion list (`HeadacheResultList` + shared `CriteriaList`) replacing the stacked headline/differential/banner; trials density; top match open; verbatim relocation; a11y fixes. (2) Treatment on-row expander (e8805ef): per-phenotype dosing moved into a collapsed opt-in "Show management" `<details>` on every match row (new `HeadacheManagement`, keyed; 43 Row strings byte-identical); clinical gate ruled show-management-for-ALL-matches (incl. partial), collapsed-by-default, no floor; partial-match confirm-diagnosis caveat (new claim `clinic-headache-partial-match-caveat`); 8 criteria cards deleted (render once in row) with 7 hidden literal claim markers + ndph tagged in management. Architect + pre/post clinical gates all approve; a11y + mobile sign-offs applied; Gate 6 client-side PASS (caveat verified on Cluster 25% partial, Migraine 100% no caveat). REMAINING: Stage Two result-copy only — band words (Leading/Possible/Less likely), non-collapsible SNNOOP10 disclaimer, "considered and set aside" tray consuming `definitionallyExcluded`/`exclusionReason`, citation footer (Class E-clinical).
 - **User-visible goal:** Wire the headache clinic pathway UI: render the rank-and-flag phenotype matches, compose Pathway primitives (header, rail, cascade, summary), integrate the near-miss affordances and the "considered and set aside" explanation tray. Engine untouched in this task; all result-screen logic and copy belongs here.
@@ -1867,6 +1903,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
   - File: src/pages/EvtPathway.tsx (UI consolidation only). EMR-note logic (buildEmrText/copySummary) + verdict logic byte-identical; header copy/share unchanged; clinical text relocated byte-for-byte.
   - Gate results: tsc clean · build 171/171 prerendered · claims hook PASS · mobile-first 375px PASS (drawer expands to 68dvh, copy button reachable, scrolls above tab bar) · architect approve-with-conditions (docs/reviews/arch-evt-declutter.md) · clinical pre-exec approve-with-conditions + post-exec verbatim PASS (docs/reviews/clinical-evt-declutter.md).
   - Gate 6 live-verify: PASS — /pathways/evt returns 200 on the d59ee42 deploy, title + H1 intact, 4-step pathway renders; homepage 200.
+- [x] 2026-06-09 — Trial enrichment wave 2: added full eligibility criteria + study-arm details (`fullEligibility` + `armDetails`) to 28 existing trial records across 7 clinically-gated batches, sourced from uploaded PDFs (evidence-verifier + medical-scientist authoring, clinical-reviewer gate each batch). All Gate 6 green. Commits: e7f6ce9 (hemicraniectomy: DECIMAL, DESTINY, DESTINY II, HAMLET), 1b2757a (antiplatelet: CHANCE, CHANCE-2, POINT, INSPIRES, THALES, SOCRATES), 41af055 (acute BP: BP-TARGET, OPTIMAL-BP, BEST-II, ENCHANTED), 5b3954a (SPARCL, SPS3), b23f286 (prehospital: B_PROUD, BEST-MSU, MR ASAP, RACECAT + MR ASAP BP-threshold fix 120→140), 2563ba8 (RIGHT-2, TRIAGE-STROKE, INTERACT4, WEAVE), 205c2a1 (WAKE-UP, CHARM, ESCAPE-NA1, ENRICH). Clinical artifacts: docs/reviews/clinical-enrichment-wave2.md. DISTAL + ESCAPE-MeVO were already enriched in the prior EVT wave. Safety correction: MR ASAP curated SBP enrollment threshold corrected 120→140 mm Hg (source-verified, was RIGHT-2 contamination).
 
 ## POST-MORTEMS
 Regressions that required rollback. Each entry links to a post-mortem
