@@ -925,7 +925,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       cautions: 'Effect is smaller than the 0–3 hour window (OR 1.34 vs ~1.7 in NINDS). Industry-sponsored (Boehringer Ingelheim). Confidence interval for OR barely excluded 1.0 (1.02–1.76). sICH rose roughly ten-fold (2.4% vs 0.2%) but mortality did not; the absolute hemorrhage increase is 2 per 100. Subsequent IPD meta-analysis (Emberson 2014) reinforced the time-benefit decay: each 15-minute delay reduces functional benefit.',
     },
     bedsidePearl: 'For eligible patients within 3–4.5 hours of symptom onset, IV alteplase improves the chance of mRS 0–1 at 90 days (NNT 14). The benefit is smaller than the 0–3 hour window (NINDS), so start treatment as soon as you confirm eligibility.',
-    bottomLineSummary: 'ECASS III extended the IV alteplase window from 3h to 4.5h for selected patients. Functional independence (mRS 0–1) at 90 days improved from 45.2% to 52.4% (NNT 14, P=0.04). Symptomatic ICH rose to 2.4% from 0.2% but mortality was unchanged. AHA/ASA 2026 §4.6.3 COR 2a for ECASS III-eligible patients.',
+    bottomLineSummary: 'ECASS III extended the IV alteplase window from 3h to 4.5h for selected patients. Functional independence (mRS 0–1) at 90 days improved from 45.2% to 52.4% (NNT 14, P=0.04). Symptomatic ICH rose to 2.4% from 0.2% but mortality was unchanged. ECASS III established the 3–4.5h extension; AHA/ASA 2026 §4.6.2 now recommends IV thrombolysis within 4.5h (COR 1) for standard-eligible patients.',
     stats: {
       sampleSize: {
         value: '821',
@@ -1223,7 +1223,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     conclusion: '',
     source: 'Schumacher et al. (Ophthalmology 2010)',
-    clinicalTrialsId: 'NCT00622778',
+    // no clinicalTrialsId: NCT00622778 was a wrong-trial link (resolves to an unrelated "Diagnostic Algorithm in Minor Head Injury" study). The EAGLE CRAO trial (Schumacher, Ophthalmology 2010) appears unregistered on ClinicalTrials.gov. Removed 2026-06-08 after registry safety sweep.
     listCategory: 'thrombolysis',
     listDescription: 'IA tPA for central retinal artery occlusion; negative trial; stopped early for futility.',
     trialResult: 'NEGATIVE',
@@ -1374,6 +1374,26 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Intra-arterial treatment (predominantly stent-retriever thrombectomy) plus usual care, including alteplase when eligible',
       control: 'Usual care alone, including alteplase when eligible'
     },
+    armDetails: [
+      {
+        arm: "Intra-arterial treatment + usual care",
+        role: "intervention",
+        agent: "Intra-arterial therapy at interventionist's discretion — mechanical thrombectomy (retrievable stent, thrombus retraction, aspiration, or wire disruption) and/or intra-arterial thrombolysis (alteplase or urokinase). Retrievable stents used in 190/233 (81.5%).",
+        route: "Endovascular (intra-arterial)",
+        frequency: "Single procedure: microcatheter to the occlusion, then thrombolytic delivery, mechanical thrombectomy, or both. Method left to the local interventionist.",
+        duration: "One-time procedure",
+        coInterventions: "+ usual care, which could include IV alteplase when eligible (89.0% of all randomized received IV alteplase before randomization). If IV alteplase given, IA thrombolytic capped at 30 mg alteplase or 400,000 IU urokinase (otherwise max 90 mg / 1,200,000 IU).",
+        note: "Technique + IA-dose caps from Berkhemer NEJM 2015 p.13. Only approved devices, operator ≥5 prior procedures with that device type. Device-agnostic, heterogeneous device generations (limits generalizability to modern stent retrievers). Any IA therapy 196/233 (84.1%); GA 37.8%; acute cervical carotid stenting 12.9%. Source: NTR1804 / ISRCTN10888758 (no CT.gov NCT).",
+      },
+      {
+        arm: "Usual care alone",
+        role: "control",
+        agent: "Usual care per Dutch acute-stroke practice (no protocol-mandated intra-arterial treatment)",
+        route: "Medical",
+        coInterventions: "+ usual care, which could include IV alteplase when eligible (90.6% of control received IV alteplase). No protocol-mandated intra-arterial therapy.",
+        note: "Control = usual care alone (Berkhemer NEJM 2015 p.12). Main text characterizes 'usual care' only as care that could include IV alteplase; granular medical-management (BP/glucose/antithrombotic) is appendix-deferred. 1/267 control (0.4%) crossed over to IA treatment. Source: NTR1804 / ISRCTN10888758.",
+      },
+    ],
     clinicalContext: 'MR CLEAN was the first modern positive thrombectomy trial and established that endovascular treatment improves disability outcomes for anterior circulation large-vessel occlusion when patients are selected with vessel imaging and treated rapidly.',
     pearls: [
       'First positive modern EVT trial that reopened the field after earlier neutral endovascular studies',
@@ -1406,6 +1426,32 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Pregnancy or breastfeeding',
       'Standard contraindications to endovascular treatment, including uncorrectable coagulopathy',
     ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa1411587',
+      sourceLabel: 'Berkhemer et al., NEJM 2015;372:11-20 (MR CLEAN); NTR1804 / ISRCTN10888758',
+      retrieved: '2026-06-08',
+      inclusion: [
+        {
+          items: [
+            'Age 18 years or older (no upper age limit)',
+            'Acute ischemic stroke caused by an intracranial arterial occlusion in the anterior circulation',
+            'A proximal intracranial occlusion of the distal intracranial ICA, MCA (M1 or M2), or anterior cerebral artery (A1 or A2), established with CTA, MRA, or DSA',
+            'A score of 2 or higher on the NIHSS (range 0 to 42)',
+            'Intra-arterial treatment possible within 6 hours after symptom onset',
+            "Inclusion of patients with an additional extracranial ICA occlusion or dissection left to the treating physician's judgment",
+            'Written informed consent provided by all patients or their legal representatives before randomization',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Detailed enumerated exclusion criteria are specified in the study protocol / Supplementary Appendix and are not reproduced in the main-text Methods.',
+          ],
+        },
+      ],
+    },
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -1700,6 +1746,26 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Solitaire stent-retriever thrombectomy plus medical therapy',
       control: 'Medical therapy alone, including alteplase when eligible'
     },
+    armDetails: [
+      {
+        arm: "Solitaire stent-retriever thrombectomy + medical therapy",
+        role: "intervention",
+        agent: "Solitaire FR stent retriever (Covidien) — self-expanding device to retrieve thrombus and restore flow",
+        route: "Endovascular (mechanical thrombectomy)",
+        frequency: "Single thrombectomy procedure, initiable within 8 h of symptom onset.",
+        duration: "One-time procedure",
+        coInterventions: "Medical therapy including IV alteplase when eligible (given in BOTH arms — eligible patients received alteplase within 4.5 h before randomization; thrombectomy arm entered after no recanalization ≥30 min post-alteplase, or with alteplase contraindication). QI workflow to minimize time to reperfusion.",
+        note: "Design from Jovin NEJM 2015 p.2297. Thrombectomy 98/103; ipsilateral cervical carotid stenting 9; GA 7 (6.7%); 1 IA alteplase + 1 angioplasty after failed retrieval. mTICI 2b/3 66%. Unrestricted Covidien grant. Source: NCT01692379.",
+      },
+      {
+        arm: "Medical therapy alone (control)",
+        role: "control",
+        agent: "Best medical therapy per Catalan/local acute-stroke guidelines (including IV alteplase when eligible); no protocol-mandated thrombectomy",
+        route: "Medical",
+        coInterventions: "IV alteplase when eligible (given in BOTH arms). Catalan Health Authorities monitored medical-therapy guideline adherence.",
+        note: "Control = medical therapy alone incl. IV alteplase when eligible (Jovin 2015 p.2296/2299). IV alteplase actually given: control 77.7% vs thrombectomy 68.0%. NO crossovers (distinct from several 2015 EVT trials). Control-arm targets appendix-deferred. Source: NCT01692379.",
+      },
+    ],
     clinicalContext: 'REVASCAT confirmed that stent-retriever thrombectomy improves disability outcomes when used in carefully selected anterior circulation LVO patients, including those in whom alteplase failed or was contraindicated.',
     pearls: [
       'Functional independence improved to 43.7% vs 28.2%',
@@ -1732,6 +1798,58 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Pregnancy',
       'Symptom onset to randomization beyond 8 hours',
     ],
+    fullEligibility: {
+      source: 'clinicaltrials.gov',
+      sourceUrl: 'https://clinicaltrials.gov/study/NCT01692379',
+      sourceLabel: 'ClinicalTrials.gov NCT01692379',
+      retrieved: '2026-06-08',
+      inclusion: [
+        {
+          items: [
+            'Acute ischemic stroke where patient is ineligible for IV thrombolytic treatment or the treatment is contraindicated, or where patient has received IV thrombolytic therapy without recanalization after a minimum of 30 min from start of iv tPA infusion',
+            'No significant pre-stroke functional disability (mRS ≤ 1)',
+            'Baseline NIHSS score obtained prior to randomization must be equal or higher than 6 points',
+            'Age ≥18 and ≤ 85',
+            'Occlusion (TICI 0-1) of the intracranial ICA, MCA-M1 segment or tandem proximal ICA/MCA-M1 suitable for endovascular treatment',
+            'Patient treatable within eight hours of symptom onset',
+            'Informed consent obtained from patient or acceptable patient surrogate',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Clinical criteria',
+          items: [
+            'Known hemorrhagic diathesis, coagulation factor deficiency, or oral anticoagulant therapy with INR > 3.0',
+            'Baseline platelet count < 30.000/µL',
+            'Baseline blood glucose of < 50mg/dL or >400mg/dl',
+            'Severe, sustained hypertension (SBP > 185 mm Hg or DBP > 110 mm Hg)',
+            'Patients in coma (NIHSS item of consciousness >1) (Intubated patients for transfer could be randomized only in case an NIHSS is obtained by a neurologist prior transportation).',
+            'Seizures at stroke onset which would preclude obtaining a baseline NIHSS',
+            'Serious, advanced, or terminal illness with anticipated life expectancy of less than one year.',
+            'History of life threatening allergy (more than rash) to contrast medium',
+            'Subjects who has received iv t-PA treatment beyond 4,5 hours from the beginning of the symptoms',
+            'Renal insufficiency with creatinine ≥ 3 mg/dl',
+            'Woman of childbearing potential who is known to be pregnant or lactating or who has a positive pregnancy test on admission.',
+            'Subject participating in a study involving an investigational drug or device that would impact this study.',
+            'Cerebral vasculitis',
+            'Patients with a pre-existing neurological or psychiatric disease that would confound the neurological or functional evaluations, mRS score at baseline must be ≤ 1. This excludes patients who are severely demented, require constant assistance in a nursing home type setting or who live at home but are not fully independent in activities of daily living (toileting, dressing, eating, cooking and preparing meals, etc.)',
+            'Unlikely to be available for 90-day follow-up (e.g. no fixed home address, visitor from overseas).',
+          ],
+        },
+        {
+          label: 'Neuroimaging criteria',
+          items: [
+            'Hypodensity on CT or restricted diffusion amounting to an ASPECTS score of <7 on NCCT or <6 on DWI MRI. Patients 81 to 85 years old with ASPECTS score on non-contrast CT or DWI MRI <9 must be excluded. ASPECTS must be evaluated by CBV maps of CT Perfusion, CTA source imaging (CTA-SI) or DWI-MR in patients whose vascular occlusion study (CTA/MRA) confirming qualifying occlusion, is performed beyond 4.5 hours of last seen well.',
+            'CT or MR evidence of hemorrhage (the presence of microbleeds is allowed).',
+            'Significant mass effect with midline shift.',
+            'Evidence of ipsilateral carotid occlusion, high grade stenosis or arterial dissection in the extracranial or petrous segment of the internal carotid artery that cannot be treated or will prevent access to the intracranial clot or excessive tortuosity of cervical vessels precluding device delivery/deployment',
+            'Subjects with occlusions in multiple vascular territories (e.g., bilateral anterior circulation, or anterior/posterior circulation)',
+            'Evidence of intracranial tumor (except small meningioma).',
+          ],
+        },
+      ],
+    },
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -1826,6 +1944,26 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Solitaire FR thrombectomy after IV alteplase',
       control: 'IV alteplase alone'
     },
+    armDetails: [
+      {
+        arm: "Endovascular thrombectomy (Solitaire FR) + IV alteplase",
+        role: "intervention",
+        agent: "Solitaire FR (Flow Restoration) retrievable stent (Covidien), deployed at the site of intracranial-vessel occlusion and removed under negative-pressure aspiration. If no lesion amenable to thrombectomy was found, the procedure was terminated.",
+        route: "Endovascular",
+        frequency: "Single procedure. Endovascular therapy initiated (groin puncture) within 6 h of onset and completed within 8 h; initiated at a median of 210 minutes after onset.",
+        duration: "One-time procedure",
+        coInterventions: "+ IV alteplase 0.9 mg/kg as standard care, given to ALL patients in both groups (within 4.5 h of onset). Conscious sedation or general anesthesia at the neurointerventionist's discretion.",
+        note: "Device, 6 h/8 h targets, both-arm alteplase from Campbell NEJM 2015 p.1010-1011. 1:1 stratified by occlusion site. Solitaire FR only by protocol — does not generalize to other devices. Covidien supplied the device + unrestricted grant, no role in design/conduct. Source: NCT01492725.",
+      },
+      {
+        arm: "IV alteplase alone (no further therapy)",
+        role: "control",
+        agent: "IV alteplase alone — no endovascular therapy ('alteplase-only group')",
+        route: "IV (medical management)",
+        coInterventions: "IV alteplase 0.9 mg/kg as standard care, given to ALL patients in both groups (within 4.5 h of onset). No protocol-mandated endovascular therapy.",
+        note: "Control = continue alteplase alone with no further therapy (Campbell NEJM 2015 p.1011). Both arms received identical IV alteplase; the trial isolates the added effect of Solitaire FR thrombectomy. Control-arm BP/glucose/antithrombotic targets appendix-deferred. Source: NCT01492725.",
+      },
+    ],
     clinicalContext: 'EXTEND-IA showed that CT perfusion imaging could identify patients with salvageable tissue most likely to benefit from thrombectomy. Reperfusion at 24h improved from 37% to 100% in the EVT group.',
     pearls: [
       'Used CT perfusion to target salvageable tissue and avoid large completed infarcts',
@@ -1857,6 +1995,56 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Standard contraindications to endovascular treatment',
       'Posterior circulation stroke',
     ],
+    fullEligibility: {
+      source: 'clinicaltrials.gov',
+      sourceUrl: 'https://clinicaltrials.gov/study/NCT01492725',
+      sourceLabel: 'ClinicalTrials.gov NCT01492725',
+      retrieved: '2026-06-08',
+      inclusion: [
+        {
+          label: 'Clinical inclusion',
+          items: [
+            'Patients presenting with anterior circulation acute ischaemic stroke eligible using standard criteria to receive IV tPA within 4.5 hours of stroke onset',
+            'Patient, family member or legally responsible person has given informed consent',
+            "Patient's age is ≥18 years",
+            'Intra-arterial clot retrieval treatment can commence (groin puncture) within 6 hours of stroke onset',
+          ],
+        },
+        {
+          label: 'Imaging inclusion criteria — dual target',
+          items: [
+            'Arterial occlusion on CTA or MRA of the ICA, M1 or M2',
+            'Mismatch — using CT or MRI with a Tmax >6 second delay perfusion volume and either CT-rCBF or DWI infarct core volume: (a) Mismatch ratio greater than 1.2, and (b) Absolute mismatch volume greater than 10 ml, and (c) Infarct core lesion volume less than 70 mL',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Intracranial haemorrhage (ICH) identified by CT or MRI',
+            'Rapidly improving symptoms at the discretion of the investigator',
+            'Pre-stroke mRS score of ≥2 (indicating previous disability)',
+            'Inability to access the cerebral vasculature in the opinion of the neurointerventional team',
+            'Contraindication to imaging with MR with contrast agents',
+            'Participation in any investigational study in the previous 30 days',
+            'Any terminal illness such that patient would not be expected to survive more than 1 year',
+            'Any condition that, in the judgment of the investigator, could impose hazards to the patient if study therapy is initiated or affect the participation of the patient in the study',
+            'Pregnant women',
+            'Previous stroke within last three months',
+            'Recent past history or clinical presentation of ICH, subarachnoid haemorrhage (SAH), arterio-venous (AV) malformation, aneurysm, or cerebral neoplasm. At the discretion of each Investigator',
+            'Current use of oral anticoagulants and a prolonged prothrombin time (INR >1.6)',
+            'Use of heparin, except for low dose subcutaneous heparin, in the previous 48 hours and a prolonged activated partial thromboplastin time exceeding the upper limit of the local laboratory normal range',
+            'Use of glycoprotein IIb–IIIa inhibitors within the past 72 hours. Prior use of single or dual agent oral platelet inhibitors (clopidogrel and/or low-dose aspirin) is permitted',
+            'Clinically significant hypoglycaemia',
+            'Uncontrolled hypertension defined by a blood pressure >185 mmHg systolic or >110 mmHg diastolic on at least 2 separate occasions at least 10 minutes apart, or requiring aggressive treatment to reduce the blood pressure to within these limits. The definition of "aggressive treatment" is left to the discretion of the responsible Investigator',
+            'Hereditary or acquired haemorrhagic diathesis',
+            'Gastrointestinal or urinary bleeding within the preceding 21 days',
+            'Major surgery within the preceding 14 days which poses risk in the opinion of the investigator',
+            'Exposure to a thrombolytic agent within the previous 72 hrs',
+          ],
+        },
+      ],
+    },
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -1944,6 +2132,26 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Solitaire stent-retriever thrombectomy plus IV tPA',
       control: 'IV tPA alone'
     },
+    armDetails: [
+      {
+        arm: "Stent-retriever thrombectomy + IV t-PA",
+        role: "intervention",
+        agent: "Solitaire FR (Flow Restoration) or Solitaire 2 stent retriever (Covidien) — uniform device protocol",
+        route: "Endovascular (mechanical thrombectomy)",
+        frequency: "Single procedure following IV t-PA. Workflow targets: qualifying-imaging-to-groin-puncture within 70 min; groin puncture within 6 h of onset and within 90 min of angiography.",
+        duration: "One-time procedure",
+        coInterventions: "IV t-PA (alteplase) initiated within 4.5 h of onset in ALL patients. Best medical care per local guidelines.",
+        note: "Device + technique from Saver NEJM 2015 p.2287: Solitaire FR/2 only; concomitant cervical ICA stenting NOT permitted (angioplasty allowed for access). Stent retriever deployed 89%; GA 37%; mTICI 2b/3 88%; median imaging-to-groin 57 min. Funded by Covidien. Source: NCT01657461.",
+      },
+      {
+        arm: "IV t-PA alone (control)",
+        role: "control",
+        agent: "IV alteplase (t-PA) — standard medical therapy, no thrombectomy",
+        route: "IV / Medical",
+        coInterventions: "IV t-PA (alteplase) within 4.5 h of onset in ALL patients (shared with intervention arm); best medical care per local guidelines. No endovascular thrombectomy.",
+        note: "Control = continue IV t-PA alone (Saver NEJM 2015 p.2286). 1:1 randomization. Control-arm BP/glucose/antithrombotic targets + imaging-selection table (S1) appendix-deferred. Source: NCT01657461.",
+      },
+    ],
     clinicalContext: 'SWIFT PRIME reinforced that high-quality imaging selection and rapid stent-retriever reperfusion substantially improve disability outcomes in anterior circulation LVO.',
     pearls: [
       'Functional independence improved from 35% to 60%',
@@ -1976,6 +2184,65 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Posterior circulation stroke',
       'Symptom onset to anticipated puncture beyond 6 hours',
     ],
+    fullEligibility: {
+      source: 'clinicaltrials.gov',
+      sourceUrl: 'https://clinicaltrials.gov/study/NCT01657461',
+      sourceLabel: 'ClinicalTrials.gov NCT01657461',
+      retrieved: '2026-06-08',
+      inclusion: [
+        {
+          items: [
+            'Age 18 - 80',
+            'Clinical signs consistent with acute ischemic stroke',
+            'Prestroke Modified Rankin Score ≤ 1',
+            'NIHSS ≥ 8 and < 30 at the time of randomization',
+            'Initiation of IV t-PA within 4.5 hours of onset of stroke symptoms, with investigator verification of correct dosing',
+            'Thrombolysis in Cerebral Infarction (TICI) 0-1 flow in the intracranial internal carotid artery, M1 segment of the MCA, or carotid terminus, confirmed by imaging',
+            'Treatment feasible within 6 hours of symptom onset and 90 minutes from angiography to groin puncture',
+            'Willingness to complete protocol-required follow-up visits',
+            'Signed informed consent obtained',
+            'Subject is affiliated with a social security system (if required by individual country regulations)',
+            'Subject meets national regulatory criteria for clinical trial participation',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Clinical Exclusion Criteria',
+          items: [
+            'Contraindication to IV t-PA per local guidelines',
+            'Pregnancy, lactation, or positive pregnancy test',
+            'Protected individual status under French law',
+            'Rapid neurological improvement suggesting stroke resolution',
+            'Serious radiographic contrast sensitivity',
+            'Known sensitivity to Nickel, Titanium metals or their alloys',
+            'Concurrent investigational study participation',
+            'Hereditary or acquired hemorrhagic diathesis',
+            'Renal Failure as defined by a serum creatinine > 2.0 mg/dl or GFR < 30; Warfarin with INR > 1.7',
+            'Hemodialysis/peritoneal dialysis requirement or angiogram contraindication',
+            'Life expectancy less than 90 days',
+            'Clinical presentation suggests a subarachnoid hemorrhage',
+            'Suspected aortic dissection',
+            'Comorbid disease compromising neurological evaluation or survival',
+            'Current or recent history of illicit drug(s) or abuses alcohol (regular/daily consumption of more than 4 alcoholic drinks per day)',
+            'Known history of arterial tortuosity, pre-existing stent, and/or other arterial disease preventing device access',
+          ],
+        },
+        {
+          label: 'Imaging Exclusion Criteria',
+          items: [
+            'CT or MRI evidence of hemorrhage',
+            'CT or MRI evidence of mass effect or intracranial tumor (except small meningioma)',
+            'CT or MRI evidence of cerebral vasculitis',
+            'CT showing hypodensity or MRI showing hyperintensity involving greater than 1/3 of the MCA territory (or in other territories, >100 cc of tissue)',
+            'Baseline non-contrast CT or DWI MRI evidence of a moderate/large core defined as extensive early ischemic changes of ASPECTS < 6',
+            'Basilar or posterior cerebral artery occlusion',
+            'CTA or MRA evidence of carotid dissection or complete cervical carotid occlusion requiring stenting',
+            'Imaging evidence suggesting mechanical thrombectomy inappropriateness per investigator judgment',
+          ],
+        },
+      ],
+    },
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -2070,6 +2337,30 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'IV alteplase followed by mechanical thrombectomy',
       control: 'IV alteplase alone'
     },
+    armDetails: [
+      {
+        arm: "IV alteplase + mechanical thrombectomy (IVTMT)",
+        role: "intervention",
+        agent: "IV alteplase 0.9 mg/kg PLUS mechanical thrombectomy with an operator-selected device from the trial's regularly-updated list of CE-marked/approved devices (stent retrievers such as Solitaire and Trevo). No single brand mandated.",
+        dose: "Alteplase 0.9 mg/kg (maximum 90 mg); optional complementary intra-arterial alteplase up to 0.3 mg/kg at end of thrombectomy for persistent distal occlusion",
+        route: "IV alteplase + endovascular thrombectomy",
+        frequency: "Alteplase: 10% bolus then remainder over 60 min, started <4 h from onset. Thrombectomy: single procedure, initiated <5 h from onset. From Oct 12, 2012, thrombectomy could begin during thrombolysis.",
+        duration: "Alteplase 60-min infusion; thrombectomy one-time procedure",
+        coInterventions: "Conscious sedation or general anaesthesia at operator discretion. Thrombectomy performed only if mTICI <2 at angiography.",
+        note: "From Bracard Lancet Neurol 2016 p.1139-1140. KEY NUANCE: if NIHSS decreased ≥4 after thrombolysis, angiography/thrombectomy were CANCELLED — 59/204 allocated IVTMT did not receive thrombectomy. Operators required ≥5 prior interventions with the chosen device. Source: NCT01062698.",
+      },
+      {
+        arm: "IV alteplase alone (IVT)",
+        role: "control",
+        agent: "IV alteplase (no thrombectomy)",
+        dose: "0.9 mg/kg (maximum 90 mg)",
+        route: "IV",
+        frequency: "10% bolus then remainder over 60 min, started <4 h from onset",
+        duration: "60-minute infusion",
+        coInterventions: "Best medical care per standard practice; no endovascular intervention",
+        note: "Control = standard IV thrombolysis ALONE (NOT thrombectomy alone). Alteplase identical to the intervention arm; only difference is added thrombectomy. Time window initially <3 h, extended to <4 h by May 14, 2011 amendment. Source: Bracard Lancet Neurol 2016 p.1139.",
+      },
+    ],
     clinicalContext: 'THRACE tested whether bridging thrombectomy improves outcomes after standard-dose alteplase in patients with proximal occlusions and supported bridging thrombectomy as the standard early EVT approach.',
     pearls: [
       'Functional independence increased from 42% to 53%',
@@ -2084,6 +2375,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     listDescription: 'French bridging-therapy trial showing benefit from adding thrombectomy to alteplase.',
     archetypeId: 'A',
     trialResult: 'POSITIVE',
+    doi: '10.1016/S1474-4422(16)30177-6',
+    pmid: '27567239',
     inclusionCriteria: [
       'Age 18 to 80 years',
       'Acute ischemic stroke with NIHSS 10 to 25',
@@ -2098,6 +2391,30 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Established large infarct on baseline CT or MRI',
       'Severe comorbid disease limiting expected survival',
     ],
+    fullEligibility: {
+      source: 'clinicaltrials.gov',
+      sourceUrl: 'https://clinicaltrials.gov/study/NCT01062698',
+      sourceLabel: 'ClinicalTrials.gov NCT01062698',
+      retrieved: '2026-06-08',
+      inclusion: [
+        {
+          items: [
+            '10 ≤ NIHSS Score ≤ 25',
+            'Symptoms onset less than 4 hours',
+            'Occlusion of the intracranial carotid, the middle cerebral artery (M1) or the upper third of the basilar',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Contraindications for intravenous thrombolysis',
+            'Occlusion or stenosis of the pre-occlusive cervical internal carotid artery ipsilateral to the lesion',
+            'Any cause local prohibiting femoral catheterization',
+          ],
+        },
+      ],
+    },
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -2185,6 +2502,29 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Direct endovascular thrombectomy alone',
       control: 'IV alteplase followed by endovascular thrombectomy'
     },
+    armDetails: [
+      {
+        arm: "Endovascular thrombectomy alone (no IV alteplase)",
+        role: "intervention",
+        agent: "Mechanical thrombectomy with a China-FDA-approved device. Stent retriever primary; aspiration devices secondary if initial reperfusion failed.",
+        route: "Endovascular",
+        frequency: "Single procedure, initiated within 4.5 h of symptom onset. NO alteplase before or during the procedure.",
+        duration: "One-time procedure",
+        coInterventions: "Intra-arterial alteplase (max 30 mg) or urokinase (max 400,000 U) accepted as RESCUE therapy in BOTH groups, at treating-physician discretion.",
+        note: "From Yang NEJM 2020 p.1983: 'thrombectomy alone had no alteplase administration before or during the procedure.' Successful reperfusion 79.4%. Source: NCT03469206.",
+      },
+      {
+        arm: "IV alteplase + endovascular thrombectomy (combination / bridging)",
+        role: "control",
+        agent: "IV alteplase per AHA-ASA and local guidelines, followed by mechanical thrombectomy (stent retriever primary, aspiration secondary)",
+        dose: "Alteplase 0.9 mg/kg (maximum 90 mg)",
+        route: "IV alteplase + endovascular thrombectomy",
+        frequency: "Alteplase 10% bolus then 90% infused over 1 hour; infusion could continue DURING thrombectomy even if revascularization was achieved. Thrombectomy within 4.5 h of onset.",
+        duration: "Alteplase 1-hour infusion; thrombectomy one-time procedure",
+        coInterventions: "Same IA-alteplase (max 30 mg) / urokinase (max 400,000 U) rescue allowance as the direct arm, both groups.",
+        note: "Verbatim from Yang NEJM 2020 p.1983. Successful reperfusion 84.5%; pre-thrombectomy reperfusion 7.0% (vs 2.4% direct). Source: NCT03469206.",
+      },
+    ],
     clinicalContext: 'DIRECT-MT was one of the first large randomized trials testing whether IV alteplase can be omitted before thrombectomy in directly presenting eligible patients.',
     pearls: [
       'Met its prespecified noninferiority margin for functional outcome',
@@ -2196,6 +2536,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     conclusion: '',
     source: 'Yang et al. (NEJM 2020)',
     doi: '10.1056/NEJMoa2001123',
+    pmid: '32374959',
     clinicalTrialsId: 'NCT03469206',
     specialDesign: 'non-inferiority',
     listCategory: 'thrombectomy',
@@ -2219,6 +2560,33 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Pregnancy',
       'Life expectancy under 6 months',
     ],
+    fullEligibility: {
+      source: 'clinicaltrials.gov',
+      sourceUrl: 'https://clinicaltrials.gov/study/NCT03469206',
+      sourceLabel: 'ClinicalTrials.gov NCT03469206',
+      retrieved: '2026-06-08',
+      inclusion: [
+        {
+          items: [
+            'a clinical diagnosis of acute ischemic stroke',
+            'caused by a large vessel occlusion of the anterior circulation (distal intracranial carotid artery or middle M1/proximal M2 cerebral artery) confirmed by CTA',
+            'CT or MRI ruling out intracranial hemorrhage',
+            'eligible for IVT and IAT (within 4.5 hours after symptom onset)',
+            'a score of at least 2 on the NIH Stroke Scale',
+            'age of 18 years or older',
+            'written informed consent',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Pre-stroke disability which interferes with the assessment of functional outcome at 90 days, i.e. mRS >2',
+            'Any contra-indication for IVT, according to guidelines of the American Heart Association, i.e.: arterial blood pressure exceeding 185/110 mmHg; blood glucose less than 2.7 or over 22.2 mmol/L; cerebral infarction in the previous 6 weeks with residual neurological deficit or signs of recent infarction on neuro-imaging; serious head trauma in the previous 3 months; major surgery or serious trauma in the previous 2 weeks; gastrointestinal or urinary tract hemorrhage in the previous 3 weeks; previous intracerebral hemorrhage; use of anticoagulant with INR exceeding 1.7; known thrombocyte count less than 100 × 10⁹/L; treatment with direct thrombin or factor X inhibitors; treatment with heparin (APTT exceeds the upper limit of normal value) in the previous 48 hours',
+          ],
+        },
+      ],
+    },
     howToReadChart: [
       {
         question: 'What does the bar show?',

@@ -591,7 +591,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled 2003-2007",
     "listCategory": "thrombolysis",
     "listDescription": "Extended IV tPA window to 4.5 hours; 52.4% vs 45.2% mRS 0-1.",
-    "bottomLineSummary": "ECASS III extended the IV alteplase window from 3h to 4.5h for selected patients. Functional independence (mRS 0–1) at 90 days improved from 45.2% to 52.4% (NNT 14, P=0.04). Symptomatic ICH rose to 2.4% from 0.2% but mortality was unchanged. AHA/ASA 2026 §4.6.3 COR 2a for ECASS III-eligible patients.",
+    "bottomLineSummary": "ECASS III extended the IV alteplase window from 3h to 4.5h for selected patients. Functional independence (mRS 0–1) at 90 days improved from 45.2% to 52.4% (NNT 14, P=0.04). Symptomatic ICH rose to 2.4% from 0.2% but mortality was unchanged. ECASS III established the 3–4.5h extension; AHA/ASA 2026 §4.6.2 now recommends IV thrombolysis within 4.5h (COR 1) for standard-eligible patients.",
     "doi": "10.1056/NEJMoa0804656"
   },
   "elan-study": {
@@ -1486,7 +1486,8 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "timeline": "Enrolled 2010-2015",
     "listCategory": "thrombectomy",
     "listDescription": "French bridging-therapy trial showing benefit from adding thrombectomy to alteplase.",
-    "bottomLineSummary": "THRACE showed that adding mechanical thrombectomy to IV alteplase in proximal anterior circulation LVO patients treated within 5 hours raised functional independence from 42% to 53% at 3 months, without increasing mortality or symptomatic hemorrhage."
+    "bottomLineSummary": "THRACE showed that adding mechanical thrombectomy to IV alteplase in proximal anterior circulation LVO patients treated within 5 hours raised functional independence from 42% to 53% at 3 months, without increasing mortality or symptomatic hemorrhage.",
+    "doi": "10.1016/S1474-4422(16)30177-6"
   },
   "timeless-trial": {
     "title": "TIMELESS Trial",
