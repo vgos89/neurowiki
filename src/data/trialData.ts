@@ -635,7 +635,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       {
         arm: "IV Alteplase (t-PA)",
         role: "intervention",
-        agent: "Alteplase (Activase, Genentech) — recombinant tissue plasminogen activator (t-PA)",
+        agent: "Alteplase (Activase, Genentech), recombinant tissue plasminogen activator (t-PA)",
         dose: "0.9 mg/kg (maximum 90 mg)",
         route: "IV",
         frequency: "10% of the total dose as an IV bolus, then the remaining 90% as a constant IV infusion",
@@ -972,7 +972,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       {
         arm: "IV Alteplase (rt-PA)",
         role: "intervention",
-        agent: "Alteplase (Actilyse, Boehringer Ingelheim) — rt-PA",
+        agent: "Alteplase (Actilyse, Boehringer Ingelheim), rt-PA",
         dose: "0.9 mg/kg (upper limit 90 mg)",
         route: "IV",
         frequency: "10% of the total dose as an IV bolus, then the remainder as a continuous IV infusion",
@@ -1378,12 +1378,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       {
         arm: "Intra-arterial treatment + usual care",
         role: "intervention",
-        agent: "Intra-arterial therapy at interventionist's discretion — mechanical thrombectomy (retrievable stent, thrombus retraction, aspiration, or wire disruption) and/or intra-arterial thrombolysis (alteplase or urokinase). Retrievable stents used in 190/233 (81.5%).",
+        agent: "Intra-arterial therapy at interventionist's discretion: mechanical thrombectomy (retrievable stent, thrombus retraction, aspiration, or wire disruption) and/or intra-arterial thrombolysis (alteplase or urokinase). Retrievable stents used in 190/233 (81.5%).",
         route: "Endovascular (intra-arterial)",
         frequency: "Single procedure: microcatheter to the occlusion, then thrombolytic delivery, mechanical thrombectomy, or both. Method left to the local interventionist.",
         duration: "One-time procedure",
         coInterventions: "+ usual care, which could include IV alteplase when eligible (89.0% of all randomized received IV alteplase before randomization). If IV alteplase given, IA thrombolytic capped at 30 mg alteplase or 400,000 IU urokinase (otherwise max 90 mg / 1,200,000 IU).",
-        note: "Technique + IA-dose caps from Berkhemer NEJM 2015 p.13. Only approved devices, operator ≥5 prior procedures with that device type. Device-agnostic, heterogeneous device generations (limits generalizability to modern stent retrievers). Any IA therapy 196/233 (84.1%); GA 37.8%; acute cervical carotid stenting 12.9%. Source: NTR1804 / ISRCTN10888758 (no CT.gov NCT).",
+        note: "Technique + IA-dose caps from Berkhemer NEJM 2015 p.13. Only approved devices, operator ≥5 prior procedures with that device type. Device-agnostic; heterogeneous device generations (limits generalizability to modern stent retrievers). Any IA therapy 196/233 (84.1%); GA 37.8%; acute cervical carotid stenting 12.9%. Source: NTR1804 / ISRCTN10888758 (no CT.gov NCT).",
       },
       {
         arm: "Usual care alone",
@@ -1559,7 +1559,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         frequency: "Single procedure preceded by cerebral angiogram. Workflow targets: study NCCT-to-groin-puncture ≤60 min; study NCCT-to-first-reperfusion (first reflow in the MCA) ≤90 min.",
         duration: "One-time procedure",
         coInterventions: "Guideline-based medical care, including IV alteplase within 4.5 h of onset if local guideline criteria were met (given in BOTH arms). General anesthesia was discouraged.",
-        note: "Technique + workflow targets from Goyal NEJM 2015 p.1021 (Treatments / Participants). In practice: retrievable stents used in 130/151 (86.1%) procedures; of those, 100 (77.0%) Solitaire (Covidien); GA in 9.1%. Device-agnostic — no single brand mandated.",
+        note: "Technique + workflow targets from Goyal NEJM 2015 p.1021 (Treatments / Participants). In practice: retrievable stents used in 130/151 (86.1%) procedures; of those, 100 (77.0%) Solitaire (Covidien); GA in 9.1%. Device-agnostic; no single brand mandated.",
       },
       {
         arm: "Guideline-based care (control)",
@@ -1567,7 +1567,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         agent: "Current standard of care per Canadian or local acute-stroke management guidelines (no protocol-mandated thrombectomy)",
         route: "Medical",
         coInterventions: "Guideline-based medical care, including IV alteplase within 4.5 h of onset if local guideline criteria were met (given in BOTH arms)",
-        note: "Control = current standard of care per Canadian/local acute-stroke guidelines (Goyal NEJM 2015 p.1021). Granular control-arm medical management (BP, glucose, antithrombotic) is in the Supplementary Appendix — see appendix-gap flag. IV alteplase actually given: control 78.7%, intervention 72.7% (Table 1). 18/150 control patients crossed over to EVT.",
+        note: "Control = current standard of care per Canadian/local acute-stroke guidelines (Goyal NEJM 2015 p.1021). Granular control-arm medical management (BP, glucose, antithrombotic) is in the Supplementary Appendix (see appendix-gap flag). IV alteplase actually given: control 78.7%, intervention 72.7% (Table 1). 18/150 control patients crossed over to EVT.",
       },
     ],
     clinicalContext: 'ESCAPE emphasized workflow discipline, collateral selection, and rapid reperfusion. It showed that thrombectomy works best when imaging confirms a small core and treatment delays are aggressively minimized.',
@@ -1750,11 +1750,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       {
         arm: "Solitaire stent-retriever thrombectomy + medical therapy",
         role: "intervention",
-        agent: "Solitaire FR stent retriever (Covidien) — self-expanding device to retrieve thrombus and restore flow",
+        agent: "Solitaire FR stent retriever (Covidien), a self-expanding device to retrieve thrombus and restore flow",
         route: "Endovascular (mechanical thrombectomy)",
         frequency: "Single thrombectomy procedure, initiable within 8 h of symptom onset.",
         duration: "One-time procedure",
-        coInterventions: "Medical therapy including IV alteplase when eligible (given in BOTH arms — eligible patients received alteplase within 4.5 h before randomization; thrombectomy arm entered after no recanalization ≥30 min post-alteplase, or with alteplase contraindication). QI workflow to minimize time to reperfusion.",
+        coInterventions: "Medical therapy including IV alteplase when eligible (given in BOTH arms; eligible patients received alteplase within 4.5 h before randomization; thrombectomy arm entered after no recanalization ≥30 min post-alteplase, or with alteplase contraindication). QI workflow to minimize time to reperfusion.",
         note: "Design from Jovin NEJM 2015 p.2297. Thrombectomy 98/103; ipsilateral cervical carotid stenting 9; GA 7 (6.7%); 1 IA alteplase + 1 angioplasty after failed retrieval. mTICI 2b/3 66%. Unrestricted Covidien grant. Source: NCT01692379.",
       },
       {
@@ -1953,12 +1953,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         frequency: "Single procedure. Endovascular therapy initiated (groin puncture) within 6 h of onset and completed within 8 h; initiated at a median of 210 minutes after onset.",
         duration: "One-time procedure",
         coInterventions: "+ IV alteplase 0.9 mg/kg as standard care, given to ALL patients in both groups (within 4.5 h of onset). Conscious sedation or general anesthesia at the neurointerventionist's discretion.",
-        note: "Device, 6 h/8 h targets, both-arm alteplase from Campbell NEJM 2015 p.1010-1011. 1:1 stratified by occlusion site. Solitaire FR only by protocol — does not generalize to other devices. Covidien supplied the device + unrestricted grant, no role in design/conduct. Source: NCT01492725.",
+        note: "Device, 6 h/8 h targets, both-arm alteplase from Campbell NEJM 2015 p.1010-1011. 1:1 stratified by occlusion site. Solitaire FR only by protocol; does not generalize to other devices. Covidien supplied the device + unrestricted grant, no role in design/conduct. Source: NCT01492725.",
       },
       {
         arm: "IV alteplase alone (no further therapy)",
         role: "control",
-        agent: "IV alteplase alone — no endovascular therapy ('alteplase-only group')",
+        agent: "IV alteplase alone, no endovascular therapy ('alteplase-only group')",
         route: "IV (medical management)",
         coInterventions: "IV alteplase 0.9 mg/kg as standard care, given to ALL patients in both groups (within 4.5 h of onset). No protocol-mandated endovascular therapy.",
         note: "Control = continue alteplase alone with no further therapy (Campbell NEJM 2015 p.1011). Both arms received identical IV alteplase; the trial isolates the added effect of Solitaire FR thrombectomy. Control-arm BP/glucose/antithrombotic targets appendix-deferred. Source: NCT01492725.",
@@ -2136,7 +2136,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       {
         arm: "Stent-retriever thrombectomy + IV t-PA",
         role: "intervention",
-        agent: "Solitaire FR (Flow Restoration) or Solitaire 2 stent retriever (Covidien) — uniform device protocol",
+        agent: "Solitaire FR (Flow Restoration) or Solitaire 2 stent retriever (Covidien); uniform device protocol",
         route: "Endovascular (mechanical thrombectomy)",
         frequency: "Single procedure following IV t-PA. Workflow targets: qualifying-imaging-to-groin-puncture within 70 min; groin puncture within 6 h of onset and within 90 min of angiography.",
         duration: "One-time procedure",
@@ -2146,7 +2146,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       {
         arm: "IV t-PA alone (control)",
         role: "control",
-        agent: "IV alteplase (t-PA) — standard medical therapy, no thrombectomy",
+        agent: "IV alteplase (t-PA), standard medical therapy, no thrombectomy",
         route: "IV / Medical",
         coInterventions: "IV t-PA (alteplase) within 4.5 h of onset in ALL patients (shared with intervention arm); best medical care per local guidelines. No endovascular thrombectomy.",
         note: "Control = continue IV t-PA alone (Saver NEJM 2015 p.2286). 1:1 randomization. Control-arm BP/glucose/antithrombotic targets + imaging-selection table (S1) appendix-deferred. Source: NCT01657461.",
@@ -2341,13 +2341,13 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       {
         arm: "IV alteplase + mechanical thrombectomy (IVTMT)",
         role: "intervention",
-        agent: "IV alteplase 0.9 mg/kg PLUS mechanical thrombectomy with an operator-selected device from the trial's regularly-updated list of CE-marked/approved devices (stent retrievers such as Solitaire and Trevo). No single brand mandated.",
+        agent: "IV alteplase 0.9 mg/kg PLUS mechanical thrombectomy with an operator-selected device from the trial's regularly-updated list of CE-marked/approved devices (stent retrievers such as Solitaire and Trevo). No single brand was mandated.",
         dose: "Alteplase 0.9 mg/kg (maximum 90 mg); optional complementary intra-arterial alteplase up to 0.3 mg/kg at end of thrombectomy for persistent distal occlusion",
         route: "IV alteplase + endovascular thrombectomy",
         frequency: "Alteplase: 10% bolus then remainder over 60 min, started <4 h from onset. Thrombectomy: single procedure, initiated <5 h from onset. From Oct 12, 2012, thrombectomy could begin during thrombolysis.",
         duration: "Alteplase 60-min infusion; thrombectomy one-time procedure",
         coInterventions: "Conscious sedation or general anaesthesia at operator discretion. Thrombectomy performed only if mTICI <2 at angiography.",
-        note: "From Bracard Lancet Neurol 2016 p.1139-1140. KEY NUANCE: if NIHSS decreased ≥4 after thrombolysis, angiography/thrombectomy were CANCELLED — 59/204 allocated IVTMT did not receive thrombectomy. Operators required ≥5 prior interventions with the chosen device. Source: NCT01062698.",
+        note: "From Bracard Lancet Neurol 2016 p.1139-1140. KEY NUANCE: if NIHSS decreased ≥4 after thrombolysis, angiography/thrombectomy were CANCELLED; 59/204 allocated IVTMT did not receive thrombectomy. Operators required ≥5 prior interventions with the chosen device. Source: NCT01062698.",
       },
       {
         arm: "IV alteplase alone (IVT)",
@@ -2983,7 +2983,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     inclusionCriteria: [
       'Age 18 or older',
       'Direct presentation at an EVT-capable center',
-      'Anterior or posterior circulation LVO',
+      'Anterior circulation LVO (intracranial ICA, M1, or proximal M2)',
       'Eligible for IV alteplase within 4.5 hours of symptom onset',
       'Eligible for endovascular treatment',
       'Pre-stroke mRS 0 to 2',
@@ -3738,7 +3738,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       control: 'First-line stent retriever thrombectomy'
     },
     armDetails: [
-      { arm: 'First-line contact aspiration (ADAPT)', role: 'intervention', agent: 'Direct aspiration first-pass technique (ADAPT) — large-bore aspiration catheter, first-line', route: 'Endovascular (transfemoral)',
+      { arm: 'First-line contact aspiration (ADAPT)', role: 'intervention', agent: 'Direct aspiration first-pass technique (ADAPT): large-bore aspiration catheter, first-line', route: 'Endovascular (transfemoral)',
         coInterventions: 'IV thrombolysis (alteplase) first if eligible, then transfer to angiography; long sheath in distal cervical vasculature; aspiration catheter advanced to proximal thrombus with continuous aspiration; GA or conscious sedation per operator; ≥3 attempts with assigned technique required before switching (rescue at operator discretion: stent retriever, combined, or angioplasty±stenting).',
         note: 'Aspiration-first arm, n=192; rescue stent retriever in 25.2%. Lapergue JAMA 2017 Methods p.444-445.' },
       { arm: 'First-line stent retriever', role: 'comparator', agent: 'Stent retriever, first-line (Solitaire and Trevo most commonly used)', route: 'Endovascular (transfemoral)',
@@ -3866,7 +3866,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       control: 'Initial thrombectomy with stent retriever alone'
     },
     armDetails: [
-      { arm: 'Combined contact aspiration + stent retriever', role: 'intervention', agent: 'Combined first-pass technique — contact aspiration and stent retriever used simultaneously', route: 'Endovascular (transfemoral)',
+      { arm: 'Combined contact aspiration + stent retriever', role: 'intervention', agent: 'Combined first-pass technique: contact aspiration and stent retriever used simultaneously', route: 'Endovascular (transfemoral)',
         coInterventions: 'IV thrombolysis if eligible (within 8 h of onset, or within 4.5 h on DWI/FLAIR-mismatch imaging) then rapid transfer; balloon-guide catheter mandatory in both groups; distal two-thirds of stent retriever deployed (proximal third in clot) combined with contact aspiration; pull-out after temporary balloon-guide inflation; GA/conscious sedation/local per practice; ≥3 attempts before rescue crossover.',
         note: 'Combined (experimental) arm, n=205 randomized/203 primary. Lapergue JAMA 2021 Methods p.1159,1161.' },
       { arm: 'Stent retriever alone', role: 'comparator', agent: 'Stent retriever alone (CE-marked devices)', route: 'Endovascular (transfemoral)',
@@ -4167,14 +4167,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     howToInterpret: {
       proves: 'In Chinese patients with acute LVO stroke treated with thrombectomy within 24 hours, peri-procedural IV tirofiban did not improve 90-day functional outcome compared with placebo (adjusted common OR 1.08, 95% CI 0.87-1.34, P = 0.51). Symptomatic ICH was significantly higher with tirofiban (9.7% vs 6.4%, P = 0.04). The combination of null efficacy and a significant safety signal argues against routine peri-EVT tirofiban use.',
       doesNotProve: 'The trial does not exclude potential benefit in narrowly defined subgroups (for example, intracranial atherosclerotic disease with rescue stenting), which were not the primary question. It does not address tirofiban given for other indications such as carotid stenting or post-procedural reocclusion management.',
-      cautions: 'Single-country (China) cohort, which limits generalizability; population includes posterior circulation and broader LVO definitions. The sICH increase (P = 0.04) is the most actionable finding from a null efficacy trial: when adding an antiplatelet agent does not help and increases bleeding, the default position is not to add it. Reperfusion rates were similar (~83%), so the harm is not offset by mechanical benefit.',
+      cautions: 'Single-country (China) cohort, which limits generalizability. The enrolled population was anterior-circulation LVO only (intracranial ICA, M1, or M2); posterior-circulation occlusion was excluded, so these results do not speak to basilar or other posterior-circulation thrombectomy. The sICH increase (P = 0.04) is the most actionable finding from a null efficacy trial: when adding an antiplatelet agent does not help and increases bleeding, the default position is not to add it. Reperfusion rates were similar (~83%), so the harm is not offset by mechanical benefit.',
     },
     /* claimId: rescue-bt-bedside | source: RESCUE BT Investigators JAMA 2022 */
     bedsidePearl: 'Do not give peri-procedural IV tirofiban as routine adjunct to thrombectomy. RESCUE BT showed no functional benefit and a significant increase in symptomatic ICH (9.7% vs 6.4%). Reserve GP IIb/IIIa inhibitors for selected indications such as rescue stenting in intracranial atherosclerosis, not for general LVO thrombectomy.',
     bottomLineSummary: 'Chinese double-blind placebo-controlled trial of peri-procedural IV tirofiban vs placebo during thrombectomy in LVO stroke within 24 hours. Adjusted common OR 1.08 (95% CI 0.87-1.34, P = 0.51): no functional benefit. Symptomatic ICH significantly higher with tirofiban (9.7% vs 6.4%, P = 0.04). Net harm signal.',
     inclusionCriteria: [
       'Age 18 to 80',
-      'Acute ischemic stroke with intracranial LVO (anterior or posterior circulation)',
+      'Acute ischemic stroke with anterior-circulation intracranial LVO (ICA, M1, or M2)',
       'NIHSS 4 or greater',
       'Treatment within 24 hours of last known well',
       'Pre-stroke mRS 0 to 2',
@@ -6307,12 +6307,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       {
         arm: "Trevo thrombectomy + standard medical care",
         role: "intervention",
-        agent: "Trevo device (Stryker Neurovascular) — retrievable self-expanding stent retriever",
+        agent: "Trevo device (Stryker Neurovascular), a retrievable self-expanding stent retriever",
         route: "Endovascular (mechanical thrombectomy)",
         frequency: "Single procedure. Rescue reperfusion with OTHER devices or pharmacologic agents was not permitted. Concomitant cervical-ICA stenting not permitted; carotid angioplasty permitted only if needed for access.",
         duration: "One-time procedure",
         coInterventions: "Standard medical care per local guidelines (both arms). Patients NOT treated with IV alteplase could receive antiplatelet agents, startable within 24 h after randomization.",
-        note: "Device, rescue-prohibition, stenting rules from Nogueira NEJM 2018 p.13 (Treatment). In practice 102/105 Trevo-only; GA 10%; mTICI 2b/3 success 84% (central)/82% (local). Trevo-only by protocol — does not generalize to other stent retrievers.",
+        note: "Device, rescue-prohibition, stenting rules from Nogueira NEJM 2018 p.13 (Treatment). In practice 102/105 Trevo-only; GA 10%; mTICI 2b/3 success 84% (central)/82% (local). Trevo-only by protocol; does not generalize to other stent retrievers.",
       },
       {
         arm: "Standard medical care alone (control)",
@@ -6647,12 +6647,12 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       { arm: 'Endovascular therapy + medical management', role: 'intervention',
         agent: 'Endovascular thrombectomy (stent retriever or contact-aspiration first-line; ± balloon angioplasty, stent implantation, or intraarterial thrombolysis as needed)',
         route: 'Endovascular', frequency: 'Single procedure', duration: 'Within 24 h of stroke onset',
-        coInterventions: 'IV thrombolysis when eligible — alteplase 0.9 mg/kg or urokinase 1.0–1.5 million IU (~28% of patients in both groups); medical management per Chinese Stroke Association guidelines',
+        coInterventions: 'IV thrombolysis when eligible: alteplase 0.9 mg/kg or urokinase 1.0–1.5 million IU (~28% of patients in both groups); medical management per Chinese Stroke Association guidelines',
         note: 'Large-core selection broader than SELECT2: ASPECTS 3–5 (any core), ASPECTS >5 with core 70–100 ml (6–24 h), ASPECTS <3 with core 70–100 ml. ICA-terminal or M1 occlusion. Simple 1:1 randomization (Huo NEJM 2023 p.1274).' },
       { arm: 'Medical management alone', role: 'control',
         agent: 'Standard medical management (no thrombectomy)', route: 'Medical', duration: 'Through hospitalization',
-        coInterventions: 'IV thrombolysis when eligible — alteplase 0.9 mg/kg or urokinase 1.0–1.5 million IU (~28% of patients in both groups); medical management per Chinese Stroke Association guidelines',
-        note: 'Both arms received Chinese Stroke Association guideline-based management; ~28% in each group received IV thrombolysis. Full-dose alteplase (0.9 mg/kg) — distinct from low-dose Japanese protocols. Substantive control (Huo NEJM 2023 p.1274).' },
+        coInterventions: 'IV thrombolysis when eligible: alteplase 0.9 mg/kg or urokinase 1.0–1.5 million IU (~28% of patients in both groups); medical management per Chinese Stroke Association guidelines',
+        note: 'Both arms received Chinese Stroke Association guideline-based management; ~28% in each group received IV thrombolysis. Full-dose alteplase (0.9 mg/kg), distinct from low-dose Japanese protocols. Substantive control (Huo NEJM 2023 p.1274).' },
     ],
     clinicalContext: 'Conducted in China, ANGEL-ASPECT complemented SELECT2 by investigating thrombectomy in patients with large infarct cores, including those with cores up to 100ml.',
     calculations: {
@@ -7368,11 +7368,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       { arm: 'Thrombectomy + standard medical care', role: 'intervention',
         agent: 'Endovascular thrombectomy with Solitaire stent retriever (Medtronic), added to standard medical care',
         route: 'Endovascular', frequency: 'Single index procedure', duration: '6–24 h after symptom onset / last known well',
-        coInterventions: 'Standard medical care per current Chinese guidelines; IV thrombolysis if arrived within the 4.5 h window and met safety criteria — used in 14% of thrombectomy-group patients (Jovin NEJM 2022 p.1373,1375)',
+        coInterventions: 'Standard medical care per current Chinese guidelines; IV thrombolysis if arrived within the 4.5 h window and met safety criteria, used in 14% of thrombectomy-group patients (Jovin NEJM 2022 p.1373,1375)',
         note: 'Solitaire device (retrievable self-expanding stent). Rescue reperfusion with other devices/pharmacologic agents NOT permitted except balloon angioplasty or stenting of the vertebral/basilar artery. Procedural complications 11% (p.1375).' },
       { arm: 'Standard medical care (control)', role: 'control',
         agent: 'Standard medical care alone (medical therapy only)', route: 'Medical', duration: '90-day follow-up',
-        coInterventions: 'Standard medical care per current Chinese guidelines; IV thrombolysis if within the 4.5 h window and met safety criteria — used in 21% of control-group patients (Jovin NEJM 2022 p.1373,1375)',
+        coInterventions: 'Standard medical care per current Chinese guidelines; IV thrombolysis if within the 4.5 h window and met safety criteria, used in 21% of control-group patients (Jovin NEJM 2022 p.1373,1375)',
         note: 'Control = standard medical care alone, no EVT. Enrollment halted early at prespecified interim for superiority of thrombectomy (p.1373).' },
     ],
     clinicalContext: 'Following the success of extended window thrombectomy in the anterior circulation (DAWN/DEFUSE-3), BAOCHE examined the 6-24 hour window for Basilar Artery Occlusion.',
