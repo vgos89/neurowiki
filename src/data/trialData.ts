@@ -1167,6 +1167,79 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
         'Arteritic CRAO (non-arteritic population only)',
       ],
     },
+    fullEligibility: {
+      inclusion: [
+        {
+          label: "Eligible patients",
+          items: [
+            "Patient age between 18 and 75 years",
+            "Acute nonarteritic central retinal artery occlusion with symptoms for less than 20 hours",
+            "Best-corrected visual acuity worse than 0.5 logMAR (Snellen equivalent of 20/63)",
+            "Angiographically confirmed, persistent arterial occlusion",
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: "Ocular diseases (Table 1)",
+          items: [
+            "Branch retinal artery occlusion",
+            "Cilioretinal arteries supplying the macula",
+            "Combined arterial-venous occlusion",
+            "Proliferative retinal diseases",
+            "Elevated intraocular pressure",
+          ],
+        },
+        {
+          label: "General diseases (Table 1)",
+          items: [
+            "Systemic arterial hypertension (systolic pressure above 200 mmHg) despite medical therapy",
+            "Acute systemic inflammation (erythrocyte sedimentation rate above 30 mm in the first hour, or C-reactive protein above 1.0 mg/dL)",
+            "Antithrombin-III deficiency, thrombocytopenia below 100,000/mL, or pathologic clotting time",
+            "Acute pancreatitis with elevated pancreatic enzymes",
+            "Heart attack within the last 6 weeks",
+            "Intracerebral bleeding or surgery within the last 4 weeks",
+            "Therapy with marcumar or warfarin",
+            "Allergic reaction to contrast agent",
+            "Hemorrhagic diathesis",
+            "Aneurysms",
+            "Inflammatory vascular diseases (for example giant cell arteritis, Wegener granulomatosis)",
+            "Endocarditis",
+            "Gastric ulcer",
+            "Patient participation in other studies during the prior 4 weeks",
+            "Patient unwillingness to participate",
+          ],
+        },
+      ],
+      source: "publication",
+      sourceLabel: "Schumacher M et al., Ophthalmology 2010",
+      sourceUrl: "https://doi.org/10.1016/j.ophtha.2010.03.061",
+      retrieved: "2026-06-09",
+    },
+    armDetails: [
+      {
+        arm: "Local intra-arterial fibrinolysis (LIF)",
+        role: "intervention",
+        agent: "Intra-arterial recombinant tissue plasminogen activator (rtPA, Actilyse)",
+        dose: "Up to a maximum of 50 mg rtPA, delivered in steps with visual acuity and funduscopy checks after 15, 30, 45, and 50 mg",
+        route: "Superselective microcatheter injection into the ophthalmic artery (or external carotid artery via collaterals if internal carotid occluded or high-grade stenosis), under heparin anticoagulation (5000 IU)",
+        frequency: "Single intra-arterial procedure",
+        duration: "One-time fibrinolysis; followed by 5 days of low-dose heparin and at least 4 weeks of aspirin (shared with control)",
+        coInterventions: "Both groups received weight-adapted low-dose heparin twice daily for 5 days starting the first postinterventional day, plus acetylsalicylic acid 100 mg daily for at least 4 weeks",
+        note: "Adverse reactions occurred in 37.1% of LIF patients versus 4.3% of conservative-treatment patients, including 2 intracranial hemorrhages; the trial was stopped early by the data monitoring committee for apparent similar efficacy and higher adverse reactions",
+      },
+      {
+        arm: "Conservative standard treatment (CST)",
+        role: "control",
+        agent: "Multimodal conservative therapy",
+        dose: "Isovolemic hemodilution (500 mL blood withdrawn, 500 mL 10% hydroxyethyl starch infused, for hematocrit above 40%); ocular massage; topical beta-blocker (for example timolol 0.5%); intravenous acetazolamide 500 mg",
+        route: "Combination of intravenous, topical, and mechanical measures",
+        frequency: "Per protocol at presentation",
+        duration: "Acute treatment; followed by 5 days of low-dose heparin and at least 4 weeks of aspirin (shared with intervention)",
+        coInterventions: "Both groups received weight-adapted low-dose heparin twice daily for 5 days starting the first postinterventional day, plus acetylsalicylic acid 100 mg daily for at least 4 weeks",
+        note: "No patient underwent anterior chamber paracentesis. Visual improvement was similar between arms (60.0% of CST vs 57.1% of LIF achieving clinically significant gain); the superiority trial detected no difference (P=0.69)",
+      },
+    ],
     stats: {
       sampleSize: {
         value: '84',
@@ -5835,6 +5908,63 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Severe renal failure (eGFR below 15 mL/min)',
       'High bleeding risk precluding any anticoagulation',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: "Target population",
+          items: [
+            "Adults at least 18 years of age",
+            "Atrial fibrillation (paroxysmal, persistent, or permanent), either previously known or diagnosed during the index hospitalization",
+            "Recent ischemic stroke within 72 hours of symptom onset",
+            "Eligible for and willing to start non-vitamin K antagonist oral anticoagulant (NOAC) treatment",
+          ],
+        },
+        {
+          label: "Conditional eligibility",
+          items: [
+            "Patients on ongoing oral anticoagulant therapy at the index stroke were eligible only if NOAC therapy was interrupted for at least 2 days at the index stroke, or the international normalized ratio was 1.7 or below on prior warfarin",
+            "After reperfusion therapy, control brain imaging had to be performed before the patient was considered eligible",
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: "Exclusions",
+          items: [
+            "Contraindication to NOAC therapy (for example ongoing bleeding or mechanical heart valve prosthesis)",
+            "Previous participation in the TIMING study",
+          ],
+        },
+      ],
+      source: "publication",
+      sourceLabel: "Oldgren J et al., Circulation 2022",
+      sourceUrl: "https://doi.org/10.1161/CIRCULATIONAHA.122.060666",
+      retrieved: "2026-06-09",
+    },
+    armDetails: [
+      {
+        arm: "Early NOAC initiation",
+        role: "intervention",
+        agent: "Non-vitamin K antagonist oral anticoagulant (apixaban, dabigatran, edoxaban, or rivaroxaban)",
+        dose: "Standard stroke-prevention dosing; specific agent and dose at the treating physician's discretion",
+        route: "Oral",
+        frequency: "Per product labeling for the chosen NOAC",
+        duration: "Initiated within 4 days (on or before day 4) of stroke onset; long-term anticoagulation continued",
+        coInterventions: "All four NOACs available and reimbursed in Sweden; choice of agent and exact day within the assigned window at physician discretion",
+        note: "Mean NOAC initiation was 66.8 hours (day 3) after stroke onset in the early group",
+      },
+      {
+        arm: "Delayed NOAC initiation",
+        role: "control",
+        agent: "Non-vitamin K antagonist oral anticoagulant (apixaban, dabigatran, edoxaban, or rivaroxaban)",
+        dose: "Standard stroke-prevention dosing; specific agent and dose at the treating physician's discretion",
+        route: "Oral",
+        frequency: "Per product labeling for the chosen NOAC",
+        duration: "Initiated 5 to 10 days after stroke onset; long-term anticoagulation continued",
+        coInterventions: "All four NOACs available and reimbursed in Sweden; choice of agent and exact day within the assigned window at physician discretion",
+        note: "Mean NOAC initiation was 116.8 hours (day 5) after stroke onset in the delayed group. Noninferiority margin was 3 percentage points (absolute); early initiation was noninferior (P=0.004) but not superior (P=0.380)",
+      },
+    ],
     pearls: [
       'Early NOAC initiation (within 4 days) was non-inferior to delayed initiation (5-10 days) for the 90-day composite endpoint',
       'Zero symptomatic intracranial hemorrhages in either arm',
@@ -5947,6 +6077,74 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Active major bleeding or very high bleeding risk',
       'Severe renal impairment precluding DOAC use',
       'Inability to consent or take oral medication',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: "Eligible patients",
+          items: [
+            "Adults aged 18 years or older",
+            "Atrial fibrillation confirmed by an electrocardiogram or medical records",
+            "Clinical diagnosis of acute ischemic stroke with symptoms lasting at least 24 hours, or at least one form of brain imaging (CT or MRI) to exclude intracranial hemorrhage and non-stroke diagnoses",
+            "Eligible for anticoagulation with a DOAC, with the responsible treating physician uncertain about the optimal timing to start anticoagulation",
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: "Bleeding and coagulation",
+          items: [
+            "Coagulopathy, or evidence of recent or current anticoagulation with a vitamin K antagonist leading to an international normalized ratio of 1.7 or higher at randomization",
+            "Clinically significant thrombocytopenia (platelet count below 75 x 10^9 per litre)",
+            "Coagulopathy or bleeding tendency judged to contraindicate anticoagulation by the treating clinician",
+          ],
+        },
+        {
+          label: "Imaging and infarct features",
+          items: [
+            "Severe hemorrhagic transformation of the acute infarct (parenchymal hematoma type 2 by the Heidelberg criteria), or an acute intracranial hemorrhage unrelated to the acute infarct",
+            "Brain imaging evidence of non-stroke pathology judged likely to explain the clinical presentation (for example mass lesion or encephalitis)",
+          ],
+        },
+        {
+          label: "Drug, organ, and other contraindications",
+          items: [
+            "Contraindication to DOAC use (severe renal impairment with creatinine clearance below 15 mL/min, cirrhosis with Child-Pugh class B or C, alanine aminotransferase more than 2 times the upper limit of normal, or concurrent medication with a notable DOAC interaction such as strong CYP3A4 inducers)",
+            "Known allergy or intolerance to Factor Xa and direct thrombin inhibitors",
+            "Definite indication for a vitamin K antagonist (for example a mechanical heart valve)",
+            "Pregnant or breastfeeding",
+            "Could not be followed up for 90 days after trial entry, or did not consent to study procedures",
+          ],
+        },
+      ],
+      source: "publication",
+      sourceLabel: "Werring DJ et al., Lancet 2024",
+      sourceUrl: "https://doi.org/10.1016/S0140-6736(24)02197-4",
+      retrieved: "2026-06-09",
+    },
+    armDetails: [
+      {
+        arm: "Early DOAC initiation",
+        role: "intervention",
+        agent: "Direct oral anticoagulant (apixaban, dabigatran, edoxaban, or rivaroxaban)",
+        dose: "Licensed stroke-prevention dose for the chosen DOAC; dose and route per the relevant summary of product characteristics, at physician discretion",
+        route: "Oral",
+        frequency: "Per product labeling for the chosen DOAC",
+        duration: "Initiated within 4 days (on or before day 4) of stroke onset; long-term anticoagulation continued",
+        coInterventions: "Antiplatelet agents before DOAC initiation were permitted in line with current practice at the treating physician's discretion",
+        note: "Mean DOAC initiation was 3.1 days after stroke onset in the early group",
+      },
+      {
+        arm: "Delayed DOAC initiation",
+        role: "control",
+        agent: "Direct oral anticoagulant (apixaban, dabigatran, edoxaban, or rivaroxaban)",
+        dose: "Licensed stroke-prevention dose for the chosen DOAC; dose and route per the relevant summary of product characteristics, at physician discretion",
+        route: "Oral",
+        frequency: "Per product labeling for the chosen DOAC",
+        duration: "Initiated 7 to 14 days after stroke onset; long-term anticoagulation continued",
+        coInterventions: "Antiplatelet agents before DOAC initiation were permitted in line with current practice at the treating physician's discretion",
+        note: "Mean DOAC initiation was 8.3 days after stroke onset in the delayed group. Noninferiority margin was 2 percentage points (absolute); early initiation was noninferior (P=0.0003) but not superior (P=0.96)",
+      },
     ],
     pearls: [
       'Primary composite event rates were identical: 3.3% vs 3.3% (risk difference 0.000)',
@@ -8443,6 +8641,61 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Recent surgery or hemorrhagic disorder',
       'Hemodynamic-failure selection (separate evidence base)',
       'Post-AMM failure (salvage stenting; addressed by WEAVE on-label registry)',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: "Eligible patients",
+          items: [
+            "Transient ischemic attack or nondisabling ischemic stroke within 30 days before enrollment",
+            "Stroke or TIA attributed to angiographically verified stenosis of 70 to 99% of the diameter of a major intracranial artery",
+            "Written informed consent; patients not undergoing diagnostic angiography as part of routine care consented to angiography per the study protocol",
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: "Symptom timing and stenosis severity",
+          items: [
+            "Symptoms that occurred more than 30 days before enrollment",
+            "Stenosis of 50 to 69% of an intracranial artery (lower stroke risk on standard medical therapy, making benefit from PTAS unlikely)",
+          ],
+        },
+        {
+          label: "Other (per published study protocol)",
+          items: [
+            "Other eligibility criteria are described in the study protocol available with the full text at NEJM.org",
+          ],
+        },
+      ],
+      source: "publication",
+      sourceLabel: "Chimowitz MI et al., N Engl J Med 2011",
+      sourceUrl: "https://doi.org/10.1056/NEJMoa1105335",
+      retrieved: "2026-06-09",
+    },
+    armDetails: [
+      {
+        arm: "Aggressive medical management plus PTAS",
+        role: "intervention",
+        agent: "Percutaneous transluminal angioplasty and stenting (Gateway PTA balloon and Wingspan self-expanding stent, Boston Scientific) plus aggressive medical management",
+        dose: "Self-expanding Wingspan stent after Gateway balloon angioplasty; clopidogrel 600 mg loading dose 6 to 24 hours before PTAS for patients not already taking clopidogrel 75 mg daily for at least 5 days",
+        route: "Endovascular (intracranial), under general anesthesia",
+        frequency: "Single procedure within 3 business days after randomization",
+        duration: "One-time procedure; aggressive medical management continued as in the control arm",
+        coInterventions: "Identical aggressive medical management in both groups: aspirin 325 mg daily plus clopidogrel 75 mg daily for 90 days after enrollment, target systolic blood pressure below 140 mmHg (below 130 mmHg if diabetic), target LDL cholesterol below 70 mg/dL with rosuvastatin, plus a lifestyle modification program",
+        note: "PTAS in this initial-treatment role caused excess 30-day stroke or death (14.7% vs 5.8%); the trial was stopped early by the data and safety monitoring board for harm plus futility",
+      },
+      {
+        arm: "Aggressive medical management alone",
+        role: "control",
+        agent: "Aggressive medical management",
+        dose: "Aspirin 325 mg daily plus clopidogrel 75 mg daily for 90 days after enrollment",
+        route: "Oral plus risk-factor and lifestyle management",
+        frequency: "Daily antiplatelet therapy",
+        duration: "Dual antiplatelet for 90 days; risk-factor management ongoing",
+        coInterventions: "Target systolic blood pressure below 140 mmHg (below 130 mmHg if diabetic), target LDL cholesterol below 70 mg/dL with rosuvastatin, plus a lifestyle modification program",
+        note: "Control arm outperformed historical WASID medical controls; first-line strategy for symptomatic intracranial atherosclerotic stenosis",
+      },
     ],
     safetyProfile: {
       sICH: {
@@ -11979,7 +12232,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     archetypeId: 'B' as const,
     inclusionCriteria: [
       'Age 18 or older',
-      'Suspected LVO stroke (RACE score 5 or higher)',
+      'Suspected LVO stroke (PASS score 2 or higher)',
       'Within 4 hours of onset or last known well',
       'Eligible for IV thrombolysis',
       'Within catchment area of a primary stroke center',
@@ -12039,8 +12292,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       { arm: 'PSC First', n: 52, pct: [19, 17, 16, 12, 12, 12, 12] },
     ],
     ordinalStats: { commonOR: 1.42, ciLow: 0.72, ciHigh: 2.82, direction: 'positive' as const, pValue: 0.31 },
-    bedsidePearl: 'TRIAGE-STROKE was stopped early (N=171 of planned 424) and cannot provide definitive guidance on bypass strategy. The mechanistic signal is informative: CSC-first shortened onset-to-groin time by 35 minutes; PSC-first shortened onset-to-needle time by 30 minutes. The net clinical effect is system dependent and this underpowered trial should not be used alone to mandate a bypass protocol.',
-    bottomLineSummary: 'In IVT-eligible patients with suspected LVO within 4 hours of onset, direct routing to a CSC versus PSC-first transport did not significantly improve 90-day functional outcome in the acute ischemic stroke population (ordinal OR 1.42, 95% CI 0.72-2.82, p=0.31). The trial was stopped early at 171 of a planned 424 patients. Direct CSC routing shortened onset-to-groin time by 35 minutes; PSC-first shortened onset-to-needle time by 30 minutes.',
+    bedsidePearl: 'TRIAGE-STROKE was stopped early (N=171 of planned 600) and cannot provide definitive guidance on bypass strategy. The mechanistic signal is informative: CSC-first shortened onset-to-groin time by 35 minutes; PSC-first shortened onset-to-needle time by 30 minutes. The net clinical effect is system dependent and this underpowered trial should not be used alone to mandate a bypass protocol.',
+    bottomLineSummary: 'In IVT-eligible patients with suspected LVO within 4 hours of onset, direct routing to a CSC versus PSC-first transport did not significantly improve 90-day functional outcome in the acute ischemic stroke population (ordinal OR 1.42, 95% CI 0.72-2.82, p=0.31). The trial was stopped early at 171 of a planned 600 patients. Direct CSC routing shortened onset-to-groin time by 35 minutes; PSC-first shortened onset-to-needle time by 30 minutes.',
     legend: {
       finding: 'TRIAGE-STROKE stopped early; cannot provide definitive guidance on bypass strategy.',
       bottomLineTag: 'Inconclusive',

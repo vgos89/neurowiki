@@ -105,3 +105,25 @@ Additive enrichment of existing trial records with `fullEligibility` + `armDetai
 - **ENRICH (Pradilla NEJM 2024):** minimally invasive trans-sulcal parafascicular evacuation (BrainPath + Myriad) vs guideline medical management; Bayesian primary (posterior 0.981, lobar-driven, basal-ganglia futile); NO frequentist p-value/NNT on the primary (NNT only on the safety endpoint); positive preserved.
 - **Never-drift / em-dash:** additive only; zero em-dash (en-dash ranges + U+2212 minus signs only).
 - **Follow-ups (non-blocking):** (1) verify the CHARM Dec-2024 Lancet Neurology Correction does not alter eligibility (needs WebFetch; current eligibility does not depend on it). (2) ESCAPE-NA1 aRR CI in the new arm note reconciled to the record's published 0.96–1.13 (fixed).
+
+---
+
+## Batch 8 (final) — SAMMPRIS, EAGLE, OPTIMAS, TIMING + TRIAGE-STROKE corrections
+
+**Decision:** approve (no follow-ups)
+**Reviewer:** clinical-reviewer (model: claude-opus-4-8) · **Date:** 2026-06-09
+
+- **Scope:** additive `fullEligibility` + `armDetails` on `sammpris-trial`, `eagle-trial`, `optimas-trial`, `timing-trial`; plus 3 source-verified `triage-stroke-trial` curated corrections.
+- **SAMMPRIS (Chimowitz NEJM 2011):** AMM + PTAS/Wingspan = intervention vs AMM alone = control; harm preserved (30-day stroke/death 14.7% vs 5.8%). Correction (NEJM 2012;367:93) is procedural bookkeeping only (16 vs 15 patients unstented); no primary/safety/eligibility value changed (already documented in pearl #7). No record value altered.
+- **EAGLE (Schumacher Ophthalmology 2010):** local intra-arterial fibrinolysis (rtPA ≤50 mg) = intervention vs conservative standard treatment = control; nonarteritic CRAO; superiority, NO difference (P=0.69), DSMB-stopped; negative framing preserved.
+- **OPTIMAS (Werring Lancet 2024):** early DOAC ≤4 d = intervention vs delayed 7–14 d = control; non-inferiority (RD 0.000, NI P=0.0003); no NNT.
+- **TIMING (Oldgren Circulation 2022):** early NOAC ≤4 d = intervention vs delayed 5–10 d = control; non-inferiority (6.89% vs 8.68%, ARD −1.79). Windows independently confirmed distinct from OPTIMAS (no cross-contamination, verified via OPTIMAS research-in-context box).
+- **TRIAGE-STROKE corrections (verified vs Behrndtz Stroke 2023):** scale corrected to PASS ≥2 (was "RACE ≥5"; RACE belongs to RACECAT; source p.2715); planned sample size corrected to 600 (was 424; source p.2716).
+- **CHARM Dec-2024 Correction:** investigator-list/appendix only; does not alter eligibility or the primary (cOR 1.17); CHARM unchanged.
+- **Never-drift / em-dash:** additive enrichment + 3 source-verified TRIAGE corrections; zero em-dash. No follow-ups.
+
+---
+
+## Wave 2 — COMPLETE
+
+All 34 trials from the uploaded set are enriched (32 this session across batches 1–8 + DISTAL/ESCAPE-MeVO from the prior EVT wave). Safety corrections surfaced and fixed during the wave: MR ASAP SBP threshold 120→140; ESCAPE-NA1 arm-note CI 1.14→1.13; TRIAGE-STROKE scale RACE→PASS and planned N 424→600. Both uploaded/published corrections (SAMMPRIS, CHARM) reviewed: neither required a displayed-value change.
