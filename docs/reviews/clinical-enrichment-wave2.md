@@ -158,3 +158,18 @@ Database after this cluster: **77 of 108 trials enriched.**
 - **Follow-up (non-blocking):** PROST-2 existing top-level `source` year label vs new `sourceLabel` (2024 vs 2025, same paper/DOI 10.1016/S1474-4422(24)00436-8) could be normalized later.
 
 Database after this cluster: **87 of 108 trials enriched.**
+
+---
+
+## Wave 2d — Free full-text (8) + STICH II (bonus) + TIMELESS/TASTE PDFs (11 trials, 2026-06-09)
+
+**Decision:** approve-with-conditions → condition resolved
+**Reviewer:** clinical-reviewer (model: claude-opus-4-8)
+
+- **Scope:** additive `fullEligibility` + `armDetails` on ims-iii, synthesis-expansion, mr-rescue, mistie-iii, stich-ii, annexa-4, sarode-2013, profess, crest, taste, timeless. 8 fetched from free PMC full text; STICH II confirmed free (PMC3906609, bonus 11th); TIMELESS + TASTE from supplied PDFs.
+- **Arm roles correct:** ANNEXA-4 **single-arm** cohort (no fabricated control); PROFESS clopidogrel = comparator, **non-inferiority NOT established** (preserved, not softened to "neutral"); CREST CAS = intervention / CEA = comparator with the stroke-higher-CAS / MI-higher-CEA trade-off intact; TASTE TNK 0.25 vs alteplase, NI established **per-protocol but NOT in ITT** (no benefit claim); SARODE 4F-PCC vs FFP (NI + INR-superiority). Early-EVT trio (IMS-III, SYNTHESIS, MR RESCUE) + MISTIE III + STICH II all NEUTRAL, preserved.
+- **CONDITION RESOLVED:** TIMELESS `bottomLineSummary` sICH corrected 2.0%/2.2% → **3.2%/2.3%** (pre-existing error; source-verified Albers NEJM 2024 p.701/706; direction unchanged, numbers now match source).
+- **Never-drift / em-dash:** additive + the one source-verified TIMELESS correction; zero em-dash in added blocks.
+- **Non-blocking follow-ups (pre-existing, NOT introduced here):** (1) PROFESS + CREST `legend.finding` badge text says "equivalent", which contradicts each record's own NI-not-established / no-overall-difference framing — align in a cleanup. (2) TASTE `primaryDesign: 'bayesian-noninferiority'` is mislabeled; the trial is a frequentist adaptive non-inferiority design — route a correction via trial-statistician.
+
+Database after this cluster: **98 of 108 trials enriched. 10 remain (all paywalled).**

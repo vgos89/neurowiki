@@ -10933,6 +10933,65 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Severe disability precluding follow-up',
       'TIA without infarction (not a qualifying event)',
     ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa0805002',
+      sourceLabel: 'Sacco RL et al., NEJM 2008;359(12):1238-1251; PMID 18753638',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'Recent ischemic stroke (within <90 days before randomization), defined by symptoms persisting for more than 24 hours or symptoms of a shorter duration but with evidence of a recent brain infarction on a computed tomographic scan or magnetic resonance imaging',
+            'Clinical and neurologic stability before randomization',
+            'An age of 55 years or older',
+          ],
+        },
+        {
+          label: 'After protocol amendment (broadened entry)',
+          items: [
+            'Younger patients (50 to 54 years of age), or those with less recent strokes (within 90 to 120 days before randomization), were eligible if they also had at least two additional vascular risk factors',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Contraindications to one of the antiplatelet agents (aspirin, extended-release dipyridamole, or clopidogrel)',
+            'Otherwise unsuitable for randomization',
+          ],
+        },
+        {
+          label: 'Editorial note (clinical surface, CLAUDE.md §13)',
+          items: [
+            'The PRoFESS publication reports exclusion criteria in summary form; the verbatim list above is the full set stated in the trial report. The curated exclusion summary on this entry (cardioembolic source, planned other antithrombotic, severe disability precluding follow-up) reflects the operational selection consistent with a non-cardioembolic secondary-prevention monotherapy comparison but is broader than the verbatim publication text. Subjects entered a 2x2 factorial design and were concurrently randomized to telmisartan or placebo (antihypertensive comparison reported separately: Yusuf S et al., NEJM 2008).',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'Aspirin + extended-release dipyridamole (Aggrenox)',
+        role: 'intervention',
+        agent: 'Aspirin plus extended-release dipyridamole (fixed-dose combination)',
+        dose: '25 mg of aspirin plus 200 mg of extended-release dipyridamole per capsule (total daily 50 mg aspirin + 400 mg ER-dipyridamole)',
+        route: 'Oral',
+        frequency: 'Twice daily',
+        duration: 'Long-term; mean follow-up 2.5 years (range 1.5-4.4)',
+        coInterventions: 'Double-dummy with matching clopidogrel placebo. Concurrent 2x2 factorial randomization to telmisartan or placebo. Best medical management of vascular risk factors.',
+        note: 'Dosing verbatim from Sacco RL et al., NEJM 2008. Headache is a recognized class effect of dipyridamole and drove higher discontinuation in this arm (29.1% vs 22.6% for any cause, P<0.001). Intracranial hemorrhage was significantly higher with this regimen (1.4% vs 1.0%, HR 1.42, 95% CI 1.11-1.83).',
+      },
+      {
+        arm: 'Clopidogrel',
+        role: 'comparator',
+        agent: 'Clopidogrel',
+        dose: '75 mg',
+        route: 'Oral',
+        frequency: 'Once daily',
+        duration: 'Long-term; mean follow-up 2.5 years (range 1.5-4.4)',
+        coInterventions: 'Double-dummy with matching ASA-ERDP placebo (no aspirin background in this arm). Concurrent 2x2 factorial randomization to telmisartan or placebo. Best medical management of vascular risk factors.',
+        note: 'Randomized double-blind double-dummy noninferiority design (prespecified hazard-ratio margin 1.075). Recurrent stroke 9.0% (ASA-ERDP) vs 8.8% (clopidogrel), HR 1.01 (95% CI 0.92-1.11); the upper CI bound crossed the margin so noninferiority was not formally established. Source: Sacco RL et al., NEJM 2008.',
+      },
+    ],
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -11148,6 +11207,68 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Chronic atrial fibrillation',
       'Inability to comply with dual antiplatelet therapy in the CAS arm',
       'Anatomy precluding safe execution of either CAS or CEA',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: 'Symptomatic patients',
+          items: [
+            'Transient ischemic attack, amaurosis fugax, or minor nondisabling stroke involving the study carotid artery within 180 days before randomization',
+            'Stenosis of 50% or more on angiography, 70% or more on ultrasonography, or 70% or more on CT angiography or magnetic resonance angiography if the stenosis on ultrasonography was 50 to 69%',
+          ],
+        },
+        {
+          label: 'Asymptomatic patients (eligibility added in 2005)',
+          items: [
+            'No qualifying ipsilateral neurologic event within 180 days',
+            'Stenosis of 60% or more on angiography, 70% or more on ultrasonography, or 80% or more on CT angiography or magnetic resonance angiography if the stenosis on ultrasonography was 50 to 69%',
+          ],
+        },
+        {
+          label: 'General',
+          items: [
+            'Clinical and anatomical suitability for management by means of either of the study revascularization techniques (carotid stenting or carotid endarterectomy)',
+            'Average surgical risk (the high-surgical-risk SAPPHIRE population was not enrolled)',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Previous stroke that was sufficiently severe to confound the assessment of end points',
+            'Chronic atrial fibrillation',
+            'Paroxysmal atrial fibrillation that had occurred within the preceding 6 months or that necessitated anticoagulation therapy',
+            'Myocardial infarction within the previous 30 days',
+            'Unstable angina',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Brott TG et al., NEJM 2010;363(1):11-23; PMID 20505173; PMCID PMC2932446',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa0912321',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Carotid artery stenting (CAS) with embolic protection',
+        role: 'intervention',
+        agent: 'RX Acculink self-expanding nitinol stent with RX Accunet distal embolic-protection device (Abbott Vascular)',
+        route: 'Endovascular',
+        frequency: 'Single procedure',
+        duration: 'One-time, with embolic protection used whenever feasible (96.1% of patients)',
+        coInterventions: 'Dual antiplatelet therapy: aspirin 325 mg twice daily plus clopidogrel 75 mg twice daily for at least 48 hours before the procedure. Interventionalists were certified through a formal CREST lead-in credentialing program.',
+        note: 'Periprocedural stroke was higher with stenting (4.1% vs 2.3% for endarterectomy, P=0.01), while periprocedural myocardial infarction was lower (1.1% vs 2.3%, P=0.03). This stroke-versus-MI trade-off is the clinically actionable signal from CREST.',
+      },
+      {
+        arm: 'Carotid endarterectomy (CEA)',
+        role: 'comparator',
+        agent: 'Standard carotid endarterectomy by credentialed vascular surgeons',
+        route: 'Surgical',
+        frequency: 'Single procedure',
+        duration: 'One-time; general anesthesia in 90.0%, patch repair in 62.4%, shunt use in 56.7%',
+        coInterventions: 'Aspirin 325 mg daily for at least 48 hours before the procedure, continued for one year or longer.',
+        note: 'Periprocedural myocardial infarction was higher with endarterectomy (2.3% vs 1.1% for stenting, P=0.03), while periprocedural stroke was lower (2.3% vs 4.1%, P=0.01). The 4-year primary composite did not differ between arms (7.2% CAS vs 6.8% CEA, HR 1.11, 95% CI 0.81-1.51, P=0.51); superiority of neither approach was demonstrated.',
+      },
     ],
     howToReadChart: [
       {
@@ -14150,6 +14271,58 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Contraindication to IV thrombolysis',
       'Large established infarct core on perfusion imaging',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Aged 18 years or older',
+            'Within 4.5 hours of symptom onset or last known well',
+            'Eligible to receive intravenous thrombolytic treatment',
+            'Brain imaging confirming the presence of an acute ischaemic stroke',
+            'CT-perfusion target mismatch: a mismatch ratio greater than 1.8 between the perfusion lesion (delay time threshold greater than 3 s) and the ischaemic core lesion (relative cerebral blood flow less than 30% of normal brain)',
+            'An absolute mismatch difference greater than 15 mL',
+            'An ischaemic core lesion volume less than 70 mL',
+            'A volume of severely hypoperfused tissue (delay time greater than 8 s) less than 100 mL',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Presence of intracranial haemorrhage identified on baseline imaging',
+            'A pre-stroke modified Rankin Scale score of 2 or greater',
+            'An extracranial or intracranial occlusion for which endovascular therapy could be delivered within an appropriate timeframe',
+            'A standard contraindication to thrombolytics',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Parsons MW et al. (TASTE), Lancet Neurol 2024;23:775-786',
+      sourceUrl: 'https://doi.org/10.1016/S1474-4422(24)00206-0',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Tenecteplase 0.25 mg/kg',
+        role: 'intervention',
+        agent: 'Tenecteplase',
+        dose: '0.25 mg/kg (maximum 25 mg)',
+        route: 'IV',
+        frequency: 'Single bolus',
+        duration: 'One-time',
+        coInterventions: 'All treatments were guided by local protocols for the standard of care for acute ischaemic stroke. Patients selected by CT-perfusion target mismatch and not being considered for endovascular thrombectomy.',
+        note: 'Non-inferiority margin was a standardised risk difference of -0.03 for mRS 0-1 at 3 months. Non-inferiority was established in the per-protocol population (57% vs 55%, SRD 0.05, 95% CI -0.02 to 0.12, one-tailed p=0.01) but was NOT reached in the intention-to-treat population (SRD 0.03, 95% CI -0.033 to 0.10, one-tailed p=0.031), because the lower confidence bound crossed the -0.03 margin. The trial stopped early at 680 of a planned 832 participants. TASTE did not establish a benefit of tenecteplase over alteplase; it provides supportive, not definitive, non-inferiority evidence.',
+      },
+      {
+        arm: 'Alteplase 0.9 mg/kg',
+        role: 'comparator',
+        agent: 'Alteplase',
+        dose: '0.9 mg/kg (maximum 90 mg)',
+        route: 'IV',
+        frequency: 'Initial bolus of 0.09 mg/kg, then a 60-min infusion of the remaining 0.81 mg/kg',
+        duration: '60 minutes',
+      },
+    ],
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -14258,13 +14431,64 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Contraindication to thrombolysis',
       'No large vessel occlusion on imaging',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'At least 18 years of age',
+            'Independent function before the stroke (baseline pre-stroke modified Rankin scale score 0 to 2)',
+            'Ischaemic stroke able to receive tenecteplase or placebo 4.5 to 24 hours after the time the patient was last known to be well',
+            'National Institutes of Health Stroke Scale (NIHSS) score of at least 5',
+            'Occlusion of the internal carotid artery (cervical or intracranial) or the M1 or M2 segment of the middle cerebral artery, or both, on CT angiography or magnetic resonance angiography',
+            'Evidence of salvageable brain tissue on CT perfusion or perfusion-diffusion MRI: an ischaemic core volume of less than 70 mL, a ratio of the volume of ischaemic tissue to the initial infarct volume of at least 1.8, and an absolute volume of potentially reversible ischaemia (penumbra) of at least 15 mL',
+            'Administration of tenecteplase or placebo required within 90 minutes after the qualifying imaging of the head',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'No evidence of salvageable tissue on perfusion imaging by the prespecified RAPID software criteria',
+            'No qualifying large-vessel occlusion of the internal carotid artery or M1 or M2 segment',
+            'Pre-stroke disability (modified Rankin scale score greater than 2)',
+            'Standard contraindication to thrombolytic therapy',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Albers GW et al. (TIMELESS), NEJM 2024;390:701-711',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa2310392',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Tenecteplase 0.25 mg/kg',
+        role: 'intervention',
+        agent: 'Tenecteplase',
+        dose: '0.25 mg/kg (maximum 25 mg)',
+        route: 'IV',
+        frequency: 'Single bolus over a period of 5 seconds',
+        duration: 'One-time, given 4.5 to 24 hours after last known well',
+        coInterventions: 'Tenecteplase was given as soon as possible, ideally before the arterial puncture for a planned endovascular thrombectomy. 77.3% of enrolled patients subsequently underwent thrombectomy. All patients received medical care per institutional protocols and AHA-ASA guidelines.',
+        note: 'Late-window thrombolysis selected by CT or MRI perfusion mismatch (ICA or MCA occlusion with salvageable tissue). The trial was neutral: tenecteplase did not improve the 90-day ordinal mRS distribution (adjusted common OR 1.13, 95% CI 0.82-1.57, P=0.45). Because most patients underwent thrombectomy, the result applies to the bridging context, not to thrombolysis alone in the late window.',
+      },
+      {
+        arm: 'Placebo',
+        role: 'control',
+        agent: 'Matching placebo',
+        route: 'IV',
+        frequency: 'Single bolus over a period of 5 seconds',
+        duration: 'One-time',
+        coInterventions: 'Placebo was given as soon as possible, ideally before the arterial puncture for a planned endovascular thrombectomy. Endovascular thrombectomy and medical care followed institutional protocols and AHA-ASA guidelines.',
+      },
+    ],
     mrsDistribution: [
       { arm: 'Tenecteplase', n: 226, pct: [15.5, 16.8, 13.7, 15.0, 12.8, 6.6, 19.5] },
       { arm: 'Placebo', n: 229, pct: [13.5, 13.1, 15.7, 14.8, 17.9, 5.7, 19.2] },
     ],
     ordinalStats: { commonOR: 1.13, ciLow: 0.82, ciHigh: 1.57, direction: 'positive' as const, pValue: 0.45 },
     bedsidePearl: 'TIMELESS is not evidence against late-window IVT in all settings. It is specifically negative for bridging tenecteplase before thrombectomy in the 4.5-24 hour window (77% of patients underwent EVT). The contrast is TRACE-III: in perfusion-selected LVO patients without EVT access, late-window tenecteplase improved mRS 0-1 from 24.2% to 33.0% (NNT 11). The rule is: late-window IVT may help when EVT is unavailable; it adds nothing as a bridge when EVT is being performed.',
-    bottomLineSummary: 'In perfusion-selected LVO patients treated 4.5-24 hours after stroke onset, tenecteplase 0.25 mg/kg before planned thrombectomy (77% of patients) did not improve 90-day mRS distribution (adjusted cOR 1.13, 95% CI 0.82-1.57, p=0.45). Functional independence occurred in 46.0% vs 42.4%. Symptomatic ICH was 2.0% vs 2.2%. TIMELESS and TRACE-III together define the role of late-window IVT: benefit only when EVT is unavailable.',
+    bottomLineSummary: 'In perfusion-selected LVO patients treated 4.5-24 hours after stroke onset, tenecteplase 0.25 mg/kg before planned thrombectomy (77% of patients) did not improve 90-day mRS distribution (adjusted cOR 1.13, 95% CI 0.82-1.57, p=0.45). Functional independence occurred in 46.0% vs 42.4%. Symptomatic ICH was 3.2% vs 2.3%. TIMELESS and TRACE-III together define the role of late-window IVT: benefit only when EVT is unavailable.',
     legend: {
       finding: 'IV tenecteplase 4.5–24 h with perfusion mismatch did not improve mRS shift; not a verdict against late IVT broadly.',
       bottomLineTag: 'Neutral',
@@ -14644,6 +14868,65 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Endovascular treatment not achievable within 7 hours of onset',
       'Severe pre-stroke disability',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: 'Age and time window',
+          items: [
+            '18 to 82 years of age',
+            'Receipt of intravenous t-PA within 3 hours after symptom onset',
+          ],
+        },
+        {
+          label: 'Neurologic severity',
+          items: [
+            'Moderate-to-severe neurologic deficit, defined as an NIHSS score of 10 or higher',
+            'After approval of amendment 3, an NIHSS score of 8 to 9 with CT angiographic evidence of an occlusion of the first segment of the middle cerebral artery (M1), internal carotid artery, or basilar artery',
+          ],
+        },
+        {
+          label: 'Consent',
+          items: [
+            'Written informed consent obtained from the patient or a legal representative',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Per protocol',
+          items: [
+            'Detailed inclusion and exclusion criteria are provided in Table 1 in the Supplementary Appendix; the full exclusion list is not reproduced in the main publication text',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Broderick et al., NEJM 2013',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa1214300',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Endovascular therapy after IV t-PA',
+        role: 'intervention',
+        agent: 'IV t-PA followed by endovascular therapy (thrombectomy with the Merci retriever, Penumbra System, or Solitaire FR revascularization device, or endovascular delivery of t-PA by means of the Micro-Sonic SV infusion system or a standard microcatheter)',
+        dose: 'IV t-PA 0.9 mg per kilogram of body weight (maximum dose 90 mg); intra-arterial t-PA delivery in selected cases',
+        route: 'Intravenous t-PA then intra-arterial endovascular approach',
+        frequency: '10% of the IV dose as a bolus, remainder infused over a 1-hour period; angiography as soon as possible after randomization',
+        duration: 'Endovascular procedure had to begin within 5 hours and be completed within 7 hours after the onset of stroke',
+        coInterventions: 'Heparin infusion started intravenously with a 2000-unit bolus, followed by an infusion of 450 units per hour',
+        note: 'Randomized within 40 minutes of IV t-PA start. CT angiographic confirmation of large-vessel occlusion was not required for enrollment before amendment 3.',
+      },
+      {
+        arm: 'IV t-PA alone',
+        role: 'control',
+        agent: 'Intravenous t-PA (alteplase)',
+        dose: '0.9 mg per kilogram of body weight (maximum dose 90 mg)',
+        route: 'Intravenous',
+        frequency: '10% as a bolus, remainder infused over a 1-hour period',
+        duration: 'Administered within 3 hours after symptom onset; infusion over 1 hour',
+        note: 'Standard-care arm; no endovascular therapy.',
+      },
+    ],
     legend: {
       finding: 'IMS-III stopped early for futility; IV tPA + endovascular therapy did not beat IV tPA alone (pre-modern EVT).',
       bottomLineTag: 'Neutral',
@@ -14721,6 +15004,54 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Large established infarct on baseline CT',
       'Severe pre-stroke disability',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: 'Population and time window',
+          items: [
+            'Patients with acute stroke and an age of 18 to 80 years',
+            'Intracranial hemorrhage ruled out',
+            'A clearly defined time of stroke onset that allowed for immediate initiation of intravenous t-PA therapy (defined as within 4.5 hours after symptom onset) or for the administration of endovascular treatment as soon as possible (within 6 hours after symptom onset)',
+            'All patients underwent randomization within 4.5 hours after symptom onset',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Per protocol',
+          items: [
+            'Inclusion and exclusion criteria are listed in detail in the protocol available at NEJM.org; comprehensive exclusion criteria are not reproduced in the main publication text',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Ciccone et al., NEJM 2013',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa1213701',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Endovascular therapy',
+        role: 'intervention',
+        agent: 'Endovascular treatment (intra-arterial t-PA and/or mechanical devices at operator discretion)',
+        dose: 'Total t-PA dose infused did not exceed 0.9 mg per kilogram of body weight (maximum 90 mg)',
+        route: 'Intra-arterial',
+        frequency: 'Intra-arterial t-PA delivered within 1 hour; mechanical options available at operator discretion',
+        duration: 'Endovascular treatment administered as soon as possible, within 6 hours after symptom onset',
+        coInterventions: 'Initial bolus dose of 5000 IU of intravenous heparin, followed by an infusion of 500 IU per hour',
+        note: 'Patients assigned to this group did not receive intravenous t-PA while awaiting endovascular treatment. No CT angiographic confirmation of large-vessel occlusion was required for enrollment.',
+      },
+      {
+        arm: 'IV alteplase',
+        role: 'control',
+        agent: 'Intravenous t-PA (alteplase)',
+        dose: '0.9 mg per kilogram (maximum 90 mg)',
+        route: 'Intravenous',
+        frequency: '10% given as an initial bolus and the remaining 90% as a constant infusion over a period of 60 minutes',
+        duration: 'Administered within 4.5 hours of symptom onset; infusion over 60 minutes',
+        note: 'Standard-care arm; no endovascular therapy.',
+      },
+    ],
     legend: {
       finding: 'Endovascular therapy alone (no IV tPA, ≤6 h) did not improve mRS 0–1 vs IV tPA (pre-stent-retriever era).',
       bottomLineTag: 'Neutral',
@@ -14797,6 +15128,64 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Established large infarct (ASPECTS below 6 or equivalent)',
       'Unable to undergo MRI or CT perfusion',
       'Posterior circulation stroke',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: 'Age and neurologic status',
+          items: [
+            'Patients between the ages of 18 and 85 years',
+            'National Institutes of Health Stroke Scale (NIHSS) scores of 6 to 29',
+          ],
+        },
+        {
+          label: 'Stroke type and time window',
+          items: [
+            'Large-vessel, anterior-circulation ischemic stroke randomly assigned within 8 hours after the onset of symptoms',
+          ],
+        },
+        {
+          label: 'Imaging pattern',
+          items: [
+            'A favorable penumbral pattern was defined as a predicted infarct core of 90 mL or less and a proportion of predicted infarct tissue within the at-risk region of 70% or less',
+          ],
+        },
+        {
+          label: 'Prior thrombolysis allowance',
+          items: [
+            'Patients treated with intravenous t-PA without successful recanalization were eligible if magnetic resonance angiography or CT angiography after the treatment showed a persistent target occlusion',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Per protocol',
+          items: [
+            'Detailed exclusion criteria are specified in the trial protocol; the Methods section of the publication does not list exclusion criteria in a dedicated format',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Kidwell et al., NEJM 2013',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa1212793',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Mechanical embolectomy',
+        role: 'intervention',
+        agent: 'Mechanical embolectomy (Merci Retriever or Penumbra System)',
+        dose: 'Intra-arterial t-PA at a dose of as much as 14 mg allowed as rescue therapy',
+        route: 'Endovascular (intra-arterial)',
+        duration: 'Intra-arterial t-PA rescue therapy permitted within 6 hours after symptom onset',
+        note: 'Performed within 8 hours of symptom onset in patients stratified by penumbral imaging pattern. First-generation devices; successful reperfusion achieved in only 27% of the embolectomy arm.',
+      },
+      {
+        arm: 'Standard medical care',
+        role: 'control',
+        agent: 'Standard medical care (including IV t-PA where eligible)',
+        note: 'Specific details of standard medical care are not elaborated in the Methods section of the publication. Patients were stratified by penumbral imaging pattern before randomization.',
+      },
     ],
     legend: {
       finding: 'Mechanical embolectomy (MERCI/Penumbra) vs standard care ≤8 h showed no benefit; pre-stent-retriever, no penumbra selection effect.',
@@ -15272,6 +15661,53 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'GCS 3 or 4 (catastrophic presentation)',
       'Significant pre-stroke disability',
     ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1016/S0140-6736(13)60986-1',
+      sourceLabel: 'Mendelow AD et al. (STICH II), Lancet 2013;382(9890):397-408; PMC3906609',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'Spontaneous lobar intracerebral haemorrhage on CT scan (1 cm or less from the cortical surface of the brain) with a volume of between 10 mL and 100 mL',
+            'Within 48 h of ictus',
+            'Best motor score on the Glasgow Coma Score (GCS) of 5 or 6, and a best eye score of 2 or more (ie, conscious at randomisation)',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Haemorrhage due to an aneurysm or angiographically proven arteriovenous malformation',
+            'Haemorrhage secondary to tumour or trauma',
+            'Haemorrhage involving the basal ganglia, thalamic, cerebellar, or brainstem regions',
+            'Any intraventricular blood',
+            'Severe pre-existing physical or mental disabilities or comorbidities that could interfere with the assessment of the outcome',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'Early surgery',
+        role: 'intervention',
+        agent: 'Surgical evacuation of the haematoma (craniotomy in the large majority)',
+        route: 'Open craniotomy',
+        frequency: 'Single procedure',
+        duration: 'Surgeons were expected to endeavour to undertake evacuation of the haematoma within 12 h of randomisation',
+        coInterventions: 'Best medical treatment as defined according to the hospital setting',
+        note: 'Craniotomy was the most commonly used surgical technique for evacuation in 343 (98%) of 350 cases. Source: Mendelow AD et al. (STICH II), Lancet 2013. Early surgery did not significantly reduce unfavourable outcome (primary endpoint not met).',
+      },
+      {
+        arm: 'Initial conservative treatment',
+        role: 'control',
+        agent: 'Best medical treatment',
+        route: 'Medical management',
+        frequency: 'Ongoing',
+        coInterventions: 'Delayed evacuation was permitted if judged clinically appropriate',
+        note: 'Patients received best medical treatment as defined according to their hospital settings; delayed surgery was allowed on clinical deterioration (21% of initially conservative patients ultimately had surgery). Prognosis-based dichotomised (favourable or unfavourable) outcome of the 8-point Extended Glasgow Outcome Scale (GOSE) at 6 months: 41% favourable with early surgery vs 38% with conservative treatment (p=0.367). Source: Mendelow AD et al., Lancet 2013.',
+      },
+    ],
     legend: {
       finding: 'Early surgery in superficial lobar ICH (no IVH) did not significantly improve outcomes.',
       bottomLineTag: 'Neutral',
@@ -15348,6 +15784,75 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Planned early craniotomy within 24 hours',
       'Intraventricular hemorrhage causing obstructive hydrocephalus requiring immediate intervention',
       'INR above 1.5 or platelets below 100,000 at enrollment',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: 'Age and diagnosis',
+          items: [
+            'Aged 18 years or older',
+            'Spontaneous, non-traumatic, supratentorial intracerebral haemorrhage of 30 mL or more',
+          ],
+        },
+        {
+          label: 'Severity markers',
+          items: [
+            'Glasgow Coma Scale (GCS) score of 14 or less or National Institutes of Health Stroke Scale (NIHSS) score of 6 or higher',
+          ],
+        },
+        {
+          label: 'Baseline function',
+          items: [
+            'Modified Rankin Scale (mRS) score of 0 or 1 before the bleed',
+          ],
+        },
+        {
+          label: 'Clot stability',
+          items: [
+            'An intracerebral haemorrhage that remained the same size (growth less than 5 mL) for at least 6 hours after diagnostic CT',
+          ],
+        },
+        {
+          label: 'Baseline coagulation and blood pressure',
+          items: [
+            '6 hours or more after diagnostic CT, an international normalised ratio of 1.3 or less, a normal activated partial thromboplastin time, and blood pressure stability',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Stated in the publication',
+          items: [
+            'Expressed care limitations',
+            'Deemed to have life-threatening mass effect requiring surgery',
+            'The full list of inclusion and exclusion criteria is in the appendix; the complete exclusion list is not reproduced in the main publication text',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Hanley et al., Lancet 2019',
+      sourceUrl: 'https://doi.org/10.1016/S0140-6736(19)30195-3',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'MISTIE (minimally invasive surgery plus alteplase)',
+        role: 'intervention',
+        agent: 'Image-guided catheter clot evacuation plus intraclot alteplase',
+        dose: 'Alteplase 1.0 mg in 1 mL followed by a 3 mL flush, every 8 hours, for up to nine doses',
+        route: 'Intraclot, via a soft catheter placed into the residual haematoma',
+        frequency: 'Every 8 hours',
+        duration: 'Alteplase started 6 hours or more after catheter placement; up to nine doses, stopped when residual haematoma reached 15 mL or less, when nine doses were given, or on a clinically symptomatic rebleeding event',
+        coInterventions: 'Under general anaesthesia, after burr hole placement, a rigid cannula was placed under image guidance within the middle two-thirds of the haematoma short axis; clot aspiration was done with a 10 mL handheld syringe until first resistance; a soft drainage catheter was then placed, tunnelled subcutaneously, and connected to a closed drainage system',
+        note: 'Patients were enrolled at least 12 hours from ictus with documented clot stability.',
+      },
+      {
+        arm: 'Standard medical management',
+        role: 'control',
+        agent: 'Guideline-based standard medical care (no hematoma evacuation)',
+        coInterventions: 'American Heart Association and European Stroke Organisation recommendations for non-traumatic spontaneous intracerebral haemorrhage, including management of airways, ventilation, intracranial pressure, sedation, and pharmacological treatment of intracranial mass effect',
+        note: 'Patients had follow-up CT scans and monitoring assessments on the same schedule as the intervention group.',
+      },
     ],
     legend: {
       finding: 'Catheter-based clot lysis for ICH ≥30 mL did not improve mRS 0–3 at 1 year vs standard care.',
@@ -18101,6 +18606,53 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Recent (within 2 weeks) thrombotic event',
       'Severe coagulopathy unrelated to FXa-inhibitor use',
     ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa1814051',
+      sourceLabel: 'Connolly SJ et al. (ANNEXA-4), NEJM 2019;380(14):1326-1335; PMC6699827',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'At least 18 years of age',
+            'Presented with acute major bleeding',
+            'Had received within 18 hours one of the following: apixaban, rivaroxaban, or edoxaban at any dose, or enoxaparin at a dose of at least 1 mg per kilogram of body weight per day',
+          ],
+        },
+        {
+          label: 'Acute major bleeding (defined as one or more of the following)',
+          items: [
+            'Potentially life-threatening bleeding with signs or symptoms of hemodynamic compromise (e.g., severe hypotension, poor skin perfusion, mental confusion, or low cardiac output that could not otherwise be explained)',
+            'Bleeding associated with a decrease in the hemoglobin level of at least 2 g per deciliter (or a hemoglobin level of <=8 g per deciliter if no baseline hemoglobin level was available)',
+            'Bleeding in a critical area or organ (e.g., retroperitoneal, intraarticular, pericardial, epidural, or intracranial bleeding, or intramuscular bleeding with compartment syndrome)',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Planned surgery within 12 hours after andexanet treatment (with the exception of minimally invasive operations or procedures)',
+            'Intracranial hemorrhage in a patient with a score of less than 7 on the Glasgow Coma Scale or an estimated hematoma volume of more than 60 cc',
+            'Expected survival of less than 1 month',
+            'The occurrence of a thrombotic event within 2 weeks before enrollment',
+            'Use of any of the following agents within the previous 7 days: vitamin K antagonist, dabigatran, prothrombin complex concentrate, recombinant factor VIIa, whole blood, or plasma',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'Andexanet alfa (single arm)',
+        role: 'intervention',
+        agent: 'Andexanet alfa (recombinant modified factor Xa decoy protein)',
+        dose: 'Low dose: 400 mg bolus + 480 mg infusion. High dose: 800 mg bolus + 960 mg infusion. Regimen selected by FXa inhibitor and timing of last dose.',
+        route: 'IV',
+        frequency: 'Bolus over 15-30 minutes followed by a 2-hour continuous infusion',
+        duration: 'Bolus plus 2-hour infusion',
+        coInterventions: 'No randomized comparator (single-arm prospective cohort). Standard supportive care for major bleeding.',
+        note: 'Trial protocol dosing verbatim from Connolly SJ et al., NEJM 2019: the low-dose regimen (400 mg bolus over 15 minutes, 480 mg infusion) was used when apixaban or rivaroxaban had been taken more than 7 hours before; the high-dose regimen (800 mg bolus over 30 minutes, 960 mg infusion) was used for enoxaparin, edoxaban, or rivaroxaban taken 7 hours or less before or at an unknown time. Each vial also delivers mannitol (osmotic load relevant in ICH). The FDA-label algorithm expresses dose selection by last-dose amount and timing; see this entry applicability.doseSpecific. No control arm: efficacy cannot be inferred. Median anti-FXa activity fell ~92%; excellent or good hemostatic efficacy at 12 h in 204/249 (82%).',
+      },
+    ],
     intervention: {
       treatment: 'Andexanet alfa bolus (low-dose or high-dose per FDA-label algorithm based on FXa inhibitor type, amount, and timing of last dose) over 15-30 minutes followed by 2-hour continuous infusion. No randomized comparator.',
       control: 'None. Single-arm prospective cohort design.',
@@ -18252,6 +18804,84 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Severe peripheral vascular, cardiac, or cerebrovascular event within 3 months',
       'DIC or known severe coagulopathy unrelated to VKA',
       'Expected survival less than 24 hours',
+    ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1161/CIRCULATIONAHA.113.002283',
+      sourceLabel: 'Sarode R et al., Circulation 2013;128(11):1234-1243; PMID 23935011',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'Patients 18 years of age or older receiving VKA therapy',
+            'An elevated INR (2.0 or greater within 3 hours before study treatment)',
+            'Experiencing an acute major bleeding event',
+          ],
+        },
+        {
+          label: 'Acute major bleeding (any of the following)',
+          items: [
+            'Life-threatening or potentially life-threatening (according to the treating physician)',
+            'Acute bleeding associated with a fall in hemoglobin of 2 g/dL or greater',
+            'Bleeding requiring blood product transfusion',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Expected survival less than 3 days or surgery scheduled in less than 1 day',
+            'Acute trauma for which reversal of VKA alone would not be expected to control bleeding',
+            'Heparin use within 24 hours before or after enrollment',
+            'Thrombotic or thromboembolic history within the prior 3 months (myocardial infarction, stroke, TIA, unstable angina, or severe peripheral vascular disease)',
+            'Antiphospholipid antibody syndrome',
+            'Suspected or confirmed sepsis',
+            'Plasma, plasma fractions, or platelets within 2 weeks before enrollment (packed red blood cells permitted)',
+            'Large-vessel rupture (e.g., aortic dissection or aneurysm rupture)',
+            'Known progressive fatal disease with life expectancy less than 2 months',
+            'Congenital or acquired coagulation factor inhibitors, hereditary protein C or protein S deficiency, or heparin-induced thrombocytopenia type II',
+            'Use of an investigational drug within 30 days before enrollment',
+            'Known hypersensitivity to study medication',
+          ],
+        },
+        {
+          label: 'Intracranial hemorrhage exclusions',
+          items: [
+            'Glasgow Coma Scale score less than 7',
+            'Intracerebral hematoma volume greater than 30 cm3',
+            'Subdural hematoma thickness 10 mm or greater',
+            'Subarachnoid hemorrhage with hydrocephalus',
+            'Infratentorial location',
+            'Epidural hematoma',
+            'Intraventricular extension',
+            'Pre-ICH modified Rankin Scale greater than 3',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: '4-factor PCC (Kcentra / Beriplex P/N)',
+        role: 'intervention',
+        agent: '4-factor prothrombin complex concentrate (factors II, VII, IX, X plus proteins C and S)',
+        dose: 'INR-stratified by factor IX content: 25 IU/kg if INR 2 to <4; 35 IU/kg if INR 4-6; 50 IU/kg if INR >6. Dose calculated on 100 kg for patients weighing more than 100 kg; maximum dose <=5000 IU of factor IX.',
+        route: 'IV',
+        frequency: 'Single intravenous dose at a maximum infusion rate of 3 IU/kg per minute',
+        duration: 'One-time dose (re-dose only if INR remains elevated with ongoing bleeding, per practice)',
+        coInterventions: 'Vitamin K by slow intravenous infusion, dosed per 2008 ACCP guidelines (5-10 mg) or local practice. Co-administration of vitamin K is required to prevent INR rebound at 12-24 h.',
+        note: 'Dosing verbatim from Sarode R et al., Circulation 2013 (Table 2). 4F-PCC was noninferior to plasma for 24-h hemostatic efficacy (72.4% vs 65.4%; difference +7.1 pp, 95% CI -5.8 to +19.9; NI margin -10 pp) and superior for rapid INR reduction (INR <=1.3 at 30 min: 62.2% vs 9.6%; difference +52.6 pp, 95% CI 39.4-65.9). Median infusion volume 99.4 mL.',
+      },
+      {
+        arm: 'Fresh frozen plasma',
+        role: 'control',
+        agent: 'Plasma (fresh frozen plasma)',
+        dose: 'INR-stratified: 10 mL/kg if INR 2 to <4; 12 mL/kg if INR 4-6; 15 mL/kg if INR >6. Maximum dose <=1500 mL.',
+        route: 'IV',
+        frequency: 'Intravenous infusion at a study-protocol-recommended rate of 1 unit per 30-minute interval',
+        duration: 'Until target dose delivered',
+        coInterventions: 'Vitamin K by slow intravenous infusion, dosed per 2008 ACCP guidelines (5-10 mg) or local practice.',
+        note: 'Dosing verbatim from Sarode R et al., Circulation 2013 (Table 2). Open-label phase IIIb noninferiority RCT with blinded endpoint adjudication. Median infusion volume 813.5 mL (an order-of-magnitude greater than 4F-PCC); fluid overload 11.9% vs 2.9% with 4F-PCC. Mortality (4.8% vs 5.1%) and thromboembolic events (6.4% vs 6.8%) comparable between arms.',
+      },
     ],
     intervention: {
       treatment: '4-factor PCC (Kcentra / Beriplex P/N. Contains factors II, VII, IX, X plus proteins C and S) at weight- and INR-based dose (25 IU/kg if INR 2-<4; 35 IU/kg if INR 4-6; 50 IU/kg if INR >6) plus vitamin K 5-10 mg IV',
