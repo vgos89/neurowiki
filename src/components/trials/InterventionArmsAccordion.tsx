@@ -74,7 +74,7 @@ function ArmPanel({ arm, defaultOpen = false }: ArmPanelProps) {
         aria-expanded={open}
         aria-controls={bodyId}
         onClick={() => setOpen((prev) => !prev)}
-        className="w-full flex items-center justify-between px-4 py-3 text-left min-h-[44px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1746A2] focus-visible:ring-inset hover:bg-slate-50 transition-colors"
+        className="w-full flex items-center justify-between px-4 py-3 text-left min-h-[44px] focus:outline-none focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:ring-inset hover:bg-slate-50 transition-colors"
       >
         <div className="flex items-center gap-2 min-w-0 flex-1">
           <span className="text-sm font-medium text-slate-800 leading-snug truncate">
@@ -95,12 +95,12 @@ function ArmPanel({ arm, defaultOpen = false }: ArmPanelProps) {
       </button>
 
       {/* Panel body */}
-      <div id={bodyId} hidden={!open} className="px-4 pb-4">
+      <div id={bodyId} hidden={!open} className="px-4 pt-3 pb-4">
         {populatedFields.length > 0 && (
           <dl className="space-y-2 mt-1">
             {populatedFields.map(([key, label]) => (
               <div key={key} className="flex gap-3">
-                <dt className="text-[10px] font-bold uppercase tracking-widest text-slate-500 w-28 flex-shrink-0 pt-0.5">
+                <dt className="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">
                   {label}
                 </dt>
                 <dd className="text-xs text-slate-700 leading-relaxed min-w-0">
@@ -111,7 +111,7 @@ function ArmPanel({ arm, defaultOpen = false }: ArmPanelProps) {
           </dl>
         )}
         {arm.note && (
-          <p className="text-xs text-slate-500 leading-relaxed mt-3 pt-3 border-t border-slate-100">
+          <p className="text-xs text-slate-600 leading-relaxed mt-3 pt-3 border-t border-slate-100">
             {arm.note}
           </p>
         )}
