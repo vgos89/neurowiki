@@ -4301,6 +4301,42 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Hemorrhagic stroke on baseline imaging',
       'Pre-stroke mRS 3 or greater',
     ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1016/S0140-6736(19)30038-8',
+      sourceLabel: 'Anderson et al., Lancet 2019;393:877–888 (ENCHANTED blood-pressure arm)',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'Adults aged 18 years or older',
+            'Acute ischaemic stroke fulfilling standard criteria for treatment with intravenous alteplase (treated with alteplase)',
+            'Systolic blood pressure 150 mm Hg or more',
+            'Treating clinician had uncertainty over the benefit and risk of the intensity of blood-pressure control during and for up to 72 h after thrombolytic treatment',
+            'Randomisation within 6 h of stroke onset (the time-to-randomisation window was extended from within 4.5 h to within 6 h by a protocol amendment on Nov 12, 2013)',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Patient unlikely to benefit from thrombolysis (for example, had advanced dementia)',
+            'Very high likelihood of death within 24 h',
+            'Substantial comorbidity that would interfere with the outcome assessments or follow-up (known pre-stroke disability, with estimated modified Rankin Scale score 2 to 5)',
+            'A specific contraindication to alteplase or to any of the blood-pressure-lowering drugs to be used',
+            'Currently participating in another clinical trial of a pharmacological agent',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      { arm: 'Intensive blood-pressure lowering', role: 'intervention', agent: 'Locally available intravenous, oral, and topical antihypertensive agents (bolus and infusion)', dose: 'Target systolic blood pressure 130 to 140 mm Hg, achieved within 1 h of randomisation', route: 'Per agent (intravenous, oral, or topical)', frequency: 'Titrated to the systolic target', duration: 'Maintained for 72 h during and after intravenous alteplase',
+        coInterventions: 'Intravenous alteplase per local protocol; managed in an acute stroke unit or equivalent monitored environment; endovascular thrombectomy when used in clinical practice was permitted.',
+        note: 'Intensive arm, n=1081. A Nov 12, 2013 amendment lowered the intensive target (originally 140 to 150 mm Hg) to 130 to 140 mm Hg to widen the between-group difference. Anderson Lancet 2019 p.879.' },
+      { arm: 'Guideline-recommended blood-pressure lowering', role: 'control', agent: 'Locally available antihypertensive agents per guideline', dose: 'Target systolic blood pressure less than 180 mm Hg (patients required to comply with thrombolysis guidelines, which require SBP 185 mm Hg or lower before alteplase)', route: 'Per agent (intravenous, oral, or topical)', frequency: 'Treated to keep SBP below the 180 mm Hg target', duration: 'Maintained for 72 h during and after intravenous alteplase',
+        coInterventions: 'Intravenous alteplase per local protocol; managed in an acute stroke unit or equivalent monitored environment; endovascular thrombectomy when used in clinical practice was permitted.',
+        note: 'Guideline arm, n=1115. Anderson Lancet 2019 p.879.' },
+    ],
     legend: {
       finding: 'Intensive post-alteplase BP lowering reduced any-ICH but did not improve 90-day disability.',
       bottomLineTag: 'NS',
@@ -4410,6 +4446,44 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'LVAD or extracorporeal membrane oxygenation',
       'Pre-stroke mRS greater than 2',
       'Unable to maintain assigned BP target',
+    ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1001/jama.2023.14330',
+      sourceLabel: 'Mistry et al., JAMA 2023;330(9):821–831 (BEST-II)',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'Adult patients aged 18 years or older',
+            'Ischaemic stroke who had undergone successful endovascular therapy, defined as modified Thrombolysis in Cerebral Infarction (mTICI) 2b (50% to 89% reperfusion), 2c (90% to 99% reperfusion), or 3 (complete reperfusion)',
+            'Occlusion in an anterior circulation large vessel, specifically the internal carotid artery and the M1 or M2 segments of the middle cerebral artery',
+            'Able to be randomised within 45 minutes of final recanalisation',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Heart failure with ejection fraction less than 30%',
+            'Left ventricular assist device',
+            'Extracorporeal membrane oxygenation',
+            'Pregnant individuals',
+            'Patients enrolled in other clinical trials',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      { arm: 'Systolic BP target less than 140 mm Hg', role: 'intervention', agent: 'Intravenous nicardipine (first-line); intravenous labetalol and hydralazine recommended as second-line and third-line agents', dose: 'Target systolic blood pressure less than 140 mm Hg', route: 'Intravenous', frequency: 'Titrated to target; agent reduced or stopped if SBP fell below the next lower target', duration: 'Initiated within 60 minutes of recanalisation and maintained for 24 hours',
+        coInterventions: 'Standard post-EVT stroke-unit care. BP monitored noninvasively (recumbent cuff) every 5 min for the first 15 min after nicardipine initiation or dose adjustment, every 15 min for the first hour, then at least every 30 min for 24 hours; arterial-line monitoring allowed but not required.',
+        note: 'n=40 randomised (1:1:1, block sizes 3, 6, 9). Lowest of three futility-design targets. Mistry JAMA 2023 p.822.' },
+      { arm: 'Systolic BP target less than 160 mm Hg', role: 'comparator', agent: 'Intravenous nicardipine (first-line); labetalol and hydralazine second-line and third-line', dose: 'Target systolic blood pressure less than 160 mm Hg', route: 'Intravenous', frequency: 'Titrated to target; agent reduced or stopped if SBP fell below the next lower target', duration: 'Initiated within 60 minutes of recanalisation and maintained for 24 hours',
+        coInterventions: 'Standard post-EVT stroke-unit care with the same noninvasive BP-monitoring schedule.',
+        note: 'n=40 randomised. Middle of three futility-design targets. Mistry JAMA 2023 p.822.' },
+      { arm: 'Systolic BP target 180 mm Hg or less (guideline-recommended)', role: 'control', agent: 'Intravenous nicardipine (first-line); labetalol and hydralazine second-line and third-line', dose: 'Target systolic blood pressure 180 mm Hg or less (current guideline-recommended target)', route: 'Intravenous', frequency: 'Treated to keep SBP at or below 180 mm Hg', duration: 'Initiated within 60 minutes of recanalisation and maintained for 24 hours',
+        coInterventions: 'Standard post-EVT stroke-unit care with the same noninvasive BP-monitoring schedule.',
+        note: 'n=40 randomised. Higher guideline-recommended comparator target; had the best mean utility-weighted mRS in this phase 2 study. Mistry JAMA 2023 p.821-822.' },
     ],
     legend: {
       finding: 'Phase 2 futility: lower post-EVT BP targets unlikely to succeed in a future superiority trial.',
@@ -4521,6 +4595,41 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Severe comorbidity precluding 24-hour protocol participation',
       'Pre-stroke mRS greater than 2',
     ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1016/S1474-4422(20)30483-X',
+      sourceLabel: 'Mazighi et al., Lancet Neurol 2021;20:265–274 (BP-TARGET)',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'Adults aged 18 years or older',
+            'Acute ischaemic stroke consecutive to a large-vessel occlusion of the anterior circulation (intracranial internal carotid artery or proximal middle cerebral artery [M1], or both)',
+            'Successful reperfusion by endovascular therapy, defined as modified Thrombolysis in Cerebral Infarction 2b or 3',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Key exclusion criteria',
+          items: [
+            'Haemorrhagic complications during endovascular therapy',
+            'Spontaneous systolic blood pressure decrease to less than 130 mm Hg after reperfusion',
+            'Severe or fatal comorbidities that would have rendered the procedure unlikely to benefit the individual (for example, malignant cancer with reduced life expectancy)',
+            'Pre-existing stroke disability defined by a modified Rankin Scale score greater than 2',
+            'Known pregnancy',
+            'Absence of written consent from the patient or the family',
+            'Absence of a social insurance scheme',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      { arm: 'Intensive systolic BP target', role: 'intervention', agent: 'Intravenous nicardipine first-line (most commonly used in French stroke units); investigators free to choose any antihypertensive agent per local practice', dose: 'Target systolic blood pressure 100 to 129 mm Hg', route: 'Intravenous', frequency: 'Titrated to target; vasopressor therapies to raise BP were not used per French and European practice', duration: 'Target achieved within 1 h after randomisation and maintained for 24 h', coInterventions: 'Managed in an acute stroke unit by dedicated vascular neurologists; intravenous alteplase before endovascular therapy in 54% of this arm; BP measured noninvasively every 15 min for the first 2 h, then every 30 min for 6 h, then hourly for the remaining 16 h.',
+        note: 'Intensive arm, n=162 (158 in ITT). Mazighi Lancet Neurol 2021 p.267.' },
+      { arm: 'Standard systolic BP target', role: 'control', agent: 'Intravenous nicardipine first-line; investigators free to choose any antihypertensive agent per local practice', dose: 'Target systolic blood pressure 130 to 185 mm Hg', route: 'Intravenous', frequency: 'Spontaneous decrease below 130 mm Hg was accepted and not actively raised; vasopressors not used', duration: 'Target achieved within 1 h after randomisation and maintained for 24 h', coInterventions: 'Managed in an acute stroke unit by dedicated vascular neurologists; intravenous alteplase before endovascular therapy in 52% of this arm; same noninvasive BP-monitoring schedule.',
+        note: 'Standard arm, n=162 (160 in ITT). Upper threshold chosen per French and European guidelines at the time. Mazighi Lancet Neurol 2021 p.267.' },
+    ],
     legend: {
       finding: 'Intensive post-EVT BP (SBP 100–129) did not reduce radiographic hemorrhage.',
       bottomLineTag: 'NS',
@@ -4630,6 +4739,40 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Serious concurrent illness',
       'Pre-stroke mRS 3 to 5',
       'Planned hemicraniectomy',
+    ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1001/jama.2023.14590',
+      sourceLabel: 'Nam et al., JAMA 2023;330(9):832–842 (OPTIMAL-BP)',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'Adults aged 20 years or older',
+            'Acute ischaemic stroke due to large-vessel occlusion who underwent endovascular thrombectomy (EVT)',
+            'Successful reperfusion of the occluded artery, defined as modified Thrombolysis in Cerebral Infarction 2b or greater',
+            'Elevated systolic blood pressure of 140 mm Hg or more on at least 2 measurements taken at a 2-minute interval within 2 hours of successful reperfusion',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Key exclusion criteria',
+          items: [
+            'Systolic blood pressure less than 140 mm Hg after EVT',
+            'Any contraindication to the use of antihypertensive medications',
+            'Symptomatic intracerebral haemorrhage evident during or immediately after EVT',
+            'Serious medical or surgical illness',
+            'Prestroke disability (modified Rankin Scale score 3 to 5)',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      { arm: 'Intensive blood-pressure management', role: 'intervention', agent: 'Intravenous nicardipine (preferred BP-lowering drug); other drugs used at physician discretion', dose: 'Target systolic blood pressure less than 140 mm Hg', route: 'Intravenous', frequency: 'Continuous noninvasive BP monitoring; titrated to target with goal SBP reached within 1 h of randomisation', duration: 'Maintained for 24 hours after enrolment', coInterventions: 'Care in a stroke unit with continuous BP monitoring and best-practice management; intravenous fluids and inotropes could be administered for clinically significant hypotension. All patients underwent EVT under conscious sedation.',
+        note: 'Intensive arm, n=155. Randomised 1:1 within 2 h of reperfusion, stratified by site and NIHSS (<15 vs ≥15). Nam JAMA 2023 p.833.' },
+      { arm: 'Conventional blood-pressure management', role: 'control', agent: 'Vasopressor drugs not used to achieve the target unless SBP decreased below 140 mm Hg; nicardipine and other agents available if needed', dose: 'Target systolic blood pressure 140 to 180 mm Hg', route: 'Intravenous', frequency: 'At physician discretion, intravenous fluids or inotropes given for clinically significant hypotension; goal SBP reached within 1 h of randomisation', duration: 'Maintained for 24 hours after enrolment', coInterventions: 'Care in a stroke unit with continuous BP monitoring and best-practice management. All patients underwent EVT under conscious sedation.',
+        note: 'Conventional arm, n=151. Nam JAMA 2023 p.833.' },
     ],
     legend: {
       finding: 'STOPPED FOR HARM: SBP <140 after EVT cut independence 15 pp and raised malignant edema 8×.',

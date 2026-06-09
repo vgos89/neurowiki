@@ -31,3 +31,18 @@ Additive enrichment of existing trial records with `fullEligibility` + `armDetai
 - **Never-drift:** no existing stat/interpretation/recommendation altered (additive only).
 - **Em-dash:** zero in added blocks.
 - **Follow-ups:** none blocking.
+
+---
+
+## Batch 3 — Acute blood-pressure management (BP-TARGET, OPTIMAL-BP, BEST-II, ENCHANTED)
+
+**Decision:** approve
+**Reviewer:** clinical-reviewer (model: claude-opus-4-8) · **Date:** 2026-06-09
+
+- **Scope:** additive `fullEligibility` + `armDetails` on `bp-target-trial`, `optimal-bp-trial`, `best-ii-trial`, `enchanted-trial`. No stats/interpretation changed.
+- **BP target fidelity (source-verified against PDFs):** BP-TARGET intensive 100–129 vs standard 130–185; OPTIMAL-BP intensive <140 vs conventional 140–180; BEST-II three-arm <140 / <160 / ≤180 guideline; ENCHANTED intensive 130–140 (within 1 h) vs guideline <180, over 72 h. Each exact to source; no cross-contamination of targets or windows (24 h post-EVT trials, 72 h ENCHANTED).
+- **Role mapping:** intensive/lower = intervention; higher/standard = control; BEST-II ≤180 = control, <160 = comparator. Not inverted.
+- **ENCHANTED arm:** correctly enriched to the BP-lowering comparison (cOR 1.01 mRS shift), not the alteplase-dose comparison. Confirmed.
+- **No false benefit framing:** BP-TARGET neutral, OPTIMAL-BP harm-stopped, BEST-II futility, ENCHANTED neutral, all preserved.
+- **Never-drift / em-dash:** additive only; zero em-dash in added blocks.
+- **Follow-ups (non-blocking, editorial):** BEST-II shows two sourced reperfusion floors (curated "mTICI 2c+" vs fullEligibility "2b/2c/3") and two clocks (randomization ≤45 min vs BP-initiation ≤60 min); both correct and sourced. A future pass could reconcile wording. Deferred.
