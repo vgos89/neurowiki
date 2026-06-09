@@ -142,3 +142,19 @@ All 34 trials from the uploaded set are enriched (32 this session across batches
 - **§8 editorial:** not applicable (no new trial entry). **Never-drift / em-dash:** additive only; zero em-dash. **Follow-ups:** none.
 
 Database after this cluster: **77 of 108 trials enriched.**
+
+---
+
+## Wave 2c — PFO / carotid / large-core EVT / reversal / aspirin (10 trials, 2026-06-09)
+
+**Decision:** approve
+**Reviewer:** clinical-reviewer (model: claude-opus-4-8)
+
+- **Scope:** additive `fullEligibility` + `armDetails` on close, reduce, respect (long-term), theia, prost-2, rescue-japan-limit, annexa-i, crest-2, ist, cast.
+- **PFO trio:** CLOSE 3-arm (closure+antiplatelet = intervention / antiplatelet = control / oral anticoagulation = comparator); REDUCE (Gore HELEX/Cardioform, anticoagulation not permitted); RESPECT long-term (Amplatzer vs medical; **`respect-original-trial` untouched**). Devices not cross-contaminated (Amplatzer / Gore / STARFlex correct per record).
+- **THEIA** neutral/underpowered (N=70, no benefit asserted); **PROST-2** prourokinase vs alteplase non-inferiority; **RESCUE-Japan LIMIT** large-core (ASPECTS 3–5) EVT positive (any-ICH harm signal preserved); **ANNEXA-I** dual hemostatic-benefit + thrombotic-harm preserved (no one-sided framing); **IST** 2x2 factorial (aspirin small-benefit, heparin no-net-benefit); **CAST** aspirin 160 mg vs placebo small-benefit.
+- **CREST-2 internal consistency:** existing record already carries the Brott NEJM 2026 split result (CAS met 2.8% vs 6.0%; CEA not met 3.7% vs 5.3%); added armDetails agree. No contradiction.
+- **Never-drift / em-dash:** additive only; zero em-dash in added blocks.
+- **Follow-up (non-blocking):** PROST-2 existing top-level `source` year label vs new `sourceLabel` (2024 vs 2025, same paper/DOI 10.1016/S1474-4422(24)00436-8) could be normalized later.
+
+Database after this cluster: **87 of 108 trials enriched.**

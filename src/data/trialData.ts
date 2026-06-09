@@ -13808,6 +13808,64 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Hemorrhagic stroke or large infarct core on baseline imaging',
       'Contraindication to IV thrombolysis',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: 'Core inclusion',
+          items: [
+            'Age older than 18 years',
+            'Acute ischaemic stroke with a baseline NIHSS score of 4 to 25',
+            'Able to undergo randomisation within 4.5 h of stroke onset',
+            'Pre-stroke modified Rankin Scale score of no more than 1 (known to be well before the stroke)',
+            'Diagnosis of ischaemic stroke based on neurological impairment persisting for a minimum of 30 min with no significant improvement, typically with non-contrast CT or MRI',
+            'Met additional eligibility requirements for intravenous thrombolysis under Chinese guideline recommendations',
+          ],
+        },
+        {
+          label: 'Endovascular thrombectomy status',
+          items: [
+            'Deemed ineligible for endovascular thrombectomy, OR refused endovascular thrombectomy',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Endovascular and protocol exclusions',
+          items: [
+            'Eligible for and agreeing to undergo endovascular thrombectomy (patients who had thrombectomy were excluded, consistent with the TRACE-2 and TRACE-3 trials, to avoid affecting the proportion of patients reaching the primary efficacy outcome)',
+            'Failure to meet standard intravenous thrombolysis criteria',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Li et al., Lancet Neurol 2025;24:33-41',
+      sourceUrl: 'https://doi.org/10.1016/S1474-4422(24)00436-8',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Recombinant human prourokinase (rhPro-UK)',
+        role: 'intervention',
+        agent: 'Recombinant human prourokinase',
+        dose: '35 mg total (15 mg bolus followed by 20 mg infusion)',
+        route: 'Intravenous',
+        frequency: 'Single treatment course',
+        duration: '15 mg bolus, then 20 mg infused over 30 min',
+        coInterventions: 'Standard acute ischaemic stroke care and secondary prevention per Chinese guideline recommendations',
+        note: 'Glycosylated single-chain proenzyme, fibrin-specific. Administered open-label.',
+      },
+      {
+        arm: 'Alteplase',
+        role: 'comparator',
+        agent: 'Alteplase',
+        dose: '0.9 mg/kg, maximum 90 mg',
+        route: 'Intravenous',
+        frequency: 'Single treatment course',
+        duration: '10% bolus within 1 min, remainder infused over 60 min',
+        coInterventions: 'Standard acute ischaemic stroke care and secondary prevention per Chinese guideline recommendations',
+        note: 'Standard-of-care intravenous thrombolytic comparator. Noninferiority margin for the risk ratio was 0.93.',
+      },
+    ],
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -15450,6 +15508,57 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Acute intracranial hemorrhage on CT or MRI',
       'Investigator-judged high risk of hemorrhage',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Acute ischemic stroke',
+            'Age 18 years or older',
+            'A score of at least 6 on the National Institutes of Health Stroke Scale (NIHSS) at admission (scores range from 0 to 42, with higher scores indicating greater neurologic deficit)',
+            'A score of 0 or 1 on the modified Rankin scale before the onset of stroke (scores range from 0 to 6, with 0 indicating no disability and 6 death)',
+            'An occlusion of the internal carotid artery or M1 segment of the middle cerebral artery on computed tomographic angiography (CTA) or magnetic resonance angiography (MRA)',
+            'An Alberta Stroke Program Early Computed Tomographic Score (ASPECTS) value of 3 to 5, as determined with the use of computed tomography (CT) or diffusion-weighted magnetic resonance imaging (MRI)',
+            'Randomization within 6 hours after the time the patient was last known to be well, or within 6 to 24 hours after the time the patient was last known to be well and there was no signal change in the initial image on fluid-attenuated inversion recovery (FLAIR) indicating that the infarction was recent',
+            'Endovascular therapy could be initiated within 60 minutes after randomization',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'A clinically significant cerebral mass effect with midline shift',
+            'An acute intracranial hemorrhage on CT or MRI',
+            'Site investigators considered that there was a high risk of hemorrhage',
+            'Patients with an ASPECTS value of 2 or lower were not evaluated (extensive infarction, unlikely to regain functional independence)',
+            'A full list of exclusion criteria is provided in the trial protocol',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Yoshimura S et al., New England Journal of Medicine 2022;386:1303-1313',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa2118191',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Endovascular therapy plus medical care',
+        role: 'intervention',
+        agent: 'Mechanical thrombectomy or related endovascular therapy. The method was selected by the treating physicians and could include a stent retriever, an aspiration catheter, balloon angioplasty, an intracranial stent, or a carotid-artery stent',
+        route: 'Endovascular',
+        frequency: 'Single procedure, with the degree of recanalization measured by the Thrombolysis in Cerebral Infarction (TICI) grading system (TICI grade 2b used as the threshold for successful recanalization)',
+        duration: 'One-time procedure, initiated within 60 minutes after randomization',
+        coInterventions: 'Medical care in line with American Heart Association and American Stroke Association guidelines. Alteplase at the Japanese standard dose of 0.6 mg per kilogram of body weight was used when appropriate at the discretion of the treating physician (given to approximately 27% of patients in each group)',
+        note: 'Device choice and concomitant care from Yoshimura NEJM 2022 p.1305 (Randomization and Intervention). TICI grade 2b reperfusion was achieved in 86% of EVT patients. Open-label assignment with blinded mRS assessment at 90 days.',
+      },
+      {
+        arm: 'Medical care alone',
+        role: 'control',
+        agent: 'Guideline-based medical care without endovascular therapy',
+        route: 'Medical',
+        coInterventions: 'Medical care in line with American Heart Association and American Stroke Association guidelines. Alteplase at the Japanese standard dose of 0.6 mg per kilogram of body weight was used when appropriate (29 of 102 medical-care patients, 28.4%)',
+        note: 'Control arm received the same guideline-based medical care as the intervention arm, without protocol-mandated endovascular therapy. Source: Yoshimura NEJM 2022 p.1305. The Japanese low-dose alteplase (0.6 mg/kg) is lower than the 0.9 mg/kg standard in US and European guidelines.',
+      },
+    ],
     safetyProfile: {
       sICH: {
         evt: 9.0,
@@ -15902,6 +16011,54 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Subdural or subarachnoid hemorrhage as primary bleeding site (after protocol amendment)',
       'GCS below 7 or NIHSS above 35',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Patients with an intracerebral hemorrhage who were receiving a factor Xa inhibitor, with the most recent dose taken within 15 hours before randomization',
+            'After the protocol was amended, only patients with an acute intracerebral hemorrhage as the main bleeding event (not subdural or subarachnoid hemorrhage), with an estimated hematoma volume of 0.5 to 60 ml and a maximum score on the National Institutes of Health Stroke Scale (NIHSS) of 35 (scores range from 0 to 42, with higher scores indicating worse neurologic deficit), were eligible',
+            'The hematoma needed to be evident in the cerebrum on a computed tomographic (CT) or magnetic resonance imaging (MRI) scan within 2 hours before randomization',
+            'An amendment changed the eligibility criterion for the time from onset of bleeding symptoms to the baseline imaging scan from 12 hours or less to 6 hours or less',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'A Glasgow Coma Scale score of less than 7 at the time of consent (scores range from 3 to 15, with lower scores indicating poor neurologic function)',
+            'A score of more than 35 on the NIHSS',
+            'Surgery planned within 12 hours after enrollment',
+            'A thrombotic event within 2 weeks before enrollment',
+            'Patients who had previously received andexanet were not enrolled',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Connolly SJ et al., New England Journal of Medicine 2024;390(19):1745-1755',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa2313040',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Andexanet alfa',
+        role: 'intervention',
+        agent: 'Andexanet alfa, a modified recombinant inactive form of human factor Xa that binds and sequesters factor Xa inhibitor molecules, rapidly reducing anti-factor Xa activity and restoring thrombin generation',
+        dose: 'A high-dose bolus or a low-dose bolus followed by a continuous infusion. The use of a high-dose or low-dose bolus was in accordance with the label approved by the Food and Drug Administration and was based on the type, the amount, and the timing of the most recent dose of the factor Xa inhibitor that was received. The andexanet formulation included 500 mg of mannitol per vial.',
+        route: 'IV',
+        frequency: 'Bolus over the course of 15 to 30 minutes followed by a continuous infusion over the course of 2 hours',
+        duration: 'Approximately 2 hours (bolus plus continuous infusion)',
+        coInterventions: 'Usual supportive care for acute intracerebral hemorrhage. Prothrombin complex concentrate was not given to the andexanet group as part of the assigned treatment',
+        note: 'Dose/administration verbatim from Connolly NEJM 2024 p.1747 (Randomization and Treatments). 78.1% of andexanet patients received the low-dose regimen and 20.1% received high-dose. Anti-factor Xa activity fell by a median of 94.5% at the 1-to-2-hour nadir. Open-label assignment with blinded outcome adjudication.',
+      },
+      {
+        arm: 'Usual care',
+        role: 'control',
+        agent: 'Usual care determined by local physicians, with andexanet excluded. Prothrombin complex concentrate could be used',
+        route: 'Per local protocol',
+        coInterventions: 'Usual care was determined by local physicians at their discretion but excluded andexanet and could include prothrombin complex concentrate. 85.5% of usual-care patients received prothrombin complex concentrate within the first 3 hours (median dose 3000 IU; 92.4% received four-factor PCC)',
+        note: 'Control = usual care excluding andexanet (Connolly NEJM 2024 p.1747). Randomization was stratified (after the first amendment) according to the intention to use prothrombin complex concentrate, and according to the time from onset of symptoms to baseline imaging (under 180 vs 180 minutes or more). Anti-factor Xa activity fell by a median of 26.9% with usual care.',
+      },
+    ],
     safetyProfile: {
       adverseEvents: {
         evt: 10.3,
@@ -15986,6 +16143,60 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Unstable angina',
       'Atrial fibrillation prompting anticoagulation',
       'Recent (within 180 days) symptoms attributable to the index carotid artery',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Patients 35 years of age or older',
+            'No history of stroke, transient ischemic attack (TIA), or amaurosis fugax in the carotid-artery territory within 180 days before randomization',
+            'Stenosis of at least 70% as assessed by Doppler ultrasonography showing a peak systolic velocity of at least 230 cm per second and any of the following findings: an end diastolic velocity of at least 100 cm per second, a peak systolic velocity ratio of the internal carotid artery to common carotid artery of at least 4.0, or at least 70% stenosis on computed tomographic angiography (CTA) or magnetic resonance angiography (MRA)',
+            'Or at least 70% stenosis on CTA or MRA',
+            'Or at least 70% stenosis on catheter angiography alone',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'A previous disabling stroke',
+            'Unstable angina',
+            'Atrial fibrillation prompting anticoagulation',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Brott TG et al. for the CREST-2 Investigators, New England Journal of Medicine 2026;394:219-231',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa2508800',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Stenting trial: carotid-artery stenting plus intensive medical management',
+        role: 'intervention',
+        agent: 'Carotid-artery stenting performed with embolic protection, in accordance with guidelines and operators standard procedures',
+        route: 'Endovascular (transfemoral or alternative access)',
+        frequency: 'Single revascularization procedure',
+        coInterventions: 'Starting 48 hours before the procedure, patients received aspirin 325 mg daily and clopidogrel 75 mg twice daily. After stenting, clopidogrel 75 mg daily and aspirin 75 to 325 mg daily for 30 days, followed by aspirin 70 to 325 mg daily thereafter. Plus intensive medical management identical to the control arm',
+        note: 'CREST-2 comprised two parallel observer-blinded trials. In the stenting trial, carotid-artery stenting plus intensive medical management was compared with intensive medical management alone. Antiplatelet and procedure detail from Brott NEJM 2026 p.220-221 (Stenting and Endarterectomy). Stenting-trial primary outcome met: 4-year primary-outcome incidence 2.8% (stenting) vs 6.0% (medical), P=0.02 for the absolute difference.',
+      },
+      {
+        arm: 'Endarterectomy trial: carotid endarterectomy plus intensive medical management',
+        role: 'intervention',
+        agent: 'Carotid endarterectomy performed in accordance with guidelines and operators standard procedures',
+        route: 'Open surgical',
+        frequency: 'Single revascularization procedure',
+        coInterventions: 'Aspirin 325 mg daily for at least 48 hours before the procedure and 70 to 325 mg daily thereafter; periprocedural anticoagulation with either heparin or bivalirudin was required. Plus intensive medical management identical to the control arm',
+        note: 'In the endarterectomy trial, carotid endarterectomy plus intensive medical management was compared with intensive medical management alone. Detail from Brott NEJM 2026 p.220-221. Endarterectomy-trial primary outcome not met: 4-year primary-outcome incidence 3.7% (endarterectomy) vs 5.3% (medical), P=0.24 for the absolute difference.',
+      },
+      {
+        arm: 'Intensive medical management alone (control in both trials)',
+        role: 'control',
+        agent: 'Protocol-driven intensive medical management of cardiovascular risk factors',
+        route: 'Medical',
+        coInterventions: 'Primary targets were a systolic blood pressure of less than 130 mm Hg (the initial target of less than 140 mm Hg was reduced in 2018 after guideline changes) and a low-density lipoprotein cholesterol level of less than 70 mg per deciliter. Elevated glucose, glycated hemoglobin, and lifestyle factors (smoking, excess body weight, physical inactivity) were managed; health coaching was provided by telephone. Alirocumab was donated by the manufacturer after 2018',
+        note: 'Control arm in both parallel trials = intensive medical management alone, the same protocol applied across both trials except for the period of antiplatelet use before and after revascularization. Source: Brott NEJM 2026 p.220 (Intensive Medical Management).',
+      },
     ],
     intervention: {
       treatment: 'Carotid-artery stenting OR carotid endarterectomy, each added to intensive medical management (parallel trials)',
@@ -16158,6 +16369,81 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Indication mandating anticoagulation (or, alternatively, contraindication to either anticoagulation or PFO closure. Assigned to one of two restricted randomization groups)',
       'Age outside 16–60',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: 'Core inclusion',
+          items: [
+            'Age 16 to 60 years',
+            'Ischaemic stroke within the previous 6 months with no identifiable cause other than a PFO',
+            'Ischaemic stroke defined as acute focal neurologic symptoms with a recent cerebral infarct on brain imaging, regardless of symptom duration',
+          ],
+        },
+        {
+          label: 'Required PFO morphology (one of)',
+          items: [
+            'PFO with an associated atrial septal aneurysm, defined by a septum primum excursion greater than 10 mm on transoesophageal echocardiography',
+            'PFO with a large interatrial shunt, defined by more than 30 microbubbles in the left atrium within 3 cardiac cycles after opacification of the right atrium on transoesophageal echocardiography with agitated saline',
+          ],
+        },
+        {
+          label: 'Required exclusion of competing causes',
+          items: [
+            'Investigations used to rule out alternative causes of stroke (large-artery atherosclerosis, established cardioembolic source, small-vessel or lacunar disease, hypercoagulable state, and arterial dissection)',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Exclusions',
+          items: [
+            'Any other identifiable cause of stroke',
+            'Age outside 16 to 60 years',
+            'Contraindication to oral anticoagulation (randomly assigned to PFO closure or to antiplatelet therapy only, randomization group 2)',
+            'Contraindication to PFO closure (randomly assigned to anticoagulation or to antiplatelet therapy only, randomization group 3)',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Mas et al., N Engl J Med 2017;377:1011-1021',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa1705915',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'PFO closure plus antiplatelet therapy',
+        role: 'intervention',
+        agent: 'Transcatheter PFO closure device plus antiplatelet therapy',
+        dose: 'Dual antiplatelet aspirin 75 mg plus clopidogrel 75 mg daily for the first 3 months, then single antiplatelet thereafter',
+        route: 'Percutaneous transcatheter device implantation; oral antiplatelet therapy',
+        frequency: 'Single closure procedure; daily antiplatelet therapy',
+        duration: 'Long-term antiplatelet therapy throughout the trial after closure',
+        coInterventions: '11 different implantable closure devices were used, selected by experienced interventional cardiologists per the Interventional Cardiology Committee; single antiplatelet options after month 3 were aspirin, clopidogrel, or aspirin plus extended-release dipyridamole',
+        note: 'Intervention arm of the PFO closure versus antiplatelet comparison (randomization groups 1 and 2 combined).',
+      },
+      {
+        arm: 'Antiplatelet therapy alone',
+        role: 'control',
+        agent: 'Antiplatelet therapy',
+        dose: 'Site-chosen single antiplatelet regimen',
+        route: 'Oral',
+        frequency: 'Daily',
+        duration: 'Throughout the trial',
+        coInterventions: 'Options were aspirin, clopidogrel, or aspirin plus extended-release dipyridamole',
+        note: 'Control arm for the primary PFO closure comparison.',
+      },
+      {
+        arm: 'Oral anticoagulation',
+        role: 'comparator',
+        agent: 'Oral anticoagulant',
+        dose: 'Vitamin K antagonist titrated to target INR 2 to 3, or a direct oral anticoagulant at standard dose',
+        route: 'Oral',
+        frequency: 'Daily',
+        duration: 'Throughout the trial',
+        coInterventions: 'Compared with antiplatelet therapy alone using combined data from randomization groups 1 and 3; this comparison was underpowered',
+        note: 'Parallel anticoagulation question, not the primary comparison. 3 of 187 strokes on anticoagulation versus 7 of 174 on antiplatelet alone; HR 0.44 (95% CI 0.11 to 1.85); statistical significance was not analysed.',
+      },
+    ],
     intervention: {
       treatment: 'Transcatheter PFO closure (11 different devices used; site-determined per Interventional Cardiology Committee) plus long-term antiplatelet therapy (aspirin, clopidogrel, or aspirin + extended-release dipyridamole; dual antiplatelet aspirin 75 mg + clopidogrel 75 mg daily for the first 3 months post-procedure, then single antiplatelet)',
       control: 'Antiplatelet therapy alone (same regimen options as the closure arm. Aspirin, clopidogrel, or aspirin + extended-release dipyridamole). Or, in a separate randomization, oral anticoagulation (vitamin K antagonist target INR 2–3, or direct oral anticoagulant) vs antiplatelet.',
@@ -16270,6 +16556,57 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Identifiable competing stroke mechanism',
       'Age outside 18–60',
       'Inability to undergo randomization within 270 days of index stroke',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: 'Core inclusion',
+          items: [
+            'Age 18 to 60 years',
+            'Cryptogenic ischaemic stroke',
+            'PFO confirmed by transoesophageal echocardiography',
+            'Able to undergo randomisation within 270 days after the index stroke',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Exclusions',
+          items: [
+            'An identifiable mechanism for the qualifying stroke other than presumed paradoxical embolisation (large-vessel arteriopathy, a cardiac source of embolism, intrinsic small-vessel disease, or an arterial hypercoagulable state as indicated by antiphospholipid antibodies or hyperhomocysteinaemia)',
+            'Age outside 18 to 60 years',
+            'Inability to undergo randomisation within 270 days of the index stroke',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Saver et al., N Engl J Med 2017;377:1022-1032',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa1610057',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'PFO closure',
+        role: 'intervention',
+        agent: 'Amplatzer PFO Occluder (St. Jude Medical)',
+        dose: 'Single device implantation',
+        route: 'Percutaneous transcatheter implantation under fluoroscopic and echocardiographic guidance',
+        frequency: 'Single closure procedure within 21 days of randomisation',
+        duration: 'Permanent implant; antithrombotic therapy at site investigator discretion after the first 6 months',
+        coInterventions: 'Patients continued their prerandomisation antithrombotic regimen until placement; after implantation, aspirin 81 to 325 mg plus clopidogrel 75 mg daily for 1 month, then aspirin monotherapy for 5 months',
+        note: 'Extended follow-up (median 5.9 years) of the intention-to-treat population from the original RESPECT trial.',
+      },
+      {
+        arm: 'Medical therapy',
+        role: 'control',
+        agent: 'Antithrombotic medical therapy',
+        dose: 'Site-chosen regimen',
+        route: 'Oral',
+        frequency: 'Daily',
+        duration: 'Throughout follow-up',
+        coInterventions: 'Permitted regimens were aspirin, warfarin, clopidogrel, or aspirin plus extended-release dipyridamole; aspirin plus clopidogrel was permitted initially but eliminated in 2006 to conform to a change in guidelines',
+        note: 'Medical-therapy patients received substantially more anticoagulation over follow-up (21.6% of patient-years on anticoagulant versus 3.3% in the closure group).',
+      },
     ],
     intervention: {
       treatment: 'Transcatheter PFO closure with the Amplatzer PFO Occluder (St. Jude Medical) within 21 days of randomization. Post-procedure: aspirin 81–325 mg + clopidogrel 75 mg daily for 1 month, then aspirin alone for 5 months, then antithrombotic therapy at site investigator discretion.',
@@ -16388,6 +16725,69 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Autoimmune disease',
       'Recent alcohol or drug abuse',
       'Age outside 18–59',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: 'Core inclusion',
+          items: [
+            'Age 18 to 59 years',
+            'Cryptogenic ischaemic stroke within 180 days before randomisation',
+            'Ischaemic stroke defined as an acute focal neurologic deficit, presumably due to ischaemia, that either resulted in clinical symptoms lasting 24 hours or more or was associated with evidence of relevant infarction on MRI (or CT if MRI could not be performed)',
+            'A PFO with a right-to-left shunt assessed by transoesophageal echocardiography with agitated saline at rest or during a Valsalva manoeuvre',
+          ],
+        },
+        {
+          label: 'Required exclusion of competing causes',
+          items: [
+            'Index stroke defined as cryptogenic after ruling out other identifiable mechanisms (large-artery atherosclerotic disease, established cardioembolic source, small-vessel occlusive [lacunar] disease, hypercoagulable disorder requiring anticoagulation, or arterial dissection)',
+            'Vessel imaging of the intracranial arteries, cervical arteries, and aortic arch performed to assess for large-artery atherosclerotic disease',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Exclusions',
+          items: [
+            'Stenosis of 50% or more of the diameter of a major vessel, or occlusion of a major vessel',
+            'Stroke as a result of small-vessel occlusive disease (a small deep infarct under 1.5 cm in diameter, or a typical clinical lacunar syndrome)',
+            'A specific indication for anticoagulation',
+            'Uncontrolled diabetes mellitus',
+            'Uncontrolled hypertension',
+            'Autoimmune disease',
+            'A recent history of alcohol or drug abuse',
+            'Age outside 18 to 59 years',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Sondergaard et al., N Engl J Med 2017;377:1033-1042',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa1707404',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'PFO closure plus antiplatelet therapy',
+        role: 'intervention',
+        agent: 'Gore HELEX Septal Occluder (through late 2012) or Gore Cardioform Septal Occluder (from late 2012 onward), plus antiplatelet therapy',
+        dose: 'Single device implantation; clopidogrel 300 mg loading dose then 75 mg daily for 3 days post-procedure, followed by the site-chosen antiplatelet regimen',
+        route: 'Percutaneous transcatheter device implantation; oral antiplatelet therapy',
+        frequency: 'Single closure procedure (attempted within 90 days of randomisation); daily antiplatelet therapy',
+        duration: 'Antiplatelet therapy continued for the duration of follow-up',
+        coInterventions: 'Antiplatelet regimen was the same as the antiplatelet-only group at each site: aspirin 75 to 325 mg daily, aspirin 50 to 100 mg plus dipyridamole 225 to 400 mg daily, or clopidogrel 75 mg daily',
+        note: 'Randomised 2:1 to PFO closure versus antiplatelet therapy alone.',
+      },
+      {
+        arm: 'Antiplatelet therapy alone',
+        role: 'control',
+        agent: 'Antiplatelet therapy',
+        dose: 'Site-chosen single regimen',
+        route: 'Oral',
+        frequency: 'Daily',
+        duration: 'For the duration of follow-up',
+        coInterventions: 'Options were aspirin 75 to 325 mg daily, aspirin 50 to 100 mg plus dipyridamole 225 to 400 mg daily, or clopidogrel 75 mg daily; other combinations of antiplatelet drugs and anticoagulants were not permitted',
+        note: 'Clean antiplatelet comparator. Anticoagulation was not permitted in either group.',
+      },
     ],
     intervention: {
       treatment: 'Transcatheter PFO closure with the Gore HELEX Septal Occluder (through late 2012) or the Gore Cardioform Septal Occluder (GSO; from late 2012 onward) plus site-chosen antiplatelet therapy. Post-procedure: clopidogrel 300 mg loading dose + 75 mg/day for 3 days, then resume chosen antiplatelet.',
@@ -16953,6 +17353,81 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'High risk of adverse effects from aspirin (hypersensitivity, active peptic ulceration, recent gastrointestinal bleeding)',
       'Already on long-term oral anticoagulants',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'A patient was eligible if, in the view of the responsible physician, there was evidence of an acute stroke (irrespective of severity) with onset less than 48 hours previously, no evidence of intracranial haemorrhage, and no clear indications for or contraindications to heparin or aspirin',
+            'The fundamental criterion for eligibility was simply that the physician was uncertain whether or not to administer either or both of the trial treatments to that particular patient',
+            'All patients were to be CT scanned to exclude intracranial haemorrhage, before randomisation where possible, and in comatose patients a CT was mandatory; a non-comatose patient could be randomised before CT if there was likely to be a long delay in getting the CT scan and if, on clinical grounds, the physician considered the stroke very likely to be ischaemic',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Only a small likelihood of worthwhile benefit, for example the symptoms seemed likely to resolve completely within a few hours, or the patient was severely disabled before the stroke',
+            'A high risk of adverse effects, for example hypersensitivity to aspirin, active peptic ulceration, or recent gastrointestinal bleeding',
+            'Already on long-term oral anticoagulants',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Sandercock PAG et al., Lancet 1997;349:1569-1581',
+      sourceUrl: 'https://doi.org/10.1016/S0140-6736(97)04011-7',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Aspirin 300 mg daily',
+        role: 'intervention',
+        agent: 'Aspirin (acetylsalicylic acid)',
+        dose: '300 mg daily',
+        route: 'Oral, nasogastric, rectal (300 mg suppository), or intravenous (100 mg lysine salt)',
+        frequency: 'Once daily',
+        duration: '14 days or until prior discharge',
+        coInterventions: 'Allocation was independent of the heparin randomisation in the factorial design. At discharge, clinicians were advised to consider long-term aspirin for all patients',
+        note: 'Aspirin limb of the factorial 2x2 design (Sandercock Lancet 1997 Methods). Aspirin-allocated patients had significantly fewer recurrent ischaemic strokes within 14 days (2.8% vs 3.9%) with no significant excess of haemorrhagic strokes, so the reduction in death or non-fatal recurrent stroke (11.3% vs 12.4%, 2p=0.02) was a small but real net benefit. Taken with CAST, supports early aspirin in acute ischaemic stroke.',
+      },
+      {
+        arm: 'Avoid aspirin',
+        role: 'control',
+        agent: 'No aspirin (open-label control, no placebo)',
+        route: 'Not applicable',
+        coInterventions: 'Patients allocated to avoid aspirin were considered non-compliant if they received any antiplatelet therapy in hospital within 14 days of randomisation. NSAIDs other than aspirin were permitted',
+        note: 'Open-label control limb for the aspirin comparison. No placebo tablets were used. Source: Sandercock Lancet 1997.',
+      },
+      {
+        arm: 'Subcutaneous unfractionated heparin, low dose (5000 IU twice daily)',
+        role: 'comparator',
+        agent: 'Unfractionated heparin',
+        dose: '5000 IU twice daily',
+        route: 'Subcutaneous',
+        frequency: 'Twice daily',
+        duration: '14 days or until prior discharge',
+        coInterventions: 'No routine coagulation monitoring (fixed-dose protocol). Allocation was independent of the aspirin randomisation',
+        note: 'Low-dose heparin limb of the factorial design. Neither heparin regimen offered any clinical advantage at 6 months: the early reduction in recurrent ischaemic stroke was offset by a similar-sized increase in haemorrhagic stroke. The authors concluded that if heparin is used, the dose should not exceed 5000 IU subcutaneously twice daily. Source: Sandercock Lancet 1997.',
+      },
+      {
+        arm: 'Subcutaneous unfractionated heparin, medium dose (12,500 IU twice daily)',
+        role: 'comparator',
+        agent: 'Unfractionated heparin',
+        dose: '12,500 IU twice daily',
+        route: 'Subcutaneous',
+        frequency: 'Twice daily',
+        duration: '14 days or until prior discharge',
+        coInterventions: 'No routine coagulation monitoring (fixed-dose protocol). Allocation was independent of the aspirin randomisation',
+        note: 'Medium-dose heparin limb. Compared with 5000 IU twice daily, the 12,500 IU twice-daily regimen was associated with significantly more transfused or fatal extracranial bleeds, more haemorrhagic strokes, and more deaths or non-fatal strokes within 14 days (12.6% vs 10.8%). Medium-dose heparin was harmful at the dose tested. Source: Sandercock Lancet 1997.',
+      },
+      {
+        arm: 'Avoid heparin',
+        role: 'control',
+        agent: 'No heparin (open-label control, no placebo)',
+        route: 'Not applicable',
+        coInterventions: 'Patients allocated to avoid heparin were considered non-compliant if they received any heparin in hospital within 14 days of randomisation',
+        note: 'Open-label control limb for the heparin comparison. No placebo was used. Source: Sandercock Lancet 1997.',
+      },
+    ],
     intervention: {
       treatment: {
         name: 'Factorial 2x2: aspirin 300 mg/day AND/OR subcutaneous unfractionated heparin',
@@ -17082,6 +17557,52 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Other major life-threatening disease',
       'Severe pre-existing disability',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          items: [
+            'Patients admitted to the participating hospitals in China were eligible if they were judged to be within 48 hours of the onset of symptoms of suspected acute ischaemic stroke, and had no clear indications for, or contraindications to, aspirin',
+            'The fundamental criterion for entry was that the responsible physician was uncertain whether or not aspirin treatment was indicated for a particular patient',
+            'A CT scan before randomisation was mandatory only for patients who were comatose; other patients could be entered for randomisation without a CT scan provided that the responsible physician was reasonably certain that haemorrhagic stroke could be excluded',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Contraindications based on an expectation of an increased risk of adverse effects, for example because there was a recent history of serious gastric bleeding or a known allergy to aspirin',
+            'Little likelihood of any worthwhile benefit in hospital, for example because the patient had only a minor stroke, other major life-threatening disease, or severe pre-existing disability',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'CAST (Chinese Acute Stroke Trial) Collaborative Group, Lancet 1997;349:1641-1649',
+      sourceUrl: 'https://doi.org/10.1016/S0140-6736(97)04010-5',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Aspirin 160 mg daily',
+        role: 'intervention',
+        agent: 'Aspirin (acetylsalicylic acid), film-coated tablet',
+        dose: '160 mg daily',
+        route: 'Oral (crushed or chewed for the first dose; nasogastric tube if the patient could not swallow tablets)',
+        frequency: 'Once daily',
+        duration: 'Up to 4 weeks, or until earlier discharge or death',
+        coInterventions: 'Non-trial aspirin and other antiplatelet drugs were not permitted during the trial period unless a strong indication developed (for example, acute myocardial infarction). Chinese herbal products were permitted at clinician discretion. The protocol encouraged long-term low-dose aspirin at discharge',
+        note: 'Aspirin arm from the CAST Collaborative Group (Lancet 1997 Methods). Started immediately after randomisation. Aspirin produced a small but definite net benefit: in-hospital mortality 3.3% vs 3.9% (2p=0.04) and combined 4-week death or non-fatal stroke 5.3% vs 5.9% (2p=0.03). Fewer recurrent ischaemic strokes (1.6% vs 2.1%) with a slight nonsignificant excess of haemorrhagic strokes (1.1% vs 0.9%). Taken with IST, supports early aspirin in acute ischaemic stroke.',
+      },
+      {
+        arm: 'Placebo',
+        role: 'control',
+        agent: 'Matching placebo, identical tablets and packaging',
+        route: 'Oral (identical administration to aspirin arm)',
+        frequency: 'Once daily',
+        duration: 'Up to 4 weeks, or until earlier discharge or death',
+        coInterventions: 'Identical restriction on non-trial antiplatelet drugs and identical permission for Chinese herbal products as the aspirin arm',
+        note: 'Double-blind, placebo-controlled. Randomisation used prepacked, sequentially numbered calendar packs of either aspirin or matching placebo, balanced for every ten consecutive patients within each hospital. Prospectively planned for parallel analysis with the International Stroke Trial (IST). Source: CAST Collaborative Group, Lancet 1997.',
+      },
+    ],
     intervention: {
       treatment: 'Aspirin 160 mg/day (single film-coated tablet) given immediately after randomisation. Crushed or chewed for the first dose, then one tablet daily for up to 4 weeks (or until earlier discharge or death). Nasogastric tube used if the patient could not swallow tablets.',
       control: 'Matching placebo, identical tablets and packaging, calendar-packed in sealed envelopes. Double-blind allocation. Non-trial aspirin and other antiplatelet drugs were not permitted during the trial period unless a strong indication developed (e.g., acute myocardial infarction). Chinese herbal products were permitted at clinician discretion.',
@@ -17199,6 +17720,63 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'CRAO with foveal sparing due to cilioretinal artery (no foveal ischaemia)',
       'Current use of anticoagulant medication',
       'Standard contraindications to IV alteplase (active bleeding, recent major surgery, BP >185/110)',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: 'Core inclusion',
+          items: [
+            'Adults aged 18 years or older',
+            'Sudden, severe, and persistent monocular vision loss due to suspected non-arteritic acute central retinal artery occlusion (CRAO)',
+            'Visual acuity worse than 1.3 LogMAR (Snellen worse than 20/400)',
+            'Diagnosis of acute CRAO confirmed by a trained ophthalmologist on fundoscopic examination or non-mydriatic retinophotography (characteristic signs such as diffuse retinal pallor, a macular cherry red spot, attenuation of retinal vessels, or visible arteriolar emboli) in association with an ipsilateral relative afferent pupillary defect',
+            'Able to start study treatment within 4.5 h of symptom onset',
+            'Clinical examination and brain imaging (CT scan or MRI) required for inclusion',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Key exclusions',
+          items: [
+            'Minor visual acuity deficits or rapid improvement before treatment initiation',
+            'Unknown or uncertain time of symptom onset',
+            'Isolated branch retinal artery occlusion without clinically significant vision loss',
+            'CRAO with foveal sparing due to a cilioretinal artery (CRAO without foveal ischaemia)',
+            'Current use of anticoagulant medication',
+            'Clinical or laboratory evidence of giant cell arteritis',
+            'Clinical or radiological evidence of stroke in the past 3 months, except for asymptomatic punctate or small lesions on diffusion-weighted imaging',
+          ],
+        },
+      ],
+      source: 'publication',
+      sourceLabel: 'Mac Grory et al., Lancet Neurol 2025;24:909-919',
+      sourceUrl: 'https://doi.org/10.1016/S1474-4422(25)00308-4',
+      retrieved: '2026-06-09',
+    },
+    armDetails: [
+      {
+        arm: 'Intravenous alteplase',
+        role: 'intervention',
+        agent: 'Alteplase',
+        dose: '0.9 mg/kg of bodyweight, maximum 90 mg',
+        route: 'Intravenous',
+        frequency: 'Single dose within 4.5 h of symptom onset',
+        duration: '10% of the dose as a bolus, remainder infused over 1 h',
+        coInterventions: 'Double-dummy: also received one oral dose of placebo. Standard stroke-unit care and secondary prevention per European Stroke Organisation guidelines. Anticoagulants, additional thrombolytic agents, and antiplatelet drugs were not permitted during the first 24 h.',
+        note: 'Patient-blinded and assessor-blinded double-dummy design.',
+      },
+      {
+        arm: 'Oral aspirin',
+        role: 'comparator',
+        agent: 'Aspirin',
+        dose: '300 mg',
+        route: 'Oral',
+        frequency: 'Single dose within 4.5 h of symptom onset',
+        duration: 'Single dose',
+        coInterventions: 'Double-dummy: also received an intravenous saline placebo (10 mL over 1 min, then 50 mL infused over 1 h). Standard stroke-unit care and secondary prevention per European Stroke Organisation guidelines.',
+        note: 'Active comparator. The primary outcome (visual acuity improvement of at least 0.3 LogMAR at 1 month) did not differ significantly between groups; the trial was underpowered (N=70).',
+      },
     ],
     intervention: {
       treatment: 'IV alteplase 0.9 mg/kg (10% bolus, 90% infused over 1h, max 90 mg) + oral placebo',
