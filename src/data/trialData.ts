@@ -3606,6 +3606,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Direct aspiration first-pass thrombectomy',
       control: 'Stent retriever first-line thrombectomy'
     },
+    armDetails: [
+      { arm: 'Aspiration first pass thrombectomy', role: 'intervention', agent: 'Direct aspiration first-pass technique (ADAPT) with large-bore aspiration catheter', route: 'Endovascular', frequency: 'Up to 3 first-line passes with assigned approach; rescue therapy thereafter if persistent occlusion',
+        coInterventions: 'FDA-cleared aspiration catheter (Penumbra System) first line; if aspiration failed after up to 3 passes, operators could switch to stent retriever or any therapy per physician preference; adjunctive balloon-guide / concurrent distal aspiration permitted.',
+        note: 'Penumbra aspiration first line; ≥3 passes then crossover; success = TICI 2b/2c/3 (Turk Lancet 2019 Procedures p.999-1000).' },
+      { arm: 'Stent retriever first line thrombectomy', role: 'comparator', agent: 'Stent retriever as first-line device', route: 'Endovascular', frequency: 'Up to 3 first-line passes with assigned approach; rescue therapy thereafter if persistent occlusion',
+        coInterventions: 'FDA-cleared stent retriever (Solitaire, Trevo, or Stryker) first line; if persistent occlusion after up to 3 passes, any therapy per physician preference including aspiration; adjunctive balloon-guide / concurrent distal aspiration permitted.',
+        note: 'Solitaire/Trevo/Stryker first line; ≥3 passes then crossover (Turk Lancet 2019 Procedures p.999-1000).' },
+    ],
     clinicalContext: 'COMPASS compared two frontline thrombectomy strategies and helped legitimize aspiration-first approaches as an alternative to stent-retriever-first treatment.',
     pearls: [
       'Aspiration first pass was noninferior to stent retriever first line',
@@ -3638,6 +3646,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Contraindication to contrast or anesthesia',
       'Life expectancy under 6 months',
     ],
+    fullEligibility: { source: 'clinicaltrials.gov', sourceUrl: 'https://clinicaltrials.gov/study/NCT02466893', sourceLabel: 'ClinicalTrials.gov NCT02466893', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Age 18 and older','NIHSS ≥8 at the time of neuroimaging','Symptoms presenting or persisting within 6 hours of groin puncture access','Neuroimaging shows large vessel proximal occlusion (distal ICA through MCA bifurcation)','Operator determines stroke can be treated with traditional endovascular approaches (ADAPT or conventional first-line stent retriever)','Pre-event Modified Rankin Scale score 0–1','Non-contrast CT/CTA for eligibility performed or repeated at treating ADAPT stroke center','Consenting requirements met per local IRB'] } ],
+      exclusion: [ { items: ['More than 6 hours from symptom onset','Rapidly improving neurologic examination','Absence of large vessel occlusion on non-invasive imaging','Presence of existing or pre-existing large territory infarction','Known or suspected pre-existing chronic large vessel occlusion in symptomatic territory','Absent femoral pulses','Excessive vascular access tortuosity preventing stable access platform','Pregnancy (positive urine or serum beta-HCG in women of childbearing potential)','Severe contrast allergy or absolute contraindication to iodinated contrast','Clinical history or imaging suggests intracranial occlusion is chronic','Severe or fatal comorbidities preventing improvement/follow-up or rendering procedure unlikely to benefit patient','Blood on imaging (SAH, ICH, etc.)','Core infarct volume >50 cc','Large regions of hypodensity (>1/3 MCA territory) or ASPECTS <7'] } ],
+    },
     howToReadChart: [
       {
         question: 'What does the bar show?',
@@ -3725,6 +3737,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'First-line contact aspiration thrombectomy',
       control: 'First-line stent retriever thrombectomy'
     },
+    armDetails: [
+      { arm: 'First-line contact aspiration (ADAPT)', role: 'intervention', agent: 'Direct aspiration first-pass technique (ADAPT) — large-bore aspiration catheter, first-line', route: 'Endovascular (transfemoral)',
+        coInterventions: 'IV thrombolysis (alteplase) first if eligible, then transfer to angiography; long sheath in distal cervical vasculature; aspiration catheter advanced to proximal thrombus with continuous aspiration; GA or conscious sedation per operator; ≥3 attempts with assigned technique required before switching (rescue at operator discretion: stent retriever, combined, or angioplasty±stenting).',
+        note: 'Aspiration-first arm, n=192; rescue stent retriever in 25.2%. Lapergue JAMA 2017 Methods p.444-445.' },
+      { arm: 'First-line stent retriever', role: 'comparator', agent: 'Stent retriever, first-line (Solitaire and Trevo most commonly used)', route: 'Endovascular (transfemoral)',
+        coInterventions: 'IV thrombolysis (alteplase) first if eligible, then transfer to angiography; balloon-guide catheter in cervical ICA; stent retriever deployed across occlusion; proximal flow arrest by balloon-guide inflation during retrieval; GA or conscious sedation per operator; ≥3 attempts before rescue crossover.',
+        note: 'Stent-retriever-first arm, n=189; per-protocol balloon-guide. Lapergue JAMA 2017 Methods p.444-445.' },
+    ],
     clinicalContext: 'ASTER directly compared aspiration-first and stent-retriever-first approaches at a time when device strategy was still unsettled in daily EVT practice.',
     pearls: [
       'No significant difference in final successful revascularization',
@@ -3754,6 +3774,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Tandem cervical lesion requiring stenting',
       'Life expectancy under 6 months',
     ],
+    fullEligibility: { source: 'clinicaltrials.gov', sourceUrl: 'https://clinicaltrials.gov/study/NCT02523261', sourceLabel: 'ClinicalTrials.gov NCT02523261', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Age > 18 years with no upper age limit','Cerebral infarction in the anterior circulation','Occlusion of the anterior circulation proven by CT angiography or MR angiography','With or without previous intravenous thrombolysis','Start of thrombectomy procedure within 6 hours of symptoms onset',"Patient expresses verbally his non-opposition to be enrolled in the study; in case patient cannot communicate, verbal non-opposition is obtained from his close / trusted person"] } ],
+      exclusion: [ { items: ['Absence of indication for thrombectomy','Contraindication for thrombectomy','Presence of cerebral infarction of the posterior circulation','Occlusion of the cervical carotid artery','Allergy to x-ray contrast products','Patient was bedridden or using a wheelchair most of the day (pre-event modified Rankin Scale score > 3) prior to stroke','Pregnancy or breastfeeding','Patient under legal protection','No affiliation to health insurance','Lack of access route for catheterization'] } ],
+    },
     howToReadChart: [
       {
         question: 'What does the bar show?',
@@ -3841,6 +3865,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Initial thrombectomy with combined contact aspiration and stent retriever',
       control: 'Initial thrombectomy with stent retriever alone'
     },
+    armDetails: [
+      { arm: 'Combined contact aspiration + stent retriever', role: 'intervention', agent: 'Combined first-pass technique — contact aspiration and stent retriever used simultaneously', route: 'Endovascular (transfemoral)',
+        coInterventions: 'IV thrombolysis if eligible (within 8 h of onset, or within 4.5 h on DWI/FLAIR-mismatch imaging) then rapid transfer; balloon-guide catheter mandatory in both groups; distal two-thirds of stent retriever deployed (proximal third in clot) combined with contact aspiration; pull-out after temporary balloon-guide inflation; GA/conscious sedation/local per practice; ≥3 attempts before rescue crossover.',
+        note: 'Combined (experimental) arm, n=205 randomized/203 primary. Lapergue JAMA 2021 Methods p.1159,1161.' },
+      { arm: 'Stent retriever alone', role: 'comparator', agent: 'Stent retriever alone (CE-marked devices)', route: 'Endovascular (transfemoral)',
+        coInterventions: 'IV thrombolysis if eligible (within 8 h, or within 4.5 h on mismatch imaging) then rapid transfer; balloon-guide catheter mandatory; distal two-thirds of stent retriever deployed; pull-out after temporary balloon-guide inflation; GA/conscious sedation/local; ≥3 attempts before rescue crossover.',
+        note: 'Stent-retriever-alone (control) arm, n=203 randomized/202 primary. Lapergue JAMA 2021 Methods p.1159,1161.' },
+    ],
     clinicalContext: 'ASTER2 asked whether combining the two leading thrombectomy techniques from the outset could improve angiographic results over standard stent-retriever-first treatment.',
     pearls: [
       'Primary endpoint was not significantly improved',
@@ -3870,6 +3902,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Tandem cervical lesion requiring stenting',
       'Life expectancy under 6 months',
     ],
+    fullEligibility: { source: 'clinicaltrials.gov', sourceUrl: 'https://clinicaltrials.gov/study/NCT03290885', sourceLabel: 'ClinicalTrials.gov NCT03290885', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Age 18 and older (i.e., candidates must have had their 18th birthday)','Groin puncture carried out within 8 hours of first symptoms','Neuroimaging demonstrates large vessel proximal occlusion (distal ICA through MCA bifurcation, M1 or M2)','Consenting requirements met according to French laws','With or without intravenous thrombolysis'] } ],
+      exclusion: [ { items: ['Absence of large vessel occlusion on non-invasive imaging','Known or suspected pre-existing (chronic) large vessel occlusion in the symptomatic territory','Suspected pregnancy; if a woman is of childbearing potential, a urine or serum beta human chorionic gonadotropin (betaHCG) test is positive','Severe contrast medium allergy or absolute contraindication to iodinated agents','Patient comorbidities likely preventing improvement, follow-up, or benefit from the procedure','Acute ischemic stroke involving posterior circulation (vertebrobasilar occlusion)','Angiographic evidence of carotid dissection or tandem cervical occlusion or stenosis requiring treatment','Patients benefiting from a legal protection','Non-membership of a national insurance scheme','Opposition of the patient or (in case of inclusion as a matter of urgency) of the trustworthy person'] } ],
+    },
     howToReadChart: [
       {
         question: 'What does the bar show?',
@@ -3962,6 +3998,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Adjunct intra-arterial alteplase infused after successful thrombectomy',
       control: 'Placebo after successful thrombectomy'
     },
+    armDetails: [
+      { arm: 'EVT + intra-arterial alteplase', role: 'intervention', agent: 'Alteplase (recombinant tissue plasminogen activator), intra-arterial', dose: '0.225 mg/kg (maximum 22.5 mg)', route: 'Intra-arterial (microcatheter, infused distal to origin of lenticulostriate branches)', duration: 'Infused over 30 minutes (or over 15 minutes after protocol amendment no. 3, 28 Nov 2019)',
+        coInterventions: 'Administered immediately after standard mechanical thrombectomy that achieved successful reperfusion (eTICI 2b50–3); given only after the angiographic success criterion was confirmed.',
+        note: 'IA alteplase 0.225 mg/kg (max 22.5 mg), distal to lenticulostriate origin, after eTICI 2b50–3 (Renú JAMA 2022 Methods p.828).' },
+      { arm: 'EVT + placebo', role: 'comparator', agent: 'Intra-arterial placebo', route: 'Intra-arterial (microcatheter, injected distally as for active arm)', duration: '15-minute infusion',
+        coInterventions: 'Administered after the same standard mechanical thrombectomy achieving eTICI 2b50–3; lyophilized placebo (L-arginine phosphate, polysorbate 80) reconstituted in sterile water, injected distal to lenticulostriate origin.',
+        note: 'Placebo 15-min IA infusion, identical handling/site, after successful eTICI 2b50–3 (Renú JAMA 2022 Methods p.828).' },
+    ],
     clinicalContext: 'CHOICE tested whether incomplete microvascular reperfusion after technically successful thrombectomy could be improved with low-dose intra-arterial alteplase.',
     pearls: [
       'Adjunct IA alteplase increased excellent outcome from 40.4% to 59.0%',
@@ -3990,6 +4034,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'ASPECTS less than 6 on non-contrast CT if symptom duration was less than 4.5 hours',
       'Use of oral anticoagulants (a major exclusion in practice)',
     ],
+    fullEligibility: { source: 'clinicaltrials.gov', sourceUrl: 'https://clinicaltrials.gov/study/NCT03876119', sourceLabel: 'ClinicalTrials.gov NCT03876119', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Symptomatic large vessel occlusion in anterior, middle or posterior cerebral artery treated with mechanical thrombectomy resulting in mTICI score 2b/3, or eligible based on diagnostic angiography before thrombectomy onset','Estimated delay to onset of rescue intra-arterial rt-PA administration <24 hours from symptom onset','No significant pre-stroke functional disability (modified Rankin scale 0–1), or mRS >1 unrelated to neurological disease','Age ≥18 years','ASPECTS >6 on non-contrast CT (NCCT) or MRI if symptoms lasting <4.5 hours, or ASPECTS >6 on CT-Perfusion (CTP) or DWI-MRI if symptoms >4.5 and <24 hours','Informed consent from patient or acceptable surrogate'] } ],
+      exclusion: [ { items: ['NIHSS score on admission >25','Contraindication to IV t-PA per local national guidelines (except time to therapy)','Carotid artery stents during procedure requiring dual antiplatelet therapy within first 24 hours','Pregnant, lactating female, or positive pregnancy test','Current participation in investigational drug/device studies (except observational studies)','Hereditary or acquired hemorrhagic diathesis or coagulation factor deficiency','Known coagulopathy, INR >1.7, or use of novel anticoagulants <48h from symptom onset','Platelets <50,000','Renal failure (serum creatinine >3.0 mg/dl or 265.2 μmol/l, or GFR <30)','Requires hemodialysis/peritoneal dialysis, or contraindication to angiogram','Any hemorrhage on CT/MRI','Clinical presentation suggesting subarachnoid hemorrhage','Suspicion of aortic dissection','Current or recent history of illicit drug use or alcohol abuse','Life-threatening allergy to contrast medium (beyond rash)','SBP >185 mmHg or DBP >110 mmHg refractory to treatment','Serious, advanced, terminal illness with life expectancy <6 months','Pre-existing neurological or psychiatric disease confounding evaluation','Presumed vasculitis or septic embolization','Unavailable for 90-day follow-up'] } ],
+    },
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -5568,6 +5616,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Endovascular Thrombectomy (stent-retriever/aspiration) + Best Medical Treatment',
       control: 'Best Medical Treatment alone (IV thrombolysis if eligible + antiplatelet)'
     },
+    armDetails: [
+      { arm: 'EVT plus best medical treatment', role: 'intervention', agent: 'Endovascular thrombectomy (operator-chosen technique) + best medical treatment', route: 'Endovascular (intra-arterial)',
+        coInterventions: 'EVT technique at operator discretion; any commercially available device (combined first-line 64.6%, stent-retriever only 15.7%, aspiration only 15.7%). Best medical treatment per current local/European guidelines. IV thrombolysis given in 62.0% of this arm when eligible. Stroke-unit/ICU admission.',
+        note: 'EVT performed in 229/271 (84.5%); final mTICI ≥2b 71.7%; median imaging-to-puncture 70 min (Psychogios NEJM 2025 p.1377,1379).' },
+      { arm: 'Best medical treatment alone', role: 'control', agent: 'Best medical treatment alone (no endovascular thrombectomy)', route: 'Systemic / supportive',
+        coInterventions: 'Best medical treatment per current local/European guidelines, including IV thrombolysis where eligible (given in 68.8% of this arm). Stroke-unit/ICU admission.',
+        note: '2/272 (0.7%) crossed over to EVT (Psychogios NEJM 2025 Fig.1 p.1377).' },
+    ],
     clinicalContext: 'EVT is proven effective for large-vessel occlusions (ICA, M1, basilar) and dominant M2 occlusions. However, benefit for medium/distal vessel occlusions remained uncertain. DISTAL tested whether EVT could help patients with smaller, more distal occlusions (nondominant M2, M3, M4, ACA, PCA segments). These vessels are technically harder to reach and have less collateral blood flow.',
     calculations: {
       // Negative trial - no NNT
@@ -5635,6 +5691,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'ASPECTS below 4 on CT or DWI-ASPECTS below 4 on MRI',
       'Severe comorbidity',
     ],
+    fullEligibility: { source: 'clinicaltrials.gov', sourceUrl: 'https://clinicaltrials.gov/study/NCT05029414', sourceLabel: 'ClinicalTrials.gov NCT05029414 (DISTAL)', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Acute ischemic stroke','Isolated medium vessel occlusion: nondominant or codominant M2, or M3/M4 segment of the MCA; A1, A2, or A3 segment of the ACA; or P1, P2, or P3 segment of the PCA','NIHSS score ≥4 points, OR symptoms deemed clearly disabling at lower NIHSS','Treatment (arterial puncture) initiable within 6 hours of last-seen-well, OR within 6–24 hours of last-seen-well with neuroimaging evidence of salvageable tissue (perfusion–diffusion mismatch on CT or MRI)','Agreement of treating physician to perform the endovascular procedure','Informed consent by signature, or fulfilling criteria for emergency/deferred consent'] } ],
+      exclusion: [ { items: ['Acute intracranial haemorrhage','Evidence of vessel recanalization prior to randomisation','Patient bedridden or presenting from a nursing home','In-hospital stroke','Severe comorbidities likely to prevent improvement or follow-up','Known serious sensitivity to radiographic contrast agents, nickel, titanium metals or their alloys','Contraindication to arterial access','Intracranial mass or tumor (excluding small meningioma)','Radiologically confirmed cerebral vasculitis','Pregnancy or lactating women','Geographic factors precluding follow-up','Participation in another interventional trial'] } ],
+    },
     mrsDistribution: [
       { arm: 'EVT + Best Medical Treatment', n: 271, pct: [13.3, 21.4, 21.8, 17.3, 9.6, 1.1, 15.5] },
       { arm: 'Best Medical Treatment Alone', n: 269, pct: [17.5, 20.1, 17.1, 21.2, 8.9, 1.2, 14.0] },
@@ -5735,6 +5795,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Endovascular Thrombectomy (stent-retriever/aspiration) + Usual Care',
       control: 'Usual Care alone (IV thrombolysis if eligible + antiplatelet)'
     },
+    armDetails: [
+      { arm: 'EVT plus guideline-based usual care', role: 'intervention', agent: 'Endovascular thrombectomy (Solitaire X family device, Medtronic, for first retrieval attempt) + guideline-based usual care', route: 'Endovascular (intra-arterial)',
+        coInterventions: 'First retrieval with Solitaire X ± concurrent aspiration; additional attempts with any approved device/combination at operator discretion; general anesthesia encouraged for safe distal deployment. Guideline-based usual care (Canadian/US/European) including IV thrombolysis (tenecteplase or alteplase) when indicated (given in 56.5% of this arm), stroke-unit care, rehabilitation, secondary prevention.',
+        note: 'Successful reperfusion (final MeVO-eTICI 2b/2c/3) 75.1%; median onset-to-recanalization 359 min (Goyal NEJM 2025 p.1389-1391).' },
+      { arm: 'Usual care alone', role: 'control', agent: 'Guideline-based usual care alone (no endovascular thrombectomy)', route: 'Systemic / supportive',
+        coInterventions: 'Standard of care per Canadian/US/European guidelines, including IV thrombolysis (tenecteplase or alteplase) when indicated (given in 60.2% of this arm), stroke-unit care, rehabilitation, stroke-mechanism workup, vascular-risk reduction.',
+        note: '3 usual-care patients crossed over to EVT (Goyal NEJM 2025 p.1389).' },
+    ],
     clinicalContext: 'Conducted in parallel with DISTAL, the ESCAPE-MeVO trial investigated the efficacy and safety of endovascular thrombectomy for Medium Vessel Occlusions (MeVO), specifically targeting the M2/M3 MCA, A2/A3 ACA, and P2/P3 PCA segments.',
     calculations: {
       // Negative binary-superiority trial with harm signal — no NNT (aRR CI crosses 1).
@@ -5785,6 +5853,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Recent major surgery or intracranial bleeding within 3 months',
       'Contraindication to contrast or thrombectomy procedure',
     ],
+    fullEligibility: { source: 'clinicaltrials.gov', sourceUrl: 'https://clinicaltrials.gov/study/NCT05151172', sourceLabel: 'ClinicalTrials.gov NCT05151172 (ESCAPE-MeVO)', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Acute ischemic stroke clinically eligible for immediate EVT','Age ≥18 years at randomization','Time from onset / last-known-well to randomization <12 hours','Disabling stroke: NIHSS >5, OR NIHSS 3–5 with a disabling deficit','Confirmed symptomatic, endovascularly treatable medium-vessel occlusion at M2 or M3 of the MCA, A2 or A3 of the ACA, or P2 or P3 of the PCA on mCTA or MRA (A1 and P1 segments specifically not included)','Clinical deficit commensurate with the MeVO location','Favorable baseline noninvasive imaging: lack of extensive ischemic changes on noncontrast CT/MRI, plus at least moderate collaterals on CTA/MRA or core–penumbra mismatch on perfusion imaging','Signed informed consent (or emergency consent per local standards)'] } ],
+      exclusion: [ { items: ['ASPECTS ≤5','Imaging evidence of extensive hypodensity / diffusion restriction or absent collaterals (per modality-specific criteria)','Any evidence of intracranial hemorrhage','Nursing-home residence or requirement for daily care','Major comorbidities preventing follow-up','Pregnancy','Concurrent participation in another therapeutic trial'] } ],
+    },
     howToReadChart: [
       {
         question: 'What does the chart show?',
