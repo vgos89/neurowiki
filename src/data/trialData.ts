@@ -11016,8 +11016,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     listCategory: 'antiplatelets',
     listDescription: 'ASA + ER-dipyridamole vs clopidogrel monotherapy after stroke. NI margin not met; ICH higher with ASA–ERDP.',
     legend: {
-      finding: 'Aspirin+ER-dipyridamole and clopidogrel monotherapy are equivalent for long-term secondary stroke prevention.',
-      bottomLineTag: 'Equivalent',
+      finding: 'Aspirin plus ER-dipyridamole and clopidogrel had similar recurrent-stroke rates, but the trial did not formally establish noninferiority of one regimen to the other.',
+      bottomLineTag: 'Noninferiority not met',
       keyStat: '9.0% vs 8.8%',
     },
   },
@@ -11294,8 +11294,8 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     listCategory: 'carotid',
     listDescription: 'CAS vs CEA in average-risk carotid stenosis. No primary 4-yr difference; CAS↑stroke, CEA↑MI/cranial nerve palsy; age-dependent.',
     legend: {
-      finding: 'Carotid stenting and endarterectomy yield equivalent composite stroke/MI/death in average-risk patients.',
-      bottomLineTag: 'Equivalent',
+      finding: 'Carotid stenting and endarterectomy showed no significant difference on the 4-year composite, but with different risks: more periprocedural stroke with stenting, more myocardial infarction with surgery.',
+      bottomLineTag: 'No clear winner',
       keyStat: '7.2% vs 6.8%',
     },
   },

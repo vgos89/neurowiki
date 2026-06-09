@@ -407,8 +407,8 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
   "crest-trial": {
     "title": "CREST Trial",
     "legend": {
-      "finding": "Carotid stenting and endarterectomy yield equivalent composite stroke/MI/death in average-risk patients.",
-      "bottomLineTag": "Equivalent",
+      "finding": "Carotid stenting and endarterectomy showed no significant difference on the 4-year composite, but with different risks: more periprocedural stroke with stenting, more myocardial infarction with surgery.",
+      "bottomLineTag": "No clear winner",
       "keyStat": "7.2% vs 6.8%"
     },
     "subtitle": "Carotid Stenting versus Endarterectomy for Carotid-Artery Stenosis",
@@ -1052,8 +1052,8 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
   "profess-trial": {
     "title": "PRoFESS Trial",
     "legend": {
-      "finding": "Aspirin+ER-dipyridamole and clopidogrel monotherapy are equivalent for long-term secondary stroke prevention.",
-      "bottomLineTag": "Equivalent",
+      "finding": "Aspirin plus ER-dipyridamole and clopidogrel had similar recurrent-stroke rates, but the trial did not formally establish noninferiority of one regimen to the other.",
+      "bottomLineTag": "Noninferiority not met",
       "keyStat": "9.0% vs 8.8%"
     },
     "subtitle": "Aspirin + Extended-Release Dipyridamole vs Clopidogrel for Recurrent Stroke",
@@ -1499,7 +1499,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "subtitle": "Tenecteplase 4.5-24 Hours with Perfusion-Imaging Selection",
     "source": "Albers GW, et al. (NEJM 2024)",
     "timeline": "NEJM 2024",
-    "bottomLineSummary": "In perfusion-selected LVO patients treated 4.5-24 hours after stroke onset, tenecteplase 0.25 mg/kg before planned thrombectomy (77% of patients) did not improve 90-day mRS distribution (adjusted cOR 1.13, 95% CI 0.82-1.57, p=0.45). Functional independence occurred in 46.0% vs 42.4%. Symptomatic ICH was 2.0% vs 2.2%. TIMELESS and TRACE-III together define the role of late-window IVT: benefit only when EVT is unavailable.",
+    "bottomLineSummary": "In perfusion-selected LVO patients treated 4.5-24 hours after stroke onset, tenecteplase 0.25 mg/kg before planned thrombectomy (77% of patients) did not improve 90-day mRS distribution (adjusted cOR 1.13, 95% CI 0.82-1.57, p=0.45). Functional independence occurred in 46.0% vs 42.4%. Symptomatic ICH was 3.2% vs 2.3%. TIMELESS and TRACE-III together define the role of late-window IVT: benefit only when EVT is unavailable.",
     "doi": "10.1056/NEJMoa2310392"
   },
   "timing-trial": {
@@ -1555,7 +1555,7 @@ export const TRIAL_CARD_META: Record<string, TrialCardMeta> = {
     "subtitle": "PSC-First vs CSC-First Routing in IVT-Eligible Suspected LVO",
     "source": "Behrndtz A, et al. (Stroke 2023)",
     "timeline": "Denmark; September 2018 to May 2022",
-    "bottomLineSummary": "In IVT-eligible patients with suspected LVO within 4 hours of onset, direct routing to a CSC versus PSC-first transport did not significantly improve 90-day functional outcome in the acute ischemic stroke population (ordinal OR 1.42, 95% CI 0.72-2.82, p=0.31). The trial was stopped early at 171 of a planned 424 patients. Direct CSC routing shortened onset-to-groin time by 35 minutes; PSC-first shortened onset-to-needle time by 30 minutes.",
+    "bottomLineSummary": "In IVT-eligible patients with suspected LVO within 4 hours of onset, direct routing to a CSC versus PSC-first transport did not significantly improve 90-day functional outcome in the acute ischemic stroke population (ordinal OR 1.42, 95% CI 0.72-2.82, p=0.31). The trial was stopped early at 171 of a planned 600 patients. Direct CSC routing shortened onset-to-groin time by 35 minutes; PSC-first shortened onset-to-needle time by 30 minutes.",
     "doi": "10.1161/STROKEAHA.123.043875"
   },
   "twist-trial": {
