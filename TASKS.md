@@ -148,15 +148,16 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Source review:** docs/reviews/clinical-headache-definitional-criteria-2026-05-27.md (Condition 3)
 - **Blocker:** Lempert et al. J Vestib Res 2012 full-text retrieval (PubMed MCP `lookup_article_by_citation` + `get_full_text_article`).
 
-### escape-primary-or-reconcile — Class E-clinical [from clinical-trial-eligibility-arms-pilot.md §3 follow-ups]
-- **Status:** [ ] open — L3, P1
-- **User-visible goal:** Reconcile discrepancy in ESCAPE trial's primary outcome effect size. Current data carries `effectSize: 'OR 2.6'` (from trialData.ts). Published literature reports common OR 3.1 (95% CI 2.0–4.7, per HERMES meta-analysis). Assess which source is correct and update data to match published primary trial results if the current entry is a transcription error.
-- **Non-goals:** not changing interpretive text or thresholds; data accuracy fix only.
-- **Files likely touched:** `src/data/trialData.ts` (ESCAPE entry `effectSize` field + supporting stats), possibly `docs/evidence-packets/` if evidence needs re-verification.
-- **Acceptance checks:** Primary outcome OR confirmed from original ESCAPE publication and/or HERMES meta-analysis; discrepancy explained + resolved; data audit trail documented; trial-statistician sign-off; clinical-reviewer §17.2 gate.
-- **Clinical impact:** medium (primary effect size is foundational to trial interpretation).
-- **Rollback plan:** git revert single commit; no schema changes.
-- **Source review:** evidence flagged in docs/reviews/clinical-trial-eligibility-arms-pilot.md §3; Hermes meta-analysis + ESCAPE publication (Goyal et al. N Engl J Med 2015).
+### escape-primary-or-reconcile — Class C-clinical (rescoped: label clarification, not value fix)
+- **Status:** [ ] open — L4, P2 (pending owner sign-off)
+- **Resolution:** Verification complete via commit c1146eb evidence packet (docs/evidence-packets/2026-06-08-trial-pilot-arm-enrichment.md Task C). The displayed OR 2.6 (95% CI 1.7–3.8) is CORRECT — this is the pre-specified unadjusted primary result per Goyal NEJM 2015 p.1024/1025. The adjusted/secondary OR 3.1 (2.0–4.7) was from HERMES meta-analysis, not the primary trial publication. NO value change to `effectSize: OR 2.6` was warranted. The discrepancy arose from ambiguity about which source held the primary result.
+- **User-visible goal:** Remaining work is OPTIONAL label clarification (non-urgent, pending owner sign-off). Annotate the displayed 2.6 as "unadjusted, pre-specified primary" in the howToInterpret text or stat card label to prevent a future editor incorrectly "correcting" 2.6 → 3.1. Optionally record the adjusted secondary 3.1 as labeled secondary stat for reference.
+- **Non-goals:** not changing the numeric value `effectSize: OR 2.6` (it is correct). Not changing ESCAPE archetype, interpretation logic, or clinical recommendation. Label-only change if anything ships.
+- **Files likely touched:** `src/data/trialData.ts` (ESCAPE entry `howToInterpret` or stat label, if owner approves); no schema changes.
+- **Acceptance checks:** Owner confirms label text; label wording aligns with trialist intent (primary vs secondary); clinical-reviewer spot-check on label only.
+- **Clinical impact:** low (no value change; label prevents future incorrect "fixes").
+- **Rollback plan:** n/a if no code change (label clarification); single-commit revert if label ships.
+- **Source review:** Evidence packet docs/evidence-packets/2026-06-08-trial-pilot-arm-enrichment.md Task C; ESCAPE primary publication Goyal et al. N Engl J Med 2015 p.1024–1025.
 
 ### ecass3-cor-class-recheck — Class C-clinical [from clinical-trial-eligibility-arms-pilot.md §3 follow-ups]
 - **Status:** [ ] open — L5, P2
@@ -169,14 +170,19 @@ Entries format: - [YYYY-MM-DD] <idea> (parked during: <task>)
 - **Source review:** flagged in docs/reviews/clinical-trial-eligibility-arms-pilot.md §3; 2026 AHA/ASA guideline §6 ECASS III entry.
 
 ### ninds-eligibility-fulltext-verify — Class C-clinical [from clinical-trial-eligibility-arms-pilot.md §3 follow-ups]
+- **Status:** [x] DONE — resolved commit c1146eb (2026-06-08) — Confidence upgrade Medium → High
+- **Resolution:** All 13 exclusion + 4 inclusion criteria in NINDS `fullEligibility` verified character-for-character against NEJM 1995 p.1582 (Broderick et al., PMID 7477192) per commit c1146eb evidence packet (docs/evidence-packets/2026-06-08-trial-pilot-arm-enrichment.md Task D). No transcription drift found. Confidence officially upgraded from Medium to High. Data is audit-trail-complete.
+- **Notes:** NINDS was the first trial in the 5-trial pilot and the first to reach High-confidence fullEligibility status. Remaining 74 NCT-linked trials eligible for backfill in future reviewed waves (tracked in task trial-eligibility-arms-expand-remaining-74-trials).
+
+### trial-control-arm-appendix-granularity — Class C-clinical (optional owner decision)
 - **Status:** [ ] open — L5, P2
-- **User-visible goal:** NINDS trial page now carries a new `fullEligibility` field populated from publication narrative (NEJM 1995 Broderick et al., PMID 7477192). This is a "Medium confidence" transcription — verify each criterion item against the full-text publication and reconcile any discrepancies before marking the entry "High confidence" (editorial review complete).
-- **Non-goals:** not changing interpretation or clinical recommendation; data-source verification only.
-- **Files likely touched:** `src/data/trialData.ts` (NINDS entry `fullEligibility` field — re-verify each criterion line against NEJM 1995 full text). May update confidence flag or add an audit note.
-- **Acceptance checks:** Each inclusion/exclusion criterion in `fullEligibility` verified against NEJM 1995 full-text publication at PMID 7477192; any transcription drift corrected; Fugate & Rabinstein Stroke 2014 catalogue (if used as secondary source) compared for consistency; final confidence marked (High/Medium/Low); clinical-reviewer spot-check on final batch.
-- **Clinical impact:** medium (eligibility criteria directly guide patient selection).
-- **Rollback plan:** git revert commit(s); `fullEligibility` field can revert to stub or null.
-- **Source review:** flagged in docs/reviews/clinical-trial-eligibility-arms-pilot.md §3; NINDS was the first trial in the 5-trial pilot, prioritized for verification because it is a foundational historical trial. NEJM 1995 PMID 7477192. Secondary: Fugate & Rabinstein Stroke 2014 catalogue (trial-focused review).
+- **User-visible goal:** Supplementary Appendices: ESCAPE (Appendix G), DAWN (Appendix S6), and DEFUSE-3 (Supplementary Appendix) defer granular control-arm medical management details (BP / glucose targets; antithrombotic / anticoagulant selection rules; concomitant drug restrictions; DVT prophylaxis allowed agents) to their published appendices. Commit c1146eb captured the main-text-level arm detail (device, agent/dose, route, window). If the owner can supply the Supplementary Appendices for these three trials, the `armDetails[]` control-arm `note` and `coInterventions` fields can be deepened to include the granular medical management protocols. Currently shipped at faithful main-article depth with the deferral explicitly noted inline in the `note` fields.
+- **Non-goals:** Not changing the interpretation or statistical outcomes; data source granularity deepening only. Not committed to obtaining appendices (owner decision whether to pursue them).
+- **Files likely touched:** `src/data/trialData.ts` (`armDetails[]` on ESCAPE/DAWN/DEFUSE-3 entries, optionally enriching `note` and `coInterventions` fields).
+- **Acceptance checks:** If appendices are supplied: arm detail re-verified against appendix-level text; `note` fields updated to cite appendix sections; `coInterventions` granularity deepened (e.g., "BP SBP <180, DBP <105 with protocol escalation per Appendix G §2.1" vs current "standard of care per Canadian/local guidelines"). Clinical-reviewer spot-check on deepened granularity. If appendices cannot be sourced: task remains open for future owner supply or transitions to archive (no obligation).
+- **Clinical impact:** low (deepening control arm detail improves protocol transparency but does not change primary-arm interpretation; appendices are supplementary, not primary).
+- **Rollback plan:** n/a if no changes ship; single-commit revert if enriched detail ships.
+- **Source:** Flagged in docs/evidence-packets/2026-06-08-trial-pilot-arm-enrichment.md clinical-review follow-ups, carry forward per docs/reviews/clinical-trial-arm-enrichment-pilot.md "Required follow-ups" §2.
 
 ### trial-eligibility-arms-expand-remaining-74-trials — [ ] open — forward-planning note [from trial-full-eligibility-and-arm-detail-pilot commit 4fbb914]
 - **Status:** [ ] open — L5, P2 (forward planning, not in-swarm work)
@@ -1221,6 +1227,7 @@ Deferred in favor of section specs (docs/specs/*.md). Each section (calculators,
 ---
 
 ## CONFIRMED CLEAN
+- [x] 2026-06-08 — Trial arm enrichment from PDFs: `armDetails` on 5 pilot trials (NINDS, ECASS III, ESCAPE, DEFUSE-3, DAWN); Study Arms accordion relocated under Primary Outcome — Class C-clinical (commit c1146eb). QA: tsc clean · build 171/171 · claims/routes/chains/card-meta pass · Gate 6 live-verify PASS · clinical-review approve-with-conditions (docs/reviews/clinical-trial-arm-enrichment-pilot.md). Post-flight follow-ups: escape-primary-or-reconcile (rescoped label-only, pending owner sign-off); ninds-eligibility-fulltext-verify (DONE, confidence Medium→High); trial-control-arm-appendix-granularity (optional deepening, pending owner decision on appendix sourcing).
 - [x] 2026-06-08 — Trial full eligibility + study arms accordion pilot (DAWN, DEFUSE-3, ECASS III, ESCAPE, NINDS) — Class D-clinical (commit 4fbb914)
   - Live verify: PASS — `/trials/dawn-trial`, `/trials/defuse-3-trial`, `/trials/ecass-3-trial`, `/trials/escape-trial`, `/trials/ninds-trial` all render with new EligibilityCriteriaCard + InterventionArmsAccordion components; full eligibility tabs behind "Show full criteria" disclosure; arm details in controlled accordion. NINDS NCT-ID corrected (was `NCT00000292` → publication path). tsc clean; vite build 171/171 prerendered; check:claims/routes pass. Architect approve-with-conditions (all folded); clinical approve; mobile-first approve; a11y approve. All gates green. Post-merge Gate 6 live-verify PASS (site live on prod).
 - [x] 2026-06-05 — Actionable follow-ups batch (Wave 1 + Wave 2 from the pending re-verify) — Class C (commits 5b4fad9, 63b6228, f4cb1e7, e72e62a)
