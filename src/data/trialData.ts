@@ -10693,6 +10693,59 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'ICH on imaging',
       'No randomization. Allocation by MSU availability (quasi-experimental)',
     ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1001/jama.2020.26345',
+      sourceLabel: 'Ebinger M et al., JAMA 2021;325(5):454–466; PMID 33528537',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'At least 18 years old',
+            'Emergency call prompted a mobile-stroke-unit dispatch code during the MSU operating hours (7 AM to 11 PM, Monday to Sunday)',
+            'Onset of symptoms to dispatch within 4 hours (allowing a minimum of 30 minutes for travel to the emergency site and assessment within the 4.5-hour window for thrombolysis)',
+            'Within the catchment area of a Berlin mobile stroke unit (3 base stations)',
+            'Ambulatory before the stroke (a rough proxy of modified Rankin Scale score 3 or less)',
+            'Final hospital-based diagnosis of acute ischemic stroke (ICD-10 I63) or transient ischemic attack (ICD-10 G45, except G45.4) without symptom resolution before arrival in the emergency vehicle',
+            'Considered eligible for thrombolysis or thrombectomy',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Absolute contraindications against both thrombolysis and thrombectomy (for example, patients without large-vessel occlusion taking oral anticoagulation, or nonmedication-induced hemophilia)',
+            'Malignancy or other severe primary disease with life expectancy of less than 1 year',
+            'Major surgery within the past 4 weeks',
+            'Previous stroke within 3 months',
+            'No deficits at emergency medical service arrival',
+            'Symptom onset or last-seen-well to alarm more than 4 hours',
+            'Not transported to a hospital, or transported to a hospital without a stroke unit',
+            'Younger than 18 years or did not have a final diagnosis of acute cerebral ischemia',
+            'Symptoms resolved before emergency department medical service or at hospital arrival, or arrived at the hospital more than 6 hours after symptom onset',
+            'Patient opted out (opt-out informed-consent design)',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'Mobile stroke unit dispatch plus conventional ambulance',
+        role: 'intervention',
+        agent: 'Mobile stroke unit (MSU) dispatch',
+        route: 'Prehospital, ambulance-based',
+        coInterventions: 'Simultaneous dispatch of a conventional ambulance; transport to the nearest stroke-unit hospital (or nearest thrombectomy-capable hospital if large-artery occlusion detected on CT angiography)',
+        note: 'MSU equipped with a CT scanner allowing angiography, telemedicine-enabled connections to radiologists, and a point-of-care laboratory (international normalized ratio, blood cell count, glucose, creatinine, electrolytes). Staffed by a paramedic, a radiology technician trained in emergency medicine, and a neurologist trained in emergency medicine. When criteria were met, thrombolysis was started prehospital on board the MSU. Dispatch code triggered simultaneous MSU and conventional-ambulance dispatch only when an MSU was available.',
+      },
+      {
+        arm: 'Conventional ambulance alone',
+        role: 'control',
+        agent: 'Conventional ambulance transport',
+        route: 'Prehospital, ambulance-based',
+        coInterventions: 'Transport to a hospital stroke unit; thrombolysis and thrombectomy delivered in hospital',
+        note: 'Conventional ambulances staffed with a paramedic and an ambulance technician. Patients allocated to this group when no MSU was available at the time of the emergency call. In-hospital thrombolysis and reperfusion decisions made by the receiving stroke team.',
+      },
+    ],
     safetyProfile: {
       sICH: {
         evt: 3.2,
@@ -10902,6 +10955,51 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Comatose or unresponsive at presentation',
       'Traumatic etiology',
       'Location outside MSU service area at time of activation',
+    ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa2103879',
+      sourceLabel: 'Grotta JC et al., N Engl J Med 2021;385(11):971–981',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          label: 'Enrollment criteria (identical for MSU and EMS groups, assessed on scene)',
+          items: [
+            'Examination features consistent with acute stroke that produced any degree of disability (no formal cutoff according to the National Institutes of Health Stroke Scale)',
+            'Stroke onset within the previous 4.5 hours (time the patient was last known to be well)',
+            'No obvious guideline contraindications to the use of tissue plasminogen activator (t-PA)',
+            'Considered enrolled if screening criteria for t-PA treatment were met on MSU or EMS arrival at the scene, whether or not the patient ultimately became eligible for the primary outcome analysis',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'No qualifying acute stroke on assessment',
+            'Stroke-mimicking condition',
+            'Cerebral hemorrhage detected on noncontrast CT (rendered the patient ineligible for t-PA)',
+            'Acute stroke with established guideline contraindications to t-PA',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'Mobile stroke unit care',
+        role: 'intervention',
+        agent: 'Mobile stroke unit (MSU) management with prehospital t-PA',
+        route: 'Prehospital, ambulance-based',
+        coInterventions: 'Transport to the destination stroke center on the basis of local EMS triage criteria; in-hospital care including imaging and reperfusion decisions after arrival',
+        note: 'On-scene MSU steps: establishment of intravenous access, determination of the NIHSS, noncontrast CT of the head, blood-pressure control, and, if criteria were met, t-PA initial bolus and start of infusion. At three sites, CT angiography could be performed if large-vessel occlusion was suspected. MSU staffed by one or two paramedics, a CT technologist, and a critical care nurse, with a vascular neurology specialist supervising on board or remotely by telemedicine. t-PA used was Activase (recombinant; supplied by Genentech). The publication and these pages do not state a per-kilogram t-PA dose.',
+      },
+      {
+        arm: 'Standard emergency medical services (EMS)',
+        role: 'control',
+        agent: 'Standard EMS transport',
+        route: 'Prehospital, ambulance-based',
+        coInterventions: 'In-hospital stroke evaluation and reperfusion treatment (t-PA and endovascular therapy as indicated) after arrival at the emergency department',
+        note: 'On EMS weeks, a study nurse (but not the MSU) met the patient and EMS at the destination emergency department without delaying intake, and the hospital-based stroke team managed care including imaging and t-PA decisions. Allocation to MSU or EMS was by alternating-week cluster, not individual randomization.',
+      },
     ],
     howToReadChart: [
       {
@@ -11135,13 +11233,59 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Age 18 or older',
       'Presumed stroke with FAST score 2 or higher',
       'Onset or last known well within 3 hours',
-      'Systolic blood pressure 120 mm Hg or higher',
+      'Systolic blood pressure 140 mm Hg or higher',
     ],
     exclusionCriteria: [
-      'Hypotension (systolic BP below 120 mm Hg)',
+      'Hypotension (systolic BP below 140 mm Hg)',
       'Nitrate use within 12 hours',
       'Known intracranial hemorrhage',
       'Severe comorbidity or reduced life expectancy',
+    ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1016/S1474-4422(22)00333-7',
+      sourceLabel: 'van den Berg SA et al., Lancet Neurol 2022;21(11):971–981',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'Adult patients (aged 18 years or older)',
+            'Probable diagnosis of acute stroke, as assessed by a paramedic in the prehospital setting',
+            'Face-arm-speech-time (FAST) test score of 2 or 3',
+            'Systolic blood pressure of at least 140 mm Hg',
+            'Treatment could be started within 3 hours of symptom onset',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Considerable pre-stroke dependency in activities of daily living, defined as staying in a chronic nursing home or rehabilitation centre',
+            'A substantially reduced consciousness level (Glasgow Coma Scale below 8)',
+            'A known contraindication or hypersensitivity to glyceryl trinitrate',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'Transdermal glyceryl trinitrate plus standard care',
+        role: 'intervention',
+        agent: 'Glyceryl trinitrate (nitroglycerin) transdermal patch (Deponit-T5; Merus Labs)',
+        dose: '5 mg/day',
+        route: 'Transdermal patch (shoulder, back, or chest)',
+        frequency: 'One patch',
+        duration: '24 hours (range 22 to 26 hours)',
+        coInterventions: 'Standard prehospital and in-hospital stroke care',
+        note: 'Patch applied immediately after randomisation in the prehospital setting by the attending paramedic and continued during hospital admission for 24 hours. Open-label treatment with blinded endpoint assessment.',
+      },
+      {
+        arm: 'Standard care alone',
+        role: 'control',
+        agent: 'Standard prehospital and in-hospital stroke care',
+        coInterventions: 'No glyceryl trinitrate; admission to the acute stroke unit once a diagnosis of stroke was made',
+        note: 'No prehospital nitrate administered. Otherwise identical pathway, including in-hospital thrombolysis and endovascular therapy as indicated.',
+      },
     ],
     mrsDistribution: [
       { arm: 'Glyceryl Trinitrate', n: 170, pct: [6, 19, 26, 13, 12, 8, 15] },
@@ -11234,6 +11378,49 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     exclusionCriteria: [
       'Direct CSC admission clinically indicated',
       'Participation in another trial',
+    ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1001/jama.2022.4404',
+      sourceLabel: 'Pérez de la Ossa N et al., JAMA 2022;327(18):1782–1794',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'Functionally independent, defined as a modified Rankin Scale (mRS) score between 0 and 2, as evaluated by EMS personnel in the field',
+            'Suspected acute stroke secondary to large-vessel occlusion (LVO), defined as a Rapid Arterial Occlusion Evaluation (RACE) Scale score between 5 and 9',
+            'Evaluation by EMS personnel in a geographical area where the primary referral center was a local stroke center without thrombectomy capabilities, covering a population of 3.85 million',
+            'Estimated arrival at a thrombectomy-capable center less than 7 hours after symptom onset (for witnessed onset) or last time seen well',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Unstable clinical status and/or coma requiring emergent life-support care',
+            'Direct comprehensive-stroke-center admission otherwise clinically indicated',
+            'Participation in another trial',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'Direct transport to a thrombectomy-capable center',
+        role: 'intervention',
+        agent: 'Direct transport to a thrombectomy-capable comprehensive stroke center (mothership strategy)',
+        route: 'Prehospital transport routing',
+        coInterventions: 'Standard clinical care and endovascular treatment per institutional protocols, in agreement with European Stroke Organisation guidelines; intravenous thrombolysis and thrombectomy delivered as indicated at the comprehensive stroke center',
+        note: 'Time to admission was determined by transport time to the allocated thrombectomy-capable center. Transport time to a thrombectomy-capable center ranged from 20 to 180 minutes. This is a transport-strategy comparison, not a drug comparison.',
+      },
+      {
+        arm: 'Transport to the closest local stroke center',
+        role: 'control',
+        agent: 'Transport to the nearest local stroke center first (drip-and-ship strategy)',
+        route: 'Prehospital transport routing',
+        coInterventions: 'Intravenous thrombolysis at the local stroke center as indicated; for confirmed LVO (or, if imaging was unavailable, clinical suspicion of LVO with NIHSS score 6 or higher), subsequent interhospital transfer to a thrombectomy-capable referral center',
+        note: 'Time to admission to a thrombectomy-capable center was determined by the sum of onset to first hospital arrival, door-in-door-out, and interhospital transfer. Local stroke centers had no thrombectomy capability; telestroke centers could initiate intravenous thrombolysis after telemedicine consultation with a stroke neurologist.',
+      },
     ],
     mrsDistribution: [
       { arm: 'Direct to CSC', n: 467, pct: [10.8, 11.8, 10.8, 17.2, 12.0, 14.5, 22.9] },

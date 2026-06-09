@@ -62,3 +62,17 @@ Additive enrichment of existing trial records with `fullEligibility` + `armDetai
 
 ### OPTIMAS + TIMING — completion needed (not enrichable as-is)
 `optimas-trial` (line ~5767) and `timing-trial` (line ~5653) exist as records with stats/design/results bodies but NO curated `inclusionCriteria`/`exclusionCriteria` fields (so the eligibility card renders nothing for them). Completing them requires adding curated criteria + `fullEligibility` + `armDetails`. Evidence extracted + verified from PDFs: OPTIMAS (Werring Lancet 2024, NCT03759938) early DOAC ≤4 days vs delayed 7–14 days, NI margin 2pp, adjusted RD 0.000; TIMING (Oldgren Circulation 2022, NCT02961348) early ≤4 days vs delayed 5–10 days, NI margin 3%, 6.89% vs 8.68% ARD −1.79%. Handled in a dedicated completion pass.
+
+---
+
+## Batch 5 — Prehospital / triage (B_PROUD, BEST-MSU, MR ASAP, RACECAT)
+
+**Decision:** approve (condition resolved)
+**Reviewer:** clinical-reviewer (model: claude-opus-4-8) · **Date:** 2026-06-09
+
+- **Scope:** additive `fullEligibility` + `armDetails` on `b-proud-trial`, `best-msu-trial`, `mr-asap-trial`, `racecat-trial`. Strategy-arm mapping correct (MSU dispatch / mothership = intervention; conventional ambulance / drip-and-ship = control). No inversion, no cross-contamination.
+- **MR ASAP threshold CORRECTION (condition resolved):** clinical-reviewer confirmed against `MR ASAP.pdf` (van den Berg, Lancet Neurol 2022) in 3 places that enrollment required SBP ≥140 mm Hg. The existing curated `inclusionCriteria`/`exclusionCriteria` said 120 (a pre-existing error, likely RIGHT-2 contamination). Corrected 120 → 140 in both (lines 11236, 11239); curated + fullEligibility + source now agree. Drug = transdermal glyceryl trinitrate 5 mg/day patch for 24 h vs standard care; negative/harm framing preserved.
+- **BEST-MSU:** t-PA per-kg dose intentionally NOT fabricated (not stated in read pages); arm note discloses this. Acceptable.
+- **RACECAT neutral preserved** (cOR 1.03, no benefit asserted); strategy-only comparison.
+- **Never-drift / em-dash:** additive plus the one source-verified threshold correction; zero em-dash in added blocks.
+- **Follow-ups:** none blocking.
