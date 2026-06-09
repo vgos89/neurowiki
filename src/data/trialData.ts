@@ -1661,7 +1661,7 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
     ],
     howToInterpret: {
       /* claimId: escape-primary-result | source: Goyal NEJM 2015 */
-      proves: 'In patients with small infarct cores (ASPECTS 6 to 10) and moderate-to-good collaterals on multiphase CTA, rapid endovascular thrombectomy added to standard care within 12 hours of onset reduced disability across the full mRS distribution (common OR 2.6, 95% CI 1.7 to 3.8; P less than 0.001 — the unadjusted, pre-specified primary analysis; adjusted common OR 3.1, 95% CI 2.0 to 4.7 as a secondary estimate), increased functional independence from 29.3% to 53.0%, and reduced 90-day mortality from 19.0% to 10.4%.',
+      proves: 'In patients with small infarct cores (ASPECTS 6 to 10) and moderate-to-good collaterals on multiphase CTA, rapid endovascular thrombectomy added to standard care within 12 hours of onset reduced disability across the full mRS distribution (common OR 2.6, 95% CI 1.7 to 3.8; P less than 0.001, the unadjusted, pre-specified primary analysis; adjusted common OR 3.1, 95% CI 2.0 to 4.7 as a secondary estimate), increased functional independence from 29.3% to 53.0%, and reduced 90-day mortality from 19.0% to 10.4%.',
       doesNotProve: 'It does not establish benefit in patients excluded by the imaging selection criteria, particularly low ASPECTS or poor collaterals. It does not address EVT beyond 12 hours, which was later tested by DAWN and DEFUSE-3 with perfusion-based selection.',
       cautions: 'ESCAPE was stopped early at 316 of a planned 500 patients after positive interim analysis, which can overestimate effect size. Workflow times in ESCAPE were exceptional (median CT-to-first-reperfusion 84 minutes) and may not be reproducible in less specialized centers. Multiphase CTA collateral assessment requires reader expertise.',
     },
@@ -2011,10 +2011,10 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
           ],
         },
         {
-          label: 'Imaging inclusion criteria — dual target',
+          label: 'Imaging inclusion criteria: dual target',
           items: [
             'Arterial occlusion on CTA or MRA of the ICA, M1 or M2',
-            'Mismatch — using CT or MRI with a Tmax >6 second delay perfusion volume and either CT-rCBF or DWI infarct core volume: (a) Mismatch ratio greater than 1.2, and (b) Absolute mismatch volume greater than 10 ml, and (c) Infarct core lesion volume less than 70 mL',
+            'Mismatch (using CT or MRI with a Tmax >6 second delay perfusion volume and either CT-rCBF or DWI infarct core volume): (a) Mismatch ratio greater than 1.2, and (b) Absolute mismatch volume greater than 10 ml, and (c) Infarct core lesion volume less than 70 mL',
           ],
         },
       ],

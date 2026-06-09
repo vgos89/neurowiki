@@ -166,7 +166,9 @@ function extractJsxStrings(src) {
 // ────────────────────────────────────────────────────────────────────────────
 
 function countEmDashes(s) {
-  return (s.match(/ — /g) || []).length;
+  // Any em-dash (U+2014) in rendered text. En-dash (U+2013, used in numeric
+  // ranges like 3–5 and CIs) is intentionally NOT matched — those are allowed.
+  return (s.match(/—/g) || []).length;
 }
 
 function countVocabCluster(s) {
@@ -191,18 +193,14 @@ function detect(str) {
     }
   }
   const dashCount = countEmDashes(str);
-  if (dashCount >= 2) {
+  if (dashCount >= 1) {
+    // Em-dash in rendered prose is a hard AI tell and is BANNED in authored
+    // content (CLAUDE.md S10.3). Replace with comma, colon, or parentheses.
+    // The en-dash (U+2013) for numeric ranges (3-5, CIs) is allowed and is
+    // not matched by countEmDashes.
     findings.push({
-      severity: 'WARN',
-      rule: `em-dash-${dashCount}-per-paragraph`,
-      sample: str.slice(0, 120),
-    });
-  } else if (dashCount === 1 && str.length > 60) {
-    // Single em-dash in a long string — informational only.
-    // Catches the SAMMPRIS-style "X — Y" pattern that V flagged.
-    findings.push({
-      severity: 'INFO',
-      rule: 'em-dash-1-prose',
+      severity: 'ERROR',
+      rule: 'em-dash-banned',
       sample: str.slice(0, 120),
     });
   }
@@ -223,6 +221,8 @@ function detect(str) {
 
 const TARGETS = [
   { path: 'src/data/trialData.ts', extractor: extractDataStrings },
+  { path: 'src/data/trialListData.ts', extractor: extractDataStrings },
+  { path: 'src/data/trialCatalogMeta.ts', extractor: extractDataStrings },
   { path: 'src/data/trial-questions.ts', extractor: extractDataStrings },
   { path: 'src/data/strokeClinicalPearls.ts', extractor: extractDataStrings },
   { path: 'src/data/guideContent.ts', extractor: extractDataStrings },

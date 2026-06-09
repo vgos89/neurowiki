@@ -291,6 +291,16 @@ The Technical side of §10 is unchanged. This rule applies ONLY to the English /
 
 **Practical test before sending any summary to V:** read your draft and circle every word a CFO of a hospital company would not understand without Googling. Rewrite each circled word. If the draft survives this test, ship it.
 
+### 10.3 Authored-prose voice: humanizer mandatory, em-dashes banned (hook-enforced)
+
+All user-facing authored prose (trial descriptions and interpretation, calculator interpretation text, Study Mode pearls, tooltips, copy, onboarding) passes the **humanizer** skill before commit. This is not optional. The failure mode V has flagged repeatedly is AI-fingerprint text (em-dash overuse, signal phrases, rule-of-three, vocab clusters) shipping into clinical content.
+
+- **The em-dash character (`—`, U+2014) is banned in rendered content.** Replace it with a comma, colon, semicolon, or parentheses. The **en-dash (`–`, U+2013) used for numeric ranges and CIs (`3–5`, `1.7–3.8`, `6–24 h`) is allowed**; it is correct typography, not an AI tell.
+- **Verbatim source criteria** (for example `fullEligibility` items quoted from ClinicalTrials.gov or a publication) are punctuation-normalized but clinically exact: an em-dash in a quoted criterion is replaced with equivalent punctuation, and no number, dose, drug, threshold, or clinical meaning changes. Punctuation normalization does not break the verbatim contract (same precedent as the OCR-artifact fixes).
+- **Any agent that authors user-facing prose** (`content-writer`, `medical-scientist`, `calculator-engineer`, and the orchestrator when it writes copy directly) loads the `humanizer` skill for that work.
+
+**Enforcement (hook tier, the only global tier per §2).** `npm run check:humanizer` runs in `.husky/pre-commit`. An em-dash in any scanned rendered string is an **ERROR that blocks the commit**; hard AI signal-phrases are ERROR too. The scanner covers `trialData.ts`, `trialListData.ts`, `trialCatalogMeta.ts`, `trial-questions.ts`, `strokeClinicalPearls.ts`, `guideContent.ts`, and the public question and trials pages. When a new authored-content surface ships, add it to the scanner's `TARGETS`. "Humanizer was run" is no longer honor-based: the wall enforces the em-dash floor mechanically. The broader humanizer judgment (signal phrases, rule-of-three, voice) remains the authoring agent's responsibility, reinforced by the same hook's phrase checks.
+
 ---
 
 ## 11. Agent roster

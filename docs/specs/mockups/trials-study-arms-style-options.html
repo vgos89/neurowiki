@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║  Study Arms — style decision mockup                                        ║
+  ║  DESIGN MOCKUP for product-owner review. NOT production code.             ║
+  ║                                                                            ║
+  ║  Three panels using DAWN trial arm content (Trevo / Medical management):  ║
+  ║   · Reference  — real "How to interpret this trial" TeachingWell           ║
+  ║   · Option A   — Study Arms as currently built (white card + eyebrow)     ║
+  ║   · Option B   — Study Arms restyled into teaching-well language           ║
+  ║                                                                            ║
+  ║  All tokens from .claude/skills/design-tokens/SKILL.md                    ║
+  ║  Exact styles transcribed from:                                            ║
+  ║    src/components/trials/TeachingWell.tsx                                  ║
+  ║    src/components/trials/InterventionArmsAccordion.tsx                     ║
+  ╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Study Arms — style options (mockup)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  // Inline Tailwind config — neuro-* palette from .claude/skills/design-tokens/SKILL.md
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          neuro: {
+            50:  '#EEF2FF',
+            100: '#E0E7FF',
+            200: '#C7D2FE',
+            300: '#A5B4FC',
+            400: '#818CF8',
+            500: '#1746A2',
+            600: '#1239A0',
+            700: '#0F2D8A',
+            800: '#0A1F6B',
+            900: '#060E40',
+          },
+        },
+      },
+    },
+  };
+</script>
+<style>
+  /* Teaching-well inline style — matches TeachingWell.tsx exactly */
+  .teaching-well {
+    background: #f8fafc;
+    border-left: 2px solid #1746A2;
+    border-radius: 0 8px 8px 0;
+    overflow: hidden;
+  }
+
+  /* Chevron rotation for open state */
+  .chevron-open  { transform: rotate(180deg); }
+  .chevron-closed { transform: rotate(0deg); }
+
+  /* Hidden via attribute (mirrors React hidden={!open}) */
+  [hidden] { display: none !important; }
+
+  /* Smooth chevron transition */
+  .chevron { transition: transform 200ms ease; }
+</style>
+</head>
+<body class="bg-slate-100 min-h-screen py-10 px-4">
+
+  <!-- ─── Page header ─────────────────────────────────────────────────────── -->
+  <div class="max-w-2xl mx-auto mb-8">
+    <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Design mockup · Study Arms card</p>
+    <h1 class="text-xl font-semibold text-slate-800 leading-snug">Study Arms — style decision</h1>
+    <p class="text-sm text-slate-500 mt-1">Trial context: DAWN (Nogueira 2018) · Trevo thrombectomy vs Medical management · Wake-up / unknown-onset ischaemic stroke</p>
+  </div>
+
+  <!-- ─── REFERENCE ──────────────────────────────────────────────────────── -->
+  <div class="max-w-2xl mx-auto mb-10">
+    <div class="mb-3">
+      <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Reference</p>
+      <p class="text-sm font-semibold text-slate-700 mt-0.5">How to interpret this trial (TeachingWell — current production style)</p>
+      <p class="text-xs text-slate-500 mt-0.5">Cobalt left border · slate-50 fill · collapsible · NO eyebrow header — this is the target style for the "all accordions look the same" option.</p>
+    </div>
+
+    <!-- TeachingWell: expanded by default so owner can read it immediately -->
+    <div class="teaching-well" id="ref-well">
+      <button
+        type="button"
+        onclick="toggleWell('ref-well')"
+        class="w-full flex items-center justify-between px-4 py-3 text-left focus:outline-none"
+        aria-expanded="true"
+        aria-controls="ref-well-body"
+      >
+        <span class="text-sm font-semibold text-slate-700">How to interpret this trial</span>
+        <svg id="ref-well-chevron" class="chevron chevron-open w-4 h-4 text-slate-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </button>
+      <div id="ref-well-body" class="px-4 pb-4 space-y-4">
+        <div>
+          <p class="text-[10px] font-semibold uppercase tracking-widest text-emerald-600 mb-1">Proves</p>
+          <p class="text-sm text-slate-700 leading-relaxed">Trevo thrombectomy improves 90-day functional independence (mRS 0–2) compared with medical management alone in patients with wake-up or late-window strokes selected by clinical–imaging mismatch.</p>
+        </div>
+        <div>
+          <p class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-1">Does not prove</p>
+          <p class="text-sm text-slate-700 leading-relaxed">Benefit extends to patients without mismatch criteria, or that all thrombectomy devices are equivalent. The trial was stopped early (206/500 patients) which may have inflated the effect size.</p>
+        </div>
+        <div>
+          <p class="text-[10px] font-semibold uppercase tracking-widest text-amber-600 mb-1">Cautions</p>
+          <p class="text-sm text-slate-700 leading-relaxed">Mismatch selection (NIHSS ≥10, infarct &lt;31 mL on DWI or &lt;1/3 MCA territory) is mandatory — the result does not generalise beyond this criteria. Enrolment stopped early by DSMB after interim analysis.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── OPTION A ──────────────────────────────────────────────────────── -->
+  <div class="max-w-2xl mx-auto mb-10">
+    <div class="mb-3">
+      <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Option A — keep current</p>
+      <p class="text-sm font-semibold text-slate-700 mt-0.5">Study Arms as a content section card (white + eyebrow)</p>
+      <p class="text-xs text-slate-500 mt-0.5">Matches the Population, Outcome, Trial Design, and Safety cards — all content sections share this white card + eyebrow pattern.</p>
+    </div>
+
+    <!-- InterventionArmsAccordion exact reproduction -->
+    <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
+
+      <!-- Card header — eyebrow only, no collapse control -->
+      <div class="px-4 py-3 border-b border-slate-100">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Study Arms</p>
+      </div>
+
+      <!-- Arm 1: Intervention — open by default -->
+      <div class="border-b border-slate-100" id="optA-arm1">
+        <button
+          type="button"
+          aria-expanded="true"
+          aria-controls="optA-arm1-body"
+          onclick="toggleArmPanel('optA-arm1')"
+          class="w-full flex items-center justify-between px-4 py-3 text-left min-h-[44px] focus:outline-none hover:bg-slate-50 transition-colors"
+        >
+          <div class="flex items-center gap-2 min-w-0 flex-1">
+            <span class="text-sm font-medium text-slate-800 leading-snug truncate">Trevo thrombectomy</span>
+            <span class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Intervention</span>
+          </div>
+          <svg id="optA-arm1-chevron" class="chevron chevron-open w-4 h-4 text-slate-400 flex-shrink-0 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+        </button>
+        <div id="optA-arm1-body" class="px-4 pt-3 pb-4">
+          <dl class="space-y-2 mt-1">
+            <div class="flex gap-3">
+              <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Agent</dt>
+              <dd class="text-xs text-slate-700 leading-relaxed min-w-0">Trevo stent retriever (Stryker)</dd>
+            </div>
+            <div class="flex gap-3">
+              <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Route</dt>
+              <dd class="text-xs text-slate-700 leading-relaxed min-w-0">Endovascular (transfemoral approach)</dd>
+            </div>
+            <div class="flex gap-3">
+              <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Frequency</dt>
+              <dd class="text-xs text-slate-700 leading-relaxed min-w-0">Single procedure; up to 3 passes permitted</dd>
+            </div>
+            <div class="flex gap-3">
+              <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Duration</dt>
+              <dd class="text-xs text-slate-700 leading-relaxed min-w-0">One-time intervention within 6–24 h of last known well</dd>
+            </div>
+            <div class="flex gap-3">
+              <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Co-interventions</dt>
+              <dd class="text-xs text-slate-700 leading-relaxed min-w-0">Standard medical management; IV tPA allowed if within window and no contraindication</dd>
+            </div>
+          </dl>
+          <p class="text-xs text-slate-600 leading-relaxed mt-3 pt-3 border-t border-slate-100">
+            TICI 2b/3 reperfusion achieved in 84% of treated patients. Contact aspiration and other retrievers permitted as adjunct at operator discretion.
+          </p>
+        </div>
+      </div>
+
+      <!-- Arm 2: Control — collapsed by default -->
+      <div id="optA-arm2">
+        <button
+          type="button"
+          aria-expanded="false"
+          aria-controls="optA-arm2-body"
+          onclick="toggleArmPanel('optA-arm2')"
+          class="w-full flex items-center justify-between px-4 py-3 text-left min-h-[44px] focus:outline-none hover:bg-slate-50 transition-colors"
+        >
+          <div class="flex items-center gap-2 min-w-0 flex-1">
+            <span class="text-sm font-medium text-slate-800 leading-snug truncate">Medical management</span>
+            <span class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold bg-slate-100 text-slate-600">Control</span>
+          </div>
+          <svg id="optA-arm2-chevron" class="chevron chevron-closed w-4 h-4 text-slate-400 flex-shrink-0 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+        </button>
+        <div id="optA-arm2-body" class="px-4 pt-3 pb-4" hidden>
+          <dl class="space-y-2 mt-1">
+            <div class="flex gap-3">
+              <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Agent</dt>
+              <dd class="text-xs text-slate-700 leading-relaxed min-w-0">Standard medical stroke care (no thrombectomy)</dd>
+            </div>
+            <div class="flex gap-3">
+              <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Route</dt>
+              <dd class="text-xs text-slate-700 leading-relaxed min-w-0">Oral / IV as clinically indicated</dd>
+            </div>
+            <div class="flex gap-3">
+              <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Duration</dt>
+              <dd class="text-xs text-slate-700 leading-relaxed min-w-0">Ongoing inpatient medical management</dd>
+            </div>
+            <div class="flex gap-3">
+              <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Co-interventions</dt>
+              <dd class="text-xs text-slate-700 leading-relaxed min-w-0">IV tPA allowed if within window and no contraindication; antithrombotic therapy, BP management, statin per local protocol</dd>
+            </div>
+          </dl>
+          <p class="text-xs text-slate-600 leading-relaxed mt-3 pt-3 border-t border-slate-100">
+            Crossover to EVT was not permitted after randomisation.
+          </p>
+        </div>
+      </div>
+
+    </div><!-- /Option A card -->
+  </div>
+
+  <!-- ─── OPTION B ──────────────────────────────────────────────────────── -->
+  <div class="max-w-2xl mx-auto mb-10">
+    <div class="mb-3">
+      <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Option B — match the wells</p>
+      <p class="text-sm font-semibold text-slate-700 mt-0.5">Study Arms restyled into teaching-well language</p>
+      <p class="text-xs text-slate-500 mt-0.5">Cobalt left border · slate-50 fill · collapsible outer shell. Per-arm panels and field rows preserved inside. Matches How-to-read / How-to-interpret visual language.</p>
+    </div>
+
+    <!-- Outer teaching-well wrapper — title + chevron is the "Study Arms" label -->
+    <div class="teaching-well" id="optB-outer">
+      <!-- Outer handle: "Study Arms" label, acts like TeachingWell title -->
+      <button
+        type="button"
+        onclick="toggleWell('optB-outer')"
+        class="w-full flex items-center justify-between px-4 py-3 text-left focus:outline-none"
+        aria-expanded="true"
+        aria-controls="optB-outer-body"
+      >
+        <span class="text-sm font-semibold text-slate-700">Study Arms</span>
+        <svg id="optB-outer-chevron" class="chevron chevron-open w-4 h-4 text-slate-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </button>
+
+      <!-- Outer content: per-arm collapsible panels inside the well -->
+      <div id="optB-outer-body" class="pb-3">
+
+        <!-- Arm 1 within the well — open by default -->
+        <div class="border-t border-slate-200/60" id="optB-arm1">
+          <button
+            type="button"
+            aria-expanded="true"
+            aria-controls="optB-arm1-body"
+            onclick="toggleArmPanel('optB-arm1')"
+            class="w-full flex items-center justify-between px-4 py-2.5 text-left min-h-[44px] focus:outline-none hover:bg-slate-200/30 transition-colors"
+          >
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+              <span class="text-sm font-medium text-slate-800 leading-snug truncate">Trevo thrombectomy</span>
+              <span class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Intervention</span>
+            </div>
+            <svg id="optB-arm1-chevron" class="chevron chevron-open w-4 h-4 text-slate-400 flex-shrink-0 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+          </button>
+          <div id="optB-arm1-body" class="px-4 pb-3">
+            <dl class="space-y-2 mt-1">
+              <div class="flex gap-3">
+                <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Agent</dt>
+                <dd class="text-xs text-slate-700 leading-relaxed min-w-0">Trevo stent retriever (Stryker)</dd>
+              </div>
+              <div class="flex gap-3">
+                <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Route</dt>
+                <dd class="text-xs text-slate-700 leading-relaxed min-w-0">Endovascular (transfemoral approach)</dd>
+              </div>
+              <div class="flex gap-3">
+                <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Frequency</dt>
+                <dd class="text-xs text-slate-700 leading-relaxed min-w-0">Single procedure; up to 3 passes permitted</dd>
+              </div>
+              <div class="flex gap-3">
+                <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Duration</dt>
+                <dd class="text-xs text-slate-700 leading-relaxed min-w-0">One-time intervention within 6–24 h of last known well</dd>
+              </div>
+              <div class="flex gap-3">
+                <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Co-interventions</dt>
+                <dd class="text-xs text-slate-700 leading-relaxed min-w-0">Standard medical management; IV tPA allowed if within window and no contraindication</dd>
+              </div>
+            </dl>
+            <p class="text-xs text-slate-600 leading-relaxed mt-3 pt-3 border-t border-slate-200/60">
+              TICI 2b/3 reperfusion achieved in 84% of treated patients. Contact aspiration and other retrievers permitted as adjunct at operator discretion.
+            </p>
+          </div>
+        </div>
+
+        <!-- Arm 2 within the well — collapsed by default -->
+        <div class="border-t border-slate-200/60" id="optB-arm2">
+          <button
+            type="button"
+            aria-expanded="false"
+            aria-controls="optB-arm2-body"
+            onclick="toggleArmPanel('optB-arm2')"
+            class="w-full flex items-center justify-between px-4 py-2.5 text-left min-h-[44px] focus:outline-none hover:bg-slate-200/30 transition-colors"
+          >
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+              <span class="text-sm font-medium text-slate-800 leading-snug truncate">Medical management</span>
+              <span class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold bg-slate-100 text-slate-600">Control</span>
+            </div>
+            <svg id="optB-arm2-chevron" class="chevron chevron-closed w-4 h-4 text-slate-400 flex-shrink-0 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+          </button>
+          <div id="optB-arm2-body" class="px-4 pb-3" hidden>
+            <dl class="space-y-2 mt-1">
+              <div class="flex gap-3">
+                <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Agent</dt>
+                <dd class="text-xs text-slate-700 leading-relaxed min-w-0">Standard medical stroke care (no thrombectomy)</dd>
+              </div>
+              <div class="flex gap-3">
+                <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Route</dt>
+                <dd class="text-xs text-slate-700 leading-relaxed min-w-0">Oral / IV as clinically indicated</dd>
+              </div>
+              <div class="flex gap-3">
+                <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Duration</dt>
+                <dd class="text-xs text-slate-700 leading-relaxed min-w-0">Ongoing inpatient medical management</dd>
+              </div>
+              <div class="flex gap-3">
+                <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Co-interventions</dt>
+                <dd class="text-xs text-slate-700 leading-relaxed min-w-0">IV tPA allowed if within window and no contraindication; antithrombotic therapy, BP management, statin per local protocol</dd>
+              </div>
+            </dl>
+            <p class="text-xs text-slate-600 leading-relaxed mt-3 pt-3 border-t border-slate-200/60">
+              Crossover to EVT was not permitted after randomisation.
+            </p>
+          </div>
+        </div>
+
+      </div><!-- /optB-outer-body -->
+    </div><!-- /Option B well -->
+  </div>
+
+  <!-- ─── Recommendation note ──────────────────────────────────────────────── -->
+  <div class="max-w-2xl mx-auto mb-10">
+    <div class="bg-white rounded-xl border border-slate-100 px-5 py-4">
+      <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Design note — trade-off</p>
+      <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+        <p>
+          <span class="font-semibold text-slate-700">Option A (keep current)</span> is the stronger default if Study Arms is understood as a structured factual summary — equivalent to Population, Outcome, Trial Design, and Safety — all of which share the white content-section card. The eyebrow "STUDY ARMS" label and consistent card frame signal that Study Arms is peer content to those sections, not a teaching overlay.
+        </p>
+        <p>
+          <span class="font-semibold text-slate-700">Option B (match the wells)</span> is the right call if the priority is visual uniformity of every collapsible accordion on the page. It removes the only card that mixes a section-card outer shell with an accordion interior, giving the page a single collapsible language. The cost is that Study Arms no longer visually clusters with Population / Outcome / Safety, which could leave a clinician unsure whether it is editorial content or factual trial data.
+        </p>
+        <p class="text-slate-500">
+          Suggested default: <span class="font-medium text-slate-700">Option A</span> — preserve the content-section card for factual trial data; reserve the cobalt-well pattern exclusively for teaching annotations (How to read, How to interpret). This sharpens the semantic contrast between "what the trial showed" (card) and "how to think about it" (well). If the page later gains more collapsible teaching wells, reconsider Option B.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── JavaScript — accordion / well toggle logic ──────────────────────── -->
+  <script>
+    /**
+     * toggleWell(wellId)
+     * Mirrors TeachingWell.tsx isOpen state: flips aria-expanded on the button,
+     * shows/hides the body, rotates the chevron.
+     */
+    function toggleWell(wellId) {
+      const well = document.getElementById(wellId);
+      const btn  = well.querySelector('button[aria-expanded]');
+      const body = well.querySelector('[id$="-body"]');
+      const chevron = well.querySelector('[id$="-chevron"]');
+
+      const isNowOpen = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!isNowOpen));
+
+      if (isNowOpen) {
+        body.setAttribute('hidden', '');
+        chevron.classList.remove('chevron-open');
+        chevron.classList.add('chevron-closed');
+      } else {
+        body.removeAttribute('hidden');
+        chevron.classList.remove('chevron-closed');
+        chevron.classList.add('chevron-open');
+      }
+    }
+
+    /**
+     * toggleArmPanel(panelId)
+     * Mirrors ArmPanel's open state: flips aria-expanded, toggles body hidden,
+     * rotates chevron. Panel id → button + body + chevron resolved by id suffix.
+     */
+    function toggleArmPanel(panelId) {
+      const panel   = document.getElementById(panelId);
+      const btn     = panel.querySelector('button[aria-expanded]');
+      const bodyId  = btn.getAttribute('aria-controls');
+      const body    = document.getElementById(bodyId);
+      const chevron = document.getElementById(panelId + '-chevron');
+
+      const isNowOpen = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!isNowOpen));
+
+      if (isNowOpen) {
+        body.setAttribute('hidden', '');
+        chevron.classList.remove('chevron-open');
+        chevron.classList.add('chevron-closed');
+      } else {
+        body.removeAttribute('hidden');
+        chevron.classList.remove('chevron-closed');
+        chevron.classList.add('chevron-open');
+      }
+    }
+  </script>
+</body>
+</html>

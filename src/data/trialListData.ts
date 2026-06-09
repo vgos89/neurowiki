@@ -496,7 +496,7 @@ const manualTrials: (Omit<TrialItem, 'year'> & { year?: number })[] = [
   }),
   buildTrial('pc-trial', 'PC Trial', 'secondary-prevention', '10.1056/NEJMoa1211716', {
     isPlaceholder: false,
-    description: 'European RCT (N=414, age <60) of Amplatzer PFO Occluder vs medical therapy after cryptogenic stroke, TIA, or peripheral embolism. Primary composite 3.4% vs 5.2% (HR 0.63, P=0.34). Underpowered — only 18 primary events. Negative.',
+    description: 'European RCT (N=414, age <60) of Amplatzer PFO Occluder vs medical therapy after cryptogenic stroke, TIA, or peripheral embolism. Primary composite 3.4% vs 5.2% (HR 0.63, P=0.34). Underpowered: only 18 primary events. Negative.',
     year: 2013,
   }),
   buildTrial('respect-original-trial', 'RESPECT (Original 2013)', 'secondary-prevention', '10.1056/NEJMoa1301440', {
@@ -593,7 +593,7 @@ const restoredLegacyTrials: TrialItem[] = Object.entries(LEGACY_TRIAL_CATALOG_ME
   .filter(([id]) => !manualTrialIds.has(id))
   .map(([id, metadata]) => {
     if (import.meta.env.DEV && !legacyTrialCategories[id]) {
-      console.warn(`[trialListData] Legacy trial "${id}" has no category mapping — defaulting to 'ivt'. Add it to legacyTrialCategories.`);
+      console.warn(`[trialListData] Legacy trial "${id}" has no category mapping, defaulting to 'ivt'. Add it to legacyTrialCategories.`);
     }
     return {
       id,

@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trials Page — Consistency Cleanups: BEFORE / AFTER</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            neuro: {
+              50:  '#EEF2FF',
+              100: '#E0E7FF',
+              200: '#C7D2FE',
+              300: '#A5B4FC',
+              400: '#818CF8',
+              500: '#1746A2',
+              600: '#1239A0',
+              700: '#0E2D6B',
+              800: '#0A1F6B',
+              900: '#060E40',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+
+    /* ── Layout helpers ── */
+    .panel-col { min-width: 0; }
+
+    /* ── Mono code blocks ── */
+    .code-tag {
+      font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+      font-size: 11px;
+      line-height: 1.55;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px 12px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .code-before { border-left: 3px solid #fca5a5; }
+    .code-after  { border-left: 3px solid #6ee7b7; }
+    .code-neutral { border-left: 3px solid #cbd5e1; }
+
+    /* ── Section chrome ── */
+    .section-block {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 36px;
+    }
+    .section-head {
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 12px 20px;
+    }
+    .before-col { background: #fff7f7; border-right: 1px solid #fde8e8; }
+    .after-col  { background: #f0fdf4; }
+    .col-head   { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 16px; border-bottom: 1px solid; }
+    .col-head-before { color: #dc2626; border-color: #fecaca; background: #fef2f2; }
+    .col-head-after  { color: #15803d; border-color: #bbf7d0; background: #f0fdf4; }
+
+    /* ── Swatch ── */
+    .swatch { display: inline-block; width: 36px; height: 20px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); vertical-align: middle; margin-right: 6px; }
+
+    /* ── Separator ── */
+    .section-divider { border: none; border-top: 2px dashed #e2e8f0; margin: 48px 0; }
+
+    /* ── "unchanged" note badge ── */
+    .identical-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: #f1f5f9; border: 1px solid #cbd5e1;
+      color: #64748b; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      border-radius: 999px; padding: 2px 8px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased px-4 py-12">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       PAGE HEADER
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="max-w-5xl mx-auto mb-12">
+    <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">NeuroWiki · docs/specs/mockups</p>
+    <h1 class="text-2xl font-bold text-slate-900 mb-2">Trials Page — Consistency Cleanups</h1>
+    <p class="text-sm text-slate-500 max-w-xl leading-relaxed">
+      Visual BEFORE / AFTER for every non-eligibility-card change committed in the design-consistency pass.
+      Files touched: <code class="text-[11px] bg-slate-100 px-1.5 py-0.5 rounded">TrialPageNew.tsx</code>
+      and <code class="text-[11px] bg-slate-100 px-1.5 py-0.5 rounded">InterventionArmsAccordion.tsx</code>.
+    </p>
+    <div class="flex flex-wrap gap-3 mt-4">
+      <span class="inline-flex items-center gap-1.5 text-xs font-medium bg-red-50 text-red-700 border border-red-200 px-3 py-1 rounded-full">
+        <span class="w-2 h-2 rounded-full bg-red-400 inline-block"></span> BEFORE (old code)
+      </span>
+      <span class="inline-flex items-center gap-1.5 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span> AFTER (current code)
+      </span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SECTION A — VISIBLE CHANGES
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="max-w-5xl mx-auto">
+    <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Section A</p>
+    <h2 class="text-lg font-bold text-slate-800 mb-6">Visible changes</h2>
+
+
+    <!-- ── A1: Eyebrow label font-bold ────────────────────────────────────── -->
+    <div class="section-block">
+      <div class="section-head">
+        <p class="text-xs font-bold text-slate-700">
+          A1 &nbsp;·&nbsp; Section eyebrow labels &mdash; <code>font-bold</code> added
+        </p>
+        <p class="text-[11px] text-slate-500 mt-0.5">
+          Affects "Trial Design", "Safety", "Primary Outcome", "NNT", "Study Arms", "See also", and sub-labels inside each card (TYPE, TIMELINE, N, ALTEPLASE, PLACEBO, DOI …)
+        </p>
+      </div>
+      <div class="grid grid-cols-2">
+
+        <!-- BEFORE -->
+        <div class="before-col panel-col">
+          <div class="col-head col-head-before">BEFORE</div>
+          <div class="p-5 space-y-5">
+            <!-- Sample eyebrow labels without bold -->
+            <div>
+              <p class="text-[10px] uppercase tracking-widest text-slate-400">TYPE</p>
+              <p class="text-sm text-slate-700 mt-0.5">Randomized Controlled Trial</p>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase tracking-widest text-slate-400">TIMELINE</p>
+              <p class="text-sm font-medium text-slate-700 mt-0.5">Oct 2012 – Jun 2018</p>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase tracking-widest text-slate-400">MORTALITY</p>
+              <div class="flex items-end gap-5 mt-0.5">
+                <div>
+                  <p class="text-[10px] uppercase tracking-widest text-slate-400">Alteplase</p>
+                  <p class="text-2xl font-bold text-slate-700">8.0%</p>
+                </div>
+                <div>
+                  <p class="text-[10px] uppercase tracking-widest text-slate-400">Placebo</p>
+                  <p class="text-2xl font-bold text-slate-400">7.4%</p>
+                </div>
+              </div>
+            </div>
+            <div class="code-tag code-before">text-[10px] uppercase tracking-widest text-slate-400</div>
+          </div>
+        </div>
+
+        <!-- AFTER -->
+        <div class="after-col panel-col">
+          <div class="col-head col-head-after">AFTER</div>
+          <div class="p-5 space-y-5">
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">TYPE</p>
+              <p class="text-sm text-slate-700 mt-0.5">Randomized Controlled Trial</p>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">TIMELINE</p>
+              <p class="text-sm font-medium text-slate-700 mt-0.5">Oct 2012 – Jun 2018</p>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">MORTALITY</p>
+              <div class="flex items-end gap-5 mt-0.5">
+                <div>
+                  <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Alteplase</p>
+                  <p class="text-2xl font-bold text-slate-700">8.0%</p>
+                </div>
+                <div>
+                  <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Placebo</p>
+                  <p class="text-2xl font-bold text-slate-400">7.4%</p>
+                </div>
+              </div>
+            </div>
+            <div class="code-tag code-after">text-[10px] <strong>font-bold</strong> uppercase tracking-widest text-slate-400</div>
+          </div>
+        </div>
+
+      </div><!-- /grid -->
+    </div><!-- /A1 -->
+
+
+    <!-- ── A2: Study Arms dt label shade ──────────────────────────────────── -->
+    <div class="section-block">
+      <div class="section-head">
+        <p class="text-xs font-bold text-slate-700">
+          A2 &nbsp;·&nbsp; Study Arms field labels <code>&lt;dt&gt;</code> &mdash; <code>text-slate-500</code> &rarr; <code>text-slate-400</code>
+        </p>
+        <p class="text-[11px] text-slate-500 mt-0.5">
+          File: <code>InterventionArmsAccordion.tsx</code> · FIELD_LABELS: AGENT / DOSE / ROUTE / FREQUENCY / DURATION / CO-INTERVENTIONS
+        </p>
+      </div>
+      <div class="grid grid-cols-2">
+
+        <!-- BEFORE -->
+        <div class="before-col panel-col">
+          <div class="col-head col-head-before">BEFORE</div>
+          <div class="p-5">
+            <dl class="space-y-2 mt-1">
+              <div class="flex gap-3">
+                <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-500 w-28 flex-shrink-0 pt-0.5">Agent</dt>
+                <dd class="text-xs text-slate-700 leading-relaxed">Alteplase 0.9 mg/kg IV</dd>
+              </div>
+              <div class="flex gap-3">
+                <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-500 w-28 flex-shrink-0 pt-0.5">Dose</dt>
+                <dd class="text-xs text-slate-700 leading-relaxed">Max 90 mg total</dd>
+              </div>
+              <div class="flex gap-3">
+                <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-500 w-28 flex-shrink-0 pt-0.5">Route</dt>
+                <dd class="text-xs text-slate-700 leading-relaxed">Intravenous bolus + infusion</dd>
+              </div>
+            </dl>
+            <div class="code-tag code-before mt-4">text-[10px] font-bold uppercase tracking-widest <strong>text-slate-500</strong></div>
+          </div>
+        </div>
+
+        <!-- AFTER -->
+        <div class="after-col panel-col">
+          <div class="col-head col-head-after">AFTER</div>
+          <div class="p-5">
+            <dl class="space-y-2 mt-1">
+              <div class="flex gap-3">
+                <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Agent</dt>
+                <dd class="text-xs text-slate-700 leading-relaxed">Alteplase 0.9 mg/kg IV</dd>
+              </div>
+              <div class="flex gap-3">
+                <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Dose</dt>
+                <dd class="text-xs text-slate-700 leading-relaxed">Max 90 mg total</dd>
+              </div>
+              <div class="flex gap-3">
+                <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Route</dt>
+                <dd class="text-xs text-slate-700 leading-relaxed">Intravenous bolus + infusion</dd>
+              </div>
+            </dl>
+            <div class="code-tag code-after mt-4">text-[10px] font-bold uppercase tracking-widest <strong>text-slate-400</strong></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Comparison swatch row -->
+      <div class="px-5 py-3 bg-white border-t border-slate-100 flex items-center gap-6 text-xs text-slate-500">
+        <span>
+          <span class="swatch" style="background:#64748b"></span>
+          slate-500 = #64748b &nbsp;(BEFORE — slightly darker)
+        </span>
+        <span>
+          <span class="swatch" style="background:#94a3b8"></span>
+          slate-400 = #94a3b8 &nbsp;(AFTER — lighter, matches eyebrow convention)
+        </span>
+      </div>
+    </div><!-- /A2 -->
+
+
+    <!-- ── A3: Study Arms note text shade ─────────────────────────────────── -->
+    <div class="section-block">
+      <div class="section-head">
+        <p class="text-xs font-bold text-slate-700">
+          A3 &nbsp;·&nbsp; Study Arms panel note text &mdash; <code>text-slate-500</code> &rarr; <code>text-slate-600</code>
+        </p>
+        <p class="text-[11px] text-slate-500 mt-0.5">
+          File: <code>InterventionArmsAccordion.tsx</code> · the <code>&lt;p&gt;</code> block rendered from <code>arm.note</code>
+        </p>
+      </div>
+      <div class="grid grid-cols-2">
+
+        <!-- BEFORE -->
+        <div class="before-col panel-col">
+          <div class="col-head col-head-before">BEFORE</div>
+          <div class="p-5">
+            <p class="text-xs text-slate-500 leading-relaxed mt-3 pt-3 border-t border-slate-100">
+              DWI-FLAIR mismatch was required for randomization. Perfusion mismatch was not mandatory. Alteplase was dosed at 0.9 mg/kg (max 90 mg) with 10% as bolus over 1 min.
+            </p>
+            <div class="code-tag code-before mt-4">text-xs <strong>text-slate-500</strong> leading-relaxed mt-3 pt-3 border-t border-slate-100</div>
+          </div>
+        </div>
+
+        <!-- AFTER -->
+        <div class="after-col panel-col">
+          <div class="col-head col-head-after">AFTER</div>
+          <div class="p-5">
+            <p class="text-xs text-slate-600 leading-relaxed mt-3 pt-3 border-t border-slate-100">
+              DWI-FLAIR mismatch was required for randomization. Perfusion mismatch was not mandatory. Alteplase was dosed at 0.9 mg/kg (max 90 mg) with 10% as bolus over 1 min.
+            </p>
+            <div class="code-tag code-after mt-4">text-xs <strong>text-slate-600</strong> leading-relaxed mt-3 pt-3 border-t border-slate-100</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Comparison swatch row -->
+      <div class="px-5 py-3 bg-white border-t border-slate-100 flex items-center gap-6 text-xs text-slate-500">
+        <span>
+          <span class="swatch" style="background:#64748b"></span>
+          slate-500 = #64748b &nbsp;(BEFORE — same muted shade as dt labels; harder to distinguish)
+        </span>
+        <span>
+          <span class="swatch" style="background:#475569"></span>
+          slate-600 = #475569 &nbsp;(AFTER — slightly darker; note reads as body text, dt reads as label)
+        </span>
+      </div>
+    </div><!-- /A3 -->
+
+
+    <!-- ── A4: Study Arms panel top padding ───────────────────────────────── -->
+    <div class="section-block">
+      <div class="section-head">
+        <p class="text-xs font-bold text-slate-700">
+          A4 &nbsp;·&nbsp; Study Arms panel body &mdash; top padding added (<code>px-4 pb-4</code> &rarr; <code>px-4 pt-3 pb-4</code>)
+        </p>
+        <p class="text-[11px] text-slate-500 mt-0.5">
+          File: <code>InterventionArmsAccordion.tsx</code> · the expanded panel body <code>&lt;div id={bodyId}&gt;</code>
+        </p>
+      </div>
+      <div class="grid grid-cols-2">
+
+        <!-- BEFORE — no pt, content flush to divider -->
+        <div class="before-col panel-col">
+          <div class="col-head col-head-before">BEFORE &mdash; flush to divider</div>
+          <div class="p-5">
+            <!-- Simulated opened panel -->
+            <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+              <!-- header row -->
+              <div class="w-full flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-slate-50">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-medium text-slate-800">Alteplase</span>
+                  <span class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Intervention</span>
+                </div>
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+              </div>
+              <!-- body: px-4 pb-4 only (no pt) — content is flush to border-b above -->
+              <div class="px-4 pb-4">
+                <dl class="space-y-2 mt-1">
+                  <div class="flex gap-3">
+                    <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Agent</dt>
+                    <dd class="text-xs text-slate-700 leading-relaxed">Alteplase 0.9 mg/kg IV</dd>
+                  </div>
+                  <div class="flex gap-3">
+                    <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Dose</dt>
+                    <dd class="text-xs text-slate-700 leading-relaxed">Max 90 mg total</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+            <div class="code-tag code-before mt-4">class="px-4 pb-4"</div>
+            <p class="text-[11px] text-slate-500 mt-2">dl starts immediately below divider line — cramped.</p>
+          </div>
+        </div>
+
+        <!-- AFTER — pt-3 creates breathing room -->
+        <div class="after-col panel-col">
+          <div class="col-head col-head-after">AFTER &mdash; 12px top gap</div>
+          <div class="p-5">
+            <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+              <!-- header row -->
+              <div class="w-full flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-slate-50">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-medium text-slate-800">Alteplase</span>
+                  <span class="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Intervention</span>
+                </div>
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+              </div>
+              <!-- body: px-4 pt-3 pb-4 -->
+              <div class="px-4 pt-3 pb-4">
+                <dl class="space-y-2 mt-1">
+                  <div class="flex gap-3">
+                    <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Agent</dt>
+                    <dd class="text-xs text-slate-700 leading-relaxed">Alteplase 0.9 mg/kg IV</dd>
+                  </div>
+                  <div class="flex gap-3">
+                    <dt class="text-[10px] font-bold uppercase tracking-widest text-slate-400 w-28 flex-shrink-0 pt-0.5">Dose</dt>
+                    <dd class="text-xs text-slate-700 leading-relaxed">Max 90 mg total</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+            <div class="code-tag code-after mt-4">class="px-4 <strong>pt-3</strong> pb-4"</div>
+            <p class="text-[11px] text-slate-500 mt-2">12px gap between divider and first row — visually breathable.</p>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /A4 -->
+
+
+    <!-- ── A5: Placeholder card radius + border ────────────────────────────── -->
+    <div class="section-block">
+      <div class="section-head">
+        <p class="text-xs font-bold text-slate-700">
+          A5 &nbsp;·&nbsp; Placeholder trial card &mdash; <code>rounded-2xl border-slate-200</code> &rarr; <code>rounded-xl border-slate-100</code>; link colour <code>text-blue-600</code> &rarr; <code>text-neuro-500</code>
+        </p>
+        <p class="text-[11px] text-slate-500 mt-0.5">
+          File: <code>TrialPageNew.tsx</code> · <code>isPlaceholderTrial</code> branch — the "Content coming soon" card and its inner DOI reference panel
+        </p>
+      </div>
+      <div class="grid grid-cols-2">
+
+        <!-- BEFORE -->
+        <div class="before-col panel-col">
+          <div class="col-head col-head-before">BEFORE</div>
+          <div class="p-5">
+            <div class="bg-white rounded-2xl border border-slate-200 p-6">
+              <div class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 mb-4">
+                Blank page ready
+              </div>
+              <h2 class="text-xl font-semibold text-slate-900 mb-3">Content coming soon</h2>
+              <p class="text-slate-600 leading-relaxed mb-6 text-sm">
+                This trial has been added to the new catalog structure, but the detailed summary has not been written yet.
+              </p>
+              <div class="rounded-xl bg-slate-50 border border-slate-200 p-4">
+                <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">Reference DOI</div>
+                <a href="#" class="inline-flex items-center gap-2 text-sm text-blue-600 hover:underline break-all">
+                  10.1056/NEJMoa1804569
+                  <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+              </div>
+            </div>
+            <div class="code-tag code-before mt-4">outer:  rounded-2xl border border-slate-200
+link:   text-blue-600</div>
+          </div>
+        </div>
+
+        <!-- AFTER -->
+        <div class="after-col panel-col">
+          <div class="col-head col-head-after">AFTER</div>
+          <div class="p-5">
+            <div class="bg-white rounded-xl border border-slate-100 p-6">
+              <div class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 mb-4">
+                Blank page ready
+              </div>
+              <h2 class="text-xl font-semibold text-slate-900 mb-3">Content coming soon</h2>
+              <p class="text-slate-600 leading-relaxed mb-6 text-sm">
+                This trial has been added to the new catalog structure, but the detailed summary has not been written yet.
+              </p>
+              <div class="rounded-xl bg-slate-50 border border-slate-200 p-4">
+                <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">Reference DOI</div>
+                <a href="#" class="inline-flex items-center gap-2 text-sm text-neuro-500 hover:underline break-all">
+                  10.1056/NEJMoa1804569
+                  <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+              </div>
+            </div>
+            <div class="code-tag code-after mt-4">outer:  rounded-xl border border-slate-100
+link:   text-neuro-500</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Swatch comparison for radius + border difference -->
+      <div class="px-5 py-3 bg-white border-t border-slate-100 text-xs text-slate-500 space-y-1">
+        <p>
+          <strong>Radius:</strong> <code>rounded-2xl</code> = 16px corners (rounder, softer) &rarr; <code>rounded-xl</code> = 12px corners (matches all other trial-page cards).
+        </p>
+        <p>
+          <strong>Border:</strong> <code>border-slate-200</code> = #e2e8f0 (more visible) &rarr; <code>border-slate-100</code> = #f1f5f9 (hairline, matches card convention).
+        </p>
+        <p>
+          <strong>Link:</strong> <code>text-blue-600</code> = #2563eb (Tailwind generic blue) &rarr; <code>text-neuro-500</code> = #1746A2 (brand cobalt, no color shift is small but consistent).
+        </p>
+      </div>
+    </div><!-- /A5 -->
+
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SECTION B — UNDER-THE-HOOD (visually identical)
+    ══════════════════════════════════════════════════════════════ -->
+    <hr class="section-divider">
+
+    <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Section B</p>
+    <h2 class="text-lg font-bold text-slate-800 mb-2">Under-the-hood &mdash; pixel-identical, code cleaned</h2>
+    <p class="text-sm text-slate-500 mb-8 max-w-xl leading-relaxed">
+      These changes replaced hardcoded hex values with design-token class names.
+      The rendered colour is identical because the tokens map to the same hex values.
+      Each entry shows: identical swatch + rendered callout + code strings.
+    </p>
+
+
+    <!-- ── B6a: text-[#1746A2] → text-neuro-500 ──────────────────────────── -->
+    <div class="section-block">
+      <div class="section-head">
+        <p class="text-xs font-bold text-slate-700">
+          B6a &nbsp;·&nbsp; Hardcoded cobalt text &mdash; <code>text-[#1746A2]</code> &rarr; <code>text-neuro-500</code>
+        </p>
+        <p class="text-[11px] text-slate-500 mt-0.5">
+          File: <code>TrialPageNew.tsx</code> · DOI / ClinicalTrials.gov links inside <code>renderTrialDesign()</code>; see-also link pill borders; EXTEND sticky header back-arrow colour; DOI link in EXTEND inline Section 8
+        </p>
+      </div>
+
+      <!-- Identical swatch strip -->
+      <div class="bg-white px-5 py-4 border-b border-slate-100 flex items-center gap-6 flex-wrap">
+        <div class="flex items-center gap-2">
+          <span class="swatch" style="background:#1746A2"></span>
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Before</p>
+            <p class="text-xs font-mono text-slate-700">#1746A2 via <code>text-[#1746A2]</code></p>
+          </div>
+        </div>
+        <span class="text-slate-300 font-bold text-lg">=</span>
+        <div class="flex items-center gap-2">
+          <span class="swatch" style="background:#1746A2"></span>
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">After</p>
+            <p class="text-xs font-mono text-slate-700">#1746A2 via <code>text-neuro-500</code></p>
+          </div>
+        </div>
+        <span class="identical-badge">pixel-identical</span>
+      </div>
+
+      <!-- Rendered example: a DOI link -->
+      <div class="bg-white px-5 pb-5 pt-2">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 mt-3">Rendered example — DOI link inside Trial Design card</p>
+        <div class="bg-white rounded-xl border border-slate-100 p-4">
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">DOI</p>
+          <a href="#" class="inline-flex items-center gap-1 text-xs hover:underline" style="color:#1746A2">
+            10.1056/NEJMoa1804569
+            <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2">Renders identically with either class string. Token variant is refactor-safe and theme-aware.</p>
+        <div class="grid grid-cols-2 gap-3 mt-3">
+          <div class="code-tag code-before">text-[#1746A2]</div>
+          <div class="code-tag code-after">text-neuro-500</div>
+        </div>
+      </div>
+    </div><!-- /B6a -->
+
+
+    <!-- ── B6b: Bedside Pearl inline styles → token classes ──────────────── -->
+    <div class="section-block">
+      <div class="section-head">
+        <p class="text-xs font-bold text-slate-700">
+          B6b &nbsp;·&nbsp; Bedside Pearl callout &mdash; inline <code>style={{}}</code> &rarr; token <code>className</code>
+        </p>
+        <p class="text-[11px] text-slate-500 mt-0.5">
+          File: <code>TrialPageNew.tsx</code> · All ~103 Bedside Pearl instances (EXTEND, WAKE-UP, ECASS III, NINDS, INSPIRES, and all subsequent archetype blocks) plus 3 "harm" variants. neuro-50 = #EEF2FF, neuro-500 = #1746A2, neuro-700 = #0E2D6B.
+        </p>
+      </div>
+
+      <!-- Identical swatch strip for Pearl colours -->
+      <div class="bg-white px-5 py-4 border-b border-slate-100 flex items-center gap-8 flex-wrap">
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5">Background</p>
+          <div class="flex items-center gap-2">
+            <span class="swatch" style="background:#EEF2FF"></span>
+            <span class="text-xs font-mono text-slate-600">#EEF2FF = neuro-50</span>
+            <span class="identical-badge">same</span>
+          </div>
+        </div>
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5">Left border</p>
+          <div class="flex items-center gap-2">
+            <span class="swatch" style="background:#1746A2"></span>
+            <span class="text-xs font-mono text-slate-600">#1746A2 = neuro-500</span>
+            <span class="identical-badge">same</span>
+          </div>
+        </div>
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5">Body text</p>
+          <div class="flex items-center gap-2">
+            <span class="swatch" style="background:#0E2D6B"></span>
+            <span class="text-xs font-mono text-slate-600">#0E2D6B = neuro-700</span>
+            <span class="identical-badge">same</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rendered Bedside Pearl — shown once; identical under both -->
+      <div class="grid grid-cols-2">
+
+        <div class="before-col panel-col">
+          <div class="col-head col-head-before">BEFORE &mdash; inline styles</div>
+          <div class="p-5">
+            <!-- Pearl rendered with inline styles to match original code -->
+            <div style="background:#EEF2FF; border-left:2px solid #1746A2; border-radius:0 12px 12px 0; padding:16px 20px;">
+              <p style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#1746A2; margin-bottom:8px;">Bedside Pearl</p>
+              <p style="font-size:14px; color:#0E2D6B; line-height:1.55;">
+                DWI-FLAIR mismatch is a radiological marker of stroke age. Bright on DWI but dark on FLAIR implies the infarct is acute — likely within the thrombolytic window.
+              </p>
+            </div>
+            <div class="code-tag code-before mt-4">style={{
+  background: '#EEF2FF',
+  borderLeft: '2px solid #1746A2',
+  borderRadius: '0 12px 12px 0',
+  padding: '16px 20px'
+}}
+label: style={{ color: '#1746A2' }}
+body:  style={{ color: '#0E2D6B' }}</div>
+          </div>
+        </div>
+
+        <div class="after-col panel-col">
+          <div class="col-head col-head-after">AFTER &mdash; token classes (pixel-identical)</div>
+          <div class="p-5">
+            <!-- Pearl rendered with Tailwind token classes -->
+            <div class="bg-neuro-50 border-l-2 border-neuro-500 rounded-r-xl px-5 py-4">
+              <p class="text-[10px] font-bold uppercase tracking-widest text-neuro-500 mb-2">Bedside Pearl</p>
+              <p class="text-sm text-neuro-700 leading-relaxed">
+                DWI-FLAIR mismatch is a radiological marker of stroke age. Bright on DWI but dark on FLAIR implies the infarct is acute — likely within the thrombolytic window.
+              </p>
+            </div>
+            <div class="code-tag code-after mt-4">className=
+  "bg-neuro-50 border-l-2 border-neuro-500
+   rounded-r-xl px-5 py-4"
+label: "text-[10px] font-bold uppercase
+   tracking-widest text-neuro-500 mb-2"
+body:  "text-sm text-neuro-700 leading-relaxed"</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="px-5 py-3 bg-white border-t border-slate-100 text-[11px] text-slate-500">
+        Both panels above render the same colour. The token variant survives a theme-colour update without hunting hex strings.
+      </div>
+    </div><!-- /B6b -->
+
+
+    <!-- ── B6c: text-blue-600 → text-neuro-500 ───────────────────────────── -->
+    <div class="section-block">
+      <div class="section-head">
+        <p class="text-xs font-bold text-slate-700">
+          B6c &nbsp;·&nbsp; Generic blue → brand cobalt &mdash; <code>text-blue-600</code> &rarr; <code>text-neuro-500</code>
+        </p>
+        <p class="text-[11px] text-slate-500 mt-0.5">
+          File: <code>TrialPageNew.tsx</code> · Placeholder trial card DOI link (<code>isPlaceholderTrial</code> branch). Covered visually by A5 above; included here to complete the B-section code audit.
+        </p>
+      </div>
+
+      <!-- Swatch comparison — these are NOT identical; neuro-500 is darker -->
+      <div class="bg-white px-5 py-4 border-b border-slate-100 flex items-center gap-6 flex-wrap">
+        <div class="flex items-center gap-2">
+          <span class="swatch" style="background:#2563eb"></span>
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Before</p>
+            <p class="text-xs font-mono text-slate-700">#2563eb &nbsp;<code>text-blue-600</code></p>
+          </div>
+        </div>
+        <span class="text-slate-300 font-bold text-lg">&rarr;</span>
+        <div class="flex items-center gap-2">
+          <span class="swatch" style="background:#1746A2"></span>
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">After</p>
+            <p class="text-xs font-mono text-slate-700">#1746A2 &nbsp;<code>text-neuro-500</code></p>
+          </div>
+        </div>
+        <span class="text-[10px] font-semibold px-2 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-full">slight shade shift</span>
+      </div>
+
+      <div class="bg-white px-5 pb-5 pt-2">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 mt-3">Side-by-side link render</p>
+        <div class="flex items-center gap-8 flex-wrap">
+          <div>
+            <p class="text-[10px] text-slate-400 mb-1">BEFORE</p>
+            <a href="#" class="inline-flex items-center gap-2 text-sm hover:underline" style="color:#2563eb">
+              10.1056/NEJMoa1804569
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+          <div>
+            <p class="text-[10px] text-slate-400 mb-1">AFTER</p>
+            <a href="#" class="inline-flex items-center gap-2 text-sm text-neuro-500 hover:underline">
+              10.1056/NEJMoa1804569
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-3">
+          The Tailwind generic <code>blue-600</code> (#2563eb) is a brighter cerulean. <code>neuro-500</code> (#1746A2) is the brand cobalt — slightly darker/deeper.
+          Clinically imperceptible; both pass WCAG 4.5:1. The change removes the off-brand blue from the page.
+        </p>
+        <div class="grid grid-cols-2 gap-3 mt-3">
+          <div class="code-tag code-before">text-blue-600   → #2563eb</div>
+          <div class="code-tag code-after">text-neuro-500  → #1746A2 (brand)</div>
+        </div>
+      </div>
+    </div><!-- /B6c -->
+
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SUMMARY TABLE
+    ══════════════════════════════════════════════════════════════ -->
+    <hr class="section-divider">
+
+    <h2 class="text-lg font-bold text-slate-800 mb-4">Summary</h2>
+    <div class="overflow-x-auto rounded-xl border border-slate-200">
+      <table class="w-full text-xs">
+        <thead>
+          <tr class="bg-slate-50 border-b border-slate-200">
+            <th class="text-left px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 w-8">#</th>
+            <th class="text-left px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">Change</th>
+            <th class="text-left px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">Before</th>
+            <th class="text-left px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">After</th>
+            <th class="text-left px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">Visible?</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          <tr class="bg-white">
+            <td class="px-4 py-3 text-slate-500 font-mono">A1</td>
+            <td class="px-4 py-3 text-slate-700 font-medium">Eyebrow labels font-bold</td>
+            <td class="px-4 py-3 font-mono text-slate-500">text-[10px] uppercase tracking-widest text-slate-400</td>
+            <td class="px-4 py-3 font-mono text-emerald-700">+ font-bold</td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-full font-semibold">Yes — weight</span></td>
+          </tr>
+          <tr class="bg-white">
+            <td class="px-4 py-3 text-slate-500 font-mono">A2</td>
+            <td class="px-4 py-3 text-slate-700 font-medium">Arms dt label shade</td>
+            <td class="px-4 py-3 font-mono text-slate-500">text-slate-500</td>
+            <td class="px-4 py-3 font-mono text-emerald-700">text-slate-400</td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-full font-semibold">Yes — lighter</span></td>
+          </tr>
+          <tr class="bg-white">
+            <td class="px-4 py-3 text-slate-500 font-mono">A3</td>
+            <td class="px-4 py-3 text-slate-700 font-medium">Arms note text shade</td>
+            <td class="px-4 py-3 font-mono text-slate-500">text-slate-500</td>
+            <td class="px-4 py-3 font-mono text-emerald-700">text-slate-600</td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-full font-semibold">Yes — darker</span></td>
+          </tr>
+          <tr class="bg-white">
+            <td class="px-4 py-3 text-slate-500 font-mono">A4</td>
+            <td class="px-4 py-3 text-slate-700 font-medium">Arms panel top padding</td>
+            <td class="px-4 py-3 font-mono text-slate-500">px-4 pb-4</td>
+            <td class="px-4 py-3 font-mono text-emerald-700">px-4 pt-3 pb-4</td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-full font-semibold">Yes — spacing</span></td>
+          </tr>
+          <tr class="bg-white">
+            <td class="px-4 py-3 text-slate-500 font-mono">A5</td>
+            <td class="px-4 py-3 text-slate-700 font-medium">Placeholder card</td>
+            <td class="px-4 py-3 font-mono text-slate-500">rounded-2xl border-slate-200 / text-blue-600</td>
+            <td class="px-4 py-3 font-mono text-emerald-700">rounded-xl border-slate-100 / text-neuro-500</td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-full font-semibold">Yes — radius + border + link</span></td>
+          </tr>
+          <tr class="bg-slate-50">
+            <td class="px-4 py-3 text-slate-500 font-mono">B6a</td>
+            <td class="px-4 py-3 text-slate-700 font-medium">Cobalt text token</td>
+            <td class="px-4 py-3 font-mono text-slate-500">text-[#1746A2]</td>
+            <td class="px-4 py-3 font-mono text-emerald-700">text-neuro-500</td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 bg-slate-100 text-slate-500 border border-slate-200 rounded-full font-semibold">Code only</span></td>
+          </tr>
+          <tr class="bg-slate-50">
+            <td class="px-4 py-3 text-slate-500 font-mono">B6b</td>
+            <td class="px-4 py-3 text-slate-700 font-medium">Bedside Pearl inline→token (~103 instances)</td>
+            <td class="px-4 py-3 font-mono text-slate-500">style={{ background:'#EEF2FF', … }}</td>
+            <td class="px-4 py-3 font-mono text-emerald-700">className="bg-neuro-50 border-l-2 border-neuro-500 …"</td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 bg-slate-100 text-slate-500 border border-slate-200 rounded-full font-semibold">Code only</span></td>
+          </tr>
+          <tr class="bg-slate-50">
+            <td class="px-4 py-3 text-slate-500 font-mono">B6c</td>
+            <td class="px-4 py-3 text-slate-700 font-medium">Generic blue → brand cobalt</td>
+            <td class="px-4 py-3 font-mono text-slate-500">text-blue-600 (#2563eb)</td>
+            <td class="px-4 py-3 font-mono text-emerald-700">text-neuro-500 (#1746A2)</td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-full font-semibold">Subtle — shade</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer -->
+    <p class="text-[11px] text-slate-400 mt-8 text-center">
+      docs/specs/mockups/trials-page-consistency-cleanups.html &nbsp;·&nbsp; Design Prototyper &nbsp;·&nbsp; 2026-06-09
+      &nbsp;·&nbsp; Tokens verified against design-tokens SKILL.md + docs/reviews/design-trials-eligibility-redesign.md
+    </p>
+
+  </div><!-- /max-w-5xl -->
+
+</body>
+</html>
