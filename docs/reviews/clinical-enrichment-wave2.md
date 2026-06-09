@@ -76,3 +76,17 @@ Additive enrichment of existing trial records with `fullEligibility` + `armDetai
 - **RACECAT neutral preserved** (cOR 1.03, no benefit asserted); strategy-only comparison.
 - **Never-drift / em-dash:** additive plus the one source-verified threshold correction; zero em-dash in added blocks.
 - **Follow-ups:** none blocking.
+
+---
+
+## Batch 6 — Prehospital GTN/triage/BP + ICAD (RIGHT-2, TRIAGE-STROKE, INTERACT4, WEAVE)
+
+**Decision:** approve
+**Reviewer:** clinical-reviewer (model: claude-opus-4-8) · **Date:** 2026-06-09
+
+- **Scope:** additive `fullEligibility` + `armDetails` on `right-2-trial`, `triage-stroke-trial`, `interact4-trial`, `weave-trial`.
+- **Fidelity:** RIGHT-2 transdermal GTN 5 mg/day vs sham (SBP ≥120, distinct from MR ASAP 140 and INTERACT4 150); TRIAGE-STROKE CSC-first bypass vs PSC-first (CSC higher EVT 63% vs 53%, IVT 78% vs 67%); INTERACT4 urapidil intensive SBP 130–140 vs usual care; WEAVE single-arm Wingspan registry. Roles correct, no cross-contamination.
+- **INTERACT4 no false benefit:** overall null (cOR 1.00) with diagnosis-differential (hemorrhagic benefit, ischemic harm) preserved; additive only.
+- **WEAVE single-arm preserved:** one intervention entry, no fabricated comparator; on-label criteria match source.
+- **Never-drift / em-dash:** additive only; zero em-dash in added blocks.
+- **Follow-ups (pre-existing TRIAGE-STROKE errors, NOT introduced here; flag for a focused cleanup):** curated `inclusionCriteria` says "RACE score 5 or higher" but the trial used PASS ≥2 (subtitle "suspected LVO" is fine, only the scale name is wrong); pre-existing prose says "planned 424" but source states 600. Deferred.

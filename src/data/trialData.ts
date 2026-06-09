@@ -8511,6 +8511,48 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Pregnancy or breastfeeding',
       'Concurrent participation in another investigational device trial',
     ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1161/STROKEAHA.118.023996',
+      sourceLabel: 'Alexander MJ et al., Stroke 2019;50:889–894',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          label: 'FDA on-label Wingspan criteria (Instructions for Use)',
+          items: [
+            'Age 22 to 80 years',
+            'Symptomatic intracranial atherosclerotic stenosis of 70% to 99%',
+            'At least 2 strokes in the vascular territory of the stenotic lesion while on medical therapy',
+            'Baseline modified Rankin Scale score of 3 or less',
+            'Stenting of the lesion 8 days or more after the most recent stroke',
+            'Lesion measured at its most severe stenosis with reference to the normal luminal diameter of the target arterial segment by digital subtraction angiography',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Off-label use (not enrolled in the primary on-label analysis)',
+          items: [
+            'Any use of the Wingspan stent outside the on-label Instructions for Use criteria above',
+            'Stenting earlier than 8 days after the qualifying stroke',
+            'Stenting after a single qualifying stroke or for transient ischemic attack symptoms only',
+            'Intracranial arterial stenosis of less than 70%',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'Wingspan stenting (on-label)',
+        role: 'intervention',
+        agent: 'Gateway PTA balloon catheter for angioplasty followed by the Wingspan self-expanding nitinol stent (Stryker Neurovascular)',
+        route: 'Endovascular (intracranial angioplasty and stenting)',
+        frequency: 'Single procedure: balloon angioplasty of the stenotic lesion, then deployment of the Wingspan stent',
+        duration: 'One-time procedure',
+        coInterventions: 'Dual antiplatelet therapy before stenting: aspirin 325 mg daily plus clopidogrel 75 mg daily for at least 7 days, continued after stenting; statin and blood-pressure medication as indicated. Antiplatelet-resistance testing permitted, with medication changes for supratherapeutic (P2Y12 <80) or subtherapeutic (P2Y12 >237) values. General anesthesia with arterial-line blood-pressure monitoring used in 97.4% of cases; conscious sedation in 2.6%.',
+        note: 'Single-arm post-market surveillance; no randomized control. FDA pre-specified a periprocedural (72-hour) stroke, bleed, and death benchmark below 4%. Balloon sized to about 80% of the true luminal diameter; mean balloon inflation pressure 6 atmospheres (nominal for the Gateway balloon). A single lesion was treated in 97% of cases; tandem lesions in 3%. Mean baseline stenosis 83%, mean residual stenosis after stenting 28%. Enrolled at 24 experienced neurointerventional centers; mean operator experience 37 Wingspan cases. Source: Alexander Stroke 2019 p.890–891, Tables 1–3.',
+      },
+    ],
     howToReadChart: [
       {
         question: 'What does the horizontal bar show?',
@@ -11101,6 +11143,55 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Epilepsy, recent head injury, or hypoglycemia',
       'Inability to confirm eligibility or initiate treatment within 2 hours',
     ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa2314741',
+      sourceLabel: 'INTERACT4 Investigators (Li G et al.), N Engl J Med 2024;390:1862–1872',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'Adult patients 18 years of age or older',
+            'Presumed acute stroke, defined as a Face-Arm-Speech-Time (FAST) score of 2 or higher (range 0 to 4, higher scores indicating more symptoms) that included an arm motor deficit',
+            'Elevated systolic blood pressure of 150 mm Hg or higher',
+            'Ability to start treatment within 2 hours after symptom onset or after the time the patient was last known to be well',
+            'Assessed by ambulance staff who were doctors employed by the participating ambulance services',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'In a coma',
+            'Severe coexisting disease',
+            'Epilepsy',
+            'Recent head injury',
+            'Hypoglycemia',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'Immediate prehospital blood-pressure reduction',
+        role: 'intervention',
+        agent: 'Urapidil (an intravenous alpha-1 adrenoceptor antagonist with 5-HT1A agonist activity, widely used in China)',
+        dose: 'Intravenous bolus of 25 mg over 1 minute, repeated once after 5 minutes if blood pressure remained elevated',
+        route: 'IV',
+        frequency: 'Bolus, repeatable once at 5 minutes; further treatment with urapidil or another agent (bolus, infusion, or oral) continued in the emergency department, stroke unit, or monitored facility',
+        duration: 'Started in the ambulance and maintained until hospital arrival',
+        coInterventions: 'Patients kept horizontal with blood pressure monitored every 5 minutes during transport. In-hospital blood-pressure management and other care per established local guidelines (China: target systolic <140 mm Hg for hemorrhagic stroke, 140 to 160 mm Hg for ischemic stroke).',
+        note: 'Goal systolic blood pressure 130 to 140 mm Hg within 30 minutes, maintained until arrival at the hospital. A systolic blood pressure of 130 mm Hg was the threshold for cessation of treatment. Source: Li NEJM 2024 p.1864.',
+      },
+      {
+        arm: 'Usual blood-pressure management',
+        role: 'control',
+        agent: 'Usual prehospital care (commencement of blood-pressure management on arrival at the hospital)',
+        route: 'IV (in ambulance only at high thresholds)',
+        coInterventions: 'In the ambulance, treatment to lower blood pressure used only for systolic blood pressure of 220 mm Hg or higher or diastolic blood pressure of 110 mm Hg or higher. Both groups received in-hospital blood-pressure management and other care per established local guidelines.',
+        note: 'Control arm represents commencement of blood-pressure management on arrival at the hospital rather than in the ambulance. Source: Li NEJM 2024 p.1864.',
+      },
+    ],
     bottomLineSummary: 'Prehospital IV blood-pressure reduction in undifferentiated acute stroke had no overall effect on 90-day functional outcome (cOR 1.00, 95% CI 0.87-1.15). The critical finding is the divergent subgroup effect: the intervention significantly reduced poor outcomes in hemorrhagic stroke (cOR 0.75, 95% CI 0.60-0.92) but significantly increased poor outcomes in ischemic stroke (cOR 1.30, 95% CI 1.06-1.60). Because nearly half the cohort had hemorrhagic stroke (unusually high for many EMS systems), the net result was null. In populations with a lower hemorrhagic fraction, the same intervention would likely cause net harm.',
     bedsidePearl: 'Type-blind prehospital BP lowering is a zero-sum strategy: you help your hemorrhagic strokes and hurt your ischemic strokes in roughly equal measure. The overall null result is not reassurance that early BP reduction is safe across the board. Without imaging to confirm stroke type, aggressive prehospital BP reduction is not routinely indicated.',
     mrsDistribution: [
@@ -11510,6 +11601,57 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Witnessed seizure at onset',
       'Recent nitrate use or PDE-5 inhibitor use',
     ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1016/S0140-6736(19)30194-1',
+      sourceLabel: 'RIGHT-2 Investigators, Lancet 2019;393:1009–1020',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'Adult patients (18 years of age or older)',
+            'Presumed stroke after an emergency call to a participating ambulance service',
+            'Presentation within 4 hours of onset of symptoms',
+            'Able to be taken to a participating hospital',
+            'Face-Arm-Speech-Time (FAST) score of 2 or 3 (thus ensuring the presence of motor weakness)',
+            'Systolic blood pressure of 120 mm Hg or higher',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Patients from a nursing home',
+            'Reduced consciousness (Glasgow Coma Scale score below 8 of 15)',
+            'Hypoglycaemia (capillary glucose concentration below 2.5 mmol/L)',
+            'A witnessed seizure at onset',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'Transdermal glyceryl trinitrate (GTN)',
+        role: 'intervention',
+        agent: 'Glyceryl trinitrate (nitroglycerin) transdermal patch (Transiderm-Nitro 5; Novartis)',
+        dose: '5 mg once daily',
+        route: 'Transdermal patch (placed on the shoulder, back, or chest; site changed daily)',
+        frequency: 'One patch once daily',
+        duration: 'Up to 4 days (first patch in the ambulance, further patches in hospital)',
+        coInterventions: 'Standard prehospital and in-hospital stroke care, including thrombolysis and endovascular therapy as indicated after the final diagnosis was made.',
+        note: 'The first patch was applied by the paramedic in the ambulance immediately after randomisation; further patches were given in hospital for up to 3 more days. The design was sham-controlled, participant-masked, and blinded-endpoint. Patches were unlabelled and a gauze dressing was taped over the patch to maintain masking. Adherence was low: only about 36% of cohort 2 received all 4 days of treatment. Source: RIGHT-2 Investigators, Lancet 2019 p.1011 (Procedures).',
+      },
+      {
+        arm: 'Sham dressing',
+        role: 'control',
+        agent: 'Sham dressing (DuoDERM hydrocolloid dressing; Convatec)',
+        route: 'Transdermal (applied as a similar-appearing dressing)',
+        frequency: 'One dressing once daily',
+        duration: 'Up to 4 days',
+        coInterventions: 'Standard prehospital and in-hospital stroke care, identical to the GTN group.',
+        note: 'A similar-appearing sham dressing was applied to maintain masking; patients were effectively masked because patches and dressings were unlabelled and an over-taped gauze dressing concealed the treatment. Paramedics were unmasked to treatment; participants and outcome assessors were masked. Source: RIGHT-2 Investigators, Lancet 2019 p.1011 (Randomisation and masking).',
+      },
+    ],
     /* claimId: right-2.interpret | source: RIGHT-2 Investigators, Lancet 2019, Table 2 */
     howToInterpret: {
       proves: 'RIGHT-2 showed that transdermal GTN started in the ambulance within 4 hours of presumed stroke did not improve 90-day functional outcome in patients with confirmed stroke or TIA. The trial also demonstrated that ambulance-based paramedic-delivered stroke intervention trials are feasible in the UK.',
@@ -11599,6 +11741,51 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Pre-morbid mRS greater than 2',
       'Direct CSC admission clinically indicated',
       'Enrollment in another trial',
+    ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1161/STROKEAHA.123.043875',
+      sourceLabel: 'Behrndtz A et al., Stroke 2023;54:2714–2723',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'At least 18 years of age',
+            'Acute focal neurological deficits',
+            'Prehospital Acute Stroke Severity (PASS) score of 2 or higher (suspected large-vessel occlusion at the prehospital level)',
+            'Functionally independent before the stroke, defined as a prestroke modified Rankin Scale score of 0 to 2',
+            'Symptoms occurred while the patient was in a primary-stroke-center catchment area, where drive time to the primary stroke center was shorter than drive time to the comprehensive stroke center',
+            'Candidate for intravenous thrombolysis (no oral anticoagulation, no recent surgery or stroke)',
+            'Able to arrive at both the comprehensive stroke center and the primary stroke center within 4 hours from stroke onset',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Stroke occurred inside a hospital',
+            'Life expectancy below 1 year',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'Direct transport to a comprehensive stroke center (CSC-first / bypass)',
+        role: 'intervention',
+        agent: 'Direct ambulance transport to a comprehensive stroke center, bypassing the nearer primary stroke center (prioritizing endovascular therapy access)',
+        route: 'Prehospital transport routing',
+        coInterventions: 'Intravenous thrombolysis and endovascular therapy delivered as indicated at the comprehensive stroke center. Large-vessel occlusion defined as occlusion of the internal carotid artery, first segment of the middle cerebral artery (M1), proximal part of the first division of the middle cerebral artery, or the basilar artery, assessed initially by CT angiography or MR angiography.',
+        note: 'Onset-to-needle time was 30 minutes longer when transported directly to the CSC, but onset-to-groin time was 35 minutes shorter. The shortest distance between the primary and comprehensive stroke centers was about 114 km (roughly 1 hour of ground transport). Transport-strategy comparison, not a drug comparison. Source: Behrndtz Stroke 2023 p.2715–2717.',
+      },
+      {
+        arm: 'Transport to the nearest primary stroke center (PSC-first)',
+        role: 'control',
+        agent: 'Ambulance transport to the nearest primary stroke center first (prioritizing intravenous thrombolysis), with secondary transfer to a comprehensive stroke center if needed',
+        route: 'Prehospital transport routing',
+        coInterventions: 'Intravenous thrombolysis initiated at the primary stroke center as indicated; subsequent interhospital transfer to the comprehensive stroke center for endovascular therapy in patients with confirmed or clinically suspected large-vessel occlusion.',
+        note: 'Intravenous thrombolysis was administered in 67% of the PSC-first group versus 78% of the CSC-first group; endovascular therapy was performed in 53% of the PSC-first group versus 63% of the CSC-first group. During the trial period, one primary stroke center was functionally a comprehensive stroke center during daytime hours, so patients from that center were included only in off-hours (4 PM to 8 AM) and on weekends. Source: Behrndtz Stroke 2023 p.2716–2717.',
+      },
     ],
     mrsDistribution: [
       { arm: 'Direct CSC First', n: 52, pct: [17, 24, 15, 26, 4, 9, 4] },
