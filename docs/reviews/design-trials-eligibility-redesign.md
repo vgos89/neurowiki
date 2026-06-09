@@ -37,3 +37,6 @@ tsc clean; build 171/171; claims/routes/card-meta pass.
 
 ## Follow-up (parked)
 Optional `aria-labelledby` on the ✓/✕ `<ul>` lists pointing to their column heading (best-practice, not a WCAG AA violation).
+
+## Study Arms style — decision (2026-06-09)
+Owner reviewed Study Arms against the How-to-read / How-to-interpret teaching wells (mockup: `docs/specs/mockups/trials-study-arms-style-options.html`). **Decision: keep Study Arms as a content-section card** (white card + eyebrow, matching Population / Outcome / Trial Design / Safety). The cobalt-left-border "well" style stays reserved for interpretation/teaching accordions. The two are intentionally distinct (factual trial content vs interpretation guidance), so no code change. Do not re-open without a new owner decision.
