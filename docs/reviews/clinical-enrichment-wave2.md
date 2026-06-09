@@ -46,3 +46,19 @@ Additive enrichment of existing trial records with `fullEligibility` + `armDetai
 - **No false benefit framing:** BP-TARGET neutral, OPTIMAL-BP harm-stopped, BEST-II futility, ENCHANTED neutral, all preserved.
 - **Never-drift / em-dash:** additive only; zero em-dash in added blocks.
 - **Follow-ups (non-blocking, editorial):** BEST-II shows two sourced reperfusion floors (curated "mTICI 2c+" vs fullEligibility "2b/2c/3") and two clocks (randomization ≤45 min vs BP-initiation ≤60 min); both correct and sourced. A future pass could reconcile wording. Deferred.
+
+---
+
+## Batch 4 — Secondary prevention (SPARCL, SPS3) + OPTIMAS/TIMING note
+
+**Decision:** approve (SPARCL, SPS3)
+**Reviewer:** clinical-reviewer (model: claude-opus-4-8) · **Date:** 2026-06-09
+
+- **Scope:** additive `fullEligibility` + `armDetails` on `sparcl-trial`, `sps3-trial`.
+- **SPARCL:** atorvastatin 80 mg/day (intervention) vs placebo (control); entry stroke/TIA 1–6 months, LDL 100–190, no known CHD, ambulatory. Regimen + criteria verbatim; DOI 10.1056/NEJMoa061894 confirmed. Roles not inverted.
+- **SPS3 (high-risk, cleared):** ANTIPLATELET arm encoded (aspirin 325 + clopidogrel 75 = intervention/DAPT vs aspirin 325 + placebo = control), matching the record's existing harm framing (mortality HR 1.52, major hemorrhage HR 1.97, recurrent-stroke HR 0.92 NS). NOT the BP arm (2x2 BP target mentioned only as context). No false benefit framing introduced. DOI 10.1056/NEJMoa1204133.
+- **Never-drift / em-dash:** additive only; zero em-dash in added blocks.
+- **Follow-ups:** none blocking for SPARCL/SPS3.
+
+### OPTIMAS + TIMING — completion needed (not enrichable as-is)
+`optimas-trial` (line ~5767) and `timing-trial` (line ~5653) exist as records with stats/design/results bodies but NO curated `inclusionCriteria`/`exclusionCriteria` fields (so the eligibility card renders nothing for them). Completing them requires adding curated criteria + `fullEligibility` + `armDetails`. Evidence extracted + verified from PDFs: OPTIMAS (Werring Lancet 2024, NCT03759938) early DOAC ≤4 days vs delayed 7–14 days, NI margin 2pp, adjusted RD 0.000; TIMING (Oldgren Circulation 2022, NCT02961348) early ≤4 days vs delayed 5–10 days, NI margin 3%, 6.89% vs 8.68% ARD −1.79%. Handled in a dedicated completion pass.

@@ -8843,6 +8843,71 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Cardioembolic source requiring anticoagulation',
       'Prior intracranial hemorrhage or high bleeding risk',
     ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: "Eligible patients",
+          items: [
+            "30 years of age or older",
+            "A symptomatic lacunar stroke within the preceding 180 days",
+            "No surgically amenable ipsilateral carotid-artery disease and no major risk factors for cardioembolic sources of stroke",
+            "Patients with a clinical lacunar syndrome were required to meet MRI criteria: a lesion 2.0 cm or less in diameter on diffusion-weighted imaging corresponding to a positive apparent-diffusion-coefficient image, or a lesion with a well-delineated area of focal hyperintensity 2.0 cm or less in diameter on FLAIR or T2-weighted imaging corresponding to the clinical syndrome",
+            "Patients with transient lacunar ischemic attacks were included only if there was evidence of the attacks on diffusion-weighted MRI",
+            "Randomization did not take place for at least 2 weeks after the qualifying stroke (to avoid lowering of blood pressure during the acute period)",
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: "Infarct type / imaging",
+          items: [
+            "MRI evidence of a recent or remote cortical infarct",
+            "A large subcortical infarct (measuring more than 1.5 cm in diameter)",
+          ],
+        },
+        {
+          label: "Hemorrhage / prior stroke",
+          items: [
+            "A history of intracerebral hemorrhage (with the exception of traumatic hemorrhage)",
+            "Previous cortical ischemic stroke",
+          ],
+        },
+        {
+          label: "Disability",
+          items: [
+            "Disabling stroke, defined as a modified Rankin scale score of 4 or more (scale of 0 to 6, with higher scores indicating more severe disability)",
+          ],
+        },
+      ],
+      source: "publication",
+      sourceLabel: "SPS3 Investigators (Benavente OR et al.), N Engl J Med 2012",
+      sourceUrl: "https://doi.org/10.1056/NEJMoa1204133",
+      retrieved: "2026-06-09",
+    },
+    armDetails: [
+      {
+        arm: "Aspirin plus clopidogrel (dual antiplatelet therapy)",
+        role: "intervention",
+        agent: "Aspirin plus clopidogrel",
+        dose: "Aspirin 325 mg daily plus clopidogrel 75 mg daily",
+        route: "Oral",
+        frequency: "Once daily",
+        duration: "Long-term (mean follow-up 3.4 years)",
+        coInterventions: "All participants received open-label aspirin 325 mg (enteric-coated) daily as background therapy; antiplatelet assignment ran inside a 2x2 factorial alongside a separate blood-pressure-target intervention (SBP under 130 vs 130 to 149 mm Hg)",
+        note: "This entry encodes the ANTIPLATELET comparison. The antiplatelet component was stopped early by the data and safety monitoring board for lack of efficacy combined with evidence of harm: no reduction in recurrent stroke (HR 0.92, 95% CI 0.72 to 1.16) and increased all-cause mortality (HR 1.52, 95% CI 1.14 to 2.04, P=0.004) and major hemorrhage (HR 1.97, 95% CI 1.41 to 2.71, P less than 0.001) versus aspirin alone",
+      },
+      {
+        arm: "Aspirin alone (aspirin plus matching placebo clopidogrel)",
+        role: "control",
+        agent: "Aspirin plus placebo clopidogrel",
+        dose: "Aspirin 325 mg daily plus a matching clopidogrel placebo once daily",
+        route: "Oral",
+        frequency: "Once daily",
+        duration: "Long-term (mean follow-up 3.4 years)",
+        coInterventions: "All participants received open-label aspirin 325 mg (enteric-coated) daily as background therapy; assignment ran inside the same 2x2 factorial alongside the blood-pressure-target intervention",
+        note: "Double-blind, placebo-controlled for the clopidogrel comparison; adherence measured by quarterly pill counts",
+      },
+    ],
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -8957,6 +9022,59 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Prior statin use within 3 months (washout required)',
       'Cardioembolic stroke requiring anticoagulation as primary prevention',
       'Severe hepatic disease or creatine kinase elevation',
+    ],
+    fullEligibility: {
+      inclusion: [
+        {
+          label: "Eligible patients",
+          items: [
+            "Men and women over 18 years of age",
+            "Had had an ischemic or hemorrhagic stroke or a TIA, diagnosed by a neurologist within 30 days after the event, 1 to 6 months before randomization",
+            "Stroke was defined by focal clinical signs of central nervous system dysfunction of vascular origin that lasted for at least 24 hours; TIA was defined by the loss of cerebral or ocular function for less than 24 hours, presumably owing to atherosclerotic causes",
+            "Patients with hemorrhagic stroke were included only if they were deemed by the investigator to be at risk for ischemic stroke or coronary heart disease",
+            "Ambulatory, with a modified Rankin score of no more than 3",
+            "An LDL cholesterol level of at least 100 mg per deciliter (2.6 mmol per liter) and no more than 190 mg per deciliter (4.9 mmol per liter)",
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: "Cardioembolic source / other defined cause",
+          items: [
+            "Atrial fibrillation",
+            "Other cardiac sources of embolism",
+            "Subarachnoid hemorrhage",
+          ],
+        },
+      ],
+      source: "publication",
+      sourceLabel: "SPARCL Investigators (Amarenco P et al.), N Engl J Med 2006",
+      sourceUrl: "https://doi.org/10.1056/NEJMoa061894",
+      retrieved: "2026-06-09",
+    },
+    armDetails: [
+      {
+        arm: "Atorvastatin 80 mg",
+        role: "intervention",
+        agent: "Atorvastatin",
+        dose: "80 mg",
+        route: "Oral",
+        frequency: "Once daily",
+        duration: "Median follow-up 4.9 years",
+        coInterventions: "All patients were counseled to follow the National Cholesterol Education Program Step 1 (or similar) diet throughout the study; patients taking lipid-altering drugs at screening stopped them 30 days before the screening visit",
+        note: "Double-blind. To preserve masking, if LDL cholesterol fell below 40 mg/dL (1.0 mmol/L) in an atorvastatin-treated patient, the investigator for a randomly chosen placebo patient was notified and LDL was remeasured in both",
+      },
+      {
+        arm: "Placebo",
+        role: "control",
+        agent: "Matching placebo",
+        dose: "Matching placebo",
+        route: "Oral",
+        frequency: "Once daily",
+        duration: "Median follow-up 4.9 years",
+        coInterventions: "Same National Cholesterol Education Program Step 1 (or similar) diet counseling as the atorvastatin group",
+        note: "Double-blind, placebo-controlled",
+      },
     ],
     howToReadChart: [
       {
