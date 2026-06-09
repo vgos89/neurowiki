@@ -4883,6 +4883,63 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Planned early hemicraniectomy precluding 72-hour drug administration',
       'Pregnancy',
     ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1016/S1474-4422(24)00425-3',
+      sourceLabel: 'Sheth KN et al., Lancet Neurol 2024;23(12):1205–1213; NCT02864953',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'Aged 18 to 85 years',
+            'Clinical diagnosis of acute ischaemic stroke in at least the middle cerebral artery territory',
+            'Within 10 h of stroke onset (in patients with wake-up stroke, stroke onset time was defined as the midpoint between sleep onset and waking)',
+            'US National Institutes of Health Stroke Scale (NIHSS) score of 10 or higher',
+            'Absence of significant premorbid disability as assessed by the site investigator',
+            'A core lesion of 80 to 300 mL, as assessed by CT perfusion (RAPID, IschemaView; or Golden, CO, USA) or diffusion-weighted imaging',
+            'If CT perfusion or MRI was not available to determine core lesion volume, non-contrast CT was used with an Alberta Stroke Program Early CT Score (ASPECTS) of 1 to 5 involving at least two cortical regions',
+            'For patients who underwent thrombectomy, a post-thrombectomy MRI was required for ascertainment of the qualifying infarct volume',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'Core lesion volume below 80 mL or above 300 mL on qualifying imaging',
+            'NIHSS score below 10',
+            'Significant premorbid disability',
+            'Stroke onset more than 10 h before planned study-drug initiation',
+            'Known hypersensitivity to glibenclamide or sulfonylurea agents',
+            'Severe hepatic or renal impairment precluding study-drug administration',
+            'Pregnancy',
+            'Any condition precluding the planned 72-h study-drug infusion',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'Intravenous glibenclamide (BIIB093)',
+        role: 'intervention',
+        agent: 'Glibenclamide (intravenous formulation, BIIB093)',
+        dose: 'Total dose 8.6 mg',
+        route: 'IV',
+        frequency: 'Bolus followed by a continuous infusion',
+        duration: '72 h',
+        coInterventions: 'Standard-of-care reperfusion interventions (rtPA and endovascular thrombectomy) permitted in accordance with local stroke guidelines; additional measures for large stroke and swelling (for example, mannitol) as clinically indicated',
+        note: 'Study drug started within 10 h of stroke onset. The trial was stopped early by the sponsor for strategic and operational reasons (slow enrolment because of COVID-19), before unblinding or knowledge of trial results, at approximately 71% of planned enrolment, leaving it underpowered. The result was neutral: the primary mRS ordinal shift at 90 days was not improved (common OR 1.17, 95% CI 0.80 to 1.71, p=0.42) in the modified intention-to-treat population aged 18 to 70 years.',
+      },
+      {
+        arm: 'Placebo',
+        role: 'control',
+        agent: 'Matching placebo infusion',
+        route: 'IV',
+        frequency: 'Bolus followed by a continuous infusion',
+        duration: '72 h',
+        coInterventions: 'Standard-of-care reperfusion interventions and supportive measures identical to the active arm; drug vials, preparation bags, and tubing were identical for both groups',
+        note: 'Hypoglycaemia occurred in 6% (15 of 259) of glibenclamide patients versus 2% (four of 259) of placebo patients. 90-day mortality was numerically higher with glibenclamide (32% vs 29%; hazard ratio 1.20, 95% CI 0.85 to 1.70, p=0.30).',
+      },
+    ],
     legend: {
       finding: 'IV glibenclamide did not improve mRS in large hemispheric infarct; trial underpowered after COVID stop.',
       bottomLineTag: 'NS',
@@ -4992,6 +5049,69 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Contraindication to contrast or study drug',
       'Large intracranial hemorrhage on baseline imaging',
       'Pregnant or breastfeeding',
+    ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1016/S0140-6736(20)30258-0',
+      sourceLabel: 'Hill MD et al., Lancet 2020;395(10227):878–887; NCT02930018',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          label: 'Clinical',
+          items: [
+            'Adults aged 18 years or older',
+            'A disabling ischaemic stroke at the time of randomisation (National Institutes of Health Stroke Scale [NIHSS] score >5; range 0 to 42, with higher scores indicating greater stroke severity)',
+            'Functioning independently in the community before the stroke (Barthel Index score >90; range 0 to 100, with higher scores indicating a greater ability to complete activities of daily living)',
+            'Enrolled up to 12 h after the onset of stroke symptoms (time the patient was last seen well)',
+          ],
+        },
+        {
+          label: 'Imaging',
+          items: [
+            'A confirmed proximal intracranial artery occlusion on non-contrast CT and multiphase CT angiography, defined as an occlusion of the intracranial internal carotid artery, the first segment of the middle cerebral artery, or both',
+            'A small-to-moderate ischaemic core, defined as an Alberta Stroke Program Early CT Score (ASPECTS) of 5 to 10 with 1 point subtracted for any evidence of early ischaemic change in each defined region on the CT scan',
+            'Moderate-to-good collateral circulation, defined as the filling of 50% or more of the middle-cerebral-artery pial arterial circulation on CT angiography',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'NIHSS score of 5 or less (non-disabling deficit)',
+            'Pre-stroke Barthel Index of 90 or below (not functioning independently in the community before the stroke)',
+            'ASPECTS below 5 on baseline non-contrast CT',
+            'Absence of a proximal anterior-circulation occlusion (intracranial internal carotid artery or first segment of the middle cerebral artery) on CT angiography',
+            'Poor collateral circulation (less than 50% middle-cerebral-artery pial filling)',
+            'More than 12 h from the time the patient was last seen well',
+            'Contraindication to iodinated contrast or to the study drug',
+            'Pregnancy or breastfeeding',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'Nerinetide plus endovascular thrombectomy',
+        role: 'intervention',
+        agent: 'Nerinetide (Tat-NR2B9c; eicosapeptide PSD-95 inhibitor)',
+        dose: '2.6 mg/kg, up to a maximum of 270 mg (based on estimated or actual weight)',
+        route: 'IV (single dose, dedicated intravenous line)',
+        frequency: 'Single dose, administered as soon as possible after randomisation',
+        duration: 'Infused over 10 min (a difference of plus or minus 1 min allowed)',
+        coInterventions: 'Rapid endovascular thrombectomy using available devices in all patients; intravenous alteplase given before or during EVT according to usual care and national or regional guidelines, at the discretion of the treating team (alteplase was not a requirement)',
+        note: 'Sites were asked to ensure the study drug was administered before arterial access closure. The trial was negative overall: functional independence (mRS 0 to 2) at 90 days was 61.4% with nerinetide versus 59.2% with placebo (adjusted risk ratio 1.04, 95% CI 0.96 to 1.13, p=0.35). A prespecified interaction suggested differential effect in patients not receiving alteplase, which is hypothesis-generating only.',
+      },
+      {
+        arm: 'Saline placebo plus endovascular thrombectomy',
+        role: 'control',
+        agent: 'Saline placebo',
+        dose: 'Volume-matched to the nerinetide dose',
+        route: 'IV (single dose, dedicated intravenous line)',
+        frequency: 'Single dose, administered as soon as possible after randomisation',
+        duration: 'Infused over 10 min',
+        coInterventions: 'Rapid endovascular thrombectomy using available devices in all patients; intravenous alteplase per usual care, identical to the active arm. Nerinetide and placebo were prepared as colourless solutions in numbered, refrigerated vials that were visually identical except for a unique vial number, so all trial personnel and patients were fully masked',
+        note: 'Mortality and symptomatic intracranial haemorrhage rates were similar between groups. Eligibility was restricted to anterior-circulation large-vessel occlusion only; posterior-circulation occlusions were not enrolled.',
+      },
     ],
     legend: {
       finding: 'Nerinetide during EVT did not improve 90-day independence overall.',
@@ -7336,6 +7456,75 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Standard contraindication to IV alteplase (active hemorrhage, recent surgery, anticoagulation)',
       'NIHSS below 1 or above 25',
       'Planned or already performed mechanical thrombectomy',
+    ],
+    fullEligibility: {
+      source: 'publication',
+      sourceLabel: 'Thomalla et al., N Engl J Med 2018;379(7):611-622',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa1804355',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          label: 'Clinical',
+          items: [
+            'Clinical signs of acute stroke',
+            'Aged 18 to 80 years',
+            'Able to carry out usual activities in daily life without support before the stroke',
+            'Either recognized stroke symptoms on awakening or could not report the timing of the onset of symptoms (for example, as a result of aphasia or confusion)',
+            'The time that had elapsed since the patient was last known to be well had to be more than 4.5 hours (with no upper limit) in order to exclude patients who would otherwise have fulfilled the standard eligibility criteria for the use of alteplase',
+            'Otherwise met the clinical criteria for intravenous thrombolysis',
+          ],
+        },
+        {
+          label: 'Imaging (DWI-FLAIR mismatch)',
+          items: [
+            'MRI examination including diffusion-weighted imaging, FLAIR (a sequence sensitive to hemorrhage), and time-of-flight magnetic resonance angiography of the circle of Willis',
+            'An acute ischemic lesion visible on diffusion-weighted imaging',
+            'No marked parenchymal hyperintensity on FLAIR in the region of the acute ischemic lesion (a mismatch between the abnormal signal on diffusion-weighted imaging and the absence of a clearly visible hyperintense signal on FLAIR)',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          label: 'Imaging',
+          items: [
+            'Intracranial hemorrhage on MRI',
+            'An ischemic lesion larger than one third of the territory of the middle cerebral artery',
+            'A visible signal change on FLAIR in the region of the acute ischemic stroke',
+          ],
+        },
+        {
+          label: 'Clinical / treatment',
+          items: [
+            'Planned thrombectomy',
+            'Severe stroke, defined as a score of more than 25 on the NIHSS (range 0 to 42)',
+            'Generally recognized contraindications to treatment with alteplase (except for the unknown time of symptom onset)',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'IV Alteplase',
+        role: 'intervention',
+        agent: 'Alteplase (recombinant tissue plasminogen activator)',
+        dose: '0.9 mg/kg of body weight',
+        route: 'IV',
+        frequency: '10% of the dose administered as a bolus, then the remainder as an infusion',
+        duration: '60-minute infusion (remainder after bolus)',
+        coInterventions: 'Concomitant treatment and procedures performed according to the standard of care at each center in compliance with European or national guidelines for acute stroke. Patients with planned thrombectomy were excluded.',
+        note: 'Dose and administration verbatim from Thomalla NEJM 2018 p.613 (Randomization and Treatment). Randomization 1:1 by a Web-based permuted-block design stratified by trial center, age (60 years or younger vs older than 60), and NIHSS (10 or lower vs higher than 10). NCT01525290; EudraCT 2011-005906-32. Enrollment stopped early after 503 of a planned 800 patients owing to cessation of funding (not a prespecified efficacy stopping rule).',
+      },
+      {
+        arm: 'Placebo',
+        role: 'comparator',
+        agent: 'Matching placebo',
+        dose: 'Volume-matched to alteplase',
+        route: 'IV',
+        frequency: 'Identical bolus-then-infusion schedule',
+        duration: '60-minute infusion',
+        coInterventions: 'Same standard-of-care concomitant treatment as the alteplase group per European or national acute-stroke guidelines.',
+        note: 'Double-blind, placebo-controlled, 1:1 allocation. Source: Thomalla NEJM 2018 p.612-613.',
+      },
     ],
     howToReadChart: [
       {
@@ -10550,6 +10739,64 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Volume <30 mL or >80 mL',
       'Pre-stroke severe disability',
       'Surgery >24 hours from LKW',
+    ],
+    fullEligibility: {
+      source: 'publication',
+      sourceUrl: 'https://doi.org/10.1056/NEJMoa2308440',
+      sourceLabel: 'Pradilla G et al., N Engl J Med 2024;390(14):1277–1289; NCT02880878',
+      retrieved: '2026-06-09',
+      inclusion: [
+        {
+          items: [
+            'Persons 18 to 80 years of age',
+            'Computed tomographic (CT) evidence of a supratentorial, spontaneous, acute intracerebral hemorrhage',
+            'A hematoma volume of 30 to 80 ml (estimated by the local investigator using volume = (length x width x height) / 2)',
+            'A score on the Glasgow Coma Scale (GCS) between 5 and 14, indicating mild-to-severe neurologic deficits',
+            'A score on the National Institutes of Health (NIH) stroke scale of more than 5, representing moderate-to-severe disability',
+            'A score before the hemorrhage occurred of 0 to 1 on the modified Rankin scale, representing little or no disability',
+            'Surgery could be initiated within 24 hours after the time that they were last known to be well',
+            'Hemorrhage in a lobar or anterior basal ganglia location (lobar = a lesion superficially located in the main lobes of the brain, typically the parietal, temporal, or frontal lobes; anterior basal ganglia = the caudate, putamen, and pallidum to the capsula externa, excluding the thalamus)',
+          ],
+        },
+      ],
+      exclusion: [
+        {
+          items: [
+            'An uncorrectable coagulopathy',
+            'A need for long-term anticoagulation',
+            'Very poor or very good results on neurologic examination (GCS below 5 or above 14, or NIH stroke scale of 5 or less)',
+            'An intraventricular hemorrhage involving more than 50% of either lateral ventricle',
+            'A primary thalamic or infratentorial hemorrhage',
+            'Any secondary cause of intracerebral hemorrhage (hemorrhagic conversion, trauma, ruptured aneurysm, arteriovenous malformation, vascular anomaly, Moyamoya disease, venous sinus thrombosis, a mass or tumor, or recurrent ICH within 1 year)',
+            'A do-not-resuscitate or comfort-measures-only order',
+            'Hematoma volume below 30 ml or above 80 ml',
+            'More than 24 hours from last known normal',
+            'A score on the modified Rankin scale above 1 before the hemorrhage occurred',
+            'After an adaptation rule was triggered at the second interim analysis, new enrollment of patients with an anterior basal ganglia hemorrhage was stopped for futility; subsequent enrollment was restricted to lobar hemorrhage',
+          ],
+        },
+      ],
+    },
+    armDetails: [
+      {
+        arm: 'Early minimally invasive surgical evacuation plus guideline-based medical management',
+        role: 'intervention',
+        agent: 'Minimally invasive trans-sulcal parafascicular surgery (BrainPath minimal access port + Myriad device, NICO Corporation)',
+        route: 'Surgical (trans-sulcal parafascicular corridor under general anesthesia)',
+        frequency: 'Single procedure',
+        duration: 'Initiated within 24 hours after the time the patient was last known to be well',
+        coInterventions: 'Plus guideline-based medical management identical to the control group; lifesaving conventional craniotomy or decompressive hemicraniectomy permitted as needed',
+        note: 'A small craniotomy and durotomy provided exposure to a sulcus oriented along the long axis of the white-matter tracts; the trajectory to the hematoma was planned with imaging guidance. The hematoma was accessed through the BrainPath access port (allowing a bimanual technique with visualization) and evacuated with suction and the Myriad device (both FDA-cleared). Surgeons completed a manufacturer-organized prerequisite training course before the trial began. The mean hematoma-volume reduction was 73.2% (mean residual 14.9 ml); a volume of 15 ml or less after surgery was achieved in 109 patients (72.7%). Postoperative rebleeding with neurologic deterioration occurred in 5 patients (3.3%).',
+      },
+      {
+        arm: 'Guideline-based medical management alone',
+        role: 'control',
+        agent: 'Guideline-based medical management (no hematoma evacuation)',
+        route: 'Medical',
+        frequency: 'Continuous, per clinical standardization guideline',
+        coInterventions: 'Treatment followed a clinical standardization guideline based on AHA/ASA intracerebral-hemorrhage recommendations; lifesaving conventional craniotomy or decompressive hemicraniectomy permitted as needed, but crossover to elective surgical evacuation was prohibited',
+        note: 'The primary efficacy end point was the mean score on the utility-weighted modified Rankin scale at 180 days, analyzed with a Bayesian model (prespecified posterior-probability-of-superiority threshold of 0.975). Surgery met the primary end point: 0.458 versus 0.374, difference +0.084 (95% Bayesian credible interval 0.005 to 0.163, posterior probability of superiority 0.981). Benefit was concentrated in lobar hemorrhage (+0.127, 95% Bayesian CrI 0.035 to 0.219); the anterior basal ganglia subgroup showed no benefit (−0.013, 95% Bayesian CrI −0.147 to 0.116). Death within 30 days was 9.3% (surgery) versus 18.0% (control). Because the primary analysis is Bayesian, no frequentist p-value or NNT applies to the primary efficacy result.',
+      },
     ],
     safetyProfile: {
       mortality: {

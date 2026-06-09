@@ -90,3 +90,18 @@ Additive enrichment of existing trial records with `fullEligibility` + `armDetai
 - **WEAVE single-arm preserved:** one intervention entry, no fabricated comparator; on-label criteria match source.
 - **Never-drift / em-dash:** additive only; zero em-dash in added blocks.
 - **Follow-ups (pre-existing TRIAGE-STROKE errors, NOT introduced here; flag for a focused cleanup):** curated `inclusionCriteria` says "RACE score 5 or higher" but the trial used PASS ≥2 (subtitle "suspected LVO" is fine, only the scale name is wrong); pre-existing prose says "planned 424" but source states 600. Deferred.
+
+---
+
+## Batch 7 — Wake-up thrombolysis, edema, neuroprotection, ICH surgery (WAKE-UP, CHARM, ESCAPE-NA1, ENRICH)
+
+**Decision:** approve
+**Reviewer:** clinical-reviewer (model: claude-opus-4-8) · **Date:** 2026-06-09
+
+- **Scope:** additive `fullEligibility` + `armDetails` on `wake-up-trial`, `charm-trial`, `escape-na1-trial`, `enrich-trial`. (Note: the batch-7 authoring agent mis-located CHARM/ESCAPE-NA1/ENRICH on its first pass and reported them "not found"; orchestrator confirmed via grep they exist at lines 4784/4893/10559 and re-authored at exact coordinates.)
+- **WAKE-UP (Thomalla NEJM 2018):** IV alteplase 0.9 mg/kg vs placebo; DWI-positive/FLAIR-negative mismatch selection; positive-as-published preserved (early funding stop caveat intact).
+- **CHARM (Sheth Lancet Neurol 2024):** IV glibenclamide/BIIB093 8.6 mg over 72 h vs placebo; NEUTRAL preserved (common OR 1.17, 95% CI 0.80–1.71, p=0.42); mortality/hypoglycemia signals carried; no benefit framing.
+- **ESCAPE-NA1 (Hill Lancet 2020):** nerinetide 2.6 mg/kg (max 270 mg) vs saline, both underwent EVT; ANTERIOR-circulation only CONFIRMED (intracranial ICA or M1; arm note states posterior not enrolled), consistent with the prior circulation correction; NEGATIVE preserved (aRR 1.04); alteplase subgroup labeled hypothesis-generating.
+- **ENRICH (Pradilla NEJM 2024):** minimally invasive trans-sulcal parafascicular evacuation (BrainPath + Myriad) vs guideline medical management; Bayesian primary (posterior 0.981, lobar-driven, basal-ganglia futile); NO frequentist p-value/NNT on the primary (NNT only on the safety endpoint); positive preserved.
+- **Never-drift / em-dash:** additive only; zero em-dash (en-dash ranges + U+2212 minus signs only).
+- **Follow-ups (non-blocking):** (1) verify the CHARM Dec-2024 Lancet Neurology Correction does not alter eligibility (needs WebFetch; current eligibility does not depend on it). (2) ESCAPE-NA1 aRR CI in the new arm note reconciled to the record's published 0.96–1.13 (fixed).
