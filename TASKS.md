@@ -2,7 +2,15 @@
 
 ## ACTIVE
 
-(none)
+### evt-enrichment-wave — Class C-clinical (back-to-back, per V directive)
+- **Status:** in_progress — 18 of 24 EVT trials enriched (batches 1–3 shipped: b83af5d, d2abd41, + batch 3). Remaining batch 4 (6): ASTER, ASTER2, COMPASS, CHOICE, DISTAL, ESCAPE-MeVO.
+- **Scope:** add `fullEligibility` + `armDetails` (PDF-sourced arms, CT.gov/publication eligibility) to EVT trials. Mechanism (components/schema) already shipped in pilot.
+- **Follow-up filed (from batch-3 clinical review — Class E/`-clinical`, separate gate):** curated `inclusionCriteria` factual error — **MR CLEAN-NO IV** and **RESCUE BT** both say "anterior or posterior circulation" but each trial was **anterior-circulation only** (ICA/M1/M2). New `fullEligibility` is source-correct (anterior-only); curated summaries contradict it. Medium-high severity (a clinician triaging posterior/basilar LVO could misread the curated card). Fix both together via a Class E gate. Lower-severity riders in same cluster: SKIP curated "mRS 0 or 1" vs pub mRS 0–2; RESCUE BT "NIHSS 4+" vs pub range; SELECT2 curated NIHSS-floor omission.
+
+### W-HEADACHE-V4 — Clinic Headache "live differential narrowing" rebuild — Class D-clinical (E-clinical surfaces)
+- **Status:** ready_for_merge (committed this session; live route flipped to V4)
+- **User-visible goal:** at /pathways/headache-clinic the clinician is walked through ICHD-3 phenotyping one question per screen, watching a live differential narrow (band words Leading/Possible/Less likely + dot meters + bare "N of M", NO percentages), to a top-2 result that weighs both patterns (never a verdict), with management behind links and a permanent dangerous-mimic safety strip. SNNOOP10 read-then-decide safety gate runs first.
+- **Non-goals:** no engine change (clinicHeadacheData.ts untouched, 84-test suite intact); no new clinical claim authored; no dosing/threshold text changed (HeadacheManagement + CriteriaList mounted verbatim).
 
 ### W-HEADACHE-V4 — Clinic Headache "live differential narrowing" rebuild — Class D-clinical (E-clinical surfaces)
 - **Status:** ready_for_merge (committed this session; live route flipped to V4)

@@ -2674,6 +2674,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Endovascular thrombectomy alone',
       control: 'IV alteplase followed by endovascular thrombectomy'
     },
+    armDetails: [
+      { arm: 'Endovascular thrombectomy alone (direct EVT)', role: 'intervention', agent: 'Mechanical thrombectomy without IV thrombolysis', route: 'Endovascular (intra-arterial)',
+        coInterventions: "Rapid endovascular treatment only, no IV alteplase; operator could use stent retrievers, thromboaspiration, intra-arterial thrombolysis, balloon angioplasty, or stenting, alone or combined, at the treatment team's discretion.",
+        note: 'Methods/Intervention, Zi JAMA 2021 p.235-236. Open-label, blinded outcome; goal eTICI 2b-3. Intra-arterial thrombolytic permitted as part of the endovascular technique.' },
+      { arm: 'Combined IV thrombolysis + endovascular thrombectomy (bridging)', role: 'control', agent: 'IV alteplase, then mechanical thrombectomy', dose: '0.9 mg/kg (10% bolus, remainder over 1-hour infusion)', route: 'IV alteplase, then endovascular thrombectomy',
+        coInterventions: 'Standard-dose IV alteplase 0.9 mg/kg started as soon as possible; endovascular procedure initiated without waiting for clinical response; full alteplase dose infused even if reperfusion already established.',
+        note: 'Methods/Intervention, Zi JAMA 2021 p.235-236. Same endovascular technique options as the direct-EVT arm.' },
+    ],
     clinicalContext: 'DEVT added further evidence from China that direct thrombectomy may achieve similar outcomes to bridging therapy in selected directly presenting alteplase-eligible patients.',
     pearls: [
       'Met its noninferiority threshold for 90-day functional independence',
@@ -2704,6 +2712,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Anticipated EVT initiation beyond 4.5-hour window',
       'Severe comorbidity limiting 90-day follow-up',
     ],
+    fullEligibility: {
+      source: 'publication', sourceUrl: 'https://doi.org/10.1001/jama.2020.23523', sourceLabel: 'Zi et al., DEVT, JAMA 2021;325(3):234-243; reg. ChiCTR-IOR-17013568', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Age ≥18 years','Acute ischemic stroke eligible for IV alteplase, treated within 4.5 hours of symptom onset','Occlusion of the intracranial internal carotid artery or first segment of the middle cerebral artery (M1) confirmed on CT angiography or MR angiography','Randomization no later than 4 hours 15 minutes from onset (onset = last known well)'] } ],
+      exclusion: [ { items: ['Imaging evidence of intracranial hemorrhage','Pre-morbid modified Rankin Scale score ≥2','Contraindication to IV recombinant tissue plasminogen activator (rt-PA)','IV thrombolytic delivered outside the hospital','Recent cardiac surgery','Advanced cancer'] } ],
+    },
     howToReadChart: [
       {
         question: 'What does the bar show?',
@@ -2791,6 +2804,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Mechanical thrombectomy alone',
       control: 'IV alteplase 0.6 mg/kg plus mechanical thrombectomy'
     },
+    armDetails: [
+      { arm: 'Mechanical thrombectomy alone', role: 'intervention', agent: 'Mechanical thrombectomy (any device approved by the Japanese Ministry of Health, Labour and Welfare)', route: 'Endovascular',
+        coInterventions: 'No intravenous alteplase. Balloon guide catheter selected as the guiding catheter; concomitant stenting/angioplasty of cervical and intracranial ICA lesions permitted without device restrictions; thrombectomy required to start within 30 minutes from randomization.',
+        note: 'Direct-EVT arm, n=101. Suzuki JAMA 2021 p.245.' },
+      { arm: 'Intravenous alteplase plus mechanical thrombectomy (bridging)', role: 'control', agent: 'Alteplase', dose: '0.6 mg/kg (low-dose; the only dose approved by the Japanese government)', route: 'Intravenous',
+        coInterventions: 'Low-dose alteplase 0.6 mg/kg, followed by mechanical thrombectomy with any approved device; rt-PA infusion continued during thrombectomy; balloon guide catheter; thrombectomy required to start within 30 minutes from randomization.',
+        note: 'Bridging arm, n=103. LOW-DOSE 0.6 mg/kg (NOT 0.9). Suzuki JAMA 2021 p.244-245.' },
+    ],
     clinicalContext: 'SKIP tested whether direct thrombectomy could replace bridging therapy in Japan, where alteplase was given at a lower approved dose than in many Western trials.',
     pearls: [
       'Did not demonstrate noninferiority despite similar point estimates',
@@ -2843,6 +2864,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'NIHSS less than 6 or greater than 29',
       'Presentation beyond 4.5 hours from last known well',
     ],
+    fullEligibility: {
+      source: 'publication', sourceUrl: 'https://doi.org/10.1001/jama.2020.23522', sourceLabel: 'Suzuki et al., JAMA 2021 (SKIP); reg. UMIN000021488', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Age 18 to 85 years','Acute ischemic stroke with internal carotid artery (ICA) or M1 occlusion evaluated by MRA or CTA','Baseline ASPECTS 6 to 10, or DWI-ASPECTS 5 to 10','Initial NIHSS score 6 or greater','Functionally independent prior to stroke (modified Rankin Scale 0 to 2)','Met Japanese-guideline criteria for treatment with lower-dose alteplase 0.6 mg/kg as intravenous thrombolysis within 4.5 hours from onset'] } ],
+      exclusion: [ { items: ['Detailed inclusion and exclusion criteria are provided in eBox 1 of Supplement 3 (not reproduced in the primary publication main text)'] } ],
+    },
     legend: {
       finding: 'Direct EVT vs low-dose alteplase + EVT: noninferiority not met; inconclusive.',
       bottomLineTag: 'NI not met',
@@ -2907,6 +2933,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Endovascular treatment alone',
       control: 'IV alteplase followed by endovascular treatment'
     },
+    armDetails: [
+      { arm: 'EVT alone', role: 'intervention', agent: 'Endovascular thrombectomy alone (no preceding IV alteplase)', route: 'Endovascular',
+        coInterventions: 'EVT without preceding alteplase, with any CE-approved stent retriever; suction catheters allowed as rescue; intra-arterial alteplase permitted at interventionist discretion (max 30 mg); rescue IV alteplase 0.9 mg/kg permitted if incomplete reperfusion (eTICI 0/1/2A) and within 4.5 h of onset.',
+        note: 'EVT-alone group; rescue IV alteplase 0.9 mg/kg allowed for incomplete reperfusion within 4.5 h (LeCouffe NEJM 2021 p.1835).' },
+      { arm: 'IV alteplase followed by EVT (usual care / bridging)', role: 'control', agent: 'IV alteplase + endovascular thrombectomy', dose: '0.9 mg/kg (max 90 mg)', route: 'IV (10% bolus, 90% over 1 h) then endovascular',
+        coInterventions: 'IV alteplase 0.9 mg/kg (max 90 mg), 10% bolus + 90% over 1 h, before EVT; EVT may start before end of infusion per guidelines; any CE-approved stent retriever; suction catheters as rescue; intra-arterial alteplase at discretion (max 30 mg).',
+        note: 'Usual-care group received IV alteplase 0.9 mg/kg before EVT (LeCouffe NEJM 2021 p.1835).' },
+    ],
     clinicalContext: 'MR CLEAN-NO IV tested the direct-EVT strategy in a non-Asian population and did not support omitting alteplase before thrombectomy in directly presenting eligible patients.',
     pearls: [
       'EVT alone was neither superior nor noninferior to bridging therapy',
@@ -2960,6 +2994,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Pre-stroke mRS greater than 2',
       'Presentation beyond 4.5 hours from symptom onset',
     ],
+    fullEligibility: {
+      source: 'publication', sourceUrl: 'https://doi.org/10.1056/NEJMoa2107727', sourceLabel: 'LeCouffe et al., NEJM 2021;385:1833-44 (MR CLEAN-NO IV); ISRCTN80619088', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Age 18 years or older','Acute ischemic stroke due to an intracranial proximal occlusion of the anterior circulation (intracranial internal carotid artery, the first segment of the middle cerebral artery [M1], or the proximal second segment [M2]) on CT angiography or MR angiography','Eligible for both EVT and intravenous alteplase administration within 4.5 hours after symptom onset according to local guidelines','Admitted directly to a center that performed EVT (directly presenting; mothership)','Score of 2 or more on the NIHSS (range 0–42)'] } ],
+      exclusion: [ { label: 'Per protocol (alteplase contraindications and standard EVT exclusions)', items: ['Any contraindication to intravenous alteplase per current guidelines','Pre-existing conditions precluding EVT or alteplase as defined in the detailed protocol (full inclusion/exclusion criteria provided in the trial protocol)'] } ],
+    },
     legend: {
       finding: 'Direct EVT was neither superior nor noninferior to alteplase + EVT in European direct presenters.',
       bottomLineTag: 'NI not met',
@@ -3024,6 +3063,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Direct endovascular thrombectomy',
       control: 'IV thrombolysis (alteplase or tenecteplase) followed by EVT'
     },
+    armDetails: [
+      { arm: 'Direct endovascular thrombectomy', role: 'intervention', agent: 'Mechanical thrombectomy without IV thrombolysis', route: 'Endovascular (intra-arterial)',
+        coInterventions: 'Direct thrombectomy with the Trevo device (Stryker) as first-line intervention, no IV thrombolytic; balloon guide/aspiration/additional devices, and stenting or antiplatelet for intracranial atherosclerotic disease, at investigator discretion; heparinised saline flush during the procedure.',
+        note: 'Methods/Procedures, Mitchell Lancet 2022 p.118. Trevo first-line. No heparin/antiplatelet/anticoagulant for ≥24 h post-procedure unless stenting required.' },
+      { arm: 'Standard bridging thrombolysis + endovascular thrombectomy', role: 'control', agent: 'IV thrombolytic (alteplase or tenecteplase), then mechanical thrombectomy', dose: 'Alteplase 0.9 mg/kg (83% of treated) or tenecteplase (17%), per local standard care', route: 'IV thrombolytic, then endovascular thrombectomy',
+        coInterventions: 'IV thrombolytic (alteplase or tenecteplase) per standard care at each site, then transfer to angiography minimising delay to puncture; same Trevo-first technique and discretionary adjuncts as the direct arm.',
+        note: 'Methods/Procedures, Mitchell Lancet 2022 p.118; agent split from Table 1 p.119 (145 treated: 120 alteplase, 25 tenecteplase). Thrombolytic agent/dose at site discretion.' },
+    ],
     clinicalContext: 'DIRECT-SAFE broadened the direct-EVT question to a more diverse international population and vascular anatomy, including posterior circulation and M2 occlusions.',
     pearls: [
       'Did not show noninferiority of direct EVT',
@@ -3075,6 +3122,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Presentation beyond 4.5 hours from symptom onset',
       'NIHSS less than 2',
     ],
+    fullEligibility: {
+      source: 'clinicaltrials.gov', sourceUrl: 'https://clinicaltrials.gov/study/NCT03494920', sourceLabel: 'ClinicalTrials.gov NCT03494920', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Patients presenting with acute ischemic stroke eligible using standard criteria to receive IV thrombolysis within 4.5 hours of stroke onset',"Patient's age is ≥18 years",'Intra-arterial clot retrieval treatment can commence (groin puncture) within 6 hours of stroke onset','Arterial occlusion on CTA or MRA of the ICA, M1, M2 or basilar artery'] } ],
+      exclusion: [ { items: ['Intracranial hemorrhage (ICH) identified by CT or MRI','Rapidly improving symptoms at the discretion of the investigator','Pre-stroke mRS score of ≥4 (indicating previous disability)','Hypodensity in >1/3 MCA territory on non-contrast CT','Contraindication to imaging with contrast agents','Any terminal illness such that patient would not be expected to survive more than 1 year','Any condition that, in the judgment of the investigator, could impose hazards to the patient if study therapy is initiated or affect the participation of the patient in the study','Pregnant women'] } ],
+    },
     legend: {
       finding: 'Direct EVT did not meet NI vs bridging therapy across AU/NZ/China/Vietnam.',
       bottomLineTag: 'NI not met',
@@ -3139,6 +3191,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Stent-retriever thrombectomy alone',
       control: 'IV alteplase plus stent-retriever thrombectomy'
     },
+    armDetails: [
+      { arm: 'Thrombectomy alone', role: 'intervention', agent: 'Stent-retriever thrombectomy (no IV alteplase)', route: 'Endovascular',
+        coInterventions: 'Thrombectomy initiated as fast as possible with any commercially available Solitaire stent-retriever; no preceding IV alteplase; balloon guide/distal aspiration catheter strongly encouraged; intra-arterial fibrinolytics prohibited; concomitant care per international standards.',
+        note: 'Intervention = thrombectomy alone; Solitaire device in both arms; IA fibrinolysis prohibited (Fischer Lancet 2022 p.106 Procedures).' },
+      { arm: 'IV alteplase plus thrombectomy (bridging)', role: 'control', agent: 'IV alteplase + stent-retriever thrombectomy', dose: '0.9 mg/kg (max 90 mg)', route: 'IV (10% bolus, remainder over 60 min) then endovascular',
+        coInterventions: 'IV alteplase 0.9 mg/kg (max 90 mg) over 60 min with 10% bolus, started as early as possible; complete dose administered unless major contraindication; then Solitaire thrombectomy; balloon guide/distal aspiration encouraged; IA fibrinolytics prohibited.',
+        note: 'Control = bridging alteplase before Solitaire thrombectomy (Fischer Lancet 2022 p.104,106).' },
+    ],
     clinicalContext: 'SWIFT DIRECT was one of the major Western direct-EVT trials and found lower reperfusion rates when alteplase was omitted.',
     pearls: [
       'Failed to show noninferiority of thrombectomy alone',
@@ -3193,6 +3253,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Transferred from non-EVT center',
       'Pre-stroke mRS greater than 2',
     ],
+    fullEligibility: {
+      source: 'clinicaltrials.gov', sourceUrl: 'https://clinicaltrials.gov/study/NCT03192332', sourceLabel: 'ClinicalTrials.gov NCT03192332 (SWIFT DIRECT)', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Informed consent as documented by signature','Age ≥ 18','Clinical signs consistent with an acute ischemic stroke','Neurological deficit with a NIHSS of ≥ 5 and < 30 (deficits judged to be clearly disabling at presentation)','Patient is eligible for intravenous thrombolysis','Patient is eligible for endovascular treatment','Randomization no later than 4 hours 15 minutes after stroke symptom onset and initiation of IV t-PA must be started within 4 hours 30 minutes of stroke symptoms onset (onset time is measured from the time when the subject was last seen well)','Occlusion (TICI 0-1) of the intracranial internal carotid artery (ICA), the M1 segment of the middle cerebral artery (MCA), or both confirmed by CT or MR angiography, accessible for MT','Core-infarct volume of Alberta Stroke Program Early CT Score (ASPECTS) greater than or equal to 4 (≥ 4) based on baseline CT or MR imaging (a region has to have diffusion abnormality in 20% or more of its volume to be considered MR-ASPECTS positive)'] } ],
+      exclusion: [ { items: ['Acute intracranial hemorrhage','Any contraindication for IV t-PA','Pre-treatment with IV t-PA','In-hospital stroke','Pregnancy or lactating women. A negative pregnancy test before randomization is required for all women with child-bearing potential.','Known (serious) sensitivity to radiographic contrast agents, nickel, titanium metals, or their alloys','Known current participation in a clinical trial (investigational drug or medical device)','Renal insufficiency as defined by a serum creatinine > 2.0 mg/dl (or 176.8 µmol/l) or glomerular filtration rate (GFR) < 30 mL/min or requirement for hemodialysis or peritoneal dialysis','Severe comorbid condition with life expectancy less than 90 days at baseline','Known advanced dementia or significant pre-stroke disability (mRS score of ≥2)','Foreseeable difficulties in follow-up due to geographic reasons (e.g. patients living abroad)','Comorbid disease or condition that would confound the neurological and functional evaluations or compromise survival or ability to complete follow-up assessments.','Subject currently uses or has a recent history of illicit drug(s) or abuses alcohol (defined as regular or daily consumption of more than four alcoholic drinks per day).','Known history of arterial tortuosity, pre-existing stent, other arterial disease and/or known disease at the femoral access site that would prevent the device from reaching the target vessel and/or preclude safe recovery after MT','Radiological confirmed evidence of mass effect or intracranial tumor (except small meningioma)','Radiological confirmed evidence of cerebral vasculitis','CTA or MRA evidence of carotid artery dissection','Evidence of additional distal intracranial vessel occlusion in another territory (i.e. A2 segment of anterior cerebral artery or M3, M4 segment of MCA) on initial NCCT/MRI or CTA/MRA'] } ],
+    },
     legend: {
       finding: 'EVT alone failed NI vs bridging; entire CI favored alteplase + EVT.',
       bottomLineTag: 'NI not met',
@@ -4013,6 +4078,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Intravenous tirofiban before endovascular thrombectomy',
       control: 'Placebo before endovascular thrombectomy'
     },
+    armDetails: [
+      { arm: 'Endovascular thrombectomy plus intravenous tirofiban', role: 'intervention', agent: 'Tirofiban (glycoprotein IIb/IIIa inhibitor)', dose: '10 µg/kg IV bolus, then continuous infusion 0.15 µg/kg/min', route: 'Intravenous', frequency: 'Bolus within 5 minutes after randomization, then continuous infusion', duration: 'Up to 24 hours',
+        coInterventions: 'All patients underwent rapid endovascular thrombectomy. At the 20th hour after study drug, oral aspirin and/or clopidogrel started (dual antiplatelet if angioplasty/stenting, otherwise single); study drug stopped at the 24th hour. IV heparin allowed during thrombectomy; post-procedure SC/LMW heparin for DVT prophylaxis permitted.',
+        note: 'Tirofiban arm, n=463. RESCUE BT JAMA 2022 p.544.' },
+      { arm: 'Endovascular thrombectomy plus placebo', role: 'comparator', agent: 'Saline placebo (visually identical to tirofiban)', dose: 'Volume-matched to tirofiban', route: 'Intravenous', frequency: 'Bolus within 5 minutes after randomization, then continuous infusion', duration: 'Up to 24 hours',
+        coInterventions: 'All patients underwent rapid endovascular thrombectomy. At the 20th hour, oral aspirin and/or clopidogrel started (dual if angioplasty/stenting, otherwise single); study drug stopped at the 24th hour. Rescue tirofiban was available for this arm if antegrade flow could not be maintained after angioplasty/stenting. IV heparin during thrombectomy; post-procedure heparin for DVT prophylaxis permitted.',
+        note: 'Placebo arm, n=485. Both arms received thrombectomy; contrast = tirofiban vs placebo. RESCUE BT JAMA 2022 p.544.' },
+    ],
     clinicalContext: 'RESCUE BT tested whether aggressive antiplatelet therapy before thrombectomy could improve microvascular patency and overall outcomes in LVO stroke.',
     pearls: [
       'No significant improvement in 90-day disability distribution with tirofiban',
@@ -4065,6 +4138,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Pre-stroke mRS greater than 2',
       'Presentation beyond 24 hours from last known well',
     ],
+    fullEligibility: {
+      source: 'publication', sourceUrl: 'https://doi.org/10.1001/jama.2022.12584', sourceLabel: 'RESCUE BT Investigators (Qiu et al.), JAMA 2022; reg. ChiCTR-IOR-17014167', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Acute ischemic stroke presenting within 24 hours of time last known well','NIHSS score 30 or less (range 0 to 42)','Alberta Stroke Program Early CT Score (ASPECTS) 6 or more','Occlusion of the intracranial internal carotid artery, or the first or second segment of the middle cerebral artery (M1 or M2), confirmed by CTA, MRA, or DSA'] } ],
+      exclusion: [ { items: ['Dual antiplatelet therapy within 1 week of the index stroke','Receipt of intravenous thrombolysis after stroke onset','Additional detailed selection criteria are provided in the eMethods of Supplement 3 (not reproduced in the primary publication main text)'] } ],
+    },
     legend: {
       finding: 'Pre-EVT IV tirofiban did not improve outcome and raised sICH 9.7% vs 6.4%.',
       bottomLineTag: 'NS / Harm',
