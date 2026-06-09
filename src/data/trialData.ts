@@ -3263,6 +3263,17 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Endovascular thrombectomy plus medical care',
       control: 'Medical care alone'
     },
+    armDetails: [
+      { arm: 'Endovascular thrombectomy plus medical care', role: 'intervention',
+        agent: 'Mechanical thrombectomy using any thrombectomy device approved by local regulatory authorities',
+        route: 'Endovascular', frequency: 'Single procedure; device choice at operator discretion', duration: 'Procedure start within 30 min of randomization; randomization ≤ 6.5 h from onset/LKW',
+        coInterventions: 'Medical care per current European guidelines for acute ischemic stroke, including IV thrombolysis (alteplase) when indicated. IV thrombolysis given in ~34.6% of thrombectomy-group patients (Table 1, p.1681).',
+        note: 'Performed at certified high-volume stroke centers in France and Spain. Successful revascularization = mTICI 2b–3. Thrombectomy performed in 151/159 ITT; 8 had spontaneous clot lysis (Costalat NEJM 2024 p.1679-1680).' },
+      { arm: 'Medical care alone (control)', role: 'control',
+        agent: 'Best medical care per current European acute ischemic stroke guidelines', route: 'Medical', duration: 'Acute hospitalization',
+        coInterventions: 'IV thrombolysis (alteplase) when indicated. IV thrombolysis given in ~35.2% of control-group patients (Table 1, p.1681).',
+        note: 'No endovascular thrombectomy. Admitted to acute-stroke units or neuro ICUs; treated per European guidelines (p.1679).' },
+    ],
     clinicalContext: 'LASTE extended EVT evidence into patients with large established infarcts, including infarct volumes not capped by a strict upper limit, showing benefit despite higher hemorrhage risk.',
     pearls: [
       'Median 90-day mRS improved from 6 to 4 with thrombectomy',
@@ -3291,6 +3302,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Standard contraindications to endovascular thrombectomy',
       'Comorbid illness expected to limit 90-day follow-up',
     ],
+    fullEligibility: {
+      source: 'clinicaltrials.gov', sourceUrl: 'https://clinicaltrials.gov/study/NCT03811769', sourceLabel: 'ClinicalTrials.gov NCT03811769', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Subject is ≥ 18 years old at inclusion (no upper age limit)','Clinical signs consistent with acute ischemic stroke with symptom onset ≤ 6.5 hours','Large ischemic core defined as ASPECT Score ≤ 5 on imaging; for patients ≥ 80 years: ASPECT 3-5','Proved anterior circulation intracranial large vessel occlusion on CTA or MRA','Informed consent obtained and signed','Selection imaging performed ≤ 3 hours before randomization','Anticipated procedure start within 30 minutes of randomization','Pre-stroke mRS ≤ 1','Eligible if receiving antiaggregant or anticoagulant agents within 24 hours','NIHSS > 6','Thrombolytic therapy initiated per clinical guidelines if indicated'] } ],
+      exclusion: [
+        { items: ['Known absence of vascular access','Known life-threatening allergy to contrast or endovascular products','Pregnant or lactating females','Severe comorbidities or life expectancy under 6 months','Unable to present or participate in follow-up','Pre-existing neurological or psychiatric disease affecting assessment','Evidence of vessel recanalization prior to randomization','Seizures at onset obscuring stroke diagnosis','Current participation in another investigational drug study','Suspicion of aortic dissection','Major patients under guardianship','Blood glucose < 50 or > 400 mg/dL','Creatinine > 4.0 mg/dL (unless on dialysis)','Platelet count < 50,000/µL','INR > 3.0 or PTT > 3 times upper limit of normal'] },
+        { label: 'Imaging exclusion', items: ['Isolated proximal cervical ICA occlusions or isolated M2 occlusions','Intracranial hemorrhage evidence on imaging','Excessive cervical vessel tortuosity','High suspicion of intracranial stenosis','Suspected cerebral vascular disease','Presumed calcified embolus or stenosis decompensation','Intracranial stent in same vascular territory','Occlusions in multiple vascular territories','Significant mass effect with midline shift','Ipsilateral cervical ICA lesion requiring stent placement'] },
+      ],
+    },
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -3384,6 +3403,17 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Endovascular thrombectomy plus medical treatment',
       control: 'Medical treatment alone'
     },
+    armDetails: [
+      { arm: 'Endovascular thrombectomy plus medical treatment', role: 'intervention',
+        agent: 'Mechanical thrombectomy (stent retriever and/or aspiration, with or without balloon protection)',
+        route: 'Endovascular', frequency: 'Single procedure; technique/device at operator discretion', duration: 'Initiated within 11 h of onset/LKW; expected completion within 12 h of onset',
+        coInterventions: 'Standard medical management per national and international guidelines, including IV thrombolysis (alteplase) when indicated. IV alteplase given in 49/125 (39%) of EVT-arm patients (Table 1, p.1757).',
+        note: 'Stent retriever, aspiration, or both, with/without balloon protection; operator choice (Procedures, p.1755). Successful reperfusion = mTICI 2b+.' },
+      { arm: 'Medical treatment alone (standard of care)', role: 'control',
+        agent: 'Best medical management per national/international guidelines', route: 'Medical', duration: 'Acute hospitalization',
+        coInterventions: 'IV thrombolysis (alteplase) when indicated. IV alteplase given in 44/128 (34%) of medical-treatment-arm patients (Table 1, p.1757).',
+        note: 'No endovascular thrombectomy. Substantive control = guideline-based medical management incl. thrombolysis where eligible (Methods, p.1755).' },
+    ],
     clinicalContext: 'TENSION demonstrated large-core EVT benefit using mostly non-contrast CT, making it more applicable to real-world stroke systems without advanced perfusion imaging.',
     pearls: [
       'Functional outcome improved substantially with EVT (adjusted common OR 2.58)',
@@ -3413,6 +3443,11 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Acute intracranial hemorrhage or significant mass effect',
       'Standard contraindications to endovascular thrombectomy',
     ],
+    fullEligibility: {
+      source: 'clinicaltrials.gov', sourceUrl: 'https://clinicaltrials.gov/study/NCT03094715', sourceLabel: 'ClinicalTrials.gov NCT03094715', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Randomization within 11 hours after stroke onset (if known) or last seen well','Endovascular treatment is expected to be finished within 12 hours after known symptom onset','Clinical signs and symptoms attributable to target occlusion with impairment of the following: language, motor function, sensation, cognition, gaze, and/or vision for at least 30 minutes','NIHSS Score of <26','Signed informed consent (IC) form by patient or legal guardian','Prior to new focal neurological deficit, mRS score was ≤2','A new focal occlusion confirmed by imaging (MRA/CTA) of the M1 segment of the middle cerebral artery or the intracranial segment of the distal internal carotid artery','CT (non-contrast CT) or DWI with an ASPECT score of 3-5'] } ],
+      exclusion: [ { items: ['Active participation in another clinical trial','Pre-existing neurological or psychiatric disease that would confound the neurological or functional evaluations','Known vascular disease preventing endovascular treatment','Contraindication for contrast medium','Patient is known to have infective endocarditis','Anticipated life expectancy of less than 12 months','Extracranial high-grade stenosis requiring acute stent placement','Mass effect, intracranial tumor, or evidence of acute hypodensity on CT consistent with established infarction beyond eligibility','CBV/DWI abnormalities with an ASPECT score of 0-2'] } ],
+    },
     howToReadChart: [
       {
         question: 'What does the chart show?',
@@ -6186,6 +6221,17 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Age >85',
       'Significant mass effect on baseline imaging',
     ],
+    fullEligibility: {
+      source: 'clinicaltrials.gov', sourceUrl: 'https://clinicaltrials.gov/study/NCT03876457', sourceLabel: 'ClinicalTrials.gov NCT03876457', retrieved: '2026-06-08',
+      inclusion: [
+        { label: 'Clinical', items: ['Adults (18–85 years) with final acute ischemic stroke diagnosis','NIHSS score ≥ 6','Last known well to groin puncture or medical management: 0–24 hours','Pre-stroke mRS of 0–1','Eligible for thrombectomy or medical management','Signed informed consent obtained','Protocol follow-up compliance commitment','Anticipated life expectancy ≥ 3 months'] },
+        { label: 'Neuroimaging', items: ['Large vessel occlusion (ICA or MCA-M1) via MRA or CTA','Large infarct-core on: ASPECTS 3–5, CT perfusion (rCBF<30% ≥50cc), or MRI-DWI (ADC<620 ≥50cc)'] },
+      ],
+      exclusion: [
+        { label: 'Clinical', items: ['Unable to undergo CT angiography/perfusion','Co-morbid conditions confounding assessments','Thrombolytic treatment >4.5 hours post-onset','Thrombolytic at 3–4.5 hours with age >80, anticoagulant use, diabetes with prior stroke, NIHSS >25, or >1/3 MCA involvement','Current participation in other investigational studies'] },
+        { label: 'Neuroimaging', items: ['ASPECTS 6–10 AND core <50cc','ASPECTS ≤2','Intracranial tumor, hemorrhage, or AVM','Significant mass effect with midline shift','Flow-limiting carotid dissection or aortic dissection','Intracranial stent precluding device deployment','Multiple vascular territory occlusions','Established infarct with cerebral edema'] },
+      ],
+    },
     safetyProfile: {
       sICH: {
         evt: 0.6,
@@ -6272,6 +6318,17 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Endovascular Thrombectomy (stent-retriever/aspiration) + Medical Management',
       control: 'Medical Management alone (IV thrombolysis if eligible + antiplatelet)'
     },
+    armDetails: [
+      { arm: 'Endovascular thrombectomy + medical care', role: 'intervention',
+        agent: 'Mechanical thrombectomy (stent retrievers, aspiration devices, or both; various manufacturers)',
+        route: 'Endovascular', frequency: 'Single procedure', duration: 'Expected to begin within 24 h of stroke onset',
+        coInterventions: 'IV thrombolysis (alteplase or tenecteplase) for patients first assessed within 4.5 h of onset; standard medical care per AHA/ASA, ESO, and Australia/NZ Stroke Foundation guidelines (BP management, critical care, rehabilitation); decompressive hemicraniectomy for severe swelling per local practice',
+        note: 'Large-core selection: ASPECTS 3–5 on NCCT or core ≥50 mL (rCBF<30% via RAPID, or ADC<620 on DWI); no upper core-volume limit. Tandem and isolated cervical ICA occlusions allowed. 1:1 adaptive minimization (Sarraj NEJM 2023 p.1261).' },
+      { arm: 'Medical care alone', role: 'control',
+        agent: 'Standard medical management (no thrombectomy)', route: 'Medical', duration: 'Through hospitalization + outpatient follow-up',
+        coInterventions: 'IV thrombolysis (alteplase or tenecteplase) for patients first assessed within 4.5 h of onset; standard medical care per AHA/ASA, ESO, and Australia/NZ Stroke Foundation guidelines; decompressive hemicraniectomy for severe swelling per local practice',
+        note: 'Both arms received guideline-based medical care; IV thrombolysis administered identically in both arms when within 4.5 h. Substantive standard-of-care control, not sham (Sarraj NEJM 2023 p.1261).' },
+    ],
     clinicalContext: 'Patients with large ischemic cores (ASPECTS < 6 or Core Volume > 50ml) were historically excluded from thrombectomy trials due to fears of futile reperfusion and hemorrhagic transformation. SELECT2 challenged this dogma.',
     calculations: {
       // Class E correction 2026-05-20: SELECT2's primary endpoint is an
@@ -6327,6 +6384,17 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'NIHSS <6 or >30',
       'Significant mass effect',
     ],
+    fullEligibility: {
+      source: 'clinicaltrials.gov', sourceUrl: 'https://clinicaltrials.gov/study/NCT04551664', sourceLabel: 'ClinicalTrials.gov NCT04551664', retrieved: '2026-06-08',
+      inclusion: [
+        { label: 'General', items: ['Ages 18–80 years','Symptoms consistent with acute ischemic stroke','Pre-stroke mRS score 0–1','NIHSS score 6–30 at randomization','Randomization within 24 hours of stroke onset','Informed consent signed'] },
+        { label: 'Neuroimaging', items: ['CTA or MRA showing ICA terminal or M1 MCA occlusion','NCCT ASPECTS combined with perfusion core volume meeting one criterion: ASPECTS 3–5; ASPECTS >5 (6h–24h) with core 70–100 ml; ASPECTS <3 with core 70–100 ml'] },
+      ],
+      exclusion: [
+        { label: 'General', items: ['Pregnancy or positive HCG in childbearing females','Severe contrast allergy uncontrolled by medications','Refractory hypertension (SBP >185 or DBP >110 mmHg)','Hemorrhagic tendency (platelets <100×10⁹/L, APTT ≥35 s, INR >1.7)','Recent organ surgery/biopsy (past month)','Active/recent bleeding (past month)','Hemodialysis/peritoneal dialysis or GFR <30 or creatinine >220 mmol/L','Brain tumor with mass effect','Expected survival <1 year','Participation in confounding interventional trials','Other investigator-deemed contraindications'] },
+        { label: 'Neuroimaging', items: ['Midline shift, herniation, or mass effect with ventricular effacement','Acute intracranial hemorrhage','Bilateral strokes or multiple vessel occlusions'] },
+      ],
+    },
     safetyProfile: {
       sICH: {
         evt: 6.1,
@@ -6425,6 +6493,17 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Endovascular Thrombectomy (stent-retriever/aspiration) + Medical Therapy',
       control: 'Medical Therapy alone (IV thrombolysis if eligible + antiplatelet)'
     },
+    armDetails: [
+      { arm: 'Endovascular therapy + medical management', role: 'intervention',
+        agent: 'Endovascular thrombectomy (stent retriever or contact-aspiration first-line; ± balloon angioplasty, stent implantation, or intraarterial thrombolysis as needed)',
+        route: 'Endovascular', frequency: 'Single procedure', duration: 'Within 24 h of stroke onset',
+        coInterventions: 'IV thrombolysis when eligible — alteplase 0.9 mg/kg or urokinase 1.0–1.5 million IU (~28% of patients in both groups); medical management per Chinese Stroke Association guidelines',
+        note: 'Large-core selection broader than SELECT2: ASPECTS 3–5 (any core), ASPECTS >5 with core 70–100 ml (6–24 h), ASPECTS <3 with core 70–100 ml. ICA-terminal or M1 occlusion. Simple 1:1 randomization (Huo NEJM 2023 p.1274).' },
+      { arm: 'Medical management alone', role: 'control',
+        agent: 'Standard medical management (no thrombectomy)', route: 'Medical', duration: 'Through hospitalization',
+        coInterventions: 'IV thrombolysis when eligible — alteplase 0.9 mg/kg or urokinase 1.0–1.5 million IU (~28% of patients in both groups); medical management per Chinese Stroke Association guidelines',
+        note: 'Both arms received Chinese Stroke Association guideline-based management; ~28% in each group received IV thrombolysis. Full-dose alteplase (0.9 mg/kg) — distinct from low-dose Japanese protocols. Substantive control (Huo NEJM 2023 p.1274).' },
+    ],
     clinicalContext: 'Conducted in China, ANGEL-ASPECT complemented SELECT2 by investigating thrombectomy in patients with large infarct cores, including those with cores up to 100ml.',
     calculations: {
       // Class E correction 2026-05-20: ANGEL-ASPECT's primary endpoint is
@@ -6879,6 +6958,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Excessive vascular tortuosity; bilateral mydriasis',
       'Advanced cancer, severe anemia, bleeding diathesis',
     ],
+    fullEligibility: {
+      source: 'clinicaltrials.gov', sourceUrl: 'https://clinicaltrials.gov/study/NCT04751708', sourceLabel: 'ClinicalTrials.gov NCT04751708', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Symptoms and signs compatible with ischemia in the basilar artery territory','Basilar artery occlusion confirmed by CTA/MRA/DSA','Age of 18 years or older','Time from stroke onset to randomization within 12 hours of estimated time of basilar artery occlusion (for unwitnessed/wake-up strokes, the time last known to be without major neurological deficits is used as the time of onset)','Written informed consent','NIHSS score ≥10 at the time of neuroimaging'] } ],
+      exclusion: [
+        { items: ['Pre-existing dependency with mRS ≥3 for patients <80 years; premorbid mRS ≥1 for patients ≥80 years','Bilateral mydriasis','Pregnancy; if a woman is of childbearing potential a urine or serum beta HCG test is positive','Severe contrast allergy or absolute contraindication to iodinated contrast','Participation in other clinical trials','Systolic pressure >185 mmHg or diastolic pressure >110 mmHg, and cannot be controlled by antihypertensive drugs','Known genetic or acquired bleeding constitution, lack of anticoagulant factors, or oral anticoagulant drugs and INR > 1.7','Blood glucose < 2.7 or >22.2 mmol/L; platelet count < 50×10⁹/L, or hematocrit < 25%','Life expectancy < 1 year','Patients that cannot complete 90-day follow-up','Acute ischemic cerebral infarction within 48 hours after major surgery (can enroll if more than 48 hours)','Premorbid cerebrovascular inflammation','Premorbid nervous system disease or mental disorders hindering assessment'] },
+        { label: 'Imaging exclusion', items: ['CT/MR shows intracranial hemorrhage (microbleeds ≤5mm allowed)','CTA/MRA/DSA shows the artery is seriously tortuous, variable or dissected, and thrombectomy device cannot reach the target vessel','PC-ASPECTS on CT/CTA-SI/MRI-DWI <6 for patients <80 years (<8 for patients ≥80 years)','CT or MR shows cerebellar infarction with obvious space-occupying effect and compression of the fourth ventricle','Complete bilateral thalami or bilateral brainstem infarction on CT/MR','Occlusion of both anterior and posterior circulation on CTA/MRA/DSA','Intracranial tumors (except small meningiomas)'] },
+      ],
+    },
     safetyProfile: {
       sICH: {
         evt: 5,
@@ -6968,6 +7055,17 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Endovascular Thrombectomy (EVT) (+/- tPA) + Best Medical Therapy',
       control: 'Best Medical Therapy alone (IV thrombolysis if eligible + antiplatelet)'
     },
+    armDetails: [
+      { arm: 'Endovascular thrombectomy + best medical care', role: 'intervention',
+        agent: 'Endovascular thrombectomy (operator-choice technique) added to best medical care',
+        route: 'Endovascular', frequency: 'Single index procedure', duration: 'Within 12 h of estimated basilar-artery occlusion onset',
+        coInterventions: 'Best medical care per Chinese national/institutional guidelines (IV thrombolytics, antiplatelets, anticoagulation, or combinations); IV thrombolysis used in 31% of thrombectomy-group patients (Tao NEJM 2022 p.1361,1365)',
+        note: 'EVT at operator discretion: stent retrievers, thromboaspiration, balloon angioplasty, stenting, intraarterial thrombolysis (alteplase or urokinase), or combinations. 221/228 underwent EVT; GA 56%; additional intracranial angioplasty/stenting 40% (p.1364-65). 2:1 randomization.' },
+      { arm: 'Best medical care (control)', role: 'control',
+        agent: 'Best medical care alone', route: 'Medical', duration: '90-day follow-up',
+        coInterventions: 'Best medical care per Chinese national/institutional guidelines; IV thrombolysis used in 34% of control-group patients (patients within 4.5 h received IV thrombolysis per Chinese standard of care) (Tao NEJM 2022 p.1361,1364-65)',
+        note: 'Control = best medical care without EVT. 6 patients total (3 per group) crossed over. Rescue EVT not part of control protocol (p.1365).' },
+    ],
     clinicalContext: 'Basilar Artery Occlusion (BAO) carries high mortality (>80% without treatment). Early trials (BEST, BASICS) were inconclusive due to crossover and slow recruitment. ATTENTION (and BAOCHE) provided definitive evidence.',
     calculations: {
       nnt: 4.3, // 1 / (0.46 - 0.23) = 4.35 ≈ 4.3
@@ -7018,6 +7116,14 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       'Recent ICH or amyloid angiopathy',
       'Age >80',
     ],
+    fullEligibility: {
+      source: 'clinicaltrials.gov', sourceUrl: 'https://clinicaltrials.gov/study/NCT02737189', sourceLabel: 'ClinicalTrials.gov NCT02737189', retrieved: '2026-06-08',
+      inclusion: [ { items: ['Posterior circulation AIS within 6-24 hours from symptom onset/last seen well where patient is ineligible for i.v. thrombolytic treatment, or patient has received i.v. thrombolytic therapy without recanalization','Occlusion (TIMI 0-1) of the basilar artery or intracranial segments of both vertebral arteries as evidenced by CT angiography, MR angiography or angiogram','Age ≥18 and ≤80 years','Baseline NIHSS score obtained prior to randomization must be equal to or higher than 6 points','No significant pre-stroke functional disability (mRS ≤ 1)','Patient treatable within 24 hours from time last seen well. Isolated vertigo with nausea and/or vomiting is not considered onset of symptom','Informed consent obtained from patient or acceptable patient surrogate'] } ],
+      exclusion: [
+        { label: 'General', items: ['Known hemorrhagic diathesis, coagulation factor deficiency, or oral anticoagulant therapy with INR > 3.0','Baseline platelet count < 50,000/µL','Baseline blood glucose < 50 mg/dL or > 400 mg/dL','Severe, sustained hypertension (SBP > 220 mm Hg or DBP > 110 mm Hg)','Patients in sedation and/or intubated could not be included if baseline NIHSS is not obtained by a neurologist or emergency physician prior to sedation/intubation','Seizures at stroke onset which would preclude obtaining a baseline NIHSS','Serious, advanced, or terminal illness with anticipated life expectancy of less than one year','History of life-threatening allergy (more than rash) to contrast medium','Subjects who received i.v. tissue plasminogen activator beyond 4.5 hours from symptom onset','Acute stroke within the first 48 hours after percutaneous cardiac, cerebrovascular interventions and major surgery','Renal insufficiency with creatinine ≥ 3 mg/dl','Woman of childbearing potential known to be pregnant or lactating or with a positive pregnancy test','Subject participating in a study involving an investigational drug or device that would impact this study','Cerebral vasculitis','Pre-existing neurological or psychiatric disease that would confound evaluations; baseline mRS must be ≤ 1','Unlikely to be available for 90 days follow-up'] },
+        { label: 'Neuroimaging', items: ['Hypodensity amounting to a posterior-circulation ASPECTS (pc-ASPECTS) < 6 and Pons-midbrain-index ≥ 3 on CTA source images, MR-DWI, or NCCT','CT or MR evidence of hemorrhage (presence of microbleeds on MRI is allowed)','Complete cerebellar infarct on CT or MRI with significant mass effect and compression of the fourth ventricle','Complete unilateral or bilateral thalamic infarction on CT or MRI','Evidence of vertebral occlusion, high-grade stenosis or arterial dissection in the extracranial or intracranial segment that cannot be treated or will prevent access, or excessive tortuosity precluding device delivery','Subjects with occlusions in both anterior and posterior circulation','Evidence of intracranial tumor (except small meningioma)'] },
+      ],
+    },
     safetyProfile: {
       sICH: {
         evt: 6,
@@ -7108,6 +7214,17 @@ export const TRIAL_DATA: Record<string, TrialMetadata> = {
       treatment: 'Endovascular Thrombectomy (stent-retriever/aspiration) + Best Medical Therapy',
       control: 'Best Medical Therapy alone (IV thrombolysis if eligible + antiplatelet)'
     },
+    armDetails: [
+      { arm: 'Thrombectomy + standard medical care', role: 'intervention',
+        agent: 'Endovascular thrombectomy with Solitaire stent retriever (Medtronic), added to standard medical care',
+        route: 'Endovascular', frequency: 'Single index procedure', duration: '6–24 h after symptom onset / last known well',
+        coInterventions: 'Standard medical care per current Chinese guidelines; IV thrombolysis if arrived within the 4.5 h window and met safety criteria — used in 14% of thrombectomy-group patients (Jovin NEJM 2022 p.1373,1375)',
+        note: 'Solitaire device (retrievable self-expanding stent). Rescue reperfusion with other devices/pharmacologic agents NOT permitted except balloon angioplasty or stenting of the vertebral/basilar artery. Procedural complications 11% (p.1375).' },
+      { arm: 'Standard medical care (control)', role: 'control',
+        agent: 'Standard medical care alone (medical therapy only)', route: 'Medical', duration: '90-day follow-up',
+        coInterventions: 'Standard medical care per current Chinese guidelines; IV thrombolysis if within the 4.5 h window and met safety criteria — used in 21% of control-group patients (Jovin NEJM 2022 p.1373,1375)',
+        note: 'Control = standard medical care alone, no EVT. Enrollment halted early at prespecified interim for superiority of thrombectomy (p.1373).' },
+    ],
     clinicalContext: 'Following the success of extended window thrombectomy in the anterior circulation (DAWN/DEFUSE-3), BAOCHE examined the 6-24 hour window for Basilar Artery Occlusion.',
     calculations: {
       nnt: 4.5, // 1 / (0.46 - 0.24) = 4.55 ≈ 4.5
