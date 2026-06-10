@@ -19,6 +19,7 @@ type BrowserWindow = Window & {
 };
 import { formatClinicalDateShort } from '../../utils/clinicalDateTime';
 import { LKWTimePicker } from '../article/stroke/LKWTimePicker';
+import { MrsPickerModal } from '../calculators/MrsPickerModal';
 
 /**
  * PatientContextPanel — collapsible accordion that captures patient-context
@@ -203,6 +204,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
 }) => {
   const [expanded, setExpanded] = useState(lockExpanded || defaultExpanded);
   const [lkwModalOpen, setLkwModalOpen] = useState(false);
+  const [mrsModalOpen, setMrsModalOpen] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [interimText, setInterimText] = useState('');
   const [speechSupported] = useState(() =>
@@ -503,12 +505,12 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             return (
               <div
                 data-claim="bp-ivt-threshold-185-110"
-                className="mx-4 mb-1 flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2"
+                className="px-4 pb-2 -mt-0.5 flex items-start gap-1.5"
                 role="status"
                 aria-live="polite"
               >
-                <span className="text-amber-500 flex-shrink-0 mt-0.5" aria-hidden="true">⚠</span>
-                <p className="text-xs text-amber-800 leading-snug">
+                <span className="text-amber-500 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
+                <p className="text-xs text-amber-700 leading-snug">
                   {ivt?.inWindow
                     ? 'If thrombolysis planned: BP goal <185/110'
                     : 'BP above tPA/TNK threshold. Lower to ≤185/110 before treatment'}
@@ -533,6 +535,28 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
               <span className="text-xs text-slate-400 ml-0.5">mg/dL</span>
             </div>
           </div>
+
+          {/* Hypoglycemia caution: glucose <60 mg/dL. Mirrors the Stroke Code
+              pathway alert (CodeModeStep1); gated to the thrombolysis surface
+              (NIHSS) so it does not double up with Stroke Code's own alert.
+              Threshold <60 per AHA/ASA 2026 §4.5 (COR 1, LOE C-LD). */}
+          {showThrombolysisTiming && (() => {
+            const glu = parseInt(values.glucose, 10);
+            if (values.glucose === '' || isNaN(glu) || glu <= 0 || glu >= 60) return null;
+            return (
+              <div
+                data-claim="ivt-hypoglycemia-60"
+                className="px-4 pb-2 -mt-0.5 flex items-start gap-1.5"
+                role="status"
+                aria-live="polite"
+              >
+                <span className="text-amber-500 text-xs font-bold flex-shrink-0 leading-snug" aria-hidden="true">!</span>
+                <p className="text-xs text-amber-700 leading-snug">
+                  {'Hypoglycemia (glucose <60): treat with D50 50 mL IV, recheck, reassess for tPA if symptoms persist.'}
+                </p>
+              </div>
+            );
+          })()}
 
           {/* Anti-coag/Antiplatelet class selector. role="group" gives screen
               reader users the context that the chips are one selection group. */}
@@ -663,8 +687,22 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
               Records functional baseline for EVT eligibility (mRS 0-1
               independent vs >=2 dependent) and outcome comparison. */}
           <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3">
-            <span id="prestroke-mrs-label" className="text-xs font-medium text-slate-600 flex-shrink-0">
-              Pre-stroke mRS
+            <span className="flex items-center gap-1.5 flex-shrink-0">
+              <span id="prestroke-mrs-label" className="text-xs font-medium text-slate-600">
+                Pre-stroke mRS
+              </span>
+              {/* Info affordance: opens the slide-up grade explainer (0-5). Kept
+                  separate from the label so the label no longer doubles as the
+                  modal trigger (V removed that dual interaction). */}
+              <button
+                type="button"
+                onClick={() => setMrsModalOpen(true)}
+                aria-label="What do the mRS grades mean?"
+                aria-haspopup="dialog"
+                className="w-[18px] h-[18px] inline-flex items-center justify-center rounded-full border border-slate-300 text-[11px] font-bold leading-none text-slate-400 hover:text-neuro-600 hover:border-neuro-300 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none"
+              >
+                ?
+              </button>
             </span>
             <div
               role="group"
@@ -800,6 +838,19 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
         }}
         initialDate={values.lkw instanceof Date ? values.lkw : undefined}
         showSleepOnset={true}
+      />
+
+      {/* Pre-stroke mRS grade explainer: slide-up sheet opened by the "?" next
+          to the mRS label. maxGrade=5 (grade 6 "Dead" is not a baseline). */}
+      <MrsPickerModal
+        isOpen={mrsModalOpen}
+        onClose={() => setMrsModalOpen(false)}
+        value={values.prestrokeMrs}
+        maxGrade={5}
+        onChange={(grade) => {
+          onChange({ ...values, prestrokeMrs: grade as PrestrokeMrsGrade | undefined });
+          setMrsModalOpen(false);
+        }}
       />
     </div>
   );

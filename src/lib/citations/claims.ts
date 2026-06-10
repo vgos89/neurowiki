@@ -1035,4 +1035,15 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
   // heparin-class agents are captured by the aPTT >40s threshold
   // (ivt-anticoag-ufh-aptt). Per V direction 2026-06-10, the Heparin/LMWH input
   // is aPTT-only, so no LMWH-timing surface or claim is shipped.
+
+  // Hypoglycemia treat-threshold. Same caution as the Stroke Code pathway alert,
+  // unified to the guideline-correct <60 (supersedes the legacy <50; the audit
+  // stroke-code-glucose-threshold-60 corrected the citation but missed the
+  // CodeModeStep1/Step3 triggers, now aligned per V direction 2026-06-10).
+  'ivt-hypoglycemia-60': {
+    id: 'ivt-hypoglycemia-60',
+    citation_ids: ['aha-asa-2026-4.5'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Hypoglycemia (blood glucose <60 mg/dL) should be treated as part of acute stroke care: treat (eg, D50 50 mL IV), recheck glucose, and reassess for IV thrombolysis if symptoms persist after normoglycemia. AHA/ASA 2026 §4.5 row 1 (COR 1, LOE C-LD), verbatim in aha-asa-2026-4.5: "hypoglycemia (blood glucose <60 mg/dL) should be treated to avoid complications." Threshold is <60, not the legacy <50 (audit stroke-code-glucose-threshold-60). Mirrors the Stroke Code CodeModeStep1 hypoglycemia alert. UI state: amber caution note when glucose <60.',
+  },
 };

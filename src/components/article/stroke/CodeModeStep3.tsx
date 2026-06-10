@@ -123,7 +123,7 @@ export const CodeModeStep3: React.FC<CodeModeStep3Props> = ({
       note += `- Time of symptom discovery: ${step1Data.symptomDiscoveryTime.toLocaleString()}\n`;
     }
     if (step1Data?.lowGlucoseGuidanceViewed) {
-      note += '- Low glucose (<50) guidance reviewed: treat with dextrose, recheck glucose, reassess for tPA if symptoms persist (AHA).\n';
+      note += '- Low glucose (<60) guidance reviewed: treat with dextrose, recheck glucose, reassess for tPA if symptoms persist (AHA).\n';
     }
     note += '\n';
 

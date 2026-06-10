@@ -4,6 +4,15 @@
 
 (none)
 
+### NIHSS-HYPOGLYCEMIA-NOTES — Hypoglycemia caution + thin-note unification + mRS explainer — Class E-clinical
+- **Status:** ready_for_merge (committed this session)
+- **User-visible goal:** (1) the patient panel's BP caution box becomes the same thin "!" inline note as the per-drug cautions, unifying the caution style across the panel; (2) a new hypoglycemia "!" note appears on the NIHSS panel when glucose <60 mg/dL, mirroring the Stroke Code pathway alert ("treat with D50 50 mL IV, recheck, reassess for tPA if symptoms persist"); (3) the Stroke Code hypoglycemia alert threshold is corrected from <50 to <60 (CodeModeStep1 trigger + CodeModeStep3 copy), completing the earlier audit stroke-code-glucose-threshold-60; (4) the pre-stroke mRS slide-up explainer is restored via a "?" next to the label (capped at grades 0-5) so users who do not know the scale can read each grade.
+- **Non-goals:** no change to the separate <50 tPA-exclusion / stroke-mimic threshold (distinct concept; tracked as a follow-up task); no field made mandatory (confirmed every patient-context field stays optional).
+- **Files:** src/components/shared/PatientContextPanel.tsx; src/components/calculators/MrsPickerModal.tsx; src/components/article/stroke/{CodeModeStep1,CodeModeStep3}.tsx; src/lib/citations/claims.ts; docs/reviews/clinical-PR-hypoglycemia-and-note-restyle.md
+- **Acceptance checks:** tsc clean; build green; check:claims pass (new ivt-hypoglycemia-60 claim mapped to aha-asa-2026-4.5); check:humanizer pass; live-preview verified at 375px (hypoglycemia note fires at glucose 45, mRS "?" opens the 0-5 grade explainer, dense chips intact); clinical §17.2 approve-with-conditions (Condition 1 dose-hedge waived per V "same as Stroke Code"; Condition 2 <50-exclusion-threshold tracked as a separate task).
+- **Clinical impact:** high (hypoglycemia treat-threshold + caution on the IV-thrombolysis surface; sourced verbatim from AHA/ASA 2026 §4.5 COR 1).
+- **Rollback plan:** `git revert <merge commit>` restores the BP box, removes the hypoglycemia note + mRS "?" modal, and reverts the Stroke Code threshold to <50. The new claim is additive.
+
 ### NIHSS-ANTICOAG-MOBILE — Discrete "quiet chip" restyle of the eligibility controls — Class C
 - **Status:** ready_for_merge (committed this session)
 - **User-visible goal:** On a phone, the anticoagulant class selector, the per-drug toggles, and the mRS read lighter and shorter. The 44px pills become small (28px), low-contrast, square-cornered chips (Variation C); the excluding value (DOAC <48h, INR >1.7, aPTT >40s) tints amber; the filled amber caution box becomes a thin inline note. No content, claim, or logic changes (pure presentation of the already-reviewed NIHSS-ANTICOAG-ELIG surface).

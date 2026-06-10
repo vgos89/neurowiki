@@ -7,6 +7,8 @@ interface MrsPickerModalProps {
   onClose: () => void;
   value: MRSGrade | undefined;
   onChange: (grade: MRSGrade | undefined) => void;
+  /** Highest grade to offer. Pre-stroke baseline passes 5 (grade 6 "Dead" is not a baseline). Default 6. */
+  maxGrade?: MRSGrade;
 }
 
 const GRADES: { grade: MRSGrade; label: string; sublabel: string }[] = [
@@ -24,8 +26,10 @@ export const MrsPickerModal: React.FC<MrsPickerModalProps> = ({
   onClose,
   value,
   onChange,
+  maxGrade = 6,
 }) => {
   if (!isOpen) return null;
+  const grades = GRADES.filter((g) => g.grade <= maxGrade);
 
   return (
     <div
@@ -54,7 +58,7 @@ export const MrsPickerModal: React.FC<MrsPickerModalProps> = ({
 
         {/* Grade list */}
         <div className="divide-y divide-slate-200">
-          {GRADES.map((g) => {
+          {grades.map((g) => {
             const isSelected = value === g.grade;
             return (
               <button

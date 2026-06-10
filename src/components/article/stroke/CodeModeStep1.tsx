@@ -124,7 +124,10 @@ export const CodeModeStep1: React.FC<CodeModeStep1Props> = ({
   const bpTooHigh = withinTPAWindow
     ? (systolicBP > 185 || diastolicBP > 110)
     : (systolicBP > 220 || diastolicBP > 120);
-  const glucoseLow = glucose > 0 && glucose < 50;
+  // Hypoglycemia treat threshold <60 mg/dL per AHA/ASA 2026 §4.5 (COR 1, LOE
+  // C-LD). Corrected from <50 (audit stroke-code-glucose-threshold-60; the
+  // citation was fixed earlier but this trigger was missed) per V 2026-06-10.
+  const glucoseLow = glucose > 0 && glucose < 60;
   const glucoseHigh = glucose > 400;
 
   // H-2 fix (UX audit 2026-05-24): weight is only required when a
