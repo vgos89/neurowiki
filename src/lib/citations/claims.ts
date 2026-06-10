@@ -983,4 +983,56 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
     description: 'NIHSS thrombolysis-timing chip in PatientContextPanel (opt-in via showThrombolysisTiming). When a witnessed LKW is set, shows time since onset plus a three-tier IV thrombolysis window chip: green "Within 4.5h" (with a minutes-left countdown in the final 30 min) for the standard window per AHA/ASA 2026 §4.6.1 (COR 1) and §4.6.2 (alteplase/tenecteplase equivalence within 4.5h); orange "4.5–9h window" for the perfusion-imaging-selected extended window (COR 2a per AHA/ASA 2026), established by EXTEND (alteplase 4.5–9h, perfusion mismatch) and WAKE-UP (unknown onset, DWI-FLAIR mismatch); red "Beyond 9h" once past the extended IV thrombolysis window. The chip states factual onset-clock time bands, not eligibility determinations (the extended window in particular is imaging-gated). On-screen real-time aid only; the chip is not emitted to the NIHSS copy export (only the time-since-onset line is).',
   },
+
+  // ─── Anticoagulant IV-thrombolysis eligibility feature (2026-06-10) ────────
+  // Five claims for the anticoagulant-class IVT eligibility surface. Authored
+  // by medical-scientist directly from the 2026 AHA/ASA AIS guideline full
+  // text (Prabhakaran et al., DOI 10.1161/STR.0000000000000513, local PDF
+  // pages e38 + e49–e52). Surface = data-claim attribute (jsx) — the feature
+  // UI tags each excluding/permitting state with these exact claim IDs.
+  // Routed to clinical-reviewer; NOT yet gated. Two structural findings for
+  // the reviewer (see PR deliverable):
+  //   • The 2026 guideline does NOT use the 2019-style standalone "ineligibility"
+  //     table. Anticoagulant criteria live in §4.6.5 + Table 8 (risk-gradient).
+  //   • DOAC <48h is a RELATIVE (not absolute) contraindication in the 2026 text.
+  //   • There is NO standalone treatment-dose-LMWH-<24h row in the 2026
+  //     guideline — see ivt-anticoag-lmwh-24h note below.
+
+  // Single/dual antiplatelet is NOT a contraindication to IVT.
+  'ivt-anticoag-antiplatelet-ok': {
+    id: 'ivt-anticoag-antiplatelet-ok',
+    citation_ids: ['aha-asa-2026-4.6.1-antiplatelet'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Single or dual antiplatelet therapy (aspirin, clopidogrel, DAPT) is NOT a contraindication to IV thrombolysis. AHA/ASA 2026 §4.6.1 Rec 9 (COR 1, LOE B-NR): in suspected AIS patients on single or DAPT and otherwise eligible, IVT is recommended despite a small absolute increase in sICH risk (~0.9%–1.2% per §4.6.1 supportive text item 9), outweighed by the anticipated treatment benefit. UI state: permitting (not an exclusion).',
+  },
+
+  // DOAC last dose <48h: RELATIVE contraindication per the actual 2026 text.
+  'ivt-anticoag-doac-48h': {
+    id: 'ivt-anticoag-doac-48h',
+    citation_ids: ['aha-asa-2026-4.6.5-doac-relative'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Recent DOAC exposure within 48h of last dose is a RELATIVE contraindication to IVT in the 2026 AHA/ASA guideline (§4.6.5 + Table 8, Relative Contraindications — DOAC exposure), NOT an absolute one. Verbatim: safety is "unknown"; IVT "may be considered after a thorough benefit vs risk analysis on an individual basis," weighing timing of last dose, renal function, stroke severity, EVT availability, reversal-agent availability, and DOAC-specific anti-FXa/thrombin-time assays. NOTE: the 2026 guideline does NOT state the "unless drug-specific assays are normal" carve-out as an absolute permit (that framing is in the older/mis-sectioned aha-asa-2026-4.2 citation, flagged for correction). The assay reference here is one input to an individualized benefit-risk decision, not an automatic green light. UI state: relative exclusion / individualized decision — do not present as an absolute block or an absolute permit.',
+  },
+
+  // Warfarin / VKA: INR > 1.7 excludes IVT (absolute).
+  'ivt-anticoag-warfarin-inr': {
+    id: 'ivt-anticoag-warfarin-inr',
+    citation_ids: ['aha-asa-2026-4.6.5-coagulopathy'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'Warfarin / VKA: INR > 1.7 is an absolute contraindication to IVT. AHA/ASA 2026 §4.6.5 + Table 8 (Absolute Contraindications — Severe coagulopathy or thrombocytopenia): IVT in patients with INR > 1.7 (also platelets <100,000/mm³, aPTT >40 s, or PT >15 s) "is unknown though may substantially increase risk of harm and should not be administered." In patients without recent warfarin or heparin use, IVT may be started before lab results return but must be discontinued if INR >1.7 (or PT/PTT abnormal by local standards). Confirms the assumed INR >1.7 cutoff verbatim. UI state: excluding when INR > 1.7.',
+  },
+
+  // IV unfractionated heparin: aPTT > 40 s excludes IVT (absolute).
+  'ivt-anticoag-ufh-aptt': {
+    id: 'ivt-anticoag-ufh-aptt',
+    citation_ids: ['aha-asa-2026-4.6.5-coagulopathy'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'IV unfractionated heparin: an elevated aPTT > 40 s is an absolute contraindication to IVT. AHA/ASA 2026 §4.6.5 + Table 8 (Absolute Contraindications — Severe coagulopathy or thrombocytopenia): IVT in patients with aPTT > 40 s (alongside INR >1.7, PT >15 s, platelets <100,000/mm³) "is unknown though may substantially increase risk of harm and should not be administered." The 2026 guideline expresses the UFH contraindication as the aPTT >40 s lab threshold rather than a fixed since-last-dose timing rule. UI state: excluding when aPTT > 40 s. Confirms the assumed aPTT criterion verbatim with the exact value (>40 s).',
+  },
+
+  // NOTE: no `ivt-anticoag-lmwh-24h` claim. The 2026 AHA/ASA guideline removed
+  // the standalone treatment-dose-LMWH-<24h row that the 2019 guideline carried;
+  // heparin-class agents are captured by the aPTT >40s threshold
+  // (ivt-anticoag-ufh-aptt). Per V direction 2026-06-10, the Heparin/LMWH input
+  // is aPTT-only, so no LMWH-timing surface or claim is shipped.
 };

@@ -186,15 +186,72 @@ export const CITATION_REGISTRY: CitationRegistry = {
 
   // ─── AHA/ASA 2026 Early Management of AIS — Guideline sections ───────────
   // Year 2026 guideline; default 6-month review window per §13.7.
-  'aha-asa-2026-4.2': {
-    id: 'aha-asa-2026-4.2',
+  //
+  // RETIRED 2026-06-10 (clinical-reviewer): the legacy 'aha-asa-2026-4.2' DOAC
+  // citation was deleted. It was mis-sectioned (§4.2 is "Head Positioning" in the
+  // published 2026 guideline, not DOAC/IVT), non-verbatim, and overstated DOAC
+  // within 48h as an absolute contraindication. It is superseded by the verbatim
+  // 'aha-asa-2026-4.6.5-doac-relative' citation below (DOAC <48h is RELATIVE).
+  // No claim referenced it at retirement.
+
+  // ─── AHA/ASA 2026 §4.6.1 / §4.6.5 — Anticoagulant-related IVT eligibility ──
+  // Authored 2026-06-10 from the actual 2026 guideline full text
+  // (Prabhakaran et al., 2026 Guideline for the Early Management of Patients
+  // With Acute Ischemic Stroke, Stroke 2026;57:e00–e00,
+  // DOI 10.1161/STR.0000000000000513). Local full-text PDF read directly
+  // (pages e38, e49–e52); journal URL is paywalled (403) so the
+  // professional.heart.org landing page is used as the public URL.
+  // PMID intentionally omitted — not yet indexed in PubMed (pre-publication
+  // "FIRST PROOF ONLY" version as of 2026-06-10); add once indexed.
+  // 6-month review window per §13.7 (current clinical guideline).
+  // These four citations underwrite the anticoagulant IV-thrombolysis
+  // eligibility feature claims (ivt-anticoag-*). Routed to clinical-reviewer.
+
+  // §4.6.1 "Thrombolysis Decision-Making" recommendations table, Rec 9
+  // (Bleeding risk subsection). Verbatim from PDF page e38.
+  'aha-asa-2026-4.6.1-antiplatelet': {
+    id: 'aha-asa-2026-4.6.1-antiplatelet',
     source: 'guideline',
-    title: '2026 AHA/ASA Guideline for the Early Management of Acute Ischemic Stroke — §4.2 (DOAC and IV thrombolysis)',
+    title: '2026 AHA/ASA Guideline — §4.6.1 (Thrombolysis Decision-Making): single/dual antiplatelet and IVT',
     year: 2026,
-    section: '§4.2',
+    section: '§4.6.1 (Table: Recommendations For Thrombolysis Decision-Making, Rec 9)',
     url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
-    last_reviewed: '2026-05-19',
-    quoted_text: 'In patients on direct oral anticoagulants, IV thrombolysis is contraindicated within 48 hours of the last DOAC dose unless drug-specific assays demonstrate the agent is no longer active.',
+    last_reviewed: '2026-06-10',
+    quoted_text: 'In suspected patients with AIS who are taking single or DAPT, and are otherwise eligible for IVT, IVT is recommended to improve functional outcomes despite an increase in risk of sICH compared with no antiplatelet therapy. (COR 1, LOE B-NR)',
+  },
+
+  // §4.6.5 + Table 8 "Conditions That are Relative Contraindications" —
+  // DOAC exposure row. Verbatim from PDF page e50. This is the correct
+  // source for the DOAC <48h IVT question (supersedes the mis-sectioned
+  // aha-asa-2026-4.2 above for new claims).
+  'aha-asa-2026-4.6.5-doac-relative': {
+    id: 'aha-asa-2026-4.6.5-doac-relative',
+    source: 'guideline',
+    title: '2026 AHA/ASA Guideline — §4.6.5 / Table 8 (Relative Contraindications): recent DOAC exposure <48h',
+    year: 2026,
+    section: '§4.6.5 (Other Specific Circumstances) + Table 8, Relative Contraindications — DOAC exposure',
+    url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
+    last_reviewed: '2026-06-10',
+    quoted_text: 'In patients with disabling symptoms and recent DOAC exposure (<48 hours) who are within the window for alteplase/tenecteplase, the safety of IV thrombolysis is unknown. Emerging but limited observational data suggest IV thrombolysis may be considered after a thorough benefit vs risk analysis on an individual basis. Benefit vs risk assessments should include considering the timing of the last DOAC administration, renal function, stroke severity, and availability of endovascular thrombectomy as well as availability of DOAC reversal agents and DOAC-specific anti-factor Xa/thrombin time assays acknowledging the potential for delay in thrombolysis and potential increased thrombotic risk.',
+  },
+
+  // §4.6.5 + Table 8 "Conditions that are Considered Absolute
+  // Contraindications" — Severe coagulopathy or thrombocytopenia row.
+  // Verbatim from PDF page e52. This single row carries ALL the coagulation
+  // lab thresholds in the 2026 guideline: platelets <100,000/mm³, INR>1.7,
+  // aPTT>40s, PT>15s. It is the source for BOTH the warfarin/VKA (INR>1.7)
+  // and IV-heparin/UFH (aPTT>40s) IVT exclusion claims. The 2026 guideline
+  // does NOT carry a standalone treatment-dose-LMWH-<24h row (see deliverable
+  // note); LMWH is folded into the aPTT>40s threshold.
+  'aha-asa-2026-4.6.5-coagulopathy': {
+    id: 'aha-asa-2026-4.6.5-coagulopathy',
+    source: 'guideline',
+    title: '2026 AHA/ASA Guideline — §4.6.5 / Table 8 (Absolute Contraindications): severe coagulopathy or thrombocytopenia (INR/aPTT/PT/platelet thresholds)',
+    year: 2026,
+    section: '§4.6.5 (Other Specific Circumstances) + Table 8, Absolute Contraindications — Severe coagulopathy or thrombocytopenia',
+    url: 'https://professional.heart.org/en/science-news/2026-guideline-for-the-early-management-of-patients-with-acute-ischemic-stroke',
+    last_reviewed: '2026-06-10',
+    quoted_text: 'The safety and efficacy of IV thrombolysis for AIS in patients with platelets <100,000/mm3, INR>1.7, aPTT>40s, or PT>15s is unknown though may substantially increase risk of harm and should not be administered. In patients without recent use of warfarin or heparin, treatment with IV thrombolysis can be initiated before availability of coagulation test results but should be discontinued if INR >1.7, PT, or PTT is abnormal by local laboratory standards.',
   },
   'aha-asa-2026-4.3': {
     id: 'aha-asa-2026-4.3',

@@ -68,10 +68,16 @@ export interface SavedCaseData {
     glucose?: string;
     /** Serialized as array because Set isn't JSON-friendly. */
     anticoag?: string[];
-    /** Last anticoagulant dose (DOAC / warfarin) — Unix ms; null = unknown. */
+    /** Last anticoagulant dose (legacy) — Unix ms; null = unknown. Deprecated;
+     *  replaced by the per-drug eligibility fields below. Kept for old cases. */
     lastAnticoagDose?: number | null;
     /** Free-text nursing documentation of pre-existing neurological deficits. */
     preExistingDeficits?: string;
+    /** Per-drug IV-thrombolysis eligibility (NIHSS thrombolysis surface). */
+    doacTiming?: 'lt48h' | 'gte48h';
+    doacDrug?: string;
+    warfarinInr?: 'le1_7' | 'gt1_7';
+    heparinAptt?: 'le40s' | 'gt40s';
   };
 
   /** Stroke timestamps. Two storage modes:

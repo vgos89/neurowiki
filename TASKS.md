@@ -4,6 +4,15 @@
 
 (none)
 
+### NIHSS-ANTICOAG-ELIG — Patient-context anticoagulant/antiplatelet IVT-eligibility redesign — Class E-clinical
+- **Status:** ready_for_merge (committed this session)
+- **User-visible goal:** On the NIHSS calculator's Patient Context panel, the anticoagulant row becomes a four-class selector (Antiplatelet, DOAC, Warfarin, Heparin/LMWH; "None" dropped, empty = none). Each selected class reveals a per-drug IV-thrombolysis eligibility input in the existing pill vocabulary: DOAC last-dose <48h vs >=48h (plus optional drug name) with an "individualize, safety unknown" note; warfarin INR <=1.7 vs >1.7; Heparin/LMWH aPTT <=40s vs >40s; the latter two with an "excluded" note. Antiplatelet shows a "not a contraindication" note. Every caution reuses the existing amber alert box. Pre-stroke mRS trimmed to 0-5 (no grade 6) with the redundant modal removed. All per-drug inputs gated to the NIHSS surface; Stroke Code unchanged.
+- **Non-goals:** no change to Stroke Code's anticoag engine; no copy-export of per-drug eligibility (on-screen aid only); no LMWH since-last-dose timing rule (absent from the 2026 guideline).
+- **Files:** src/components/shared/PatientContextPanel.tsx; src/pages/NihssCalculator.tsx; src/lib/cases/{types,format}.ts; src/lib/citations/{claims,registry}.ts; docs/specs/PATIENT_CONTEXT_ELIGIBILITY_SPEC.md; docs/reviews/{arch,clinical}-PR-anticoag-eligibility-redesign.md
+- **Acceptance checks:** all passed — tsc clean; build green; check:claims pass (4 new ivt-anticoag claims tagged + registered); check:humanizer pass (0 errors); live-preview verified at 768px (panel renders, four class pills, per-drug sub-rows, amber caution boxes, mRS 0-5); architect §17.1 approve-with-conditions (all adopted); clinical §17.2 approve-with-conditions (conditions addressed: legacy aha-asa-2026-4.2 citation retired, antiplatelet copy tightened to "single or dual", comment-syntax verified clean).
+- **Clinical impact:** high (IV-thrombolysis eligibility surface; criteria sourced verbatim from AHA/ASA 2026 §4.6.1 + §4.6.5 / Table 8).
+- **Rollback plan:** `git revert <merge commit>` restores the prior 4-pill (None/DOAC/Warfarin/Antiplatelet) selector, the last-dose picker, and mRS 0-6. New optional SavedCaseData fields are additive and ignored by old code (no migration).
+
 ### W-HEADACHE-V4 — Clinic Headache "live differential narrowing" rebuild — Class D-clinical (E-clinical surfaces)
 - **Status:** ready_for_merge (committed this session; live route flipped to V4)
 - **User-visible goal:** at /pathways/headache-clinic the clinician is walked through ICHD-3 phenotyping one question per screen, watching a live differential narrow (band words Leading/Possible/Less likely + dot meters + bare "N of M", NO percentages), to a top-2 result that weighs both patterns (never a verdict), with management behind links and a permanent dangerous-mimic safety strip. SNNOOP10 read-then-decide safety gate runs first.

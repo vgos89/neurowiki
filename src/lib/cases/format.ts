@@ -39,6 +39,7 @@ const ANTICOAG_LABELS: Record<string, string> = {
   doac: 'DOAC',
   warfarin: 'Warfarin',
   antiplatelet: 'Antiplatelet',
+  heparin: 'Heparin/LMWH',
 };
 
 const TIMESTAMP_EVENTS = [
@@ -126,8 +127,9 @@ export function formatSavedCaseAsEmrText(c: SavedCase): string {
         ? `Glucose: ${pc.glucose} mg/dL`
         : `Glucose: Not entered`
     );
-    if (pc.anticoag && pc.anticoag.length > 0) {
-      const list = pc.anticoag.map((k) => ANTICOAG_LABELS[k] ?? k).join(', ');
+    const anticoagList = (pc.anticoag ?? []).filter((k) => k !== 'none');
+    if (anticoagList.length > 0) {
+      const list = anticoagList.map((k) => ANTICOAG_LABELS[k] ?? k).join(', ');
       contextLines.push(`Anti-Coag/Antiplatelet: ${list}`);
     } else {
       contextLines.push(`Anti-Coag/Antiplatelet: None`);

@@ -219,7 +219,9 @@ const NihssCalculator: React.FC = () => {
             systolic: pc.systolic ?? '',
             diastolic: pc.diastolic ?? '',
             glucose: pc.glucose ?? '',
-            anticoag: new Set((pc.anticoag ?? []) as Anticoag[]),
+            // Drop the legacy 'none' value (removed from Anticoag) so cases
+            // saved before this change load cleanly.
+            anticoag: new Set((pc.anticoag ?? []).filter((k) => k !== 'none') as Anticoag[]),
             lastAnticoagDose:
               typeof pc.lastAnticoagDose === 'number'
                 ? new Date(pc.lastAnticoagDose)
@@ -227,6 +229,10 @@ const NihssCalculator: React.FC = () => {
                 ? null
                 : undefined,
             preExistingDeficits: pc.preExistingDeficits ?? '',
+            doacTiming: pc.doacTiming,
+            doacDrug: pc.doacDrug,
+            warfarinInr: pc.warfarinInr,
+            heparinAptt: pc.heparinAptt,
           });
         }
         // Restore stroke timestamps — only in absolute mode. Relative-mode
@@ -429,10 +435,10 @@ const NihssCalculator: React.FC = () => {
     //    a complete documentation block even when some fields weren't
     //    captured during the exam.
     const ANTICOAG_LABELS: Record<Anticoag, string> = {
-      none: 'None',
+      antiplatelet: 'Antiplatelet',
       doac: 'DOAC',
       warfarin: 'Warfarin',
-      antiplatelet: 'Antiplatelet',
+      heparin: 'Heparin/LMWH',
     };
     // Time since onset for the copy export. Uses LKW as onset, shown only when
     // a witnessed LKW timestamp is set. Computed at copy time. The on-screen
@@ -881,6 +887,10 @@ const NihssCalculator: React.FC = () => {
                     ? patientContext.lastAnticoagDose.getTime()
                     : patientContext.lastAnticoagDose,
                 preExistingDeficits: patientContext.preExistingDeficits || undefined,
+                doacTiming: patientContext.doacTiming,
+                doacDrug: patientContext.doacDrug || undefined,
+                warfarinInr: patientContext.warfarinInr,
+                heparinAptt: patientContext.heparinAptt,
               },
               strokeTimestamps: hasAnyStamp ? stamps : undefined,
               strokeTimestampsMode: hasAnyStamp

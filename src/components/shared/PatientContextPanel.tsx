@@ -19,7 +19,6 @@ type BrowserWindow = Window & {
 };
 import { formatClinicalDateShort } from '../../utils/clinicalDateTime';
 import { LKWTimePicker } from '../article/stroke/LKWTimePicker';
-import { MrsPickerModal } from '../calculators/MrsPickerModal';
 
 /**
  * PatientContextPanel — collapsible accordion that captures patient-context
@@ -46,10 +45,17 @@ import { MrsPickerModal } from '../calculators/MrsPickerModal';
  *   - docs/reviews/arch-PR-stroke-code-patient-context.md (2026-05-24)
  */
 
-export type Anticoag = 'none' | 'doac' | 'warfarin' | 'antiplatelet';
+/**
+ * Anticoagulant / antiplatelet class. 'none' removed: an empty Set is "none".
+ * 'heparin' covers the Heparin/LMWH chip (the IVT gate is the aPTT lab value).
+ */
+export type Anticoag = 'antiplatelet' | 'doac' | 'warfarin' | 'heparin';
 
-/** 0–6 modified Rankin Scale grade. */
+/** 0–6 modified Rankin Scale grade. Full scale (MrsPickerModal needs grade 6). */
 export type MRSGrade = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
+/** Pre-stroke baseline mRS, constrained to 0–5: a baseline of 6 (dead) is not meaningful. */
+export type PrestrokeMrsGrade = 0 | 1 | 2 | 3 | 4 | 5;
 
 export interface PatientContextValues {
   /** Last known well — undefined if not set, null if explicitly Unknown / wake-up. */
@@ -69,14 +75,23 @@ export interface PatientContextValues {
    */
   lastAnticoagDose?: Date | null;
   /**
-   * Pre-stroke modified Rankin Scale grade (0–6). Records the patient's
+   * Pre-stroke modified Rankin Scale grade (0–5). Records the patient's
    * functional baseline before the current event. Used for EVT eligibility
    * assessment (mRS 0–1 vs ≥2) and outcome comparison. `undefined` = not yet
-   * recorded.
+   * recorded. Grade 6 (dead) is excluded: this is a baseline measure.
    */
-  prestrokeMrs?: MRSGrade;
+  prestrokeMrs?: PrestrokeMrsGrade;
   /** Free-text documentation of pre-existing neurological deficits, entered by nursing staff. */
   preExistingDeficits: string;
+  // ── Per-drug IV-thrombolysis eligibility (rendered only when showThrombolysisTiming) ──
+  /** DOAC last dose relative to the 48h window. */
+  doacTiming?: 'lt48h' | 'gte48h';
+  /** Optional DOAC drug name (free text). */
+  doacDrug?: string;
+  /** Warfarin INR bucket relative to the 1.7 threshold. */
+  warfarinInr?: 'le1_7' | 'gt1_7';
+  /** Heparin/LMWH aPTT bucket relative to the 40s threshold. */
+  heparinAptt?: 'le40s' | 'gt40s';
 }
 
 export const EMPTY_PATIENT_CONTEXT: PatientContextValues = {
@@ -88,6 +103,10 @@ export const EMPTY_PATIENT_CONTEXT: PatientContextValues = {
   lastAnticoagDose: undefined,
   prestrokeMrs: undefined,
   preExistingDeficits: '',
+  doacTiming: undefined,
+  doacDrug: undefined,
+  warfarinInr: undefined,
+  heparinAptt: undefined,
 };
 
 /**
@@ -151,11 +170,20 @@ interface PatientContextPanelProps {
 }
 
 const ANTICOAG_LABELS: Record<Anticoag, string> = {
-  none: 'None',
+  antiplatelet: 'Antiplatelet',
   doac: 'DOAC',
   warfarin: 'Warfarin',
-  antiplatelet: 'Antiplatelet',
+  heparin: 'Heparin/LMWH',
 };
+
+/** Display + render order for the anticoag chips and their sub-rows. */
+const ANTICOAG_KEYS: Anticoag[] = ['antiplatelet', 'doac', 'warfarin', 'heparin'];
+
+/** Shared pill classes — the exact existing anticoag/mRS chip vocabulary. */
+const PILL_BASE =
+  'min-h-[44px] py-1.5 px-3 -my-1 text-xs font-semibold rounded-full border transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none';
+const PILL_ON = 'bg-neuro-50 border-neuro-200 text-neuro-700';
+const PILL_OFF = 'bg-white border-slate-200 text-slate-500 hover:border-slate-300';
 
 export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
   values,
@@ -168,8 +196,6 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
 }) => {
   const [expanded, setExpanded] = useState(lockExpanded || defaultExpanded);
   const [lkwModalOpen, setLkwModalOpen] = useState(false);
-  const [doseModalOpen, setDoseModalOpen] = useState(false);
-  const [mrsModalOpen, setMrsModalOpen] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [interimText, setInterimText] = useState('');
   const [speechSupported] = useState(() =>
@@ -263,18 +289,6 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
     setIsListening(true);
   }, [isListening]);
 
-  // Conditional row: last anticoagulant dose surfaces only for
-  // reversible anticoagulants (DOAC + warfarin). Antiplatelets do not
-  // have meaningful "last dose" timing for acute decisions; 'none' is
-  // by definition no dose.
-  const showLastDoseRow = values.anticoag.has('doac') || values.anticoag.has('warfarin');
-  const lastDoseDisplay =
-    values.lastAnticoagDose === undefined || values.lastAnticoagDose === null
-      ? values.lastAnticoagDose === null
-        ? 'Unknown'
-        : 'Add'
-      : formatClinicalDateShort(values.lastAnticoagDose);
-
   const hasAnyValue =
     values.lkw !== undefined ||
     values.systolic !== '' ||
@@ -290,20 +304,8 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
 
   const toggleAnticoag = (key: Anticoag) => {
     const next = new Set(values.anticoag);
-    if (next.has(key)) {
-      next.delete(key);
-    } else {
-      // 'None' is mutually exclusive with positive selections — picking
-      // None clears DOAC/Warfarin/Antiplatelet; picking any positive
-      // clears None. Lets clinicians record the explicit negative
-      // ("not on anything") for EMR documentation.
-      if (key === 'none') {
-        next.clear();
-      } else {
-        next.delete('none');
-      }
-      next.add(key);
-    }
+    if (next.has(key)) next.delete(key);
+    else next.add(key);
     onChange({ ...values, anticoag: next });
   };
 
@@ -525,24 +527,19 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             </div>
           </div>
 
-          {/* Anti-coag/Antiplatelet row — M-11 fix: role="group" on the
-              chip container gives screen reader users the context that
-              the four chips form a single anticoagulant selection group. */}
+          {/* Anti-coag/Antiplatelet class selector. role="group" gives screen
+              reader users the context that the chips are one selection group. */}
           <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 flex-wrap">
             <span id="anticoag-label" className="text-xs font-medium text-slate-600 flex-shrink-0">Anti-coag/Antiplatelet</span>
             <div className="flex items-center gap-1.5 flex-wrap" role="group" aria-labelledby="anticoag-label">
-              {(['none', 'doac', 'warfarin', 'antiplatelet'] as const).map((key) => {
+              {ANTICOAG_KEYS.map((key) => {
                 const selected = values.anticoag.has(key);
                 return (
                   <button
                     key={key}
                     type="button"
                     onClick={() => toggleAnticoag(key)}
-                    className={`min-h-[44px] py-1.5 px-3 -my-1 text-xs font-semibold rounded-full border transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none ${
-                      selected
-                        ? 'bg-neuro-50 border-neuro-200 text-neuro-700'
-                        : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300'
-                    }`}
+                    className={`${PILL_BASE} ${selected ? PILL_ON : PILL_OFF}`}
                     aria-pressed={selected}
                   >
                     {ANTICOAG_LABELS[key]}
@@ -552,46 +549,122 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             </div>
           </div>
 
-          {/* Last anticoagulant dose row — conditional. Surfaces only
-              when the clinician has marked DOAC or warfarin on the row
-              above. Clinically meaningful for reversal decisions and EMR
-              documentation; antiplatelets and 'none' do not trigger it. */}
-          {showLastDoseRow && (
-            <button
-              type="button"
-              onClick={() => setDoseModalOpen(true)}
-              className="w-full min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 hover:bg-slate-50 transition-colors text-left"
-              aria-haspopup="dialog"
-            >
-              <span className="text-xs font-medium text-slate-600 flex-shrink-0">Last dose</span>
-              <span className="flex items-center gap-1">
-                <span className={`text-sm ${values.lastAnticoagDose === undefined ? 'text-slate-400' : 'text-slate-900'}`}>{lastDoseDisplay}</span>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400" aria-hidden />
-              </span>
-            </button>
+          {/* Per-drug IV-thrombolysis eligibility sub-rows. Only on the
+              thrombolysis surface (NIHSS via showThrombolysisTiming); Stroke
+              Code keeps its own engine and sees only the class selector above.
+              Each selected class reveals its eligibility input in the same pill
+              vocabulary; the contraindication cue is the existing amber box.
+              Criteria: AHA/ASA 2026 §4.6.1 (antiplatelet not a contraindication)
+              and §4.6.5 + Table 8 (DOAC <48h relative; INR >1.7 and aPTT >40s
+              absolute). */}
+          {showThrombolysisTiming && values.anticoag.has('antiplatelet') && (
+            <div data-claim="ivt-anticoag-antiplatelet-ok" className="px-4 pb-2 -mt-0.5">
+              <p className="text-xs text-slate-400 italic">
+                Single or dual antiplatelet use is not a contraindication to IV thrombolysis.
+              </p>
+            </div>
           )}
 
-          {/* Pre-stroke mRS — 7 compact number chips (0–6).
-              No modal, no drawer — tap to select inline.
-              Clinically: records functional baseline before the event for
-              EVT eligibility (mRS 0–1 independent vs ≥2 dependent) and
-              outcome comparison post-treatment. */}
+          {showThrombolysisTiming && values.anticoag.has('doac') && (
+            <>
+              <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 flex-wrap">
+                <span id="doac-label" className="text-xs font-medium text-slate-600 flex-shrink-0">Last DOAC dose</span>
+                <div className="flex items-center gap-1.5 flex-wrap" role="group" aria-labelledby="doac-label">
+                  {([['lt48h', '<48 h'], ['gte48h', '≥48 h']] as const).map(([val, lbl]) => {
+                    const selected = values.doacTiming === val;
+                    return (
+                      <button key={val} type="button"
+                        onClick={() => onChange({ ...values, doacTiming: selected ? undefined : val })}
+                        className={`${PILL_BASE} ${selected ? PILL_ON : PILL_OFF}`} aria-pressed={selected}>
+                        {lbl}
+                      </button>
+                    );
+                  })}
+                  <input
+                    type="text"
+                    value={values.doacDrug ?? ''}
+                    onChange={(e) => onChange({ ...values, doacDrug: e.target.value || undefined })}
+                    placeholder="drug, optional"
+                    className="w-[104px] text-right text-sm text-slate-900 bg-transparent border-b border-slate-200 focus:border-neuro-500 focus:outline-none px-1 py-1 placeholder:text-slate-300"
+                    aria-label="DOAC drug name"
+                  />
+                </div>
+              </div>
+              {values.doacTiming === 'lt48h' && (
+                <div data-claim="ivt-anticoag-doac-48h" className="mx-4 mb-1 flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2" role="status" aria-live="polite">
+                  <span className="text-amber-500 flex-shrink-0 mt-0.5" aria-hidden="true">⚠</span>
+                  <p className="text-xs text-amber-800 leading-snug">{'DOAC <48h: individualize, IV thrombolysis safety unknown.'}</p>
+                </div>
+              )}
+            </>
+          )}
+
+          {showThrombolysisTiming && values.anticoag.has('warfarin') && (
+            <>
+              <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 flex-wrap">
+                <span id="warfarin-label" className="text-xs font-medium text-slate-600 flex-shrink-0">INR</span>
+                <div className="flex items-center gap-1.5 flex-wrap" role="group" aria-labelledby="warfarin-label">
+                  {([['le1_7', '≤1.7'], ['gt1_7', '>1.7']] as const).map(([val, lbl]) => {
+                    const selected = values.warfarinInr === val;
+                    return (
+                      <button key={val} type="button"
+                        onClick={() => onChange({ ...values, warfarinInr: selected ? undefined : val })}
+                        className={`${PILL_BASE} ${selected ? PILL_ON : PILL_OFF}`} aria-pressed={selected}>
+                        {lbl}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              {values.warfarinInr === 'gt1_7' && (
+                <div data-claim="ivt-anticoag-warfarin-inr" className="mx-4 mb-1 flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2" role="status" aria-live="polite">
+                  <span className="text-amber-500 flex-shrink-0 mt-0.5" aria-hidden="true">⚠</span>
+                  <p className="text-xs text-amber-800 leading-snug">{'INR >1.7: excluded from IV thrombolysis.'}</p>
+                </div>
+              )}
+            </>
+          )}
+
+          {showThrombolysisTiming && values.anticoag.has('heparin') && (
+            <>
+              <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3 flex-wrap">
+                <span id="heparin-label" className="text-xs font-medium text-slate-600 flex-shrink-0">aPTT</span>
+                <div className="flex items-center gap-1.5 flex-wrap" role="group" aria-labelledby="heparin-label">
+                  {([['le40s', '≤40 s'], ['gt40s', '>40 s']] as const).map(([val, lbl]) => {
+                    const selected = values.heparinAptt === val;
+                    return (
+                      <button key={val} type="button"
+                        onClick={() => onChange({ ...values, heparinAptt: selected ? undefined : val })}
+                        className={`${PILL_BASE} ${selected ? PILL_ON : PILL_OFF}`} aria-pressed={selected}>
+                        {lbl}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              {values.heparinAptt === 'gt40s' && (
+                <div data-claim="ivt-anticoag-ufh-aptt" className="mx-4 mb-1 flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2" role="status" aria-live="polite">
+                  <span className="text-amber-500 flex-shrink-0 mt-0.5" aria-hidden="true">⚠</span>
+                  <p className="text-xs text-amber-800 leading-snug">{'IV heparin, aPTT >40 s: excluded from IV thrombolysis.'}</p>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Pre-stroke mRS — compact number chips, inline only (no modal).
+              Range 0-5: a pre-stroke baseline of 6 (dead) is not meaningful.
+              Records functional baseline for EVT eligibility (mRS 0-1
+              independent vs >=2 dependent) and outcome comparison. */}
           <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3">
-            <button
-              id="prestroke-mrs-label"
-              type="button"
-              onClick={() => setMrsModalOpen(true)}
-              className="text-xs font-medium text-slate-600 flex-shrink-0 flex items-center gap-1 hover:text-neuro-600 transition-colors focus-visible:ring-2 focus-visible:ring-neuro-500 focus-visible:outline-none rounded"
-            >
+            <span id="prestroke-mrs-label" className="text-xs font-medium text-slate-600 flex-shrink-0">
               Pre-stroke mRS
-              <span className="text-[10px] text-slate-400 font-normal">(full scale)</span>
-            </button>
+            </span>
             <div
               role="group"
               aria-labelledby="prestroke-mrs-label"
               className="flex items-center gap-1"
             >
-              {([0, 1, 2, 3, 4, 5, 6] as MRSGrade[]).map((grade) => {
+              {([0, 1, 2, 3, 4, 5] as PrestrokeMrsGrade[]).map((grade) => {
                 const selected = values.prestrokeMrs === grade;
                 return (
                   <button
@@ -706,16 +779,6 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
         )}
       </div>
 
-      <MrsPickerModal
-        isOpen={mrsModalOpen}
-        onClose={() => setMrsModalOpen(false)}
-        value={values.prestrokeMrs}
-        onChange={(grade) => {
-          onChange({ ...values, prestrokeMrs: grade });
-          setMrsModalOpen(false);
-        }}
-      />
-
       {/* LKW modal — canonical LKWTimePicker (portal). Same component used
           by Stroke Code Step 1 and Extended IVT pathway. showSleepOnset
           enabled so wake-up stroke documentation works in this context too. */}
@@ -732,25 +795,6 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
         }}
         initialDate={values.lkw instanceof Date ? values.lkw : undefined}
         showSleepOnset={true}
-      />
-
-      {/* Last-dose modal — second LKWTimePicker instance reused for
-          the anticoagulant last-dose timestamp. Sleep-onset tab is
-          hidden because last-DOAC-dose timing is unambiguous (the
-          patient or family supplies the actual time). */}
-      <LKWTimePicker
-        isOpen={doseModalOpen}
-        onClose={() => setDoseModalOpen(false)}
-        onConfirm={(date) => {
-          onChange({ ...values, lastAnticoagDose: date });
-          setDoseModalOpen(false);
-        }}
-        onUnknown={() => {
-          onChange({ ...values, lastAnticoagDose: null });
-          setDoseModalOpen(false);
-        }}
-        initialDate={values.lastAnticoagDose instanceof Date ? values.lastAnticoagDose : undefined}
-        showSleepOnset={false}
       />
     </div>
   );
