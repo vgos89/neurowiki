@@ -477,6 +477,22 @@ const NihssCalculator: React.FC = () => {
     for (const event of STROKE_TIMESTAMP_EVENTS) {
       const stamp = strokeTimestamps[event];
       if (!stamp) continue;
+      // Dedup vs the "Exam Performed" context line. "Neurology Evaluation" and
+      // performedAt are kept in sync (see handleNihssChange) because they are
+      // the same workflow event. With no Code Activation anchor the stamp shows
+      // no elapsed offset, so printing it here just repeats "Exam Performed".
+      // Skip it in that case so the EMR paste does not show the time twice.
+      // (V flag 2026-06-10: "Neurology Evaluation" and "Exam Performed" both
+      // read 7:31 AM.) When a Code Activation anchor exists the line carries a
+      // useful "+Xm" door-to-eval offset, so it is kept.
+      if (
+        event === 'Neurology Evaluation' &&
+        anchorMs === null &&
+        performedAt !== null &&
+        stamp.getTime() === performedAt.getTime()
+      ) {
+        continue;
+      }
       if (event === 'Code Activation' || anchorMs === null) {
         stampLines.push(`${event}: ${fmtTime(stamp)}`);
       } else {
