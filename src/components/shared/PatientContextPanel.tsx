@@ -138,6 +138,16 @@ interface PatientContextPanelProps {
    * per pathway (e.g. ELAN anticoagulant timing, EVT LVO context).
    */
   extraRows?: PatientContextRow[];
+  /**
+   * Opt-in thrombolysis-timing aid (currently NIHSS). When true and a
+   * witnessed LKW timestamp is set, the panel shows time since onset, a
+   * within/beyond-4.5h window chip, and reframes the elevated-BP note as a
+   * "Thrombolytic candidate: BP goal <185/110" prompt while in window. These
+   * are live bedside aids and are not part of any copy export. Off by default
+   * so the Stroke Code steps and the mRS picker that share this panel are
+   * unchanged.
+   */
+  showThrombolysisTiming?: boolean;
 }
 
 const ANTICOAG_LABELS: Record<Anticoag, string> = {
@@ -154,6 +164,7 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
   defaultExpanded = false,
   lockExpanded = false,
   extraRows,
+  showThrombolysisTiming = false,
 }) => {
   const [expanded, setExpanded] = useState(lockExpanded || defaultExpanded);
   const [lkwModalOpen, setLkwModalOpen] = useState(false);
@@ -303,6 +314,24 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
       ? 'Unknown / wake-up'
       : formatClinicalDateShort(values.lkw);
 
+  // Thrombolysis-timing aid (opt-in via showThrombolysisTiming, currently
+  // NIHSS). Computes time since a witnessed LKW and the standard 4.5h IV
+  // thrombolysis window state. Recomputed each render so it stays current as
+  // the clinician interacts. Returns null unless a real LKW Date is set
+  // (wake-up / unknown / unset have no onset clock). AHA/ASA 2026 §4.6.1/§4.6.2.
+  const ivt = (() => {
+    if (!showThrombolysisTiming || !(values.lkw instanceof Date)) return null;
+    const elapsedMin = Math.max(0, Math.floor((Date.now() - values.lkw.getTime()) / 60000));
+    const hh = Math.floor(elapsedMin / 60);
+    const mm = elapsedMin % 60;
+    const elapsedLabel = hh > 0 ? `${hh} h ${mm} min` : `${mm} min`;
+    const elapsedHours = elapsedMin / 60;
+    const inWindow = elapsedHours <= 4.5;
+    const minutesLeft = Math.max(0, Math.round((4.5 - elapsedHours) * 60));
+    const lastHalfHour = inWindow && minutesLeft <= 30;
+    return { elapsedLabel, inWindow, minutesLeft, lastHalfHour };
+  })();
+
   return (
     <div className="bg-white border border-slate-100 rounded-xl overflow-hidden">
       {/* Header row — toggles expansion unless lockExpanded=true,
@@ -373,6 +402,40 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
             </span>
           </button>
 
+          {/* Thrombolysis timing — opt-in (NIHSS). Time since onset plus a
+              within/beyond-4.5h chip. Live bedside aid; the chip is not part
+              of the copy export (only the time-since-onset line is). */}
+          {ivt && (
+            <div
+              data-claim="ivt-window-4.5h"
+              className="px-4 pb-2 -mt-0.5 flex items-center gap-2 flex-wrap"
+              role="status"
+              aria-live="polite"
+            >
+              <span className="text-xs text-slate-500">~{ivt.elapsedLabel} since onset</span>
+              <span
+                className={`inline-flex items-center text-[11px] font-semibold rounded-full px-2 py-0.5 border ${
+                  ivt.inWindow && !ivt.lastHalfHour
+                    ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
+                    : 'text-amber-700 bg-amber-50 border-amber-200'
+                }`}
+              >
+                {ivt.inWindow
+                  ? ivt.lastHalfHour
+                    ? `${ivt.minutesLeft} min left`
+                    : 'Within 4.5h'
+                  : 'Beyond 4.5h'}
+              </span>
+            </div>
+          )}
+          {showThrombolysisTiming && values.lkw === null && (
+            <div className="px-4 pb-2 -mt-0.5">
+              <span className="text-xs text-slate-400">
+                Wake-up or unknown onset, so time since onset is not shown.
+              </span>
+            </div>
+          )}
+
           {/* BP row */}
           <div className="min-h-[44px] flex items-center justify-between px-4 py-2 gap-3">
             <label className="text-xs font-medium text-slate-600 flex-shrink-0">Blood pressure</label>
@@ -421,7 +484,9 @@ export const PatientContextPanel: React.FC<PatientContextPanelProps> = ({
               >
                 <span className="text-amber-500 flex-shrink-0 mt-0.5" aria-hidden="true">⚠</span>
                 <p className="text-xs text-amber-800 leading-snug">
-                  BP above tPA/TNK threshold — lower to ≤185/110 before treatment
+                  {ivt?.inWindow
+                    ? 'If thrombolysis planned: BP goal <185/110'
+                    : 'BP above tPA/TNK threshold. Lower to ≤185/110 before treatment'}
                 </p>
               </div>
             );

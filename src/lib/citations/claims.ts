@@ -975,6 +975,12 @@ export const CLAIM_REGISTRY: ClaimRegistry = {
     id: 'bp-ivt-threshold-185-110',
     citation_ids: ['aha-asa-ivt-bp-threshold', 'aha-asa-2026-4.6.1', 'aha-asa-2026-4.6.2'],
     surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
-    description: 'Inline BP alert in PatientContextPanel: when SBP ≥185 OR DBP ≥110, surfaces "BP above tPA/TNK threshold — lower to ≤185/110 before treatment". Threshold per AHA/ASA 2019 Table 5 (PMID 31662037), confirmed unchanged in 2026 guideline. Applies to both alteplase and tenecteplase. Alert scoped to pre-treatment context only (PatientContextPanel is an initial-assessment surface).',
+    description: 'Inline BP alert in PatientContextPanel when SBP ≥185 OR DBP ≥110. In the standard IV thrombolysis window (NIHSS opt-in via showThrombolysisTiming) it reads "If thrombolysis planned: BP goal <185/110"; out of window, or on surfaces that do not opt in, it reads "BP above tPA/TNK threshold. Lower to ≤185/110 before treatment". Conditional in-window wording chosen so the chip surfaces the BP target without asserting overall thrombolysis eligibility (clinical-review condition 2026-06-10). Threshold per AHA/ASA 2019 Table 5 (PMID 31662037), confirmed unchanged in 2026 guideline. Applies to both alteplase and tenecteplase. Scoped to pre-treatment context only (PatientContextPanel is an initial-assessment surface).',
+  },
+  'ivt-window-4.5h': {
+    id: 'ivt-window-4.5h',
+    citation_ids: ['aha-asa-2026-4.6.1', 'aha-asa-2026-4.6.2'],
+    surfaces: [{ type: 'jsx', attribute: 'data-claim' }],
+    description: 'NIHSS thrombolysis-timing chip in PatientContextPanel (opt-in via showThrombolysisTiming). When a witnessed LKW is set, shows time since onset plus a window chip: "Within 4.5h" (with a minutes-left countdown in the final 30 min) when elapsed time is ≤4.5h, "Beyond 4.5h" otherwise. The 4.5h standard IV thrombolysis window applies to both alteplase and tenecteplase per AHA/ASA 2026 §4.6.1 (COR 1) and §4.6.2 (agent equivalence within 4.5h). On-screen real-time aid only; the chip is not emitted to the NIHSS copy export (only the time-since-onset line is).',
   },
 };

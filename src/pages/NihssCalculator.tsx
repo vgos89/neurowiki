@@ -434,6 +434,16 @@ const NihssCalculator: React.FC = () => {
       warfarin: 'Warfarin',
       antiplatelet: 'Antiplatelet',
     };
+    // Time since onset for the copy export. Uses LKW as onset, shown only when
+    // a witnessed LKW timestamp is set. Computed at copy time. The on-screen
+    // within/beyond-4.5h chip is intentionally NOT exported (live bedside aid).
+    // V direction 2026-06-10.
+    const elapsedSinceOnset = (from: Date): string => {
+      const min = Math.max(0, Math.floor((Date.now() - from.getTime()) / 60000));
+      const hh = Math.floor(min / 60);
+      const mm = min % 60;
+      return hh > 0 ? `${hh} h ${mm} min` : `${mm} min`;
+    };
     const contextLines: string[] = [
       performedAt
         ? `Exam Performed: ${formatClinicalDateTime(performedAt)}`
@@ -443,6 +453,9 @@ const NihssCalculator: React.FC = () => {
         : patientContext.lkw instanceof Date
         ? `LKW: ${formatClinicalDateTime(patientContext.lkw)}`
         : `LKW: Not entered`,
+      patientContext.lkw instanceof Date
+        ? `~${elapsedSinceOnset(patientContext.lkw)} since onset`
+        : null,
       patientContext.systolic && patientContext.diastolic
         ? `BP: ${patientContext.systolic}/${patientContext.diastolic}`
         : `BP: Not entered`,
@@ -516,11 +529,11 @@ const NihssCalculator: React.FC = () => {
           .map((idx) => DISABLING_CHECK_SHORT[idx])
           .join(', ');
         blocks.push(
-          `Disabling features: present (${checkedLabels}) — IVT indicated per AHA/ASA 2026 §4.6.1 (Class I, Level A)`,
+          `Disabling features: present (${checkedLabels}); IVT indicated per AHA/ASA 2026 §4.6.1 (Class I, Level A)`,
         );
       } else if (confirmedNoDisabling) {
         blocks.push(
-          'Disabling features: none identified — IVT not recommended per AHA/ASA 2026 §4.6.1 (Class 3 No Benefit)',
+          'Disabling features: none identified; IVT not recommended per AHA/ASA 2026 §4.6.1 (Class 3 No Benefit)',
         );
       }
     }
@@ -911,7 +924,11 @@ const NihssCalculator: React.FC = () => {
             Captures LKW + BP + glucose + anticoagulant for inclusion in the
             EMR copy/share output. Skinny settings-panel style. */}
         <div className="mb-4">
-          <PatientContextPanel values={patientContext} onChange={setPatientContext} />
+          <PatientContextPanel
+            values={patientContext}
+            onChange={setPatientContext}
+            showThrombolysisTiming
+          />
         </div>
 
         {/* Normal exam shortcut — Phase 7E §3.5 */}
